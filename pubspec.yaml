@@ -1,0 +1,107 @@
+name: mhad
+description: Pennsylvania Mental Health Advance Directive app
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  # State management
+  flutter_riverpod: ^2.6.1
+  riverpod_annotation: ^2.6.1
+
+  # Navigation
+  go_router: ^14.6.2
+
+  # Database (Drift = type-safe SQLite with code generation)
+  # sqlcipher_flutter_libs replaces sqlite3_flutter_libs + adds encryption support.
+  # We do NOT use drift_flutter (it pulls in sqlite3_flutter_libs causing DEX conflict).
+  drift: ^2.22.0
+  sqlite3: ^2.4.0
+  sqlcipher_flutter_libs: ^0.6.8
+  path_provider: ^2.1.5
+
+  # Web database support (drift WASM)
+  sqlite3_web: ^0.2.0
+
+  # AI (Gemini free tier)
+  google_generative_ai: ^0.4.7
+  http: ^1.2.0
+
+  # PDF generation & printing
+  pdf: ^3.11.1
+  printing: ^5.14.0
+
+  # Signature capture
+  signature: ^5.5.0
+
+  # Secure key storage (API key)
+  flutter_secure_storage: ^9.2.2
+
+  # Local notifications (2-year expiration reminders)
+  flutter_local_notifications: ^17.2.4
+  timezone: ^0.9.4
+
+  # First-launch disclaimer persistence
+  shared_preferences: ^2.3.3
+
+  # Biometric authentication for private mode
+  local_auth: ^2.3.0
+
+  # Resource links (tap-to-call / tap-to-web)
+  url_launcher: ^6.3.1
+
+  # File sharing (data export)
+  share_plus: ^10.1.4
+
+  # QR code generation
+  qr_flutter: ^4.1.0
+
+  # Device security (root/jailbreak detection)
+  safe_device: ^1.1.7
+
+  # Hashing (passcode fallback for private mode)
+  crypto: ^3.0.6
+
+  # Document import (camera, gallery, file picker)
+  image_picker: ^1.1.2
+  file_picker: ^8.1.6
+  image: ^4.5.4
+
+  # Utilities
+  path: ^1.9.0
+  intl: ^0.20.1
+  cupertino_icons: ^1.0.8
+  uuid: ^4.5.1
+  collection: ^1.19.1
+  # flutter_windowmanager removed — incompatible with AGP 8+
+  # Screenshot protection (FLAG_SECURE) is now via MethodChannel in screenshot_protection_service.dart
+  flutter_contacts: ^2.0.1
+  speech_to_text: ^7.3.0
+  nfc_manager: ^4.1.1
+  ndef_record: ^1.4.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+  # Code generation
+  build_runner: ^2.4.13
+  drift_dev: ^2.22.0
+  riverpod_generator: ^2.6.1
+
+  # App icon generation
+  flutter_launcher_icons: ^0.14.1
+
+flutter:
+  generate: true
+  uses-material-design: true
+  assets:
+    - assets/

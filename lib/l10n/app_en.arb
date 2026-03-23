@@ -1,0 +1,87 @@
+{
+  "@@locale": "en",
+  "appTitle": "PA Mental Health\nAdvance Directive",
+  "newDirective": "New Directive",
+  "home": "Home",
+  "education": "Education",
+  "assistant": "Assistant",
+  "exportDirective": "Export Directive",
+  "cancel": "Cancel",
+  "save": "Save",
+  "back": "Back",
+  "next": "Next",
+  "finish": "Finish",
+  "done": "Done",
+  "delete": "Delete",
+  "close": "Close",
+  "yes": "Yes",
+  "no": "No",
+  "ok": "OK",
+  "retry": "Retry",
+  "required": "Required",
+  "combinedForm": "Combined Declaration & Power of Attorney",
+  "declarationOnly": "Declaration Only",
+  "poaOnly": "Power of Attorney Only",
+  "personalInfo": "Personal Information",
+  "fullName": "Full name",
+  "dateOfBirth": "Date of birth",
+  "address": "Address",
+  "city": "City",
+  "state": "State",
+  "zipCode": "ZIP code",
+  "phone": "Phone number",
+  "effectiveCondition": "Effective Condition",
+  "treatmentFacility": "Treatment Facility",
+  "medications": "Medications",
+  "ectPreferences": "ECT Preferences",
+  "experimentalStudies": "Experimental Studies",
+  "drugTrials": "Drug Trials",
+  "additionalInstructions": "Additional Instructions",
+  "agentDesignation": "Agent Designation",
+  "alternateAgent": "Alternate Agent",
+  "agentAuthority": "Agent Authority & Limits",
+  "guardianNomination": "Guardian Nomination",
+  "review": "Review",
+  "execution": "Execution",
+  "draft": "Draft",
+  "complete": "Complete",
+  "expired": "Expired",
+  "revoked": "Revoked",
+  "saveAndExit": "Save & Exit",
+  "saveAndExitMessage": "Your progress on this step will be saved. You can return to continue later.",
+  "legalDisclaimer": "This app does not provide legal advice. Information is for educational purposes only and does not substitute for a licensed attorney. Consult a legal professional before executing any legal document.",
+  "aiDisclaimer": "The AI assistant provides general information only. It is not a substitute for legal, medical, or professional advice.",
+  "previewPdf": "Preview PDF",
+  "sharePrint": "Share / Print",
+  "generateWalletCard": "Generate Wallet Card",
+  "importFromDocument": "Import from Document",
+  "importFromContacts": "Import from Contacts",
+  "seeExamples": "See examples",
+  "aiSuggest": "AI Suggest",
+  "stepNOfTotal": "Step {current} of {total}",
+  "@stepNOfTotal": {
+    "placeholders": {
+      "current": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "percentComplete": "{percent}% complete",
+  "@percentComplete": {
+    "placeholders": {
+      "percent": {"type": "int"}
+    }
+  },
+  "lastEdited": "Last edited {date}",
+  "@lastEdited": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "nSections": "{filled} of {total} sections",
+  "@nSections": {
+    "placeholders": {
+      "filled": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  }
+}

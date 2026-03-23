@@ -1,0 +1,278 @@
+import 'dart:async';
+import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
+import 'package:google_generative_ai/google_generative_ai.dart';
+import 'package:http/http.dart' as http;
+import 'package:mhad/services/certificate_pinning_service.dart';
+import 'package:mhad/services/clinical_data_service.dart';
+
+/// The structured input collected from the user via NIH APIs (zero tokens).
+class SmartFillInput {
+  final List<IcdCondition> conditions;
+  final List<String> currentMedications;
+  final List<String> medicationsToAvoid;
+  final String formType; // 'combined', 'declaration', 'poa'
+
+  const SmartFillInput({
+    required this.conditions,
+    required this.currentMedications,
+    required this.medicationsToAvoid,
+    required this.formType,
+  });
+
+  bool get isEmpty =>
+      conditions.isEmpty &&
+      currentMedications.isEmpty &&
+      medicationsToAvoid.isEmpty;
+}
+
+/// Structured output from the AI — one field per directive section.
+/// Every field is optional (AI only fills what it can infer).
+class SmartFillResult {
+  final String? effectiveCondition;
+  final String? healthHistory;
+  final String? preferredFacilityNote;
+  final String? avoidFacilityNote;
+  final String? ectPreference;
+  final String? crisisIntervention;
+  final String? activities;
+  final String? dietary;
+  final String? agentGuidance;
+  final List<MedSuggestion> additionalMedsToConsider;
+  final List<MedSuggestion> additionalMedsToAvoid;
+
+  const SmartFillResult({
+    this.effectiveCondition,
+    this.healthHistory,
+    this.preferredFacilityNote,
+    this.avoidFacilityNote,
+    this.ectPreference,
+    this.crisisIntervention,
+    this.activities,
+    this.dietary,
+    this.agentGuidance,
+    this.additionalMedsToConsider = const [],
+    this.additionalMedsToAvoid = const [],
+  });
+
+  bool get isEmpty =>
+      effectiveCondition == null &&
+      healthHistory == null &&
+      preferredFacilityNote == null &&
+      avoidFacilityNote == null &&
+      ectPreference == null &&
+      crisisIntervention == null &&
+      activities == null &&
+      dietary == null &&
+      agentGuidance == null &&
+      additionalMedsToConsider.isEmpty &&
+      additionalMedsToAvoid.isEmpty;
+
+  /// All non-null fields as label→value for the review UI.
+  Map<String, String> toDisplayMap() {
+    final m = <String, String>{};
+    if (effectiveCondition != null) {
+      m['Effective Condition'] = effectiveCondition!;
+    }
+    if (healthHistory != null) m['Health History'] = healthHistory!;
+    if (preferredFacilityNote != null) {
+      m['Facility Notes (preferred)'] = preferredFacilityNote!;
+    }
+    if (avoidFacilityNote != null) {
+      m['Facility Notes (avoid)'] = avoidFacilityNote!;
+    }
+    if (ectPreference != null) m['ECT Guidance'] = ectPreference!;
+    if (crisisIntervention != null) {
+      m['Crisis Intervention'] = crisisIntervention!;
+    }
+    if (activities != null) m['Helpful Activities'] = activities!;
+    if (dietary != null) m['Dietary Considerations'] = dietary!;
+    if (agentGuidance != null) {
+      m['Agent Guidance'] = agentGuidance!;
+    }
+    if (additionalMedsToConsider.isNotEmpty) {
+      m['Additional Medications to Consider'] =
+          additionalMedsToConsider.map((s) => s.display).join('\n');
+    }
+    if (additionalMedsToAvoid.isNotEmpty) {
+      m['Additional Medications to Avoid'] =
+          additionalMedsToAvoid.map((s) => s.display).join('\n');
+    }
+    return m;
+  }
+
+  factory SmartFillResult.fromJson(Map<String, dynamic> json) {
+    return SmartFillResult(
+      effectiveCondition: _str(json['effective_condition']),
+      healthHistory: _str(json['health_history']),
+      preferredFacilityNote: _str(json['preferred_facility_note']),
+      avoidFacilityNote: _str(json['avoid_facility_note']),
+      ectPreference: _str(json['ect_preference']),
+      crisisIntervention: _str(json['crisis_intervention']),
+      activities: _str(json['activities']),
+      dietary: _str(json['dietary']),
+      agentGuidance: _str(json['agent_guidance']),
+      additionalMedsToConsider: _parseMeds(json['additional_meds_to_consider']),
+      additionalMedsToAvoid: _parseMeds(json['additional_meds_to_avoid']),
+    );
+  }
+
+  static String? _str(dynamic v) {
+    if (v == null) return null;
+    final s = v.toString().trim();
+    return s.isEmpty ? null : s;
+  }
+
+  static List<MedSuggestion> _parseMeds(dynamic v) {
+    if (v is! List) return [];
+    return v
+        .whereType<Map<String, dynamic>>()
+        .map((m) => MedSuggestion(
+              name: m['name']?.toString() ?? '',
+              reason: m['reason']?.toString() ?? '',
+            ))
+        .where((m) => m.name.isNotEmpty)
+        .toList();
+  }
+}
+
+class MedSuggestion {
+  final String name;
+  final String reason;
+  const MedSuggestion({required this.name, this.reason = ''});
+  String get display => reason.isNotEmpty ? '$name — $reason' : name;
+}
+
+/// Sends a compact, structured prompt to Gemini using pre-validated clinical
+/// data from the NIH APIs. This approach minimizes token usage by:
+///
+/// 1. Using ICD-10 codes instead of free-text descriptions (tokens: ~5 per condition vs ~50)
+/// 2. Using validated RxNorm drug names instead of free-text (prevents hallucination)
+/// 3. Requesting JSON output (no conversational padding)
+/// 4. No system prompt, no educational content, no chat history — single-shot
+/// 5. Only sending the structured selections, not the entire form
+class SmartFillService {
+  final String apiKey;
+  final http.Client _httpClient;
+
+  SmartFillService({required this.apiKey})
+      : _httpClient = CertificatePinningService.createPinnedClient();
+
+  static const _model = 'gemini-2.5-flash';
+
+  /// Given structured clinical data, ask Gemini to generate directive content.
+  /// Typical prompt is ~200-300 tokens. Response is ~300-500 tokens.
+  /// Compared to the chat assistant's ~3000+ token system prompt, this is ~90% cheaper.
+  Future<SmartFillResult> generate(SmartFillInput input) async {
+    final model = GenerativeModel(
+      model: _model,
+      apiKey: apiKey,
+      httpClient: _httpClient,
+      generationConfig: GenerationConfig(
+        responseMimeType: 'application/json',
+        temperature: 0.3,
+      ),
+    );
+
+    final prompt = _buildPrompt(input);
+
+    try {
+      final response = await model
+          .generateContent([Content.text(prompt)]).timeout(
+        const Duration(seconds: 30),
+      );
+
+      final text = response.text;
+      if (text == null || text.isEmpty) {
+        throw Exception('Empty response from Gemini');
+      }
+
+      return _parse(text);
+    } on TimeoutException {
+      throw Exception('Request timed out. Please try again.');
+    } on GenerativeAIException catch (e) {
+      if (e.message.contains('429') ||
+          e.message.toLowerCase().contains('rate limit')) {
+        throw Exception('Rate limited. Please wait a moment and try again.');
+      }
+      throw Exception('AI error: ${e.message}');
+    }
+  }
+
+  String _buildPrompt(SmartFillInput input) {
+    final buf = StringBuffer();
+
+    // Ultra-compact: structured data only, no prose
+    buf.writeln('PA Mental Health Advance Directive auto-fill.');
+    buf.writeln('Form: ${input.formType}');
+
+    if (input.conditions.isNotEmpty) {
+      buf.writeln('ICD-10 diagnoses:');
+      for (final c in input.conditions) {
+        buf.writeln('- ${c.code} ${c.name}');
+      }
+    }
+
+    if (input.currentMedications.isNotEmpty) {
+      buf.writeln('Current meds: ${input.currentMedications.join(", ")}');
+    }
+
+    if (input.medicationsToAvoid.isNotEmpty) {
+      buf.writeln('Avoid meds: ${input.medicationsToAvoid.join(", ")}');
+    }
+
+    buf.writeln();
+    buf.writeln('Generate JSON for a PA MHAD (Act 194 of 2004). '
+        'Only include fields you can confidently infer from the diagnoses and medications above. '
+        'Use plain language suitable for a legal document. '
+        'Do NOT include patient name, DOB, or any PII.');
+
+    buf.writeln();
+    buf.writeln('{');
+    buf.writeln('  "effective_condition": "when this directive activates",');
+    buf.writeln('  "health_history": "brief relevant history from diagnoses",');
+    buf.writeln(
+        '  "preferred_facility_note": "type of facility that would be appropriate",');
+    buf.writeln(
+        '  "avoid_facility_note": "type of facility or setting to avoid",');
+    buf.writeln('  "ect_preference": "guidance on ECT given these conditions",');
+    buf.writeln(
+        '  "crisis_intervention": "what helps during crisis for these conditions",');
+    buf.writeln(
+        '  "activities": "therapeutic activities helpful for these conditions",');
+    buf.writeln(
+        '  "dietary": "dietary considerations related to these medications",');
+    if (input.formType != 'declaration') {
+      buf.writeln(
+          '  "agent_guidance": "what an agent should know about these conditions/meds",');
+    }
+    buf.writeln('  "additional_meds_to_consider": [{"name":"..","reason":".."}],');
+    buf.writeln('  "additional_meds_to_avoid": [{"name":"..","reason":".."}]');
+    buf.writeln('}');
+
+    return buf.toString();
+  }
+
+  SmartFillResult _parse(String text) {
+    var cleaned = text.trim();
+    // Strip markdown code fences (handles \r\n from some API responses)
+    if (cleaned.startsWith('```')) {
+      cleaned = cleaned
+          .replaceFirst(RegExp(r'^```(?:json)?\s*[\r\n]*'), '')
+          .replaceFirst(RegExp(r'[\r\n]*```\s*$'), '');
+    }
+    // Remove trailing commas before } or ] (common AI JSON quirk)
+    cleaned = cleaned.replaceAll(RegExp(r',(\s*[}\]])'), r'$1');
+    try {
+      final json = jsonDecode(cleaned) as Map<String, dynamic>;
+      return SmartFillResult.fromJson(json);
+    } catch (e) {
+      debugPrint('Smart fill parse error: $e\nResponse: ${cleaned.substring(0, cleaned.length.clamp(0, 200))}');
+      if (cleaned.toLowerCase().contains('error')) {
+        throw Exception('The AI encountered an error. Please try again.');
+      }
+      throw Exception('The AI response was not in the expected format. Please try again.');
+    }
+  }
+}
