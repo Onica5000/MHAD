@@ -46,10 +46,10 @@ workflows:
       - name: Run tests
         script: flutter test
 
-      - name: Build Android
+      - name: Build Android APK
         script: flutter build apk --debug
 
-      - name: Build iOS
+      - name: Build iOS (verification — no codesign)
         script: flutter build ios --no-codesign
 
       - name: Build macOS
@@ -63,4 +63,5 @@ workflows:
 
     artifacts:
       - build/app/outputs/flutter-apk/app-debug.apk
+      - build/macos/Build/Products/Debug/**/*.app
       - build/web/**
