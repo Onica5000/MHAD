@@ -1,23 +1,9 @@
-# codemagic.yaml — CI/CD for PA MHAD (all 5 platforms)
+# codemagic.yaml — CI/CD for PA MHAD
 # https://docs.codemagic.io/yaml-quick-start/building-a-flutter-app/
-#
-# Required Codemagic environment variables:
-#   APP_STORE_CONNECT_ISSUER_ID   — App Store Connect API key issuer
-#   APP_STORE_CONNECT_KEY_ID      — App Store Connect API key ID
-#   APP_STORE_CONNECT_PRIVATE_KEY — App Store Connect API private key (base64)
-#   CERTIFICATE_PRIVATE_KEY       — iOS distribution certificate private key
-#   KEYSTORE_BASE64               — Android keystore (base64)
-#   KEYSTORE_PASSWORD
-#   KEY_ALIAS
-#   KEY_PASSWORD
-#
-# Note: macOS, iOS, and Web workflows run on macOS runners.
-#       Android workflow can run on macOS or Linux runners.
-#       Windows workflow requires a Windows runner (Codemagic Premium).
 
 workflows:
 
-  # ─── Tests (runs on every push) ────────────────────────────────────────────
+  # ─── Tests (every push) ────────────────────────────────────────────────────
   tests:
     name: Tests
     max_build_duration: 15
@@ -36,180 +22,7 @@ workflows:
       - name: Run tests
         script: flutter test
 
-  # ─── Android release ───────────────────────────────────────────────────────
-  android-release:
-    name: Android Release
-    max_build_duration: 30
-    instance_type: mac_mini_m2
-    environment:
-      flutter: 3.41.4
-      android_signing:
-        - mhad_keystore
-    triggering:
-      events:
-        - tag
-      tag_patterns:
-        - pattern: 'v*'
-    scripts:
-      - name: Get dependencies
-        script: flutter pub get
-
-      - name: Run tests
-        script: flutter test
-
-      - name: Build APK (release, obfuscated)
-        script: |
-          flutter build apk \
-            --release \
-            --obfuscate \
-            --split-debug-info=build/debug-info
-
-      - name: Build App Bundle (release, obfuscated)
-        script: |
-          flutter build appbundle \
-            --release \
-            --obfuscate \
-            --split-debug-info=build/debug-info
-
-    artifacts:
-      - build/app/outputs/flutter-apk/app-release.apk
-      - build/app/outputs/bundle/release/app-release.aab
-      - build/debug-info/
-
-    publishing:
-      google_play:
-        credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
-        track: internal
-
-  # ─── iOS release ───────────────────────────────────────────────────────────
-  ios-release:
-    name: iOS Release
-    max_build_duration: 60
-    instance_type: mac_mini_m2
-    environment:
-      flutter: 3.41.4
-      xcode: latest
-      cocoapods: default
-      ios_signing:
-        distribution_type: app_store
-        bundle_identifier: com.mhad.mhad
-    triggering:
-      events:
-        - tag
-      tag_patterns:
-        - pattern: 'v*'
-    scripts:
-      - name: Get dependencies
-        script: flutter pub get
-
-      - name: Install CocoaPods
-        script: |
-          cd ios
-          pod install
-
-      - name: Run tests
-        script: flutter test
-
-      - name: Build iOS (release, obfuscated)
-        script: |
-          flutter build ipa \
-            --release \
-            --obfuscate \
-            --split-debug-info=build/debug-info \
-            --export-options-plist=/Users/builder/export_options.plist
-
-    artifacts:
-      - build/ios/ipa/*.ipa
-      - build/debug-info/
-      - /tmp/xcodebuild_logs/*.log
-
-    publishing:
-      app_store_connect:
-        auth: integration
-        submit_to_testflight: true
-
-  # ─── macOS release ─────────────────────────────────────────────────────────
-  macos-release:
-    name: macOS Release
-    max_build_duration: 60
-    instance_type: mac_mini_m2
-    environment:
-      flutter: 3.41.4
-      xcode: latest
-    triggering:
-      events:
-        - tag
-      tag_patterns:
-        - pattern: 'v*'
-    scripts:
-      - name: Get dependencies
-        script: flutter pub get
-
-      - name: Run tests
-        script: flutter test
-
-      - name: Build macOS (release)
-        script: |
-          flutter build macos --release
-
-    artifacts:
-      - build/macos/Build/Products/Release/*.app
-
-  # ─── Web release ───────────────────────────────────────────────────────────
-  web-release:
-    name: Web Release
-    max_build_duration: 30
-    instance_type: mac_mini_m2
-    environment:
-      flutter: 3.41.4
-    triggering:
-      events:
-        - tag
-      tag_patterns:
-        - pattern: 'v*'
-    scripts:
-      - name: Get dependencies
-        script: flutter pub get
-
-      - name: Run tests
-        script: flutter test
-
-      - name: Build Web
-        script: flutter build web --release
-
-    artifacts:
-      - build/web/**
-
-  # ─── Windows release ───────────────────────────────────────────────────────
-  # NOTE: Requires Codemagic Premium plan for Windows runner access.
-  # If you don't have a Windows runner, build locally with:
-  #   flutter build windows --release
-  windows-release:
-    name: Windows Release
-    max_build_duration: 60
-    instance_type: windows_x2
-    environment:
-      flutter: 3.41.4
-    triggering:
-      events:
-        - tag
-      tag_patterns:
-        - pattern: 'v*'
-    scripts:
-      - name: Get dependencies
-        script: flutter pub get
-
-      - name: Run tests
-        script: flutter test
-
-      - name: Build Windows (release)
-        script: flutter build windows --release
-
-    artifacts:
-      - build\windows\x64\runner\Release\**
-
-  # ─── All platforms (manual trigger) ────────────────────────────────────────
-  # Use this to verify all 5 platforms build before a release.
+  # ─── Build All Platforms ───────────────────────────────────────────────────
   build-all:
     name: Build All Platforms
     max_build_duration: 90
@@ -220,7 +33,10 @@ workflows:
       cocoapods: default
     triggering:
       events:
+        - tag
         - push
+      tag_patterns:
+        - pattern: 'v*'
       branch_patterns:
         - pattern: 'release/*'
     scripts:
@@ -230,17 +46,20 @@ workflows:
       - name: Run tests
         script: flutter test
 
-      - name: Build Android (debug — no signing needed for verification)
+      - name: Build Android
         script: flutter build apk --debug
 
-      - name: Build iOS (no codesign — verification only)
+      - name: Build iOS
         script: flutter build ios --no-codesign
 
-      - name: Build macOS (debug)
+      - name: Build macOS
         script: flutter build macos --debug
 
       - name: Build Web
         script: flutter build web
+
+      # Windows cannot build on macOS — build locally with:
+      #   flutter build windows --release
 
     artifacts:
       - build/app/outputs/flutter-apk/app-debug.apk
