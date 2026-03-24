@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:drift/drift.dart' show Value;
 import 'package:mhad/data/database/app_database.dart';
-import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/wizard/widgets/wizard_help_button.dart';
 import 'package:mhad/ui/wizard/wizard_step_mixin.dart';
@@ -20,9 +19,10 @@ class TreatmentFacilityStep extends ConsumerStatefulWidget {
 class _TreatmentFacilityStepState
     extends ConsumerState<TreatmentFacilityStep> with WizardStepMixin {
   final _formKey = GlobalKey<FormState>();
-  TreatmentFacilityPreference _pref = TreatmentFacilityPreference.noPreference;
   final _preferFacilityCtrl = TextEditingController();
+  final _preferLocationCtrl = TextEditingController();
   final _avoidFacilityCtrl = TextEditingController();
+  final _avoidLocationCtrl = TextEditingController();
 
   @override
   void initState() {
@@ -33,7 +33,9 @@ class _TreatmentFacilityStepState
   @override
   void dispose() {
     _preferFacilityCtrl.dispose();
+    _preferLocationCtrl.dispose();
     _avoidFacilityCtrl.dispose();
+    _avoidLocationCtrl.dispose();
     super.dispose();
   }
 
@@ -43,12 +45,14 @@ class _TreatmentFacilityStepState
         .getPreferences(widget.directiveId);
     if (pref != null && mounted) {
       setState(() {
-        _pref = TreatmentFacilityPreference.values.firstWhere(
-          (e) => e.name == pref.treatmentFacilityPref,
-          orElse: () => TreatmentFacilityPreference.noPreference,
-        );
-        _preferFacilityCtrl.text = pref.preferredFacilityName;
-        _avoidFacilityCtrl.text = pref.avoidFacilityName;
+        // Split "Name | Location" format if present
+        final prefParts = pref.preferredFacilityName.split(' | ');
+        _preferFacilityCtrl.text = prefParts.first;
+        if (prefParts.length > 1) _preferLocationCtrl.text = prefParts[1];
+
+        final avoidParts = pref.avoidFacilityName.split(' | ');
+        _avoidFacilityCtrl.text = avoidParts.first;
+        if (avoidParts.length > 1) _avoidLocationCtrl.text = avoidParts[1];
       });
     }
   }
@@ -57,22 +61,35 @@ class _TreatmentFacilityStepState
   Future<bool> validateAndSave() async {
     if (!(_formKey.currentState?.validate() ?? false)) return false;
 
+    final preferName = _preferFacilityCtrl.text.trim();
+    final preferLoc = _preferLocationCtrl.text.trim();
+    final preferred = preferName.isEmpty
+        ? ''
+        : preferLoc.isEmpty
+            ? preferName
+            : '$preferName | $preferLoc';
+
+    final avoidName = _avoidFacilityCtrl.text.trim();
+    final avoidLoc = _avoidLocationCtrl.text.trim();
+    final avoid = avoidName.isEmpty
+        ? ''
+        : avoidLoc.isEmpty
+            ? avoidName
+            : '$avoidName | $avoidLoc';
+
+    // Determine pref value based on what's filled in
+    final prefValue = preferred.isNotEmpty
+        ? 'prefer'
+        : avoid.isNotEmpty
+            ? 'avoid'
+            : 'noPreference';
+
     await ref.read(directiveRepositoryProvider).upsertPreferences(
           DirectivePrefsCompanion(
             directiveId: Value(widget.directiveId),
-            treatmentFacilityPref: Value(_pref.name),
-            preferredFacilityName: Value(
-              _pref == TreatmentFacilityPreference.prefer
-                  ? _preferFacilityCtrl.text.trim()
-                  : '',
-            ),
-            avoidFacilityName: Value(
-              _pref == TreatmentFacilityPreference.avoid
-                  ? _avoidFacilityCtrl.text.trim()
-                  : _pref == TreatmentFacilityPreference.prefer
-                      ? _avoidFacilityCtrl.text.trim()
-                      : '',
-            ),
+            treatmentFacilityPref: Value(prefValue),
+            preferredFacilityName: Value(preferred),
+            avoidFacilityName: Value(avoid),
           ),
         );
     return true;
@@ -80,10 +97,11 @@ class _TreatmentFacilityStepState
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     const helpText =
-        'You may specify a treatment facility you prefer or want to avoid. '
-        'This preference is not binding — it guides your agent and treatment '
-        'providers but may not always be possible to honor.';
+        'You may specify treatment facilities you prefer or want to avoid. '
+        'These preferences guide your agent and treatment providers but '
+        'may not always be possible to honor. Both fields are optional.';
 
     return Form(
       key: _formKey,
@@ -91,59 +109,68 @@ class _TreatmentFacilityStepState
         padding: const EdgeInsets.all(16),
         children: [
           WizardHelpButton(helpText: helpText, stepId: 'treatmentFacility'),
-          const SizedBox(height: 8),
-          RadioGroup<TreatmentFacilityPreference>(
-            groupValue: _pref,
-            onChanged: (v) => setState(() => _pref = v!),
-            child: Column(
-              children: [
-                RadioListTile<TreatmentFacilityPreference>(
-                  title: const Text('No preference'),
-                  value: TreatmentFacilityPreference.noPreference,
-                ),
-                RadioListTile<TreatmentFacilityPreference>(
-                  title: const Text('I prefer this facility'),
-                  value: TreatmentFacilityPreference.prefer,
-                ),
-                RadioListTile<TreatmentFacilityPreference>(
-                  title: const Text('I want to avoid this facility'),
-                  value: TreatmentFacilityPreference.avoid,
-                ),
-              ],
-            ),
+          const SizedBox(height: 16),
+          Text(
+            'Preferred Facility',
+            style: TextStyle(
+                fontWeight: FontWeight.w600, color: cs.onSurface),
           ),
-          if (_pref == TreatmentFacilityPreference.prefer) ...[
-            const SizedBox(height: 12),
-            TextFormField(
-              controller: _preferFacilityCtrl,
-              decoration: const InputDecoration(
-                labelText: 'Preferred facility name',
-                border: OutlineInputBorder(),
-              ),
-              validator: (v) =>
-                  (v == null || v.trim().isEmpty) ? 'Required' : null,
+          const SizedBox(height: 4),
+          Text(
+            'If you are hospitalized, which facility would you prefer?',
+            style: TextStyle(fontSize: 13, color: cs.onSurfaceVariant),
+          ),
+          const SizedBox(height: 8),
+          TextFormField(
+            controller: _preferFacilityCtrl,
+            decoration: const InputDecoration(
+              labelText: 'Preferred facility name (optional)',
+              hintText: 'e.g., Community Hospital',
+              border: OutlineInputBorder(),
             ),
-            const SizedBox(height: 12),
-            TextFormField(
-              controller: _avoidFacilityCtrl,
-              decoration: const InputDecoration(
-                labelText: 'Facility to avoid (optional)',
-                border: OutlineInputBorder(),
-              ),
+            textInputAction: TextInputAction.next,
+          ),
+          const SizedBox(height: 8),
+          TextFormField(
+            controller: _preferLocationCtrl,
+            decoration: const InputDecoration(
+              labelText: 'Location (optional)',
+              hintText: 'e.g., 123 Main St, Philadelphia, PA',
+              border: OutlineInputBorder(),
             ),
-          ],
-          if (_pref == TreatmentFacilityPreference.avoid) ...[
-            const SizedBox(height: 12),
-            TextFormField(
-              controller: _avoidFacilityCtrl,
-              decoration: const InputDecoration(
-                labelText: 'Facility to avoid',
-                border: OutlineInputBorder(),
-              ),
-              validator: (v) =>
-                  (v == null || v.trim().isEmpty) ? 'Required' : null,
+            textInputAction: TextInputAction.next,
+          ),
+          const SizedBox(height: 24),
+          Text(
+            'Facility to Avoid',
+            style: TextStyle(
+                fontWeight: FontWeight.w600, color: cs.onSurface),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            'Is there a facility where you do not want to be treated?',
+            style: TextStyle(fontSize: 13, color: cs.onSurfaceVariant),
+          ),
+          const SizedBox(height: 8),
+          TextFormField(
+            controller: _avoidFacilityCtrl,
+            decoration: const InputDecoration(
+              labelText: 'Facility to avoid (optional)',
+              hintText: 'e.g., County Crisis Center',
+              border: OutlineInputBorder(),
             ),
-          ],
+            textInputAction: TextInputAction.next,
+          ),
+          const SizedBox(height: 8),
+          TextFormField(
+            controller: _avoidLocationCtrl,
+            decoration: const InputDecoration(
+              labelText: 'Location (optional)',
+              hintText: 'e.g., 456 Oak Ave, Pittsburgh, PA',
+              border: OutlineInputBorder(),
+            ),
+            textInputAction: TextInputAction.done,
+          ),
         ],
       ),
     );
