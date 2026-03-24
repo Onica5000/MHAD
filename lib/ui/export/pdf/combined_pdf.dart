@@ -148,14 +148,15 @@ List<pw.Page> buildCombinedPages({
 
           // Treatment facility
           partHeader('1. Choice of Treatment Facility'),
-          if (prefs != null && prefs.treatmentFacilityPref == 'prefer' &&
-              prefs.preferredFacilityName.isNotEmpty) ...[
+          if (prefs != null && prefs.preferredFacilityName.isNotEmpty) ...[
             checkRow(
               'In the event that I require commitment to a psychiatric treatment facility, '
               'I would prefer to be admitted to the following facility:',
               checked: true,
             ),
-            dataLine('Name of facility', prefs.preferredFacilityName),
+            dataLine('Name of facility', _facilityName(prefs.preferredFacilityName)),
+            if (_facilityLocation(prefs.preferredFacilityName).isNotEmpty)
+              dataLine('Location', _facilityLocation(prefs.preferredFacilityName)),
           ] else
             checkRow(
               'In the event that I require commitment to a psychiatric treatment facility, '
@@ -167,7 +168,9 @@ List<pw.Page> buildCombinedPages({
               'I do not wish to be committed to the following facility:',
               checked: true,
             ),
-            dataLine('Name of facility', prefs.avoidFacilityName),
+            dataLine('Name of facility', _facilityName(prefs.avoidFacilityName)),
+            if (_facilityLocation(prefs.avoidFacilityName).isNotEmpty)
+              dataLine('Location', _facilityLocation(prefs.avoidFacilityName)),
           ] else
             checkRow(
               'In the event that I require commitment to a psychiatric treatment facility, '
@@ -623,6 +626,17 @@ List<pw.Page> buildCombinedPages({
       },
     ),
   ];
+}
+
+/// Split "Name | Location" format from treatment facility.
+String _facilityName(String raw) {
+  final parts = raw.split(' | ');
+  return parts.first;
+}
+
+String _facilityLocation(String raw) {
+  final parts = raw.split(' | ');
+  return parts.length > 1 ? parts[1] : '';
 }
 
 String _monthName(int month) {

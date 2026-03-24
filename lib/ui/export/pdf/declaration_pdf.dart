@@ -73,13 +73,14 @@ List<pw.Page> buildDeclarationPages({
 
           sectionHeader('B. Treatment Preferences — 1. Choice of Treatment Facility'),
           pw.SizedBox(height: 4),
-          if (prefs != null && prefs.treatmentFacilityPref == 'prefer' &&
-              prefs.preferredFacilityName.isNotEmpty) ...[
+          if (prefs != null && prefs.preferredFacilityName.isNotEmpty) ...[
             checkRow(
               'I would prefer to be admitted to the following facility:',
               checked: true,
             ),
-            dataLine('Name of facility', prefs.preferredFacilityName),
+            dataLine('Name of facility', _facilityName(prefs.preferredFacilityName)),
+            if (_facilityLocation(prefs.preferredFacilityName).isNotEmpty)
+              dataLine('Location', _facilityLocation(prefs.preferredFacilityName)),
           ] else
             checkRow('I would prefer to be admitted to the following facility:'),
           if (prefs != null && prefs.avoidFacilityName.isNotEmpty) ...[
@@ -87,7 +88,9 @@ List<pw.Page> buildDeclarationPages({
               'I do not wish to be committed to the following facility:',
               checked: true,
             ),
-            dataLine('Name of facility', prefs.avoidFacilityName),
+            dataLine('Name of facility', _facilityName(prefs.avoidFacilityName)),
+            if (_facilityLocation(prefs.avoidFacilityName).isNotEmpty)
+              dataLine('Location', _facilityLocation(prefs.avoidFacilityName)),
           ] else
             checkRow('I do not wish to be committed to the following facility:'),
           pw.Text(
@@ -346,6 +349,16 @@ List<pw.Page> buildDeclarationPages({
       },
     ),
   ];
+}
+
+String _facilityName(String raw) {
+  final parts = raw.split(' | ');
+  return parts.first;
+}
+
+String _facilityLocation(String raw) {
+  final parts = raw.split(' | ');
+  return parts.length > 1 ? parts[1] : '';
 }
 
 String _monthName(int month) {

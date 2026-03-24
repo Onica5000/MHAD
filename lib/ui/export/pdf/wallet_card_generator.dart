@@ -1,8 +1,5 @@
 /// Generates a credit-card-sized (3.375" x 2.125") printable wallet card
-/// summarizing the principal's PA Mental Health Advance Directive.
-///
-/// The card includes the principal's name, agent contact info, execution
-/// and expiration dates, and a reference to PA Act 194 of 2004.
+/// matching the official PA MHAD booklet front-page card format.
 library;
 
 import 'dart:typed_data';
@@ -20,6 +17,9 @@ const _cardHeight = 2.125 * PdfPageFormat.inch;
 const _cardFormat = PdfPageFormat(_cardWidth, _cardHeight);
 
 /// Generates a single-page wallet-card PDF from directive data.
+///
+/// Matches the official PA MHAD booklet cover card:
+/// "I, [name], have executed an advance directive..."
 class WalletCardGenerator {
   const WalletCardGenerator();
 
@@ -35,39 +35,29 @@ class WalletCardGenerator {
 
     final primaryAgent =
         agents.where((a) => a.agentType == 'primary').firstOrNull;
-
-    final executionDate = directive.executionDate != null
-        ? DateTime.fromMillisecondsSinceEpoch(directive.executionDate!)
-            .toString()
-            .split(' ')
-            .first
-        : null;
-
-    final expirationDate = directive.expirationDate != null
-        ? DateTime.fromMillisecondsSinceEpoch(directive.expirationDate!)
-            .toString()
-            .split(' ')
-            .first
-        : null;
-
-    // Determine the best phone number for the agent
     final agentPhone = _bestPhone(primaryAgent);
+
+    // Format phone for display: xxx-xxx-xxxx
+    final phoneDisplay = agentPhone.isNotEmpty
+        ? agentPhone
+        : '___-___-____';
+    final agentName = primaryAgent?.fullName ?? '________________________';
 
     pdf.addPage(
       pw.Page(
         pageFormat: _cardFormat,
-        margin: const pw.EdgeInsets.all(8),
+        margin: const pw.EdgeInsets.all(6),
         build: (pw.Context context) {
           return pw.Container(
             decoration: pw.BoxDecoration(
               border: pw.Border.all(color: kTeal, width: 1.5),
               borderRadius: const pw.BorderRadius.all(pw.Radius.circular(6)),
             ),
-            padding: const pw.EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+            padding: const pw.EdgeInsets.symmetric(horizontal: 8, vertical: 5),
             child: pw.Column(
               crossAxisAlignment: pw.CrossAxisAlignment.start,
               children: [
-                // Header bar
+                // Header
                 pw.Container(
                   width: double.infinity,
                   color: kTeal,
@@ -75,80 +65,81 @@ class WalletCardGenerator {
                       horizontal: 6, vertical: 3),
                   child: pw.Center(
                     child: pw.Text(
-                      'PA Mental Health Advance Directive',
+                      'MENTAL HEALTH ADVANCE DIRECTIVE',
                       style: pw.TextStyle(
-                        fontSize: 7.5,
+                        fontSize: 7,
                         fontWeight: pw.FontWeight.bold,
                         color: PdfColors.white,
                       ),
                     ),
                   ),
                 ),
+                pw.SizedBox(height: 4),
 
-                pw.SizedBox(height: 5),
-
-                // Principal name
-                _labelValue('Principal', directive.fullName),
-
+                // Official card text matching the PA MHAD booklet
+                pw.Text(
+                  'I, ${directive.fullName.isNotEmpty ? directive.fullName : "_____________________"}, '
+                  'have executed an advance directive specifying my decisions '
+                  'about my mental health care.',
+                  style: pw.TextStyle(fontSize: 6.5, height: 1.3),
+                ),
                 pw.SizedBox(height: 3),
 
-                // Agent info (if designated)
-                if (primaryAgent != null) ...[
-                  _labelValue('Agent', primaryAgent.fullName),
-                  if (agentPhone.isNotEmpty)
-                    _labelValue('Agent Phone', agentPhone),
-                  pw.SizedBox(height: 3),
-                ],
+                pw.Text(
+                  'My Mental Health Care Agent is $agentName.',
+                  style: pw.TextStyle(
+                      fontSize: 6.5,
+                      fontWeight: pw.FontWeight.bold,
+                      height: 1.3),
+                ),
+                pw.SizedBox(height: 2),
 
-                // Dates row
-                pw.Row(
-                  children: [
-                    if (executionDate != null)
-                      pw.Expanded(
-                        child: _labelValue('Executed', executionDate),
-                      ),
-                    if (expirationDate != null)
-                      pw.Expanded(
-                        child: _labelValue('Expires', expirationDate),
-                      ),
-                    if (expirationDate == null && executionDate != null)
-                      pw.Expanded(
-                        child: _labelValue('Expires', 'Not specified'),
-                      ),
-                  ],
+                pw.Text(
+                  'If I am hospitalized, my Agent should be immediately '
+                  'contacted at $phoneDisplay.',
+                  style: pw.TextStyle(fontSize: 6.5, height: 1.3),
                 ),
 
                 pw.Spacer(),
 
-                // "Full directive on file" line
-                if (primaryAgent != null)
-                  pw.Text(
-                    'Full directive on file with: ${primaryAgent.fullName}',
+                // PA P&A contact (matches official card)
+                pw.Container(
+                  width: double.infinity,
+                  padding: const pw.EdgeInsets.symmetric(vertical: 2),
+                  child: pw.Text(
+                    'If the hospital has questions about its legal '
+                    'responsibilities to honor my decisions, it should '
+                    'contact Pennsylvania Protection and Advocacy at: '
+                    '1-800-692-7443',
                     style: pw.TextStyle(
-                      fontSize: 6,
+                      fontSize: 5.5,
                       fontStyle: pw.FontStyle.italic,
                       color: kDarkGrey,
+                      height: 1.2,
                     ),
                   ),
+                ),
 
                 pw.SizedBox(height: 2),
 
-                // Legal reference footer
+                // Footer with dates and legal reference
                 pw.Row(
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
                     pw.Text(
                       'PA Act 194 of 2004',
-                      style: pw.TextStyle(fontSize: 5.5, color: kDarkGrey),
+                      style: pw.TextStyle(fontSize: 5, color: kDarkGrey),
                     ),
-                    pw.Text(
-                      'Carry this card with you at all times',
-                      style: pw.TextStyle(
-                        fontSize: 5,
-                        fontStyle: pw.FontStyle.italic,
-                        color: kDarkGrey,
+                    if (directive.executionDate != null)
+                      pw.Text(
+                        'Executed: ${_fmtDate(directive.executionDate!)}',
+                        style: pw.TextStyle(fontSize: 5, color: kDarkGrey),
                       ),
-                    ),
+                    if (directive.expirationDate != null)
+                      pw.Text(
+                        'Expires: ${_fmtDate(directive.expirationDate!)}',
+                        style: pw.TextStyle(fontSize: 5, color: kDarkGrey),
+                      ),
                   ],
                 ),
               ],
@@ -161,7 +152,6 @@ class WalletCardGenerator {
     return pdf.save();
   }
 
-  /// Picks the best available phone number from an agent record.
   static String _bestPhone(Agent? agent) {
     if (agent == null) return '';
     if (agent.cellPhone.isNotEmpty) return agent.cellPhone;
@@ -170,25 +160,8 @@ class WalletCardGenerator {
     return '';
   }
 
-  /// Small label + value widget for the wallet card.
-  static pw.Widget _labelValue(String label, String value) {
-    return pw.RichText(
-      text: pw.TextSpan(
-        children: [
-          pw.TextSpan(
-            text: '$label: ',
-            style: pw.TextStyle(
-              fontSize: 6.5,
-              fontWeight: pw.FontWeight.bold,
-              color: kBlack,
-            ),
-          ),
-          pw.TextSpan(
-            text: value.isEmpty ? '---' : value,
-            style: pw.TextStyle(fontSize: 6.5, color: kBlack),
-          ),
-        ],
-      ),
-    );
+  static String _fmtDate(int ms) {
+    final d = DateTime.fromMillisecondsSinceEpoch(ms);
+    return '${d.month}/${d.day}/${d.year}';
   }
 }
