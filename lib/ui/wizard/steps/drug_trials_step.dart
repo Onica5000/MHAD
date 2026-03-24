@@ -164,6 +164,33 @@ class _DrugTrialsStepState extends ConsumerState<DrugTrialsStep>
                   (v == null || v.trim().isEmpty) ? 'Required' : null,
             ),
           ],
+          const SizedBox(height: 16),
+          Card(
+            color: Theme.of(context).colorScheme.tertiaryContainer,
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(Icons.info_outline, size: 20,
+                      color: Theme.of(context).colorScheme.onTertiaryContainer),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'Important: Under PA Act 194, your agent cannot consent '
+                      'to drug trials or experimental treatments on your '
+                      'behalf unless you explicitly authorize it here.',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Theme.of(context).colorScheme.onTertiaryContainer,
+                        height: 1.4,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );

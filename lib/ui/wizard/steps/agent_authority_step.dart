@@ -125,34 +125,6 @@ class _AgentAuthorityStepState
               suffixIcon: VoiceInputButton(controller: _limitationsCtrl),
             ),
           ),
-          const SizedBox(height: 16),
-          Card(
-            color: Theme.of(context).colorScheme.tertiaryContainer,
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Icon(Icons.science_outlined, size: 20,
-                      color: Theme.of(context).colorScheme.onTertiaryContainer),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      'Important: Under PA Act 194, your agent cannot consent to '
-                      'experimental treatments or clinical trials on your behalf '
-                      'unless you explicitly authorize it in this directive. If you '
-                      'wish to allow this, include specific instructions above.',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Theme.of(context).colorScheme.onTertiaryContainer,
-                        height: 1.4,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
         ],
       ),
     );
