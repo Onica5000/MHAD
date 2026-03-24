@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mhad/ai/ai_assistant.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
+import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/wizard/wizard_step_mixin.dart';
 import 'package:mhad/ui/wizard/steps/personal_info_step.dart';
@@ -137,6 +138,38 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                   child: IconButton(
                     icon: const Icon(Icons.auto_awesome),
                     onPressed: () async {
+                      // Check if AI is set up
+                      final apiKey = ref.read(apiKeyProvider).valueOrNull;
+                      if (apiKey == null || apiKey.isEmpty) {
+                        if (!context.mounted) return;
+                        final goSetup = await showDialog<bool>(
+                          context: context,
+                          builder: (ctx) => AlertDialog(
+                            icon: const Icon(Icons.auto_awesome, size: 36),
+                            title: const Text('AI Not Set Up'),
+                            content: const Text(
+                              'Smart Fill uses AI to generate personalized '
+                              'suggestions based on your conditions and '
+                              'medications.\n\n'
+                              'You need a free Gemini API key to use this '
+                              'feature. It takes about 30 seconds to set up.'),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(ctx, false),
+                                child: const Text('Not Now'),
+                              ),
+                              FilledButton(
+                                onPressed: () => Navigator.pop(ctx, true),
+                                child: const Text('Set Up AI'),
+                              ),
+                            ],
+                          ),
+                        );
+                        if (goSetup == true && context.mounted) {
+                          context.push(AppRoutes.aiSetup);
+                        }
+                        return;
+                      }
                       final applied = await showSmartFillFlow(
                         context,
                         directiveId: directive.id,
@@ -145,6 +178,14 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                       if (applied == true && mounted) {
                         // Rebuild to pick up new data
                         setState(() {});
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                  'Smart Fill suggestions applied. Review your form to confirm.'),
+                            ),
+                          );
+                        }
                       }
                     },
                   ),

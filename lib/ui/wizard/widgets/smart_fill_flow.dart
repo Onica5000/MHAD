@@ -7,7 +7,6 @@ import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/services/clinical_data_service.dart';
-import 'package:mhad/services/gemini_rate_tracker.dart';
 import 'package:mhad/ui/widgets/ai_consent_dialog.dart';
 import 'package:mhad/ui/widgets/friendly_error.dart';
 import 'package:mhad/ui/widgets/nlm_attribution.dart';
@@ -116,7 +115,16 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
     }
 
     final apiKey = ref.read(apiKeyProvider).valueOrNull;
-    if (apiKey == null || apiKey.isEmpty) return;
+    if (apiKey == null || apiKey.isEmpty) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('AI is not set up. Go to AI Assistant Setup to add your API key.'),
+          ),
+        );
+      }
+      return;
+    }
 
     // Check rate limits
     final tracker = ref.read(geminiRateTrackerProvider);
@@ -179,128 +187,133 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
   Future<void> _apply() async {
     if (_result == null || _accepted == null || _editedValues == null) return;
 
-    final repo = ref.read(directiveRepositoryProvider);
-    final id = widget.directiveId;
-    final r = _result!;
-    final a = _accepted!;
-    final v = _editedValues!;
+    try {
+      final repo = ref.read(directiveRepositoryProvider);
+      final id = widget.directiveId;
+      final r = _result!;
+      final a = _accepted!;
+      final v = _editedValues!;
 
-    String? editedVal(String key) {
-      if (a[key] != true) return null;
-      final text = v[key]?.trim();
-      return (text != null && text.isNotEmpty) ? text : null;
-    }
-
-    // Effective condition
-    final ec = editedVal('Effective Condition');
-    if (ec != null) {
-      final d = await repo.getDirectiveById(id);
-      if (d != null && d.effectiveCondition.isEmpty) {
-        await repo.updateEffectiveCondition(id, ec);
+      String? editedVal(String key) {
+        if (a[key] != true) return null;
+        final text = v[key]?.trim();
+        return (text != null && text.isNotEmpty) ? text : null;
       }
-    }
 
-    // Health history + other additional instructions
-    final instrUpdates = <String, String>{};
-    final hh = editedVal('Health History');
-    if (hh != null) instrUpdates['healthHistory'] = hh;
-    final ci = editedVal('Crisis Intervention');
-    if (ci != null) instrUpdates['crisisIntervention'] = ci;
-    final act = editedVal('Helpful Activities');
-    if (act != null) instrUpdates['activities'] = act;
-    final diet = editedVal('Dietary Considerations');
-    if (diet != null) instrUpdates['dietary'] = diet;
-    final ag = editedVal('Agent Guidance');
-    if (ag != null) instrUpdates['other'] = ag;
-
-    if (instrUpdates.isNotEmpty) {
-      final existing = await repo.getAdditionalInstructions(id);
-      await repo.upsertAdditionalInstructions(
-        AdditionalInstructionsTableCompanion(
-          directiveId: Value(id),
-          healthHistory: instrUpdates.containsKey('healthHistory')
-              ? Value(_merge(
-                  existing?.healthHistory, instrUpdates['healthHistory']!))
-              : const Value.absent(),
-          crisisIntervention: instrUpdates.containsKey('crisisIntervention')
-              ? Value(_merge(existing?.crisisIntervention,
-                  instrUpdates['crisisIntervention']!))
-              : const Value.absent(),
-          activities: instrUpdates.containsKey('activities')
-              ? Value(
-                  _merge(existing?.activities, instrUpdates['activities']!))
-              : const Value.absent(),
-          dietary: instrUpdates.containsKey('dietary')
-              ? Value(_merge(existing?.dietary, instrUpdates['dietary']!))
-              : const Value.absent(),
-          other: instrUpdates.containsKey('other')
-              ? Value(_merge(existing?.other, instrUpdates['other']!))
-              : const Value.absent(),
-        ),
-      );
-    }
-
-    // Medications to consider → preferred
-    if (a['Additional Medications to Consider'] == true) {
-      final existing = await repo.watchMedications(id).first;
-      int order = existing.length;
-      for (final m in r.additionalMedsToConsider) {
-        await repo.insertMedication(MedicationEntriesCompanion.insert(
-          directiveId: id,
-          entryType: MedicationEntryType.preferred.name,
-          medicationName: Value(m.name),
-          reason: Value(m.reason),
-          sortOrder: Value(order++),
-        ));
+      // Effective condition
+      final ec = editedVal('Effective Condition');
+      if (ec != null) {
+        final d = await repo.getDirectiveById(id);
+        if (d != null && d.effectiveCondition.isEmpty) {
+          await repo.updateEffectiveCondition(id, ec);
+        }
       }
-    }
 
-    // Medications to avoid → exceptions
-    if (a['Additional Medications to Avoid'] == true) {
-      final existing = await repo.watchMedications(id).first;
-      int order = existing.length;
-      for (final m in r.additionalMedsToAvoid) {
-        await repo.insertMedication(MedicationEntriesCompanion.insert(
-          directiveId: id,
-          entryType: MedicationEntryType.exception.name,
-          medicationName: Value(m.name),
-          reason: Value(m.reason),
-          sortOrder: Value(order++),
-        ));
+      // Health history + other additional instructions
+      final instrUpdates = <String, String>{};
+      final hh = editedVal('Health History');
+      if (hh != null) instrUpdates['healthHistory'] = hh;
+      final ci = editedVal('Crisis Intervention');
+      if (ci != null) instrUpdates['crisisIntervention'] = ci;
+      final act = editedVal('Helpful Activities');
+      if (act != null) instrUpdates['activities'] = act;
+      final diet = editedVal('Dietary Considerations');
+      if (diet != null) instrUpdates['dietary'] = diet;
+      final ag = editedVal('Agent Guidance');
+      if (ag != null) instrUpdates['other'] = ag;
+
+      if (instrUpdates.isNotEmpty) {
+        final existing = await repo.getAdditionalInstructions(id);
+        await repo.upsertAdditionalInstructions(
+          AdditionalInstructionsTableCompanion(
+            directiveId: Value(id),
+            healthHistory: instrUpdates.containsKey('healthHistory')
+                ? Value(_merge(
+                    existing?.healthHistory, instrUpdates['healthHistory']!))
+                : const Value.absent(),
+            crisisIntervention: instrUpdates.containsKey('crisisIntervention')
+                ? Value(_merge(existing?.crisisIntervention,
+                    instrUpdates['crisisIntervention']!))
+                : const Value.absent(),
+            activities: instrUpdates.containsKey('activities')
+                ? Value(
+                    _merge(existing?.activities, instrUpdates['activities']!))
+                : const Value.absent(),
+            dietary: instrUpdates.containsKey('dietary')
+                ? Value(_merge(existing?.dietary, instrUpdates['dietary']!))
+                : const Value.absent(),
+            other: instrUpdates.containsKey('other')
+                ? Value(_merge(existing?.other, instrUpdates['other']!))
+                : const Value.absent(),
+          ),
+        );
       }
-    }
 
-    // Also save the user's explicit current meds + avoid meds from step 2
-    final existingMeds = await repo.watchMedications(id).first;
-    int order = existingMeds.length;
-    // Dedup uses full display name (including dosage/form) AND entry type.
-    // "Sertraline 50 MG" and "Sertraline 100 MG" are different entries.
-    // Same drug in "preferred" and "avoid" are both allowed (different intent).
-    bool isDuplicate(String name, String entryType) {
-      return existingMeds.any((m) =>
-          m.medicationName.toLowerCase() == name.toLowerCase() &&
-          m.entryType == entryType);
-    }
-
-    for (final name in _selectedCurrentMeds) {
-      if (!isDuplicate(name, MedicationEntryType.preferred.name)) {
-        await repo.insertMedication(MedicationEntriesCompanion.insert(
-          directiveId: id,
-          entryType: MedicationEntryType.preferred.name,
-          medicationName: Value(name),
-          reason: Value('Currently prescribed'),
-          sortOrder: Value(order++),
-        ));
+      // Medications to consider → preferred
+      if (a['Additional Medications to Consider'] == true) {
+        final existing = await repo.watchMedications(id).first;
+        int order = existing.length;
+        for (final m in r.additionalMedsToConsider) {
+          await repo.insertMedication(MedicationEntriesCompanion.insert(
+            directiveId: id,
+            entryType: MedicationEntryType.preferred.name,
+            medicationName: Value(m.name),
+            reason: Value(m.reason),
+            sortOrder: Value(order++),
+          ));
+        }
       }
-    }
-    for (final name in _selectedAvoidMeds) {
-      if (!isDuplicate(name, MedicationEntryType.exception.name)) {
-        await repo.insertMedication(MedicationEntriesCompanion.insert(
-          directiveId: id,
-          entryType: MedicationEntryType.exception.name,
-          medicationName: Value(name),
-          sortOrder: Value(order++),
-        ));
+
+      // Medications to avoid → exceptions
+      if (a['Additional Medications to Avoid'] == true) {
+        final existing = await repo.watchMedications(id).first;
+        int order = existing.length;
+        for (final m in r.additionalMedsToAvoid) {
+          await repo.insertMedication(MedicationEntriesCompanion.insert(
+            directiveId: id,
+            entryType: MedicationEntryType.exception.name,
+            medicationName: Value(m.name),
+            reason: Value(m.reason),
+            sortOrder: Value(order++),
+          ));
+        }
+      }
+
+      // Also save the user's explicit current meds + avoid meds from step 2
+      final existingMeds = await repo.watchMedications(id).first;
+      int order = existingMeds.length;
+      bool isDuplicate(String name, String entryType) {
+        return existingMeds.any((m) =>
+            m.medicationName.toLowerCase() == name.toLowerCase() &&
+            m.entryType == entryType);
+      }
+
+      for (final name in _selectedCurrentMeds) {
+        if (!isDuplicate(name, MedicationEntryType.preferred.name)) {
+          await repo.insertMedication(MedicationEntriesCompanion.insert(
+            directiveId: id,
+            entryType: MedicationEntryType.preferred.name,
+            medicationName: Value(name),
+            reason: Value('Currently prescribed'),
+            sortOrder: Value(order++),
+          ));
+        }
+      }
+      for (final name in _selectedAvoidMeds) {
+        if (!isDuplicate(name, MedicationEntryType.exception.name)) {
+          await repo.insertMedication(MedicationEntriesCompanion.insert(
+            directiveId: id,
+            entryType: MedicationEntryType.exception.name,
+            medicationName: Value(name),
+            sortOrder: Value(order++),
+          ));
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error applying suggestions: $e')),
+        );
       }
     }
 
