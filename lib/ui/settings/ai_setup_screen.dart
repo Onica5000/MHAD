@@ -250,6 +250,19 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                     macShortcut: '\u2318 + Shift + N',
                     color: cs.onErrorContainer,
                   ),
+                  _BrowserShortcut(
+                    browser: 'DuckDuckGo',
+                    shortcut: 'All browsing is private (Fire Button clears)',
+                    macShortcut: '',
+                    color: cs.onErrorContainer,
+                    isNote: true,
+                  ),
+                  _BrowserShortcut(
+                    browser: 'Comet',
+                    shortcut: 'Ctrl + Shift + N',
+                    macShortcut: '\u2318 + Shift + N',
+                    color: cs.onErrorContainer,
+                  ),
                   const SizedBox(height: 8),
                   Text(
                     'On a phone: tap the menu (\u22EE or \u22EF) and select '
@@ -555,20 +568,28 @@ class _BrowserShortcut extends StatelessWidget {
   final String shortcut;
   final String macShortcut;
   final Color color;
+  final bool isNote;
 
   const _BrowserShortcut({
     required this.browser,
     required this.shortcut,
-    required this.macShortcut,
     required this.color,
+    this.macShortcut = '',
+    this.isNote = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    // Show both shortcuts since we don't know the user's OS on web
-    final text = shortcut.isNotEmpty
-        ? '$browser:  $shortcut  (Mac: $macShortcut)'
-        : '$browser:  $macShortcut  (Mac only)';
+    final String text;
+    if (isNote) {
+      text = '$browser:  $shortcut';
+    } else if (shortcut.isNotEmpty && macShortcut.isNotEmpty) {
+      text = '$browser:  $shortcut  (Mac: $macShortcut)';
+    } else if (macShortcut.isNotEmpty) {
+      text = '$browser:  $macShortcut  (Mac only)';
+    } else {
+      text = '$browser:  $shortcut';
+    }
     return Padding(
       padding: const EdgeInsets.only(bottom: 4),
       child: Row(
@@ -581,7 +602,7 @@ class _BrowserShortcut extends StatelessWidget {
               style: TextStyle(
                 fontSize: 12,
                 color: color,
-                fontFamily: 'monospace',
+                fontFamily: isNote ? null : 'monospace',
                 height: 1.3,
               ),
             ),
