@@ -173,7 +173,29 @@
       "Bash(git:*)",
       "Bash(gh --version)",
       "WebFetch(domain:docs.codemagic.io)",
-      "WebFetch(domain:docs.github.com)"
+      "WebFetch(domain:docs.github.com)",
+      "WebFetch(domain:drift.simonbinder.eu)",
+      "Bash(curl -L -o sqlite3.wasm \"https://github.com/nicbn/sqlite3.dart/releases/download/sqlite3-2.9.4/sqlite3.wasm\")",
+      "Bash(curl -sL \"https://api.github.com/repos/nicbn/sqlite3.dart/releases\")",
+      "Bash(curl -sL \"https://api.github.com/repos/nicbn/sqlite3.dart/releases/tags/sqlite3-2.9.4\")",
+      "Bash(curl -sL \"https://api.github.com/repos/nicbn/nicbn.github.io/releases\")",
+      "Bash(curl -sL \"https://api.github.com/repos/nicbn/nicbn.github.io/releases/tags/sqlite3-2.9.4\")",
+      "Bash(curl -sL \"https://api.github.com/repos/nicbn/nicbn.github.io/tags\")",
+      "Bash(curl -sL \"https://api.github.com/repos/nicbn/nicbn.github.io/releases/latest\")",
+      "Bash(curl -sL \"https://api.github.com/repos/nicbn/nicbn.github.io/contents\")",
+      "Bash(curl -sL \"https://api.github.com/repos/nicbn/sqlite3.dart/releases/latest\")",
+      "Bash(curl -sL \"https://api.github.com/repos/nicbn/nicbn.github.io/\")",
+      "Bash(curl -sL \"https://api.github.com/repos/nicbn/nicbn.github.io\")",
+      "Bash(curl -sL \"https://api.github.com/repos/simolus3/sqlite3.dart/releases\")",
+      "Bash(python3 -c \"import sys,json; [print\\(r[''''tag_name'''']\\) for r in json.loads\\(sys.stdin.read\\(\\)\\)[:10]]\")",
+      "Bash(curl -sL https://api.github.com/repos/simolus3/sqlite3.dart/releases)",
+      "Bash(curl -sL \"https://api.github.com/repos/simolus3/sqlite3.dart/releases?per_page=50\")",
+      "Bash(curl -sL \"https://api.github.com/repos/simolus3/sqlite3.dart/releases/tags/sqlite3-2.9.4\")",
+      "Bash(curl -sL \"https://api.github.com/repos/simolus3/drift/releases?per_page=20\")",
+      "Bash(curl -sL \"https://api.github.com/repos/simolus3/drift/releases/tags/drift-2.28.2\")",
+      "Bash(curl -L -o sqlite3.wasm \"https://github.com/simolus3/sqlite3.dart/releases/download/sqlite3-2.9.4/sqlite3.wasm\")",
+      "Bash(curl -L -o drift_worker.js \"https://github.com/simolus3/drift/releases/download/drift-2.28.2/drift_worker.js\")",
+      "Bash(MSYS_NO_PATHCONV=1 \"D:/flutter/bin/flutter.bat\" build web --release --base-href '/MHAD/')"
     ]
   }
 }
