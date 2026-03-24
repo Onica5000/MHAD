@@ -35,6 +35,9 @@ class _AdditionalInstructionsStepState
   final _familyNotificationCtrl = TextEditingController();
   final _recordsDisclosureCtrl = TextEditingController();
   final _petCustodyCtrl = TextEditingController();
+  final _deescalationCtrl = TextEditingController();
+  final _triggersCtrl = TextEditingController();
+  final _reproductiveCtrl = TextEditingController();
   final _otherCtrl = TextEditingController();
 
   @override
@@ -71,6 +74,9 @@ class _AdditionalInstructionsStepState
     _familyNotificationCtrl.dispose();
     _recordsDisclosureCtrl.dispose();
     _petCustodyCtrl.dispose();
+    _deescalationCtrl.dispose();
+    _triggersCtrl.dispose();
+    _reproductiveCtrl.dispose();
     _otherCtrl.dispose();
     super.dispose();
   }
@@ -90,9 +96,45 @@ class _AdditionalInstructionsStepState
         _familyNotificationCtrl.text = data.familyNotification;
         _recordsDisclosureCtrl.text = data.recordsDisclosure;
         _petCustodyCtrl.text = data.petCustody;
-        _otherCtrl.text = data.other;
+        _parseOtherField(data.other);
       });
     }
+  }
+
+  // The database has one "other" column. We store de-escalation, triggers,
+  // and reproductive health in it with tagged sections, and parse them back.
+  static const _deescTag = '[DE-ESCALATION] ';
+  static const _trigTag = '[TRIGGERS] ';
+  static const _reproTag = '[REPRODUCTIVE] ';
+
+  void _parseOtherField(String raw) {
+    final lines = raw.split('\n');
+    final otherLines = <String>[];
+    for (final line in lines) {
+      if (line.startsWith(_deescTag)) {
+        _deescalationCtrl.text = line.substring(_deescTag.length);
+      } else if (line.startsWith(_trigTag)) {
+        _triggersCtrl.text = line.substring(_trigTag.length);
+      } else if (line.startsWith(_reproTag)) {
+        _reproductiveCtrl.text = line.substring(_reproTag.length);
+      } else {
+        otherLines.add(line);
+      }
+    }
+    _otherCtrl.text = otherLines.join('\n').trim();
+  }
+
+  String _buildOtherField() {
+    final parts = <String>[];
+    final deesc = _deescalationCtrl.text.trim();
+    final trig = _triggersCtrl.text.trim();
+    final repro = _reproductiveCtrl.text.trim();
+    final other = _otherCtrl.text.trim();
+    if (deesc.isNotEmpty) parts.add('$_deescTag$deesc');
+    if (trig.isNotEmpty) parts.add('$_trigTag$trig');
+    if (repro.isNotEmpty) parts.add('$_reproTag$repro');
+    if (other.isNotEmpty) parts.add(other);
+    return parts.join('\n');
   }
 
   @override
@@ -111,7 +153,7 @@ class _AdditionalInstructionsStepState
             familyNotification: Value(_familyNotificationCtrl.text.trim()),
             recordsDisclosure: Value(_recordsDisclosureCtrl.text.trim()),
             petCustody: Value(_petCustodyCtrl.text.trim()),
-            other: Value(_otherCtrl.text.trim()),
+            other: Value(_buildOtherField()),
           ),
         );
     return true;
@@ -188,47 +230,22 @@ class _AdditionalInstructionsStepState
             'What helps or doesn\'t help during a crisis',
             'specific things that help or make things worse during a mental health crisis, based on past experience',
           ),
-          ExpansionTile(
-            title: const Text('De-escalation Techniques'),
-            subtitle: Text(
-              'What calms you during distress',
-              style: TextStyle(
-                fontSize: 12,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
-            ),
-            children: const [
-              Padding(
-                padding: EdgeInsets.fromLTRB(16, 0, 16, 8),
-                child: Text(
-                  'Examples: listening to music, going for a walk, '
-                  'deep breathing, speaking with a specific person, '
-                  'being in a quiet room, using a weighted blanket.',
-                  style: TextStyle(fontSize: 12),
-                ),
-              ),
-            ],
+          _buildSection(
+            'De-escalation Techniques',
+            _deescalationCtrl,
+            'e.g., music, deep breathing, quiet room, weighted blanket',
+            'techniques and strategies that calm you during distress — '
+            'for example, listening to music, going for a walk, deep '
+            'breathing, speaking with a specific person, being in a '
+            'quiet room, or using a weighted blanket',
           ),
-          ExpansionTile(
-            title: const Text('Potential Crisis Triggers'),
-            subtitle: Text(
-              'Situations that may worsen a crisis',
-              style: TextStyle(
-                fontSize: 12,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
-            ),
-            children: const [
-              Padding(
-                padding: EdgeInsets.fromLTRB(16, 0, 16, 8),
-                child: Text(
-                  'Examples: loud environments, specific topics, '
-                  'being touched without permission, being alone, '
-                  'certain people or settings.',
-                  style: TextStyle(fontSize: 12),
-                ),
-              ),
-            ],
+          _buildSection(
+            'Potential Crisis Triggers',
+            _triggersCtrl,
+            'e.g., loud environments, specific topics, being alone',
+            'situations or stimuli that may worsen a crisis — for example, '
+            'loud environments, specific conversation topics, being touched '
+            'without permission, being alone, or certain people or settings',
           ),
           ExpansionTile(
             title: const Text('Health History'),
@@ -308,28 +325,14 @@ class _AdditionalInstructionsStepState
             'Instructions for care of your pets',
             'instructions for care and custody of pets if you are hospitalized',
           ),
-          ExpansionTile(
-            title: const Text('Reproductive Health Care'),
-            subtitle: Text(
-              'Optional — preferences during a mental health crisis',
-              style: TextStyle(
-                fontSize: 12,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
-            ),
-            children: const [
-              Padding(
-                padding: EdgeInsets.fromLTRB(16, 0, 16, 8),
-                child: Text(
-                  'You may document preferences about reproductive health '
-                  'care during a mental health crisis — for example, '
-                  'pregnancy testing before medication changes, '
-                  'contraception preferences, or any reproductive health '
-                  'conditions your treatment team should be aware of.',
-                  style: TextStyle(fontSize: 12),
-                ),
-              ),
-            ],
+          _buildSection(
+            'Reproductive Health Care',
+            _reproductiveCtrl,
+            'Pregnancy testing, contraception, etc.',
+            'reproductive health care preferences during a mental health '
+            'crisis — for example, pregnancy testing before medication '
+            'changes, contraception preferences, or reproductive health '
+            'conditions your treatment team should be aware of',
           ),
           _buildSection(
             'Other Instructions',
