@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/wizard/auto_save_mixin.dart';
-import 'package:mhad/ui/wizard/widgets/ai_suggest_button.dart';
 import 'package:mhad/ui/wizard/widgets/example_text_button.dart';
-import 'package:mhad/ui/wizard/widgets/field_help_icon.dart';
 import 'package:mhad/ui/wizard/widgets/voice_input_button.dart';
 import 'package:mhad/ui/wizard/widgets/wizard_help_button.dart';
 import 'package:mhad/ui/wizard/wizard_step_mixin.dart';
@@ -102,26 +100,7 @@ class _EffectiveConditionStepState
             decoration: InputDecoration(
               labelText: 'When this directive becomes effective',
               border: const OutlineInputBorder(),
-              suffixIcon: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  VoiceInputButton(controller: _ctrl),
-                  const FieldHelpIcon(
-                    tooltip:
-                        'This describes when your directive activates — typically '
-                        'when two professionals certify you lack capacity to make '
-                        'treatment decisions. Under PA Act 194, at least one must '
-                        'be a psychiatrist.',
-                  ),
-                  AiSuggestButton(
-                    controller: _ctrl,
-                    fieldName: 'Effective Condition',
-                    fieldGuidance:
-                        'the specific circumstances under which this mental health '
-                        'advance directive becomes operative',
-                  ),
-                ],
-              ),
+              suffixIcon: VoiceInputButton(controller: _ctrl),
             ),
             validator: (v) =>
                 (v == null || v.trim().isEmpty) ? 'Required' : null,

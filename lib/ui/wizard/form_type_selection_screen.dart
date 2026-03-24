@@ -50,6 +50,8 @@ class _FormTypeSelectionScreenState
           ListView(
         padding: const EdgeInsets.all(16),
         children: [
+          const _AiSetupPrompt(),
+          const SizedBox(height: 16),
           Text(
             'Which type of directive would you like to create?',
             style: Theme.of(context).textTheme.titleMedium,
@@ -120,8 +122,6 @@ class _FormTypeSelectionScreenState
             icon: const Icon(Icons.quiz_outlined),
             label: const Text('Which form is right for me?'),
           ),
-          const SizedBox(height: 24),
-          const _AiSetupPrompt(),
         ],
       ),
       if (_creating)
@@ -260,7 +260,14 @@ class _AiSetupPrompt extends ConsumerWidget {
     final isEphemeral = isEphemeralApiKeyMode(ref);
 
     return Card(
-      color: cs.surfaceContainerHighest,
+      color: hasKey ? cs.surfaceContainerHighest : cs.primaryContainer,
+      elevation: hasKey ? 0 : 2,
+      shape: hasKey
+          ? null
+          : RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: BorderSide(color: cs.primary, width: 2),
+            ),
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
         onTap: () => context.push(AppRoutes.aiSetup),
@@ -278,45 +285,58 @@ class _AiSetupPrompt extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      hasKey
-                          ? 'AI Assistant Ready'
-                          : 'Set Up AI Assistant (Optional)',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14,
-                        color: cs.onSurface,
-                      ),
+                    Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            hasKey
+                                ? 'AI Assistant Ready'
+                                : 'Set Up AI Assistant',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
+                              color: hasKey ? cs.onSurface : cs.onPrimaryContainer,
+                            ),
+                          ),
+                        ),
+                        if (!hasKey) ...[
+                          const SizedBox(width: 8),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: cs.primary,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Text('Strongly Recommended',
+                                style: TextStyle(
+                                    fontSize: 10,
+                                    color: cs.onPrimary,
+                                    fontWeight: FontWeight.w600)),
+                          ),
+                        ],
+                      ],
                     ),
-                    const SizedBox(height: 2),
+                    const SizedBox(height: 4),
                     Text(
                       hasKey
                           ? isEphemeral
                               ? 'API key set for this session'
                               : 'API key saved'
-                          : 'Get a free Gemini API key to enable AI-powered '
-                              'suggestions and guided help',
+                          : 'Get a free Gemini API key to unlock AI-powered '
+                              'suggestions, guided help, and document import. '
+                              'Takes about 30 seconds.',
                       style: TextStyle(
                         fontSize: 12,
-                        color: cs.onSurfaceVariant,
+                        color: hasKey ? cs.onSurfaceVariant : cs.onPrimaryContainer,
+                        height: 1.3,
                       ),
                     ),
-                    if (!hasKey && isEphemeral) ...[
-                      const SizedBox(height: 4),
-                      Text(
-                        'Tip: Use a private/incognito browser window when '
-                        'signing into Google on a shared device',
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontStyle: FontStyle.italic,
-                          color: cs.onSurfaceVariant,
-                        ),
-                      ),
-                    ],
                   ],
                 ),
               ),
-              Icon(Icons.chevron_right, color: cs.onSurfaceVariant),
+              Icon(Icons.chevron_right,
+                  color: hasKey ? cs.onSurfaceVariant : cs.onPrimaryContainer),
             ],
           ),
         ),
