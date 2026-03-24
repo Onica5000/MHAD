@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -497,6 +498,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       await ref.read(directiveRepositoryProvider).deleteAllDirectives();
       const storage = FlutterSecureStorage();
       await storage.deleteAll();
+      // Also clear AI session data
+      await endPublicSession(ref);
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('All data deleted successfully.')),
@@ -589,11 +592,14 @@ class _PublicModeNotice extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
+    final isWeb = kIsWeb;
+
     return Semantics(
       container: true,
-      label: 'Public mode. Session data is temporary. '
-          'If the app closes unexpectedly, you have 10 minutes to reopen '
-          'and recover your work. Tap End Session when done.',
+      label: isWeb
+          ? 'Your data is stored in this browser. '
+            'Tap Clear All Data to start over.'
+          : 'Public mode. Tap End Session when done.',
       child: Card(
         color: cs.secondaryContainer,
         child: Padding(
@@ -601,22 +607,30 @@ class _PublicModeNotice extends StatelessWidget {
           child: Column(
             children: [
               ExcludeSemantics(
-                child: Icon(Icons.visibility_off_outlined,
+                child: Icon(
+                    isWeb ? Icons.language : Icons.visibility_off_outlined,
                     size: 40, color: cs.onSecondaryContainer),
               ),
               const SizedBox(height: 12),
-              Text('Public Mode',
+              Text(isWeb ? 'Web App' : 'Public Mode',
                   style: TextStyle(
                       fontWeight: FontWeight.w600,
                       color: cs.onSecondaryContainer)),
               const SizedBox(height: 8),
               Text(
-                'This is a temporary session. Your data is not permanently '
-                'stored.\n\n'
-                'If the app closes unexpectedly, you have 10 minutes to '
-                'reopen and recover your work (API key and form data).\n\n'
-                'When you\'re done, tap "End Session" below to securely '
-                'erase all session data.',
+                isWeb
+                    ? 'Your directives are saved in this browser and will '
+                      'persist if you reload the page.\n\n'
+                      'Your data is not encrypted and is not sent to any '
+                      'server. Use "Clear All Data" below to erase '
+                      'everything when you\'re done.'
+                    : 'This is a temporary session. Your data is not '
+                      'permanently stored.\n\n'
+                      'If the app closes unexpectedly, you have 10 minutes '
+                      'to reopen and recover your work (API key and form '
+                      'data).\n\n'
+                      'When you\'re done, tap "End Session" below to '
+                      'securely erase all session data.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontSize: 13,
@@ -627,8 +641,9 @@ class _PublicModeNotice extends StatelessWidget {
                 width: double.infinity,
                 child: OutlinedButton.icon(
                   onPressed: onEndSession,
-                  icon: const Icon(Icons.logout, size: 18),
-                  label: const Text('End Session'),
+                  icon: Icon(
+                      isWeb ? Icons.delete_forever : Icons.logout, size: 18),
+                  label: Text(isWeb ? 'Clear All Data & Start Over' : 'End Session'),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: cs.onSecondaryContainer,
                     side: BorderSide(

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/ai/ai_assistant.dart';
@@ -72,8 +73,14 @@ GoRouter _buildRouter(
         // Disclaimer accepted: bounce away from disclaimer screen
         if (loc == AppRoutes.disclaimer) return AppRoutes.modeSelection;
 
-        // Step 2 — Must select public/private mode each launch
+        // Step 2 — Must select public/private mode each launch.
+        // On web, auto-select public mode (private mode isn't available)
+        // so the user goes straight to home and data persists on reload.
         if (!privacy.isSelected) {
+          if (kIsWeb) {
+            privacy.setPublicMode();
+            return AppRoutes.home;
+          }
           return loc == AppRoutes.modeSelection ? null : AppRoutes.modeSelection;
         }
         // Mode selected: bounce away from mode-selection screen
