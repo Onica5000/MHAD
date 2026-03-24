@@ -201,24 +201,46 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       orElse: () => FormType.combined,
     );
 
-    final payload = jsonEncode({
-      'type': 'PA_MHAD',
-      'principal': directive.fullName,
-      'formType': formType.displayName,
-      if (directive.executionDate != null)
-        'executed': DateTime.fromMillisecondsSinceEpoch(
-                directive.executionDate!)
-            .toString()
-            .split(' ')
-            .first,
-      if (directive.expirationDate != null)
-        'expires': DateTime.fromMillisecondsSinceEpoch(
-                directive.expirationDate!)
-            .toString()
-            .split(' ')
-            .first,
-      'note': 'This is a summary only. Request the full directive from the principal.',
-    });
+    final agentName = _agents.isNotEmpty ? _agents.first.fullName : null;
+    final agentPhone = _agents.isNotEmpty
+        ? [_agents.first.cellPhone, _agents.first.homePhone, _agents.first.workPhone]
+            .firstWhere((p) => p.isNotEmpty, orElse: () => '')
+        : '';
+
+    final execDate = directive.executionDate != null
+        ? DateTime.fromMillisecondsSinceEpoch(directive.executionDate!)
+        : null;
+    final expDate = directive.expirationDate != null
+        ? DateTime.fromMillisecondsSinceEpoch(directive.expirationDate!)
+        : null;
+
+    final buf = StringBuffer();
+    buf.writeln('PA MENTAL HEALTH ADVANCE DIRECTIVE');
+    buf.writeln('');
+    buf.writeln('I, ${directive.fullName}, have executed an advance directive '
+        'specifying my decisions about my mental health care.');
+    buf.writeln('');
+    if (agentName != null && agentName.isNotEmpty) {
+      buf.writeln('My Mental Health Care Agent is $agentName.');
+      if (agentPhone.isNotEmpty) {
+        buf.writeln('Contact Agent at: $agentPhone');
+      }
+      buf.writeln('');
+    }
+    buf.writeln('Form: ${formType.displayName}');
+    if (execDate != null) {
+      buf.writeln('Executed: ${execDate.month}/${execDate.day}/${execDate.year}');
+    }
+    if (expDate != null) {
+      buf.writeln('Expires: ${expDate.month}/${expDate.day}/${expDate.year}');
+    }
+    buf.writeln('');
+    buf.writeln('If the hospital has questions, contact PA Protection '
+        '& Advocacy at 1-800-692-7443.');
+    buf.writeln('');
+    buf.writeln('This is a summary. Request the full directive from the principal.');
+
+    final payload = buf.toString();
 
     showDialog(
       context: context,
