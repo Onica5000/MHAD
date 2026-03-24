@@ -103,23 +103,10 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
 
   @override
   Future<bool> validateAndSave() async {
+    // Save whatever is filled in — don't block navigation
     if (_executionDate == null) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Please select an execution date')),
-        );
-      }
-      return false;
-    }
-    if (_w1NameCtrl.text.trim().isEmpty ||
-        _w2NameCtrl.text.trim().isEmpty) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text('Both witness names are required')),
-        );
-      }
-      return false;
+      // Default to today if not selected
+      _executionDate = DateTime.now();
     }
 
     final repo = ref.read(directiveRepositoryProvider);
@@ -194,15 +181,26 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
               'The directive is valid for 2 years from the execution date.',
           stepId: 'execution',
         ),
+        const SizedBox(height: 16),
+
+        // ── Execution date ─────────────────────────────────
+        Text('Execution Date',
+            style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 15,
+                color: Theme.of(context).colorScheme.onSurface)),
         const SizedBox(height: 8),
-        const WitnessReminderButton(),
-        const SizedBox(height: 8),
-        // Execution date picker
         Card(
           child: ListTile(
             leading: const Icon(Icons.calendar_today),
-            title: const Text('Execution date'),
-            subtitle: Text(dateStr),
+            title: Text(_executionDate != null ? dateStr : 'Tap to select a date'),
+            subtitle: _executionDate != null
+                ? Text('Expires: $expirationStr',
+                    style: TextStyle(
+                        fontSize: 12,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant))
+                : const Text('Defaults to today if not selected',
+                    style: TextStyle(fontSize: 12)),
             trailing: const Icon(Icons.edit_outlined),
             onTap: () async {
               final picked = await showDatePicker(
@@ -217,22 +215,15 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
             },
           ),
         ),
-        if (_executionDate != null)
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            child: Text(
-              'This directive will expire on $expirationStr',
-              style: TextStyle(
-                  fontSize: 12,
-                  color: Theme.of(context).colorScheme.onSurfaceVariant),
-            ),
-          ),
         const SizedBox(height: 24),
+        const Divider(),
+        const SizedBox(height: 16),
 
-        // Principal signature
+        // ── Principal signature ────────────────────────────
         _SectionHeader(
-          title: 'Your signature (Principal)',
-          subtitle: 'Sign in the box below',
+          title: 'Your Signature (Principal)',
+          subtitle: 'Draw your signature in the box below. The printed '
+              'document must be signed with original ink to be legally valid.',
         ),
         _SignaturePad(controller: _principalSigController),
         const SizedBox(height: 24),
@@ -280,11 +271,32 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
           const SizedBox(height: 24),
         ],
 
-        // Witness 1
+        const Divider(),
+        const SizedBox(height: 16),
+
+        // ── Witnesses ──────────────────────────────────────
+        Text('Witnesses',
+            style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 15,
+                color: Theme.of(context).colorScheme.onSurface)),
+        const SizedBox(height: 4),
+        Text(
+          'Two adult witnesses must be present when you sign. '
+          'Witnesses cannot be your agent, healthcare provider, '
+          'or facility employee (unless a relative).',
+          style: TextStyle(
+              fontSize: 12.5,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+              height: 1.4),
+        ),
+        const SizedBox(height: 8),
+        const WitnessReminderButton(),
+        const SizedBox(height: 16),
+
         _SectionHeader(
           title: 'Witness 1',
-          subtitle: 'Must be an adult who is not your agent, healthcare provider, '
-              'or facility employee',
+          subtitle: 'Name, address, and signature',
         ),
         TextFormField(
           controller: _w1NameCtrl,
@@ -307,10 +319,10 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
         _SignaturePad(controller: _w1SigController),
         const SizedBox(height: 24),
 
-        // Witness 2
+        const SizedBox(height: 8),
         _SectionHeader(
           title: 'Witness 2',
-          subtitle: 'Must meet the same requirements as Witness 1',
+          subtitle: 'Same requirements as Witness 1',
         ),
         TextFormField(
           controller: _w2NameCtrl,
@@ -333,19 +345,44 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
         _SignaturePad(controller: _w2SigController),
         const SizedBox(height: 40),
 
+        const Divider(),
+        const SizedBox(height: 8),
         // Legal notice
         Card(
           color: Theme.of(context).colorScheme.errorContainer,
           child: Padding(
             padding: const EdgeInsets.all(12),
-            child: Text(
-              'By tapping "Finish" you confirm that this directive was executed '
-              'voluntarily, that you have legal capacity, and that it was signed '
-              'in the presence of the two witnesses listed above. '
-              'This app does not constitute legal advice.',
-              style: TextStyle(
-                  fontSize: 12,
-                  color: Theme.of(context).colorScheme.onErrorContainer),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(Icons.gavel, size: 16,
+                        color: Theme.of(context).colorScheme.onErrorContainer),
+                    const SizedBox(width: 8),
+                    Text('Important',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 13,
+                            color: Theme.of(context).colorScheme.onErrorContainer)),
+                  ],
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  'By proceeding you confirm that:\n'
+                  '  \u2022 This directive was executed voluntarily\n'
+                  '  \u2022 You have legal capacity to make this directive\n'
+                  '  \u2022 The printed document will be signed with ink in the '
+                  'presence of both witnesses\n\n'
+                  'Digital signatures in this app are for preparation only. '
+                  'The printed directive must have original ink signatures '
+                  'to be legally valid under PA Act 194.',
+                  style: TextStyle(
+                      fontSize: 12,
+                      color: Theme.of(context).colorScheme.onErrorContainer,
+                      height: 1.4),
+                ),
+              ],
             ),
           ),
         ),
