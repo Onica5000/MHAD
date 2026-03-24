@@ -160,14 +160,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           const SizedBox(height: 16),
           const ProviderResourcesCard(),
           const SizedBox(height: 4),
-          Align(
-            alignment: Alignment.centerRight,
-            child: TextButton.icon(
-              icon: const Icon(Icons.privacy_tip_outlined, size: 16),
-              label: const Text('Privacy Policy',
-                  style: TextStyle(fontSize: 12)),
-              onPressed: () => context.push(AppRoutes.privacyPolicy),
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              TextButton.icon(
+                icon: const Icon(Icons.auto_awesome, size: 16),
+                label: const Text('AI Setup',
+                    style: TextStyle(fontSize: 12)),
+                onPressed: () => context.push(AppRoutes.aiSetup),
+              ),
+              const SizedBox(width: 8),
+              TextButton.icon(
+                icon: const Icon(Icons.privacy_tip_outlined, size: 16),
+                label: const Text('Privacy Policy',
+                    style: TextStyle(fontSize: 12)),
+                onPressed: () => context.push(AppRoutes.privacyPolicy),
+              ),
+            ],
           ),
           const SizedBox(height: 8),
           if (privacyMode.isPublic) ...[
