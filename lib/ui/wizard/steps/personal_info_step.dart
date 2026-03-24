@@ -155,6 +155,25 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
     return null;
   }
 
+  Future<void> _pickDateOfBirth() async {
+    final now = DateTime.now();
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: now.subtract(const Duration(days: 365 * 30)),
+      firstDate: DateTime(1900),
+      lastDate: now,
+      helpText: 'Select your date of birth',
+    );
+    if (picked != null) {
+      _dobCtrl.text =
+          '${picked.month.toString().padLeft(2, '0')}/'
+          '${picked.day.toString().padLeft(2, '0')}/'
+          '${picked.year}';
+      // Trigger validation
+      _formKey.currentState?.validate();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -186,13 +205,19 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
             const SizedBox(height: 16),
             TextFormField(
               controller: _dobCtrl,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: 'Date of birth (MM/DD/YYYY) *',
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
                 hintText: 'MM/DD/YYYY',
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.calendar_month),
+                  tooltip: 'Pick date',
+                  onPressed: _pickDateOfBirth,
+                ),
               ),
               keyboardType: TextInputType.datetime,
               textInputAction: TextInputAction.next,
+              inputFormatters: [_DateInputFormatter()],
               validator: _validateAge,
             ),
             const SizedBox(height: 16),
@@ -302,6 +327,26 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
           ],
         ),
       ),
+    );
+  }
+}
+
+/// Auto-formats date input as MM/DD/YYYY while typing.
+/// Inserts slashes automatically after month and day digits.
+class _DateInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    final digits = newValue.text.replaceAll(RegExp(r'\D'), '');
+    final buf = StringBuffer();
+    for (var i = 0; i < digits.length && i < 8; i++) {
+      if (i == 2 || i == 4) buf.write('/');
+      buf.write(digits[i]);
+    }
+    final formatted = buf.toString();
+    return TextEditingValue(
+      text: formatted,
+      selection: TextSelection.collapsed(offset: formatted.length),
     );
   }
 }
