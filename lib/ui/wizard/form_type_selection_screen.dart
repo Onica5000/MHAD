@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
+import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/wizard/widgets/form_type_quiz.dart';
 
@@ -119,6 +120,8 @@ class _FormTypeSelectionScreenState
             icon: const Icon(Icons.quiz_outlined),
             label: const Text('Which form is right for me?'),
           ),
+          const SizedBox(height: 24),
+          const _AiSetupPrompt(),
         ],
       ),
       if (_creating)
@@ -235,6 +238,85 @@ class _FormTypeCard extends StatelessWidget {
               Text(description,
                   style:
                       TextStyle(fontSize: 13, color: cs.onSurfaceVariant)),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Prompts the user to set up their AI API key if they haven't yet.
+class _AiSetupPrompt extends ConsumerWidget {
+  const _AiSetupPrompt();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final cs = Theme.of(context).colorScheme;
+    final hasKey = ref.watch(apiKeyProvider).whenOrNull(
+              data: (k) => k != null && k.isNotEmpty,
+            ) ??
+        false;
+    final isEphemeral = isEphemeralApiKeyMode(ref);
+
+    return Card(
+      color: cs.surfaceContainerHighest,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: () => context.push(AppRoutes.aiSetup),
+        child: Padding(
+          padding: const EdgeInsets.all(14),
+          child: Row(
+            children: [
+              Icon(
+                hasKey ? Icons.check_circle : Icons.auto_awesome,
+                color: hasKey ? Colors.green : cs.primary,
+                size: 28,
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      hasKey
+                          ? 'AI Assistant Ready'
+                          : 'Set Up AI Assistant (Optional)',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                        color: cs.onSurface,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      hasKey
+                          ? isEphemeral
+                              ? 'API key set for this session'
+                              : 'API key saved'
+                          : 'Get a free Gemini API key to enable AI-powered '
+                              'suggestions and guided help',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: cs.onSurfaceVariant,
+                      ),
+                    ),
+                    if (!hasKey && isEphemeral) ...[
+                      const SizedBox(height: 4),
+                      Text(
+                        'Tip: Use a private/incognito browser window when '
+                        'signing into Google on a shared device',
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontStyle: FontStyle.italic,
+                          color: cs.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+              Icon(Icons.chevron_right, color: cs.onSurfaceVariant),
             ],
           ),
         ),

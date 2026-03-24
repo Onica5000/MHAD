@@ -152,23 +152,49 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
               color: cs.tertiaryContainer,
               child: Padding(
                 padding: const EdgeInsets.all(14),
-                child: Row(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Icon(Icons.info_outline,
-                        size: 20, color: cs.onTertiaryContainer),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Text(
-                        'You are in Public Mode. Your API key will be held '
-                        'in memory only for this session and will be '
-                        'automatically discarded when you close the app. '
-                        'It is never written to disk.',
-                        style: TextStyle(
-                            fontSize: 12.5,
-                            color: cs.onTertiaryContainer,
-                            height: 1.4),
-                      ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(Icons.info_outline,
+                            size: 20, color: cs.onTertiaryContainer),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            'Your API key will not be saved permanently. '
+                            'It is held in memory only and discarded when '
+                            'you clear your data or close the app.',
+                            style: TextStyle(
+                                fontSize: 12.5,
+                                color: cs.onTertiaryContainer,
+                                height: 1.4),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(Icons.security,
+                            size: 20, color: cs.onTertiaryContainer),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            'If you are on a shared or public device, open '
+                            'Google AI Studio in a private/incognito browser '
+                            'window so your Google login is not saved on '
+                            'this device.',
+                            style: TextStyle(
+                                fontSize: 12.5,
+                                color: cs.onTertiaryContainer,
+                                fontWeight: FontWeight.w600,
+                                height: 1.4),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
