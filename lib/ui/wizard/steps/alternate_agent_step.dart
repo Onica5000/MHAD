@@ -101,8 +101,7 @@ class _AlternateAgentStepState
 
     return Form(
       key: _formKey,
-      child: AutofillGroup(
-        child: ListView(
+      child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
             WizardHelpButton(helpText: helpText, stepId: 'alternateAgent'),
@@ -146,7 +145,7 @@ class _AlternateAgentStepState
                 labelText: 'Full name',
                 border: OutlineInputBorder(),
               ),
-              autofillHints: const [AutofillHints.name],
+              autofillHints: const [],
               textInputAction: TextInputAction.next,
             ),
             const SizedBox(height: 12),
@@ -165,7 +164,7 @@ class _AlternateAgentStepState
                 labelText: 'Address',
                 border: OutlineInputBorder(),
               ),
-              autofillHints: const [AutofillHints.fullStreetAddress],
+              autofillHints: const [],
               textInputAction: TextInputAction.next,
             ),
             const SizedBox(height: 12),
@@ -176,7 +175,7 @@ class _AlternateAgentStepState
                 labelText: 'Home phone',
                 border: OutlineInputBorder(),
               ),
-              autofillHints: const [AutofillHints.telephoneNumber],
+              autofillHints: const [],
               textInputAction: TextInputAction.next,
             ),
             const SizedBox(height: 12),
@@ -187,7 +186,7 @@ class _AlternateAgentStepState
                 labelText: 'Work phone',
                 border: OutlineInputBorder(),
               ),
-              autofillHints: const [AutofillHints.telephoneNumber],
+              autofillHints: const [],
               textInputAction: TextInputAction.next,
             ),
             const SizedBox(height: 12),
@@ -198,12 +197,11 @@ class _AlternateAgentStepState
                 labelText: 'Cell phone',
                 border: OutlineInputBorder(),
               ),
-              autofillHints: const [AutofillHints.telephoneNumber],
+              autofillHints: const [],
               textInputAction: TextInputAction.done,
             ),
           ],
         ),
-      ),
-    );
+      );
   }
 }

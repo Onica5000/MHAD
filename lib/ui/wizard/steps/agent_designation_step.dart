@@ -128,8 +128,7 @@ class _AgentDesignationStepState
 
     return Form(
       key: _formKey,
-      child: AutofillGroup(
-        child: ListView(
+      child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
             WizardHelpButton(helpText: helpText, stepId: 'agentDesignation'),
@@ -161,7 +160,7 @@ class _AgentDesignationStepState
                 labelText: 'Full name',
                 border: OutlineInputBorder(),
               ),
-              autofillHints: const [AutofillHints.name],
+              autofillHints: const [],
               textInputAction: TextInputAction.next,
               validator: (v) =>
                   (v == null || v.trim().isEmpty) ? 'Required' : null,
@@ -215,7 +214,7 @@ class _AgentDesignationStepState
                 labelText: 'Address',
                 border: OutlineInputBorder(),
               ),
-              autofillHints: const [AutofillHints.fullStreetAddress],
+              autofillHints: const [],
               textInputAction: TextInputAction.next,
             ),
             const SizedBox(height: 12),
@@ -226,7 +225,7 @@ class _AgentDesignationStepState
                 labelText: 'Home phone',
                 border: OutlineInputBorder(),
               ),
-              autofillHints: const [AutofillHints.telephoneNumber],
+              autofillHints: const [],
               textInputAction: TextInputAction.next,
               autovalidateMode: AutovalidateMode.onUserInteraction,
               inputFormatters: [
@@ -242,7 +241,7 @@ class _AgentDesignationStepState
                 labelText: 'Work phone',
                 border: OutlineInputBorder(),
               ),
-              autofillHints: const [AutofillHints.telephoneNumber],
+              autofillHints: const [],
               textInputAction: TextInputAction.next,
               autovalidateMode: AutovalidateMode.onUserInteraction,
               inputFormatters: [
@@ -258,7 +257,7 @@ class _AgentDesignationStepState
                 labelText: 'Cell phone',
                 border: OutlineInputBorder(),
               ),
-              autofillHints: const [AutofillHints.telephoneNumber],
+              autofillHints: const [],
               textInputAction: TextInputAction.done,
               autovalidateMode: AutovalidateMode.onUserInteraction,
               inputFormatters: [
@@ -268,7 +267,6 @@ class _AgentDesignationStepState
             ),
           ],
         ),
-      ),
-    );
+      );
   }
 }

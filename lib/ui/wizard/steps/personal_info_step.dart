@@ -178,8 +178,7 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
-      child: AutofillGroup(
-        child: ListView(
+      child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
             WizardHelpButton(
@@ -196,7 +195,7 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
                 labelText: 'Full legal name *',
                 border: OutlineInputBorder(),
               ),
-              autofillHints: const [AutofillHints.name],
+              autofillHints: const [],
               textCapitalization: TextCapitalization.words,
               textInputAction: TextInputAction.next,
               validator: (v) =>
@@ -227,7 +226,7 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
                 labelText: 'Street address',
                 border: OutlineInputBorder(),
               ),
-              autofillHints: const [AutofillHints.streetAddressLine1],
+              autofillHints: const [],
               textCapitalization: TextCapitalization.words,
               textInputAction: TextInputAction.next,
             ),
@@ -238,7 +237,7 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
                 labelText: 'Apt, suite, unit, etc.',
                 border: OutlineInputBorder(),
               ),
-              autofillHints: const [AutofillHints.streetAddressLine2],
+              autofillHints: const [],
               textCapitalization: TextCapitalization.words,
               textInputAction: TextInputAction.next,
             ),
@@ -253,7 +252,7 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
                       labelText: 'City',
                       border: OutlineInputBorder(),
                     ),
-                    autofillHints: const [AutofillHints.addressCity],
+                    autofillHints: const [],
                     textCapitalization: TextCapitalization.words,
                     textInputAction: TextInputAction.next,
                   ),
@@ -266,7 +265,7 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
                       labelText: 'State',
                       border: OutlineInputBorder(),
                     ),
-                    autofillHints: const [AutofillHints.addressState],
+                    autofillHints: const [],
                     textCapitalization: TextCapitalization.characters,
                     textInputAction: TextInputAction.next,
                     maxLength: 2,
@@ -283,7 +282,7 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
                       labelText: 'ZIP',
                       border: OutlineInputBorder(),
                     ),
-                    autofillHints: const [AutofillHints.postalCode],
+                    autofillHints: const [],
                     keyboardType: TextInputType.number,
                     textInputAction: TextInputAction.next,
                     maxLength: 10,
@@ -309,7 +308,7 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
                 hintText: '(215) 555-1234',
                 border: OutlineInputBorder(),
               ),
-              autofillHints: const [AutofillHints.telephoneNumber],
+              autofillHints: const [],
               keyboardType: TextInputType.phone,
               textInputAction: TextInputAction.done,
               inputFormatters: [
@@ -326,8 +325,7 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
             ),
           ],
         ),
-      ),
-    );
+      );
   }
 }
 
