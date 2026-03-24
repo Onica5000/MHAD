@@ -77,7 +77,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
 
   @override
   Future<bool> validateAndSave() async {
-    if (!(_formKey.currentState?.validate() ?? false)) return false;
+    _formKey.currentState?.validate();
     final repo = ref.read(directiveRepositoryProvider);
 
     int order = 0;

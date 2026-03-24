@@ -52,7 +52,7 @@ class _AgentAuthorityStepState
 
   @override
   Future<bool> validateAndSave() async {
-    if (!(_formKey.currentState?.validate() ?? false)) return false;
+    _formKey.currentState?.validate();
 
     await ref.read(directiveRepositoryProvider).upsertPreferences(
           DirectivePrefsCompanion(

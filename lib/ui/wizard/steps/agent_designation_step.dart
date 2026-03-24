@@ -85,19 +85,12 @@ class _AgentDesignationStepState
 
   @override
   Future<bool> validateAndSave() async {
-    if (!(_formKey.currentState?.validate() ?? false)) return false;
+    // Validate but don't block — always save whatever is entered
+    _formKey.currentState?.validate();
 
     final home = _homePhoneCtrl.text.trim();
     final work = _workPhoneCtrl.text.trim();
     final cell = _cellPhoneCtrl.text.trim();
-    if (home.isEmpty && work.isEmpty && cell.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please provide at least one phone number.'),
-        ),
-      );
-      return false;
-    }
 
     await ref.read(directiveRepositoryProvider).upsertAgent(
           AgentsCompanion(

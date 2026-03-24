@@ -59,7 +59,7 @@ class _TreatmentFacilityStepState
 
   @override
   Future<bool> validateAndSave() async {
-    if (!(_formKey.currentState?.validate() ?? false)) return false;
+    _formKey.currentState?.validate();
 
     final preferName = _preferFacilityCtrl.text.trim();
     final preferLoc = _preferLocationCtrl.text.trim();

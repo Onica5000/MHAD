@@ -67,7 +67,7 @@ class _EctStepState extends ConsumerState<EctStep> with WizardStepMixin {
 
   @override
   Future<bool> validateAndSave() async {
-    if (!(_formKey.currentState?.validate() ?? false)) return false;
+    _formKey.currentState?.validate();
 
     final String consentValue;
     if (_consent == ConsentOption.conditional) {

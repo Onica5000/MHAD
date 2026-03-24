@@ -123,7 +123,7 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
 
   @override
   Future<bool> validateAndSave() async {
-    if (!(_formKey.currentState?.validate() ?? false)) return false;
+    _formKey.currentState?.validate(); // Show warnings but don't block
     await ref.read(directiveRepositoryProvider).updatePersonalInfo(
       widget.directiveId,
       fullName: _fullNameCtrl.text.trim(),
