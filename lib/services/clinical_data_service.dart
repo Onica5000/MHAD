@@ -100,7 +100,7 @@ class ClinicalDataService {
     if (body == null) return [];
     final data = jsonDecode(body) as List;
     if (data.length >= 2 && data[1] is List) {
-      return (data[1] as List).cast<String>();
+      return List<String>.from(data[1] as List);
     }
     return [];
   }

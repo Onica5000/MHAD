@@ -7,18 +7,49 @@ import 'package:http/http.dart' as http;
 import 'package:mhad/services/certificate_pinning_service.dart';
 import 'package:mhad/services/clinical_data_service.dart';
 
-/// The structured input collected from the user via NIH APIs (zero tokens).
+/// The structured input collected from the user via NIH APIs (zero tokens),
+/// plus existing wizard data so the AI can supplement rather than duplicate.
 class SmartFillInput {
   final List<IcdCondition> conditions;
   final List<String> currentMedications;
   final List<String> medicationsToAvoid;
   final String formType; // 'combined', 'declaration', 'poa'
 
+  // Existing wizard data (non-PII) — AI should not contradict these.
+  final String existingEffectiveCondition;
+  final String existingHealthHistory;
+  final String existingCrisisIntervention;
+  final String existingActivities;
+  final String existingDietary;
+  final String existingOther;
+  final String existingFacilityPref; // 'noPreference', 'prefer', 'avoid'
+  final String existingPreferredFacility;
+  final String existingAvoidFacility;
+  final String existingEctConsent;
+  final String existingExperimentalConsent;
+  final String existingDrugTrialConsent;
+  final List<String> existingPreferredMeds;
+  final List<String> existingAvoidMeds;
+
   const SmartFillInput({
     required this.conditions,
     required this.currentMedications,
     required this.medicationsToAvoid,
     required this.formType,
+    this.existingEffectiveCondition = '',
+    this.existingHealthHistory = '',
+    this.existingCrisisIntervention = '',
+    this.existingActivities = '',
+    this.existingDietary = '',
+    this.existingOther = '',
+    this.existingFacilityPref = 'noPreference',
+    this.existingPreferredFacility = '',
+    this.existingAvoidFacility = '',
+    this.existingEctConsent = 'no',
+    this.existingExperimentalConsent = 'no',
+    this.existingDrugTrialConsent = 'no',
+    this.existingPreferredMeds = const [],
+    this.existingAvoidMeds = const [],
   });
 
   bool get isEmpty =>
@@ -203,7 +234,6 @@ class SmartFillService {
   String _buildPrompt(SmartFillInput input) {
     final buf = StringBuffer();
 
-    // Ultra-compact: structured data only, no prose
     buf.writeln('PA Mental Health Advance Directive auto-fill.');
     buf.writeln('Form: ${input.formType}');
 
@@ -222,9 +252,55 @@ class SmartFillService {
       buf.writeln('Avoid meds: ${input.medicationsToAvoid.join(", ")}');
     }
 
+    // Include existing wizard data so AI can supplement, not duplicate
+    final existing = <String>[];
+    if (input.existingEffectiveCondition.isNotEmpty) {
+      existing.add('Effective condition: ${input.existingEffectiveCondition}');
+    }
+    if (input.existingHealthHistory.isNotEmpty) {
+      existing.add('Health history: ${input.existingHealthHistory}');
+    }
+    if (input.existingCrisisIntervention.isNotEmpty) {
+      existing.add('Crisis plan: ${input.existingCrisisIntervention}');
+    }
+    if (input.existingActivities.isNotEmpty) {
+      existing.add('Activities: ${input.existingActivities}');
+    }
+    if (input.existingDietary.isNotEmpty) {
+      existing.add('Dietary: ${input.existingDietary}');
+    }
+    if (input.existingOther.isNotEmpty) {
+      existing.add('Other instructions: ${input.existingOther}');
+    }
+    if (input.existingPreferredFacility.isNotEmpty) {
+      existing.add('Preferred facility: ${input.existingPreferredFacility}');
+    }
+    if (input.existingAvoidFacility.isNotEmpty) {
+      existing.add('Avoid facility: ${input.existingAvoidFacility}');
+    }
+    if (input.existingEctConsent != 'no') {
+      existing.add('ECT consent: ${input.existingEctConsent}');
+    }
+    if (input.existingPreferredMeds.isNotEmpty) {
+      existing.add('Already listed preferred meds: ${input.existingPreferredMeds.join(", ")}');
+    }
+    if (input.existingAvoidMeds.isNotEmpty) {
+      existing.add('Already listed avoid meds: ${input.existingAvoidMeds.join(", ")}');
+    }
+
+    if (existing.isNotEmpty) {
+      buf.writeln();
+      buf.writeln('EXISTING DATA (user-entered — do NOT contradict, duplicate, or override):');
+      for (final line in existing) {
+        buf.writeln('- $line');
+      }
+    }
+
     buf.writeln();
     buf.writeln('Generate JSON for a PA MHAD (Act 194 of 2004). '
         'Only include fields you can confidently infer from the diagnoses and medications above. '
+        'SUPPLEMENT existing data — do not repeat or contradict what the user already wrote. '
+        'For fields the user already filled in, only add NEW information they may have missed. '
         'Use plain language suitable for a legal document. '
         'Do NOT include patient name, DOB, or any PII.');
 

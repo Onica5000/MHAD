@@ -142,12 +142,42 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
     });
 
     try {
+      // Read existing wizard data so AI can supplement, not duplicate
+      final repo = ref.read(directiveRepositoryProvider);
+      final directive = await repo.getDirectiveById(widget.directiveId);
+      final prefs = await repo.getPreferences(widget.directiveId);
+      final instr = await repo.getAdditionalInstructions(widget.directiveId);
+      final meds = await repo.watchMedications(widget.directiveId).first;
+
+      final existingPreferred = meds
+          .where((m) => m.entryType == 'preferred')
+          .map((m) => m.medicationName)
+          .toList();
+      final existingAvoid = meds
+          .where((m) => m.entryType == 'exception')
+          .map((m) => m.medicationName)
+          .toList();
+
       final service = SmartFillService(apiKey: apiKey);
       final result = await service.generate(SmartFillInput(
         conditions: _selectedConditions,
         currentMedications: _selectedCurrentMeds,
         medicationsToAvoid: _selectedAvoidMeds,
         formType: widget.formType,
+        existingEffectiveCondition: directive?.effectiveCondition ?? '',
+        existingHealthHistory: instr?.healthHistory ?? '',
+        existingCrisisIntervention: instr?.crisisIntervention ?? '',
+        existingActivities: instr?.activities ?? '',
+        existingDietary: instr?.dietary ?? '',
+        existingOther: instr?.other ?? '',
+        existingFacilityPref: prefs?.treatmentFacilityPref ?? 'noPreference',
+        existingPreferredFacility: prefs?.preferredFacilityName ?? '',
+        existingAvoidFacility: prefs?.avoidFacilityName ?? '',
+        existingEctConsent: prefs?.ectConsent ?? 'no',
+        existingExperimentalConsent: prefs?.experimentalConsent ?? 'no',
+        existingDrugTrialConsent: prefs?.drugTrialConsent ?? 'no',
+        existingPreferredMeds: existingPreferred,
+        existingAvoidMeds: existingAvoid,
       ));
 
       // Record request (smart fill prompt is compact: ~300-500 tokens)
@@ -322,7 +352,7 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
 
   String _merge(String? existing, String newText) {
     if (existing == null || existing.trim().isEmpty) return newText;
-    return '$existing\n$newText';
+    return '$existing\n\n[AI suggestion] $newText';
   }
 
   // ── Build ───────────────────────────────────────────────────────────
