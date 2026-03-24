@@ -99,8 +99,8 @@ class ClinicalDataService {
     final body = await _fetch(uri);
     if (body == null) return [];
     final data = jsonDecode(body) as List;
-    if (data.length >= 4 && data[3] is List) {
-      return (data[3] as List).cast<String>();
+    if (data.length >= 2 && data[1] is List) {
+      return (data[1] as List).cast<String>();
     }
     return [];
   }

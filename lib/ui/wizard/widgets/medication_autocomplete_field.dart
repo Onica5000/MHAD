@@ -75,9 +75,9 @@ class _MedicationAutocompleteFieldState
       if (response.statusCode != 200) return;
 
       final data = jsonDecode(response.body) as List;
-      // data[1] contains the array of display strings
-      if (data.length >= 4 && data[3] is List) {
-        final names = (data[3] as List).cast<String>();
+      // data[1] contains the flat array of display strings
+      if (data.length >= 2 && data[1] is List) {
+        final names = (data[1] as List).cast<String>();
         if (mounted) {
           setState(() => _suggestions = names);
           if (names.isNotEmpty && _focusNode.hasFocus) {
