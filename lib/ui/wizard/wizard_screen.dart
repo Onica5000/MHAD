@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -127,7 +128,7 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
               title: Text(currentStep.displayName),
               leading: IconButton(
                 icon: const Icon(Icons.close),
-                tooltip: 'Save & exit',
+                tooltip: kIsWeb ? 'Exit' : 'Save & exit',
                 onPressed: _isSaving ? null : () => _saveAndExit(context),
               ),
               actions: [
@@ -293,6 +294,47 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
   }
 
   Future<void> _saveAndExit(BuildContext context) async {
+    if (kIsWeb) {
+      await _exitWebWizard(context);
+    } else {
+      await _saveAndExitNative(context);
+    }
+  }
+
+  Future<void> _exitWebWizard(BuildContext context) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        icon: Icon(Icons.warning_amber_rounded,
+            color: Theme.of(context).colorScheme.error, size: 40),
+        title: const Text('Exit Without Saving?'),
+        content: const Text(
+            'The web app does not save your progress. '
+            'If you leave now, your work on this step will be lost.\n\n'
+            'Your session data is kept in memory for 10 minutes '
+            'in case the browser closes unexpectedly, but you '
+            'should export or print your document before leaving.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Stay'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            style: FilledButton.styleFrom(
+                backgroundColor: Theme.of(ctx).colorScheme.error),
+            child: const Text('Exit'),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+    if (context.mounted) {
+      context.go(AppRoutes.home);
+    }
+  }
+
+  Future<void> _saveAndExitNative(BuildContext context) async {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
