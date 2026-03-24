@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,8 +9,6 @@ import 'package:mhad/services/notification_service.dart';
 import 'package:mhad/ui/wizard/widgets/witness_reminder_button.dart';
 import 'package:mhad/ui/wizard/widgets/wizard_help_button.dart';
 import 'package:mhad/ui/wizard/wizard_step_mixin.dart';
-import 'package:mhad/utils/platform_utils.dart';
-import 'package:signature/signature.dart';
 
 class ExecutionStep extends ConsumerStatefulWidget {
   final int directiveId;
@@ -26,11 +23,6 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
     with WizardStepMixin {
   DateTime? _executionDate;
 
-  // Signature controllers are initialized in initState so we can access theme
-  late final SignatureController _principalSigController;
-  late final SignatureController _w1SigController;
-  late final SignatureController _w2SigController;
-
   // Witness 1
   final _w1NameCtrl = TextEditingController();
   final _w1AddressCtrl = TextEditingController();
@@ -44,34 +36,15 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
   @override
   void initState() {
     super.initState();
-    // Use post-frame callback to access theme for signature pad colors
-    _principalSigController = SignatureController(
-      penStrokeWidth: 2,
-      penColor: Colors.black,
-      exportBackgroundColor: Colors.white,
-    );
-    _w1SigController = SignatureController(
-      penStrokeWidth: 2,
-      penColor: Colors.black,
-      exportBackgroundColor: Colors.white,
-    );
-    _w2SigController = SignatureController(
-      penStrokeWidth: 2,
-      penColor: Colors.black,
-      exportBackgroundColor: Colors.white,
-    );
     WidgetsBinding.instance.addPostFrameCallback((_) => _loadData());
   }
 
   @override
   void dispose() {
-    _principalSigController.dispose();
     _w1NameCtrl.dispose();
     _w1AddressCtrl.dispose();
-    _w1SigController.dispose();
     _w2NameCtrl.dispose();
     _w2AddressCtrl.dispose();
-    _w2SigController.dispose();
     super.dispose();
   }
 
@@ -126,26 +99,22 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
       updatedAt: Value(DateTime.now().millisecondsSinceEpoch),
     ));
 
-    // Save witness signatures and info
+    // Save witness info (signatures affixed on printed original only)
     Future<void> saveWitness(int number, int? existingId,
         TextEditingController nameCtrl,
-        TextEditingController addressCtrl,
-        SignatureController sigCtrl) async {
-      final sigBytes = await sigCtrl.toPngBytes();
-      final sigB64 = sigBytes != null ? base64Encode(sigBytes) : null;
+        TextEditingController addressCtrl) async {
       await repo.upsertWitness(WitnessesCompanion(
         id: existingId != null ? Value(existingId) : const Value.absent(),
         directiveId: Value(widget.directiveId),
         witnessNumber: Value(number),
         fullName: Value(nameCtrl.text.trim()),
         address: Value(addressCtrl.text.trim()),
-        signatureBase64: Value(sigB64),
         signatureDate: Value(executionMs),
       ));
     }
 
-    await saveWitness(1, _w1Id, _w1NameCtrl, _w1AddressCtrl, _w1SigController);
-    await saveWitness(2, _w2Id, _w2NameCtrl, _w2AddressCtrl, _w2SigController);
+    await saveWitness(1, _w1Id, _w1NameCtrl, _w1AddressCtrl);
+    await saveWitness(2, _w2Id, _w2NameCtrl, _w2AddressCtrl);
 
     // Schedule 2-year expiration reminders
     final expirationDate =
@@ -222,10 +191,11 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
         // ── Principal signature ────────────────────────────
         _SectionHeader(
           title: 'Your Signature (Principal)',
-          subtitle: 'Draw your signature in the box below. The printed '
-              'document must be signed with original ink to be legally valid.',
+          subtitle: 'Original ink signatures are required on the printed '
+              'document for legal validity under PA Act 194.',
         ),
-        _SignaturePad(controller: _principalSigController),
+        const _SignaturePlaceholder(
+            label: 'Principal\'s signature to be affixed on original document'),
         const SizedBox(height: 24),
 
         // Agent acceptance (Combined and POA only)
@@ -296,12 +266,12 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
 
         _SectionHeader(
           title: 'Witness 1',
-          subtitle: 'Name, address, and signature',
+          subtitle: 'Name and address',
         ),
         TextFormField(
           controller: _w1NameCtrl,
           decoration: const InputDecoration(
-            labelText: 'Witness 1 full name *',
+            labelText: 'Witness 1 full name',
             border: OutlineInputBorder(),
           ),
           textCapitalization: TextCapitalization.words,
@@ -316,10 +286,10 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
           textCapitalization: TextCapitalization.words,
         ),
         const SizedBox(height: 8),
-        _SignaturePad(controller: _w1SigController),
+        const _SignaturePlaceholder(
+            label: 'Witness 1 signature to be affixed on original document'),
         const SizedBox(height: 24),
 
-        const SizedBox(height: 8),
         _SectionHeader(
           title: 'Witness 2',
           subtitle: 'Same requirements as Witness 1',
@@ -327,7 +297,7 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
         TextFormField(
           controller: _w2NameCtrl,
           decoration: const InputDecoration(
-            labelText: 'Witness 2 full name *',
+            labelText: 'Witness 2 full name',
             border: OutlineInputBorder(),
           ),
           textCapitalization: TextCapitalization.words,
@@ -342,7 +312,8 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
           textCapitalization: TextCapitalization.words,
         ),
         const SizedBox(height: 8),
-        _SignaturePad(controller: _w2SigController),
+        const _SignaturePlaceholder(
+            label: 'Witness 2 signature to be affixed on original document'),
         const SizedBox(height: 40),
 
         const Divider(),
@@ -372,11 +343,10 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
                   'By proceeding you confirm that:\n'
                   '  \u2022 This directive was executed voluntarily\n'
                   '  \u2022 You have legal capacity to make this directive\n'
-                  '  \u2022 The printed document will be signed with ink in the '
-                  'presence of both witnesses\n\n'
-                  'Digital signatures in this app are for preparation only. '
-                  'The printed directive must have original ink signatures '
-                  'to be legally valid under PA Act 194.',
+                  '  \u2022 The printed document will be signed with original '
+                  'ink signatures in the presence of both witnesses\n\n'
+                  'All signatures must be affixed to the original printed '
+                  'document to be legally valid under PA Act 194.',
                   style: TextStyle(
                       fontSize: 12,
                       color: Theme.of(context).colorScheme.onErrorContainer,
@@ -416,72 +386,37 @@ class _SectionHeader extends StatelessWidget {
   }
 }
 
-class _SignaturePad extends StatefulWidget {
-  final SignatureController controller;
-  const _SignaturePad({required this.controller});
+/// Placeholder indicating that a signature will be affixed on the
+/// printed original document.
+class _SignaturePlaceholder extends StatelessWidget {
+  final String label;
+  const _SignaturePlaceholder({required this.label});
 
-  @override
-  State<_SignaturePad> createState() => _SignaturePadState();
-}
-
-class _SignaturePadState extends State<_SignaturePad> {
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
-    // Use a light surface for the signing area so ink is always visible,
-    // while adapting to the theme rather than forcing pure white.
-    final padBackground = cs.surfaceContainerLowest;
-
     return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
       decoration: BoxDecoration(
-        border: Border.all(color: cs.outline),
+        border: Border.all(color: cs.outline, style: BorderStyle.solid),
         borderRadius: BorderRadius.circular(8),
-        color: padBackground,
+        color: cs.surfaceContainerLowest,
       ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(8),
-        child: Stack(
-          children: [
-            MouseRegion(
-              cursor: platformIsDesktop
-                  ? SystemMouseCursors.precise
-                  : MouseCursor.defer,
-              child: Signature(
-                controller: widget.controller,
-                height: 150,
-                backgroundColor: padBackground,
-              ),
+      child: Column(
+        children: [
+          Icon(Icons.draw_outlined, size: 28, color: cs.onSurfaceVariant),
+          const SizedBox(height: 8),
+          Text(
+            label,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 12,
+              fontStyle: FontStyle.italic,
+              color: cs.onSurfaceVariant,
             ),
-            Positioned(
-              right: 4,
-              top: 4,
-              child: IconButton(
-                icon: const Icon(Icons.clear, size: 18),
-                tooltip: 'Clear signature',
-                onPressed: () =>
-                    setState(() => widget.controller.clear()),
-                style: IconButton.styleFrom(
-                  backgroundColor: cs.surfaceContainerHighest,
-                  minimumSize: const Size(48, 48),
-                ),
-              ),
-            ),
-            Positioned(
-              bottom: 8,
-              left: 0,
-              right: 0,
-              child: Center(
-                child: Text(
-                  'Sign here',
-                  style: TextStyle(
-                    color: cs.onSurfaceVariant,
-                    fontSize: 12,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
