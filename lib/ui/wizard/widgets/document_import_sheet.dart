@@ -62,8 +62,8 @@ class _DocumentPickerContent extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
-          // Camera and gallery only on mobile — on desktop/web, use file picker
-          if (platformIsMobile) ...[
+          // Camera and gallery on devices with cameras (mobile native + mobile web)
+          if (deviceHasCamera) ...[
             ListTile(
               leading: const Icon(Icons.camera_alt),
               title: const Text('Take Photos'),
@@ -79,8 +79,8 @@ class _DocumentPickerContent extends StatelessWidget {
           ],
           ListTile(
             leading: const Icon(Icons.description),
-            title: Text(platformIsMobile ? 'Pick Files' : 'Choose Files'),
-            subtitle: Text(platformIsMobile
+            title: Text(deviceHasCamera ? 'Pick Files' : 'Choose Files'),
+            subtitle: Text(deviceHasCamera
                 ? 'PDF, text, or image files (multi-select)'
                 : 'PDF, photos, text, or image files (multi-select)'),
             onTap: () => _pickFiles(context),

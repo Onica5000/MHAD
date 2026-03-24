@@ -11,12 +11,14 @@ class DirectiveCard extends StatelessWidget {
   final VoidCallback onDelete;
   final VoidCallback? onRevoke;
   final VoidCallback? onRenew;
+  final VoidCallback? onExport;
 
   const DirectiveCard({
     required this.directive,
     required this.onDelete,
     this.onRevoke,
     this.onRenew,
+    this.onExport,
     super.key,
   });
 
@@ -156,11 +158,20 @@ class DirectiveCard extends StatelessWidget {
                   ),
                   PopupMenuButton<_Action>(
                     onSelected: (action) {
+                      if (action == _Action.export) onExport?.call();
                       if (action == _Action.delete) onDelete();
                       if (action == _Action.revoke) onRevoke?.call();
                       if (action == _Action.renew) onRenew?.call();
                     },
                     itemBuilder: (_) => [
+                      const PopupMenuItem(
+                        value: _Action.export,
+                        child: Row(children: [
+                          Icon(Icons.picture_as_pdf),
+                          SizedBox(width: 8),
+                          Text('Export PDF'),
+                        ]),
+                      ),
                       if ((status == DirectiveStatus.complete ||
                               status == DirectiveStatus.expired) &&
                           onRenew != null)
@@ -205,7 +216,7 @@ class DirectiveCard extends StatelessWidget {
   }
 }
 
-enum _Action { delete, revoke, renew }
+enum _Action { export, delete, revoke, renew }
 
 class _StatusChip extends StatelessWidget {
   final DirectiveStatus status;

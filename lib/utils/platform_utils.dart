@@ -14,6 +14,15 @@ bool get platformIsIOS =>
 
 bool get platformIsMobile => platformIsAndroid || platformIsIOS;
 
+/// Whether the device has a camera (mobile native or mobile web browser).
+/// On web, detects mobile browsers via user-agent so camera/gallery are
+/// offered on phones but not desktop browsers.
+bool get deviceHasCamera =>
+    platformIsMobile ||
+    (kIsWeb &&
+        (defaultTargetPlatform == TargetPlatform.android ||
+         defaultTargetPlatform == TargetPlatform.iOS));
+
 bool get platformIsWindows =>
     !kIsWeb && defaultTargetPlatform == TargetPlatform.windows;
 

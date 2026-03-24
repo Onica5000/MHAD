@@ -195,6 +195,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     return DirectiveCard(
                       key: ValueKey(d.id),
                       directive: d,
+                      onExport: () => context.push(AppRoutes.exportRoute(d.id)),
                       onDelete: () => _confirmDelete(context, ref, d.id),
                       onRevoke: () => _confirmRevoke(context, ref, d.id),
                       onRenew: () => _renewDirective(context, ref, d),
@@ -234,6 +235,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     return DirectiveCard(
                       key: ValueKey(d.id),
                       directive: d,
+                      onExport: () => context.push(AppRoutes.exportRoute(d.id)),
                       onDelete: () => _confirmDelete(context, ref, d.id),
                       onRevoke: () => _confirmRevoke(context, ref, d.id),
                       onRenew: () => _renewDirective(context, ref, d),
