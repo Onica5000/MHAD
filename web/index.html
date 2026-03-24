@@ -42,5 +42,24 @@
     * https://docs.flutter.dev/platform-integration/web/initialization
   -->
   <script src="flutter_bootstrap.js" async></script>
+  <!-- Accessible privacy/legal links before app loads (GDPR/CCPA compliance) -->
+  <noscript>
+    <p style="text-align:center;padding:20px;font-family:sans-serif;">
+      This app requires JavaScript to run.
+    </p>
+  </noscript>
+  <div id="legal-footer" style="position:fixed;bottom:0;width:100%;text-align:center;padding:8px;font-size:11px;font-family:sans-serif;color:#666;background:#f5f5f5;z-index:9999;">
+    Not a medical device. Not legal advice.
+    &bull; <a href="#/privacy-policy" style="color:#00827F;">Privacy Policy</a>
+    &bull; <a href="#/disclaimer" style="color:#00827F;">Legal Disclaimer</a>
+    &bull; This app does not use cookies or tracking.
+  </div>
+  <script>
+    // Hide the legal footer once the Flutter app loads
+    window.addEventListener('flutter-first-frame', function() {
+      var footer = document.getElementById('legal-footer');
+      if (footer) footer.style.display = 'none';
+    });
+  </script>
 </body>
 </html>

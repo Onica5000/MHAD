@@ -110,11 +110,39 @@ class PrivacyPolicyScreen extends StatelessWidget {
             ),
 
             _PolicySection(
-              title: 'Multi-State Privacy Compliance',
+              title: 'International Users (GDPR)',
+              body:
+                  'If you are located in the European Economic Area (EEA), '
+                  'the UK, or Switzerland, the General Data Protection '
+                  'Regulation (GDPR) applies to your use of this app.\n\n'
+                  'Legal basis for processing: Your explicit consent, '
+                  'given through the in-app disclaimer and AI consent '
+                  'dialogs.\n\n'
+                  'Your rights under GDPR:\n'
+                  '  - Right to access: All your data is stored locally on '
+                  'your device — you have direct access at all times.\n'
+                  '  - Right to erasure: Use "Delete All Data" in the app '
+                  'menu to permanently erase all local data.\n'
+                  '  - Right to data portability: Export your directives as '
+                  'PDF or FHIR JSON at any time.\n'
+                  '  - Right to withdraw consent: Stop using AI features at '
+                  'any time; remove your API key to prevent further data '
+                  'transmission.\n'
+                  '  - Right to restriction: You may use the app in Public '
+                  'Mode without any data persistence.\n\n'
+                  'Data sent to Google\'s Gemini API is processed under '
+                  'Google\'s own privacy policy and data processing terms. '
+                  'We cannot control or delete data once sent to Google.',
+              headingStyle: headingStyle,
+              bodyStyle: bodyStyle,
+            ),
+
+            _PolicySection(
+              title: 'US State Privacy Compliance (CCPA / MHMDA)',
               body:
                   'This app may be subject to state consumer health data '
-                  'privacy laws, including Washington\'s My Health My Data Act '
-                  '(MHMDA), if used by residents of those states.\n\n'
+                  'privacy laws, including California\'s CCPA/CPRA and '
+                  'Washington\'s My Health My Data Act (MHMDA).\n\n'
                   'Under these laws: (1) We collect mental health treatment '
                   'preference data solely for the purpose of creating your '
                   'advance directive. (2) We do not sell your health data. '
@@ -122,6 +150,9 @@ class PrivacyPolicyScreen extends StatelessWidget {
                   'explicit per-session consent. (4) You may delete all '
                   'locally stored data at any time via the \'Delete All Data\' '
                   'option in the app menu.\n\n'
+                  'This app does not use cookies, tracking pixels, analytics '
+                  'SDKs, or any form of behavioral tracking. No cookie '
+                  'consent banner is needed because no cookies are set.\n\n'
                   'For questions about your privacy rights, contact the '
                   'developer through the app store listing.',
               headingStyle: headingStyle,

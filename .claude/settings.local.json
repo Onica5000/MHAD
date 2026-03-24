@@ -171,7 +171,8 @@
       "Read(//f/AndroidStudioProjects/MHAD/$HOME/.pub-cache/hosted/**)",
       "Read(//d/flutter/**)",
       "Bash(git:*)",
-      "Bash(gh --version)"
+      "Bash(gh --version)",
+      "WebFetch(domain:docs.codemagic.io)"
     ]
   }
 }
