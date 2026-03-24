@@ -82,15 +82,33 @@ class _EffectiveConditionStepState
           const ExampleTextButton(
             fieldName: 'Effective Condition',
             examples: [
-              'This directive becomes effective when I am determined to lack '
-              'the capacity to make mental health treatment decisions, as '
-              'certified by a psychiatrist and one other qualified professional.',
-              'This directive takes effect when I am in a mental health crisis '
-              'and two qualified professionals certify that I am unable to make '
-              'informed decisions about my care.',
-              'This directive is effective when my treating psychiatrist and '
-              'my family physician both determine that I lack capacity to '
-              'consent to or refuse mental health treatment.',
+              // Standard — two professionals certify
+              'This directive takes effect when I am unable to make mental '
+              'health treatment decisions for myself, as determined by two '
+              'qualified professionals.',
+
+              // Broader — any hospitalization or crisis
+              'This directive becomes effective any time I am admitted to a '
+              'psychiatric facility or crisis unit, whether voluntary or '
+              'involuntary, and I am unable to clearly communicate my wishes.',
+
+              // Specific symptoms
+              'This directive takes effect when I am experiencing a severe '
+              'episode of psychosis, mania, or dissociation that prevents me '
+              'from understanding my treatment options or communicating my '
+              'preferences.',
+
+              // Self-identified trigger
+              'This directive becomes effective when I tell my agent or '
+              'treatment provider that I want it activated, or when I am '
+              'unable to make consistent and informed decisions about my '
+              'mental health care.',
+
+              // Broad with agent authority
+              'This directive is effective when my designated agent, in '
+              'consultation with any treating professional, determines that '
+              'I would benefit from having my pre-stated treatment '
+              'preferences followed.',
             ],
           ),
           const SizedBox(height: 8),
