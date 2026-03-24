@@ -109,6 +109,32 @@ class _TreatmentFacilityStepState
         padding: const EdgeInsets.all(16),
         children: [
           WizardHelpButton(helpText: helpText, stepId: 'treatmentFacility'),
+          const SizedBox(height: 8),
+          Card(
+            color: cs.secondaryContainer,
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(Icons.info_outline, size: 18,
+                      color: cs.onSecondaryContainer),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'Leave both sections blank if you have no preference. '
+                      'Your directive will indicate "No Preference" for '
+                      'treatment facility.',
+                      style: TextStyle(
+                          fontSize: 12.5,
+                          color: cs.onSecondaryContainer,
+                          height: 1.4),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
           const SizedBox(height: 16),
           Text(
             'Preferred Facility',
