@@ -172,7 +172,8 @@
       "Read(//d/flutter/**)",
       "Bash(git:*)",
       "Bash(gh --version)",
-      "WebFetch(domain:docs.codemagic.io)"
+      "WebFetch(domain:docs.codemagic.io)",
+      "WebFetch(domain:docs.github.com)"
     ]
   }
 }
