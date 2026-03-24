@@ -152,49 +152,22 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
               color: cs.tertiaryContainer,
               child: Padding(
                 padding: const EdgeInsets.all(14),
-                child: Column(
+                child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Icon(Icons.info_outline,
-                            size: 20, color: cs.onTertiaryContainer),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: Text(
-                            'Your API key will not be saved permanently. '
-                            'It is held in memory only and discarded when '
-                            'you clear your data or close the app.',
-                            style: TextStyle(
-                                fontSize: 12.5,
-                                color: cs.onTertiaryContainer,
-                                height: 1.4),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Icon(Icons.security,
-                            size: 20, color: cs.onTertiaryContainer),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: Text(
-                            'If you are on a shared or public device, open '
-                            'Google AI Studio in a private/incognito browser '
-                            'window so your Google login is not saved on '
-                            'this device.',
-                            style: TextStyle(
-                                fontSize: 12.5,
-                                color: cs.onTertiaryContainer,
-                                fontWeight: FontWeight.w600,
-                                height: 1.4),
-                          ),
-                        ),
-                      ],
+                    Icon(Icons.info_outline,
+                        size: 20, color: cs.onTertiaryContainer),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        'Your API key will not be saved permanently. '
+                        'It is held in memory only and discarded when '
+                        'you clear your data or close the app.',
+                        style: TextStyle(
+                            fontSize: 12.5,
+                            color: cs.onTertiaryContainer,
+                            height: 1.4),
+                      ),
                     ),
                   ],
                 ),
@@ -218,9 +191,91 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
           ),
           const SizedBox(height: 16),
 
+          // ---- Step 1: Private browsing ----
+          Card(
+            color: cs.errorContainer,
+            child: Padding(
+              padding: const EdgeInsets.all(14),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(Icons.security, size: 20,
+                          color: cs.onErrorContainer),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          'Step 1: Open a Private/Incognito Window',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                            color: cs.onErrorContainer,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'You\'ll need to sign into your Google account to get an '
+                    'API key. To protect your login on shared or public '
+                    'devices, open a private browsing window first:',
+                    style: TextStyle(
+                        fontSize: 12.5, color: cs.onErrorContainer,
+                        height: 1.4),
+                  ),
+                  const SizedBox(height: 10),
+                  _BrowserShortcut(
+                    browser: 'Chrome',
+                    shortcut: 'Ctrl + Shift + N',
+                    macShortcut: '\u2318 + Shift + N',
+                    color: cs.onErrorContainer,
+                  ),
+                  _BrowserShortcut(
+                    browser: 'Firefox',
+                    shortcut: 'Ctrl + Shift + P',
+                    macShortcut: '\u2318 + Shift + P',
+                    color: cs.onErrorContainer,
+                  ),
+                  _BrowserShortcut(
+                    browser: 'Edge',
+                    shortcut: 'Ctrl + Shift + N',
+                    macShortcut: '\u2318 + Shift + N',
+                    color: cs.onErrorContainer,
+                  ),
+                  _BrowserShortcut(
+                    browser: 'Safari',
+                    shortcut: '',
+                    macShortcut: '\u2318 + Shift + N',
+                    color: cs.onErrorContainer,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'On a phone: tap the menu (\u22EE or \u22EF) and select '
+                    '"New Incognito Tab" or "New Private Tab".',
+                    style: TextStyle(
+                        fontSize: 12, color: cs.onErrorContainer,
+                        fontStyle: FontStyle.italic, height: 1.4),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Your Google login will be automatically forgotten when '
+                    'you close the private window.',
+                    style: TextStyle(
+                        fontSize: 12.5, color: cs.onErrorContainer,
+                        fontWeight: FontWeight.w600, height: 1.4),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+
+          // ---- Step 2: Open AI Studio ----
           _StepTile(
-            number: '1',
-            title: 'Open Google AI Studio',
+            number: '2',
+            title: 'Open Google AI Studio (in your private window)',
             subtitle: 'Use any Google account (personal Gmail works fine)',
             trailing: OutlinedButton.icon(
               onPressed: () => launchUrl(_aiStudioUri,
@@ -230,14 +285,14 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
             ),
           ),
           const _StepTile(
-            number: '2',
+            number: '3',
             title: 'Sign in with Google',
             subtitle:
                 'No credit card or payment is needed. '
                 'The free tier is generous and sufficient for this app.',
           ),
           const _StepTile(
-            number: '3',
+            number: '4',
             title: 'Create an API key',
             subtitle:
                 'Click "Create API key" on the API keys page. '
@@ -245,7 +300,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                 'the defaults are fine.',
           ),
           _StepTile(
-            number: '4',
+            number: '5',
             title: 'Copy and paste below',
             subtitle:
                 'The key starts with "AIza..." — copy it, then '
@@ -487,6 +542,48 @@ class _StepTile extends StatelessWidget {
                   trailing!,
                 ],
               ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _BrowserShortcut extends StatelessWidget {
+  final String browser;
+  final String shortcut;
+  final String macShortcut;
+  final Color color;
+
+  const _BrowserShortcut({
+    required this.browser,
+    required this.shortcut,
+    required this.macShortcut,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    // Show both shortcuts since we don't know the user's OS on web
+    final text = shortcut.isNotEmpty
+        ? '$browser:  $shortcut  (Mac: $macShortcut)'
+        : '$browser:  $macShortcut  (Mac only)';
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 4),
+      child: Row(
+        children: [
+          const SizedBox(width: 4),
+          Text('\u2022 ', style: TextStyle(color: color, fontSize: 13)),
+          Expanded(
+            child: Text(
+              text,
+              style: TextStyle(
+                fontSize: 12,
+                color: color,
+                fontFamily: 'monospace',
+                height: 1.3,
+              ),
             ),
           ),
         ],
