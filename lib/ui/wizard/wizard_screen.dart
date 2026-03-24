@@ -264,16 +264,20 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
 
   Future<void> _goNext(BuildContext context, bool isLastStep) async {
     FocusScope.of(context).unfocus();
-    final state = _stepKey.currentState;
-    if (state == null) return;
 
     setState(() => _isSaving = true);
     try {
-      bool success = true;
-      if (state is WizardStepMixin) {
-        success = await (state as WizardStepMixin).validateAndSave();
+      // Try to save current step data, but never block navigation
+      final state = _stepKey.currentState;
+      if (state != null && state is WizardStepMixin) {
+        try {
+          await (state as WizardStepMixin).validateAndSave();
+        } catch (e) {
+          debugPrint('Step save error (non-blocking): $e');
+        }
       }
-      if (success && mounted) {
+
+      if (mounted) {
         if (isLastStep) {
           if (context.mounted) {
             context.go(AppRoutes.wizardCompleteRoute(widget.directiveId));
