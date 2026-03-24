@@ -153,6 +153,10 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
           .where((m) => m.entryType == 'preferred')
           .map((m) => m.medicationName)
           .toList();
+      final existingLimitation = meds
+          .where((m) => m.entryType == 'limitation')
+          .map((m) => m.medicationName)
+          .toList();
       final existingAvoid = meds
           .where((m) => m.entryType == 'exception')
           .map((m) => m.medicationName)
@@ -164,19 +168,36 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
         currentMedications: _selectedCurrentMeds,
         medicationsToAvoid: _selectedAvoidMeds,
         formType: widget.formType,
+        // Directive
         existingEffectiveCondition: directive?.effectiveCondition ?? '',
+        // Preferences
+        existingFacilityPref: prefs?.treatmentFacilityPref ?? 'noPreference',
+        existingPreferredFacility: prefs?.preferredFacilityName ?? '',
+        existingAvoidFacility: prefs?.avoidFacilityName ?? '',
+        existingMedicationConsent: prefs?.medicationConsent ?? 'yes',
+        existingEctConsent: prefs?.ectConsent ?? 'no',
+        existingExperimentalConsent: prefs?.experimentalConsent ?? 'no',
+        existingDrugTrialConsent: prefs?.drugTrialConsent ?? 'no',
+        existingAgentCanConsentHospitalization:
+            prefs?.agentCanConsentHospitalization ?? true,
+        existingAgentCanConsentMedication:
+            prefs?.agentCanConsentMedication ?? true,
+        existingAgentAuthorityLimitations:
+            prefs?.agentAuthorityLimitations ?? '',
+        // Additional instructions
         existingHealthHistory: instr?.healthHistory ?? '',
         existingCrisisIntervention: instr?.crisisIntervention ?? '',
         existingActivities: instr?.activities ?? '',
         existingDietary: instr?.dietary ?? '',
+        existingReligious: instr?.religious ?? '',
+        existingChildrenCustody: instr?.childrenCustody ?? '',
+        existingFamilyNotification: instr?.familyNotification ?? '',
+        existingRecordsDisclosure: instr?.recordsDisclosure ?? '',
+        existingPetCustody: instr?.petCustody ?? '',
         existingOther: instr?.other ?? '',
-        existingFacilityPref: prefs?.treatmentFacilityPref ?? 'noPreference',
-        existingPreferredFacility: prefs?.preferredFacilityName ?? '',
-        existingAvoidFacility: prefs?.avoidFacilityName ?? '',
-        existingEctConsent: prefs?.ectConsent ?? 'no',
-        existingExperimentalConsent: prefs?.experimentalConsent ?? 'no',
-        existingDrugTrialConsent: prefs?.drugTrialConsent ?? 'no',
+        // Medications
         existingPreferredMeds: existingPreferred,
+        existingLimitationMeds: existingLimitation,
         existingAvoidMeds: existingAvoid,
       ));
 
@@ -198,7 +219,7 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
       final display = result.toDisplayMap();
       setState(() {
         _result = result;
-        _accepted = {for (final key in display.keys) key: true};
+        _accepted = {for (final key in display.keys) key: false};
         _editedValues = Map<String, String>.from(display);
         _step = _Step.review;
       });
@@ -733,9 +754,9 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  'Review and edit each suggestion. Tap any item to '
-                  'modify it. Uncheck items you do not want. '
-                  'This is not medical or legal advice.',
+                  'Review each suggestion carefully. Tap to edit, '
+                  'then check the box to approve it. Only checked '
+                  'items will be applied. This is not medical or legal advice.',
                   style: TextStyle(
                       fontSize: 12,
                       color: cs.onTertiaryContainer,

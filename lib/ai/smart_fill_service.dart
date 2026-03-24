@@ -16,19 +16,33 @@ class SmartFillInput {
   final String formType; // 'combined', 'declaration', 'poa'
 
   // Existing wizard data (non-PII) — AI should not contradict these.
+  // ── Directive ──
   final String existingEffectiveCondition;
+  // ── Preferences ──
+  final String existingFacilityPref; // 'noPreference', 'prefer', 'avoid'
+  final String existingPreferredFacility;
+  final String existingAvoidFacility;
+  final String existingMedicationConsent;
+  final String existingEctConsent;
+  final String existingExperimentalConsent;
+  final String existingDrugTrialConsent;
+  final bool existingAgentCanConsentHospitalization;
+  final bool existingAgentCanConsentMedication;
+  final String existingAgentAuthorityLimitations;
+  // ── Additional instructions ──
   final String existingHealthHistory;
   final String existingCrisisIntervention;
   final String existingActivities;
   final String existingDietary;
+  final String existingReligious;
+  final String existingChildrenCustody;
+  final String existingFamilyNotification;
+  final String existingRecordsDisclosure;
+  final String existingPetCustody;
   final String existingOther;
-  final String existingFacilityPref; // 'noPreference', 'prefer', 'avoid'
-  final String existingPreferredFacility;
-  final String existingAvoidFacility;
-  final String existingEctConsent;
-  final String existingExperimentalConsent;
-  final String existingDrugTrialConsent;
+  // ── Medications already in form ──
   final List<String> existingPreferredMeds;
+  final List<String> existingLimitationMeds;
   final List<String> existingAvoidMeds;
 
   const SmartFillInput({
@@ -37,18 +51,28 @@ class SmartFillInput {
     required this.medicationsToAvoid,
     required this.formType,
     this.existingEffectiveCondition = '',
+    this.existingFacilityPref = 'noPreference',
+    this.existingPreferredFacility = '',
+    this.existingAvoidFacility = '',
+    this.existingMedicationConsent = 'yes',
+    this.existingEctConsent = 'no',
+    this.existingExperimentalConsent = 'no',
+    this.existingDrugTrialConsent = 'no',
+    this.existingAgentCanConsentHospitalization = true,
+    this.existingAgentCanConsentMedication = true,
+    this.existingAgentAuthorityLimitations = '',
     this.existingHealthHistory = '',
     this.existingCrisisIntervention = '',
     this.existingActivities = '',
     this.existingDietary = '',
+    this.existingReligious = '',
+    this.existingChildrenCustody = '',
+    this.existingFamilyNotification = '',
+    this.existingRecordsDisclosure = '',
+    this.existingPetCustody = '',
     this.existingOther = '',
-    this.existingFacilityPref = 'noPreference',
-    this.existingPreferredFacility = '',
-    this.existingAvoidFacility = '',
-    this.existingEctConsent = 'no',
-    this.existingExperimentalConsent = 'no',
-    this.existingDrugTrialConsent = 'no',
     this.existingPreferredMeds = const [],
+    this.existingLimitationMeds = const [],
     this.existingAvoidMeds = const [],
   });
 
@@ -254,9 +278,42 @@ class SmartFillService {
 
     // Include existing wizard data so AI can supplement, not duplicate
     final existing = <String>[];
+    // Directive
     if (input.existingEffectiveCondition.isNotEmpty) {
       existing.add('Effective condition: ${input.existingEffectiveCondition}');
     }
+    // Preferences
+    if (input.existingPreferredFacility.isNotEmpty) {
+      existing.add('Preferred facility: ${input.existingPreferredFacility}');
+    }
+    if (input.existingAvoidFacility.isNotEmpty) {
+      existing.add('Avoid facility: ${input.existingAvoidFacility}');
+    }
+    if (input.existingMedicationConsent != 'yes') {
+      existing.add('Medication consent: ${input.existingMedicationConsent}');
+    }
+    if (input.existingEctConsent != 'no') {
+      existing.add('ECT consent: ${input.existingEctConsent}');
+    }
+    if (input.existingExperimentalConsent != 'no') {
+      existing.add('Experimental studies consent: ${input.existingExperimentalConsent}');
+    }
+    if (input.existingDrugTrialConsent != 'no') {
+      existing.add('Drug trial consent: ${input.existingDrugTrialConsent}');
+    }
+    // Agent authority (POA/combined only)
+    if (input.formType != 'declaration') {
+      if (!input.existingAgentCanConsentHospitalization) {
+        existing.add('Agent CANNOT consent to hospitalization');
+      }
+      if (!input.existingAgentCanConsentMedication) {
+        existing.add('Agent CANNOT consent to medication');
+      }
+      if (input.existingAgentAuthorityLimitations.isNotEmpty) {
+        existing.add('Agent authority limitations: ${input.existingAgentAuthorityLimitations}');
+      }
+    }
+    // Additional instructions
     if (input.existingHealthHistory.isNotEmpty) {
       existing.add('Health history: ${input.existingHealthHistory}');
     }
@@ -269,20 +326,30 @@ class SmartFillService {
     if (input.existingDietary.isNotEmpty) {
       existing.add('Dietary: ${input.existingDietary}');
     }
+    if (input.existingReligious.isNotEmpty) {
+      existing.add('Religious/spiritual: ${input.existingReligious}');
+    }
+    if (input.existingChildrenCustody.isNotEmpty) {
+      existing.add('Children/custody: ${input.existingChildrenCustody}');
+    }
+    if (input.existingFamilyNotification.isNotEmpty) {
+      existing.add('Family notification: ${input.existingFamilyNotification}');
+    }
+    if (input.existingRecordsDisclosure.isNotEmpty) {
+      existing.add('Records disclosure: ${input.existingRecordsDisclosure}');
+    }
+    if (input.existingPetCustody.isNotEmpty) {
+      existing.add('Pet custody: ${input.existingPetCustody}');
+    }
     if (input.existingOther.isNotEmpty) {
       existing.add('Other instructions: ${input.existingOther}');
     }
-    if (input.existingPreferredFacility.isNotEmpty) {
-      existing.add('Preferred facility: ${input.existingPreferredFacility}');
-    }
-    if (input.existingAvoidFacility.isNotEmpty) {
-      existing.add('Avoid facility: ${input.existingAvoidFacility}');
-    }
-    if (input.existingEctConsent != 'no') {
-      existing.add('ECT consent: ${input.existingEctConsent}');
-    }
+    // Medications already in form
     if (input.existingPreferredMeds.isNotEmpty) {
       existing.add('Already listed preferred meds: ${input.existingPreferredMeds.join(", ")}');
+    }
+    if (input.existingLimitationMeds.isNotEmpty) {
+      existing.add('Already listed medication limitations: ${input.existingLimitationMeds.join(", ")}');
     }
     if (input.existingAvoidMeds.isNotEmpty) {
       existing.add('Already listed avoid meds: ${input.existingAvoidMeds.join(", ")}');
