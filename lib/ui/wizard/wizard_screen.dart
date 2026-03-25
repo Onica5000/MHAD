@@ -6,6 +6,7 @@ import 'package:mhad/ai/ai_assistant.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/providers/assistant_providers.dart';
+import 'package:mhad/services/web_session_cache.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/wizard/wizard_step_mixin.dart';
 import 'package:mhad/ui/wizard/steps/personal_info_step.dart';
@@ -48,6 +49,22 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
     ref
         .read(directiveRepositoryProvider)
         .updateLastStepIndex(widget.directiveId, _stepIndex);
+    _cacheForWebReload();
+  }
+
+  /// On web, snapshot the full directive to SharedPreferences so the user
+  /// can resume after a page reload within the TTL window.
+  Future<void> _cacheForWebReload() async {
+    if (!kIsWeb) return;
+    try {
+      final repo = ref.read(directiveRepositoryProvider);
+      final snap = await repo.snapshotDirective(widget.directiveId);
+      if (snap.isNotEmpty) {
+        await WebSessionCache.saveDirective(snap);
+      }
+    } catch (e) {
+      debugPrint('Web cache save failed: $e');
+    }
   }
 
   @override
@@ -127,12 +144,26 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
           },
           child: Scaffold(
             appBar: AppBar(
-              title: Text(currentStep.displayName),
+              title: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(currentStep.displayName),
+                  Text(
+                    'Step ${_stepIndex + 1} of ${steps.length}',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSurfaceVariant,
+                        ),
+                  ),
+                ],
+              ),
               leading: IconButton(
                 icon: const Icon(Icons.close),
-                tooltip: kIsWeb ? 'Exit' : 'Save & exit',
+                tooltip: kIsWeb ? 'Exit wizard' : 'Save & exit wizard',
                 onPressed: _isSaving ? null : () => _saveAndExit(context),
               ),
+              automaticallyImplyLeading: false,
               actions: [
                 Tooltip(
                   message: 'Smart Fill — pick conditions & meds, AI fills the rest',
@@ -314,16 +345,31 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
     try {
       // Try to save current step data, but never block navigation
       final state = _stepKey.currentState;
+      bool stepValid = true;
       if (state != null && state is WizardStepMixin) {
         try {
-          await (state as WizardStepMixin).validateAndSave();
+          stepValid = await (state as WizardStepMixin).validateAndSave();
         } catch (e) {
           debugPrint('Step save error (non-blocking): $e');
         }
       }
+      // Show a non-blocking warning if step has missing required fields
+      if (!stepValid && mounted && context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Some fields are incomplete — you can come back to finish later.'),
+            duration: Duration(seconds: 3),
+          ),
+        );
+      }
+
+      // Cache for web reload recovery
+      _cacheForWebReload();
 
       if (mounted) {
         if (isLastStep) {
+          // Clear web cache on completion — directive is done
+          if (kIsWeb) WebSessionCache.clear();
           if (context.mounted) {
             context.go(AppRoutes.wizardCompleteRoute(widget.directiveId));
           }

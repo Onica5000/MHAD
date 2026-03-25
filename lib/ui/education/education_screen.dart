@@ -70,6 +70,7 @@ class _EducationScreenState extends State<EducationScreen> {
                 if (result != null && mounted) {
                   Navigator.of(context).push(
                     MaterialPageRoute(
+                      fullscreenDialog: true,
                       builder: (_) => _SectionDetailScreen(section: result),
                     ),
                   );
@@ -151,6 +152,7 @@ class _SectionTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         onTap: () => Navigator.of(context).push(
           MaterialPageRoute(
+            fullscreenDialog: true,
             builder: (_) => _SectionDetailScreen(section: section),
           ),
         ),

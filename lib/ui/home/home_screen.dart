@@ -7,6 +7,7 @@ import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/services/data_export_service.dart';
 import 'package:mhad/services/device_security_service.dart';
+import 'package:mhad/services/web_session_cache.dart';
 import 'package:mhad/services/screenshot_protection_service.dart';
 import 'package:mhad/services/notification_service.dart';
 import 'package:mhad/services/privacy_mode_service.dart';
@@ -40,10 +41,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         final onboarded = await OnboardingScreen.isCompleted();
         if (!onboarded && mounted) {
           await Navigator.of(context).push(MaterialPageRoute(
+            fullscreenDialog: true,
             builder: (_) => OnboardingScreen(
               onComplete: () => Navigator.of(context).pop(),
             ),
           ));
+        }
+        // On web, auto-restore cached directive without prompting
+        if (kIsWeb && mounted) {
+          await _tryWebSessionRestore();
         }
         if (mounted) checkAndOfferDraftRecovery(context, ref);
       });
@@ -269,7 +275,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           SizedBox(
             width: double.infinity,
             child: FilledButton.icon(
-              onPressed: () => context.push(AppRoutes.formTypeSelection),
+              onPressed: () => context.go(AppRoutes.formTypeSelection),
               icon: const Icon(Icons.add),
               label: const Text('New Directive'),
               style: FilledButton.styleFrom(
@@ -281,6 +287,30 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ],
       ),
     );
+  }
+
+  Future<void> _tryWebSessionRestore() async {
+    try {
+      final snap = await WebSessionCache.getCachedDirective();
+      if (snap == null || !mounted) return;
+
+      final repo = ref.read(directiveRepositoryProvider);
+      final newId = await repo.restoreFromSnapshot(snap);
+      await WebSessionCache.clear();
+
+      if (mounted && context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Session restored. Personal info must be re-entered.'),
+            duration: Duration(seconds: 4),
+          ),
+        );
+        context.push(AppRoutes.wizardRoute(newId));
+      }
+    } catch (e) {
+      debugPrint('Web session restore failed: $e');
+      await WebSessionCache.clear();
+    }
   }
 
   Future<void> _confirmEndSession(
@@ -318,6 +348,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     // Wipe everything
     await endPublicSession(ref);
+    await WebSessionCache.clear();
     // Delete all in-memory directives
     try {
       await ref.read(directiveRepositoryProvider).deleteAllDirectives();
@@ -507,6 +538,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       await ref.read(directiveRepositoryProvider).deleteAllDirectives();
       const storage = FlutterSecureStorage();
       await storage.deleteAll();
+      await WebSessionCache.clear();
       // Also clear AI session data
       await endPublicSession(ref);
       if (context.mounted) {
@@ -606,8 +638,8 @@ class _PublicModeNotice extends StatelessWidget {
     return Semantics(
       container: true,
       label: isWeb
-          ? 'Your data is stored in this browser. '
-            'Tap Clear All Data to start over.'
+          ? 'Web app — data is in memory only, not saved to disk. '
+            'Export before closing browser.'
           : 'Public mode. Tap End Session when done.',
       child: Card(
         color: cs.secondaryContainer,
@@ -628,11 +660,12 @@ class _PublicModeNotice extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                 isWeb
-                    ? 'Your directives are saved in this browser and will '
-                      'persist if you reload the page.\n\n'
-                      'Your data is not encrypted and is not sent to any '
-                      'server. Use "Clear All Data" below to erase '
-                      'everything when you\'re done.'
+                    ? 'Your data is stored in memory only and is NOT '
+                      'encrypted or saved to disk.\n\n'
+                      'Closing or refreshing the browser tab will erase '
+                      'all directive data. Your AI key is cached for '
+                      '10 minutes for crash recovery only.\n\n'
+                      'Export or print your directive before leaving.'
                     : 'This is a temporary session. Your data is not '
                       'permanently stored.\n\n'
                       'If the app closes unexpectedly, you have 10 minutes '

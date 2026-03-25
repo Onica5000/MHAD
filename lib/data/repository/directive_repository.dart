@@ -206,4 +206,152 @@ class DirectiveRepository {
 
   Future<void> deleteDiagnosis(int id) =>
       (_db.delete(_db.diagnosisEntries)..where((t) => t.id.equals(id))).go();
+
+  // ── Snapshot / Restore (for web reload recovery) ───────────────────────
+
+  /// Export all non-PII data for a directive as a JSON-safe map.
+  Future<Map<String, dynamic>> snapshotDirective(int directiveId) async {
+    final d = await getDirectiveById(directiveId);
+    if (d == null) return {};
+
+    final prefs = await getPreferences(directiveId);
+    final instr = await getAdditionalInstructions(directiveId);
+    final meds = await watchMedications(directiveId).first;
+    final diags = await getDiagnoses(directiveId);
+
+    return {
+      'formType': d.formType,
+      'lastStepIndex': d.lastStepIndex,
+      'effectiveCondition': d.effectiveCondition,
+      'preferredDoctorName': d.preferredDoctorName,
+      'preferredDoctorContact': d.preferredDoctorContact,
+      if (prefs != null) 'prefs': {
+        'treatmentFacilityPref': prefs.treatmentFacilityPref,
+        'preferredFacilityName': prefs.preferredFacilityName,
+        'avoidFacilityName': prefs.avoidFacilityName,
+        'medicationConsent': prefs.medicationConsent,
+        'ectConsent': prefs.ectConsent,
+        'experimentalConsent': prefs.experimentalConsent,
+        'drugTrialConsent': prefs.drugTrialConsent,
+        'agentCanConsentHospitalization': prefs.agentCanConsentHospitalization,
+        'agentCanConsentMedication': prefs.agentCanConsentMedication,
+        'agentAuthorityLimitations': prefs.agentAuthorityLimitations,
+      },
+      if (instr != null) 'instructions': {
+        'activities': instr.activities,
+        'crisisIntervention': instr.crisisIntervention,
+        'healthHistory': instr.healthHistory,
+        'dietary': instr.dietary,
+        'religious': instr.religious,
+        'childrenCustody': instr.childrenCustody,
+        'familyNotification': instr.familyNotification,
+        'recordsDisclosure': instr.recordsDisclosure,
+        'petCustody': instr.petCustody,
+        'other': instr.other,
+      },
+      if (meds.isNotEmpty) 'medications': meds.map((m) => {
+        'entryType': m.entryType,
+        'medicationName': m.medicationName,
+        'reason': m.reason,
+        'sortOrder': m.sortOrder,
+      }).toList(),
+      if (diags.isNotEmpty) 'diagnoses': diags.map((d) => {
+        'icdCode': d.icdCode,
+        'name': d.name,
+        'sortOrder': d.sortOrder,
+      }).toList(),
+    };
+  }
+
+  /// Restore a directive from a snapshot map. Returns the new directive ID.
+  Future<int> restoreFromSnapshot(Map<String, dynamic> snap) async {
+    final formType = FormType.values.firstWhere(
+      (e) => e.name == (snap['formType'] ?? 'combined'),
+      orElse: () => FormType.combined,
+    );
+    final id = await createDirective(formType);
+
+    // Directive fields
+    final ec = snap['effectiveCondition']?.toString() ?? '';
+    if (ec.isNotEmpty) await updateEffectiveCondition(id, ec);
+    final docName = snap['preferredDoctorName']?.toString() ?? '';
+    final docContact = snap['preferredDoctorContact']?.toString() ?? '';
+    if (docName.isNotEmpty || docContact.isNotEmpty) {
+      await updatePreferredDoctor(id, name: docName, contact: docContact);
+    }
+    final step = snap['lastStepIndex'];
+    if (step is int && step > 0) await updateLastStepIndex(id, step);
+
+    // Preferences
+    final p = snap['prefs'];
+    if (p is Map<String, dynamic>) {
+      await upsertPreferences(DirectivePrefsCompanion(
+        directiveId: Value(id),
+        treatmentFacilityPref: _v(p['treatmentFacilityPref']),
+        preferredFacilityName: _v(p['preferredFacilityName']),
+        avoidFacilityName: _v(p['avoidFacilityName']),
+        medicationConsent: _v(p['medicationConsent']),
+        ectConsent: _v(p['ectConsent']),
+        experimentalConsent: _v(p['experimentalConsent']),
+        drugTrialConsent: _v(p['drugTrialConsent']),
+        agentAuthorityLimitations: _v(p['agentAuthorityLimitations']),
+      ));
+    }
+
+    // Additional instructions
+    final i = snap['instructions'];
+    if (i is Map<String, dynamic>) {
+      await upsertAdditionalInstructions(AdditionalInstructionsTableCompanion(
+        directiveId: Value(id),
+        activities: _v(i['activities']),
+        crisisIntervention: _v(i['crisisIntervention']),
+        healthHistory: _v(i['healthHistory']),
+        dietary: _v(i['dietary']),
+        religious: _v(i['religious']),
+        childrenCustody: _v(i['childrenCustody']),
+        familyNotification: _v(i['familyNotification']),
+        recordsDisclosure: _v(i['recordsDisclosure']),
+        petCustody: _v(i['petCustody']),
+        other: _v(i['other']),
+      ));
+    }
+
+    // Medications
+    final meds = snap['medications'];
+    if (meds is List) {
+      for (final m in meds) {
+        if (m is Map<String, dynamic>) {
+          await insertMedication(MedicationEntriesCompanion.insert(
+            directiveId: id,
+            entryType: m['entryType']?.toString() ?? 'preferred',
+            medicationName: Value(m['medicationName']?.toString() ?? ''),
+            reason: Value(m['reason']?.toString() ?? ''),
+            sortOrder: Value(m['sortOrder'] as int? ?? 0),
+          ));
+        }
+      }
+    }
+
+    // Diagnoses
+    final diags = snap['diagnoses'];
+    if (diags is List) {
+      for (final d in diags) {
+        if (d is Map<String, dynamic>) {
+          await insertDiagnosis(DiagnosisEntriesCompanion.insert(
+            directiveId: id,
+            icdCode: Value(d['icdCode']?.toString() ?? ''),
+            name: Value(d['name']?.toString() ?? ''),
+            sortOrder: Value(d['sortOrder'] as int? ?? 0),
+          ));
+        }
+      }
+    }
+
+    return id;
+  }
+
+  static Value<String> _v(dynamic val) {
+    final s = val?.toString() ?? '';
+    return s.isNotEmpty ? Value(s) : const Value.absent();
+  }
 }

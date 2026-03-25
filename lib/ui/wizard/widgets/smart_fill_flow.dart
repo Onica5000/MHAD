@@ -67,6 +67,135 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
   Map<String, String>? _editedValues;
   String? _error;
 
+  // ── Existing wizard data summary (shown to user) ──────────────────
+  final List<String> _existingDataSummary = [];
+  bool _loadedExisting = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadExistingData();
+  }
+
+  /// Pre-populate conditions, medications, and build a summary of all
+  /// existing wizard data so the user can see what the AI will work with.
+  Future<void> _loadExistingData() async {
+    final repo = ref.read(directiveRepositoryProvider);
+    final directive = await repo.getDirectiveById(widget.directiveId);
+    final prefs = await repo.getPreferences(widget.directiveId);
+    final instr = await repo.getAdditionalInstructions(widget.directiveId);
+    final savedDiagnoses = await repo.getDiagnoses(widget.directiveId);
+    final savedMeds = await repo.watchMedications(widget.directiveId).first;
+
+    if (!mounted) return;
+    setState(() {
+      // Pre-populate conditions from saved diagnoses
+      for (final d in savedDiagnoses) {
+        if (!_selectedConditions.any((c) => c.code == d.icdCode)) {
+          _selectedConditions
+              .add(IcdCondition(code: d.icdCode, name: d.name));
+        }
+      }
+      // Pre-populate medications
+      for (final m in savedMeds) {
+        if (m.entryType == 'preferred' &&
+            !_selectedCurrentMeds.contains(m.medicationName)) {
+          _selectedCurrentMeds.add(m.medicationName);
+        } else if (m.entryType == 'exception' &&
+            !_selectedAvoidMeds.contains(m.medicationName)) {
+          _selectedAvoidMeds.add(m.medicationName);
+        }
+      }
+
+      // Build summary of ALL existing wizard data for display
+      _existingDataSummary.clear();
+      if (directive != null) {
+        if (directive.effectiveCondition.isNotEmpty) {
+          _existingDataSummary.add(
+              'Effective condition: ${directive.effectiveCondition}');
+        }
+      }
+      if (prefs != null) {
+        if (prefs.preferredFacilityName.isNotEmpty) {
+          _existingDataSummary.add(
+              'Preferred facility: ${prefs.preferredFacilityName}');
+        }
+        if (prefs.avoidFacilityName.isNotEmpty) {
+          _existingDataSummary.add(
+              'Avoid facility: ${prefs.avoidFacilityName}');
+        }
+        if (prefs.medicationConsent != 'yes') {
+          _existingDataSummary.add(
+              'Medication consent: ${prefs.medicationConsent}');
+        }
+        if (prefs.ectConsent != 'no') {
+          _existingDataSummary.add('ECT consent: ${prefs.ectConsent}');
+        }
+        if (prefs.experimentalConsent != 'no') {
+          _existingDataSummary.add(
+              'Experimental consent: ${prefs.experimentalConsent}');
+        }
+        if (prefs.drugTrialConsent != 'no') {
+          _existingDataSummary.add(
+              'Drug trial consent: ${prefs.drugTrialConsent}');
+        }
+        if (prefs.agentAuthorityLimitations.isNotEmpty) {
+          _existingDataSummary.add(
+              'Agent limitations: ${prefs.agentAuthorityLimitations}');
+        }
+      }
+      if (instr != null) {
+        if (instr.healthHistory.isNotEmpty) {
+          _existingDataSummary.add(
+              'Health history: ${instr.healthHistory}');
+        }
+        if (instr.crisisIntervention.isNotEmpty) {
+          _existingDataSummary.add(
+              'Crisis plan: ${instr.crisisIntervention}');
+        }
+        if (instr.activities.isNotEmpty) {
+          _existingDataSummary.add('Activities: ${instr.activities}');
+        }
+        if (instr.dietary.isNotEmpty) {
+          _existingDataSummary.add('Dietary: ${instr.dietary}');
+        }
+        if (instr.religious.isNotEmpty) {
+          _existingDataSummary.add(
+              'Religious/spiritual: ${instr.religious}');
+        }
+        if (instr.childrenCustody.isNotEmpty) {
+          _existingDataSummary.add(
+              'Children/custody: ${instr.childrenCustody}');
+        }
+        if (instr.familyNotification.isNotEmpty) {
+          _existingDataSummary.add(
+              'Family notification: ${instr.familyNotification}');
+        }
+        if (instr.recordsDisclosure.isNotEmpty) {
+          _existingDataSummary.add(
+              'Records disclosure: ${instr.recordsDisclosure}');
+        }
+        if (instr.petCustody.isNotEmpty) {
+          _existingDataSummary.add('Pet custody: ${instr.petCustody}');
+        }
+        if (instr.other.isNotEmpty) {
+          _existingDataSummary.add('Other: ${instr.other}');
+        }
+      }
+      // Limitation meds (separate from preferred/avoid)
+      final limitationMeds = savedMeds
+          .where((m) => m.entryType == 'limitation')
+          .map((m) => m.medicationName)
+          .toList();
+      if (limitationMeds.isNotEmpty) {
+        _existingDataSummary.add(
+            'Medication limitations: ${limitationMeds.join(", ")}');
+      }
+
+      _loadedExisting = true;
+    });
+  }
+
   @override
   void dispose() {
     _condSearchCtrl.dispose();
@@ -149,6 +278,15 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
       final prefs = await repo.getPreferences(widget.directiveId);
       final instr = await repo.getAdditionalInstructions(widget.directiveId);
       final meds = await repo.watchMedications(widget.directiveId).first;
+      final savedDiagnoses = await repo.getDiagnoses(widget.directiveId);
+
+      // Merge wizard's saved diagnoses with Smart Fill's selected conditions
+      final allConditions = <IcdCondition>[..._selectedConditions];
+      for (final d in savedDiagnoses) {
+        if (!allConditions.any((c) => c.code == d.icdCode)) {
+          allConditions.add(IcdCondition(code: d.icdCode, name: d.name));
+        }
+      }
 
       final existingPreferred = meds
           .where((m) => m.entryType == 'preferred')
@@ -165,7 +303,7 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
 
       final service = SmartFillService(apiKey: apiKey);
       final response = await service.generate(SmartFillInput(
-        conditions: _selectedConditions,
+        conditions: allConditions,
         currentMedications: _selectedCurrentMeds,
         medicationsToAvoid: _selectedAvoidMeds,
         formType: widget.formType,
@@ -456,6 +594,52 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
 
   // ── Step 1: Conditions ──────────────────────────────────────────────
 
+  Widget _buildExistingDataCard() {
+    if (!_loadedExisting || _existingDataSummary.isEmpty) {
+      return const SizedBox.shrink();
+    }
+    final cs = Theme.of(context).colorScheme;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: ExpansionTile(
+        tilePadding: const EdgeInsets.symmetric(horizontal: 4),
+        childrenPadding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+        leading: Icon(Icons.info_outline, size: 18, color: cs.primary),
+        title: Text(
+          'Your existing form data (${_existingDataSummary.length} fields)',
+          style: TextStyle(fontSize: 13, color: cs.onSurfaceVariant),
+        ),
+        children: _existingDataSummary.map((line) {
+          final parts = line.split(': ');
+          final label = parts.first;
+          final value = parts.length > 1 ? parts.sublist(1).join(': ') : '';
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 6),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: 120,
+                  child: Text(label,
+                      style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                          color: cs.onSurfaceVariant)),
+                ),
+                Expanded(
+                  child: Text(
+                    value.length > 80 ? '${value.substring(0, 80)}...' : value,
+                    style: TextStyle(fontSize: 11, color: cs.onSurface),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
   Widget _buildConditionsStep() {
     final cs = Theme.of(context).colorScheme;
     return Padding(
@@ -463,6 +647,7 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          _buildExistingDataCard(),
           TextField(
             controller: _condSearchCtrl,
             decoration: InputDecoration(
@@ -512,23 +697,39 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
                       style: TextStyle(color: cs.onSurfaceVariant),
                     ),
                   )
-                : ListView.builder(
+                : ListView.separated(
                     itemCount: _condResults.length,
+                    separatorBuilder: (context2, index) =>
+                        Divider(height: 1, color: cs.outlineVariant),
                     itemBuilder: (ctx, i) {
                       final c = _condResults[i];
                       final selected = _selectedConditions
                           .any((s) => s.code == c.code);
                       return ListTile(
-                        leading: Icon(
-                          selected
-                              ? Icons.check_circle
-                              : Icons.circle_outlined,
-                          color: selected ? cs.primary : cs.outline,
-                        ),
-                        title: Text(c.name),
-                        subtitle: Text(c.code,
+                        dense: true,
+                        leading: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 6, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: cs.primaryContainer,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Text(
+                            c.code,
                             style: TextStyle(
-                                fontSize: 12, color: cs.onSurfaceVariant)),
+                              fontSize: 11,
+                              fontFamily: 'monospace',
+                              color: cs.onPrimaryContainer,
+                            ),
+                          ),
+                        ),
+                        title: Text(c.name,
+                            style: const TextStyle(fontSize: 14)),
+                        trailing: selected
+                            ? Icon(Icons.check_circle,
+                                color: cs.primary, size: 20)
+                            : Icon(Icons.add_circle_outline,
+                                color: cs.primary, size: 20),
                         onTap: () {
                           setState(() {
                             if (selected) {
@@ -563,6 +764,7 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          _buildExistingDataCard(),
           // Toggle between current / avoid
           SegmentedButton<bool>(
             segments: const [
@@ -685,48 +887,97 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
                         items.add('$baseName $s');
                       }
 
+                      final nameSelected = targetList.contains(med.name);
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           // Main medication name
-                          _MedListItem(
-                            name: med.name,
-                            targetList: targetList,
-                            currentMeds: _selectedCurrentMeds,
-                            avoidMeds: _selectedAvoidMeds,
-                            onChanged: () => setState(() {}),
+                          Semantics(
+                            button: true,
+                            label: 'Select ${med.name}',
+                            child: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  if (nameSelected) {
+                                    targetList.remove(med.name);
+                                  } else {
+                                    targetList.add(med.name);
+                                  }
+                                });
+                              },
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(12, 10, 12, 4),
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.medication,
+                                        size: 16, color: cs.primary),
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: Text(med.name,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium
+                                              ?.copyWith(
+                                                  fontWeight:
+                                                      FontWeight.w600)),
+                                    ),
+                                    if (nameSelected)
+                                      Icon(Icons.check_circle,
+                                          size: 18, color: cs.primary),
+                                  ],
+                                ),
+                              ),
+                            ),
                           ),
-                          // Strength options
+                          // Strength chips
                           if (med.strengths.isNotEmpty)
                             Padding(
-                              padding: const EdgeInsets.fromLTRB(48, 0, 12, 8),
+                              padding: const EdgeInsets.fromLTRB(36, 0, 12, 8),
                               child: Wrap(
                                 spacing: 6,
                                 runSpacing: 4,
                                 children: med.strengths.map((s) {
                                   final display = '$baseName $s';
                                   final inTarget = targetList.contains(display);
-                                  return ActionChip(
-                                    label: Text(s,
-                                        style: const TextStyle(fontSize: 11)),
-                                    avatar: inTarget
-                                        ? const Icon(Icons.check, size: 14)
-                                        : null,
-                                    backgroundColor: inTarget
-                                        ? (_pickingAvoidMeds
-                                            ? cs.errorContainer
-                                            : cs.primaryContainer)
-                                        : null,
-                                    visualDensity: VisualDensity.compact,
-                                    onPressed: () {
-                                      setState(() {
-                                        if (inTarget) {
-                                          targetList.remove(display);
-                                        } else {
-                                          targetList.add(display);
-                                        }
-                                      });
-                                    },
+                                  return Semantics(
+                                    button: true,
+                                    label: 'Select $display',
+                                    child: InkWell(
+                                      borderRadius: BorderRadius.circular(12),
+                                      onTap: () {
+                                        setState(() {
+                                          if (inTarget) {
+                                            targetList.remove(display);
+                                          } else {
+                                            targetList.add(display);
+                                          }
+                                        });
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8, vertical: 4),
+                                        decoration: BoxDecoration(
+                                          color: inTarget
+                                              ? (_pickingAvoidMeds
+                                                  ? cs.errorContainer
+                                                  : cs.primaryContainer)
+                                              : cs.surfaceContainerHighest,
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                        ),
+                                        child: Text(
+                                          s,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .labelSmall
+                                              ?.copyWith(
+                                                  color: inTarget
+                                                      ? cs.onPrimaryContainer
+                                                      : cs.onSurfaceVariant),
+                                        ),
+                                      ),
+                                    ),
                                   );
                                 }).toList(),
                               ),
@@ -967,46 +1218,4 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
   }
 }
 
-class _MedListItem extends StatelessWidget {
-  final String name;
-  final List<String> targetList;
-  final List<String> currentMeds;
-  final List<String> avoidMeds;
-  final VoidCallback onChanged;
 
-  const _MedListItem({
-    required this.name,
-    required this.targetList,
-    required this.currentMeds,
-    required this.avoidMeds,
-    required this.onChanged,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
-    final inCurrent = currentMeds.contains(name);
-    final inAvoid = avoidMeds.contains(name);
-    final selected = inCurrent || inAvoid;
-
-    return ListTile(
-      leading: Icon(
-        selected ? Icons.check_circle : Icons.circle_outlined,
-        color: inAvoid
-            ? cs.error
-            : selected
-                ? cs.primary
-                : cs.outline,
-      ),
-      title: Text(name),
-      onTap: () {
-        if (selected) {
-          targetList.remove(name);
-        } else {
-          targetList.add(name);
-        }
-        onChanged();
-      },
-    );
-  }
-}

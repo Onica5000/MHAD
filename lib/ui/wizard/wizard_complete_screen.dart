@@ -149,17 +149,8 @@ class WizardCompleteScreen extends StatelessWidget {
             icon: const Icon(Icons.picture_as_pdf),
             label: const Text('Export PDF'),
             onPressed: () =>
-                context.push(AppRoutes.exportRoute(directiveId)),
+                context.go(AppRoutes.exportRoute(directiveId)),
             style: FilledButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 14),
-            ),
-          ),
-          const SizedBox(height: 12),
-          OutlinedButton.icon(
-            icon: const Icon(Icons.home),
-            label: const Text('Go to Home'),
-            onPressed: () => context.go(AppRoutes.home),
-            style: OutlinedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 14),
             ),
           ),

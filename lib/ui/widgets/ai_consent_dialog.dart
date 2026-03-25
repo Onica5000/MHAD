@@ -72,7 +72,7 @@ Future<bool> showAiConsentDialog(BuildContext context) async {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(ctx, false),
-          child: const Text('Cancel'),
+          child: const Text('Not Now'),
         ),
         FilledButton(
           onPressed: () => Navigator.pop(ctx, true),

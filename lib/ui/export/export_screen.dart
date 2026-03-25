@@ -4,9 +4,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
+import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/export/pdf/pdf_generator.dart';
 import 'package:mhad/ui/export/pdf/wallet_card_generator.dart';
 import 'package:mhad/services/fhir_export_service.dart';
@@ -130,6 +132,13 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
             TextButton(
               onPressed: () => Navigator.pop(ctx, false),
               child: const Text('Go Back'),
+            ),
+            OutlinedButton(
+              onPressed: () {
+                Navigator.pop(ctx, false);
+                context.go(AppRoutes.wizardRoute(widget.directiveId));
+              },
+              child: const Text('Edit Directive'),
             ),
             FilledButton(
               onPressed: () => Navigator.pop(ctx, true),
@@ -392,6 +401,13 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
+          if (_isGenerating)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: LinearProgressIndicator(
+                borderRadius: BorderRadius.circular(4),
+              ),
+            ),
           // Disclaimer
           Semantics(
             label: 'Important: Before sharing, ensure this directive has been '
