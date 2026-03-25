@@ -7,10 +7,12 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:mhad/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/providers/app_providers.dart';
+import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/services/database_encryption_service.dart';
 import 'package:mhad/services/disclaimer_service.dart';
 import 'package:mhad/services/notification_service.dart';
 import 'package:mhad/services/privacy_mode_service.dart';
+import 'package:mhad/services/public_session_cache.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/crisis_resources_banner.dart';
@@ -45,6 +47,10 @@ void main() {
     final dbEncryptionKey =
         await DatabaseEncryptionService.getOrCreateKey();
 
+    // Pre-load cached API key from SharedPreferences so it's available
+    // synchronously on the first frame (avoids async race on web reload).
+    final cachedApiKey = await PublicSessionCache.getCachedApiKey();
+
     // Privacy mode starts fresh every launch (not persisted)
     final privacyModeNotifier = PrivacyModeNotifier();
 
@@ -62,6 +68,9 @@ void main() {
         // Inject the database encryption key so appDatabaseProvider can use it
         // to open the SQLCipher-encrypted database in private mode.
         dbEncryptionKeyProvider.overrideWithValue(dbEncryptionKey),
+        // Pre-loaded API key from SharedPreferences cache (avoids async race
+        // on web page reload).
+        preloadedApiKeyProvider.overrideWith((_) => cachedApiKey),
       ],
       child: const MhadApp(),
     ));

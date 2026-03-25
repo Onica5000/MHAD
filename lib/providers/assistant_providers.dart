@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mhad/ai/ai_assistant.dart';
@@ -59,19 +58,8 @@ final _persistedApiKeyProvider =
 // ---------------------------------------------------------------------------
 
 class _EphemeralApiKeyNotifier extends StateNotifier<AsyncValue<String?>> {
-  _EphemeralApiKeyNotifier() : super(const AsyncValue.loading()) {
-    _tryRestoreFromCache();
-  }
-
-  /// On creation, check the public session cache for a recent API key.
-  Future<void> _tryRestoreFromCache() async {
-    try {
-      final cached = await PublicSessionCache.getCachedApiKey();
-      state = AsyncValue.data(cached);
-    } catch (e) {
-      state = const AsyncValue.data(null);
-    }
-  }
+  _EphemeralApiKeyNotifier(String? preloadedKey)
+      : super(AsyncValue.data(preloadedKey));
 
   void save(String key) {
     final trimmed = key.trim();
@@ -86,9 +74,14 @@ class _EphemeralApiKeyNotifier extends StateNotifier<AsyncValue<String?>> {
   }
 }
 
+/// Pre-loaded cached API key from SharedPreferences, resolved in main()
+/// before runApp() so it's available synchronously on the first frame.
+final preloadedApiKeyProvider = StateProvider<String?>((_) => null);
+
 final _ephemeralApiKeyProvider =
     StateNotifierProvider<_EphemeralApiKeyNotifier, AsyncValue<String?>>((ref) {
-  return _EphemeralApiKeyNotifier();
+  final preloaded = ref.read(preloadedApiKeyProvider);
+  return _EphemeralApiKeyNotifier(preloaded);
 });
 
 // ---------------------------------------------------------------------------
