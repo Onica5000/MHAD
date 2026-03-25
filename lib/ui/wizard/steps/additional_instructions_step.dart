@@ -5,7 +5,6 @@ import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/wizard/auto_save_mixin.dart';
 import 'package:mhad/ui/wizard/widgets/ai_suggest_button.dart';
-import 'package:mhad/ui/wizard/widgets/condition_autocomplete_field.dart';
 import 'package:mhad/ui/wizard/widgets/example_text_button.dart';
 import 'package:mhad/ui/wizard/widgets/voice_input_button.dart';
 import 'package:mhad/ui/wizard/widgets/wizard_help_button.dart';
@@ -252,22 +251,25 @@ class _AdditionalInstructionsStepState
             children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                child: ConditionAutocompleteField(
+                child: TextFormField(
                   controller: _healthHistoryCtrl,
-                  labelText: 'Health History',
-                  hintText: 'Relevant mental health history, diagnoses, hospitalizations',
                   maxLines: 4,
-                  suffixIcon: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      VoiceInputButton(controller: _healthHistoryCtrl),
-                      AiSuggestButton(
-                        controller: _healthHistoryCtrl,
-                        fieldName: 'Health History',
-                        fieldGuidance:
-                            'relevant mental health history including diagnoses, past hospitalizations, and treatments that did or did not work',
-                      ),
-                    ],
+                  decoration: InputDecoration(
+                    labelText: 'Health History',
+                    hintText: 'Relevant mental health history, diagnoses, hospitalizations',
+                    border: const OutlineInputBorder(),
+                    suffixIcon: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        VoiceInputButton(controller: _healthHistoryCtrl),
+                        AiSuggestButton(
+                          controller: _healthHistoryCtrl,
+                          fieldName: 'Health History',
+                          fieldGuidance:
+                              'relevant mental health history including diagnoses, past hospitalizations, and treatments that did or did not work',
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

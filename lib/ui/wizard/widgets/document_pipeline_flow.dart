@@ -323,12 +323,16 @@ class _PipelineScreenState extends ConsumerState<_PipelineScreen> {
 
     try {
       final service = SmartFillService(apiKey: apiKey);
-      final result = await service.generate(SmartFillInput(
+      final response = await service.generate(SmartFillInput(
         conditions: _validated!.icdConditions,
         currentMedications: _validated!.validatedPreferredMedNames,
         medicationsToAvoid: _validated!.validatedAvoidMedNames,
         formType: widget.formType,
       ));
+
+      final result = response.result;
+      ref.read(geminiRateTrackerProvider).recordRequest(
+          estimatedTokens: response.totalTokens);
 
       if (!mounted) return;
 
