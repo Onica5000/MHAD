@@ -90,19 +90,43 @@ class ClinicalDataService {
     return resp.body;
   }
 
-  /// Search for medication names. Returns display strings.
-  static Future<List<String>> searchMedications(String query,
+  /// Search for medication names with strengths/forms.
+  /// Returns [MedicationResult] objects containing the drug name and its
+  /// available dosage strengths.
+  static Future<List<MedicationResult>> searchMedicationsWithStrengths(
+      String query,
       {int count = 12}) async {
     if (query.trim().length < 2) return [];
     final uri = Uri.parse(
-        '$_rxTermsBase?terms=${Uri.encodeComponent(query)}&count=$count');
+        '$_rxTermsBase?terms=${Uri.encodeComponent(query)}'
+        '&ef=STRENGTHS_AND_FORMS&count=$count');
     final body = await _fetch(uri);
     if (body == null) return [];
     final data = jsonDecode(body) as List;
-    if (data.length >= 2 && data[1] is List) {
-      return List<String>.from(data[1] as List);
-    }
-    return [];
+    if (data.length < 2 || data[1] is! List) return [];
+
+    final names = List<String>.from(data[1] as List);
+    // data[2] is {"STRENGTHS_AND_FORMS": [["150 mg Cap",...], ...]}
+    final extraFields = data.length >= 3 && data[2] is Map
+        ? data[2] as Map<String, dynamic>
+        : <String, dynamic>{};
+    final strengthsLists = extraFields['STRENGTHS_AND_FORMS'] is List
+        ? extraFields['STRENGTHS_AND_FORMS'] as List
+        : <List>[];
+
+    return List.generate(names.length, (i) {
+      final strengths = i < strengthsLists.length && strengthsLists[i] is List
+          ? List<String>.from(strengthsLists[i] as List)
+          : <String>[];
+      return MedicationResult(name: names[i], strengths: strengths);
+    });
+  }
+
+  /// Simple search returning just medication names (no strengths).
+  static Future<List<String>> searchMedications(String query,
+      {int count = 12}) async {
+    final results = await searchMedicationsWithStrengths(query, count: count);
+    return results.map((r) => r.name).toList();
   }
 
   /// Search for ICD-10-CM conditions. Returns code+name pairs.
@@ -140,4 +164,10 @@ class IcdCondition {
 
   @override
   String toString() => '$code: $name';
+}
+
+class MedicationResult {
+  final String name;
+  final List<String> strengths;
+  const MedicationResult({required this.name, this.strengths = const []});
 }

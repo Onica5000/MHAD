@@ -55,7 +55,7 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
 
   // ── Step 2: Medications ─────────────────────────────────────────────
   final _medSearchCtrl = TextEditingController();
-  List<String> _medResults = [];
+  List<MedicationResult> _medResults = [];
   final List<String> _selectedCurrentMeds = [];
   final List<String> _selectedAvoidMeds = [];
   bool _searchingMed = false;
@@ -97,7 +97,8 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
     }
     setState(() => _searchingMed = true);
     try {
-      final results = await ClinicalDataService.searchMedications(query);
+      final results =
+          await ClinicalDataService.searchMedicationsWithStrengths(query);
       if (mounted) setState(() => _medResults = results);
     } finally {
       if (mounted) setState(() => _searchingMed = false);
@@ -673,32 +674,64 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
                 : ListView.builder(
                     itemCount: _medResults.length,
                     itemBuilder: (ctx, i) {
-                      final m = _medResults[i];
-                      final inCurrent = _selectedCurrentMeds.contains(m);
-                      final inAvoid = _selectedAvoidMeds.contains(m);
-                      final selected = inCurrent || inAvoid;
+                      final med = _medResults[i];
+                      final baseName = med.name.split(' (').first;
 
-                      return ListTile(
-                        leading: Icon(
-                          selected
-                              ? Icons.check_circle
-                              : Icons.circle_outlined,
-                          color: inAvoid
-                              ? cs.error
-                              : selected
-                                  ? cs.primary
-                                  : cs.outline,
-                        ),
-                        title: Text(m),
-                        onTap: () {
-                          setState(() {
-                            if (selected) {
-                              targetList.remove(m);
-                            } else {
-                              targetList.add(m);
-                            }
-                          });
-                        },
+                      // Build list of selectable items: the base name + each strength
+                      final items = <String>[med.name];
+                      for (final s in med.strengths) {
+                        items.add('$baseName $s');
+                      }
+
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Main medication name
+                          _MedListItem(
+                            name: med.name,
+                            targetList: targetList,
+                            currentMeds: _selectedCurrentMeds,
+                            avoidMeds: _selectedAvoidMeds,
+                            onChanged: () => setState(() {}),
+                          ),
+                          // Strength options
+                          if (med.strengths.isNotEmpty)
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(48, 0, 12, 8),
+                              child: Wrap(
+                                spacing: 6,
+                                runSpacing: 4,
+                                children: med.strengths.map((s) {
+                                  final display = '$baseName $s';
+                                  final inTarget = targetList.contains(display);
+                                  return ActionChip(
+                                    label: Text(s,
+                                        style: const TextStyle(fontSize: 11)),
+                                    avatar: inTarget
+                                        ? const Icon(Icons.check, size: 14)
+                                        : null,
+                                    backgroundColor: inTarget
+                                        ? (_pickingAvoidMeds
+                                            ? cs.errorContainer
+                                            : cs.primaryContainer)
+                                        : null,
+                                    visualDensity: VisualDensity.compact,
+                                    onPressed: () {
+                                      setState(() {
+                                        if (inTarget) {
+                                          targetList.remove(display);
+                                        } else {
+                                          targetList.add(display);
+                                        }
+                                      });
+                                    },
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                          if (i < _medResults.length - 1)
+                            Divider(height: 1, color: cs.outlineVariant),
+                        ],
                       );
                     },
                   ),
@@ -928,6 +961,50 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _MedListItem extends StatelessWidget {
+  final String name;
+  final List<String> targetList;
+  final List<String> currentMeds;
+  final List<String> avoidMeds;
+  final VoidCallback onChanged;
+
+  const _MedListItem({
+    required this.name,
+    required this.targetList,
+    required this.currentMeds,
+    required this.avoidMeds,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    final inCurrent = currentMeds.contains(name);
+    final inAvoid = avoidMeds.contains(name);
+    final selected = inCurrent || inAvoid;
+
+    return ListTile(
+      leading: Icon(
+        selected ? Icons.check_circle : Icons.circle_outlined,
+        color: inAvoid
+            ? cs.error
+            : selected
+                ? cs.primary
+                : cs.outline,
+      ),
+      title: Text(name),
+      onTap: () {
+        if (selected) {
+          targetList.remove(name);
+        } else {
+          targetList.add(name);
+        }
+        onChanged();
+      },
     );
   }
 }

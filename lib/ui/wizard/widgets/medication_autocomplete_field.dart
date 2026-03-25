@@ -1,11 +1,10 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:mhad/services/clinical_data_service.dart';
 
 /// A text field that provides medication name autocomplete suggestions
-/// from the NIH RxTerms API (free, no license needed).
+/// with dosage strengths from the NIH RxTerms API (free, no license needed).
 class MedicationAutocompleteField extends StatefulWidget {
   final TextEditingController controller;
   final String? labelText;
@@ -24,7 +23,7 @@ class MedicationAutocompleteField extends StatefulWidget {
 class _MedicationAutocompleteFieldState
     extends State<MedicationAutocompleteField> {
   Timer? _debounce;
-  List<String> _suggestions = [];
+  List<MedicationResult> _suggestions = [];
   bool _loading = false;
   final _focusNode = FocusNode();
   final _layerLink = LayerLink();
@@ -68,23 +67,15 @@ class _MedicationAutocompleteFieldState
   Future<void> _fetchSuggestions(String query) async {
     setState(() => _loading = true);
     try {
-      final uri = Uri.parse(
-          'https://clinicaltables.nlm.nih.gov/api/rxterms/v3/search'
-          '?terms=${Uri.encodeComponent(query)}&count=8');
-      final response = await http.get(uri).timeout(const Duration(seconds: 5));
-      if (response.statusCode != 200) return;
-
-      final data = jsonDecode(response.body) as List;
-      // data[1] contains the flat array of display strings
-      if (data.length >= 2 && data[1] is List) {
-        final names = List<String>.from(data[1] as List);
-        if (mounted) {
-          setState(() => _suggestions = names);
-          if (names.isNotEmpty && _focusNode.hasFocus) {
-            _showOverlay();
-          } else {
-            _removeOverlay();
-          }
+      final results =
+          await ClinicalDataService.searchMedicationsWithStrengths(query,
+              count: 8);
+      if (mounted) {
+        setState(() => _suggestions = results);
+        if (results.isNotEmpty && _focusNode.hasFocus) {
+          _showOverlay();
+        } else {
+          _removeOverlay();
         }
       }
     } catch (_) {
@@ -94,48 +85,111 @@ class _MedicationAutocompleteFieldState
     }
   }
 
+  void _selectMedication(String value) {
+    widget.controller.text = value;
+    widget.controller.selection =
+        TextSelection.collapsed(offset: value.length);
+    _removeOverlay();
+  }
+
   void _showOverlay() {
     _removeOverlay();
     final overlay = Overlay.of(context);
     _overlayEntry = OverlayEntry(
-      builder: (ctx) => Positioned(
-        width: context.size?.width ?? 300,
-        child: CompositedTransformFollower(
-          link: _layerLink,
-          showWhenUnlinked: false,
-          offset: Offset(0, (context.size?.height ?? 48) + 4),
-          child: Material(
-            elevation: 4,
-            borderRadius: BorderRadius.circular(8),
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxHeight: 200),
-              child: ListView.builder(
-                padding: EdgeInsets.zero,
-                shrinkWrap: true,
-                itemCount: _suggestions.length,
-                itemBuilder: (ctx, i) => Semantics(
-                  button: true,
-                  label: 'Select medication ${_suggestions[i]}',
-                  child: InkWell(
-                    onTap: () {
-                      widget.controller.text = _suggestions[i];
-                      widget.controller.selection = TextSelection.collapsed(
-                          offset: _suggestions[i].length);
-                      _removeOverlay();
-                    },
-                    child: Padding(
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                      child: Text(_suggestions[i],
-                          style: Theme.of(ctx).textTheme.bodyMedium),
-                    ),
-                  ),
+      builder: (ctx) {
+        final cs = Theme.of(ctx).colorScheme;
+        final textStyle = Theme.of(ctx).textTheme;
+        return Positioned(
+          width: context.size?.width ?? 300,
+          child: CompositedTransformFollower(
+            link: _layerLink,
+            showWhenUnlinked: false,
+            offset: Offset(0, (context.size?.height ?? 48) + 4),
+            child: Material(
+              elevation: 4,
+              color: cs.surfaceContainerLow,
+              borderRadius: BorderRadius.circular(8),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxHeight: 300),
+                child: ListView.builder(
+                  padding: EdgeInsets.zero,
+                  shrinkWrap: true,
+                  itemCount: _suggestions.length,
+                  itemBuilder: (ctx, i) {
+                    final med = _suggestions[i];
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Main medication name — tappable to select without strength
+                        Semantics(
+                          button: true,
+                          label: 'Select medication ${med.name}',
+                          child: InkWell(
+                            onTap: () => _selectMedication(med.name),
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(12, 10, 12, 4),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.medication,
+                                      size: 16, color: cs.primary),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: Text(med.name,
+                                        style: textStyle.bodyMedium?.copyWith(
+                                            fontWeight: FontWeight.w600)),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        // Strength chips
+                        if (med.strengths.isNotEmpty)
+                          Padding(
+                            padding:
+                                const EdgeInsets.fromLTRB(36, 0, 12, 8),
+                            child: Wrap(
+                              spacing: 6,
+                              runSpacing: 4,
+                              children: med.strengths.map((s) {
+                                final display =
+                                    '${med.name.split(' (').first} $s';
+                                return Semantics(
+                                  button: true,
+                                  label: 'Select $display',
+                                  child: InkWell(
+                                    borderRadius: BorderRadius.circular(12),
+                                    onTap: () => _selectMedication(display),
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8, vertical: 4),
+                                      decoration: BoxDecoration(
+                                        color: cs.primaryContainer,
+                                        borderRadius:
+                                            BorderRadius.circular(12),
+                                      ),
+                                      child: Text(
+                                        s,
+                                        style: textStyle.labelSmall?.copyWith(
+                                            color: cs.onPrimaryContainer),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                        if (i < _suggestions.length - 1)
+                          Divider(height: 1, color: cs.outlineVariant),
+                      ],
+                    );
+                  },
                 ),
               ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
     overlay.insert(_overlayEntry!);
   }
@@ -152,6 +206,9 @@ class _MedicationAutocompleteFieldState
       child: TextFormField(
         controller: widget.controller,
         focusNode: _focusNode,
+        autofillHints: const [],
+        autocorrect: false,
+        enableSuggestions: false,
         decoration: InputDecoration(
           labelText: widget.labelText ?? 'Medication name',
           border: const OutlineInputBorder(),

@@ -4,6 +4,7 @@ import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/wizard/auto_save_mixin.dart';
 import 'package:mhad/ui/wizard/widgets/example_text_button.dart';
 import 'package:mhad/ui/wizard/widgets/voice_input_button.dart';
+import 'package:mhad/ui/wizard/widgets/condition_autocomplete_field.dart';
 import 'package:mhad/ui/wizard/widgets/wizard_help_button.dart';
 import 'package:mhad/ui/wizard/wizard_step_mixin.dart';
 
@@ -22,6 +23,8 @@ class _EffectiveConditionStepState
     with WizardStepMixin, AutoSaveMixin {
   final _formKey = GlobalKey<FormState>();
   final _ctrl = TextEditingController();
+  final _doctorNameCtrl = TextEditingController();
+  final _doctorContactCtrl = TextEditingController();
 
   @override
   void initState() {
@@ -31,13 +34,19 @@ class _EffectiveConditionStepState
       collector: () => {'effectiveCondition': _ctrl.text.trim()},
     );
     _ctrl.addListener(triggerAutoSave);
+    _doctorNameCtrl.addListener(triggerAutoSave);
+    _doctorContactCtrl.addListener(triggerAutoSave);
     WidgetsBinding.instance.addPostFrameCallback((_) => _loadData());
   }
 
   @override
   void dispose() {
     _ctrl.removeListener(triggerAutoSave);
+    _doctorNameCtrl.removeListener(triggerAutoSave);
+    _doctorContactCtrl.removeListener(triggerAutoSave);
     _ctrl.dispose();
+    _doctorNameCtrl.dispose();
+    _doctorContactCtrl.dispose();
     super.dispose();
   }
 
@@ -48,6 +57,8 @@ class _EffectiveConditionStepState
     if (directive != null && mounted) {
       setState(() {
         _ctrl.text = directive.effectiveCondition;
+        _doctorNameCtrl.text = directive.preferredDoctorName;
+        _doctorContactCtrl.text = directive.preferredDoctorContact;
       });
     }
   }
@@ -55,9 +66,14 @@ class _EffectiveConditionStepState
   @override
   Future<bool> validateAndSave() async {
     _formKey.currentState?.validate(); // Show warnings but don't block
-    await ref
-        .read(directiveRepositoryProvider)
-        .updateEffectiveCondition(widget.directiveId, _ctrl.text.trim());
+    final repo = ref.read(directiveRepositoryProvider);
+    await repo.updateEffectiveCondition(
+        widget.directiveId, _ctrl.text.trim());
+    await repo.updatePreferredDoctor(
+      widget.directiveId,
+      name: _doctorNameCtrl.text.trim(),
+      contact: _doctorContactCtrl.text.trim(),
+    );
     return true;
   }
 
@@ -111,6 +127,8 @@ class _EffectiveConditionStepState
             ],
           ),
           const SizedBox(height: 8),
+          ConditionAutocompleteField(targetController: _ctrl),
+          const SizedBox(height: 8),
           TextFormField(
             controller: _ctrl,
             maxLines: 5,
@@ -121,6 +139,33 @@ class _EffectiveConditionStepState
             ),
             validator: (v) =>
                 (v == null || v.trim().isEmpty) ? 'Required' : null,
+          ),
+          const SizedBox(height: 24),
+          Text(
+            'Preferred evaluating doctor (optional)',
+            style: Theme.of(context).textTheme.titleSmall,
+          ),
+          const SizedBox(height: 4),
+          Text(
+            'If you have a preferred doctor to evaluate your capacity, '
+            'enter their information below.',
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+          const SizedBox(height: 8),
+          TextFormField(
+            controller: _doctorNameCtrl,
+            decoration: const InputDecoration(
+              labelText: 'Name of Doctor',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          const SizedBox(height: 8),
+          TextFormField(
+            controller: _doctorContactCtrl,
+            decoration: const InputDecoration(
+              labelText: 'Address / Phone Number',
+              border: OutlineInputBorder(),
+            ),
           ),
         ],
       ),
