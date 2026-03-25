@@ -154,10 +154,8 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
 
         // ── Execution date ─────────────────────────────────
         Text('Execution Date',
-            style: TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 15,
-                color: Theme.of(context).colorScheme.onSurface)),
+            style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                fontWeight: FontWeight.w600)),
         const SizedBox(height: 8),
         Card(
           child: ListTile(
@@ -165,11 +163,11 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
             title: Text(_executionDate != null ? dateStr : 'Tap to select a date'),
             subtitle: _executionDate != null
                 ? Text('Expires: $expirationStr',
-                    style: TextStyle(
-                        fontSize: 12,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: Theme.of(context).colorScheme.onSurfaceVariant))
-                : const Text('Defaults to today if not selected',
-                    style: TextStyle(fontSize: 12)),
+                : Text('Defaults to today if not selected',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant)),
             trailing: const Icon(Icons.edit_outlined),
             onTap: () async {
               final picked = await showDatePicker(
@@ -209,7 +207,7 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
                 'thinks is best).',
           ),
           Card(
-            color: Theme.of(context).colorScheme.surfaceContainerLow,
+            color: Theme.of(context).colorScheme.secondaryContainer,
             child: Padding(
               padding: const EdgeInsets.all(12),
               child: Text(
@@ -222,7 +220,7 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
                 'parental rights on behalf of the principal.',
                 style: TextStyle(
                   fontSize: 13,
-                  color: Theme.of(context).colorScheme.onSurface,
+                  color: Theme.of(context).colorScheme.onSecondaryContainer,
                   height: 1.4,
                 ),
               ),
@@ -232,8 +230,7 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
           Text(
             'Note: The agent\'s signature is collected on the printed document. '
             'Have your agent review and sign the printed directive.',
-            style: TextStyle(
-              fontSize: 12,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
               fontStyle: FontStyle.italic,
               color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
@@ -246,19 +243,15 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
 
         // ── Witnesses ──────────────────────────────────────
         Text('Witnesses',
-            style: TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 15,
-                color: Theme.of(context).colorScheme.onSurface)),
+            style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                fontWeight: FontWeight.w600)),
         const SizedBox(height: 4),
         Text(
           'Two adult witnesses must be present when you sign. '
           'Witnesses cannot be your agent, healthcare provider, '
           'or facility employee (unless a relative).',
-          style: TextStyle(
-              fontSize: 12.5,
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-              height: 1.4),
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant),
         ),
         const SizedBox(height: 8),
         const WitnessReminderButton(),
@@ -374,11 +367,10 @@ class _SectionHeader extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(title,
-              style: const TextStyle(
-                  fontWeight: FontWeight.w600, fontSize: 15)),
+              style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                  fontWeight: FontWeight.w600)),
           Text(subtitle,
-              style: TextStyle(
-                  fontSize: 12,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: Theme.of(context).colorScheme.onSurfaceVariant)),
         ],
       ),

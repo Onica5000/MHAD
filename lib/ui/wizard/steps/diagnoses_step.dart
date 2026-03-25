@@ -113,8 +113,8 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
               Text(
                 'Search and add your mental health diagnoses. '
                 'These will be included in your directive.',
-                style: TextStyle(
-                    fontSize: 13, color: cs.onSurfaceVariant, height: 1.4),
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: cs.onSurfaceVariant),
               ),
               const SizedBox(height: 16),
 
@@ -140,12 +140,17 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                                   CircularProgressIndicator(strokeWidth: 2)),
                         )
                       : _searchCtrl.text.isNotEmpty
-                          ? IconButton(
-                              icon: const Icon(Icons.clear, size: 18),
-                              onPressed: () {
-                                _searchCtrl.clear();
-                                setState(() => _searchResults = []);
-                              },
+                          ? Semantics(
+                              button: true,
+                              label: 'Clear search',
+                              child: IconButton(
+                                icon: const Icon(Icons.clear, size: 18),
+                                tooltip: 'Clear search',
+                                onPressed: () {
+                                  _searchCtrl.clear();
+                                  setState(() => _searchResults = []);
+                                },
+                              ),
                             )
                           : null,
                 ),

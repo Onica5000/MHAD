@@ -217,16 +217,16 @@ class _MedTable extends StatelessWidget {
     return Card(
       color: cs.surfaceContainerLow,
       child: Padding(
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(title,
-                style: const TextStyle(
-                    fontWeight: FontWeight.w600, fontSize: 14)),
+                style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.w600)),
             Text(subtitle,
-                style: TextStyle(
-                    fontSize: 12, color: cs.onSurfaceVariant)),
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: cs.onSurfaceVariant)),
             const SizedBox(height: 8),
             ...List.generate(rows.length, (i) {
               return Padding(
@@ -262,10 +262,14 @@ class _MedTable extends StatelessWidget {
                 ),
               );
             }),
-            TextButton.icon(
-              onPressed: onAdd,
-              icon: const Icon(Icons.add, size: 16),
-              label: const Text('Add medication'),
+            Semantics(
+              button: true,
+              label: 'Add medication to $title list',
+              child: TextButton.icon(
+                onPressed: onAdd,
+                icon: const Icon(Icons.add, size: 16),
+                label: const Text('Add medication'),
+              ),
             ),
           ],
         ),

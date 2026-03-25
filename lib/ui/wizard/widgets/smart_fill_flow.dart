@@ -56,10 +56,11 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
   // ── Step 2: Medications ─────────────────────────────────────────────
   final _medSearchCtrl = TextEditingController();
   List<MedicationResult> _medResults = [];
-  final List<String> _selectedCurrentMeds = [];
+  final List<String> _selectedPreferredMeds = [];
+  final List<String> _selectedLimitationMeds = [];
   final List<String> _selectedAvoidMeds = [];
   bool _searchingMed = false;
-  bool _pickingAvoidMeds = false;
+  _MedCategory _medCategory = _MedCategory.preferred;
 
   // ── Step 3: Result ──────────────────────────────────────────────────
   SmartFillResult? _result;
@@ -99,8 +100,11 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
       // Pre-populate medications
       for (final m in savedMeds) {
         if (m.entryType == 'preferred' &&
-            !_selectedCurrentMeds.contains(m.medicationName)) {
-          _selectedCurrentMeds.add(m.medicationName);
+            !_selectedPreferredMeds.contains(m.medicationName)) {
+          _selectedPreferredMeds.add(m.medicationName);
+        } else if (m.entryType == 'limitation' &&
+            !_selectedLimitationMeds.contains(m.medicationName)) {
+          _selectedLimitationMeds.add(m.medicationName);
         } else if (m.entryType == 'exception' &&
             !_selectedAvoidMeds.contains(m.medicationName)) {
           _selectedAvoidMeds.add(m.medicationName);
@@ -304,7 +308,7 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
       final service = SmartFillService(apiKey: apiKey);
       final response = await service.generate(SmartFillInput(
         conditions: allConditions,
-        currentMedications: _selectedCurrentMeds,
+        currentMedications: [..._selectedPreferredMeds, ..._selectedLimitationMeds],
         medicationsToAvoid: _selectedAvoidMeds,
         formType: widget.formType,
         // Directive
@@ -480,13 +484,22 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
             m.entryType == entryType);
       }
 
-      for (final name in _selectedCurrentMeds) {
+      for (final name in _selectedPreferredMeds) {
         if (!isDuplicate(name, MedicationEntryType.preferred.name)) {
           await repo.insertMedication(MedicationEntriesCompanion.insert(
             directiveId: id,
             entryType: MedicationEntryType.preferred.name,
             medicationName: Value(name),
-            reason: Value('Currently prescribed'),
+            sortOrder: Value(order++),
+          ));
+        }
+      }
+      for (final name in _selectedLimitationMeds) {
+        if (!isDuplicate(name, MedicationEntryType.limitation.name)) {
+          await repo.insertMedication(MedicationEntriesCompanion.insert(
+            directiveId: id,
+            entryType: MedicationEntryType.limitation.name,
+            medicationName: Value(name),
             sortOrder: Value(order++),
           ));
         }
@@ -539,6 +552,7 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
         title: Text(_stepTitle),
         leading: IconButton(
           icon: const Icon(Icons.close),
+          tooltip: 'Close',
           onPressed: isProcessing
               ? null
               : () => Navigator.pop(context, false),
@@ -754,10 +768,16 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
 
   Widget _buildMedicationsStep() {
     final cs = Theme.of(context).colorScheme;
-    final targetList =
-        _pickingAvoidMeds ? _selectedAvoidMeds : _selectedCurrentMeds;
-    final targetLabel =
-        _pickingAvoidMeds ? 'medications to AVOID' : 'current medications';
+    final targetList = switch (_medCategory) {
+      _MedCategory.preferred => _selectedPreferredMeds,
+      _MedCategory.limitations => _selectedLimitationMeds,
+      _MedCategory.avoid => _selectedAvoidMeds,
+    };
+    final targetLabel = switch (_medCategory) {
+      _MedCategory.preferred => 'preferred medications',
+      _MedCategory.limitations => 'medications with limitations',
+      _MedCategory.avoid => 'medications to NEVER give',
+    };
 
     return Padding(
       padding: const EdgeInsets.all(16),
@@ -765,15 +785,19 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildExistingDataCard(),
-          // Toggle between current / avoid
-          SegmentedButton<bool>(
+          // Toggle between categories (matches wizard)
+          SegmentedButton<_MedCategory>(
             segments: const [
-              ButtonSegment(value: false, label: Text('Current Meds')),
-              ButtonSegment(value: true, label: Text('Meds to Avoid')),
+              ButtonSegment(value: _MedCategory.preferred,
+                  label: Text('Preferred', style: TextStyle(fontSize: 12))),
+              ButtonSegment(value: _MedCategory.limitations,
+                  label: Text('Limitations', style: TextStyle(fontSize: 12))),
+              ButtonSegment(value: _MedCategory.avoid,
+                  label: Text('Never', style: TextStyle(fontSize: 12))),
             ],
-            selected: {_pickingAvoidMeds},
+            selected: {_medCategory},
             onSelectionChanged: (v) =>
-                setState(() => _pickingAvoidMeds = v.first),
+                setState(() => _medCategory = v.first),
           ),
           const SizedBox(height: 12),
           TextField(
@@ -821,23 +845,43 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
               ),
             ),
           ],
-          // Selected chips for both lists
-          if (_selectedCurrentMeds.isNotEmpty ||
+          // Selected chips for all three categories
+          if (_selectedPreferredMeds.isNotEmpty ||
+              _selectedLimitationMeds.isNotEmpty ||
               _selectedAvoidMeds.isNotEmpty) ...[
             const SizedBox(height: 12),
-            if (_selectedCurrentMeds.isNotEmpty) ...[
-              Text('Current:', style: TextStyle(fontSize: 11, color: cs.onSurfaceVariant)),
+            if (_selectedPreferredMeds.isNotEmpty) ...[
+              Text('Preferred:', style: TextStyle(fontSize: 11, color: cs.onSurfaceVariant)),
               const SizedBox(height: 4),
               Wrap(
                 spacing: 6,
                 runSpacing: 4,
-                children: _selectedCurrentMeds
+                children: _selectedPreferredMeds
                     .map((m) => Chip(
                           label: Text(m, style: const TextStyle(fontSize: 11)),
                           deleteIcon: const Icon(Icons.close, size: 14),
                           onDeleted: () =>
-                              setState(() => _selectedCurrentMeds.remove(m)),
+                              setState(() => _selectedPreferredMeds.remove(m)),
                           backgroundColor: cs.primaryContainer,
+                          visualDensity: VisualDensity.compact,
+                        ))
+                    .toList(),
+              ),
+            ],
+            if (_selectedLimitationMeds.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              Text('Limitations:', style: TextStyle(fontSize: 11, color: cs.tertiary)),
+              const SizedBox(height: 4),
+              Wrap(
+                spacing: 6,
+                runSpacing: 4,
+                children: _selectedLimitationMeds
+                    .map((m) => Chip(
+                          label: Text(m, style: const TextStyle(fontSize: 11)),
+                          deleteIcon: const Icon(Icons.close, size: 14),
+                          onDeleted: () =>
+                              setState(() => _selectedLimitationMeds.remove(m)),
+                          backgroundColor: cs.tertiaryContainer,
                           visualDensity: VisualDensity.compact,
                         ))
                     .toList(),
@@ -845,7 +889,7 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
             ],
             if (_selectedAvoidMeds.isNotEmpty) ...[
               const SizedBox(height: 8),
-              Text('Avoid:', style: TextStyle(fontSize: 11, color: cs.error)),
+              Text('Never:', style: TextStyle(fontSize: 11, color: cs.error)),
               const SizedBox(height: 4),
               Wrap(
                 spacing: 6,
@@ -959,7 +1003,7 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
                                             horizontal: 8, vertical: 4),
                                         decoration: BoxDecoration(
                                           color: inTarget
-                                              ? (_pickingAvoidMeds
+                                              ? (_medCategory == _MedCategory.avoid
                                                   ? cs.errorContainer
                                                   : cs.primaryContainer)
                                               : cs.surfaceContainerHighest,
@@ -1194,7 +1238,8 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
               ),
             if (_step == _Step.medications)
               FilledButton.icon(
-                onPressed: (_selectedCurrentMeds.isEmpty &&
+                onPressed: (_selectedPreferredMeds.isEmpty &&
+                        _selectedLimitationMeds.isEmpty &&
                         _selectedAvoidMeds.isEmpty &&
                         _selectedConditions.isEmpty)
                     ? null
@@ -1218,4 +1263,4 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
   }
 }
 
-
+enum _MedCategory { preferred, limitations, avoid }

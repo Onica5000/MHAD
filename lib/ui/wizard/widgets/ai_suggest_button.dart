@@ -203,6 +203,7 @@ Please provide a more concise, clear, and legally appropriate version of this te
                   size: 20,
                   color: hasAssistant ? cs.primary : cs.onSurfaceVariant,
                 ),
+                tooltip: 'AI suggestion',
                 onPressed: _suggest,
                 style: IconButton.styleFrom(
                   minimumSize: const Size(48, 48),

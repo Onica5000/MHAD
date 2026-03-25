@@ -38,6 +38,7 @@ class WizardHelpButton extends StatelessWidget {
           style: TextButton.styleFrom(
             foregroundColor: Theme.of(context).colorScheme.primary,
             textStyle: const TextStyle(fontSize: 13),
+            visualDensity: VisualDensity.compact,
           ),
         ),
       ),
@@ -76,6 +77,7 @@ class _HelpSheet extends StatelessWidget {
               const Spacer(),
               IconButton(
                 icon: const Icon(Icons.close),
+                tooltip: 'Close',
                 onPressed: () => Navigator.pop(context),
               ),
             ],

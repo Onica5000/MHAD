@@ -51,7 +51,11 @@ class _ConditionAutocompleteFieldState
 
   void _onFocusChanged() {
     if (!_focusNode.hasFocus) {
-      _removeOverlay();
+      Future.delayed(const Duration(milliseconds: 200), () {
+        if (mounted && !_focusNode.hasFocus) {
+          _removeOverlay();
+        }
+      });
     }
   }
 

@@ -138,13 +138,14 @@ class _TreatmentFacilityStepState
           const SizedBox(height: 16),
           Text(
             'Preferred Facility',
-            style: TextStyle(
-                fontWeight: FontWeight.w600, color: cs.onSurface),
+            style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 4),
           Text(
             'If you are hospitalized, which facility would you prefer?',
-            style: TextStyle(fontSize: 13, color: cs.onSurfaceVariant),
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: cs.onSurfaceVariant),
           ),
           const SizedBox(height: 8),
           TextFormField(
@@ -169,13 +170,14 @@ class _TreatmentFacilityStepState
           const SizedBox(height: 24),
           Text(
             'Facility to Avoid',
-            style: TextStyle(
-                fontWeight: FontWeight.w600, color: cs.onSurface),
+            style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 4),
           Text(
             'Is there a facility where you do not want to be treated?',
-            style: TextStyle(fontSize: 13, color: cs.onSurfaceVariant),
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: cs.onSurfaceVariant),
           ),
           const SizedBox(height: 8),
           TextFormField(

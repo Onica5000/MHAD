@@ -219,7 +219,7 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
               inputFormatters: [_DateInputFormatter()],
               validator: _validateAge,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 24),
             TextFormField(
               controller: _addressCtrl,
               decoration: const InputDecoration(
@@ -299,7 +299,7 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 24),
             TextFormField(
               controller: _phoneCtrl,
               decoration: const InputDecoration(

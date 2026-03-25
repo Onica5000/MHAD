@@ -691,6 +691,7 @@ class _PipelineScreenState extends ConsumerState<_PipelineScreen> {
         title: Text(_title),
         leading: IconButton(
           icon: const Icon(Icons.close),
+          tooltip: 'Close',
           onPressed: isProcessing
               ? null
               : () => Navigator.pop(context, false),

@@ -48,7 +48,14 @@ class _MedicationAutocompleteFieldState
 
   void _onFocusChanged() {
     if (!_focusNode.hasFocus) {
-      _removeOverlay();
+      // Delay removal so overlay tap handlers fire before the overlay is gone.
+      // Without this, tapping a suggestion on web loses focus first, removes
+      // the overlay, and the tap never registers.
+      Future.delayed(const Duration(milliseconds: 200), () {
+        if (mounted && !_focusNode.hasFocus) {
+          _removeOverlay();
+        }
+      });
     }
   }
 

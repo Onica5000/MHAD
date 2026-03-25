@@ -168,6 +168,7 @@ class _AdditionalInstructionsStepState
           child: TextFormField(
             controller: ctrl,
             maxLines: 4,
+            autofillHints: const [],
             decoration: InputDecoration(
               labelText: title,
               hintText: hint,
@@ -246,34 +247,11 @@ class _AdditionalInstructionsStepState
             'loud environments, specific conversation topics, being touched '
             'without permission, being alone, or certain people or settings',
           ),
-          ExpansionTile(
-            title: const Text('Health History'),
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                child: TextFormField(
-                  controller: _healthHistoryCtrl,
-                  maxLines: 4,
-                  decoration: InputDecoration(
-                    labelText: 'Health History',
-                    hintText: 'Relevant mental health history, diagnoses, hospitalizations',
-                    border: const OutlineInputBorder(),
-                    suffixIcon: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        VoiceInputButton(controller: _healthHistoryCtrl),
-                        AiSuggestButton(
-                          controller: _healthHistoryCtrl,
-                          fieldName: 'Health History',
-                          fieldGuidance:
-                              'relevant mental health history including diagnoses, past hospitalizations, and treatments that did or did not work',
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
+          _buildSection(
+            'Health History',
+            _healthHistoryCtrl,
+            'Relevant mental health history, diagnoses, hospitalizations',
+            'relevant mental health history including diagnoses, past hospitalizations, and treatments that did or did not work',
           ),
           _buildSection(
             'Dietary Preferences',

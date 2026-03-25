@@ -240,8 +240,8 @@ class _ReviewSection extends StatelessWidget {
                 Expanded(
                   child: Text(
                     title,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.w600, fontSize: 14),
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.w600),
                   ),
                 ),
                 if (nonEmpty.isEmpty)
