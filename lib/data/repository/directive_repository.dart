@@ -65,6 +65,18 @@ class DirectiveRepository {
         ),
       );
 
+  Future<void> updatePreferredDoctor(int id, {
+    required String name,
+    required String contact,
+  }) =>
+      (_db.update(_db.directives)..where((t) => t.id.equals(id))).write(
+        DirectivesCompanion(
+          preferredDoctorName: Value(name),
+          preferredDoctorContact: Value(contact),
+          updatedAt: Value(DateTime.now().millisecondsSinceEpoch),
+        ),
+      );
+
   Future<void> updateStatus(int id, DirectiveStatus status) =>
       (_db.update(_db.directives)..where((t) => t.id.equals(id))).write(
         DirectivesCompanion(
@@ -79,6 +91,7 @@ class DirectiveRepository {
   Future<void> deleteAllDirectives() async {
     await _db.transaction(() async {
       await _db.delete(_db.medicationEntries).go();
+      await _db.delete(_db.diagnosisEntries).go();
       await _db.delete(_db.agents).go();
       await _db.delete(_db.witnesses).go();
       await _db.delete(_db.directivePrefs).go();
@@ -173,4 +186,24 @@ class DirectiveRepository {
 
   Future<void> upsertGuardianNomination(GuardianNominationsCompanion data) =>
       _db.into(_db.guardianNominations).insertOnConflictUpdate(data);
+
+  // ── Diagnoses ──────────────────────────────────────────────────────────────
+
+  Stream<List<DiagnosisEntry>> watchDiagnoses(int directiveId) =>
+      (_db.select(_db.diagnosisEntries)
+            ..where((t) => t.directiveId.equals(directiveId))
+            ..orderBy([(t) => OrderingTerm.asc(t.sortOrder)]))
+          .watch();
+
+  Future<List<DiagnosisEntry>> getDiagnoses(int directiveId) =>
+      (_db.select(_db.diagnosisEntries)
+            ..where((t) => t.directiveId.equals(directiveId))
+            ..orderBy([(t) => OrderingTerm.asc(t.sortOrder)]))
+          .get();
+
+  Future<int> insertDiagnosis(DiagnosisEntriesCompanion entry) =>
+      _db.into(_db.diagnosisEntries).insert(entry);
+
+  Future<void> deleteDiagnosis(int id) =>
+      (_db.delete(_db.diagnosisEntries)..where((t) => t.id.equals(id))).go();
 }

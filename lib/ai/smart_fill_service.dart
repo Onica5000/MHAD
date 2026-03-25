@@ -6,6 +6,7 @@ import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:http/http.dart' as http;
 import 'package:mhad/services/certificate_pinning_service.dart';
 import 'package:mhad/services/clinical_data_service.dart';
+import 'package:mhad/services/gemini_rate_tracker.dart';
 
 /// The structured input collected from the user via NIH APIs (zero tokens),
 /// plus existing wizard data so the AI can supplement rather than duplicate.
@@ -199,6 +200,14 @@ class MedSuggestion {
   String get display => reason.isNotEmpty ? '$name — $reason' : name;
 }
 
+/// Wrapper returned by [SmartFillService.generate] containing the parsed
+/// result and actual token usage for rate tracking.
+class SmartFillResponse {
+  final SmartFillResult result;
+  final int totalTokens;
+  const SmartFillResponse({required this.result, required this.totalTokens});
+}
+
 /// Sends a compact, structured prompt to Gemini using pre-validated clinical
 /// data from the NIH APIs. This approach minimizes token usage by:
 ///
@@ -217,9 +226,9 @@ class SmartFillService {
   static const _model = 'gemini-2.5-flash';
 
   /// Given structured clinical data, ask Gemini to generate directive content.
-  /// Typical prompt is ~200-300 tokens. Response is ~300-500 tokens.
-  /// Compared to the chat assistant's ~3000+ token system prompt, this is ~90% cheaper.
-  Future<SmartFillResult> generate(SmartFillInput input) async {
+  /// Returns [SmartFillResponse] containing the parsed result and actual token
+  /// usage from the API (for rate tracking).
+  Future<SmartFillResponse> generate(SmartFillInput input) async {
     final model = GenerativeModel(
       model: _model,
       apiKey: apiKey,
@@ -243,7 +252,17 @@ class SmartFillService {
         throw Exception('Empty response from Gemini');
       }
 
-      return _parse(text);
+      final promptTokens = response.usageMetadata?.promptTokenCount ?? 0;
+      final responseTokens =
+          response.usageMetadata?.candidatesTokenCount ?? 0;
+      final totalTokens = promptTokens + responseTokens;
+
+      return SmartFillResponse(
+        result: _parse(text),
+        totalTokens: totalTokens > 0
+            ? totalTokens
+            : GeminiRateTracker.estimateTokens(prompt.length + text.length),
+      );
     } on TimeoutException {
       throw Exception('Request timed out. Please try again.');
     } on GenerativeAIException catch (e) {

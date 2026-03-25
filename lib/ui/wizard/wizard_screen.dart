@@ -9,6 +9,7 @@ import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/wizard/wizard_step_mixin.dart';
 import 'package:mhad/ui/wizard/steps/personal_info_step.dart';
+import 'package:mhad/ui/wizard/steps/diagnoses_step.dart';
 import 'package:mhad/ui/wizard/steps/effective_condition_step.dart';
 import 'package:mhad/ui/wizard/steps/treatment_facility_step.dart';
 import 'package:mhad/ui/wizard/steps/medications_step.dart';
@@ -275,6 +276,8 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
     return switch (step) {
       WizardStep.personalInfo =>
         PersonalInfoStep(key: _stepKey, directiveId: directiveId),
+      WizardStep.diagnoses =>
+        DiagnosesStep(key: _stepKey, directiveId: directiveId),
       WizardStep.effectiveCondition =>
         EffectiveConditionStep(key: _stepKey, directiveId: directiveId),
       WizardStep.treatmentFacility =>

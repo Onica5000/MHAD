@@ -187,6 +187,30 @@ class $DirectivesTable extends Directives
         requiredDuringInsert: false,
         defaultValue: const Constant(''),
       );
+  static const VerificationMeta _preferredDoctorNameMeta =
+      const VerificationMeta('preferredDoctorName');
+  @override
+  late final GeneratedColumn<String> preferredDoctorName =
+      GeneratedColumn<String>(
+        'preferred_doctor_name',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: const Constant(''),
+      );
+  static const VerificationMeta _preferredDoctorContactMeta =
+      const VerificationMeta('preferredDoctorContact');
+  @override
+  late final GeneratedColumn<String> preferredDoctorContact =
+      GeneratedColumn<String>(
+        'preferred_doctor_contact',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: const Constant(''),
+      );
   static const VerificationMeta _lastStepIndexMeta = const VerificationMeta(
     'lastStepIndex',
   );
@@ -217,6 +241,8 @@ class $DirectivesTable extends Directives
     zip,
     phone,
     effectiveCondition,
+    preferredDoctorName,
+    preferredDoctorContact,
     lastStepIndex,
   ];
   @override
@@ -342,6 +368,24 @@ class $DirectivesTable extends Directives
         ),
       );
     }
+    if (data.containsKey('preferred_doctor_name')) {
+      context.handle(
+        _preferredDoctorNameMeta,
+        preferredDoctorName.isAcceptableOrUnknown(
+          data['preferred_doctor_name']!,
+          _preferredDoctorNameMeta,
+        ),
+      );
+    }
+    if (data.containsKey('preferred_doctor_contact')) {
+      context.handle(
+        _preferredDoctorContactMeta,
+        preferredDoctorContact.isAcceptableOrUnknown(
+          data['preferred_doctor_contact']!,
+          _preferredDoctorContactMeta,
+        ),
+      );
+    }
     if (data.containsKey('last_step_index')) {
       context.handle(
         _lastStepIndexMeta,
@@ -424,6 +468,14 @@ class $DirectivesTable extends Directives
         DriftSqlType.string,
         data['${effectivePrefix}effective_condition'],
       )!,
+      preferredDoctorName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}preferred_doctor_name'],
+      )!,
+      preferredDoctorContact: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}preferred_doctor_contact'],
+      )!,
       lastStepIndex: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}last_step_index'],
@@ -454,6 +506,8 @@ class Directive extends DataClass implements Insertable<Directive> {
   final String zip;
   final String phone;
   final String effectiveCondition;
+  final String preferredDoctorName;
+  final String preferredDoctorContact;
   final int lastStepIndex;
   const Directive({
     required this.id,
@@ -472,6 +526,8 @@ class Directive extends DataClass implements Insertable<Directive> {
     required this.zip,
     required this.phone,
     required this.effectiveCondition,
+    required this.preferredDoctorName,
+    required this.preferredDoctorContact,
     required this.lastStepIndex,
   });
   @override
@@ -497,6 +553,8 @@ class Directive extends DataClass implements Insertable<Directive> {
     map['zip'] = Variable<String>(zip);
     map['phone'] = Variable<String>(phone);
     map['effective_condition'] = Variable<String>(effectiveCondition);
+    map['preferred_doctor_name'] = Variable<String>(preferredDoctorName);
+    map['preferred_doctor_contact'] = Variable<String>(preferredDoctorContact);
     map['last_step_index'] = Variable<int>(lastStepIndex);
     return map;
   }
@@ -523,6 +581,8 @@ class Directive extends DataClass implements Insertable<Directive> {
       zip: Value(zip),
       phone: Value(phone),
       effectiveCondition: Value(effectiveCondition),
+      preferredDoctorName: Value(preferredDoctorName),
+      preferredDoctorContact: Value(preferredDoctorContact),
       lastStepIndex: Value(lastStepIndex),
     );
   }
@@ -551,6 +611,12 @@ class Directive extends DataClass implements Insertable<Directive> {
       effectiveCondition: serializer.fromJson<String>(
         json['effectiveCondition'],
       ),
+      preferredDoctorName: serializer.fromJson<String>(
+        json['preferredDoctorName'],
+      ),
+      preferredDoctorContact: serializer.fromJson<String>(
+        json['preferredDoctorContact'],
+      ),
       lastStepIndex: serializer.fromJson<int>(json['lastStepIndex']),
     );
   }
@@ -574,6 +640,10 @@ class Directive extends DataClass implements Insertable<Directive> {
       'zip': serializer.toJson<String>(zip),
       'phone': serializer.toJson<String>(phone),
       'effectiveCondition': serializer.toJson<String>(effectiveCondition),
+      'preferredDoctorName': serializer.toJson<String>(preferredDoctorName),
+      'preferredDoctorContact': serializer.toJson<String>(
+        preferredDoctorContact,
+      ),
       'lastStepIndex': serializer.toJson<int>(lastStepIndex),
     };
   }
@@ -595,6 +665,8 @@ class Directive extends DataClass implements Insertable<Directive> {
     String? zip,
     String? phone,
     String? effectiveCondition,
+    String? preferredDoctorName,
+    String? preferredDoctorContact,
     int? lastStepIndex,
   }) => Directive(
     id: id ?? this.id,
@@ -617,6 +689,9 @@ class Directive extends DataClass implements Insertable<Directive> {
     zip: zip ?? this.zip,
     phone: phone ?? this.phone,
     effectiveCondition: effectiveCondition ?? this.effectiveCondition,
+    preferredDoctorName: preferredDoctorName ?? this.preferredDoctorName,
+    preferredDoctorContact:
+        preferredDoctorContact ?? this.preferredDoctorContact,
     lastStepIndex: lastStepIndex ?? this.lastStepIndex,
   );
   Directive copyWithCompanion(DirectivesCompanion data) {
@@ -645,6 +720,12 @@ class Directive extends DataClass implements Insertable<Directive> {
       effectiveCondition: data.effectiveCondition.present
           ? data.effectiveCondition.value
           : this.effectiveCondition,
+      preferredDoctorName: data.preferredDoctorName.present
+          ? data.preferredDoctorName.value
+          : this.preferredDoctorName,
+      preferredDoctorContact: data.preferredDoctorContact.present
+          ? data.preferredDoctorContact.value
+          : this.preferredDoctorContact,
       lastStepIndex: data.lastStepIndex.present
           ? data.lastStepIndex.value
           : this.lastStepIndex,
@@ -670,6 +751,8 @@ class Directive extends DataClass implements Insertable<Directive> {
           ..write('zip: $zip, ')
           ..write('phone: $phone, ')
           ..write('effectiveCondition: $effectiveCondition, ')
+          ..write('preferredDoctorName: $preferredDoctorName, ')
+          ..write('preferredDoctorContact: $preferredDoctorContact, ')
           ..write('lastStepIndex: $lastStepIndex')
           ..write(')'))
         .toString();
@@ -693,6 +776,8 @@ class Directive extends DataClass implements Insertable<Directive> {
     zip,
     phone,
     effectiveCondition,
+    preferredDoctorName,
+    preferredDoctorContact,
     lastStepIndex,
   );
   @override
@@ -715,6 +800,8 @@ class Directive extends DataClass implements Insertable<Directive> {
           other.zip == this.zip &&
           other.phone == this.phone &&
           other.effectiveCondition == this.effectiveCondition &&
+          other.preferredDoctorName == this.preferredDoctorName &&
+          other.preferredDoctorContact == this.preferredDoctorContact &&
           other.lastStepIndex == this.lastStepIndex);
 }
 
@@ -735,6 +822,8 @@ class DirectivesCompanion extends UpdateCompanion<Directive> {
   final Value<String> zip;
   final Value<String> phone;
   final Value<String> effectiveCondition;
+  final Value<String> preferredDoctorName;
+  final Value<String> preferredDoctorContact;
   final Value<int> lastStepIndex;
   const DirectivesCompanion({
     this.id = const Value.absent(),
@@ -753,6 +842,8 @@ class DirectivesCompanion extends UpdateCompanion<Directive> {
     this.zip = const Value.absent(),
     this.phone = const Value.absent(),
     this.effectiveCondition = const Value.absent(),
+    this.preferredDoctorName = const Value.absent(),
+    this.preferredDoctorContact = const Value.absent(),
     this.lastStepIndex = const Value.absent(),
   });
   DirectivesCompanion.insert({
@@ -772,6 +863,8 @@ class DirectivesCompanion extends UpdateCompanion<Directive> {
     this.zip = const Value.absent(),
     this.phone = const Value.absent(),
     this.effectiveCondition = const Value.absent(),
+    this.preferredDoctorName = const Value.absent(),
+    this.preferredDoctorContact = const Value.absent(),
     this.lastStepIndex = const Value.absent(),
   }) : formType = Value(formType),
        createdAt = Value(createdAt),
@@ -793,6 +886,8 @@ class DirectivesCompanion extends UpdateCompanion<Directive> {
     Expression<String>? zip,
     Expression<String>? phone,
     Expression<String>? effectiveCondition,
+    Expression<String>? preferredDoctorName,
+    Expression<String>? preferredDoctorContact,
     Expression<int>? lastStepIndex,
   }) {
     return RawValuesInsertable({
@@ -812,6 +907,10 @@ class DirectivesCompanion extends UpdateCompanion<Directive> {
       if (zip != null) 'zip': zip,
       if (phone != null) 'phone': phone,
       if (effectiveCondition != null) 'effective_condition': effectiveCondition,
+      if (preferredDoctorName != null)
+        'preferred_doctor_name': preferredDoctorName,
+      if (preferredDoctorContact != null)
+        'preferred_doctor_contact': preferredDoctorContact,
       if (lastStepIndex != null) 'last_step_index': lastStepIndex,
     });
   }
@@ -833,6 +932,8 @@ class DirectivesCompanion extends UpdateCompanion<Directive> {
     Value<String>? zip,
     Value<String>? phone,
     Value<String>? effectiveCondition,
+    Value<String>? preferredDoctorName,
+    Value<String>? preferredDoctorContact,
     Value<int>? lastStepIndex,
   }) {
     return DirectivesCompanion(
@@ -852,6 +953,9 @@ class DirectivesCompanion extends UpdateCompanion<Directive> {
       zip: zip ?? this.zip,
       phone: phone ?? this.phone,
       effectiveCondition: effectiveCondition ?? this.effectiveCondition,
+      preferredDoctorName: preferredDoctorName ?? this.preferredDoctorName,
+      preferredDoctorContact:
+          preferredDoctorContact ?? this.preferredDoctorContact,
       lastStepIndex: lastStepIndex ?? this.lastStepIndex,
     );
   }
@@ -907,6 +1011,16 @@ class DirectivesCompanion extends UpdateCompanion<Directive> {
     if (effectiveCondition.present) {
       map['effective_condition'] = Variable<String>(effectiveCondition.value);
     }
+    if (preferredDoctorName.present) {
+      map['preferred_doctor_name'] = Variable<String>(
+        preferredDoctorName.value,
+      );
+    }
+    if (preferredDoctorContact.present) {
+      map['preferred_doctor_contact'] = Variable<String>(
+        preferredDoctorContact.value,
+      );
+    }
     if (lastStepIndex.present) {
       map['last_step_index'] = Variable<int>(lastStepIndex.value);
     }
@@ -932,6 +1046,8 @@ class DirectivesCompanion extends UpdateCompanion<Directive> {
           ..write('zip: $zip, ')
           ..write('phone: $phone, ')
           ..write('effectiveCondition: $effectiveCondition, ')
+          ..write('preferredDoctorName: $preferredDoctorName, ')
+          ..write('preferredDoctorContact: $preferredDoctorContact, ')
           ..write('lastStepIndex: $lastStepIndex')
           ..write(')'))
         .toString();
@@ -3975,6 +4091,21 @@ class $GuardianNominationsTable extends GuardianNominations
         requiredDuringInsert: false,
         defaultValue: const Constant(''),
       );
+  static const VerificationMeta _guardianCanRevokeMeta = const VerificationMeta(
+    'guardianCanRevoke',
+  );
+  @override
+  late final GeneratedColumn<bool> guardianCanRevoke = GeneratedColumn<bool>(
+    'guardian_can_revoke',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("guardian_can_revoke" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -3983,6 +4114,7 @@ class $GuardianNominationsTable extends GuardianNominations
     nomineeAddress,
     nomineePhone,
     nomineeRelationship,
+    guardianCanRevoke,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -4046,6 +4178,15 @@ class $GuardianNominationsTable extends GuardianNominations
         ),
       );
     }
+    if (data.containsKey('guardian_can_revoke')) {
+      context.handle(
+        _guardianCanRevokeMeta,
+        guardianCanRevoke.isAcceptableOrUnknown(
+          data['guardian_can_revoke']!,
+          _guardianCanRevokeMeta,
+        ),
+      );
+    }
     return context;
   }
 
@@ -4079,6 +4220,10 @@ class $GuardianNominationsTable extends GuardianNominations
         DriftSqlType.string,
         data['${effectivePrefix}nominee_relationship'],
       )!,
+      guardianCanRevoke: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}guardian_can_revoke'],
+      )!,
     );
   }
 
@@ -4096,6 +4241,7 @@ class GuardianNomination extends DataClass
   final String nomineeAddress;
   final String nomineePhone;
   final String nomineeRelationship;
+  final bool guardianCanRevoke;
   const GuardianNomination({
     required this.id,
     required this.directiveId,
@@ -4103,6 +4249,7 @@ class GuardianNomination extends DataClass
     required this.nomineeAddress,
     required this.nomineePhone,
     required this.nomineeRelationship,
+    required this.guardianCanRevoke,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -4113,6 +4260,7 @@ class GuardianNomination extends DataClass
     map['nominee_address'] = Variable<String>(nomineeAddress);
     map['nominee_phone'] = Variable<String>(nomineePhone);
     map['nominee_relationship'] = Variable<String>(nomineeRelationship);
+    map['guardian_can_revoke'] = Variable<bool>(guardianCanRevoke);
     return map;
   }
 
@@ -4124,6 +4272,7 @@ class GuardianNomination extends DataClass
       nomineeAddress: Value(nomineeAddress),
       nomineePhone: Value(nomineePhone),
       nomineeRelationship: Value(nomineeRelationship),
+      guardianCanRevoke: Value(guardianCanRevoke),
     );
   }
 
@@ -4141,6 +4290,7 @@ class GuardianNomination extends DataClass
       nomineeRelationship: serializer.fromJson<String>(
         json['nomineeRelationship'],
       ),
+      guardianCanRevoke: serializer.fromJson<bool>(json['guardianCanRevoke']),
     );
   }
   @override
@@ -4153,6 +4303,7 @@ class GuardianNomination extends DataClass
       'nomineeAddress': serializer.toJson<String>(nomineeAddress),
       'nomineePhone': serializer.toJson<String>(nomineePhone),
       'nomineeRelationship': serializer.toJson<String>(nomineeRelationship),
+      'guardianCanRevoke': serializer.toJson<bool>(guardianCanRevoke),
     };
   }
 
@@ -4163,6 +4314,7 @@ class GuardianNomination extends DataClass
     String? nomineeAddress,
     String? nomineePhone,
     String? nomineeRelationship,
+    bool? guardianCanRevoke,
   }) => GuardianNomination(
     id: id ?? this.id,
     directiveId: directiveId ?? this.directiveId,
@@ -4170,6 +4322,7 @@ class GuardianNomination extends DataClass
     nomineeAddress: nomineeAddress ?? this.nomineeAddress,
     nomineePhone: nomineePhone ?? this.nomineePhone,
     nomineeRelationship: nomineeRelationship ?? this.nomineeRelationship,
+    guardianCanRevoke: guardianCanRevoke ?? this.guardianCanRevoke,
   );
   GuardianNomination copyWithCompanion(GuardianNominationsCompanion data) {
     return GuardianNomination(
@@ -4189,6 +4342,9 @@ class GuardianNomination extends DataClass
       nomineeRelationship: data.nomineeRelationship.present
           ? data.nomineeRelationship.value
           : this.nomineeRelationship,
+      guardianCanRevoke: data.guardianCanRevoke.present
+          ? data.guardianCanRevoke.value
+          : this.guardianCanRevoke,
     );
   }
 
@@ -4200,7 +4356,8 @@ class GuardianNomination extends DataClass
           ..write('nomineeFullName: $nomineeFullName, ')
           ..write('nomineeAddress: $nomineeAddress, ')
           ..write('nomineePhone: $nomineePhone, ')
-          ..write('nomineeRelationship: $nomineeRelationship')
+          ..write('nomineeRelationship: $nomineeRelationship, ')
+          ..write('guardianCanRevoke: $guardianCanRevoke')
           ..write(')'))
         .toString();
   }
@@ -4213,6 +4370,7 @@ class GuardianNomination extends DataClass
     nomineeAddress,
     nomineePhone,
     nomineeRelationship,
+    guardianCanRevoke,
   );
   @override
   bool operator ==(Object other) =>
@@ -4223,7 +4381,8 @@ class GuardianNomination extends DataClass
           other.nomineeFullName == this.nomineeFullName &&
           other.nomineeAddress == this.nomineeAddress &&
           other.nomineePhone == this.nomineePhone &&
-          other.nomineeRelationship == this.nomineeRelationship);
+          other.nomineeRelationship == this.nomineeRelationship &&
+          other.guardianCanRevoke == this.guardianCanRevoke);
 }
 
 class GuardianNominationsCompanion extends UpdateCompanion<GuardianNomination> {
@@ -4233,6 +4392,7 @@ class GuardianNominationsCompanion extends UpdateCompanion<GuardianNomination> {
   final Value<String> nomineeAddress;
   final Value<String> nomineePhone;
   final Value<String> nomineeRelationship;
+  final Value<bool> guardianCanRevoke;
   const GuardianNominationsCompanion({
     this.id = const Value.absent(),
     this.directiveId = const Value.absent(),
@@ -4240,6 +4400,7 @@ class GuardianNominationsCompanion extends UpdateCompanion<GuardianNomination> {
     this.nomineeAddress = const Value.absent(),
     this.nomineePhone = const Value.absent(),
     this.nomineeRelationship = const Value.absent(),
+    this.guardianCanRevoke = const Value.absent(),
   });
   GuardianNominationsCompanion.insert({
     this.id = const Value.absent(),
@@ -4248,6 +4409,7 @@ class GuardianNominationsCompanion extends UpdateCompanion<GuardianNomination> {
     this.nomineeAddress = const Value.absent(),
     this.nomineePhone = const Value.absent(),
     this.nomineeRelationship = const Value.absent(),
+    this.guardianCanRevoke = const Value.absent(),
   }) : directiveId = Value(directiveId);
   static Insertable<GuardianNomination> custom({
     Expression<int>? id,
@@ -4256,6 +4418,7 @@ class GuardianNominationsCompanion extends UpdateCompanion<GuardianNomination> {
     Expression<String>? nomineeAddress,
     Expression<String>? nomineePhone,
     Expression<String>? nomineeRelationship,
+    Expression<bool>? guardianCanRevoke,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -4265,6 +4428,7 @@ class GuardianNominationsCompanion extends UpdateCompanion<GuardianNomination> {
       if (nomineePhone != null) 'nominee_phone': nomineePhone,
       if (nomineeRelationship != null)
         'nominee_relationship': nomineeRelationship,
+      if (guardianCanRevoke != null) 'guardian_can_revoke': guardianCanRevoke,
     });
   }
 
@@ -4275,6 +4439,7 @@ class GuardianNominationsCompanion extends UpdateCompanion<GuardianNomination> {
     Value<String>? nomineeAddress,
     Value<String>? nomineePhone,
     Value<String>? nomineeRelationship,
+    Value<bool>? guardianCanRevoke,
   }) {
     return GuardianNominationsCompanion(
       id: id ?? this.id,
@@ -4283,6 +4448,7 @@ class GuardianNominationsCompanion extends UpdateCompanion<GuardianNomination> {
       nomineeAddress: nomineeAddress ?? this.nomineeAddress,
       nomineePhone: nomineePhone ?? this.nomineePhone,
       nomineeRelationship: nomineeRelationship ?? this.nomineeRelationship,
+      guardianCanRevoke: guardianCanRevoke ?? this.guardianCanRevoke,
     );
   }
 
@@ -4307,6 +4473,9 @@ class GuardianNominationsCompanion extends UpdateCompanion<GuardianNomination> {
     if (nomineeRelationship.present) {
       map['nominee_relationship'] = Variable<String>(nomineeRelationship.value);
     }
+    if (guardianCanRevoke.present) {
+      map['guardian_can_revoke'] = Variable<bool>(guardianCanRevoke.value);
+    }
     return map;
   }
 
@@ -4318,7 +4487,360 @@ class GuardianNominationsCompanion extends UpdateCompanion<GuardianNomination> {
           ..write('nomineeFullName: $nomineeFullName, ')
           ..write('nomineeAddress: $nomineeAddress, ')
           ..write('nomineePhone: $nomineePhone, ')
-          ..write('nomineeRelationship: $nomineeRelationship')
+          ..write('nomineeRelationship: $nomineeRelationship, ')
+          ..write('guardianCanRevoke: $guardianCanRevoke')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $DiagnosisEntriesTable extends DiagnosisEntries
+    with TableInfo<$DiagnosisEntriesTable, DiagnosisEntry> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $DiagnosisEntriesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _directiveIdMeta = const VerificationMeta(
+    'directiveId',
+  );
+  @override
+  late final GeneratedColumn<int> directiveId = GeneratedColumn<int>(
+    'directive_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES directives (id) ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _icdCodeMeta = const VerificationMeta(
+    'icdCode',
+  );
+  @override
+  late final GeneratedColumn<String> icdCode = GeneratedColumn<String>(
+    'icd_code',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  static const VerificationMeta _sortOrderMeta = const VerificationMeta(
+    'sortOrder',
+  );
+  @override
+  late final GeneratedColumn<int> sortOrder = GeneratedColumn<int>(
+    'sort_order',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    directiveId,
+    icdCode,
+    name,
+    sortOrder,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'diagnosis_entries';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<DiagnosisEntry> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('directive_id')) {
+      context.handle(
+        _directiveIdMeta,
+        directiveId.isAcceptableOrUnknown(
+          data['directive_id']!,
+          _directiveIdMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_directiveIdMeta);
+    }
+    if (data.containsKey('icd_code')) {
+      context.handle(
+        _icdCodeMeta,
+        icdCode.isAcceptableOrUnknown(data['icd_code']!, _icdCodeMeta),
+      );
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
+    }
+    if (data.containsKey('sort_order')) {
+      context.handle(
+        _sortOrderMeta,
+        sortOrder.isAcceptableOrUnknown(data['sort_order']!, _sortOrderMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  DiagnosisEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return DiagnosisEntry(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      directiveId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}directive_id'],
+      )!,
+      icdCode: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}icd_code'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      sortOrder: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}sort_order'],
+      )!,
+    );
+  }
+
+  @override
+  $DiagnosisEntriesTable createAlias(String alias) {
+    return $DiagnosisEntriesTable(attachedDatabase, alias);
+  }
+}
+
+class DiagnosisEntry extends DataClass implements Insertable<DiagnosisEntry> {
+  final int id;
+  final int directiveId;
+  final String icdCode;
+  final String name;
+  final int sortOrder;
+  const DiagnosisEntry({
+    required this.id,
+    required this.directiveId,
+    required this.icdCode,
+    required this.name,
+    required this.sortOrder,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['directive_id'] = Variable<int>(directiveId);
+    map['icd_code'] = Variable<String>(icdCode);
+    map['name'] = Variable<String>(name);
+    map['sort_order'] = Variable<int>(sortOrder);
+    return map;
+  }
+
+  DiagnosisEntriesCompanion toCompanion(bool nullToAbsent) {
+    return DiagnosisEntriesCompanion(
+      id: Value(id),
+      directiveId: Value(directiveId),
+      icdCode: Value(icdCode),
+      name: Value(name),
+      sortOrder: Value(sortOrder),
+    );
+  }
+
+  factory DiagnosisEntry.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return DiagnosisEntry(
+      id: serializer.fromJson<int>(json['id']),
+      directiveId: serializer.fromJson<int>(json['directiveId']),
+      icdCode: serializer.fromJson<String>(json['icdCode']),
+      name: serializer.fromJson<String>(json['name']),
+      sortOrder: serializer.fromJson<int>(json['sortOrder']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'directiveId': serializer.toJson<int>(directiveId),
+      'icdCode': serializer.toJson<String>(icdCode),
+      'name': serializer.toJson<String>(name),
+      'sortOrder': serializer.toJson<int>(sortOrder),
+    };
+  }
+
+  DiagnosisEntry copyWith({
+    int? id,
+    int? directiveId,
+    String? icdCode,
+    String? name,
+    int? sortOrder,
+  }) => DiagnosisEntry(
+    id: id ?? this.id,
+    directiveId: directiveId ?? this.directiveId,
+    icdCode: icdCode ?? this.icdCode,
+    name: name ?? this.name,
+    sortOrder: sortOrder ?? this.sortOrder,
+  );
+  DiagnosisEntry copyWithCompanion(DiagnosisEntriesCompanion data) {
+    return DiagnosisEntry(
+      id: data.id.present ? data.id.value : this.id,
+      directiveId: data.directiveId.present
+          ? data.directiveId.value
+          : this.directiveId,
+      icdCode: data.icdCode.present ? data.icdCode.value : this.icdCode,
+      name: data.name.present ? data.name.value : this.name,
+      sortOrder: data.sortOrder.present ? data.sortOrder.value : this.sortOrder,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('DiagnosisEntry(')
+          ..write('id: $id, ')
+          ..write('directiveId: $directiveId, ')
+          ..write('icdCode: $icdCode, ')
+          ..write('name: $name, ')
+          ..write('sortOrder: $sortOrder')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, directiveId, icdCode, name, sortOrder);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is DiagnosisEntry &&
+          other.id == this.id &&
+          other.directiveId == this.directiveId &&
+          other.icdCode == this.icdCode &&
+          other.name == this.name &&
+          other.sortOrder == this.sortOrder);
+}
+
+class DiagnosisEntriesCompanion extends UpdateCompanion<DiagnosisEntry> {
+  final Value<int> id;
+  final Value<int> directiveId;
+  final Value<String> icdCode;
+  final Value<String> name;
+  final Value<int> sortOrder;
+  const DiagnosisEntriesCompanion({
+    this.id = const Value.absent(),
+    this.directiveId = const Value.absent(),
+    this.icdCode = const Value.absent(),
+    this.name = const Value.absent(),
+    this.sortOrder = const Value.absent(),
+  });
+  DiagnosisEntriesCompanion.insert({
+    this.id = const Value.absent(),
+    required int directiveId,
+    this.icdCode = const Value.absent(),
+    this.name = const Value.absent(),
+    this.sortOrder = const Value.absent(),
+  }) : directiveId = Value(directiveId);
+  static Insertable<DiagnosisEntry> custom({
+    Expression<int>? id,
+    Expression<int>? directiveId,
+    Expression<String>? icdCode,
+    Expression<String>? name,
+    Expression<int>? sortOrder,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (directiveId != null) 'directive_id': directiveId,
+      if (icdCode != null) 'icd_code': icdCode,
+      if (name != null) 'name': name,
+      if (sortOrder != null) 'sort_order': sortOrder,
+    });
+  }
+
+  DiagnosisEntriesCompanion copyWith({
+    Value<int>? id,
+    Value<int>? directiveId,
+    Value<String>? icdCode,
+    Value<String>? name,
+    Value<int>? sortOrder,
+  }) {
+    return DiagnosisEntriesCompanion(
+      id: id ?? this.id,
+      directiveId: directiveId ?? this.directiveId,
+      icdCode: icdCode ?? this.icdCode,
+      name: name ?? this.name,
+      sortOrder: sortOrder ?? this.sortOrder,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (directiveId.present) {
+      map['directive_id'] = Variable<int>(directiveId.value);
+    }
+    if (icdCode.present) {
+      map['icd_code'] = Variable<String>(icdCode.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (sortOrder.present) {
+      map['sort_order'] = Variable<int>(sortOrder.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('DiagnosisEntriesCompanion(')
+          ..write('id: $id, ')
+          ..write('directiveId: $directiveId, ')
+          ..write('icdCode: $icdCode, ')
+          ..write('name: $name, ')
+          ..write('sortOrder: $sortOrder')
           ..write(')'))
         .toString();
   }
@@ -4337,6 +4859,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $WitnessesTable witnesses = $WitnessesTable(this);
   late final $GuardianNominationsTable guardianNominations =
       $GuardianNominationsTable(this);
+  late final $DiagnosisEntriesTable diagnosisEntries = $DiagnosisEntriesTable(
+    this,
+  );
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -4349,6 +4874,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     additionalInstructionsTable,
     witnesses,
     guardianNominations,
+    diagnosisEntries,
   ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
@@ -4394,6 +4920,13 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       ),
       result: [TableUpdate('guardian_nominations', kind: UpdateKind.delete)],
     ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'directives',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('diagnosis_entries', kind: UpdateKind.delete)],
+    ),
   ]);
 }
 
@@ -4415,6 +4948,8 @@ typedef $$DirectivesTableCreateCompanionBuilder =
       Value<String> zip,
       Value<String> phone,
       Value<String> effectiveCondition,
+      Value<String> preferredDoctorName,
+      Value<String> preferredDoctorContact,
       Value<int> lastStepIndex,
     });
 typedef $$DirectivesTableUpdateCompanionBuilder =
@@ -4435,6 +4970,8 @@ typedef $$DirectivesTableUpdateCompanionBuilder =
       Value<String> zip,
       Value<String> phone,
       Value<String> effectiveCondition,
+      Value<String> preferredDoctorName,
+      Value<String> preferredDoctorContact,
       Value<int> lastStepIndex,
     });
 
@@ -4578,6 +5115,29 @@ final class $$DirectivesTableReferences
       manager.$state.copyWith(prefetchedData: cache),
     );
   }
+
+  static MultiTypedResultKey<$DiagnosisEntriesTable, List<DiagnosisEntry>>
+  _diagnosisEntriesRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.diagnosisEntries,
+    aliasName: $_aliasNameGenerator(
+      db.directives.id,
+      db.diagnosisEntries.directiveId,
+    ),
+  );
+
+  $$DiagnosisEntriesTableProcessedTableManager get diagnosisEntriesRefs {
+    final manager = $$DiagnosisEntriesTableTableManager(
+      $_db,
+      $_db.diagnosisEntries,
+    ).filter((f) => f.directiveId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _diagnosisEntriesRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
 }
 
 class $$DirectivesTableFilterComposer
@@ -4666,6 +5226,16 @@ class $$DirectivesTableFilterComposer
 
   ColumnFilters<String> get effectiveCondition => $composableBuilder(
     column: $table.effectiveCondition,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get preferredDoctorName => $composableBuilder(
+    column: $table.preferredDoctorName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get preferredDoctorContact => $composableBuilder(
+    column: $table.preferredDoctorContact,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -4827,6 +5397,31 @@ class $$DirectivesTableFilterComposer
     );
     return f(composer);
   }
+
+  Expression<bool> diagnosisEntriesRefs(
+    Expression<bool> Function($$DiagnosisEntriesTableFilterComposer f) f,
+  ) {
+    final $$DiagnosisEntriesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.diagnosisEntries,
+      getReferencedColumn: (t) => t.directiveId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$DiagnosisEntriesTableFilterComposer(
+            $db: $db,
+            $table: $db.diagnosisEntries,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $$DirectivesTableOrderingComposer
@@ -4918,6 +5513,16 @@ class $$DirectivesTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get preferredDoctorName => $composableBuilder(
+    column: $table.preferredDoctorName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get preferredDoctorContact => $composableBuilder(
+    column: $table.preferredDoctorContact,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<int> get lastStepIndex => $composableBuilder(
     column: $table.lastStepIndex,
     builder: (column) => ColumnOrderings(column),
@@ -4986,6 +5591,16 @@ class $$DirectivesTableAnnotationComposer
 
   GeneratedColumn<String> get effectiveCondition => $composableBuilder(
     column: $table.effectiveCondition,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get preferredDoctorName => $composableBuilder(
+    column: $table.preferredDoctorName,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get preferredDoctorContact => $composableBuilder(
+    column: $table.preferredDoctorContact,
     builder: (column) => column,
   );
 
@@ -5149,6 +5764,31 @@ class $$DirectivesTableAnnotationComposer
         );
     return f(composer);
   }
+
+  Expression<T> diagnosisEntriesRefs<T extends Object>(
+    Expression<T> Function($$DiagnosisEntriesTableAnnotationComposer a) f,
+  ) {
+    final $$DiagnosisEntriesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.diagnosisEntries,
+      getReferencedColumn: (t) => t.directiveId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$DiagnosisEntriesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.diagnosisEntries,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $$DirectivesTableTableManager
@@ -5171,6 +5811,7 @@ class $$DirectivesTableTableManager
             bool additionalInstructionsTableRefs,
             bool witnessesRefs,
             bool guardianNominationsRefs,
+            bool diagnosisEntriesRefs,
           })
         > {
   $$DirectivesTableTableManager(_$AppDatabase db, $DirectivesTable table)
@@ -5202,6 +5843,8 @@ class $$DirectivesTableTableManager
                 Value<String> zip = const Value.absent(),
                 Value<String> phone = const Value.absent(),
                 Value<String> effectiveCondition = const Value.absent(),
+                Value<String> preferredDoctorName = const Value.absent(),
+                Value<String> preferredDoctorContact = const Value.absent(),
                 Value<int> lastStepIndex = const Value.absent(),
               }) => DirectivesCompanion(
                 id: id,
@@ -5220,6 +5863,8 @@ class $$DirectivesTableTableManager
                 zip: zip,
                 phone: phone,
                 effectiveCondition: effectiveCondition,
+                preferredDoctorName: preferredDoctorName,
+                preferredDoctorContact: preferredDoctorContact,
                 lastStepIndex: lastStepIndex,
               ),
           createCompanionCallback:
@@ -5240,6 +5885,8 @@ class $$DirectivesTableTableManager
                 Value<String> zip = const Value.absent(),
                 Value<String> phone = const Value.absent(),
                 Value<String> effectiveCondition = const Value.absent(),
+                Value<String> preferredDoctorName = const Value.absent(),
+                Value<String> preferredDoctorContact = const Value.absent(),
                 Value<int> lastStepIndex = const Value.absent(),
               }) => DirectivesCompanion.insert(
                 id: id,
@@ -5258,6 +5905,8 @@ class $$DirectivesTableTableManager
                 zip: zip,
                 phone: phone,
                 effectiveCondition: effectiveCondition,
+                preferredDoctorName: preferredDoctorName,
+                preferredDoctorContact: preferredDoctorContact,
                 lastStepIndex: lastStepIndex,
               ),
           withReferenceMapper: (p0) => p0
@@ -5276,6 +5925,7 @@ class $$DirectivesTableTableManager
                 additionalInstructionsTableRefs = false,
                 witnessesRefs = false,
                 guardianNominationsRefs = false,
+                diagnosisEntriesRefs = false,
               }) {
                 return PrefetchHooks(
                   db: db,
@@ -5287,6 +5937,7 @@ class $$DirectivesTableTableManager
                       db.additionalInstructionsTable,
                     if (witnessesRefs) db.witnesses,
                     if (guardianNominationsRefs) db.guardianNominations,
+                    if (diagnosisEntriesRefs) db.diagnosisEntries,
                   ],
                   addJoins: null,
                   getPrefetchedDataCallback: (items) async {
@@ -5417,6 +6068,27 @@ class $$DirectivesTableTableManager
                               ),
                           typedResults: items,
                         ),
+                      if (diagnosisEntriesRefs)
+                        await $_getPrefetchedData<
+                          Directive,
+                          $DirectivesTable,
+                          DiagnosisEntry
+                        >(
+                          currentTable: table,
+                          referencedTable: $$DirectivesTableReferences
+                              ._diagnosisEntriesRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$DirectivesTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).diagnosisEntriesRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.directiveId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
                     ];
                   },
                 );
@@ -5444,6 +6116,7 @@ typedef $$DirectivesTableProcessedTableManager =
         bool additionalInstructionsTableRefs,
         bool witnessesRefs,
         bool guardianNominationsRefs,
+        bool diagnosisEntriesRefs,
       })
     >;
 typedef $$AgentsTableCreateCompanionBuilder =
@@ -7521,6 +8194,7 @@ typedef $$GuardianNominationsTableCreateCompanionBuilder =
       Value<String> nomineeAddress,
       Value<String> nomineePhone,
       Value<String> nomineeRelationship,
+      Value<bool> guardianCanRevoke,
     });
 typedef $$GuardianNominationsTableUpdateCompanionBuilder =
     GuardianNominationsCompanion Function({
@@ -7530,6 +8204,7 @@ typedef $$GuardianNominationsTableUpdateCompanionBuilder =
       Value<String> nomineeAddress,
       Value<String> nomineePhone,
       Value<String> nomineeRelationship,
+      Value<bool> guardianCanRevoke,
     });
 
 final class $$GuardianNominationsTableReferences
@@ -7602,6 +8277,11 @@ class $$GuardianNominationsTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
+  ColumnFilters<bool> get guardianCanRevoke => $composableBuilder(
+    column: $table.guardianCanRevoke,
+    builder: (column) => ColumnFilters(column),
+  );
+
   $$DirectivesTableFilterComposer get directiveId {
     final $$DirectivesTableFilterComposer composer = $composerBuilder(
       composer: this,
@@ -7660,6 +8340,11 @@ class $$GuardianNominationsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<bool> get guardianCanRevoke => $composableBuilder(
+    column: $table.guardianCanRevoke,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   $$DirectivesTableOrderingComposer get directiveId {
     final $$DirectivesTableOrderingComposer composer = $composerBuilder(
       composer: this,
@@ -7713,6 +8398,11 @@ class $$GuardianNominationsTableAnnotationComposer
 
   GeneratedColumn<String> get nomineeRelationship => $composableBuilder(
     column: $table.nomineeRelationship,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get guardianCanRevoke => $composableBuilder(
+    column: $table.guardianCanRevoke,
     builder: (column) => column,
   );
 
@@ -7782,6 +8472,7 @@ class $$GuardianNominationsTableTableManager
                 Value<String> nomineeAddress = const Value.absent(),
                 Value<String> nomineePhone = const Value.absent(),
                 Value<String> nomineeRelationship = const Value.absent(),
+                Value<bool> guardianCanRevoke = const Value.absent(),
               }) => GuardianNominationsCompanion(
                 id: id,
                 directiveId: directiveId,
@@ -7789,6 +8480,7 @@ class $$GuardianNominationsTableTableManager
                 nomineeAddress: nomineeAddress,
                 nomineePhone: nomineePhone,
                 nomineeRelationship: nomineeRelationship,
+                guardianCanRevoke: guardianCanRevoke,
               ),
           createCompanionCallback:
               ({
@@ -7798,6 +8490,7 @@ class $$GuardianNominationsTableTableManager
                 Value<String> nomineeAddress = const Value.absent(),
                 Value<String> nomineePhone = const Value.absent(),
                 Value<String> nomineeRelationship = const Value.absent(),
+                Value<bool> guardianCanRevoke = const Value.absent(),
               }) => GuardianNominationsCompanion.insert(
                 id: id,
                 directiveId: directiveId,
@@ -7805,6 +8498,7 @@ class $$GuardianNominationsTableTableManager
                 nomineeAddress: nomineeAddress,
                 nomineePhone: nomineePhone,
                 nomineeRelationship: nomineeRelationship,
+                guardianCanRevoke: guardianCanRevoke,
               ),
           withReferenceMapper: (p0) => p0
               .map(
@@ -7875,6 +8569,328 @@ typedef $$GuardianNominationsTableProcessedTableManager =
       GuardianNomination,
       PrefetchHooks Function({bool directiveId})
     >;
+typedef $$DiagnosisEntriesTableCreateCompanionBuilder =
+    DiagnosisEntriesCompanion Function({
+      Value<int> id,
+      required int directiveId,
+      Value<String> icdCode,
+      Value<String> name,
+      Value<int> sortOrder,
+    });
+typedef $$DiagnosisEntriesTableUpdateCompanionBuilder =
+    DiagnosisEntriesCompanion Function({
+      Value<int> id,
+      Value<int> directiveId,
+      Value<String> icdCode,
+      Value<String> name,
+      Value<int> sortOrder,
+    });
+
+final class $$DiagnosisEntriesTableReferences
+    extends
+        BaseReferences<_$AppDatabase, $DiagnosisEntriesTable, DiagnosisEntry> {
+  $$DiagnosisEntriesTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $DirectivesTable _directiveIdTable(_$AppDatabase db) =>
+      db.directives.createAlias(
+        $_aliasNameGenerator(db.diagnosisEntries.directiveId, db.directives.id),
+      );
+
+  $$DirectivesTableProcessedTableManager get directiveId {
+    final $_column = $_itemColumn<int>('directive_id')!;
+
+    final manager = $$DirectivesTableTableManager(
+      $_db,
+      $_db.directives,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_directiveIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$DiagnosisEntriesTableFilterComposer
+    extends Composer<_$AppDatabase, $DiagnosisEntriesTable> {
+  $$DiagnosisEntriesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get icdCode => $composableBuilder(
+    column: $table.icdCode,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get sortOrder => $composableBuilder(
+    column: $table.sortOrder,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$DirectivesTableFilterComposer get directiveId {
+    final $$DirectivesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.directiveId,
+      referencedTable: $db.directives,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$DirectivesTableFilterComposer(
+            $db: $db,
+            $table: $db.directives,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$DiagnosisEntriesTableOrderingComposer
+    extends Composer<_$AppDatabase, $DiagnosisEntriesTable> {
+  $$DiagnosisEntriesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get icdCode => $composableBuilder(
+    column: $table.icdCode,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get sortOrder => $composableBuilder(
+    column: $table.sortOrder,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$DirectivesTableOrderingComposer get directiveId {
+    final $$DirectivesTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.directiveId,
+      referencedTable: $db.directives,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$DirectivesTableOrderingComposer(
+            $db: $db,
+            $table: $db.directives,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$DiagnosisEntriesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $DiagnosisEntriesTable> {
+  $$DiagnosisEntriesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get icdCode =>
+      $composableBuilder(column: $table.icdCode, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<int> get sortOrder =>
+      $composableBuilder(column: $table.sortOrder, builder: (column) => column);
+
+  $$DirectivesTableAnnotationComposer get directiveId {
+    final $$DirectivesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.directiveId,
+      referencedTable: $db.directives,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$DirectivesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.directives,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$DiagnosisEntriesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $DiagnosisEntriesTable,
+          DiagnosisEntry,
+          $$DiagnosisEntriesTableFilterComposer,
+          $$DiagnosisEntriesTableOrderingComposer,
+          $$DiagnosisEntriesTableAnnotationComposer,
+          $$DiagnosisEntriesTableCreateCompanionBuilder,
+          $$DiagnosisEntriesTableUpdateCompanionBuilder,
+          (DiagnosisEntry, $$DiagnosisEntriesTableReferences),
+          DiagnosisEntry,
+          PrefetchHooks Function({bool directiveId})
+        > {
+  $$DiagnosisEntriesTableTableManager(
+    _$AppDatabase db,
+    $DiagnosisEntriesTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$DiagnosisEntriesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$DiagnosisEntriesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$DiagnosisEntriesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<int> directiveId = const Value.absent(),
+                Value<String> icdCode = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<int> sortOrder = const Value.absent(),
+              }) => DiagnosisEntriesCompanion(
+                id: id,
+                directiveId: directiveId,
+                icdCode: icdCode,
+                name: name,
+                sortOrder: sortOrder,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required int directiveId,
+                Value<String> icdCode = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<int> sortOrder = const Value.absent(),
+              }) => DiagnosisEntriesCompanion.insert(
+                id: id,
+                directiveId: directiveId,
+                icdCode: icdCode,
+                name: name,
+                sortOrder: sortOrder,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$DiagnosisEntriesTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({directiveId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (directiveId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.directiveId,
+                                referencedTable:
+                                    $$DiagnosisEntriesTableReferences
+                                        ._directiveIdTable(db),
+                                referencedColumn:
+                                    $$DiagnosisEntriesTableReferences
+                                        ._directiveIdTable(db)
+                                        .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$DiagnosisEntriesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $DiagnosisEntriesTable,
+      DiagnosisEntry,
+      $$DiagnosisEntriesTableFilterComposer,
+      $$DiagnosisEntriesTableOrderingComposer,
+      $$DiagnosisEntriesTableAnnotationComposer,
+      $$DiagnosisEntriesTableCreateCompanionBuilder,
+      $$DiagnosisEntriesTableUpdateCompanionBuilder,
+      (DiagnosisEntry, $$DiagnosisEntriesTableReferences),
+      DiagnosisEntry,
+      PrefetchHooks Function({bool directiveId})
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -7897,4 +8913,6 @@ class $AppDatabaseManager {
       $$WitnessesTableTableManager(_db, _db.witnesses);
   $$GuardianNominationsTableTableManager get guardianNominations =>
       $$GuardianNominationsTableTableManager(_db, _db.guardianNominations);
+  $$DiagnosisEntriesTableTableManager get diagnosisEntries =>
+      $$DiagnosisEntriesTableTableManager(_db, _db.diagnosisEntries);
 }

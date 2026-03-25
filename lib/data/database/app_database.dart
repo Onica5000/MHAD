@@ -36,6 +36,12 @@ class Directives extends Table {
   TextColumn get effectiveCondition =>
       text().withDefault(const Constant(''))();
 
+  // Preferred evaluating doctor (official form field)
+  TextColumn get preferredDoctorName =>
+      text().withDefault(const Constant(''))();
+  TextColumn get preferredDoctorContact =>
+      text().withDefault(const Constant(''))();
+
   // Wizard resume — tracks which step the user last visited
   IntColumn get lastStepIndex => integer().withDefault(const Constant(0))();
 }
@@ -125,6 +131,15 @@ class Witnesses extends Table {
   IntColumn get signatureDate => integer().nullable()();
 }
 
+class DiagnosisEntries extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  IntColumn get directiveId =>
+      integer().references(Directives, #id, onDelete: KeyAction.cascade)();
+  TextColumn get icdCode => text().withDefault(const Constant(''))();
+  TextColumn get name => text().withDefault(const Constant(''))();
+  IntColumn get sortOrder => integer().withDefault(const Constant(0))();
+}
+
 class GuardianNominations extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get directiveId => integer()
@@ -135,6 +150,9 @@ class GuardianNominations extends Table {
   TextColumn get nomineePhone => text().withDefault(const Constant(''))();
   TextColumn get nomineeRelationship =>
       text().withDefault(const Constant(''))();
+  // true = guardian authorized to revoke; false = guardian cannot revoke
+  BoolColumn get guardianCanRevoke =>
+      boolean().withDefault(const Constant(false))();
 }
 
 // ─── Database ──────────────────────────────────────────────────────────────
@@ -147,12 +165,13 @@ class GuardianNominations extends Table {
   AdditionalInstructionsTable,
   Witnesses,
   GuardianNominations,
+  DiagnosisEntries,
 ])
 class AppDatabase extends _$AppDatabase {
   AppDatabase(super.executor);
 
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 6;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -176,6 +195,26 @@ class AppDatabase extends _$AppDatabase {
           if (from < 4) {
             await customStatement(
                 'ALTER TABLE directives ADD COLUMN last_step_index INTEGER NOT NULL DEFAULT 0');
+          }
+          if (from < 5) {
+            await customStatement(
+                "ALTER TABLE directives ADD COLUMN preferred_doctor_name TEXT NOT NULL DEFAULT ''");
+            await customStatement(
+                "ALTER TABLE directives ADD COLUMN preferred_doctor_contact TEXT NOT NULL DEFAULT ''");
+            await customStatement(
+                'ALTER TABLE guardian_nominations ADD COLUMN guardian_can_revoke INTEGER NOT NULL DEFAULT 0');
+          }
+          if (from < 6) {
+            await customStatement(
+                'CREATE TABLE IF NOT EXISTS diagnosis_entries ('
+                'id INTEGER PRIMARY KEY AUTOINCREMENT, '
+                'directive_id INTEGER NOT NULL REFERENCES directives(id) ON DELETE CASCADE, '
+                "icd_code TEXT NOT NULL DEFAULT '', "
+                "name TEXT NOT NULL DEFAULT '', "
+                'sort_order INTEGER NOT NULL DEFAULT 0)');
+            await customStatement(
+                'CREATE INDEX IF NOT EXISTS idx_diagnosis_directive '
+                'ON diagnosis_entries (directive_id)');
           }
         },
       );

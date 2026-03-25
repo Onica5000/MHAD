@@ -4,7 +4,6 @@ import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/wizard/auto_save_mixin.dart';
 import 'package:mhad/ui/wizard/widgets/example_text_button.dart';
 import 'package:mhad/ui/wizard/widgets/voice_input_button.dart';
-import 'package:mhad/ui/wizard/widgets/condition_autocomplete_field.dart';
 import 'package:mhad/ui/wizard/widgets/wizard_help_button.dart';
 import 'package:mhad/ui/wizard/wizard_step_mixin.dart';
 
@@ -126,8 +125,6 @@ class _EffectiveConditionStepState
               'preferences followed.',
             ],
           ),
-          const SizedBox(height: 8),
-          ConditionAutocompleteField(targetController: _ctrl),
           const SizedBox(height: 8),
           TextFormField(
             controller: _ctrl,

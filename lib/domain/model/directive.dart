@@ -12,6 +12,7 @@ enum MedicationEntryType { exception, limitation, preferred }
 
 enum WizardStep {
   personalInfo,
+  diagnoses,
   effectiveCondition,
   treatmentFacility,
   medications,
@@ -39,6 +40,7 @@ extension FormTypeExt on FormType {
 
   List<WizardStep> get steps => [
         WizardStep.personalInfo,
+        WizardStep.diagnoses,
         WizardStep.effectiveCondition,
         WizardStep.treatmentFacility,
         WizardStep.medications,
@@ -58,6 +60,7 @@ extension FormTypeExt on FormType {
 extension WizardStepExt on WizardStep {
   String get displayName => switch (this) {
         WizardStep.personalInfo => 'Personal Information',
+        WizardStep.diagnoses => 'Medical Diagnoses',
         WizardStep.effectiveCondition => 'Effective Condition',
         WizardStep.treatmentFacility => 'Treatment Facility',
         WizardStep.medications => 'Medications',

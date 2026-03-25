@@ -164,7 +164,7 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
           .toList();
 
       final service = SmartFillService(apiKey: apiKey);
-      final result = await service.generate(SmartFillInput(
+      final response = await service.generate(SmartFillInput(
         conditions: _selectedConditions,
         currentMedications: _selectedCurrentMeds,
         medicationsToAvoid: _selectedAvoidMeds,
@@ -202,8 +202,10 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
         existingAvoidMeds: existingAvoid,
       ));
 
-      // Record request (smart fill prompt is compact: ~300-500 tokens)
-      tracker.recordRequest(estimatedTokens: 500);
+      final result = response.result;
+
+      // Record actual token usage from API response
+      tracker.recordRequest(estimatedTokens: response.totalTokens);
 
       if (!mounted) return;
 
