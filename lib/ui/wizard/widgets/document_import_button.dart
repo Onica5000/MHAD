@@ -22,31 +22,30 @@ class DocumentImportButton extends ConsumerWidget {
     final hasApiKey = ref.watch(apiKeyProvider).valueOrNull?.isNotEmpty == true;
     final cs = Theme.of(context).colorScheme;
 
-    return Semantics(
-      button: true,
-      label: 'Import from document',
-      child: Tooltip(
-        message: hasApiKey
-            ? 'Import data from a photo, PDF, or text file'
-            : 'Set up AI to use document import',
-        child: IconButton(
-          icon: Icon(
-            Icons.document_scanner,
-            color: hasApiKey ? cs.primary : cs.onSurfaceVariant,
-          ),
-          onPressed: () {
-            if (!hasApiKey) {
-              context.push(AppRoutes.aiSetup);
-              return;
-            }
-            showDocumentPipelineFlow(
-              context,
-              directiveId: directiveId,
-              formType: formType,
-            );
-          },
+    return TextButton.icon(
+      icon: Icon(
+        Icons.document_scanner,
+        size: 18,
+        color: hasApiKey ? cs.primary : cs.onSurfaceVariant,
+      ),
+      label: Text(
+        'Import',
+        style: TextStyle(
+          fontSize: 12,
+          color: hasApiKey ? cs.primary : cs.onSurfaceVariant,
         ),
       ),
+      onPressed: () {
+        if (!hasApiKey) {
+          context.push(AppRoutes.aiSetup);
+          return;
+        }
+        showDocumentPipelineFlow(
+          context,
+          directiveId: directiveId,
+          formType: formType,
+        );
+      },
     );
   }
 }

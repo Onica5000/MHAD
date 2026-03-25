@@ -165,10 +165,9 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
               ),
               automaticallyImplyLeading: false,
               actions: [
-                Tooltip(
-                  message: 'Smart Fill — pick conditions & meds, AI fills the rest',
-                  child: IconButton(
-                    icon: const Icon(Icons.auto_awesome),
+                TextButton.icon(
+                  icon: const Icon(Icons.auto_awesome, size: 18),
+                  label: const Text('Smart Fill', style: TextStyle(fontSize: 12)),
                     onPressed: () async {
                       // Check if AI is set up
                       final apiKey = ref.read(apiKeyProvider).valueOrNull;
@@ -220,7 +219,6 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                         }
                       }
                     },
-                  ),
                 ),
                 DocumentImportButton(
                   directiveId: directive.id,
@@ -242,7 +240,7 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                 ),
               ],
             ),
-            floatingActionButton: FloatingActionButton.small(
+            floatingActionButton: FloatingActionButton.extended(
               heroTag: 'assistant_fab',
               tooltip: 'AI Assistant',
               onPressed: () {
@@ -270,7 +268,8 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                   ),
                 );
               },
-              child: const Icon(Icons.smart_toy_outlined),
+              icon: const Icon(Icons.smart_toy_outlined, size: 20),
+              label: const Text('AI Chat'),
             ),
             bottomNavigationBar: _BottomBar(
               stepIndex: _stepIndex,
