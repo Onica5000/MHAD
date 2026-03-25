@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/providers/assistant_providers.dart';
@@ -151,6 +152,13 @@ class _FormTypeSelectionScreenState
                   },
             icon: const Icon(Icons.quiz_outlined),
             label: const Text('Which form is right for me?'),
+          ),
+          const SizedBox(height: 12),
+          _ImportFromExistingButton(
+            creating: _creating,
+            onCreated: (id) {
+              if (mounted) context.go(AppRoutes.wizardRoute(id));
+            },
           ),
         ],
       ),
@@ -372,5 +380,83 @@ class _AiSetupPrompt extends ConsumerWidget {
         ),
       ),
     );
+  }
+}
+
+/// Shows a button to copy non-PII data from the most recent completed/expired
+/// directive into a new one. Only visible if eligible directives exist.
+class _ImportFromExistingButton extends ConsumerWidget {
+  final bool creating;
+  final void Function(int newId) onCreated;
+
+  const _ImportFromExistingButton({
+    required this.creating,
+    required this.onCreated,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final directivesAsync = ref.watch(allDirectivesProvider);
+    return directivesAsync.when(
+      loading: () => const SizedBox.shrink(),
+      error: (e, st) => const SizedBox.shrink(),
+      data: (directives) {
+        final eligible = directives.where((d) =>
+            d.status == 'complete' || d.status == 'expired').toList();
+        if (eligible.isEmpty) return const SizedBox.shrink();
+
+        final label = eligible.first.fullName.isNotEmpty
+            ? eligible.first.fullName
+            : 'previous directive';
+        return OutlinedButton.icon(
+          onPressed: creating
+              ? null
+              : () => _importFrom(context, ref, eligible.first),
+          icon: const Icon(Icons.content_copy_outlined),
+          label: Text('Copy from "$label"'),
+        );
+      },
+    );
+  }
+
+  Future<void> _importFrom(
+      BuildContext context, WidgetRef ref, Directive source) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Copy Previous Directive?'),
+        content: const Text(
+          'This will create a new directive and copy your treatment '
+          'preferences, medications, and additional instructions.\n\n'
+          'Personal information (name, address, phone) will NOT be copied '
+          'and must be re-entered.\n\n'
+          'You can edit everything after copying.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('Copy & Create'),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true) return;
+
+    try {
+      final repo = ref.read(directiveRepositoryProvider);
+      final snap = await repo.snapshotDirective(source.id);
+      if (snap.isEmpty) return;
+      final newId = await repo.restoreFromSnapshot(snap);
+      onCreated(newId);
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Copy failed: $e')),
+        );
+      }
+    }
   }
 }

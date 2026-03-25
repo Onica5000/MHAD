@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mhad/utils/platform_utils.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
@@ -81,6 +82,23 @@ class _VoiceInputButtonState extends State<VoiceInputButton> {
 
   @override
   Widget build(BuildContext context) {
+    // On web, show a disabled button with tooltip instead of hiding
+    if (kIsWeb) {
+      return Tooltip(
+        message: 'Voice input available on mobile only',
+        child: IconButton(
+          icon: Icon(
+            Icons.mic_none,
+            size: 20,
+            color: Theme.of(context).colorScheme.onSurfaceVariant.withValues(alpha: 0.4),
+          ),
+          onPressed: null,
+          padding: EdgeInsets.zero,
+          constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
+        ),
+      );
+    }
+
     // speech_to_text only works on Android, iOS, and macOS
     if (!platformIsAndroid && !platformIsIOS && !platformIsMacOS) {
       return const SizedBox.shrink();

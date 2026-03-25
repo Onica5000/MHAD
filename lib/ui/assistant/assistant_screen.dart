@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -25,9 +26,12 @@ class AssistantScreen extends ConsumerStatefulWidget {
 class _AssistantScreenState extends ConsumerState<AssistantScreen> {
   final _inputCtrl = TextEditingController();
   final _scrollCtrl = ScrollController();
+  bool _piiStripped = false;
+  Timer? _piiTimer;
 
   @override
   void dispose() {
+    _piiTimer?.cancel();
     _inputCtrl.dispose();
     _scrollCtrl.dispose();
     super.dispose();
@@ -86,6 +90,18 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
               content: PiiStripper.strip(m.content),
             ))
         .toList();
+
+    // Check if PII was found in the user's message or history
+    final strippedUserText = PiiStripper.strip(text);
+    final historyHadPii = history.any(
+        (m) => PiiStripper.strip(m.content) != m.content);
+    if (strippedUserText != text || historyHadPii) {
+      _piiTimer?.cancel();
+      setState(() => _piiStripped = true);
+      _piiTimer = Timer(const Duration(seconds: 3), () {
+        if (mounted) setState(() => _piiStripped = false);
+      });
+    }
 
     // Estimate tokens and auto-trim history to fit within budget.
     // Reserve 80% of context for input (system + history + message),
@@ -321,6 +337,22 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                   ),
           ),
 
+          // PII stripping indicator
+          if (_piiStripped)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Chip(
+                  avatar: const Icon(Icons.shield_outlined, size: 14),
+                  label: const Text('Personal info removed',
+                      style: TextStyle(fontSize: 11)),
+                  padding: EdgeInsets.zero,
+                  visualDensity: VisualDensity.compact,
+                ),
+              ),
+            ),
+
           // Input row
           _InputBar(
             controller: _inputCtrl,
@@ -367,12 +399,6 @@ class _RateLimitBar extends ConsumerWidget {
             ? cs.onTertiaryContainer
             : cs.onSurfaceVariant;
 
-    // Token info for last request
-    final lastTokens = tracker.lastRequestTokens;
-    final tokenInfo = lastTokens > 0
-        ? ' \u2022 ~${(lastTokens / 1000).toStringAsFixed(1)}K tokens/req'
-        : '';
-
     return Material(
       color: isDailyLimit
           ? cs.errorContainer
@@ -395,7 +421,7 @@ class _RateLimitBar extends ConsumerWidget {
             const SizedBox(width: 6),
             Expanded(
               child: Text(
-                '${tracker.statusText}$tokenInfo',
+                tracker.statusText,
                 style: TextStyle(fontSize: 11, color: fg),
               ),
             ),

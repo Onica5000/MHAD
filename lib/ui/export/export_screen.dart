@@ -477,7 +477,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
           const SizedBox(height: 8),
           _FormCheckbox(
             title: 'Combined Declaration & Power of Attorney',
-            subtitle: 'Recommended — most comprehensive form',
+            subtitle: 'Declaration + Power of Attorney (most complete)',
             value: _includeCombined,
             onChanged: (v) => setState(() => _includeCombined = v ?? false),
             warning: _includeCombined && _agents.isEmpty
@@ -486,13 +486,13 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
           ),
           _FormCheckbox(
             title: 'Declaration Only',
-            subtitle: 'Instructions only, no agent authority',
+            subtitle: 'Treatment preferences only (no agent)',
             value: _includeDeclaration,
             onChanged: (v) => setState(() => _includeDeclaration = v ?? false),
           ),
           _FormCheckbox(
             title: 'Power of Attorney Only',
-            subtitle: 'Agent authority only, no direct instructions',
+            subtitle: 'Agent authority only (no personal preferences)',
             value: _includePoa,
             onChanged: (v) => setState(() => _includePoa = v ?? false),
             warning: _includePoa && _agents.isEmpty
@@ -510,14 +510,14 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
           const SizedBox(height: 8),
           _FormCheckbox(
             title: 'Supplementary Legal Information',
-            subtitle: 'Key provisions from PA Act 194 not in the booklet',
+            subtitle: 'Additional legal reference information',
             value: _includeSupplementary,
             onChanged: (v) =>
                 setState(() => _includeSupplementary = v ?? false),
           ),
           _FormCheckbox(
             title: 'Distribution Checklist & Notes',
-            subtitle: 'Printable checklist with space for personal notes',
+            subtitle: 'Blank pages for handwritten notes',
             value: _includeNotes,
             onChanged: (v) => setState(() => _includeNotes = v ?? false),
           ),
@@ -731,6 +731,7 @@ class _FormCheckbox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
       child: Column(
@@ -738,7 +739,8 @@ class _FormCheckbox extends StatelessWidget {
           CheckboxListTile(
             title: Text(title,
                 style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500)),
-            subtitle: Text(subtitle, style: const TextStyle(fontSize: 12)),
+            subtitle: Text(subtitle,
+                style: TextStyle(fontSize: 11, color: cs.onSurfaceVariant)),
             value: value,
             onChanged: onChanged,
             controlAffinity: ListTileControlAffinity.leading,

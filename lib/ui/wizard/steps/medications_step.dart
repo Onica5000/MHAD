@@ -182,6 +182,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
             title: 'Medications I NEVER want',
             subtitle: 'These medications should not be administered',
             rows: _exceptions,
+            accentColor: Theme.of(context).colorScheme.error,
             onAdd: () => setState(
                 () => _exceptions.add(_MedRow())),
             onRemove: (i) => setState(() {
@@ -194,6 +195,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
             title: 'Medications with limitations',
             subtitle: 'May be given but with restrictions',
             rows: _limitations,
+            accentColor: Theme.of(context).colorScheme.tertiary,
             onAdd: () => setState(
                 () => _limitations.add(_MedRow())),
             onRemove: (i) => setState(() {
@@ -206,6 +208,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
             title: 'Preferred medications',
             subtitle: 'Medications that have worked well for you',
             rows: _preferred,
+            accentColor: Theme.of(context).colorScheme.primary,
             onAdd: () =>
                 setState(() => _preferred.add(_MedRow())),
             onRemove: (i) => setState(() {
@@ -236,6 +239,7 @@ class _MedTable extends StatelessWidget {
   final List<_MedRow> rows;
   final VoidCallback onAdd;
   final void Function(int index) onRemove;
+  final Color? accentColor;
 
   const _MedTable({
     required this.title,
@@ -243,6 +247,7 @@ class _MedTable extends StatelessWidget {
     required this.rows,
     required this.onAdd,
     required this.onRemove,
+    this.accentColor,
   });
 
   @override
@@ -250,6 +255,12 @@ class _MedTable extends StatelessWidget {
     final cs = Theme.of(context).colorScheme;
     return Card(
       color: cs.surfaceContainerLow,
+      shape: accentColor != null
+          ? RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: BorderSide(color: accentColor!, width: 2),
+            )
+          : null,
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(

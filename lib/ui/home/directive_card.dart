@@ -12,6 +12,7 @@ class DirectiveCard extends StatelessWidget {
   final VoidCallback? onRevoke;
   final VoidCallback? onRenew;
   final VoidCallback? onExport;
+  final String? agentName;
 
   const DirectiveCard({
     required this.directive,
@@ -19,6 +20,7 @@ class DirectiveCard extends StatelessWidget {
     this.onRevoke,
     this.onRenew,
     this.onExport,
+    this.agentName,
     super.key,
   });
 
@@ -106,6 +108,13 @@ class DirectiveCard extends StatelessWidget {
                                 fontWeight: FontWeight.w600,
                               ),
                         ),
+                        if (agentName != null && agentName!.isNotEmpty)
+                          Text(
+                            'Agent: $agentName',
+                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                ),
+                          ),
                         Text(
                           'Last edited $dateStr',
                           style: Theme.of(context).textTheme.bodySmall?.copyWith(

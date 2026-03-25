@@ -141,13 +141,13 @@ class GeminiRateTracker extends ChangeNotifier {
   String get statusText {
     _prune(DateTime.now());
     if (dailyLimitReached) {
-      return 'Daily limit reached ($maxRpd/$maxRpd)';
+      return 'Daily limit reached';
     }
     if (remainingRpm <= 0) {
-      return 'Wait ${secondsUntilRpmSlot}s \u2022 $remainingRpd/$maxRpd today';
+      return 'Wait ${secondsUntilRpmSlot}s \u2022 $remainingRpd requests left today';
     }
     if (requestsToday == 0) return '';
-    return '$remainingRpd/$maxRpd today \u2022 $remainingRpm/$maxRpm this min';
+    return '$remainingRpd requests left today \u2022 $remainingRpm this minute';
   }
 
   /// Whether to show a warning indicator (approaching limits).

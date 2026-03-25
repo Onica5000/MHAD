@@ -10,6 +10,7 @@ import 'package:mhad/ui/education/education_screen.dart';
 import 'package:mhad/ui/export/export_screen.dart';
 import 'package:mhad/ui/home/home_screen.dart';
 import 'package:mhad/ui/settings/ai_setup_screen.dart';
+import 'package:mhad/ui/settings/settings_screen.dart';
 import 'package:mhad/ui/settings/privacy_policy_screen.dart';
 import 'package:mhad/ui/mode_selection/mode_selection_screen.dart';
 import 'package:mhad/ui/wizard/form_type_selection_screen.dart';
@@ -31,6 +32,7 @@ abstract class AppRoutes {
   static String wizardCompleteRoute(int directiveId) =>
       '/wizard-complete/$directiveId';
   static const privacyPolicy = '/privacy-policy';
+  static const settings = '/settings';
 
   static String wizardRoute(int directiveId) => '/wizard/$directiveId';
   static String exportRoute(int directiveId) => '/export/$directiveId';
@@ -153,6 +155,10 @@ GoRouter _buildRouter(
         GoRoute(
           path: AppRoutes.privacyPolicy,
           builder: (_, _) => const PrivacyPolicyScreen(),
+        ),
+        GoRoute(
+          path: AppRoutes.settings,
+          builder: (_, _) => const SettingsScreen(),
         ),
       ],
       errorBuilder: (_, _) => const HomeScreen(),

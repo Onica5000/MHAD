@@ -8,7 +8,6 @@ import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/services/data_export_service.dart';
 import 'package:mhad/services/device_security_service.dart';
 import 'package:mhad/services/web_session_cache.dart';
-import 'package:mhad/services/screenshot_protection_service.dart';
 import 'package:mhad/services/notification_service.dart';
 import 'package:mhad/services/privacy_mode_service.dart';
 import 'package:mhad/domain/model/directive.dart';
@@ -17,7 +16,6 @@ import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/onboarding/onboarding_screen.dart';
 import 'package:mhad/ui/widgets/draft_recovery_dialog.dart';
 import 'package:mhad/ui/widgets/provider_resources.dart';
-import 'package:mhad/utils/platform_utils.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -117,33 +115,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     size: 20),
               ),
             ),
+          IconButton(
+            icon: const Icon(Icons.settings_outlined),
+            tooltip: 'Settings',
+            onPressed: () => context.push(AppRoutes.settings),
+          ),
           PopupMenuButton<String>(
             tooltip: 'More options',
             icon: const Icon(Icons.more_vert),
             onSelected: (value) async {
               if (value == 'delete_all') {
                 _deleteAllData(context, ref);
-              } else if (value == 'screenshot_toggle') {
-                await ScreenshotProtectionService.toggle();
               }
             },
             itemBuilder: (_) => [
-              if (platformIsAndroid)
-                PopupMenuItem(
-                  value: 'screenshot_toggle',
-                  child: Row(children: [
-                    Icon(
-                      ScreenshotProtectionService.isEnabled
-                          ? Icons.screen_lock_portrait
-                          : Icons.screenshot_outlined,
-                      size: 18,
-                    ),
-                    const SizedBox(width: 8),
-                    Text(ScreenshotProtectionService.isEnabled
-                        ? 'Allow Screenshots'
-                        : 'Block Screenshots'),
-                  ]),
-                ),
               const PopupMenuItem(
                 value: 'delete_all',
                 child: Row(children: [
@@ -165,25 +150,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           _LearnMoreCard(),
           const SizedBox(height: 16),
           const ProviderResourcesCard(),
-          const SizedBox(height: 4),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              TextButton.icon(
-                icon: const Icon(Icons.auto_awesome, size: 16),
-                label: const Text('AI Setup',
-                    style: TextStyle(fontSize: 12)),
-                onPressed: () => context.push(AppRoutes.aiSetup),
-              ),
-              const SizedBox(width: 8),
-              TextButton.icon(
-                icon: const Icon(Icons.privacy_tip_outlined, size: 16),
-                label: const Text('Privacy Policy',
-                    style: TextStyle(fontSize: 12)),
-                onPressed: () => context.push(AppRoutes.privacyPolicy),
-              ),
-            ],
-          ),
           const SizedBox(height: 8),
           if (privacyMode.isPublic) ...[
             _PublicModeNotice(
@@ -208,7 +174,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   itemCount: directives.length,
                   itemBuilder: (context, index) {
                     final d = directives[index];
-                    return DirectiveCard(
+                    return _DirectiveCardWithAgent(
                       key: ValueKey(d.id),
                       directive: d,
                       onExport: () => context.push(AppRoutes.exportRoute(d.id)),
@@ -248,7 +214,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   itemCount: directives.length,
                   itemBuilder: (context, index) {
                     final d = directives[index];
-                    return DirectiveCard(
+                    return _DirectiveCardWithAgent(
                       key: ValueKey(d.id),
                       directive: d,
                       onExport: () => context.push(AppRoutes.exportRoute(d.id)),
@@ -760,4 +726,45 @@ class _DeviceSecurityCheckState extends State<_DeviceSecurityCheck> {
 
   @override
   Widget build(BuildContext context) => const SizedBox.shrink();
+}
+
+/// Wrapper that loads the primary agent name for a directive and passes it
+/// to [DirectiveCard]. Uses a [FutureBuilder] so the card renders immediately
+/// and the agent name appears once loaded.
+class _DirectiveCardWithAgent extends ConsumerWidget {
+  final Directive directive;
+  final VoidCallback onDelete;
+  final VoidCallback? onRevoke;
+  final VoidCallback? onRenew;
+  final VoidCallback? onExport;
+
+  const _DirectiveCardWithAgent({
+    required this.directive,
+    required this.onDelete,
+    this.onRevoke,
+    this.onRenew,
+    this.onExport,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final repo = ref.read(directiveRepositoryProvider);
+    return FutureBuilder<List<Agent>>(
+      future: repo.getAgents(directive.id),
+      builder: (context, snapshot) {
+        final agentName = (snapshot.data != null && snapshot.data!.isNotEmpty)
+            ? snapshot.data!.first.fullName
+            : null;
+        return DirectiveCard(
+          directive: directive,
+          onDelete: onDelete,
+          onRevoke: onRevoke,
+          onRenew: onRenew,
+          onExport: onExport,
+          agentName: agentName,
+        );
+      },
+    );
+  }
 }
