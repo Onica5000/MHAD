@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/services/notification_service.dart';
 
 /// A button that helps the user schedule a reminder to arrange
 /// witness signing. PA Act 194 requires two adult witnesses.
-class WitnessReminderButton extends StatelessWidget {
+/// Only shown in private mode (reminders are useless if data doesn't persist).
+class WitnessReminderButton extends ConsumerWidget {
   const WitnessReminderButton({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isPrivate = ref.watch(privacyModeNotifierProvider).isPrivate;
+    if (!isPrivate) return const SizedBox.shrink();
+
     return OutlinedButton.icon(
       onPressed: () => _showScheduleDialog(context),
       icon: const Icon(Icons.event, size: 18),
@@ -42,7 +48,6 @@ class WitnessReminderButton extends StatelessWidget {
       time.minute,
     );
 
-    // Schedule a local notification
     try {
       await NotificationService.instance.scheduleWitnessReminder(scheduled);
       if (context.mounted) {

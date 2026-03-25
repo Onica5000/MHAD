@@ -144,7 +144,34 @@ class WizardCompleteScreen extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 16),
+          Card(
+            color: cs.errorContainer,
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(Icons.backup_outlined, size: 20,
+                      color: cs.onErrorContainer),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'Export and save a backup now. If you lose your device, '
+                      'your directive data cannot be recovered without an '
+                      'exported copy.',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: cs.onErrorContainer,
+                        height: 1.4,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
           FilledButton.icon(
             icon: const Icon(Icons.picture_as_pdf),
             label: const Text('Export PDF'),

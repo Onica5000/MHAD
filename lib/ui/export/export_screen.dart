@@ -672,6 +672,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       additional: _additional,
       witnesses: _witnesses,
       guardian: _guardian,
+      diagnoses: _diagnoses,
     );
     await _shareText(json, 'MHAD FHIR Consent Resource');
   }

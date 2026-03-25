@@ -21,6 +21,36 @@ class _FormTypeSelectionScreenState
 
   Future<void> _createDirective(FormType formType) async {
     if (_creating) return;
+
+    // Warn POA-only users about agent having full authority
+    if (formType == FormType.poa && mounted) {
+      final proceed = await showDialog<bool>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          icon: const Icon(Icons.info_outline, size: 36),
+          title: const Text('Power of Attorney Only'),
+          content: const Text(
+            'With a POA-only form, your agent will have authority to make '
+            'mental health care decisions on your behalf, but the document '
+            'will not include your personal treatment preferences.\n\n'
+            'Consider using the Combined form instead to document both '
+            'your preferences AND appoint an agent. This gives your care '
+            'team the most guidance.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx, false),
+              child: const Text('Go Back'),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(ctx, true),
+              child: const Text('Continue with POA'),
+            ),
+          ],
+        ),
+      );
+      if (proceed != true || !mounted) return;
+    }
+
     setState(() => _creating = true);
     try {
       final id = await ref

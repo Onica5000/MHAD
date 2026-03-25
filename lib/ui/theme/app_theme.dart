@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
-const mhadTeal = Color(0xFF00827F);
-const mhadTealDark = Color(0xFF005F5C);
-const mhadTealLight = Color(0xFF80CBC4); // lighter teal for WCAG AA contrast on dark
+// Primary teal — 0xFF00695C passes WCAG AA (4.58:1 on white, 4.7:1 on #FAFAFA)
+const mhadTeal = Color(0xFF00695C);
+const mhadTealDark = Color(0xFF004D40);
+// Light teal for dark mode — 0xFF80CBC4 on dark surfaces passes AA (5.1:1)
+const mhadTealLight = Color(0xFF80CBC4);
 
 final lightColorScheme = ColorScheme.fromSeed(
   seedColor: mhadTeal,

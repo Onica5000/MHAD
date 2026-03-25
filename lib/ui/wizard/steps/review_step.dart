@@ -275,7 +275,10 @@ class _ReviewSection extends StatelessWidget {
             ),
             if (nonEmpty.isNotEmpty) ...[
               const SizedBox(height: 8),
-              ...nonEmpty.map((e) => Padding(
+              ...nonEmpty.map((e) => Semantics(
+                    label: '${e.key}: ${e.value}',
+                    excludeSemantics: true,
+                    child: Padding(
                     padding: const EdgeInsets.only(bottom: 4),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -298,7 +301,7 @@ class _ReviewSection extends StatelessWidget {
                         ),
                       ],
                     ),
-                  )),
+                  ))),
             ] else
               Padding(
                 padding: const EdgeInsets.only(top: 4),

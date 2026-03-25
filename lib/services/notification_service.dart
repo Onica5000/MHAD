@@ -112,6 +112,19 @@ class NotificationService {
         scheduledDate: remind14,
       );
     }
+
+    // Annual review reminder (1 year after execution)
+    final reviewDate = expirationDate.subtract(const Duration(days: 365));
+    if (reviewDate.isAfter(now)) {
+      await _schedule(
+        id: directiveId * 10 + 3,
+        title: 'Time to Review Your Directive',
+        body: 'It has been one year since you executed your Mental Health '
+            'Advance Directive. Review it to make sure your preferences '
+            'are still current.',
+        scheduledDate: reviewDate,
+      );
+    }
   }
 
   /// Schedules a reminder for the user to arrange witness signing.
@@ -132,6 +145,7 @@ class NotificationService {
     try {
       await _plugin.cancel(directiveId * 10 + 1);
       await _plugin.cancel(directiveId * 10 + 2);
+      await _plugin.cancel(directiveId * 10 + 3);
     } catch (e) {
       debugPrint('NotificationService cancel error: $e');
     }

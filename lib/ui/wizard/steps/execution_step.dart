@@ -124,13 +124,16 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
     await saveWitness(1, _w1Id, _w1NameCtrl, _w1AddressCtrl, _w1PhoneCtrl);
     await saveWitness(2, _w2Id, _w2NameCtrl, _w2AddressCtrl, _w2PhoneCtrl);
 
-    // Schedule 2-year expiration reminders
-    final expirationDate =
-        _executionDate!.add(const Duration(days: 365 * 2));
-    await NotificationService.instance.scheduleExpirationReminders(
-      widget.directiveId,
-      expirationDate,
-    );
+    // Schedule reminders only in private mode (public/web data doesn't persist)
+    final isPrivate = ref.read(privacyModeNotifierProvider).isPrivate;
+    if (isPrivate) {
+      final expirationDate =
+          _executionDate!.add(const Duration(days: 365 * 2));
+      await NotificationService.instance.scheduleExpirationReminders(
+        widget.directiveId,
+        expirationDate,
+      );
+    }
 
     return true;
   }

@@ -16,9 +16,16 @@ class FhirExportService {
     required AdditionalInstructionsTableData? additional,
     List<WitnessesData>? witnesses,
     GuardianNomination? guardian,
+    List<DiagnosisEntry>? diagnoses,
   }) {
     final resource = <String, dynamic>{
       'resourceType': 'Consent',
+      'id': 'mhad-directive-${directive.id}',
+      'meta': {
+        'profile': ['http://hl7.org/fhir/StructureDefinition/Consent'],
+        'lastUpdated': DateTime.fromMillisecondsSinceEpoch(directive.updatedAt)
+            .toIso8601String(),
+      },
       'status': directive.status == 'complete' ? 'active' : 'draft',
       'scope': {
         'coding': [
@@ -168,6 +175,50 @@ class FhirExportService {
       resource['provision'] ??= {};
       (resource['provision'] as Map)['actor'] = actors;
     }
+
+    // ICD-10 diagnoses
+    if (diagnoses != null && diagnoses.isNotEmpty) {
+      final diagProvisions = diagnoses.map((d) => <String, dynamic>{
+        'type': 'permit',
+        'code': [
+          {
+            'coding': [
+              {
+                'system': 'http://hl7.org/fhir/sid/icd-10-cm',
+                'code': d.icdCode,
+                'display': d.name,
+              }
+            ],
+          }
+        ],
+      }).toList();
+      resource['provision'] ??= {};
+      final existingProvisions =
+          (resource['provision'] as Map)['provision'] as List? ?? [];
+      (resource['provision'] as Map)['provision'] = [
+        ...existingProvisions,
+        ...diagProvisions,
+      ];
+    }
+
+    // Additional instructions as notes
+    final notes = <Map<String, dynamic>>[];
+    if (additional != null) {
+      void addNote(String label, String value) {
+        if (value.isNotEmpty) notes.add({'text': '$label: $value'});
+      }
+      addNote('Health History', additional.healthHistory);
+      addNote('Crisis Intervention', additional.crisisIntervention);
+      addNote('Activities', additional.activities);
+      addNote('Dietary', additional.dietary);
+      addNote('Religious', additional.religious);
+      addNote('Children/Custody', additional.childrenCustody);
+      addNote('Family Notification', additional.familyNotification);
+      addNote('Records Disclosure', additional.recordsDisclosure);
+      addNote('Pet Custody', additional.petCustody);
+      addNote('Other', additional.other);
+    }
+    if (notes.isNotEmpty) resource['note'] = notes;
 
     // Source reference — the directive text
     if (directive.effectiveCondition.isNotEmpty) {

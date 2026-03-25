@@ -74,7 +74,7 @@ class _CrisisResourcesBannerState extends State<CrisisResourcesBanner> {
                 button: true,
                 label: _expanded
                     ? 'Collapse crisis resources'
-                    : 'Expand crisis resources',
+                    : 'Need help now? Tap to expand crisis resources including 988 Suicide and Crisis Lifeline',
                 child: InkWell(
                   onTap: () => setState(() => _expanded = !_expanded),
                   child: Container(

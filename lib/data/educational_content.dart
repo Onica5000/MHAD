@@ -406,6 +406,143 @@ const _faq = [
         'evaluators agree. You or your agent may request additional '
         'evaluations if you believe the determination is incorrect.',
   ),
+  EducationSection(
+    id: 'faq_agent_unavailable',
+    category: EducationCategory.faq,
+    title: 'What if my agent is unavailable during a crisis?',
+    content:
+        'If your primary agent cannot be reached or is unable to serve, your '
+        'alternate agent (if you designated one) will step in. This is why '
+        'naming an alternate agent is strongly recommended.\n\n'
+        'If neither agent is available, your directive\'s written treatment '
+        'preferences still guide your care team. Providers must follow your '
+        'documented wishes to the extent possible, even without an agent '
+        'present to interpret them.\n\n'
+        'If no agent is available and your directive does not address the '
+        'specific treatment decision, providers will use their clinical '
+        'judgment consistent with accepted medical practice.',
+  ),
+  EducationSection(
+    id: 'faq_finding_witnesses',
+    category: EducationCategory.faq,
+    title: 'How do I find eligible witnesses?',
+    content:
+        'You need two adult witnesses (18+) who are NOT:\n\n'
+        '\u2022 Your designated agent or alternate agent\n'
+        '\u2022 Your healthcare provider\n'
+        '\u2022 An employee of the facility where you receive treatment\n\n'
+        'Exception: A person who would otherwise be disqualified MAY serve '
+        'as a witness if they are related to you by blood, marriage, or '
+        'adoption.\n\n'
+        'Good options for witnesses include: friends, neighbors, coworkers, '
+        'faith community members, or staff at a library, bank, or community '
+        'center. You can also ask an attorney or notary public.\n\n'
+        'Both witnesses must be physically present when you sign the '
+        'directive. Remote or video witnessing is not accepted under PA law.',
+  ),
+  EducationSection(
+    id: 'faq_how_providers_access',
+    category: EducationCategory.faq,
+    title: 'How do healthcare providers access my directive?',
+    content:
+        'Providers can only access your directive if you or your agent '
+        'gives them a copy. PA law does not create a central registry.\n\n'
+        'Best practices for ensuring access:\n\n'
+        '\u2022 Give copies to your primary care physician, psychiatrist, '
+        'and any mental health providers\n'
+        '\u2022 Give a copy to your local emergency room or crisis center\n'
+        '\u2022 Carry a wallet card with a summary and contact info for '
+        'your agent (this app can generate one)\n'
+        '\u2022 Tell your agent where the original is stored\n'
+        '\u2022 Keep a digital copy on your phone for emergencies\n\n'
+        'Some hospitals and health systems allow you to upload advance '
+        'directives to your patient portal or electronic health record.',
+  ),
+  EducationSection(
+    id: 'faq_deescalation',
+    category: EducationCategory.faq,
+    title: 'What are de-escalation preferences?',
+    content:
+        'De-escalation preferences describe what helps you calm down during '
+        'a mental health crisis. Documenting these gives your care team '
+        'specific tools to help you without resorting to restraint or '
+        'forced medication.\n\n'
+        'Examples of de-escalation techniques to include:\n\n'
+        '\u2022 Listening to music (specify genre or playlist)\n'
+        '\u2022 Being in a quiet, dimly lit room\n'
+        '\u2022 Talking with a specific person (name and contact)\n'
+        '\u2022 Deep breathing or grounding exercises\n'
+        '\u2022 Access to comfort items (blanket, stuffed animal, book)\n'
+        '\u2022 Being spoken to in a calm, slow voice\n'
+        '\u2022 Being left alone for a set period\n'
+        '\u2022 Physical activity (walking, stretching)\n\n'
+        'Also consider listing triggers that make things worse — loud '
+        'environments, specific topics, physical contact, being alone, '
+        'or certain people or settings.',
+  ),
+  EducationSection(
+    id: 'faq_reproductive_health',
+    category: EducationCategory.faq,
+    title: 'Can I include reproductive health preferences?',
+    content:
+        'Yes. If you are or may become pregnant, you can include '
+        'preferences about how your mental health treatment should be '
+        'managed during pregnancy, labor, delivery, and postpartum care.\n\n'
+        'This is especially important because some psychiatric medications '
+        'carry risks during pregnancy, and treatment decisions may need to '
+        'balance mental health needs with fetal safety.\n\n'
+        'Examples of reproductive health preferences:\n\n'
+        '\u2022 Which medications to continue or discontinue during pregnancy\n'
+        '\u2022 Whether you consent to psychiatric hospitalization while pregnant\n'
+        '\u2022 Preferences for postpartum mental health monitoring\n'
+        '\u2022 Who should be notified if you are hospitalized while pregnant\n'
+        '\u2022 Preferences for breastfeeding vs. medication compatibility\n\n'
+        'Include these in the "Other matters of importance" section of your '
+        'directive. California has pioneered a specialized "Reproductive PAD" '
+        'template that addresses these issues in detail.',
+  ),
+  EducationSection(
+    id: 'faq_revocation_how',
+    category: EducationCategory.faq,
+    title: 'How do I properly revoke my directive?',
+    content:
+        'Under PA Act 194, you may revoke your directive at any time while '
+        'you have capacity to make mental health decisions. You can revoke '
+        'orally or in writing.\n\n'
+        'Steps for a complete revocation:\n\n'
+        '1. Notify your agent(s) in writing that the directive is revoked\n'
+        '2. Notify your healthcare providers (psychiatrist, therapist, '
+        'primary care doctor)\n'
+        '3. Notify any hospital or facility that has a copy\n'
+        '4. Destroy or clearly mark "REVOKED" on all printed copies\n'
+        '5. Request return of copies you distributed\n\n'
+        'Your revocation is effective as soon as you communicate it to '
+        'your attending physician or mental health care provider — either '
+        'by you directly or through a witness to your revocation.\n\n'
+        'You may also revoke only part of your directive while keeping the '
+        'rest in effect. For example, you could revoke the agent designation '
+        'but keep your treatment preferences.',
+  ),
+  EducationSection(
+    id: 'faq_guardianship_interaction',
+    category: EducationCategory.faq,
+    title: 'How does my directive interact with a court-appointed guardian?',
+    content:
+        'If a court appoints a guardian for you under 20 Pa.C.S. \u00A75511, '
+        'you choose whether the guardian can revoke your directive.\n\n'
+        'In your directive, you select one of two options:\n\n'
+        '\u2022 The guardian CANNOT revoke, suspend, or terminate your '
+        'directive — your pre-stated wishes remain in effect\n'
+        '\u2022 The guardian CAN revoke, suspend, or terminate your '
+        'directive — giving the guardian full authority\n\n'
+        'This is an important decision. If you have strong feelings about '
+        'your treatment preferences, consider preventing the guardian from '
+        'overriding them. If you trust that a future guardian would act in '
+        'your best interest, you may allow revocation.\n\n'
+        'Note: Your agent (healthcare proxy) and your guardian are different '
+        'roles. Your agent makes decisions under the power of attorney; a '
+        'guardian has broader court-granted authority over personal affairs.',
+  ),
 ];
 
 // ---------------------------------------------------------------------------
@@ -1905,16 +2042,20 @@ const wizardStepEducationMap = <String, List<String>>{
     'decl_additional',
     'poa_facility',
     'faq_what_to_include',
+    'faq_deescalation',
+    'faq_reproductive_health',
   ],
   'agentDesignation': [
     'combined_agent',
     'poa_agent',
     'faq_poa',
+    'faq_agent_unavailable',
     'gloss_agent',
   ],
   'alternateAgent': [
     'combined_alt_agent',
     'poa_alt_agent',
+    'faq_agent_unavailable',
     'gloss_agent',
   ],
   'agentAuthority': [
@@ -1929,14 +2070,17 @@ const wizardStepEducationMap = <String, List<String>>{
     'decl_guardian',
     'poa_guardian',
     'faq_guardian',
+    'faq_guardianship_interaction',
     'gloss_declaration',
   ],
-  'review': ['faq_who_to_give', 'faq_changes'],
+  'review': ['faq_who_to_give', 'faq_changes', 'faq_how_providers_access'],
   'execution': [
     'combined_execution',
     'decl_execution',
     'poa_execution',
     'faq_valid',
+    'faq_finding_witnesses',
+    'faq_revocation_how',
     'gloss_execute',
     'supp_governing_law',
   ],
