@@ -127,6 +127,7 @@ class Witnesses extends Table {
   IntColumn get witnessNumber => integer()(); // 1 or 2
   TextColumn get fullName => text().withDefault(const Constant(''))();
   TextColumn get address => text().withDefault(const Constant(''))();
+  TextColumn get phone => text().withDefault(const Constant(''))();
   TextColumn get signatureBase64 => text().nullable()();
   IntColumn get signatureDate => integer().nullable()();
 }
@@ -171,7 +172,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase(super.executor);
 
   @override
-  int get schemaVersion => 6;
+  int get schemaVersion => 7;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -215,6 +216,10 @@ class AppDatabase extends _$AppDatabase {
             await customStatement(
                 'CREATE INDEX IF NOT EXISTS idx_diagnosis_directive '
                 'ON diagnosis_entries (directive_id)');
+          }
+          if (from < 7) {
+            await customStatement(
+                "ALTER TABLE witnesses ADD COLUMN phone TEXT NOT NULL DEFAULT ''");
           }
         },
       );

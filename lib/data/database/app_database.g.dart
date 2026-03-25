@@ -3599,6 +3599,16 @@ class $WitnessesTable extends Witnesses
     requiredDuringInsert: false,
     defaultValue: const Constant(''),
   );
+  static const VerificationMeta _phoneMeta = const VerificationMeta('phone');
+  @override
+  late final GeneratedColumn<String> phone = GeneratedColumn<String>(
+    'phone',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
   static const VerificationMeta _signatureBase64Meta = const VerificationMeta(
     'signatureBase64',
   );
@@ -3628,6 +3638,7 @@ class $WitnessesTable extends Witnesses
     witnessNumber,
     fullName,
     address,
+    phone,
     signatureBase64,
     signatureDate,
   ];
@@ -3680,6 +3691,12 @@ class $WitnessesTable extends Witnesses
         address.isAcceptableOrUnknown(data['address']!, _addressMeta),
       );
     }
+    if (data.containsKey('phone')) {
+      context.handle(
+        _phoneMeta,
+        phone.isAcceptableOrUnknown(data['phone']!, _phoneMeta),
+      );
+    }
     if (data.containsKey('signature_base64')) {
       context.handle(
         _signatureBase64Meta,
@@ -3727,6 +3744,10 @@ class $WitnessesTable extends Witnesses
         DriftSqlType.string,
         data['${effectivePrefix}address'],
       )!,
+      phone: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}phone'],
+      )!,
       signatureBase64: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}signature_base64'],
@@ -3750,6 +3771,7 @@ class WitnessesData extends DataClass implements Insertable<WitnessesData> {
   final int witnessNumber;
   final String fullName;
   final String address;
+  final String phone;
   final String? signatureBase64;
   final int? signatureDate;
   const WitnessesData({
@@ -3758,6 +3780,7 @@ class WitnessesData extends DataClass implements Insertable<WitnessesData> {
     required this.witnessNumber,
     required this.fullName,
     required this.address,
+    required this.phone,
     this.signatureBase64,
     this.signatureDate,
   });
@@ -3769,6 +3792,7 @@ class WitnessesData extends DataClass implements Insertable<WitnessesData> {
     map['witness_number'] = Variable<int>(witnessNumber);
     map['full_name'] = Variable<String>(fullName);
     map['address'] = Variable<String>(address);
+    map['phone'] = Variable<String>(phone);
     if (!nullToAbsent || signatureBase64 != null) {
       map['signature_base64'] = Variable<String>(signatureBase64);
     }
@@ -3785,6 +3809,7 @@ class WitnessesData extends DataClass implements Insertable<WitnessesData> {
       witnessNumber: Value(witnessNumber),
       fullName: Value(fullName),
       address: Value(address),
+      phone: Value(phone),
       signatureBase64: signatureBase64 == null && nullToAbsent
           ? const Value.absent()
           : Value(signatureBase64),
@@ -3805,6 +3830,7 @@ class WitnessesData extends DataClass implements Insertable<WitnessesData> {
       witnessNumber: serializer.fromJson<int>(json['witnessNumber']),
       fullName: serializer.fromJson<String>(json['fullName']),
       address: serializer.fromJson<String>(json['address']),
+      phone: serializer.fromJson<String>(json['phone']),
       signatureBase64: serializer.fromJson<String?>(json['signatureBase64']),
       signatureDate: serializer.fromJson<int?>(json['signatureDate']),
     );
@@ -3818,6 +3844,7 @@ class WitnessesData extends DataClass implements Insertable<WitnessesData> {
       'witnessNumber': serializer.toJson<int>(witnessNumber),
       'fullName': serializer.toJson<String>(fullName),
       'address': serializer.toJson<String>(address),
+      'phone': serializer.toJson<String>(phone),
       'signatureBase64': serializer.toJson<String?>(signatureBase64),
       'signatureDate': serializer.toJson<int?>(signatureDate),
     };
@@ -3829,6 +3856,7 @@ class WitnessesData extends DataClass implements Insertable<WitnessesData> {
     int? witnessNumber,
     String? fullName,
     String? address,
+    String? phone,
     Value<String?> signatureBase64 = const Value.absent(),
     Value<int?> signatureDate = const Value.absent(),
   }) => WitnessesData(
@@ -3837,6 +3865,7 @@ class WitnessesData extends DataClass implements Insertable<WitnessesData> {
     witnessNumber: witnessNumber ?? this.witnessNumber,
     fullName: fullName ?? this.fullName,
     address: address ?? this.address,
+    phone: phone ?? this.phone,
     signatureBase64: signatureBase64.present
         ? signatureBase64.value
         : this.signatureBase64,
@@ -3855,6 +3884,7 @@ class WitnessesData extends DataClass implements Insertable<WitnessesData> {
           : this.witnessNumber,
       fullName: data.fullName.present ? data.fullName.value : this.fullName,
       address: data.address.present ? data.address.value : this.address,
+      phone: data.phone.present ? data.phone.value : this.phone,
       signatureBase64: data.signatureBase64.present
           ? data.signatureBase64.value
           : this.signatureBase64,
@@ -3872,6 +3902,7 @@ class WitnessesData extends DataClass implements Insertable<WitnessesData> {
           ..write('witnessNumber: $witnessNumber, ')
           ..write('fullName: $fullName, ')
           ..write('address: $address, ')
+          ..write('phone: $phone, ')
           ..write('signatureBase64: $signatureBase64, ')
           ..write('signatureDate: $signatureDate')
           ..write(')'))
@@ -3885,6 +3916,7 @@ class WitnessesData extends DataClass implements Insertable<WitnessesData> {
     witnessNumber,
     fullName,
     address,
+    phone,
     signatureBase64,
     signatureDate,
   );
@@ -3897,6 +3929,7 @@ class WitnessesData extends DataClass implements Insertable<WitnessesData> {
           other.witnessNumber == this.witnessNumber &&
           other.fullName == this.fullName &&
           other.address == this.address &&
+          other.phone == this.phone &&
           other.signatureBase64 == this.signatureBase64 &&
           other.signatureDate == this.signatureDate);
 }
@@ -3907,6 +3940,7 @@ class WitnessesCompanion extends UpdateCompanion<WitnessesData> {
   final Value<int> witnessNumber;
   final Value<String> fullName;
   final Value<String> address;
+  final Value<String> phone;
   final Value<String?> signatureBase64;
   final Value<int?> signatureDate;
   const WitnessesCompanion({
@@ -3915,6 +3949,7 @@ class WitnessesCompanion extends UpdateCompanion<WitnessesData> {
     this.witnessNumber = const Value.absent(),
     this.fullName = const Value.absent(),
     this.address = const Value.absent(),
+    this.phone = const Value.absent(),
     this.signatureBase64 = const Value.absent(),
     this.signatureDate = const Value.absent(),
   });
@@ -3924,6 +3959,7 @@ class WitnessesCompanion extends UpdateCompanion<WitnessesData> {
     required int witnessNumber,
     this.fullName = const Value.absent(),
     this.address = const Value.absent(),
+    this.phone = const Value.absent(),
     this.signatureBase64 = const Value.absent(),
     this.signatureDate = const Value.absent(),
   }) : directiveId = Value(directiveId),
@@ -3934,6 +3970,7 @@ class WitnessesCompanion extends UpdateCompanion<WitnessesData> {
     Expression<int>? witnessNumber,
     Expression<String>? fullName,
     Expression<String>? address,
+    Expression<String>? phone,
     Expression<String>? signatureBase64,
     Expression<int>? signatureDate,
   }) {
@@ -3943,6 +3980,7 @@ class WitnessesCompanion extends UpdateCompanion<WitnessesData> {
       if (witnessNumber != null) 'witness_number': witnessNumber,
       if (fullName != null) 'full_name': fullName,
       if (address != null) 'address': address,
+      if (phone != null) 'phone': phone,
       if (signatureBase64 != null) 'signature_base64': signatureBase64,
       if (signatureDate != null) 'signature_date': signatureDate,
     });
@@ -3954,6 +3992,7 @@ class WitnessesCompanion extends UpdateCompanion<WitnessesData> {
     Value<int>? witnessNumber,
     Value<String>? fullName,
     Value<String>? address,
+    Value<String>? phone,
     Value<String?>? signatureBase64,
     Value<int?>? signatureDate,
   }) {
@@ -3963,6 +4002,7 @@ class WitnessesCompanion extends UpdateCompanion<WitnessesData> {
       witnessNumber: witnessNumber ?? this.witnessNumber,
       fullName: fullName ?? this.fullName,
       address: address ?? this.address,
+      phone: phone ?? this.phone,
       signatureBase64: signatureBase64 ?? this.signatureBase64,
       signatureDate: signatureDate ?? this.signatureDate,
     );
@@ -3986,6 +4026,9 @@ class WitnessesCompanion extends UpdateCompanion<WitnessesData> {
     if (address.present) {
       map['address'] = Variable<String>(address.value);
     }
+    if (phone.present) {
+      map['phone'] = Variable<String>(phone.value);
+    }
     if (signatureBase64.present) {
       map['signature_base64'] = Variable<String>(signatureBase64.value);
     }
@@ -4003,6 +4046,7 @@ class WitnessesCompanion extends UpdateCompanion<WitnessesData> {
           ..write('witnessNumber: $witnessNumber, ')
           ..write('fullName: $fullName, ')
           ..write('address: $address, ')
+          ..write('phone: $phone, ')
           ..write('signatureBase64: $signatureBase64, ')
           ..write('signatureDate: $signatureDate')
           ..write(')'))
@@ -7836,6 +7880,7 @@ typedef $$WitnessesTableCreateCompanionBuilder =
       required int witnessNumber,
       Value<String> fullName,
       Value<String> address,
+      Value<String> phone,
       Value<String?> signatureBase64,
       Value<int?> signatureDate,
     });
@@ -7846,6 +7891,7 @@ typedef $$WitnessesTableUpdateCompanionBuilder =
       Value<int> witnessNumber,
       Value<String> fullName,
       Value<String> address,
+      Value<String> phone,
       Value<String?> signatureBase64,
       Value<int?> signatureDate,
     });
@@ -7900,6 +7946,11 @@ class $$WitnessesTableFilterComposer
 
   ColumnFilters<String> get address => $composableBuilder(
     column: $table.address,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get phone => $composableBuilder(
+    column: $table.phone,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -7966,6 +8017,11 @@ class $$WitnessesTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get phone => $composableBuilder(
+    column: $table.phone,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get signatureBase64 => $composableBuilder(
     column: $table.signatureBase64,
     builder: (column) => ColumnOrderings(column),
@@ -8022,6 +8078,9 @@ class $$WitnessesTableAnnotationComposer
 
   GeneratedColumn<String> get address =>
       $composableBuilder(column: $table.address, builder: (column) => column);
+
+  GeneratedColumn<String> get phone =>
+      $composableBuilder(column: $table.phone, builder: (column) => column);
 
   GeneratedColumn<String> get signatureBase64 => $composableBuilder(
     column: $table.signatureBase64,
@@ -8090,6 +8149,7 @@ class $$WitnessesTableTableManager
                 Value<int> witnessNumber = const Value.absent(),
                 Value<String> fullName = const Value.absent(),
                 Value<String> address = const Value.absent(),
+                Value<String> phone = const Value.absent(),
                 Value<String?> signatureBase64 = const Value.absent(),
                 Value<int?> signatureDate = const Value.absent(),
               }) => WitnessesCompanion(
@@ -8098,6 +8158,7 @@ class $$WitnessesTableTableManager
                 witnessNumber: witnessNumber,
                 fullName: fullName,
                 address: address,
+                phone: phone,
                 signatureBase64: signatureBase64,
                 signatureDate: signatureDate,
               ),
@@ -8108,6 +8169,7 @@ class $$WitnessesTableTableManager
                 required int witnessNumber,
                 Value<String> fullName = const Value.absent(),
                 Value<String> address = const Value.absent(),
+                Value<String> phone = const Value.absent(),
                 Value<String?> signatureBase64 = const Value.absent(),
                 Value<int?> signatureDate = const Value.absent(),
               }) => WitnessesCompanion.insert(
@@ -8116,6 +8178,7 @@ class $$WitnessesTableTableManager
                 witnessNumber: witnessNumber,
                 fullName: fullName,
                 address: address,
+                phone: phone,
                 signatureBase64: signatureBase64,
                 signatureDate: signatureDate,
               ),

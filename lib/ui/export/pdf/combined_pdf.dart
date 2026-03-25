@@ -675,10 +675,10 @@ List<pw.Page> buildCombinedPages({
 
             // Witness 1 details
             witnessDetailBlock('Witness 1', w1?.fullName, w1?.address,
-                signatureDate: w1?.signatureDate),
+                phone: w1?.phone, signatureDate: w1?.signatureDate),
             // Witness 2 details
             witnessDetailBlock('Witness 2', w2?.fullName, w2?.address,
-                signatureDate: w2?.signatureDate),
+                phone: w2?.phone, signatureDate: w2?.signatureDate),
 
             // Signing on behalf
             signOnBehalfBlock(

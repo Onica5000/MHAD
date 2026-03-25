@@ -26,11 +26,13 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
   // Witness 1
   final _w1NameCtrl = TextEditingController();
   final _w1AddressCtrl = TextEditingController();
+  final _w1PhoneCtrl = TextEditingController();
   int? _w1Id;
 
   // Witness 2
   final _w2NameCtrl = TextEditingController();
   final _w2AddressCtrl = TextEditingController();
+  final _w2PhoneCtrl = TextEditingController();
   int? _w2Id;
 
   @override
@@ -43,8 +45,10 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
   void dispose() {
     _w1NameCtrl.dispose();
     _w1AddressCtrl.dispose();
+    _w1PhoneCtrl.dispose();
     _w2NameCtrl.dispose();
     _w2AddressCtrl.dispose();
+    _w2PhoneCtrl.dispose();
     super.dispose();
   }
 
@@ -65,10 +69,12 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
           _w1Id = w.id;
           _w1NameCtrl.text = w.fullName;
           _w1AddressCtrl.text = w.address;
+          _w1PhoneCtrl.text = w.phone;
         } else if (w.witnessNumber == 2) {
           _w2Id = w.id;
           _w2NameCtrl.text = w.fullName;
           _w2AddressCtrl.text = w.address;
+          _w2PhoneCtrl.text = w.phone;
         }
       }
     });
@@ -102,19 +108,21 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
     // Save witness info (signatures affixed on printed original only)
     Future<void> saveWitness(int number, int? existingId,
         TextEditingController nameCtrl,
-        TextEditingController addressCtrl) async {
+        TextEditingController addressCtrl,
+        TextEditingController phoneCtrl) async {
       await repo.upsertWitness(WitnessesCompanion(
         id: existingId != null ? Value(existingId) : const Value.absent(),
         directiveId: Value(widget.directiveId),
         witnessNumber: Value(number),
         fullName: Value(nameCtrl.text.trim()),
         address: Value(addressCtrl.text.trim()),
+        phone: Value(phoneCtrl.text.trim()),
         signatureDate: Value(executionMs),
       ));
     }
 
-    await saveWitness(1, _w1Id, _w1NameCtrl, _w1AddressCtrl);
-    await saveWitness(2, _w2Id, _w2NameCtrl, _w2AddressCtrl);
+    await saveWitness(1, _w1Id, _w1NameCtrl, _w1AddressCtrl, _w1PhoneCtrl);
+    await saveWitness(2, _w2Id, _w2NameCtrl, _w2AddressCtrl, _w2PhoneCtrl);
 
     // Schedule 2-year expiration reminders
     final expirationDate =
@@ -279,6 +287,15 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
           textCapitalization: TextCapitalization.words,
         ),
         const SizedBox(height: 8),
+        TextFormField(
+          controller: _w1PhoneCtrl,
+          decoration: const InputDecoration(
+            labelText: 'Witness 1 phone number',
+            border: OutlineInputBorder(),
+          ),
+          keyboardType: TextInputType.phone,
+        ),
+        const SizedBox(height: 8),
         const _SignaturePlaceholder(
             label: 'Witness 1 signature to be affixed on original document'),
         const SizedBox(height: 24),
@@ -303,6 +320,15 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
             border: OutlineInputBorder(),
           ),
           textCapitalization: TextCapitalization.words,
+        ),
+        const SizedBox(height: 8),
+        TextFormField(
+          controller: _w2PhoneCtrl,
+          decoration: const InputDecoration(
+            labelText: 'Witness 2 phone number',
+            border: OutlineInputBorder(),
+          ),
+          keyboardType: TextInputType.phone,
         ),
         const SizedBox(height: 8),
         const _SignaturePlaceholder(

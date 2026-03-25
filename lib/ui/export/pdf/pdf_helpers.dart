@@ -483,7 +483,7 @@ pw.Widget signOnBehalfBlock(String formTypeDescription) {
 
 /// Full witness detail block: Name, Address, City/State/Zip, Phone.
 pw.Widget witnessDetailBlock(String label, String? name, String? address,
-    {int? signatureDate}) {
+    {String? phone, int? signatureDate}) {
   final dateStr = signatureDate != null
       ? formatExecDate(signatureDate)
       : '____________________';
@@ -492,6 +492,7 @@ pw.Widget witnessDetailBlock(String label, String? name, String? address,
     children: [
       dataLine('Name of Witness', name ?? ''),
       dataLine('Address', address ?? ''),
+      dataLine('Phone Number', phone ?? ''),
       dataLine('Date Signed', dateStr),
       pw.SizedBox(height: 6),
     ],
