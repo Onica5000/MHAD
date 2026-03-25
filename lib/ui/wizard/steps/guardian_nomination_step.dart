@@ -24,6 +24,7 @@ class _GuardianNominationStepState
   late final TextEditingController _phoneCtrl;
   late final TextEditingController _relationshipCtrl;
   int? _existingId;
+  bool _guardianCanRevoke = false;
 
   @override
   void initState() {
@@ -55,6 +56,7 @@ class _GuardianNominationStepState
         _addressCtrl.text = g.nomineeAddress;
         _phoneCtrl.text = g.nomineePhone;
         _relationshipCtrl.text = g.nomineeRelationship;
+        _guardianCanRevoke = g.guardianCanRevoke;
       });
     }
   }
@@ -72,6 +74,7 @@ class _GuardianNominationStepState
             nomineeAddress: Value(_addressCtrl.text.trim()),
             nomineePhone: Value(_phoneCtrl.text.trim()),
             nomineeRelationship: Value(_relationshipCtrl.text.trim()),
+            guardianCanRevoke: Value(_guardianCanRevoke),
           ),
         );
     return true;
@@ -99,6 +102,38 @@ class _GuardianNominationStepState
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
+          ),
+          const SizedBox(height: 12),
+          Card(
+            color: Theme.of(context).colorScheme.secondaryContainer,
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(
+                    Icons.info_outline,
+                    size: 20,
+                    color: Theme.of(context).colorScheme.onSecondaryContainer,
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'A guardian is different from your agent. A guardian is '
+                      'appointed by a court during formal incapacity proceedings. '
+                      'This nomination tells the court who you prefer.',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Theme.of(context)
+                            .colorScheme
+                            .onSecondaryContainer,
+                        height: 1.4,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
           const SizedBox(height: 12),
           ContactPickerButton(
@@ -147,6 +182,37 @@ class _GuardianNominationStepState
               border: OutlineInputBorder(),
             ),
             keyboardType: TextInputType.phone,
+          ),
+          const SizedBox(height: 24),
+          Text(
+            'Guardian authority over this directive',
+            style: Theme.of(context).textTheme.titleSmall,
+          ),
+          const SizedBox(height: 4),
+          Text(
+            'If a guardian is appointed, should they have the power to '
+            'revoke, suspend, or terminate this directive?',
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+          RadioListTile<bool>(
+            title: const Text(
+              'The guardian will NOT have the power to revoke, suspend, '
+              'or terminate this directive.',
+            ),
+            value: false,
+            groupValue: _guardianCanRevoke,
+            onChanged: (v) => setState(() => _guardianCanRevoke = v!),
+            contentPadding: EdgeInsets.zero,
+          ),
+          RadioListTile<bool>(
+            title: const Text(
+              'I authorize the guardian to revoke, suspend, or terminate '
+              'this directive.',
+            ),
+            value: true,
+            groupValue: _guardianCanRevoke,
+            onChanged: (v) => setState(() => _guardianCanRevoke = v!),
+            contentPadding: EdgeInsets.zero,
           ),
         ],
       ),

@@ -22,6 +22,7 @@ class _ReviewData {
   final AdditionalInstructionsTableData? additionalInstructions;
   final GuardianNomination? guardian;
   final List<MedicationEntry> medications;
+  final List<DiagnosisEntry> diagnoses;
 
   const _ReviewData({
     required this.directive,
@@ -30,6 +31,7 @@ class _ReviewData {
     required this.additionalInstructions,
     required this.guardian,
     required this.medications,
+    required this.diagnoses,
   });
 }
 
@@ -55,6 +57,7 @@ class _ReviewStepState extends ConsumerState<ReviewStep>
     final guardian = await repo.getGuardianNomination(widget.directiveId);
     final medications =
         await repo.watchMedications(widget.directiveId).first;
+    final diagnoses = await repo.getDiagnoses(widget.directiveId);
 
     if (mounted) {
       setState(() {
@@ -65,6 +68,7 @@ class _ReviewStepState extends ConsumerState<ReviewStep>
           additionalInstructions: additional,
           guardian: guardian,
           medications: medications,
+          diagnoses: diagnoses,
         );
       });
     }
@@ -115,6 +119,11 @@ class _ReviewStepState extends ConsumerState<ReviewStep>
               .join(', '),
           'Phone': d.phone,
         }),
+        if (_data!.diagnoses.isNotEmpty)
+          _ReviewSection(title: 'Medical Diagnoses', entries: {
+            for (final dx in _data!.diagnoses)
+              dx.icdCode: dx.name,
+          }),
         _ReviewSection(title: 'Effective Condition', entries: {
           'Condition': d.effectiveCondition,
         }),

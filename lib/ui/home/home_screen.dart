@@ -442,9 +442,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           'Revoking means this directive is no longer in effect. '
           'Under PA Act 194, you may revoke your directive at any time '
           'while capable of making mental health decisions.\n\n'
-          'You should notify your agent and healthcare providers of this '
-          'revocation.\n\n'
-          'This action cannot be undone.',
+          'Important: Revoking in this app does NOT automatically revoke '
+          'printed copies. You must also:\n\n'
+          '  \u2022 Notify your agent in writing\n'
+          '  \u2022 Notify your healthcare providers\n'
+          '  \u2022 Destroy or mark "REVOKED" on all printed copies\n'
+          '  \u2022 Request return of copies you distributed\n\n'
+          'This action cannot be undone in the app.',
         ),
         actions: [
           TextButton(

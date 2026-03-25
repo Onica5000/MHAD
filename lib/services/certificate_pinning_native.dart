@@ -5,6 +5,7 @@ import 'package:http/io_client.dart';
 /// Allowed hostnames for API connections.
 const _allowedHosts = {
   'generativelanguage.googleapis.com',
+  'clinicaltables.nlm.nih.gov',
 };
 
 /// Creates an [http.Client] with hardened TLS for Google APIs (native platforms).

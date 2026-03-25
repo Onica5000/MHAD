@@ -132,6 +132,18 @@ class PiiStripper {
     caseSensitive: false,
   );
 
+  // Medical license numbers (NPI, DEA, state license)
+  static final _licensePattern = RegExp(
+    r'(?:license|lic|NPI|DEA)\s*[:=#]?\s*[A-Za-z0-9\-]{5,20}',
+    caseSensitive: false,
+  );
+
+  // Insurance policy/member/group/subscriber IDs
+  static final _insuranceIdPattern = RegExp(
+    r'(?:policy|member|group|subscriber)\s*(?:id|number|num|no|#)\s*[:=#]?\s*[A-Za-z0-9\-]{4,20}',
+    caseSensitive: false,
+  );
+
   /// Ordered list of all PII patterns with labels and replacements.
   /// Order matters: ZIP before SSN to avoid ZIP+4 false positives.
   static final _allPatterns = <_PiiPattern>[
@@ -148,6 +160,8 @@ class PiiStripper {
     _PiiPattern('insurance info', _insurancePattern, '[insurance removed]'),
     _PiiPattern('facility name', _facilityNamePattern, '[facility removed]'),
     _PiiPattern('medical record number', _mrnPattern, '[record number removed]'),
+    _PiiPattern('medical license number', _licensePattern, '[license number removed]'),
+    _PiiPattern('insurance ID', _insuranceIdPattern, '[insurance ID removed]'),
   ];
 }
 

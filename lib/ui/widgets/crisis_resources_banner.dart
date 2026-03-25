@@ -134,7 +134,7 @@ class _CrisisResourcesBannerState extends State<CrisisResourcesBanner> {
                 _CrisisResourceTile(
                   icon: Icons.call,
                   title: '988 Suicide & Crisis Lifeline',
-                  subtitle: 'Call or text 988',
+                  subtitle: 'Call or text 988 — emotional distress support',
                   actionLabel: platformIsMobile ? 'Call' : 'Copy',
                   onAction: () => _callOrCopy(crisis988Phone),
                   secondaryActionLabel: platformIsMobile ? 'Text' : null,
@@ -146,7 +146,7 @@ class _CrisisResourcesBannerState extends State<CrisisResourcesBanner> {
                 _CrisisResourceTile(
                   icon: Icons.sms,
                   title: 'Crisis Text Line',
-                  subtitle: 'Text HOME to $crisisTextLine',
+                  subtitle: 'Text HOME to $crisisTextLine — text-based support',
                   actionLabel: platformIsMobile ? 'Text' : 'Copy',
                   onAction: platformIsMobile
                       ? () => _textOrCopy(crisisTextLine, 'HOME')
@@ -156,9 +156,25 @@ class _CrisisResourcesBannerState extends State<CrisisResourcesBanner> {
                 _CrisisResourceTile(
                   icon: Icons.call,
                   title: 'SAMHSA Helpline',
-                  subtitle: '1-800-662-4357',
+                  subtitle: '1-800-662-4357 — treatment referrals',
                   actionLabel: platformIsMobile ? 'Call' : 'Copy',
                   onAction: () => _callOrCopy(samhsaHelpline),
+                  foreground: cs.onErrorContainer,
+                ),
+                _CrisisResourceTile(
+                  icon: Icons.call,
+                  title: 'Veterans Crisis Line',
+                  subtitle: 'Call 988, then press 1',
+                  actionLabel: platformIsMobile ? 'Call' : 'Copy',
+                  onAction: () => _callOrCopy(veteransCrisisPhone),
+                  foreground: cs.onErrorContainer,
+                ),
+                _CrisisResourceTile(
+                  icon: Icons.call,
+                  title: 'NAMI Helpline',
+                  subtitle: '1-800-950-NAMI (6264)',
+                  actionLabel: platformIsMobile ? 'Call' : 'Copy',
+                  onAction: () => _callOrCopy(namiHelpline),
                   foreground: cs.onErrorContainer,
                 ),
                 const SizedBox(height: 4),

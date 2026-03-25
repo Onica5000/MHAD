@@ -42,8 +42,9 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
   bool _isSaving = false;
   bool _restoredStep = false;
 
-  // A plain GlobalKey so we can cast currentState to WizardStepMixin
-  final _stepKey = GlobalKey();
+  // A plain GlobalKey so we can cast currentState to WizardStepMixin.
+  // Re-assigned after Smart Fill apply to force step re-creation.
+  GlobalKey _stepKey = GlobalKey();
 
   void _persistStep() {
     ref
@@ -209,8 +210,12 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                         formType: formType.name,
                       );
                       if (applied == true && mounted) {
-                        // Rebuild to pick up new data
-                        setState(() {});
+                        // Invalidate cached directive so provider re-fetches
+                        ref.invalidate(directiveByIdProvider(directive.id));
+                        // Force step widget to re-create by changing key
+                        setState(() {
+                          _stepKey = GlobalKey();
+                        });
                         if (context.mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
@@ -250,13 +255,11 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                 void add(String k, String v) {
                   if (v.isNotEmpty) fields[k] = v;
                 }
-                add('Full Name', directive.fullName);
-                add('Date of Birth', directive.dateOfBirth);
-                add('Address', directive.address);
-                add('City', directive.city);
+                // PII fields are intentionally excluded from AI context
+                // to prevent sending personal data to external APIs.
+                // Excluded: Full Name, Date of Birth, Address, City,
+                // ZIP, Phone.
                 add('State', directive.state);
-                add('ZIP', directive.zip);
-                add('Phone', directive.phone);
                 add('Effective Condition',
                     directive.effectiveCondition);
 

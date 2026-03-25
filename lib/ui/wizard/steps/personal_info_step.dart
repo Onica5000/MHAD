@@ -194,6 +194,7 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
               decoration: const InputDecoration(
                 labelText: 'Full legal name *',
                 border: OutlineInputBorder(),
+                helperText: 'Use your full legal name as it appears on official ID',
               ),
               autofillHints: const [],
               textCapitalization: TextCapitalization.words,
@@ -208,6 +209,7 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
                 labelText: 'Date of birth (MM/DD/YYYY) *',
                 border: const OutlineInputBorder(),
                 hintText: 'MM/DD/YYYY',
+                helperText: 'Used to verify your identity on the directive',
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.calendar_month),
                   tooltip: 'Pick date',
@@ -225,6 +227,7 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
               decoration: const InputDecoration(
                 labelText: 'Street address',
                 border: OutlineInputBorder(),
+                helperText: 'Your current residential address',
               ),
               autofillHints: const [],
               textCapitalization: TextCapitalization.words,

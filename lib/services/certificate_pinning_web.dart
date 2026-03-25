@@ -7,6 +7,9 @@ http.Client createPinnedClient() => http.Client();
 
 /// Checks if a host is in the allowlist.
 bool isAllowedHost(String host) {
-  const allowedHosts = {'generativelanguage.googleapis.com'};
+  const allowedHosts = {
+    'generativelanguage.googleapis.com',
+    'clinicaltables.nlm.nih.gov',
+  };
   return allowedHosts.contains(host);
 }

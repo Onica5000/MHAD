@@ -254,12 +254,55 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
             style: Theme.of(context).textTheme.titleSmall?.copyWith(
                 fontWeight: FontWeight.w600)),
         const SizedBox(height: 4),
-        Text(
-          'Two adult witnesses must be present when you sign. '
-          'Witnesses cannot be your agent, healthcare provider, '
-          'or facility employee (unless a relative).',
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: Theme.of(context).colorScheme.onSurfaceVariant),
+        Card(
+          color: Theme.of(context).colorScheme.tertiaryContainer,
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(Icons.gavel, size: 18,
+                        color: Theme.of(context).colorScheme.onTertiaryContainer),
+                    const SizedBox(width: 8),
+                    Text('Witness Eligibility (PA Act 194 §5822)',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 13,
+                            color: Theme.of(context).colorScheme.onTertiaryContainer)),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Each witness must meet ALL of these requirements:',
+                  style: TextStyle(fontSize: 12,
+                      color: Theme.of(context).colorScheme.onTertiaryContainer,
+                      fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(height: 4),
+                ...[
+                  'Is 18 years of age or older',
+                  'Is NOT your designated agent or alternate agent',
+                  'Is NOT your healthcare provider or their employee',
+                  'Is NOT an employee of the facility where you receive treatment',
+                  'Exception: relatives by blood, marriage, or adoption may serve even if otherwise excluded',
+                ].map((rule) => Padding(
+                  padding: const EdgeInsets.only(left: 8, top: 3),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('\u2022 ', style: TextStyle(fontSize: 12,
+                          color: Theme.of(context).colorScheme.onTertiaryContainer)),
+                      Expanded(child: Text(rule,
+                          style: TextStyle(fontSize: 12, height: 1.3,
+                              color: Theme.of(context).colorScheme.onTertiaryContainer))),
+                    ],
+                  ),
+                )),
+              ],
+            ),
+          ),
         ),
         const SizedBox(height: 8),
         const WitnessReminderButton(),

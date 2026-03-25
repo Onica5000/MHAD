@@ -70,6 +70,8 @@ class DraftRecoveryService {
     'guardianFullName',
     'guardianAddress',
     'guardianPhone',
+    'preferredDoctorName',
+    'preferredDoctorContact',
   };
 
   /// Save a draft of non-PII form data.

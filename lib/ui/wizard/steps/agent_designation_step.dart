@@ -137,6 +137,37 @@ class _AgentDesignationStepState
               'this directive is in effect.',
             ),
             const SizedBox(height: 12),
+            Card(
+              color: Theme.of(context).colorScheme.secondaryContainer,
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Icon(
+                      Icons.info_outline,
+                      size: 20,
+                      color: Theme.of(context).colorScheme.onSecondaryContainer,
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        'An agent (healthcare proxy) is someone you choose to make '
+                        'mental health care decisions on your behalf when you cannot.',
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSecondaryContainer,
+                          height: 1.4,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
             ContactPickerButton(
               onContactPicked: (c) => setState(() {
                 _nameCtrl.text = c.fullName;

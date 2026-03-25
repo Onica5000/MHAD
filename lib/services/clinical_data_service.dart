@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
+import 'package:mhad/services/certificate_pinning_service.dart';
 
 /// Wraps the NIH Clinical Table Search Service for both RxTerms (medications)
 /// and ICD-10-CM (diagnoses). All lookups are free, no API key needed, and
@@ -16,7 +16,7 @@ class ClinicalDataService {
   static const _icdBase =
       'https://clinicaltables.nlm.nih.gov/api/icd10cm/v3/search';
 
-  static final _client = http.Client();
+  static final _client = CertificatePinningService.createPinnedClient();
 
   // ── Cache (12h TTL per NLM recommendation) ──────────────────────────
   static final _cache = <String, _CacheEntry>{};

@@ -132,6 +132,40 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
                 'Your treatment team will consider these preferences, but may not always be able to honor them.',
             stepId: 'medications',
           ),
+          const SizedBox(height: 8),
+          Card(
+            color: Theme.of(context).colorScheme.secondaryContainer,
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Medication categories',
+                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSecondaryContainer,
+                        ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    '\u2022 Never give (Exceptions): Medications you refuse under any circumstances\n'
+                    '\u2022 With limitations: Medications allowed but with restrictions (e.g., low dose only, only during acute crisis)\n'
+                    '\u2022 Preferred: Medications that have worked well for you',
+                    style: TextStyle(
+                      fontSize: 13,
+                      height: 1.5,
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onSecondaryContainer,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
           if (_hasAgentSections) ...[
             CheckboxListTile(
               value: _agentDecidesMeds,

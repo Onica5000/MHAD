@@ -114,7 +114,7 @@ class GeminiRateTracker extends ChangeNotifier {
 
   // ── Pre-flight check ─────────────────────────────────────────────────
 
-  bool get canSend => remainingRpm > 0 && remainingRpd > 0;
+  bool get canSend => remainingRpm > 0 && remainingRpd > 0 && remainingTpm > 0;
 
   /// Returns a user-facing reason if the request should be blocked,
   /// or null if it's safe to send.
@@ -127,6 +127,10 @@ class GeminiRateTracker extends ChangeNotifier {
     if (remainingRpm <= 0) {
       return 'Too many requests this minute (limit: $maxRpm/min). '
           'Please wait ${secondsUntilRpmSlot} seconds.';
+    }
+    if (remainingTpm <= 0) {
+      return 'Token limit reached this minute (${(maxTpm / 1000).round()}K/min). '
+          'Please wait a moment before sending another request.';
     }
     return null;
   }
