@@ -206,39 +206,29 @@ List<pw.Page> buildPoaPages({
           pw.SizedBox(height: 4),
           pw.Text(
             'In the event that I require commitment to a psychiatric treatment facility, '
-            'I would prefer to be admitted to the following facility:',
+            'I would prefer to be admitted to the following facilities:',
             style: bodyStyle(),
           ),
           pw.SizedBox(height: 2),
-          if (prefs != null && prefs.preferredFacilityName.isNotEmpty) ...[
-            dataLine('Name of facility', facilityName(prefs.preferredFacilityName)),
-            if (facilityLocation(prefs.preferredFacilityName).isNotEmpty)
-              dataLine('Address', facilityLocation(prefs.preferredFacilityName))
-            else
-              blankLine('Address'),
-          ] else ...[
+          if (prefs != null && prefs.preferredFacilityName.isNotEmpty)
+            facilityList(prefs.preferredFacilityName)
+          else ...[
             blankLine('Name of facility'),
             blankLine('Address'),
           ],
-          blankLine('City, State, Zip Code'),
           pw.SizedBox(height: 4),
           pw.Text(
             'In the event that I require commitment to a psychiatric treatment facility, '
-            'I do not wish to be committed to the following facility:',
+            'I do not wish to be committed to the following facilities:',
             style: bodyStyle(),
           ),
           pw.SizedBox(height: 2),
-          if (prefs != null && prefs.avoidFacilityName.isNotEmpty) ...[
-            dataLine('Name of facility', facilityName(prefs.avoidFacilityName)),
-            if (facilityLocation(prefs.avoidFacilityName).isNotEmpty)
-              dataLine('Address', facilityLocation(prefs.avoidFacilityName))
-            else
-              blankLine('Address'),
-          ] else ...[
+          if (prefs != null && prefs.avoidFacilityName.isNotEmpty)
+            facilityList(prefs.avoidFacilityName)
+          else ...[
             blankLine('Name of facility'),
             blankLine('Address'),
           ],
-          blankLine('City, State, Zip Code'),
           pw.Text(
             'I understand that my physician may have to place me in a facility that is not my preference.',
             style: smallBodyStyle(),

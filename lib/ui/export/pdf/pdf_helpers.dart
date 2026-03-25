@@ -549,3 +549,29 @@ String facilityLocation(String raw) {
   final parts = raw.split(' | ');
   return parts.length > 1 ? parts[1] : '';
 }
+
+/// Render a list of facilities from a newline-delimited "Name | Location" string.
+pw.Widget facilityList(String raw) {
+  final entries = raw
+      .split('\n')
+      .where((l) => l.trim().isNotEmpty)
+      .toList();
+  if (entries.isEmpty) return pw.SizedBox.shrink();
+  return pw.Column(
+    crossAxisAlignment: pw.CrossAxisAlignment.start,
+    children: entries.map((entry) {
+      final name = facilityName(entry);
+      final loc = facilityLocation(entry);
+      return pw.Padding(
+        padding: const pw.EdgeInsets.only(bottom: 3),
+        child: pw.Column(
+          crossAxisAlignment: pw.CrossAxisAlignment.start,
+          children: [
+            dataLine('Name', name),
+            if (loc.isNotEmpty) dataLine('Address', loc),
+          ],
+        ),
+      );
+    }).toList(),
+  );
+}
