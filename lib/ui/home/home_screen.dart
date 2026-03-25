@@ -45,7 +45,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
           ));
         }
-        if (mounted) checkAndOfferDraftRecovery(context);
+        if (mounted) checkAndOfferDraftRecovery(context, ref);
       });
     }
   }
