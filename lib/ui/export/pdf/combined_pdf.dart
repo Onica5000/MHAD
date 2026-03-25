@@ -1,9 +1,8 @@
 /// Combined Mental Health Declaration and Power of Attorney PDF layout.
-/// Layout based on the official PA MHAD form (Disabilities Law Project 2005).
+/// Matches the official PA MHAD form pages 25-32 (Disabilities Law Project 2005).
 library;
 
 import 'package:mhad/data/database/app_database.dart';
-import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'pdf_helpers.dart';
 
@@ -30,12 +29,14 @@ List<pw.Page> buildCombinedPages({
   final preferred =
       medications.where((m) => m.entryType == 'preferred').toList();
 
-  // ---------------------------------------------------------------------------
+  final parsed = additional != null ? parseOtherField(additional.other) : const ParsedOtherContent();
+
+  // -------------------------------------------------------------------------
   // Pages
-  // ---------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
   return [
-    // ---- Page 1: Title + Part I + Part II sections 1–2 --------------------
+    // ---- Page 1: Title + Part I (Introduction) ----------------------------
     pw.Page(
       pageFormat: kPageFormat,
       margin: pageMargins,
@@ -61,10 +62,11 @@ List<pw.Page> buildCombinedPages({
             ),
           ),
 
-          sectionHeader('PART I. INTRODUCTION'),
+          sectionHeader('Part I. Introduction'),
           pw.SizedBox(height: 4),
           pw.Text(
-            'I, ${directive.fullName}, having capacity to make mental health decisions, '
+            'I, ${directive.fullName.isNotEmpty ? directive.fullName : '___________________________________________'}, '
+            'having capacity to make mental health decisions, '
             'willfully and voluntarily make this Declaration and Power of Attorney '
             'regarding my mental health care. I understand that mental health care includes '
             'any care, treatment, service or procedure to maintain, diagnose, treat or '
@@ -90,20 +92,21 @@ List<pw.Page> buildCombinedPages({
           ),
           pw.SizedBox(height: 4),
           checkRow(
-            'When I am deemed incapable of making mental health care decisions.',
-            checked: directive.effectiveCondition.isNotEmpty
-                ? directive.effectiveCondition.toLowerCase().contains('incapab') ||
-                    directive.effectiveCondition.toLowerCase().contains('incapac') ||
-                    directive.effectiveCondition.toLowerCase().contains('deemed')
-                : true,
+            'When I am deemed incapable of making mental health care decisions. I would '
+            'prefer the following doctor(s) to evaluate me for my ability to make mental '
+            'health decisions:',
+            checked: directive.effectiveCondition.isEmpty,
           ),
-          dataLine('Preferred doctor(s) for evaluation', ''),
-          pw.SizedBox(height: 2),
-          pw.Text(
-            'Effective condition: ${directive.effectiveCondition}',
-            style: bodyStyle(),
-          ),
+          dataLine('Name of Doctor', directive.preferredDoctorName),
+          dataLine('Address/Phone Number', directive.preferredDoctorContact),
           pw.SizedBox(height: 4),
+          checkRow(
+            'When the following condition is met:',
+            checked: directive.effectiveCondition.isNotEmpty,
+          ),
+          if (directive.effectiveCondition.isNotEmpty)
+            dataLine('Condition', directive.effectiveCondition),
+          pw.SizedBox(height: 6),
 
           partHeader('B. Revocation and Amendments'),
           pw.Text(
@@ -115,12 +118,23 @@ List<pw.Page> buildCombinedPages({
             'my revocation, of the intent to revoke. If I choose to revoke a particular '
             'instruction contained in this Power of Attorney in the manner specified, I '
             'understand that the other instructions contained in this Power of Attorney '
-            'will remain effective until: (1) I revoke this Power of Attorney in its '
-            'entirety; (2) I make a new combined Mental Health Care Declaration and Power '
-            'of Attorney; or (3) Two years from the date this document was executed.',
+            'will remain effective until:\n'
+            '(1) I revoke this Power of Attorney in its entirety;\n'
+            '(2) I make a new combined Mental Health Care Declaration and Power of Attorney; or\n'
+            '(3) Two years from the date this document was executed.',
             style: bodyStyle(),
           ),
           pw.SizedBox(height: 4),
+          pw.Text(
+            'I may make changes to this Advance Directive at any time, as long as I have '
+            'capacity to make mental health care decisions. Any changes will be made in '
+            'writing and be signed and witnessed by two individuals in the same way as the '
+            'original document. Any changes will be effective as soon the changes are '
+            'communicated to my attending physician or other mental health care provider, '
+            'either by me, my agent, or a witness to my amendments.',
+            style: bodyStyle(),
+          ),
+          pw.SizedBox(height: 6),
 
           partHeader('C. Termination'),
           pw.Text(
@@ -135,7 +149,7 @@ List<pw.Page> buildCombinedPages({
       ),
     ),
 
-    // ---- Page 2: Part II — Treatment Preferences --------------------------
+    // ---- Page 2: Part II — Treatment Preferences (Facility + Medications) --
     pw.Page(
       pageFormat: kPageFormat,
       margin: pageMargins,
@@ -143,102 +157,94 @@ List<pw.Page> buildCombinedPages({
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: [
           pageHeader(formTitle),
-          sectionHeader('PART II. MENTAL HEALTH DECLARATION — A. Treatment Preferences'),
-          pw.SizedBox(height: 6),
+          sectionHeader('Part II. Mental Health Declaration'),
+          pw.SizedBox(height: 4),
+          partHeader('A. Treatment preferences'),
+          pw.SizedBox(height: 4),
 
-          // Treatment facility
-          partHeader('1. Choice of Treatment Facility'),
+          // 1. Treatment facility
+          pw.Text('1. Choice of treatment facility', style: boldStyle(fontSize: 9)),
+          pw.SizedBox(height: 4),
+          pw.Text(
+            'In the event that I require commitment to a psychiatric treatment facility, '
+            'I would prefer to be admitted to the following facility:',
+            style: bodyStyle(),
+          ),
+          pw.SizedBox(height: 2),
           if (prefs != null && prefs.preferredFacilityName.isNotEmpty) ...[
-            checkRow(
-              'In the event that I require commitment to a psychiatric treatment facility, '
-              'I would prefer to be admitted to the following facility:',
-              checked: true,
-            ),
-            dataLine('Name of facility', _facilityName(prefs.preferredFacilityName)),
-            if (_facilityLocation(prefs.preferredFacilityName).isNotEmpty)
-              dataLine('Location', _facilityLocation(prefs.preferredFacilityName)),
-          ] else
-            checkRow(
-              'In the event that I require commitment to a psychiatric treatment facility, '
-              'I would prefer to be admitted to the following facility:',
-            ),
+            dataLine('Name of facility', facilityName(prefs.preferredFacilityName)),
+            if (facilityLocation(prefs.preferredFacilityName).isNotEmpty)
+              dataLine('Address', facilityLocation(prefs.preferredFacilityName))
+            else
+              blankLine('Address'),
+          ] else ...[
+            blankLine('Name of facility'),
+            blankLine('Address'),
+          ],
+          blankLine('City, State, Zip Code'),
+          pw.SizedBox(height: 4),
+          pw.Text(
+            'In the event that I require commitment to a psychiatric treatment facility, '
+            'I do not wish to be committed to the following facility:',
+            style: bodyStyle(),
+          ),
+          pw.SizedBox(height: 2),
           if (prefs != null && prefs.avoidFacilityName.isNotEmpty) ...[
-            checkRow(
-              'In the event that I require commitment to a psychiatric treatment facility, '
-              'I do not wish to be committed to the following facility:',
-              checked: true,
-            ),
-            dataLine('Name of facility', _facilityName(prefs.avoidFacilityName)),
-            if (_facilityLocation(prefs.avoidFacilityName).isNotEmpty)
-              dataLine('Location', _facilityLocation(prefs.avoidFacilityName)),
-          ] else
-            checkRow(
-              'In the event that I require commitment to a psychiatric treatment facility, '
-              'I do not wish to be committed to the following facility:',
-            ),
+            dataLine('Name of facility', facilityName(prefs.avoidFacilityName)),
+            if (facilityLocation(prefs.avoidFacilityName).isNotEmpty)
+              dataLine('Address', facilityLocation(prefs.avoidFacilityName))
+            else
+              blankLine('Address'),
+          ] else ...[
+            blankLine('Name of facility'),
+            blankLine('Address'),
+          ],
+          blankLine('City, State, Zip Code'),
           pw.Text(
             'I understand that my physician may have to place me in a facility that is not my preference.',
             style: smallBodyStyle(),
           ),
           pw.SizedBox(height: 8),
 
-          // Medications
-          partHeader('2. Preferences Regarding Medications for Psychiatric Treatment'),
+          // 2. Medications
+          pw.Text('2. Preferences regarding medications for psychiatric treatment',
+              style: boldStyle(fontSize: 9)),
+          pw.SizedBox(height: 4),
           if (prefs != null) ...[
             checkRow(
               'I consent to the medications that my treating physician recommends.',
               checked: prefs.medicationConsent == 'yes',
             ),
-            if (exceptions.isNotEmpty || limitations.isNotEmpty || preferred.isNotEmpty) ...[
-              checkRow(
-                'I consent to the medications that my treating physician recommends '
-                'with the following exceptions, limitations, and/or preferences:',
-                checked: exceptions.isNotEmpty ||
-                    limitations.isNotEmpty ||
-                    preferred.isNotEmpty,
+            checkRow(
+              'I consent to the medications that my treating physician recommends with '
+              'the following exceptions, limitations, and/or preferences:',
+              checked: exceptions.isNotEmpty || limitations.isNotEmpty || preferred.isNotEmpty,
+            ),
+            if (exceptions.isNotEmpty)
+              medTable(
+                'Exceptions:',
+                exceptions.map((m) => {'medication': m.medicationName, 'reason': m.reason}).toList(),
+                false,
               ),
-              pw.SizedBox(height: 4),
-              if (exceptions.isNotEmpty)
-                medTable(
-                  'Exceptions (medications I do NOT consent to):',
-                  exceptions
-                      .map((m) => {
-                            'medication': m.medicationName,
-                            'reason': m.reason,
-                          })
-                      .toList(),
-                  false,
-                ),
-              if (limitations.isNotEmpty)
-                medTable(
-                  'I consent to the following medications with these limitations:',
-                  limitations
-                      .map((m) => {
-                            'medication': m.medicationName,
-                            'limitation': m.reason,
-                            'reason': '',
-                          })
-                      .toList(),
-                  true,
-                ),
-              if (preferred.isNotEmpty)
-                medTable(
-                  'I prefer the following medications:',
-                  preferred
-                      .map((m) => {
-                            'medication': m.medicationName,
-                            'reason': m.reason,
-                          })
-                      .toList(),
-                  false,
-                ),
+            if (limitations.isNotEmpty)
+              medTable(
+                'I consent to the following medications with these limitations:',
+                limitations.map((m) => {'medication': m.medicationName, 'limitation': m.reason, 'reason': ''}).toList(),
+                true,
+              ),
+            if (preferred.isNotEmpty)
+              medTable(
+                'I prefer the following medications:',
+                preferred.map((m) => {'medication': m.medicationName, 'reason': m.reason}).toList(),
+                false,
+              ),
+            if (exceptions.isNotEmpty || limitations.isNotEmpty || preferred.isNotEmpty)
               pw.Text(
                 'The exception, limitation, or preference, applies to generic, brand name and '
                 'trade name equivalents unless otherwise stated. I understand that dosage '
                 'instructions are not binding on my physician.',
                 style: smallBodyStyle(),
               ),
-            ],
             checkRow(
               'I have designated an agent under the Power of Attorney portion of this '
               'document to make decisions related to medication.',
@@ -263,70 +269,83 @@ List<pw.Page> buildCombinedPages({
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: [
           pageHeader(formTitle),
-          sectionHeader('PART II. MENTAL HEALTH DECLARATION — A. Treatment Preferences (continued)'),
-          pw.SizedBox(height: 6),
 
-          // ECT
-          partHeader('3. Preferences for Electroconvulsive Therapy (ECT)'),
+          // 3. ECT
+          pw.Text('3. Preferences for electroconvulsive therapy (ECT)',
+              style: boldStyle(fontSize: 9)),
+          pw.SizedBox(height: 4),
           if (prefs != null) ...[
             checkRow(
               'I consent to the administration of electroconvulsive therapy.',
-              checked: prefs.ectConsent == 'yes',
+              checked: isConsentYes(prefs.ectConsent),
             ),
             checkRow(
               'I have designated an agent under the Power of Attorney portion of this '
               'document to make decisions related to electroconvulsive therapy.',
-              checked: prefs.ectConsent == 'agentDecides',
+              checked: isConsentAgent(prefs.ectConsent),
             ),
             checkRow(
               'I do not consent to the administration of electroconvulsive therapy.',
-              checked: prefs.ectConsent == 'no',
+              checked: isConsentNo(prefs.ectConsent),
             ),
+            if (isConsentConditional(prefs.ectConsent))
+              dataBlock('Conditions:', consentConditionText(prefs.ectConsent)),
           ],
           pw.SizedBox(height: 6),
 
-          // Experimental
-          partHeader('4. Preferences for Experimental Studies'),
+          // 4. Experimental studies
+          pw.Text('4. Preferences for experimental studies',
+              style: boldStyle(fontSize: 9)),
+          pw.SizedBox(height: 4),
           if (prefs != null) ...[
             checkRow(
               'I consent to participation in experimental studies if my treating physician '
               'believes that the potential benefits to me outweigh the possible risks to me.',
-              checked: prefs.experimentalConsent == 'yes',
+              checked: isConsentYes(prefs.experimentalConsent),
             ),
             checkRow(
               'I have designated an agent under the Power of Attorney portion of this '
               'document to make decisions related to experimental studies.',
-              checked: prefs.experimentalConsent == 'agentDecides',
+              checked: isConsentAgent(prefs.experimentalConsent),
             ),
             checkRow(
               'I do not consent to participation in experimental studies.',
-              checked: prefs.experimentalConsent == 'no',
+              checked: isConsentNo(prefs.experimentalConsent),
             ),
+            if (isConsentConditional(prefs.experimentalConsent))
+              dataBlock('Conditions:', consentConditionText(prefs.experimentalConsent)),
           ],
           pw.SizedBox(height: 6),
 
-          // Drug trials
-          partHeader('5. Preferences for Drug Trials'),
+          // 5. Drug trials
+          pw.Text('5. Preferences for drug trials',
+              style: boldStyle(fontSize: 9)),
+          pw.SizedBox(height: 4),
           if (prefs != null) ...[
             checkRow(
               'I consent to participation in drug trials if my treating physician believes '
               'that the potential benefits to me outweigh the possible risks to me.',
-              checked: prefs.drugTrialConsent == 'yes',
+              checked: isConsentYes(prefs.drugTrialConsent),
             ),
             checkRow(
               'I have designated an agent under the Power of Attorney portion of this '
               'document to make decisions related to drug trials.',
-              checked: prefs.drugTrialConsent == 'agentDecides',
+              checked: isConsentAgent(prefs.drugTrialConsent),
             ),
             checkRow(
               'I do not consent to participation in any drug trials.',
-              checked: prefs.drugTrialConsent == 'no',
+              checked: isConsentNo(prefs.drugTrialConsent),
             ),
+            if (isConsentConditional(prefs.drugTrialConsent))
+              dataBlock('Conditions:', consentConditionText(prefs.drugTrialConsent)),
           ],
           pw.SizedBox(height: 6),
 
-          // Additional instructions
-          sectionHeader('6. Additional Instructions or Information'),
+          // 6. Additional instructions
+          pw.Text('6. Additional instructions or information.',
+              style: boldStyle(fontSize: 9)),
+          pw.Text('Examples of other instructions or information that may be included:',
+              style: smallBodyStyle()),
           pw.SizedBox(height: 4),
           if (additional != null) ...[
             if (additional.activities.isNotEmpty)
@@ -345,13 +364,19 @@ List<pw.Page> buildCombinedPages({
             if (additional.familyNotification.isNotEmpty)
               dataBlock('Family notification:', additional.familyNotification),
             if (additional.recordsDisclosure.isNotEmpty)
-              dataBlock(
-                  'Limitations on the release or disclosure of mental health records:',
+              dataBlock('Limitations on the release or disclosure of mental health records:',
                   additional.recordsDisclosure),
             if (additional.petCustody.isNotEmpty)
               dataBlock('Temporary care and custody of pets:', additional.petCustody),
-            if (additional.other.isNotEmpty)
-              dataBlock('Other matters of importance:', additional.other),
+            // Tagged content from 'other' field
+            if (parsed.deEscalation.isNotEmpty)
+              dataBlock('De-escalation techniques:', parsed.deEscalation),
+            if (parsed.triggers.isNotEmpty)
+              dataBlock('Crisis triggers:', parsed.triggers),
+            if (parsed.reproductiveHealth.isNotEmpty)
+              dataBlock('Reproductive health preferences:', parsed.reproductiveHealth),
+            if (parsed.otherText.isNotEmpty)
+              dataBlock('Other matters of importance:', parsed.otherText),
           ],
           pw.Spacer(),
           pageFooter('Page 3'),
@@ -359,7 +384,7 @@ List<pw.Page> buildCombinedPages({
       ),
     ),
 
-    // ---- Page 4: Part III — Power of Attorney (Agent) ----------------------
+    // ---- Page 4: Part III — Power of Attorney (Agent + Alt Agent) ----------
     pw.Page(
       pageFormat: kPageFormat,
       margin: pageMargins,
@@ -367,10 +392,11 @@ List<pw.Page> buildCombinedPages({
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: [
           pageHeader(formTitle),
-          sectionHeader('PART III. MENTAL HEALTH CARE POWER OF ATTORNEY'),
-          pw.SizedBox(height: 6),
+          sectionHeader('Part III. Mental Health Care Power of Attorney'),
+          pw.SizedBox(height: 4),
           pw.Text(
-            'I, ${directive.fullName}, having the capacity to make mental health decisions, '
+            'I, ${directive.fullName.isNotEmpty ? directive.fullName : '___________________________________________'}, '
+            'having the capacity to make mental health decisions, '
             'authorize my designated health care agent to make certain decisions on my behalf '
             'regarding my mental health care. If I have not expressed a choice in this document '
             'or in the accompanying Declaration, I authorize my agent to make the decision that '
@@ -379,7 +405,8 @@ List<pw.Page> buildCombinedPages({
           ),
           pw.SizedBox(height: 8),
 
-          partHeader('A. Designation of Agent'),
+          // A. Designation of agent
+          partHeader('A. Designation of agent'),
           pw.Text(
             'I hereby designate and appoint the following person as my agent to make mental '
             'health care decisions for me as authorized in this document. This authorization '
@@ -388,67 +415,48 @@ List<pw.Page> buildCombinedPages({
             style: bodyStyle(),
           ),
           pw.SizedBox(height: 4),
-          if (primaryAgent != null) ...[
-            dataLine('Name of designated person', primaryAgent.fullName),
-            dataLine('Address', primaryAgent.address),
-            twoCol(
-              blankLine('City, State, Zip Code'),
-              dataLine(
-                'Phone Number',
-                [primaryAgent.homePhone, primaryAgent.workPhone, primaryAgent.cellPhone]
-                    .firstWhere((p) => p.isNotEmpty, orElse: () => ''),
-              ),
-            ),
-          ] else ...[
-            blankLine('Name of designated person'),
-            blankLine('Address'),
-            twoCol(blankLine('City, State, Zip Code'), blankLine('Phone Number')),
-          ],
+          dataLine('Name of designated person', primaryAgent?.fullName ?? ''),
+          dataLine('Address', primaryAgent?.address ?? ''),
+          twoCol(
+            blankLine('City, State, Zip Code'),
+            dataLine('Phone Number',
+                _agentPhone(primaryAgent)),
+          ),
           pw.SizedBox(height: 4),
+          pw.Text("Agent's acceptance:", style: boldStyle(fontSize: 9)),
           pw.Text(
-            'Agent\'s acceptance: I hereby accept designation as mental health care agent '
-            'for ${directive.fullName}.',
+            'I hereby accept designation as mental health care agent for '
+            '${directive.fullName.isNotEmpty ? directive.fullName : '(insert name of declarant)'}.',
             style: bodyStyle(),
           ),
-          signatureBlock(
-            'Agent\'s Signature',
-            name: primaryAgent?.fullName ?? '',
-          ),
+          signatureBlock("Agent's Signature", name: primaryAgent?.fullName ?? ''),
 
           pw.SizedBox(height: 8),
-          partHeader('B. Designation of Alternative Agent'),
+
+          // B. Designation of alternative agent
+          partHeader('B. Designation of alternative agent'),
           pw.Text(
             'In the event that my first agent is unavailable or unable to serve as my '
             'mental health care agent, I hereby designate and appoint the following '
-            'individual as my alternative mental health care agent:',
+            'individual as my alternative mental health care agent to make mental health '
+            'care decisions for me as authorized in this document:',
             style: bodyStyle(),
           ),
           pw.SizedBox(height: 4),
-          if (altAgent != null) ...[
-            dataLine('Name of designated person', altAgent.fullName),
-            dataLine('Address', altAgent.address),
-            twoCol(
-              blankLine('City, State, Zip Code'),
-              dataLine(
-                'Phone Number',
-                [altAgent.homePhone, altAgent.workPhone, altAgent.cellPhone]
-                    .firstWhere((p) => p.isNotEmpty, orElse: () => ''),
-              ),
-            ),
-          ] else ...[
-            blankLine('Name of designated person'),
-            blankLine('Address'),
-            twoCol(blankLine('City, State, Zip Code'), blankLine('Phone Number')),
-          ],
+          dataLine('Name of designated person', altAgent?.fullName ?? ''),
+          dataLine('Address', altAgent?.address ?? ''),
+          twoCol(
+            blankLine('City, State, Zip Code'),
+            dataLine('Phone Number', _agentPhone(altAgent)),
+          ),
+          pw.SizedBox(height: 4),
+          pw.Text("Alternative Agent's acceptance:", style: boldStyle(fontSize: 9)),
           pw.Text(
-            'Alternative Agent\'s acceptance: I hereby accept designation as alternative '
-            'mental health care agent for ${directive.fullName}.',
+            'I hereby accept designation as alternative mental health care agent for '
+            '${directive.fullName.isNotEmpty ? directive.fullName : '(insert name of declarant)'}.',
             style: bodyStyle(),
           ),
-          signatureBlock(
-            'Alternate Agent\'s Signature',
-            name: altAgent?.fullName ?? '',
-          ),
+          signatureBlock("Alternate Agent's Signature", name: altAgent?.fullName ?? ''),
 
           pw.Spacer(),
           pageFooter('Page 4'),
@@ -456,7 +464,7 @@ List<pw.Page> buildCombinedPages({
       ),
     ),
 
-    // ---- Page 5: Part III C — Authority + Part IV + Part V (Execution) ----
+    // ---- Page 5: Part III C (Authority) + Part IV (Guardian) ---------------
     pw.Page(
       pageFormat: kPageFormat,
       margin: pageMargins,
@@ -464,19 +472,26 @@ List<pw.Page> buildCombinedPages({
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: [
           pageHeader(formTitle),
-          partHeader('C. Authority Granted to My Mental Health Care Agent'),
+          partHeader('C. Authority granted to my mental health care agent'),
           pw.Text(
             'I hereby grant to my agent full power and authority to make mental health '
             'care decisions for me consistent with the instructions and limitations set '
-            'forth in this document.',
+            'forth in this document. If I have not expressed a choice in this Power of '
+            'Attorney, or in the accompanying Declaration, I authorize my agent to make '
+            'the decision that my agent determines is the decision I would make if I '
+            'were competent to do so.',
             style: bodyStyle(),
           ),
-          pw.SizedBox(height: 4),
+          pw.SizedBox(height: 6),
           if (prefs != null) ...[
-            pw.Text('1. Medications:', style: boldStyle(fontSize: 8.5)),
+            // 1. Medications
+            pw.Text('1. Preferences regarding medications for psychiatric treatment.',
+                style: boldStyle(fontSize: 9)),
+            pw.SizedBox(height: 2),
             checkRow(
               'My agent is authorized to consent to the use of any medications after '
-              'consultation with my treating psychiatrist.',
+              'consultation with my treating psychiatrist and any other persons my agent '
+              'considers appropriate.',
               checked: prefs.agentCanConsentMedication,
             ),
             checkRow(
@@ -484,48 +499,74 @@ List<pw.Page> buildCombinedPages({
               checked: !prefs.agentCanConsentMedication,
             ),
             pw.SizedBox(height: 4),
-            pw.Text('2. Electroconvulsive Therapy (ECT):', style: boldStyle(fontSize: 8.5)),
+
+            // 2. ECT
+            pw.Text('2. Preferences regarding electroconvulsive therapy (ECT).',
+                style: boldStyle(fontSize: 9)),
+            pw.SizedBox(height: 2),
             checkRow(
-              'My agent is authorized to consent to the administration of electroconvulsive therapy.',
-              checked: prefs.ectConsent == 'agentDecides',
+              'My agent is authorized to consent to the administration of '
+              'electroconvulsive therapy.',
+              checked: isConsentAgent(prefs.ectConsent),
             ),
             checkRow(
-              'My agent is not authorized to consent to the administration of electroconvulsive therapy.',
-              checked: prefs.ectConsent != 'agentDecides',
-            ),
-            pw.SizedBox(height: 4),
-            pw.Text('3. Experimental Studies:', style: boldStyle(fontSize: 8.5)),
-            checkRow(
-              'My agent is authorized to consent to my participation in experimental studies.',
-              checked: prefs.experimentalConsent == 'agentDecides',
-            ),
-            checkRow(
-              'My agent is not authorized to consent to my participation in experimental studies.',
-              checked: prefs.experimentalConsent != 'agentDecides',
+              'My agent is not authorized to consent to the administration of '
+              'electroconvulsive therapy.',
+              checked: !isConsentAgent(prefs.ectConsent),
             ),
             pw.SizedBox(height: 4),
-            pw.Text('4. Drug Trials:', style: boldStyle(fontSize: 8.5)),
+
+            // 3. Experimental studies
+            pw.Text('3. Preferences for experimental studies.',
+                style: boldStyle(fontSize: 9)),
+            pw.SizedBox(height: 2),
             checkRow(
-              'My agent is authorized to consent to my participation in drug trials.',
-              checked: prefs.drugTrialConsent == 'agentDecides',
+              'My agent is authorized to consent to my participation in experimental '
+              'studies if, after consultation with my treating physician and any other '
+              'individuals my agent deems appropriate, my agent believes that the '
+              'potential benefits to me outweigh the possible risks to me.',
+              checked: isConsentAgent(prefs.experimentalConsent),
+            ),
+            checkRow(
+              'My agent is not authorized to consent to my participation in '
+              'experimental studies.',
+              checked: !isConsentAgent(prefs.experimentalConsent),
+            ),
+            pw.SizedBox(height: 4),
+
+            // 4. Drug trials
+            pw.Text('4. Preferences regarding drug trials.',
+                style: boldStyle(fontSize: 9)),
+            pw.SizedBox(height: 2),
+            checkRow(
+              'My agent is authorized to consent to my participation in drug trials '
+              'if, after consultation with my treating physician and any other '
+              'individuals my agent deems appropriate, my agent believes that the '
+              'potential benefits to me outweigh the possible risks to me.',
+              checked: isConsentAgent(prefs.drugTrialConsent),
             ),
             checkRow(
               'My agent is not authorized to consent to my participation in drug trials.',
-              checked: prefs.drugTrialConsent != 'agentDecides',
+              checked: !isConsentAgent(prefs.drugTrialConsent),
             ),
             if (prefs.agentAuthorityLimitations.isNotEmpty) ...[
               pw.SizedBox(height: 4),
-              dataBlock('Additional limitations on agent authority:', prefs.agentAuthorityLimitations),
+              dataBlock('Additional limitations on agent authority:',
+                  prefs.agentAuthorityLimitations),
             ],
           ],
           pw.SizedBox(height: 8),
-          sectionHeader('PART IV. NOMINATING A GUARDIAN'),
+
+          // Part IV — Guardian
+          sectionHeader('PART IV. Nominating a Guardian'),
           pw.SizedBox(height: 4),
+          partHeader('A. Preference as to a court-appointed guardian'),
           pw.Text(
             'I understand that I may nominate a guardian of my person for consideration by '
-            'the court if incapacity proceedings are commenced under 20 Pa.C.S. § 5511. '
+            'the court if incapacity proceedings are commenced under 20 Pa.C.S. \u00A7 5511. '
             'I understand that the court will appoint a guardian in accordance with my most '
-            'recent nomination except for good cause or disqualification.',
+            'recent nomination except for good cause or disqualification. In the event a '
+            'court decides to appoint a guardian, I desire the following person to be appointed:',
             style: bodyStyle(),
           ),
           pw.SizedBox(height: 4),
@@ -533,7 +574,7 @@ List<pw.Page> buildCombinedPages({
             dataLine('Name of Person', guardian.nomineeFullName),
             dataLine('Address', guardian.nomineeAddress),
             twoCol(
-              dataLine('Relationship', guardian.nomineeRelationship),
+              blankLine('City, State, Zip Code'),
               dataLine('Phone Number', guardian.nomineePhone),
             ),
           ] else ...[
@@ -541,12 +582,19 @@ List<pw.Page> buildCombinedPages({
             blankLine('Address'),
             twoCol(blankLine('City, State, Zip Code'), blankLine('Phone Number')),
           ],
+          pw.SizedBox(height: 4),
           checkRow(
             'The appointment of a guardian of my person will not give the guardian the '
             'power to revoke, suspend or terminate this Combined Mental Health Care '
             'Declaration and Power of Attorney.',
-            checked: true,
+            checked: guardian == null || !guardian.guardianCanRevoke,
           ),
+          checkRow(
+            'Upon appointment of a guardian, I authorize the guardian to revoke, suspend '
+            'or terminate this Combined Mental Health Care Declaration and Power of Attorney.',
+            checked: guardian != null && guardian.guardianCanRevoke,
+          ),
+
           pw.Spacer(),
           pageFooter('Page 5'),
         ],
@@ -560,19 +608,13 @@ List<pw.Page> buildCombinedPages({
       build: (ctx) {
         final w1 = witnesses.where((w) => w.witnessNumber == 1).firstOrNull;
         final w2 = witnesses.where((w) => w.witnessNumber == 2).firstOrNull;
-        final execDate = directive.executionDate != null
-            ? DateTime.fromMillisecondsSinceEpoch(directive.executionDate!)
-            : null;
-        final dateStr = execDate != null
-            ? '${execDate.day}th day of '
-                '${_monthName(execDate.month)}, ${execDate.year}'
-            : '_____ day of ______________, _______';
+        final dateStr = formatExecDate(directive.executionDate);
 
         return pw.Column(
           crossAxisAlignment: pw.CrossAxisAlignment.start,
           children: [
             pageHeader(formTitle),
-            sectionHeader('PART V. EXECUTION'),
+            sectionHeader('PART V. Execution'),
             pw.SizedBox(height: 6),
             pw.Text(
               'I am making this Combined Mental Health Care Declaration and Power of '
@@ -580,43 +622,33 @@ List<pw.Page> buildCombinedPages({
               style: bodyStyle(),
             ),
             pw.SizedBox(height: 8),
-            signatureBlock('Principal Signature', name: directive.fullName),
+            signatureBlock('My Signature', name: directive.fullName),
             dataLine('My Name', directive.fullName),
-            dataLine('Address', [directive.address, directive.address2, directive.city, directive.state]
-                .where((s) => s.isNotEmpty)
-                .join(', ')),
+            dataLine('Address',
+                [directive.address, directive.address2, directive.city, directive.state, directive.zip]
+                    .where((s) => s.isNotEmpty)
+                    .join(', ')),
             dataLine('Phone Number', directive.phone),
-            pw.SizedBox(height: 12),
-            pw.Text('Witnesses:', style: boldStyle()),
-            pw.Text(
-              'Your document must be signed and dated by you in the presence of two '
-              'witnesses. Each witness must be at least 18 years old. The witnesses may '
-              'not be your agent or a person signing on your behalf.',
-              style: smallBodyStyle(),
-            ),
-            pw.SizedBox(height: 8),
+            pw.SizedBox(height: 10),
+
+            // Witness signatures side by side
+            pw.Text('Witness Signatures:', style: boldStyle()),
+            pw.SizedBox(height: 4),
             twoCol(
-              pw.Column(
-                crossAxisAlignment: pw.CrossAxisAlignment.start,
-                children: [
-                  signatureBlock('Witness 1 Signature', name: w1?.fullName ?? ''),
-                  if (w1 != null) dataLine('Address', w1.address),
-                ],
-              ),
-              pw.Column(
-                crossAxisAlignment: pw.CrossAxisAlignment.start,
-                children: [
-                  signatureBlock('Witness 2 Signature', name: w2?.fullName ?? ''),
-                  if (w2 != null) dataLine('Address', w2.address),
-                ],
-              ),
+              signatureBlock('Witness Signature', name: ''),
+              signatureBlock('Witness Signature', name: ''),
             ),
+
+            // Witness 1 details
+            witnessDetailBlock('Witness 1', w1?.fullName, w1?.address),
+            // Witness 2 details
+            witnessDetailBlock('Witness 2', w2?.fullName, w2?.address),
+
+            // Signing on behalf
+            signOnBehalfBlock(
+                'Combined Mental Health Care Declaration and Power of Attorney'),
+
             pw.Spacer(),
-            pw.Text(
-              'Prepared using the PA MHAD app. This document is not a substitute for legal counsel.',
-              style: pw.TextStyle(fontSize: 8, color: PdfColor.fromInt(0xFF888888)),
-            ),
-            pw.SizedBox(height: 2),
             pw.Text(
               'Disabilities Law Project 2005. All Rights Reserved.',
               style: pw.TextStyle(fontSize: 7, color: kDarkGrey),
@@ -628,21 +660,9 @@ List<pw.Page> buildCombinedPages({
   ];
 }
 
-/// Split "Name | Location" format from treatment facility.
-String _facilityName(String raw) {
-  final parts = raw.split(' | ');
-  return parts.first;
-}
-
-String _facilityLocation(String raw) {
-  final parts = raw.split(' | ');
-  return parts.length > 1 ? parts[1] : '';
-}
-
-String _monthName(int month) {
-  const months = [
-    '', 'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
-  ];
-  return months[month];
+/// Get the first non-empty phone from an agent.
+String _agentPhone(Agent? agent) {
+  if (agent == null) return '';
+  return [agent.homePhone, agent.workPhone, agent.cellPhone]
+      .firstWhere((p) => p.isNotEmpty, orElse: () => '');
 }

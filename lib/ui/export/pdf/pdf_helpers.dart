@@ -141,6 +141,18 @@ pw.Widget dataBlock(String label, String value, {int lines = 3}) {
   );
 }
 
+/// Parse a consent value that may be 'yes', 'no', 'agentDecides', or
+/// 'conditional:...' and compare against a target.
+/// For 'conditional:...' values, [isConsentYes] returns true (user consented
+/// with conditions), [isConsentConditional] returns true, [isConsentNo] false.
+bool isConsentYes(String value) =>
+    value == 'yes' || value.startsWith('conditional:');
+bool isConsentNo(String value) => value == 'no';
+bool isConsentAgent(String value) => value == 'agentDecides';
+bool isConsentConditional(String value) => value.startsWith('conditional:');
+String consentConditionText(String value) =>
+    value.startsWith('conditional:') ? value.substring('conditional:'.length) : '';
+
 /// A checkbox row — checked or unchecked.
 pw.Widget checkRow(String text, {bool checked = false}) {
   return pw.Padding(
@@ -385,4 +397,132 @@ pw.Widget medTable(
       pw.SizedBox(height: 4),
     ],
   );
+}
+
+// ---------------------------------------------------------------------------
+// Tagged "other" field parsing
+// ---------------------------------------------------------------------------
+
+/// Content parsed from the AdditionalInstructions.other field which stores
+/// de-escalation, triggers, and reproductive health info with tagged prefixes.
+class ParsedOtherContent {
+  final String deEscalation;
+  final String triggers;
+  final String reproductiveHealth;
+  final String otherText;
+
+  const ParsedOtherContent({
+    this.deEscalation = '',
+    this.triggers = '',
+    this.reproductiveHealth = '',
+    this.otherText = '',
+  });
+}
+
+/// Parse [DE-ESCALATION], [TRIGGERS], [REPRODUCTIVE] tags from `other` field.
+ParsedOtherContent parseOtherField(String raw) {
+  if (raw.isEmpty) return const ParsedOtherContent();
+  const deescTag = '[DE-ESCALATION] ';
+  const trigTag = '[TRIGGERS] ';
+  const reproTag = '[REPRODUCTIVE] ';
+
+  String deesc = '';
+  String trig = '';
+  String repro = '';
+  final otherLines = <String>[];
+
+  for (final line in raw.split('\n')) {
+    if (line.startsWith(deescTag)) {
+      deesc = line.substring(deescTag.length);
+    } else if (line.startsWith(trigTag)) {
+      trig = line.substring(trigTag.length);
+    } else if (line.startsWith(reproTag)) {
+      repro = line.substring(reproTag.length);
+    } else {
+      otherLines.add(line);
+    }
+  }
+
+  return ParsedOtherContent(
+    deEscalation: deesc.trim(),
+    triggers: trig.trim(),
+    reproductiveHealth: repro.trim(),
+    otherText: otherLines.join('\n').trim(),
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Signing on behalf section (appears at end of each form)
+// ---------------------------------------------------------------------------
+
+/// "If the principal is unable to sign..." block per official form.
+pw.Widget signOnBehalfBlock(String formTypeDescription) {
+  return pw.Column(
+    crossAxisAlignment: pw.CrossAxisAlignment.start,
+    children: [
+      pw.SizedBox(height: 10),
+      pw.Text(
+        'If the principal making this $formTypeDescription is unable to sign '
+        'this document, another individual may sign on behalf of and at the '
+        'direction of the principal. An agent or a person signing on behalf '
+        'of the principal may not also be a witness.',
+        style: bodyStyle(),
+      ),
+      pw.SizedBox(height: 6),
+      blankLine('Signature of person signing on my behalf'),
+      blankLine('Name of Person'),
+      blankLine('Address'),
+      twoCol(blankLine('City, State, Zip Code'), blankLine('Phone Number')),
+    ],
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Witness block — full details per official form
+// ---------------------------------------------------------------------------
+
+/// Full witness detail block: Name, Address, City/State/Zip, Phone.
+pw.Widget witnessDetailBlock(String label, String? name, String? address) {
+  return pw.Column(
+    crossAxisAlignment: pw.CrossAxisAlignment.start,
+    children: [
+      dataLine('Name of Witness', name ?? ''),
+      dataLine('Address', address ?? ''),
+      blankLine('City, State, Zip Code'),
+      blankLine('Phone Number'),
+      pw.SizedBox(height: 6),
+    ],
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Month name helper
+// ---------------------------------------------------------------------------
+
+String monthName(int month) {
+  const months = [
+    '', 'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+  return months[month];
+}
+
+/// Format execution date string per official form.
+String formatExecDate(int? executionDateMs) {
+  if (executionDateMs == null) {
+    return '________ day of (month)_____________, (year)_______________';
+  }
+  final d = DateTime.fromMillisecondsSinceEpoch(executionDateMs);
+  return '${d.day} day of ${monthName(d.month)}, ${d.year}';
+}
+
+/// Split "Name | Location" format from treatment facility.
+String facilityName(String raw) {
+  final parts = raw.split(' | ');
+  return parts.first;
+}
+
+String facilityLocation(String raw) {
+  final parts = raw.split(' | ');
+  return parts.length > 1 ? parts[1] : '';
 }
