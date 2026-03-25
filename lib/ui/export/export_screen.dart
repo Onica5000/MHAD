@@ -45,6 +45,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
   GuardianNomination? _guardian;
   List<MedicationEntry> _medications = [];
   List<WitnessesData> _witnesses = [];
+  List<DiagnosisEntry> _diagnoses = [];
   bool _loading = true;
 
   @override
@@ -74,6 +75,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
     final guardian = await repo.getGuardianNomination(widget.directiveId);
     final medications = await repo.watchMedications(widget.directiveId).first;
     final witnesses = await repo.getWitnesses(widget.directiveId);
+    final diagnoses = await repo.getDiagnoses(widget.directiveId);
 
     if (mounted) {
       setState(() {
@@ -84,6 +86,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         _guardian = guardian;
         _medications = medications;
         _witnesses = witnesses;
+        _diagnoses = diagnoses;
         _loading = false;
 
         // Pre-select the form type the user filled in
@@ -177,6 +180,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         guardian: guardian,
         medications: medications,
         witnesses: witnesses,
+        diagnoses: _diagnoses,
       ));
 
       if (!mounted) return;
@@ -328,6 +332,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         guardian: guardian,
         medications: medications,
         witnesses: witnesses,
+        diagnoses: _diagnoses,
       ));
 
       if (!mounted) return;

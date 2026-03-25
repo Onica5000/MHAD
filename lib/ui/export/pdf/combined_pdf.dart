@@ -14,6 +14,7 @@ List<pw.Page> buildCombinedPages({
   required GuardianNomination? guardian,
   required List<MedicationEntry> medications,
   required List<WitnessesData> witnesses,
+  List<DiagnosisEntry> diagnoses = const [],
 }) {
   const formTitle = 'Combined Declaration & Power of Attorney';
 
@@ -82,7 +83,12 @@ List<pw.Page> buildCombinedPages({
             'my treating professionals.',
             style: bodyStyle(),
           ),
+          if (directive.dateOfBirth.isNotEmpty)
+            dataLine('Date of Birth', directive.dateOfBirth),
           pw.SizedBox(height: 6),
+
+          // Diagnoses (from wizard diagnoses step)
+          if (diagnoses.isNotEmpty) diagnosisList(diagnoses),
 
           partHeader('A. When this Combined Mental Health Declaration and Power of Attorney becomes effective'),
           pw.Text(
@@ -164,6 +170,19 @@ List<pw.Page> buildCombinedPages({
 
           // 1. Treatment facility
           pw.Text('1. Choice of treatment facility', style: boldStyle(fontSize: 9)),
+          pw.SizedBox(height: 4),
+          if (prefs != null) ...[
+            checkRow('I have a preference for a treatment facility.',
+                checked: prefs.treatmentFacilityPref == 'prefer' ||
+                    prefs.preferredFacilityName.isNotEmpty),
+            checkRow('I have a facility I wish to avoid.',
+                checked: prefs.treatmentFacilityPref == 'avoid' ||
+                    prefs.avoidFacilityName.isNotEmpty),
+            checkRow('I have no preference regarding treatment facility.',
+                checked: prefs.treatmentFacilityPref == 'noPreference' &&
+                    prefs.preferredFacilityName.isEmpty &&
+                    prefs.avoidFacilityName.isEmpty),
+          ],
           pw.SizedBox(height: 4),
           pw.Text(
             'In the event that I require commitment to a psychiatric treatment facility, '
@@ -416,6 +435,8 @@ List<pw.Page> buildCombinedPages({
           ),
           pw.SizedBox(height: 4),
           dataLine('Name of designated person', primaryAgent?.fullName ?? ''),
+          if (primaryAgent != null && primaryAgent.relationship.isNotEmpty)
+            dataLine('Relationship', primaryAgent.relationship),
           dataLine('Address', primaryAgent?.address ?? ''),
           twoCol(
             blankLine('City, State, Zip Code'),
@@ -444,6 +465,8 @@ List<pw.Page> buildCombinedPages({
           ),
           pw.SizedBox(height: 4),
           dataLine('Name of designated person', altAgent?.fullName ?? ''),
+          if (altAgent != null && altAgent.relationship.isNotEmpty)
+            dataLine('Relationship', altAgent.relationship),
           dataLine('Address', altAgent?.address ?? ''),
           twoCol(
             blankLine('City, State, Zip Code'),
@@ -484,6 +507,22 @@ List<pw.Page> buildCombinedPages({
           ),
           pw.SizedBox(height: 6),
           if (prefs != null) ...[
+            // Hospitalization
+            pw.Text('Preferences regarding hospitalization.',
+                style: boldStyle(fontSize: 9)),
+            pw.SizedBox(height: 2),
+            checkRow(
+              'My agent is authorized to consent to my voluntary admission to a '
+              'treatment facility for mental health care.',
+              checked: prefs.agentCanConsentHospitalization,
+            ),
+            checkRow(
+              'My agent is not authorized to consent to my voluntary admission to a '
+              'treatment facility for mental health care.',
+              checked: !prefs.agentCanConsentHospitalization,
+            ),
+            pw.SizedBox(height: 4),
+
             // 1. Medications
             pw.Text('1. Preferences regarding medications for psychiatric treatment.',
                 style: boldStyle(fontSize: 9)),
@@ -572,6 +611,8 @@ List<pw.Page> buildCombinedPages({
           pw.SizedBox(height: 4),
           if (guardian != null && guardian.nomineeFullName.isNotEmpty) ...[
             dataLine('Name of Person', guardian.nomineeFullName),
+            if (guardian.nomineeRelationship.isNotEmpty)
+              dataLine('Relationship', guardian.nomineeRelationship),
             dataLine('Address', guardian.nomineeAddress),
             twoCol(
               blankLine('City, State, Zip Code'),
@@ -622,6 +663,9 @@ List<pw.Page> buildCombinedPages({
               style: bodyStyle(),
             ),
             pw.SizedBox(height: 8),
+            if (directive.expirationDate != null)
+              dataLine('Expiration Date', formatExecDate(directive.expirationDate)),
+            pw.SizedBox(height: 8),
             signatureBlock('My Signature', name: directive.fullName),
             dataLine('My Name', directive.fullName),
             dataLine('Address',
@@ -640,9 +684,11 @@ List<pw.Page> buildCombinedPages({
             ),
 
             // Witness 1 details
-            witnessDetailBlock('Witness 1', w1?.fullName, w1?.address),
+            witnessDetailBlock('Witness 1', w1?.fullName, w1?.address,
+                signatureDate: w1?.signatureDate),
             // Witness 2 details
-            witnessDetailBlock('Witness 2', w2?.fullName, w2?.address),
+            witnessDetailBlock('Witness 2', w2?.fullName, w2?.address,
+                signatureDate: w2?.signatureDate),
 
             // Signing on behalf
             signOnBehalfBlock(

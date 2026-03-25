@@ -14,6 +14,7 @@ List<pw.Page> buildPoaPages({
   required GuardianNomination? guardian,
   required List<MedicationEntry> medications,
   required List<WitnessesData> witnesses,
+  List<DiagnosisEntry> diagnoses = const [],
 }) {
   const formTitle = 'Mental Health Power of Attorney';
 
@@ -73,7 +74,11 @@ List<pw.Page> buildPoaPages({
             'professionals.',
             style: bodyStyle(),
           ),
-          pw.SizedBox(height: 8),
+          if (directive.dateOfBirth.isNotEmpty)
+            dataLine('Date of Birth', directive.dateOfBirth),
+          pw.SizedBox(height: 6),
+
+          if (diagnoses.isNotEmpty) diagnosisList(diagnoses),
 
           // A. Designation of agent
           partHeader('A. Designation of agent'),
@@ -84,6 +89,8 @@ List<pw.Page> buildPoaPages({
           ),
           pw.SizedBox(height: 4),
           dataLine('Name of designated person', primaryAgent?.fullName ?? ''),
+          if (primaryAgent != null && primaryAgent.relationship.isNotEmpty)
+            dataLine('Relationship', primaryAgent.relationship),
           dataLine('Address', primaryAgent?.address ?? ''),
           twoCol(
             blankLine('City, State, Zip Code'),
@@ -110,6 +117,8 @@ List<pw.Page> buildPoaPages({
           ),
           pw.SizedBox(height: 4),
           dataLine('Name of designated person', altAgent?.fullName ?? ''),
+          if (altAgent != null && altAgent.relationship.isNotEmpty)
+            dataLine('Relationship', altAgent.relationship),
           dataLine('Address', altAgent?.address ?? ''),
           twoCol(
             blankLine('City, State, Zip Code'),
@@ -182,6 +191,19 @@ List<pw.Page> buildPoaPages({
           pw.Text('(a). Choice of treatment facility.',
               style: boldStyle(fontSize: 9)),
           pw.SizedBox(height: 4),
+          if (prefs != null) ...[
+            checkRow('I have a preference for a treatment facility.',
+                checked: prefs.treatmentFacilityPref == 'prefer' ||
+                    prefs.preferredFacilityName.isNotEmpty),
+            checkRow('I have a facility I wish to avoid.',
+                checked: prefs.treatmentFacilityPref == 'avoid' ||
+                    prefs.avoidFacilityName.isNotEmpty),
+            checkRow('I have no preference regarding treatment facility.',
+                checked: prefs.treatmentFacilityPref == 'noPreference' &&
+                    prefs.preferredFacilityName.isEmpty &&
+                    prefs.avoidFacilityName.isEmpty),
+          ],
+          pw.SizedBox(height: 4),
           pw.Text(
             'In the event that I require commitment to a psychiatric treatment facility, '
             'I would prefer to be admitted to the following facility:',
@@ -236,6 +258,24 @@ List<pw.Page> buildPoaPages({
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: [
           pageHeader(formTitle),
+
+          // Hospitalization authority
+          if (prefs != null) ...[
+            pw.Text('Preferences regarding hospitalization.',
+                style: boldStyle(fontSize: 9)),
+            pw.SizedBox(height: 2),
+            checkRow(
+              'My agent is authorized to consent to my voluntary admission to a '
+              'treatment facility for mental health care.',
+              checked: prefs.agentCanConsentHospitalization,
+            ),
+            checkRow(
+              'My agent is not authorized to consent to my voluntary admission to a '
+              'treatment facility for mental health care.',
+              checked: !prefs.agentCanConsentHospitalization,
+            ),
+            pw.SizedBox(height: 4),
+          ],
 
           // (b). Medications
           pw.Text('(b). Preferences regarding medications for psychiatric treatment.',
@@ -355,6 +395,11 @@ List<pw.Page> buildPoaPages({
               checked: !isConsentAgent(prefs.drugTrialConsent),
             ),
           ],
+          if (prefs != null && prefs.agentAuthorityLimitations.isNotEmpty) ...[
+            pw.SizedBox(height: 4),
+            dataBlock('Additional limitations on agent authority:',
+                prefs.agentAuthorityLimitations),
+          ],
 
           pw.Spacer(),
           pageFooter('Page 3'),
@@ -472,6 +517,8 @@ List<pw.Page> buildPoaPages({
           pw.SizedBox(height: 4),
           if (guardian != null && guardian.nomineeFullName.isNotEmpty) ...[
             dataLine('Name of Person', guardian.nomineeFullName),
+            if (guardian.nomineeRelationship.isNotEmpty)
+              dataLine('Relationship', guardian.nomineeRelationship),
             dataLine('Address', guardian.nomineeAddress),
             twoCol(
               blankLine('City, State, Zip Code'),
@@ -520,6 +567,8 @@ List<pw.Page> buildPoaPages({
               'I am making this Mental Health Care Power of Attorney on the $dateStr.',
               style: bodyStyle(),
             ),
+            if (directive.expirationDate != null)
+              dataLine('Expiration Date', formatExecDate(directive.expirationDate)),
             pw.SizedBox(height: 8),
             signatureBlock('Principal Signature', name: directive.fullName),
             dataLine('Name of Principal', directive.fullName),
@@ -537,8 +586,10 @@ List<pw.Page> buildPoaPages({
             ),
 
             // Witness details
-            witnessDetailBlock('Witness 1', w1?.fullName, w1?.address),
-            witnessDetailBlock('Witness 2', w2?.fullName, w2?.address),
+            witnessDetailBlock('Witness 1', w1?.fullName, w1?.address,
+                signatureDate: w1?.signatureDate),
+            witnessDetailBlock('Witness 2', w2?.fullName, w2?.address,
+                signatureDate: w2?.signatureDate),
 
             // Signing on behalf
             signOnBehalfBlock('Mental Health Care Power of Attorney'),

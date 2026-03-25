@@ -32,6 +32,7 @@ class PdfGenerator {
     required GuardianNomination? guardian,
     required List<MedicationEntry> medications,
     required List<WitnessesData> witnesses,
+    List<DiagnosisEntry> diagnoses = const [],
   }) async {
     final pdf = pw.Document(
       title: 'PA Mental Health Advance Directive',
@@ -50,6 +51,7 @@ class PdfGenerator {
         guardian: guardian,
         medications: medications,
         witnesses: witnesses,
+        diagnoses: diagnoses,
       ));
     }
 
@@ -61,6 +63,7 @@ class PdfGenerator {
         guardian: guardian,
         medications: medications,
         witnesses: witnesses,
+        diagnoses: diagnoses,
       ));
     }
 
@@ -73,6 +76,7 @@ class PdfGenerator {
         guardian: guardian,
         medications: medications,
         witnesses: witnesses,
+        diagnoses: diagnoses,
       ));
     }
 

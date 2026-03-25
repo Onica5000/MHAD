@@ -482,14 +482,37 @@ pw.Widget signOnBehalfBlock(String formTypeDescription) {
 // ---------------------------------------------------------------------------
 
 /// Full witness detail block: Name, Address, City/State/Zip, Phone.
-pw.Widget witnessDetailBlock(String label, String? name, String? address) {
+pw.Widget witnessDetailBlock(String label, String? name, String? address,
+    {int? signatureDate}) {
+  final dateStr = signatureDate != null
+      ? formatExecDate(signatureDate)
+      : '____________________';
   return pw.Column(
     crossAxisAlignment: pw.CrossAxisAlignment.start,
     children: [
       dataLine('Name of Witness', name ?? ''),
       dataLine('Address', address ?? ''),
-      blankLine('City, State, Zip Code'),
-      blankLine('Phone Number'),
+      dataLine('Date Signed', dateStr),
+      pw.SizedBox(height: 6),
+    ],
+  );
+}
+
+/// Renders a list of ICD-10 diagnoses.
+pw.Widget diagnosisList(List<dynamic> diagnoses) {
+  if (diagnoses.isEmpty) return pw.SizedBox.shrink();
+  return pw.Column(
+    crossAxisAlignment: pw.CrossAxisAlignment.start,
+    children: [
+      pw.Text('Medical Diagnoses (ICD-10):', style: boldStyle(fontSize: 9)),
+      pw.SizedBox(height: 2),
+      ...diagnoses.map((d) => pw.Padding(
+            padding: const pw.EdgeInsets.only(left: 8, bottom: 1),
+            child: pw.Text(
+              '\u2022 ${d.icdCode} — ${d.name}',
+              style: bodyStyle(),
+            ),
+          )),
       pw.SizedBox(height: 6),
     ],
   );
