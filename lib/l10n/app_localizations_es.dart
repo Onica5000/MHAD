@@ -154,7 +154,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get saveAndExitMessage =>
-      'Su progreso en este paso se guardará. Puede regresar para continuar más tarde.';
+      'Su progreso en este paso se guardará. Puede regresar para continuar más tarde (solo en Modo Privado).';
 
   @override
   String get legalDisclaimer =>

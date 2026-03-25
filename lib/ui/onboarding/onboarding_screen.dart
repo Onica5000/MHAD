@@ -54,8 +54,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           '\u2022 Contact info for your chosen agent\n'
           '\u2022 Names and contact info for two adult witnesses\n'
           '\u2022 Any medical documents (the app can import these)\n\n'
-          'You can also fill it out over multiple sessions — your '
-          'progress is saved automatically.',
+          'In Private Mode, you can fill it out over multiple sessions — '
+          'your progress is saved automatically. In Public Mode or on the '
+          'web, data is kept in memory only and lost when you close the app, '
+          'so plan to complete and export in one session.',
     ),
     _PageData(
       icon: Icons.timer_outlined,

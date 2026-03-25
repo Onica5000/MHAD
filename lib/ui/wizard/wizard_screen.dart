@@ -160,7 +160,9 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
               ),
               leading: IconButton(
                 icon: const Icon(Icons.close),
-                tooltip: kIsWeb ? 'Exit wizard' : 'Save & exit wizard',
+                tooltip: (kIsWeb || !ref.read(privacyModeNotifierProvider).isPrivate)
+                    ? 'Exit wizard'
+                    : 'Save & exit wizard',
                 onPressed: _isSaving ? null : () => _saveAndExit(context),
               ),
               automaticallyImplyLeading: false,
@@ -354,10 +356,13 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
       }
       // Show a non-blocking warning if step has missing required fields
       if (!stepValid && mounted && context.mounted) {
+        final isPrivate = ref.read(privacyModeNotifierProvider).isPrivate;
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Some fields are incomplete — you can come back to finish later.'),
-            duration: Duration(seconds: 3),
+          SnackBar(
+            content: Text(isPrivate
+                ? 'Some fields are incomplete — you can come back to finish later.'
+                : 'Some fields are incomplete — complete them before exporting.'),
+            duration: const Duration(seconds: 3),
           ),
         );
       }
@@ -383,7 +388,8 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
   }
 
   Future<void> _saveAndExit(BuildContext context) async {
-    if (kIsWeb) {
+    final isPrivate = ref.read(privacyModeNotifierProvider).isPrivate;
+    if (kIsWeb || !isPrivate) {
       await _exitWebWizard(context);
     } else {
       await _saveAndExitNative(context);
@@ -397,12 +403,17 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
         icon: Icon(Icons.warning_amber_rounded,
             color: Theme.of(context).colorScheme.error, size: 40),
         title: const Text('Exit Without Saving?'),
-        content: const Text(
-            'The web app does not save your progress. '
-            'If you leave now, your work on this step will be lost.\n\n'
-            'Your session data is kept in memory for 10 minutes '
-            'in case the browser closes unexpectedly, but you '
-            'should export or print your document before leaving.'),
+        content: Text(
+            kIsWeb
+                ? 'The web app does not save your progress permanently. '
+                  'If you leave now, your work on this step will be lost.\n\n'
+                  'Your session data is kept in memory for 10 minutes '
+                  'in case the browser closes unexpectedly, but you '
+                  'should export or print your document before leaving.'
+                : 'You are in Public Mode — your data is stored in memory '
+                  'only and will be lost when the app closes.\n\n'
+                  'Export or print your document before leaving. '
+                  'To save across sessions, use Private Mode instead.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),

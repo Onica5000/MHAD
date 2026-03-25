@@ -132,7 +132,8 @@ class DisclaimerScreen extends StatelessWidget {
                         number: '7',
                         title: 'Privacy & AI Features',
                         body:
-                            'All directive data is stored only on this device. This '
+                            'In Private Mode, directive data is encrypted and stored on this device. '
+                            'In Public Mode or on the web, data is held in memory only and not saved permanently. This '
                             'app is not HIPAA-compliant.\n\n'
                             'If you use the optional AI Assistant feature (powered by '
                             'Google Gemini), text you send via AI chat or AI Suggest '

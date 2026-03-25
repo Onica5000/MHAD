@@ -160,7 +160,7 @@ class AppStrings {
 
   static const saveExitMessage =
       'Your progress on this step will be saved. '
-      'You can return to continue later.';
+      'You can return to continue later (Private Mode only).';
 
   static const directiveNotFound = 'Directive not found.';
 
