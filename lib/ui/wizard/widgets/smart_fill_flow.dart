@@ -415,8 +415,17 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
       if (act != null) instrUpdates['activities'] = act;
       final diet = editedVal('Dietary Considerations');
       if (diet != null) instrUpdates['dietary'] = diet;
+      // De-escalation & triggers stored as tagged entries in 'other' field
+      final deesc = editedVal('De-escalation Techniques');
+      final trig = editedVal('Crisis Triggers');
       final ag = editedVal('Agent Guidance');
-      if (ag != null) instrUpdates['other'] = ag;
+      final otherParts = <String>[];
+      if (deesc != null) otherParts.add('[DE-ESCALATION] $deesc');
+      if (trig != null) otherParts.add('[TRIGGERS] $trig');
+      if (ag != null) otherParts.add(ag);
+      if (otherParts.isNotEmpty) {
+        instrUpdates['other'] = otherParts.join('\n');
+      }
 
       if (instrUpdates.isNotEmpty) {
         final existing = await repo.getAdditionalInstructions(id);

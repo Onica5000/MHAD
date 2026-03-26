@@ -92,6 +92,8 @@ class SmartFillResult {
   final String? avoidFacilityNote;
   final String? ectPreference;
   final String? crisisIntervention;
+  final String? deescalation;
+  final String? triggers;
   final String? activities;
   final String? dietary;
   final String? agentGuidance;
@@ -105,6 +107,8 @@ class SmartFillResult {
     this.avoidFacilityNote,
     this.ectPreference,
     this.crisisIntervention,
+    this.deescalation,
+    this.triggers,
     this.activities,
     this.dietary,
     this.agentGuidance,
@@ -119,6 +123,8 @@ class SmartFillResult {
       avoidFacilityNote == null &&
       ectPreference == null &&
       crisisIntervention == null &&
+      deescalation == null &&
+      triggers == null &&
       activities == null &&
       dietary == null &&
       agentGuidance == null &&
@@ -142,6 +148,10 @@ class SmartFillResult {
     if (crisisIntervention != null) {
       m['Crisis Intervention'] = crisisIntervention!;
     }
+    if (deescalation != null) {
+      m['De-escalation Techniques'] = deescalation!;
+    }
+    if (triggers != null) m['Crisis Triggers'] = triggers!;
     if (activities != null) m['Helpful Activities'] = activities!;
     if (dietary != null) m['Dietary Considerations'] = dietary!;
     if (agentGuidance != null) {
@@ -166,6 +176,8 @@ class SmartFillResult {
       avoidFacilityNote: _str(json['avoid_facility_note']),
       ectPreference: _str(json['ect_preference']),
       crisisIntervention: _str(json['crisis_intervention']),
+      deescalation: _str(json['deescalation']),
+      triggers: _str(json['triggers']),
       activities: _str(json['activities']),
       dietary: _str(json['dietary']),
       agentGuidance: _str(json['agent_guidance']),
@@ -242,17 +254,33 @@ class SmartFillService {
     final prompt = _buildPrompt(input);
 
     try {
-      final response = await model
-          .generateContent([Content.text(prompt)]).timeout(
-        const Duration(seconds: 30),
-      );
+      // Retry once on rate limit (429) with backoff
+      GenerateContentResponse? response;
+      for (var attempt = 0; attempt < 2; attempt++) {
+        try {
+          response = await model
+              .generateContent([Content.text(prompt)]).timeout(
+            const Duration(seconds: 45),
+          );
+          break; // success
+        } on GenerativeAIException catch (e) {
+          if ((e.message.contains('429') ||
+                  e.message.toLowerCase().contains('rate limit')) &&
+              attempt == 0) {
+            // Wait and retry once
+            await Future<void>.delayed(const Duration(seconds: 10));
+            continue;
+          }
+          rethrow;
+        }
+      }
 
-      final text = response.text;
+      final text = response?.text;
       if (text == null || text.isEmpty) {
         throw Exception('Empty response from Gemini');
       }
 
-      final promptTokens = response.usageMetadata?.promptTokenCount ?? 0;
+      final promptTokens = response!.usageMetadata?.promptTokenCount ?? 0;
       final responseTokens =
           response.usageMetadata?.candidatesTokenCount ?? 0;
       final totalTokens = promptTokens + responseTokens;
@@ -401,6 +429,10 @@ class SmartFillService {
     buf.writeln('  "ect_preference": "guidance on ECT given these conditions",');
     buf.writeln(
         '  "crisis_intervention": "what helps during crisis for these conditions",');
+    buf.writeln(
+        '  "deescalation": "specific de-escalation techniques for these conditions (e.g., music, quiet room, grounding exercises)",');
+    buf.writeln(
+        '  "triggers": "common crisis triggers to avoid for these conditions",');
     buf.writeln(
         '  "activities": "therapeutic activities helpful for these conditions",');
     buf.writeln(
