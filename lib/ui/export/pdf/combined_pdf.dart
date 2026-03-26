@@ -222,12 +222,14 @@ List<pw.Page> buildCombinedPages({
           if (prefs != null) ...[
             checkRow(
               'I consent to the medications that my treating physician recommends.',
-              checked: prefs.medicationConsent == 'yes',
+              checked: prefs.medicationConsent == 'yes' &&
+                  exceptions.isEmpty && limitations.isEmpty && preferred.isEmpty,
             ),
             checkRow(
               'I consent to the medications that my treating physician recommends with '
               'the following exceptions, limitations, and/or preferences:',
-              checked: exceptions.isNotEmpty || limitations.isNotEmpty || preferred.isNotEmpty,
+              checked: prefs.medicationConsent == 'yes' &&
+                  (exceptions.isNotEmpty || limitations.isNotEmpty || preferred.isNotEmpty),
             ),
             if (exceptions.isNotEmpty)
               medTable(
@@ -286,8 +288,15 @@ List<pw.Page> buildCombinedPages({
           if (prefs != null) ...[
             checkRow(
               'I consent to the administration of electroconvulsive therapy.',
-              checked: isConsentYes(prefs.ectConsent),
+              checked: prefs.ectConsent == 'yes',
             ),
+            if (isConsentConditional(prefs.ectConsent)) ...[
+              checkRow(
+                'I consent to ECT under the following conditions:',
+                checked: true,
+              ),
+              dataBlock('Conditions:', consentConditionText(prefs.ectConsent)),
+            ],
             checkRow(
               'I have designated an agent under the Power of Attorney portion of this '
               'document to make decisions related to electroconvulsive therapy.',
@@ -297,8 +306,6 @@ List<pw.Page> buildCombinedPages({
               'I do not consent to the administration of electroconvulsive therapy.',
               checked: isConsentNo(prefs.ectConsent),
             ),
-            if (isConsentConditional(prefs.ectConsent))
-              dataBlock('Conditions:', consentConditionText(prefs.ectConsent)),
           ],
           pw.SizedBox(height: 6),
 
@@ -310,8 +317,15 @@ List<pw.Page> buildCombinedPages({
             checkRow(
               'I consent to participation in experimental studies if my treating physician '
               'believes that the potential benefits to me outweigh the possible risks to me.',
-              checked: isConsentYes(prefs.experimentalConsent),
+              checked: prefs.experimentalConsent == 'yes',
             ),
+            if (isConsentConditional(prefs.experimentalConsent)) ...[
+              checkRow(
+                'I consent to experimental studies under the following conditions:',
+                checked: true,
+              ),
+              dataBlock('Conditions:', consentConditionText(prefs.experimentalConsent)),
+            ],
             checkRow(
               'I have designated an agent under the Power of Attorney portion of this '
               'document to make decisions related to experimental studies.',
@@ -321,8 +335,6 @@ List<pw.Page> buildCombinedPages({
               'I do not consent to participation in experimental studies.',
               checked: isConsentNo(prefs.experimentalConsent),
             ),
-            if (isConsentConditional(prefs.experimentalConsent))
-              dataBlock('Conditions:', consentConditionText(prefs.experimentalConsent)),
           ],
           pw.SizedBox(height: 6),
 
@@ -334,8 +346,15 @@ List<pw.Page> buildCombinedPages({
             checkRow(
               'I consent to participation in drug trials if my treating physician believes '
               'that the potential benefits to me outweigh the possible risks to me.',
-              checked: isConsentYes(prefs.drugTrialConsent),
+              checked: prefs.drugTrialConsent == 'yes',
             ),
+            if (isConsentConditional(prefs.drugTrialConsent)) ...[
+              checkRow(
+                'I consent to drug trials under the following conditions:',
+                checked: true,
+              ),
+              dataBlock('Conditions:', consentConditionText(prefs.drugTrialConsent)),
+            ],
             checkRow(
               'I have designated an agent under the Power of Attorney portion of this '
               'document to make decisions related to drug trials.',
@@ -345,8 +364,6 @@ List<pw.Page> buildCombinedPages({
               'I do not consent to participation in any drug trials.',
               checked: isConsentNo(prefs.drugTrialConsent),
             ),
-            if (isConsentConditional(prefs.drugTrialConsent))
-              dataBlock('Conditions:', consentConditionText(prefs.drugTrialConsent)),
           ],
           pw.SizedBox(height: 6),
 

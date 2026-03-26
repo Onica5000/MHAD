@@ -275,13 +275,16 @@ List<pw.Page> buildPoaPages({
             checkRow(
               'I consent to the medications that my agent agrees to after consultation '
               'with my treating physician and any other persons my agent considers appropriate.',
-              checked: prefs.medicationConsent == 'yes' ||
-                  prefs.medicationConsent == 'agentDecides',
+              checked: (prefs.medicationConsent == 'yes' ||
+                  prefs.medicationConsent == 'agentDecides') &&
+                  exceptions.isEmpty && limitations.isEmpty,
             ),
             checkRow(
               'I consent to the medications that my agent agrees to, with the following '
               'exceptions or limitations:',
-              checked: exceptions.isNotEmpty || limitations.isNotEmpty,
+              checked: (prefs.medicationConsent == 'yes' ||
+                  prefs.medicationConsent == 'agentDecides') &&
+                  (exceptions.isNotEmpty || limitations.isNotEmpty),
             ),
             if (exceptions.isNotEmpty)
               medTable(
