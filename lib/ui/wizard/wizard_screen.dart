@@ -46,11 +46,11 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
   // Re-assigned after Smart Fill apply to force step re-creation.
   GlobalKey _stepKey = GlobalKey();
 
-  void _persistStep() {
-    ref
+  Future<void> _persistStep() async {
+    await ref
         .read(directiveRepositoryProvider)
         .updateLastStepIndex(widget.directiveId, _stepIndex);
-    _cacheForWebReload();
+    await _cacheForWebReload();
   }
 
   /// On web, snapshot the full directive to SharedPreferences so the user
@@ -295,7 +295,7 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                       }
                       if (mounted) {
                         setState(() => _stepIndex--);
-                        _persistStep();
+                        await _persistStep();
                       }
                     }
                   : null,
@@ -370,8 +370,8 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
         );
       }
 
-      // Cache for web reload recovery
-      _cacheForWebReload();
+      // Cache for web reload recovery — must await so data is written before navigation
+      await _cacheForWebReload();
 
       if (mounted) {
         if (isLastStep) {
@@ -382,7 +382,7 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
           }
         } else {
           setState(() => _stepIndex++);
-          _persistStep();
+          await _persistStep();
         }
       }
     } finally {
