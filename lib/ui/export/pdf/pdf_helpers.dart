@@ -409,26 +409,38 @@ class ParsedOtherContent {
   final String deEscalation;
   final String triggers;
   final String reproductiveHealth;
+  final String ectGuidance;
+  final String experimentalGuidance;
+  final String drugTrialGuidance;
   final String otherText;
 
   const ParsedOtherContent({
     this.deEscalation = '',
     this.triggers = '',
     this.reproductiveHealth = '',
+    this.ectGuidance = '',
+    this.experimentalGuidance = '',
+    this.drugTrialGuidance = '',
     this.otherText = '',
   });
 }
 
-/// Parse [DE-ESCALATION], [TRIGGERS], [REPRODUCTIVE] tags from `other` field.
+/// Parse tagged entries from `other` field.
 ParsedOtherContent parseOtherField(String raw) {
   if (raw.isEmpty) return const ParsedOtherContent();
   const deescTag = '[DE-ESCALATION] ';
   const trigTag = '[TRIGGERS] ';
   const reproTag = '[REPRODUCTIVE] ';
+  const ectTag = '[ECT GUIDANCE] ';
+  const expTag = '[EXPERIMENTAL GUIDANCE] ';
+  const drugTag = '[DRUG TRIAL GUIDANCE] ';
 
   String deesc = '';
   String trig = '';
   String repro = '';
+  String ectGuidance = '';
+  String expGuidance = '';
+  String drugGuidance = '';
   final otherLines = <String>[];
 
   for (final line in raw.split('\n')) {
@@ -438,6 +450,12 @@ ParsedOtherContent parseOtherField(String raw) {
       trig = line.substring(trigTag.length);
     } else if (line.startsWith(reproTag)) {
       repro = line.substring(reproTag.length);
+    } else if (line.startsWith(ectTag)) {
+      ectGuidance = line.substring(ectTag.length);
+    } else if (line.startsWith(expTag)) {
+      expGuidance = line.substring(expTag.length);
+    } else if (line.startsWith(drugTag)) {
+      drugGuidance = line.substring(drugTag.length);
     } else {
       otherLines.add(line);
     }
@@ -447,6 +465,9 @@ ParsedOtherContent parseOtherField(String raw) {
     deEscalation: deesc.trim(),
     triggers: trig.trim(),
     reproductiveHealth: repro.trim(),
+    ectGuidance: ectGuidance.trim(),
+    experimentalGuidance: expGuidance.trim(),
+    drugTrialGuidance: drugGuidance.trim(),
     otherText: otherLines.join('\n').trim(),
   );
 }

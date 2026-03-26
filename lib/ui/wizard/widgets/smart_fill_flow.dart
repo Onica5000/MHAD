@@ -415,16 +415,42 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
       if (act != null) instrUpdates['activities'] = act;
       final diet = editedVal('Dietary Considerations');
       if (diet != null) instrUpdates['dietary'] = diet;
-      // De-escalation & triggers stored as tagged entries in 'other' field
+      // De-escalation, triggers, guidance stored as tagged entries in 'other' field
       final deesc = editedVal('De-escalation Techniques');
       final trig = editedVal('Crisis Triggers');
+      final ectG = editedVal('ECT Guidance');
+      final expG = editedVal('Experimental Studies Guidance');
+      final drugG = editedVal('Drug Trials Guidance');
       final ag = editedVal('Agent Guidance');
       final otherParts = <String>[];
       if (deesc != null) otherParts.add('[DE-ESCALATION] $deesc');
       if (trig != null) otherParts.add('[TRIGGERS] $trig');
+      if (ectG != null) otherParts.add('[ECT GUIDANCE] $ectG');
+      if (expG != null) otherParts.add('[EXPERIMENTAL GUIDANCE] $expG');
+      if (drugG != null) otherParts.add('[DRUG TRIAL GUIDANCE] $drugG');
       if (ag != null) otherParts.add(ag);
       if (otherParts.isNotEmpty) {
         instrUpdates['other'] = otherParts.join('\n');
+      }
+
+      // Facility notes → save to preferences if user hasn't already set them
+      final prefFac = editedVal('Facility Notes (preferred)');
+      final avoidFac = editedVal('Facility Notes (avoid)');
+      if (prefFac != null || avoidFac != null) {
+        final existingPrefs = await repo.getPreferences(id);
+        final setPref = prefFac != null &&
+            (existingPrefs?.preferredFacilityName.isEmpty ?? true);
+        final setAvoid = avoidFac != null &&
+            (existingPrefs?.avoidFacilityName.isEmpty ?? true);
+        if (setPref || setAvoid) {
+          await repo.upsertPreferences(DirectivePrefsCompanion(
+            directiveId: Value(id),
+            preferredFacilityName:
+                setPref ? Value(prefFac) : const Value.absent(),
+            avoidFacilityName:
+                setAvoid ? Value(avoidFac) : const Value.absent(),
+          ));
+        }
       }
 
       if (instrUpdates.isNotEmpty) {

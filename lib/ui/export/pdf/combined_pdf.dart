@@ -401,6 +401,12 @@ List<pw.Page> buildCombinedPages({
               dataBlock('Crisis triggers:', parsed.triggers),
             if (parsed.reproductiveHealth.isNotEmpty)
               dataBlock('Reproductive health preferences:', parsed.reproductiveHealth),
+            if (parsed.ectGuidance.isNotEmpty)
+              dataBlock('ECT guidance notes:', parsed.ectGuidance),
+            if (parsed.experimentalGuidance.isNotEmpty)
+              dataBlock('Experimental studies guidance:', parsed.experimentalGuidance),
+            if (parsed.drugTrialGuidance.isNotEmpty)
+              dataBlock('Drug trials guidance:', parsed.drugTrialGuidance),
             if (parsed.otherText.isNotEmpty)
               dataBlock('Other matters of importance:', parsed.otherText),
           ],
