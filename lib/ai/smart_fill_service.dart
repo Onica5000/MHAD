@@ -91,6 +91,8 @@ class SmartFillResult {
   final String? preferredFacilityNote;
   final String? avoidFacilityNote;
   final String? ectPreference;
+  final String? experimentalPreference;
+  final String? drugTrialPreference;
   final String? crisisIntervention;
   final String? deescalation;
   final String? triggers;
@@ -106,6 +108,8 @@ class SmartFillResult {
     this.preferredFacilityNote,
     this.avoidFacilityNote,
     this.ectPreference,
+    this.experimentalPreference,
+    this.drugTrialPreference,
     this.crisisIntervention,
     this.deescalation,
     this.triggers,
@@ -122,6 +126,8 @@ class SmartFillResult {
       preferredFacilityNote == null &&
       avoidFacilityNote == null &&
       ectPreference == null &&
+      experimentalPreference == null &&
+      drugTrialPreference == null &&
       crisisIntervention == null &&
       deescalation == null &&
       triggers == null &&
@@ -145,6 +151,12 @@ class SmartFillResult {
       m['Facility Notes (avoid)'] = avoidFacilityNote!;
     }
     if (ectPreference != null) m['ECT Guidance'] = ectPreference!;
+    if (experimentalPreference != null) {
+      m['Experimental Studies Guidance'] = experimentalPreference!;
+    }
+    if (drugTrialPreference != null) {
+      m['Drug Trials Guidance'] = drugTrialPreference!;
+    }
     if (crisisIntervention != null) {
       m['Crisis Intervention'] = crisisIntervention!;
     }
@@ -175,6 +187,8 @@ class SmartFillResult {
       preferredFacilityNote: _str(json['preferred_facility_note']),
       avoidFacilityNote: _str(json['avoid_facility_note']),
       ectPreference: _str(json['ect_preference']),
+      experimentalPreference: _str(json['experimental_preference']),
+      drugTrialPreference: _str(json['drug_trial_preference']),
       crisisIntervention: _str(json['crisis_intervention']),
       deescalation: _str(json['deescalation']),
       triggers: _str(json['triggers']),
@@ -347,30 +361,24 @@ class SmartFillService {
     if (input.existingAvoidFacility.isNotEmpty) {
       existing.add('Avoid facility: ${input.existingAvoidFacility}');
     }
-    if (input.existingMedicationConsent != 'yes') {
-      existing.add('Medication consent: ${input.existingMedicationConsent}');
-    }
-    if (input.existingEctConsent != 'no') {
-      existing.add('ECT consent: ${input.existingEctConsent}');
-    }
-    if (input.existingExperimentalConsent != 'no') {
-      existing.add('Experimental studies consent: ${input.existingExperimentalConsent}');
-    }
-    if (input.existingDrugTrialConsent != 'no') {
-      existing.add('Drug trial consent: ${input.existingDrugTrialConsent}');
-    }
-    // Agent authority (POA/combined only)
+    // ALWAYS send ALL consent values — consent is the core of this directive.
+    // The AI MUST respect these decisions and never suggest overriding them.
+    existing.add('');
+    existing.add('=== CONSENT DECISIONS (BINDING — do NOT contradict) ===');
+    existing.add('Medication consent: ${_describeConsent(input.existingMedicationConsent)}');
+    existing.add('ECT consent: ${_describeConsent(input.existingEctConsent)}');
+    existing.add('Experimental studies consent: ${_describeConsent(input.existingExperimentalConsent)}');
+    existing.add('Drug trial consent: ${_describeConsent(input.existingDrugTrialConsent)}');
+    // Agent authority (POA/combined only) — always send full picture
     if (input.formType != 'declaration') {
-      if (!input.existingAgentCanConsentHospitalization) {
-        existing.add('Agent CANNOT consent to hospitalization');
-      }
-      if (!input.existingAgentCanConsentMedication) {
-        existing.add('Agent CANNOT consent to medication');
-      }
+      existing.add('Agent consent to hospitalization: ${input.existingAgentCanConsentHospitalization ? "YES — agent authorized" : "NO — agent NOT authorized"}');
+      existing.add('Agent consent to medication: ${input.existingAgentCanConsentMedication ? "YES — agent authorized" : "NO — agent NOT authorized"}');
       if (input.existingAgentAuthorityLimitations.isNotEmpty) {
         existing.add('Agent authority limitations: ${input.existingAgentAuthorityLimitations}');
       }
     }
+    existing.add('=== END CONSENT DECISIONS ===');
+    existing.add('');
     // Additional instructions
     if (input.existingHealthHistory.isNotEmpty) {
       existing.add('Health history: ${input.existingHealthHistory}');
@@ -413,12 +421,21 @@ class SmartFillService {
       existing.add('Already listed avoid meds: ${input.existingAvoidMeds.join(", ")}');
     }
 
-    if (existing.isNotEmpty) {
-      buf.writeln();
-      buf.writeln('EXISTING DATA (user-entered — do NOT contradict, duplicate, or override):');
-      for (final line in existing) {
-        buf.writeln('- $line');
-      }
+    buf.writeln();
+    buf.writeln('EXISTING DATA (user-entered — do NOT contradict, duplicate, or override).');
+    buf.writeln('CRITICAL CONSENT RULES:');
+    buf.writeln('- This is a CONSENT document. Every consent decision below is BINDING.');
+    buf.writeln('- "NO" means HARD REFUSAL. Your guidance must RESPECT the refusal. '
+        'Explain why someone with these conditions might refuse, do NOT suggest reconsideration.');
+    buf.writeln('- "YES" means the user consents. Your guidance should note relevant '
+        'considerations for informed consent (risks, benefits, what to expect).');
+    buf.writeln('- "CONDITIONAL" means consent with specific restrictions. Honor those restrictions exactly.');
+    buf.writeln('- "AGENT DECIDES" means delegated. Your guidance should help the agent make informed decisions.');
+    buf.writeln('- Medication suggestions MUST respect medication consent. If consent is NO, '
+        'do not suggest additional medications.');
+    buf.writeln('- ECT/experimental/drug trial guidance MUST align with the user\'s consent choice.');
+    for (final line in existing) {
+      buf.writeln('- $line');
     }
 
     buf.writeln();
@@ -442,6 +459,10 @@ class SmartFillService {
         '  "avoid_facility_note": "type of facility or setting to avoid",');
     buf.writeln('  "ect_preference": "guidance on ECT given these conditions",');
     buf.writeln(
+        '  "experimental_preference": "guidance on experimental studies/research for these conditions",');
+    buf.writeln(
+        '  "drug_trial_preference": "guidance on clinical drug trials for these conditions",');
+    buf.writeln(
         '  "crisis_intervention": "what helps during crisis for these conditions",');
     buf.writeln(
         '  "deescalation": "specific de-escalation techniques for these conditions (e.g., music, quiet room, grounding exercises)",');
@@ -460,6 +481,18 @@ class SmartFillService {
     buf.writeln('}');
 
     return buf.toString();
+  }
+
+  /// Translate stored consent values into clear human-readable descriptions
+  /// so the AI understands the user's hard decisions.
+  static String _describeConsent(String value) {
+    if (value == 'yes') return 'YES — user consents';
+    if (value == 'no') return 'NO — user refuses (hard no, do NOT suggest otherwise)';
+    if (value == 'agentDecides') return 'AGENT DECIDES — user delegated to agent';
+    if (value.startsWith('conditional:')) {
+      return 'CONDITIONAL — user consents only if: ${value.substring('conditional:'.length)}';
+    }
+    return value;
   }
 
   SmartFillResult _parse(String text) {
