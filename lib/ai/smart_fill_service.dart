@@ -247,11 +247,15 @@ class SmartFillService {
       httpClient: _httpClient,
       generationConfig: GenerationConfig(
         responseMimeType: 'application/json',
-        temperature: 0.3,
+        temperature: 0.0,
       ),
     );
 
     final prompt = _buildPrompt(input);
+    debugPrint('SmartFill prompt: ${prompt.length} chars '
+        '(~${(prompt.length / 4).round()} tokens), '
+        '${input.conditions.length} conditions, '
+        '${input.currentMedications.length} meds');
 
     try {
       // Retry once on rate limit (429) with backoff
@@ -280,13 +284,20 @@ class SmartFillService {
         throw Exception('Empty response from Gemini');
       }
 
+      debugPrint('SmartFill response: ${text.length} chars');
+
       final promptTokens = response!.usageMetadata?.promptTokenCount ?? 0;
       final responseTokens =
           response.usageMetadata?.candidatesTokenCount ?? 0;
       final totalTokens = promptTokens + responseTokens;
 
+      final result = _parse(text);
+      final display = result.toDisplayMap();
+      debugPrint('SmartFill fields returned: ${display.keys.join(', ')} '
+          '(${display.length} of 13 possible)');
+
       return SmartFillResponse(
-        result: _parse(text),
+        result: result,
         totalTokens: totalTokens > 0
             ? totalTokens
             : GeminiRateTracker.estimateTokens(prompt.length + text.length),
@@ -412,10 +423,13 @@ class SmartFillService {
 
     buf.writeln();
     buf.writeln('Generate JSON for a PA MHAD (Act 194 of 2004). '
-        'Only include fields you can confidently infer from the diagnoses and medications above. '
+        'You MUST provide a value for EVERY field listed below — do NOT skip any. '
+        'Base your suggestions on the diagnoses and medications provided. '
         'SUPPLEMENT existing data — do not repeat or contradict what the user already wrote. '
-        'For fields the user already filled in, only add NEW information they may have missed. '
+        'For fields the user already filled in, add NEW information they may have missed. '
         'Use plain language suitable for a legal document. '
+        'Be specific and practical — include concrete examples, names of techniques, '
+        'and actionable instructions rather than generic advice. '
         'Do NOT include patient name, DOB, or any PII.');
 
     buf.writeln();
