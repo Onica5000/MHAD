@@ -415,6 +415,8 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
       if (act != null) instrUpdates['activities'] = act;
       final diet = editedVal('Dietary Considerations');
       if (diet != null) instrUpdates['dietary'] = diet;
+      final rel = editedVal('Religious/Spiritual');
+      if (rel != null) instrUpdates['religious'] = rel;
       // De-escalation, triggers, guidance stored as tagged entries in 'other' field
       final deesc = editedVal('De-escalation Techniques');
       final trig = editedVal('Crisis Triggers');
@@ -472,6 +474,9 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
                 : const Value.absent(),
             dietary: instrUpdates.containsKey('dietary')
                 ? Value(_merge(existing?.dietary, instrUpdates['dietary']!))
+                : const Value.absent(),
+            religious: instrUpdates.containsKey('religious')
+                ? Value(_merge(existing?.religious, instrUpdates['religious']!))
                 : const Value.absent(),
             other: instrUpdates.containsKey('other')
                 ? Value(_merge(existing?.other, instrUpdates['other']!))

@@ -98,6 +98,7 @@ class SmartFillResult {
   final String? triggers;
   final String? activities;
   final String? dietary;
+  final String? religious;
   final String? agentGuidance;
   final List<MedSuggestion> additionalMedsToConsider;
   final List<MedSuggestion> additionalMedsToAvoid;
@@ -115,6 +116,7 @@ class SmartFillResult {
     this.triggers,
     this.activities,
     this.dietary,
+    this.religious,
     this.agentGuidance,
     this.additionalMedsToConsider = const [],
     this.additionalMedsToAvoid = const [],
@@ -133,6 +135,7 @@ class SmartFillResult {
       triggers == null &&
       activities == null &&
       dietary == null &&
+      religious == null &&
       agentGuidance == null &&
       additionalMedsToConsider.isEmpty &&
       additionalMedsToAvoid.isEmpty;
@@ -166,6 +169,7 @@ class SmartFillResult {
     if (triggers != null) m['Crisis Triggers'] = triggers!;
     if (activities != null) m['Helpful Activities'] = activities!;
     if (dietary != null) m['Dietary Considerations'] = dietary!;
+    if (religious != null) m['Religious/Spiritual'] = religious!;
     if (agentGuidance != null) {
       m['Agent Guidance'] = agentGuidance!;
     }
@@ -194,6 +198,7 @@ class SmartFillResult {
       triggers: _str(json['triggers']),
       activities: _str(json['activities']),
       dietary: _str(json['dietary']),
+      religious: _str(json['religious']),
       agentGuidance: _str(json['agent_guidance']),
       additionalMedsToConsider: _parseMeds(json['additional_meds_to_consider']),
       additionalMedsToAvoid: _parseMeds(json['additional_meds_to_avoid']),
@@ -478,6 +483,12 @@ class SmartFillService {
         '  "activities": "therapeutic activities helpful for these conditions",');
     buf.writeln(
         '  "dietary": "dietary considerations related to these medications",');
+    if (input.existingReligious.isNotEmpty) {
+      buf.writeln(
+          '  "religious": "supplement the user\'s religious/spiritual preferences '
+          'with relevant treatment considerations (e.g., medication timing around '
+          'prayer, fasting accommodations, clergy contact preferences)",');
+    }
     if (input.formType != 'declaration') {
       buf.writeln(
           '  "agent_guidance": "what an agent should know about these conditions/meds",');
