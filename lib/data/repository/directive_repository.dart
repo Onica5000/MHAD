@@ -295,6 +295,8 @@ class DirectiveRepository {
         experimentalConsent: _v(p['experimentalConsent']),
         drugTrialConsent: _v(p['drugTrialConsent']),
         agentAuthorityLimitations: _v(p['agentAuthorityLimitations']),
+        agentCanConsentHospitalization: _vBool(p['agentCanConsentHospitalization']),
+        agentCanConsentMedication: _vBool(p['agentCanConsentMedication']),
       ));
     }
 
@@ -353,5 +355,11 @@ class DirectiveRepository {
   static Value<String> _v(dynamic val) {
     final s = val?.toString() ?? '';
     return s.isNotEmpty ? Value(s) : const Value.absent();
+  }
+
+  static Value<bool> _vBool(dynamic val) {
+    if (val is bool) return Value(val);
+    if (val is String) return Value(val == 'true' || val == '1');
+    return const Value.absent();
   }
 }

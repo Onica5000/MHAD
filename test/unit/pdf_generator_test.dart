@@ -21,11 +21,15 @@ Directive _makeDirective() => const Directive(
       fullName: 'Jane Doe',
       dateOfBirth: '01/15/1980',
       address: '123 Main St',
+      address2: '',
       city: 'Philadelphia',
       state: 'PA',
       zip: '19103',
       phone: '215-555-1234',
       effectiveCondition: '',
+      preferredDoctorName: '',
+      preferredDoctorContact: '',
+      lastStepIndex: 0,
     );
 
 Agent _makeAgent() => const Agent(
@@ -78,6 +82,7 @@ GuardianNomination _makeGuardian() => const GuardianNomination(
       nomineeAddress: '50 Guardian Rd, Harrisburg, PA 17101',
       nomineePhone: '717-555-9999',
       nomineeRelationship: 'Brother',
+      guardianCanRevoke: false,
     );
 
 MedicationEntry _makeMedication() => const MedicationEntry(
@@ -95,6 +100,7 @@ WitnessesData _makeWitness(int number) => WitnessesData(
       witnessNumber: number,
       fullName: 'Witness $number',
       address: '$number Witness Way, Philadelphia, PA 19103',
+      phone: '215-555-000$number',
     );
 
 // ─── Tests ───────────────────────────────────────────────────────────────────
@@ -159,6 +165,7 @@ void main() {
           guardian: guardian,
           medications: medications,
           witnesses: witnesses,
+          diagnoses: const [],
         );
 
     test('only combinedSelected → produces non-empty PDF bytes', () async {
