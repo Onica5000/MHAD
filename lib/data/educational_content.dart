@@ -178,11 +178,11 @@ const _faq = [
     category: EducationCategory.faq,
     title: 'What makes a Mental Health Care Advance Directive valid?',
     content:
-        '**In simple terms: You must be 18 or older, sign it, and have two '
-        'adult witnesses.**\n\n'
+        '**In simple terms: You must be 18 or older (or an emancipated minor), '
+        'sign it, and have two adult witnesses.**\n\n'
         'There is no specific form that must be used, but your Mental Health '
         'Advance Directive must meet the following requirements:\n\n'
-        '1. You must be at least 18 years of age.\n\n'
+        '1. You must be at least 18 years of age, or an emancipated minor.\n\n'
         '2. You must not have been declared incapacitated by a court and had a '
         'guardian appointed, or currently be under an involuntary commitment.\n\n'
         '3. The Mental Health Advance Directive must be signed, witnessed, and '

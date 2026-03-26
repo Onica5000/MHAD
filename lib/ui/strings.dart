@@ -99,7 +99,7 @@ class AppStrings {
 
   static const notLegalAdvice = 'Not Legal or Medical Advice';
 
-  static const iAmAdult = 'I am 18 years of age or older';
+  static const iAmAdult = 'I am 18 years of age or older, or an emancipated minor';
 
   static const disclaimerAcceptPrefix =
       'By tapping "I Understand" you confirm you have read and '

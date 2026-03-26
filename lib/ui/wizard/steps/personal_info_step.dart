@@ -151,7 +151,7 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
         (now.month == dob.month && now.day < dob.day)) {
       age--;
     }
-    if (age < 18) return 'Must be 18 or older to create a directive';
+    if (age < 18) return 'Must be 18 or older (or an emancipated minor) to create a directive';
     return null;
   }
 
@@ -185,8 +185,8 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
             WizardHelpButton(
               helpText:
                   'Provide your legal name as it appears on official documents. '
-                  'You must be 18 years of age or older to create a Mental Health '
-                  'Advance Directive under PA Act 194 of 2004.',
+                  'You must be 18 years of age or older, or an emancipated minor, '
+                  'to create a Mental Health Advance Directive under PA Act 194 of 2004.',
               stepId: 'personalInfo',
             ),
             const SizedBox(height: 8),

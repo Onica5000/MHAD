@@ -198,7 +198,7 @@ class GeminiApiAssistant implements AiAssistant {
     buf.writeln('1. PERSONAL INFORMATION');
     buf.writeln('   Full legal name, date of birth, street address, '
         'apt/suite/unit, city, state, ZIP, phone number.');
-    buf.writeln('   • Must be 18+ to create a directive.\n');
+    buf.writeln('   • Must be 18+ or an emancipated minor to create a directive.\n');
 
     buf.writeln('2. EFFECTIVE CONDITION');
     buf.writeln('   Describe the circumstances under which this directive '

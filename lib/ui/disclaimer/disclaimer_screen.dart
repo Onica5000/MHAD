@@ -270,7 +270,7 @@ class _AcceptButtonState extends State<_AcceptButton> {
           CheckboxListTile(
             value: _isAdult,
             onChanged: (v) => setState(() => _isAdult = v ?? false),
-            title: const Text('I am 18 years of age or older'),
+            title: const Text('I am 18 years of age or older, or an emancipated minor'),
             controlAffinity: ListTileControlAffinity.leading,
             contentPadding: EdgeInsets.zero,
           ),

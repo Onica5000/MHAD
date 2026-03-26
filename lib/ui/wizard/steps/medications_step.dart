@@ -182,7 +182,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
             title: 'Medications I NEVER want',
             subtitle: 'These medications should not be administered',
             rows: _exceptions,
-            accentColor: Theme.of(context).colorScheme.error,
+            accentColor: Theme.of(context).colorScheme.outline,
             onAdd: () => setState(
                 () => _exceptions.add(_MedRow())),
             onRemove: (i) => setState(() {
