@@ -377,6 +377,12 @@ class SmartFillService {
         existing.add('Agent authority limitations: ${input.existingAgentAuthorityLimitations}');
       }
     }
+    existing.add('');
+    existing.add('SCOPE RULE: Agent hospitalization/medication authority covers ONLY '
+        'voluntary admission and general psychiatric medications. It does NOT '
+        'extend to ECT, experimental studies, or drug trials — those are '
+        'governed by the separate consent fields above and the agent CANNOT '
+        'override the patient\'s choices on those matters under PA Act 194.');
     existing.add('=== END CONSENT DECISIONS ===');
     existing.add('');
     // Additional instructions
