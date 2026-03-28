@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:http/http.dart' as http;
+import 'package:mhad/ai/pii_stripper.dart';
 import 'package:mhad/services/certificate_pinning_service.dart';
 import 'package:mhad/services/clinical_data_service.dart';
 import 'package:mhad/services/gemini_rate_tracker.dart';
@@ -353,18 +354,22 @@ class SmartFillService {
       buf.writeln('Avoid meds: ${input.medicationsToAvoid.join(", ")}');
     }
 
-    // Include existing wizard data so AI can supplement, not duplicate
+    // Include existing wizard data so AI can supplement, not duplicate.
+    // Strip PII from free-text fields — users may have typed names,
+    // addresses, or other identifying info into these fields.
+    String s(String text) => PiiStripper.strip(text);
+
     final existing = <String>[];
     // Directive
     if (input.existingEffectiveCondition.isNotEmpty) {
-      existing.add('Effective condition: ${input.existingEffectiveCondition}');
+      existing.add('Effective condition: ${s(input.existingEffectiveCondition)}');
     }
     // Preferences
     if (input.existingPreferredFacility.isNotEmpty) {
-      existing.add('Preferred facility: ${input.existingPreferredFacility}');
+      existing.add('Preferred facility: ${s(input.existingPreferredFacility)}');
     }
     if (input.existingAvoidFacility.isNotEmpty) {
-      existing.add('Avoid facility: ${input.existingAvoidFacility}');
+      existing.add('Avoid facility: ${s(input.existingAvoidFacility)}');
     }
     // ALWAYS send ALL consent values — consent is the core of this directive.
     // The AI MUST respect these decisions and never suggest overriding them.
@@ -379,7 +384,7 @@ class SmartFillService {
       existing.add('Agent consent to hospitalization: ${input.existingAgentCanConsentHospitalization ? "YES — agent authorized" : "NO — agent NOT authorized"}');
       existing.add('Agent consent to medication: ${input.existingAgentCanConsentMedication ? "YES — agent authorized" : "NO — agent NOT authorized"}');
       if (input.existingAgentAuthorityLimitations.isNotEmpty) {
-        existing.add('Agent authority limitations: ${input.existingAgentAuthorityLimitations}');
+        existing.add('Agent authority limitations: ${s(input.existingAgentAuthorityLimitations)}');
       }
     }
     existing.add('');
@@ -390,36 +395,36 @@ class SmartFillService {
         'override the patient\'s choices on those matters under PA Act 194.');
     existing.add('=== END CONSENT DECISIONS ===');
     existing.add('');
-    // Additional instructions
+    // Additional instructions — all free-text, PII-strip each one
     if (input.existingHealthHistory.isNotEmpty) {
-      existing.add('Health history: ${input.existingHealthHistory}');
+      existing.add('Health history: ${s(input.existingHealthHistory)}');
     }
     if (input.existingCrisisIntervention.isNotEmpty) {
-      existing.add('Crisis plan: ${input.existingCrisisIntervention}');
+      existing.add('Crisis plan: ${s(input.existingCrisisIntervention)}');
     }
     if (input.existingActivities.isNotEmpty) {
-      existing.add('Activities: ${input.existingActivities}');
+      existing.add('Activities: ${s(input.existingActivities)}');
     }
     if (input.existingDietary.isNotEmpty) {
-      existing.add('Dietary: ${input.existingDietary}');
+      existing.add('Dietary: ${s(input.existingDietary)}');
     }
     if (input.existingReligious.isNotEmpty) {
-      existing.add('Religious/spiritual: ${input.existingReligious}');
+      existing.add('Religious/spiritual: ${s(input.existingReligious)}');
     }
     if (input.existingChildrenCustody.isNotEmpty) {
-      existing.add('Children/custody: ${input.existingChildrenCustody}');
+      existing.add('Children/custody: ${s(input.existingChildrenCustody)}');
     }
     if (input.existingFamilyNotification.isNotEmpty) {
-      existing.add('Family notification: ${input.existingFamilyNotification}');
+      existing.add('Family notification: ${s(input.existingFamilyNotification)}');
     }
     if (input.existingRecordsDisclosure.isNotEmpty) {
-      existing.add('Records disclosure: ${input.existingRecordsDisclosure}');
+      existing.add('Records disclosure: ${s(input.existingRecordsDisclosure)}');
     }
     if (input.existingPetCustody.isNotEmpty) {
-      existing.add('Pet custody: ${input.existingPetCustody}');
+      existing.add('Pet custody: ${s(input.existingPetCustody)}');
     }
     if (input.existingOther.isNotEmpty) {
-      existing.add('Other instructions: ${input.existingOther}');
+      existing.add('Other instructions: ${s(input.existingOther)}');
     }
     // Medications already in form
     if (input.existingPreferredMeds.isNotEmpty) {
