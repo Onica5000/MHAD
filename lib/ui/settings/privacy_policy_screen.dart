@@ -76,7 +76,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
                   'On the free tier, Google may:\n'
                   '  - Use your input/output data to improve their products\n'
                   '  - Allow human reviewers to read your inputs and outputs\n'
-                  '  - Retain data for up to 30 days\n\n'
+                  '  - Retain data indefinitely (no automatic expiration)\n\n'
                   'The app strips common personally identifiable information '
                   '(SSNs, phone numbers, emails, dates of birth, addresses, '
                   'names) before sending data to Google, but this is a '
@@ -230,9 +230,12 @@ class PrivacyPolicyScreen extends StatelessWidget {
                   'or business associate under HIPAA. The app is intended for '
                   'personal use by individuals preparing their own mental '
                   'health advance directives.\n\n'
-                  'This app does not meet GDPR, CCPA, or other data privacy '
-                  'regulation requirements. If you are subject to these '
-                  'regulations, consult with a privacy professional before use.',
+                  'While this app implements privacy measures aligned with '
+                  'GDPR, CCPA, and MHMDA principles (as described above), it '
+                  'has not been independently audited or certified for '
+                  'compliance with these regulations. If you require verified '
+                  'regulatory compliance, consult with a privacy professional '
+                  'before use.',
               headingStyle: headingStyle,
               bodyStyle: bodyStyle,
             ),
