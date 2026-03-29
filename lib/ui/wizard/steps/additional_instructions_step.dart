@@ -161,10 +161,25 @@ class _AdditionalInstructionsStepState
   static const _maxFieldLength = 2000;
 
   Widget _buildSection(
-      String title, TextEditingController ctrl, String hint, String guidance) {
+      String title,
+      TextEditingController ctrl,
+      String hint,
+      String guidance,
+      String description) {
     return ExpansionTile(
       title: Text(title),
       children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+          child: Text(
+            description,
+            style: TextStyle(
+              fontSize: 12,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+              height: 1.4,
+            ),
+          ),
+        ),
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
           child: TextFormField(
@@ -226,12 +241,19 @@ class _AdditionalInstructionsStepState
             _activitiesCtrl,
             'Preferences about daily activities, environment, restraints, seclusion',
             'preferences about daily activities, physical environment, use of restraints or seclusion during treatment',
+            'Describe activities that help you feel better (e.g., walking, '
+            'reading, music) and your preferences about your physical '
+            'environment during treatment. You can also state whether you '
+            'consent to or refuse the use of restraints or seclusion.',
           ),
           _buildSection(
             'Crisis Intervention',
             _crisisCtrl,
             'What helps or doesn\'t help during a crisis',
             'specific things that help or make things worse during a mental health crisis, based on past experience',
+            'Based on your past experience, describe what helps you during '
+            'a mental health crisis and what makes things worse. This helps '
+            'your treatment team respond in the way that works best for you.',
           ),
           _buildSection(
             'De-escalation Techniques',
@@ -241,6 +263,10 @@ class _AdditionalInstructionsStepState
             'for example, listening to music, going for a walk, deep '
             'breathing, speaking with a specific person, being in a '
             'quiet room, or using a weighted blanket',
+            'List specific techniques or strategies that help calm you '
+            'when you are distressed. Examples include listening to music, '
+            'deep breathing, being in a quiet room, using a weighted '
+            'blanket, speaking with a specific person, or going for a walk.',
           ),
           _buildSection(
             'Potential Crisis Triggers',
@@ -249,36 +275,63 @@ class _AdditionalInstructionsStepState
             'situations or stimuli that may worsen a crisis — for example, '
             'loud environments, specific conversation topics, being touched '
             'without permission, being alone, or certain people or settings',
+            'Identify situations, environments, or topics that may trigger '
+            'or worsen a crisis for you. This helps your treatment team '
+            'avoid these triggers. Examples: loud environments, being '
+            'touched without permission, certain conversation topics, '
+            'being left alone, or specific people.',
           ),
           _buildSection(
             'Health History',
             _healthHistoryCtrl,
             'Relevant mental health history, diagnoses, hospitalizations',
             'relevant mental health history including diagnoses, past hospitalizations, and treatments that did or did not work',
+            'Summarize your relevant mental health history, including '
+            'past diagnoses, hospitalizations, and treatments that worked '
+            'well or did not work. This gives your treatment team context '
+            'about your care history.',
           ),
           _buildSection(
             'Dietary Preferences',
             _dietaryCtrl,
             'Food restrictions, preferences, religious dietary laws',
             'dietary restrictions, food allergies, religious dietary requirements, and food preferences',
+            'List any food allergies, dietary restrictions, or preferences '
+            'your treatment team should know about. This includes religious '
+            'dietary laws (e.g., kosher, halal, vegetarian), food '
+            'intolerances, and any foods to avoid due to medication '
+            'interactions.',
           ),
           _buildSection(
             'Religious & Spiritual',
             _religiousCtrl,
             'Religious practices, spiritual needs, clergy contact',
             'religious affiliation, spiritual practices, need for chaplain or clergy access during treatment',
+            'Describe any religious or spiritual practices that are '
+            'important to you during treatment. This may include prayer '
+            'times, clergy or chaplain visits, religious texts or items '
+            'you would like to have access to, fasting observances, or '
+            'faith-based coping practices.',
           ),
           _buildSection(
             'Children & Custody',
             _childrenCustodyCtrl,
             'Instructions regarding care of your minor children',
             'instructions for the care and custody of minor children if you are hospitalized',
+            'If you have minor children or dependents, describe who should '
+            'care for them if you are hospitalized. Include contact '
+            'information for caregivers, school details, and any custody '
+            'arrangements your treatment team should be aware of.',
           ),
           _buildSection(
             'Family Notification',
             _familyNotificationCtrl,
             'Who should be notified and how',
             'who should be notified of your hospitalization, how to contact them, and what information may be shared',
+            'Specify who should be notified if you are hospitalized or if '
+            'your treatment changes. Include how to reach them and what '
+            'information may be shared. You can also specify people who '
+            'should NOT be contacted.',
           ),
           _buildSection(
             'Records Disclosure & Limitations',
@@ -287,26 +340,22 @@ class _AdditionalInstructionsStepState
             'individuals or organizations authorized to receive copies of your '
                 'mental health treatment records, and any limitations on who can '
                 'access them',
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-            child: Text(
-              'You may specify limitations on who can access your mental health '
-              'records. For example, you might limit access to your treatment '
-              'team only, or exclude certain family members from receiving '
-              'information about your treatment.',
-              style: TextStyle(
-                fontSize: 12,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-                height: 1.4,
-              ),
-            ),
+            'Specify who is authorized to receive copies of your mental '
+            'health treatment records and any limitations on disclosure. '
+            'For example, you might limit access to your treatment team '
+            'only, authorize your agent to access records, or exclude '
+            'certain family members from receiving information about '
+            'your treatment.',
           ),
           _buildSection(
             'Pet Care',
             _petCustodyCtrl,
             'Instructions for care of your pets',
             'instructions for care and custody of pets if you are hospitalized',
+            'If you have pets, describe who should care for them if you '
+            'are hospitalized. Include the caregiver\'s contact information, '
+            'feeding and medication schedules, veterinary contacts, and any '
+            'special care instructions.',
           ),
           _buildSection(
             'Reproductive Health Care',
@@ -316,12 +365,21 @@ class _AdditionalInstructionsStepState
             'crisis — for example, pregnancy testing before medication '
             'changes, contraception preferences, or reproductive health '
             'conditions your treatment team should be aware of',
+            'Describe any reproductive health care preferences your '
+            'treatment team should know about. This may include whether '
+            'you want pregnancy testing before medication changes, '
+            'contraception preferences, or reproductive health conditions '
+            'that could affect your treatment.',
           ),
           _buildSection(
             'Other Instructions',
             _otherCtrl,
             'Any other instructions not covered above',
             'any additional instructions for your treatment team or agent not addressed in the sections above',
+            'Use this section for any instructions to your treatment team '
+            'or agent that are not covered by the sections above. This is '
+            'a catch-all for anything else you want to communicate about '
+            'your care preferences.',
           ),
         ],
       ),
