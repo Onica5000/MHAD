@@ -87,7 +87,14 @@ Field purpose: ${widget.fieldGuidance}
 The user has entered:
 "$sanitizedText"
 
-Please provide a more concise, clear, and legally appropriate version of this text suitable for a formal advance directive document. Ensure the revised text complies with PA Act 194 of 2004 requirements. Preserve the user's intent and meaning. Use plain, direct language. Keep it brief. Return only the revised text — no explanation, no quotes.''';
+INSTRUCTIONS:
+1. Start with the user's own words — preserve their intent, meaning, and specific preferences exactly.
+2. Improve clarity and wording to be suitable for a formal legal/medical document, but keep the user's voice.
+3. Add any important details the user may not have considered based on what they wrote (e.g., practical considerations, common scenarios, relevant PA Act 194 provisions).
+4. SAFETY: Never suggest anything that could endanger the user's physical or mental health. Never contradict the user's stated preferences or treatment decisions.
+5. Use plain, direct language. Be specific and practical.
+
+Return only the improved text — no explanation, no quotes, no preamble.''';
 
       final suggestion = await assistant.sendMessage(prompt, history: []);
       tracker.recordRequest(

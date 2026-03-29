@@ -558,65 +558,122 @@ class SmartFillService {
     }
 
     buf.writeln();
-    buf.writeln('Generate JSON for a PA MHAD (Act 194 of 2004). '
-        'You MUST provide a value for EVERY field listed below — do NOT skip any. '
-        'Base your suggestions on the diagnoses and medications provided. '
-        'SUPPLEMENT existing data — do not repeat or contradict what the user already wrote. '
-        'For fields the user already filled in, add NEW information they may have missed. '
-        'Use plain language suitable for a legal document. '
-        'Be specific and practical — include concrete examples, names of techniques, '
-        'and actionable instructions rather than generic advice. '
-        'Do NOT include patient name, DOB, or any PII. '
-        'PA NTI drug rule: Narrow Therapeutic Index drugs (lithium, carbamazepine, '
+    buf.writeln('Generate JSON for a PA MHAD (Act 194 of 2004).');
+    buf.writeln();
+    buf.writeln('PRIORITY HIERARCHY for each field:');
+    buf.writeln('1. USER INPUT FIRST: If the user already wrote something for a field, '
+        'use their input as the foundation. Improve wording for clarity and legal '
+        'appropriateness, but preserve their specific preferences and intent verbatim '
+        'where possible.');
+    buf.writeln('2. SUPPLEMENT: Add important details the user may not have considered '
+        'based on their diagnoses, medications, and what they wrote in other fields. '
+        'Suggest practical considerations, common scenarios, and relevant PA Act 194 provisions.');
+    buf.writeln('3. GENERAL KNOWLEDGE: For fields the user left empty, generate suggestions '
+        'based on the user\'s diagnoses and medications first, then general clinical best '
+        'practices for those conditions.');
+    buf.writeln();
+    buf.writeln('SAFETY — ABSOLUTE RULES:');
+    buf.writeln('- NEVER suggest anything that could endanger the user\'s physical or mental health.');
+    buf.writeln('- NEVER contradict the user\'s stated treatment preferences or consent decisions.');
+    buf.writeln('- NEVER suggest stopping or changing medications the user is currently taking.');
+    buf.writeln('- NEVER suggest treatments that are contraindicated for the user\'s diagnoses.');
+    buf.writeln('- Flag known dangerous drug interactions in medication suggestions.');
+    buf.writeln('- When suggesting medications, note common side effects and monitoring requirements.');
+    buf.writeln();
+    buf.writeln('QUALITY RULES:');
+    buf.writeln('- You MUST provide a value for EVERY field listed below — do NOT skip any.');
+    buf.writeln('- Cross-reference ALL user data: diagnoses inform crisis plans, medications '
+        'inform dietary needs, conditions inform activity suggestions, etc.');
+    buf.writeln('- Be specific and practical — include concrete examples, names of techniques, '
+        'and actionable instructions rather than generic advice.');
+    buf.writeln('- Use plain language suitable for a legal document.');
+    buf.writeln('- Do NOT include patient name, DOB, or any PII.');
+    buf.writeln('- PA NTI drug rule: Narrow Therapeutic Index drugs (lithium, carbamazepine, '
         'valproic acid, phenytoin, clonazepam) CANNOT have generics substituted under '
-        'PA law (35 P.S. §960.3). If suggesting NTI drugs, note the monitoring requirements '
-        'in the reason field. All other medication preferences apply to generic, brand name, '
-        'and trade name equivalents.');
+        'PA law (35 P.S. §960.3). Note monitoring requirements in the reason field.');
 
     buf.writeln();
     buf.writeln('{');
-    buf.writeln('  "effective_condition": "when this directive activates",');
-    buf.writeln('  "health_history": "brief relevant history from diagnoses",');
-    buf.writeln(
-        '  "preferred_facility_note": "type of facility that would be appropriate",');
-    buf.writeln(
-        '  "avoid_facility_note": "type of facility or setting to avoid",');
-    buf.writeln('  "ect_preference": "guidance on ECT given these conditions",');
-    buf.writeln(
-        '  "experimental_preference": "guidance on experimental studies/research for these conditions",');
-    buf.writeln(
-        '  "drug_trial_preference": "guidance on clinical drug trials for these conditions",');
-    buf.writeln(
-        '  "crisis_intervention": "what helps during crisis for these conditions",');
-    buf.writeln(
-        '  "deescalation": "specific de-escalation techniques for these conditions (e.g., music, quiet room, grounding exercises)",');
-    buf.writeln(
-        '  "triggers": "common crisis triggers to avoid for these conditions",');
-    buf.writeln(
-        '  "activities": "therapeutic activities helpful for these conditions",');
-    buf.writeln(
-        '  "dietary": "dietary considerations related to these medications",');
-    if (input.existingReligious.isNotEmpty) {
-      buf.writeln(
-          '  "religious": "supplement the user\'s religious/spiritual preferences '
-          'with relevant treatment considerations (e.g., medication timing around '
-          'prayer, fasting accommodations, clergy contact preferences)",');
+
+    // Helper to build field descriptions that reference user input when present
+    String fieldDesc(String base, String existingData) {
+      if (existingData.isEmpty) return base;
+      return 'Build on user\'s input and add what they may have missed. $base';
     }
-    buf.writeln(
-        '  "children_custody": "arrangements for children/dependents during treatment '
-        '(e.g., who should care for them, school contacts, custody considerations)",');
-    buf.writeln(
-        '  "family_notification": "who should be notified about hospitalization or '
-        'treatment changes (names are placeholders — user fills in real names)",');
-    buf.writeln(
-        '  "records_disclosure": "preferences about sharing medical records '
-        '(e.g., who may access records, what information to share or restrict)",');
-    buf.writeln(
-        '  "pet_custody": "arrangements for pets during treatment '
-        '(e.g., who should care for them, veterinary contacts, feeding instructions)",');
+
+    buf.writeln('  "effective_condition": "${fieldDesc(
+        'When this directive activates — describe the mental health conditions or '
+        'circumstances under which this directive should take effect',
+        input.existingEffectiveCondition)}",');
+    buf.writeln('  "health_history": "${fieldDesc(
+        'Relevant health history based on diagnoses and medications — '
+        'include condition timeline, past treatments, hospitalizations',
+        input.existingHealthHistory)}",');
+    buf.writeln('  "preferred_facility_note": "${fieldDesc(
+        'Type of facility that would be appropriate and why, '
+        'based on the user\'s conditions',
+        input.existingPreferredFacility)}",');
+    buf.writeln('  "avoid_facility_note": "${fieldDesc(
+        'Type of facility or setting to avoid and why',
+        input.existingAvoidFacility)}",');
+    buf.writeln('  "ect_preference": "${fieldDesc(
+        'Guidance on ECT for these specific conditions — risks, benefits, what to expect',
+        '')}",');
+    buf.writeln('  "experimental_preference": "${fieldDesc(
+        'Guidance on experimental studies/research for these conditions',
+        '')}",');
+    buf.writeln('  "drug_trial_preference": "${fieldDesc(
+        'Guidance on clinical drug trials for these conditions',
+        '')}",');
+    buf.writeln('  "crisis_intervention": "${fieldDesc(
+        'Specific interventions that help during a mental health crisis '
+        'for these conditions — include concrete steps, not generic advice',
+        input.existingCrisisIntervention)}",');
+    buf.writeln('  "deescalation": "${fieldDesc(
+        'Specific de-escalation techniques (e.g., music, quiet room, '
+        'grounding exercises, breathing techniques, sensory tools)',
+        '')}",');
+    buf.writeln('  "triggers": "${fieldDesc(
+        'Known and common crisis triggers to avoid for these conditions',
+        '')}",');
+    buf.writeln('  "activities": "${fieldDesc(
+        'Therapeutic activities helpful for these conditions — '
+        'include both structured and informal activities',
+        input.existingActivities)}",');
+    buf.writeln('  "dietary": "${fieldDesc(
+        'Dietary considerations related to these specific medications '
+        '(e.g., grapefruit interactions, caffeine limits, hydration needs, '
+        'foods that affect drug levels)',
+        input.existingDietary)}",');
+    buf.writeln('  "religious": "${fieldDesc(
+        'Religious/spiritual preferences relevant to treatment '
+        '(e.g., medication timing around prayer, fasting accommodations, '
+        'clergy contact, faith-based coping)',
+        input.existingReligious)}",');
+    buf.writeln('  "children_custody": "${fieldDesc(
+        'Arrangements for children/dependents during treatment — '
+        'who should care for them, school contacts, custody considerations, '
+        'what to tell them',
+        input.existingChildrenCustody)}",');
+    buf.writeln('  "family_notification": "${fieldDesc(
+        'Who should and should not be notified about hospitalization '
+        'or treatment changes — use role placeholders (e.g., spouse, parent) '
+        'not real names',
+        input.existingFamilyNotification)}",');
+    buf.writeln('  "records_disclosure": "${fieldDesc(
+        'Preferences about sharing medical records — who may access them, '
+        'what information to share or restrict, HIPAA considerations',
+        input.existingRecordsDisclosure)}",');
+    buf.writeln('  "pet_custody": "${fieldDesc(
+        'Arrangements for pets during treatment — who should care for them, '
+        'feeding/medication schedules, veterinary contacts',
+        input.existingPetCustody)}",');
     if (input.formType != 'declaration') {
-      buf.writeln(
-          '  "agent_guidance": "what an agent should know about these conditions/meds",');
+      buf.writeln('  "agent_guidance": "${fieldDesc(
+          'What the agent should know about these conditions and medications — '
+          'warning signs, when to seek emergency help, treatment preferences '
+          'the agent should advocate for',
+          '')}",');
     }
     buf.writeln('  "additional_meds_to_consider": [{"name":"..","reason":"why this med is beneficial"}],');
     buf.writeln('  "additional_meds_with_limitations": [{"name":"..","reason":"specific limitation/restriction for this med"}],');
