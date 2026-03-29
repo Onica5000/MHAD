@@ -402,6 +402,21 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
         if (instr.religious.isNotEmpty) {
           _existingFieldValues['Religious/Spiritual'] = instr.religious;
         }
+        if (instr.childrenCustody.isNotEmpty) {
+          _existingFieldValues['Children/Dependent Care'] =
+              instr.childrenCustody;
+        }
+        if (instr.familyNotification.isNotEmpty) {
+          _existingFieldValues['Family Notification'] =
+              instr.familyNotification;
+        }
+        if (instr.recordsDisclosure.isNotEmpty) {
+          _existingFieldValues['Records Disclosure'] =
+              instr.recordsDisclosure;
+        }
+        if (instr.petCustody.isNotEmpty) {
+          _existingFieldValues['Pet Care'] = instr.petCustody;
+        }
       }
 
       // Detect consent conflicts
@@ -487,6 +502,14 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
       if (diet != null) instrUpdates['dietary'] = diet;
       final rel = editedVal('Religious/Spiritual');
       if (rel != null) instrUpdates['religious'] = rel;
+      final cc = editedVal('Children/Dependent Care');
+      if (cc != null) instrUpdates['childrenCustody'] = cc;
+      final fn = editedVal('Family Notification');
+      if (fn != null) instrUpdates['familyNotification'] = fn;
+      final rd = editedVal('Records Disclosure');
+      if (rd != null) instrUpdates['recordsDisclosure'] = rd;
+      final pc = editedVal('Pet Care');
+      if (pc != null) instrUpdates['petCustody'] = pc;
       // De-escalation, triggers, guidance stored as tagged entries in 'other' field.
       // Enforce consent: skip guidance for treatments user has refused.
       final deesc = editedVal('De-escalation Techniques');
@@ -554,6 +577,23 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
                 : const Value.absent(),
             religious: instrUpdates.containsKey('religious')
                 ? Value(_merge(existing?.religious, instrUpdates['religious']!))
+                : const Value.absent(),
+            childrenCustody: instrUpdates.containsKey('childrenCustody')
+                ? Value(_merge(existing?.childrenCustody,
+                    instrUpdates['childrenCustody']!))
+                : const Value.absent(),
+            familyNotification:
+                instrUpdates.containsKey('familyNotification')
+                    ? Value(_merge(existing?.familyNotification,
+                        instrUpdates['familyNotification']!))
+                    : const Value.absent(),
+            recordsDisclosure: instrUpdates.containsKey('recordsDisclosure')
+                ? Value(_merge(existing?.recordsDisclosure,
+                    instrUpdates['recordsDisclosure']!))
+                : const Value.absent(),
+            petCustody: instrUpdates.containsKey('petCustody')
+                ? Value(_merge(
+                    existing?.petCustody, instrUpdates['petCustody']!))
                 : const Value.absent(),
             other: instrUpdates.containsKey('other')
                 ? Value(_merge(existing?.other, instrUpdates['other']!))

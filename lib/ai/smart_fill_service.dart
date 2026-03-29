@@ -150,6 +150,10 @@ class SmartFillResult {
   final String? activities;
   final String? dietary;
   final String? religious;
+  final String? childrenCustody;
+  final String? familyNotification;
+  final String? recordsDisclosure;
+  final String? petCustody;
   final String? agentGuidance;
   final List<MedSuggestion> additionalMedsToConsider;
   final List<MedSuggestion> additionalMedsWithLimitations;
@@ -169,6 +173,10 @@ class SmartFillResult {
     this.activities,
     this.dietary,
     this.religious,
+    this.childrenCustody,
+    this.familyNotification,
+    this.recordsDisclosure,
+    this.petCustody,
     this.agentGuidance,
     this.additionalMedsToConsider = const [],
     this.additionalMedsWithLimitations = const [],
@@ -189,6 +197,10 @@ class SmartFillResult {
       activities == null &&
       dietary == null &&
       religious == null &&
+      childrenCustody == null &&
+      familyNotification == null &&
+      recordsDisclosure == null &&
+      petCustody == null &&
       agentGuidance == null &&
       additionalMedsToConsider.isEmpty &&
       additionalMedsWithLimitations.isEmpty &&
@@ -224,6 +236,16 @@ class SmartFillResult {
     if (activities != null) m['Helpful Activities'] = activities!;
     if (dietary != null) m['Dietary Considerations'] = dietary!;
     if (religious != null) m['Religious/Spiritual'] = religious!;
+    if (childrenCustody != null) {
+      m['Children/Dependent Care'] = childrenCustody!;
+    }
+    if (familyNotification != null) {
+      m['Family Notification'] = familyNotification!;
+    }
+    if (recordsDisclosure != null) {
+      m['Records Disclosure'] = recordsDisclosure!;
+    }
+    if (petCustody != null) m['Pet Care'] = petCustody!;
     if (agentGuidance != null) {
       m['Agent Guidance'] = agentGuidance!;
     }
@@ -257,6 +279,10 @@ class SmartFillResult {
       activities: _str(json['activities']),
       dietary: _str(json['dietary']),
       religious: _str(json['religious']),
+      childrenCustody: _str(json['children_custody']),
+      familyNotification: _str(json['family_notification']),
+      recordsDisclosure: _str(json['records_disclosure']),
+      petCustody: _str(json['pet_custody']),
       agentGuidance: _str(json['agent_guidance']),
       additionalMedsToConsider: _parseMeds(json['additional_meds_to_consider']),
       additionalMedsWithLimitations:
@@ -576,6 +602,18 @@ class SmartFillService {
           'with relevant treatment considerations (e.g., medication timing around '
           'prayer, fasting accommodations, clergy contact preferences)",');
     }
+    buf.writeln(
+        '  "children_custody": "arrangements for children/dependents during treatment '
+        '(e.g., who should care for them, school contacts, custody considerations)",');
+    buf.writeln(
+        '  "family_notification": "who should be notified about hospitalization or '
+        'treatment changes (names are placeholders — user fills in real names)",');
+    buf.writeln(
+        '  "records_disclosure": "preferences about sharing medical records '
+        '(e.g., who may access records, what information to share or restrict)",');
+    buf.writeln(
+        '  "pet_custody": "arrangements for pets during treatment '
+        '(e.g., who should care for them, veterinary contacts, feeding instructions)",');
     if (input.formType != 'declaration') {
       buf.writeln(
           '  "agent_guidance": "what an agent should know about these conditions/meds",');
