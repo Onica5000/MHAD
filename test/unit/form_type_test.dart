@@ -3,12 +3,13 @@ import 'package:mhad/domain/model/directive.dart';
 
 void main() {
   group('FormType.steps', () {
-    test('combined form includes all 14 steps', () {
+    test('combined form includes all 15 steps', () {
       final steps = FormType.combined.steps;
-      expect(steps.length, 14);
+      expect(steps.length, 15);
       expect(steps, contains(WizardStep.agentDesignation));
       expect(steps, contains(WizardStep.alternateAgent));
       expect(steps, contains(WizardStep.agentAuthority));
+      expect(steps, contains(WizardStep.guardianNomination));
       expect(steps, contains(WizardStep.execution));
     });
 

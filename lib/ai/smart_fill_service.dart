@@ -12,10 +12,15 @@ import 'package:mhad/services/gemini_rate_tracker.dart';
 /// The structured input collected from the user via NIH APIs (zero tokens),
 /// plus existing wizard data so the AI can supplement rather than duplicate.
 class SmartFillInput {
+  static const maxConditions = 30;
+  static const maxMedsPerCategory = 50;
+  static const maxFieldLength = 2000;
+  static const _validFormTypes = {'combined', 'declaration', 'poa'};
+
   final List<IcdCondition> conditions;
   final List<String> currentMedications;
   final List<String> medicationsToAvoid;
-  final String formType; // 'combined', 'declaration', 'poa'
+  final String formType;
 
   // Existing wizard data (non-PII) — AI should not contradict these.
   // ── Directive ──
@@ -82,6 +87,51 @@ class SmartFillInput {
       conditions.isEmpty &&
       currentMedications.isEmpty &&
       medicationsToAvoid.isEmpty;
+
+  /// Validates and clamps input to safe bounds.
+  SmartFillInput sanitized() {
+    final safeFormType =
+        _validFormTypes.contains(formType) ? formType : 'combined';
+    return SmartFillInput(
+      conditions: conditions.take(maxConditions).toList(),
+      currentMedications: currentMedications.take(maxMedsPerCategory).toList(),
+      medicationsToAvoid: medicationsToAvoid.take(maxMedsPerCategory).toList(),
+      formType: safeFormType,
+      existingEffectiveCondition:
+          _truncate(existingEffectiveCondition),
+      existingFacilityPref: existingFacilityPref,
+      existingPreferredFacility: _truncate(existingPreferredFacility),
+      existingAvoidFacility: _truncate(existingAvoidFacility),
+      existingMedicationConsent: existingMedicationConsent,
+      existingEctConsent: existingEctConsent,
+      existingExperimentalConsent: existingExperimentalConsent,
+      existingDrugTrialConsent: existingDrugTrialConsent,
+      existingAgentCanConsentHospitalization:
+          existingAgentCanConsentHospitalization,
+      existingAgentCanConsentMedication: existingAgentCanConsentMedication,
+      existingAgentAuthorityLimitations:
+          _truncate(existingAgentAuthorityLimitations),
+      existingHealthHistory: _truncate(existingHealthHistory),
+      existingCrisisIntervention: _truncate(existingCrisisIntervention),
+      existingActivities: _truncate(existingActivities),
+      existingDietary: _truncate(existingDietary),
+      existingReligious: _truncate(existingReligious),
+      existingChildrenCustody: _truncate(existingChildrenCustody),
+      existingFamilyNotification: _truncate(existingFamilyNotification),
+      existingRecordsDisclosure: _truncate(existingRecordsDisclosure),
+      existingPetCustody: _truncate(existingPetCustody),
+      existingOther: _truncate(existingOther),
+      existingPreferredMeds:
+          existingPreferredMeds.take(maxMedsPerCategory).toList(),
+      existingLimitationMeds:
+          existingLimitationMeds.take(maxMedsPerCategory).toList(),
+      existingAvoidMeds:
+          existingAvoidMeds.take(maxMedsPerCategory).toList(),
+    );
+  }
+
+  static String _truncate(String s) =>
+      s.length > maxFieldLength ? s.substring(0, maxFieldLength) : s;
 }
 
 /// Structured output from the AI — one field per directive section.
@@ -102,6 +152,7 @@ class SmartFillResult {
   final String? religious;
   final String? agentGuidance;
   final List<MedSuggestion> additionalMedsToConsider;
+  final List<MedSuggestion> additionalMedsWithLimitations;
   final List<MedSuggestion> additionalMedsToAvoid;
 
   const SmartFillResult({
@@ -120,6 +171,7 @@ class SmartFillResult {
     this.religious,
     this.agentGuidance,
     this.additionalMedsToConsider = const [],
+    this.additionalMedsWithLimitations = const [],
     this.additionalMedsToAvoid = const [],
   });
 
@@ -139,6 +191,7 @@ class SmartFillResult {
       religious == null &&
       agentGuidance == null &&
       additionalMedsToConsider.isEmpty &&
+      additionalMedsWithLimitations.isEmpty &&
       additionalMedsToAvoid.isEmpty;
 
   /// All non-null fields as label→value for the review UI.
@@ -178,6 +231,10 @@ class SmartFillResult {
       m['Additional Medications to Consider'] =
           additionalMedsToConsider.map((s) => s.display).join('\n');
     }
+    if (additionalMedsWithLimitations.isNotEmpty) {
+      m['Additional Medications with Limitations'] =
+          additionalMedsWithLimitations.map((s) => s.display).join('\n');
+    }
     if (additionalMedsToAvoid.isNotEmpty) {
       m['Additional Medications to Avoid'] =
           additionalMedsToAvoid.map((s) => s.display).join('\n');
@@ -202,6 +259,8 @@ class SmartFillResult {
       religious: _str(json['religious']),
       agentGuidance: _str(json['agent_guidance']),
       additionalMedsToConsider: _parseMeds(json['additional_meds_to_consider']),
+      additionalMedsWithLimitations:
+          _parseMeds(json['additional_meds_with_limitations']),
       additionalMedsToAvoid: _parseMeds(json['additional_meds_to_avoid']),
     );
   }
@@ -212,15 +271,18 @@ class SmartFillResult {
     return s.isEmpty ? null : s;
   }
 
+  static const _maxMedSuggestions = 20;
+
   static List<MedSuggestion> _parseMeds(dynamic v) {
     if (v is! List) return [];
     return v
         .whereType<Map<String, dynamic>>()
         .map((m) => MedSuggestion(
-              name: m['name']?.toString() ?? '',
-              reason: m['reason']?.toString() ?? '',
+              name: (m['name']?.toString() ?? '').trim(),
+              reason: (m['reason']?.toString() ?? '').trim(),
             ))
         .where((m) => m.name.isNotEmpty)
+        .take(_maxMedSuggestions)
         .toList();
   }
 }
@@ -260,7 +322,8 @@ class SmartFillService {
   /// Given structured clinical data, ask Gemini to generate directive content.
   /// Returns [SmartFillResponse] containing the parsed result and actual token
   /// usage from the API (for rate tracking).
-  Future<SmartFillResponse> generate(SmartFillInput input) async {
+  Future<SmartFillResponse> generate(SmartFillInput rawInput) async {
+    final input = rawInput.sanitized();
     final model = GenerativeModel(
       model: _model,
       apiKey: apiKey,
@@ -340,9 +403,23 @@ class SmartFillService {
     buf.writeln('Form: ${input.formType}');
 
     if (input.conditions.isNotEmpty) {
-      buf.writeln('ICD-10 diagnoses:');
-      for (final c in input.conditions) {
-        buf.writeln('- ${c.code} ${c.name}');
+      final psychiatric = input.conditions
+          .where((c) => c.code.startsWith('F'))
+          .toList();
+      final medical = input.conditions
+          .where((c) => !c.code.startsWith('F'))
+          .toList();
+      if (psychiatric.isNotEmpty) {
+        buf.writeln('Psychiatric diagnoses (ICD-10):');
+        for (final c in psychiatric) {
+          buf.writeln('- ${c.code} ${c.name}');
+        }
+      }
+      if (medical.isNotEmpty) {
+        buf.writeln('Medical diagnoses (ICD-10):');
+        for (final c in medical) {
+          buf.writeln('- ${c.code} ${c.name}');
+        }
       }
     }
 
@@ -375,10 +452,10 @@ class SmartFillService {
     // The AI MUST respect these decisions and never suggest overriding them.
     existing.add('');
     existing.add('=== CONSENT DECISIONS (BINDING — do NOT contradict) ===');
-    existing.add('Medication consent: ${_describeConsent(input.existingMedicationConsent)}');
-    existing.add('ECT consent: ${_describeConsent(input.existingEctConsent)}');
-    existing.add('Experimental studies consent: ${_describeConsent(input.existingExperimentalConsent)}');
-    existing.add('Drug trial consent: ${_describeConsent(input.existingDrugTrialConsent)}');
+    existing.add('Medication consent: ${s(_describeConsent(input.existingMedicationConsent))}');
+    existing.add('ECT consent: ${s(_describeConsent(input.existingEctConsent))}');
+    existing.add('Experimental studies consent: ${s(_describeConsent(input.existingExperimentalConsent))}');
+    existing.add('Drug trial consent: ${s(_describeConsent(input.existingDrugTrialConsent))}');
     // Agent authority (POA/combined only) — always send full picture
     if (input.formType != 'declaration') {
       existing.add('Agent consent to hospitalization: ${input.existingAgentCanConsentHospitalization ? "YES — agent authorized" : "NO — agent NOT authorized"}');
@@ -463,7 +540,12 @@ class SmartFillService {
         'Use plain language suitable for a legal document. '
         'Be specific and practical — include concrete examples, names of techniques, '
         'and actionable instructions rather than generic advice. '
-        'Do NOT include patient name, DOB, or any PII.');
+        'Do NOT include patient name, DOB, or any PII. '
+        'PA NTI drug rule: Narrow Therapeutic Index drugs (lithium, carbamazepine, '
+        'valproic acid, phenytoin, clonazepam) CANNOT have generics substituted under '
+        'PA law (35 P.S. §960.3). If suggesting NTI drugs, note the monitoring requirements '
+        'in the reason field. All other medication preferences apply to generic, brand name, '
+        'and trade name equivalents.');
 
     buf.writeln();
     buf.writeln('{');
@@ -498,8 +580,9 @@ class SmartFillService {
       buf.writeln(
           '  "agent_guidance": "what an agent should know about these conditions/meds",');
     }
-    buf.writeln('  "additional_meds_to_consider": [{"name":"..","reason":".."}],');
-    buf.writeln('  "additional_meds_to_avoid": [{"name":"..","reason":".."}]');
+    buf.writeln('  "additional_meds_to_consider": [{"name":"..","reason":"why this med is beneficial"}],');
+    buf.writeln('  "additional_meds_with_limitations": [{"name":"..","reason":"specific limitation/restriction for this med"}],');
+    buf.writeln('  "additional_meds_to_avoid": [{"name":"..","reason":"why to avoid this med"}]');
     buf.writeln('}');
 
     return buf.toString();

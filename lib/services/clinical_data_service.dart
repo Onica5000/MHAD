@@ -171,3 +171,52 @@ class MedicationResult {
   final List<String> strengths;
   const MedicationResult({required this.name, this.strengths = const []});
 }
+
+/// Pennsylvania Narrow Therapeutic Index (NTI) psychiatric medications.
+///
+/// Under PA Generic Equivalent Drug Law (35 P.S. §960.3), pharmacists
+/// CANNOT substitute generic equivalents for NTI drugs. These drugs
+/// require careful titration and monitoring — small changes in blood
+/// levels can cause toxicity or treatment failure.
+///
+/// Source: PA Dept. of Health NTI Drug List + FDA NTI classifications.
+class NtiDrugReference {
+  NtiDrugReference._();
+
+  /// Lowercase generic names of NTI psychiatric medications relevant to
+  /// mental health advance directives.
+  static const ntiDrugs = <String, String>{
+    'lithium': 'Bipolar disorder — blood level monitoring required',
+    'carbamazepine': 'Bipolar/seizures — blood level monitoring required',
+    'valproic acid': 'Bipolar/seizures — blood level monitoring required',
+    'divalproex': 'Bipolar/seizures — blood level monitoring required',
+    'divalproex sodium': 'Bipolar/seizures — blood level monitoring required',
+    'phenytoin': 'Seizures — blood level monitoring required',
+    'clonazepam': 'Anxiety/seizures — narrow therapeutic window',
+    'phenobarbital': 'Seizures/anxiety — narrow therapeutic window',
+    'ethosuximide': 'Absence seizures — blood level monitoring required',
+    'primidone': 'Seizures — blood level monitoring required',
+    'warfarin': 'Blood thinner — commonly co-prescribed, strict monitoring',
+    'theophylline': 'Respiratory — commonly co-prescribed, strict monitoring',
+    'levothyroxine': 'Thyroid — commonly co-prescribed with lithium',
+    'cyclosporine': 'Immunosuppressant — strict monitoring required',
+  };
+
+  /// Returns true if the medication name matches a known NTI drug.
+  /// Checks the base generic name (before any strength/form suffix).
+  static bool isNti(String medicationName) {
+    final lower = medicationName.toLowerCase().trim();
+    return ntiDrugs.keys.any((nti) => lower == nti || lower.startsWith('$nti '));
+  }
+
+  /// Returns the NTI note for a medication, or null if not NTI.
+  static String? ntiNote(String medicationName) {
+    final lower = medicationName.toLowerCase().trim();
+    for (final entry in ntiDrugs.entries) {
+      if (lower == entry.key || lower.startsWith('${entry.key} ')) {
+        return entry.value;
+      }
+    }
+    return null;
+  }
+}

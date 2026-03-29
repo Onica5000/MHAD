@@ -158,6 +158,8 @@ class _AdditionalInstructionsStepState
     return true;
   }
 
+  static const _maxFieldLength = 2000;
+
   Widget _buildSection(
       String title, TextEditingController ctrl, String hint, String guidance) {
     return ExpansionTile(
@@ -168,6 +170,7 @@ class _AdditionalInstructionsStepState
           child: TextFormField(
             controller: ctrl,
             maxLines: 4,
+            maxLength: _maxFieldLength,
             autofillHints: const [],
             decoration: InputDecoration(
               labelText: title,

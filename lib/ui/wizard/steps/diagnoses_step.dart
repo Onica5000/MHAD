@@ -83,6 +83,37 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
     await ref.read(directiveRepositoryProvider).deleteDiagnosis(id);
   }
 
+  Widget _buildDiagnosisTile(DiagnosisEntry d, ColorScheme cs) {
+    return Card(
+      margin: const EdgeInsets.only(bottom: 6),
+      child: ListTile(
+        dense: true,
+        leading: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+          decoration: BoxDecoration(
+            color: cs.primaryContainer,
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: Text(
+            d.icdCode,
+            style: TextStyle(
+              fontSize: 11,
+              fontFamily: 'monospace',
+              color: cs.onPrimaryContainer,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+        title: Text(d.name, style: const TextStyle(fontSize: 14)),
+        trailing: IconButton(
+          icon: Icon(Icons.remove_circle_outline, color: cs.error, size: 20),
+          tooltip: 'Remove',
+          onPressed: () => _removeDiagnosis(d.id),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
@@ -90,10 +121,12 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
         ref.watch(directiveRepositoryProvider).watchDiagnoses(widget.directiveId);
 
     const helpText =
-        'Search for your mental health diagnoses using ICD-10 codes. '
+        'Search for your psychiatric and medical diagnoses using ICD-10 codes. '
         'These are the official medical classification codes used by healthcare '
         'providers. Adding your diagnoses helps your care team and agent '
         'understand your conditions.\n\n'
+        'Psychiatric diagnoses (F-codes) and medical diagnoses are shown '
+        'in separate sections.\n\n'
         'This lookup is free and uses the NIH Clinical Tables Service — '
         'no AI tokens are used.';
 
@@ -106,12 +139,12 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
               WizardHelpButton(helpText: helpText, stepId: 'diagnoses'),
               const SizedBox(height: 8),
               Text(
-                'Medical Diagnoses',
+                'Diagnoses',
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(height: 4),
               Text(
-                'Search and add your mental health diagnoses. '
+                'Search and add your psychiatric and medical diagnoses. '
                 'These will be included in your directive.',
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: cs.onSurfaceVariant),
@@ -256,48 +289,38 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                       ),
                     );
                   }
+                  final psychiatric = diagnoses
+                      .where((d) => d.icdCode.startsWith('F'))
+                      .toList();
+                  final medical = diagnoses
+                      .where((d) => !d.icdCode.startsWith('F'))
+                      .toList();
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Your Diagnoses (${diagnoses.length})',
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleSmall
-                            ?.copyWith(fontWeight: FontWeight.w600),
-                      ),
-                      const SizedBox(height: 8),
-                      ...diagnoses.map((d) => Card(
-                            margin: const EdgeInsets.only(bottom: 6),
-                            child: ListTile(
-                              dense: true,
-                              leading: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 6, vertical: 2),
-                                decoration: BoxDecoration(
-                                  color: cs.primaryContainer,
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                                child: Text(
-                                  d.icdCode,
-                                  style: TextStyle(
-                                    fontSize: 11,
-                                    fontFamily: 'monospace',
-                                    color: cs.onPrimaryContainer,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                              title: Text(d.name,
-                                  style: const TextStyle(fontSize: 14)),
-                              trailing: IconButton(
-                                icon: Icon(Icons.remove_circle_outline,
-                                    color: cs.error, size: 20),
-                                tooltip: 'Remove',
-                                onPressed: () => _removeDiagnosis(d.id),
-                              ),
-                            ),
-                          )),
+                      if (psychiatric.isNotEmpty) ...[
+                        Text(
+                          'Psychiatric Diagnoses (${psychiatric.length})',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleSmall
+                              ?.copyWith(fontWeight: FontWeight.w600),
+                        ),
+                        const SizedBox(height: 8),
+                        ...psychiatric.map((d) => _buildDiagnosisTile(d, cs)),
+                        const SizedBox(height: 16),
+                      ],
+                      if (medical.isNotEmpty) ...[
+                        Text(
+                          'Medical Diagnoses (${medical.length})',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleSmall
+                              ?.copyWith(fontWeight: FontWeight.w600),
+                        ),
+                        const SizedBox(height: 8),
+                        ...medical.map((d) => _buildDiagnosisTile(d, cs)),
+                      ],
                     ],
                   );
                 },

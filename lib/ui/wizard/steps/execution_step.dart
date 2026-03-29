@@ -80,13 +80,48 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
     });
   }
 
+  /// Returns a warning message if witnesses have issues, or null if OK.
+  Future<String?> _witnessWarning() async {
+    final w1 = _w1NameCtrl.text.trim().toLowerCase();
+    final w2 = _w2NameCtrl.text.trim().toLowerCase();
+
+    if (w1.isNotEmpty && w2.isNotEmpty && w1 == w2) {
+      return 'Witness 1 and Witness 2 must be different people.';
+    }
+
+    // PA Act 194 §5822: witnesses cannot be the designated agent
+    if (widget.formType.hasAgentSections) {
+      final agents = await ref
+          .read(directiveRepositoryProvider)
+          .getAgents(widget.directiveId);
+      for (final agent in agents) {
+        final agentName = agent.fullName.trim().toLowerCase();
+        if (agentName.isEmpty) continue;
+        if (w1 == agentName) {
+          return 'Witness 1 cannot be your designated agent.';
+        }
+        if (w2 == agentName) {
+          return 'Witness 2 cannot be your designated agent.';
+        }
+      }
+    }
+
+    return null;
+  }
+
   @override
   Future<bool> validateAndSave() async {
-    // Save whatever is filled in — don't block navigation
-    if (_executionDate == null) {
-      // Default to today if not selected
-      _executionDate = DateTime.now();
+    final warning = await _witnessWarning();
+    if (warning != null && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(warning)),
+      );
+      return false;
     }
+
+    // Save whatever is filled in — don't block navigation.
+    // Default to today if not selected.
+    _executionDate ??= DateTime.now();
 
     final repo = ref.read(directiveRepositoryProvider);
     final executionMs = _executionDate!.millisecondsSinceEpoch;

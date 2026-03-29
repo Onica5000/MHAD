@@ -293,7 +293,7 @@ class PiiStripper {
     _PiiPattern('insurance info', _insurancePattern, '[insurance removed]'),
     _PiiPattern('facility name', _facilityNamePattern, '[facility removed]'),
     _PiiPattern('medical record number', _mrnPattern, '[record number removed]'),
-    _PiiPattern('medical license number', _licensePattern, '[license number removed]'),
+    _PiiPattern('medical license number', _licensePattern, '[license removed]'),
     _PiiPattern('insurance ID', _insuranceIdPattern, '[insurance ID removed]'),
   ];
 }

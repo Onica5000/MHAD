@@ -124,13 +124,15 @@ class _MedicationAutocompleteFieldState
                   itemCount: _suggestions.length,
                   itemBuilder: (ctx, i) {
                     final med = _suggestions[i];
+                    final isNti = NtiDrugReference.isNti(med.name);
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // Main medication name — tappable to select without strength
                         Semantics(
                           button: true,
-                          label: 'Select medication ${med.name}',
+                          label: 'Select medication ${med.name}'
+                              '${isNti ? ', narrow therapeutic index drug' : ''}',
                           child: InkWell(
                             onTap: () => _selectMedication(med.name),
                             child: Padding(
@@ -145,6 +147,26 @@ class _MedicationAutocompleteFieldState
                                         style: textStyle.bodyMedium?.copyWith(
                                             fontWeight: FontWeight.w600)),
                                   ),
+                                  if (isNti)
+                                    Tooltip(
+                                      message: 'NTI drug — no generic '
+                                          'substitution in PA',
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 5, vertical: 1),
+                                        decoration: BoxDecoration(
+                                          color: cs.tertiaryContainer,
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                        ),
+                                        child: Text('NTI',
+                                            style: TextStyle(
+                                              fontSize: 9,
+                                              fontWeight: FontWeight.w700,
+                                              color: cs.onTertiaryContainer,
+                                            )),
+                                      ),
+                                    ),
                                 ],
                               ),
                             ),

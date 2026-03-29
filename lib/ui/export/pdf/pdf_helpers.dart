@@ -523,19 +523,36 @@ pw.Widget witnessDetailBlock(String label, String? name, String? address,
 /// Renders a list of ICD-10 diagnoses.
 pw.Widget diagnosisList(List<dynamic> diagnoses) {
   if (diagnoses.isEmpty) return pw.SizedBox.shrink();
+
+  final psychiatric = diagnoses.where((d) => d.icdCode.startsWith('F')).toList();
+  final medical = diagnoses.where((d) => !d.icdCode.startsWith('F')).toList();
+
+  pw.Widget buildGroup(String title, List<dynamic> items) {
+    return pw.Column(
+      crossAxisAlignment: pw.CrossAxisAlignment.start,
+      children: [
+        pw.Text('$title:', style: boldStyle(fontSize: 9)),
+        pw.SizedBox(height: 2),
+        ...items.map((d) => pw.Padding(
+              padding: const pw.EdgeInsets.only(left: 8, bottom: 1),
+              child: pw.Text(
+                '\u2022 ${d.icdCode} — ${d.name}',
+                style: bodyStyle(),
+              ),
+            )),
+        pw.SizedBox(height: 4),
+      ],
+    );
+  }
+
   return pw.Column(
     crossAxisAlignment: pw.CrossAxisAlignment.start,
     children: [
-      pw.Text('Medical Diagnoses (ICD-10):', style: boldStyle(fontSize: 9)),
+      if (psychiatric.isNotEmpty)
+        buildGroup('Psychiatric Diagnoses (ICD-10)', psychiatric),
+      if (medical.isNotEmpty)
+        buildGroup('Medical Diagnoses (ICD-10)', medical),
       pw.SizedBox(height: 2),
-      ...diagnoses.map((d) => pw.Padding(
-            padding: const pw.EdgeInsets.only(left: 8, bottom: 1),
-            child: pw.Text(
-              '\u2022 ${d.icdCode} — ${d.name}',
-              style: bodyStyle(),
-            ),
-          )),
-      pw.SizedBox(height: 6),
     ],
   );
 }

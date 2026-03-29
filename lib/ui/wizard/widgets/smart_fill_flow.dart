@@ -68,6 +68,17 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
   Map<String, String>? _editedValues;
   String? _error;
 
+  // ── Consent context for review warnings & apply enforcement ────────
+  // Keys that conflict with user's consent decisions.
+  final Set<String> _consentConflicts = {};
+  String _medicationConsent = 'yes';
+  String _ectConsent = 'no';
+  String _experimentalConsent = 'no';
+  String _drugTrialConsent = 'no';
+
+  // ── Existing field values for side-by-side comparison ──────────────
+  Map<String, String> _existingFieldValues = {};
+
   // ── Existing wizard data summary (shown to user) ──────────────────
   final List<String> _existingDataSummary = [];
   bool _loadedExisting = false;
@@ -361,6 +372,62 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
         return;
       }
 
+      // Capture consent values and existing data for review context
+      // (reuse directive, prefs, instr from above)
+      _medicationConsent = prefs?.medicationConsent ?? 'yes';
+      _ectConsent = prefs?.ectConsent ?? 'no';
+      _experimentalConsent = prefs?.experimentalConsent ?? 'no';
+      _drugTrialConsent = prefs?.drugTrialConsent ?? 'no';
+
+      // Build existing field values for side-by-side comparison
+      _existingFieldValues = {};
+      if (directive != null && directive.effectiveCondition.isNotEmpty) {
+        _existingFieldValues['Effective Condition'] =
+            directive.effectiveCondition;
+      }
+      if (instr != null) {
+        if (instr.healthHistory.isNotEmpty) {
+          _existingFieldValues['Health History'] = instr.healthHistory;
+        }
+        if (instr.crisisIntervention.isNotEmpty) {
+          _existingFieldValues['Crisis Intervention'] =
+              instr.crisisIntervention;
+        }
+        if (instr.activities.isNotEmpty) {
+          _existingFieldValues['Helpful Activities'] = instr.activities;
+        }
+        if (instr.dietary.isNotEmpty) {
+          _existingFieldValues['Dietary Considerations'] = instr.dietary;
+        }
+        if (instr.religious.isNotEmpty) {
+          _existingFieldValues['Religious/Spiritual'] = instr.religious;
+        }
+      }
+
+      // Detect consent conflicts
+      _consentConflicts.clear();
+      final medKeys = {
+        'Additional Medications to Consider',
+        'Additional Medications with Limitations',
+      };
+      if (_medicationConsent == 'no') {
+        for (final k in medKeys) {
+          if (result.toDisplayMap().containsKey(k)) _consentConflicts.add(k);
+        }
+      }
+      if (_ectConsent == 'no' &&
+          result.toDisplayMap().containsKey('ECT Guidance')) {
+        _consentConflicts.add('ECT Guidance');
+      }
+      if (_experimentalConsent == 'no' &&
+          result.toDisplayMap().containsKey('Experimental Studies Guidance')) {
+        _consentConflicts.add('Experimental Studies Guidance');
+      }
+      if (_drugTrialConsent == 'no' &&
+          result.toDisplayMap().containsKey('Drug Trials Guidance')) {
+        _consentConflicts.add('Drug Trials Guidance');
+      }
+
       final display = result.toDisplayMap();
       setState(() {
         _result = result;
@@ -390,6 +457,9 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
       final a = _accepted!;
       final v = _editedValues!;
 
+      // Read consent preferences once for enforcement across the method
+      final currentPrefs = await repo.getPreferences(id);
+
       String? editedVal(String key) {
         if (a[key] != true) return null;
         final text = v[key]?.trim();
@@ -417,12 +487,19 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
       if (diet != null) instrUpdates['dietary'] = diet;
       final rel = editedVal('Religious/Spiritual');
       if (rel != null) instrUpdates['religious'] = rel;
-      // De-escalation, triggers, guidance stored as tagged entries in 'other' field
+      // De-escalation, triggers, guidance stored as tagged entries in 'other' field.
+      // Enforce consent: skip guidance for treatments user has refused.
       final deesc = editedVal('De-escalation Techniques');
       final trig = editedVal('Crisis Triggers');
-      final ectG = editedVal('ECT Guidance');
-      final expG = editedVal('Experimental Studies Guidance');
-      final drugG = editedVal('Drug Trials Guidance');
+      final ectG = (currentPrefs?.ectConsent ?? 'no') == 'no'
+          ? null
+          : editedVal('ECT Guidance');
+      final expG = (currentPrefs?.experimentalConsent ?? 'no') == 'no'
+          ? null
+          : editedVal('Experimental Studies Guidance');
+      final drugG = (currentPrefs?.drugTrialConsent ?? 'no') == 'no'
+          ? null
+          : editedVal('Drug Trials Guidance');
       final ag = editedVal('Agent Guidance');
       final otherParts = <String>[];
       if (deesc != null) otherParts.add('[DE-ESCALATION] $deesc');
@@ -485,45 +562,84 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
         );
       }
 
-      // Medications to consider → preferred
-      if (a['Additional Medications to Consider'] == true) {
-        final existing = await repo.watchMedications(id).first;
-        int order = existing.length;
-        for (final m in r.additionalMedsToConsider) {
-          await repo.insertMedication(MedicationEntriesCompanion.insert(
-            directiveId: id,
-            entryType: MedicationEntryType.preferred.name,
-            medicationName: Value(m.name),
-            reason: Value(m.reason),
-            sortOrder: Value(order++),
-          ));
-        }
+      // ── Medications ──────────────────────────────────────────────────
+      // Enforce consent: skip medication suggestions if user refused
+      final medConsent = currentPrefs?.medicationConsent ?? 'yes';
+      if (medConsent == 'no') {
+        // Silently skip — user was warned in review UI
+        a.remove('Additional Medications to Consider');
+        a.remove('Additional Medications with Limitations');
       }
 
-      // Medications to avoid → exceptions
-      if (a['Additional Medications to Avoid'] == true) {
-        final existing = await repo.watchMedications(id).first;
-        int order = existing.length;
-        for (final m in r.additionalMedsToAvoid) {
-          await repo.insertMedication(MedicationEntriesCompanion.insert(
-            directiveId: id,
-            entryType: MedicationEntryType.exception.name,
-            medicationName: Value(m.name),
-            reason: Value(m.reason),
-            sortOrder: Value(order++),
-          ));
-        }
-      }
-
-      // Also save the user's explicit current meds + avoid meds from step 2
+      // Query existing meds ONCE and track order across all inserts to
+      // avoid race conditions from multiple queries.
       final existingMeds = await repo.watchMedications(id).first;
       int order = existingMeds.length;
+      final insertedNames = <String, Set<String>>{}; // entryType → names
+
       bool isDuplicate(String name, String entryType) {
-        return existingMeds.any((m) =>
-            m.medicationName.toLowerCase() == name.toLowerCase() &&
-            m.entryType == entryType);
+        final lowerName = name.toLowerCase();
+        if (existingMeds.any((m) =>
+            m.medicationName.toLowerCase() == lowerName &&
+            m.entryType == entryType)) {
+          return true;
+        }
+        return insertedNames[entryType]?.contains(lowerName) ?? false;
       }
 
+      void trackInserted(String name, String entryType) {
+        (insertedNames[entryType] ??= {}).add(name.toLowerCase());
+      }
+
+      // AI-suggested medications to consider → preferred
+      if (a['Additional Medications to Consider'] == true) {
+        for (final m in r.additionalMedsToConsider) {
+          if (!isDuplicate(m.name, MedicationEntryType.preferred.name)) {
+            await repo.insertMedication(MedicationEntriesCompanion.insert(
+              directiveId: id,
+              entryType: MedicationEntryType.preferred.name,
+              medicationName: Value(m.name),
+              reason: Value(m.reason),
+              sortOrder: Value(order++),
+            ));
+            trackInserted(m.name, MedicationEntryType.preferred.name);
+          }
+        }
+      }
+
+      // AI-suggested medications with limitations → limitations
+      if (a['Additional Medications with Limitations'] == true) {
+        for (final m in r.additionalMedsWithLimitations) {
+          if (!isDuplicate(m.name, MedicationEntryType.limitation.name)) {
+            await repo.insertMedication(MedicationEntriesCompanion.insert(
+              directiveId: id,
+              entryType: MedicationEntryType.limitation.name,
+              medicationName: Value(m.name),
+              reason: Value(m.reason),
+              sortOrder: Value(order++),
+            ));
+            trackInserted(m.name, MedicationEntryType.limitation.name);
+          }
+        }
+      }
+
+      // AI-suggested medications to avoid → exceptions
+      if (a['Additional Medications to Avoid'] == true) {
+        for (final m in r.additionalMedsToAvoid) {
+          if (!isDuplicate(m.name, MedicationEntryType.exception.name)) {
+            await repo.insertMedication(MedicationEntriesCompanion.insert(
+              directiveId: id,
+              entryType: MedicationEntryType.exception.name,
+              medicationName: Value(m.name),
+              reason: Value(m.reason),
+              sortOrder: Value(order++),
+            ));
+            trackInserted(m.name, MedicationEntryType.exception.name);
+          }
+        }
+      }
+
+      // User's explicit selections from step 2
       for (final name in _selectedPreferredMeds) {
         if (!isDuplicate(name, MedicationEntryType.preferred.name)) {
           await repo.insertMedication(MedicationEntriesCompanion.insert(
@@ -532,6 +648,7 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
             medicationName: Value(name),
             sortOrder: Value(order++),
           ));
+          trackInserted(name, MedicationEntryType.preferred.name);
         }
       }
       for (final name in _selectedLimitationMeds) {
@@ -542,6 +659,7 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
             medicationName: Value(name),
             sortOrder: Value(order++),
           ));
+          trackInserted(name, MedicationEntryType.limitation.name);
         }
       }
       for (final name in _selectedAvoidMeds) {
@@ -552,6 +670,7 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
             medicationName: Value(name),
             sortOrder: Value(order++),
           ));
+          trackInserted(name, MedicationEntryType.exception.name);
         }
       }
     } catch (e) {
@@ -694,6 +813,64 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
     );
   }
 
+  List<Widget> _buildGroupedConditionChips(ColorScheme cs) {
+    final psychiatric = _selectedConditions
+        .where((c) => c.code.startsWith('F'))
+        .toList();
+    final medical = _selectedConditions
+        .where((c) => !c.code.startsWith('F'))
+        .toList();
+    return [
+      if (psychiatric.isNotEmpty) ...[
+        Text('Psychiatric',
+            style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: cs.onSurfaceVariant)),
+        const SizedBox(height: 4),
+        Wrap(
+          spacing: 6,
+          runSpacing: 6,
+          children: psychiatric
+              .map((c) => Chip(
+                    label:
+                        Text(c.name, style: const TextStyle(fontSize: 12)),
+                    deleteIcon: const Icon(Icons.close, size: 16),
+                    onDeleted: () =>
+                        setState(() => _selectedConditions.remove(c)),
+                    backgroundColor: cs.primaryContainer,
+                    labelStyle: TextStyle(color: cs.onPrimaryContainer),
+                  ))
+              .toList(),
+        ),
+        const SizedBox(height: 8),
+      ],
+      if (medical.isNotEmpty) ...[
+        Text('Medical',
+            style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: cs.onSurfaceVariant)),
+        const SizedBox(height: 4),
+        Wrap(
+          spacing: 6,
+          runSpacing: 6,
+          children: medical
+              .map((c) => Chip(
+                    label:
+                        Text(c.name, style: const TextStyle(fontSize: 12)),
+                    deleteIcon: const Icon(Icons.close, size: 16),
+                    onDeleted: () =>
+                        setState(() => _selectedConditions.remove(c)),
+                    backgroundColor: cs.tertiaryContainer,
+                    labelStyle: TextStyle(color: cs.onTertiaryContainer),
+                  ))
+              .toList(),
+        ),
+      ],
+    ];
+  }
+
   Widget _buildConditionsStep() {
     final cs = Theme.of(context).colorScheme;
     return Padding(
@@ -723,21 +900,7 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
           ),
           if (_selectedConditions.isNotEmpty) ...[
             const SizedBox(height: 12),
-            Wrap(
-              spacing: 6,
-              runSpacing: 6,
-              children: _selectedConditions
-                  .map((c) => Chip(
-                        label: Text(c.name, style: const TextStyle(fontSize: 12)),
-                        deleteIcon: const Icon(Icons.close, size: 16),
-                        onDeleted: () => setState(
-                            () => _selectedConditions.remove(c)),
-                        backgroundColor: cs.primaryContainer,
-                        labelStyle:
-                            TextStyle(color: cs.onPrimaryContainer),
-                      ))
-                  .toList(),
-            ),
+            ..._buildGroupedConditionChips(cs),
           ],
           const SizedBox(height: 8),
           Expanded(
@@ -789,6 +952,14 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
                             if (selected) {
                               _selectedConditions
                                   .removeWhere((s) => s.code == c.code);
+                            } else if (_selectedConditions.length >=
+                                SmartFillInput.maxConditions) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'Maximum ${SmartFillInput.maxConditions} conditions allowed'),
+                                ),
+                              );
                             } else {
                               _selectedConditions.add(c);
                             }
@@ -984,6 +1155,14 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
                                 setState(() {
                                   if (nameSelected) {
                                     targetList.remove(med.name);
+                                  } else if (targetList.length >=
+                                      SmartFillInput.maxMedsPerCategory) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          'Maximum ${SmartFillInput.maxMedsPerCategory} medications per category'),
+                                      ),
+                                    );
                                   } else {
                                     targetList.add(med.name);
                                   }
@@ -1033,6 +1212,16 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
                                         setState(() {
                                           if (inTarget) {
                                             targetList.remove(display);
+                                          } else if (targetList.length >=
+                                              SmartFillInput
+                                                  .maxMedsPerCategory) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                  'Maximum ${SmartFillInput.maxMedsPerCategory} medications per category'),
+                                              ),
+                                            );
                                           } else {
                                             targetList.add(display);
                                           }
@@ -1140,12 +1329,16 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
         ...keys.map((key) {
           final checked = _accepted![key] ?? false;
           final value = _editedValues![key] ?? '';
+          final hasConflict = _consentConflicts.contains(key);
+          final existingValue = _existingFieldValues[key];
 
           return Card(
             margin: const EdgeInsets.only(bottom: 8),
-            color: checked
-                ? cs.surfaceContainerLow
-                : cs.surfaceContainerHighest.withValues(alpha: 0.5),
+            color: hasConflict
+                ? cs.errorContainer.withValues(alpha: 0.3)
+                : checked
+                    ? cs.surfaceContainerLow
+                    : cs.surfaceContainerHighest.withValues(alpha: 0.5),
             child: InkWell(
               borderRadius: BorderRadius.circular(12),
               onTap: () => _editField(key, value),
@@ -1156,8 +1349,23 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
                   children: [
                     Checkbox(
                       value: checked,
-                      onChanged: (v) =>
-                          setState(() => _accepted![key] = v ?? false),
+                      onChanged: hasConflict
+                          ? (v) {
+                              if (v == true) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'This conflicts with your consent '
+                                      'decision. Change your consent setting '
+                                      'first if you want to accept this.',
+                                    ),
+                                    duration: const Duration(seconds: 4),
+                                  ),
+                                );
+                              }
+                            }
+                          : (v) =>
+                              setState(() => _accepted![key] = v ?? false),
                     ),
                     Expanded(
                       child: Padding(
@@ -1165,15 +1373,62 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(key,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelLarge
-                                    ?.copyWith(
-                                      color: checked
-                                          ? cs.onSurface
-                                          : cs.onSurfaceVariant,
-                                    )),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(key,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelLarge
+                                          ?.copyWith(
+                                            color: hasConflict
+                                                ? cs.error
+                                                : checked
+                                                    ? cs.onSurface
+                                                    : cs.onSurfaceVariant,
+                                          )),
+                                ),
+                                if (hasConflict)
+                                  Tooltip(
+                                    message: 'Conflicts with your consent decision',
+                                    child: Icon(Icons.warning_amber_rounded,
+                                        size: 18, color: cs.error),
+                                  ),
+                              ],
+                            ),
+                            if (hasConflict) ...[
+                              const SizedBox(height: 4),
+                              Text(
+                                'You refused consent for this. This '
+                                'suggestion will not be applied.',
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  color: cs.error,
+                                  fontStyle: FontStyle.italic,
+                                ),
+                              ),
+                            ],
+                            if (existingValue != null) ...[
+                              const SizedBox(height: 4),
+                              Text('Your current text:',
+                                  style: TextStyle(
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w600,
+                                      color: cs.onSurfaceVariant)),
+                              Text(
+                                existingValue.length > 120
+                                    ? '${existingValue.substring(0, 120)}...'
+                                    : existingValue,
+                                style: TextStyle(
+                                    fontSize: 11, color: cs.onSurfaceVariant),
+                              ),
+                              Text('AI will add to your text, not replace it.',
+                                  style: TextStyle(
+                                      fontSize: 11,
+                                      color: cs.primary,
+                                      fontStyle: FontStyle.italic)),
+                              const SizedBox(height: 4),
+                            ],
                             const SizedBox(height: 4),
                             Text(
                               value,

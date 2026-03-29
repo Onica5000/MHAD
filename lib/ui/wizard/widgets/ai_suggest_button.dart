@@ -106,62 +106,95 @@ Please provide a more concise, clear, and legally appropriate version of this te
   }
 
   Future<void> _showSuggestionDialog(String suggestion) async {
-    final accepted = await showDialog<bool>(
+    final originalText = widget.controller.text.trim();
+
+    // 'replace' = replace with AI text, 'merge' = append AI text, null = dismiss
+    final action = await showDialog<String>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Row(children: [
-          Icon(Icons.auto_awesome, size: 20),
-          SizedBox(width: 8),
-          Text('AI Suggestion'),
-        ]),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Suggested revision for "${widget.fieldName}":',
-              style: Theme.of(ctx)
-                  .textTheme
-                  .labelMedium
-                  ?.copyWith(color: Theme.of(ctx).colorScheme.onSurfaceVariant),
+      builder: (ctx) {
+        final cs = Theme.of(ctx).colorScheme;
+        final labelStyle = Theme.of(ctx)
+            .textTheme
+            .labelMedium
+            ?.copyWith(fontWeight: FontWeight.w600);
+        return AlertDialog(
+          title: const Row(children: [
+            Icon(Icons.auto_awesome, size: 20),
+            SizedBox(width: 8),
+            Expanded(child: Text('AI Suggestion')),
+          ]),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Your text:', style: labelStyle),
+                const SizedBox(height: 4),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: cs.surfaceContainerHighest,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: cs.outline.withValues(alpha: 0.3)),
+                  ),
+                  child: Text(
+                    originalText,
+                    style: Theme.of(ctx).textTheme.bodySmall,
+                    maxLines: 6,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Text('AI suggestion:', style: labelStyle),
+                const SizedBox(height: 4),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: cs.primaryContainer.withValues(alpha: 0.3),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: cs.primary.withValues(alpha: 0.3)),
+                  ),
+                  child: SelectableText(
+                    suggestion,
+                    style: Theme.of(ctx).textTheme.bodySmall,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'AI suggestions are not legal advice. Review carefully.',
+                  style: Theme.of(ctx).textTheme.bodySmall?.copyWith(
+                      color: cs.onSurfaceVariant,
+                      fontStyle: FontStyle.italic),
+                ),
+              ],
             ),
-            const SizedBox(height: 8),
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Theme.of(ctx).colorScheme.surfaceContainerHighest,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: SelectableText(
-                suggestion,
-                style: Theme.of(ctx).textTheme.bodyMedium,
-              ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: const Text('Dismiss'),
             ),
-            const SizedBox(height: 8),
-            Text(
-              'AI suggestions are not legal advice. Review carefully before accepting.',
-              style: Theme.of(ctx).textTheme.bodySmall?.copyWith(
-                  color: Theme.of(ctx).colorScheme.onSurfaceVariant,
-                  fontStyle: FontStyle.italic),
+            OutlinedButton(
+              onPressed: () => Navigator.pop(ctx, 'merge'),
+              child: const Text('Add to mine'),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(ctx, 'replace'),
+              child: const Text('Use instead'),
             ),
           ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Dismiss'),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Accept'),
-          ),
-        ],
-      ),
+        );
+      },
     );
 
-    if (accepted == true && mounted) {
+    if (!mounted || action == null) return;
+
+    if (action == 'replace') {
       widget.controller.text = suggestion;
+    } else if (action == 'merge') {
+      widget.controller.text = '$originalText\n\n[AI suggestion] $suggestion';
     }
   }
 

@@ -130,6 +130,7 @@ class _EffectiveConditionStepState
           TextFormField(
             controller: _ctrl,
             maxLines: 5,
+            maxLength: 2000,
             decoration: InputDecoration(
               labelText: 'When this directive becomes effective',
               border: const OutlineInputBorder(),

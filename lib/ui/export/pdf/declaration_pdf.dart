@@ -78,8 +78,10 @@ List<pw.Page> buildDeclarationPages({
             'health decisions:',
             checked: directive.effectiveCondition.isEmpty,
           ),
-          dataLine('Name of Doctor', directive.preferredDoctorName),
-          dataLine('Address/Phone Number', directive.preferredDoctorContact),
+          if (directive.effectiveCondition.isEmpty) ...[
+            dataLine('Name of Doctor', directive.preferredDoctorName),
+            dataLine('Address/Phone Number', directive.preferredDoctorContact),
+          ],
           pw.SizedBox(height: 4),
           checkRow(
             'When the following condition is met:',
@@ -185,13 +187,19 @@ List<pw.Page> buildDeclarationPages({
                 preferred.map((m) => {'medication': m.medicationName, 'reason': m.reason}).toList(),
                 false,
               ),
-            if (exceptions.isNotEmpty || limitations.isNotEmpty || preferred.isNotEmpty)
+            if (exceptions.isNotEmpty || limitations.isNotEmpty || preferred.isNotEmpty) ...[
               pw.Text(
                 'The exception, limitation, or preference, applies to generic, brand name and '
                 'trade name equivalents unless otherwise stated. I understand that dosage '
                 'instructions are not binding on my physician.',
                 style: smallBodyStyle(),
               ),
+              pw.Text(
+                'Note: Narrow therapeutic index (NTI) drugs (e.g., lithium, carbamazepine, '
+                'valproic acid) cannot have generics substituted under PA law (35 P.S. \u00a7960.3).',
+                style: smallBodyStyle(),
+              ),
+            ],
             checkRow(
               'I do not consent to the use of any medications.',
               checked: prefs.medicationConsent == 'no',

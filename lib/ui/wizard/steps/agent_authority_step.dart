@@ -170,6 +170,7 @@ class _AgentAuthorityStepState
           TextFormField(
             controller: _limitationsCtrl,
             maxLines: 4,
+            maxLength: 2000,
             decoration: InputDecoration(
               labelText: 'Additional limitations or instructions (optional)',
               border: const OutlineInputBorder(),

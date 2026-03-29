@@ -75,6 +75,21 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
     });
   }
 
+  static const _maxMedsPerCategory = 50;
+
+  void _addMedRow(List<_MedRow> rows) {
+    if (rows.length >= _maxMedsPerCategory) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content:
+              Text('Maximum $_maxMedsPerCategory medications per category'),
+        ),
+      );
+      return;
+    }
+    setState(() => rows.add(_MedRow()));
+  }
+
   @override
   Future<bool> validateAndSave() async {
     _formKey.currentState?.validate();
@@ -129,7 +144,12 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
                 'Exceptions: medications you never want given. '
                 'Limitations: medications that may be given but only with restrictions (e.g., low dose only). '
                 'Preferred: medications that have worked well for you.\n\n'
-                'Your treatment team will consider these preferences, but may not always be able to honor them.',
+                'Your preferences apply to generic, brand name, and trade name '
+                'equivalents unless you specify otherwise in the notes.\n\n'
+                'NTI (Narrow Therapeutic Index) drugs like lithium, '
+                'carbamazepine, and valproic acid cannot have generics '
+                'substituted under PA law (35 P.S. §960.3). These are '
+                'marked with an "NTI" badge when you search.',
             stepId: 'medications',
           ),
           const SizedBox(height: 8),
@@ -152,7 +172,10 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
                   Text(
                     '\u2022 Never give (Exceptions): Medications you refuse under any circumstances\n'
                     '\u2022 With limitations: Medications allowed but with restrictions (e.g., low dose only, only during acute crisis)\n'
-                    '\u2022 Preferred: Medications that have worked well for you',
+                    '\u2022 Preferred: Medications that have worked well for you\n\n'
+                    'Each preference applies to generic, brand name, and trade '
+                    'name equivalents. To request brand-name only, note it in '
+                    'the reason field.',
                     style: TextStyle(
                       fontSize: 13,
                       height: 1.5,
@@ -183,8 +206,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
             subtitle: 'These medications should not be administered',
             rows: _exceptions,
             accentColor: Theme.of(context).colorScheme.outline,
-            onAdd: () => setState(
-                () => _exceptions.add(_MedRow())),
+            onAdd: () => _addMedRow(_exceptions),
             onRemove: (i) => setState(() {
               _exceptions[i].dispose();
               _exceptions.removeAt(i);
@@ -196,8 +218,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
             subtitle: 'May be given but with restrictions',
             rows: _limitations,
             accentColor: Theme.of(context).colorScheme.tertiary,
-            onAdd: () => setState(
-                () => _limitations.add(_MedRow())),
+            onAdd: () => _addMedRow(_limitations),
             onRemove: (i) => setState(() {
               _limitations[i].dispose();
               _limitations.removeAt(i);
@@ -209,8 +230,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
             subtitle: 'Medications that have worked well for you',
             rows: _preferred,
             accentColor: Theme.of(context).colorScheme.primary,
-            onAdd: () =>
-                setState(() => _preferred.add(_MedRow())),
+            onAdd: () => _addMedRow(_preferred),
             onRemove: (i) => setState(() {
               _preferred[i].dispose();
               _preferred.removeAt(i);
@@ -287,6 +307,7 @@ class _MedTable extends StatelessWidget {
                           const SizedBox(height: 8),
                           TextFormField(
                             controller: rows[i].reasonCtrl,
+                            maxLength: 500,
                             decoration: const InputDecoration(
                               labelText: 'Reason / notes (optional)',
                               border: OutlineInputBorder(),
