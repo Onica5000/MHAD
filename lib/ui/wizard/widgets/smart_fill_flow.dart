@@ -871,6 +871,97 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
     ];
   }
 
+  Widget _buildGroupedCondResults(ColorScheme cs) {
+    final psych =
+        _condResults.where((c) => c.code.startsWith('F')).toList();
+    final med =
+        _condResults.where((c) => !c.code.startsWith('F')).toList();
+
+    Widget buildTile(IcdCondition c) {
+      final selected = _selectedConditions.any((s) => s.code == c.code);
+      return ListTile(
+        dense: true,
+        leading: Container(
+          padding:
+              const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+          decoration: BoxDecoration(
+            color: c.code.startsWith('F')
+                ? cs.primaryContainer
+                : cs.tertiaryContainer,
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: Text(
+            c.code,
+            style: TextStyle(
+              fontSize: 11,
+              fontFamily: 'monospace',
+              color: c.code.startsWith('F')
+                  ? cs.onPrimaryContainer
+                  : cs.onTertiaryContainer,
+            ),
+          ),
+        ),
+        title: Text(c.name, style: const TextStyle(fontSize: 14)),
+        trailing: selected
+            ? Icon(Icons.check_circle, color: cs.primary, size: 20)
+            : Icon(Icons.add_circle_outline,
+                color: cs.primary, size: 20),
+        onTap: () {
+          setState(() {
+            if (selected) {
+              _selectedConditions
+                  .removeWhere((s) => s.code == c.code);
+            } else if (_selectedConditions.length >=
+                SmartFillInput.maxConditions) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                      'Maximum ${SmartFillInput.maxConditions} conditions allowed'),
+                ),
+              );
+            } else {
+              _selectedConditions.add(c);
+            }
+          });
+        },
+      );
+    }
+
+    Widget sectionHeader(String label) {
+      return Container(
+        width: double.infinity,
+        padding:
+            const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+        color: cs.surfaceContainerHighest,
+        child: Text(label,
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w700,
+              color: cs.onSurfaceVariant,
+            )),
+      );
+    }
+
+    return ListView(
+      children: [
+        if (psych.isNotEmpty) ...[
+          sectionHeader('Psychiatric'),
+          ...psych.expand((c) => [
+                buildTile(c),
+                Divider(height: 1, color: cs.outlineVariant),
+              ]),
+        ],
+        if (med.isNotEmpty) ...[
+          sectionHeader('Medical'),
+          ...med.expand((c) => [
+                buildTile(c),
+                Divider(height: 1, color: cs.outlineVariant),
+              ]),
+        ],
+      ],
+    );
+  }
+
   Widget _buildConditionsStep() {
     final cs = Theme.of(context).colorScheme;
     return Padding(
@@ -914,60 +1005,7 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
                       style: TextStyle(color: cs.onSurfaceVariant),
                     ),
                   )
-                : ListView.separated(
-                    itemCount: _condResults.length,
-                    separatorBuilder: (context2, index) =>
-                        Divider(height: 1, color: cs.outlineVariant),
-                    itemBuilder: (ctx, i) {
-                      final c = _condResults[i];
-                      final selected = _selectedConditions
-                          .any((s) => s.code == c.code);
-                      return ListTile(
-                        dense: true,
-                        leading: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 6, vertical: 2),
-                          decoration: BoxDecoration(
-                            color: cs.primaryContainer,
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: Text(
-                            c.code,
-                            style: TextStyle(
-                              fontSize: 11,
-                              fontFamily: 'monospace',
-                              color: cs.onPrimaryContainer,
-                            ),
-                          ),
-                        ),
-                        title: Text(c.name,
-                            style: const TextStyle(fontSize: 14)),
-                        trailing: selected
-                            ? Icon(Icons.check_circle,
-                                color: cs.primary, size: 20)
-                            : Icon(Icons.add_circle_outline,
-                                color: cs.primary, size: 20),
-                        onTap: () {
-                          setState(() {
-                            if (selected) {
-                              _selectedConditions
-                                  .removeWhere((s) => s.code == c.code);
-                            } else if (_selectedConditions.length >=
-                                SmartFillInput.maxConditions) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    'Maximum ${SmartFillInput.maxConditions} conditions allowed'),
-                                ),
-                              );
-                            } else {
-                              _selectedConditions.add(c);
-                            }
-                          });
-                        },
-                      );
-                    },
-                  ),
+                : _buildGroupedCondResults(cs),
           ),
           const NlmAttribution(),
         ],

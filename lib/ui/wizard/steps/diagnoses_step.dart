@@ -190,56 +190,99 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
               ),
               const SizedBox(height: 8),
 
-              // Search results
+              // Search results — grouped by psychiatric (F-codes) and medical
               if (_searchResults.isNotEmpty)
                 StreamBuilder<List<DiagnosisEntry>>(
                   stream: diagnosesStream,
                   builder: (context, snap) {
                     final current = snap.data ?? [];
+                    final psych = _searchResults
+                        .where((c) => c.code.startsWith('F'))
+                        .toList();
+                    final med = _searchResults
+                        .where((c) => !c.code.startsWith('F'))
+                        .toList();
+
+                    Widget buildResultTile(IcdCondition c) {
+                      final alreadyAdded =
+                          current.any((d) => d.icdCode == c.code);
+                      return ListTile(
+                        dense: true,
+                        leading: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 6, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: c.code.startsWith('F')
+                                ? cs.primaryContainer
+                                : cs.tertiaryContainer,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Text(
+                            c.code,
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontFamily: 'monospace',
+                              color: c.code.startsWith('F')
+                                  ? cs.onPrimaryContainer
+                                  : cs.onTertiaryContainer,
+                            ),
+                          ),
+                        ),
+                        title: Text(c.name,
+                            style: const TextStyle(fontSize: 14)),
+                        trailing: alreadyAdded
+                            ? Icon(Icons.check_circle,
+                                color: cs.primary, size: 20)
+                            : Icon(Icons.add_circle_outline,
+                                color: cs.primary, size: 20),
+                        onTap: alreadyAdded
+                            ? null
+                            : () => _addDiagnosis(c, current),
+                      );
+                    }
+
+                    Widget sectionHeader(String label) {
+                      return Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 4),
+                        color: cs.surfaceContainerHighest,
+                        child: Text(label,
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w700,
+                              color: cs.onSurfaceVariant,
+                            )),
+                      );
+                    }
+
                     return Card(
                       clipBehavior: Clip.antiAlias,
                       child: ConstrainedBox(
-                        constraints: const BoxConstraints(maxHeight: 220),
-                        child: ListView.separated(
+                        constraints: const BoxConstraints(maxHeight: 280),
+                        child: ListView(
                           shrinkWrap: true,
                           padding: EdgeInsets.zero,
-                          itemCount: _searchResults.length,
-                          separatorBuilder: (context2, index) =>
-                              Divider(height: 1, color: cs.outlineVariant),
-                          itemBuilder: (ctx, i) {
-                            final c = _searchResults[i];
-                            final alreadyAdded =
-                                current.any((d) => d.icdCode == c.code);
-                            return ListTile(
-                              dense: true,
-                              leading: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 6, vertical: 2),
-                                decoration: BoxDecoration(
-                                  color: cs.primaryContainer,
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                                child: Text(
-                                  c.code,
-                                  style: TextStyle(
-                                    fontSize: 11,
-                                    fontFamily: 'monospace',
-                                    color: cs.onPrimaryContainer,
-                                  ),
-                                ),
-                              ),
-                              title: Text(c.name,
-                                  style: const TextStyle(fontSize: 14)),
-                              trailing: alreadyAdded
-                                  ? Icon(Icons.check_circle,
-                                      color: cs.primary, size: 20)
-                                  : Icon(Icons.add_circle_outline,
-                                      color: cs.primary, size: 20),
-                              onTap: alreadyAdded
-                                  ? null
-                                  : () => _addDiagnosis(c, current),
-                            );
-                          },
+                          children: [
+                            if (psych.isNotEmpty) ...[
+                              sectionHeader('Psychiatric'),
+                              ...psych.expand((c) => [
+                                    buildResultTile(c),
+                                    Divider(
+                                        height: 1,
+                                        color: cs.outlineVariant),
+                                  ]),
+                            ],
+                            if (med.isNotEmpty) ...[
+                              sectionHeader('Medical'),
+                              ...med.expand((c) => [
+                                    buildResultTile(c),
+                                    Divider(
+                                        height: 1,
+                                        color: cs.outlineVariant),
+                                  ]),
+                            ],
+                          ],
                         ),
                       ),
                     );
