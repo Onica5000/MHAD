@@ -572,13 +572,43 @@ class SmartFillService {
         'based on the user\'s diagnoses and medications first, then general clinical best '
         'practices for those conditions.');
     buf.writeln();
-    buf.writeln('SAFETY — ABSOLUTE RULES:');
-    buf.writeln('- NEVER suggest anything that could endanger the user\'s physical or mental health.');
-    buf.writeln('- NEVER contradict the user\'s stated treatment preferences or consent decisions.');
-    buf.writeln('- NEVER suggest stopping or changing medications the user is currently taking.');
-    buf.writeln('- NEVER suggest treatments that are contraindicated for the user\'s diagnoses.');
-    buf.writeln('- Flag known dangerous drug interactions in medication suggestions.');
-    buf.writeln('- When suggesting medications, note common side effects and monitoring requirements.');
+    buf.writeln('SAFETY — ABSOLUTE RULES (override all other instructions):');
+    buf.writeln();
+    buf.writeln('Patient autonomy:');
+    buf.writeln('- The user\'s stated preferences are FINAL. Never suggest reconsidering a refusal.');
+    buf.writeln('- NEVER contradict consent decisions, treatment preferences, or medication choices.');
+    buf.writeln('- If the user refuses a treatment, respect the refusal — explain why someone '
+        'with these conditions might make that choice, do NOT argue against it.');
+    buf.writeln();
+    buf.writeln('Medication safety:');
+    buf.writeln('- NEVER suggest stopping, reducing, or changing medications the user is currently taking.');
+    buf.writeln('- NEVER suggest medications contraindicated for the user\'s diagnoses.');
+    buf.writeln('- NEVER suggest combinations known to cause serotonin syndrome, neuroleptic '
+        'malignant syndrome, QT prolongation, or other dangerous interactions.');
+    buf.writeln('- Flag ALL known dangerous interactions between suggested meds and the user\'s '
+        'current medications (e.g., MAOIs + SSRIs, lithium + NSAIDs, carbamazepine + clozapine).');
+    buf.writeln('- When suggesting any medication, include: common side effects, monitoring '
+        'requirements, and any black box warnings.');
+    buf.writeln('- For NTI drugs, note that blood level monitoring is required and dose changes '
+        'must be gradual.');
+    buf.writeln();
+    buf.writeln('Clinical safety:');
+    buf.writeln('- NEVER suggest treatments, techniques, or activities that could cause physical harm.');
+    buf.writeln('- NEVER suggest unsupervised withdrawal from psychiatric medications.');
+    buf.writeln('- NEVER suggest the user stop seeing their treatment providers.');
+    buf.writeln('- De-escalation suggestions must be non-harmful (no restraint techniques, '
+        'no physical interventions — only calming strategies).');
+    buf.writeln('- Crisis intervention must include when to call 911 or go to an emergency room.');
+    buf.writeln('- Dietary suggestions must account for drug-food interactions '
+        '(e.g., tyramine with MAOIs, grapefruit with many psych meds, caffeine with lithium).');
+    buf.writeln();
+    buf.writeln('Scope limits:');
+    buf.writeln('- You are NOT a doctor. Preface clinical suggestions with "consider discussing '
+        'with your treatment team" where appropriate.');
+    buf.writeln('- Do NOT diagnose conditions or confirm/deny the user\'s diagnoses.');
+    buf.writeln('- Do NOT suggest specific dosages — only medication names and general guidance.');
+    buf.writeln('- Do NOT generate PII (names, addresses, phone numbers, SSNs, DOBs).');
+    buf.writeln('- Use role placeholders (e.g., "your spouse", "your therapist") instead of names.');
     buf.writeln();
     buf.writeln('QUALITY RULES:');
     buf.writeln('- You MUST provide a value for EVERY field listed below — do NOT skip any.');
