@@ -151,7 +151,13 @@ class DirectiveRepository {
           .getSingleOrNull();
 
   Future<void> upsertPreferences(DirectivePrefsCompanion prefs) =>
-      _db.into(_db.directivePrefs).insertOnConflictUpdate(prefs);
+      _db.into(_db.directivePrefs).insert(
+        prefs,
+        onConflict: DoUpdate(
+          (old) => prefs,
+          target: [_db.directivePrefs.directiveId],
+        ),
+      );
 
   // ── Additional Instructions ───────────────────────────────────────────────
 
