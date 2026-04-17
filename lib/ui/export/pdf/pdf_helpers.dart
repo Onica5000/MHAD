@@ -168,7 +168,7 @@ pw.Widget checkRow(String text, {bool checked = false}) {
           height: 10,
           margin: const pw.EdgeInsets.only(top: 0.5),
           decoration: pw.BoxDecoration(
-            color: checked ? PdfColors.black : PdfColors.white,
+            color: PdfColors.white,
             border: pw.Border.all(color: kBlack, width: 1.0),
           ),
           child: checked
@@ -178,7 +178,7 @@ pw.Widget checkRow(String text, {bool checked = false}) {
                     style: pw.TextStyle(
                       fontSize: 8,
                       fontWeight: pw.FontWeight.bold,
-                      color: PdfColors.white,
+                      color: kBlack,
                     ),
                   ),
                 )
