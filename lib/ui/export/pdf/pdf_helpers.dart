@@ -154,15 +154,33 @@ String consentConditionText(String value) =>
     value.startsWith('conditional:') ? value.substring('conditional:'.length) : '';
 
 /// A checkbox row — checked or unchecked.
+/// Uses drawn box + ASCII 'X' instead of Unicode ballot characters,
+/// which are unsupported by the pdf package's built-in fonts.
 pw.Widget checkRow(String text, {bool checked = false}) {
   return pw.Padding(
     padding: const pw.EdgeInsets.symmetric(vertical: 2),
     child: pw.Row(
       crossAxisAlignment: pw.CrossAxisAlignment.start,
       children: [
-        pw.Text(
-          checked ? '\u2612' : '\u2610',
-          style: pw.TextStyle(fontSize: 10),
+        pw.Container(
+          width: 9,
+          height: 9,
+          margin: const pw.EdgeInsets.only(top: 0.5),
+          decoration: pw.BoxDecoration(
+            border: pw.Border.all(color: kBlack, width: 0.8),
+          ),
+          child: checked
+              ? pw.Center(
+                  child: pw.Text(
+                    'X',
+                    style: pw.TextStyle(
+                      fontSize: 7,
+                      fontWeight: pw.FontWeight.bold,
+                      color: kBlack,
+                    ),
+                  ),
+                )
+              : null,
         ),
         pw.SizedBox(width: 5),
         pw.Expanded(
