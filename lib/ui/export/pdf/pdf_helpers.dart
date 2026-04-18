@@ -153,36 +153,61 @@ bool isConsentConditional(String value) => value.startsWith('conditional:');
 String consentConditionText(String value) =>
     value.startsWith('conditional:') ? value.substring('conditional:'.length) : '';
 
+/// Draws a checkbox using raw PDF graphics primitives via CustomPaint.
+/// This bypasses widget rendering entirely to ensure reliable checked/unchecked
+/// visual distinction in the generated PDF.
+class _CheckboxPainter extends pw.CustomPainter {
+  final bool checked;
+  const _CheckboxPainter({required this.checked});
+
+  @override
+  void paint(PdfGraphics canvas, PdfPoint size) {
+    final w = size.x;
+    final h = size.y;
+    const pad = 1.5;
+
+    // White fill
+    canvas.setFillColor(PdfColors.white);
+    canvas.drawRect(0, 0, w, h);
+    canvas.fillPath();
+
+    // Black border
+    canvas.setStrokeColor(PdfColors.black);
+    canvas.setLineWidth(0.75);
+    canvas.drawRect(0, 0, w, h);
+    canvas.strokePath();
+
+    if (checked) {
+      canvas.setLineWidth(1.2);
+      // Diagonal: bottom-left to top-right
+      canvas.moveTo(pad, pad);
+      canvas.lineTo(w - pad, h - pad);
+      canvas.strokePath();
+      // Diagonal: top-left to bottom-right
+      canvas.moveTo(pad, h - pad);
+      canvas.lineTo(w - pad, pad);
+      canvas.strokePath();
+    }
+  }
+
+  @override
+  bool shouldRepaint(pw.CustomPainter oldDelegate) => false;
+}
+
 /// A checkbox row — checked or unchecked.
-/// Uses drawn box + ASCII 'X'. Explicit white fill is required because
-/// the pdf package defaults to the current graphics fill color (black),
-/// which would make unchecked boxes appear filled.
 pw.Widget checkRow(String text, {bool checked = false}) {
   return pw.Padding(
     padding: const pw.EdgeInsets.symmetric(vertical: 2),
     child: pw.Row(
       crossAxisAlignment: pw.CrossAxisAlignment.start,
       children: [
-        pw.Container(
+        pw.SizedBox(
           width: 10,
           height: 10,
-          margin: const pw.EdgeInsets.only(top: 0.5),
-          decoration: pw.BoxDecoration(
-            color: PdfColors.white,
-            border: pw.Border.all(color: kBlack, width: 1.0),
+          child: pw.CustomPaint(
+            size: const PdfPoint(10, 10),
+            painter: _CheckboxPainter(checked: checked),
           ),
-          child: checked
-              ? pw.Center(
-                  child: pw.Text(
-                    'X',
-                    style: pw.TextStyle(
-                      fontSize: 8,
-                      fontWeight: pw.FontWeight.bold,
-                      color: kBlack,
-                    ),
-                  ),
-                )
-              : pw.SizedBox(),
         ),
         pw.SizedBox(width: 5),
         pw.Expanded(
