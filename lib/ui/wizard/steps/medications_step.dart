@@ -119,9 +119,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
 
     // Save medication consent option (idempotent upsert, no transaction needed)
     if (_hasAgentSections) {
-      final existingPrefs = await repo.getPreferences(widget.directiveId);
       await repo.upsertPreferences(DirectivePrefsCompanion(
-        id: existingPrefs != null ? Value(existingPrefs.id) : const Value.absent(),
         directiveId: Value(widget.directiveId),
         medicationConsent:
             Value(_agentDecidesMeds ? 'agentDecides' : 'yes'),

@@ -153,6 +153,47 @@ bool isConsentConditional(String value) => value.startsWith('conditional:');
 String consentConditionText(String value) =>
     value.startsWith('conditional:') ? value.substring('conditional:'.length) : '';
 
+/// Draws a checkbox using raw PDF graphics primitives via CustomPaint.
+/// This bypasses widget rendering entirely to ensure reliable checked/unchecked
+/// visual distinction in the generated PDF.
+class _CheckboxPainter extends pw.CustomPainter {
+  final bool checked;
+  const _CheckboxPainter({required this.checked});
+
+  @override
+  void paint(PdfGraphics canvas, PdfPoint size) {
+    final w = size.x;
+    final h = size.y;
+    const pad = 1.5;
+
+    // White fill
+    canvas.setFillColor(PdfColors.white);
+    canvas.drawRect(0, 0, w, h);
+    canvas.fillPath();
+
+    // Black border
+    canvas.setStrokeColor(PdfColors.black);
+    canvas.setLineWidth(0.75);
+    canvas.drawRect(0, 0, w, h);
+    canvas.strokePath();
+
+    if (checked) {
+      canvas.setLineWidth(1.2);
+      // Diagonal: bottom-left to top-right
+      canvas.moveTo(pad, pad);
+      canvas.lineTo(w - pad, h - pad);
+      canvas.strokePath();
+      // Diagonal: top-left to bottom-right
+      canvas.moveTo(pad, h - pad);
+      canvas.lineTo(w - pad, pad);
+      canvas.strokePath();
+    }
+  }
+
+  @override
+  bool shouldRepaint(pw.CustomPainter oldDelegate) => false;
+}
+
 /// A checkbox row — checked or unchecked.
 pw.Widget checkRow(String text, {bool checked = false}) {
   return pw.Padding(
@@ -160,9 +201,13 @@ pw.Widget checkRow(String text, {bool checked = false}) {
     child: pw.Row(
       crossAxisAlignment: pw.CrossAxisAlignment.start,
       children: [
-        pw.Text(
-          checked ? '\u2612' : '\u2610',
-          style: pw.TextStyle(fontSize: 10),
+        pw.SizedBox(
+          width: 10,
+          height: 10,
+          child: pw.CustomPaint(
+            size: const PdfPoint(10, 10),
+            painter: _CheckboxPainter(checked: checked),
+          ),
         ),
         pw.SizedBox(width: 5),
         pw.Expanded(

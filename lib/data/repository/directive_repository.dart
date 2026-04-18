@@ -150,8 +150,15 @@ class DirectiveRepository {
             ..where((t) => t.directiveId.equals(directiveId)))
           .getSingleOrNull();
 
-  Future<void> upsertPreferences(DirectivePrefsCompanion prefs) =>
-      _db.into(_db.directivePrefs).insertOnConflictUpdate(prefs);
+  Future<void> upsertPreferences(DirectivePrefsCompanion prefs) async {
+    final directiveId = prefs.directiveId.value;
+    final updated = await (_db.update(_db.directivePrefs)
+            ..where((t) => t.directiveId.equals(directiveId)))
+        .write(prefs);
+    if (updated == 0) {
+      await _db.into(_db.directivePrefs).insert(prefs);
+    }
+  }
 
   // ── Additional Instructions ───────────────────────────────────────────────
 
