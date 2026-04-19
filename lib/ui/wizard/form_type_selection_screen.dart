@@ -267,12 +267,12 @@ class _FormTypeCard extends StatelessWidget {
                               color: p.primary,
                               borderRadius: BorderRadius.circular(100),
                             ),
-                            child: const Text(
+                            child: Text(
                               'Recommended',
                               style: TextStyle(
                                 fontFamily: 'DM Sans',
                                 fontSize: 10,
-                                color: Colors.white,
+                                color: p.onPrimary,
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
@@ -345,14 +345,14 @@ class _AiSetupPrompt extends ConsumerWidget {
             width: 42,
             height: 42,
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.2),
+              color: p.primary,
               borderRadius: BorderRadius.circular(12),
             ),
-            child: const Icon(Icons.auto_awesome,
-                color: Colors.white, size: 20),
+            child: Icon(Icons.auto_awesome,
+                color: p.onPrimary, size: 20),
           ),
           const SizedBox(width: 12),
-          const Expanded(
+          Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -362,25 +362,24 @@ class _AiSetupPrompt extends ConsumerWidget {
                     fontFamily: 'DM Sans',
                     fontWeight: FontWeight.w700,
                     fontSize: 15,
-                    color: Colors.white,
+                    color: p.onPrimaryLight,
                   ),
                 ),
-                SizedBox(height: 2),
+                const SizedBox(height: 2),
                 Text(
                   'Get a free Gemini API key to unlock AI suggestions, '
                   'guided help, and document import. Takes ~30 seconds.',
                   style: TextStyle(
                     fontFamily: 'DM Sans',
                     fontSize: 12,
-                    color: Colors.white,
+                    color: p.onPrimaryLight.withValues(alpha: 0.85),
                     height: 1.4,
                   ),
                 ),
               ],
             ),
           ),
-          Icon(Icons.chevron_right,
-              color: Colors.white.withValues(alpha: 0.9)),
+          Icon(Icons.chevron_right, color: p.onPrimaryLight),
         ],
       ),
     );

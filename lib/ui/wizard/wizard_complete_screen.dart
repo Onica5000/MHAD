@@ -241,9 +241,9 @@ class _NextStep extends StatelessWidget {
             ),
             child: Text(
               number,
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'DM Sans',
-                color: Colors.white,
+                color: p.onPrimary,
                 fontWeight: FontWeight.w700,
                 fontSize: 13,
               ),

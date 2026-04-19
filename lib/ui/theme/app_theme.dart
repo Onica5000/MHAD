@@ -78,6 +78,17 @@ class MhadPalette {
 
   final Color scaffoldBackground;
 
+  /// Foreground color to use when drawing on top of [primary]. In light-mode
+  /// palettes the primary is dark enough for white; in dark-mode palettes the
+  /// primary becomes a light tint, so `onPrimary` flips to a deep color to
+  /// preserve WCAG-AA contrast.
+  final Color onPrimary;
+
+  /// Foreground color for content on top of [primaryLight]. In light mode the
+  /// primaryLight is very pale, so the deep primaryDark reads well; in dark
+  /// mode primaryLight is itself dark-tinted and needs a light foreground.
+  final Color onPrimaryLight;
+
   const MhadPalette({
     required this.primary,
     required this.primaryMid,
@@ -90,6 +101,8 @@ class MhadPalette {
     required this.text,
     required this.textMuted,
     required this.scaffoldBackground,
+    required this.onPrimary,
+    required this.onPrimaryLight,
   });
 
   // ─── Warm Teal ─────────────────────────────────────────────────────────
@@ -103,8 +116,10 @@ class MhadPalette {
     card: Color(0xFFFFFFFF),
     border: Color(0xFFE2EDEA),
     text: Color(0xFF1A2E2B),
-    textMuted: Color(0xFF6B8884),
+    textMuted: Color(0xFF4C6763),
     scaffoldBackground: Color(0xFFF6FAF8),
+    onPrimary: Color(0xFFFFFFFF),
+    onPrimaryLight: Color(0xFF0A2E2A),
   );
 
   static const tealDark = MhadPalette(
@@ -117,8 +132,10 @@ class MhadPalette {
     card: Color(0xFF172622),
     border: Color(0xFF26342F),
     text: Color(0xFFE8F2EF),
-    textMuted: Color(0xFF9AB5B0),
+    textMuted: Color(0xFFBCD0CB),
     scaffoldBackground: Color(0xFF0A1413),
+    onPrimary: Color(0xFF04201C),
+    onPrimaryLight: Color(0xFFE8F2EF),
   );
 
   // ─── Deep Navy ─────────────────────────────────────────────────────────
@@ -132,8 +149,10 @@ class MhadPalette {
     card: Color(0xFFFFFFFF),
     border: Color(0xFFE0E5F0),
     text: Color(0xFF111A2E),
-    textMuted: Color(0xFF6B7688),
+    textMuted: Color(0xFF52607A),
     scaffoldBackground: Color(0xFFF7F9FC),
+    onPrimary: Color(0xFFFFFFFF),
+    onPrimaryLight: Color(0xFF101D3B),
   );
 
   static const navyDark = MhadPalette(
@@ -146,8 +165,10 @@ class MhadPalette {
     card: Color(0xFF151B2E),
     border: Color(0xFF232B3E),
     text: Color(0xFFE5EAF5),
-    textMuted: Color(0xFF9AA4BB),
+    textMuted: Color(0xFFBDC6DD),
     scaffoldBackground: Color(0xFF0A0F1B),
+    onPrimary: Color(0xFF0A0F1B),
+    onPrimaryLight: Color(0xFFE5EAF5),
   );
 
   // ─── Sage Green ────────────────────────────────────────────────────────
@@ -161,8 +182,10 @@ class MhadPalette {
     card: Color(0xFFFFFFFF),
     border: Color(0xFFDDE8E0),
     text: Color(0xFF1E2E23),
-    textMuted: Color(0xFF6B8875),
+    textMuted: Color(0xFF4F6C59),
     scaffoldBackground: Color(0xFFF7FAF8),
+    onPrimary: Color(0xFFFFFFFF),
+    onPrimaryLight: Color(0xFF112618),
   );
 
   static const sageDark = MhadPalette(
@@ -175,8 +198,10 @@ class MhadPalette {
     card: Color(0xFF172218),
     border: Color(0xFF243025),
     text: Color(0xFFE5F0E8),
-    textMuted: Color(0xFF9AB3A2),
+    textMuted: Color(0xFFBDD3C4),
     scaffoldBackground: Color(0xFF0A130C),
+    onPrimary: Color(0xFF0A130C),
+    onPrimaryLight: Color(0xFFE5F0E8),
   );
 }
 
@@ -252,13 +277,13 @@ ThemeData buildMhadTheme(ThemePalette palette, Brightness brightness) {
   final colorScheme = ColorScheme(
     brightness: brightness,
     primary: p.primary,
-    onPrimary: brightness == Brightness.dark ? p.text : Colors.white,
+    onPrimary: p.onPrimary,
     primaryContainer: p.primaryLight,
-    onPrimaryContainer: p.primaryDark,
+    onPrimaryContainer: p.onPrimaryLight,
     secondary: p.primaryMid,
-    onSecondary: Colors.white,
+    onSecondary: p.onPrimary,
     secondaryContainer: p.primaryTint,
-    onSecondaryContainer: p.primaryDark,
+    onSecondaryContainer: p.onPrimaryLight,
     tertiary: SemanticColors.warningTextLight,
     onTertiary: Colors.white,
     tertiaryContainer: brightness == Brightness.dark
@@ -333,7 +358,7 @@ ThemeData buildMhadTheme(ThemePalette palette, Brightness brightness) {
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(
         backgroundColor: p.primary,
-        foregroundColor: Colors.white,
+        foregroundColor: p.onPrimary,
         disabledBackgroundColor: p.border,
         disabledForegroundColor: p.textMuted,
         minimumSize: const Size.fromHeight(DesignTokens.buttonHeightMd),
@@ -351,7 +376,7 @@ ThemeData buildMhadTheme(ThemePalette palette, Brightness brightness) {
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: p.primary,
-        foregroundColor: Colors.white,
+        foregroundColor: p.onPrimary,
         minimumSize: const Size.fromHeight(DesignTokens.buttonHeightMd),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(DesignTokens.buttonRadius),
@@ -423,7 +448,7 @@ ThemeData buildMhadTheme(ThemePalette palette, Brightness brightness) {
       side: BorderSide.none,
       labelStyle: TextStyle(
         fontFamily: 'DM Sans',
-        color: p.primary,
+        color: p.onPrimaryLight,
         fontSize: 12,
         fontWeight: FontWeight.w600,
       ),
@@ -468,7 +493,7 @@ ThemeData buildMhadTheme(ThemePalette palette, Brightness brightness) {
 
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: p.primary,
-      foregroundColor: Colors.white,
+      foregroundColor: p.onPrimary,
     ),
 
     listTileTheme: ListTileThemeData(

@@ -467,7 +467,7 @@ class _MessageBubble extends StatelessWidget {
               CircleAvatar(
                 radius: 14,
                 backgroundColor: cs.primary,
-                child: const Icon(Icons.smart_toy, size: 16, color: Colors.white),
+                child: Icon(Icons.smart_toy, size: 16, color: cs.onPrimary),
               ),
               const SizedBox(width: 8),
             ],
@@ -579,7 +579,7 @@ class _TypingIndicatorState extends State<_TypingIndicator>
               child: CircleAvatar(
                 radius: 14,
                 backgroundColor: cs.primary,
-                child: const Icon(Icons.smart_toy, size: 16, color: Colors.white),
+                child: Icon(Icons.smart_toy, size: 16, color: cs.onPrimary),
               ),
             ),
             const SizedBox(width: 8),
@@ -678,8 +678,8 @@ class _InputBar extends StatelessWidget {
                       height: 20,
                       child: Semantics(
                         label: 'Loading',
-                        child: const CircularProgressIndicator(
-                            strokeWidth: 2, color: Colors.white),
+                        child: CircularProgressIndicator(
+                            strokeWidth: 2, color: cs.onPrimary),
                       ),
                     )
                   : const Icon(Icons.send_rounded),

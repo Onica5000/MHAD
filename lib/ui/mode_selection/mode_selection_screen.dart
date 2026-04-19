@@ -92,24 +92,24 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                         width: 72,
                         height: 72,
                         decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.15),
+                          color: p.onPrimary.withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(22),
                         ),
-                        child: const Icon(
+                        child: Icon(
                           Icons.shield_outlined,
-                          color: Colors.white,
+                          color: p.onPrimary,
                           size: 40,
                         ),
                       ),
                       const SizedBox(height: 20),
-                      const Text(
+                      Text(
                         'PA Mental Health\nAdvance Directive',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontFamily: 'DM Sans',
                           fontSize: 26,
                           fontWeight: FontWeight.w700,
-                          color: Colors.white,
+                          color: p.onPrimary,
                           height: 1.2,
                           letterSpacing: -0.3,
                         ),
@@ -121,7 +121,7 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                         style: TextStyle(
                           fontFamily: 'DM Sans',
                           fontSize: 14,
-                          color: Colors.white.withValues(alpha: 0.75),
+                          color: p.onPrimary.withValues(alpha: 0.85),
                           height: 1.5,
                         ),
                       ),
@@ -166,7 +166,7 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                       style: TextStyle(
                         fontFamily: 'DM Sans',
                         fontSize: 11,
-                        color: Colors.white.withValues(alpha: 0.6),
+                        color: p.onPrimary.withValues(alpha: 0.75),
                       ),
                     ),
                   ],
@@ -203,15 +203,15 @@ class _ModeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
 
-    final bg = light ? Colors.white : Colors.white.withValues(alpha: 0.12);
-    final titleColor = light ? p.text : Colors.white;
+    final bg = light ? p.card : p.onPrimary.withValues(alpha: 0.12);
+    final titleColor = light ? p.text : p.onPrimary;
     final descColor =
-        light ? p.textMuted : Colors.white.withValues(alpha: 0.7);
+        light ? p.textMuted : p.onPrimary.withValues(alpha: 0.85);
     final iconBgColor =
-        light ? p.primaryLight : Colors.white.withValues(alpha: 0.15);
-    final iconColor = light ? p.primary : Colors.white.withValues(alpha: 0.85);
+        light ? p.primaryLight : p.onPrimary.withValues(alpha: 0.15);
+    final iconColor = light ? p.primary : p.onPrimary;
     final chevColor =
-        light ? p.textMuted : Colors.white.withValues(alpha: 0.5);
+        light ? p.textMuted : p.onPrimary.withValues(alpha: 0.7);
 
     return Semantics(
       button: true,
@@ -232,7 +232,7 @@ class _ModeCard extends StatelessWidget {
                 border: light
                     ? null
                     : Border.all(
-                        color: Colors.white.withValues(alpha: 0.25),
+                        color: p.onPrimary.withValues(alpha: 0.4),
                         width: 1.5),
               ),
               child: Row(

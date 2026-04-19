@@ -30,7 +30,7 @@ class InfoBanner extends StatelessWidget {
     final dark = theme.brightness == Brightness.dark;
 
     final (bg, border, fg) = switch (variant) {
-      InfoBannerVariant.info => (p.primaryLight, p.border, p.primaryDark),
+      InfoBannerVariant.info => (p.primaryLight, p.border, p.onPrimaryLight),
       InfoBannerVariant.warning => dark
           ? (SemanticColors.warningBgDark, SemanticColors.warningBorderDark,
               SemanticColors.warningTextDark)

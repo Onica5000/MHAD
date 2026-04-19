@@ -573,6 +573,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 class _LearnMoreCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
     return Semantics(
       button: true,
       label:
@@ -587,14 +588,14 @@ class _LearnMoreCard extends StatelessWidget {
               width: 44,
               height: 44,
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.2),
+                color: p.primary,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: const Icon(Icons.menu_book,
-                  color: Colors.white, size: 22),
+              child: Icon(Icons.menu_book,
+                  color: p.onPrimary, size: 22),
             ),
             const SizedBox(width: 12),
-            const Expanded(
+            Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -604,23 +605,22 @@ class _LearnMoreCard extends StatelessWidget {
                       fontFamily: 'DM Sans',
                       fontWeight: FontWeight.w700,
                       fontSize: 15,
-                      color: Colors.white,
+                      color: p.onPrimaryLight,
                     ),
                   ),
-                  SizedBox(height: 2),
+                  const SizedBox(height: 2),
                   Text(
                     'FAQ, instructions, glossary, legal details & checklist',
                     style: TextStyle(
                       fontFamily: 'DM Sans',
                       fontSize: 12,
-                      color: Colors.white,
+                      color: p.onPrimaryLight.withValues(alpha: 0.85),
                     ),
                   ),
                 ],
               ),
             ),
-            Icon(Icons.chevron_right,
-                color: Colors.white.withValues(alpha: 0.9)),
+            Icon(Icons.chevron_right, color: p.onPrimaryLight),
           ],
         ),
       ),

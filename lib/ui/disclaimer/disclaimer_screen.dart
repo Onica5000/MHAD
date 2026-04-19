@@ -288,7 +288,7 @@ class _AcceptButtonState extends State<_AcceptButton> {
                       ),
                     ),
                     child: _isAdult
-                        ? const Icon(Icons.check, size: 14, color: Colors.white)
+                        ? Icon(Icons.check, size: 14, color: p.onPrimary)
                         : null,
                   ),
                   const SizedBox(width: 12),

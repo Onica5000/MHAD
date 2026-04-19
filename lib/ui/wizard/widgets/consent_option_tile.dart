@@ -46,7 +46,7 @@ class ConsentOptionTile extends StatelessWidget {
               child: Icon(
                 icon,
                 size: 20,
-                color: selected ? Colors.white : p.primary,
+                color: selected ? p.onPrimary : p.onPrimaryLight,
               ),
             ),
             const SizedBox(width: 12),

@@ -44,31 +44,31 @@ class MhadAppDrawer extends ConsumerWidget {
                         width: 42,
                         height: 42,
                         decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.15),
+                          color: p.onPrimary.withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        child: const Icon(
+                        child: Icon(
                           Icons.shield_outlined,
-                          color: Colors.white,
+                          color: p.onPrimary,
                           size: 24,
                         ),
                       ),
                       const Spacer(),
                       IconButton(
-                        icon: const Icon(Icons.close, color: Colors.white),
+                        icon: Icon(Icons.close, color: p.onPrimary),
                         tooltip: 'Close menu',
                         onPressed: () => Navigator.of(context).maybePop(),
                       ),
                     ],
                   ),
                   const SizedBox(height: 10),
-                  const Text(
+                  Text(
                     'PA Mental Health\nAdvance Directive',
                     style: TextStyle(
                       fontFamily: 'DM Sans',
                       fontSize: 17,
                       fontWeight: FontWeight.w700,
-                      color: Colors.white,
+                      color: p.onPrimary,
                       height: 1.2,
                     ),
                   ),
@@ -96,7 +96,7 @@ class MhadAppDrawer extends ConsumerWidget {
                           style: TextStyle(
                             fontFamily: 'DM Sans',
                             fontSize: 12,
-                            color: Colors.white.withValues(alpha: 0.85),
+                            color: p.onPrimary.withValues(alpha: 0.9),
                           ),
                         ),
                       ),
