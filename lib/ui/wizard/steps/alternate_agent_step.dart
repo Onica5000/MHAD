@@ -23,9 +23,7 @@ class _AlternateAgentStepState
   final _nameCtrl = TextEditingController();
   final _relationshipCtrl = TextEditingController();
   final _addressCtrl = TextEditingController();
-  final _homePhoneCtrl = TextEditingController();
-  final _workPhoneCtrl = TextEditingController();
-  final _cellPhoneCtrl = TextEditingController();
+  final _phoneCtrl = TextEditingController();
 
   int? _existingAgentId;
 
@@ -40,9 +38,7 @@ class _AlternateAgentStepState
     _nameCtrl.dispose();
     _relationshipCtrl.dispose();
     _addressCtrl.dispose();
-    _homePhoneCtrl.dispose();
-    _workPhoneCtrl.dispose();
-    _cellPhoneCtrl.dispose();
+    _phoneCtrl.dispose();
     super.dispose();
   }
 
@@ -58,9 +54,11 @@ class _AlternateAgentStepState
         _nameCtrl.text = alternate.fullName;
         _relationshipCtrl.text = alternate.relationship;
         _addressCtrl.text = alternate.address;
-        _homePhoneCtrl.text = alternate.homePhone;
-        _workPhoneCtrl.text = alternate.workPhone;
-        _cellPhoneCtrl.text = alternate.cellPhone;
+        _phoneCtrl.text = [
+          alternate.cellPhone,
+          alternate.homePhone,
+          alternate.workPhone,
+        ].firstWhere((p) => p.isNotEmpty, orElse: () => '');
       });
     }
   }
@@ -82,9 +80,9 @@ class _AlternateAgentStepState
               fullName: Value(name),
               relationship: Value(_relationshipCtrl.text.trim()),
               address: Value(_addressCtrl.text.trim()),
-              homePhone: Value(_homePhoneCtrl.text.trim()),
-              workPhone: Value(_workPhoneCtrl.text.trim()),
-              cellPhone: Value(_cellPhoneCtrl.text.trim()),
+              homePhone: const Value(''),
+              workPhone: const Value(''),
+              cellPhone: Value(_phoneCtrl.text.trim()),
             ),
           );
     }
@@ -133,9 +131,9 @@ class _AlternateAgentStepState
               onContactPicked: (c) => setState(() {
                 _nameCtrl.text = c.fullName;
                 if (c.address.isNotEmpty) _addressCtrl.text = c.address;
-                if (c.homePhone.isNotEmpty) _homePhoneCtrl.text = c.homePhone;
-                if (c.workPhone.isNotEmpty) _workPhoneCtrl.text = c.workPhone;
-                if (c.cellPhone.isNotEmpty) _cellPhoneCtrl.text = c.cellPhone;
+                final picked = [c.cellPhone, c.homePhone, c.workPhone]
+                    .firstWhere((p) => p.isNotEmpty, orElse: () => '');
+                if (picked.isNotEmpty) _phoneCtrl.text = picked;
               }),
             ),
             const SizedBox(height: 16),
@@ -169,32 +167,10 @@ class _AlternateAgentStepState
             ),
             const SizedBox(height: 12),
             TextFormField(
-              controller: _homePhoneCtrl,
+              controller: _phoneCtrl,
               keyboardType: TextInputType.phone,
               decoration: const InputDecoration(
-                labelText: 'Home phone',
-                border: OutlineInputBorder(),
-              ),
-              autofillHints: const [],
-              textInputAction: TextInputAction.next,
-            ),
-            const SizedBox(height: 12),
-            TextFormField(
-              controller: _workPhoneCtrl,
-              keyboardType: TextInputType.phone,
-              decoration: const InputDecoration(
-                labelText: 'Work phone',
-                border: OutlineInputBorder(),
-              ),
-              autofillHints: const [],
-              textInputAction: TextInputAction.next,
-            ),
-            const SizedBox(height: 12),
-            TextFormField(
-              controller: _cellPhoneCtrl,
-              keyboardType: TextInputType.phone,
-              decoration: const InputDecoration(
-                labelText: 'Cell phone',
+                labelText: 'Phone number',
                 border: OutlineInputBorder(),
               ),
               autofillHints: const [],
