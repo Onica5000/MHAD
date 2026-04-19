@@ -271,12 +271,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ],
               );
             },
-            loading: () => const Padding(
-              padding: EdgeInsets.symmetric(vertical: 32),
+            loading: () => Padding(
+              padding: const EdgeInsets.symmetric(vertical: 32),
               child: Center(
                 child: Semantics(
                   label: 'Loading',
-                  child: CircularProgressIndicator(),
+                  child: const CircularProgressIndicator(),
                 ),
               ),
             ),
