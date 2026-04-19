@@ -151,13 +151,6 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
             appBar: AppBar(
               title: const Text('Directive Wizard'),
               actions: [
-                IconButton(
-                  icon: const Icon(Icons.close),
-                  tooltip: (kIsWeb || !ref.read(privacyModeNotifierProvider).isPrivate)
-                      ? 'Exit wizard'
-                      : 'Save & exit wizard',
-                  onPressed: _isSaving ? null : () => _saveAndExit(context),
-                ),
                 TextButton.icon(
                   icon: const Icon(Icons.auto_awesome, size: 18),
                   label: const Text('Smart Fill', style: TextStyle(fontSize: 12)),
@@ -242,6 +235,13 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                       ),
                     );
                   },
+                ),
+                IconButton(
+                  icon: const Icon(Icons.close),
+                  tooltip: (kIsWeb || !ref.read(privacyModeNotifierProvider).isPrivate)
+                      ? 'Exit wizard'
+                      : 'Save & exit wizard',
+                  onPressed: _isSaving ? null : () => _saveAndExit(context),
                 ),
               ],
             ),
