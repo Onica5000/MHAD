@@ -9,6 +9,7 @@ import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/services/web_session_cache.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/design/app_drawer.dart';
 import 'package:mhad/ui/widgets/design/gradient_progress.dart';
 import 'package:mhad/ui/wizard/wizard_step_mixin.dart';
 import 'package:mhad/ui/wizard/steps/personal_info_step.dart';
@@ -146,6 +147,7 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
             await _saveAndExit(context);
           },
           child: Scaffold(
+            drawer: const MhadAppDrawer(),
             appBar: AppBar(
               title: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -161,15 +163,14 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                   ),
                 ],
               ),
-              leading: IconButton(
-                icon: const Icon(Icons.close),
-                tooltip: (kIsWeb || !ref.read(privacyModeNotifierProvider).isPrivate)
-                    ? 'Exit wizard'
-                    : 'Save & exit wizard',
-                onPressed: _isSaving ? null : () => _saveAndExit(context),
-              ),
-              automaticallyImplyLeading: false,
               actions: [
+                IconButton(
+                  icon: const Icon(Icons.close),
+                  tooltip: (kIsWeb || !ref.read(privacyModeNotifierProvider).isPrivate)
+                      ? 'Exit wizard'
+                      : 'Save & exit wizard',
+                  onPressed: _isSaving ? null : () => _saveAndExit(context),
+                ),
                 TextButton.icon(
                   icon: const Icon(Icons.auto_awesome, size: 18),
                   label: const Text('Smart Fill', style: TextStyle(fontSize: 12)),
@@ -551,45 +552,58 @@ class _BottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-        child: Row(
-          children: [
-            if (onBack != null)
-              Semantics(
-                button: true,
-                label: 'Back to step $stepIndex',
-                child: OutlinedButton.icon(
-                  onPressed: isSaving ? null : onBack,
-                  icon: const Icon(Icons.arrow_back),
-                  label: const Text('Back'),
+    final p = Theme.of(context).mhadPalette;
+    return Container(
+      decoration: BoxDecoration(
+        color: p.card,
+        border: Border(top: BorderSide(color: p.border, width: 1)),
+      ),
+      child: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+          child: Row(
+            children: [
+              Expanded(
+                child: Semantics(
+                  button: true,
+                  label: onBack != null ? 'Back to step $stepIndex' : 'Back',
+                  child: OutlinedButton.icon(
+                    onPressed: (isSaving || onBack == null) ? null : onBack,
+                    icon: const Icon(Icons.arrow_back, size: 18),
+                    label: const Text('Back'),
+                  ),
                 ),
               ),
-            const Spacer(),
-            Semantics(
-              button: true,
-              label: isSaving
-                  ? 'Saving'
-                  : isLastStep
-                      ? 'Finish directive'
-                      : 'Next, go to step ${stepIndex + 2} of $totalSteps',
-              child: FilledButton.icon(
-                onPressed: isSaving ? null : onNext,
-                icon: isSaving
-                    ? SizedBox(
-                        width: 16,
-                        height: 16,
-                        child: Semantics(
-                          label: 'Loading',
-                          child: const CircularProgressIndicator(strokeWidth: 2),
-                        ),
-                      )
-                    : Icon(isLastStep ? Icons.check : Icons.arrow_forward),
-                label: Text(isLastStep ? 'Finish' : 'Next'),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Semantics(
+                  button: true,
+                  label: isSaving
+                      ? 'Saving'
+                      : isLastStep
+                          ? 'Finish directive'
+                          : 'Next, go to step ${stepIndex + 2} of $totalSteps',
+                  child: FilledButton.icon(
+                    onPressed: isSaving ? null : onNext,
+                    icon: isSaving
+                        ? SizedBox(
+                            width: 16,
+                            height: 16,
+                            child: Semantics(
+                              label: 'Loading',
+                              child: const CircularProgressIndicator(
+                                  strokeWidth: 2),
+                            ),
+                          )
+                        : Icon(isLastStep ? Icons.check : Icons.arrow_forward,
+                            size: 18),
+                    label: Text(isLastStep ? 'Finish' : 'Next'),
+                  ),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
