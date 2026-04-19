@@ -149,20 +149,7 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
           child: Scaffold(
             drawer: const MhadAppDrawer(),
             appBar: AppBar(
-              title: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(currentStep.displayName),
-                  Text(
-                    'Step ${_stepIndex + 1} of ${steps.length}',
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSurfaceVariant,
-                        ),
-                  ),
-                ],
-              ),
+              title: const Text('Directive Wizard'),
               actions: [
                 IconButton(
                   icon: const Icon(Icons.close),
@@ -234,9 +221,9 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                   directiveId: directive.id,
                   formType: formType.name,
                 ),
-                IconButton(
-                  icon: const Icon(Icons.smart_toy_outlined),
-                  tooltip: 'AI Chat',
+                TextButton.icon(
+                  icon: const Icon(Icons.smart_toy_outlined, size: 18),
+                  label: const Text('AI Chat', style: TextStyle(fontSize: 12)),
                   onPressed: () {
                     final fields = <String, String>{};
                     void add(String k, String v) {
@@ -260,6 +247,11 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
             ),
             body: Column(
               children: [
+                _StepTitleHeader(
+                  title: currentStep.displayName,
+                  stepIndex: _stepIndex,
+                  totalSteps: steps.length,
+                ),
                 _ProgressBar(
                     current: _stepIndex + 1, total: steps.length),
                 if (_stepIndex == 0) const DocumentImportTip(),
@@ -469,6 +461,54 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
         }
       }
     }
+  }
+}
+
+class _StepTitleHeader extends StatelessWidget {
+  final String title;
+  final int stepIndex;
+  final int totalSteps;
+  const _StepTitleHeader({
+    required this.title,
+    required this.stepIndex,
+    required this.totalSteps,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
+    return Container(
+      width: double.infinity,
+      color: p.card,
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Step ${stepIndex + 1} of $totalSteps',
+            style: TextStyle(
+              fontFamily: 'DM Sans',
+              fontSize: 11,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 0.6,
+              color: p.primary,
+            ),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            title,
+            style: TextStyle(
+              fontFamily: 'DM Sans',
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+              color: p.text,
+              height: 1.2,
+              letterSpacing: -0.2,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
