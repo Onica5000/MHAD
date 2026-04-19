@@ -679,7 +679,8 @@ class _InputBar extends StatelessWidget {
                       child: Semantics(
                         label: 'Loading',
                         child: CircularProgressIndicator(
-                            strokeWidth: 2, color: cs.onPrimary),
+                            strokeWidth: 2,
+                            color: Theme.of(context).colorScheme.onPrimary),
                       ),
                     )
                   : const Icon(Icons.send_rounded),
