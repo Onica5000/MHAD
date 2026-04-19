@@ -8,6 +8,8 @@ import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/services/web_session_cache.dart';
 import 'package:mhad/ui/router.dart';
+import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/design/gradient_progress.dart';
 import 'package:mhad/ui/wizard/wizard_step_mixin.dart';
 import 'package:mhad/ui/wizard/steps/personal_info_step.dart';
 import 'package:mhad/ui/wizard/steps/diagnoses_step.dart';
@@ -483,32 +485,48 @@ class _ProgressBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
     final percent = ((current / total) * 100).round();
     return Semantics(
       label: 'Step $current of $total, $percent% complete',
       value: '$percent%',
       liveRegion: true,
-      child: Column(
-        children: [
-          LinearProgressIndicator(
-            value: current / total,
-            backgroundColor:
-                Theme.of(context).colorScheme.surfaceContainerHighest,
-            minHeight: 4,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-            child: Row(
+      child: Container(
+        color: p.card,
+        padding: const EdgeInsets.fromLTRB(20, 4, 20, 12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            GradientProgress(
+              value: current / total,
+              height: 6,
+            ),
+            const SizedBox(height: 6),
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Step $current of $total',
-                    style: Theme.of(context).textTheme.labelSmall),
-                Text('$percent% complete',
-                    style: Theme.of(context).textTheme.labelSmall),
+                Text(
+                  'Step $current of $total',
+                  style: TextStyle(
+                    fontFamily: 'DM Sans',
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                    color: p.textMuted,
+                  ),
+                ),
+                Text(
+                  '$percent% complete',
+                  style: TextStyle(
+                    fontFamily: 'DM Sans',
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                    color: p.primary,
+                  ),
+                ),
               ],
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

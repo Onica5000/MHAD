@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mhad/services/pin_auth_service.dart';
 import 'package:mhad/services/privacy_mode_service.dart';
 import 'package:mhad/ui/mode_selection/pin_dialog.dart';
+import 'package:mhad/ui/theme/app_theme.dart';
 
 /// Shown on every app launch (after the one-time disclaimer).
 /// The user must choose Public or Private mode before accessing any directives.
@@ -15,26 +16,27 @@ class ModeSelectionScreen extends StatefulWidget {
 }
 
 class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
-  bool _loading = false;
+  String? _loading; // 'private' | 'public'
 
   Future<void> _pickPublic() async {
+    setState(() => _loading = 'public');
+    // Small visual pause matches the prototype's tap affordance.
+    await Future<void>.delayed(const Duration(milliseconds: 250));
+    if (!mounted) return;
     widget.notifier.setPublicMode();
-    // GoRouter redirect fires automatically via notifyListeners
   }
 
   Future<void> _pickPrivate() async {
-    setState(() => _loading = true);
+    setState(() => _loading = 'private');
 
     final result = await widget.notifier.trySetPrivateMode();
     if (!mounted) return;
-    setState(() => _loading = false);
+    setState(() => _loading = null);
 
     switch (result) {
       case AuthResult.success:
-        // GoRouter redirect fires automatically via notifyListeners.
         break;
       case AuthResult.unavailable:
-        // Biometrics / device credentials not usable — fall back to passcode.
         await _handlePasscodeAuth();
         break;
       case AuthResult.cancelled:
@@ -70,107 +72,107 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
+    final p = Theme.of(context).mhadPalette;
+
     return PopScope(
       canPop: false,
       child: Scaffold(
+        backgroundColor: p.primary,
         body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const Spacer(),
-                Center(
-                  child: Icon(Icons.shield_outlined,
-                      size: 64, color: cs.primary),
-                ),
-                const SizedBox(height: 20),
-                Text(
-                  'Choose Access Mode',
-                  style: Theme.of(context)
-                      .textTheme
-                      .headlineSmall
-                      ?.copyWith(fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'Select how you want to use the app in this session.',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium
-                      ?.copyWith(color: cs.onSurfaceVariant),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 40),
-
-                // Public mode card
-                _ModeCard(
-                  icon: Icons.visibility_off_outlined,
-                  title: 'Public Mode',
-                  description:
-                      'Use the app without saving anything.\n'
-                      'All data is temporary and automatically erased when the app closes. '
-                      'No stored directives are accessible.',
-                  color: cs.secondaryContainer,
-                  onColor: cs.onSecondaryContainer,
-                  onTap: _loading ? null : _pickPublic,
-                ),
-                const SizedBox(height: 16),
-
-                // Private mode card (not available on web — no encrypted storage)
-                if (!kIsWeb)
-                  _ModeCard(
-                    icon: Icons.fingerprint,
-                    title: 'Private Mode',
-                    description:
-                        'Access your saved directives.\n'
-                        'Requires authentication. Your data is encrypted '
-                        'and stored securely on this device.',
-                    color: cs.primaryContainer,
-                    onColor: cs.onPrimaryContainer,
-                    onTap: _loading ? null : _pickPrivate,
-                    trailing: _loading
-                        ? SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: Semantics(
-                              label: 'Loading',
-                              child: const CircularProgressIndicator(strokeWidth: 2),
-                            ),
-                          )
-                        : null,
+          child: Column(
+            children: [
+              // Hero
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 32),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 72,
+                        height: 72,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(22),
+                        ),
+                        child: const Icon(
+                          Icons.shield_outlined,
+                          color: Colors.white,
+                          size: 40,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      const Text(
+                        'PA Mental Health\nAdvance Directive',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontFamily: 'DM Sans',
+                          fontSize: 26,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                          height: 1.2,
+                          letterSpacing: -0.3,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        'Document your mental health treatment preferences — legally binding under PA Act 194',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontFamily: 'DM Sans',
+                          fontSize: 14,
+                          color: Colors.white.withValues(alpha: 0.75),
+                          height: 1.5,
+                        ),
+                      ),
+                    ],
                   ),
-                if (kIsWeb)
-                  Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Text(
-                      'Private mode with encrypted storage is available '
-                      'in the mobile and desktop apps.',
+                ),
+              ),
+
+              // Mode cards
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 40),
+                child: Column(
+                  children: [
+                    if (!kIsWeb)
+                      _ModeCard(
+                        title: 'Private Mode',
+                        description:
+                            'Encrypted & saved. Requires biometric or passcode.',
+                        icon: Icons.fingerprint,
+                        light: true,
+                        loading: _loading == 'private',
+                        dimmed: _loading == 'public',
+                        onTap: _loading != null ? null : _pickPrivate,
+                      ),
+                    if (!kIsWeb) const SizedBox(height: 12),
+                    _ModeCard(
+                      title: 'Public Mode',
+                      description:
+                          'Temporary session. Data erased when you exit.',
+                      icon: Icons.visibility_off_outlined,
+                      light: false,
+                      loading: _loading == 'public',
+                      dimmed: _loading == 'private',
+                      onTap: _loading != null ? null : _pickPublic,
+                    ),
+                    const SizedBox(height: 14),
+                    Text(
+                      kIsWeb
+                          ? 'Private mode with encrypted storage is available in the mobile and desktop apps.'
+                          : 'This selection applies to this session only.',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 12,
-                        color: cs.onSurfaceVariant,
+                        fontFamily: 'DM Sans',
+                        fontSize: 11,
+                        color: Colors.white.withValues(alpha: 0.6),
                       ),
                     ),
-                  ),
-                const Spacer(flex: 2),
-                Text(
-                  kIsWeb
-                      ? 'Data entered in this session is temporary and will '
-                        'not be saved when you close the browser tab.'
-                      : 'This selection applies to this session only. '
-                        'You will be asked again the next time you open the app.',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodySmall
-                      ?.copyWith(color: cs.onSurfaceVariant),
-                  textAlign: TextAlign.center,
+                  ],
                 ),
-                const SizedBox(height: 8),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -179,68 +181,114 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
 }
 
 class _ModeCard extends StatelessWidget {
-  final IconData icon;
   final String title;
   final String description;
-  final Color color;
-  final Color onColor;
+  final IconData icon;
+  final bool light;
+  final bool loading;
+  final bool dimmed;
   final VoidCallback? onTap;
-  final Widget? trailing;
 
   const _ModeCard({
-    required this.icon,
     required this.title,
     required this.description,
-    required this.color,
-    required this.onColor,
+    required this.icon,
+    required this.light,
+    required this.loading,
+    required this.dimmed,
     required this.onTap,
-    this.trailing,
   });
 
   @override
   Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
+
+    final bg = light ? Colors.white : Colors.white.withValues(alpha: 0.12);
+    final titleColor = light ? p.text : Colors.white;
+    final descColor =
+        light ? p.textMuted : Colors.white.withValues(alpha: 0.7);
+    final iconBgColor =
+        light ? p.primaryLight : Colors.white.withValues(alpha: 0.15);
+    final iconColor = light ? p.primary : Colors.white.withValues(alpha: 0.85);
+    final chevColor =
+        light ? p.textMuted : Colors.white.withValues(alpha: 0.5);
+
     return Semantics(
       button: true,
-      label: 'Select $title mode',
-      child: Card(
-      color: color,
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Icon(icon, color: onColor, size: 32),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(title,
-                        style: TextStyle(
-                            color: onColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16)),
-                    const SizedBox(height: 4),
-                    Text(description,
-                        style: TextStyle(
-                            color: onColor.withValues(alpha: 0.85),
-                            fontSize: 13,
-                            height: 1.4)),
-                  ],
-                ),
+      label: 'Select $title',
+      child: AnimatedOpacity(
+        opacity: dimmed ? 0.5 : 1,
+        duration: const Duration(milliseconds: 200),
+        child: Material(
+          color: bg,
+          borderRadius: BorderRadius.circular(20),
+          child: InkWell(
+            onTap: onTap,
+            borderRadius: BorderRadius.circular(20),
+            child: Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                border: light
+                    ? null
+                    : Border.all(
+                        color: Colors.white.withValues(alpha: 0.25),
+                        width: 1.5),
               ),
-              if (trailing != null) ...[
-                const SizedBox(width: 8),
-                trailing!,
-              ],
-            ],
+              child: Row(
+                children: [
+                  Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: iconBgColor,
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: loading
+                        ? Padding(
+                            padding: const EdgeInsets.all(13),
+                            child: CircularProgressIndicator(
+                              strokeWidth: 3,
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(iconColor),
+                            ),
+                          )
+                        : Icon(icon, color: iconColor, size: 26),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          title,
+                          style: TextStyle(
+                            fontFamily: 'DM Sans',
+                            fontWeight: FontWeight.w700,
+                            fontSize: 16,
+                            color: titleColor,
+                          ),
+                        ),
+                        const SizedBox(height: 3),
+                        Text(
+                          description,
+                          style: TextStyle(
+                            fontFamily: 'DM Sans',
+                            fontSize: 13,
+                            color: descColor,
+                            height: 1.4,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Icon(Icons.chevron_right, color: chevColor, size: 20),
+                ],
+              ),
+            ),
           ),
         ),
       ),
-    ),
     );
   }
 }

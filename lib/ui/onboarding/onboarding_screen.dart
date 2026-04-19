@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const _prefKey = 'onboarding_completed';
@@ -23,51 +24,55 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final _controller = PageController();
   int _page = 0;
 
-  static const _pages = [
+  static const _pages = <_PageData>[
     _PageData(
       icon: Icons.description_outlined,
-      title: 'What is a Mental Health\nAdvance Directive?',
-      body: 'A legal document that lets you state your preferences for '
-          'mental health treatment in advance — so your wishes are '
-          'respected even during a crisis when you may not be able to '
-          'communicate them.\n\n'
-          'Under Pennsylvania Act 194 of 2004, your MHAD is legally '
-          'binding once signed and witnessed.',
+      title: 'Your Voice in a Crisis',
+      body:
+          'A Mental Health Advance Directive lets you document your treatment '
+          'preferences now — so your wishes are respected even when you can\u2019t '
+          'communicate them during a mental health crisis.\n\n'
+          'Under Pennsylvania Act 194 of 2004, your MHAD is legally binding once '
+          'signed and witnessed.',
+      tag: 'PA Act 194 of 2004',
     ),
     _PageData(
       icon: Icons.checklist,
       title: 'What You Can Include',
-      body: '\u2022 Medications you want or don\'t want\n'
-          '\u2022 Treatment facilities you prefer or want to avoid\n'
-          '\u2022 Whether you consent to ECT, experimental studies, or drug trials\n'
-          '\u2022 A trusted person (agent) to make decisions for you\n'
-          '\u2022 Crisis intervention preferences\n'
-          '\u2022 Dietary, religious, and cultural needs\n'
-          '\u2022 Guardian nomination',
+      bullets: [
+        'Medications you want or want to avoid',
+        'Treatment facilities you prefer or want to avoid',
+        'Your stance on ECT, drug trials, or experimental studies',
+        'A trusted agent to decide on your behalf',
+        'Crisis intervention preferences',
+        'Dietary, religious & cultural preferences',
+        'Guardian nomination',
+      ],
+      accent: _AccentColor.warning,
     ),
     _PageData(
       icon: Icons.inventory_2_outlined,
       title: 'What to Have Ready',
-      body: 'To make filling out your directive easier, gather:\n\n'
-          '\u2022 A list of your current medications\n'
-          '\u2022 Names of your diagnoses or conditions\n'
-          '\u2022 Contact info for your chosen agent\n'
-          '\u2022 Names and contact info for two adult witnesses\n'
-          '\u2022 Any medical documents (the app can import these)\n\n'
-          'In Private Mode, you can fill it out over multiple sessions — '
-          'your progress is saved automatically. In Public Mode or on the '
-          'web, data is kept in memory only and lost when you close the app, '
-          'so plan to complete and export in one session.',
+      bullets: [
+        'List of your current medications',
+        'Names of your diagnoses or conditions',
+        'Contact info for your chosen agent',
+        'Names & contact info for two adult witnesses',
+      ],
+      footnote:
+          'The app can import from photos, PDFs, or medical documents to auto-fill fields.',
+      accent: _AccentColor.success,
     ),
     _PageData(
       icon: Icons.timer_outlined,
-      title: 'How Long Does It Take?',
-      body: 'Most people complete their directive in 20-40 minutes.\n\n'
-          'The app offers Smart Fill to speed things up — select your '
-          'conditions and medications, and AI fills the rest.\n\n'
-          'You can also import data from medical documents (photos, '
-          'PDFs) to auto-fill fields.\n\n'
-          'Your directive is valid for 2 years once signed.',
+      title: 'Takes About 20–40 Minutes',
+      body:
+          'Use Smart Fill — select your conditions and let AI pre-fill the form.\n\n'
+          'In Private Mode, progress is auto-saved and you can complete the form over '
+          'multiple sessions. In Public Mode or on the web, data is in memory only — '
+          'plan to complete and export in one session.\n\n'
+          'Your directive is legally valid for 2 years once signed by you and two witnesses.',
+      tag: 'Auto-save in Private Mode',
     ),
   ];
 
@@ -85,19 +90,30 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
+    final p = Theme.of(context).mhadPalette;
     final isLast = _page == _pages.length - 1;
 
     return Scaffold(
+      backgroundColor: p.surface,
       body: SafeArea(
         child: Column(
           children: [
-            // Skip button
             Align(
               alignment: Alignment.topRight,
-              child: TextButton(
-                onPressed: _finish,
-                child: const Text('Skip'),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(8, 8, 16, 0),
+                child: TextButton(
+                  onPressed: _finish,
+                  child: Text(
+                    'Skip',
+                    style: TextStyle(
+                      fontFamily: 'DM Sans',
+                      fontSize: 14,
+                      color: p.textMuted,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
               ),
             ),
             Expanded(
@@ -107,29 +123,109 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 itemCount: _pages.length,
                 itemBuilder: (ctx, i) {
                   final page = _pages[i];
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 32),
+                  final (tileBg, iconColor) = _resolveAccent(page.accent, p);
+                  return SingleChildScrollView(
+                    padding: const EdgeInsets.fromLTRB(28, 24, 28, 16),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Icon(page.icon, size: 64, color: cs.primary),
-                        const SizedBox(height: 24),
-                        Text(
-                          page.title,
-                          textAlign: TextAlign.center,
-                          style:
-                              Theme.of(ctx).textTheme.headlineSmall?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                        Container(
+                          width: 80,
+                          height: 80,
+                          decoration: BoxDecoration(
+                            color: tileBg,
+                            borderRadius: BorderRadius.circular(24),
+                          ),
+                          child: Icon(page.icon, size: 42, color: iconColor),
                         ),
                         const SizedBox(height: 16),
+                        if (page.tag != null)
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: p.primaryLight,
+                              borderRadius: BorderRadius.circular(100),
+                            ),
+                            child: Text(
+                              page.tag!,
+                              style: TextStyle(
+                                fontFamily: 'DM Sans',
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                                color: p.primary,
+                              ),
+                            ),
+                          ),
+                        if (page.tag != null) const SizedBox(height: 10),
                         Text(
-                          page.body,
-                          textAlign: TextAlign.center,
-                          style: Theme.of(ctx).textTheme.bodyMedium?.copyWith(
+                          page.title,
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineLarge
+                              ?.copyWith(height: 1.25),
+                        ),
+                        const SizedBox(height: 14),
+                        if (page.body != null)
+                          ...page.body!.split('\n\n').map((para) => Padding(
+                                padding: const EdgeInsets.only(bottom: 10),
+                                child: Text(
+                                  para,
+                                  style: TextStyle(
+                                    fontFamily: 'DM Sans',
+                                    fontSize: 15,
+                                    color: p.textMuted,
+                                    height: 1.55,
+                                  ),
+                                ),
+                              )),
+                        if (page.bullets != null)
+                          ...page.bullets!.map((b) => Padding(
+                                padding: const EdgeInsets.only(bottom: 10),
+                                child: Row(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      width: 20,
+                                      height: 20,
+                                      margin: const EdgeInsets.only(top: 1),
+                                      decoration: BoxDecoration(
+                                        color: tileBg,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: Icon(Icons.check,
+                                          size: 12, color: iconColor),
+                                    ),
+                                    const SizedBox(width: 10),
+                                    Expanded(
+                                      child: Text(
+                                        b,
+                                        style: TextStyle(
+                                          fontFamily: 'DM Sans',
+                                          fontSize: 15,
+                                          color: p.textMuted,
+                                          height: 1.45,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )),
+                        if (page.footnote != null)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8),
+                            child: Text(
+                              page.footnote!,
+                              style: TextStyle(
+                                fontFamily: 'DM Sans',
+                                fontSize: 13,
+                                color: p.textMuted,
+                                fontStyle: FontStyle.italic,
                                 height: 1.5,
                               ),
-                        ),
+                            ),
+                          ),
                       ],
                     ),
                   );
@@ -137,34 +233,38 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               ),
             ),
             // Dots
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(
-                _pages.length,
-                (i) => Container(
-                  width: 8,
-                  height: 8,
-                  margin: const EdgeInsets.symmetric(horizontal: 4),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: i == _page ? cs.primary : cs.surfaceContainerHighest,
-                  ),
-                ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 12, top: 4),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(_pages.length, (i) {
+                  final active = i == _page;
+                  return AnimatedContainer(
+                    duration: const Duration(milliseconds: 250),
+                    margin: const EdgeInsets.symmetric(horizontal: 3),
+                    width: active ? 20 : 7,
+                    height: 7,
+                    decoration: BoxDecoration(
+                      color: active ? p.primary : p.border,
+                      borderRadius: BorderRadius.circular(100),
+                    ),
+                  );
+                }),
               ),
             ),
-            const SizedBox(height: 16),
             Padding(
-              padding: const EdgeInsets.fromLTRB(32, 0, 32, 24),
+              padding: const EdgeInsets.fromLTRB(28, 8, 28, 24),
               child: SizedBox(
                 width: double.infinity,
-                child: FilledButton(
+                child: FilledButton.icon(
                   onPressed: isLast
                       ? _finish
                       : () => _controller.nextPage(
                             duration: const Duration(milliseconds: 300),
                             curve: Curves.easeInOut,
                           ),
-                  child: Text(isLast ? 'Get Started' : 'Next'),
+                  icon: Icon(isLast ? Icons.check : Icons.arrow_forward),
+                  label: Text(isLast ? 'Get Started' : 'Next'),
                 ),
               ),
             ),
@@ -175,10 +275,36 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 }
 
+enum _AccentColor { primary, warning, success }
+
+(Color, Color) _resolveAccent(_AccentColor? a, MhadPalette p) {
+  switch (a) {
+    case _AccentColor.warning:
+      return (SemanticColors.warningBgLight, SemanticColors.warningTextLight);
+    case _AccentColor.success:
+      return (SemanticColors.successBgLight, SemanticColors.successTextLight);
+    case _AccentColor.primary:
+    case null:
+      return (p.primaryLight, p.primary);
+  }
+}
+
 class _PageData {
   final IconData icon;
   final String title;
-  final String body;
-  const _PageData(
-      {required this.icon, required this.title, required this.body});
+  final String? body;
+  final List<String>? bullets;
+  final String? tag;
+  final String? footnote;
+  final _AccentColor? accent;
+
+  const _PageData({
+    required this.icon,
+    required this.title,
+    this.body,
+    this.bullets,
+    this.tag,
+    this.footnote,
+    this.accent,
+  });
 }

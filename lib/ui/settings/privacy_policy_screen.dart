@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/ui/router.dart';
+import 'package:mhad/ui/widgets/design/app_drawer.dart';
 
 /// In-app privacy policy accessible from settings and disclaimer screen.
 class PrivacyPolicyScreen extends StatelessWidget {
@@ -19,6 +20,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
         ?.copyWith(fontWeight: FontWeight.w600);
 
     return Scaffold(
+      drawer: const MhadAppDrawer(),
       appBar: AppBar(title: const Text('Privacy Policy')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),

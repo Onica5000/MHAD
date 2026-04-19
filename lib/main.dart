@@ -15,6 +15,7 @@ import 'package:mhad/services/privacy_mode_service.dart';
 import 'package:mhad/services/public_session_cache.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/theme/theme_controller.dart';
 import 'package:mhad/ui/widgets/crisis_resources_banner.dart';
 import 'package:mhad/utils/platform_utils.dart';
 
@@ -79,15 +80,17 @@ void main() {
   });
 }
 
-class MhadApp extends StatelessWidget {
+class MhadApp extends ConsumerWidget {
   const MhadApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final themeSettings = ref.watch(appThemeControllerProvider);
     return MaterialApp.router(
       title: 'PA Mental Health Advance Directive',
-      theme: lightTheme,
-      darkTheme: darkTheme,
+      theme: buildMhadTheme(themeSettings.palette, Brightness.light),
+      darkTheme: buildMhadTheme(themeSettings.palette, Brightness.dark),
+      themeMode: themeSettings.mode,
       routerConfig: appRouter,
       debugShowCheckedModeBanner: false,
       localizationsDelegates: const [

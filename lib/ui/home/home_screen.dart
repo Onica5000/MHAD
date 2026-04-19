@@ -14,6 +14,11 @@ import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/ui/home/directive_card.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/onboarding/onboarding_screen.dart';
+import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/design/app_drawer.dart';
+import 'package:mhad/ui/widgets/design/design_card.dart';
+import 'package:mhad/ui/widgets/design/info_banner.dart';
+import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/draft_recovery_dialog.dart';
 import 'package:mhad/ui/widgets/provider_resources.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -35,7 +40,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       _checkedDraftRecovery = true;
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         if (!mounted) return;
-        // Show onboarding on first launch
         final onboarded = await OnboardingScreen.isCompleted();
         if (!onboarded && mounted) {
           await Navigator.of(context).push(MaterialPageRoute(
@@ -45,7 +49,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
           ));
         }
-        // On web, auto-restore cached directive without prompting
         if (kIsWeb && mounted) {
           await _tryWebSessionRestore();
         }
@@ -57,42 +60,103 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final directivesAsync = ref.watch(allDirectivesProvider);
-
     final privacyMode = ref.watch(privacyModeNotifierProvider);
+    final p = Theme.of(context).mhadPalette;
 
     return Scaffold(
+      backgroundColor: p.surface,
+      drawer: const MhadAppDrawer(),
       appBar: AppBar(
-        title: Text(
-          'PA Mental Health\nAdvance Directive',
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
+        title: Row(
+          children: [
+            Container(
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(
+                color: p.primaryLight,
+                borderRadius: BorderRadius.circular(10),
               ),
+              child: Icon(Icons.shield_outlined, color: p.primary, size: 18),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'My Directives',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
+                  ),
+                  Row(
+                    children: [
+                      Container(
+                        width: 6,
+                        height: 6,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: privacyMode.isPrivate
+                              ? SemanticColors.successTextLight
+                              : SemanticColors.warningTextLight,
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      Flexible(
+                        child: Text(
+                          privacyMode.isPrivate
+                              ? 'Private · Encrypted'
+                              : (privacyMode.isPublic
+                                  ? 'Public · Not saved'
+                                  : 'No session'),
+                          style: TextStyle(
+                            fontFamily: 'DM Sans',
+                            fontSize: 11,
+                            color: p.textMuted,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
+        titleSpacing: 4,
         actions: [
-          // Mode badge + optional downgrade action
           if (privacyMode.isPrivate)
             PopupMenuButton<String>(
-              tooltip: 'Session: Private',
-              icon: const Icon(Icons.lock_outline),
+              tooltip: 'Session options',
+              icon: Icon(Icons.lock_outline, color: p.text),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
               onSelected: (value) {
                 if (value == 'switch_public') {
                   _confirmSwitchToPublic(context, privacyMode);
                 } else if (value == 'export_data') {
                   _exportData(context, ref);
+                } else if (value == 'delete_all') {
+                  _deleteAllData(context, ref);
                 }
               },
               itemBuilder: (_) => [
                 const PopupMenuItem(
                   enabled: false,
                   child: Text('Private session',
-                      style: TextStyle(fontWeight: FontWeight.w600)),
+                      style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontFamily: 'DM Sans')),
                 ),
                 const PopupMenuDivider(),
                 const PopupMenuItem(
                   value: 'export_data',
                   child: Row(children: [
                     Icon(Icons.download_outlined, size: 18),
-                    SizedBox(width: 8),
+                    SizedBox(width: 10),
                     Text('Export All Data'),
                   ]),
                 ),
@@ -100,155 +164,140 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   value: 'switch_public',
                   child: Row(children: [
                     Icon(Icons.visibility_off_outlined, size: 18),
-                    SizedBox(width: 8),
-                    Text('Switch to Public Mode'),
+                    SizedBox(width: 10),
+                    Text('Switch to Public'),
+                  ]),
+                ),
+                const PopupMenuDivider(),
+                PopupMenuItem(
+                  value: 'delete_all',
+                  child: Row(children: [
+                    Icon(Icons.delete_forever,
+                        size: 18,
+                        color: Theme.of(context).colorScheme.error),
+                    const SizedBox(width: 10),
+                    Text(
+                      'Delete All Data',
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.error),
+                    ),
                   ]),
                 ),
               ],
             )
-          else if (privacyMode.isPublic)
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12),
-              child: Tooltip(
-                message: 'Public session — data is not saved',
-                child: Icon(Icons.visibility_off_outlined,
-                    size: 20),
+          else
+            PopupMenuButton<String>(
+              tooltip: 'Session options',
+              icon: Icon(Icons.visibility_off_outlined, color: p.text),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
               ),
+              onSelected: (value) {
+                if (value == 'delete_all') {
+                  _deleteAllData(context, ref);
+                }
+              },
+              itemBuilder: (_) => [
+                const PopupMenuItem(
+                  enabled: false,
+                  child: Text('Public session',
+                      style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontFamily: 'DM Sans')),
+                ),
+                const PopupMenuDivider(),
+                PopupMenuItem(
+                  value: 'delete_all',
+                  child: Row(children: [
+                    Icon(Icons.delete_forever,
+                        size: 18,
+                        color: Theme.of(context).colorScheme.error),
+                    const SizedBox(width: 10),
+                    Text(
+                      'Delete All Data',
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.error),
+                    ),
+                  ]),
+                ),
+              ],
             ),
-          IconButton(
-            icon: const Icon(Icons.settings_outlined),
-            tooltip: 'Settings',
-            onPressed: () => context.push(AppRoutes.settings),
-          ),
-          PopupMenuButton<String>(
-            tooltip: 'More options',
-            icon: const Icon(Icons.more_vert),
-            onSelected: (value) async {
-              if (value == 'delete_all') {
-                _deleteAllData(context, ref);
-              }
-            },
-            itemBuilder: (_) => [
-              const PopupMenuItem(
-                value: 'delete_all',
-                child: Row(children: [
-                  Icon(Icons.delete_forever, size: 18),
-                  SizedBox(width: 8),
-                  Text('Delete All Data'),
-                ]),
-              ),
-            ],
-          ),
         ],
       ),
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
         children: [
           const _DeviceSecurityCheck(),
-          _DisclaimerBanner(),
+          const InfoBanner(
+            icon: Icons.gavel_rounded,
+            text:
+                'This app helps you document your mental health preferences. '
+                'It is not legal advice. Directives are valid for 2 years '
+                'under PA Act 194 of 2004.',
+            variant: InfoBannerVariant.warning,
+          ),
           const SizedBox(height: 16),
           _LearnMoreCard(),
-          const SizedBox(height: 16),
-          const ProviderResourcesCard(),
-          const SizedBox(height: 8),
+          const SizedBox(height: 20),
           if (privacyMode.isPublic) ...[
             _PublicModeNotice(
               onEndSession: () => _confirmEndSession(context, ref),
             ),
-            const SizedBox(height: 16),
-            // Public mode still shows directives created this session
-            Text(
-              'Session Directives',
-              style: Theme.of(context)
-                  .textTheme
-                  .titleMedium
-                  ?.copyWith(fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 8),
-            directivesAsync.when(
-              data: (directives) {
-                if (directives.isEmpty) return const _EmptyDirectives();
-                return ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: directives.length,
-                  itemBuilder: (context, index) {
-                    final d = directives[index];
-                    return _DirectiveCardWithAgent(
-                      key: ValueKey(d.id),
-                      directive: d,
-                      onExport: () => context.push(AppRoutes.exportRoute(d.id)),
-                      onDelete: () => _confirmDelete(context, ref, d.id),
-                      onRevoke: () => _confirmRevoke(context, ref, d.id),
-                      onRenew: () => _renewDirective(context, ref, d),
-                    );
-                  },
-                );
-              },
-              loading: () => Center(
-                    child: Semantics(
-                      label: 'Loading',
-                      child: const CircularProgressIndicator(),
-                    ),
-                  ),
-              error: (e, _) {
-                debugPrint('Error loading directives: $e');
-                return const _EmptyDirectives();
-              },
-            ),
-          ] else ...[
-            Text(
-              'My Directives',
-              style: Theme.of(context)
-                  .textTheme
-                  .titleMedium
-                  ?.copyWith(fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 8),
-            directivesAsync.when(
-              data: (directives) {
-                if (directives.isEmpty) return const _EmptyDirectives();
-                return ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: directives.length,
-                  itemBuilder: (context, index) {
-                    final d = directives[index];
-                    return _DirectiveCardWithAgent(
-                      key: ValueKey(d.id),
-                      directive: d,
-                      onExport: () => context.push(AppRoutes.exportRoute(d.id)),
-                      onDelete: () => _confirmDelete(context, ref, d.id),
-                      onRevoke: () => _confirmRevoke(context, ref, d.id),
-                      onRenew: () => _renewDirective(context, ref, d),
-                    );
-                  },
-                );
-              },
-              loading: () => Center(
-                    child: Semantics(
-                      label: 'Loading',
-                      child: const CircularProgressIndicator(),
-                    ),
-                  ),
-              error: (e, _) {
-                debugPrint('Error loading directives: $e');
-                return const _EmptyDirectives();
-              },
-            ),
+            const SizedBox(height: 20),
           ],
-          const SizedBox(height: 16),
+          directivesAsync.when(
+            data: (directives) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SectionLabel(
+                    privacyMode.isPublic
+                        ? 'Session Directives (${directives.length})'
+                        : 'Your Directives (${directives.length})',
+                  ),
+                  const SizedBox(height: 8),
+                  if (directives.isEmpty)
+                    const _EmptyDirectives()
+                  else
+                    ...directives.map((d) => _DirectiveCardWithAgent(
+                          key: ValueKey(d.id),
+                          directive: d,
+                          onExport: () =>
+                              context.push(AppRoutes.exportRoute(d.id)),
+                          onDelete: () => _confirmDelete(context, ref, d.id),
+                          onRevoke: () => _confirmRevoke(context, ref, d.id),
+                          onRenew: () => _renewDirective(context, ref, d),
+                        )),
+                ],
+              );
+            },
+            loading: () => const Padding(
+              padding: EdgeInsets.symmetric(vertical: 32),
+              child: Center(
+                child: Semantics(
+                  label: 'Loading',
+                  child: CircularProgressIndicator(),
+                ),
+              ),
+            ),
+            error: (e, _) {
+              debugPrint('Error loading directives: $e');
+              return const _EmptyDirectives();
+            },
+          ),
+          const SizedBox(height: 20),
           SizedBox(
             width: double.infinity,
             child: FilledButton.icon(
               onPressed: () => context.go(AppRoutes.formTypeSelection),
               icon: const Icon(Icons.add),
               label: const Text('New Directive'),
-              style: FilledButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 14),
-              ),
             ),
           ),
+          const SizedBox(height: 24),
+          const SectionLabel('Resources'),
+          const SizedBox(height: 8),
+          const ProviderResourcesCard(),
           const SizedBox(height: 16),
         ],
       ),
@@ -312,10 +361,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
     if (confirmed != true || !context.mounted) return;
 
-    // Wipe everything
     await endPublicSession(ref);
     await WebSessionCache.clear();
-    // Delete all in-memory directives
     try {
       await ref.read(directiveRepositoryProvider).deleteAllDirectives();
     } catch (_) {}
@@ -392,7 +439,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
     if (confirmed == true) {
       await ref.read(directiveRepositoryProvider).deleteDirective(id);
-      // Cancel any scheduled expiration reminders for this directive
       await NotificationService.instance.cancelReminders(id);
     }
   }
@@ -469,7 +515,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final repo = ref.read(directiveRepositoryProvider);
     final newId = await repo.createDirective(formType);
 
-    // Copy non-PII data from old directive
     await repo.updateEffectiveCondition(newId, old.effectiveCondition);
 
     if (context.mounted) {
@@ -509,7 +554,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       const storage = FlutterSecureStorage();
       await storage.deleteAll();
       await WebSessionCache.clear();
-      // Also clear AI session data
       await endPublicSession(ref);
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -526,72 +570,60 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 }
 
-class _DisclaimerBanner extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
-    return Semantics(
-      label: 'Disclaimer: This app helps you document your mental health '
-          'preferences. It is not legal advice. Directives are valid for '
-          '2 years under PA Act 194 of 2004.',
-      container: true,
-      child: Card(
-        color: cs.errorContainer,
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Text(
-            'This app helps you document your mental health preferences. '
-            'It is not legal advice. Directives are valid for 2 years under PA Act 194 of 2004.',
-            style: TextStyle(fontSize: 12, color: cs.onErrorContainer),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class _LearnMoreCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
     return Semantics(
       button: true,
-      label: 'Learn About MHADs — FAQ, instructions, glossary, legal details and checklist',
-      child: Card(
-      color: cs.primaryContainer,
-      child: InkWell(
+      label:
+          'Learn About MHADs — FAQ, instructions, glossary, legal details and checklist',
+      child: DesignCard(
+        variant: DesignCardVariant.primary,
         onTap: () => context.push(AppRoutes.education),
-        borderRadius: BorderRadius.circular(12),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            children: [
-              ExcludeSemantics(
-                child: Icon(Icons.menu_book, color: cs.primary, size: 32),
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          children: [
+            Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.2),
+                borderRadius: BorderRadius.circular(12),
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Learn About MHADs',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            color: cs.onPrimaryContainer)),
-                    Text('FAQ, instructions, glossary, legal details & checklist',
-                        style: TextStyle(
-                            fontSize: 12, color: cs.onPrimaryContainer)),
-                  ],
-                ),
+              child: const Icon(Icons.menu_book,
+                  color: Colors.white, size: 22),
+            ),
+            const SizedBox(width: 12),
+            const Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Learn About MHADs',
+                    style: TextStyle(
+                      fontFamily: 'DM Sans',
+                      fontWeight: FontWeight.w700,
+                      fontSize: 15,
+                      color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(height: 2),
+                  Text(
+                    'FAQ, instructions, glossary, legal details & checklist',
+                    style: TextStyle(
+                      fontFamily: 'DM Sans',
+                      fontSize: 12,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
               ),
-              ExcludeSemantics(
-                child: Icon(Icons.chevron_right, color: cs.primary),
-              ),
-            ],
-          ),
+            ),
+            Icon(Icons.chevron_right,
+                color: Colors.white.withValues(alpha: 0.9)),
+          ],
         ),
       ),
-    ),
     );
   }
 }
@@ -602,69 +634,87 @@ class _PublicModeNotice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
+    final p = Theme.of(context).mhadPalette;
     final isWeb = kIsWeb;
 
     return Semantics(
       container: true,
       label: isWeb
           ? 'Web app — data is in memory only, not saved to disk. '
-            'Export before closing browser.'
+              'Export before closing browser.'
           : 'Public mode. Tap End Session when done.',
-      child: Card(
-        color: cs.secondaryContainer,
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            children: [
-              ExcludeSemantics(
-                child: Icon(
+      child: DesignCard(
+        variant: DesignCardVariant.warning,
+        padding: const EdgeInsets.all(18),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  width: 38,
+                  height: 38,
+                  decoration: BoxDecoration(
+                    color:
+                        SemanticColors.warningTextLight.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Icon(
                     isWeb ? Icons.language : Icons.visibility_off_outlined,
-                    size: 40, color: cs.onSecondaryContainer),
-              ),
-              const SizedBox(height: 12),
-              Text(isWeb ? 'Web App' : 'Public Mode',
-                  style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      color: cs.onSecondaryContainer)),
-              const SizedBox(height: 8),
-              Text(
-                isWeb
-                    ? 'Your data is stored in memory only and is NOT '
+                    size: 20,
+                    color: SemanticColors.warningTextLight,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    isWeb ? 'Web App' : 'Public Mode',
+                    style: TextStyle(
+                      fontFamily: 'DM Sans',
+                      fontWeight: FontWeight.w700,
+                      fontSize: 15,
+                      color: p.text,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Text(
+              isWeb
+                  ? 'Your data is stored in memory only and is NOT '
                       'encrypted or saved to disk.\n\n'
                       'Closing or refreshing the browser tab will erase '
                       'all directive data. Your AI key is cached for '
                       '10 minutes for crash recovery only.\n\n'
                       'Export or print your directive before leaving.'
-                    : 'This is a temporary session. Your data is not '
+                  : 'This is a temporary session. Your data is not '
                       'permanently stored.\n\n'
                       'If the app closes unexpectedly, you have 10 minutes '
                       'to reopen and recover your work (API key and form '
                       'data).\n\n'
                       'When you\'re done, tap "End Session" below to '
                       'securely erase all session data.',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: 13,
-                    color: cs.onSecondaryContainer.withValues(alpha: 0.85)),
+              style: TextStyle(
+                fontFamily: 'DM Sans',
+                fontSize: 13,
+                color: p.textMuted,
+                height: 1.5,
               ),
-              const SizedBox(height: 14),
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton.icon(
-                  onPressed: onEndSession,
-                  icon: Icon(
-                      isWeb ? Icons.delete_forever : Icons.logout, size: 18),
-                  label: Text(isWeb ? 'Clear All Data & Start Over' : 'End Session'),
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: cs.onSecondaryContainer,
-                    side: BorderSide(
-                        color: cs.onSecondaryContainer.withValues(alpha: 0.5)),
-                  ),
-                ),
+            ),
+            const SizedBox(height: 14),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: onEndSession,
+                icon: Icon(
+                    isWeb ? Icons.delete_forever : Icons.logout,
+                    size: 18),
+                label: Text(
+                    isWeb ? 'Clear All Data & Start Over' : 'End Session'),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -676,27 +726,45 @@ class _EmptyDirectives extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
     return Semantics(
       label: 'No directives yet. Tap New Directive to get started.',
       container: true,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 40),
+      child: DesignCard(
+        padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
         child: Column(
           children: [
             ExcludeSemantics(
-              child: Icon(Icons.description_outlined,
-                  size: 48,
-                  color: Theme.of(context).colorScheme.onSurfaceVariant),
+              child: Container(
+                width: 64,
+                height: 64,
+                decoration: BoxDecoration(
+                  color: p.primaryLight,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Icon(Icons.description_outlined,
+                    size: 32, color: p.primary),
+              ),
             ),
-            const SizedBox(height: 12),
-            Text('No directives yet',
-                style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant)),
+            const SizedBox(height: 14),
+            Text(
+              'No directives yet',
+              style: TextStyle(
+                fontFamily: 'DM Sans',
+                fontSize: 15,
+                fontWeight: FontWeight.w700,
+                color: p.text,
+              ),
+            ),
             const SizedBox(height: 4),
-            Text('Tap "New Directive" to get started',
-                style: TextStyle(
-                    fontSize: 12,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant)),
+            Text(
+              'Tap "New Directive" to get started',
+              style: TextStyle(
+                fontFamily: 'DM Sans',
+                fontSize: 13,
+                color: p.textMuted,
+              ),
+            ),
           ],
         ),
       ),
@@ -704,8 +772,6 @@ class _EmptyDirectives extends StatelessWidget {
   }
 }
 
-/// Zero-size widget that triggers root/jailbreak detection once per session.
-/// Placed inside the HomeScreen tree so it has a valid navigator context.
 class _DeviceSecurityCheck extends StatefulWidget {
   const _DeviceSecurityCheck();
 
@@ -728,9 +794,6 @@ class _DeviceSecurityCheckState extends State<_DeviceSecurityCheck> {
   Widget build(BuildContext context) => const SizedBox.shrink();
 }
 
-/// Wrapper that loads the primary agent name for a directive and passes it
-/// to [DirectiveCard]. Uses a [FutureBuilder] so the card renders immediately
-/// and the agent name appears once loaded.
 class _DirectiveCardWithAgent extends ConsumerWidget {
   final Directive directive;
   final VoidCallback onDelete;

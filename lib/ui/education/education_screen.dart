@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mhad/data/educational_content.dart';
+import 'package:mhad/ui/widgets/design/app_drawer.dart';
 
 class EducationScreen extends StatefulWidget {
   /// If set, only show sections matching these IDs (deep-link from wizard Help).
@@ -48,6 +49,7 @@ class _EducationScreenState extends State<EducationScreen> {
         widget.filterIds != null && widget.filterIds!.isNotEmpty;
 
     return Scaffold(
+      drawer: isFiltered ? null : const MhadAppDrawer(),
       appBar: AppBar(
         title: Text(isFiltered ? 'Help' : 'Education & Resources'),
         actions: [
