@@ -4,7 +4,10 @@ import 'package:drift/drift.dart' show Value;
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
-import 'package:mhad/ui/wizard/widgets/field_help_icon.dart';
+import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/design/info_banner.dart';
+import 'package:mhad/ui/widgets/design/section_label.dart';
+import 'package:mhad/ui/wizard/widgets/consent_option_tile.dart';
 import 'package:mhad/ui/wizard/widgets/wizard_help_button.dart';
 import 'package:mhad/ui/wizard/wizard_step_mixin.dart';
 
@@ -88,6 +91,7 @@ class _DrugTrialsStepState extends ConsumerState<DrugTrialsStep>
 
   @override
   Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
     const helpText =
         'Clinical drug trials test new medications. You can consent, refuse, '
         'or set conditions for your participation.\n\n'
@@ -98,99 +102,81 @@ class _DrugTrialsStepState extends ConsumerState<DrugTrialsStep>
     return Form(
       key: _formKey,
       child: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
         children: [
-          WizardHelpButton(helpText: helpText, stepId: 'drugTrials'),
-          const SizedBox(height: 8),
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  'Drug Trials',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-              ),
-              const FieldHelpIcon(
-                tooltip:
-                    'Drug trials (clinical trials) test new medications or new '
-                    'uses of existing medications. They may involve placebos. '
-                    'You can consent, refuse, or set conditions for participation.',
-              ),
-            ],
+          const SectionLabel('CLINICAL TRIALS'),
+          const SizedBox(height: 6),
+          Text(
+            'Drug Trials',
+            style: Theme.of(context).textTheme.headlineSmall,
           ),
-          const SizedBox(height: 8),
-          const Text(
+          const SizedBox(height: 6),
+          Text(
             'State your preferences regarding participation in clinical drug '
             'trials during mental health treatment.',
-          ),
-          const SizedBox(height: 16),
-          RadioGroup<ConsentOption>(
-            groupValue: _consent,
-            onChanged: (v) => setState(() => _consent = v!),
-            child: Column(
-              children: [
-                RadioListTile<ConsentOption>(
-                  title: const Text('I consent to participation in drug trials'),
-                  value: ConsentOption.yes,
-                ),
-                RadioListTile<ConsentOption>(
-                  title:
-                      const Text('I do not consent to participation in drug trials'),
-                  value: ConsentOption.no,
-                ),
-                RadioListTile<ConsentOption>(
-                  title: const Text('I consent under these conditions:'),
-                  value: ConsentOption.conditional,
-                ),
-                if (_hasAgentSections)
-                  RadioListTile<ConsentOption>(
-                    title: const Text(
-                        'My agent will make decisions about drug trials'),
-                    value: ConsentOption.agentDecides,
-                  ),
-              ],
+            style: TextStyle(
+              fontFamily: 'DM Sans',
+              fontSize: 13,
+              color: p.textMuted,
+              height: 1.45,
             ),
           ),
+          const SizedBox(height: 14),
+          const InfoBanner(
+            icon: Icons.gavel_outlined,
+            variant: InfoBannerVariant.warning,
+            text: 'Under PA Act 194, your agent cannot consent to drug '
+                'trials unless you explicitly authorize it here.',
+          ),
+          const SizedBox(height: 8),
+          WizardHelpButton(helpText: helpText, stepId: 'drugTrials'),
+          const SizedBox(height: 16),
+          ConsentOptionTile(
+            icon: Icons.check_circle_outline,
+            title: 'I consent to drug trials',
+            description:
+                'I am willing to participate in clinical drug trials.',
+            selected: _consent == ConsentOption.yes,
+            onTap: () => setState(() => _consent = ConsentOption.yes),
+          ),
+          ConsentOptionTile(
+            icon: Icons.block,
+            title: 'I do not consent',
+            description: 'I refuse participation in drug trials.',
+            selected: _consent == ConsentOption.no,
+            onTap: () => setState(() => _consent = ConsentOption.no),
+          ),
+          ConsentOptionTile(
+            icon: Icons.rule,
+            title: 'I consent under specific conditions',
+            description: 'Describe the conditions in the box below.',
+            selected: _consent == ConsentOption.conditional,
+            onTap: () =>
+                setState(() => _consent = ConsentOption.conditional),
+          ),
+          if (_hasAgentSections)
+            ConsentOptionTile(
+              icon: Icons.person_outline,
+              title: 'My agent will decide',
+              description:
+                  'Authorize your agent to consent or refuse on your behalf.',
+              selected: _consent == ConsentOption.agentDecides,
+              onTap: () =>
+                  setState(() => _consent = ConsentOption.agentDecides),
+            ),
           if (_consent == ConsentOption.conditional) ...[
-            const SizedBox(height: 12),
+            const SizedBox(height: 6),
             TextFormField(
               controller: _conditionsCtrl,
               maxLines: 3,
               decoration: const InputDecoration(
                 labelText: 'Conditions',
-                border: OutlineInputBorder(),
+                hintText: 'e.g., only trials with an independent safety monitor',
               ),
               validator: (v) =>
                   (v == null || v.trim().isEmpty) ? 'Required' : null,
             ),
           ],
-          const SizedBox(height: 16),
-          Card(
-            color: Theme.of(context).colorScheme.tertiaryContainer,
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Icon(Icons.info_outline, size: 20,
-                      color: Theme.of(context).colorScheme.onTertiaryContainer),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      'Important: Under PA Act 194, your agent cannot consent '
-                      'to drug trials or experimental treatments on your '
-                      'behalf unless you explicitly authorize it here.',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Theme.of(context).colorScheme.onTertiaryContainer,
-                        height: 1.4,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
         ],
       ),
     );

@@ -234,6 +234,28 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                   directiveId: directive.id,
                   formType: formType.name,
                 ),
+                IconButton(
+                  icon: const Icon(Icons.smart_toy_outlined),
+                  tooltip: 'AI Chat',
+                  onPressed: () {
+                    final fields = <String, String>{};
+                    void add(String k, String v) {
+                      if (v.isNotEmpty) fields[k] = v;
+                    }
+                    // PII fields are intentionally excluded from AI context.
+                    add('State', directive.state);
+                    add('Effective Condition', directive.effectiveCondition);
+
+                    context.push(
+                      AppRoutes.assistant,
+                      extra: AssistantContext(
+                        formType: formType.name,
+                        stepName: currentStep.displayName,
+                        filledFields: fields.isEmpty ? null : fields,
+                      ),
+                    );
+                  },
+                ),
               ],
             ),
             body: Column(
@@ -249,35 +271,6 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                   ),
                 ),
               ],
-            ),
-            floatingActionButton: FloatingActionButton.extended(
-              heroTag: 'assistant_fab',
-              tooltip: 'AI Assistant',
-              onPressed: () {
-                final fields = <String, String>{};
-                void add(String k, String v) {
-                  if (v.isNotEmpty) fields[k] = v;
-                }
-                // PII fields are intentionally excluded from AI context
-                // to prevent sending personal data to external APIs.
-                // Excluded: Full Name, Date of Birth, Address, City,
-                // ZIP, Phone.
-                add('State', directive.state);
-                add('Effective Condition',
-                    directive.effectiveCondition);
-
-                context.push(
-                  AppRoutes.assistant,
-                  extra: AssistantContext(
-                    formType: formType.name,
-                    stepName: currentStep.displayName,
-                    filledFields:
-                        fields.isEmpty ? null : fields,
-                  ),
-                );
-              },
-              icon: const Icon(Icons.smart_toy_outlined, size: 20),
-              label: const Text('AI Chat'),
             ),
             bottomNavigationBar: _BottomBar(
               stepIndex: _stepIndex,
