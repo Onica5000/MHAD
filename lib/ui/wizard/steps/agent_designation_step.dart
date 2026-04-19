@@ -25,9 +25,7 @@ class _AgentDesignationStepState
   final _nameCtrl = TextEditingController();
   final _relationshipCtrl = TextEditingController();
   final _addressCtrl = TextEditingController();
-  final _homePhoneCtrl = TextEditingController();
-  final _workPhoneCtrl = TextEditingController();
-  final _cellPhoneCtrl = TextEditingController();
+  final _phoneCtrl = TextEditingController();
 
   int? _existingAgentId;
 
@@ -42,9 +40,7 @@ class _AgentDesignationStepState
     _nameCtrl.dispose();
     _relationshipCtrl.dispose();
     _addressCtrl.dispose();
-    _homePhoneCtrl.dispose();
-    _workPhoneCtrl.dispose();
-    _cellPhoneCtrl.dispose();
+    _phoneCtrl.dispose();
     super.dispose();
   }
 
@@ -59,26 +55,23 @@ class _AgentDesignationStepState
         _nameCtrl.text = primary.fullName;
         _relationshipCtrl.text = primary.relationship;
         _addressCtrl.text = primary.address;
-        _homePhoneCtrl.text = primary.homePhone;
-        _workPhoneCtrl.text = primary.workPhone;
-        _cellPhoneCtrl.text = primary.cellPhone;
+        _phoneCtrl.text = [
+          primary.cellPhone,
+          primary.homePhone,
+          primary.workPhone,
+        ].firstWhere((p) => p.isNotEmpty, orElse: () => '');
       });
     }
   }
 
-  String? _validateAtLeastOnePhone(String? value) {
-    final home = _homePhoneCtrl.text.trim();
-    final work = _workPhoneCtrl.text.trim();
-    final cell = _cellPhoneCtrl.text.trim();
-    if (home.isEmpty && work.isEmpty && cell.isEmpty) {
-      return 'At least one phone number is required';
+  String? _validatePhone(String? value) {
+    final v = value?.trim() ?? '';
+    if (v.isEmpty) {
+      return 'Phone number is required';
     }
-    // Validate that the current field (if filled) has enough digits
-    if (value != null && value.trim().isNotEmpty) {
-      final digits = value.replaceAll(RegExp(r'\D'), '');
-      if (digits.length < 10) {
-        return 'Enter a valid phone number (10+ digits)';
-      }
+    final digits = v.replaceAll(RegExp(r'\D'), '');
+    if (digits.length < 10) {
+      return 'Enter a valid phone number (10+ digits)';
     }
     return null;
   }
@@ -88,9 +81,7 @@ class _AgentDesignationStepState
     // Validate but don't block — always save whatever is entered
     _formKey.currentState?.validate();
 
-    final home = _homePhoneCtrl.text.trim();
-    final work = _workPhoneCtrl.text.trim();
-    final cell = _cellPhoneCtrl.text.trim();
+    final phone = _phoneCtrl.text.trim();
 
     await ref.read(directiveRepositoryProvider).upsertAgent(
           AgentsCompanion(
@@ -102,9 +93,9 @@ class _AgentDesignationStepState
             fullName: Value(_nameCtrl.text.trim()),
             relationship: Value(_relationshipCtrl.text.trim()),
             address: Value(_addressCtrl.text.trim()),
-            homePhone: Value(home),
-            workPhone: Value(work),
-            cellPhone: Value(cell),
+            homePhone: const Value(''),
+            workPhone: const Value(''),
+            cellPhone: Value(phone),
           ),
         );
     return true;
@@ -172,9 +163,9 @@ class _AgentDesignationStepState
               onContactPicked: (c) => setState(() {
                 _nameCtrl.text = c.fullName;
                 if (c.address.isNotEmpty) _addressCtrl.text = c.address;
-                if (c.homePhone.isNotEmpty) _homePhoneCtrl.text = c.homePhone;
-                if (c.workPhone.isNotEmpty) _workPhoneCtrl.text = c.workPhone;
-                if (c.cellPhone.isNotEmpty) _cellPhoneCtrl.text = c.cellPhone;
+                final picked = [c.cellPhone, c.homePhone, c.workPhone]
+                    .firstWhere((p) => p.isNotEmpty, orElse: () => '');
+                if (picked.isNotEmpty) _phoneCtrl.text = picked;
               }),
             ),
             const SizedBox(height: 16),
@@ -243,42 +234,10 @@ class _AgentDesignationStepState
             ),
             const SizedBox(height: 12),
             TextFormField(
-              controller: _homePhoneCtrl,
+              controller: _phoneCtrl,
               keyboardType: TextInputType.phone,
               decoration: const InputDecoration(
-                labelText: 'Home phone',
-                border: OutlineInputBorder(),
-              ),
-              autofillHints: const [],
-              textInputAction: TextInputAction.next,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp(r'[0-9()\-+.\s]')),
-              ],
-              validator: _validateAtLeastOnePhone,
-            ),
-            const SizedBox(height: 12),
-            TextFormField(
-              controller: _workPhoneCtrl,
-              keyboardType: TextInputType.phone,
-              decoration: const InputDecoration(
-                labelText: 'Work phone',
-                border: OutlineInputBorder(),
-              ),
-              autofillHints: const [],
-              textInputAction: TextInputAction.next,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp(r'[0-9()\-+.\s]')),
-              ],
-              validator: _validateAtLeastOnePhone,
-            ),
-            const SizedBox(height: 12),
-            TextFormField(
-              controller: _cellPhoneCtrl,
-              keyboardType: TextInputType.phone,
-              decoration: const InputDecoration(
-                labelText: 'Cell phone',
+                labelText: 'Phone number',
                 border: OutlineInputBorder(),
               ),
               autofillHints: const [],
@@ -287,7 +246,7 @@ class _AgentDesignationStepState
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp(r'[0-9()\-+.\s]')),
               ],
-              validator: _validateAtLeastOnePhone,
+              validator: _validatePhone,
             ),
           ],
         ),
