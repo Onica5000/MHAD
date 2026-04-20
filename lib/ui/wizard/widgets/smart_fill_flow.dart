@@ -510,7 +510,11 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
       if (rd != null) instrUpdates['recordsDisclosure'] = rd;
       final pc = editedVal('Pet Care');
       if (pc != null) instrUpdates['petCustody'] = pc;
-      // De-escalation, triggers, guidance stored as tagged entries in 'other' field.
+      // De-escalation, triggers, guidance stored in the 'other' field.
+      // The wizard's Additional Instructions step parses three tagged lines
+      // from this column: [DE-ESCALATION] ..., [TRIGGERS] ..., [REPRODUCTIVE] ...
+      // (single-line each). Anything else becomes free-form "Other Instructions".
+      // We merge AI additions into that exact format so the wizard round-trips.
       // Enforce consent: skip guidance for treatments user has refused.
       final deesc = editedVal('De-escalation Techniques');
       final trig = editedVal('Crisis Triggers');
@@ -524,15 +528,30 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
           ? null
           : editedVal('Drug Trials Guidance');
       final ag = editedVal('Agent Guidance');
-      final otherParts = <String>[];
-      if (deesc != null) otherParts.add('[DE-ESCALATION] $deesc');
-      if (trig != null) otherParts.add('[TRIGGERS] $trig');
-      if (ectG != null) otherParts.add('[ECT GUIDANCE] $ectG');
-      if (expG != null) otherParts.add('[EXPERIMENTAL GUIDANCE] $expG');
-      if (drugG != null) otherParts.add('[DRUG TRIAL GUIDANCE] $drugG');
-      if (ag != null) otherParts.add(ag);
-      if (otherParts.isNotEmpty) {
-        instrUpdates['other'] = otherParts.join('\n');
+
+      if (deesc != null ||
+          trig != null ||
+          ectG != null ||
+          expG != null ||
+          drugG != null ||
+          ag != null) {
+        final existingInstr = await repo.getAdditionalInstructions(id);
+        final parsed = _parseOther(existingInstr?.other ?? '');
+        final mergedDeesc = _mergeInline(parsed.deesc, deesc);
+        final mergedTrig = _mergeInline(parsed.trig, trig);
+        final freeForm = _appendGuidance(
+          parsed.freeForm,
+          ect: ectG,
+          experimental: expG,
+          drugTrial: drugG,
+          agent: ag,
+        );
+        instrUpdates['other'] = _composeOther(
+          deesc: mergedDeesc,
+          trig: mergedTrig,
+          repro: parsed.repro,
+          freeForm: freeForm,
+        );
       }
 
       // Facility notes → save to preferences if user hasn't already set them
@@ -596,7 +615,7 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
                     existing?.petCustody, instrUpdates['petCustody']!))
                 : const Value.absent(),
             other: instrUpdates.containsKey('other')
-                ? Value(_merge(existing?.other, instrUpdates['other']!))
+                ? Value(instrUpdates['other']!)
                 : const Value.absent(),
           ),
         );
@@ -727,6 +746,83 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
   String _merge(String? existing, String newText) {
     if (existing == null || existing.trim().isEmpty) return newText;
     return '$existing\n\n[AI suggestion] $newText';
+  }
+
+  // Tag constants must match additional_instructions_step.dart exactly.
+  static const _deescTag = '[DE-ESCALATION] ';
+  static const _trigTag = '[TRIGGERS] ';
+  static const _reproTag = '[REPRODUCTIVE] ';
+
+  _ParsedOther _parseOther(String raw) {
+    String? deesc;
+    String? trig;
+    String? repro;
+    final freeLines = <String>[];
+    for (final line in raw.split('\n')) {
+      if (line.startsWith(_deescTag)) {
+        deesc = line.substring(_deescTag.length);
+      } else if (line.startsWith(_trigTag)) {
+        trig = line.substring(_trigTag.length);
+      } else if (line.startsWith(_reproTag)) {
+        repro = line.substring(_reproTag.length);
+      } else {
+        freeLines.add(line);
+      }
+    }
+    return _ParsedOther(
+      deesc: deesc,
+      trig: trig,
+      repro: repro,
+      freeForm: freeLines.join('\n').trim(),
+    );
+  }
+
+  // Merge an AI addition into an existing tagged (single-line) value.
+  // Uses ". " as a separator so the result stays on one line and round-trips
+  // through the wizard parser.
+  String? _mergeInline(String? existing, String? addition) {
+    final a = addition?.trim();
+    final e = existing?.trim();
+    if (a == null || a.isEmpty) return (e != null && e.isNotEmpty) ? e : null;
+    if (e == null || e.isEmpty) return _oneLine(a);
+    return '$e. ${_oneLine(a)}';
+  }
+
+  String _oneLine(String s) =>
+      s.replaceAll(RegExp(r'\s*\n+\s*'), ' ').trim();
+
+  String _appendGuidance(
+    String existingFreeForm, {
+    String? ect,
+    String? experimental,
+    String? drugTrial,
+    String? agent,
+  }) {
+    final blocks = <String>[];
+    if (existingFreeForm.isNotEmpty) blocks.add(existingFreeForm);
+    void add(String? text, String label) {
+      if (text == null || text.trim().isEmpty) return;
+      blocks.add('$label:\n${text.trim()}');
+    }
+    add(ect, 'ECT guidance');
+    add(experimental, 'Experimental studies guidance');
+    add(drugTrial, 'Drug trial guidance');
+    add(agent, 'Agent guidance');
+    return blocks.join('\n\n');
+  }
+
+  String _composeOther({
+    String? deesc,
+    String? trig,
+    String? repro,
+    String freeForm = '',
+  }) {
+    final parts = <String>[];
+    if (deesc != null && deesc.isNotEmpty) parts.add('$_deescTag$deesc');
+    if (trig != null && trig.isNotEmpty) parts.add('$_trigTag$trig');
+    if (repro != null && repro.isNotEmpty) parts.add('$_reproTag$repro');
+    if (freeForm.isNotEmpty) parts.add(freeForm);
+    return parts.join('\n');
   }
 
   // ── Build ───────────────────────────────────────────────────────────
@@ -1796,3 +1892,16 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
 }
 
 enum _MedCategory { preferred, limitations, avoid }
+
+class _ParsedOther {
+  final String? deesc;
+  final String? trig;
+  final String? repro;
+  final String freeForm;
+  const _ParsedOther({
+    this.deesc,
+    this.trig,
+    this.repro,
+    this.freeForm = '',
+  });
+}
