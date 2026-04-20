@@ -1638,8 +1638,8 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
                 _selectedAvoidMeds.isEmpty)
             ? null
             : _generate;
-        nextIcon = const Icon(Icons.auto_awesome, size: 18);
-        nextLabel = 'Generate';
+        nextIcon = const Icon(Icons.arrow_forward, size: 18);
+        nextLabel = 'Next';
       case _Step.review:
         final acceptedCount =
             _accepted?.values.where((v) => v).length ?? 0;
