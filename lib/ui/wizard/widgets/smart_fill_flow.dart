@@ -813,6 +813,37 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
               child: _buildExistingDataCard(),
             ),
+          if (_error != null)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: cs.errorContainer,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.error_outline,
+                        size: 18, color: cs.onErrorContainer),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(_error!,
+                          style: TextStyle(
+                              color: cs.onErrorContainer, fontSize: 12)),
+                    ),
+                    const SizedBox(width: 8),
+                    TextButton(
+                      onPressed: () {
+                        setState(() => _error = null);
+                        _generate();
+                      },
+                      child: const Text('Retry'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           TabBar(
             labelColor: cs.primary,
             unselectedLabelColor: cs.onSurfaceVariant,
@@ -1142,32 +1173,6 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
             ),
             onChanged: _searchMedications,
           ),
-          if (_error != null) ...[
-            const SizedBox(height: 8),
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: cs.errorContainer,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(_error!,
-                        style: TextStyle(color: cs.onErrorContainer, fontSize: 12)),
-                  ),
-                  const SizedBox(width: 8),
-                  TextButton(
-                    onPressed: () {
-                      setState(() => _error = null);
-                      _generate();
-                    },
-                    child: const Text('Retry'),
-                  ),
-                ],
-              ),
-            ),
-          ],
           // Selected chips for all three categories
           if (_selectedPreferredMeds.isNotEmpty ||
               _selectedLimitationMeds.isNotEmpty ||
