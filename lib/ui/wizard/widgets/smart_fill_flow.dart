@@ -42,10 +42,10 @@ class _SmartFillScreen extends ConsumerStatefulWidget {
   ConsumerState<_SmartFillScreen> createState() => _SmartFillScreenState();
 }
 
-enum _Step { conditions, medications, generating, review }
+enum _Step { inputs, generating, review }
 
 class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
-  _Step _step = _Step.conditions;
+  _Step _step = _Step.inputs;
 
   // ── Step 1: Conditions ──────────────────────────────────────────────
   final _condSearchCtrl = TextEditingController();
@@ -367,7 +367,7 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
           _error =
               'The AI could not generate suggestions from the selected data. '
               'Try adding more conditions or medications.';
-          _step = _Step.medications;
+          _step = _Step.inputs;
         });
         return;
       }
@@ -454,7 +454,7 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
       if (mounted) {
         setState(() {
           _error = FriendlyError.from(e);
-          _step = _Step.medications;
+          _step = _Step.inputs;
         });
       }
     }
@@ -783,26 +783,62 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
   }
 
   String get _stepTitle => switch (_step) {
-        _Step.conditions => 'Your Conditions',
-        _Step.medications => 'Your Medications',
+        _Step.inputs => 'Your Conditions & Medications',
         _Step.generating => 'Generating',
         _Step.review => 'Review Suggestions',
       };
 
   String get _stepSubtitle => switch (_step) {
-        _Step.conditions => 'Search and select your diagnoses',
-        _Step.medications => 'Search and select your medications',
+        _Step.inputs => 'Search and select your diagnoses and medications',
         _Step.generating => 'AI is creating suggestions...',
         _Step.review => 'Accept or reject each suggestion',
       };
 
   Widget _buildStepBody() {
     return switch (_step) {
-      _Step.conditions => _buildConditionsStep(),
-      _Step.medications => _buildMedicationsStep(),
+      _Step.inputs => _buildInputsStep(),
       _Step.generating => _buildGeneratingStep(),
       _Step.review => _buildReviewStep(),
     };
+  }
+
+  Widget _buildInputsStep() {
+    final cs = Theme.of(context).colorScheme;
+    return DefaultTabController(
+      length: 2,
+      child: Column(
+        children: [
+          if (_existingDataSummary.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+              child: _buildExistingDataCard(),
+            ),
+          TabBar(
+            labelColor: cs.primary,
+            unselectedLabelColor: cs.onSurfaceVariant,
+            indicatorColor: cs.primary,
+            tabs: const [
+              Tab(
+                icon: Icon(Icons.medical_services_outlined, size: 18),
+                text: 'Conditions',
+              ),
+              Tab(
+                icon: Icon(Icons.medication_outlined, size: 18),
+                text: 'Medications',
+              ),
+            ],
+          ),
+          Expanded(
+            child: TabBarView(
+              children: [
+                _buildConditionsStep(),
+                _buildMedicationsStep(),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   // ── Step 1: Conditions ──────────────────────────────────────────────
@@ -1009,7 +1045,6 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildExistingDataCard(),
           TextField(
             controller: _condSearchCtrl,
             decoration: InputDecoration(
@@ -1073,7 +1108,6 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildExistingDataCard(),
           // Toggle between categories (matches wizard)
           SegmentedButton<_MedCategory>(
             segments: const [
@@ -1579,13 +1613,11 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
   Widget? _buildBottomBar() {
     if (_step == _Step.generating) return null;
 
-    final canGoBack = _step != _Step.conditions;
+    final canGoBack = _step == _Step.review;
     void goBack() {
       setState(() {
-        if (_step == _Step.medications) {
-          _step = _Step.conditions;
-        } else if (_step == _Step.review) {
-          _step = _Step.medications;
+        if (_step == _Step.review) {
+          _step = _Step.inputs;
         }
       });
     }
@@ -1594,17 +1626,11 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
     final Widget nextIcon;
     final String nextLabel;
     switch (_step) {
-      case _Step.conditions:
-        nextAction = _selectedConditions.isEmpty
-            ? null
-            : () => setState(() => _step = _Step.medications);
-        nextIcon = const Icon(Icons.arrow_forward, size: 18);
-        nextLabel = 'Next';
-      case _Step.medications:
-        nextAction = (_selectedPreferredMeds.isEmpty &&
+      case _Step.inputs:
+        nextAction = (_selectedConditions.isEmpty &&
+                _selectedPreferredMeds.isEmpty &&
                 _selectedLimitationMeds.isEmpty &&
-                _selectedAvoidMeds.isEmpty &&
-                _selectedConditions.isEmpty)
+                _selectedAvoidMeds.isEmpty)
             ? null
             : _generate;
         nextIcon = const Icon(Icons.auto_awesome, size: 18);
