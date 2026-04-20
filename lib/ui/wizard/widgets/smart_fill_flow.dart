@@ -42,7 +42,7 @@ class _SmartFillScreen extends ConsumerStatefulWidget {
   ConsumerState<_SmartFillScreen> createState() => _SmartFillScreenState();
 }
 
-enum _Step { inputs, generating, review }
+enum _Step { inputs, confirm, generating, review }
 
 class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
   _Step _step = _Step.inputs;
@@ -367,7 +367,7 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
           _error =
               'The AI could not generate suggestions from the selected data. '
               'Try adding more conditions or medications.';
-          _step = _Step.inputs;
+          _step = _Step.confirm;
         });
         return;
       }
@@ -454,7 +454,7 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
       if (mounted) {
         setState(() {
           _error = FriendlyError.from(e);
-          _step = _Step.inputs;
+          _step = _Step.confirm;
         });
       }
     }
@@ -784,12 +784,14 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
 
   String get _stepTitle => switch (_step) {
         _Step.inputs => 'Your Conditions & Medications',
+        _Step.confirm => 'Confirm & Generate',
         _Step.generating => 'Generating',
         _Step.review => 'Review Suggestions',
       };
 
   String get _stepSubtitle => switch (_step) {
         _Step.inputs => 'Search and select your diagnoses and medications',
+        _Step.confirm => 'Review selections, then generate AI suggestions',
         _Step.generating => 'AI is creating suggestions...',
         _Step.review => 'Accept or reject each suggestion',
       };
@@ -797,6 +799,7 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
   Widget _buildStepBody() {
     return switch (_step) {
       _Step.inputs => _buildInputsStep(),
+      _Step.confirm => _buildConfirmStep(),
       _Step.generating => _buildGeneratingStep(),
       _Step.review => _buildReviewStep(),
     };
@@ -869,6 +872,109 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  // ── Confirm step ────────────────────────────────────────────────────
+
+  Widget _buildConfirmStep() {
+    final cs = Theme.of(context).colorScheme;
+    final conditionNames =
+        _selectedConditions.map((c) => c.name).toList();
+    final totalItems = _selectedConditions.length +
+        _selectedPreferredMeds.length +
+        _selectedLimitationMeds.length +
+        _selectedAvoidMeds.length;
+
+    Widget section(String label, List<String> items, Color chipColor,
+        Color chipTextColor) {
+      if (items.isEmpty) return const SizedBox.shrink();
+      return Padding(
+        padding: const EdgeInsets.only(top: 12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              label,
+              style: Theme.of(context).textTheme.labelLarge,
+            ),
+            const SizedBox(height: 6),
+            Wrap(
+              spacing: 6,
+              runSpacing: 6,
+              children: items
+                  .map((m) => Chip(
+                        label: Text(m,
+                            style: const TextStyle(fontSize: 12)),
+                        backgroundColor: chipColor,
+                        labelStyle: TextStyle(color: chipTextColor),
+                        visualDensity: VisualDensity.compact,
+                      ))
+                  .toList(),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return ListView(
+      padding: const EdgeInsets.all(16),
+      children: [
+        if (_error != null) ...[
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: cs.errorContainer,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              children: [
+                Icon(Icons.error_outline,
+                    size: 18, color: cs.onErrorContainer),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(_error!,
+                      style: TextStyle(
+                          color: cs.onErrorContainer, fontSize: 12)),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+        ],
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: cs.secondaryContainer,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(Icons.auto_awesome,
+                  size: 20, color: cs.onSecondaryContainer),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  'Review the $totalItems item(s) below. Tapping Next will '
+                  'send them to the AI to generate suggestions. This uses '
+                  'your Gemini quota — only one request per Smart Fill run.',
+                  style: TextStyle(
+                      color: cs.onSecondaryContainer, fontSize: 13),
+                ),
+              ),
+            ],
+          ),
+        ),
+        section('Conditions', conditionNames,
+            cs.primaryContainer, cs.onPrimaryContainer),
+        section('Preferred medications', _selectedPreferredMeds,
+            cs.primaryContainer, cs.onPrimaryContainer),
+        section('Medications with limitations', _selectedLimitationMeds,
+            cs.tertiaryContainer, cs.onTertiaryContainer),
+        section('Medications to avoid', _selectedAvoidMeds,
+            cs.errorContainer, cs.onErrorContainer),
+      ],
     );
   }
 
@@ -1618,11 +1724,14 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
   Widget? _buildBottomBar() {
     if (_step == _Step.generating) return null;
 
-    final canGoBack = _step == _Step.review;
+    final canGoBack =
+        _step == _Step.confirm || _step == _Step.review;
     void goBack() {
       setState(() {
-        if (_step == _Step.review) {
+        if (_step == _Step.confirm) {
           _step = _Step.inputs;
+        } else if (_step == _Step.review) {
+          _step = _Step.confirm;
         }
       });
     }
@@ -1637,9 +1746,16 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
                 _selectedLimitationMeds.isEmpty &&
                 _selectedAvoidMeds.isEmpty)
             ? null
-            : _generate;
+            : () => setState(() {
+                  _error = null;
+                  _step = _Step.confirm;
+                });
         nextIcon = const Icon(Icons.arrow_forward, size: 18);
         nextLabel = 'Next';
+      case _Step.confirm:
+        nextAction = _generate;
+        nextIcon = const Icon(Icons.auto_awesome, size: 18);
+        nextLabel = 'Generate';
       case _Step.review:
         final acceptedCount =
             _accepted?.values.where((v) => v).length ?? 0;
