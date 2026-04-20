@@ -1579,56 +1579,68 @@ class _SmartFillScreenState extends ConsumerState<_SmartFillScreen> {
   Widget? _buildBottomBar() {
     if (_step == _Step.generating) return null;
 
+    final canGoBack = _step != _Step.conditions;
+    void goBack() {
+      setState(() {
+        if (_step == _Step.medications) {
+          _step = _Step.conditions;
+        } else if (_step == _Step.review) {
+          _step = _Step.medications;
+        }
+      });
+    }
+
+    final VoidCallback? nextAction;
+    final Widget nextIcon;
+    final String nextLabel;
+    switch (_step) {
+      case _Step.conditions:
+        nextAction = _selectedConditions.isEmpty
+            ? null
+            : () => setState(() => _step = _Step.medications);
+        nextIcon = const Icon(Icons.arrow_forward, size: 18);
+        nextLabel = 'Next';
+      case _Step.medications:
+        nextAction = (_selectedPreferredMeds.isEmpty &&
+                _selectedLimitationMeds.isEmpty &&
+                _selectedAvoidMeds.isEmpty &&
+                _selectedConditions.isEmpty)
+            ? null
+            : _generate;
+        nextIcon = const Icon(Icons.auto_awesome, size: 18);
+        nextLabel = 'Generate';
+      case _Step.review:
+        final acceptedCount =
+            _accepted?.values.where((v) => v).length ?? 0;
+        nextAction = acceptedCount > 0 ? _apply : null;
+        nextIcon = const Icon(Icons.check, size: 18);
+        nextLabel = 'Apply $acceptedCount items';
+      case _Step.generating:
+        nextAction = null;
+        nextIcon = const SizedBox.shrink();
+        nextLabel = '';
+    }
+
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
         child: Row(
           children: [
-            if (_step != _Step.conditions)
-              OutlinedButton(
-                onPressed: _step == _Step.generating
-                    ? null
-                    : () {
-                        setState(() {
-                          if (_step == _Step.medications) {
-                            _step = _Step.conditions;
-                          } else if (_step == _Step.review) {
-                            _step = _Step.medications;
-                          }
-                        });
-                      },
-                child: const Text('Back'),
+            Expanded(
+              child: OutlinedButton.icon(
+                onPressed: canGoBack ? goBack : null,
+                icon: const Icon(Icons.arrow_back, size: 18),
+                label: const Text('Back'),
               ),
-            const Spacer(),
-            if (_step == _Step.conditions)
-              FilledButton.icon(
-                onPressed: _selectedConditions.isEmpty
-                    ? null
-                    : () => setState(() => _step = _Step.medications),
-                icon: const Icon(Icons.arrow_forward),
-                label: Text(
-                    'Next (${_selectedConditions.length} selected)'),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: FilledButton.icon(
+                onPressed: nextAction,
+                icon: nextIcon,
+                label: Text(nextLabel),
               ),
-            if (_step == _Step.medications)
-              FilledButton.icon(
-                onPressed: (_selectedPreferredMeds.isEmpty &&
-                        _selectedLimitationMeds.isEmpty &&
-                        _selectedAvoidMeds.isEmpty &&
-                        _selectedConditions.isEmpty)
-                    ? null
-                    : _generate,
-                icon: const Icon(Icons.auto_awesome),
-                label: const Text('Generate'),
-              ),
-            if (_step == _Step.review)
-              FilledButton.icon(
-                onPressed: _accepted?.values.any((v) => v) == true
-                    ? _apply
-                    : null,
-                icon: const Icon(Icons.check),
-                label: Text(
-                    'Apply ${_accepted?.values.where((v) => v).length ?? 0} items'),
-              ),
+            ),
           ],
         ),
       ),
