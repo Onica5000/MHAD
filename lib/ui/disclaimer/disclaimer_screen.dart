@@ -8,18 +8,36 @@ import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 
-/// Full-screen legal disclaimer shown once on first launch.
-/// The user must tap "I Understand" before accessing the app.
+/// Full-screen legal disclaimer.
+///
+/// Use [DisclaimerScreen.gate] for the first-launch acceptance flow and
+/// [DisclaimerScreen.readOnly] to let users re-read the disclaimer from
+/// Settings after they have already accepted it.
 class DisclaimerScreen extends StatelessWidget {
-  final DisclaimerNotifier notifier;
-  const DisclaimerScreen({required this.notifier, super.key});
+  final DisclaimerNotifier? _notifier;
+  final bool _readOnly;
+
+  /// First-launch gate variant — the user must tick the age checkbox and tap
+  /// "I Understand" before accessing the app.
+  const DisclaimerScreen.gate({required DisclaimerNotifier notifier, super.key})
+      : _notifier = notifier,
+        _readOnly = false;
+
+  /// Read-only variant — shows the full disclaimer content with an AppBar
+  /// back button instead of the accept footer.
+  const DisclaimerScreen.readOnly({super.key})
+      : _notifier = null,
+        _readOnly = true;
 
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
     return PopScope(
-      canPop: false,
+      canPop: _readOnly,
       child: Scaffold(
+        appBar: _readOnly
+            ? AppBar(title: const Text('Legal Disclaimer'))
+            : null,
         backgroundColor: p.scaffoldBackground,
         body: SafeArea(
           child: Column(
@@ -30,23 +48,43 @@ class DisclaimerScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SectionLabel('Before we begin'),
-                      const EditorialHeading(
-                        text: 'A few important things.',
-                        size: 38,
-                        height: 1.05,
-                      ),
-                      const SizedBox(height: 10),
-                      Text(
-                        'Read carefully — these confirm what this app does and '
-                        "doesn't do.",
-                        style: TextStyle(
-                          fontFamily: 'DM Sans',
-                          fontSize: 13.5,
-                          color: p.textMuted,
-                          height: 1.5,
+                      if (!_readOnly) ...[
+                        const SectionLabel('Before we begin'),
+                        const EditorialHeading(
+                          text: 'A few important things.',
+                          size: 38,
+                          height: 1.05,
                         ),
-                      ),
+                        const SizedBox(height: 10),
+                        Text(
+                          'Read carefully — these confirm what this app does and '
+                          "doesn't do.",
+                          style: TextStyle(
+                            fontFamily: 'DM Sans',
+                            fontSize: 13.5,
+                            color: p.textMuted,
+                            height: 1.5,
+                          ),
+                        ),
+                      ] else ...[
+                        const SectionLabel('Legal Disclaimer'),
+                        const EditorialHeading(
+                          text: 'A few important things.',
+                          size: 38,
+                          height: 1.05,
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          'This is the legal disclaimer that governs use of '
+                          'this app.',
+                          style: TextStyle(
+                            fontFamily: 'DM Sans',
+                            fontSize: 13.5,
+                            color: p.textMuted,
+                            height: 1.5,
+                          ),
+                        ),
+                      ],
                       const SizedBox(height: 16),
                       const InfoBanner(
                         icon: Icons.gavel_rounded,
@@ -178,7 +216,7 @@ class DisclaimerScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              _AcceptButton(notifier: notifier),
+              if (!_readOnly) _AcceptButton(notifier: _notifier!),
             ],
           ),
         ),
