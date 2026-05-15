@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/widgets/design/web_sidebar.dart';
 
 /// Width threshold at which we switch from the mobile drawer layout to the
@@ -32,18 +32,30 @@ class ResponsiveShell extends StatelessWidget {
     if (width < kWideLayoutBreakpoint) {
       return child;
     }
-    final route = GoRouterState.of(context).matchedLocation;
-    return Row(
-      children: [
-        WebSidebar(activeRoute: route),
-        Expanded(
-          child: ClipRect(
-            // Suppress the child Scaffold's drawer button on wide layout —
-            // the sidebar provides navigation.
-            child: _SuppressDrawer(child: child),
-          ),
-        ),
-      ],
+    // On wide screens ResponsiveShell lives in MaterialApp.router's builder
+    // callback, which is *above* InheritedGoRouter in the widget tree.
+    // GoRouterState.of(context) only searches ancestor widgets, so it cannot
+    // find InheritedGoRouter (a descendant inside `child`) and throws.
+    // Instead we read the current route from the global appRouter directly and
+    // wrap in ListenableBuilder so the sidebar refreshes on every navigation.
+    return ListenableBuilder(
+      listenable: appRouter,
+      builder: (_, __) {
+        final route =
+            appRouter.routerDelegate.currentConfiguration.matchedLocation;
+        return Row(
+          children: [
+            WebSidebar(activeRoute: route),
+            Expanded(
+              child: ClipRect(
+                // Suppress the child Scaffold's drawer button on wide layout —
+                // the sidebar provides navigation.
+                child: _SuppressDrawer(child: child),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

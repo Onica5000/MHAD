@@ -21,8 +21,8 @@ void main() {
     // Wait for async operations
     await tester.pumpAndSettle();
 
-    // Home screen should show the app title text
-    expect(find.text('PA Mental Health\nAdvance Directive'), findsOneWidget);
+    // Home screen should show the app bar title
+    expect(find.text('PA MHAD'), findsOneWidget);
 
     // FAB should exist for creating new directives
     expect(find.text('New Directive'), findsOneWidget);
