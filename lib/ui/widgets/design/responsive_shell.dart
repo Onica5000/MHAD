@@ -38,11 +38,14 @@ class ResponsiveShell extends StatelessWidget {
     // find InheritedGoRouter (a descendant inside `child`) and throws.
     // Instead we read the current route from the global appRouter directly and
     // wrap in ListenableBuilder so the sidebar refreshes on every navigation.
+    // The routerDelegate itself is a ChangeNotifier, so subscribe to that.
+    // `currentConfiguration.uri.path` is the equivalent of GoRouterState's
+    // `matchedLocation` for active-route comparisons.
     return ListenableBuilder(
-      listenable: appRouter,
+      listenable: appRouter.routerDelegate,
       builder: (_, __) {
         final route =
-            appRouter.routerDelegate.currentConfiguration.matchedLocation;
+            appRouter.routerDelegate.currentConfiguration.uri.path;
         return Row(
           children: [
             WebSidebar(activeRoute: route),
