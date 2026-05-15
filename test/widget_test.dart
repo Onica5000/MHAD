@@ -21,14 +21,19 @@ void main() {
     // Wait for async operations
     await tester.pumpAndSettle();
 
-    // Home screen should show the app bar title
+    // App bar shows the brand mark.
     expect(find.text('PA MHAD'), findsOneWidget);
 
-    // FAB should exist for creating new directives
-    expect(find.text('New Directive'), findsOneWidget);
+    // Learn More card is high on the home screen.
+    final learnCard = find.text('Learn About MHADs');
+    await tester.scrollUntilVisible(learnCard, 200);
+    expect(learnCard, findsOneWidget);
 
-    // Learn More card should be present
-    expect(find.text('Learn About MHADs'), findsOneWidget);
+    // The "New Directive" button sits further down the ListView; scroll to
+    // it before asserting so the test viewport doesn't matter.
+    final newBtn = find.text('New Directive');
+    await tester.scrollUntilVisible(newBtn, 200);
+    expect(newBtn, findsOneWidget);
 
     await db.close();
   });
@@ -48,14 +53,14 @@ void main() {
 
     await tester.pumpAndSettle();
 
-    // Scroll down to make the directives section visible
-    await tester.scrollUntilVisible(
-      find.text('My Directives'),
-      200,
-    );
+    // The "No directives yet" empty state lives in the home ListView. Scroll
+    // until it's on screen, then assert. (The home screen redesigned the
+    // section label, so we anchor on the empty-state copy itself.)
+    final emptyFinder = find.text('No directives yet');
+    await tester.scrollUntilVisible(emptyFinder, 200);
     await tester.pumpAndSettle();
 
-    expect(find.text('No directives yet'), findsOneWidget);
+    expect(emptyFinder, findsOneWidget);
 
     await db.close();
   });
