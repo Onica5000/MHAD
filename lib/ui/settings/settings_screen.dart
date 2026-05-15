@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/services/screenshot_protection_service.dart';
+import 'package:mhad/ui/disclaimer/disclaimer_screen.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/theme/theme_controller.dart';
@@ -97,6 +98,23 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   title: 'Privacy Policy',
                   subtitle: 'How your data is stored and protected',
                   onTap: () => context.push(AppRoutes.privacyPolicy),
+                ),
+                Divider(height: 1, color: p.border),
+                _SettingsRow(
+                  icon: Icons.gavel_rounded,
+                  title: 'Legal Disclaimer',
+                  subtitle: 'Terms, limitations, and your legal rights',
+                  onTap: () {
+                    // Use Navigator.push (not GoRouter) so the GoRouter
+                    // redirect logic — which would bounce away from
+                    // AppRoutes.disclaimer since it's already accepted —
+                    // does not interfere with the read-only view.
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const DisclaimerScreen.readOnly(),
+                      ),
+                    );
+                  },
                 ),
                 if (platformIsAndroid && !kIsWeb) ...[
                   Divider(height: 1, color: p.border),

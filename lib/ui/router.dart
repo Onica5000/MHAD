@@ -93,7 +93,7 @@ GoRouter _buildRouter(
       routes: [
         GoRoute(
           path: AppRoutes.disclaimer,
-          builder: (_, _) => DisclaimerScreen(notifier: disclaimer),
+          builder: (_, _) => DisclaimerScreen.gate(notifier: disclaimer),
         ),
         GoRoute(
           path: AppRoutes.modeSelection,
