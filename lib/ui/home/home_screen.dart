@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/providers/assistant_providers.dart';
@@ -17,6 +18,7 @@ import 'package:mhad/ui/onboarding/onboarding_screen.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/app_drawer.dart';
 import 'package:mhad/ui/widgets/design/design_card.dart';
+import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/draft_recovery_dialog.dart';
@@ -63,65 +65,69 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final privacyMode = ref.watch(privacyModeNotifierProvider);
     final p = Theme.of(context).mhadPalette;
 
+    final dateLabel = DateFormat('EEEE · MMMM d').format(DateTime.now());
+
     return Scaffold(
-      backgroundColor: p.surface,
+      backgroundColor: p.scaffoldBackground,
       drawer: const MhadAppDrawer(),
       appBar: AppBar(
         title: Row(
           children: [
             Container(
-              width: 32,
-              height: 32,
+              width: 28,
+              height: 28,
               decoration: BoxDecoration(
-                color: p.primaryLight,
-                borderRadius: BorderRadius.circular(10),
+                color: p.primary,
+                borderRadius: BorderRadius.circular(8),
               ),
-              child: Icon(Icons.shield_outlined, color: p.primary, size: 18),
+              alignment: Alignment.center,
+              child: Text(
+                'm',
+                style: TextStyle(
+                  fontFamily: 'Instrument Serif',
+                  fontFamilyFallback: const ['Georgia', 'serif'],
+                  fontStyle: FontStyle.italic,
+                  fontSize: 18,
+                  color: p.onPrimary,
+                ),
+              ),
             ),
             const SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'My Directives',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w700,
-                        ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'PA MHAD',
+                  style: TextStyle(
+                    fontFamily: 'DM Sans',
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: -0.2,
+                    color: p.text,
                   ),
-                  Row(
-                    children: [
-                      Container(
-                        width: 6,
-                        height: 6,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: privacyMode.isPrivate
-                              ? SemanticColors.successTextLight
-                              : SemanticColors.warningTextLight,
-                        ),
-                      ),
-                      const SizedBox(width: 6),
-                      Flexible(
-                        child: Text(
-                          privacyMode.isPrivate
-                              ? 'Private · Encrypted'
-                              : (privacyMode.isPublic
-                                  ? 'Public · Not saved'
-                                  : 'No session'),
-                          style: TextStyle(
-                            fontFamily: 'DM Sans',
-                            fontSize: 11,
-                            color: p.textMuted,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
+                ),
+                Text(
+                  privacyMode.isPrivate
+                      ? '● PRIVATE · ENCRYPTED'
+                      : (privacyMode.isPublic
+                          ? '● PUBLIC · NOT SAVED'
+                          : 'NO SESSION'),
+                  style: TextStyle(
+                    fontFamily: 'JetBrains Mono',
+                    fontFamilyFallback: const [
+                      'Consolas',
+                      'Courier New',
+                      'monospace'
                     ],
+                    fontSize: 9.5,
+                    letterSpacing: 0.6,
+                    color: privacyMode.isPrivate
+                        ? SemanticColors.successTextLight
+                        : SemanticColors.warningTextLight,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ],
         ),
@@ -225,9 +231,25 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ],
       ),
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
+        padding: const EdgeInsets.fromLTRB(22, 4, 22, 24),
         children: [
           const _DeviceSecurityCheck(),
+          SectionLabel(dateLabel),
+          EditorialHeading(
+            textSpan: TextSpan(
+              children: [
+                const TextSpan(text: 'Your voice,\n'),
+                TextSpan(
+                  text: 'in your words.',
+                  style: TextStyle(color: p.primary),
+                ),
+              ],
+            ),
+            size: 38,
+            height: 1.05,
+            letterSpacing: -0.6,
+          ),
+          const SizedBox(height: 16),
           const InfoBanner(
             icon: Icons.gavel_rounded,
             text:

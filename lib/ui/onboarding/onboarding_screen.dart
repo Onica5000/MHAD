@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/design/editorial_heading.dart';
+import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const _prefKey = 'onboarding_completed';
@@ -27,14 +29,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   static const _pages = <_PageData>[
     _PageData(
       icon: Icons.description_outlined,
-      title: 'Your Voice in a Crisis',
+      title: 'In your words.',
+      editorial: true,
       body:
           'A Mental Health Advance Directive lets you document your treatment '
           'preferences now — so your wishes are respected even when you can\u2019t '
           'communicate them during a mental health crisis.\n\n'
           'Under Pennsylvania Act 194 of 2004, your MHAD is legally binding once '
           'signed and witnessed.',
-      tag: 'PA Act 194 of 2004',
+      tag: 'PA MHAD · Act 194',
     ),
     _PageData(
       icon: Icons.checklist,
@@ -129,17 +132,20 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          width: 80,
-                          height: 80,
-                          decoration: BoxDecoration(
-                            color: tileBg,
-                            borderRadius: BorderRadius.circular(24),
+                        if (!page.editorial) ...[
+                          Container(
+                            width: 80,
+                            height: 80,
+                            decoration: BoxDecoration(
+                              color: tileBg,
+                              borderRadius: BorderRadius.circular(24),
+                            ),
+                            child:
+                                Icon(page.icon, size: 42, color: iconColor),
                           ),
-                          child: Icon(page.icon, size: 42, color: iconColor),
-                        ),
-                        const SizedBox(height: 16),
-                        if (page.tag != null)
+                          const SizedBox(height: 16),
+                        ],
+                        if (page.tag != null && !page.editorial)
                           Container(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 4),
@@ -157,14 +163,32 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                               ),
                             ),
                           ),
-                        if (page.tag != null) const SizedBox(height: 10),
-                        Text(
-                          page.title,
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineLarge
-                              ?.copyWith(height: 1.25),
-                        ),
+                        if (page.tag != null && page.editorial)
+                          SectionLabel(page.tag!),
+                        if (page.tag != null) const SizedBox(height: 6),
+                        if (page.editorial)
+                          EditorialHeading(
+                            textSpan: TextSpan(
+                              children: [
+                                const TextSpan(text: 'In your\n'),
+                                TextSpan(
+                                  text: 'words.',
+                                  style: TextStyle(color: p.primary),
+                                ),
+                              ],
+                            ),
+                            size: 64,
+                            height: 0.95,
+                            letterSpacing: -1.5,
+                          )
+                        else
+                          Text(
+                            page.title,
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineLarge
+                                ?.copyWith(height: 1.25),
+                          ),
                         const SizedBox(height: 14),
                         if (page.body != null)
                           ...page.body!.split('\n\n').map((para) => Padding(
@@ -297,6 +321,7 @@ class _PageData {
   final String? tag;
   final String? footnote;
   final _AccentColor? accent;
+  final bool editorial;
 
   const _PageData({
     required this.icon,
@@ -306,5 +331,6 @@ class _PageData {
     this.tag,
     this.footnote,
     this.accent,
+    this.editorial = false,
   });
 }

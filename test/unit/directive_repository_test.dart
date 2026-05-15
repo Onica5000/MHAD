@@ -80,6 +80,7 @@ void main() {
           fullName: 'Jane Doe',
           dateOfBirth: '01/15/1980',
           address: '123 Main St',
+          address2: '',
           city: 'Philadelphia',
           state: 'PA',
           zip: '19103',

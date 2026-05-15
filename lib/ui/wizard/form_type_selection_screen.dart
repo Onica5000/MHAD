@@ -8,6 +8,7 @@ import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/design_card.dart';
+import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/wizard/widgets/form_type_quiz.dart';
@@ -79,31 +80,42 @@ class _FormTypeSelectionScreenState
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
     return Scaffold(
-      backgroundColor: p.surface,
-      appBar: AppBar(title: const Text('Choose Form Type')),
+      backgroundColor: p.scaffoldBackground,
+      appBar: AppBar(),
       body: Stack(
         children: [
           ListView(
-            padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
+            padding: const EdgeInsets.fromLTRB(22, 8, 22, 24),
             children: [
-              const _AiSetupPrompt(),
-              const SizedBox(height: 16),
-              Text(
-                'Which type of directive would you like to create?',
-                style: Theme.of(context).textTheme.titleMedium,
+              const SectionLabel('New directive · 1 of 2'),
+              EditorialHeading(
+                textSpan: TextSpan(
+                  children: [
+                    const TextSpan(text: 'Which form\n'),
+                    TextSpan(
+                      text: 'fits you?',
+                      style: TextStyle(color: p.primary),
+                    ),
+                  ],
+                ),
+                size: 44,
+                height: 0.95,
+                letterSpacing: -1,
               ),
-              const SizedBox(height: 6),
+              const SizedBox(height: 10),
               Text(
-                'Not sure? The Combined form gives you the most options — '
-                'you can designate an agent AND document your treatment preferences.',
+                'You can switch later if you change your mind. Combined is the '
+                'broadest.',
                 style: TextStyle(
                   fontFamily: 'DM Sans',
-                  fontSize: 13,
+                  fontSize: 14,
                   color: p.textMuted,
                   height: 1.5,
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
+              const _AiSetupPrompt(),
+              const SizedBox(height: 18),
               _FormTypeCard(
                 icon: Icons.people_alt_outlined,
                 title: 'Combined',

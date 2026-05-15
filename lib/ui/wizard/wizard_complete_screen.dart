@@ -1,23 +1,81 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
+import 'package:mhad/data/database/app_database.dart';
+import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/design_card.dart';
+import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
+import 'package:mhad/ui/widgets/design/section_label.dart';
+import 'package:mhad/ui/widgets/design/wallet_card.dart';
 
-/// Shown after the user finishes the wizard execution step.
-class WizardCompleteScreen extends StatelessWidget {
+/// "You did it." — shown after the user signs the directive. Mirrors the
+/// prototype's [m-done] screen: editorial italic display, wallet-card
+/// preview with QR, and a checklist for sharing with the right people.
+class WizardCompleteScreen extends ConsumerStatefulWidget {
   final int directiveId;
   const WizardCompleteScreen({required this.directiveId, super.key});
+
+  @override
+  ConsumerState<WizardCompleteScreen> createState() =>
+      _WizardCompleteScreenState();
+}
+
+class _WizardCompleteScreenState extends ConsumerState<WizardCompleteScreen> {
+  Directive? _directive;
+  Agent? _primaryAgent;
+  Agent? _alternateAgent;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _load());
+  }
+
+  Future<void> _load() async {
+    final repo = ref.read(directiveRepositoryProvider);
+    final d = await repo.getDirectiveById(widget.directiveId);
+    final agents = await repo.getAgents(widget.directiveId);
+    if (!mounted) return;
+    setState(() {
+      _directive = d;
+      _primaryAgent =
+          agents.where((a) => a.agentType == 'primary').firstOrNull;
+      _alternateAgent =
+          agents.where((a) => a.agentType == 'alternate').firstOrNull;
+    });
+  }
+
+  String _expirationLabel() {
+    final d = _directive;
+    if (d == null) return '— · ——';
+    final exp = d.expirationDate;
+    if (exp == null) return '— · ——';
+    final dt = DateTime.fromMillisecondsSinceEpoch(exp);
+    return DateFormat('MM · yyyy').format(dt);
+  }
+
+  String _principalName() {
+    final n = _directive?.fullName.trim() ?? '';
+    return n.isEmpty ? 'Principal' : n;
+  }
+
+  String _agentPhone(Agent? a) {
+    if (a == null) return '';
+    final pieces = [a.cellPhone, a.homePhone, a.workPhone];
+    return pieces.firstWhere((p) => p.isNotEmpty, orElse: () => '');
+  }
 
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
 
     return Scaffold(
-      backgroundColor: p.surface,
+      backgroundColor: p.scaffoldBackground,
       appBar: AppBar(
-        title: const Text('Directive Complete'),
         leading: IconButton(
           icon: const Icon(Icons.home_outlined),
           tooltip: 'Go to home',
@@ -25,43 +83,138 @@ class WizardCompleteScreen extends StatelessWidget {
         ),
       ),
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
+        padding: const EdgeInsets.fromLTRB(22, 12, 22, 32),
         children: [
-          const SizedBox(height: 8),
-          Center(
-            child: Container(
-              width: 88,
-              height: 88,
-              decoration: BoxDecoration(
-                color: SemanticColors.successBgLight,
-                shape: BoxShape.circle,
+          // Editorial header
+          Row(
+            children: [
+              Container(
+                width: 8,
+                height: 8,
+                decoration: BoxDecoration(
+                  color: p.primary,
+                  shape: BoxShape.circle,
+                ),
               ),
-              child: const Icon(Icons.check_circle,
-                  size: 56, color: SemanticColors.successTextLight),
-            ),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'Your directive is saved!',
-            textAlign: TextAlign.center,
-            style: Theme.of(context)
-                .textTheme
-                .headlineMedium
-                ?.copyWith(fontWeight: FontWeight.w700),
+              const SizedBox(width: 6),
+              const SectionLabel('Complete'),
+            ],
           ),
           const SizedBox(height: 6),
+          EditorialHeading(
+            textSpan: TextSpan(
+              children: [
+                const TextSpan(text: 'You did\n'),
+                TextSpan(
+                  text: 'it.',
+                  style: TextStyle(color: p.primary),
+                ),
+              ],
+            ),
+            size: 64,
+            height: 0.95,
+            letterSpacing: -1.5,
+          ),
+          const SizedBox(height: 10),
           Text(
-            'Here are the next steps to make it legally valid.',
-            textAlign: TextAlign.center,
+            'Your directive is saved. Now make sure the right people have a copy.',
             style: TextStyle(
               fontFamily: 'DM Sans',
+              fontSize: 14.5,
               color: p.textMuted,
-              fontSize: 14,
               height: 1.5,
             ),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 26),
 
+          // Wallet card preview
+          const SectionLabel('Wallet card'),
+          const SizedBox(height: 4),
+          WalletCard(
+            principalName: _principalName(),
+            agentName: _primaryAgent?.fullName.isNotEmpty == true
+                ? _primaryAgent!.fullName
+                : null,
+            agentPhone:
+                _agentPhone(_primaryAgent).isEmpty ? null : _agentPhone(_primaryAgent),
+            validThrough: _expirationLabel(),
+            qrPayload: 'MHAD-${widget.directiveId}',
+          ),
+
+          const SizedBox(height: 20),
+
+          // Sharing checklist
+          const SectionLabel('Share copies with'),
+          const SizedBox(height: 4),
+          _ShareRow(
+            who: 'Your primary agent',
+            detail: _primaryAgent?.fullName.isNotEmpty == true
+                ? _primaryAgent!.fullName
+                : 'Add agent details',
+            done: _primaryAgent?.fullName.isNotEmpty == true,
+          ),
+          _ShareRow(
+            who: 'Your alternate agent',
+            detail: _alternateAgent?.fullName.isNotEmpty == true
+                ? _alternateAgent!.fullName
+                : 'Optional',
+            done: _alternateAgent?.fullName.isNotEmpty == true,
+          ),
+          const _ShareRow(
+            who: 'Your primary care doctor',
+            detail: 'Add provider',
+          ),
+          const _ShareRow(
+            who: 'Your psychiatrist or therapist',
+            detail: 'Add provider',
+          ),
+          const _ShareRow(
+            who: 'A trusted family member',
+            detail: 'Optional',
+          ),
+
+          const SizedBox(height: 20),
+
+          // Action buttons
+          Row(
+            children: [
+              Expanded(
+                child: FilledButton.tonalIcon(
+                  icon: const Icon(Icons.picture_as_pdf_outlined, size: 18),
+                  label: const Text('PDF'),
+                  onPressed: () => context.go(
+                      AppRoutes.exportRoute(widget.directiveId)),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: FilledButton.tonalIcon(
+                  icon: const Icon(Icons.ios_share, size: 18),
+                  label: const Text('Share'),
+                  onPressed: () => context.go(
+                      AppRoutes.exportRoute(widget.directiveId)),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: FilledButton.tonalIcon(
+                  icon: const Icon(Icons.account_balance_wallet_outlined,
+                      size: 18),
+                  label: const Text('Wallet'),
+                  onPressed: () => context.go(
+                      AppRoutes.exportRoute(widget.directiveId)),
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 22),
+          const Divider(),
+          const SizedBox(height: 16),
+
+          // What to do next — keep the existing checklist content
+          const SectionLabel('What to do next'),
+          const SizedBox(height: 4),
           DesignCard(
             padding: const EdgeInsets.all(16),
             child: Column(
@@ -100,67 +253,10 @@ class WizardCompleteScreen extends StatelessWidget {
           const SizedBox(height: 16),
 
           const InfoBanner(
-            icon: Icons.flight_takeoff,
-            text:
-                'If you travel or live part-time in another state, consider '
-                'having your directive notarized for broader acceptance.',
-            variant: InfoBannerVariant.info,
-          ),
-
-          DesignCard(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Icon(Icons.checklist, size: 20, color: p.primary),
-                    const SizedBox(width: 8),
-                    Text(
-                      'Distribution Checklist',
-                      style: Theme.of(context).textTheme.titleSmall,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'After printing and signing, give copies to:',
-                  style: TextStyle(
-                    fontFamily: 'DM Sans',
-                    fontSize: 13,
-                    color: p.textMuted,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                const _ChecklistItem(
-                    'Your designated agent (and alternate agent)'),
-                const _ChecklistItem('Your primary care physician'),
-                const _ChecklistItem('Your mental health provider(s)'),
-                const _ChecklistItem('Your local hospital'),
-                const _ChecklistItem('A trusted family member or friend'),
-                const _ChecklistItem('Your attorney (if you have one)'),
-                const SizedBox(height: 10),
-                Text(
-                  'Keep the original in a safe, accessible place. '
-                  'Consider telling others where it is stored.',
-                  style: TextStyle(
-                    fontFamily: 'DM Sans',
-                    fontSize: 12,
-                    fontStyle: FontStyle.italic,
-                    color: p.textMuted,
-                    height: 1.5,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 16),
-
-          const InfoBanner(
             icon: Icons.backup_outlined,
-            text: 'Export and save a backup now. If you lose your device, '
-                'your directive data cannot be recovered without an '
-                'exported copy.',
+            text:
+                'Export and save a backup now. If you lose your device, your '
+                'directive data cannot be recovered without an exported copy.',
             variant: InfoBannerVariant.error,
           ),
           const SizedBox(height: 8),
@@ -170,7 +266,7 @@ class WizardCompleteScreen extends StatelessWidget {
               icon: const Icon(Icons.picture_as_pdf),
               label: const Text('Export PDF'),
               onPressed: () =>
-                  context.go(AppRoutes.exportRoute(directiveId)),
+                  context.go(AppRoutes.exportRoute(widget.directiveId)),
             ),
           ),
         ],
@@ -179,32 +275,80 @@ class WizardCompleteScreen extends StatelessWidget {
   }
 }
 
-class _ChecklistItem extends StatelessWidget {
-  final String text;
-  const _ChecklistItem(this.text);
+class _ShareRow extends StatelessWidget {
+  final String who;
+  final String detail;
+  final bool done;
+  const _ShareRow({
+    required this.who,
+    required this.detail,
+    this.done = false,
+  });
 
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
     return Padding(
-      padding: const EdgeInsets.only(top: 6),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(Icons.check, size: 14, color: p.primary),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              text,
-              style: TextStyle(
-                fontFamily: 'DM Sans',
-                fontSize: 13,
-                color: p.text,
-                height: 1.4,
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        decoration: BoxDecoration(
+          color: p.card,
+          border: Border.all(color: p.border),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 22,
+              height: 22,
+              decoration: BoxDecoration(
+                color: done ? p.primary : Colors.transparent,
+                border: done
+                    ? null
+                    : Border.all(color: p.border, width: 1.5),
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: done
+                  ? Icon(Icons.check, size: 14, color: p.onPrimary)
+                  : null,
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    who,
+                    style: TextStyle(
+                      fontFamily: 'DM Sans',
+                      fontSize: 13.5,
+                      fontWeight: FontWeight.w600,
+                      color: p.text,
+                    ),
+                  ),
+                  Text(
+                    detail,
+                    style: TextStyle(
+                      fontFamily: 'DM Sans',
+                      fontSize: 11.5,
+                      color: p.textMuted,
+                    ),
+                  ),
+                ],
               ),
             ),
-          ),
-        ],
+            Text(
+              done ? 'Sent ✓' : 'Send →',
+              style: TextStyle(
+                fontFamily: 'DM Sans',
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+                color: p.primary,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -12,9 +12,14 @@ import 'package:mhad/ui/wizard/widgets/wizard_help_button.dart';
 import 'package:mhad/ui/wizard/wizard_step_mixin.dart';
 
 class ExperimentalStudiesStep extends ConsumerStatefulWidget {
-  const ExperimentalStudiesStep({required this.directiveId, super.key});
+  const ExperimentalStudiesStep({
+    required this.directiveId,
+    this.embedded = false,
+    super.key,
+  });
 
   final int directiveId;
+  final bool embedded;
 
   @override
   ConsumerState<ExperimentalStudiesStep> createState() =>
@@ -101,7 +106,12 @@ class _ExperimentalStudiesStepState
     return Form(
       key: _formKey,
       child: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+        shrinkWrap: widget.embedded,
+        physics:
+            widget.embedded ? const NeverScrollableScrollPhysics() : null,
+        padding: widget.embedded
+            ? const EdgeInsets.symmetric(horizontal: 4)
+            : const EdgeInsets.fromLTRB(16, 16, 16, 24),
         children: [
           const SectionLabel('RESEARCH CONSENT'),
           const SizedBox(height: 6),

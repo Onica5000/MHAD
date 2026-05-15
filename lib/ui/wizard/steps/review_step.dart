@@ -8,8 +8,13 @@ import 'package:mhad/ui/wizard/wizard_step_mixin.dart';
 class ReviewStep extends ConsumerStatefulWidget {
   final int directiveId;
   final FormType formType;
-  const ReviewStep(
-      {required this.directiveId, required this.formType, super.key});
+  final bool embedded;
+  const ReviewStep({
+    required this.directiveId,
+    required this.formType,
+    this.embedded = false,
+    super.key,
+  });
 
   @override
   ConsumerState<ReviewStep> createState() => _ReviewStepState();
@@ -109,7 +114,11 @@ class _ReviewStepState extends ConsumerState<ReviewStep>
         meds.where((m) => m.entryType == 'preferred').toList();
 
     return ListView(
-      padding: const EdgeInsets.all(16),
+      shrinkWrap: widget.embedded,
+      physics: widget.embedded ? const NeverScrollableScrollPhysics() : null,
+      padding: widget.embedded
+          ? const EdgeInsets.symmetric(horizontal: 4)
+          : const EdgeInsets.all(16),
       children: [
         _ReviewSection(title: 'Personal Information', entries: {
           'Name': d.fullName,

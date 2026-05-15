@@ -192,7 +192,55 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('AI Assistant'),
+        title: Row(
+          children: [
+            Container(
+              width: 28,
+              height: 28,
+              decoration: BoxDecoration(
+                color: Theme.of(context)
+                    .colorScheme
+                    .primary
+                    .withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(
+                Icons.auto_awesome,
+                size: 16,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+            const SizedBox(width: 10),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  'AI assistant',
+                  style: TextStyle(
+                    fontFamily: 'DM Sans',
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                Text(
+                  '● GEMINI · PII STRIPPED',
+                  style: TextStyle(
+                    fontFamily: 'JetBrains Mono',
+                    fontFamilyFallback: const [
+                      'Consolas',
+                      'Courier New',
+                      'monospace'
+                    ],
+                    fontSize: 9,
+                    letterSpacing: 0.6,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.delete_outline),

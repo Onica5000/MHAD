@@ -11,6 +11,9 @@ import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/export/pdf/pdf_generator.dart';
 import 'package:mhad/ui/export/pdf/wallet_card_generator.dart';
+import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/design/editorial_heading.dart';
+import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/services/fhir_export_service.dart';
 import 'package:mhad/ui/export/nfc_write_button.dart';
 import 'package:mhad/utils/background_runner.dart';
@@ -399,13 +402,29 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       );
     }
 
+    final p = Theme.of(context).mhadPalette;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Export Directive'),
-      ),
+      backgroundColor: p.scaffoldBackground,
+      appBar: AppBar(),
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.fromLTRB(22, 4, 22, 16),
         children: [
+          const SectionLabel('Export & share'),
+          EditorialHeading(
+            textSpan: TextSpan(
+              children: [
+                const TextSpan(text: 'Your directive,\n'),
+                TextSpan(
+                  text: 'on paper.',
+                  style: TextStyle(color: p.primary),
+                ),
+              ],
+            ),
+            size: 36,
+            height: 1.05,
+            letterSpacing: -0.8,
+          ),
+          const SizedBox(height: 16),
           if (_isGenerating)
             Padding(
               padding: const EdgeInsets.only(bottom: 12),

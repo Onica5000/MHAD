@@ -8,6 +8,7 @@ import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/theme/theme_controller.dart';
 import 'package:mhad/ui/widgets/design/app_drawer.dart';
 import 'package:mhad/ui/widgets/design/design_card.dart';
+import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/utils/platform_utils.dart';
 
@@ -28,12 +29,20 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     final themeCtrl = ref.read(appThemeControllerProvider.notifier);
 
     return Scaffold(
-      backgroundColor: p.surface,
+      backgroundColor: p.scaffoldBackground,
       drawer: const MhadAppDrawer(),
-      appBar: AppBar(title: const Text('Settings')),
+      appBar: AppBar(),
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
+        padding: const EdgeInsets.fromLTRB(22, 4, 22, 24),
         children: [
+          const SectionLabel('Settings'),
+          const EditorialHeading(
+            text: 'How this works for you.',
+            size: 32,
+            height: 1.05,
+            letterSpacing: -0.6,
+          ),
+          const SizedBox(height: 18),
           const SectionLabel('Appearance'),
           const SizedBox(height: 8),
           DesignCard(

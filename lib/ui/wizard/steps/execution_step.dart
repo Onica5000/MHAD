@@ -13,7 +13,13 @@ import 'package:mhad/ui/wizard/wizard_step_mixin.dart';
 class ExecutionStep extends ConsumerStatefulWidget {
   final int directiveId;
   final FormType formType;
-  const ExecutionStep({required this.directiveId, required this.formType, super.key});
+  final bool embedded;
+  const ExecutionStep({
+    required this.directiveId,
+    required this.formType,
+    this.embedded = false,
+    super.key,
+  });
 
   @override
   ConsumerState<ExecutionStep> createState() => _ExecutionStepState();
@@ -184,7 +190,11 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
         : '—';
 
     return ListView(
-      padding: const EdgeInsets.all(16),
+      shrinkWrap: widget.embedded,
+      physics: widget.embedded ? const NeverScrollableScrollPhysics() : null,
+      padding: widget.embedded
+          ? const EdgeInsets.symmetric(horizontal: 4)
+          : const EdgeInsets.all(16),
       children: [
         WizardHelpButton(
           helpText:

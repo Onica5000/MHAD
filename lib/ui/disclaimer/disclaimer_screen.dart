@@ -4,7 +4,9 @@ import 'package:mhad/services/disclaimer_service.dart';
 import 'package:mhad/services/notification_service.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/design_card.dart';
+import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
+import 'package:mhad/ui/widgets/design/section_label.dart';
 
 /// Full-screen legal disclaimer shown once on first launch.
 /// The user must tap "I Understand" before accessing the app.
@@ -18,25 +20,34 @@ class DisclaimerScreen extends StatelessWidget {
     return PopScope(
       canPop: false,
       child: Scaffold(
-        backgroundColor: p.surface,
-        appBar: AppBar(
-          title: const Text('Important Disclaimer'),
-          automaticallyImplyLeading: false,
-          backgroundColor: p.card,
-          foregroundColor: p.text,
-          elevation: 0,
-          systemOverlayStyle: null,
-        ),
+        backgroundColor: p.scaffoldBackground,
         body: SafeArea(
-          top: false,
           child: Column(
             children: [
               Expanded(
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
+                  padding: const EdgeInsets.fromLTRB(22, 20, 22, 16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      const SectionLabel('Before we begin'),
+                      const EditorialHeading(
+                        text: 'A few important things.',
+                        size: 38,
+                        height: 1.05,
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        'Read carefully — these confirm what this app does and '
+                        "doesn't do.",
+                        style: TextStyle(
+                          fontFamily: 'DM Sans',
+                          fontSize: 13.5,
+                          color: p.textMuted,
+                          height: 1.5,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
                       const InfoBanner(
                         icon: Icons.gavel_rounded,
                         text:

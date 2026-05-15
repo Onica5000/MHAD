@@ -2,36 +2,31 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mhad/domain/model/directive.dart';
 
 void main() {
-  group('FormType.steps', () {
-    test('combined form includes all 15 steps', () {
+  group('FormType.steps (9-step redesign)', () {
+    test('combined form includes all 9 steps', () {
       final steps = FormType.combined.steps;
-      expect(steps.length, 15);
-      expect(steps, contains(WizardStep.agentDesignation));
-      expect(steps, contains(WizardStep.alternateAgent));
-      expect(steps, contains(WizardStep.agentAuthority));
+      expect(steps.length, 9);
+      expect(steps, contains(WizardStep.peopleITrust));
       expect(steps, contains(WizardStep.guardianNomination));
-      expect(steps, contains(WizardStep.execution));
+      expect(steps, contains(WizardStep.reviewAndSign));
     });
 
-    test('declaration form excludes agent steps', () {
+    test('declaration form excludes peopleITrust', () {
       final steps = FormType.declaration.steps;
-      expect(steps, isNot(contains(WizardStep.agentDesignation)));
-      expect(steps, isNot(contains(WizardStep.alternateAgent)));
-      expect(steps, isNot(contains(WizardStep.agentAuthority)));
+      expect(steps, isNot(contains(WizardStep.peopleITrust)));
+      expect(steps.length, 8);
     });
 
-    test('declaration form still includes personal info and execution', () {
+    test('declaration form still includes about you and review & sign', () {
       final steps = FormType.declaration.steps;
-      expect(steps, contains(WizardStep.personalInfo));
-      expect(steps, contains(WizardStep.execution));
-      expect(steps, contains(WizardStep.review));
+      expect(steps, contains(WizardStep.aboutYou));
+      expect(steps, contains(WizardStep.reviewAndSign));
     });
 
-    test('poa form includes all steps including agent sections', () {
+    test('poa form includes peopleITrust', () {
       final steps = FormType.poa.steps;
-      expect(steps, contains(WizardStep.agentDesignation));
-      expect(steps, contains(WizardStep.alternateAgent));
-      expect(steps, contains(WizardStep.agentAuthority));
+      expect(steps, contains(WizardStep.peopleITrust));
+      expect(steps.length, 9);
     });
 
     test('combined form has more steps than declaration', () {
@@ -41,25 +36,17 @@ void main() {
       );
     });
 
-    test('all steps lists start with personalInfo', () {
+    test('all step lists start with aboutYou', () {
       for (final formType in FormType.values) {
-        expect(formType.steps.first, WizardStep.personalInfo,
-            reason: '${formType.name} should start with personalInfo');
+        expect(formType.steps.first, WizardStep.aboutYou,
+            reason: '${formType.name} should start with aboutYou');
       }
     });
 
-    test('all steps lists end with execution', () {
+    test('all step lists end with reviewAndSign', () {
       for (final formType in FormType.values) {
-        expect(formType.steps.last, WizardStep.execution,
-            reason: '${formType.name} should end with execution');
-      }
-    });
-
-    test('review step always appears second-to-last', () {
-      for (final formType in FormType.values) {
-        final steps = formType.steps;
-        expect(steps[steps.length - 2], WizardStep.review,
-            reason: '${formType.name} should have review second-to-last');
+        expect(formType.steps.last, WizardStep.reviewAndSign,
+            reason: '${formType.name} should end with reviewAndSign');
       }
     });
   });
@@ -78,11 +65,18 @@ void main() {
     });
   });
 
-  group('WizardStep.displayName', () {
+  group('WizardStep.displayName + subtitle', () {
     test('all wizard steps have non-empty display names', () {
       for (final step in WizardStep.values) {
         expect(step.displayName, isNotEmpty,
             reason: '${step.name} should have a displayName');
+      }
+    });
+
+    test('all wizard steps have non-empty subtitles', () {
+      for (final step in WizardStep.values) {
+        expect(step.subtitle, isNotEmpty,
+            reason: '${step.name} should have a subtitle');
       }
     });
   });

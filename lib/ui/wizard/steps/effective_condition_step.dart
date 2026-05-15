@@ -8,9 +8,14 @@ import 'package:mhad/ui/wizard/widgets/wizard_help_button.dart';
 import 'package:mhad/ui/wizard/wizard_step_mixin.dart';
 
 class EffectiveConditionStep extends ConsumerStatefulWidget {
-  const EffectiveConditionStep({required this.directiveId, super.key});
+  const EffectiveConditionStep({
+    required this.directiveId,
+    this.embedded = false,
+    super.key,
+  });
 
   final int directiveId;
+  final bool embedded;
 
   @override
   ConsumerState<EffectiveConditionStep> createState() =>
@@ -91,7 +96,12 @@ class _EffectiveConditionStepState
       key: _formKey,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       child: ListView(
-        padding: const EdgeInsets.all(16),
+        shrinkWrap: widget.embedded,
+        physics:
+            widget.embedded ? const NeverScrollableScrollPhysics() : null,
+        padding: widget.embedded
+            ? const EdgeInsets.symmetric(horizontal: 4)
+            : const EdgeInsets.all(16),
         children: [
           WizardHelpButton(helpText: helpText, stepId: 'effectiveCondition'),
           const ExampleTextButton(

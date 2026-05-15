@@ -11,9 +11,16 @@ import 'package:mhad/ui/wizard/widgets/wizard_help_button.dart';
 import 'package:mhad/ui/wizard/wizard_step_mixin.dart';
 
 class DiagnosesStep extends ConsumerStatefulWidget {
-  const DiagnosesStep({required this.directiveId, super.key});
+  const DiagnosesStep({
+    required this.directiveId,
+    this.embedded = false,
+    super.key,
+  });
 
   final int directiveId;
+  /// When true, render as a non-scrolling Column suitable for embedding in a
+  /// parent ListView. When false, render as a full ListView with its own scroll.
+  final bool embedded;
 
   @override
   ConsumerState<DiagnosesStep> createState() => _DiagnosesStepState();
@@ -130,12 +137,13 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
         'This lookup is free and uses the NIH Clinical Tables Service — '
         'no AI tokens are used.';
 
-    return Column(
+    final list = ListView(
+      shrinkWrap: widget.embedded,
+      physics: widget.embedded ? const NeverScrollableScrollPhysics() : null,
+      padding: widget.embedded
+          ? const EdgeInsets.symmetric(horizontal: 4)
+          : const EdgeInsets.all(16),
       children: [
-        Expanded(
-          child: ListView(
-            padding: const EdgeInsets.all(16),
-            children: [
               WizardHelpButton(helpText: helpText, stepId: 'diagnoses'),
               const SizedBox(height: 8),
               Text(
@@ -368,12 +376,11 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                   );
                 },
               ),
-              const SizedBox(height: 12),
-              const NlmAttribution(),
-            ],
-          ),
-        ),
+        const SizedBox(height: 12),
+        const NlmAttribution(),
       ],
     );
+    if (widget.embedded) return list;
+    return Column(children: [Expanded(child: list)]);
   }
 }

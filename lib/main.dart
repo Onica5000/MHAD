@@ -17,6 +17,7 @@ import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/theme/theme_controller.dart';
 import 'package:mhad/ui/widgets/crisis_resources_banner.dart';
+import 'package:mhad/ui/widgets/design/responsive_shell.dart';
 import 'package:mhad/utils/platform_utils.dart';
 
 void main() {
@@ -110,7 +111,9 @@ class MhadApp extends ConsumerWidget {
             child: MediaQuery.removePadding(
               context: context,
               removeBottom: true,
-              child: child ?? const SizedBox.shrink(),
+              child: ResponsiveShell(
+                child: child ?? const SizedBox.shrink(),
+              ),
             ),
           ),
           const CrisisResourcesBanner(),

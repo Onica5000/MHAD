@@ -12,9 +12,14 @@ import 'package:mhad/ui/wizard/widgets/wizard_help_button.dart';
 import 'package:mhad/ui/wizard/wizard_step_mixin.dart';
 
 class DrugTrialsStep extends ConsumerStatefulWidget {
-  const DrugTrialsStep({required this.directiveId, super.key});
+  const DrugTrialsStep({
+    required this.directiveId,
+    this.embedded = false,
+    super.key,
+  });
 
   final int directiveId;
+  final bool embedded;
 
   @override
   ConsumerState<DrugTrialsStep> createState() => _DrugTrialsStepState();
@@ -102,7 +107,12 @@ class _DrugTrialsStepState extends ConsumerState<DrugTrialsStep>
     return Form(
       key: _formKey,
       child: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+        shrinkWrap: widget.embedded,
+        physics:
+            widget.embedded ? const NeverScrollableScrollPhysics() : null,
+        padding: widget.embedded
+            ? const EdgeInsets.symmetric(horizontal: 4)
+            : const EdgeInsets.fromLTRB(16, 16, 16, 24),
         children: [
           const SectionLabel('CLINICAL TRIALS'),
           const SizedBox(height: 6),

@@ -10,23 +10,20 @@ import 'package:mhad/services/web_session_cache.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/app_drawer.dart';
-import 'package:mhad/ui/widgets/design/gradient_progress.dart';
+import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
+import 'package:mhad/ui/widgets/design/step_dots.dart';
+import 'package:mhad/ui/widgets/design/step_head.dart';
+import 'package:mhad/ui/widgets/design/wizard_bottom_bar.dart';
 import 'package:mhad/ui/wizard/wizard_step_mixin.dart';
 import 'package:mhad/ui/wizard/steps/personal_info_step.dart';
-import 'package:mhad/ui/wizard/steps/diagnoses_step.dart';
-import 'package:mhad/ui/wizard/steps/effective_condition_step.dart';
+import 'package:mhad/ui/wizard/steps/when_it_kicks_in_step.dart';
+import 'package:mhad/ui/wizard/steps/people_i_trust_step.dart';
+import 'package:mhad/ui/wizard/steps/procedures_research_step.dart';
+import 'package:mhad/ui/wizard/steps/review_and_sign_step.dart';
 import 'package:mhad/ui/wizard/steps/treatment_facility_step.dart';
 import 'package:mhad/ui/wizard/steps/medications_step.dart';
-import 'package:mhad/ui/wizard/steps/ect_step.dart';
-import 'package:mhad/ui/wizard/steps/experimental_studies_step.dart';
-import 'package:mhad/ui/wizard/steps/drug_trials_step.dart';
 import 'package:mhad/ui/wizard/steps/additional_instructions_step.dart';
-import 'package:mhad/ui/wizard/steps/agent_designation_step.dart';
-import 'package:mhad/ui/wizard/steps/alternate_agent_step.dart';
-import 'package:mhad/ui/wizard/steps/agent_authority_step.dart';
 import 'package:mhad/ui/wizard/steps/guardian_nomination_step.dart';
-import 'package:mhad/ui/wizard/steps/review_step.dart';
-import 'package:mhad/ui/wizard/steps/execution_step.dart';
 import 'package:mhad/ui/wizard/widgets/document_import_button.dart';
 import 'package:mhad/ui/wizard/widgets/document_import_tip.dart';
 import 'package:mhad/ui/wizard/widgets/smart_fill_flow.dart';
@@ -45,8 +42,8 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
   bool _isSaving = false;
   bool _restoredStep = false;
 
-  // A plain GlobalKey so we can cast currentState to WizardStepMixin.
-  // Re-assigned after Smart Fill apply to force step re-creation.
+  /// Re-keyed after Smart Fill to force the step widget to rebuild with the
+  /// freshly persisted values.
   GlobalKey _stepKey = GlobalKey();
 
   Future<void> _persistStep() async {
@@ -128,17 +125,20 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
         _steps ??= formType.steps;
         final steps = _steps!;
 
-        // Restore last step on first load
+        // Restore last step on first load (clamp to valid range — the enum
+        // shrunk from 15 to 9 in the redesign, so saved indices from older
+        // sessions may overshoot).
         if (!_restoredStep) {
           _restoredStep = true;
           final saved = directive.lastStepIndex;
-          if (saved > 0 && saved < steps.length) {
-            _stepIndex = saved;
+          if (saved > 0) {
+            _stepIndex = saved.clamp(0, steps.length - 1);
           }
         }
 
         final currentStep = steps[_stepIndex];
         final isLastStep = _stepIndex == steps.length - 1;
+        final p = Theme.of(context).mhadPalette;
 
         return PopScope(
           canPop: false,
@@ -149,80 +149,26 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
           child: Scaffold(
             drawer: const MhadAppDrawer(),
             appBar: AppBar(
-              title: const Text('Directive Wizard'),
+              title: Text(currentStep.displayName),
+              backgroundColor: p.card,
               actions: [
-                TextButton.icon(
-                  icon: const Icon(Icons.auto_awesome, size: 18),
-                  label: const Text('Smart Fill', style: TextStyle(fontSize: 12)),
-                    onPressed: () async {
-                      // Check if AI is set up
-                      final apiKey = ref.read(apiKeyProvider).valueOrNull;
-                      if (apiKey == null || apiKey.isEmpty) {
-                        if (!context.mounted) return;
-                        final goSetup = await showDialog<bool>(
-                          context: context,
-                          builder: (ctx) => AlertDialog(
-                            icon: const Icon(Icons.auto_awesome, size: 36),
-                            title: const Text('AI Not Set Up'),
-                            content: const Text(
-                              'Smart Fill uses AI to generate personalized '
-                              'suggestions based on your conditions and '
-                              'medications.\n\n'
-                              'You need a free Gemini API key to use this '
-                              'feature. It takes about 30 seconds to set up.'),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(ctx, false),
-                                child: const Text('Not Now'),
-                              ),
-                              FilledButton(
-                                onPressed: () => Navigator.pop(ctx, true),
-                                child: const Text('Set Up AI'),
-                              ),
-                            ],
-                          ),
-                        );
-                        if (goSetup == true && context.mounted) {
-                          context.push(AppRoutes.aiSetup);
-                        }
-                        return;
-                      }
-                      final applied = await showSmartFillFlow(
-                        context,
-                        directiveId: directive.id,
-                        formType: formType.name,
-                      );
-                      if (applied == true && mounted) {
-                        // Invalidate cached directive so provider re-fetches
-                        ref.invalidate(directiveByIdProvider(directive.id));
-                        // Force step widget to re-create by changing key
-                        setState(() {
-                          _stepKey = GlobalKey();
-                        });
-                        if (context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                  'Smart Fill suggestions applied. Review your form to confirm.'),
-                            ),
-                          );
-                        }
-                      }
-                    },
+                IconButton(
+                  icon: const Icon(Icons.auto_awesome, size: 20),
+                  tooltip: 'Smart Fill',
+                  onPressed: () => _smartFill(context, directive.id, formType.name),
                 ),
                 DocumentImportButton(
                   directiveId: directive.id,
                   formType: formType.name,
                 ),
-                TextButton.icon(
-                  icon: const Icon(Icons.smart_toy_outlined, size: 18),
-                  label: const Text('AI Chat', style: TextStyle(fontSize: 12)),
+                IconButton(
+                  icon: const Icon(Icons.smart_toy_outlined, size: 20),
+                  tooltip: 'AI chat',
                   onPressed: () {
                     final fields = <String, String>{};
                     void add(String k, String v) {
                       if (v.isNotEmpty) fields[k] = v;
                     }
-                    // PII fields are intentionally excluded from AI context.
                     add('State', directive.state);
                     add('Effective Condition', directive.effectiveCondition);
 
@@ -237,8 +183,9 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                   },
                 ),
                 IconButton(
-                  icon: const Icon(Icons.close),
-                  tooltip: (kIsWeb || !ref.read(privacyModeNotifierProvider).isPrivate)
+                  icon: const Icon(Icons.close, size: 22),
+                  tooltip: (kIsWeb ||
+                          !ref.read(privacyModeNotifierProvider).isPrivate)
                       ? 'Exit wizard'
                       : 'Save & exit wizard',
                   onPressed: _isSaving ? null : () => _saveAndExit(context),
@@ -247,13 +194,21 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
             ),
             body: Column(
               children: [
-                _StepTitleHeader(
-                  title: currentStep.displayName,
-                  stepIndex: _stepIndex,
-                  totalSteps: steps.length,
+                const CrisisTopBar(compact: true),
+                Container(
+                  color: p.card,
+                  padding: const EdgeInsets.only(top: 8),
+                  child: StepDots(
+                    current: _stepIndex + 1,
+                    total: steps.length,
+                  ),
                 ),
-                _ProgressBar(
-                    current: _stepIndex + 1, total: steps.length),
+                StepHead(
+                  stepNumber: _stepIndex + 1,
+                  totalSteps: steps.length,
+                  title: currentStep.displayName,
+                  subtitle: currentStep.subtitle,
+                ),
                 if (_stepIndex == 0) const DocumentImportTip(),
                 Expanded(
                   child: _buildStep(
@@ -264,15 +219,16 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                 ),
               ],
             ),
-            bottomNavigationBar: _BottomBar(
-              stepIndex: _stepIndex,
-              totalSteps: steps.length,
-              isSaving: _isSaving,
-              isLastStep: isLastStep,
-              onBack: _stepIndex > 0
+            bottomNavigationBar: WizardBottomBar(
+              primaryLabel: isLastStep ? 'Finish & export' : 'Continue',
+              primaryIcon:
+                  isLastStep ? Icons.check_rounded : Icons.arrow_forward,
+              primaryLoading: _isSaving,
+              onPrimary: () => _goNext(context, isLastStep),
+              secondaryLabel: _stepIndex > 0 ? 'Back' : null,
+              onSecondary: _stepIndex > 0
                   ? () async {
                       FocusScope.of(context).unfocus();
-                      // Auto-save current step data on back navigation (best-effort)
                       final state = _stepKey.currentState;
                       if (state is WizardStepMixin) {
                         try {
@@ -287,7 +243,7 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                       }
                     }
                   : null,
-              onNext: () => _goNext(context, isLastStep),
+              showGradient: false,
             ),
           ),
         );
@@ -297,37 +253,85 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
 
   Widget _buildStep(WizardStep step, int directiveId, FormType formType) {
     return switch (step) {
-      WizardStep.personalInfo =>
+      WizardStep.aboutYou =>
         PersonalInfoStep(key: _stepKey, directiveId: directiveId),
-      WizardStep.diagnoses =>
-        DiagnosesStep(key: _stepKey, directiveId: directiveId),
-      WizardStep.effectiveCondition =>
-        EffectiveConditionStep(key: _stepKey, directiveId: directiveId),
-      WizardStep.treatmentFacility =>
-        TreatmentFacilityStep(key: _stepKey, directiveId: directiveId),
-      WizardStep.medications =>
-        MedicationsStep(key: _stepKey, directiveId: directiveId, formType: formType),
-      WizardStep.ect =>
-        EctStep(key: _stepKey, directiveId: directiveId),
-      WizardStep.experimentalStudies =>
-        ExperimentalStudiesStep(key: _stepKey, directiveId: directiveId),
-      WizardStep.drugTrials =>
-        DrugTrialsStep(key: _stepKey, directiveId: directiveId),
-      WizardStep.additionalInstructions =>
-        AdditionalInstructionsStep(key: _stepKey, directiveId: directiveId),
-      WizardStep.agentDesignation =>
-        AgentDesignationStep(key: _stepKey, directiveId: directiveId),
-      WizardStep.alternateAgent =>
-        AlternateAgentStep(key: _stepKey, directiveId: directiveId),
-      WizardStep.agentAuthority =>
-        AgentAuthorityStep(key: _stepKey, directiveId: directiveId),
+      WizardStep.whenItKicksIn =>
+        WhenItKicksInStep(key: _stepKey, directiveId: directiveId),
+      WizardStep.peopleITrust =>
+        PeopleITrustStep(key: _stepKey, directiveId: directiveId),
       WizardStep.guardianNomination =>
         GuardianNominationStep(key: _stepKey, directiveId: directiveId),
-      WizardStep.review =>
-        ReviewStep(key: _stepKey, directiveId: directiveId, formType: formType),
-      WizardStep.execution =>
-        ExecutionStep(key: _stepKey, directiveId: directiveId, formType: formType),
+      WizardStep.whereIWantCare =>
+        TreatmentFacilityStep(key: _stepKey, directiveId: directiveId),
+      WizardStep.medications => MedicationsStep(
+          key: _stepKey,
+          directiveId: directiveId,
+          formType: formType,
+        ),
+      WizardStep.proceduresResearch =>
+        ProceduresResearchStep(key: _stepKey, directiveId: directiveId),
+      WizardStep.anythingElse =>
+        AdditionalInstructionsStep(key: _stepKey, directiveId: directiveId),
+      WizardStep.reviewAndSign => ReviewAndSignStep(
+          key: _stepKey,
+          directiveId: directiveId,
+          formType: formType,
+        ),
     };
+  }
+
+  Future<void> _smartFill(
+      BuildContext context, int directiveId, String formTypeName) async {
+    final apiKey = ref.read(apiKeyProvider).valueOrNull;
+    if (apiKey == null || apiKey.isEmpty) {
+      if (!context.mounted) return;
+      final goSetup = await showDialog<bool>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          icon: const Icon(Icons.auto_awesome, size: 36),
+          title: const Text('AI Not Set Up'),
+          content: const Text(
+            'Smart Fill uses AI to generate personalized suggestions based on '
+            'your conditions and medications.\n\n'
+            'You need a free Gemini API key to use this feature. It takes '
+            'about 30 seconds to set up.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx, false),
+              child: const Text('Not Now'),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(ctx, true),
+              child: const Text('Set Up AI'),
+            ),
+          ],
+        ),
+      );
+      if (goSetup == true && context.mounted) {
+        context.push(AppRoutes.aiSetup);
+      }
+      return;
+    }
+    final applied = await showSmartFillFlow(
+      context,
+      directiveId: directiveId,
+      formType: formTypeName,
+    );
+    if (applied == true && mounted) {
+      ref.invalidate(directiveByIdProvider(directiveId));
+      setState(() {
+        _stepKey = GlobalKey();
+      });
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+                'Smart Fill suggestions applied. Review your form to confirm.'),
+          ),
+        );
+      }
+    }
   }
 
   Future<void> _goNext(BuildContext context, bool isLastStep) async {
@@ -335,7 +339,6 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
 
     setState(() => _isSaving = true);
     try {
-      // Try to save current step data, but never block navigation
       final state = _stepKey.currentState;
       bool stepValid = true;
       if (state != null && state is WizardStepMixin) {
@@ -345,7 +348,6 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
           debugPrint('Step save error (non-blocking): $e');
         }
       }
-      // Show a non-blocking warning if step has missing required fields
       if (!stepValid && mounted && context.mounted) {
         final isPrivate = ref.read(privacyModeNotifierProvider).isPrivate;
         ScaffoldMessenger.of(context).showSnackBar(
@@ -358,12 +360,10 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
         );
       }
 
-      // Cache for web reload recovery — must await so data is written before navigation
       await _cacheForWebReload();
 
       if (mounted) {
         if (isLastStep) {
-          // Clear web cache on completion — directive is done
           if (kIsWeb) WebSessionCache.clear();
           if (context.mounted) {
             context.go(AppRoutes.wizardCompleteRoute(widget.directiveId));
@@ -461,184 +461,5 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
         }
       }
     }
-  }
-}
-
-class _StepTitleHeader extends StatelessWidget {
-  final String title;
-  final int stepIndex;
-  final int totalSteps;
-  const _StepTitleHeader({
-    required this.title,
-    required this.stepIndex,
-    required this.totalSteps,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final p = Theme.of(context).mhadPalette;
-    return Container(
-      width: double.infinity,
-      color: p.card,
-      padding: const EdgeInsets.fromLTRB(20, 12, 20, 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Step ${stepIndex + 1} of $totalSteps',
-            style: TextStyle(
-              fontFamily: 'DM Sans',
-              fontSize: 11,
-              fontWeight: FontWeight.w700,
-              letterSpacing: 0.6,
-              color: p.primary,
-            ),
-          ),
-          const SizedBox(height: 2),
-          Text(
-            title,
-            style: TextStyle(
-              fontFamily: 'DM Sans',
-              fontSize: 20,
-              fontWeight: FontWeight.w700,
-              color: p.text,
-              height: 1.2,
-              letterSpacing: -0.2,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _ProgressBar extends StatelessWidget {
-  final int current;
-  final int total;
-  const _ProgressBar({required this.current, required this.total});
-
-  @override
-  Widget build(BuildContext context) {
-    final p = Theme.of(context).mhadPalette;
-    final percent = ((current / total) * 100).round();
-    return Semantics(
-      label: 'Step $current of $total, $percent% complete',
-      value: '$percent%',
-      liveRegion: true,
-      child: Container(
-        color: p.card,
-        padding: const EdgeInsets.fromLTRB(20, 4, 20, 12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            GradientProgress(
-              value: current / total,
-              height: 6,
-            ),
-            const SizedBox(height: 6),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Step $current of $total',
-                  style: TextStyle(
-                    fontFamily: 'DM Sans',
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600,
-                    color: p.textMuted,
-                  ),
-                ),
-                Text(
-                  '$percent% complete',
-                  style: TextStyle(
-                    fontFamily: 'DM Sans',
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600,
-                    color: p.primary,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _BottomBar extends StatelessWidget {
-  final int stepIndex;
-  final int totalSteps;
-  final bool isSaving;
-  final bool isLastStep;
-  final VoidCallback? onBack;
-  final VoidCallback onNext;
-
-  const _BottomBar({
-    required this.stepIndex,
-    required this.totalSteps,
-    required this.isSaving,
-    required this.isLastStep,
-    required this.onBack,
-    required this.onNext,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final p = Theme.of(context).mhadPalette;
-    return Container(
-      decoration: BoxDecoration(
-        color: p.card,
-        border: Border(top: BorderSide(color: p.border, width: 1)),
-      ),
-      child: SafeArea(
-        top: false,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
-          child: Row(
-            children: [
-              Expanded(
-                child: Semantics(
-                  button: true,
-                  label: onBack != null ? 'Back to step $stepIndex' : 'Back',
-                  child: OutlinedButton.icon(
-                    onPressed: (isSaving || onBack == null) ? null : onBack,
-                    icon: const Icon(Icons.arrow_back, size: 18),
-                    label: const Text('Back'),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Semantics(
-                  button: true,
-                  label: isSaving
-                      ? 'Saving'
-                      : isLastStep
-                          ? 'Finish directive'
-                          : 'Next, go to step ${stepIndex + 2} of $totalSteps',
-                  child: FilledButton.icon(
-                    onPressed: isSaving ? null : onNext,
-                    icon: isSaving
-                        ? SizedBox(
-                            width: 16,
-                            height: 16,
-                            child: Semantics(
-                              label: 'Loading',
-                              child: const CircularProgressIndicator(
-                                  strokeWidth: 2),
-                            ),
-                          )
-                        : Icon(isLastStep ? Icons.check : Icons.arrow_forward,
-                            size: 18),
-                    label: Text(isLastStep ? 'Finish' : 'Next'),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
   }
 }

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mhad/data/educational_content.dart';
+import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/app_drawer.dart';
+import 'package:mhad/ui/widgets/design/editorial_heading.dart';
+import 'package:mhad/ui/widgets/design/section_label.dart';
 
 class EducationScreen extends StatefulWidget {
   /// If set, only show sections matching these IDs (deep-link from wizard Help).
@@ -84,6 +87,34 @@ class _EducationScreenState extends State<EducationScreen> {
       ),
       body: Column(
         children: [
+          if (!isFiltered)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(22, 8, 22, 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SectionLabel('Education'),
+                  Builder(builder: (context) {
+                    final p = Theme.of(context).mhadPalette;
+                    return EditorialHeading(
+                      textSpan: TextSpan(
+                        children: [
+                          const TextSpan(text: 'Understand '),
+                          TextSpan(
+                            text: 'before',
+                            style: TextStyle(color: p.primary),
+                          ),
+                          const TextSpan(text: ' you sign.'),
+                        ],
+                      ),
+                      size: 38,
+                      height: 1.05,
+                      letterSpacing: -0.8,
+                    );
+                  }),
+                ],
+              ),
+            ),
           if (!isFiltered)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),

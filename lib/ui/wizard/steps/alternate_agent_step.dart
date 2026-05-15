@@ -8,9 +8,14 @@ import 'package:mhad/ui/wizard/widgets/wizard_help_button.dart';
 import 'package:mhad/ui/wizard/wizard_step_mixin.dart';
 
 class AlternateAgentStep extends ConsumerStatefulWidget {
-  const AlternateAgentStep({required this.directiveId, super.key});
+  const AlternateAgentStep({
+    required this.directiveId,
+    this.embedded = false,
+    super.key,
+  });
 
   final int directiveId;
+  final bool embedded;
 
   @override
   ConsumerState<AlternateAgentStep> createState() => _AlternateAgentStepState();
@@ -100,7 +105,12 @@ class _AlternateAgentStepState
     return Form(
       key: _formKey,
       child: ListView(
-          padding: const EdgeInsets.all(16),
+          shrinkWrap: widget.embedded,
+          physics:
+              widget.embedded ? const NeverScrollableScrollPhysics() : null,
+          padding: widget.embedded
+              ? const EdgeInsets.symmetric(horizontal: 4)
+              : const EdgeInsets.all(16),
           children: [
             WizardHelpButton(helpText: helpText, stepId: 'alternateAgent'),
             const SizedBox(height: 8),
