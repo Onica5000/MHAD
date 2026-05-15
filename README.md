@@ -115,3 +115,4 @@ This project is provided as-is for public benefit. See the in-app disclaimer and
 ## Contributing
 
 Issues and pull requests are welcome. Please read the in-app disclaimer before contributing — all content related to PA Act 194 must be sourced verbatim from official documents.
+
