@@ -153,10 +153,15 @@ class MhadAppDrawer extends ConsumerWidget {
                     trailing: aiReady
                         ? _ReadyBadge(color: p.primary)
                         : _SetupBadge(color: p.primary),
-                    active: currentRoute == AppRoutes.aiSetup,
+                    active: currentRoute == AppRoutes.assistant ||
+                        currentRoute == AppRoutes.aiSetup,
                     onTap: () {
                       Navigator.of(context).pop();
-                      context.push(AppRoutes.aiSetup);
+                      if (aiReady) {
+                        context.push(AppRoutes.assistant);
+                      } else {
+                        context.push(AppRoutes.aiSetup);
+                      }
                     },
                   ),
                   Padding(
