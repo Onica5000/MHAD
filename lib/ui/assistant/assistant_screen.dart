@@ -10,6 +10,7 @@ import 'package:mhad/constants.dart';
 import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/services/gemini_rate_tracker.dart';
 import 'package:mhad/ui/router.dart';
+import 'package:mhad/ui/widgets/design/bottom_nav.dart';
 import 'package:mhad/ui/widgets/ai_consent_dialog.dart';
 import 'package:mhad/ui/widgets/friendly_error.dart';
 
@@ -191,6 +192,7 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
         false;
 
     return Scaffold(
+      bottomNavigationBar: const MhadBottomNav(),
       appBar: AppBar(
         title: Row(
           children: [

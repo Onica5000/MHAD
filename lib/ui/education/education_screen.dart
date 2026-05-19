@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mhad/data/educational_content.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
-import 'package:mhad/ui/widgets/design/app_drawer.dart';
+import 'package:mhad/ui/widgets/design/bottom_nav.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 
@@ -52,7 +52,7 @@ class _EducationScreenState extends State<EducationScreen> {
         widget.filterIds != null && widget.filterIds!.isNotEmpty;
 
     return Scaffold(
-      drawer: isFiltered ? null : const MhadAppDrawer(),
+      bottomNavigationBar: isFiltered ? null : const MhadBottomNav(),
       appBar: AppBar(
         title: Text(isFiltered ? 'Help' : 'Education & Resources'),
         actions: [

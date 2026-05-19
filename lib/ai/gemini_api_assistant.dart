@@ -24,6 +24,12 @@ class GeminiApiAssistant implements AiAssistant {
   /// Maximum input tokens for Gemini 2.5 Flash (1M context window).
   static const maxContextTokens = 1048576;
 
+  /// PII-stripping chokepoint applied to every outbound user payload before
+  /// it reaches Google. Centralised here so tests can pin the contract and
+  /// callers cannot accidentally bypass [PiiStripper].
+  @visibleForTesting
+  static String sanitizeForApi(String input) => PiiStripper.strip(input);
+
   /// Estimate the total input tokens for a chat request.
   /// Returns (systemTokens, historyTokens, messageTokens, totalTokens).
   ({int system, int history, int message, int total}) estimateTokens({
@@ -67,8 +73,8 @@ class GeminiApiAssistant implements AiAssistant {
 
     final chat = model.startChat(history: chatHistory);
 
-    // Strip PII before sending to external API
-    final sanitizedMessage = PiiStripper.strip(userMessage);
+    // Strip PII before sending to external API (V4-L15 chokepoint).
+    final sanitizedMessage = sanitizeForApi(userMessage);
 
     // Retry transient failures with increasing backoff
     const maxAttempts = 3;

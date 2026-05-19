@@ -4,6 +4,11 @@
 *.pyc
 *.swp
 
+# Local design-handoff archives (the extracted folders are tracked as the
+# canonical design reference; the zips are just transit copies).
+MHAD.zip
+MHAD-handoff.zip
+
 # Android release signing
 android/key.properties
 *.jks

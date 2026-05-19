@@ -1,118 +1,153 @@
 # PA Mental Health Advance Directive (MHAD)
 
-A free, open-source app for creating, managing, and exporting Pennsylvania Mental Health Advance Directives under [PA Act 194 of 2004](https://www.legis.state.pa.us/cfdocs/legis/li/uconsCheck.cfm?yr=2004&sessInd=0&act=194).
+A free, open-source app for creating, managing, and exporting Pennsylvania Mental Health Advance Directives under [PA Act 194 of 2004](https://www.legis.state.pa.us/cfdocs/legis/li/uconsCheck.cfm?yr=2004&sessInd=0&act=194) (codified at [20 Pa.C.S. Ch. 58](https://www.palegis.us/statutes/consolidated/view-statute?iFrame=true&txtType=HTM&ttl=20&div=0&chpt=58)).
 
-**Try it now:** [https://onica5000.github.io/MHAD/](https://onica5000.github.io/MHAD/)
+**Try it on the web:** [https://onica5000.github.io/MHAD/](https://onica5000.github.io/MHAD/)
 
 ## What is a Mental Health Advance Directive?
 
-A Mental Health Advance Directive (MHAD) lets you document your mental health treatment preferences in advance, so they are honored if you are ever unable to make decisions for yourself. Under Pennsylvania law, you can:
+A Mental Health Advance Directive (MHAD) lets you document your mental-health treatment preferences in advance, so they are honored if you are ever unable to make decisions for yourself. Under Pennsylvania law, you can:
 
-- Specify which treatments, medications, and facilities you prefer or want to avoid
-- Designate an agent (healthcare proxy) to make mental health decisions on your behalf
-- Nominate a guardian in case a court ever appoints one
+- Specify which treatments, medications, and facilities you prefer or want to avoid.
+- Designate an agent (healthcare proxy) to make mental-health decisions on your behalf (POA / Combined forms).
+- Nominate a guardian in case a court ever appoints one.
 
-The directive is valid for **2 years** and requires **two adult witnesses** to be legally binding.
+The directive is valid for **2 years** and must be signed in the presence of **two adult witnesses** to be legally binding.
+
+The app supports all three PA Act 194 form types: **Combined Declaration + Power of Attorney**, **Declaration Only**, and **Power of Attorney Only**.
 
 ## Features
 
-- **14-step guided wizard** for Combined, Declaration, and Power of Attorney form types
-- **AI assistant** (Google Gemini) for guided help, field suggestions, and document import
-- **PDF generation** with pixel-perfect layout matching the official PA MHAD forms
-- **Encrypted storage** (SQLCipher AES-256) with biometric/passcode authentication
-- **Public mode** for one-time use without saving data permanently
-- **Educational content** sourced verbatim from the PA MHAD booklet (FAQ, glossary, checklists)
-- **Wallet card** generator, QR code, NFC tag writing, and FHIR JSON export
-- **Voice dictation** for hands-free form entry
-- **Document import** with AI-powered extraction from photos, PDFs, and text files
-- **Crisis resources** banner with 988 Suicide & Crisis Lifeline on every screen
+- **9-step guided wizard** (consolidated from the original 15) that adapts per form type — `About you`, `When this kicks in`, `People I trust` (POA/Combined only), `If a court appoints a guardian`, `Where I want care`, `Medications`, `Procedures & research`, `Anything else`, `Review & sign`.
+- **Editorial visual design** based on a Claude-Design HTML/CSS handoff — Instrument Serif italic display, DM Sans body, JetBrains Mono labels (all three font families bundled, no runtime fetch).
+- **Navigation tuned to the prototype:** a floating pill **bottom nav** on mobile (Home · Learn · Ask · Settings) and a persistent **WebSidebar** on wide screens (≥1000px). No hamburger drawer.
+- **AI assistant** (Google Gemini 2.5 Flash) for guided help, smart-fill suggestions, and document import — entirely optional, with per-session affirmative consent and PII-stripping at a single named chokepoint (`GeminiApiAssistant.sanitizeForApi`).
+- **PDF generation** with coordinate-based, pixel-faithful layout matching the official PA MHAD forms.
+- **Encrypted storage** (SQLCipher AES-256) in Private Mode, with biometric / passcode unlock and a device-secure-keystore-backed key. Public Mode keeps everything in memory only.
+- **Educational content** sourced verbatim from the PA MHAD booklet (FAQ, glossary, instructions), framed around the research-validated *facilitated PAD* approach.
+- **Crisis-availability tooling** addressing the "transmitter/receiver problem": wallet card generator, QR code, NFC tag writing, FHIR JSON export, and a post-wizard checklist for distributing copies and making the directive findable in a crisis.
+- **988 Suicide & Crisis Lifeline** persistent on every screen.
 
 ## Platforms
 
 | Platform | Status | Notes |
 |----------|--------|-------|
-| **Web** | Available now | [onica5000.github.io/MHAD](https://onica5000.github.io/MHAD/) |
+| **Web** | Available now | [onica5000.github.io/MHAD](https://onica5000.github.io/MHAD/) — public mode only |
 | **Android** | Builds locally | APK available |
-| **Windows** | Builds locally | .exe available |
-| **iOS** | Compiles on CI | Requires Apple Developer account for distribution |
-| **macOS** | Compiles on CI | Requires Apple Developer account for notarization |
+| **Windows** | Builds locally | `.exe` available |
+| **iOS** | Compiles on CI (Codemagic) | Requires Apple Developer account for distribution |
+| **macOS** | Compiles on CI (Codemagic) | Requires Apple Developer account for notarization |
 
-## Privacy & Security
+## Privacy, security, and legal posture
 
-- **All data is stored locally** on your device. Nothing is sent to any server for storage.
-- **No analytics, no tracking, no cookies, no ads.** The only external connections are Google Gemini API (optional, user-initiated) and NIH/NLM medication lookup (user-initiated).
-- **AI features are optional.** The app works fully without them.
-- **PII stripping** automatically removes personal information before sending text to the AI.
-- **Per-session AI consent** is required before any data is sent to Google.
-- **Public mode** holds data in memory only (or browser storage on web) and can be erased at any time.
-- **Private mode** encrypts data with SQLCipher (AES-256) and requires biometric or passcode authentication.
-- This app is **NOT HIPAA-compliant** and is intended for personal use only.
+- **Local-first.** All directive data stays on your device. There is no app server, no cloud sync, no developer-side copy.
+- **No analytics, no tracking, no cookies, no ads.** The only outbound flows are the **opt-in** Google Gemini AI feature and NIH/NLM medication/diagnosis lookups (no PII sent).
+- **Strict TLS + certificate pinning** on the Gemini path; **SQLCipher AES-256** for Private Mode; key in the platform secure keystore.
+- **Per-session affirmative consent** for AI features, with prominent PII warnings.
+- **Public Mode** holds data in memory only and can be erased at any time. **Private Mode** uses encrypted on-device storage with biometric / passcode unlock.
+- This app is **not HIPAA-compliant** and is intended for personal use only.
+- The app is designed to comply with the amended **FTC Health Breach Notification Rule** (16 CFR Part 318, eff. 2024-07-29), state consumer-health-data laws (**CA, WA, CT, NV, NY**), and emerging Google Play / Apple platform requirements for health apps. See:
+  - [`PRIVACY_POLICY.md`](./PRIVACY_POLICY.md) — public, non-PDF privacy policy (also rendered in-app).
+  - [`docs/BREACH_PLAN.md`](./docs/BREACH_PLAN.md) — amended-rule breach procedure.
+  - [`docs/THREAT_MODEL.md`](./docs/THREAT_MODEL.md) — OWASP MASVS scope and deliberate deferrals.
+  - [`docs/GAP_ANALYSIS_V4.md`](./docs/GAP_ANALYSIS_V4.md) — current prioritized gap & improvement status (V2/V3 are historical).
 
-## Not Legal or Medical Advice
+## Not legal or medical advice
 
-This app helps you **document** your mental health treatment preferences. It does **not** provide legal advice, medical advice, or create any professional relationship. Consult a licensed attorney for legal questions and a qualified mental health professional for treatment decisions.
+This app helps you **document** your mental-health treatment preferences. It does **not** provide legal advice, medical advice, or create any professional relationship. Consult a licensed PA attorney for legal questions and a qualified mental-health professional for treatment decisions.
 
-For assistance with your rights under PA Act 194, contact:
+For assistance with your rights under PA Act 194:
+
 - **PA Protection & Advocacy:** 1-800-692-7443 (toll-free)
-- **988 Suicide & Crisis Lifeline:** Call or text 988
+- **988 Suicide & Crisis Lifeline:** call or text 988
 
-## Building from Source
+## Building from source
 
 ### Prerequisites
 
-- [Flutter](https://flutter.dev/docs/get-started/install) 3.41.4+
+- [Flutter](https://flutter.dev/docs/get-started/install) 3.41.4+ / Dart 3.11.1+
 - Android SDK (for Android builds)
-- Xcode (for iOS/macOS builds, macOS only)
-- Visual Studio with C++ tools (for Windows builds)
+- Xcode (iOS/macOS builds — macOS only, or via Codemagic CI)
+- Visual Studio with C++ tools (Windows builds)
 
-### Build Commands
+### Build commands
 
 ```bash
-# Get dependencies
 flutter pub get
 
-# Run code generation (after database schema changes)
+# Re-run after any database schema change
 flutter pub run build_runner build --delete-conflicting-outputs
 
-# Build for each platform
-flutter build apk --debug          # Android
-flutter build web                   # Web
-flutter build windows               # Windows
-flutter build ios --no-codesign     # iOS (verification only)
-flutter build macos --debug         # macOS
+# Per-platform builds
+flutter build apk --debug                                # Android (debug)
+flutter build apk --release --obfuscate \
+  --split-debug-info=build/debug-info                    # Android (release, obfuscated)
+flutter build web                                        # Web
+flutter build windows                                    # Windows
+flutter build ios --no-codesign                          # iOS (verification only)
+flutter build macos --debug                              # macOS
+
+# Tests + analysis
+flutter test
+flutter analyze
 ```
 
-### Web Database Files
+### Web database files
 
-The web build requires two files in the `web/` directory (already included):
+The web build requires two files in `web/` (already included):
+
 - `sqlite3.wasm` — SQLite compiled to WebAssembly
 - `drift_worker.js` — Drift database web worker
 
 These are downloaded from the [sqlite3.dart](https://github.com/simolus3/sqlite3.dart/releases) and [drift](https://github.com/simolus3/drift/releases) release pages.
 
-## Tech Stack
+## Tech stack
 
-- **Framework:** Flutter / Dart
+- **Framework:** Flutter / Dart (3.41.4 / 3.11.1)
 - **State management:** Riverpod
 - **Database:** Drift + SQLCipher (encrypted SQLite)
-- **Navigation:** GoRouter
-- **AI:** Google Gemini 2.5 Flash (free tier)
-- **PDF:** pdf + printing packages
-- **Medical data:** NIH/NLM RxTerms and ICD-10-CM APIs
+- **Navigation:** GoRouter (no Scaffold drawer; bottom nav on mobile, sidebar on wide)
+- **AI:** Google Gemini 2.5 Flash (free tier, optional, opt-in)
+- **PDF:** `pdf` + `printing` packages (coordinate-based layout)
+- **Fonts (bundled):** Instrument Serif, DM Sans, JetBrains Mono
+- **Medical reference data:** NIH/NLM RxTerms and ICD-10-CM APIs
+
+## Project layout
+
+```
+lib/
+  ai/                                  -- AiAssistant + GeminiApiAssistant
+  data/
+    database/                          -- Drift schema + generated code
+    repository/                        -- DirectiveRepository
+  domain/model/directive.dart          -- FormType, WizardStep enums
+  ui/
+    disclaimer/                        -- First-launch gate + Settings read-only variant
+    home/, education/, assistant/      -- Top-level destinations
+    wizard/                            -- 9-step consolidated flow
+    export/                            -- PDF, wallet card, QR, FHIR
+    settings/                          -- Settings, AI setup, privacy policy
+    widgets/design/                    -- bottom_nav, web_sidebar, responsive_shell, ...
+docs/                                  -- ACTION_PLAN, BREACH_PLAN, THREAT_MODEL, GAP_ANALYSIS_V4
+PRIVACY_POLICY.md                      -- Public privacy policy source (mirrors in-app)
+MHAD-handoff/                          -- Claude-Design HTML/CSS prototype source (reference)
+```
+
+For deeper architecture and conventions, see [`CLAUDE.md`](./CLAUDE.md).
 
 ## CI/CD
 
 Automated builds via [Codemagic](https://codemagic.io/):
-- **Tests** workflow runs on every push
-- **Build All** workflow compiles Android, iOS, macOS, and Web on tag or release branch
 
-Web deployment is automated via GitHub Actions to GitHub Pages.
+- **Tests** workflow runs on every push.
+- **Build All** workflow compiles Android, iOS, macOS, and Web on tag or release branch.
+
+Web deployment is automated to GitHub Pages via GitHub Actions.
 
 ## License
 
-This project is provided as-is for public benefit. See the in-app disclaimer and privacy policy for terms of use.
+This project is provided as-is for public benefit. See the in-app disclaimer and [`PRIVACY_POLICY.md`](./PRIVACY_POLICY.md) for terms of use.
 
 ## Contributing
 
-Issues and pull requests are welcome. Please read the in-app disclaimer before contributing — all content related to PA Act 194 must be sourced verbatim from official documents.
-
+Issues and pull requests are welcome. Please read the in-app disclaimer before contributing — all content related to PA Act 194 must be sourced verbatim from official documents. New contributors should also skim [`CLAUDE.md`](./CLAUDE.md) (project conventions) and [`docs/GAP_ANALYSIS_V4.md`](./docs/GAP_ANALYSIS_V4.md) (current backlog).

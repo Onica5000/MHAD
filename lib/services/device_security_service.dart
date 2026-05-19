@@ -22,7 +22,16 @@ class DeviceSecurityService {
   Future<void> checkAndWarn(BuildContext context) async {
     if (_hasWarned) return;
 
-    // Skip on desktop / web / debug emulator to avoid false positives
+    // Skip on desktop / web / test host to avoid false positives.
+    //
+    // V4-L14 — Flutter widget tests run on the Dart VM with the host OS
+    // (Windows/macOS/Linux), so `defaultTargetPlatform` is *not* Android/iOS
+    // and `_isMobilePlatform()` already short-circuits this method before
+    // `SafeDevice.isJailBroken` is called. The "Error checking JailBroken
+    // status: MissingPluginException" line that may appear in test output
+    // is logged by the plugin's own native side during plugin registration
+    // and is harmless — there is no Dart-side change that can suppress it
+    // without dropping the dependency.
     if (kIsWeb) return;
     if (!_isMobilePlatform()) return;
 

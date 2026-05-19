@@ -67,6 +67,24 @@ This regenerates `app_database.g.dart`.
 - PII stripping before sending to external API
 - "Not legal advice" disclaimer always shown in UI
 
+## Navigation (current model — no hamburger drawer)
+- **Mobile**: floating pill `MhadBottomNav` (Home · Learn · Ask · Settings) on the four
+  top-level screens. **Wide ≥1000px**: persistent `WebSidebar` via `ResponsiveShell`.
+- `app_drawer.dart` was deleted — do not reintroduce a Scaffold `drawer:`.
+- Secondary destinations (New directive, Export, AI setup, Privacy policy) are reached
+  contextually, not via global nav (mirrors the prototype).
+
+## Localization (single mechanism)
+- Use **only** the generated `AppLocalizations` (ARB files in `lib/l10n/app_*.arb`,
+  `l10n.yaml`). The old `lib/ui/strings.dart` `AppStrings` layer was **deleted** — do
+  not add a parallel string-constants class.
+- Migrate hardcoded UI strings to ARB screen-by-screen; only ship a locale (`es`) for a
+  screen once it is fully covered (partial localization is worse than none).
+
+## Docs
+- Authoritative gap/improvement status: `docs/GAP_ANALYSIS_V4.md` (V2/V3 are historical).
+- Security scope/threat model: `docs/THREAT_MODEL.md`. Breach process: `docs/BREACH_PLAN.md`.
+
 ## Multi-Platform
 - Platform utility: `lib/utils/platform_utils.dart` (safe checks for web)
 - Conditional imports: `_native.dart` / `_web.dart` / `_stub.dart` pattern
@@ -79,4 +97,4 @@ This regenerates `app_database.g.dart`.
 - ConsumerWidget for screens that read Riverpod state
 - StatelessWidget for pure display widgets
 - Providers in separate `providers/` file per feature when they grow large
-- Never hardcode strings that appear in the UI — use a constants file (TODO)
+- Never hardcode UI strings — use the generated `AppLocalizations` (see Localization)

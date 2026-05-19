@@ -14,8 +14,8 @@ import 'package:url_launcher/url_launcher.dart';
 ///
 /// Mirrors the prototype's `WebSidebar`: brand mark, primary destinations,
 /// crisis card pinned to the bottom, and a session-mode chip. On narrow
-/// screens the [ResponsiveShell] swaps this out for the standard
-/// [MhadAppDrawer].
+/// screens this is not shown — top-level screens use the floating
+/// `MhadBottomNav` instead.
 class WebSidebar extends ConsumerWidget {
   final String activeRoute;
   const WebSidebar({required this.activeRoute, super.key});

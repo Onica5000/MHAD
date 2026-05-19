@@ -1,5 +1,9 @@
 # PA MHAD Gap Analysis V3 — Legal/Privacy Compliance
 
+> ⚠️ **SUPERSEDED — see `GAP_ANALYSIS_V4.md` (2026-05-19).** The "All V3 items
+> complete" summary is historical. Notably: V3-L19 (PDF password) was *removed*, not
+> "UI-ready"; V3-H3 (PrivacyInfo) was incomplete; V3-M11 covered only WA, not CT/NV/NY.
+
 ## Methodology
 Third-pass analysis focused on:
 - **Legal compliance**: FTC Health Breach Notification Rule, state privacy laws (WA MHMDA, IL HB 1806), UPL risk, FDA guidance

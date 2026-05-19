@@ -16,7 +16,7 @@ import 'package:mhad/ui/home/directive_card.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/onboarding/onboarding_screen.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
-import 'package:mhad/ui/widgets/design/app_drawer.dart';
+import 'package:mhad/ui/widgets/design/bottom_nav.dart';
 import 'package:mhad/ui/widgets/design/design_card.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
@@ -69,7 +69,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     return Scaffold(
       backgroundColor: p.scaffoldBackground,
-      drawer: const MhadAppDrawer(),
+      bottomNavigationBar: const MhadBottomNav(),
       appBar: AppBar(
         title: Row(
           children: [

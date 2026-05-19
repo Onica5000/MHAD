@@ -1,5 +1,7 @@
 # PA MHAD Gap Analysis Implementation Plan
 
+> ⚠️ **Historical — superseded by `GAP_ANALYSIS_V4.md` (2026-05-19).**
+
 ## Status Key: [ ] Todo, [~] In Progress, [x] Done
 
 ---

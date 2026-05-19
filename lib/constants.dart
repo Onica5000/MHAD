@@ -15,3 +15,12 @@ const veteransCrisisPhone = '988';
 
 /// NAMI Helpline (National Alliance on Mental Illness).
 const namiHelpline = '18009506264';
+
+/// Public privacy-policy URL.
+///
+/// Google Play (Jan 2026 health-app rules) requires the privacy policy to be a
+/// publicly accessible web page (no PDFs) at a URL **identical** across the Play
+/// Console, the app, and the developer website. The repo ships `PRIVACY_POLICY.md`
+/// as the source of truth; host it (e.g., GitHub Pages) and update this constant
+/// to the live URL before submission. The in-app screen mirrors the same content.
+const privacyPolicyUrl = 'https://onica5000.github.io/mhad/privacy';

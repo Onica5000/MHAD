@@ -123,35 +123,38 @@ class _DisclaimerScreenState extends State<DisclaimerScreen> {
                               'serif'
                             ],
                             fontStyle: FontStyle.italic,
-                            fontSize: 40,
+                            fontSize: 44,
                             fontWeight: FontWeight.w400,
-                            height: 1.0,
+                            height: 0.98,
                             letterSpacing: -1,
                             color: p.text,
                           ),
                         ),
-                        const SizedBox(height: 10),
-                        Text.rich(
-                          TextSpan(
-                            style: TextStyle(
-                              fontFamily: 'DM Sans',
-                              fontSize: 13.5,
-                              color: p.textMuted,
-                              height: 1.5,
-                            ),
-                            children: [
-                              const TextSpan(
-                                  text:
-                                      "Read carefully — these confirm what this app does and doesn't do under "),
-                              TextSpan(
-                                text: 'PA Act 194',
-                                style: TextStyle(
-                                  color: p.text,
-                                  fontWeight: FontWeight.w600,
-                                ),
+                        const SizedBox(height: 8),
+                        ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 340),
+                          child: Text.rich(
+                            TextSpan(
+                              style: TextStyle(
+                                fontFamily: 'DM Sans',
+                                fontSize: 14,
+                                color: p.textMuted,
+                                height: 1.5,
                               ),
-                              const TextSpan(text: '.'),
-                            ],
+                              children: [
+                                const TextSpan(
+                                    text:
+                                        "Read carefully — these confirm what this app does and doesn't do under "),
+                                TextSpan(
+                                  text: 'PA Act 194',
+                                  style: TextStyle(
+                                    color: p.text,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                const TextSpan(text: '.'),
+                              ],
+                            ),
                           ),
                         ),
                         const SizedBox(height: 14),
@@ -197,11 +200,33 @@ class _DisclaimerScreenState extends State<DisclaimerScreen> {
                     ),
                   ),
 
-                  // Sections list (scrollable)
+                  // Sections list (scrollable). Bottom 24px fades to the
+                  // scaffold — matches the prototype's maskImage gradient
+                  // (linear-gradient(to bottom, black calc(100% - 24px),
+                  // transparent)).
                   Expanded(
-                    child: ListView(
-                      padding: const EdgeInsets.fromLTRB(22, 0, 22, 24),
-                      children: [
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        final fadeStop = constraints.maxHeight <= 0
+                            ? 1.0
+                            : (1 - 24 / constraints.maxHeight)
+                                .clamp(0.0, 1.0);
+                        return ShaderMask(
+                          shaderCallback: (rect) => LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            stops: [0, fadeStop, 1],
+                            colors: const [
+                              Colors.black,
+                              Colors.black,
+                              Colors.transparent,
+                            ],
+                          ).createShader(rect),
+                          blendMode: BlendMode.dstIn,
+                          child: ListView(
+                            padding:
+                                const EdgeInsets.fromLTRB(22, 0, 22, 24),
+                            children: [
                         _ShortVersionBanner(),
                         const SizedBox(height: 14),
                         for (int i = 0; i < sections.length; i++) ...[
@@ -258,7 +283,10 @@ class _DisclaimerScreenState extends State<DisclaimerScreen> {
                             ),
                           ),
                         ),
-                      ],
+                            ],
+                          ),
+                        );
+                      },
                     ),
                   ),
 
@@ -281,8 +309,8 @@ class _DisclaimerScreenState extends State<DisclaimerScreen> {
               // has its own AppBar and the route is already private).
               if (!readOnly)
                 Positioned(
-                  top: 8,
-                  right: 12,
+                  top: 12,
+                  right: 16,
                   child: _Need988Pill(
                     bg: dark
                         ? SemanticColors.errorBgDark
@@ -708,11 +736,15 @@ class _AccordionSection extends StatelessWidget {
             color: Colors.transparent,
             child: InkWell(
               onTap: onTap,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 14, vertical: 14),
+              child: SizedBox(
+                // Fixed accordion-header height ≥ 48 for the a11y guideline.
+                // The visible content (number + title + chevron) is centered
+                // within it, matching the prototype's tight header look.
+                height: 56,
+                child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 14),
                 child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(
                       width: 30,
@@ -734,7 +766,7 @@ class _AccordionSection extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 4),
+                    const SizedBox(width: 12),
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.only(top: 2),
@@ -754,16 +786,17 @@ class _AccordionSection extends StatelessWidget {
                       duration: const Duration(milliseconds: 200),
                       turns: expanded ? 0.5 : 0,
                       child: Icon(Icons.keyboard_arrow_down,
-                          size: 22, color: p.textMuted),
+                          size: 18, color: p.textMuted),
                     ),
                   ],
                 ),
+              ),
               ),
             ),
           ),
           if (expanded)
             Padding(
-              padding: const EdgeInsets.fromLTRB(48, 0, 18, 16),
+              padding: const EdgeInsets.fromLTRB(56, 0, 18, 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: body,
@@ -887,7 +920,12 @@ class _Need988Pill extends StatelessWidget {
         child: InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(100),
-          child: Container(
+          // 48px tap target around the ~29px visible pill (a11y guideline).
+          child: SizedBox(
+            height: 48,
+            child: Center(
+              widthFactor: 1,
+              child: Container(
             padding:
                 const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             decoration: BoxDecoration(
@@ -909,6 +947,8 @@ class _Need988Pill extends StatelessWidget {
                   ),
                 ),
               ],
+            ),
+          ),
             ),
           ),
         ),
@@ -951,7 +991,7 @@ class _AcceptFooter extends StatelessWidget {
           ),
         ],
       ),
-      padding: const EdgeInsets.fromLTRB(18, 14, 18, 16),
+      padding: const EdgeInsets.fromLTRB(18, 14, 18, 28),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -1040,7 +1080,9 @@ class _CheckRow extends StatelessWidget {
         onTap: onToggle,
         borderRadius: BorderRadius.circular(8),
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
+          // Vertical 14 (≈ 22 + 28 = 50) keeps the row ≥ 48 for a11y while
+          // staying close to the prototype's tight checkbox row.
+          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 4),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

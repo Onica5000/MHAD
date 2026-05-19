@@ -7,7 +7,7 @@ import 'package:mhad/ui/disclaimer/disclaimer_screen.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/theme/theme_controller.dart';
-import 'package:mhad/ui/widgets/design/app_drawer.dart';
+import 'package:mhad/ui/widgets/design/bottom_nav.dart';
 import 'package:mhad/ui/widgets/design/design_card.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
@@ -31,7 +31,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
     return Scaffold(
       backgroundColor: p.scaffoldBackground,
-      drawer: const MhadAppDrawer(),
+      bottomNavigationBar: const MhadBottomNav(),
       appBar: AppBar(),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(22, 4, 22, 24),

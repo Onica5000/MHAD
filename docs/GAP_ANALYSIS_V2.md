@@ -1,5 +1,11 @@
 # PA MHAD Gap Analysis V2 — Research-Based
 
+> ⚠️ **SUPERSEDED — see `GAP_ANALYSIS_V4.md` (2026-05-19).** V2/V3 declared all gaps
+> closed; that is no longer accurate. Regulations changed after V2/V3 (FTC HBNR
+> amendments, CT/NV/NY health-data laws, Google Play Jan-2026 health rules, Apple
+> Nov-2025 third-party-AI rule) and several "done" items drifted in code. Treat the
+> "complete" summaries below as historical, not current.
+
 ## Methodology
 This analysis combines:
 - **Online research**: PA Act 194 statutory text, SAMHSA/NAMI guidelines, MHAD app best practices, Flutter security/accessibility standards, app store policies, legal/privacy compliance

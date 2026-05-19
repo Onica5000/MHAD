@@ -9,7 +9,6 @@ import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/services/web_session_cache.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
-import 'package:mhad/ui/widgets/design/app_drawer.dart';
 import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
 import 'package:mhad/ui/widgets/design/step_dots.dart';
 import 'package:mhad/ui/widgets/design/step_head.dart';
@@ -147,7 +146,6 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
             await _saveAndExit(context);
           },
           child: Scaffold(
-            drawer: const MhadAppDrawer(),
             appBar: AppBar(
               title: Text(currentStep.displayName),
               backgroundColor: p.card,

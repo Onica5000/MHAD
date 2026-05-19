@@ -75,6 +75,30 @@ const _introduction = [
         'your advance directive and answers to frequently asked questions.',
   ),
   EducationSection(
+    id: 'intro_why_take_your_time',
+    category: EducationCategory.intro,
+    title: 'Why taking your time pays off',
+    content:
+        'Research on psychiatric advance directives consistently finds that '
+        'people who complete one through a deliberate, guided process — with '
+        'time to think through their crisis history, their preferences, and '
+        'who they trust to speak for them — are far more likely to have a '
+        'directive that is actually used and honored. In one randomised '
+        'study, that kind of guided completion reduced the use of coercive '
+        'interventions (like involuntary hospitalisation) by roughly half '
+        'over the next two years.\n\n'
+        'This app is built around the same idea. The wizard walks you through '
+        'the questions a trained facilitator would ask, the AI assistant is '
+        'there for clarifying explanations (not advice), and the education '
+        'section is open at any step. There is no rush — saving and coming '
+        'back is fine, and revising your directive later is fine too.\n\n'
+        'The most common reason a directive fails is not the document itself '
+        'but that the people treating you cannot find it during a crisis. '
+        'When you finish, the app will show you a checklist for making your '
+        'directive findable: carry the wallet card, share copies with your '
+        'agent and providers, and tell the people around you that it exists.',
+  ),
+  EducationSection(
     id: 'intro_contacts',
     category: EducationCategory.intro,
     title: 'Where to Get Help',

@@ -1,5 +1,18 @@
 # PA Mental Health Advance Directive App -- Action Plan
 
+> ⚠️ **CURRENT-STATE CORRECTIONS (2026-05-19, see `GAP_ANALYSIS_V4.md` V4-M11).**
+> This historical plan has drifted from the code. Authoritative facts:
+> - **AI = Google Gemini** (`lib/ai/gemini_api_assistant.dart`, `google_generative_ai`,
+>   model `gemini-2.5-flash`). *Not* Claude — ignore "Claude"/`ClaudeApiAssistant` below.
+> - **`drift_flutter` is NOT used** (removed — caused a DEX conflict). DB stack is
+>   `drift` + `sqlite3` + `sqlcipher_flutter_libs`.
+> - **Wizard is 9 consolidated steps** (was 15); old granular step files are composed
+>   as sections inside the merged steps.
+> - **Navigation**: floating bottom nav on mobile + `WebSidebar` on wide (≥1000px).
+>   There is **no hamburger drawer** (`app_drawer.dart` was deleted).
+> - Phase 3/7 checkboxes below are stale — most features exist; test coverage is the
+>   real gap (see V4-H6).
+
 ## Document Summary
 
 The source PDF (PA MHAD.pdf, 47 meaningful pages) is a Pennsylvania Mental Health Advance Directive booklet (PA Act 194 of 2004) containing:
@@ -19,7 +32,7 @@ Each form collects: personal info, agent/alternate agent designation, treatment 
 - **Cross-platform** via Flutter/Dart targeting Android and iOS
   - Android builds on Windows locally
   - iOS builds via Codemagic CI (macOS runner) — no Mac required for development
-- **External AI API** (Claude) with an abstraction layer (`AiAssistant` interface) to swap in on-device inference later
+- **External AI API** (Google Gemini, `gemini-2.5-flash`) behind an `AiAssistant` interface to swap in on-device inference later
 - **Pixel-perfect PDF reproduction** with only dynamic expansion of text areas where user content exceeds the original allotted space
 - **All three form types** from day one
 - **User-controlled print scope**: choose any combination of forms to include in the final PDF output, regardless of how much data was entered

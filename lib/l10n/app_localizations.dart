@@ -389,7 +389,7 @@ abstract class AppLocalizations {
   /// No description provided for @saveAndExitMessage.
   ///
   /// In en, this message translates to:
-  /// **'Your progress on this step will be saved. You can return to continue later.'**
+  /// **'Your progress on this step will be saved. You can return to continue later (Private Mode only).'**
   String get saveAndExitMessage;
 
   /// No description provided for @legalDisclaimer.

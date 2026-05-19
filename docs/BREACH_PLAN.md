@@ -46,46 +46,67 @@ to third-party services:
 
 ## Notification Timeline
 
-Per 16 CFR Part 318:
+Per 16 CFR Part 318 (final rule effective **2024-07-29**):
 
-- **Discovery**: The date the breach is known or reasonably should have been known
-- **FTC notification**: Within 60 calendar days of discovery
-- **Individual notification**: Within 60 calendar days of discovery
-- **If 500+ individuals affected**: Also notify prominent media outlets serving the
-  affected area without unreasonable delay
+- **Discovery**: The date the breach is known or reasonably should have been known.
+- **Individual notification**: Without unreasonable delay, and in no case later than
+  **60 calendar days** after discovery.
+- **FTC notification**:
+  - **< 500 individuals affected**: submit through the FTC online form by the end of
+    the calendar year following discovery.
+  - **≥ 500 individuals affected**: notify the FTC **at the same time** as affected
+    individuals, and in no case later than 60 days after discovery (the amended rule
+    requires *concurrent* FTC notice, not the pre-amendment 10-business-day window).
+- **Media notice (≥ 500 individuals)**: notify prominent media outlets serving the
+  affected area without unreasonable delay, and in no case later than 60 days.
 
-## Notification Content (per 16 CFR 318.5)
+## Notification Content (per amended 16 CFR 318.5)
 
 All breach notifications must include:
 
 1. A brief description of the breach, including the date(s) of the breach and the
-   date of discovery
-2. A description of the types of unsecured identifiable health information involved
-   in the breach (e.g., treatment preferences, medication names, personal identifiers)
-3. Steps individuals should take to protect themselves from potential harm resulting
-   from the breach
-4. A brief description of what the company is doing to investigate the breach,
-   mitigate harm, and prevent future breaches
-5. Contact information for individuals to ask questions, including a toll-free phone
-   number, email address, website, or postal address
+   date of discovery.
+2. A description of the types of unsecured PHR-identifiable health information involved
+   (e.g., treatment preferences, medication names, personal identifiers).
+3. **The full name or identity** (or, where impossible, a description) of any **third
+   party** that acquired the PHR-identifiable health information as a result of the
+   breach. *(Added by the 2024 amendments — required, not optional.)*
+4. Steps individuals should take to protect themselves from potential harm.
+5. A brief description of what the **notifying entity is doing to protect the affected
+   individuals** (e.g., revoking API keys, issuing an app update, recommended user
+   actions). *(Strengthened by the 2024 amendments.)*
+6. A brief description of what the company is doing to investigate the breach and
+   prevent future breaches.
+7. **Contact procedures**: must include **at least two** of the following — toll-free
+   phone number, email address, website, **in-app notice**, or postal address. *(The
+   2024 amendments expressly added "in-app" as a permissible contact method, which is
+   the realistic primary channel for this local-first app.)*
 
 ## Notification Methods
 
+Because the app is local-first and stores no contact information server-side, the
+**primary channel is in-app notice** (a full-screen blocker banner shown on next
+launch). The other channels are used to the extent we have addresses for affected
+users (e.g., people who voluntarily contacted us, or via Google for the Gemini path).
+
 **Individuals (fewer than 500 affected):**
+- **In-app notice** (primary), AND
 - Email to the individual's last known email address (if available), OR
-- First-class mail to the individual's last known postal address
+- First-class mail to the individual's last known postal address.
 - If contact info is insufficient for 10 or more individuals: conspicuous posting
-  on the app's website/landing page for 90 days
+  on the privacy-policy URL (`PRIVACY_POLICY.md` hosted page) for 90 days.
 
 **Individuals (500 or more affected):**
-- Same as above, PLUS
-- Notify prominent media outlets serving the state of Pennsylvania
+- All of the above, PLUS
+- Notify prominent media outlets serving the state of Pennsylvania.
 
 **FTC:**
-- Submit breach report via https://www.ftc.gov/healthbreachnotification
-- Include all required content listed above
-- Submit within 60 days of discovery (or 10 business days if 500+ affected,
-  per the updated 2024 rule)
+- Submit breach report via <https://www.ftc.gov/healthbreachnotification>.
+- Include all required content listed above (including the *third-party identity*
+  field and at least two contact methods).
+- **< 500 affected**: by the end of the calendar year following discovery.
+- **≥ 500 affected**: **concurrent** with individual notice, no later than 60 days
+  after discovery.
 
 ## Response Procedure
 
@@ -159,3 +180,4 @@ This plan should be reviewed:
 | Version | Date       | Changes                          |
 |---------|------------|----------------------------------|
 | 1.0     | 2026-03-16 | Initial breach notification plan |
+| 1.1     | 2026-05-19 | Updated to amended 16 CFR Part 318 (eff. 2024-07-29): concurrent FTC notice for ≥500, third-party-identity content field, ≥2 contact methods incl. in-app, "protecting affected individuals" content strengthened. (V4-H3.) |

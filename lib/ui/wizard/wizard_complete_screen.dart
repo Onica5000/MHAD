@@ -245,6 +245,18 @@ class _WizardCompleteScreenState extends ConsumerState<WizardCompleteScreen> {
                   description:
                       'Give copies to your agent, doctor, hospital, family, '
                       'and anyone who may need it in a crisis.',
+                ),
+                _NextStep(
+                  number: '5',
+                  title: 'Make it findable in a crisis',
+                  description:
+                      'A directive only helps if the people treating you can '
+                      'find it. Carry the wallet card on your person, photograph '
+                      'your signed copy on your phone, and tell your agent, '
+                      'closest contacts, and primary providers that the '
+                      'directive exists and where the originals are. PA does '
+                      'not maintain a state MHAD registry — custody by you, '
+                      'your agent, and your providers is the only mechanism.',
                   isLast: true,
                 ),
               ],

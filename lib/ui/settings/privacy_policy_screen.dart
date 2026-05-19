@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mhad/constants.dart';
 import 'package:mhad/ui/router.dart';
-import 'package:mhad/ui/widgets/design/app_drawer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /// In-app privacy policy accessible from settings and disclaimer screen.
 class PrivacyPolicyScreen extends StatelessWidget {
@@ -20,7 +22,6 @@ class PrivacyPolicyScreen extends StatelessWidget {
         ?.copyWith(fontWeight: FontWeight.w600);
 
     return Scaffold(
-      drawer: const MhadAppDrawer(),
       appBar: AppBar(title: const Text('Privacy Policy')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
@@ -30,8 +31,16 @@ class PrivacyPolicyScreen extends StatelessWidget {
             Text('PA MHAD App Privacy Policy', style: headingStyle),
             const SizedBox(height: 4),
             Text(
-              'Last updated: March 2026 (v1.0.0)',
+              'Last updated: May 2026 (v1.1)',
               style: bodyStyle?.copyWith(color: cs.onSurfaceVariant),
+            ),
+            const SizedBox(height: 8),
+            // Public, non-PDF URL — required by Google Play Jan 2026 health-app
+            // rules. The hosted page mirrors this in-app content.
+            OutlinedButton.icon(
+              icon: const Icon(Icons.open_in_new, size: 16),
+              label: const Text('View this policy online'),
+              onPressed: () => _openPolicyUrl(context),
             ),
             const SizedBox(height: 16),
 
@@ -140,23 +149,34 @@ class PrivacyPolicyScreen extends StatelessWidget {
             ),
 
             _PolicySection(
-              title: 'US State Privacy Compliance (CCPA / MHMDA)',
+              title: 'US State Consumer Health Data Laws (CA, WA, CT, NV, NY)',
               body:
-                  'This app may be subject to state consumer health data '
-                  'privacy laws, including California\'s CCPA/CPRA and '
-                  'Washington\'s My Health My Data Act (MHMDA).\n\n'
-                  'Under these laws: (1) We collect mental health treatment '
-                  'preference data solely for the purpose of creating your '
-                  'advance directive. (2) We do not sell your health data. '
-                  '(3) Data shared with Google\'s AI service requires your '
-                  'explicit per-session consent. (4) You may delete all '
-                  'locally stored data at any time via the \'Delete All Data\' '
-                  'option in the app menu.\n\n'
-                  'This app does not use cookies, tracking pixels, analytics '
-                  'SDKs, or any form of behavioral tracking. No cookie '
-                  'consent banner is needed because no cookies are set.\n\n'
+                  'This app may be subject to state consumer-health-data '
+                  'privacy laws including California (CCPA/CPRA), Washington '
+                  '(My Health My Data Act / MHMDA), Connecticut (CTDPA health '
+                  'provisions), Nevada (SB 370), and New York (Health '
+                  'Information Privacy Act).\n\n'
+                  'Mental-health-directive content is "consumer health data" '
+                  'under each of these laws. Under all of them: (1) We collect '
+                  'mental-health treatment-preference data **solely** to help '
+                  'you create your advance directive. (2) We **do not sell** '
+                  'your health data — there is no commercial recipient. '
+                  '(3) The only third party that may receive any of your text '
+                  'is Google (Gemini API), and **only** if you affirmatively '
+                  'opt in to AI features each session. (4) We use no '
+                  'third-party SDKs, no analytics, no advertising frameworks, '
+                  'no tracking pixels or cookies. (5) You may delete all '
+                  'locally stored data at any time via "Delete All Data" in '
+                  'the app menu.\n\n'
+                  'Washington MHMDA includes a **private right of action**; '
+                  'we have designed the app to require explicit, per-session '
+                  'consent before any third-party transfer of consumer health '
+                  'data, and we treat written consent as conditional on the '
+                  'specific terms shown in the AI consent dialog.\n\n'
                   'For questions about your privacy rights, contact the '
-                  'developer through the app store listing.',
+                  'developer using the channels listed in the Contact section '
+                  'below (multiple methods are provided per the FTC Health '
+                  'Breach Notification Rule).',
               headingStyle: headingStyle,
               bodyStyle: bodyStyle,
             ),
@@ -262,8 +282,15 @@ class PrivacyPolicyScreen extends StatelessWidget {
             _PolicySection(
               title: 'Contact',
               body:
-                  'For questions about this privacy policy or the app, contact '
-                  'the developer through the app store listing.',
+                  'You can reach the developer through any of the following '
+                  '(the FTC Health Breach Notification Rule requires at least '
+                  'two contact methods — we provide three):\n\n'
+                  '  - In-app: an in-app breach notice will be shown on next '
+                  'launch if a breach affects you.\n'
+                  '  - Online: $privacyPolicyUrl (also used for breach '
+                  'postings if direct contact information is insufficient).\n'
+                  '  - App store listing: the developer support address shown '
+                  'on the Google Play / App Store product page.',
               headingStyle: headingStyle,
               bodyStyle: bodyStyle,
             ),
@@ -280,6 +307,20 @@ class PrivacyPolicyScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+Future<void> _openPolicyUrl(BuildContext context) async {
+  final uri = Uri.parse(privacyPolicyUrl);
+  final ok =
+      await canLaunchUrl(uri) && await launchUrl(uri, mode: LaunchMode.externalApplication);
+  if (!ok && context.mounted) {
+    await Clipboard.setData(const ClipboardData(text: privacyPolicyUrl));
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Privacy policy URL copied to clipboard.')),
+      );
+    }
   }
 }
 

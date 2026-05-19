@@ -38,7 +38,11 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
   bool _includeNotes = false;
   bool _isGenerating = false;
 
-  // (Password protection removed — pdf package does not support encryption)
+  // The `pdf` Dart package does not support native PDF encryption, so the
+  // file produced here is unprotected by design. We compensate at the UX
+  // layer: a persistent banner above the share button + a one-time-per-
+  // session acknowledgement before the first share (V4-M8).
+  static bool _unprotectedAcked = false;
 
   // Loaded directive data
   Directive? _directive;
@@ -154,6 +158,40 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         ),
       );
       if (proceed != true || !mounted) return;
+    }
+
+    // V4-M8 — one-time-per-session unprotected-file acknowledgement. The PDF
+    // contains full directive PII and is shared via the OS share sheet with
+    // no built-in encryption. Users must be told plainly, once.
+    if (!_unprotectedAcked) {
+      final ackd = await showDialog<bool>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          icon: const Icon(Icons.lock_open_outlined, size: 32),
+          title: const Text('Exported file is not encrypted'),
+          content: const Text(
+            'The PDF you are about to share contains your full mental-health '
+            'directive (names, agents, medications, signatures). It is '
+            'generated unencrypted because the underlying PDF library does '
+            'not support password protection.\n\n'
+            'Share only via channels you trust (e.g., direct hand-off, a '
+            'secure email to a specific provider). Avoid public uploads, '
+            'cloud links, or untrusted messaging apps.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx, false),
+              child: const Text('Cancel'),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(ctx, true),
+              child: const Text('I understand, continue'),
+            ),
+          ],
+        ),
+      );
+      if (ackd != true || !mounted) return;
+      _unprotectedAcked = true;
     }
 
     setState(() => _isGenerating = true);
@@ -564,9 +602,37 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
             ),
           ),
           const SizedBox(height: 8),
+          // V4-M8 — persistent banner: the PDF is unencrypted by design.
+          Container(
+            margin: const EdgeInsets.only(bottom: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.errorContainer,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(Icons.lock_open_outlined,
+                    size: 18,
+                    color: Theme.of(context).colorScheme.onErrorContainer),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    'The exported PDF is not encrypted. Share only via '
+                    'channels you trust.',
+                    style: TextStyle(
+                      fontSize: 12.5,
+                      color: Theme.of(context).colorScheme.onErrorContainer,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
           Semantics(
             button: true,
-            label: 'Share or print the PDF directive',
+            label: 'Share or print the PDF directive (unencrypted file)',
             child: OutlinedButton.icon(
               onPressed: _isGenerating ? null : _generateAndShare,
               icon: const Icon(Icons.share),

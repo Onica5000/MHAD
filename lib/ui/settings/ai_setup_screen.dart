@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/providers/assistant_providers.dart';
-import 'package:mhad/ui/widgets/design/app_drawer.dart';
+import 'package:mhad/ui/widgets/design/bottom_nav.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// Full-screen setup for the Gemini API key with step-by-step instructions.
@@ -133,7 +132,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
         false;
 
     return Scaffold(
-      drawer: const MhadAppDrawer(),
+      bottomNavigationBar: const MhadBottomNav(),
       appBar: AppBar(
         title: const Text('AI Assistant Setup'),
         actions: [
