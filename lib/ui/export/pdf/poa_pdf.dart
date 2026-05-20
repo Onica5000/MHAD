@@ -16,7 +16,9 @@ List<pw.Page> buildPoaPages({
   required List<WitnessesData> witnesses,
   List<DiagnosisEntry> diagnoses = const [],
 }) {
-  const formTitle = 'Mental Health Power of Attorney';
+  final formTitle = directive.status == 'draft'
+      ? 'Mental Health Power of Attorney  ·  DRAFT — UNSIGNED'
+      : 'Mental Health Power of Attorney';
 
   final primaryAgent =
       agents.where((a) => a.agentType == 'primary').firstOrNull;

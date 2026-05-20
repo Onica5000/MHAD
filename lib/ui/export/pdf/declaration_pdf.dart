@@ -15,7 +15,9 @@ List<pw.Page> buildDeclarationPages({
   required List<WitnessesData> witnesses,
   List<DiagnosisEntry> diagnoses = const [],
 }) {
-  const formTitle = 'Mental Health Declaration';
+  final formTitle = directive.status == 'draft'
+      ? 'Mental Health Declaration  ·  DRAFT — UNSIGNED'
+      : 'Mental Health Declaration';
 
   final exceptions =
       medications.where((m) => m.entryType == 'exception').toList();

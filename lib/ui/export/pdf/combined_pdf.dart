@@ -16,7 +16,11 @@ List<pw.Page> buildCombinedPages({
   required List<WitnessesData> witnesses,
   List<DiagnosisEntry> diagnoses = const [],
 }) {
-  const formTitle = 'Combined Declaration & Power of Attorney';
+  // Draft indicator: appended to the header-bar form title (not the big
+  // page-1 form title) so an unsigned export is unmistakable when printed.
+  final formTitle = directive.status == 'draft'
+      ? 'Combined Declaration & Power of Attorney  ·  DRAFT — UNSIGNED'
+      : 'Combined Declaration & Power of Attorney';
 
   final primaryAgent =
       agents.where((a) => a.agentType == 'primary').firstOrNull;

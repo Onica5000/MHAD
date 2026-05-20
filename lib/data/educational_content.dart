@@ -567,6 +567,174 @@ const _faq = [
         'roles. Your agent makes decisions under the power of attorney; a '
         'guardian has broader court-granted authority over personal affairs.',
   ),
+  EducationSection(
+    id: 'faq_revocation_specifics',
+    category: EducationCategory.faq,
+    title: 'How exactly do I revoke my directive?',
+    content:
+        'Under PA Act 194, you can revoke your directive at any time you have '
+        'capacity. Revocation can be done in any of three ways:\n\n'
+        '1. **In writing** — sign and date a written statement saying you are '
+        'revoking the directive. Give a copy to your agent, your providers, '
+        'and anyone who has a copy of the original directive.\n\n'
+        '2. **By destroying the original** — physically tear up, shred, or '
+        'otherwise destroy the original document with the intent to revoke. '
+        'Still tell anyone who has a copy.\n\n'
+        '3. **By executing a new directive** — signing a new directive '
+        'automatically revokes any prior one.\n\n'
+        'Important: notification matters as much as the act of revoking. A '
+        'directive whose revocation you forgot to communicate may still be '
+        'used in good faith by a provider who has the old copy. Always '
+        'notify everyone who has a copy.',
+  ),
+  EducationSection(
+    id: 'faq_agent_disagreement',
+    category: EducationCategory.faq,
+    title: 'What if my agent disagrees with what I wrote?',
+    content:
+        'Your agent is legally required to act on your stated wishes when '
+        'your directive is in effect. Their personal disagreement does not '
+        'authorize them to override your written instructions.\n\n'
+        'Practical advice: have the conversation now, before you are in a '
+        'crisis. Walk through your directive with your agent in person — '
+        'explain why you chose each preference, what experiences led you to '
+        'it, and what "honoring" the directive means in concrete situations '
+        '(medications, ECT, facilities). An agent who has had this '
+        'conversation is far more likely to follow your wishes confidently '
+        'and to advocate for you with providers.\n\n'
+        'If your agent indicates they cannot or will not follow your '
+        'directive, name a different agent (or move them to the alternate '
+        'slot and choose a new primary).',
+  ),
+  EducationSection(
+    id: 'faq_travel_other_states',
+    category: EducationCategory.faq,
+    title: 'What should I do if I travel or move out of Pennsylvania?',
+    content:
+        'A Pennsylvania MHAD is created under PA Act 194 of 2004. Other '
+        'states are not required to honor it the way PA providers are, '
+        'though many states extend "reasonable recognition" to out-of-state '
+        'directives as a matter of clinical practice.\n\n'
+        'If you regularly travel or move between states:\n\n'
+        '• Bring a copy of your PA directive AND a brief cover sheet '
+        'identifying it as a "mental health advance directive under '
+        'Pennsylvania Act 194 of 2004 (20 Pa.C.S. Ch. 58)."\n'
+        '• Carry the wallet card and the names/numbers of your PA agent.\n'
+        '• If you settle in another state, consider executing a new '
+        'directive under that state\'s law in addition to your PA one.\n\n'
+        'For specific cross-border questions, contact PA Protection & '
+        'Advocacy (1-800-692-7443).',
+  ),
+  EducationSection(
+    id: 'faq_provider_refusal',
+    category: EducationCategory.faq,
+    title: 'Can a provider refuse to follow my directive?',
+    content:
+        'A Pennsylvania provider must follow a valid directive in good '
+        'faith. They can decline to provide specific care only if it would '
+        'be medically inappropriate or unavailable — they cannot decline '
+        'simply because they disagree.\n\n'
+        'If a provider believes following your directive would conflict '
+        'with accepted medical standards, they are required to attempt to '
+        'transfer your care to a provider who will follow it. If transfer '
+        'is not possible, the provider must continue to act in your best '
+        'interest while consulting with your agent.\n\n'
+        'If you believe a provider is improperly refusing to follow your '
+        'directive, contact PA Protection & Advocacy (1-800-692-7443) — '
+        'they handle complaints under Act 194.',
+  ),
+  EducationSection(
+    id: 'faq_capacity_restoration',
+    category: EducationCategory.faq,
+    title: 'What happens when I regain capacity?',
+    content:
+        'Your directive automatically suspends when you regain capacity. '
+        'In other words: when you are able to make and communicate your own '
+        'mental-health treatment decisions, those current decisions take '
+        'precedence over any preference written in your directive.\n\n'
+        'When capacity is restored, you can also choose to:\n\n'
+        '• **Revoke** the directive (see the revocation FAQ).\n'
+        '• **Amend** it by executing a new directive that supersedes the '
+        'prior one.\n'
+        '• **Leave it alone** so it is ready the next time it is needed.\n\n'
+        'Capacity determinations are made by qualified clinicians under PA '
+        'Act 194 — typically a physician, certified registered nurse '
+        'practitioner, or psychologist familiar with the patient. The '
+        'determination must be documented in the medical record.',
+  ),
+  EducationSection(
+    id: 'faq_sections_302_303_304_305',
+    category: EducationCategory.faq,
+    title: 'What are sections 302, 303, 304, and 305 (involuntary commitment)?',
+    content:
+        'These are sections of Pennsylvania\'s Mental Health Procedures Act '
+        '(50 P.S. §§ 7301–7306), which governs *involuntary* mental health '
+        'treatment. They are distinct from Act 194 but often come up '
+        'together because a directive may take effect during an involuntary '
+        'admission.\n\n'
+        '• **Section 302** — Emergency examination and treatment for up to '
+        '**120 hours** (5 days). Initiated by a physician, peace officer, '
+        'or any responsible adult through a written petition.\n'
+        '• **Section 303** — Extended emergency involuntary treatment for '
+        'up to **20 days** following a 302. Requires a court hearing within '
+        '120 hours of the initial 302 admission.\n'
+        '• **Section 304** — Court-ordered involuntary treatment for up to '
+        '**90 days** (renewable for additional 90-day periods). Requires a '
+        'formal certification and an additional hearing.\n'
+        '• **Section 305** — A further 180-day extension after a 304.\n\n'
+        'Your MHAD continues to apply during a 302/303/304 admission to the '
+        'extent permitted by law. Your agent (if you have one) retains '
+        'authority over decisions the agent has been given, and your '
+        'preferences should still inform the care team. The commitment '
+        'procedure itself, however, is governed by the Mental Health '
+        'Procedures Act, not by Act 194.',
+  ),
+  EducationSection(
+    id: 'faq_emancipated_minor',
+    category: EducationCategory.faq,
+    title: 'Can a minor create a Mental Health Advance Directive?',
+    content:
+        'Under Pennsylvania law, the principal of an MHAD must be **18 or '
+        'older** or a **legally emancipated minor**. Emancipation in PA is '
+        'granted by a court and gives a minor adult-like legal capacity for '
+        'decisions including healthcare.\n\n'
+        'If you are under 18 and not emancipated, you cannot independently '
+        'create a binding MHAD, but you can:\n\n'
+        '• Talk with a parent or guardian about the kind of treatment you '
+        'would want or want to avoid — they make these decisions for you '
+        'until you turn 18.\n'
+        '• Create a personal "mental-health crisis plan" that lists your '
+        'preferences, triggers, supports, and contacts. It is not a binding '
+        'directive but it gives clinicians useful information.\n'
+        '• Plan to execute an MHAD on or shortly after your 18th birthday.',
+  ),
+  EducationSection(
+    id: 'faq_scenario_admission',
+    category: EducationCategory.faq,
+    title: 'Sample scenario: how a directive helps during admission',
+    content:
+        'Here is an anonymised, composite scenario drawn from PAD '
+        'implementation literature — it is illustrative, not a real case.\n\n'
+        '**Background.** Alex has bipolar I disorder and a history of '
+        'manic episodes that have required hospitalisation. Two years ago, '
+        'with help from a peer specialist, Alex completed an MHAD that '
+        'names his sister as primary agent, declines a specific '
+        'antipsychotic that gave him severe akathisia, identifies two '
+        'preferred facilities and one to avoid, and consents to ECT only '
+        'if his sister also agrees in writing at the time.\n\n'
+        '**Crisis.** Alex is brought to a hospital by EMS during a manic '
+        'episode. He cannot consistently communicate his preferences.\n\n'
+        '**With the directive in place.** The intake nurse finds the '
+        'wallet card in Alex\'s pocket, scans the QR code, and pulls up '
+        'the directive summary. The team contacts his sister, transfers '
+        'him to one of his preferred facilities the next morning, avoids '
+        'the named antipsychotic, and starts the medication he listed as '
+        'preferred. ECT is not raised because the prerequisite agent-in-'
+        'writing condition cannot be met.\n\n'
+        '**Why it worked.** The directive existed *and* was findable. The '
+        'agent had been briefed in advance. Preferences were specific '
+        'enough to guide medication choice, not just record-keeping.',
+  ),
 ];
 
 // ---------------------------------------------------------------------------
@@ -1519,6 +1687,125 @@ const _glossary = [
         'other contexts, which focuses on what an objective person would '
         'consider best for the patient.',
   ),
+  EducationSection(
+    id: 'glossary_principal',
+    category: EducationCategory.glossary,
+    title: 'Principal',
+    content:
+        'The person creating the directive — that is, you. The term comes '
+        'from the language of legal instruments: the principal is the one '
+        'whose wishes are being expressed and on whose behalf the agent '
+        'acts.',
+  ),
+  EducationSection(
+    id: 'glossary_capacity',
+    category: EducationCategory.glossary,
+    title: 'Capacity',
+    content:
+        'A clinical determination that a person can understand, weigh, and '
+        'communicate a decision about their own care. Capacity is decision-'
+        'specific (you may have capacity for one decision and not another) '
+        'and time-specific (it can come and go). Under PA Act 194, capacity '
+        'is determined by a qualified clinician and documented in the '
+        'medical record.',
+  ),
+  EducationSection(
+    id: 'glossary_incapacity',
+    category: EducationCategory.glossary,
+    title: 'Incapacity',
+    content:
+        'The absence of capacity for a given decision at a given time. A '
+        'finding of incapacity is what activates the operative parts of '
+        'your MHAD. Incapacity is NOT the same as a psychiatric diagnosis, '
+        'an involuntary commitment, or a finding of legal incompetence — a '
+        'person can be hospitalised under section 302 and still have '
+        'capacity for some decisions.',
+  ),
+  EducationSection(
+    id: 'glossary_competence',
+    category: EducationCategory.glossary,
+    title: 'Competence (vs. capacity)',
+    content:
+        '"Competence" is a *legal* status determined by a court (for '
+        'example, after a guardianship hearing). "Capacity" is a *clinical* '
+        'judgment that can be made on a moment-by-moment basis by a '
+        'physician, psychologist, or certified RN practitioner. Your MHAD '
+        'is triggered by a clinical finding of incapacity — it does not '
+        'require a court declaration of incompetence.',
+  ),
+  EducationSection(
+    id: 'glossary_least_restrictive',
+    category: EducationCategory.glossary,
+    title: 'Least restrictive alternative',
+    content:
+        'A foundational principle in PA mental-health law: treatment '
+        'should be provided in the setting and manner that imposes the '
+        'least limit on the person\'s freedom consistent with effective '
+        'care. Your directive can specify preferred settings (outpatient, '
+        'partial hospitalisation, specific facilities) that align with '
+        'this principle.',
+  ),
+  EducationSection(
+    id: 'glossary_section_302',
+    category: EducationCategory.glossary,
+    title: 'Section 302 (emergency involuntary examination)',
+    content:
+        'Under 50 P.S. § 7302 of the Mental Health Procedures Act, a '
+        'person may be involuntarily taken for psychiatric examination '
+        'and treatment for up to **120 hours** (5 days) when there is '
+        'clear and present danger to self or others. Initiated by '
+        'physician, peace officer, or written petition by a responsible '
+        'adult. A 302 admission does not by itself trigger your MHAD; an '
+        'incapacity determination does.',
+  ),
+  EducationSection(
+    id: 'glossary_section_303',
+    category: EducationCategory.glossary,
+    title: 'Section 303 (extended emergency treatment)',
+    content:
+        'Under 50 P.S. § 7303, a court may order extended involuntary '
+        'treatment for up to **20 days** following a 302. Requires a '
+        'hearing in front of a mental-health review officer within 120 '
+        'hours of the 302 admission. You have the right to counsel and '
+        'to be present.',
+  ),
+  EducationSection(
+    id: 'glossary_pmhca',
+    category: EducationCategory.glossary,
+    title: 'PMHCA — PA Mental Health Consumers\' Association',
+    content:
+        'A statewide consumer-run organisation providing peer support, '
+        'advocacy, and self-help resources for Pennsylvanians with mental-'
+        'health conditions. Helpline: 1-800-887-6422. They are a useful '
+        'point of contact for peer specialists, recovery groups, and '
+        'community resources to name in your directive\'s additional-'
+        'instructions section.',
+  ),
+  EducationSection(
+    id: 'glossary_county_mh_idd',
+    category: EducationCategory.glossary,
+    title: 'County MH/IDD program',
+    content:
+        'Each PA county operates a Mental Health / Intellectual '
+        'Disabilities (MH/IDD) program that serves as the local entry '
+        'point for public mental-health services, crisis intervention, '
+        'and case management. Your county MH/IDD office is often a useful '
+        'contact to list in your directive — they can help coordinate '
+        'care across providers.',
+  ),
+  EducationSection(
+    id: 'glossary_treatment_over_objection',
+    category: EducationCategory.glossary,
+    title: 'Treatment over objection',
+    content:
+        'Treatment provided despite the patient\'s contemporaneous '
+        'objection. Under PA law and constitutional protections, treatment '
+        'over objection is generally permitted only with strict procedural '
+        'safeguards (court order or qualifying involuntary-commitment '
+        'status) and only for treatments where the benefit substantially '
+        'outweighs the burden. Your directive\'s preferences are part of '
+        'the analysis a court would weigh.',
+  ),
 ];
 
 // ---------------------------------------------------------------------------
@@ -2004,6 +2291,93 @@ const _checklist = [
         'still accurate\n\n'
         'Set a calendar reminder to review contacts at least once a year, '
         'even before your directive\'s two-year expiration.',
+  ),
+  EducationSection(
+    id: 'checklist_before_signing',
+    category: EducationCategory.checklist,
+    title: 'Before signing — final verification',
+    content:
+        'Walk through this list with the printed directive in hand, '
+        'before any witness signs:\n\n'
+        '☐ My full legal name is correct everywhere.\n'
+        '☐ My date of birth and address are accurate.\n'
+        '☐ The effective-condition language reflects when I want this to '
+        'take effect.\n'
+        '☐ My primary agent (and alternate, if any) is named correctly '
+        '— with current phone numbers.\n'
+        '☐ Agent authority box is filled in (which decisions can the '
+        'agent make? Are experimental treatments explicitly addressed '
+        'per §5805(c)(4)?).\n'
+        '☐ Treatment-facility preferences and exclusions are listed by '
+        'specific facility name where possible.\n'
+        '☐ Medication preferences include both preferred and to-avoid '
+        'lists with reasons.\n'
+        '☐ ECT, experimental-studies, and drug-trial consent boxes are '
+        'each marked (yes / no / agent / conditional — not blank).\n'
+        '☐ Additional-instructions section covers religious, cultural, '
+        'communication, comfort, contact, custody, and records '
+        'preferences I care about.\n'
+        '☐ Guardian nomination is filled in (or intentionally blank).\n'
+        '☐ Two witnesses are present, both are 18+, and neither is my '
+        'agent, my agent\'s spouse, my mental-health provider, or an '
+        'employee of my treatment facility (unless related).\n'
+        '☐ Pens are blue or black ballpoint ink (no pencil, no gel that '
+        'smears).\n'
+        '☐ All dates are written by the signer, not pre-printed.',
+  ),
+  EducationSection(
+    id: 'checklist_conversation_with_agent',
+    category: EducationCategory.checklist,
+    title: 'Conversation with your designated agent',
+    content:
+        'A directive only works if your agent understands and is willing '
+        'to act on it. Set aside an hour and walk through these together:\n\n'
+        '☐ Show them the full directive (not just a summary).\n'
+        '☐ Explain why you chose each medication preference (what worked, '
+        'what didn\'t, what side effects matter most).\n'
+        '☐ Walk through one or two past crisis episodes — what helped, '
+        'what made things worse, what you wish had happened.\n'
+        '☐ Identify your warning signs together so they can recognise an '
+        'episode early.\n'
+        '☐ Talk through the facilities you prefer and the ones you want '
+        'to avoid, and why.\n'
+        '☐ Confirm they know how to reach your primary care doctor, your '
+        'psychiatrist, and your county MH/IDD office.\n'
+        '☐ Talk about the ECT / research / drug-trial consent choices and '
+        'the reasoning.\n'
+        '☐ Confirm they are willing to advocate firmly for your stated '
+        'wishes if a provider pushes back.\n'
+        '☐ Tell them where the original signed copy and the wallet card '
+        'are kept.\n'
+        '☐ Ask them whether anything in the directive feels unclear or '
+        'unworkable — and revise it if needed before signing.',
+  ),
+  EducationSection(
+    id: 'checklist_share_with_providers',
+    category: EducationCategory.checklist,
+    title: 'What to share with your providers',
+    content:
+        'Distributing the directive to your treatment team is the single '
+        'biggest factor in whether it is honored in a crisis. For each '
+        'provider you regularly see:\n\n'
+        '☐ Give them a *printed* copy of the signed directive (paper is '
+        'still more reliably accessible than the EHR in many crisis '
+        'settings).\n'
+        '☐ Ask them to scan or upload it into your medical record under '
+        '"advance directive" or "patient-supplied document."\n'
+        '☐ Confirm it shows up in their system on your next routine '
+        'visit (test by asking them to open your record).\n'
+        '☐ If you change providers or facilities, give the new provider '
+        'a fresh copy — directives don\'t auto-transfer.\n\n'
+        'Recommended people to give a copy to:\n\n'
+        '• Primary care physician.\n'
+        '• Psychiatrist / mental-health prescriber.\n'
+        '• Therapist or counselor.\n'
+        '• Your designated agent (and alternate).\n'
+        '• Your county MH/IDD office, if you receive county services.\n'
+        '• A trusted family member.\n'
+        '• The local emergency department you would most likely be '
+        'brought to in a crisis (their advance-directive registry).',
   ),
 ];
 

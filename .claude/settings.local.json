@@ -234,7 +234,8 @@
       "Bash(grep -rln \"app_drawer\\\\|MhadAppDrawer\" lib test)",
       "Bash(rm lib/ui/strings.dart)",
       "Bash(grep -rln \"ui/strings.dart\\\\|AppStrings\" lib test --include=*.dart)",
-      "Bash(awk '{print $5,$NF}')"
+      "Bash(awk '{print $5,$NF}')",
+      "Bash(grep -n \"^const _faq\\\\|^const _glossary\\\\|^const _checklist\\\\|^const _scenarios\\\\|allEducationSections =\\\\|\\\\\\\\.\\\\\\\\.\\\\\\\\._\" lib/data/educational_content.dart)"
     ]
   }
 }
