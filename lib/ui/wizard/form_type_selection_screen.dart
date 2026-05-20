@@ -8,11 +8,19 @@ import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/design_card.dart';
-import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/wizard/widgets/form_type_quiz.dart';
 
+/// Form-type picker (3 options: Combined / Declaration / POA).
+///
+/// Visual design follows the prototype `ScrFormType` (mobile.jsx): sans-serif
+/// H1, three radio-style option cards with title + sub + monospace tag pills,
+/// a primaryLight "Help me choose" banner that launches the 4-question quiz,
+/// then the AI-setup prompt and copy-from-existing helpers below.
+///
+/// All wiring (`_createDirective`, POA-only confirmation dialog, AI setup,
+/// quiz launcher, copy-from-existing, loading overlay) is unchanged.
 class FormTypeSelectionScreen extends ConsumerStatefulWidget {
   const FormTypeSelectionScreen({super.key});
 
@@ -76,6 +84,12 @@ class _FormTypeSelectionScreenState
     }
   }
 
+  Future<void> _openQuiz() async {
+    if (_creating) return;
+    final rec = await showFormTypeQuiz(context);
+    if (rec != null && mounted) _createDirective(rec);
+  }
+
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
@@ -88,24 +102,22 @@ class _FormTypeSelectionScreenState
             padding: const EdgeInsets.fromLTRB(22, 8, 22, 24),
             children: [
               const SectionLabel('New directive · 1 of 2'),
-              EditorialHeading(
-                textSpan: TextSpan(
-                  children: [
-                    const TextSpan(text: 'Which form\n'),
-                    TextSpan(
-                      text: 'fits you?',
-                      style: TextStyle(color: p.primary),
-                    ),
-                  ],
-                ),
-                size: 44,
-                height: 0.95,
-                letterSpacing: -1,
-              ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 6),
               Text(
-                'You can switch later if you change your mind. Combined is the '
-                'broadest.',
+                'Which form fits you?',
+                style: TextStyle(
+                  fontFamily: 'DM Sans',
+                  fontSize: 28,
+                  fontWeight: FontWeight.w700,
+                  height: 1.15,
+                  letterSpacing: -0.4,
+                  color: p.text,
+                ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                'You can switch later if you change your mind. Combined is '
+                'the broadest.',
                 style: TextStyle(
                   fontFamily: 'DM Sans',
                   fontSize: 14,
@@ -113,69 +125,56 @@ class _FormTypeSelectionScreenState
                   height: 1.5,
                 ),
               ),
-              const SizedBox(height: 16),
-              const _AiSetupPrompt(),
               const SizedBox(height: 18),
-              _FormTypeCard(
-                icon: Icons.people_alt_outlined,
+
+              // Three form-type option cards — prototype "Opt" style: radio
+              // dot on the left, title row with optional Recommended badge,
+              // subtitle paragraph, and monospace tag pills.
+              _OptCard(
                 title: 'Combined',
-                subtitle: 'Declaration + Power of Attorney',
-                description:
-                    'The most comprehensive option. Documents your treatment preferences '
-                    'AND designates an agent (healthcare proxy) to make decisions on your behalf. '
-                    'Recommended for most people.',
+                subtitle:
+                    'Both name people I trust to speak for me, and document '
+                    'my treatment preferences. Most flexibility.',
+                tags: const ['9 steps', 'Agents + preferences', 'Most common'],
                 recommended: true,
                 onTap: _creating
                     ? null
                     : () => _createDirective(FormType.combined),
               ),
-              const SizedBox(height: 12),
-              _FormTypeCard(
-                icon: Icons.description_outlined,
-                title: 'Declaration Only',
-                subtitle: 'Treatment preferences only',
-                description:
-                    'Documents your mental health treatment preferences without '
-                    'designating an agent. Use this if you prefer not to name a '
-                    'specific decision-maker.',
-                recommended: false,
+              const SizedBox(height: 10),
+              _OptCard(
+                title: 'Declaration only',
+                subtitle:
+                    'Just document my treatment preferences — no agent. '
+                    'Decisions still go through doctors.',
+                tags: const ['8 steps', 'No agents'],
                 onTap: _creating
                     ? null
                     : () => _createDirective(FormType.declaration),
               ),
-              const SizedBox(height: 12),
-              _FormTypeCard(
-                icon: Icons.manage_accounts_outlined,
-                title: 'Power of Attorney Only',
-                subtitle: 'Agent designation only',
-                description:
-                    'Designates an agent to make mental health treatment decisions '
-                    'without specifying detailed treatment preferences. The agent '
-                    'uses their judgment within the bounds of PA law.',
-                recommended: false,
+              const SizedBox(height: 10),
+              _OptCard(
+                title: 'Power of Attorney only',
+                subtitle:
+                    'Just name people to make decisions for me. They will '
+                    'decide treatment in the moment.',
+                tags: const ['9 steps', 'Agents only'],
                 onTap: _creating
                     ? null
                     : () => _createDirective(FormType.poa),
               ),
-              const SizedBox(height: 20),
-              const SectionLabel('Need help?'),
-              const SizedBox(height: 8),
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton.icon(
-                  onPressed: _creating
-                      ? null
-                      : () async {
-                          final rec = await showFormTypeQuiz(context);
-                          if (rec != null && mounted) {
-                            _createDirective(rec);
-                          }
-                        },
-                  icon: const Icon(Icons.quiz_outlined),
-                  label: const Text('Which form is right for me?'),
-                ),
+
+              const SizedBox(height: 18),
+
+              // "Help me choose" — prototype's primaryLight pill banner.
+              _HelpMeChooseBanner(
+                enabled: !_creating,
+                onTap: _openQuiz,
               ),
-              const SizedBox(height: 12),
+
+              const SizedBox(height: 22),
+              const _AiSetupPrompt(),
+              const SizedBox(height: 14),
               _ImportFromExistingButton(
                 creating: _creating,
                 onCreated: (id) {
@@ -211,113 +210,220 @@ class _FormTypeSelectionScreenState
   }
 }
 
-class _FormTypeCard extends StatelessWidget {
-  final IconData icon;
+/// Prototype `Opt` — a radio-style option card with a 22px dot, title row
+/// (plus optional "Recommended" badge), subtitle paragraph, and monospace
+/// tag pills.
+class _OptCard extends StatelessWidget {
   final String title;
   final String subtitle;
-  final String description;
+  final List<String> tags;
   final bool recommended;
   final VoidCallback? onTap;
 
-  const _FormTypeCard({
-    required this.icon,
+  const _OptCard({
     required this.title,
     required this.subtitle,
-    required this.description,
-    required this.recommended,
+    required this.tags,
+    this.recommended = false,
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
-    return DesignCard(
-      variant: recommended ? DesignCardVariant.tinted : DesignCardVariant.plain,
-      overrideBorder: recommended
-          ? BorderSide(color: p.primary, width: 2)
-          : null,
-      onTap: onTap,
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: 44,
-                height: 44,
-                decoration: BoxDecoration(
-                  color: p.primaryLight,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Icon(icon, color: p.primary, size: 22),
+    return Semantics(
+      button: true,
+      label: 'Select $title${recommended ? ' (recommended)' : ''}',
+      child: Material(
+        color: recommended ? p.primaryLight : p.card,
+        borderRadius: BorderRadius.circular(16),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(16),
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: recommended ? p.primary : p.border,
+                width: 2,
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Flexible(
-                          child: Text(
-                            title,
-                            style: const TextStyle(
-                              fontFamily: 'DM Sans',
-                              fontWeight: FontWeight.w700,
-                              fontSize: 16,
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Radio dot (filled if recommended/active).
+                Container(
+                  width: 22,
+                  height: 22,
+                  margin: const EdgeInsets.only(top: 2),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: recommended ? p.primary : Colors.transparent,
+                    border: Border.all(
+                      color: recommended ? p.primary : p.border,
+                      width: 2,
+                    ),
+                  ),
+                  child: recommended
+                      ? Center(
+                          child: Container(
+                            width: 8,
+                            height: 8,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: p.onPrimary,
                             ),
                           ),
-                        ),
-                        if (recommended) ...[
-                          const SizedBox(width: 8),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 2),
-                            decoration: BoxDecoration(
-                              color: p.primary,
-                              borderRadius: BorderRadius.circular(100),
-                            ),
+                        )
+                      : null,
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Flexible(
                             child: Text(
-                              'Recommended',
+                              title,
                               style: TextStyle(
                                 fontFamily: 'DM Sans',
-                                fontSize: 10,
-                                color: p.onPrimary,
+                                fontSize: 16,
                                 fontWeight: FontWeight.w700,
+                                letterSpacing: -0.2,
+                                color: p.text,
                               ),
                             ),
                           ),
+                          if (recommended) ...[
+                            const SizedBox(width: 8),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 7, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: p.primary,
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: Text(
+                                'RECOMMENDED',
+                                style: TextStyle(
+                                  fontFamily: 'JetBrains Mono',
+                                  fontSize: 9.5,
+                                  fontWeight: FontWeight.w700,
+                                  letterSpacing: 0.6,
+                                  color: p.onPrimary,
+                                ),
+                              ),
+                            ),
+                          ],
                         ],
-                      ],
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      subtitle,
-                      style: TextStyle(
-                        fontFamily: 'DM Sans',
-                        fontSize: 12,
-                        color: p.textMuted,
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 4),
+                      Text(
+                        subtitle,
+                        style: TextStyle(
+                          fontFamily: 'DM Sans',
+                          fontSize: 13,
+                          color: p.textMuted,
+                          height: 1.45,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Wrap(
+                        spacing: 4,
+                        runSpacing: 4,
+                        children: tags
+                            .map((t) => Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 7, vertical: 2),
+                                  decoration: BoxDecoration(
+                                    color: p.scaffoldBackground,
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  child: Text(
+                                    t.toUpperCase(),
+                                    style: TextStyle(
+                                      fontFamily: 'JetBrains Mono',
+                                      fontSize: 10.5,
+                                      fontWeight: FontWeight.w600,
+                                      letterSpacing: 0.4,
+                                      color: p.textMuted,
+                                    ),
+                                  ),
+                                ))
+                            .toList(growable: false),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              Icon(Icons.chevron_right, color: p.textMuted),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Text(
-            description,
-            style: TextStyle(
-              fontFamily: 'DM Sans',
-              fontSize: 13,
-              color: p.textMuted,
-              height: 1.5,
+              ],
             ),
           ),
-        ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Prototype "Help me choose" pill — opens the 4-question quiz.
+class _HelpMeChooseBanner extends StatelessWidget {
+  final bool enabled;
+  final VoidCallback onTap;
+
+  const _HelpMeChooseBanner({required this.enabled, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
+    return Semantics(
+      button: true,
+      label: 'Take the 4-question quiz to choose a form',
+      child: Material(
+        color: p.primaryLight,
+        borderRadius: BorderRadius.circular(12),
+        child: InkWell(
+          onTap: enabled ? onTap : null,
+          borderRadius: BorderRadius.circular(12),
+          child: Container(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+            constraints: const BoxConstraints(minHeight: 48),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              border:
+                  Border.all(color: p.primary.withValues(alpha: 0.20)),
+            ),
+            child: Row(
+              children: [
+                Icon(Icons.auto_awesome, size: 18, color: p.primary),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    'Not sure? Take the 4-question quiz.',
+                    style: TextStyle(
+                      fontFamily: 'DM Sans',
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      color: p.onPrimaryLight,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  'Help me choose →',
+                  style: TextStyle(
+                    fontFamily: 'DM Sans',
+                    fontSize: 12.5,
+                    fontWeight: FontWeight.w700,
+                    color: p.primary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

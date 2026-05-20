@@ -4,9 +4,18 @@ import 'package:mhad/services/pin_auth_service.dart';
 import 'package:mhad/services/privacy_mode_service.dart';
 import 'package:mhad/ui/mode_selection/pin_dialog.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
+import 'package:mhad/ui/widgets/design/section_label.dart';
 
 /// Shown on every app launch (after the one-time disclaimer).
 /// The user must choose Public or Private mode before accessing any directives.
+///
+/// Visual design follows the prototype `ScrMode` (mobile.jsx): scaffold
+/// background with two white "Card2" cards — a Recommended Private mode
+/// (encrypted on-device, biometric / passcode) and a Public mode (in-memory,
+/// nothing saved). The auth wiring is unchanged from the previous version —
+/// `_pickPrivate`, `_pickPublic`, the passcode fallback, and the loading
+/// state all behave exactly as before.
 class ModeSelectionScreen extends StatefulWidget {
   final PrivacyModeNotifier notifier;
   const ModeSelectionScreen({required this.notifier, super.key});
@@ -77,104 +86,103 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
     return PopScope(
       canPop: false,
       child: Scaffold(
-        backgroundColor: p.primary,
+        backgroundColor: p.scaffoldBackground,
         body: SafeArea(
           child: Column(
             children: [
-              // Hero
+              const CrisisTopBar(compact: true),
               Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 32),
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.fromLTRB(22, 20, 22, 40),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
-                        width: 72,
-                        height: 72,
-                        decoration: BoxDecoration(
-                          color: p.onPrimary.withValues(alpha: 0.15),
-                          borderRadius: BorderRadius.circular(22),
-                        ),
-                        child: Icon(
-                          Icons.shield_outlined,
-                          color: p.onPrimary,
-                          size: 40,
-                        ),
-                      ),
-                      const SizedBox(height: 20),
+                      const SectionLabel('Step 1 of 3 · setup'),
+                      const SizedBox(height: 6),
                       Text(
-                        'PA Mental Health\nAdvance Directive',
-                        textAlign: TextAlign.center,
+                        'How should we handle your data?',
                         style: TextStyle(
                           fontFamily: 'DM Sans',
-                          fontSize: 26,
+                          fontSize: 28,
                           fontWeight: FontWeight.w700,
-                          color: p.onPrimary,
-                          height: 1.2,
-                          letterSpacing: -0.3,
+                          height: 1.15,
+                          letterSpacing: -0.5,
+                          color: p.text,
                         ),
                       ),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 6),
                       Text(
-                        'Document your mental health treatment preferences — legally binding under PA Act 194',
-                        textAlign: TextAlign.center,
+                        'You can change this anytime in Settings.',
                         style: TextStyle(
                           fontFamily: 'DM Sans',
                           fontSize: 14,
-                          // Full onPrimary (no alpha fade) keeps the WCAG
-                          // contrast ratio comfortably above 4.5 on the
-                          // primary background.
-                          color: p.onPrimary,
                           height: 1.5,
+                          color: p.textMuted,
+                        ),
+                      ),
+                      const SizedBox(height: 22),
+
+                      // Mode cards. Order follows the prototype: Private
+                      // (recommended) first, then Public. On web, the
+                      // Private card is hidden because encrypted storage
+                      // isn't available there — matching the prior wiring.
+                      if (!kIsWeb)
+                        _Card2(
+                          icon: Icons.lock_outline,
+                          title: 'Private mode',
+                          subtitle:
+                              'Your data stays on this device, encrypted. '
+                              'Unlock with biometrics or a passcode. You can '
+                              'come back to your draft anytime.',
+                          badges: const [
+                            'Biometrics',
+                            'AES-256',
+                            'Save drafts',
+                            'Across sessions',
+                          ],
+                          recommended: true,
+                          loading: _loading == 'private',
+                          dimmed: _loading == 'public',
+                          onTap: _loading != null ? null : _pickPrivate,
+                        ),
+                      if (!kIsWeb) const SizedBox(height: 16),
+
+                      _Card2(
+                        icon: Icons.visibility_off_outlined,
+                        title: 'Public mode',
+                        subtitle:
+                            'No data is saved after you close the app. Best '
+                            'for shared devices, or one-time use without '
+                            'leaving a trace.',
+                        badges: const [
+                          'Nothing saved',
+                          'In-memory only',
+                          'Single session',
+                        ],
+                        loading: _loading == 'public',
+                        dimmed: _loading == 'private',
+                        onTap: _loading != null ? null : _pickPublic,
+                      ),
+
+                      const SizedBox(height: 18),
+                      Center(
+                        child: Text(
+                          kIsWeb
+                              ? 'Private mode with encrypted storage is '
+                                'available in the mobile and desktop apps.'
+                              : 'This app is not HIPAA-compliant. Nothing '
+                                'is sent to a server for storage.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontFamily: 'DM Sans',
+                            fontSize: 11.5,
+                            height: 1.45,
+                            color: p.textMuted,
+                          ),
                         ),
                       ),
                     ],
                   ),
-                ),
-              ),
-
-              // Mode cards
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 0, 20, 40),
-                child: Column(
-                  children: [
-                    if (!kIsWeb)
-                      _ModeCard(
-                        title: 'Private Mode',
-                        description:
-                            'Encrypted & saved. Requires biometric or passcode.',
-                        icon: Icons.fingerprint,
-                        light: true,
-                        loading: _loading == 'private',
-                        dimmed: _loading == 'public',
-                        onTap: _loading != null ? null : _pickPrivate,
-                      ),
-                    if (!kIsWeb) const SizedBox(height: 12),
-                    _ModeCard(
-                      title: 'Public Mode',
-                      description:
-                          'Temporary session. Data erased when you exit.',
-                      icon: Icons.visibility_off_outlined,
-                      light: false,
-                      loading: _loading == 'public',
-                      dimmed: _loading == 'private',
-                      onTap: _loading != null ? null : _pickPublic,
-                    ),
-                    const SizedBox(height: 14),
-                    Text(
-                      kIsWeb
-                          ? 'Private mode with encrypted storage is available in the mobile and desktop apps.'
-                          : 'This selection applies to this session only.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: 'DM Sans',
-                        fontSize: 11,
-                        // Same reason as the header above — full onPrimary
-                        // keeps the small text above the WCAG 4.5 threshold.
-                        color: p.onPrimary,
-                      ),
-                    ),
-                  ],
                 ),
               ),
             ],
@@ -185,20 +193,26 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
   }
 }
 
-class _ModeCard extends StatelessWidget {
-  final String title;
-  final String description;
+/// Prototype `Card2`: a 1.5px-bordered white card with an icon block, title,
+/// subtitle, optional pill badges, and an optional floating "Recommended"
+/// label. Tapping the card invokes [onTap]; [loading] swaps the icon for a
+/// small spinner; [dimmed] reduces opacity while a sibling is in-flight.
+class _Card2 extends StatelessWidget {
   final IconData icon;
-  final bool light;
+  final String title;
+  final String subtitle;
+  final List<String> badges;
+  final bool recommended;
   final bool loading;
   final bool dimmed;
   final VoidCallback? onTap;
 
-  const _ModeCard({
-    required this.title,
-    required this.description,
+  const _Card2({
     required this.icon,
-    required this.light,
+    required this.title,
+    required this.subtitle,
+    required this.badges,
+    this.recommended = false,
     required this.loading,
     required this.dimmed,
     required this.onTap,
@@ -207,87 +221,131 @@ class _ModeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
-
-    final bg = light ? p.card : p.onPrimary.withValues(alpha: 0.12);
-    final titleColor = light ? p.text : p.onPrimary;
-    final descColor =
-        light ? p.textMuted : p.onPrimary.withValues(alpha: 0.85);
-    final iconBgColor =
-        light ? p.primaryLight : p.onPrimary.withValues(alpha: 0.15);
-    final iconColor = light ? p.primary : p.onPrimary;
-    final chevColor =
-        light ? p.textMuted : p.onPrimary.withValues(alpha: 0.7);
+    final borderColor = recommended ? p.primary : p.border;
 
     return Semantics(
       button: true,
-      label: 'Select $title',
+      label: 'Select $title${recommended ? ' (recommended)' : ''}',
       child: AnimatedOpacity(
         opacity: dimmed ? 0.5 : 1,
         duration: const Duration(milliseconds: 200),
         child: Material(
-          color: bg,
-          borderRadius: BorderRadius.circular(20),
+          color: p.card,
+          borderRadius: BorderRadius.circular(16),
           child: InkWell(
             onTap: onTap,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(16),
             child: Container(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(18),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                border: light
-                    ? null
-                    : Border.all(
-                        color: p.onPrimary.withValues(alpha: 0.4),
-                        width: 1.5),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: borderColor, width: 1.5),
               ),
-              child: Row(
+              child: Stack(
+                clipBehavior: Clip.none,
                 children: [
-                  Container(
-                    width: 48,
-                    height: 48,
-                    decoration: BoxDecoration(
-                      color: iconBgColor,
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                    child: loading
-                        ? Padding(
-                            padding: const EdgeInsets.all(13),
-                            child: CircularProgressIndicator(
-                              strokeWidth: 3,
-                              valueColor:
-                                  AlwaysStoppedAnimation<Color>(iconColor),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Icon + title row
+                      Row(
+                        children: [
+                          Container(
+                            width: 38,
+                            height: 38,
+                            decoration: BoxDecoration(
+                              color: p.primaryLight,
+                              borderRadius: BorderRadius.circular(10),
                             ),
-                          )
-                        : Icon(icon, color: iconColor, size: 26),
+                            alignment: Alignment.center,
+                            child: loading
+                                ? SizedBox(
+                                    width: 18,
+                                    height: 18,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2.5,
+                                      valueColor:
+                                          AlwaysStoppedAnimation<Color>(
+                                              p.primary),
+                                    ),
+                                  )
+                                : Icon(icon, color: p.primary, size: 20),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Text(
+                              title,
+                              style: TextStyle(
+                                fontFamily: 'DM Sans',
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: -0.2,
+                                color: p.text,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        subtitle,
+                        style: TextStyle(
+                          fontFamily: 'DM Sans',
+                          fontSize: 13.5,
+                          height: 1.45,
+                          color: p.textMuted,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Wrap(
+                        spacing: 6,
+                        runSpacing: 6,
+                        children: badges
+                            .map((b) => Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 3),
+                                  decoration: BoxDecoration(
+                                    color: p.scaffoldBackground,
+                                    borderRadius: BorderRadius.circular(100),
+                                    border: Border.all(color: p.border),
+                                  ),
+                                  child: Text(
+                                    b,
+                                    style: TextStyle(
+                                      fontFamily: 'DM Sans',
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w600,
+                                      color: p.textMuted,
+                                    ),
+                                  ),
+                                ))
+                            .toList(growable: false),
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          title,
+                  if (recommended)
+                    Positioned(
+                      top: -22,
+                      left: -2,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 9, vertical: 3),
+                        decoration: BoxDecoration(
+                          color: p.primary,
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Text(
+                          'RECOMMENDED',
                           style: TextStyle(
-                            fontFamily: 'DM Sans',
+                            fontFamily: 'JetBrains Mono',
+                            fontSize: 10,
                             fontWeight: FontWeight.w700,
-                            fontSize: 16,
-                            color: titleColor,
+                            letterSpacing: 0.6,
+                            color: p.onPrimary,
                           ),
                         ),
-                        const SizedBox(height: 3),
-                        Text(
-                          description,
-                          style: TextStyle(
-                            fontFamily: 'DM Sans',
-                            fontSize: 13,
-                            color: descColor,
-                            height: 1.4,
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
-                  Icon(Icons.chevron_right, color: chevColor, size: 20),
                 ],
               ),
             ),
