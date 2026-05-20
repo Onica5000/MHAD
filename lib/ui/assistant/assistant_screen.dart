@@ -712,8 +712,10 @@ class _InputBar extends StatelessWidget {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(24),
                   ),
+                  // vertical 14 (was 10) brings the single-line height to
+                  // ~52 — comfortably over the 48px a11y guideline.
                   contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 16, vertical: 10),
+                      horizontal: 16, vertical: 14),
                   isDense: true,
                 ),
                 onSubmitted: (_) => onSend(),

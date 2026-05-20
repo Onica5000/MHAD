@@ -107,9 +107,10 @@ void main() {
     await db.close();
   });
 
-  // Sweep the rest of the top-level destinations against the
-  // labeledTapTargetGuideline. Every tappable on these screens must be at
-  // least 48×48 AND carry a label (tooltip / Semantics).
+  // Sweep the rest of the top-level destinations against the three a11y
+  // guidelines: Android tap target (≥ 48×48), labeled tap target
+  // (≥ 48×48 AND has a label), and text contrast (WCAG-aligned colour
+  // contrast for any rendered text).
   Future<void> testScreenLabeled(
     WidgetTester tester, {
     required String route,
@@ -121,6 +122,36 @@ void main() {
     await tester.pumpAndSettle();
 
     await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
+
+    await db.close();
+  }
+
+  Future<void> testScreenAndroid(
+    WidgetTester tester, {
+    required String route,
+  }) async {
+    final db = AppDatabase(NativeDatabase.memory());
+    await tester.pumpWidget(buildApp(db));
+    await tester.pumpAndSettle();
+    appRouter.go(route);
+    await tester.pumpAndSettle();
+
+    await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
+
+    await db.close();
+  }
+
+  Future<void> testScreenContrast(
+    WidgetTester tester, {
+    required String route,
+  }) async {
+    final db = AppDatabase(NativeDatabase.memory());
+    await tester.pumpWidget(buildApp(db));
+    await tester.pumpAndSettle();
+    appRouter.go(route);
+    await tester.pumpAndSettle();
+
+    await expectLater(tester, meetsGuideline(textContrastGuideline));
 
     await db.close();
   }
@@ -170,6 +201,79 @@ void main() {
     appRouter.go(AppRoutes.assistant);
     await tester.pumpAndSettle();
     await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
+    await db.close();
+  });
+
+  // Android tap-target sweep — every top-level destination must have all
+  // tap targets ≥ 48×48 even before considering labels.
+  testWidgets('Settings meets Android tap target guideline', (tester) async {
+    await testScreenAndroid(tester, route: AppRoutes.settings);
+  });
+  testWidgets('Education meets Android tap target guideline', (tester) async {
+    await testScreenAndroid(tester, route: AppRoutes.education);
+  });
+  testWidgets('AI Setup meets Android tap target guideline', (tester) async {
+    await testScreenAndroid(tester, route: AppRoutes.aiSetup);
+  });
+  testWidgets('Privacy Policy meets Android tap target guideline',
+      (tester) async {
+    await testScreenAndroid(tester, route: AppRoutes.privacyPolicy);
+  });
+  testWidgets('Form-type selection meets Android tap target guideline',
+      (tester) async {
+    await testScreenAndroid(tester, route: AppRoutes.formTypeSelection);
+  });
+  testWidgets('Assistant screen meets Android tap target guideline',
+      (tester) async {
+    await testScreenAndroid(tester, route: AppRoutes.assistant);
+  });
+
+  // Text-contrast sweep — every top-level destination must render text
+  // with sufficient contrast against its surface.
+  testWidgets('Settings meets text contrast guideline', (tester) async {
+    await testScreenContrast(tester, route: AppRoutes.settings);
+  });
+  testWidgets('Education meets text contrast guideline', (tester) async {
+    await testScreenContrast(tester, route: AppRoutes.education);
+  });
+  testWidgets('AI Setup meets text contrast guideline', (tester) async {
+    await testScreenContrast(tester, route: AppRoutes.aiSetup);
+  });
+  testWidgets('Privacy Policy meets text contrast guideline', (tester) async {
+    await testScreenContrast(tester, route: AppRoutes.privacyPolicy);
+  });
+  testWidgets('Form-type selection meets text contrast guideline',
+      (tester) async {
+    await testScreenContrast(tester, route: AppRoutes.formTypeSelection);
+  });
+  testWidgets('Assistant screen meets text contrast guideline',
+      (tester) async {
+    await testScreenContrast(tester, route: AppRoutes.assistant);
+  });
+
+  // Mode selection is a redirected route — exercise it with its own setUp.
+  testWidgets('Mode selection meets Android tap target guideline',
+      (tester) async {
+    initRouter(
+      DisclaimerNotifier(initialValue: true),
+      PrivacyModeNotifier(),
+    );
+    final db = AppDatabase(NativeDatabase.memory());
+    await tester.pumpWidget(buildApp(db));
+    await tester.pumpAndSettle();
+    await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
+    await db.close();
+  });
+  testWidgets('Mode selection meets text contrast guideline',
+      (tester) async {
+    initRouter(
+      DisclaimerNotifier(initialValue: true),
+      PrivacyModeNotifier(),
+    );
+    final db = AppDatabase(NativeDatabase.memory());
+    await tester.pumpWidget(buildApp(db));
+    await tester.pumpAndSettle();
+    await expectLater(tester, meetsGuideline(textContrastGuideline));
     await db.close();
   });
 

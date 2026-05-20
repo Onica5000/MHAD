@@ -122,15 +122,15 @@ class _EducationScreenState extends State<EducationScreen> {
                 decoration: const InputDecoration(
                   labelText: 'Category',
                   border: OutlineInputBorder(),
+                  // Standard density (no isDense) gives the dropdown a
+                  // ≥48px tap target per the a11y guideline.
                   contentPadding:
-                      EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                  isDense: true,
+                      EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                 ),
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<EducationCategory?>(
                     value: _selectedCategory,
                     isExpanded: true,
-                    isDense: true,
                     items: [
                       const DropdownMenuItem<EducationCategory?>(
                         value: null,
@@ -189,7 +189,11 @@ class _SectionTile extends StatelessWidget {
             builder: (_) => _SectionDetailScreen(section: section),
           ),
         ),
-        child: Padding(
+        // ≥48px tap target for the whole card per a11y guideline; the
+        // visible content (badge + title + preview) sizes naturally inside.
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minHeight: 48),
+          child: Padding(
           padding: const EdgeInsets.all(12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -221,6 +225,7 @@ class _SectionTile extends StatelessWidget {
               ),
             ],
           ),
+        ),
         ),
       ),
     ),

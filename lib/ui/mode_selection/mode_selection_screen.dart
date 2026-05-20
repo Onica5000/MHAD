@@ -121,7 +121,10 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                         style: TextStyle(
                           fontFamily: 'DM Sans',
                           fontSize: 14,
-                          color: p.onPrimary.withValues(alpha: 0.85),
+                          // Full onPrimary (no alpha fade) keeps the WCAG
+                          // contrast ratio comfortably above 4.5 on the
+                          // primary background.
+                          color: p.onPrimary,
                           height: 1.5,
                         ),
                       ),
@@ -166,7 +169,9 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                       style: TextStyle(
                         fontFamily: 'DM Sans',
                         fontSize: 11,
-                        color: p.onPrimary.withValues(alpha: 0.75),
+                        // Same reason as the header above — full onPrimary
+                        // keeps the small text above the WCAG 4.5 threshold.
+                        color: p.onPrimary,
                       ),
                     ),
                   ],
