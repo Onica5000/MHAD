@@ -79,6 +79,8 @@ class _PinSetupDialogState extends State<PinSetupDialog> {
                 suffixIcon: IconButton(
                   icon: Icon(
                       _obscure ? Icons.visibility : Icons.visibility_off),
+                  tooltip:
+                      _obscure ? 'Show passcode' : 'Hide passcode',
                   onPressed: () => setState(() => _obscure = !_obscure),
                 ),
               ),
@@ -226,6 +228,8 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
                 suffixIcon: IconButton(
                   icon: Icon(
                       _obscure ? Icons.visibility : Icons.visibility_off),
+                  tooltip:
+                      _obscure ? 'Show passcode' : 'Hide passcode',
                   onPressed: () => setState(() => _obscure = !_obscure),
                 ),
               ),

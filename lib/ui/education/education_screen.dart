@@ -325,6 +325,7 @@ class _EducationSearchDelegate extends SearchDelegate<EducationSection?> {
   List<Widget> buildActions(BuildContext context) => [
         IconButton(
           icon: const Icon(Icons.clear),
+          tooltip: 'Clear search',
           onPressed: () => query = '',
         ),
       ];
@@ -332,6 +333,7 @@ class _EducationSearchDelegate extends SearchDelegate<EducationSection?> {
   @override
   Widget buildLeading(BuildContext context) => IconButton(
         icon: const Icon(Icons.arrow_back),
+        tooltip: 'Back',
         onPressed: () => close(context, null),
       );
 

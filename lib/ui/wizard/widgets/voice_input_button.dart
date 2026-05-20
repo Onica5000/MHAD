@@ -94,7 +94,9 @@ class _VoiceInputButtonState extends State<VoiceInputButton> {
           ),
           onPressed: null,
           padding: EdgeInsets.zero,
-          constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
+          // 48px hit target meets the a11y guideline; the visible icon
+          // is unchanged (size: 20) thanks to padding: EdgeInsets.zero.
+          constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
         ),
       );
     }
@@ -118,7 +120,9 @@ class _VoiceInputButtonState extends State<VoiceInputButton> {
           ),
           onPressed: _toggleListening,
           padding: EdgeInsets.zero,
-          constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
+          // 48px hit target meets the a11y guideline; the visible icon
+          // is unchanged (size: 20) thanks to padding: EdgeInsets.zero.
+          constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
         ),
       ),
     );
