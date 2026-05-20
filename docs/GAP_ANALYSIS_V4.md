@@ -153,6 +153,27 @@ were superseded by regulations that changed *after* they were written.
   failure mode and is a strong product differentiator.
 - **Status:** [ ]
 
+### V4-M10b: Provider-duty content understated the statutory "shall comply" rule (resolved 2026-05-20)
+- **Evidence:** Independent research compared 20 Pa.C.S. §5462(c)(1) (Chapter 54,
+  general health care) and the analogous §5842 (Chapter 58, Mental Health Care) against
+  patient-facing handouts (UPMC FAQ, hospital brochures, planning workbooks) and found
+  the patient materials understate physician duties — describing directives as
+  "guidelines only" or saying "no law guarantees" compliance. The existing in-app FAQ
+  `faq_providers_follow` opened with "Yes, unless…" which mirrored the same soft framing
+  the research flagged as misleading. The existing `supp_provider_obligations` cited the
+  right sections but did not quote the statutory text, did not bridge to Chapter 54, and
+  did not address the patient-materials discrepancy.
+- **Fix:** Rewrote `faq_providers_follow` to lead with the mandatory "shall comply"
+  language and cite both §5842 (MHAD) and §5462(c)(1) (general health care). Added new
+  FAQ entries `faq_guidelines_only_misconception` and `faq_mhad_vs_health_care_directive`;
+  expanded `supp_provider_obligations` with the actual quoted statutory text and the
+  good-faith immunity provision under §5805; added new supplementary sections
+  `supp_chapter_54_vs_58` and `supp_patient_materials_discrepancy`; added glossary
+  entries `glossary_shall_comply` and `glossary_chapter_54_vs_58`; and added the
+  `checklist_provider_refuses_to_follow` advocate checklist. All additions feed the AI
+  assistant via the system-prompt reference loop.
+- **Status:** [x]
+
 ### V4-M11: `docs/ACTION_PLAN.md` is materially stale (doc/code drift)
 - **Evidence:** ACTION_PLAN says AI = **Claude** API (`ClaudeApiAssistant`,
   `claude-opus-4-6`) and dependency = `drift_flutter`; the actual code uses **Gemini**

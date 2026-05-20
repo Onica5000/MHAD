@@ -315,22 +315,49 @@ const _faq = [
     category: EducationCategory.faq,
     title: 'Do health care providers have to follow my instructions?',
     content:
-        'Yes, unless a provider cannot in good conscience comply with your '
-        'instructions because they are against accepted clinical or medical '
-        'practice, or because the policies of the provider (such as what is '
-        'covered by insurance) do not allow compliance, or because the '
-        'treatment is physically unavailable. If the provider cannot comply for '
-        'any of these reasons, the provider must tell you or your agent as soon '
-        'as possible.\n\n'
-        'It is very helpful to discuss your decisions with your provider when '
-        'you make your Mental Health Advance Directive, so that you know '
-        'whether they will be able to follow your instructions.\n\n'
-        'Remember that even if you consent in advance to a particular '
-        'medication or treatment, your doctor will not prescribe that treatment '
-        'or drug unless it is appropriate at the time you are ill. Your consent '
-        'is only good if your choices are okay at that time, within the '
-        'standards of medical care. Your doctor will also have to consider if '
-        'a particular treatment option is covered by your insurance.',
+        '**Short answer: yes — and the law uses mandatory language.**\n\n'
+        'Under PA Act 194, **20 Pa.C.S. §5842** (Duties of Attending '
+        'Physician and Mental Health Care Provider) requires that an '
+        'attending physician or mental health care provider "**shall '
+        'comply** with a mental health care decision made by a mental '
+        'health care agent." In statutory drafting, "shall" creates a '
+        'duty — this is not a suggestion. The agent\'s decision is '
+        'treated as if you had made it yourself.\n\n'
+        'The same mandatory framework applies to your general health-care '
+        'agent under the parallel statute, **20 Pa.C.S. §5462(c)(1)** of '
+        'Chapter 54 (Act 169 of 2006), which says that outside a narrow '
+        'life-preserving carve-out, the provider "**shall comply** with a '
+        'health care decision made by a health care agent or health care '
+        'representative to the same extent as if the decision had been '
+        'made by the principal."\n\n'
+        '**Narrow exceptions.** A provider may decline to comply when:\n'
+        '• Your instructions are against accepted clinical practice and '
+        'medical standards; or\n'
+        '• The treatment is physically unavailable at the facility; or\n'
+        '• Provider/institutional policy or insurance coverage precludes '
+        'compliance; or\n'
+        '• The provider has a good-faith conscience objection.\n\n'
+        'When a provider cannot comply, **§5804** requires them to (a) '
+        'tell you, your agent, and any guardian as soon as possible, '
+        '(b) document the reason, (c) make a reasonable effort to '
+        'transfer your care to a provider who will comply, and (d) '
+        'continue providing care under your directive while the transfer '
+        'is pending.\n\n'
+        '**Beware of "guidelines only" framing.** Some hospital handouts '
+        'and patient FAQs describe advance directives as "guidelines '
+        'only" or say there is "no law that guarantees" compliance. '
+        'That language understates the statutory rule. The rule is '
+        'mandatory compliance plus a defined set of exceptions and a '
+        'duty to transfer — not pure clinical discretion. See the '
+        'Supplementary section "Provider Obligations Under Act 194" and '
+        'the FAQ "What if a provider says my directive is just a '
+        'guideline?" for the full statutory analysis.\n\n'
+        '**Practical advice.** Discuss your directive with your providers '
+        'in advance so you know whether they will be able to follow it. '
+        'Even when you consent in advance to a specific medication or '
+        'treatment, the clinical decision to use it at any given time '
+        'still must be appropriate to your condition at that moment and '
+        'within accepted standards of care.',
   ),
   EducationSection(
     id: 'faq_involuntary',
@@ -707,6 +734,89 @@ const _faq = [
         'preferences, triggers, supports, and contacts. It is not a binding '
         'directive but it gives clinicians useful information.\n'
         '• Plan to execute an MHAD on or shortly after your 18th birthday.',
+  ),
+  EducationSection(
+    id: 'faq_guidelines_only_misconception',
+    category: EducationCategory.faq,
+    title:
+        'What if a provider says my directive is "just a guideline"?',
+    content:
+        'This is a common misunderstanding — sometimes repeated by '
+        'hospital handouts and patient FAQs. The statute is stronger than '
+        'that. Under **20 Pa.C.S. §5842** (for MHADs) and **§5462(c)(1)** '
+        '(for general health-care directives), providers "**shall comply**" '
+        'with decisions made by a valid agent or representative, treating '
+        'them as if you had made them yourself.\n\n'
+        '"Shall" is the law\'s word for *required*. It is not "may." It '
+        'is not "should consider." It is not a clinical suggestion. The '
+        'narrow exceptions (conscience objection, clinical unavailability, '
+        'institutional policy) trigger a **transfer obligation**, not a '
+        'free-for-all of provider discretion.\n\n'
+        '**If a provider tells you "this is just a guideline":**\n\n'
+        '1. Stay calm and polite — most staff who say this are repeating '
+        'older training, not refusing in bad faith.\n'
+        '2. Cite the statute by name: "Under 20 Pa.C.S. §5842, you are '
+        'required to comply with my agent\'s decisions to the same '
+        'extent as if I had made them." For a non-mental-health '
+        'directive, cite §5462(c)(1).\n'
+        '3. Ask which of the **specific statutory exceptions** they are '
+        'relying on (conscience, clinical standards, unavailability, '
+        'institutional policy). Vague clinical disagreement is not one '
+        'of the exceptions.\n'
+        '4. If they invoke an exception, ask for the **transfer plan** '
+        'required by §5804 — who will take the case, and what care will '
+        'be provided in the meantime.\n'
+        '5. Ask the hospital\'s patient-advocate or ombudsperson to be '
+        'involved.\n'
+        '6. If the dispute is not resolved, contact **Disability Rights '
+        'Pennsylvania (formerly PA Protection & Advocacy)** at '
+        '1-800-692-7443. They handle Act 194 complaints.\n\n'
+        'See also: the FAQ "Do health care providers have to follow my '
+        'instructions?" and the Supplementary section "Provider '
+        'Obligations Under Act 194" for the full statutory framework.',
+  ),
+  EducationSection(
+    id: 'faq_mhad_vs_health_care_directive',
+    category: EducationCategory.faq,
+    title:
+        'How is my MHAD different from a regular health-care directive '
+        'or living will?',
+    content:
+        'Pennsylvania has **two parallel advance-directive statutes** in '
+        'Title 20 of the Consolidated Statutes. Many people benefit from '
+        'having both. They cover different decisions but use the same '
+        '"shall comply" framework for provider duties.\n\n'
+        '**Chapter 58 — Mental Health Care (Act 194 of 2004).** This is '
+        'the law for *mental health* treatment decisions: hospitalization '
+        'in a psychiatric facility, psychotropic medications, ECT, '
+        'experimental psychiatric studies, drug trials, treatment-facility '
+        'preferences, and a mental-health agent. This app generates '
+        'directives under Chapter 58.\n\n'
+        '**Chapter 54 — Health Care (Act 169 of 2006).** This is the law '
+        'for *general* health-care decisions: living wills, end-of-life '
+        'care, life-preserving treatment, surgery consent, the general '
+        'health-care power of attorney, and the default "health-care '
+        'representative" hierarchy when no agent is named.\n\n'
+        '**How they fit together:**\n'
+        '• If you sign a Chapter 58 MHAD and a Chapter 54 health-care '
+        'POA, both can be in force at the same time. The mental-health '
+        'agent makes mental-health decisions; the general health-care '
+        'agent (or representative) makes everything else.\n'
+        '• The same person can be named in both — it often makes sense '
+        'for one trusted person to hold both roles.\n'
+        '• Both statutes use mandatory "**shall comply**" language for '
+        'provider duties (see §5842 for MHAD, §5462(c)(1) for general '
+        'health care).\n'
+        '• Both allow conscience-based refusal, but both also require '
+        'the provider to **transfer** to a complying provider rather '
+        'than simply override your wishes.\n\n'
+        '**When in doubt, ask which statute applies.** A psychiatric '
+        'admission decision is Chapter 58. A do-not-resuscitate question '
+        'is Chapter 54. A medication decision during a psychiatric '
+        'hospitalization is usually Chapter 58. Hospitals occasionally '
+        'cite the wrong statute or apply Chapter 54 rules to a '
+        'mental-health situation — knowing the distinction helps you and '
+        'your agent advocate correctly.',
   ),
   EducationSection(
     id: 'faq_scenario_admission',
@@ -1806,6 +1916,58 @@ const _glossary = [
         'outweighs the burden. Your directive\'s preferences are part of '
         'the analysis a court would weigh.',
   ),
+  EducationSection(
+    id: 'glossary_shall_comply',
+    category: EducationCategory.glossary,
+    title: '"Shall comply" (statutory language)',
+    content:
+        'In statutory drafting, the word "shall" creates a mandatory '
+        'duty — it is not the same as "may" or "should." When a PA '
+        'statute says a physician or provider "shall comply" with an '
+        'agent\'s decision, the law is requiring compliance, not '
+        'suggesting it.\n\n'
+        'Two PA statutes use this exact construction for advance '
+        'directives:\n'
+        '• **20 Pa.C.S. §5842** (Chapter 58 — Mental Health Care): '
+        'attending physicians and mental health care providers "shall '
+        'comply" with decisions made by a mental health care agent.\n'
+        '• **20 Pa.C.S. §5462(c)(1)** (Chapter 54 — Health Care): '
+        'attending physicians and health-care providers "shall comply" '
+        'with decisions made by a health-care agent or representative, '
+        'to the same extent as if the principal had made them, outside '
+        'a narrow life-preserving carve-out.\n\n'
+        'Patient handouts that describe directives as "guidelines only" '
+        'or say "no law guarantees compliance" do not change the '
+        'mandatory force of the statute. They describe outcomes (which '
+        'depend on facts and exceptions), not the default rule (which '
+        'is compulsory compliance subject to a defined transfer '
+        'process).',
+  ),
+  EducationSection(
+    id: 'glossary_chapter_54_vs_58',
+    category: EducationCategory.glossary,
+    title: 'Chapter 54 vs Chapter 58 (the two PA advance-directive laws)',
+    content:
+        'Pennsylvania has two parallel advance-directive statutes in '
+        'Title 20 of the Consolidated Statutes:\n\n'
+        '• **Chapter 54 — Health Care (Act 169 of 2006).** General '
+        'health-care decisions: living wills, end-of-life care, '
+        'life-preserving treatment, surgery consent, general '
+        'health-care power of attorney, default health-care '
+        'representative hierarchy. Provider-duty section: §5462.\n\n'
+        '• **Chapter 58 — Mental Health Care (Act 194 of 2004).** '
+        'Mental-health treatment decisions: psychiatric '
+        'hospitalization, psychotropic medications, ECT, experimental '
+        'psychiatric studies, drug trials, facility preferences, '
+        'mental-health agent. Provider-duty section: §5842. This is '
+        'the law your MHAD is written under.\n\n'
+        'Both chapters use mandatory "shall comply" language for '
+        'provider duties. The same person can be named as your agent '
+        'under both — and often it is simplest if they are. See the '
+        'Supplementary section "How Chapter 54 and Chapter 58 work '
+        'together" for how each statute applies in specific clinical '
+        'situations.',
+  ),
 ];
 
 // ---------------------------------------------------------------------------
@@ -1858,24 +2020,57 @@ const _supplementary = [
   EducationSection(
     id: 'supp_provider_obligations',
     category: EducationCategory.supplementary,
-    title: 'Provider Obligations Under Act 194',
+    title: 'Provider Obligations Under Act 194 — "shall comply"',
     content:
-        'Under 20 Pa.C.S. §5804, §5807, and §5842, attending physicians and '
-        'mental health care providers MUST comply with your declaration and '
-        'power of attorney instructions.\n\n'
-        'If a provider objects on conscience grounds or the requested treatment '
-        'is unavailable, the provider must:\n'
-        '• Immediately inform you (if competent), the substitute named in your '
-        'declaration, your guardian, or your agent\n'
-        '• Document the reasons for noncompliance\n'
-        '• Make a reasonable effort to transfer you to a compliant provider\n'
-        '• Continue treating you per the directive during a pending transfer\n'
-        '• Allow discharge if no compliant provider accepts the transfer\n\n'
-        'Providers must also inquire about the existence of a directive at '
-        'intake or initial assessment, and must inform discharged patients '
-        'about the availability of declarations and powers of attorney. A '
-        'provider may not require a directive as a condition of treatment, nor '
-        'base treatment acceptance or refusal on whether a directive exists.',
+        '**The statutory rule.** Under 20 Pa.C.S. §5842 (Duties of '
+        'Attending Physician and Mental Health Care Provider), the law '
+        'uses mandatory language: "An attending physician or mental '
+        'health care provider **shall comply** with a mental health '
+        'care decision made by a mental health care agent."\n\n'
+        'In statutory drafting, "shall" creates a duty — it is not '
+        'permissive language. The agent\'s decision must be honored to '
+        'the same extent as if you had made it yourself. This default '
+        'rule is subject only to the specific exceptions in §5804 '
+        '(conscience, clinical standards, unavailability, institutional '
+        'policy) and any limitations you yourself wrote into the '
+        'mental-health power of attorney.\n\n'
+        '**The transfer mechanism (§5804).** A provider who cannot in '
+        'good conscience comply with a directive does not gain a '
+        'unilateral override. The provider must instead:\n'
+        '• Immediately inform you (if competent), your agent, the '
+        'substitute named in your declaration, and any guardian;\n'
+        '• Document the reasons for noncompliance in the medical record;\n'
+        '• Make a reasonable effort to transfer your care to a provider '
+        'who will comply;\n'
+        '• Continue treating you per the directive while the transfer '
+        'is pending;\n'
+        '• Allow discharge if no complying provider accepts transfer.\n\n'
+        '**Other duties (§5807).** Providers must inquire about the '
+        'existence of an MHAD at intake or initial assessment, and must '
+        'inform discharged patients about the availability of '
+        'declarations and powers of attorney. A provider may not require '
+        'a directive as a condition of treatment, nor base treatment '
+        'acceptance or refusal on whether a directive exists.\n\n'
+        '**Good-faith immunity (§5805).** A provider who acts in good '
+        'faith and consistent with Chapter 58 is not subject to criminal '
+        'or civil liability, professional discipline, or administrative '
+        'sanctions for following an agent\'s direction — so long as the '
+        'direction is not clearly contrary to the terms of the '
+        'mental-health power of attorney. The statute therefore both '
+        'requires compliance AND protects the provider who complies.\n\n'
+        '**Parallel rule for general health care.** Chapter 54 (Act 169 '
+        'of 2006) contains the same framework for general health-care '
+        'directives at §5462(c)(1): outside a narrow life-preserving '
+        'carve-out, the attending physician or health-care provider '
+        '"shall comply with a health care decision made by a health '
+        'care agent or health care representative to the same extent as '
+        'if the decision had been made by the principal." The two '
+        'chapters operate in parallel — see the FAQ "How is my MHAD '
+        'different from a regular health-care directive?" for the '
+        'practical interaction.\n\n'
+        '**Sources:** 20 Pa.C.S. §§ 5804, 5805, 5807, 5842 (Chapter 58 — '
+        'Act 194 of 2004); 20 Pa.C.S. § 5462(c)(1) (Chapter 54 — Act '
+        '169 of 2006).',
   ),
   EducationSection(
     id: 'supp_emergency_override',
@@ -2161,6 +2356,116 @@ const _supplementary = [
         'to local mental health services, crisis support, housing, and '
         'other community resources. Available 24/7 by dialing 211.',
   ),
+  EducationSection(
+    id: 'supp_chapter_54_vs_58',
+    category: EducationCategory.supplementary,
+    title:
+        'How Chapter 54 (general health care) and Chapter 58 (mental '
+        'health) work together',
+    content:
+        'Pennsylvania law splits advance directives into two parallel '
+        'chapters of Title 20 of the Consolidated Statutes:\n\n'
+        '**Chapter 54 \u2014 Health Care (Act 169 of 2006).** Living wills, '
+        'health-care powers of attorney, end-of-life and life-preserving '
+        'treatment, the default "health-care representative" hierarchy '
+        'when no agent is named. Provider-duty section: \u00a75462. Core '
+        '"shall comply" sentence at \u00a75462(c)(1): "In every other case, '
+        'subject to any limitation specified in the health care power of '
+        'attorney, an attending physician or health care provider shall '
+        'comply with a health care decision made by a health care agent '
+        'or health care representative to the same extent as if the '
+        'decision had been made by the principal."\n\n'
+        '**Chapter 58 \u2014 Mental Health Care (Act 194 of 2004).** Mental '
+        'health declarations, mental health powers of attorney, '
+        'mental-health treatment decisions (medications, ECT, '
+        'experimental studies, drug trials, facility preferences). '
+        'Provider-duty section: \u00a75842. The "shall comply" rule for '
+        'mental-health agents mirrors \u00a75462(c)(1): "An attending '
+        'physician or mental health care provider shall comply with a '
+        'mental health care decision made by a mental health care '
+        'agent."\n\n'
+        '**When does each apply?**\n'
+        '\u2022 A psychiatric admission decision \u2192 Chapter 58.\n'
+        '\u2022 A do-not-resuscitate question during medical care \u2192 '
+        'Chapter 54.\n'
+        '\u2022 A psychotropic-medication decision during a psychiatric '
+        'hospitalization \u2192 Chapter 58.\n'
+        '\u2022 A surgical-consent decision while you are involuntarily '
+        'committed \u2192 typically Chapter 54 (general health care), but '
+        'check whether your MHAD covers the specific facet.\n'
+        '\u2022 A facility preference for psychiatric care \u2192 Chapter 58.\n\n'
+        '**Same person, two roles.** Most people benefit from having '
+        'both a Chapter 58 MHAD (which this app generates) and a '
+        'Chapter 54 health-care POA. The same trusted person can be '
+        'named in both roles \u2014 and often it is simplest if they are.\n\n'
+        '**Why the distinction matters in a dispute.** If a hospital '
+        'cites Chapter 54 rules in a mental-health situation (or vice '
+        'versa), the analysis may produce the wrong answer. The '
+        '"shall comply" duty exists in both chapters, but the carve-outs '
+        'and decision categories differ. Knowing the correct statute '
+        'helps you, your agent, and any patient advocate insist on the '
+        'right framework.',
+  ),
+  EducationSection(
+    id: 'supp_patient_materials_discrepancy',
+    category: EducationCategory.supplementary,
+    title:
+        'Why some patient materials say "guidelines only" \u2014 and what '
+        'the law actually says',
+    content:
+        'A number of widely circulated Pennsylvania patient handouts and '
+        'hospital FAQs describe advance directives in language that '
+        'understates the statutory duty:\n\n'
+        '\u2022 Some say a directive "acts only as guidelines, not as '
+        'automatic medical orders."\n'
+        '\u2022 Some say there is "no law in Pennsylvania that guarantees '
+        'that your medical providers will follow your instructions in '
+        'all circumstances."\n'
+        '\u2022 Some emphasize "professional judgment" without referencing '
+        'the statute.\n\n'
+        '**Why this matters.** Taken at face value, that framing '
+        'suggests broad clinical discretion. But the statutory rule '
+        'under both Chapter 58 (\u00a75842, MHAD) and Chapter 54 (\u00a75462(c)(1), '
+        'general health care) is the opposite: providers "**shall '
+        'comply**" with a valid agent\'s or representative\'s decisions, '
+        'subject to defined exceptions and a duty to **transfer** when '
+        'they cannot comply.\n\n'
+        '**Reading the cautionary language fairly.** Those statements '
+        'are not wrong in the absolute sense \u2014 no law literally '
+        '*guarantees* outcome in every conceivable case, and there are '
+        'narrow statutory exceptions (conscience, clinical standards, '
+        'unavailability, institutional policy, the life-preserving '
+        'carve-out in \u00a75462(c)(1) for general health care). But framing '
+        'the directive as "guidelines only" buries the central legal '
+        'rule (mandatory compliance) under language emphasising provider '
+        'discretion.\n\n'
+        '**What to do as a patient or agent.**\n'
+        '1. Treat your directive as a legal instrument, not a wish '
+        'list. The law backs you up.\n'
+        '2. Quote the statute by section number if a provider downplays '
+        'the directive (\u00a75842 for mental-health decisions; \u00a75462(c)(1) '
+        'for general health care).\n'
+        '3. Ask which statutory exception they are invoking. "We '
+        'usually do X" is not an exception.\n'
+        '4. If the provider is invoking a conscience or clinical-standards '
+        'exception, request the \u00a75804 transfer plan in writing.\n'
+        '5. If you cannot resolve the dispute at the bedside, contact '
+        'Disability Rights Pennsylvania at 1-800-692-7443. They are the '
+        'federally designated protection-and-advocacy organisation for '
+        'Pennsylvania and handle Act 194 complaints.\n\n'
+        '**For institutions.** Aligning patient handouts and ethics-'
+        'committee guidance with the statutory text ("shall comply" + '
+        'defined exceptions + duty to transfer) reduces conflict with '
+        'surrogates, aligns ethical principles with legal rules, and '
+        'supports more consistent practice across providers. This is the '
+        'core finding of bioethics commentary that has compared Act 194 '
+        'and Act 169 with widely used patient materials.\n\n'
+        '**Bottom line for this app.** The wizard and the AI assistant '
+        'in this app describe the provider duty using the statutory '
+        '"shall comply" language. If a printed handout or FAQ you '
+        'encounter elsewhere describes things differently, the statute '
+        'is the controlling authority.',
+  ),
 ];
 
 // ---------------------------------------------------------------------------
@@ -2378,6 +2683,56 @@ const _checklist = [
         '• A trusted family member.\n'
         '• The local emergency department you would most likely be '
         'brought to in a crisis (their advance-directive registry).',
+  ),
+  EducationSection(
+    id: 'checklist_provider_refuses_to_follow',
+    category: EducationCategory.checklist,
+    title: 'If a provider refuses to follow your directive — step by step',
+    content:
+        'Pennsylvania law (20 Pa.C.S. §5842 for MHADs; §5462(c)(1) for '
+        'general health-care directives) requires providers to "shall '
+        'comply" with a valid agent\'s decisions. If a provider tells '
+        'you or your agent they will not follow the directive, work '
+        'through this checklist:\n\n'
+        '☐ **Stay calm and document.** Note the date, time, who said '
+        'what, and any witnesses. Keep it factual.\n\n'
+        '☐ **Ask them to identify the specific exception they are '
+        'relying on.** The only statutory exceptions are:\n'
+        '   • Good-faith conscience objection;\n'
+        '   • Treatment against accepted clinical practice or medical '
+        'standards;\n'
+        '   • Treatment physically unavailable at the facility;\n'
+        '   • Institutional / insurance policy precluding compliance.\n'
+        '   "I just don\'t think we should do that" is not a valid '
+        'exception.\n\n'
+        '☐ **Cite the statute by section.** For mental-health '
+        'decisions: "Under 20 Pa.C.S. §5842, you are required to '
+        'comply with my agent\'s decisions to the same extent as if I '
+        'had made them." For general health-care decisions: cite '
+        '§5462(c)(1).\n\n'
+        '☐ **Request the §5804 transfer plan.** If they are invoking a '
+        'real exception, the law requires them to (a) tell you and '
+        'your agent, (b) document the reason, (c) make a reasonable '
+        'effort to transfer you to a complying provider, and (d) keep '
+        'treating you per the directive while the transfer is pending. '
+        'Ask: "Who is taking the transfer, and what is the timeline?"\n\n'
+        '☐ **Escalate within the institution.** Ask for the '
+        'patient-advocate / ombudsperson, the medical-director on '
+        'call, or the ethics committee. Many disputes resolve when '
+        'someone with authority reviews the statute.\n\n'
+        '☐ **Call Disability Rights Pennsylvania at 1-800-692-7443.** '
+        'They are the federally designated protection-and-advocacy '
+        'organization for PA and handle Act 194 complaints. They can '
+        'advise in real time.\n\n'
+        '☐ **Do not sign anything that purports to revoke the '
+        'directive** unless you (the principal, with capacity) actually '
+        'intend to revoke it. An agent does not have authority to '
+        'revoke the principal\'s directive.\n\n'
+        '☐ **Keep treating your agent as the decision-maker.** The '
+        'agent should continue making decisions and asserting the '
+        'statutory duty until transfer or resolution. Section 5805 '
+        'protects providers who comply in good faith — there is no '
+        'liability risk to following the directive.',
   ),
 ];
 
