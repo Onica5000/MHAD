@@ -153,6 +153,44 @@ were superseded by regulations that changed *after* they were written.
   failure mode and is a strong product differentiator.
 - **Status:** [ ]
 
+### V4-M10c: Prototype visual fidelity sweep beyond the disclaimer (resolved 2026-05-20)
+- **Evidence:** The disclaimer screen and navigation chrome (bottom-nav /
+  WebSidebar) were already prototype-faithful. The remaining top-level screens —
+  Mode selection, Form-type selection, Home — used legacy designs that
+  diverged from the Claude-Design handoff:
+  - Mode selection used a primary-teal full-screen background with onPrimary
+    text (forcing the V4-M9 contrast workaround); the prototype `ScrMode` uses
+    a cream scaffold with white "Card2" cards.
+  - Form-type selection used a `DesignCard` with icon-block-and-chevron;
+    the prototype `ScrFormType` uses a radio-dot `Opt` card with monospace tag
+    pills and a "Help me choose →" primaryLight pill banner.
+  - Home was missing the prototype's active-directive hero (with progress
+    bar + "Continue where you left off" CTA) and the 2×2 tools grid.
+- **Fix:** Three commits on `chore/prototype-fidelity-mode-formtype-home`:
+  - Mode selection rebuilt around the prototype's Card2 pattern, scaffold
+    background, sans H1, CrisisTopBar, and the floating RECOMMENDED badge.
+    All auth wiring (biometric / passcode / loading) preserved verbatim.
+  - Form-type screen rewritten with the prototype's Opt radio cards + tag
+    pills + primaryLight quiz banner. POA confirmation dialog, AI setup
+    prompt, snapshot/restore copy logic, loading overlay all preserved.
+  - Home gets two additive widgets — `_ActiveDirectiveHero` (most-recent
+    draft with progress + Continue CTA, only renders when a draft exists)
+    and `_ToolsGrid` (2x2 of AI / Learn / Wallet card / Crisis help) —
+    without removing the existing AppBar menu, directive list, public-mode
+    notice, _LearnMoreCard, ProviderResourcesCard, or "New Directive"
+    button. Zero removals; legacy entry points all still work.
+- **Note on wizard steps:** the wizard step chrome (`StepHead`,
+  `StepDots`, `WizardBottomBar`) and the global `inputDecorationTheme`
+  in `app_theme.dart` already match the prototype's editorial pattern
+  (serif italic numeral, mono "Step N of Y", filled white card inputs).
+  The wizard AppBar carries four functional action icons (Smart Fill,
+  Document Import, AI chat, Close) that are *features*, not chrome —
+  stripping them to match the prototype's minimal "Back / Save & exit"
+  header would remove user-facing functionality and was intentionally
+  not done. Wizard-step visual fidelity is therefore considered
+  complete via the existing widgets.
+- **Status:** [x]
+
 ### V4-M10b: Provider-duty content understated the statutory "shall comply" rule (resolved 2026-05-20)
 - **Evidence:** Independent research compared 20 Pa.C.S. §5462(c)(1) (Chapter 54,
   general health care) and the analogous §5842 (Chapter 58, Mental Health Care) against
