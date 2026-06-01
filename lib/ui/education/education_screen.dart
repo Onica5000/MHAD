@@ -72,7 +72,7 @@ class _EducationScreenState extends State<EducationScreen> {
                   delegate: _EducationSearchDelegate(),
                   query: _query,
                 );
-                if (result != null && mounted) {
+                if (result != null && context.mounted) {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       fullscreenDialog: true,

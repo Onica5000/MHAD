@@ -1,9 +1,5 @@
 import 'package:drift/drift.dart';
 
-import 'app_database_stub.dart'
-    if (dart.library.io) 'app_database_native.dart'
-    if (dart.library.js_interop) 'app_database_web.dart';
-
 export 'app_database_stub.dart'
     if (dart.library.io) 'app_database_native.dart'
     if (dart.library.js_interop) 'app_database_web.dart'
@@ -95,6 +91,22 @@ class DirectivePrefs extends Table {
       boolean().withDefault(const Constant(true))();
   TextColumn get agentAuthorityLimitations =>
       text().withDefault(const Constant(''))();
+  // Comma-separated room-preference chip ids (e.g. 'singleRoom,windowIfPossible,quietFloor').
+  // Schema 8.
+  TextColumn get roomPreferences =>
+      text().withDefault(const Constant(''))();
+  // Phase 4 — Crisis plan / WRAP toolbox (optional add-on per v2 prototype).
+  // JSON-encoded structure: {earlyWarning: [], triggers: [], helps: [],
+  // sayToMe: [], dontDo: []}. Empty string = not yet filled.
+  // Schema 10.
+  TextColumn get crisisPlanJson =>
+      text().withDefault(const Constant(''))();
+  // Phase 4 — Self-binding (Ulysses) clause opt-in.
+  // Per v3 prototype: PA Act 194 § 5802 makes self-binding structural; this
+  // toggle confirms the principal acknowledges the structural effect.
+  // Schema 10.
+  BoolColumn get selfBindingEnabled =>
+      boolean().withDefault(const Constant(false))();
 }
 
 class AdditionalInstructionsTable extends Table {
@@ -141,6 +153,30 @@ class DiagnosisEntries extends Table {
   IntColumn get sortOrder => integer().withDefault(const Constant(0))();
 }
 
+/// Allergies & reactions captured in wizard step 8 (Phase 3 — schema 9).
+///
+/// `codeSource` notes where the chosen code came from for provenance
+/// (`rxterms` for drug allergies, `icd10` for non-drug status codes,
+/// `manual` for free-text). `reactions` is a comma-separated list of chip
+/// labels (e.g. `Hives,Swelling,Throat closing`).
+class DirectiveAllergies extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  IntColumn get directiveId =>
+      integer().references(Directives, #id, onDelete: KeyAction.cascade)();
+  // 'drug' | 'food' | 'material' | 'environmental' | 'other'
+  TextColumn get kind => text().withDefault(const Constant('drug'))();
+  TextColumn get substance => text().withDefault(const Constant(''))();
+  TextColumn get code => text().withDefault(const Constant(''))();
+  // 'rxterms' | 'icd10' | 'manual'
+  TextColumn get codeSource => text().withDefault(const Constant('manual'))();
+  // 'mild' | 'moderate' | 'severe'
+  TextColumn get severity => text().withDefault(const Constant('moderate'))();
+  // Comma-separated reaction chip labels.
+  TextColumn get reactions => text().withDefault(const Constant(''))();
+  TextColumn get notes => text().withDefault(const Constant(''))();
+  IntColumn get sortOrder => integer().withDefault(const Constant(0))();
+}
+
 class GuardianNominations extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get directiveId => integer()
@@ -154,6 +190,12 @@ class GuardianNominations extends Table {
   // true = guardian authorized to revoke; false = guardian cannot revoke
   BoolColumn get guardianCanRevoke =>
       boolean().withDefault(const Constant(false))();
+  // Relation to existing agents: 'sameAsPrimary' | 'sameAsAlternate' |
+  // 'different' | 'noPreference'. Existing rows with `nomineeFullName`
+  // populated migrate to 'different'; empty rows → 'noPreference'.
+  // Schema 8.
+  TextColumn get guardianRelation =>
+      text().withDefault(const Constant('different'))();
 }
 
 // ─── Database ──────────────────────────────────────────────────────────────
@@ -167,12 +209,13 @@ class GuardianNominations extends Table {
   Witnesses,
   GuardianNominations,
   DiagnosisEntries,
+  DirectiveAllergies,
 ])
 class AppDatabase extends _$AppDatabase {
   AppDatabase(super.executor);
 
   @override
-  int get schemaVersion => 7;
+  int get schemaVersion => 10;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -220,6 +263,56 @@ class AppDatabase extends _$AppDatabase {
           if (from < 7) {
             await customStatement(
                 "ALTER TABLE witnesses ADD COLUMN phone TEXT NOT NULL DEFAULT ''");
+          }
+          if (from < 8) {
+            // Phase 2: room-preference chips + guardian-relation enum.
+            await customStatement(
+                "ALTER TABLE directive_prefs ADD COLUMN room_preferences "
+                "TEXT NOT NULL DEFAULT ''");
+            await customStatement(
+                "ALTER TABLE guardian_nominations ADD COLUMN "
+                "guardian_relation TEXT NOT NULL DEFAULT 'different'");
+            // Existing rows with no nominee fall back to 'noPreference' so
+            // the prototype's 4-radio default state is honest.
+            await customStatement(
+                "UPDATE guardian_nominations SET guardian_relation = 'noPreference' "
+                "WHERE nominee_full_name = '' AND nominee_address = '' "
+                "AND nominee_phone = '' AND nominee_relationship = ''");
+          }
+          if (from < 10) {
+            // Phase 4 — Crisis plan JSON + Ulysses opt-in on directive_prefs.
+            await customStatement(
+                "ALTER TABLE directive_prefs ADD COLUMN crisis_plan_json "
+                "TEXT NOT NULL DEFAULT ''");
+            await customStatement(
+                'ALTER TABLE directive_prefs ADD COLUMN self_binding_enabled '
+                'INTEGER NOT NULL DEFAULT 0');
+          }
+          if (from < 9) {
+            // Phase 3: new directive_allergies table for wizard step 8.
+            await customStatement(
+                'CREATE TABLE IF NOT EXISTS directive_allergies ('
+                'id INTEGER PRIMARY KEY AUTOINCREMENT, '
+                'directive_id INTEGER NOT NULL REFERENCES directives(id) ON DELETE CASCADE, '
+                "kind TEXT NOT NULL DEFAULT 'drug', "
+                "substance TEXT NOT NULL DEFAULT '', "
+                "code TEXT NOT NULL DEFAULT '', "
+                "code_source TEXT NOT NULL DEFAULT 'manual', "
+                "severity TEXT NOT NULL DEFAULT 'moderate', "
+                "reactions TEXT NOT NULL DEFAULT '', "
+                "notes TEXT NOT NULL DEFAULT '', "
+                'sort_order INTEGER NOT NULL DEFAULT 0)');
+            await customStatement(
+                'CREATE INDEX IF NOT EXISTS idx_allergies_directive '
+                'ON directive_allergies (directive_id)');
+            // Migration of existing Reactions-tab content (entry_type =
+            // 'reaction' on medication_entries does not exist — the current
+            // Reactions tab still uses the MedicationEntryType.preferred /
+            // .limitation / .exception triad, with reactions stored in the
+            // `reason` field of `.exception` rows that mention reactions).
+            // Rather than guess-migrate, the existing rows stay in
+            // medication_entries; users can re-enter allergies in step 8.
+            // This preserves data without risking false-positive migration.
           }
         },
       );

@@ -135,7 +135,7 @@ class _FormTypeSelectionScreenState
                 subtitle:
                     'Both name people I trust to speak for me, and document '
                     'my treatment preferences. Most flexibility.',
-                tags: const ['9 steps', 'Agents + preferences', 'Most common'],
+                tags: const ['11 steps', 'Agents + preferences', 'Most common'],
                 recommended: true,
                 onTap: _creating
                     ? null
@@ -147,7 +147,7 @@ class _FormTypeSelectionScreenState
                 subtitle:
                     'Just document my treatment preferences — no agent. '
                     'Decisions still go through doctors.',
-                tags: const ['8 steps', 'No agents'],
+                tags: const ['9 steps', 'No agents'],
                 onTap: _creating
                     ? null
                     : () => _createDirective(FormType.declaration),
@@ -158,7 +158,7 @@ class _FormTypeSelectionScreenState
                 subtitle:
                     'Just name people to make decisions for me. They will '
                     'decide treatment in the moment.',
-                tags: const ['9 steps', 'Agents only'],
+                tags: const ['6 steps', 'Agents only'],
                 onTap: _creating
                     ? null
                     : () => _createDirective(FormType.poa),

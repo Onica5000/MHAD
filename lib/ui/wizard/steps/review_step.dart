@@ -229,6 +229,52 @@ class _ReviewStepState extends ConsumerState<ReviewStep>
             ),
           ),
         ),
+        const SizedBox(height: 12),
+        // FACTUAL_ANALYSIS C6 / F15+F18 — providers SHALL comply with the
+        // directive (§ 5837), but a provider may decline to follow specific
+        // instructions that are against accepted medical practice or when the
+        // provider is not physically available. Surfacing this here sets
+        // accurate expectations before signing.
+        Card(
+          color: Theme.of(context).colorScheme.surfaceContainerHighest,
+          child: Padding(
+            padding: const EdgeInsets.all(14),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(
+                  Icons.info_outline,
+                  size: 18,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text.rich(
+                    TextSpan(
+                      style: TextStyle(
+                        fontSize: 12.5,
+                        height: 1.45,
+                        color: Theme.of(context)
+                            .colorScheme
+                            .onSurfaceVariant,
+                      ),
+                      children: const [
+                        TextSpan(
+                          text: 'Providers must comply ',
+                          style: TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                        TextSpan(
+                          text:
+                              'with your directive under PA Act 194 § 5837. A provider may decline specific instructions only if they conflict with accepted medical practice, or when the provider is not physically available.',
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
         const SizedBox(height: 80),
       ],
     );

@@ -21,6 +21,9 @@ class _TreatmentFacilityStepState
   final _formKey = GlobalKey<FormState>();
   final List<_FacilityRow> _preferred = [];
   final List<_FacilityRow> _avoid = [];
+  // Selected room-preference chip ids — see [_RoomChip.all] for the canonical
+  // list. Persisted as a comma-separated string in `roomPreferences`.
+  final Set<String> _roomPrefs = {};
 
   @override
   void initState() {
@@ -44,6 +47,11 @@ class _TreatmentFacilityStepState
       setState(() {
         _preferred.addAll(_parseFacilities(pref.preferredFacilityName));
         _avoid.addAll(_parseFacilities(pref.avoidFacilityName));
+        _roomPrefs
+          ..clear()
+          ..addAll(pref.roomPreferences
+              .split(',')
+              .where((s) => s.trim().isNotEmpty));
       });
     }
   }
@@ -90,6 +98,7 @@ class _TreatmentFacilityStepState
             treatmentFacilityPref: Value(prefValue),
             preferredFacilityName: Value(preferred),
             avoidFacilityName: Value(avoid),
+            roomPreferences: Value(_roomPrefs.join(',')),
           ),
         );
     return true;
@@ -155,7 +164,92 @@ class _TreatmentFacilityStepState
               _avoid.removeAt(i);
             }),
           ),
+          const SizedBox(height: 24),
+          // Phase 2 — inclusive room-preference chip set per v2 prototype.
+          // Stored as a comma-separated id list in `room_preferences`.
+          _RoomPreferencesCard(
+            selected: _roomPrefs,
+            onToggle: (id) => setState(() {
+              if (_roomPrefs.contains(id)) {
+                _roomPrefs.remove(id);
+              } else {
+                _roomPrefs.add(id);
+              }
+            }),
+          ),
         ],
+      ),
+    );
+  }
+}
+
+/// Inclusive room-preference chip set, expanded from the prototype's
+/// binary-gender chip to a more inclusive list (per PROTOTYPE_DIFF_DECISIONS
+/// item #10 / submission item #10).
+class _RoomChip {
+  final String id;
+  final String label;
+  const _RoomChip(this.id, this.label);
+
+  static const all = <_RoomChip>[
+    _RoomChip('singleRoom', 'Single room'),
+    _RoomChip('windowIfPossible', 'Window if possible'),
+    _RoomChip('quietFloor', 'Quiet floor'),
+    _RoomChip('sameGenderRoommate', 'Same-gender roommate'),
+    _RoomChip('noRoommate', 'No roommate'),
+    _RoomChip('transAffirmingStaff', 'Trans-affirming staff'),
+    _RoomChip('lowStimulationUnit', 'Low-stimulation unit'),
+  ];
+}
+
+class _RoomPreferencesCard extends StatelessWidget {
+  final Set<String> selected;
+  final ValueChanged<String> onToggle;
+  const _RoomPreferencesCard({
+    required this.selected,
+    required this.onToggle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    return Card(
+      color: cs.surfaceContainerLow,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Room preferences',
+              style: Theme.of(context)
+                  .textTheme
+                  .titleSmall
+                  ?.copyWith(fontWeight: FontWeight.w600),
+            ),
+            Text(
+              'Optional — guides staff if a choice is available.',
+              style: Theme.of(context)
+                  .textTheme
+                  .bodySmall
+                  ?.copyWith(color: cs.onSurfaceVariant),
+            ),
+            const SizedBox(height: 12),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                for (final chip in _RoomChip.all)
+                  FilterChip(
+                    label: Text(chip.label),
+                    selected: selected.contains(chip.id),
+                    onSelected: (_) => onToggle(chip.id),
+                    showCheckmark: false,
+                  ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

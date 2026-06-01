@@ -61,7 +61,12 @@ class _ReviewAndSignStepState extends ConsumerState<ReviewAndSignStep>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SectionLabel('Step 9 of 9 · finalize'),
+              // Derived from FormType.steps so the count stays accurate as
+              // the wizard structure evolves (Phase 3 → 11 / 9 / 6 steps).
+              SectionLabel(
+                'Step ${widget.formType.steps.length} of '
+                '${widget.formType.steps.length} · finalize',
+              ),
               const EditorialHeading(text: 'Almost there.', size: 36),
               const SizedBox(height: 4),
               Text(

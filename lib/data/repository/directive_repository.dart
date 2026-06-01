@@ -214,6 +214,20 @@ class DirectiveRepository {
   Future<void> deleteDiagnosis(int id) =>
       (_db.delete(_db.diagnosisEntries)..where((t) => t.id.equals(id))).go();
 
+  // ── Allergies (wizard step 8 — Phase 3) ────────────────────────────────
+
+  Future<List<DirectiveAllergy>> getAllergies(int directiveId) =>
+      (_db.select(_db.directiveAllergies)
+            ..where((t) => t.directiveId.equals(directiveId))
+            ..orderBy([(t) => OrderingTerm.asc(t.sortOrder)]))
+          .get();
+
+  Future<int> addAllergy(DirectiveAllergiesCompanion entry) =>
+      _db.into(_db.directiveAllergies).insert(entry);
+
+  Future<void> removeAllergy(int id) =>
+      (_db.delete(_db.directiveAllergies)..where((t) => t.id.equals(id))).go();
+
   // ── Snapshot / Restore (for web reload recovery) ───────────────────────
 
   /// Export all non-PII data for a directive as a JSON-safe map.

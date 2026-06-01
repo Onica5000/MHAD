@@ -117,7 +117,12 @@ class _WizardCompleteScreenState extends ConsumerState<WizardCompleteScreen> {
           ),
           const SizedBox(height: 10),
           Text(
-            'Your directive is saved. Now make sure the right people have a copy.',
+            // Updated per Decision 6 + v2 prototype: the directive becomes
+            // legally valid only after you and two adult witnesses sign on
+            // paper in original ink. Until then, the saved version is a
+            // ready-to-print draft.
+            'Your directive is ready to print. It becomes legally valid once '
+            'you and two adult witnesses sign on paper in original ink.',
             style: TextStyle(
               fontFamily: 'DM Sans',
               fontSize: 14.5,
@@ -263,6 +268,21 @@ class _WizardCompleteScreenState extends ConsumerState<WizardCompleteScreen> {
             ),
           ),
           const SizedBox(height: 16),
+
+          // FACTUAL_ANALYSIS C6 / F15+F18 — providers SHALL comply (§ 5837)
+          // but may decline instructions against accepted medical practice or
+          // when unavailable. Surfaced here for accurate expectations after
+          // the signed directive is distributed.
+          const InfoBanner(
+            icon: Icons.info_outline,
+            text:
+                'Providers must comply with your directive under PA Act 194 '
+                '§ 5837. A provider may decline specific instructions only if '
+                'they conflict with accepted medical practice, or when the '
+                'provider is not physically available.',
+            variant: InfoBannerVariant.info,
+          ),
+          const SizedBox(height: 12),
 
           const InfoBanner(
             icon: Icons.backup_outlined,

@@ -126,7 +126,7 @@ class GeminiRateTracker extends ChangeNotifier {
     }
     if (remainingRpm <= 0) {
       return 'Too many requests this minute (limit: $maxRpm/min). '
-          'Please wait ${secondsUntilRpmSlot} seconds.';
+          'Please wait $secondsUntilRpmSlot seconds.';
     }
     if (remainingTpm <= 0) {
       return 'Token limit reached this minute (${(maxTpm / 1000).round()}K/min). '

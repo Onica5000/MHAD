@@ -57,6 +57,11 @@ DirectivePref _makePrefs() => const DirectivePref(
       agentCanConsentHospitalization: true,
       agentCanConsentMedication: true,
       agentAuthorityLimitations: '',
+      // Phase 2 — schema v8 additions.
+      roomPreferences: '',
+      // Phase 4 — schema v10 additions.
+      crisisPlanJson: '',
+      selfBindingEnabled: false,
     );
 
 AdditionalInstructionsTableData _makeAdditional() =>
@@ -83,6 +88,9 @@ GuardianNomination _makeGuardian() => const GuardianNomination(
       nomineePhone: '717-555-9999',
       nomineeRelationship: 'Brother',
       guardianCanRevoke: false,
+      // Phase 2 — schema v8 addition. 'different' = explicit named nominee
+      // (matches the inline-expansion branch in guardian_nomination_step.dart).
+      guardianRelation: 'different',
     );
 
 MedicationEntry _makeMedication() => const MedicationEntry(

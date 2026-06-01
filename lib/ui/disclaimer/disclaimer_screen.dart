@@ -6,7 +6,7 @@ import 'package:mhad/ui/widgets/design/crisis_sheet.dart';
 
 /// First-launch legal disclaimer + read-only Settings variant.
 ///
-/// Layout — per `MHAD-handoff/mhad/project/Disclaimer Screen.html`:
+/// Layout â€” per `MHAD-handoff/mhad/project/Disclaimer Screen.html`:
 ///  - "Need 988" pill pinned to top-right
 ///  - Editorial italic header "A few _important_ things."
 ///  - Read-progress meter ("X / 8 READ") that fills as sections are opened
@@ -19,7 +19,7 @@ class DisclaimerScreen extends StatefulWidget {
   final DisclaimerNotifier? _notifier;
   final bool _readOnly;
 
-  /// First-launch gate variant — user must tick both checkboxes before
+  /// First-launch gate variant â€” user must tick both checkboxes before
   /// they can tap Continue.
   const DisclaimerScreen.gate({
     required DisclaimerNotifier notifier,
@@ -27,8 +27,8 @@ class DisclaimerScreen extends StatefulWidget {
   })  : _notifier = notifier,
         _readOnly = false;
 
-  /// Read-only variant — the same accordion content with an AppBar back
-  /// button instead of the accept footer. Used from Settings → Legal.
+  /// Read-only variant â€” the same accordion content with an AppBar back
+  /// button instead of the accept footer. Used from Settings â†’ Legal.
   const DisclaimerScreen.readOnly({super.key})
       : _notifier = null,
         _readOnly = true;
@@ -144,7 +144,7 @@ class _DisclaimerScreenState extends State<DisclaimerScreen> {
                               children: [
                                 const TextSpan(
                                     text:
-                                        "Read carefully — these confirm what this app does and doesn't do under "),
+                                        "Read carefully â€” these confirm what this app does and doesn't do under "),
                                 TextSpan(
                                   text: 'PA Act 194',
                                   style: TextStyle(
@@ -201,7 +201,7 @@ class _DisclaimerScreenState extends State<DisclaimerScreen> {
                   ),
 
                   // Sections list (scrollable). Bottom 24px fades to the
-                  // scaffold — matches the prototype's maskImage gradient
+                  // scaffold â€” matches the prototype's maskImage gradient
                   // (linear-gradient(to bottom, black calc(100% - 24px),
                   // transparent)).
                   Expanded(
@@ -246,7 +246,7 @@ class _DisclaimerScreenState extends State<DisclaimerScreen> {
                             child: Column(
                               children: [
                                 Text(
-                                  '"Your directive is your voice — written in '
+                                  '"Your directive is your voice â€” written in '
                                   "advance, kept safe, honored when you can't "
                                   'speak for yourself."',
                                   textAlign: TextAlign.center,
@@ -265,7 +265,7 @@ class _DisclaimerScreenState extends State<DisclaimerScreen> {
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
-                                  '— PA MHAD BOOKLET',
+                                  'â€” PA MHAD BOOKLET',
                                   style: TextStyle(
                                     fontFamily: 'JetBrains Mono',
                                     fontFamilyFallback: const [
@@ -290,7 +290,7 @@ class _DisclaimerScreenState extends State<DisclaimerScreen> {
                     ),
                   ),
 
-                  // Sticky accept bar — gate only
+                  // Sticky accept bar â€” gate only
                   if (!readOnly)
                     _AcceptFooter(
                       isAdult: _isAdult,
@@ -305,7 +305,7 @@ class _DisclaimerScreenState extends State<DisclaimerScreen> {
                 ],
               ),
 
-              // Persistent 988 chip pinned to top-right (gate only — Settings
+              // Persistent 988 chip pinned to top-right (gate only â€” Settings
               // has its own AppBar and the route is already private).
               if (!readOnly)
                 Positioned(
@@ -332,7 +332,7 @@ class _DisclaimerScreenState extends State<DisclaimerScreen> {
   }
 }
 
-// ─── Data ────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Data â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 class _SectionData {
   final String number;
@@ -355,11 +355,11 @@ List<_SectionData> _buildSections(MhadPalette p) {
           const TextSpan(
               text:
                   'This app helps Pennsylvania residents document their treatment preferences under '),
-          _Bold('PA Act 194 of 2004'),
+          _bold('PA Act 194 of 2004'),
           const TextSpan(
               text:
                   '. The information is for informational purposes only and does '),
-          _Bold('not'),
+          _bold('not'),
           const TextSpan(text: ' constitute legal or medical advice.'),
         ], palette: p),
         _Para(spans: const [
@@ -375,10 +375,10 @@ List<_SectionData> _buildSections(MhadPalette p) {
       body: [
         _Para(spans: [
           const TextSpan(text: 'Use of this app does '),
-          _Bold('not'),
+          _bold('not'),
           const TextSpan(
               text:
-                  ' create an attorney–client relationship, a provider–patient relationship, or any other professional relationship between you and the developer.'),
+                  ' create an attorneyâ€“client relationship, a providerâ€“patient relationship, or any other professional relationship between you and the developer.'),
         ], palette: p),
         _Para(spans: const [
           TextSpan(
@@ -411,7 +411,7 @@ List<_SectionData> _buildSections(MhadPalette p) {
           const TextSpan(
               text:
                   'A PA Mental Health Advance Directive is legally valid '),
-          _Bold('only'),
+          _bold('only'),
           const TextSpan(text: ' when:'),
         ], palette: p),
         _Bullet(spans: const [
@@ -421,14 +421,14 @@ List<_SectionData> _buildSections(MhadPalette p) {
         ], palette: p),
         _Bullet(spans: [
           const TextSpan(text: 'It is signed in the presence of '),
-          _Bold('two adult witnesses'),
+          _bold('two adult witnesses'),
         ], palette: p),
         _Bullet(spans: const [
           TextSpan(
               text: 'Both witnesses meet eligibility requirements under Act 194'),
         ], palette: p),
         _Para(spans: [
-          _Bold('Witnesses cannot be: '),
+          _bold('Witnesses cannot be: '),
           const TextSpan(
               text:
                   "your designated agent, your agent's spouse, your mental health care provider, or an employee of your treatment facility (unless related to you)."),
@@ -437,10 +437,17 @@ List<_SectionData> _buildSections(MhadPalette p) {
           const TextSpan(
               text:
                   'This app captures touch-drawn signatures for convenience during preparation. The '),
-          _Bold('printed'),
+          _bold('printed'),
           const TextSpan(
               text:
                   ' directive must be signed in original ink, in the presence of your two witnesses, to be legally valid.'),
+        ], palette: p),
+        _Para(spans: [
+          const TextSpan(text: 'Once signed, providers and your agent '),
+          _bold('must comply'),
+          const TextSpan(
+              text:
+                  ' with your directive (20 Pa.C.S. Â§ 5837). However, a provider may decline to follow specific instructions that are against accepted medical practice, or when the provider is not physically available.'),
         ], palette: p),
       ],
     ),
@@ -450,10 +457,14 @@ List<_SectionData> _buildSections(MhadPalette p) {
       body: [
         _Para(spans: [
           const TextSpan(text: 'Under PA Act 194, an MHAD is valid for '),
-          _Bold('two years'),
+          _bold('two years'),
           const TextSpan(
               text:
-                  ' from the date of execution unless revoked earlier. This app will remind you when your directive is approaching expiration.'),
+                  ' from the date of execution unless revoked earlier â€” '),
+          _bold('unless you are found incapable'),
+          const TextSpan(
+              text:
+                  ' of making mental health decisions at the time it would expire, in which case it remains in effect until capacity returns. This app will remind you when your directive is approaching expiration.'),
         ], palette: p),
       ],
     ),
@@ -486,22 +497,22 @@ List<_SectionData> _buildSections(MhadPalette p) {
       body: [
         _Para(spans: [
           const TextSpan(text: 'In '),
-          _Bold('Private Mode'),
+          _bold('Private Mode'),
           const TextSpan(
               text:
                   ', your directive is encrypted and stored on this device. In '),
-          _Bold('Public Mode'),
+          _bold('Public Mode'),
           const TextSpan(
               text:
                   ' (or on the web), data is held in memory only and is not saved permanently. This app is '),
-          _Bold('not'),
+          _bold('not'),
           const TextSpan(text: ' HIPAA-compliant.'),
         ], palette: p),
         _Para(spans: [
           const TextSpan(
               text:
                   "If you use the optional AI Assistant (Google Gemini), text you send is transmitted to Google's servers. On the free tier, Google may use this data to improve their products and human reviewers may read inputs. "),
-          _Bold('Do not include personally identifying information'),
+          _bold('Do not include personally identifying information'),
           const TextSpan(
               text:
                   ' (full name, SSN, date of birth, address) in AI requests.'),
@@ -509,7 +520,7 @@ List<_SectionData> _buildSections(MhadPalette p) {
         _Para(spans: const [
           TextSpan(
               text:
-                  'AI suggestions are not legal or medical advice — review carefully before accepting.'),
+                  'AI suggestions are not legal or medical advice â€” review carefully before accepting.'),
         ], palette: p),
       ],
     ),
@@ -520,7 +531,7 @@ List<_SectionData> _buildSections(MhadPalette p) {
         _Resource(
             title: 'PA Protection & Advocacy',
             sub: 'Your rights under Act 194',
-            mono: '1-800-692-7443 · TDD/TTY 1-877-375-7139',
+            mono: '1-800-692-7443 Â· TDD/TTY 1-877-375-7139',
             palette: p),
         const SizedBox(height: 10),
         _Resource(
@@ -545,9 +556,9 @@ List<_SectionData> _buildSections(MhadPalette p) {
   ];
 }
 
-// ─── Building blocks ─────────────────────────────────────────────────────
+// â”€â”€â”€ Building blocks â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
-InlineSpan _Bold(String text) => TextSpan(
+InlineSpan _bold(String text) => TextSpan(
       text: text,
       style: const TextStyle(fontWeight: FontWeight.w600),
     );
@@ -623,7 +634,7 @@ class _Bullet extends StatelessWidget {
 }
 
 /// Bold spans inside body text get the full-text color (rather than the
-/// muted body color) — matches the prototype's `.disc-body strong` rule.
+/// muted body color) â€” matches the prototype's `.disc-body strong` rule.
 InlineSpan _coloredBoldInBody(InlineSpan span, MhadPalette palette) {
   if (span is! TextSpan) return span;
   final isBold = (span.style?.fontWeight == FontWeight.w600 ||
@@ -665,7 +676,7 @@ class _Resource extends StatelessWidget {
               ),
               if (sub != null)
                 TextSpan(
-                  text: ' — $sub',
+                  text: ' â€” $sub',
                   style: TextStyle(color: palette.textMuted),
                 ),
             ],
@@ -696,7 +707,7 @@ class _Resource extends StatelessWidget {
   }
 }
 
-// ─── Accordion section ──────────────────────────────────────────────────
+// â”€â”€â”€ Accordion section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 class _AccordionSection extends StatelessWidget {
   final String number;
@@ -737,7 +748,7 @@ class _AccordionSection extends StatelessWidget {
             child: InkWell(
               onTap: onTap,
               child: SizedBox(
-                // Fixed accordion-header height ≥ 48 for the a11y guideline.
+                // Fixed accordion-header height â‰¥ 48 for the a11y guideline.
                 // The visible content (number + title + chevron) is centered
                 // within it, matching the prototype's tight header look.
                 height: 56,
@@ -808,7 +819,7 @@ class _AccordionSection extends StatelessWidget {
   }
 }
 
-// ─── Short-version banner ───────────────────────────────────────────────
+// â”€â”€â”€ Short-version banner â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 class _ShortVersionBanner extends StatelessWidget {
   @override
@@ -895,7 +906,7 @@ class _ShortVersionBanner extends StatelessWidget {
   }
 }
 
-// ─── 988 pill ───────────────────────────────────────────────────────────
+// â”€â”€â”€ 988 pill â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 class _Need988Pill extends StatelessWidget {
   final Color bg;
@@ -913,7 +924,7 @@ class _Need988Pill extends StatelessWidget {
   Widget build(BuildContext context) {
     return Semantics(
       button: true,
-      label: 'Need 988 — open crisis resources',
+      label: 'Need 988 â€” open crisis resources',
       child: Material(
         color: bg,
         borderRadius: BorderRadius.circular(100),
@@ -957,7 +968,7 @@ class _Need988Pill extends StatelessWidget {
   }
 }
 
-// ─── Accept footer (gate only) ──────────────────────────────────────────
+// â”€â”€â”€ Accept footer (gate only) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 class _AcceptFooter extends StatelessWidget {
   final bool isAdult;
@@ -1000,7 +1011,7 @@ class _AcceptFooter extends StatelessWidget {
             onToggle: onAdultToggle,
             labelSpans: [
               const TextSpan(text: "I'm "),
-              _Bold('18 or older'),
+              _bold('18 or older'),
               const TextSpan(text: ', or an emancipated minor.'),
             ],
           ),
@@ -1010,7 +1021,7 @@ class _AcceptFooter extends StatelessWidget {
             onToggle: onNotLegalToggle,
             labelSpans: [
               const TextSpan(text: 'I understand this app is '),
-              _Bold('not legal or medical advice'),
+              _bold('not legal or medical advice'),
               const TextSpan(text: '.'),
             ],
           ),
@@ -1025,7 +1036,7 @@ class _AcceptFooter extends StatelessWidget {
                 color: canContinue ? p.onPrimary : p.textMuted,
               ),
               label: Text(
-                'I understand · Continue',
+                'I understand Â· Continue',
                 style: TextStyle(
                   fontFamily: 'DM Sans',
                   fontWeight: FontWeight.w600,
@@ -1046,7 +1057,7 @@ class _AcceptFooter extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Text(
-            'You can re-read this anytime from Settings → Legal.',
+            'You can re-read this anytime from Settings â†’ Legal.',
             textAlign: TextAlign.center,
             style: TextStyle(
               fontFamily: 'DM Sans',
@@ -1080,7 +1091,7 @@ class _CheckRow extends StatelessWidget {
         onTap: onToggle,
         borderRadius: BorderRadius.circular(8),
         child: Padding(
-          // Vertical 14 (≈ 22 + 28 = 50) keeps the row ≥ 48 for a11y while
+          // Vertical 14 (â‰ˆ 22 + 28 = 50) keeps the row â‰¥ 48 for a11y while
           // staying close to the prototype's tight checkbox row.
           padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 4),
           child: Row(

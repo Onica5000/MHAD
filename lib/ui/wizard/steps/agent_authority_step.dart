@@ -112,7 +112,8 @@ class _AgentAuthorityStepState
                           color: Theme.of(context).colorScheme.onTertiaryContainer),
                       const SizedBox(width: 8),
                       Expanded(
-                        child: Text('Important: Scope of Authority (PA Act 194)',
+                        child: Text(
+                            'Important: Scope of Authority (20 Pa.C.S. § 5836)',
                             style: TextStyle(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 13,
@@ -137,6 +138,51 @@ class _AgentAuthorityStepState
                       fontSize: 12,
                       color: Theme.of(context).colorScheme.onTertiaryContainer,
                       height: 1.4,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          // FACTUAL_ANALYSIS comprehensiveness gap #1 / F14 — § 5836(d)
+          // substituted-judgment standard: explain to users what their agent
+          // is legally bound to do. This is one of the strongest arguments
+          // for filling out the declaration parts even when naming an agent.
+          Card(
+            color: Theme.of(context).colorScheme.primaryContainer,
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(
+                    Icons.balance,
+                    size: 18,
+                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text.rich(
+                      TextSpan(
+                        style: TextStyle(
+                          fontSize: 12.5,
+                          height: 1.45,
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onPrimaryContainer,
+                        ),
+                        children: [
+                          const TextSpan(
+                            text: 'The standard your agent must follow: ',
+                            style: TextStyle(fontWeight: FontWeight.w700),
+                          ),
+                          const TextSpan(
+                            text:
+                                'under § 5836(d), your agent is legally bound to make the decision you would make if you were competent, guided by what you write in this directive and any clear prior instructions, after consulting with providers. The more you fill in, the closer their decisions can match yours.',
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],

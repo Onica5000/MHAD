@@ -1,18 +1,27 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/ai/ai_assistant.dart';
 import 'package:mhad/services/disclaimer_service.dart';
 import 'package:mhad/services/privacy_mode_service.dart';
+import 'package:mhad/ui/ai_check/ai_consistency_screen.dart';
 import 'package:mhad/ui/assistant/assistant_screen.dart';
+import 'package:mhad/ui/clinician/clinician_view_screen.dart';
+import 'package:mhad/ui/crisis_plan/crisis_plan_screen.dart';
 import 'package:mhad/ui/disclaimer/disclaimer_screen.dart';
 import 'package:mhad/ui/education/education_screen.dart';
 import 'package:mhad/ui/export/export_screen.dart';
+import 'package:mhad/ui/facilitator/facilitator_screen.dart';
 import 'package:mhad/ui/home/home_screen.dart';
+import 'package:mhad/ui/legal_toggle/plain_legal_toggle_screen.dart';
+import 'package:mhad/ui/past/past_directive_detail_screen.dart';
+import 'package:mhad/ui/revocation/revocation_screen.dart';
+import 'package:mhad/ui/settings/accessibility_settings_screen.dart';
 import 'package:mhad/ui/settings/ai_setup_screen.dart';
 import 'package:mhad/ui/settings/settings_screen.dart';
 import 'package:mhad/ui/settings/privacy_policy_screen.dart';
+import 'package:mhad/ui/share/share_sheet_screen.dart';
 import 'package:mhad/ui/mode_selection/mode_selection_screen.dart';
+import 'package:mhad/ui/ulysses/ulysses_clause_screen.dart';
 import 'package:mhad/ui/wizard/form_type_selection_screen.dart';
 import 'package:mhad/ui/wizard/wizard_complete_screen.dart';
 import 'package:mhad/ui/wizard/wizard_screen.dart';
@@ -36,6 +45,31 @@ abstract class AppRoutes {
 
   static String wizardRoute(int directiveId) => '/wizard/$directiveId';
   static String exportRoute(int directiveId) => '/export/$directiveId';
+
+  // Phase 4 — net-new screens per v2 prototype artboards. All reachable via
+  // existing surfaces (Home Tools tile, Settings → My directive, etc.).
+  static const accessibility = '/accessibility';
+  static const facilitator = '/facilitator';
+  static const legalToggle = '/legal-toggle/:directiveId';
+  static const clinicianView = '/clinician/:directiveId';
+  static const crisisPlan = '/crisis-plan/:directiveId';
+  static const ulysses = '/ulysses/:directiveId';
+  static const revocation = '/revoke/:directiveId';
+  static const aiCheck = '/ai-check/:directiveId';
+  static const pastDirective = '/past/:directiveId';
+  static const shareSheet = '/share/:directiveId';
+
+  static String legalToggleRoute(int directiveId) =>
+      '/legal-toggle/$directiveId';
+  static String clinicianViewRoute(int directiveId) =>
+      '/clinician/$directiveId';
+  static String crisisPlanRoute(int directiveId) =>
+      '/crisis-plan/$directiveId';
+  static String ulyssesRoute(int directiveId) => '/ulysses/$directiveId';
+  static String revocationRoute(int directiveId) => '/revoke/$directiveId';
+  static String aiCheckRoute(int directiveId) => '/ai-check/$directiveId';
+  static String pastDirectiveRoute(int directiveId) => '/past/$directiveId';
+  static String shareSheetRoute(int directiveId) => '/share/$directiveId';
 }
 
 /// Initializes the global [appRouter] with the loaded service notifiers.
@@ -159,6 +193,80 @@ GoRouter _buildRouter(
         GoRoute(
           path: AppRoutes.settings,
           builder: (_, _) => const SettingsScreen(),
+        ),
+
+        // Phase 4 — net-new artboards from v2 prototype.
+        GoRoute(
+          path: AppRoutes.accessibility,
+          builder: (_, _) => const AccessibilitySettingsScreen(),
+        ),
+        GoRoute(
+          path: AppRoutes.facilitator,
+          builder: (_, _) => const FacilitatorScreen(),
+        ),
+        GoRoute(
+          path: AppRoutes.legalToggle,
+          builder: (_, state) {
+            final id = int.tryParse(state.pathParameters['directiveId'] ?? '');
+            if (id == null) return const HomeScreen();
+            return PlainLegalToggleScreen(directiveId: id);
+          },
+        ),
+        GoRoute(
+          path: AppRoutes.clinicianView,
+          builder: (_, state) {
+            final id = int.tryParse(state.pathParameters['directiveId'] ?? '');
+            if (id == null) return const HomeScreen();
+            return ClinicianViewScreen(directiveId: id);
+          },
+        ),
+        GoRoute(
+          path: AppRoutes.crisisPlan,
+          builder: (_, state) {
+            final id = int.tryParse(state.pathParameters['directiveId'] ?? '');
+            if (id == null) return const HomeScreen();
+            return CrisisPlanScreen(directiveId: id);
+          },
+        ),
+        GoRoute(
+          path: AppRoutes.ulysses,
+          builder: (_, state) {
+            final id = int.tryParse(state.pathParameters['directiveId'] ?? '');
+            if (id == null) return const HomeScreen();
+            return UlyssesClauseScreen(directiveId: id);
+          },
+        ),
+        GoRoute(
+          path: AppRoutes.revocation,
+          builder: (_, state) {
+            final id = int.tryParse(state.pathParameters['directiveId'] ?? '');
+            if (id == null) return const HomeScreen();
+            return RevocationScreen(directiveId: id);
+          },
+        ),
+        GoRoute(
+          path: AppRoutes.aiCheck,
+          builder: (_, state) {
+            final id = int.tryParse(state.pathParameters['directiveId'] ?? '');
+            if (id == null) return const HomeScreen();
+            return AiConsistencyScreen(directiveId: id);
+          },
+        ),
+        GoRoute(
+          path: AppRoutes.pastDirective,
+          builder: (_, state) {
+            final id = int.tryParse(state.pathParameters['directiveId'] ?? '');
+            if (id == null) return const HomeScreen();
+            return PastDirectiveDetailScreen(directiveId: id);
+          },
+        ),
+        GoRoute(
+          path: AppRoutes.shareSheet,
+          builder: (_, state) {
+            final id = int.tryParse(state.pathParameters['directiveId'] ?? '');
+            if (id == null) return const HomeScreen();
+            return ShareSheetScreen(directiveId: id);
+          },
         ),
       ],
       errorBuilder: (_, _) => const HomeScreen(),

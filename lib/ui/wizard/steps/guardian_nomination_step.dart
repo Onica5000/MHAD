@@ -16,6 +16,31 @@ class GuardianNominationStep extends ConsumerStatefulWidget {
       _GuardianNominationStepState();
 }
 
+/// Canonical "who is my preferred guardian" choices from the v2 prototype.
+/// Persists as a string in `guardianRelation`. The `different` branch is the
+/// only one that shows the inline name / address / phone fields.
+enum _GuardianRel {
+  sameAsPrimary('sameAsPrimary', 'Same as my primary agent',
+      'The simplest path. The court is not required to follow this, but it is strong guidance.'),
+  sameAsAlternate('sameAsAlternate', 'Same as my alternate agent',
+      'Use this if your alternate would be a better fit for a longer-term guardianship role.'),
+  different('different', 'Someone different',
+      'Choose another person — e.g. an attorney, sibling, or close friend not already named.'),
+  noPreference('noPreference', 'No preference',
+      'Let the court decide. They will usually appoint a family member or county guardianship office.');
+
+  final String id;
+  final String label;
+  final String hint;
+  const _GuardianRel(this.id, this.label, this.hint);
+
+  static _GuardianRel fromId(String id) =>
+      _GuardianRel.values.firstWhere(
+        (e) => e.id == id,
+        orElse: () => _GuardianRel.noPreference,
+      );
+}
+
 class _GuardianNominationStepState
     extends ConsumerState<GuardianNominationStep> with WizardStepMixin {
   final _formKey = GlobalKey<FormState>();
@@ -25,6 +50,7 @@ class _GuardianNominationStepState
   late final TextEditingController _relationshipCtrl;
   int? _existingId;
   bool _guardianCanRevoke = false;
+  _GuardianRel _relation = _GuardianRel.noPreference;
 
   @override
   void initState() {
@@ -57,6 +83,7 @@ class _GuardianNominationStepState
         _phoneCtrl.text = g.nomineePhone;
         _relationshipCtrl.text = g.nomineeRelationship;
         _guardianCanRevoke = g.guardianCanRevoke;
+        _relation = _GuardianRel.fromId(g.guardianRelation);
       });
     }
   }
@@ -64,17 +91,24 @@ class _GuardianNominationStepState
   @override
   Future<bool> validateAndSave() async {
     _formKey.currentState?.validate();
+    // For non-"different" choices, the inline fields don't apply — blank
+    // them out before save so the persisted row stays consistent.
+    final isDifferent = _relation == _GuardianRel.different;
     await ref.read(directiveRepositoryProvider).upsertGuardianNomination(
           GuardianNominationsCompanion(
             id: _existingId != null
                 ? Value(_existingId!)
                 : const Value.absent(),
             directiveId: Value(widget.directiveId),
-            nomineeFullName: Value(_nameCtrl.text.trim()),
-            nomineeAddress: Value(_addressCtrl.text.trim()),
-            nomineePhone: Value(_phoneCtrl.text.trim()),
-            nomineeRelationship: Value(_relationshipCtrl.text.trim()),
+            nomineeFullName:
+                Value(isDifferent ? _nameCtrl.text.trim() : ''),
+            nomineeAddress:
+                Value(isDifferent ? _addressCtrl.text.trim() : ''),
+            nomineePhone: Value(isDifferent ? _phoneCtrl.text.trim() : ''),
+            nomineeRelationship:
+                Value(isDifferent ? _relationshipCtrl.text.trim() : ''),
             guardianCanRevoke: Value(_guardianCanRevoke),
+            guardianRelation: Value(_relation.id),
           ),
         );
     return true;
@@ -136,53 +170,81 @@ class _GuardianNominationStepState
             ),
           ),
           const SizedBox(height: 12),
-          ContactPickerButton(
-            onContactPicked: (c) => setState(() {
-              _nameCtrl.text = c.fullName;
-              if (c.address.isNotEmpty) _addressCtrl.text = c.address;
-              if (c.cellPhone.isNotEmpty) {
-                _phoneCtrl.text = c.cellPhone;
-              } else if (c.homePhone.isNotEmpty) {
-                _phoneCtrl.text = c.homePhone;
-              }
-            }),
+          // Phase 2 — 4-radio Opt pattern per v2 prototype's `ScrWizardGuardian`.
+          // The 'Someone different' branch expands inline to show the existing
+          // free-text fields; other branches hide them (and clear on save).
+          Text(
+            'Preferred guardian',
+            style: Theme.of(context).textTheme.titleSmall,
           ),
-          const SizedBox(height: 16),
-          TextFormField(
-            controller: _nameCtrl,
-            decoration: const InputDecoration(
-              labelText: 'Nominee full name',
-              border: OutlineInputBorder(),
+          const SizedBox(height: 4),
+          Text(
+            'Pick what fits — your nomination is guidance for the court, not '
+            'a binding instruction.',
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+          const SizedBox(height: 12),
+          for (final rel in _GuardianRel.values) ...[
+            _GuardianRelOptCard(
+              option: rel,
+              selected: _relation == rel,
+              onTap: () => setState(() => _relation = rel),
             ),
-            textCapitalization: TextCapitalization.words,
-          ),
-          const SizedBox(height: 16),
-          TextFormField(
-            controller: _relationshipCtrl,
-            decoration: const InputDecoration(
-              labelText: 'Relationship to you',
-              border: OutlineInputBorder(),
+            const SizedBox(height: 8),
+          ],
+
+          // Inline expansion: only visible for 'Someone different'. Keeps the
+          // existing contact-picker + 4 free-text fields the previous step had.
+          if (_relation == _GuardianRel.different) ...[
+            const SizedBox(height: 8),
+            ContactPickerButton(
+              onContactPicked: (c) => setState(() {
+                _nameCtrl.text = c.fullName;
+                if (c.address.isNotEmpty) _addressCtrl.text = c.address;
+                if (c.cellPhone.isNotEmpty) {
+                  _phoneCtrl.text = c.cellPhone;
+                } else if (c.homePhone.isNotEmpty) {
+                  _phoneCtrl.text = c.homePhone;
+                }
+              }),
             ),
-            textCapitalization: TextCapitalization.words,
-          ),
-          const SizedBox(height: 16),
-          TextFormField(
-            controller: _addressCtrl,
-            decoration: const InputDecoration(
-              labelText: 'Address',
-              border: OutlineInputBorder(),
+            const SizedBox(height: 16),
+            TextFormField(
+              controller: _nameCtrl,
+              decoration: const InputDecoration(
+                labelText: 'Nominee full name',
+                border: OutlineInputBorder(),
+              ),
+              textCapitalization: TextCapitalization.words,
             ),
-            textCapitalization: TextCapitalization.words,
-          ),
-          const SizedBox(height: 16),
-          TextFormField(
-            controller: _phoneCtrl,
-            decoration: const InputDecoration(
-              labelText: 'Phone number',
-              border: OutlineInputBorder(),
+            const SizedBox(height: 16),
+            TextFormField(
+              controller: _relationshipCtrl,
+              decoration: const InputDecoration(
+                labelText: 'Relationship to you',
+                border: OutlineInputBorder(),
+              ),
+              textCapitalization: TextCapitalization.words,
             ),
-            keyboardType: TextInputType.phone,
-          ),
+            const SizedBox(height: 16),
+            TextFormField(
+              controller: _addressCtrl,
+              decoration: const InputDecoration(
+                labelText: 'Address',
+                border: OutlineInputBorder(),
+              ),
+              textCapitalization: TextCapitalization.words,
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              controller: _phoneCtrl,
+              decoration: const InputDecoration(
+                labelText: 'Phone number',
+                border: OutlineInputBorder(),
+              ),
+              keyboardType: TextInputType.phone,
+            ),
+          ],
           const SizedBox(height: 24),
           Text(
             'Guardian authority over this directive',
@@ -194,25 +256,33 @@ class _GuardianNominationStepState
             'revoke, suspend, or terminate this directive?',
             style: Theme.of(context).textTheme.bodySmall,
           ),
-          RadioListTile<bool>(
-            title: const Text(
-              'The guardian will NOT have the power to revoke, suspend, '
-              'or terminate this directive.',
-            ),
-            value: false,
+          // Wrapped in RadioGroup per Flutter ≥ 3.32 — replaces the
+          // deprecated per-tile groupValue / onChanged pattern.
+          RadioGroup<bool>(
             groupValue: _guardianCanRevoke,
-            onChanged: (v) => setState(() => _guardianCanRevoke = v!),
-            contentPadding: EdgeInsets.zero,
-          ),
-          RadioListTile<bool>(
-            title: const Text(
-              'I authorize the guardian to revoke, suspend, or terminate '
-              'this directive.',
+            onChanged: (v) {
+              if (v != null) setState(() => _guardianCanRevoke = v);
+            },
+            child: const Column(
+              children: [
+                RadioListTile<bool>(
+                  title: Text(
+                    'The guardian will NOT have the power to revoke, suspend, '
+                    'or terminate this directive.',
+                  ),
+                  value: false,
+                  contentPadding: EdgeInsets.zero,
+                ),
+                RadioListTile<bool>(
+                  title: Text(
+                    'I authorize the guardian to revoke, suspend, or terminate '
+                    'this directive.',
+                  ),
+                  value: true,
+                  contentPadding: EdgeInsets.zero,
+                ),
+              ],
             ),
-            value: true,
-            groupValue: _guardianCanRevoke,
-            onChanged: (v) => setState(() => _guardianCanRevoke = v!),
-            contentPadding: EdgeInsets.zero,
           ),
         ],
       ),
@@ -220,3 +290,96 @@ class _GuardianNominationStepState
   }
 }
 
+/// Radio-card variant used by the Guardian step's 4-option pattern. Mirrors
+/// the prototype's `Opt` card: tinted background when selected, 2 px primary
+/// border, sub-explanation only on the selected card.
+class _GuardianRelOptCard extends StatelessWidget {
+  final _GuardianRel option;
+  final bool selected;
+  final VoidCallback onTap;
+
+  const _GuardianRelOptCard({
+    required this.option,
+    required this.selected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 140),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        decoration: BoxDecoration(
+          color: selected ? cs.primaryContainer : cs.surfaceContainerLow,
+          border: Border.all(
+            color: selected ? cs.primary : cs.outlineVariant,
+            width: selected ? 2 : 1,
+          ),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              margin: const EdgeInsets.only(top: 2),
+              width: 20,
+              height: 20,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: selected ? cs.primary : cs.outline,
+                  width: 2,
+                ),
+              ),
+              alignment: Alignment.center,
+              child: selected
+                  ? Container(
+                      width: 10,
+                      height: 10,
+                      decoration: BoxDecoration(
+                        color: cs.primary,
+                        shape: BoxShape.circle,
+                      ),
+                    )
+                  : null,
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    option.label,
+                    style: TextStyle(
+                      fontFamily: 'DM Sans',
+                      fontSize: 14.5,
+                      fontWeight: FontWeight.w600,
+                      color: cs.onSurface,
+                      height: 1.3,
+                    ),
+                  ),
+                  if (selected) ...[
+                    const SizedBox(height: 4),
+                    Text(
+                      option.hint,
+                      style: TextStyle(
+                        fontFamily: 'DM Sans',
+                        fontSize: 12.5,
+                        color: cs.onSurfaceVariant,
+                        height: 1.4,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

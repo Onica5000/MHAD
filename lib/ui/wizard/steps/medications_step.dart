@@ -187,6 +187,63 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
             ),
           ),
           const SizedBox(height: 8),
+          // FACTUAL_ANALYSIS C5 / F16 \u2014 PA Act 194 \u00a7 5823(B)(2) / \u00a7 5808:
+          // dose instructions are not binding on the physician. Surface this
+          // honestly so users understand the limits of dose-level preferences.
+          Card(
+            color: Theme.of(context).colorScheme.surfaceContainerHighest,
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(
+                    Icons.info_outline,
+                    size: 18,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text.rich(
+                      TextSpan(
+                        style: TextStyle(
+                          fontSize: 12.5,
+                          height: 1.45,
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSurfaceVariant,
+                        ),
+                        children: [
+                          const TextSpan(
+                            text: 'Heads up \u2014 ',
+                            style: TextStyle(fontWeight: FontWeight.w600),
+                          ),
+                          const TextSpan(
+                            text:
+                                'your refusal of a medication and any limits you set on its use are binding under PA Act 194, but ',
+                          ),
+                          TextSpan(
+                            text: 'specific dosage instructions are not binding',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurfaceVariant,
+                            ),
+                          ),
+                          const TextSpan(
+                            text:
+                                ' on the physician \u2014 they choose the dose. (20 Pa.C.S. \u00a7 5808.)',
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
           if (_hasAgentSections) ...[
             CheckboxListTile(
               value: _agentDecidesMeds,

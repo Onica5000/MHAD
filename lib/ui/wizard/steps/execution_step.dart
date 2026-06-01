@@ -206,6 +206,59 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
               'The directive is valid for 2 years from the execution date.',
           stepId: 'execution',
         ),
+        const SizedBox(height: 12),
+        // v2 prototype `m-sign · 18 Make it legal (print & wet-ink)` framing.
+        // Decision 6 confirmed: signing happens with wet ink on the printed
+        // PDF in the physical presence of two witnesses; the app collects
+        // information but never a digital signature. This banner makes that
+        // explicit at the top of the step.
+        Card(
+          color: Theme.of(context).colorScheme.primaryContainer,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(Icons.edit_note,
+                        color: Theme.of(context).colorScheme.onPrimaryContainer),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Make it legal — with a pen',
+                      style: TextStyle(
+                        fontFamily: 'Instrument Serif',
+                        fontFamilyFallback: const [
+                          'Georgia',
+                          'Times New Roman',
+                          'serif'
+                        ],
+                        fontStyle: FontStyle.italic,
+                        fontSize: 22,
+                        fontWeight: FontWeight.w500,
+                        color:
+                            Theme.of(context).colorScheme.onPrimaryContainer,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  'This app does not collect a digital signature. After you '
+                  'finish, generate the PDF, print it, and sign in original '
+                  'ink in the physical presence of your two adult witnesses. '
+                  'The directive is legally valid only after wet-ink signing.',
+                  style: TextStyle(
+                    fontFamily: 'DM Sans',
+                    fontSize: 13,
+                    height: 1.45,
+                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
         const SizedBox(height: 16),
 
         // ── Execution date ─────────────────────────────────

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/ai/ai_assistant.dart';
+import 'package:mhad/data/database/app_database.dart' show Directive;
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/providers/assistant_providers.dart';
@@ -14,17 +15,19 @@ import 'package:mhad/ui/widgets/design/step_dots.dart';
 import 'package:mhad/ui/widgets/design/step_head.dart';
 import 'package:mhad/ui/widgets/design/wizard_bottom_bar.dart';
 import 'package:mhad/ui/wizard/wizard_step_mixin.dart';
-import 'package:mhad/ui/wizard/steps/personal_info_step.dart';
-import 'package:mhad/ui/wizard/steps/when_it_kicks_in_step.dart';
+import 'package:mhad/ui/wizard/steps/additional_instructions_step.dart';
+import 'package:mhad/ui/wizard/steps/allergies_step.dart';
+import 'package:mhad/ui/wizard/steps/diagnoses_step.dart';
+import 'package:mhad/ui/wizard/steps/guardian_nomination_step.dart';
+import 'package:mhad/ui/wizard/steps/medications_step.dart';
 import 'package:mhad/ui/wizard/steps/people_i_trust_step.dart';
+import 'package:mhad/ui/wizard/steps/personal_info_step.dart';
 import 'package:mhad/ui/wizard/steps/procedures_research_step.dart';
 import 'package:mhad/ui/wizard/steps/review_and_sign_step.dart';
 import 'package:mhad/ui/wizard/steps/treatment_facility_step.dart';
-import 'package:mhad/ui/wizard/steps/medications_step.dart';
-import 'package:mhad/ui/wizard/steps/additional_instructions_step.dart';
-import 'package:mhad/ui/wizard/steps/guardian_nomination_step.dart';
-import 'package:mhad/ui/wizard/widgets/document_import_button.dart';
+import 'package:mhad/ui/wizard/steps/when_it_kicks_in_step.dart';
 import 'package:mhad/ui/wizard/widgets/document_import_tip.dart';
+import 'package:mhad/ui/wizard/widgets/document_pipeline_flow.dart';
 import 'package:mhad/ui/wizard/widgets/smart_fill_flow.dart';
 
 class WizardScreen extends ConsumerStatefulWidget {
@@ -34,6 +37,11 @@ class WizardScreen extends ConsumerStatefulWidget {
   @override
   ConsumerState<WizardScreen> createState() => _WizardScreenState();
 }
+
+/// Identifiers for the wizard top-bar overflow menu.
+/// Each maps to one of the four legacy AppBar action icons that were
+/// collapsed into a single `⋮` menu per PROTOTYPE_DIFF_DECISIONS.md § B.4.
+enum _WizardMenuAction { smartFill, documentImport, aiChat, close }
 
 class _WizardScreenState extends ConsumerState<WizardScreen> {
   int _stepIndex = 0;
@@ -149,44 +157,64 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
             appBar: AppBar(
               title: Text(currentStep.displayName),
               backgroundColor: p.card,
+              // Per PROTOTYPE_DIFF_DECISIONS.md § B.4 — collapse the four
+              // legacy action icons (Smart Fill / Document Import / AI Chat /
+              // Close) into a single overflow menu so the wizard chrome
+              // matches the prototype's minimal "Back ... Save & exit" row
+              // without losing the four functional destinations.
               actions: [
-                IconButton(
-                  icon: const Icon(Icons.auto_awesome, size: 20),
-                  tooltip: 'Smart Fill',
-                  onPressed: () => _smartFill(context, directive.id, formType.name),
-                ),
-                DocumentImportButton(
-                  directiveId: directive.id,
-                  formType: formType.name,
-                ),
-                IconButton(
-                  icon: const Icon(Icons.smart_toy_outlined, size: 20),
-                  tooltip: 'AI chat',
-                  onPressed: () {
-                    final fields = <String, String>{};
-                    void add(String k, String v) {
-                      if (v.isNotEmpty) fields[k] = v;
-                    }
-                    add('State', directive.state);
-                    add('Effective Condition', directive.effectiveCondition);
-
-                    context.push(
-                      AppRoutes.assistant,
-                      extra: AssistantContext(
-                        formType: formType.name,
-                        stepName: currentStep.displayName,
-                        filledFields: fields.isEmpty ? null : fields,
+                PopupMenuButton<_WizardMenuAction>(
+                  tooltip: 'More actions',
+                  icon: const Icon(Icons.more_vert, size: 22),
+                  onSelected: (action) =>
+                      _handleMenuAction(context, action, directive, formType, currentStep),
+                  itemBuilder: (ctx) {
+                    final isPrivate =
+                        !kIsWeb && ref.read(privacyModeNotifierProvider).isPrivate;
+                    final closeLabel = isPrivate
+                        ? 'Save & exit wizard'
+                        : 'Exit wizard';
+                    return [
+                      const PopupMenuItem(
+                        value: _WizardMenuAction.smartFill,
+                        child: ListTile(
+                          dense: true,
+                          contentPadding: EdgeInsets.zero,
+                          leading: Icon(Icons.auto_awesome, size: 20),
+                          title: Text('Smart Fill'),
+                        ),
                       ),
-                    );
+                      const PopupMenuItem(
+                        value: _WizardMenuAction.documentImport,
+                        child: ListTile(
+                          dense: true,
+                          contentPadding: EdgeInsets.zero,
+                          leading: Icon(Icons.file_upload_outlined, size: 20),
+                          title: Text('Import a document'),
+                        ),
+                      ),
+                      const PopupMenuItem(
+                        value: _WizardMenuAction.aiChat,
+                        child: ListTile(
+                          dense: true,
+                          contentPadding: EdgeInsets.zero,
+                          leading: Icon(Icons.smart_toy_outlined, size: 20),
+                          title: Text('Ask the AI'),
+                        ),
+                      ),
+                      const PopupMenuDivider(),
+                      PopupMenuItem(
+                        value: _WizardMenuAction.close,
+                        enabled: !_isSaving,
+                        child: ListTile(
+                          dense: true,
+                          contentPadding: EdgeInsets.zero,
+                          leading: const Icon(Icons.close, size: 20),
+                          title: Text(closeLabel),
+                        ),
+                      ),
+                    ];
                   },
-                ),
-                IconButton(
-                  icon: const Icon(Icons.close, size: 22),
-                  tooltip: (kIsWeb ||
-                          !ref.read(privacyModeNotifierProvider).isPrivate)
-                      ? 'Exit wizard'
-                      : 'Save & exit wizard',
-                  onPressed: _isSaving ? null : () => _saveAndExit(context),
                 ),
               ],
             ),
@@ -249,6 +277,56 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
     );
   }
 
+  /// Dispatches the four overflow-menu actions to their respective handlers.
+  /// Doc-import shows its own bottom sheet because [DocumentImportButton]
+  /// owns that flow; we trigger it via a synthetic invocation here.
+  Future<void> _handleMenuAction(
+    BuildContext context,
+    _WizardMenuAction action,
+    Directive directive,
+    FormType formType,
+    WizardStep currentStep,
+  ) async {
+    switch (action) {
+      case _WizardMenuAction.smartFill:
+        await _smartFill(context, directive.id, formType.name);
+      case _WizardMenuAction.documentImport:
+        // Mirrors DocumentImportButton's behavior: route to AI setup first if
+        // no key is configured, then launch the document-pipeline flow.
+        final apiKey = ref.read(apiKeyProvider).valueOrNull;
+        if (apiKey == null || apiKey.isEmpty) {
+          if (!context.mounted) return;
+          context.push(AppRoutes.aiSetup);
+          return;
+        }
+        if (!context.mounted) return;
+        await showDocumentPipelineFlow(
+          context,
+          directiveId: directive.id,
+          formType: formType.name,
+        );
+      case _WizardMenuAction.aiChat:
+        final fields = <String, String>{};
+        void add(String k, String v) {
+          if (v.isNotEmpty) fields[k] = v;
+        }
+        add('State', directive.state);
+        add('Effective Condition', directive.effectiveCondition);
+        if (!context.mounted) return;
+        await context.push(
+          AppRoutes.assistant,
+          extra: AssistantContext(
+            formType: formType.name,
+            stepName: currentStep.displayName,
+            filledFields: fields.isEmpty ? null : fields,
+          ),
+        );
+      case _WizardMenuAction.close:
+        if (_isSaving) return;
+        await _saveAndExit(context);
+    }
+  }
+
   Widget _buildStep(WizardStep step, int directiveId, FormType formType) {
     return switch (step) {
       WizardStep.aboutYou =>
@@ -261,11 +339,18 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
         GuardianNominationStep(key: _stepKey, directiveId: directiveId),
       WizardStep.whereIWantCare =>
         TreatmentFacilityStep(key: _stepKey, directiveId: directiveId),
+      // Phase 3 — Diagnoses now its own dedicated step (was embedded in step 2).
+      WizardStep.diagnoses =>
+        DiagnosesStep(key: _stepKey, directiveId: directiveId),
       WizardStep.medications => MedicationsStep(
           key: _stepKey,
           directiveId: directiveId,
           formType: formType,
         ),
+      // Phase 3 — net-new Allergies step. Backward-nudge model: Severe entries
+      // suggest returning to step 7 (Medications · Avoid).
+      WizardStep.allergies =>
+        AllergiesStep(key: _stepKey, directiveId: directiveId),
       WizardStep.proceduresResearch =>
         ProceduresResearchStep(key: _stepKey, directiveId: directiveId),
       WizardStep.anythingElse =>

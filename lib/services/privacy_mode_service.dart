@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:mhad/utils/platform_utils.dart';
 
 enum PrivacyMode { notSelected, publicMode, privateMode }
 
