@@ -234,30 +234,39 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       body: ListView(
         padding: const EdgeInsets.fromLTRB(22, 4, 22, 24),
         children: [
+          // Public-mode ephemeral status bar — matches prototype `ScrPublic`
+          // L1568-1577: a dark strip that sits above the rest of the home
+          // content reminding the user nothing is being saved.
+          if (privacyMode.isPublic) const _EphemeralBar(),
           const _DeviceSecurityCheck(),
           SectionLabel(dateLabel),
-          // Personalized editorial greeting — matches prototype ScrHome:
-          // when the user has any directive (draft or otherwise), pull their
-          // first name and surface "Hi, [Name]." with a muted "Let's keep
-          // your voice clear." subhead. If there's no stored name yet we
-          // fall back to the v3 "Your voice, in your words." dual-color
-          // line so first-launch still has the editorial hook.
+          // Editorial greeting — three states:
+          //   - Public mode: "Welcome, guest. / Quick draft, no trace."
+          //     (italic editorial, replaces any name-based greeting)
+          //   - Private mode + any directive with a stored name:
+          //     "Hi, [Name]. / Let's keep your voice clear." + avatar pill
+          //   - Anonymous fallback: dual-color "Your voice, / in your words."
           directivesAsync.maybeWhen(
-            data: (directives) => _HomeGreeting(directives: directives),
-            orElse: () => EditorialHeading(
-              textSpan: TextSpan(
-                children: [
-                  const TextSpan(text: 'Your voice,\n'),
-                  TextSpan(
-                    text: 'in your words.',
-                    style: TextStyle(color: p.primary),
-                  ),
-                ],
-              ),
-              size: 38,
-              height: 1.05,
-              letterSpacing: -0.6,
+            data: (directives) => _HomeGreeting(
+              directives: directives,
+              isPublic: privacyMode.isPublic,
             ),
+            orElse: () => privacyMode.isPublic
+                ? const _PublicGuestGreeting()
+                : EditorialHeading(
+                    textSpan: TextSpan(
+                      children: [
+                        const TextSpan(text: 'Your voice,\n'),
+                        TextSpan(
+                          text: 'in your words.',
+                          style: TextStyle(color: p.primary),
+                        ),
+                      ],
+                    ),
+                    size: 38,
+                    height: 1.05,
+                    letterSpacing: -0.6,
+                  ),
           ),
           const SizedBox(height: 16),
           const InfoBanner(
@@ -1456,7 +1465,11 @@ class _ToolTileCard extends StatelessWidget {
 ///     hook. The caller handles this branch via `directivesAsync.maybeWhen`.
 class _HomeGreeting extends StatelessWidget {
   final List<Directive> directives;
-  const _HomeGreeting({required this.directives});
+  final bool isPublic;
+  const _HomeGreeting({
+    required this.directives,
+    this.isPublic = false,
+  });
 
   /// Picks the user's name to greet. Preference order: the most-recently-
   /// updated DRAFT, then the most-recently-updated directive of any status.
@@ -1491,6 +1504,10 @@ class _HomeGreeting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
+    // Public mode: always show the guest greeting regardless of whether
+    // session directives happen to carry a name. The "guest" framing is
+    // the point — Public mode is anonymous by design.
+    if (isPublic) return const _PublicGuestGreeting();
     final fullName = _pickName();
     if (fullName.isEmpty) {
       // No usable name → keep the anonymous editorial. The caller's fallback
@@ -1561,6 +1578,93 @@ class _HomeGreeting extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// Dark ephemeral status strip shown above home content while the user is
+/// in Public mode. Matches prototype `ScrPublic` (mobile-extra.jsx L1568-
+/// 1577): inverted color block, EyeOff icon left, "Public mode · nothing
+/// is saved" text center, monospace "EPHEMERAL" pill right.
+class _EphemeralBar extends StatelessWidget {
+  const _EphemeralBar();
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: p.text,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Row(
+          children: [
+            Icon(Icons.visibility_off_outlined,
+                size: 13, color: p.scaffoldBackground),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                'Public mode · nothing is saved',
+                style: TextStyle(
+                  fontFamily: 'DM Sans',
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: p.scaffoldBackground,
+                ),
+              ),
+            ),
+            Text(
+              'EPHEMERAL',
+              style: TextStyle(
+                fontFamily: 'JetBrains Mono',
+                fontFamilyFallback: const [
+                  'Consolas',
+                  'Menlo',
+                  'Courier New',
+                  'monospace',
+                ],
+                fontSize: 10.5,
+                letterSpacing: 0.5,
+                color: p.scaffoldBackground.withValues(alpha: 0.7),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Editorial greeting for Public-mode home — "Welcome, guest. / Quick
+/// draft, no trace." (mobile-extra.jsx::ScrPublic L1582-1586).
+class _PublicGuestGreeting extends StatelessWidget {
+  const _PublicGuestGreeting();
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
+    return Text.rich(
+      TextSpan(
+        children: [
+          const TextSpan(text: 'Welcome, guest.\n'),
+          TextSpan(
+            text: 'Quick draft, no trace.',
+            style: TextStyle(color: p.textMuted, fontSize: 22),
+          ),
+        ],
+      ),
+      style: const TextStyle(
+        fontFamily: 'Instrument Serif',
+        fontFamilyFallback: ['Georgia', 'serif'],
+        fontStyle: FontStyle.italic,
+        fontSize: 38,
+        height: 1.05,
+        letterSpacing: -0.5,
+        fontWeight: FontWeight.w400,
+      ),
     );
   }
 }

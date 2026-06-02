@@ -26,7 +26,7 @@ Items not requiring a Flutter screen (device-only flows): camera/voice/NFC.
 |---|---|---|---|
 | m-welcome | `onboarding/onboarding_screen.dart` | 🟢 | Page 1 of the carousel now carries the prototype's editorial hero hallmarks: "In your **words**." dual-color italic + 4 value pills ("Valid 2 years", "2 witnesses", "PA Act 194", "Stays on your device"). Pages 2-4 of the carousel (educational content) intentionally retained — would lose functionality to compress to a single screen. |
 | m-mode | `mode_selection/mode_selection_screen.dart` | ✅ | (Initial audit flagged this as DRIFT; on re-read the screen IS the prototype layout — `_Card2` widgets, "Step 1 of 3 · setup" label, recommended badge, HIPAA footnote. The PIN flow the audit saw is post-pick auth, not the mode picker.) |
-| m-public | NONE | ❌ | Public-mode home variant with ephemeral banner + "Welcome, guest" italic hero. |
+| m-public | `home/home_screen.dart` (Public-mode branch) | ✅ | Dark ephemeral status strip (`_EphemeralBar`) above home content; greeting swaps to "Welcome, guest. / Quick draft, no trace." (`_PublicGuestGreeting`) italic editorial. Existing `_PublicModeNotice` warning card retained for End-Session + 10-minute-recovery copy the prototype omits. |
 | m-disclaimer | `disclaimer/disclaimer_screen.dart` | ✅ | |
 | m-faceid | (covered by `pin_dialog.dart`) | 🟡 | Prototype shows full unlock screen with editorial "Welcome back" hero; Flutter is a minimal modal PIN. |
 | m-empty | `home/home_screen.dart::_EmptyDirectives` | ✅ | Rebuilt to match prototype's editorial hero: 1.5px primary border + 200pt decorative italic numeral, "Your first directive" tinted label, "About 15 minutes. / That's all." italic h2, three monospace pill timeline rows, embedded "Start my directive" CTA. |
@@ -57,8 +57,8 @@ Items not requiring a Flutter screen (device-only flows): camera/voice/NFC.
 | m-pdf | (covered by `export/export_screen.dart`) | 🟡 | Prototype shows 6-page PDF preview with toolbar/thumbs; Flutter shows generation options instead. |
 | m-past | `past/past_directive_detail_screen.dart` | ✅ | |
 | m-verify | NONE | ❌ | Wallet-QR verifier view (what an EMS scanner sees). |
-| m-renew | NONE | ❌ | Hard renewal nudge before 2-year expiry. |
-| m-checkin | NONE | ❌ | Soft quarterly check-in prompt. |
+| m-renew | `reminders/reminder_sheets.dart::showRenewalNudge` | 🟢 | Modal bottom sheet built (warning palette, italic "Time to renew, [Name].", days-until-expiry pill, primaryTint "Quick renew · ~5 min" card, "Start quick renew" CTA wired to existing `onRenew` callback). Accessible via the directive card overflow menu. **Auto-trigger policy** (28 days before `expirationDate`) deferred — needs notification scheduling. |
+| m-checkin | `reminders/reminder_sheets.dart::showQuarterlyCheckIn` | 🟢 | Modal bottom sheet built (primary palette, italic "Anything changed?", form-type-aware "Common things that change" 3-row list, "Still accurate — all good" + "Edit my directive" CTAs). Accessible via the directive card overflow menu. **Auto-trigger policy** (90 days since `updatedAt`) deferred — needs SharedPreferences "last-shown" tracking + notification scheduling. |
 | m-revoke | `revocation/revocation_screen.dart` | ✅ | |
 | m-ai | `assistant/assistant_screen.dart` | ✅ | |
 | m-learn | `education/education_screen.dart` | ✅ | |
@@ -74,8 +74,8 @@ Items not requiring a Flutter screen (device-only flows): camera/voice/NFC.
 | m-agentaccept | NONE | ❌ | Agent acceptance/consent receipt — new screen for designated agents. |
 | m-a11y | `settings/accessibility_settings_screen.dart` | ✅ | |
 
-**Tally:** 31 PARITY / 7 DRIFT (2 partial 🟢) / 8 MISSING-buildable / 3 MISSING-device-only-deferred / 1 MISSING-backend-deferred (m-wallet).
-(This batch: m-mode + m-crisis reclassified ✅; m-empty rebuilt; m-welcome + m-wizard-people partially aligned 🟢.)
+**Tally:** 32 PARITY / 7 DRIFT (2 partial 🟢) / 5 MISSING-buildable (2 🟢 partial — sheets built, auto-trigger deferred) / 3 MISSING-device-only-deferred / 1 MISSING-backend-deferred (m-wallet).
+(Batch 4 part 1: m-public ✅, m-renew 🟢, m-checkin 🟢.)
 
 ## Web/desktop artboards
 
@@ -95,7 +95,7 @@ Key item: **`w-wiz-mobile`** — desktop AI right-rail collapses into a tappable
 | 1 | Default palette teal→navy, design-token sync | ✅ Complete (this commit) |
 | 2 | Highest-visibility DRIFT fixes — start with m-home editorial greeting | 🟡 In progress |
 | 3 | Remaining DRIFT items (m-welcome, m-mode, m-faceid, m-empty, m-wizard-people, m-sign, m-pdf, m-crisis sheet) | 🟢 6 of 8 done: m-empty ✅ · m-welcome 🟢 · m-mode ✅ · m-crisis ✅ · m-wizard-people 🟢. Still pending: m-faceid (needs route/state work — see Batch 5), m-sign (functional conflict with wet-ink design — needs user input), m-pdf (lower-visibility export thumbs). |
-| 4 | Build MISSING-buildable screens (m-public, m-contacts, m-verify, m-renew, m-checkin, m-agentaccept) | ⏳ Next session(s) |
+| 4 | Build MISSING-buildable screens (m-public, m-contacts, m-verify, m-renew, m-checkin, m-agentaccept) | 🟢 m-public ✅ + m-renew 🟢 + m-checkin 🟢 (sheets built, auto-trigger deferred). Still pending: m-contacts, m-verify, m-agentaccept |
 | 5 | Web/desktop responsive layout + w-wiz-mobile bottom-sheet AI rail | ⏳ Next session(s) |
 | 6 (deferred) | Device-only screens (m-scan / m-voice / m-wallet) — need plugin + signing pipeline | ⏳ Defer until plugin/cryptography scope is decided |
 

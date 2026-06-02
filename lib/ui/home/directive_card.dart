@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/ui/home/section_completion_indicator.dart';
+import 'package:mhad/ui/reminders/reminder_sheets.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/design_card.dart';
@@ -298,6 +299,26 @@ class DirectiveCard extends StatelessWidget {
                   if (action == _Action.revokeFlow) {
                     context.push(AppRoutes.revocationRoute(directive.id));
                   }
+                  // Reminder sheets — visible artifact for m-renew and
+                  // m-checkin prototype screens. Trigger policy (auto-
+                  // showing at 28 days before expiry / quarterly) is a
+                  // follow-up; for now the user can preview either sheet
+                  // from this menu.
+                  if (action == _Action.renewPreview) {
+                    showRenewalNudge(
+                      context,
+                      directive: directive,
+                      onStartRenew: () => onRenew?.call(),
+                    );
+                  }
+                  if (action == _Action.checkInPreview) {
+                    showQuarterlyCheckIn(
+                      context,
+                      directive: directive,
+                      onEdit: () =>
+                          context.push(AppRoutes.wizardRoute(directive.id)),
+                    );
+                  }
                 },
                 itemBuilder: (_) => [
                   if (!isRevoked)
@@ -414,6 +435,27 @@ class DirectiveCard extends StatelessWidget {
                         Text('Revoke (full flow)'),
                       ]),
                     ),
+                  // Reminder previews — only meaningful once the directive
+                  // has been completed (drafts have no expiration date or
+                  // signing pressure yet).
+                  if (status == DirectiveStatus.complete) ...[
+                    const PopupMenuItem(
+                      value: _Action.checkInPreview,
+                      child: Row(children: [
+                        Icon(Icons.favorite_outline, size: 18),
+                        SizedBox(width: 10),
+                        Text('Quarterly check-in'),
+                      ]),
+                    ),
+                    const PopupMenuItem(
+                      value: _Action.renewPreview,
+                      child: Row(children: [
+                        Icon(Icons.event_outlined, size: 18),
+                        SizedBox(width: 10),
+                        Text('Renewal nudge'),
+                      ]),
+                    ),
+                  ],
                   const PopupMenuDivider(),
                   PopupMenuItem(
                     value: _Action.delete,
@@ -453,4 +495,7 @@ enum _Action {
   aiCheck,
   pastDetail,
   revokeFlow,
+  // Batch 4 — `7Mym` bundle reminder previews.
+  renewPreview,
+  checkInPreview,
 }
