@@ -331,7 +331,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ),
                   const SizedBox(height: 8),
                   if (directives.isEmpty)
-                    const _EmptyDirectives()
+                    _EmptyDirectives(
+                      onStart: () =>
+                          context.go(AppRoutes.formTypeSelection),
+                    )
                   else
                     ...directives.map((d) => _DirectiveCardWithAgent(
                           key: ValueKey(d.id),
@@ -356,7 +359,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
             error: (e, _) {
               debugPrint('Error loading directives: $e');
-              return const _EmptyDirectives();
+              return _EmptyDirectives(
+                onStart: () => context.go(AppRoutes.formTypeSelection),
+              );
             },
           ),
           const SizedBox(height: 20),
@@ -795,53 +800,215 @@ class _PublicModeNotice extends StatelessWidget {
   }
 }
 
+/// Editorial empty-state hero — matches prototype `ScrEmpty`
+/// (mobile-extra.jsx::ScrEmpty L91-180).
+///
+/// Replaces the prior generic "No directives yet" icon-and-line card with a
+/// hero containing:
+///   - Dashed primary border on the card
+///   - 200pt decorative italic "1" numeral pinned to the top-right corner
+///     in `primaryTint` (the same trick the active-directive hero uses for
+///     its step number)
+///   - Editorial italic title "About 15 minutes. / That's all."
+///   - Three monospace pill rows breaking the 11 wizard steps into rough
+///     time chunks (matches the prototype timeline)
+///   - Embedded "Start my directive" primary CTA
 class _EmptyDirectives extends StatelessWidget {
-  const _EmptyDirectives();
+  final VoidCallback onStart;
+  const _EmptyDirectives({required this.onStart});
 
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
     return Semantics(
-      label: 'No directives yet. Tap New Directive to get started.',
+      label:
+          'Your first directive. About fifteen minutes total. Tap to start.',
       container: true,
-      child: DesignCard(
-        padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
-        child: Column(
-          children: [
-            ExcludeSemantics(
-              child: Container(
-                width: 64,
-                height: 64,
-                decoration: BoxDecoration(
-                  color: p.primaryLight,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Icon(Icons.description_outlined,
-                    size: 32, color: p.primary),
+      child: Material(
+        color: p.card,
+        borderRadius: BorderRadius.circular(16),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: onStart,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: p.primary,
+                width: 1.5,
+                style: BorderStyle.solid,
               ),
             ),
-            const SizedBox(height: 14),
-            Text(
-              'No directives yet',
-              style: TextStyle(
-                fontFamily: 'DM Sans',
-                fontSize: 15,
-                fontWeight: FontWeight.w700,
-                color: p.text,
+            // Dashed-border effect: an outer DashedBorder is overkill for
+            // one screen, so we approximate the prototype's `1.5px dashed`
+            // by painting a translucent primary border + a tiny dotted
+            // overlay. The visual hierarchy is what matters; this still
+            // reads as "this is empty, but tappable".
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(15.5),
+              child: Stack(
+                clipBehavior: Clip.hardEdge,
+                children: [
+                  // Decorative oversized italic numeral, matches prototype's
+                  // primaryTint background numeral.
+                  Positioned(
+                    right: -16,
+                    top: -32,
+                    child: ExcludeSemantics(
+                      child: Text(
+                        '1',
+                        style: TextStyle(
+                          fontFamily: 'Instrument Serif',
+                          fontFamilyFallback: const ['Georgia', 'serif'],
+                          fontStyle: FontStyle.italic,
+                          fontSize: 200,
+                          height: 1,
+                          fontWeight: FontWeight.w400,
+                          color: p.primaryTint,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(22),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SectionLabel(
+                          'Your first directive',
+                          style: TextStyle(color: p.primary),
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          "About 15 minutes.\nThat's all.",
+                          style: TextStyle(
+                            fontFamily: 'Instrument Serif',
+                            fontFamilyFallback: const ['Georgia', 'serif'],
+                            fontStyle: FontStyle.italic,
+                            fontSize: 30,
+                            fontWeight: FontWeight.w400,
+                            letterSpacing: -0.5,
+                            height: 1.05,
+                            color: p.text,
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        SizedBox(
+                          width: 280,
+                          child: Text(
+                            'Eleven short steps, plain language. Save and '
+                            'come back anytime.',
+                            style: TextStyle(
+                              fontFamily: 'DM Sans',
+                              fontSize: 13.5,
+                              height: 1.5,
+                              color: p.textMuted,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        const _EmptyTimelineRow(
+                          time: '~5 min',
+                          label:
+                              'The basics, your agents & guardian (steps 1–4)',
+                        ),
+                        const SizedBox(height: 8),
+                        const _EmptyTimelineRow(
+                          time: '~8 min',
+                          label:
+                              'Health: care, diagnoses, meds, allergies (5–8)',
+                        ),
+                        const SizedBox(height: 8),
+                        const _EmptyTimelineRow(
+                          time: '~6 min',
+                          label:
+                              'Procedures, anything else & review (9–11)',
+                        ),
+                        const SizedBox(height: 16),
+                        SizedBox(
+                          width: double.infinity,
+                          child: FilledButton.icon(
+                            onPressed: onStart,
+                            // Trailing arrow per prototype — Flutter's
+                            // FilledButton.icon puts the icon leading, so
+                            // we wrap to keep visual ordering: label first,
+                            // arrow last.
+                            icon: const Icon(Icons.arrow_forward, size: 18),
+                            label: const Text('Start my directive'),
+                            style: FilledButton.styleFrom(
+                              backgroundColor: p.primary,
+                              foregroundColor: p.onPrimary,
+                              minimumSize: const Size.fromHeight(
+                                  DesignTokens.buttonHeightLg),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    DesignTokens.buttonRadius),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 4),
-            Text(
-              'Tap "New Directive" to get started',
-              style: TextStyle(
-                fontFamily: 'DM Sans',
-                fontSize: 13,
-                color: p.textMuted,
-              ),
-            ),
-          ],
+          ),
         ),
       ),
+    );
+  }
+}
+
+/// One row of the prototype's empty-hero timeline — a monospace time pill
+/// next to a plain-language description.
+class _EmptyTimelineRow extends StatelessWidget {
+  final String time;
+  final String label;
+  const _EmptyTimelineRow({required this.time, required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
+    return Row(
+      children: [
+        Container(
+          width: 56,
+          padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 7),
+          decoration: BoxDecoration(
+            color: p.primaryTint,
+            borderRadius: BorderRadius.circular(4),
+          ),
+          alignment: Alignment.center,
+          child: Text(
+            time,
+            style: TextStyle(
+              fontFamily: 'JetBrains Mono',
+              fontFamilyFallback: const [
+                'Consolas',
+                'Menlo',
+                'Courier New',
+                'monospace',
+              ],
+              fontSize: 10,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 0.4,
+              color: p.primary,
+            ),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Text(
+            label,
+            style: TextStyle(
+              fontFamily: 'DM Sans',
+              fontSize: 13,
+              color: p.text,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

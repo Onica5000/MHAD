@@ -24,12 +24,12 @@ Items not requiring a Flutter screen (device-only flows): camera/voice/NFC.
 
 | Artboard | Flutter file | Status | Top deltas |
 |---|---|---|---|
-| m-welcome | `onboarding/onboarding_screen.dart` | 🟡 | Flutter has full 4-page carousel; prototype is a single editorial "In your words." hero with value pills. |
-| m-mode | `mode_selection/mode_selection_screen.dart` | 🟡 | Prototype is a 2-card Private/Public picker; Flutter includes inline PIN flow that obscures the card layout. |
+| m-welcome | `onboarding/onboarding_screen.dart` | 🟢 | Page 1 of the carousel now carries the prototype's editorial hero hallmarks: "In your **words**." dual-color italic + 4 value pills ("Valid 2 years", "2 witnesses", "PA Act 194", "Stays on your device"). Pages 2-4 of the carousel (educational content) intentionally retained — would lose functionality to compress to a single screen. |
+| m-mode | `mode_selection/mode_selection_screen.dart` | ✅ | (Initial audit flagged this as DRIFT; on re-read the screen IS the prototype layout — `_Card2` widgets, "Step 1 of 3 · setup" label, recommended badge, HIPAA footnote. The PIN flow the audit saw is post-pick auth, not the mode picker.) |
 | m-public | NONE | ❌ | Public-mode home variant with ephemeral banner + "Welcome, guest" italic hero. |
 | m-disclaimer | `disclaimer/disclaimer_screen.dart` | ✅ | |
 | m-faceid | (covered by `pin_dialog.dart`) | 🟡 | Prototype shows full unlock screen with editorial "Welcome back" hero; Flutter is a minimal modal PIN. |
-| m-empty | `home/home_screen.dart` (empty state) | 🟡 | Prototype is first-time empty home; Flutter always renders the full layout. |
+| m-empty | `home/home_screen.dart::_EmptyDirectives` | ✅ | Rebuilt to match prototype's editorial hero: 1.5px primary border + 200pt decorative italic numeral, "Your first directive" tinted label, "About 15 minutes. / That's all." italic h2, three monospace pill timeline rows, embedded "Start my directive" CTA. |
 | m-home | `home/home_screen.dart` | 🟡 | **Highest impact.** Missing editorial "Hi, [name]. / Let's keep your voice clear." greeting + decorative numeral on draft card. |
 | m-formtype | `wizard/form_type_selection_screen.dart` | ✅ | |
 | m-quiz | (covered by `widgets/form_type_quiz.dart`) | ✅ | 4-question quiz dialog + confidence meter — built in Phase 1. |
@@ -74,7 +74,8 @@ Items not requiring a Flutter screen (device-only flows): camera/voice/NFC.
 | m-agentaccept | NONE | ❌ | Agent acceptance/consent receipt — new screen for designated agents. |
 | m-a11y | `settings/accessibility_settings_screen.dart` | ✅ | |
 
-**Tally:** 28 PARITY / 12 DRIFT / 8 MISSING-buildable / 3 MISSING-device-only-deferred / 1 MISSING-backend-deferred (m-wallet).
+**Tally:** 30 PARITY / 9 DRIFT (1 partial 🟢) / 8 MISSING-buildable / 3 MISSING-device-only-deferred / 1 MISSING-backend-deferred (m-wallet).
+(m-mode reclassified ✅ on re-read; m-empty rebuilt + m-welcome page 1 styled to prototype in this batch.)
 
 ## Web/desktop artboards
 
@@ -93,7 +94,7 @@ Key item: **`w-wiz-mobile`** — desktop AI right-rail collapses into a tappable
 | 0 | Read prototype source + delta table (this doc) | ✅ Complete (this commit) |
 | 1 | Default palette teal→navy, design-token sync | ✅ Complete (this commit) |
 | 2 | Highest-visibility DRIFT fixes — start with m-home editorial greeting | 🟡 In progress |
-| 3 | Remaining DRIFT items (m-welcome, m-mode, m-faceid, m-empty, m-wizard-people, m-sign, m-pdf, m-crisis sheet) | ⏳ Next session(s) |
+| 3 | Remaining DRIFT items (m-welcome, m-mode, m-faceid, m-empty, m-wizard-people, m-sign, m-pdf, m-crisis sheet) | 🟡 m-empty rebuilt + m-welcome page-1 styled + m-mode reclassified ✅. Still pending: m-faceid, m-wizard-people, m-sign, m-pdf, m-crisis sheet |
 | 4 | Build MISSING-buildable screens (m-public, m-contacts, m-verify, m-renew, m-checkin, m-agentaccept) | ⏳ Next session(s) |
 | 5 | Web/desktop responsive layout + w-wiz-mobile bottom-sheet AI rail | ⏳ Next session(s) |
 | 6 (deferred) | Device-only screens (m-scan / m-voice / m-wallet) — need plugin + signing pipeline | ⏳ Defer until plugin/cryptography scope is decided |

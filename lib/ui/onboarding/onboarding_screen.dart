@@ -251,6 +251,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                               ),
                             ),
                           ),
+                        // Editorial-page value pills — match the prototype
+                        // `ScrWelcome` (mobile.jsx::ScrWelcome L73-78). Four
+                        // primary-tinted chips summarizing what this app IS
+                        // before the user moves into the longer-form pages.
+                        if (page.editorial) ...[
+                          const SizedBox(height: 18),
+                          const _WelcomePills(),
+                        ],
                       ],
                     ),
                   );
@@ -334,4 +342,53 @@ class _PageData {
     this.accent,
     this.editorial = false,
   });
+}
+
+/// Four chips summarizing the directive's shape, shown on the editorial
+/// welcome page only. Matches prototype `ScrWelcome` L73-78.
+class _WelcomePills extends StatelessWidget {
+  const _WelcomePills();
+
+  static const _pills = <(IconData, String)>[
+    (Icons.calendar_today_outlined, 'Valid 2 years'),
+    (Icons.people_alt_outlined, '2 witnesses'),
+    (Icons.shield_outlined, 'PA Act 194'),
+    (Icons.lock_outline, 'Stays on your device'),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      children: [
+        for (final (icon, label) in _pills)
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color: p.primaryLight,
+              borderRadius: BorderRadius.circular(100),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(icon, size: 12, color: p.onPrimaryLight),
+                const SizedBox(width: 6),
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontFamily: 'DM Sans',
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: p.onPrimaryLight,
+                    height: 1,
+                  ),
+                ),
+              ],
+            ),
+          ),
+      ],
+    );
+  }
 }

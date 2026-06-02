@@ -66,14 +66,16 @@ void main() {
 
     await tester.pumpAndSettle();
 
-    // The "No directives yet" empty state lives in the home ListView. Scroll
-    // until it's on screen, then assert. (The home screen redesigned the
-    // section label, so we anchor on the empty-state copy itself.)
-    final emptyFinder = find.text('No directives yet');
+    // The editorial empty-hero card lives in the home ListView. Scroll
+    // until it's on screen, then assert. The home screen now uses the
+    // prototype's "Your first directive" hero copy + "Start my directive"
+    // CTA in place of the prior "No directives yet" line.
+    final emptyFinder = find.text('Start my directive');
     await tester.scrollUntilVisible(emptyFinder, 200);
     await tester.pumpAndSettle();
 
     expect(emptyFinder, findsOneWidget);
+    expect(find.text('Your first directive'.toUpperCase()), findsOneWidget);
 
     await db.close();
   });
