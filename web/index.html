@@ -31,6 +31,31 @@
 
   <title>PA Mental Health Advance Directive</title>
   <link rel="manifest" href="manifest.json">
+
+  <!--
+    Belt-and-suspenders service-worker cleanup. Flutter 3.41.4 already ships
+    a self-unregistering SW stub (`flutter_service_worker.js`) — on activate
+    it calls `registration.unregister()` and reloads every open tab onto the
+    fresh build. This script adds a second cleanup pass that runs on every
+    page load: it unregisters any SW still attached and clears the origin's
+    Cache Storage. If Flutter ever changes the stub behavior in a future
+    version, this snippet keeps the no-stale-SW guarantee.
+
+    Runs early (before flutter_bootstrap.js) so cleanup is in flight while
+    Flutter loads. Safe to ship: with no SW present this is a no-op.
+  -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function (regs) {
+        regs.forEach(function (r) { r.unregister(); });
+      }).catch(function () { /* no SW or permission denied — ignore */ });
+    }
+    if ('caches' in window) {
+      caches.keys().then(function (keys) {
+        keys.forEach(function (k) { caches.delete(k); });
+      }).catch(function () { /* ignore */ });
+    }
+  </script>
 </head>
 <body>
   <!--

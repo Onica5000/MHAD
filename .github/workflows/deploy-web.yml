@@ -35,6 +35,15 @@ jobs:
         run: flutter pub get
 
       - name: Build web
+        # Flutter 3.41.4 already ships a self-unregistering service worker
+        # stub: `flutter_service_worker.js` calls `registration.unregister()`
+        # on activate and reloads every open tab onto the fresh build. So
+        # there is no longer a "stale SW pinning users to the previous
+        # deploy" problem to solve at the build flag level. The defensive
+        # unregister snippet in `web/index.html` provides belt-and-suspenders
+        # cleanup if Flutter ever changes the stub behavior.
+        # (The `--pwa-strategy=none` flag was removed from `flutter build web`
+        # in 4.x; in 3.41 it is silently ignored, so we omit it for clarity.)
         run: flutter build web --release --base-href "/MHAD/"
 
       - name: Setup Pages
