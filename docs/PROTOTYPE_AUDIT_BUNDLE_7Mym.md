@@ -28,7 +28,7 @@ Items not requiring a Flutter screen (device-only flows): camera/voice/NFC.
 | m-mode | `mode_selection/mode_selection_screen.dart` | ✅ | (Initial audit flagged this as DRIFT; on re-read the screen IS the prototype layout — `_Card2` widgets, "Step 1 of 3 · setup" label, recommended badge, HIPAA footnote. The PIN flow the audit saw is post-pick auth, not the mode picker.) |
 | m-public | `home/home_screen.dart` (Public-mode branch) | ✅ | Dark ephemeral status strip (`_EphemeralBar`) above home content; greeting swaps to "Welcome, guest. / Quick draft, no trace." (`_PublicGuestGreeting`) italic editorial. Existing `_PublicModeNotice` warning card retained for End-Session + 10-minute-recovery copy the prototype omits. |
 | m-disclaimer | `disclaimer/disclaimer_screen.dart` | ✅ | |
-| m-faceid | (covered by `pin_dialog.dart`) | 🟡 | Prototype shows full unlock screen with editorial "Welcome back" hero; Flutter is a minimal modal PIN. |
+| m-faceid | `mode_selection/pin_dialog.dart::PinEntryDialog` | ✅ | Rebuilt as a full-screen editorial unlock (matches prototype `ScrFaceID`): brand row top-left, centered "lock" glyph in a 124pt rounded tile with pulse-ring overlay, italic dual-color "Use your **passcode.**" heading, dynamic monospace status pill ("AUTHENTICATING…" / "ATTEMPT N / 5" / "LOCKED · WAIT 30S"), 18pt monospace passcode field with 6-letter spacing, "Unlock" CTA, "Switch to public mode" ghost dismiss. API unchanged (`PinEntryDialog.show(context)` still returns `Future<bool?>`). |
 | m-empty | `home/home_screen.dart::_EmptyDirectives` | ✅ | Rebuilt to match prototype's editorial hero: 1.5px primary border + 200pt decorative italic numeral, "Your first directive" tinted label, "About 15 minutes. / That's all." italic h2, three monospace pill timeline rows, embedded "Start my directive" CTA. |
 | m-home | `home/home_screen.dart` | 🟡 | **Highest impact.** Missing editorial "Hi, [name]. / Let's keep your voice clear." greeting + decorative numeral on draft card. |
 | m-formtype | `wizard/form_type_selection_screen.dart` | ✅ | |
@@ -74,8 +74,8 @@ Items not requiring a Flutter screen (device-only flows): camera/voice/NFC.
 | m-agentaccept | NONE | ⏸ | Agent acceptance/consent receipt. The screen presupposes an online agent-acceptance flow (agent receives a link, reviews the directive, taps acknowledgments, signs digitally) which does NOT exist in the current architecture — directives are signed in ink with witnesses, not digitally by agents. Building only the post-acceptance receipt would imply functionality that isn't there. Deferred pending design conversation on whether to add an agent-acceptance flow or repurpose the screen as a manual "log that my agent accepted in person" record. |
 | m-a11y | `settings/accessibility_settings_screen.dart` | ✅ | |
 
-**Tally:** 33 PARITY / 7 DRIFT (2 partial 🟢) / 3 MISSING-buildable (2 🟢 partial — sheets built, auto-trigger deferred) / 3 MISSING-device-only-deferred / 1 MISSING-backend-deferred (m-wallet) / 1 MISSING-architecture-deferred (m-agentaccept).
-(Batch 4 part 2: m-verify ✅; m-agentaccept ⏸ deferred pending architecture decision.)
+**Tally:** 34 PARITY / 6 DRIFT (2 partial 🟢) / 3 MISSING-buildable (2 🟢 partial — sheets built, auto-trigger deferred) / 3 MISSING-device-only-deferred / 1 MISSING-backend-deferred (m-wallet) / 1 MISSING-architecture-deferred (m-agentaccept).
+(Batch 5 part 1: m-faceid ✅ editorial unlock screen; `w-wizard` desktop step rail at ≥1000px landed.)
 
 ## Web/desktop artboards
 
@@ -85,7 +85,9 @@ Not yet audited — covered in a later batch. Bundle defines:
 `w-wiz-procedures`, `w-wiz-else`, `w-review`, `w-conflict`, `w-sign`, `w-done`, `w-export`, `w-dataexport`, `w-share`,
 `w-revoke`, `w-learn`, `w-article`, `w-ai`, `w-settings`, `w-crisis`.
 
-Key item: **`w-wiz-mobile`** — desktop AI right-rail collapses into a tappable bottom sheet at the 1000px breakpoint. Per chat3, this was the last piece added to the prototype (item #33c).
+Key items:
+- **`w-wizard`** — desktop wizard with a left step rail at ≥1000px. Built in Batch 5: `wizard_screen.dart` now wraps its body in a `LayoutBuilder`; at width ≥1000 it shows `_WideStepRail` (240px column listing all 11 steps with done/current/pending dots + "STEP N / TOTAL" editorial header) alongside the existing form column (max width 760px). Read-only in this pass — rail items don't accept clicks because jumping mid-wizard would skip per-step validation; navigation stays on the Continue/Back bar.
+- **`w-wiz-mobile`** — desktop AI right-rail collapses into a tappable bottom sheet at the 1000px breakpoint. Per chat3, this was the last piece added to the prototype (item #33c). The wizard already exposes "Ask the AI" via its overflow menu; surfacing it as a persistent "Need help?" bar/sheet is deferred — touches existing AI route plumbing.
 
 ## Pass plan
 
@@ -96,7 +98,7 @@ Key item: **`w-wiz-mobile`** — desktop AI right-rail collapses into a tappable
 | 2 | Highest-visibility DRIFT fixes — start with m-home editorial greeting | 🟡 In progress |
 | 3 | Remaining DRIFT items (m-welcome, m-mode, m-faceid, m-empty, m-wizard-people, m-sign, m-pdf, m-crisis sheet) | 🟢 6 of 8 done: m-empty ✅ · m-welcome 🟢 · m-mode ✅ · m-crisis ✅ · m-wizard-people 🟢. Still pending: m-faceid (needs route/state work — see Batch 5), m-sign (functional conflict with wet-ink design — needs user input), m-pdf (lower-visibility export thumbs). |
 | 4 | Build MISSING-buildable screens (m-public, m-contacts, m-verify, m-renew, m-checkin, m-agentaccept) | 🟢 m-public ✅ · m-renew 🟢 · m-checkin 🟢 · m-verify ✅. m-agentaccept ⏸ deferred (no upstream agent-acceptance flow exists). m-contacts deferred to Batch 6 (needs `flutter_contacts` plugin + permission). |
-| 5 | Web/desktop responsive layout + w-wiz-mobile bottom-sheet AI rail | ⏳ Next session(s) |
+| 5 | Web/desktop responsive layout + w-wiz-mobile bottom-sheet AI rail | 🟢 m-faceid ✅ + `w-wizard` desktop step rail landed (Batch 5 part 1). Still pending: `w-wiz-mobile` AI bottom sheet, m-pdf preview thumbs, full per-screen web layouts (dashboard / share / learn). |
 | 6 (deferred) | Device-only screens (m-scan / m-voice / m-wallet) — need plugin + signing pipeline | ⏳ Defer until plugin/cryptography scope is decided |
 
 Each batch ends with `flutter analyze` + `flutter test` clean and one commit

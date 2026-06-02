@@ -218,32 +218,61 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                 ),
               ],
             ),
-            body: Column(
-              children: [
-                const CrisisTopBar(compact: true),
-                Container(
-                  color: p.card,
-                  padding: const EdgeInsets.only(top: 8),
-                  child: StepDots(
-                    current: _stepIndex + 1,
-                    total: steps.length,
-                  ),
-                ),
-                StepHead(
-                  stepNumber: _stepIndex + 1,
-                  totalSteps: steps.length,
-                  title: currentStep.displayName,
-                  subtitle: currentStep.subtitle,
-                ),
-                if (_stepIndex == 0) const DocumentImportTip(),
-                Expanded(
-                  child: _buildStep(
-                    currentStep,
-                    directive.id,
-                    formType,
-                  ),
-                ),
-              ],
+            body: LayoutBuilder(
+              builder: (context, constraints) {
+                // Desktop / wide layout — step rail on the left, content
+                // column on the right. Matches the prototype's `w-wizard`
+                // pattern; below the 1000px breakpoint we collapse to the
+                // existing mobile-first column. The rail is read-only in
+                // this first pass: jumping mid-wizard would skip
+                // validation of intermediate steps.
+                final isWide = constraints.maxWidth >= 1000;
+                final mainColumn = Column(
+                  children: [
+                    const CrisisTopBar(compact: true),
+                    if (!isWide)
+                      Container(
+                        color: p.card,
+                        padding: const EdgeInsets.only(top: 8),
+                        child: StepDots(
+                          current: _stepIndex + 1,
+                          total: steps.length,
+                        ),
+                      ),
+                    StepHead(
+                      stepNumber: _stepIndex + 1,
+                      totalSteps: steps.length,
+                      title: currentStep.displayName,
+                      subtitle: currentStep.subtitle,
+                    ),
+                    if (_stepIndex == 0) const DocumentImportTip(),
+                    Expanded(
+                      child: _buildStep(
+                        currentStep,
+                        directive.id,
+                        formType,
+                      ),
+                    ),
+                  ],
+                );
+                if (!isWide) return mainColumn;
+                return Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    _WideStepRail(
+                      steps: steps,
+                      currentIndex: _stepIndex,
+                    ),
+                    Container(width: 1, color: p.border),
+                    Expanded(
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 760),
+                        child: mainColumn,
+                      ),
+                    ),
+                  ],
+                );
+              },
             ),
             bottomNavigationBar: WizardBottomBar(
               primaryLabel: isLastStep ? 'Finish & export' : 'Continue',
@@ -551,5 +580,167 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
         }
       }
     }
+  }
+}
+
+/// Desktop step rail rendered at widths ≥1000px. Matches the prototype's
+/// `w-wizard` left column (web-wizard-steps.jsx). Read-only in this pass:
+/// it shows progress with completed / current / pending dot states but
+/// does not let the user jump arbitrarily (which would skip per-step
+/// validation). Navigation still happens via Continue / Back at the
+/// bottom bar.
+class _WideStepRail extends StatelessWidget {
+  final List<WizardStep> steps;
+  final int currentIndex;
+  const _WideStepRail({
+    required this.steps,
+    required this.currentIndex,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
+    return Container(
+      width: 240,
+      color: p.card,
+      padding: const EdgeInsets.fromLTRB(20, 24, 16, 24),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'YOUR DIRECTIVE',
+              style: TextStyle(
+                fontFamily: 'JetBrains Mono',
+                fontFamilyFallback: const [
+                  'Consolas',
+                  'Menlo',
+                  'Courier New',
+                  'monospace',
+                ],
+                fontSize: 10.5,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 1.2,
+                color: p.textMuted,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              '${currentIndex + 1} / ${steps.length}',
+              style: TextStyle(
+                fontFamily: 'Instrument Serif',
+                fontFamilyFallback: const ['Georgia', 'serif'],
+                fontStyle: FontStyle.italic,
+                fontSize: 36,
+                fontWeight: FontWeight.w400,
+                letterSpacing: -0.5,
+                height: 1,
+                color: p.primary,
+              ),
+            ),
+            const SizedBox(height: 18),
+            for (var i = 0; i < steps.length; i++)
+              _RailStepRow(
+                index: i + 1,
+                title: steps[i].displayName,
+                state: i < currentIndex
+                    ? _RailStepState.done
+                    : i == currentIndex
+                        ? _RailStepState.current
+                        : _RailStepState.pending,
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+enum _RailStepState { done, current, pending }
+
+class _RailStepRow extends StatelessWidget {
+  final int index;
+  final String title;
+  final _RailStepState state;
+  const _RailStepRow({
+    required this.index,
+    required this.title,
+    required this.state,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
+    final dotBg = switch (state) {
+      _RailStepState.done => p.primary,
+      _RailStepState.current => p.primary,
+      _RailStepState.pending => Colors.transparent,
+    };
+    final dotBorder = switch (state) {
+      _RailStepState.done => p.primary,
+      _RailStepState.current => p.primary,
+      _RailStepState.pending => p.border,
+    };
+    final dotFg = switch (state) {
+      _RailStepState.done => p.onPrimary,
+      _RailStepState.current => p.onPrimary,
+      _RailStepState.pending => p.textMuted,
+    };
+    final titleColor = switch (state) {
+      _RailStepState.done => p.textMuted,
+      _RailStepState.current => p.text,
+      _RailStepState.pending => p.textMuted,
+    };
+    final titleWeight = state == _RailStepState.current
+        ? FontWeight.w700
+        : FontWeight.w500;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            width: 26,
+            height: 26,
+            decoration: BoxDecoration(
+              color: dotBg,
+              border: Border.all(color: dotBorder, width: 1.5),
+              shape: BoxShape.circle,
+            ),
+            alignment: Alignment.center,
+            child: state == _RailStepState.done
+                ? Icon(Icons.check, size: 14, color: dotFg)
+                : Text(
+                    '$index',
+                    style: TextStyle(
+                      fontFamily: 'JetBrains Mono',
+                      fontFamilyFallback: const [
+                        'Consolas',
+                        'Menlo',
+                        'Courier New',
+                        'monospace',
+                      ],
+                      fontSize: 11,
+                      fontWeight: FontWeight.w700,
+                      color: dotFg,
+                    ),
+                  ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              title,
+              style: TextStyle(
+                fontFamily: 'DM Sans',
+                fontSize: 13.5,
+                fontWeight: titleWeight,
+                color: titleColor,
+                height: 1.2,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
