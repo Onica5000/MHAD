@@ -46,26 +46,15 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           const SizedBox(height: 18),
           const SectionLabel('Appearance'),
           const SizedBox(height: 8),
+          // Per user direction (2026-06-02): the app ships in the Deep Navy
+          // palette only — no in-app palette picker. The teal/sage palettes
+          // remain in `app_theme.dart` as inert tokens (the design system
+          // still documents all three) but are not reachable from the UI.
           DesignCard(
             padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Color theme',
-                  style: Theme.of(context).textTheme.titleSmall,
-                ),
-                const SizedBox(height: 10),
-                Column(
-                  children: ThemePalette.values
-                      .map((pal) => _PaletteTile(
-                            palette: pal,
-                            selected: themeSettings.palette == pal,
-                            onTap: () => themeCtrl.setPalette(pal),
-                          ))
-                      .toList(),
-                ),
-                const SizedBox(height: 16),
                 Text(
                   'Brightness',
                   style: Theme.of(context).textTheme.titleSmall,
@@ -290,88 +279,6 @@ class _SettingsRow extends StatelessWidget {
             ),
             Icon(Icons.chevron_right, color: p.textMuted, size: 20),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class _PaletteTile extends StatelessWidget {
-  final ThemePalette palette;
-  final bool selected;
-  final VoidCallback onTap;
-
-  const _PaletteTile({
-    required this.palette,
-    required this.selected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final p = Theme.of(context).mhadPalette;
-    final swatch = palette.light;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: selected ? p.primaryLight : Colors.transparent,
-            border: Border.all(
-              color: selected ? p.primary : p.border,
-              width: selected ? 1.5 : 1,
-            ),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Row(
-            children: [
-              Container(
-                width: 34,
-                height: 34,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  gradient: LinearGradient(
-                    colors: [swatch.primary, swatch.primaryMid],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      palette.label,
-                      style: const TextStyle(
-                        fontFamily: 'DM Sans',
-                        fontWeight: FontWeight.w700,
-                        fontSize: 14,
-                      ),
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      palette.description,
-                      style: TextStyle(
-                        fontFamily: 'DM Sans',
-                        fontSize: 12,
-                        color: p.textMuted,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              if (selected)
-                Icon(Icons.check_circle, color: p.primary, size: 22)
-              else
-                Icon(Icons.circle_outlined, color: p.border, size: 22),
-            ],
-          ),
         ),
       ),
     );

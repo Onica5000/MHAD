@@ -25,12 +25,11 @@ class AppThemeController extends Notifier<AppThemeSettings> {
 
   @override
   AppThemeSettings build() {
-    // Defaults — hydrated asynchronously once prefs are loaded.
-    // Per the Claude Design bundle `7MymEiPDh58jY_cchvUF8A` (EDITMODE block
-    // in Mental Health Advance Directive.html line 47), the ship-it default
-    // shifted from `teal` to `navy` — Deep Navy was selected as the final
-    // primary palette for v1. Returning users who explicitly chose another
-    // palette keep it; this only affects fresh installs / first-launch.
+    // Per user direction (2026-06-02): the app ships in Deep Navy only.
+    // No in-app palette picker; the teal/sage palettes remain in
+    // `app_theme.dart` as inert tokens but are unreachable from the UI.
+    // Hydration only restores the brightness mode now — any persisted
+    // palette is force-migrated to navy and the key is cleared.
     _hydrate();
     return const AppThemeSettings(
       palette: ThemePalette.navy,
@@ -41,17 +40,15 @@ class AppThemeController extends Notifier<AppThemeSettings> {
   Future<void> _hydrate() async {
     final prefs = await SharedPreferences.getInstance();
     _prefs = prefs;
-    final paletteName = prefs.getString(_paletteKey);
-    final modeName = prefs.getString(_modeKey);
 
-    ThemePalette? palette;
-    for (final p in ThemePalette.values) {
-      if (p.name == paletteName) {
-        palette = p;
-        break;
-      }
+    // One-shot migration: drop any persisted palette choice from earlier
+    // builds. We never write to this key again, so this only fires once
+    // per device.
+    if (prefs.containsKey(_paletteKey)) {
+      await prefs.remove(_paletteKey);
     }
 
+    final modeName = prefs.getString(_modeKey);
     ThemeMode? mode;
     for (final m in ThemeMode.values) {
       if (m.name == modeName) {
@@ -59,14 +56,16 @@ class AppThemeController extends Notifier<AppThemeSettings> {
         break;
       }
     }
-
-    if (palette == null && mode == null) return;
-    state = state.copyWith(palette: palette, mode: mode);
+    if (mode == null) return;
+    state = state.copyWith(mode: mode);
   }
 
+  /// Kept for source compatibility — no-op while the app is navy-locked.
+  /// If a future build re-introduces the picker, restore the body to:
+  ///   `state = state.copyWith(palette: palette);`
+  ///   `await _prefs?.setString(_paletteKey, palette.name);`
   Future<void> setPalette(ThemePalette palette) async {
-    state = state.copyWith(palette: palette);
-    await _prefs?.setString(_paletteKey, palette.name);
+    // Intentionally empty.
   }
 
   Future<void> setMode(ThemeMode mode) async {
