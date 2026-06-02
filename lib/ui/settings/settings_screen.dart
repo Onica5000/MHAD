@@ -90,6 +90,15 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 ),
                 Divider(height: 1, color: p.border),
                 _SettingsRow(
+                  icon: Icons.shield_outlined,
+                  title: 'Privacy & permissions',
+                  subtitle:
+                      'What permissions the app uses, and what we promise '
+                      'about each',
+                  onTap: () => context.push(AppRoutes.permissions),
+                ),
+                Divider(height: 1, color: p.border),
+                _SettingsRow(
                   icon: Icons.gavel_rounded,
                   title: 'Legal Disclaimer',
                   subtitle: 'Terms, limitations, and your legal rights',

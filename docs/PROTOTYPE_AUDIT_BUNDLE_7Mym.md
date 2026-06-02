@@ -35,7 +35,7 @@ Items not requiring a Flutter screen (device-only flows): camera/voice/NFC.
 | m-quiz | (covered by `widgets/form_type_quiz.dart`) | ✅ | 4-question quiz dialog + confidence meter — built in Phase 1. |
 | m-scan | NONE (device-only) | ❌ | Camera-driven document scan; needs `camera` plugin work. |
 | m-snap-review | NONE | ❌ | AI extraction review post-scan. Pairs with m-scan. |
-| m-permission | NONE (device-only) | ❌ | System-permissions consent screen. |
+| m-permission | `permissions/permissions_overview_screen.dart` | ✅ | The OS-native permission dialog the prototype shows is shipped by iOS/Android, not customizable from Flutter. The buildable parity is an in-app Privacy & Permissions overview that mirrors the prototype's "What we use it for" 4-check transparency block per category. Lists Biometrics / Notifications / Camera / Microphone / Contacts with: plain-language usedFor, 4 promises, and an OS-managed status pill. Reachable from Settings → AI & Privacy → "Privacy & permissions". |
 | m-voice | NONE (device-only) | ❌ | Speech-to-text input. Needs `speech_to_text` plugin. |
 | m-wizard-about | `wizard/steps/personal_info_step.dart` | ✅ | |
 | m-wizard-when | `wizard/steps/when_it_kicks_in_step.dart` | ✅ | |
@@ -54,7 +54,7 @@ Items not requiring a Flutter screen (device-only flows): camera/voice/NFC.
 | m-done | `wizard/wizard_complete_screen.dart` | ✅ | |
 | m-wallet | NONE | ❌ | Apple Wallet `.pkpass` generation. Backend-bound; deferred per Phase 4 audit item #15. |
 | m-share | `share/share_sheet_screen.dart` | ✅ | |
-| m-pdf | (covered by `export/export_screen.dart`) | 🟡 | Prototype shows 6-page PDF preview with toolbar/thumbs; Flutter shows generation options instead. |
+| m-pdf | `export/export_screen.dart::_PdfPreviewScreen` | ✅ | (Initial audit flagged 🟡; on re-read, the existing `_PdfPreviewScreen` already uses `PdfPreview` from the `printing` package which renders the page thumbnails + preview pane the prototype shows. Allow-printing + allow-sharing actions are wired. Coverage matches prototype.) |
 | m-past | `past/past_directive_detail_screen.dart` | ✅ | |
 | m-verify | `verify/wallet_verify_screen.dart` | ✅ | Dark-themed read-only verifier preview (what an EMS / ER scanner sees on QR scan). Status banner (green when active, red otherwise) with "ACT 194" pill · principal card with initials avatar + monospace DOB/city · "Call first" agent row with `tel:` launch · Treatment flags pulled from real data: severe allergies → "Avoid: X" crisis flags, `ectConsent`/`drugTrialConsent` mapped to crisis/warn tones, room-preference summary as ok flag. Reachable from directive card overflow menu as "Preview QR view". |
 | m-renew | `reminders/reminder_sheets.dart::showRenewalNudge` | 🟢 | Modal bottom sheet built (warning palette, italic "Time to renew, [Name].", days-until-expiry pill, primaryTint "Quick renew · ~5 min" card, "Start quick renew" CTA wired to existing `onRenew` callback). Accessible via the directive card overflow menu. **Auto-trigger policy** (28 days before `expirationDate`) deferred — needs notification scheduling. |
@@ -74,8 +74,8 @@ Items not requiring a Flutter screen (device-only flows): camera/voice/NFC.
 | m-agentaccept | `agent_accept/agent_accept_screen.dart` | ✅ | Per user decision (2026-06-02): repurposed as a manual in-person acceptance log. Schema v11 added `Agents.acceptedAt` (nullable INT) + `Agents.acceptanceNotes` (TEXT). Screen lists each agent with two states: unlogged → "Log acceptance" outline CTA opening a date+time+notes dialog; logged → editorial italic "[FirstName] is now your agent." headline + monospace "ACCEPTED" badge + timestamp + optional notes block + Edit affordance. Local only — no online flow. Reachable from directive card overflow menu as "Agent acceptance log". |
 | m-a11y | `settings/accessibility_settings_screen.dart` | ✅ | |
 
-**Tally:** 37 PARITY / 4 DRIFT (2 partial 🟢) / 2 MISSING-buildable (2 🟢 partial — sheets built + auto-fire on launch wired) / 3 MISSING-device-only-deferred / 1 MISSING-backend-deferred (m-wallet).
-(Batch 5: m-faceid ✅ · `w-wizard` rail ✅ · desktop max-content ✅ · reminder auto-fire ✅ · m-agentaccept ✅ · m-sign ✅.)
+**Tally:** 39 PARITY / 3 DRIFT (2 partial 🟢) / 1 MISSING-buildable (2 🟢 partial — sheets built + auto-fire on launch wired) / 4 plugin-bound-deferred (m-scan, m-snap-review, m-voice, m-contacts) / 1 MISSING-backend-deferred (m-wallet).
+(Batch 6 part 1: m-permission ✅ (in-app overview screen) · m-pdf ✅ (reclassified; PdfPreview already wired).)
 
 ## Web/desktop artboards
 
@@ -99,7 +99,7 @@ Key items:
 | 3 | Remaining DRIFT items (m-welcome, m-mode, m-faceid, m-empty, m-wizard-people, m-sign, m-pdf, m-crisis sheet) | 🟢 6 of 8 done: m-empty ✅ · m-welcome 🟢 · m-mode ✅ · m-crisis ✅ · m-wizard-people 🟢. Still pending: m-faceid (needs route/state work — see Batch 5), m-sign (functional conflict with wet-ink design — needs user input), m-pdf (lower-visibility export thumbs). |
 | 4 | Build MISSING-buildable screens (m-public, m-contacts, m-verify, m-renew, m-checkin, m-agentaccept) | 🟢 m-public ✅ · m-renew 🟢 · m-checkin 🟢 · m-verify ✅. m-agentaccept ⏸ deferred (no upstream agent-acceptance flow exists). m-contacts deferred to Batch 6 (needs `flutter_contacts` plugin + permission). |
 | 5 | Web/desktop responsive layout + w-wiz-mobile bottom-sheet AI rail | 🟢 m-faceid ✅ + `w-wizard` desktop step rail landed (Batch 5 part 1). Still pending: `w-wiz-mobile` AI bottom sheet, m-pdf preview thumbs, full per-screen web layouts (dashboard / share / learn). |
-| 6 (deferred) | Device-only screens (m-scan / m-voice / m-wallet) — need plugin + signing pipeline | ⏳ Defer until plugin/cryptography scope is decided |
+| 6 | Plugin-bound screens | 🟢 m-permission ✅ (overview screen, no plugin) · m-pdf ✅ (reclassified — already wired). Still pending: m-scan + m-snap-review (camera plugin), m-voice (speech_to_text plugin), m-contacts (flutter_contacts plugin), m-wallet (cryptography / cert / PassKit). All need explicit plugin-scope decisions before I add packages. |
 
 Each batch ends with `flutter analyze` + `flutter test` clean and one commit
 pushed to `main`. This doc gets updated after each batch.

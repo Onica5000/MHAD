@@ -21,6 +21,7 @@ import 'package:mhad/ui/settings/settings_screen.dart';
 import 'package:mhad/ui/settings/privacy_policy_screen.dart';
 import 'package:mhad/ui/share/share_sheet_screen.dart';
 import 'package:mhad/ui/agent_accept/agent_accept_screen.dart';
+import 'package:mhad/ui/permissions/permissions_overview_screen.dart';
 import 'package:mhad/ui/verify/wallet_verify_screen.dart';
 import 'package:mhad/ui/mode_selection/mode_selection_screen.dart';
 import 'package:mhad/ui/ulysses/ulysses_clause_screen.dart';
@@ -68,6 +69,8 @@ abstract class AppRoutes {
   // user decision: principal records that each agent verbally accepted
   // in person; no online flow).
   static const agentAccept = '/agent-accept/:directiveId';
+  // Batch 6 — in-app privacy & permissions overview.
+  static const permissions = '/permissions';
 
   static String legalToggleRoute(int directiveId) =>
       '/legal-toggle/$directiveId';
@@ -296,6 +299,10 @@ GoRouter _buildRouter(
             if (id == null) return const HomeScreen();
             return AgentAcceptScreen(directiveId: id);
           },
+        ),
+        GoRoute(
+          path: AppRoutes.permissions,
+          builder: (_, _) => const PermissionsOverviewScreen(),
         ),
       ],
       errorBuilder: (_, _) => const HomeScreen(),
