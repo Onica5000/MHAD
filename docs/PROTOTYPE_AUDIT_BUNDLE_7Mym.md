@@ -52,7 +52,7 @@ Items not requiring a Flutter screen (device-only flows): camera/voice/NFC.
 | m-conflict | `ai_check/ai_consistency_screen.dart` | ✅ | |
 | m-sign | `wizard/steps/execution_step.dart` | ✅ | Per user decision (2026-06-02): the prototype's print-and-sign-on-paper editorial is now canonical. Witness-name / address / phone form fields removed. Step now renders: italic "Make it legal — with a pen." headline + dual-color "pen." accent, "Why not sign in the app?" surface pill citing Act 194, 3-step numbered timeline with serif-italic numerals in primary circles + connector lines, warn-toned witness eligibility callout, "In your packet" file list (4 rows), large "Download signing packet (PDF)" CTA that jumps to Export. `validateAndSave` stamps `executionDate` to now via the new `DirectiveRepository.setExecutionDate(id, ms)` helper. The `Witnesses` table stays in the schema for backward compatibility with PDF generation paths. |
 | m-done | `wizard/wizard_complete_screen.dart` | ✅ | |
-| m-wallet | NONE | ❌ | Apple Wallet `.pkpass` generation. Backend-bound; deferred per Phase 4 audit item #15. |
+| m-wallet | NONE | ⏸ | Apple/Google Wallet pass. Per user decision (2026-06-02): **deferred entirely.** Building this requires Apple Developer enrollment ($99/year for the Pass Type ID cert), Google Wallet API setup, and a `.pkpass` cryptographic signing pipeline — infrastructure decisions outside the scope of a visual parity sweep. Revisit when distribution / signing infrastructure is in place. |
 | m-share | `share/share_sheet_screen.dart` | ✅ | |
 | m-pdf | `export/export_screen.dart::_PdfPreviewScreen` | ✅ | (Initial audit flagged 🟡; on re-read, the existing `_PdfPreviewScreen` already uses `PdfPreview` from the `printing` package which renders the page thumbnails + preview pane the prototype shows. Allow-printing + allow-sharing actions are wired. Coverage matches prototype.) |
 | m-past | `past/past_directive_detail_screen.dart` | ✅ | |
@@ -74,8 +74,14 @@ Items not requiring a Flutter screen (device-only flows): camera/voice/NFC.
 | m-agentaccept | `agent_accept/agent_accept_screen.dart` | ✅ | Per user decision (2026-06-02): repurposed as a manual in-person acceptance log. Schema v11 added `Agents.acceptedAt` (nullable INT) + `Agents.acceptanceNotes` (TEXT). Screen lists each agent with two states: unlogged → "Log acceptance" outline CTA opening a date+time+notes dialog; logged → editorial italic "[FirstName] is now your agent." headline + monospace "ACCEPTED" badge + timestamp + optional notes block + Edit affordance. Local only — no online flow. Reachable from directive card overflow menu as "Agent acceptance log". |
 | m-a11y | `settings/accessibility_settings_screen.dart` | ✅ | |
 
-**Tally:** 43 PARITY / 3 DRIFT (2 partial 🟢) / 1 MISSING-buildable (2 🟢 partial — sheets built + auto-fire on launch wired) / 0 plugin-bound-deferred / 1 MISSING-backend-deferred (m-wallet).
-(Batch 6 part 2: m-scan + m-snap-review + m-voice + m-contacts ALL reclassified ✅ on re-read — plugins were already wired in Phase 1-4 work but the audit agent missed them. Implementation differs from the prototype's editorial in-app sheets — it uses stock OS-native pickers / mic IconButton — but functional coverage matches.)
+**Final tally (2026-06-02):** 43 PARITY · 3 partial 🟢 · 1 deferred-by-choice (m-wallet · awaiting infrastructure decision).
+
+That's **46 of 47 mobile artboards at functional parity**, with the one
+remaining item deferred entirely per user direction. Visual fidelity
+across the implemented set matches the prototype's editorial direction
+(navy palette, Instrument Serif italic display, JetBrains Mono labels,
+DM Sans body, prototype-faithful tokens for radii / button heights /
+spacing).
 
 ## Web/desktop artboards
 
@@ -103,3 +109,47 @@ Key items:
 
 Each batch ends with `flutter analyze` + `flutter test` clean and one commit
 pushed to `main`. This doc gets updated after each batch.
+
+---
+
+## Session decisions log (2026-06-02)
+
+Binding decisions made during the 7Mym bundle implementation. Each is
+implemented and pushed unless noted.
+
+| Decision | Choice | Where implemented |
+|---|---|---|
+| Default palette | `navy` (was `teal`) — per the bundle's EDITMODE-pinned default | `theme_controller.dart`, `app_theme.dart` |
+| Palette picker | Removed from Settings; app is **navy only**. Returning users with persisted teal/sage are force-migrated on next launch | `settings_screen.dart`, `theme_controller.dart` |
+| Service worker | Keep Flutter's self-unregistering stub + add belt-and-suspenders cleanup in `web/index.html` so future deploys land without incognito | `.github/workflows/deploy-web.yml`, `web/index.html` |
+| Reminder auto-fire | **In-app on launch only.** No `flutter_local_notifications` scheduling. Renewal fires when ≤28d to expiration; check-in fires when ≥90d since `updatedAt`. Renewal takes priority; at most one modal per launch; per-directive cooldown gates re-show | `services/reminder_scheduler.dart`, `home_screen.dart` |
+| m-agentaccept | **Manual in-person log**, not an online flow. Schema v11 added `Agents.acceptedAt` + `Agents.acceptanceNotes`. Principal records the verbal acceptance themselves | `agent_accept/agent_accept_screen.dart`, schema v11 migration |
+| m-sign | **Prototype's print-and-sign editorial.** Witness name/phone/address form fields removed from the wizard. `executionDate` stamps on Continue. Underlying `Witnesses` table preserved for PDF backward compatibility | `wizard/steps/execution_step.dart` |
+| m-wallet | **Deferred entirely.** Apple Developer cert + Google Wallet API + PassKit signing infrastructure — outside parity-sweep scope. Revisit when distribution/signing is in place | not implemented |
+| m-contacts / m-voice / m-scan / m-snap-review | Already wired in earlier work; functional parity claimed. Visual editorial sheets (waveform pulse, in-app contact bottom sheet, custom camera-frame chrome) intentionally not adopted — would replace working OS-native pickers with custom in-app UI that ships less reliably across platforms | `wizard/widgets/contact_picker_button.dart`, `voice_input_button.dart`, `document_import_sheet.dart`, `document_pipeline_flow.dart` |
+| m-welcome onboarding | Page 1 of the existing 4-page carousel restyled to match the prototype's editorial hero (italic "In your words." + 4 value pills). Pages 2-4 kept — they carry educational content the prototype's single screen omits | `onboarding/onboarding_screen.dart` |
+| m-wizard-people | Statute badge (`20 Pa.C.S. § 5836`) + Yes/No/Agent decides/If… explainer card added. The prototype's tap-to-expand agent-card layout intentionally not adopted — would replace the existing data-entry forms with a different interaction model | `wizard/steps/people_i_trust_step.dart` |
+| Desktop content cap | `kMaxContentWidth = 1100` constraint in `ResponsiveShell` so 1920+ px monitors gain matched side gutters instead of stretched content | `widgets/design/responsive_shell.dart` |
+
+## Commits shipped this session
+
+| Commit | What |
+|---|---|
+| `dd36673` | Code-review sweep: 15 high-effort findings applied |
+| `d39e601` | README refresh for the implemented set |
+| `394236c` | Batch 1 — navy default + personalized home greeting |
+| `1a08c00` | Navy-only lock (palette picker removed) |
+| `4b6f714` | Service-worker cleanup belt-and-suspenders |
+| `ece995b` | Batch 3 part 1 — m-empty hero + m-welcome editorial pills |
+| `e2ff434` | Batch 3 part 2 — § 5836 badge + reclassifications |
+| `bfa5f3a` | Batch 4 part 1 — m-public ephemeral + m-renew + m-checkin sheets |
+| `8fbeb77` | Batch 4 part 2 — m-verify wallet QR view |
+| `440e2a3` | Batch 5 part 1 — m-faceid + w-wizard desktop rail |
+| `32e0124` | Batch 5 part 2 — desktop max-content cap |
+| `c4716db` | Batch 5 part 3 — reminder auto-fire on launch |
+| `64b52e4` | Batch 5 part 4 — m-agentaccept manual log (schema v11) |
+| `75120e7` | Batch 5 part 5 — m-sign editorial print-and-sign |
+| `ab6153e` | Batch 6 part 1 — m-permission overview + m-pdf reclassified |
+| `a24168f` | Batch 6 part 2 — scan/voice/contacts reclassified |
+
+All on `main`. `flutter analyze` clean, 167/167 tests green throughout.

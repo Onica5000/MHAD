@@ -1,8 +1,17 @@
 # Prototype-Diff Decisions Log
 
-Companion to `docs/PROTOTYPE_DIFF_AUDIT.md`. Records each decision the user
-makes while walking through the audit, plus the running list of items to
-submit back to Claude Design for clarification or design-side completion.
+> ℹ️ **Historical — preserved as the binding decisions reference.**
+> This is the canonical record of every decision made during the first
+> prototype walkthrough (50 numbered decisions). Code comments in `lib/`
+> still cite specific § numbers from this document (e.g. `§ D.5`,
+> `§ B.4`), so the file stays in place even though the broader audit it
+> companioned (`PROTOTYPE_DIFF_AUDIT.md`) and the follow-up coverage docs
+> have been removed. The current state-of-the-world for prototype parity
+> lives in `docs/PROTOTYPE_AUDIT_BUNDLE_7Mym.md`.
+
+Originally a companion to a deleted `PROTOTYPE_DIFF_AUDIT.md`. Records
+each decision the user makes while walking through the audit, plus the
+running list of items submitted back to Claude Design for clarification.
 
 **Started:** 2026-05-28
 **Guiding principle:** Visually, the prototype takes precedence (the user

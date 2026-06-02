@@ -121,12 +121,12 @@ were superseded by regulations that changed *after* they were written.
 ### V4-M8: Exported PDF has no protection, and the docs claim otherwise
 - **Files:** `lib/ui/export/export_screen.dart:41` — `// (Password protection removed —
   pdf package does not support encryption)`
-- **Evidence:** `GAP_ANALYSIS_V3.md` V3-L19 states the toggle is "UI-ready with a TODO."
-  Reality: the feature was **removed**. Exported directives contain full mental-health PII
-  and are shared via `share_plus` with zero protection.
+- **Evidence:** A prior gap analysis (V3, since removed) claimed the toggle was
+  "UI-ready with a TODO." Reality: the feature was **removed**. Exported directives
+  contain full mental-health PII and are shared via `share_plus` with zero protection.
 - **Fix:** Either (a) integrate a PDF encryption path (native plugin or a maintained Dart
   lib), or (b) explicitly warn the user at export time that the file is unprotected and
-  recommend secure handling — and correct the V3 doc claim.
+  recommend secure handling.
 - **Status:** [!]
 
 ### V4-M9: WCAG 2.2 deltas not evaluated (signature dragging, focus-not-obscured)
