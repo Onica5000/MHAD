@@ -26,9 +26,14 @@ class AppThemeController extends Notifier<AppThemeSettings> {
   @override
   AppThemeSettings build() {
     // Defaults — hydrated asynchronously once prefs are loaded.
+    // Per the Claude Design bundle `7MymEiPDh58jY_cchvUF8A` (EDITMODE block
+    // in Mental Health Advance Directive.html line 47), the ship-it default
+    // shifted from `teal` to `navy` — Deep Navy was selected as the final
+    // primary palette for v1. Returning users who explicitly chose another
+    // palette keep it; this only affects fresh installs / first-launch.
     _hydrate();
     return const AppThemeSettings(
-      palette: ThemePalette.teal,
+      palette: ThemePalette.navy,
       mode: ThemeMode.system,
     );
   }

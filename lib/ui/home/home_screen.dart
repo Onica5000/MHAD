@@ -236,19 +236,28 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         children: [
           const _DeviceSecurityCheck(),
           SectionLabel(dateLabel),
-          EditorialHeading(
-            textSpan: TextSpan(
-              children: [
-                const TextSpan(text: 'Your voice,\n'),
-                TextSpan(
-                  text: 'in your words.',
-                  style: TextStyle(color: p.primary),
-                ),
-              ],
+          // Personalized editorial greeting — matches prototype ScrHome:
+          // when the user has any directive (draft or otherwise), pull their
+          // first name and surface "Hi, [Name]." with a muted "Let's keep
+          // your voice clear." subhead. If there's no stored name yet we
+          // fall back to the v3 "Your voice, in your words." dual-color
+          // line so first-launch still has the editorial hook.
+          directivesAsync.maybeWhen(
+            data: (directives) => _HomeGreeting(directives: directives),
+            orElse: () => EditorialHeading(
+              textSpan: TextSpan(
+                children: [
+                  const TextSpan(text: 'Your voice,\n'),
+                  TextSpan(
+                    text: 'in your words.',
+                    style: TextStyle(color: p.primary),
+                  ),
+                ],
+              ),
+              size: 38,
+              height: 1.05,
+              letterSpacing: -0.6,
             ),
-            size: 38,
-            height: 1.05,
-            letterSpacing: -0.6,
           ),
           const SizedBox(height: 16),
           const InfoBanner(
@@ -1265,6 +1274,126 @@ class _ToolTileCard extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+/// Editorial home greeting — matches prototype `ScrHome` (mobile.jsx::L242-253).
+/// Renders one of two states:
+///   - **Personalized** (any directive with a stored fullName): big italic
+///     "Hi, [Name]." headline + muted "Let's keep your voice clear." subhead,
+///     paired with a 40×40 avatar pill bearing the user's initials on the
+///     right side.
+///   - **Anonymous** (no directives yet): falls back to the v3 dual-color
+///     "Your voice, in your words." editorial so first-launch still has a
+///     hook. The caller handles this branch via `directivesAsync.maybeWhen`.
+class _HomeGreeting extends StatelessWidget {
+  final List<Directive> directives;
+  const _HomeGreeting({required this.directives});
+
+  /// Picks the user's name to greet. Preference order: the most-recently-
+  /// updated DRAFT, then the most-recently-updated directive of any status.
+  /// Returns an empty string if none of the directives carry a `fullName`.
+  String _pickName() {
+    if (directives.isEmpty) return '';
+    final sorted = [...directives]
+      ..sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
+    final firstDraft = sorted
+        .where((d) => d.status == 'draft' && d.fullName.trim().isNotEmpty)
+        .toList();
+    final src = firstDraft.isNotEmpty
+        ? firstDraft.first
+        : sorted.firstWhere(
+            (d) => d.fullName.trim().isNotEmpty,
+            orElse: () => sorted.first,
+          );
+    return src.fullName.trim();
+  }
+
+  String _initialsFrom(String name) {
+    final parts =
+        name.split(RegExp(r'\s+')).where((p) => p.isNotEmpty).toList();
+    if (parts.isEmpty) return '';
+    if (parts.length == 1) {
+      return parts.first.substring(0, 1).toUpperCase();
+    }
+    return (parts.first.substring(0, 1) + parts.last.substring(0, 1))
+        .toUpperCase();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
+    final fullName = _pickName();
+    if (fullName.isEmpty) {
+      // No usable name → keep the anonymous editorial. The caller's fallback
+      // already covers the empty-directives case; this guards the case where
+      // a directive exists but the name field is still blank.
+      return EditorialHeading(
+        textSpan: TextSpan(
+          children: [
+            const TextSpan(text: 'Your voice,\n'),
+            TextSpan(
+              text: 'in your words.',
+              style: TextStyle(color: p.primary),
+            ),
+          ],
+        ),
+        size: 38,
+        height: 1.05,
+        letterSpacing: -0.6,
+      );
+    }
+    final firstName = fullName.split(RegExp(r'\s+')).first;
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          child: Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(text: 'Hi, $firstName.\n'),
+                TextSpan(
+                  text: "Let's keep your voice clear.",
+                  style: TextStyle(color: p.textMuted, fontSize: 22),
+                ),
+              ],
+            ),
+            style: const TextStyle(
+              fontFamily: 'Instrument Serif',
+              fontFamilyFallback: ['Georgia', 'serif'],
+              fontStyle: FontStyle.italic,
+              fontSize: 38,
+              height: 1.05,
+              letterSpacing: -0.5,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+        ),
+        const SizedBox(width: 12),
+        // Avatar pill — initials in primaryLight chip, matches prototype L248-253.
+        Semantics(
+          label: 'Profile $firstName',
+          child: Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: p.primaryLight,
+              borderRadius: BorderRadius.circular(100),
+            ),
+            alignment: Alignment.center,
+            child: Text(
+              _initialsFrom(fullName),
+              style: TextStyle(
+                fontFamily: 'DM Sans',
+                fontWeight: FontWeight.w700,
+                fontSize: 14,
+                color: p.onPrimaryLight,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

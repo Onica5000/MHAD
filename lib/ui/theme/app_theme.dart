@@ -249,7 +249,7 @@ extension MhadThemeX on ThemeData {
     // We stash the palette in [extensions] so it's available from any
     // `Theme.of(context)` call.
     return extension<_MhadPaletteExt>()?.palette ??
-        MhadPalette.tealLight;
+        MhadPalette.navyLight;
   }
 }
 
@@ -557,6 +557,7 @@ const mhadTealDark = Color(0xFF125A52);
 const mhadTealLight = Color(0xFF4ABFB1);
 
 /// Legacy helpers — still used by some older screens. They now build themes
-/// against the default Warm Teal palette.
-ThemeData get lightTheme => buildMhadTheme(ThemePalette.teal, Brightness.light);
-ThemeData get darkTheme => buildMhadTheme(ThemePalette.teal, Brightness.dark);
+/// against the default Deep Navy palette (the ship-it choice from the v4
+/// Claude Design bundle `7MymEiPDh58jY_cchvUF8A`).
+ThemeData get lightTheme => buildMhadTheme(ThemePalette.navy, Brightness.light);
+ThemeData get darkTheme => buildMhadTheme(ThemePalette.navy, Brightness.dark);
