@@ -39,7 +39,7 @@ Items not requiring a Flutter screen (device-only flows): camera/voice/NFC.
 | m-voice | NONE (device-only) | ❌ | Speech-to-text input. Needs `speech_to_text` plugin. |
 | m-wizard-about | `wizard/steps/personal_info_step.dart` | ✅ | |
 | m-wizard-when | `wizard/steps/when_it_kicks_in_step.dart` | ✅ | |
-| m-wizard-people | `wizard/steps/people_i_trust_step.dart` | 🟡 | Prototype has expanded agent cards with "Phone verified" chip; Flutter is minimal. |
+| m-wizard-people | `wizard/steps/people_i_trust_step.dart` | 🟢 | Added the prototype's right-aligned "20 Pa.C.S. § 5836" monospace statute badge next to the "What can they decide?" section label, plus the dashed-border "Agent decides / No / If…" explainer card below the authority section. The compact agent-card layout (with "Phone verified" chip + Contact picker action chips) is intentionally NOT applied — it would replace the data-entry forms with a tap-to-expand pattern, which is a functional UX change beyond the scope of a visual sweep. |
 | m-contacts | NONE | ❌ | Contact-picker UI for picking agents from address book. |
 | m-wizard-guardian | `wizard/steps/guardian_nomination_step.dart` | ✅ | |
 | m-wizard-care | `wizard/steps/treatment_facility_step.dart` | ✅ | |
@@ -65,7 +65,7 @@ Items not requiring a Flutter screen (device-only flows): camera/voice/NFC.
 | m-article | `education/article_reader_screen.dart` | ✅ | |
 | m-settings | `settings/settings_screen.dart` | ✅ | |
 | m-export | `export/export_screen.dart` | ✅ | |
-| m-crisis | (covered by `widgets/crisis_resources_banner.dart` + persistent strip) | 🟡 | Prototype has a full crisis sheet screen; Flutter has the always-on bottom strip but no dedicated sheet. |
+| m-crisis | `widgets/design/crisis_sheet.dart` + `crisis_top_bar.dart` | ✅ | (Initial audit flagged 🟡; on re-read the prototype's `ScrCrisis` bottom-sheet IS implemented as `showCrisisSheet()` — DraggableScrollableSheet with drag handle, "24/7 FREE, CONFIDENTIAL" pill, "You are not alone." editorial heading, 4 prototype crisis rows + 988-accent + 1 extra Veterans line, plus an educational "Why these numbers?" footer the prototype doesn't have. Wired from the persistent strip tap, home tile, and disclaimer. Coverage exceeds prototype.) |
 | m-crisisplan | `crisis_plan/crisis_plan_screen.dart` | ✅ | |
 | m-facilitator | `facilitator/facilitator_screen.dart` | ✅ | |
 | m-clinician | `clinician/clinician_view_screen.dart` | ✅ | |
@@ -74,8 +74,8 @@ Items not requiring a Flutter screen (device-only flows): camera/voice/NFC.
 | m-agentaccept | NONE | ❌ | Agent acceptance/consent receipt — new screen for designated agents. |
 | m-a11y | `settings/accessibility_settings_screen.dart` | ✅ | |
 
-**Tally:** 30 PARITY / 9 DRIFT (1 partial 🟢) / 8 MISSING-buildable / 3 MISSING-device-only-deferred / 1 MISSING-backend-deferred (m-wallet).
-(m-mode reclassified ✅ on re-read; m-empty rebuilt + m-welcome page 1 styled to prototype in this batch.)
+**Tally:** 31 PARITY / 7 DRIFT (2 partial 🟢) / 8 MISSING-buildable / 3 MISSING-device-only-deferred / 1 MISSING-backend-deferred (m-wallet).
+(This batch: m-mode + m-crisis reclassified ✅; m-empty rebuilt; m-welcome + m-wizard-people partially aligned 🟢.)
 
 ## Web/desktop artboards
 
@@ -94,7 +94,7 @@ Key item: **`w-wiz-mobile`** — desktop AI right-rail collapses into a tappable
 | 0 | Read prototype source + delta table (this doc) | ✅ Complete (this commit) |
 | 1 | Default palette teal→navy, design-token sync | ✅ Complete (this commit) |
 | 2 | Highest-visibility DRIFT fixes — start with m-home editorial greeting | 🟡 In progress |
-| 3 | Remaining DRIFT items (m-welcome, m-mode, m-faceid, m-empty, m-wizard-people, m-sign, m-pdf, m-crisis sheet) | 🟡 m-empty rebuilt + m-welcome page-1 styled + m-mode reclassified ✅. Still pending: m-faceid, m-wizard-people, m-sign, m-pdf, m-crisis sheet |
+| 3 | Remaining DRIFT items (m-welcome, m-mode, m-faceid, m-empty, m-wizard-people, m-sign, m-pdf, m-crisis sheet) | 🟢 6 of 8 done: m-empty ✅ · m-welcome 🟢 · m-mode ✅ · m-crisis ✅ · m-wizard-people 🟢. Still pending: m-faceid (needs route/state work — see Batch 5), m-sign (functional conflict with wet-ink design — needs user input), m-pdf (lower-visibility export thumbs). |
 | 4 | Build MISSING-buildable screens (m-public, m-contacts, m-verify, m-renew, m-checkin, m-agentaccept) | ⏳ Next session(s) |
 | 5 | Web/desktop responsive layout + w-wiz-mobile bottom-sheet AI rail | ⏳ Next session(s) |
 | 6 (deferred) | Device-only screens (m-scan / m-voice / m-wallet) — need plugin + signing pipeline | ⏳ Defer until plugin/cryptography scope is decided |
