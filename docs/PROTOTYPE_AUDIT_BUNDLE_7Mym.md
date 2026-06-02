@@ -50,7 +50,7 @@ Items not requiring a Flutter screen (device-only flows): camera/voice/NFC.
 | m-wizard-else | `wizard/steps/additional_instructions_step.dart` | ✅ | |
 | m-review | `wizard/steps/review_step.dart` | ✅ | |
 | m-conflict | `ai_check/ai_consistency_screen.dart` | ✅ | |
-| m-sign | `wizard/steps/execution_step.dart` | 🟡 | Prototype: print-and-sign-on-paper instructions; Flutter: witness entry form. Conflicts with the local-only "wet ink only" decision — verify which model is canonical. |
+| m-sign | `wizard/steps/execution_step.dart` | ✅ | Per user decision (2026-06-02): the prototype's print-and-sign-on-paper editorial is now canonical. Witness-name / address / phone form fields removed. Step now renders: italic "Make it legal — with a pen." headline + dual-color "pen." accent, "Why not sign in the app?" surface pill citing Act 194, 3-step numbered timeline with serif-italic numerals in primary circles + connector lines, warn-toned witness eligibility callout, "In your packet" file list (4 rows), large "Download signing packet (PDF)" CTA that jumps to Export. `validateAndSave` stamps `executionDate` to now via the new `DirectiveRepository.setExecutionDate(id, ms)` helper. The `Witnesses` table stays in the schema for backward compatibility with PDF generation paths. |
 | m-done | `wizard/wizard_complete_screen.dart` | ✅ | |
 | m-wallet | NONE | ❌ | Apple Wallet `.pkpass` generation. Backend-bound; deferred per Phase 4 audit item #15. |
 | m-share | `share/share_sheet_screen.dart` | ✅ | |
@@ -71,11 +71,11 @@ Items not requiring a Flutter screen (device-only flows): camera/voice/NFC.
 | m-clinician | `clinician/clinician_view_screen.dart` | ✅ | |
 | m-legaltoggle | `legal_toggle/plain_legal_toggle_screen.dart` | ✅ | |
 | m-ulysses | `ulysses/ulysses_clause_screen.dart` | ✅ | |
-| m-agentaccept | NONE | ⏸ | Agent acceptance/consent receipt. The screen presupposes an online agent-acceptance flow (agent receives a link, reviews the directive, taps acknowledgments, signs digitally) which does NOT exist in the current architecture — directives are signed in ink with witnesses, not digitally by agents. Building only the post-acceptance receipt would imply functionality that isn't there. Deferred pending design conversation on whether to add an agent-acceptance flow or repurpose the screen as a manual "log that my agent accepted in person" record. |
+| m-agentaccept | `agent_accept/agent_accept_screen.dart` | ✅ | Per user decision (2026-06-02): repurposed as a manual in-person acceptance log. Schema v11 added `Agents.acceptedAt` (nullable INT) + `Agents.acceptanceNotes` (TEXT). Screen lists each agent with two states: unlogged → "Log acceptance" outline CTA opening a date+time+notes dialog; logged → editorial italic "[FirstName] is now your agent." headline + monospace "ACCEPTED" badge + timestamp + optional notes block + Edit affordance. Local only — no online flow. Reachable from directive card overflow menu as "Agent acceptance log". |
 | m-a11y | `settings/accessibility_settings_screen.dart` | ✅ | |
 
-**Tally:** 34 PARITY / 6 DRIFT (2 partial 🟢) / 3 MISSING-buildable (2 🟢 partial — sheets built, auto-trigger deferred) / 3 MISSING-device-only-deferred / 1 MISSING-backend-deferred (m-wallet) / 1 MISSING-architecture-deferred (m-agentaccept).
-(Batch 5 part 1: m-faceid ✅ editorial unlock screen; `w-wizard` desktop step rail at ≥1000px landed.)
+**Tally:** 37 PARITY / 4 DRIFT (2 partial 🟢) / 2 MISSING-buildable (2 🟢 partial — sheets built + auto-fire on launch wired) / 3 MISSING-device-only-deferred / 1 MISSING-backend-deferred (m-wallet).
+(Batch 5: m-faceid ✅ · `w-wizard` rail ✅ · desktop max-content ✅ · reminder auto-fire ✅ · m-agentaccept ✅ · m-sign ✅.)
 
 ## Web/desktop artboards
 

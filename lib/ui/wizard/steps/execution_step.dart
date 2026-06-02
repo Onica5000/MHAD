@@ -1,15 +1,39 @@
-import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
-import 'package:mhad/data/database/app_database.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
-import 'package:mhad/services/notification_service.dart';
-import 'package:mhad/ui/wizard/widgets/witness_reminder_button.dart';
+import 'package:mhad/ui/router.dart';
+import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/design/editorial_heading.dart';
+import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/wizard/widgets/wizard_help_button.dart';
 import 'package:mhad/ui/wizard/wizard_step_mixin.dart';
 
+/// "Make it legal — with a pen." — the prototype `ScrSign` print-and-sign
+/// instructions screen (mobile.jsx::ScrSign L884-980), adopted per user
+/// decision (2026-06-02) as the canonical sign step.
+///
+/// **Behavioral change from the prior witness-entry form.** This step no
+/// longer captures witness names / phones / addresses in the app. Under
+/// PA Act 194 the directive is only valid when the principal and two
+/// qualified witnesses sign the *same paper document*, together — so the
+/// signing happens on paper, not in the app. The witnesses' names get
+/// written by the witnesses themselves on the printed copy.
+///
+/// What this step does:
+///   1. Renders editorial step-by-step instructions for how to sign on
+///      paper (print packet → gather two qualified witnesses → everyone
+///      signs together).
+///   2. On `validateAndSave`, stamps the directive's `executionDate` to
+///      today if not already set, so downstream views (Done screen,
+///      "Signed in effect" status pills) flip from draft to complete.
+///   3. Offers a "Download signing packet (PDF)" CTA that jumps to the
+///      Export screen so the user can print.
+///
+/// The underlying `Witnesses` table stays in the schema for backward
+/// compatibility with PDF generation paths that still reference it; any
+/// rows previously created stay on disk untouched.
 class ExecutionStep extends ConsumerStatefulWidget {
   final int directiveId;
   final FormType formType;
@@ -27,495 +51,218 @@ class ExecutionStep extends ConsumerStatefulWidget {
 
 class _ExecutionStepState extends ConsumerState<ExecutionStep>
     with WizardStepMixin {
-  DateTime? _executionDate;
-
-  // Witness 1
-  final _w1NameCtrl = TextEditingController();
-  final _w1AddressCtrl = TextEditingController();
-  final _w1PhoneCtrl = TextEditingController();
-  int? _w1Id;
-
-  // Witness 2
-  final _w2NameCtrl = TextEditingController();
-  final _w2AddressCtrl = TextEditingController();
-  final _w2PhoneCtrl = TextEditingController();
-  int? _w2Id;
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _loadData());
-  }
-
-  @override
-  void dispose() {
-    _w1NameCtrl.dispose();
-    _w1AddressCtrl.dispose();
-    _w1PhoneCtrl.dispose();
-    _w2NameCtrl.dispose();
-    _w2AddressCtrl.dispose();
-    _w2PhoneCtrl.dispose();
-    super.dispose();
-  }
-
-  Future<void> _loadData() async {
-    final repo = ref.read(directiveRepositoryProvider);
-    final directive = await repo.getDirectiveById(widget.directiveId);
-    final witnesses = await repo.getWitnesses(widget.directiveId);
-
-    if (!mounted) return;
-
-    setState(() {
-      if (directive?.executionDate != null) {
-        _executionDate = DateTime.fromMillisecondsSinceEpoch(
-            directive!.executionDate!);
-      }
-      for (final w in witnesses) {
-        if (w.witnessNumber == 1) {
-          _w1Id = w.id;
-          _w1NameCtrl.text = w.fullName;
-          _w1AddressCtrl.text = w.address;
-          _w1PhoneCtrl.text = w.phone;
-        } else if (w.witnessNumber == 2) {
-          _w2Id = w.id;
-          _w2NameCtrl.text = w.fullName;
-          _w2AddressCtrl.text = w.address;
-          _w2PhoneCtrl.text = w.phone;
-        }
-      }
-    });
-  }
-
-  /// Returns a warning message if witnesses have issues, or null if OK.
-  Future<String?> _witnessWarning() async {
-    final w1 = _w1NameCtrl.text.trim().toLowerCase();
-    final w2 = _w2NameCtrl.text.trim().toLowerCase();
-
-    if (w1.isNotEmpty && w2.isNotEmpty && w1 == w2) {
-      return 'Witness 1 and Witness 2 must be different people.';
-    }
-
-    // PA Act 194 §5822: witnesses cannot be the designated agent
-    if (widget.formType.hasAgentSections) {
-      final agents = await ref
-          .read(directiveRepositoryProvider)
-          .getAgents(widget.directiveId);
-      for (final agent in agents) {
-        final agentName = agent.fullName.trim().toLowerCase();
-        if (agentName.isEmpty) continue;
-        if (w1 == agentName) {
-          return 'Witness 1 cannot be your designated agent.';
-        }
-        if (w2 == agentName) {
-          return 'Witness 2 cannot be your designated agent.';
-        }
-      }
-    }
-
-    return null;
-  }
-
   @override
   Future<bool> validateAndSave() async {
-    final warning = await _witnessWarning();
-    if (warning != null && mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(warning)),
-      );
-      return false;
-    }
-
-    // Save whatever is filled in — don't block navigation.
-    // Default to today if not selected.
-    _executionDate ??= DateTime.now();
-
+    // Stamp execution date (today) if not yet set. No witness fields to
+    // validate — those are captured on the printed paper, not in-app.
     final repo = ref.read(directiveRepositoryProvider);
-    final executionMs = _executionDate!.millisecondsSinceEpoch;
-    final expirationMs = _executionDate!
-        .add(const Duration(days: 365 * 2))
-        .millisecondsSinceEpoch;
-
-    // Save execution date and expiration on directive
-    final db = ref.read(appDatabaseProvider);
-    await (db.update(db.directives)
-          ..where((t) => t.id.equals(widget.directiveId)))
-        .write(DirectivesCompanion(
-      executionDate: Value(executionMs),
-      expirationDate: Value(expirationMs),
-      status: const Value('complete'),
-      updatedAt: Value(DateTime.now().millisecondsSinceEpoch),
-    ));
-
-    // Save witness info (signatures affixed on printed original only)
-    Future<void> saveWitness(int number, int? existingId,
-        TextEditingController nameCtrl,
-        TextEditingController addressCtrl,
-        TextEditingController phoneCtrl) async {
-      await repo.upsertWitness(WitnessesCompanion(
-        id: existingId != null ? Value(existingId) : const Value.absent(),
-        directiveId: Value(widget.directiveId),
-        witnessNumber: Value(number),
-        fullName: Value(nameCtrl.text.trim()),
-        address: Value(addressCtrl.text.trim()),
-        phone: Value(phoneCtrl.text.trim()),
-        signatureDate: Value(executionMs),
-      ));
+    final directive = await repo.getDirectiveById(widget.directiveId);
+    if (directive == null) return true;
+    if (directive.executionDate == null) {
+      await repo.setExecutionDate(
+          widget.directiveId, DateTime.now().millisecondsSinceEpoch);
     }
-
-    await saveWitness(1, _w1Id, _w1NameCtrl, _w1AddressCtrl, _w1PhoneCtrl);
-    await saveWitness(2, _w2Id, _w2NameCtrl, _w2AddressCtrl, _w2PhoneCtrl);
-
-    // Schedule reminders only in private mode (public/web data doesn't persist)
-    final isPrivate = ref.read(privacyModeNotifierProvider).isPrivate;
-    if (isPrivate) {
-      final expirationDate =
-          _executionDate!.add(const Duration(days: 365 * 2));
-      await NotificationService.instance.scheduleExpirationReminders(
-        widget.directiveId,
-        expirationDate,
-      );
-    }
-
     return true;
   }
 
   @override
   Widget build(BuildContext context) {
-    final dateStr = _executionDate != null
-        ? DateFormat('MMMM d, yyyy').format(_executionDate!)
-        : 'Not selected';
-    final expirationStr = _executionDate != null
-        ? DateFormat('MMMM d, yyyy')
-            .format(_executionDate!.add(const Duration(days: 365 * 2)))
-        : '—';
+    final p = Theme.of(context).mhadPalette;
+    final dark = Theme.of(context).brightness == Brightness.dark;
+    final warnBg =
+        dark ? SemanticColors.warningBgDark : SemanticColors.warningBgLight;
+    final warnBorder = dark
+        ? SemanticColors.warningBorderDark
+        : SemanticColors.warningBorderLight;
+    final warnText = dark
+        ? SemanticColors.warningTextDark
+        : SemanticColors.warningTextLight;
 
     return ListView(
-      shrinkWrap: widget.embedded,
-      physics: widget.embedded ? const NeverScrollableScrollPhysics() : null,
       padding: widget.embedded
           ? const EdgeInsets.symmetric(horizontal: 4)
-          : const EdgeInsets.all(16),
+          : const EdgeInsets.fromLTRB(20, 8, 20, 32),
       children: [
-        WizardHelpButton(
+        const WizardHelpButton(
           helpText:
-              'To be valid under PA Act 194, the directive must be signed and dated '
-              'by you (the principal) in the presence of two adult witnesses. '
-              'Witnesses cannot be: your agent, your healthcare provider, an employee '
-              'of your treatment facility (unless a relative), or anyone with a '
-              'financial interest in your estate.\n\n'
-              'The directive is valid for 2 years from the execution date.',
+              'Per 20 Pa.C.S. § 5821 / § 5832, a Mental Health Advance '
+              'Directive must be signed on paper by you and two qualified '
+              'witnesses, all present at the same time. The app cannot '
+              "witness it for you — this step walks you through what to do.",
           stepId: 'execution',
         ),
-        const SizedBox(height: 12),
-        // v2 prototype `m-sign · 18 Make it legal (print & wet-ink)` framing.
-        // Decision 6 confirmed: signing happens with wet ink on the printed
-        // PDF in the physical presence of two witnesses; the app collects
-        // information but never a digital signature. This banner makes that
-        // explicit at the top of the step.
-        Card(
-          color: Theme.of(context).colorScheme.primaryContainer,
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Icon(Icons.edit_note,
-                        color: Theme.of(context).colorScheme.onPrimaryContainer),
-                    const SizedBox(width: 8),
-                    Text(
-                      'Make it legal — with a pen',
-                      style: TextStyle(
-                        fontFamily: 'Instrument Serif',
-                        fontFamilyFallback: const [
-                          'Georgia',
-                          'Times New Roman',
-                          'serif'
-                        ],
-                        fontStyle: FontStyle.italic,
-                        fontSize: 22,
-                        fontWeight: FontWeight.w500,
-                        color:
-                            Theme.of(context).colorScheme.onPrimaryContainer,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  'This app does not collect a digital signature. After you '
-                  'finish, generate the PDF, print it, and sign in original '
-                  'ink in the physical presence of your two adult witnesses. '
-                  'The directive is legally valid only after wet-ink signing.',
-                  style: TextStyle(
-                    fontFamily: 'DM Sans',
-                    fontSize: 13,
-                    height: 1.45,
-                    color: Theme.of(context).colorScheme.onPrimaryContainer,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        const SizedBox(height: 16),
-
-        // ── Execution date ─────────────────────────────────
-        Text('Execution Date',
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                fontWeight: FontWeight.w600)),
         const SizedBox(height: 8),
-        Card(
-          child: ListTile(
-            leading: const Icon(Icons.calendar_today),
-            title: Text(_executionDate != null ? dateStr : 'Tap to select a date'),
-            subtitle: _executionDate != null
-                ? Text('Expires: $expirationStr',
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant))
-                : Text('Defaults to today if not selected',
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant)),
-            trailing: const Icon(Icons.edit_outlined),
-            onTap: () async {
-              final picked = await showDatePicker(
-                context: context,
-                initialDate: _executionDate ?? DateTime.now(),
-                firstDate: DateTime(2000),
-                lastDate: DateTime.now(),
-              );
-              if (picked != null) {
-                setState(() => _executionDate = picked);
-              }
-            },
+        const SectionLabel('Final step · on paper'),
+        const EditorialHeading(
+          text: 'Make it legal — with a pen.',
+          size: 32,
+        ),
+        const SizedBox(height: 6),
+        Text(
+          "Pennsylvania law requires a real signature on paper. We can't "
+          "witness it for you — but here's exactly what to do.",
+          style: TextStyle(
+            fontFamily: 'DM Sans',
+            fontSize: 14,
+            color: p.textMuted,
+            height: 1.5,
           ),
         ),
-        const SizedBox(height: 24),
-        const Divider(),
         const SizedBox(height: 16),
-
-        // ── Principal signature ────────────────────────────
-        _SectionHeader(
-          title: 'Your Signature (Principal)',
-          subtitle: 'Original ink signatures are required on the printed '
-              'document for legal validity under PA Act 194.',
-        ),
-        const _SignaturePlaceholder(
-            label: 'Principal\'s signature to be affixed on original document'),
-        const SizedBox(height: 24),
-
-        // Agent acceptance (Combined and POA only)
-        if (widget.formType.hasAgentSections) ...[
-          _SectionHeader(
-            title: 'Agent Acceptance',
-            subtitle: 'Your designated agent should review and acknowledge '
-                'this section. The agent accepts responsibility to act in '
-                'accordance with your wishes using the substituted judgment '
-                'standard (deciding as you would decide, not what the agent '
-                'thinks is best).',
+        // Why not sign in the app — info pill.
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: p.surface,
+            border: Border.all(color: p.border),
+            borderRadius: BorderRadius.circular(12),
           ),
-          Card(
-            color: Theme.of(context).colorScheme.secondaryContainer,
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Text(
-                'I accept the designation as mental health care agent. I understand '
-                'that I have a duty to act consistently with the wishes of the '
-                'principal as expressed in this directive. I understand that this '
-                'document gives me authority to make mental health care decisions '
-                'for the principal only when the principal is unable to make those '
-                'decisions. I will not consent to psychosurgery or termination of '
-                'parental rights on behalf of the principal.',
-                style: TextStyle(
-                  fontSize: 13,
-                  color: Theme.of(context).colorScheme.onSecondaryContainer,
-                  height: 1.4,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Note: The agent\'s signature is collected on the printed document. '
-            'Have your agent review and sign the printed directive.',
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              fontStyle: FontStyle.italic,
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-            ),
-          ),
-          const SizedBox(height: 24),
-        ],
-
-        const Divider(),
-        const SizedBox(height: 16),
-
-        // ── Witnesses ──────────────────────────────────────
-        Text('Witnesses',
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                fontWeight: FontWeight.w600)),
-        const SizedBox(height: 4),
-        Card(
-          color: Theme.of(context).colorScheme.tertiaryContainer,
-          child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Icon(Icons.gavel, size: 18,
-                        color: Theme.of(context).colorScheme.onTertiaryContainer),
-                    const SizedBox(width: 8),
-                    Text('Witness Eligibility (PA Act 194 §5822)',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 13,
-                            color: Theme.of(context).colorScheme.onTertiaryContainer)),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'Each witness must meet ALL of these requirements:',
-                  style: TextStyle(fontSize: 12,
-                      color: Theme.of(context).colorScheme.onTertiaryContainer,
-                      fontWeight: FontWeight.w600),
-                ),
-                const SizedBox(height: 4),
-                ...[
-                  'Is 18 years of age or older',
-                  'Is NOT your designated agent or alternate agent',
-                  'Is NOT your healthcare provider or their employee',
-                  'Is NOT an employee of the facility where you receive treatment',
-                  'Exception: relatives by blood, marriage, or adoption may serve even if otherwise excluded',
-                ].map((rule) => Padding(
-                  padding: const EdgeInsets.only(left: 8, top: 3),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(Icons.info_outline, size: 16, color: p.textMuted),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text.rich(
+                  TextSpan(
+                    style: TextStyle(
+                      fontFamily: 'DM Sans',
+                      fontSize: 12,
+                      color: p.textMuted,
+                      height: 1.45,
+                    ),
                     children: [
-                      Text('\u2022 ', style: TextStyle(fontSize: 12,
-                          color: Theme.of(context).colorScheme.onTertiaryContainer)),
-                      Expanded(child: Text(rule,
-                          style: TextStyle(fontSize: 12, height: 1.3,
-                              color: Theme.of(context).colorScheme.onTertiaryContainer))),
+                      TextSpan(
+                        text: 'Why not sign in the app? ',
+                        style: TextStyle(
+                          color: p.text,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const TextSpan(
+                          text:
+                              'Under Act 194 the directive is only valid '
+                              'when you and two qualified witnesses sign '
+                              'the '),
+                      TextSpan(
+                        text: 'same paper document',
+                        style: TextStyle(
+                          color: p.text,
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
+                      const TextSpan(
+                          text:
+                              ", together. A tap-to-sign wouldn't hold up."),
                     ],
                   ),
-                )),
-              ],
-            ),
-          ),
-        ),
-        const SizedBox(height: 8),
-        const WitnessReminderButton(),
-        const SizedBox(height: 16),
-
-        _SectionHeader(
-          title: 'Witness 1',
-          subtitle: 'Name and address',
-        ),
-        TextFormField(
-          controller: _w1NameCtrl,
-          decoration: const InputDecoration(
-            labelText: 'Witness 1 full name',
-            border: OutlineInputBorder(),
-          ),
-          textCapitalization: TextCapitalization.words,
-        ),
-        const SizedBox(height: 8),
-        TextFormField(
-          controller: _w1AddressCtrl,
-          decoration: const InputDecoration(
-            labelText: 'Witness 1 address',
-            border: OutlineInputBorder(),
-          ),
-          textCapitalization: TextCapitalization.words,
-        ),
-        const SizedBox(height: 8),
-        TextFormField(
-          controller: _w1PhoneCtrl,
-          decoration: const InputDecoration(
-            labelText: 'Witness 1 phone number',
-            border: OutlineInputBorder(),
-          ),
-          keyboardType: TextInputType.phone,
-        ),
-        const SizedBox(height: 8),
-        const _SignaturePlaceholder(
-            label: 'Witness 1 signature to be affixed on original document'),
-        const SizedBox(height: 24),
-
-        _SectionHeader(
-          title: 'Witness 2',
-          subtitle: 'Same requirements as Witness 1',
-        ),
-        TextFormField(
-          controller: _w2NameCtrl,
-          decoration: const InputDecoration(
-            labelText: 'Witness 2 full name',
-            border: OutlineInputBorder(),
-          ),
-          textCapitalization: TextCapitalization.words,
-        ),
-        const SizedBox(height: 8),
-        TextFormField(
-          controller: _w2AddressCtrl,
-          decoration: const InputDecoration(
-            labelText: 'Witness 2 address',
-            border: OutlineInputBorder(),
-          ),
-          textCapitalization: TextCapitalization.words,
-        ),
-        const SizedBox(height: 8),
-        TextFormField(
-          controller: _w2PhoneCtrl,
-          decoration: const InputDecoration(
-            labelText: 'Witness 2 phone number',
-            border: OutlineInputBorder(),
-          ),
-          keyboardType: TextInputType.phone,
-        ),
-        const SizedBox(height: 8),
-        const _SignaturePlaceholder(
-            label: 'Witness 2 signature to be affixed on original document'),
-        const SizedBox(height: 40),
-
-        const Divider(),
-        const SizedBox(height: 8),
-        // Legal notice
-        Card(
-          color: Theme.of(context).colorScheme.errorContainer,
-          child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Icon(Icons.gavel, size: 16,
-                        color: Theme.of(context).colorScheme.onErrorContainer),
-                    const SizedBox(width: 8),
-                    Text('Important',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 13,
-                            color: Theme.of(context).colorScheme.onErrorContainer)),
-                  ],
                 ),
-                const SizedBox(height: 6),
-                Text(
-                  'By proceeding you confirm that:\n'
-                  '  \u2022 This directive was executed voluntarily\n'
-                  '  \u2022 You have legal capacity to make this directive\n'
-                  '  \u2022 The printed document will be signed with original '
-                  'ink signatures in the presence of both witnesses\n\n'
-                  'All signatures must be affixed to the original printed '
-                  'document to be legally valid under PA Act 194.',
-                  style: TextStyle(
-                      fontSize: 12,
-                      color: Theme.of(context).colorScheme.onErrorContainer,
-                      height: 1.4),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 22),
+        const _SignStep(
+          n: 1,
+          title: 'Print the packet',
+          body: 'Print the PDF we just made. It already has signature '
+              'lines for you and two witnesses.',
+        ),
+        const _SignStep(
+          n: 2,
+          title: 'Gather two qualified witnesses',
+          body: 'Both must be 18+, present at the same time, and NOT '
+              'your agent, alternate, or a provider treating you.',
+        ),
+        const _SignStep(
+          n: 3,
+          title: 'Everyone signs, same place, same time',
+          body: 'Sign and date the witness page in front of both '
+              'witnesses. They sign right after you, while you watch.',
+          last: true,
+        ),
+        const SizedBox(height: 8),
+        // Witness eligibility warning.
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: warnBg,
+            border: Border.all(color: warnBorder),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(Icons.warning_amber_rounded,
+                  size: 16, color: warnText),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text.rich(
+                  TextSpan(
+                    style: TextStyle(
+                      fontFamily: 'DM Sans',
+                      fontSize: 12.5,
+                      color: warnText,
+                      height: 1.45,
+                    ),
+                    children: [
+                      const TextSpan(text: 'A witness '),
+                      const TextSpan(
+                        text: 'cannot',
+                        style: TextStyle(fontWeight: FontWeight.w700),
+                      ),
+                      const TextSpan(
+                        text: ' be your designated agent, your alternate, '
+                            'or anyone currently providing your treatment.',
+                      ),
+                    ],
+                  ),
                 ),
-              ],
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 18),
+        const SectionLabel('In your packet'),
+        const SizedBox(height: 8),
+        const _PacketRow(
+          icon: Icons.description_outlined,
+          title: 'Your completed MHAD',
+          sub: 'PDF · PA Act 194 format',
+        ),
+        const SizedBox(height: 8),
+        const _PacketRow(
+          icon: Icons.draw_outlined,
+          title: 'Signature & witness page',
+          sub: 'Pre-filled with your name and the date lines',
+        ),
+        const SizedBox(height: 8),
+        const _PacketRow(
+          icon: Icons.people_outlined,
+          title: 'Witness eligibility guide',
+          sub: "One page — who can and can't sign",
+        ),
+        const SizedBox(height: 8),
+        const _PacketRow(
+          icon: Icons.checklist_outlined,
+          title: 'What to do after signing',
+          sub: 'Who to give copies to, how to distribute',
+        ),
+        const SizedBox(height: 22),
+        SizedBox(
+          width: double.infinity,
+          child: FilledButton.icon(
+            onPressed: () =>
+                context.push(AppRoutes.exportRoute(widget.directiveId)),
+            icon: const Icon(Icons.download, size: 18),
+            label: const Text('Download signing packet (PDF)'),
+            style: FilledButton.styleFrom(
+              minimumSize:
+                  const Size.fromHeight(DesignTokens.buttonHeightLg),
+              shape: RoundedRectangleBorder(
+                borderRadius:
+                    BorderRadius.circular(DesignTokens.buttonRadius),
+              ),
             ),
           ),
         ),
@@ -524,58 +271,89 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
   }
 }
 
-class _SectionHeader extends StatelessWidget {
+/// One row of the numbered "how to sign" timeline. Italic serif numeral
+/// in a primary-filled circle + bold step title + body. Connector line
+/// painted on all but the last row, matching prototype `ScrSign` L887-902.
+class _SignStep extends StatelessWidget {
+  final int n;
   final String title;
-  final String subtitle;
-  const _SectionHeader({required this.title, required this.subtitle});
+  final String body;
+  final bool last;
+  const _SignStep({
+    required this.n,
+    required this.title,
+    required this.body,
+    this.last = false,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Column(
+    final p = Theme.of(context).mhadPalette;
+    return IntrinsicHeight(
+      child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title,
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                  fontWeight: FontWeight.w600)),
-          Text(subtitle,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant)),
-        ],
-      ),
-    );
-  }
-}
-
-/// Placeholder indicating that a signature will be affixed on the
-/// printed original document.
-class _SignaturePlaceholder extends StatelessWidget {
-  final String label;
-  const _SignaturePlaceholder({required this.label});
-
-  @override
-  Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-      decoration: BoxDecoration(
-        border: Border.all(color: cs.outline, style: BorderStyle.solid),
-        borderRadius: BorderRadius.circular(8),
-        color: cs.surfaceContainerLowest,
-      ),
-      child: Column(
-        children: [
-          Icon(Icons.draw_outlined, size: 28, color: cs.onSurfaceVariant),
-          const SizedBox(height: 8),
-          Text(
-            label,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 12,
-              fontStyle: FontStyle.italic,
-              color: cs.onSurfaceVariant,
+          // Numeral circle + connector
+          Column(
+            children: [
+              Container(
+                width: 32,
+                height: 32,
+                decoration: BoxDecoration(
+                  color: p.primary,
+                  shape: BoxShape.circle,
+                ),
+                alignment: Alignment.center,
+                child: Text(
+                  '$n',
+                  style: TextStyle(
+                    fontFamily: 'Instrument Serif',
+                    fontFamilyFallback: const ['Georgia', 'serif'],
+                    fontStyle: FontStyle.italic,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    color: p.onPrimary,
+                  ),
+                ),
+              ),
+              if (!last)
+                Expanded(
+                  child: Container(
+                    width: 2,
+                    margin: const EdgeInsets.symmetric(vertical: 4),
+                    color: p.border,
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 18, top: 4),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontFamily: 'DM Sans',
+                      fontSize: 14.5,
+                      fontWeight: FontWeight.w700,
+                      color: p.text,
+                    ),
+                  ),
+                  const SizedBox(height: 3),
+                  Text(
+                    body,
+                    style: TextStyle(
+                      fontFamily: 'DM Sans',
+                      fontSize: 12.5,
+                      color: p.textMuted,
+                      height: 1.45,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
@@ -584,3 +362,56 @@ class _SignaturePlaceholder extends StatelessWidget {
   }
 }
 
+class _PacketRow extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String sub;
+  const _PacketRow({
+    required this.icon,
+    required this.title,
+    required this.sub,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
+      decoration: BoxDecoration(
+        color: p.card,
+        border: Border.all(color: p.border),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, size: 16, color: p.primary),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontFamily: 'DM Sans',
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    color: p.text,
+                  ),
+                ),
+                Text(
+                  sub,
+                  style: TextStyle(
+                    fontFamily: 'DM Sans',
+                    fontSize: 11.5,
+                    color: p.textMuted,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

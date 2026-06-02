@@ -77,6 +77,18 @@ class DirectiveRepository {
         ),
       );
 
+  /// Stamps the directive's `executionDate` to [now] (millis-since-epoch).
+  /// Called by the wet-ink sign step when the user advances past the
+  /// print-and-sign instructions — flips downstream "Signed in effect"
+  /// status pills and date columns from draft to complete.
+  Future<void> setExecutionDate(int id, int now) =>
+      (_db.update(_db.directives)..where((t) => t.id.equals(id))).write(
+        DirectivesCompanion(
+          executionDate: Value(now),
+          updatedAt: Value(DateTime.now().millisecondsSinceEpoch),
+        ),
+      );
+
   Future<void> updateStatus(int id, DirectiveStatus status) =>
       (_db.update(_db.directives)..where((t) => t.id.equals(id))).write(
         DirectivesCompanion(
