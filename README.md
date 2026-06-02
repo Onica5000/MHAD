@@ -18,13 +18,20 @@ The app supports all three PA Act 194 form types: **Combined Declaration + Power
 
 ## Features
 
-- **9-step guided wizard** (consolidated from the original 15) that adapts per form type — `About you`, `When this kicks in`, `People I trust` (POA/Combined only), `If a court appoints a guardian`, `Where I want care`, `Medications`, `Procedures & research`, `Anything else`, `Review & sign`.
+- **Adaptive guided wizard** that ranges from 6 to 11 steps depending on form type — **Combined 11 / Declaration 9 / POA 6**. Steps: `About you`, `When this kicks in`, `People I trust` (POA/Combined), `If a court appoints a guardian` (POA/Combined), `Where I want care`, `Diagnoses`, `Medications`, `Allergies & reactions`, `Procedures & research`, `Anything else`, `Review & sign`. Each step supports embedded clinical autocomplete (ICD-10-CM diagnoses, RxTerms medications) and a backward-nudge model that surfaces cross-step contradictions instead of auto-mutating earlier steps.
 - **Editorial visual design** based on a Claude-Design HTML/CSS handoff — Instrument Serif italic display, DM Sans body, JetBrains Mono labels (all three font families bundled, no runtime fetch).
 - **Navigation tuned to the prototype:** a floating pill **bottom nav** on mobile (Home · Learn · Ask · Settings) and a persistent **WebSidebar** on wide screens (≥1000px). No hamburger drawer.
-- **AI assistant** (Google Gemini 2.5 Flash) for guided help, smart-fill suggestions, and document import — entirely optional, with per-session affirmative consent and PII-stripping at a single named chokepoint (`GeminiApiAssistant.sanitizeForApi`).
-- **PDF generation** with coordinate-based, pixel-faithful layout matching the official PA MHAD forms.
+- **AI assistant** (Google Gemini 2.5 Flash) for guided help, smart-fill suggestions, document import, and a **cross-step consistency check** at Review — entirely optional, with per-session affirmative consent and PII-stripping at a single named chokepoint (`GeminiApiAssistant.sanitizeForApi`). The consistency check warns but never blocks PDF generation.
+- **Crisis plan / WRAP toolbox** — optional add-on capturing early warning signs, triggers, what genuinely helps, things to say, and what *not* to do; mirrors the v2 prototype's WRAP layout and is read by agents and ER staff first.
+- **Self-binding (Ulysses) clause** — explicit opt-in confirming the structural effect of PA Act 194 § 5802 (a signed directive binds you when you later refuse care during a crisis).
+- **Revocation flow** with the verbatim statutory revocation statement (20 Pa.C.S. § 5808), per-recipient notification opt-in, and honest copy about what marking a directive revoked locally does and does not communicate to providers.
+- **Local share sheet** (email · SMS · QR · system share · print) using your device's native composers — no verified links, one-time codes, expiry, or read receipts. Mailto/sms URIs follow RFC 6068 / RFC 5724.
+- **Clinician view + Legal toggle** — two read-only render modes of a signed directive: a plain-language clinician summary, and a strict statutory-citation rendering for legal review.
+- **Past directives + revocation history** — every superseded directive stays viewable on the device with status pill (Active / Expired / Revoked), explicit Delete confirmation, and the v3 promise that no share log is kept in Public Mode.
+- **PDF generation** with coordinate-based, pixel-faithful layout matching the official PA MHAD forms, including guardian-relation-aware nominee resolution (same-as-primary / same-as-alternate / specific / no preference).
 - **Encrypted storage** (SQLCipher AES-256) in Private Mode, with biometric / passcode unlock and a device-secure-keystore-backed key. Public Mode keeps everything in memory only.
-- **Educational content** sourced verbatim from the PA MHAD booklet (FAQ, glossary, instructions), framed around the research-validated *facilitated PAD* approach.
+- **Accessibility settings** wired into `MaterialApp` — text-scale slider, language selection, dyslexia-font / high-contrast / reduce-motion / VoiceOver-hints toggles, plus a facilitator-support screen for the *facilitated PAD* workflow.
+- **Educational content** sourced verbatim from the PA MHAD booklet (FAQ, glossary, instructions), framed around the research-validated *facilitated PAD* approach, with Ch. 54 (psychiatric advance) ↔ Ch. 58 (mental-health advance) bridge articles and provider-duty (§ 5837) explanations.
 - **Crisis-availability tooling** addressing the "transmitter/receiver problem": wallet card generator, QR code, NFC tag writing, FHIR JSON export, and a post-wizard checklist for distributing copies and making the directive findable in a crisis.
 - **988 Suicide & Crisis Lifeline** persistent on every screen.
 
@@ -118,16 +125,28 @@ These are downloaded from the [sqlite3.dart](https://github.com/simolus3/sqlite3
 lib/
   ai/                                  -- AiAssistant + GeminiApiAssistant
   data/
-    database/                          -- Drift schema + generated code
-    repository/                        -- DirectiveRepository
-  domain/model/directive.dart          -- FormType, WizardStep enums
+    database/                          -- Drift schema v10 + generated code
+    repository/                        -- DirectiveRepository (snapshot/restore)
+  domain/model/directive.dart          -- FormType, WizardStep, AllergySeverity enums
+  providers/                           -- Riverpod providers (accessibility, privacy, theme, …)
   ui/
+    ai_check/                          -- AI consistency check (cross-step contradictions)
+    assistant/                         -- AI chat UI (Gemini)
+    clinician/                         -- Read-only clinician view of a signed directive
+    crisis_plan/                       -- WRAP toolbox (5 sections, JSON-stored)
     disclaimer/                        -- First-launch gate + Settings read-only variant
-    home/, education/, assistant/      -- Top-level destinations
-    wizard/                            -- 9-step consolidated flow
+    education/                         -- FAQ, glossary, articles, Ch. 54 ↔ Ch. 58 bridge
     export/                            -- PDF, wallet card, QR, FHIR
-    settings/                          -- Settings, AI setup, privacy policy
-    widgets/design/                    -- bottom_nav, web_sidebar, responsive_shell, ...
+    facilitator/                       -- Facilitated-PAD workflow support
+    home/, mode_selection/, onboarding/ -- Top-level destinations + first-run
+    legal_toggle/                      -- Plain-language ↔ statutory citation toggle
+    past/                              -- Past directive detail + delete confirm
+    revocation/                        -- 20 Pa.C.S. § 5808 flow + per-recipient notify
+    settings/                          -- Settings, AI setup, accessibility, privacy
+    share/                             -- Local share sheet (RFC 6068 mailto, RFC 5724 sms)
+    ulysses/                           -- Self-binding clause opt-in (§ 5802)
+    wizard/                            -- Adaptive 6/9/11-step flow per FormType
+    widgets/design/                    -- bottom_nav, web_sidebar, responsive_shell, …
 docs/                                  -- ACTION_PLAN, BREACH_PLAN, THREAT_MODEL, GAP_ANALYSIS_V4
 PRIVACY_POLICY.md                      -- Public privacy policy source (mirrors in-app)
 MHAD-handoff/                          -- Claude-Design HTML/CSS prototype source (reference)
