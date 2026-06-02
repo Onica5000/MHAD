@@ -8,6 +8,7 @@ import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/services/data_export_service.dart';
 import 'package:mhad/services/device_security_service.dart';
+import 'package:mhad/services/reminder_scheduler.dart';
 import 'package:mhad/services/web_session_cache.dart';
 import 'package:mhad/services/notification_service.dart';
 import 'package:mhad/services/privacy_mode_service.dart';
@@ -56,6 +57,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           await _tryWebSessionRestore();
         }
         if (mounted) checkAndOfferDraftRecovery(context, ref);
+        // Reminder auto-fire (in-app, per-launch). Runs after onboarding +
+        // draft recovery so it never stacks on top of those flows. The
+        // scheduler is a silent no-op when no reminder is due.
+        if (mounted) await ReminderScheduler.maybeShow(context, ref);
       });
     }
   }
