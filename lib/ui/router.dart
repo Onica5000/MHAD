@@ -20,6 +20,7 @@ import 'package:mhad/ui/settings/ai_setup_screen.dart';
 import 'package:mhad/ui/settings/settings_screen.dart';
 import 'package:mhad/ui/settings/privacy_policy_screen.dart';
 import 'package:mhad/ui/share/share_sheet_screen.dart';
+import 'package:mhad/ui/verify/wallet_verify_screen.dart';
 import 'package:mhad/ui/mode_selection/mode_selection_screen.dart';
 import 'package:mhad/ui/ulysses/ulysses_clause_screen.dart';
 import 'package:mhad/ui/wizard/form_type_selection_screen.dart';
@@ -58,6 +59,10 @@ abstract class AppRoutes {
   static const aiCheck = '/ai-check/:directiveId';
   static const pastDirective = '/past/:directiveId';
   static const shareSheet = '/share/:directiveId';
+  // Batch 4 — wallet-QR verifier preview (what an EMS/clinician sees on
+  // scan). The screen is read-only and reachable from the directive card
+  // overflow menu so the principal can rehearse the receiver experience.
+  static const walletVerify = '/verify/:directiveId';
 
   static String legalToggleRoute(int directiveId) =>
       '/legal-toggle/$directiveId';
@@ -70,6 +75,7 @@ abstract class AppRoutes {
   static String aiCheckRoute(int directiveId) => '/ai-check/$directiveId';
   static String pastDirectiveRoute(int directiveId) => '/past/$directiveId';
   static String shareSheetRoute(int directiveId) => '/share/$directiveId';
+  static String walletVerifyRoute(int directiveId) => '/verify/$directiveId';
 }
 
 /// Initializes the global [appRouter] with the loaded service notifiers.
@@ -266,6 +272,14 @@ GoRouter _buildRouter(
             final id = int.tryParse(state.pathParameters['directiveId'] ?? '');
             if (id == null) return const HomeScreen();
             return ShareSheetScreen(directiveId: id);
+          },
+        ),
+        GoRoute(
+          path: AppRoutes.walletVerify,
+          builder: (_, state) {
+            final id = int.tryParse(state.pathParameters['directiveId'] ?? '');
+            if (id == null) return const HomeScreen();
+            return WalletVerifyScreen(directiveId: id);
           },
         ),
       ],

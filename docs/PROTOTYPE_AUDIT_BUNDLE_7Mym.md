@@ -56,7 +56,7 @@ Items not requiring a Flutter screen (device-only flows): camera/voice/NFC.
 | m-share | `share/share_sheet_screen.dart` | ✅ | |
 | m-pdf | (covered by `export/export_screen.dart`) | 🟡 | Prototype shows 6-page PDF preview with toolbar/thumbs; Flutter shows generation options instead. |
 | m-past | `past/past_directive_detail_screen.dart` | ✅ | |
-| m-verify | NONE | ❌ | Wallet-QR verifier view (what an EMS scanner sees). |
+| m-verify | `verify/wallet_verify_screen.dart` | ✅ | Dark-themed read-only verifier preview (what an EMS / ER scanner sees on QR scan). Status banner (green when active, red otherwise) with "ACT 194" pill · principal card with initials avatar + monospace DOB/city · "Call first" agent row with `tel:` launch · Treatment flags pulled from real data: severe allergies → "Avoid: X" crisis flags, `ectConsent`/`drugTrialConsent` mapped to crisis/warn tones, room-preference summary as ok flag. Reachable from directive card overflow menu as "Preview QR view". |
 | m-renew | `reminders/reminder_sheets.dart::showRenewalNudge` | 🟢 | Modal bottom sheet built (warning palette, italic "Time to renew, [Name].", days-until-expiry pill, primaryTint "Quick renew · ~5 min" card, "Start quick renew" CTA wired to existing `onRenew` callback). Accessible via the directive card overflow menu. **Auto-trigger policy** (28 days before `expirationDate`) deferred — needs notification scheduling. |
 | m-checkin | `reminders/reminder_sheets.dart::showQuarterlyCheckIn` | 🟢 | Modal bottom sheet built (primary palette, italic "Anything changed?", form-type-aware "Common things that change" 3-row list, "Still accurate — all good" + "Edit my directive" CTAs). Accessible via the directive card overflow menu. **Auto-trigger policy** (90 days since `updatedAt`) deferred — needs SharedPreferences "last-shown" tracking + notification scheduling. |
 | m-revoke | `revocation/revocation_screen.dart` | ✅ | |
@@ -71,11 +71,11 @@ Items not requiring a Flutter screen (device-only flows): camera/voice/NFC.
 | m-clinician | `clinician/clinician_view_screen.dart` | ✅ | |
 | m-legaltoggle | `legal_toggle/plain_legal_toggle_screen.dart` | ✅ | |
 | m-ulysses | `ulysses/ulysses_clause_screen.dart` | ✅ | |
-| m-agentaccept | NONE | ❌ | Agent acceptance/consent receipt — new screen for designated agents. |
+| m-agentaccept | NONE | ⏸ | Agent acceptance/consent receipt. The screen presupposes an online agent-acceptance flow (agent receives a link, reviews the directive, taps acknowledgments, signs digitally) which does NOT exist in the current architecture — directives are signed in ink with witnesses, not digitally by agents. Building only the post-acceptance receipt would imply functionality that isn't there. Deferred pending design conversation on whether to add an agent-acceptance flow or repurpose the screen as a manual "log that my agent accepted in person" record. |
 | m-a11y | `settings/accessibility_settings_screen.dart` | ✅ | |
 
-**Tally:** 32 PARITY / 7 DRIFT (2 partial 🟢) / 5 MISSING-buildable (2 🟢 partial — sheets built, auto-trigger deferred) / 3 MISSING-device-only-deferred / 1 MISSING-backend-deferred (m-wallet).
-(Batch 4 part 1: m-public ✅, m-renew 🟢, m-checkin 🟢.)
+**Tally:** 33 PARITY / 7 DRIFT (2 partial 🟢) / 3 MISSING-buildable (2 🟢 partial — sheets built, auto-trigger deferred) / 3 MISSING-device-only-deferred / 1 MISSING-backend-deferred (m-wallet) / 1 MISSING-architecture-deferred (m-agentaccept).
+(Batch 4 part 2: m-verify ✅; m-agentaccept ⏸ deferred pending architecture decision.)
 
 ## Web/desktop artboards
 
@@ -95,7 +95,7 @@ Key item: **`w-wiz-mobile`** — desktop AI right-rail collapses into a tappable
 | 1 | Default palette teal→navy, design-token sync | ✅ Complete (this commit) |
 | 2 | Highest-visibility DRIFT fixes — start with m-home editorial greeting | 🟡 In progress |
 | 3 | Remaining DRIFT items (m-welcome, m-mode, m-faceid, m-empty, m-wizard-people, m-sign, m-pdf, m-crisis sheet) | 🟢 6 of 8 done: m-empty ✅ · m-welcome 🟢 · m-mode ✅ · m-crisis ✅ · m-wizard-people 🟢. Still pending: m-faceid (needs route/state work — see Batch 5), m-sign (functional conflict with wet-ink design — needs user input), m-pdf (lower-visibility export thumbs). |
-| 4 | Build MISSING-buildable screens (m-public, m-contacts, m-verify, m-renew, m-checkin, m-agentaccept) | 🟢 m-public ✅ + m-renew 🟢 + m-checkin 🟢 (sheets built, auto-trigger deferred). Still pending: m-contacts, m-verify, m-agentaccept |
+| 4 | Build MISSING-buildable screens (m-public, m-contacts, m-verify, m-renew, m-checkin, m-agentaccept) | 🟢 m-public ✅ · m-renew 🟢 · m-checkin 🟢 · m-verify ✅. m-agentaccept ⏸ deferred (no upstream agent-acceptance flow exists). m-contacts deferred to Batch 6 (needs `flutter_contacts` plugin + permission). |
 | 5 | Web/desktop responsive layout + w-wiz-mobile bottom-sheet AI rail | ⏳ Next session(s) |
 | 6 (deferred) | Device-only screens (m-scan / m-voice / m-wallet) — need plugin + signing pipeline | ⏳ Defer until plugin/cryptography scope is decided |
 

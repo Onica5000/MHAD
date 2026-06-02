@@ -319,6 +319,10 @@ class DirectiveCard extends StatelessWidget {
                           context.push(AppRoutes.wizardRoute(directive.id)),
                     );
                   }
+                  if (action == _Action.walletVerify) {
+                    context
+                        .push(AppRoutes.walletVerifyRoute(directive.id));
+                  }
                 },
                 itemBuilder: (_) => [
                   if (!isRevoked)
@@ -455,6 +459,14 @@ class DirectiveCard extends StatelessWidget {
                         Text('Renewal nudge'),
                       ]),
                     ),
+                    const PopupMenuItem(
+                      value: _Action.walletVerify,
+                      child: Row(children: [
+                        Icon(Icons.qr_code_2_outlined, size: 18),
+                        SizedBox(width: 10),
+                        Text('Preview QR view'),
+                      ]),
+                    ),
                   ],
                   const PopupMenuDivider(),
                   PopupMenuItem(
@@ -495,7 +507,8 @@ enum _Action {
   aiCheck,
   pastDetail,
   revokeFlow,
-  // Batch 4 — `7Mym` bundle reminder previews.
+  // Batch 4 — `7Mym` bundle reminder previews + wallet verifier preview.
   renewPreview,
   checkInPreview,
+  walletVerify,
 }
