@@ -111,6 +111,22 @@ class DirectiveRepository {
   Future<int> upsertAgent(AgentsCompanion agent) =>
       _db.into(_db.agents).insertOnConflictUpdate(agent);
 
+  /// Manual agent-acceptance log (m-agentaccept). Per user decision the
+  /// prototype's online acceptance receipt is repurposed as a principal-
+  /// recorded log of an in-person verbal acceptance. Passing `null` for
+  /// [acceptedAt] clears the log.
+  Future<void> updateAgentAcceptance(
+    int agentId, {
+    required DateTime? acceptedAt,
+    String notes = '',
+  }) =>
+      (_db.update(_db.agents)..where((t) => t.id.equals(agentId))).write(
+        AgentsCompanion(
+          acceptedAt: Value(acceptedAt?.millisecondsSinceEpoch),
+          acceptanceNotes: Value(notes),
+        ),
+      );
+
   // ── Medications ───────────────────────────────────────────────────────────
 
   Stream<List<MedicationEntry>> watchMedications(int directiveId) =>

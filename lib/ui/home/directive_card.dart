@@ -323,6 +323,10 @@ class DirectiveCard extends StatelessWidget {
                     context
                         .push(AppRoutes.walletVerifyRoute(directive.id));
                   }
+                  if (action == _Action.agentAccept) {
+                    context
+                        .push(AppRoutes.agentAcceptRoute(directive.id));
+                  }
                 },
                 itemBuilder: (_) => [
                   if (!isRevoked)
@@ -467,6 +471,14 @@ class DirectiveCard extends StatelessWidget {
                         Text('Preview QR view'),
                       ]),
                     ),
+                    const PopupMenuItem(
+                      value: _Action.agentAccept,
+                      child: Row(children: [
+                        Icon(Icons.handshake_outlined, size: 18),
+                        SizedBox(width: 10),
+                        Text('Agent acceptance log'),
+                      ]),
+                    ),
                   ],
                   const PopupMenuDivider(),
                   PopupMenuItem(
@@ -511,4 +523,6 @@ enum _Action {
   renewPreview,
   checkInPreview,
   walletVerify,
+  // Batch 5 — manual agent-acceptance log.
+  agentAccept,
 }

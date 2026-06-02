@@ -42,6 +42,7 @@ Agent _makeAgent() => const Agent(
       homePhone: '412-555-0001',
       workPhone: '',
       cellPhone: '412-555-0002',
+      acceptanceNotes: '',
     );
 
 DirectivePref _makePrefs() => const DirectivePref(

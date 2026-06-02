@@ -53,6 +53,14 @@ class Agents extends Table {
   TextColumn get homePhone => text().withDefault(const Constant(''))();
   TextColumn get workPhone => text().withDefault(const Constant(''))();
   TextColumn get cellPhone => text().withDefault(const Constant(''))();
+
+  // Manual agent-acceptance log (m-agentaccept).
+  // Per user decision (2026-06-02): the prototype's `ScrAgentAccept`
+  // receipt is repurposed as a principal-recorded log that the agent
+  // accepted in person. NULL = not yet logged. Schema v11.
+  IntColumn get acceptedAt => integer().nullable()();
+  TextColumn get acceptanceNotes =>
+      text().withDefault(const Constant(''))();
 }
 
 class MedicationEntries extends Table {
@@ -215,7 +223,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase(super.executor);
 
   @override
-  int get schemaVersion => 10;
+  int get schemaVersion => 11;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -287,6 +295,13 @@ class AppDatabase extends _$AppDatabase {
             await customStatement(
                 'ALTER TABLE directive_prefs ADD COLUMN self_binding_enabled '
                 'INTEGER NOT NULL DEFAULT 0');
+          }
+          if (from < 11) {
+            // Batch 5: manual agent-acceptance log fields on agents.
+            await customStatement(
+                'ALTER TABLE agents ADD COLUMN accepted_at INTEGER NULL');
+            await customStatement(
+                "ALTER TABLE agents ADD COLUMN acceptance_notes TEXT NOT NULL DEFAULT ''");
           }
           if (from < 9) {
             // Phase 3: new directive_allergies table for wizard step 8.

@@ -20,6 +20,7 @@ import 'package:mhad/ui/settings/ai_setup_screen.dart';
 import 'package:mhad/ui/settings/settings_screen.dart';
 import 'package:mhad/ui/settings/privacy_policy_screen.dart';
 import 'package:mhad/ui/share/share_sheet_screen.dart';
+import 'package:mhad/ui/agent_accept/agent_accept_screen.dart';
 import 'package:mhad/ui/verify/wallet_verify_screen.dart';
 import 'package:mhad/ui/mode_selection/mode_selection_screen.dart';
 import 'package:mhad/ui/ulysses/ulysses_clause_screen.dart';
@@ -63,6 +64,10 @@ abstract class AppRoutes {
   // scan). The screen is read-only and reachable from the directive card
   // overflow menu so the principal can rehearse the receiver experience.
   static const walletVerify = '/verify/:directiveId';
+  // Batch 5 — manual agent-acceptance log (m-agentaccept repurposed per
+  // user decision: principal records that each agent verbally accepted
+  // in person; no online flow).
+  static const agentAccept = '/agent-accept/:directiveId';
 
   static String legalToggleRoute(int directiveId) =>
       '/legal-toggle/$directiveId';
@@ -76,6 +81,8 @@ abstract class AppRoutes {
   static String pastDirectiveRoute(int directiveId) => '/past/$directiveId';
   static String shareSheetRoute(int directiveId) => '/share/$directiveId';
   static String walletVerifyRoute(int directiveId) => '/verify/$directiveId';
+  static String agentAcceptRoute(int directiveId) =>
+      '/agent-accept/$directiveId';
 }
 
 /// Initializes the global [appRouter] with the loaded service notifiers.
@@ -280,6 +287,14 @@ GoRouter _buildRouter(
             final id = int.tryParse(state.pathParameters['directiveId'] ?? '');
             if (id == null) return const HomeScreen();
             return WalletVerifyScreen(directiveId: id);
+          },
+        ),
+        GoRoute(
+          path: AppRoutes.agentAccept,
+          builder: (_, state) {
+            final id = int.tryParse(state.pathParameters['directiveId'] ?? '');
+            if (id == null) return const HomeScreen();
+            return AgentAcceptScreen(directiveId: id);
           },
         ),
       ],

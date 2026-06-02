@@ -1169,6 +1169,29 @@ class $AgentsTable extends Agents with TableInfo<$AgentsTable, Agent> {
     requiredDuringInsert: false,
     defaultValue: const Constant(''),
   );
+  static const VerificationMeta _acceptedAtMeta = const VerificationMeta(
+    'acceptedAt',
+  );
+  @override
+  late final GeneratedColumn<int> acceptedAt = GeneratedColumn<int>(
+    'accepted_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _acceptanceNotesMeta = const VerificationMeta(
+    'acceptanceNotes',
+  );
+  @override
+  late final GeneratedColumn<String> acceptanceNotes = GeneratedColumn<String>(
+    'acceptance_notes',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -1180,6 +1203,8 @@ class $AgentsTable extends Agents with TableInfo<$AgentsTable, Agent> {
     homePhone,
     workPhone,
     cellPhone,
+    acceptedAt,
+    acceptanceNotes,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -1254,6 +1279,21 @@ class $AgentsTable extends Agents with TableInfo<$AgentsTable, Agent> {
         cellPhone.isAcceptableOrUnknown(data['cell_phone']!, _cellPhoneMeta),
       );
     }
+    if (data.containsKey('accepted_at')) {
+      context.handle(
+        _acceptedAtMeta,
+        acceptedAt.isAcceptableOrUnknown(data['accepted_at']!, _acceptedAtMeta),
+      );
+    }
+    if (data.containsKey('acceptance_notes')) {
+      context.handle(
+        _acceptanceNotesMeta,
+        acceptanceNotes.isAcceptableOrUnknown(
+          data['acceptance_notes']!,
+          _acceptanceNotesMeta,
+        ),
+      );
+    }
     return context;
   }
 
@@ -1299,6 +1339,14 @@ class $AgentsTable extends Agents with TableInfo<$AgentsTable, Agent> {
         DriftSqlType.string,
         data['${effectivePrefix}cell_phone'],
       )!,
+      acceptedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}accepted_at'],
+      ),
+      acceptanceNotes: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}acceptance_notes'],
+      )!,
     );
   }
 
@@ -1318,6 +1366,8 @@ class Agent extends DataClass implements Insertable<Agent> {
   final String homePhone;
   final String workPhone;
   final String cellPhone;
+  final int? acceptedAt;
+  final String acceptanceNotes;
   const Agent({
     required this.id,
     required this.directiveId,
@@ -1328,6 +1378,8 @@ class Agent extends DataClass implements Insertable<Agent> {
     required this.homePhone,
     required this.workPhone,
     required this.cellPhone,
+    this.acceptedAt,
+    required this.acceptanceNotes,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -1341,6 +1393,10 @@ class Agent extends DataClass implements Insertable<Agent> {
     map['home_phone'] = Variable<String>(homePhone);
     map['work_phone'] = Variable<String>(workPhone);
     map['cell_phone'] = Variable<String>(cellPhone);
+    if (!nullToAbsent || acceptedAt != null) {
+      map['accepted_at'] = Variable<int>(acceptedAt);
+    }
+    map['acceptance_notes'] = Variable<String>(acceptanceNotes);
     return map;
   }
 
@@ -1355,6 +1411,10 @@ class Agent extends DataClass implements Insertable<Agent> {
       homePhone: Value(homePhone),
       workPhone: Value(workPhone),
       cellPhone: Value(cellPhone),
+      acceptedAt: acceptedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(acceptedAt),
+      acceptanceNotes: Value(acceptanceNotes),
     );
   }
 
@@ -1373,6 +1433,8 @@ class Agent extends DataClass implements Insertable<Agent> {
       homePhone: serializer.fromJson<String>(json['homePhone']),
       workPhone: serializer.fromJson<String>(json['workPhone']),
       cellPhone: serializer.fromJson<String>(json['cellPhone']),
+      acceptedAt: serializer.fromJson<int?>(json['acceptedAt']),
+      acceptanceNotes: serializer.fromJson<String>(json['acceptanceNotes']),
     );
   }
   @override
@@ -1388,6 +1450,8 @@ class Agent extends DataClass implements Insertable<Agent> {
       'homePhone': serializer.toJson<String>(homePhone),
       'workPhone': serializer.toJson<String>(workPhone),
       'cellPhone': serializer.toJson<String>(cellPhone),
+      'acceptedAt': serializer.toJson<int?>(acceptedAt),
+      'acceptanceNotes': serializer.toJson<String>(acceptanceNotes),
     };
   }
 
@@ -1401,6 +1465,8 @@ class Agent extends DataClass implements Insertable<Agent> {
     String? homePhone,
     String? workPhone,
     String? cellPhone,
+    Value<int?> acceptedAt = const Value.absent(),
+    String? acceptanceNotes,
   }) => Agent(
     id: id ?? this.id,
     directiveId: directiveId ?? this.directiveId,
@@ -1411,6 +1477,8 @@ class Agent extends DataClass implements Insertable<Agent> {
     homePhone: homePhone ?? this.homePhone,
     workPhone: workPhone ?? this.workPhone,
     cellPhone: cellPhone ?? this.cellPhone,
+    acceptedAt: acceptedAt.present ? acceptedAt.value : this.acceptedAt,
+    acceptanceNotes: acceptanceNotes ?? this.acceptanceNotes,
   );
   Agent copyWithCompanion(AgentsCompanion data) {
     return Agent(
@@ -1427,6 +1495,12 @@ class Agent extends DataClass implements Insertable<Agent> {
       homePhone: data.homePhone.present ? data.homePhone.value : this.homePhone,
       workPhone: data.workPhone.present ? data.workPhone.value : this.workPhone,
       cellPhone: data.cellPhone.present ? data.cellPhone.value : this.cellPhone,
+      acceptedAt: data.acceptedAt.present
+          ? data.acceptedAt.value
+          : this.acceptedAt,
+      acceptanceNotes: data.acceptanceNotes.present
+          ? data.acceptanceNotes.value
+          : this.acceptanceNotes,
     );
   }
 
@@ -1441,7 +1515,9 @@ class Agent extends DataClass implements Insertable<Agent> {
           ..write('address: $address, ')
           ..write('homePhone: $homePhone, ')
           ..write('workPhone: $workPhone, ')
-          ..write('cellPhone: $cellPhone')
+          ..write('cellPhone: $cellPhone, ')
+          ..write('acceptedAt: $acceptedAt, ')
+          ..write('acceptanceNotes: $acceptanceNotes')
           ..write(')'))
         .toString();
   }
@@ -1457,6 +1533,8 @@ class Agent extends DataClass implements Insertable<Agent> {
     homePhone,
     workPhone,
     cellPhone,
+    acceptedAt,
+    acceptanceNotes,
   );
   @override
   bool operator ==(Object other) =>
@@ -1470,7 +1548,9 @@ class Agent extends DataClass implements Insertable<Agent> {
           other.address == this.address &&
           other.homePhone == this.homePhone &&
           other.workPhone == this.workPhone &&
-          other.cellPhone == this.cellPhone);
+          other.cellPhone == this.cellPhone &&
+          other.acceptedAt == this.acceptedAt &&
+          other.acceptanceNotes == this.acceptanceNotes);
 }
 
 class AgentsCompanion extends UpdateCompanion<Agent> {
@@ -1483,6 +1563,8 @@ class AgentsCompanion extends UpdateCompanion<Agent> {
   final Value<String> homePhone;
   final Value<String> workPhone;
   final Value<String> cellPhone;
+  final Value<int?> acceptedAt;
+  final Value<String> acceptanceNotes;
   const AgentsCompanion({
     this.id = const Value.absent(),
     this.directiveId = const Value.absent(),
@@ -1493,6 +1575,8 @@ class AgentsCompanion extends UpdateCompanion<Agent> {
     this.homePhone = const Value.absent(),
     this.workPhone = const Value.absent(),
     this.cellPhone = const Value.absent(),
+    this.acceptedAt = const Value.absent(),
+    this.acceptanceNotes = const Value.absent(),
   });
   AgentsCompanion.insert({
     this.id = const Value.absent(),
@@ -1504,6 +1588,8 @@ class AgentsCompanion extends UpdateCompanion<Agent> {
     this.homePhone = const Value.absent(),
     this.workPhone = const Value.absent(),
     this.cellPhone = const Value.absent(),
+    this.acceptedAt = const Value.absent(),
+    this.acceptanceNotes = const Value.absent(),
   }) : directiveId = Value(directiveId),
        agentType = Value(agentType);
   static Insertable<Agent> custom({
@@ -1516,6 +1602,8 @@ class AgentsCompanion extends UpdateCompanion<Agent> {
     Expression<String>? homePhone,
     Expression<String>? workPhone,
     Expression<String>? cellPhone,
+    Expression<int>? acceptedAt,
+    Expression<String>? acceptanceNotes,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1527,6 +1615,8 @@ class AgentsCompanion extends UpdateCompanion<Agent> {
       if (homePhone != null) 'home_phone': homePhone,
       if (workPhone != null) 'work_phone': workPhone,
       if (cellPhone != null) 'cell_phone': cellPhone,
+      if (acceptedAt != null) 'accepted_at': acceptedAt,
+      if (acceptanceNotes != null) 'acceptance_notes': acceptanceNotes,
     });
   }
 
@@ -1540,6 +1630,8 @@ class AgentsCompanion extends UpdateCompanion<Agent> {
     Value<String>? homePhone,
     Value<String>? workPhone,
     Value<String>? cellPhone,
+    Value<int?>? acceptedAt,
+    Value<String>? acceptanceNotes,
   }) {
     return AgentsCompanion(
       id: id ?? this.id,
@@ -1551,6 +1643,8 @@ class AgentsCompanion extends UpdateCompanion<Agent> {
       homePhone: homePhone ?? this.homePhone,
       workPhone: workPhone ?? this.workPhone,
       cellPhone: cellPhone ?? this.cellPhone,
+      acceptedAt: acceptedAt ?? this.acceptedAt,
+      acceptanceNotes: acceptanceNotes ?? this.acceptanceNotes,
     );
   }
 
@@ -1584,6 +1678,12 @@ class AgentsCompanion extends UpdateCompanion<Agent> {
     if (cellPhone.present) {
       map['cell_phone'] = Variable<String>(cellPhone.value);
     }
+    if (acceptedAt.present) {
+      map['accepted_at'] = Variable<int>(acceptedAt.value);
+    }
+    if (acceptanceNotes.present) {
+      map['acceptance_notes'] = Variable<String>(acceptanceNotes.value);
+    }
     return map;
   }
 
@@ -1598,7 +1698,9 @@ class AgentsCompanion extends UpdateCompanion<Agent> {
           ..write('address: $address, ')
           ..write('homePhone: $homePhone, ')
           ..write('workPhone: $workPhone, ')
-          ..write('cellPhone: $cellPhone')
+          ..write('cellPhone: $cellPhone, ')
+          ..write('acceptedAt: $acceptedAt, ')
+          ..write('acceptanceNotes: $acceptanceNotes')
           ..write(')'))
         .toString();
   }
@@ -7078,6 +7180,8 @@ typedef $$AgentsTableCreateCompanionBuilder =
       Value<String> homePhone,
       Value<String> workPhone,
       Value<String> cellPhone,
+      Value<int?> acceptedAt,
+      Value<String> acceptanceNotes,
     });
 typedef $$AgentsTableUpdateCompanionBuilder =
     AgentsCompanion Function({
@@ -7090,6 +7194,8 @@ typedef $$AgentsTableUpdateCompanionBuilder =
       Value<String> homePhone,
       Value<String> workPhone,
       Value<String> cellPhone,
+      Value<int?> acceptedAt,
+      Value<String> acceptanceNotes,
     });
 
 final class $$AgentsTableReferences
@@ -7162,6 +7268,16 @@ class $$AgentsTableFilterComposer
 
   ColumnFilters<String> get cellPhone => $composableBuilder(
     column: $table.cellPhone,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get acceptedAt => $composableBuilder(
+    column: $table.acceptedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get acceptanceNotes => $composableBuilder(
+    column: $table.acceptanceNotes,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -7238,6 +7354,16 @@ class $$AgentsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<int> get acceptedAt => $composableBuilder(
+    column: $table.acceptedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get acceptanceNotes => $composableBuilder(
+    column: $table.acceptanceNotes,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   $$DirectivesTableOrderingComposer get directiveId {
     final $$DirectivesTableOrderingComposer composer = $composerBuilder(
       composer: this,
@@ -7296,6 +7422,16 @@ class $$AgentsTableAnnotationComposer
 
   GeneratedColumn<String> get cellPhone =>
       $composableBuilder(column: $table.cellPhone, builder: (column) => column);
+
+  GeneratedColumn<int> get acceptedAt => $composableBuilder(
+    column: $table.acceptedAt,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get acceptanceNotes => $composableBuilder(
+    column: $table.acceptanceNotes,
+    builder: (column) => column,
+  );
 
   $$DirectivesTableAnnotationComposer get directiveId {
     final $$DirectivesTableAnnotationComposer composer = $composerBuilder(
@@ -7358,6 +7494,8 @@ class $$AgentsTableTableManager
                 Value<String> homePhone = const Value.absent(),
                 Value<String> workPhone = const Value.absent(),
                 Value<String> cellPhone = const Value.absent(),
+                Value<int?> acceptedAt = const Value.absent(),
+                Value<String> acceptanceNotes = const Value.absent(),
               }) => AgentsCompanion(
                 id: id,
                 directiveId: directiveId,
@@ -7368,6 +7506,8 @@ class $$AgentsTableTableManager
                 homePhone: homePhone,
                 workPhone: workPhone,
                 cellPhone: cellPhone,
+                acceptedAt: acceptedAt,
+                acceptanceNotes: acceptanceNotes,
               ),
           createCompanionCallback:
               ({
@@ -7380,6 +7520,8 @@ class $$AgentsTableTableManager
                 Value<String> homePhone = const Value.absent(),
                 Value<String> workPhone = const Value.absent(),
                 Value<String> cellPhone = const Value.absent(),
+                Value<int?> acceptedAt = const Value.absent(),
+                Value<String> acceptanceNotes = const Value.absent(),
               }) => AgentsCompanion.insert(
                 id: id,
                 directiveId: directiveId,
@@ -7390,6 +7532,8 @@ class $$AgentsTableTableManager
                 homePhone: homePhone,
                 workPhone: workPhone,
                 cellPhone: cellPhone,
+                acceptedAt: acceptedAt,
+                acceptanceNotes: acceptanceNotes,
               ),
           withReferenceMapper: (p0) => p0
               .map(
