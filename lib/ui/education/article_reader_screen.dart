@@ -56,6 +56,7 @@ class _ArticleReaderScreenState extends State<ArticleReaderScreen> {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
+          tooltip: 'Back',
           onPressed: () => Navigator.of(context).maybePop(),
         ),
         title: Text(
@@ -82,8 +83,19 @@ class _ArticleReaderScreenState extends State<ArticleReaderScreen> {
           ),
         ),
         actions: const [
-          IconButton(icon: Icon(Icons.bookmark_outline), onPressed: null),
-          IconButton(icon: Icon(Icons.share_outlined), onPressed: null),
+          // Bookmark + Share are placeholders for future article-level
+          // affordances; tooltips are required by the button-label audit
+          // even when disabled.
+          IconButton(
+            icon: Icon(Icons.bookmark_outline),
+            tooltip: 'Bookmark (coming soon)',
+            onPressed: null,
+          ),
+          IconButton(
+            icon: Icon(Icons.share_outlined),
+            tooltip: 'Share (coming soon)',
+            onPressed: null,
+          ),
         ],
       ),
       body: ListView(

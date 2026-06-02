@@ -400,20 +400,32 @@ List<pw.Page> buildDeclarationPages({
               style: bodyStyle(),
             ),
             pw.SizedBox(height: 4),
-            if (guardian != null && guardian.nomineeFullName.isNotEmpty) ...[
-              dataLine('Name of Person', guardian.nomineeFullName),
-              if (guardian.nomineeRelationship.isNotEmpty)
-                dataLine('Relationship', guardian.nomineeRelationship),
-              dataLine('Address', guardian.nomineeAddress),
-              twoCol(
-                blankLine('City, State, Zip Code'),
-                dataLine('Phone Number', guardian.nomineePhone),
-              ),
-            ] else ...[
-              blankLine('Name of Person'),
-              blankLine('Address'),
-              twoCol(blankLine('City, State, Zip Code'), blankLine('Phone Number')),
-            ],
+            // Declaration form has no `agents` parameter (Declaration-only
+            // skips the People I Trust step per § D.5), so the
+            // `sameAsPrimary` / `sameAsAlternate` choices cannot resolve
+            // here. Use the helper with an empty agent list — it falls
+            // through to empty for those cases, which correctly leaves
+            // blank lines for the court to fill in.
+            ...() {
+              final g = resolveGuardianDisplay(guardian, const []);
+              return [
+                if (g.hasNominee) ...[
+                  dataLine('Name of Person', g.fullName),
+                  if (g.relationship.isNotEmpty)
+                    dataLine('Relationship', g.relationship),
+                  dataLine('Address', g.address),
+                  twoCol(
+                    blankLine('City, State, Zip Code'),
+                    dataLine('Phone Number', g.phone),
+                  ),
+                ] else ...[
+                  blankLine('Name of Person'),
+                  blankLine('Address'),
+                  twoCol(blankLine('City, State, Zip Code'),
+                      blankLine('Phone Number')),
+                ],
+              ];
+            }(),
             pw.SizedBox(height: 4),
             checkRow(
               'The appointment of a guardian of my person will not give the guardian '

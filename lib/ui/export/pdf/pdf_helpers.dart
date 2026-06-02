@@ -1,8 +1,102 @@
 /// Shared drawing primitives for PA MHAD PDF forms.
 library;
 
+import 'package:mhad/data/database/app_database.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
+
+/// Resolves the four nominee display fields for the Guardian section based
+/// on the `guardian_relation` choice. The Phase-2 GuardianNominationStep
+/// blanks the persisted nominee columns for the three non-"different"
+/// branches, so PDF generators must fall back to the named agent (or skip
+/// rendering entirely for "noPreference") to avoid emitting an empty
+/// nominee block. See PROTOTYPE_DIFF_DECISIONS § E.4 and the senior-code-
+/// review finding "PDFs gate guardian on nomineeFullName".
+class GuardianDisplay {
+  final String fullName;
+  final String address;
+  final String phone;
+  final String relationship;
+
+  /// True when the resolved nominee is meaningful and should be rendered.
+  /// False for `noPreference` (court decides) or unresolved `sameAs*` with
+  /// no matching agent on file.
+  final bool hasNominee;
+
+  const GuardianDisplay({
+    required this.fullName,
+    required this.address,
+    required this.phone,
+    required this.relationship,
+    required this.hasNominee,
+  });
+
+  static const empty = GuardianDisplay(
+    fullName: '',
+    address: '',
+    phone: '',
+    relationship: '',
+    hasNominee: false,
+  );
+}
+
+/// Compute the effective Guardian display from the persisted row + agents.
+///
+/// Behavior by `guardianRelation`:
+/// * `different` → use the stored nominee fields verbatim.
+/// * `sameAsPrimary` / `sameAsAlternate` → resolve to that agent's name +
+///   contact + relationship + address. If the agent isn't on file, falls
+///   through to the no-nominee state.
+/// * `noPreference` (or any unknown value) → empty / hasNominee = false.
+GuardianDisplay resolveGuardianDisplay(
+  GuardianNomination? guardian,
+  List<Agent> agents,
+) {
+  if (guardian == null) return GuardianDisplay.empty;
+  Agent? agentByType(String type) =>
+      agents.where((a) => a.agentType == type).firstOrNull;
+  String pickPhone(Agent a) {
+    for (final p in [a.cellPhone, a.homePhone, a.workPhone]) {
+      if (p.isNotEmpty) return p;
+    }
+    return '';
+  }
+
+  switch (guardian.guardianRelation) {
+    case 'sameAsPrimary':
+      final a = agentByType('primary');
+      if (a == null || a.fullName.isEmpty) return GuardianDisplay.empty;
+      return GuardianDisplay(
+        fullName: a.fullName,
+        address: a.address,
+        phone: pickPhone(a),
+        relationship: a.relationship,
+        hasNominee: true,
+      );
+    case 'sameAsAlternate':
+      final a = agentByType('alternate');
+      if (a == null || a.fullName.isEmpty) return GuardianDisplay.empty;
+      return GuardianDisplay(
+        fullName: a.fullName,
+        address: a.address,
+        phone: pickPhone(a),
+        relationship: a.relationship,
+        hasNominee: true,
+      );
+    case 'different':
+      if (guardian.nomineeFullName.isEmpty) return GuardianDisplay.empty;
+      return GuardianDisplay(
+        fullName: guardian.nomineeFullName,
+        address: guardian.nomineeAddress,
+        phone: guardian.nomineePhone,
+        relationship: guardian.nomineeRelationship,
+        hasNominee: true,
+      );
+    case 'noPreference':
+    default:
+      return GuardianDisplay.empty;
+  }
+}
 
 // ---------------------------------------------------------------------------
 // Colors

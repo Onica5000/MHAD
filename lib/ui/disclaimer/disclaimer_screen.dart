@@ -6,7 +6,7 @@ import 'package:mhad/ui/widgets/design/crisis_sheet.dart';
 
 /// First-launch legal disclaimer + read-only Settings variant.
 ///
-/// Layout â€” per `MHAD-handoff/mhad/project/Disclaimer Screen.html`:
+/// Layout — per `MHAD-handoff/mhad/project/Disclaimer Screen.html`:
 ///  - "Need 988" pill pinned to top-right
 ///  - Editorial italic header "A few _important_ things."
 ///  - Read-progress meter ("X / 8 READ") that fills as sections are opened
@@ -19,7 +19,7 @@ class DisclaimerScreen extends StatefulWidget {
   final DisclaimerNotifier? _notifier;
   final bool _readOnly;
 
-  /// First-launch gate variant â€” user must tick both checkboxes before
+  /// First-launch gate variant — user must tick both checkboxes before
   /// they can tap Continue.
   const DisclaimerScreen.gate({
     required DisclaimerNotifier notifier,
@@ -27,8 +27,8 @@ class DisclaimerScreen extends StatefulWidget {
   })  : _notifier = notifier,
         _readOnly = false;
 
-  /// Read-only variant â€” the same accordion content with an AppBar back
-  /// button instead of the accept footer. Used from Settings â†’ Legal.
+  /// Read-only variant — the same accordion content with an AppBar back
+  /// button instead of the accept footer. Used from Settings → Legal.
   const DisclaimerScreen.readOnly({super.key})
       : _notifier = null,
         _readOnly = true;
@@ -144,7 +144,7 @@ class _DisclaimerScreenState extends State<DisclaimerScreen> {
                               children: [
                                 const TextSpan(
                                     text:
-                                        "Read carefully â€” these confirm what this app does and doesn't do under "),
+                                        "Read carefully — these confirm what this app does and doesn't do under "),
                                 TextSpan(
                                   text: 'PA Act 194',
                                   style: TextStyle(
@@ -201,7 +201,7 @@ class _DisclaimerScreenState extends State<DisclaimerScreen> {
                   ),
 
                   // Sections list (scrollable). Bottom 24px fades to the
-                  // scaffold â€” matches the prototype's maskImage gradient
+                  // scaffold — matches the prototype's maskImage gradient
                   // (linear-gradient(to bottom, black calc(100% - 24px),
                   // transparent)).
                   Expanded(
@@ -246,7 +246,7 @@ class _DisclaimerScreenState extends State<DisclaimerScreen> {
                             child: Column(
                               children: [
                                 Text(
-                                  '"Your directive is your voice â€” written in '
+                                  '"Your directive is your voice — written in '
                                   "advance, kept safe, honored when you can't "
                                   'speak for yourself."',
                                   textAlign: TextAlign.center,
@@ -265,7 +265,7 @@ class _DisclaimerScreenState extends State<DisclaimerScreen> {
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
-                                  'â€” PA MHAD BOOKLET',
+                                  '— PA MHAD BOOKLET',
                                   style: TextStyle(
                                     fontFamily: 'JetBrains Mono',
                                     fontFamilyFallback: const [
@@ -290,7 +290,7 @@ class _DisclaimerScreenState extends State<DisclaimerScreen> {
                     ),
                   ),
 
-                  // Sticky accept bar â€” gate only
+                  // Sticky accept bar — gate only
                   if (!readOnly)
                     _AcceptFooter(
                       isAdult: _isAdult,
@@ -305,7 +305,7 @@ class _DisclaimerScreenState extends State<DisclaimerScreen> {
                 ],
               ),
 
-              // Persistent 988 chip pinned to top-right (gate only â€” Settings
+              // Persistent 988 chip pinned to top-right (gate only — Settings
               // has its own AppBar and the route is already private).
               if (!readOnly)
                 Positioned(
@@ -332,7 +332,7 @@ class _DisclaimerScreenState extends State<DisclaimerScreen> {
   }
 }
 
-// â”€â”€â”€ Data â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Data ────────────────────────────────────────────────────────────────
 
 class _SectionData {
   final String number;
@@ -378,7 +378,7 @@ List<_SectionData> _buildSections(MhadPalette p) {
           _bold('not'),
           const TextSpan(
               text:
-                  ' create an attorneyâ€“client relationship, a providerâ€“patient relationship, or any other professional relationship between you and the developer.'),
+                  ' create an attorney–client relationship, a provider–patient relationship, or any other professional relationship between you and the developer.'),
         ], palette: p),
         _Para(spans: const [
           TextSpan(
@@ -447,7 +447,7 @@ List<_SectionData> _buildSections(MhadPalette p) {
           _bold('must comply'),
           const TextSpan(
               text:
-                  ' with your directive (20 Pa.C.S. Â§ 5837). However, a provider may decline to follow specific instructions that are against accepted medical practice, or when the provider is not physically available.'),
+                  ' with your directive (20 Pa.C.S. § 5837). However, a provider may decline to follow specific instructions that are against accepted medical practice, or when the provider is not physically available.'),
         ], palette: p),
       ],
     ),
@@ -460,7 +460,7 @@ List<_SectionData> _buildSections(MhadPalette p) {
           _bold('two years'),
           const TextSpan(
               text:
-                  ' from the date of execution unless revoked earlier â€” '),
+                  ' from the date of execution unless revoked earlier — '),
           _bold('unless you are found incapable'),
           const TextSpan(
               text:
@@ -520,7 +520,7 @@ List<_SectionData> _buildSections(MhadPalette p) {
         _Para(spans: const [
           TextSpan(
               text:
-                  'AI suggestions are not legal or medical advice â€” review carefully before accepting.'),
+                  'AI suggestions are not legal or medical advice — review carefully before accepting.'),
         ], palette: p),
       ],
     ),
@@ -531,7 +531,7 @@ List<_SectionData> _buildSections(MhadPalette p) {
         _Resource(
             title: 'PA Protection & Advocacy',
             sub: 'Your rights under Act 194',
-            mono: '1-800-692-7443 Â· TDD/TTY 1-877-375-7139',
+            mono: '1-800-692-7443 · TDD/TTY 1-877-375-7139',
             palette: p),
         const SizedBox(height: 10),
         _Resource(
@@ -556,7 +556,7 @@ List<_SectionData> _buildSections(MhadPalette p) {
   ];
 }
 
-// â”€â”€â”€ Building blocks â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Building blocks ─────────────────────────────────────────────────────
 
 InlineSpan _bold(String text) => TextSpan(
       text: text,
@@ -634,7 +634,7 @@ class _Bullet extends StatelessWidget {
 }
 
 /// Bold spans inside body text get the full-text color (rather than the
-/// muted body color) â€” matches the prototype's `.disc-body strong` rule.
+/// muted body color) — matches the prototype's `.disc-body strong` rule.
 InlineSpan _coloredBoldInBody(InlineSpan span, MhadPalette palette) {
   if (span is! TextSpan) return span;
   final isBold = (span.style?.fontWeight == FontWeight.w600 ||
@@ -676,7 +676,7 @@ class _Resource extends StatelessWidget {
               ),
               if (sub != null)
                 TextSpan(
-                  text: ' â€” $sub',
+                  text: ' — $sub',
                   style: TextStyle(color: palette.textMuted),
                 ),
             ],
@@ -707,7 +707,7 @@ class _Resource extends StatelessWidget {
   }
 }
 
-// â”€â”€â”€ Accordion section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Accordion section ──────────────────────────────────────────────────
 
 class _AccordionSection extends StatelessWidget {
   final String number;
@@ -819,7 +819,7 @@ class _AccordionSection extends StatelessWidget {
   }
 }
 
-// â”€â”€â”€ Short-version banner â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Short-version banner ───────────────────────────────────────────────
 
 class _ShortVersionBanner extends StatelessWidget {
   @override
@@ -906,7 +906,7 @@ class _ShortVersionBanner extends StatelessWidget {
   }
 }
 
-// â”€â”€â”€ 988 pill â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── 988 pill ───────────────────────────────────────────────────────────
 
 class _Need988Pill extends StatelessWidget {
   final Color bg;
@@ -924,7 +924,7 @@ class _Need988Pill extends StatelessWidget {
   Widget build(BuildContext context) {
     return Semantics(
       button: true,
-      label: 'Need 988 â€” open crisis resources',
+      label: 'Need 988 — open crisis resources',
       child: Material(
         color: bg,
         borderRadius: BorderRadius.circular(100),
@@ -968,7 +968,7 @@ class _Need988Pill extends StatelessWidget {
   }
 }
 
-// â”€â”€â”€ Accept footer (gate only) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Accept footer (gate only) ──────────────────────────────────────────
 
 class _AcceptFooter extends StatelessWidget {
   final bool isAdult;
@@ -1036,7 +1036,7 @@ class _AcceptFooter extends StatelessWidget {
                 color: canContinue ? p.onPrimary : p.textMuted,
               ),
               label: Text(
-                'I understand Â· Continue',
+                'I understand · Continue',
                 style: TextStyle(
                   fontFamily: 'DM Sans',
                   fontWeight: FontWeight.w600,
@@ -1057,7 +1057,7 @@ class _AcceptFooter extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Text(
-            'You can re-read this anytime from Settings â†’ Legal.',
+            'You can re-read this anytime from Settings → Legal.',
             textAlign: TextAlign.center,
             style: TextStyle(
               fontFamily: 'DM Sans',

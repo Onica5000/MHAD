@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mhad/providers/app_providers.dart';
+import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
@@ -146,7 +148,11 @@ class _AiConsistencyScreenState extends ConsumerState<AiConsistencyScreen> {
                   )
                 else
                   for (var i = 0; i < _conflicts.length; i++)
-                    _ConflictCard(index: i, conflict: _conflicts[i]),
+                    _ConflictCard(
+                      index: i,
+                      conflict: _conflicts[i],
+                      directiveId: widget.directiveId,
+                    ),
                 const SizedBox(height: 14),
                 InfoBanner(
                   icon: Icons.auto_awesome,
@@ -175,12 +181,20 @@ class _Conflict {
     required this.actionEditA,
     required this.actionEditB,
   });
+  // NOTE: deep-link-by-step would let "Edit step 7" land directly on step
+  // 7 rather than the user's last-saved step. That needs a `startStep`
+  // query param on the wizard route — tracked separately.
 }
 
 class _ConflictCard extends StatelessWidget {
   final int index;
   final _Conflict conflict;
-  const _ConflictCard({required this.index, required this.conflict});
+  final int directiveId;
+  const _ConflictCard({
+    required this.index,
+    required this.conflict,
+    required this.directiveId,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -252,12 +266,19 @@ class _ConflictCard extends StatelessWidget {
               spacing: 8,
               runSpacing: 8,
               children: [
+                // Both "Edit step" buttons actually navigate to the wizard
+                // route now. Previously they called `Navigator.pop(context,
+                // true)` — which just closed the consistency screen and
+                // dropped the user wherever they came from (usually the
+                // Review screen), making the "Edit step N" label a lie.
                 FilledButton(
-                  onPressed: () => Navigator.pop(context, true),
+                  onPressed: () =>
+                      context.push(AppRoutes.wizardRoute(directiveId)),
                   child: Text(conflict.actionEditA),
                 ),
                 OutlinedButton(
-                  onPressed: () => Navigator.pop(context, true),
+                  onPressed: () =>
+                      context.push(AppRoutes.wizardRoute(directiveId)),
                   child: Text(conflict.actionEditB),
                 ),
                 TextButton(

@@ -272,6 +272,32 @@ class DirectiveCard extends StatelessWidget {
                   if (action == _Action.edit && !isRevoked) {
                     context.push(AppRoutes.wizardRoute(directive.id));
                   }
+                  // Phase 4 routes — surfaced through the existing card menu
+                  // so the screens are reachable from a normal user flow.
+                  if (action == _Action.clinicianView) {
+                    context.push(AppRoutes.clinicianViewRoute(directive.id));
+                  }
+                  if (action == _Action.legalToggle) {
+                    context.push(AppRoutes.legalToggleRoute(directive.id));
+                  }
+                  if (action == _Action.crisisPlan) {
+                    context.push(AppRoutes.crisisPlanRoute(directive.id));
+                  }
+                  if (action == _Action.ulysses) {
+                    context.push(AppRoutes.ulyssesRoute(directive.id));
+                  }
+                  if (action == _Action.share) {
+                    context.push(AppRoutes.shareSheetRoute(directive.id));
+                  }
+                  if (action == _Action.aiCheck) {
+                    context.push(AppRoutes.aiCheckRoute(directive.id));
+                  }
+                  if (action == _Action.pastDetail) {
+                    context.push(AppRoutes.pastDirectiveRoute(directive.id));
+                  }
+                  if (action == _Action.revokeFlow) {
+                    context.push(AppRoutes.revocationRoute(directive.id));
+                  }
                 },
                 itemBuilder: (_) => [
                   if (!isRevoked)
@@ -311,6 +337,84 @@ class DirectiveCard extends StatelessWidget {
                         Text('Revoke'),
                       ]),
                     ),
+
+                  // Phase-4 surfaces — visible for any non-revoked directive.
+                  if (!isRevoked) const PopupMenuDivider(),
+                  if (!isRevoked)
+                    const PopupMenuItem(
+                      value: _Action.clinicianView,
+                      child: Row(children: [
+                        Icon(Icons.medical_services_outlined, size: 18),
+                        SizedBox(width: 10),
+                        Text('Clinician view'),
+                      ]),
+                    ),
+                  if (!isRevoked)
+                    const PopupMenuItem(
+                      value: _Action.share,
+                      child: Row(children: [
+                        Icon(Icons.share_outlined, size: 18),
+                        SizedBox(width: 10),
+                        Text('Share'),
+                      ]),
+                    ),
+                  if (!isRevoked)
+                    const PopupMenuItem(
+                      value: _Action.legalToggle,
+                      child: Row(children: [
+                        Icon(Icons.description_outlined, size: 18),
+                        SizedBox(width: 10),
+                        Text('Plain ⇄ Legal view'),
+                      ]),
+                    ),
+                  if (!isRevoked)
+                    const PopupMenuItem(
+                      value: _Action.crisisPlan,
+                      child: Row(children: [
+                        Icon(Icons.favorite_outline, size: 18),
+                        SizedBox(width: 10),
+                        Text('Crisis plan / WRAP'),
+                      ]),
+                    ),
+                  if (!isRevoked)
+                    const PopupMenuItem(
+                      value: _Action.ulysses,
+                      child: Row(children: [
+                        Icon(Icons.anchor_outlined, size: 18),
+                        SizedBox(width: 10),
+                        Text('Self-binding clause'),
+                      ]),
+                    ),
+                  if (!isRevoked)
+                    const PopupMenuItem(
+                      value: _Action.aiCheck,
+                      child: Row(children: [
+                        Icon(Icons.auto_awesome_outlined, size: 18),
+                        SizedBox(width: 10),
+                        Text('AI consistency check'),
+                      ]),
+                    ),
+                  if (status == DirectiveStatus.expired ||
+                      status == DirectiveStatus.revoked ||
+                      status == DirectiveStatus.complete)
+                    const PopupMenuItem(
+                      value: _Action.pastDetail,
+                      child: Row(children: [
+                        Icon(Icons.history, size: 18),
+                        SizedBox(width: 10),
+                        Text('View details'),
+                      ]),
+                    ),
+                  if (status == DirectiveStatus.complete && onRevoke != null)
+                    const PopupMenuItem(
+                      value: _Action.revokeFlow,
+                      child: Row(children: [
+                        Icon(Icons.cancel_presentation_outlined, size: 18),
+                        SizedBox(width: 10),
+                        Text('Revoke (full flow)'),
+                      ]),
+                    ),
+                  const PopupMenuDivider(),
                   PopupMenuItem(
                     value: _Action.delete,
                     child: Row(children: [
@@ -334,4 +438,19 @@ class DirectiveCard extends StatelessWidget {
   }
 }
 
-enum _Action { edit, export, delete, revoke, renew }
+enum _Action {
+  edit,
+  export,
+  delete,
+  revoke,
+  renew,
+  // Phase 4 routes — keep the menu the single discovery surface.
+  clinicianView,
+  legalToggle,
+  crisisPlan,
+  ulysses,
+  share,
+  aiCheck,
+  pastDetail,
+  revokeFlow,
+}

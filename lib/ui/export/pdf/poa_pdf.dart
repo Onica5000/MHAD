@@ -532,20 +532,29 @@ List<pw.Page> buildPoaPages({
             style: bodyStyle(),
           ),
           pw.SizedBox(height: 4),
-          if (guardian != null && guardian.nomineeFullName.isNotEmpty) ...[
-            dataLine('Name of Person', guardian.nomineeFullName),
-            if (guardian.nomineeRelationship.isNotEmpty)
-              dataLine('Relationship', guardian.nomineeRelationship),
-            dataLine('Address', guardian.nomineeAddress),
-            twoCol(
-              blankLine('City, State, Zip Code'),
-              dataLine('Phone Number', guardian.nomineePhone),
-            ),
-          ] else ...[
-            blankLine('Name of Person'),
-            blankLine('Address'),
-            twoCol(blankLine('City, State, Zip Code'), blankLine('Phone Number')),
-          ],
+          // Resolve display fields based on `guardianRelation` so the three
+          // non-'different' radio choices render the correct named agent
+          // rather than emitting a blank nominee block.
+          ...() {
+            final g = resolveGuardianDisplay(guardian, agents);
+            return [
+              if (g.hasNominee) ...[
+                dataLine('Name of Person', g.fullName),
+                if (g.relationship.isNotEmpty)
+                  dataLine('Relationship', g.relationship),
+                dataLine('Address', g.address),
+                twoCol(
+                  blankLine('City, State, Zip Code'),
+                  dataLine('Phone Number', g.phone),
+                ),
+              ] else ...[
+                blankLine('Name of Person'),
+                blankLine('Address'),
+                twoCol(blankLine('City, State, Zip Code'),
+                    blankLine('Phone Number')),
+              ],
+            ];
+          }(),
           pw.SizedBox(height: 4),
           checkRow(
             'The appointment of a guardian of my person will not give the guardian the '

@@ -165,6 +165,33 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               onTap: () => context.push(AppRoutes.education),
             ),
           ),
+          const SizedBox(height: 20),
+
+          // Phase 4 — surfaces that don't depend on a specific directive.
+          const SectionLabel('Help & accessibility'),
+          const SizedBox(height: 8),
+          DesignCard(
+            padding: EdgeInsets.zero,
+            child: Column(
+              children: [
+                _SettingsRow(
+                  icon: Icons.support_agent_outlined,
+                  title: 'Get help',
+                  subtitle:
+                      'Peer specialists, rights advocates, clinician referral',
+                  onTap: () => context.push(AppRoutes.facilitator),
+                ),
+                Divider(height: 1, color: p.border),
+                _SettingsRow(
+                  icon: Icons.accessibility_new,
+                  title: 'Accessibility',
+                  subtitle:
+                      'Text size, dyslexia font, language, screen reader',
+                  onTap: () => context.push(AppRoutes.accessibility),
+                ),
+              ],
+            ),
+          ),
           const SizedBox(height: 24),
 
           DesignCard(

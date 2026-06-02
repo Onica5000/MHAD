@@ -19,16 +19,20 @@ class ShareSheetScreen extends ConsumerWidget {
   final int directiveId;
   const ShareSheetScreen({required this.directiveId, super.key});
 
+  /// Build an RFC 6068 mailto: URI. Previously this used `Uri(scheme:
+  /// 'mailto', query: ...)` which produces `mailto:?subject=...&to=...` —
+  /// non-conformant because `to=` belongs in the path (`mailto:<addr>`),
+  /// not the query, and many mail clients silently dropped it. We also
+  /// stop auto-filling recipients from `agent.cellPhone` (the Agents
+  /// table has no email column — phone numbers are not email addresses).
+  /// The user picks recipients in their mail app.
   Future<void> _email(BuildContext context, List<Agent> agents) async {
-    final to = agents
-        .where((a) => a.cellPhone.isNotEmpty)
-        .map((a) => a.cellPhone)
-        .join(';');
-    final uri = Uri(
-      scheme: 'mailto',
-      query: 'subject=My Mental Health Advance Directive&body=Attached when '
-          'you open this in your mail app — generate the PDF in Export '
-          'first and attach it manually.&to=$to',
+    const subject = 'My Mental Health Advance Directive';
+    const body = 'Attached when you open this in your mail app — generate '
+        'the PDF in Export first and attach it manually.';
+    final uri = Uri.parse(
+      'mailto:?subject=${Uri.encodeComponent(subject)}'
+      '&body=${Uri.encodeComponent(body)}',
     );
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri);
@@ -36,9 +40,10 @@ class ShareSheetScreen extends ConsumerWidget {
   }
 
   Future<void> _sms(BuildContext context) async {
-    final uri = Uri.parse(
-        'sms:?body=I want to share my Mental Health Advance Directive with you. '
-        "Let me know how you'd like to receive it.");
+    const body = 'I want to share my Mental Health Advance Directive with '
+        "you. Let me know how you'd like to receive it.";
+    // Properly percent-encode the body per RFC 5724 (sms: URI).
+    final uri = Uri.parse('sms:?body=${Uri.encodeComponent(body)}');
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri);
     }

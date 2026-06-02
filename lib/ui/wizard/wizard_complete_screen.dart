@@ -148,7 +148,12 @@ class _WizardCompleteScreenState extends ConsumerState<WizardCompleteScreen> {
 
           const SizedBox(height: 20),
 
-          // Sharing checklist
+          // Sharing checklist — the right-side affordance always reads
+          // "Send →" and the checkbox is hollow until the user actually
+          // sends a copy via the share sheet (and ticks the row themselves).
+          // Previously a "Sent ✓" tick auto-flipped on as soon as an agent
+          // had a name, which lied about delivery state — we have no
+          // send tracking, so the only honest state is "not yet sent."
           const SectionLabel('Share copies with'),
           const SizedBox(height: 4),
           _ShareRow(
@@ -156,26 +161,34 @@ class _WizardCompleteScreenState extends ConsumerState<WizardCompleteScreen> {
             detail: _primaryAgent?.fullName.isNotEmpty == true
                 ? _primaryAgent!.fullName
                 : 'Add agent details',
-            done: _primaryAgent?.fullName.isNotEmpty == true,
+            onTap: () => context
+                .push(AppRoutes.shareSheetRoute(widget.directiveId)),
           ),
           _ShareRow(
             who: 'Your alternate agent',
             detail: _alternateAgent?.fullName.isNotEmpty == true
                 ? _alternateAgent!.fullName
                 : 'Optional',
-            done: _alternateAgent?.fullName.isNotEmpty == true,
+            onTap: () => context
+                .push(AppRoutes.shareSheetRoute(widget.directiveId)),
           ),
-          const _ShareRow(
+          _ShareRow(
             who: 'Your primary care doctor',
             detail: 'Add provider',
+            onTap: () => context
+                .push(AppRoutes.shareSheetRoute(widget.directiveId)),
           ),
-          const _ShareRow(
+          _ShareRow(
             who: 'Your psychiatrist or therapist',
             detail: 'Add provider',
+            onTap: () => context
+                .push(AppRoutes.shareSheetRoute(widget.directiveId)),
           ),
-          const _ShareRow(
+          _ShareRow(
             who: 'A trusted family member',
             detail: 'Optional',
+            onTap: () => context
+                .push(AppRoutes.shareSheetRoute(widget.directiveId)),
           ),
 
           const SizedBox(height: 20),
@@ -310,78 +323,88 @@ class _WizardCompleteScreenState extends ConsumerState<WizardCompleteScreen> {
 class _ShareRow extends StatelessWidget {
   final String who;
   final String detail;
-  final bool done;
+
+  /// Tap target — opens the share sheet so the user can actually deliver
+  /// the directive. The row no longer carries a `done` flag: we have no
+  /// way to verify delivery, so claiming "Sent ✓" was always a lie.
+  final VoidCallback? onTap;
+
   const _ShareRow({
     required this.who,
     required this.detail,
-    this.done = false,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
+    final body = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(
+        color: p.card,
+        border: Border.all(color: p.border),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 22,
+            height: 22,
+            decoration: BoxDecoration(
+              color: Colors.transparent,
+              border: Border.all(color: p.border, width: 1.5),
+              borderRadius: BorderRadius.circular(6),
+            ),
+            // Empty checkbox — the user mentally ticks the row after they
+            // confirm the recipient has the document. We intentionally do
+            // NOT auto-fill this; we have no delivery confirmation channel.
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  who,
+                  style: TextStyle(
+                    fontFamily: 'DM Sans',
+                    fontSize: 13.5,
+                    fontWeight: FontWeight.w600,
+                    color: p.text,
+                  ),
+                ),
+                Text(
+                  detail,
+                  style: TextStyle(
+                    fontFamily: 'DM Sans',
+                    fontSize: 11.5,
+                    color: p.textMuted,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Text(
+            'Send →',
+            style: TextStyle(
+              fontFamily: 'DM Sans',
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+              color: p.primary,
+            ),
+          ),
+        ],
+      ),
+    );
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-        decoration: BoxDecoration(
-          color: p.card,
-          border: Border.all(color: p.border),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 22,
-              height: 22,
-              decoration: BoxDecoration(
-                color: done ? p.primary : Colors.transparent,
-                border: done
-                    ? null
-                    : Border.all(color: p.border, width: 1.5),
-                borderRadius: BorderRadius.circular(6),
-              ),
-              child: done
-                  ? Icon(Icons.check, size: 14, color: p.onPrimary)
-                  : null,
+      child: onTap == null
+          ? body
+          : InkWell(
+              onTap: onTap,
+              borderRadius: BorderRadius.circular(10),
+              child: body,
             ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    who,
-                    style: TextStyle(
-                      fontFamily: 'DM Sans',
-                      fontSize: 13.5,
-                      fontWeight: FontWeight.w600,
-                      color: p.text,
-                    ),
-                  ),
-                  Text(
-                    detail,
-                    style: TextStyle(
-                      fontFamily: 'DM Sans',
-                      fontSize: 11.5,
-                      color: p.textMuted,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Text(
-              done ? 'Sent ✓' : 'Send →',
-              style: TextStyle(
-                fontFamily: 'DM Sans',
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-                color: p.primary,
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

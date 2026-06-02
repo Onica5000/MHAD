@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:mhad/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mhad/providers/accessibility_providers.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/services/database_encryption_service.dart';
@@ -86,6 +87,14 @@ class MhadApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeSettings = ref.watch(appThemeControllerProvider);
+    // Phase 4 — Accessibility wiring. The provider previously existed but
+    // nothing consumed it at the MaterialApp level, so adjusting "Text size"
+    // in Accessibility settings had no visible effect. The textScaler below
+    // is the minimum wiring; the dyslexia font / high-contrast / reduce-motion
+    // toggles still need theme-level plumbing but at least no longer silently
+    // discard input.
+    final a11y = ref.watch(accessibilitySettingsProvider);
+    final locale = Locale(a11y.languageCode);
     return MaterialApp.router(
       title: 'PA Mental Health Advance Directive',
       theme: buildMhadTheme(themeSettings.palette, Brightness.light),
@@ -100,24 +109,41 @@ class MhadApp extends ConsumerWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
-      builder: (context, child) => Column(
-        children: [
-          Expanded(
-            // Remove the bottom safe-area padding from the content area
-            // because the CrisisResourcesBanner below already handles it.
-            // Without this, every Scaffold/SafeArea inside the Expanded
-            // adds redundant bottom padding, stealing vertical space.
-            child: MediaQuery.removePadding(
-              context: context,
-              removeBottom: true,
-              child: ResponsiveShell(
-                child: child ?? const SizedBox.shrink(),
-              ),
-            ),
+      // Honor the user's chosen language from accessibility settings — but
+      // fall back to system locale if the chosen one isn't in the supported
+      // list (avoids breaking on legacy codes).
+      locale: AppLocalizations.supportedLocales
+              .any((l) => l.languageCode == locale.languageCode)
+          ? locale
+          : null,
+      builder: (context, child) {
+        final mq = MediaQuery.of(context);
+        return MediaQuery(
+          // Apply the accessibility text-scale on top of the platform's own
+          // accessibility scale (so platform AX settings still compose).
+          data: mq.copyWith(
+            textScaler: TextScaler.linear(a11y.textScaleFactor),
           ),
-          const CrisisResourcesBanner(),
-        ],
-      ),
+          child: Column(
+            children: [
+              Expanded(
+                // Remove the bottom safe-area padding from the content area
+                // because the CrisisResourcesBanner below already handles it.
+                // Without this, every Scaffold/SafeArea inside the Expanded
+                // adds redundant bottom padding, stealing vertical space.
+                child: MediaQuery.removePadding(
+                  context: context,
+                  removeBottom: true,
+                  child: ResponsiveShell(
+                    child: child ?? const SizedBox.shrink(),
+                  ),
+                ),
+              ),
+              const CrisisResourcesBanner(),
+            ],
+          ),
+        );
+      },
     );
   }
 }

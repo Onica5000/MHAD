@@ -348,9 +348,16 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
           formType: formType,
         ),
       // Phase 3 — net-new Allergies step. Backward-nudge model: Severe entries
-      // suggest returning to step 7 (Medications · Avoid).
-      WizardStep.allergies =>
-        AllergiesStep(key: _stepKey, directiveId: directiveId),
+      // suggest returning to step 7 (Medications · Avoid). The hook lets the
+      // SnackBar action move the wizard back one step instead of being
+      // intercepted by the wizard's PopScope (which would Save & Exit).
+      WizardStep.allergies => AllergiesStep(
+          key: _stepKey,
+          directiveId: directiveId,
+          onGoToPrevStep: _stepIndex > 0
+              ? () => setState(() => _stepIndex--)
+              : null,
+        ),
       WizardStep.proceduresResearch =>
         ProceduresResearchStep(key: _stepKey, directiveId: directiveId),
       WizardStep.anythingElse =>

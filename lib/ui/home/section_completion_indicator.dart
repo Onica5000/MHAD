@@ -72,29 +72,51 @@ class SectionCompletionIndicator extends ConsumerWidget {
     );
   }
 
+  /// Derive the section list from FormType.steps so new wizard steps
+  /// (e.g. Phase 3 diagnoses + allergies) appear automatically without
+  /// further edits here. Multi-substep wizard steps (peopleITrust →
+  /// agent / altAgent / agentAuth; proceduresResearch → ect / experimental
+  /// / drugTrials) are expanded into per-section keys so completion is
+  /// reflected at finer granularity than the wizard step.
   List<String> _getSections(FormType formType) {
-    final sections = [
-      'personal',
-      'condition',
-      'facility',
-      'medications',
-      'ect',
-      'experimental',
-      'drugTrials',
-      'additional',
-    ];
-    if (formType.hasAgentSections) {
-      sections.addAll(['agent', 'altAgent', 'agentAuth']);
+    final out = <String>[];
+    for (final step in formType.steps) {
+      switch (step) {
+        case WizardStep.aboutYou:
+          out.add('personal');
+        case WizardStep.whenItKicksIn:
+          out.add('condition');
+        case WizardStep.peopleITrust:
+          out.addAll(['agent', 'altAgent', 'agentAuth']);
+        case WizardStep.guardianNomination:
+          out.add('guardian');
+        case WizardStep.whereIWantCare:
+          out.add('facility');
+        case WizardStep.diagnoses:
+          out.add('diagnoses');
+        case WizardStep.medications:
+          out.add('medications');
+        case WizardStep.allergies:
+          out.add('allergies');
+        case WizardStep.proceduresResearch:
+          out.addAll(['ect', 'experimental', 'drugTrials']);
+        case WizardStep.anythingElse:
+          out.add('additional');
+        case WizardStep.reviewAndSign:
+          // Reviewing/signing is not a "section" in the completion sense.
+          break;
+      }
     }
-    sections.add('guardian');
-    return sections;
+    return out;
   }
 
   String _sectionName(String key) => switch (key) {
         'personal' => 'Personal Info',
         'condition' => 'Effective Condition',
         'facility' => 'Treatment Facility',
+        'diagnoses' => 'Diagnoses',
         'medications' => 'Medications',
+        'allergies' => 'Allergies',
         'ect' => 'ECT',
         'experimental' => 'Experimental Studies',
         'drugTrials' => 'Drug Trials',
@@ -131,6 +153,14 @@ class SectionCompletionIndicator extends ConsumerWidget {
     final meds = await repo.watchMedications(id).first;
     result['medications'] = meds.isNotEmpty;
 
+    // Diagnoses (Phase 3)
+    final diags = await repo.getDiagnoses(id);
+    result['diagnoses'] = diags.isNotEmpty;
+
+    // Allergies (Phase 3)
+    final allergies = await repo.getAllergies(id);
+    result['allergies'] = allergies.isNotEmpty;
+
     // ECT / experimental / drug trials — complete if prefs row exists
     // (user has visited the step and saved, even if they chose the default "no")
     result['ect'] = prefs != null;
@@ -164,10 +194,27 @@ class SectionCompletionIndicator extends ConsumerWidget {
               !prefs.agentCanConsentMedication);
     }
 
-    // Guardian
+    // Guardian — complete if the user made ANY explicit choice
+    // (sameAsPrimary / sameAsAlternate / different-with-name / noPreference).
+    // The previous gate (`nomineeFullName.isNotEmpty`) incorrectly counted
+    // the three non-'different' radios as incomplete after the Phase 2
+    // restructure of GuardianNominationStep.
     final guardian = await repo.getGuardianNomination(id);
-    result['guardian'] =
-        guardian != null && guardian.nomineeFullName.isNotEmpty;
+    result['guardian'] = guardian != null &&
+        (() {
+          switch (guardian.guardianRelation) {
+            case 'sameAsPrimary':
+            case 'sameAsAlternate':
+            case 'noPreference':
+              return true;
+            case 'different':
+              return guardian.nomineeFullName.isNotEmpty;
+            default:
+              // Legacy rows pre-Phase-2 default to 'different'; treat them
+              // as before — complete only when a name was typed.
+              return guardian.nomineeFullName.isNotEmpty;
+          }
+        })();
 
     return result;
   }

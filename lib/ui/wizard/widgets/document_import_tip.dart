@@ -92,9 +92,16 @@ class _DocumentImportTipState extends State<DocumentImportTip>
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          'Tap the sparkle icon to use Smart Fill — select your '
-                          'conditions and medications, and AI fills the rest. '
-                          'Or tap the scan icon to import from a document.',
+                          // Per v3 prototype, Smart Fill and Document import
+                          // live behind the overflow ⋮ menu on each wizard
+                          // step (not standalone icons in the app bar). The
+                          // previous copy pointed at a "sparkle icon" and
+                          // "scan icon" that no longer exist as separate
+                          // affordances.
+                          'Open the ⋮ menu on any step to use Smart Fill — '
+                          'pick your conditions and medications, and AI '
+                          'drafts the rest — or to import details from a '
+                          'document.',
                           style:
                               Theme.of(context).textTheme.bodySmall?.copyWith(
                                     color: cs.onPrimaryContainer,

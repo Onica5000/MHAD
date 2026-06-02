@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
+import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
@@ -42,13 +44,50 @@ class PastDirectiveDetailScreen extends ConsumerWidget {
   }
 }
 
-class _Body extends StatelessWidget {
+class _Body extends ConsumerWidget {
   final Directive directive;
   final bool isPrivate;
   const _Body({required this.directive, required this.isPrivate});
 
+  Future<void> _confirmDelete(BuildContext context, WidgetRef ref) async {
+    final cs = Theme.of(context).colorScheme;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Delete from this device?'),
+        content: const Text(
+          'This removes the saved directive from this device. The legal '
+          'effect of any previously-signed paper copy is unchanged. This '
+          'cannot be undone.',
+        ),
+        actions: [
+          TextButton(
+              onPressed: () => Navigator.pop(ctx, false),
+              child: const Text('Cancel')),
+          FilledButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            style: FilledButton.styleFrom(
+              backgroundColor: cs.error,
+              foregroundColor: cs.onError,
+            ),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !context.mounted) return;
+    await ref
+        .read(directiveRepositoryProvider)
+        .deleteDirective(directive.id);
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Directive deleted from this device.')),
+    );
+    Navigator.of(context).maybePop();
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final p = Theme.of(context).mhadPalette;
     final dateFmt = DateFormat('MMM d, y');
     final status = directive.status == DirectiveStatus.revoked.name
@@ -158,28 +197,38 @@ class _Body extends StatelessWidget {
         ListTile(
           leading: const Icon(Icons.swap_vert),
           title: const Text('Copy to a new directive'),
-          subtitle: const Text('Start with these answers'),
-          onTap: () => Navigator.of(context).maybePop(),
+          subtitle: const Text(
+              'Start a fresh directive with these answers pre-filled — '
+              'coming with renewal flow'),
+          // Wire to renewal/duplication once the renewal flow is built;
+          // for now the visible CTA tells the user it's pending so it isn't
+          // a silent no-op.
+          enabled: false,
+          onTap: null,
         ),
         ListTile(
           leading: const Icon(Icons.download_outlined),
           title: const Text('Download the PDF'),
-          subtitle: const Text('Keep a record for yourself'),
-          onTap: () => Navigator.of(context).maybePop(),
+          subtitle: const Text('Open the Export screen'),
+          onTap: () =>
+              context.push(AppRoutes.exportRoute(directive.id)),
         ),
         ListTile(
           leading: const Icon(Icons.share_outlined),
           title: const Text('Re-send to someone'),
-          subtitle: const Text('Use your system mail/SMS composer'),
-          onTap: () => Navigator.of(context).maybePop(),
+          subtitle: const Text('Open the share sheet'),
+          onTap: () =>
+              context.push(AppRoutes.shareSheetRoute(directive.id)),
         ),
         ListTile(
           leading: Icon(Icons.delete_outline,
               color: Theme.of(context).colorScheme.error),
           title: Text('Delete from this device',
               style: TextStyle(color: Theme.of(context).colorScheme.error)),
-          subtitle: const Text('The directive remains revoked / expired regardless'),
-          onTap: () => Navigator.of(context).maybePop(),
+          subtitle: const Text(
+              'Permanently removes the saved row from this device. Legal '
+              'effect of any signed paper copy is unchanged.'),
+          onTap: () => _confirmDelete(context, ref),
         ),
       ],
     );

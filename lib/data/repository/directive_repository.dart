@@ -239,6 +239,8 @@ class DirectiveRepository {
     final instr = await getAdditionalInstructions(directiveId);
     final meds = await watchMedications(directiveId).first;
     final diags = await getDiagnoses(directiveId);
+    final allergies = await getAllergies(directiveId);
+    final guardian = await getGuardianNomination(directiveId);
 
     return {
       'formType': d.formType,
@@ -257,6 +259,20 @@ class DirectiveRepository {
         'agentCanConsentHospitalization': prefs.agentCanConsentHospitalization,
         'agentCanConsentMedication': prefs.agentCanConsentMedication,
         'agentAuthorityLimitations': prefs.agentAuthorityLimitations,
+        // Phase 2 + Phase 4 additions — without these the web-reload
+        // recovery silently drops room chips, crisis-plan JSON and the
+        // Ulysses acknowledgment flag.
+        'roomPreferences': prefs.roomPreferences,
+        'crisisPlanJson': prefs.crisisPlanJson,
+        'selfBindingEnabled': prefs.selfBindingEnabled,
+      },
+      if (guardian != null) 'guardian': {
+        'nomineeFullName': guardian.nomineeFullName,
+        'nomineeAddress': guardian.nomineeAddress,
+        'nomineePhone': guardian.nomineePhone,
+        'nomineeRelationship': guardian.nomineeRelationship,
+        'guardianCanRevoke': guardian.guardianCanRevoke,
+        'guardianRelation': guardian.guardianRelation,
       },
       if (instr != null) 'instructions': {
         'activities': instr.activities,
@@ -280,6 +296,16 @@ class DirectiveRepository {
         'icdCode': d.icdCode,
         'name': d.name,
         'sortOrder': d.sortOrder,
+      }).toList(),
+      if (allergies.isNotEmpty) 'allergies': allergies.map((a) => {
+        'kind': a.kind,
+        'substance': a.substance,
+        'code': a.code,
+        'codeSource': a.codeSource,
+        'severity': a.severity,
+        'reactions': a.reactions,
+        'notes': a.notes,
+        'sortOrder': a.sortOrder,
       }).toList(),
     };
   }
@@ -318,6 +344,24 @@ class DirectiveRepository {
         agentAuthorityLimitations: _v(p['agentAuthorityLimitations']),
         agentCanConsentHospitalization: _vBool(p['agentCanConsentHospitalization']),
         agentCanConsentMedication: _vBool(p['agentCanConsentMedication']),
+        // Phase 2 + Phase 4 additions — round-trip pair to snapshotDirective.
+        roomPreferences: _v(p['roomPreferences']),
+        crisisPlanJson: _v(p['crisisPlanJson']),
+        selfBindingEnabled: _vBool(p['selfBindingEnabled']),
+      ));
+    }
+
+    // Guardian (Phase 2 — includes the new `guardianRelation` enum).
+    final g = snap['guardian'];
+    if (g is Map<String, dynamic>) {
+      await upsertGuardianNomination(GuardianNominationsCompanion(
+        directiveId: Value(id),
+        nomineeFullName: _v(g['nomineeFullName']),
+        nomineeAddress: _v(g['nomineeAddress']),
+        nomineePhone: _v(g['nomineePhone']),
+        nomineeRelationship: _v(g['nomineeRelationship']),
+        guardianCanRevoke: _vBool(g['guardianCanRevoke']),
+        guardianRelation: _v(g['guardianRelation']),
       ));
     }
 
@@ -365,6 +409,26 @@ class DirectiveRepository {
             icdCode: Value(d['icdCode']?.toString() ?? ''),
             name: Value(d['name']?.toString() ?? ''),
             sortOrder: Value(d['sortOrder'] as int? ?? 0),
+          ));
+        }
+      }
+    }
+
+    // Allergies (Phase 3) — round-trip pair to snapshotDirective.
+    final aller = snap['allergies'];
+    if (aller is List) {
+      for (final a in aller) {
+        if (a is Map<String, dynamic>) {
+          await addAllergy(DirectiveAllergiesCompanion.insert(
+            directiveId: id,
+            kind: Value(a['kind']?.toString() ?? 'drug'),
+            substance: Value(a['substance']?.toString() ?? ''),
+            code: Value(a['code']?.toString() ?? ''),
+            codeSource: Value(a['codeSource']?.toString() ?? 'manual'),
+            severity: Value(a['severity']?.toString() ?? 'moderate'),
+            reactions: Value(a['reactions']?.toString() ?? ''),
+            notes: Value(a['notes']?.toString() ?? ''),
+            sortOrder: Value(a['sortOrder'] as int? ?? 0),
           ));
         }
       }

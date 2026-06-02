@@ -91,22 +91,24 @@ class _GuardianNominationStepState
   @override
   Future<bool> validateAndSave() async {
     _formKey.currentState?.validate();
-    // For non-"different" choices, the inline fields don't apply — blank
-    // them out before save so the persisted row stays consistent.
-    final isDifferent = _relation == _GuardianRel.different;
+    // PRESERVE the nominee text fields even when the user is currently on a
+    // non-'different' radio: we always write whatever's in the controllers
+    // back to the row. The downstream consumers (PDF generators, clinician
+    // view) read `guardianRelation` to decide whether the nominee fields
+    // are active or whether to substitute the named agent. Blanking the
+    // fields here would silently destroy contact-picker-imported names if
+    // the user toggled "different" → "Same as primary" → save → and later
+    // came back. See review finding A5.
     await ref.read(directiveRepositoryProvider).upsertGuardianNomination(
           GuardianNominationsCompanion(
             id: _existingId != null
                 ? Value(_existingId!)
                 : const Value.absent(),
             directiveId: Value(widget.directiveId),
-            nomineeFullName:
-                Value(isDifferent ? _nameCtrl.text.trim() : ''),
-            nomineeAddress:
-                Value(isDifferent ? _addressCtrl.text.trim() : ''),
-            nomineePhone: Value(isDifferent ? _phoneCtrl.text.trim() : ''),
-            nomineeRelationship:
-                Value(isDifferent ? _relationshipCtrl.text.trim() : ''),
+            nomineeFullName: Value(_nameCtrl.text.trim()),
+            nomineeAddress: Value(_addressCtrl.text.trim()),
+            nomineePhone: Value(_phoneCtrl.text.trim()),
+            nomineeRelationship: Value(_relationshipCtrl.text.trim()),
             guardianCanRevoke: Value(_guardianCanRevoke),
             guardianRelation: Value(_relation.id),
           ),

@@ -52,13 +52,52 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
     await repo.updateStatus(widget.directiveId, DirectiveStatus.revoked);
     if (!mounted) return;
     setState(() => _busy = false);
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text(
-            'Directive marked revoked locally. Now print or email the '
-            'revocation letter so providers know.'),
+    // Use the picked recipients in the follow-up dialog so the choice is
+    // not silently discarded. Previously `_notifyPicked` was captured but
+    // never read, and the snackbar promised a revocation PDF the app did
+    // not yet generate — honest copy now, with a per-recipient checklist
+    // the user works from.
+    final picked = _notifyPicked.toList();
+    await showDialog<void>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Marked revoked on this device'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Per 20 Pa.C.S. § 5808, revocation is effective only when '
+              'communicated to your attending physician or provider. '
+              'Marking this directive revoked here does not communicate it — '
+              'you still need to tell each recipient.',
+            ),
+            if (picked.isNotEmpty) ...[
+              const SizedBox(height: 12),
+              const Text('You picked these recipients to notify:',
+                  style: TextStyle(fontWeight: FontWeight.w700)),
+              const SizedBox(height: 4),
+              for (final cat in picked) Text('• $cat'),
+            ],
+            const SizedBox(height: 12),
+            const Text(
+              'A revocation-letter PDF is not yet generated automatically. '
+              'Until that is wired up, call or email each recipient yourself, '
+              'and ask the receiving provider to record the revocation in '
+              'your chart.',
+              style: TextStyle(fontStyle: FontStyle.italic),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Got it'),
+          ),
+        ],
       ),
     );
+    if (!mounted) return;
     Navigator.of(context).maybePop();
   }
 
@@ -149,8 +188,9 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
           const SectionLabel('Who to notify (opt-in per recipient)'),
           const SizedBox(height: 4),
           Text(
-            'No batch sends — pick each recipient. The app generates a '
-            'revocation PDF you can email from your phone\'s mail app.',
+            'No batch sends — pick each recipient. The app keeps your '
+            'choices in front of you as a checklist; you contact each '
+            'recipient yourself (call, email, or in person).',
             style: Theme.of(context).textTheme.bodySmall,
           ),
           const SizedBox(height: 8),

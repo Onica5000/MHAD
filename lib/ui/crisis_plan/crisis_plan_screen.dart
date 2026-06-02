@@ -72,28 +72,19 @@ class _CrisisPlanScreenState extends ConsumerState<CrisisPlanScreen> {
   }
 
   Future<void> _addItem(String section) async {
+    // Extract the dialog into a real StatefulWidget so the
+    // TextEditingController has a proper lifecycle and is disposed when
+    // the dialog closes. The previous inline `builder:` created the
+    // controller every rebuild and never disposed it.
     final text = await showDialog<String>(
       context: context,
-      builder: (ctx) {
-        final c = TextEditingController();
-        return AlertDialog(
-          title: const Text('Add'),
-          content: TextField(
-            controller: c,
-            autofocus: true,
-            decoration: const InputDecoration(hintText: 'Type a short note'),
-          ),
-          actions: [
-            TextButton(
-                onPressed: () => Navigator.pop(ctx),
-                child: const Text('Cancel')),
-            FilledButton(
-                onPressed: () => Navigator.pop(ctx, c.text.trim()),
-                child: const Text('Add')),
-          ],
-        );
-      },
+      builder: (ctx) => const _AddNoteDialog(),
     );
+    // Guard against the screen being popped mid-dialog before we touch
+    // `setState` — without this check, a back-button between dialog
+    // dismiss and the setState below crashes with "setState called after
+    // dispose".
+    if (!mounted) return;
     if (text == null || text.isEmpty) return;
     setState(() => _data[section] = [..._data[section]!, text]);
     await _persist();
@@ -185,6 +176,48 @@ class _CrisisPlanScreenState extends ConsumerState<CrisisPlanScreen> {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// Owns a single `TextEditingController` with proper dispose lifecycle.
+/// Returns the trimmed entered text via `Navigator.pop`, or `null` on cancel.
+class _AddNoteDialog extends StatefulWidget {
+  const _AddNoteDialog();
+
+  @override
+  State<_AddNoteDialog> createState() => _AddNoteDialogState();
+}
+
+class _AddNoteDialogState extends State<_AddNoteDialog> {
+  final _c = TextEditingController();
+
+  @override
+  void dispose() {
+    _c.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Add'),
+      content: TextField(
+        controller: _c,
+        autofocus: true,
+        decoration: const InputDecoration(hintText: 'Type a short note'),
+        onSubmitted: (_) => Navigator.pop(context, _c.text.trim()),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Cancel'),
+        ),
+        FilledButton(
+          onPressed: () => Navigator.pop(context, _c.text.trim()),
+          child: const Text('Add'),
+        ),
+      ],
     );
   }
 }

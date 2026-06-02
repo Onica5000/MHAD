@@ -70,7 +70,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       icon: Icons.timer_outlined,
       title: 'Takes About 20–40 Minutes',
       body:
-          'Use Smart Fill — select your conditions and let AI pre-fill the form.\n\n'
+          'Use Smart Fill — open the ⋮ menu on any wizard step, pick your '
+          'conditions, and let AI pre-fill the form.\n\n'
           'In Private Mode, progress is auto-saved and you can complete the form over '
           'multiple sessions. In Public Mode or on the web, data is in memory only — '
           'plan to complete and export in one session.\n\n'

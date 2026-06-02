@@ -29,11 +29,18 @@ class AllergiesStep extends ConsumerStatefulWidget {
   const AllergiesStep({
     required this.directiveId,
     this.embedded = false,
+    this.onGoToPrevStep,
     super.key,
   });
 
   final int directiveId;
   final bool embedded;
+
+  /// Wizard-step backward navigation hook. Supplied by [WizardScreen] so the
+  /// Severe-allergy backward nudge actually decrements the wizard's step
+  /// index (rather than popping the entire wizard route via `maybePop`,
+  /// which the wizard's PopScope traps and converts into Save & Exit).
+  final VoidCallback? onGoToPrevStep;
 
   @override
   ConsumerState<AllergiesStep> createState() => _AllergiesStepState();
@@ -71,6 +78,9 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
   Future<void> _addAllergy() async {
     final name = _substanceCtrl.text.trim();
     if (name.isEmpty) return;
+    // Capture severity BEFORE the post-add setState wipes it back to
+    // Moderate — otherwise the severe-allergy nudge below can never fire.
+    final wasSevere = _severity == AllergySeverity.severe;
     await ref.read(directiveRepositoryProvider).addAllergy(
           DirectiveAllergiesCompanion.insert(
             directiveId: widget.directiveId,
@@ -87,7 +97,7 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
       _severity = AllergySeverity.moderate;
     });
     await _loadData();
-    if (_severity == AllergySeverity.severe) {
+    if (wasSevere && mounted) {
       _showSevereNudge(name);
     }
   }
@@ -116,9 +126,11 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
           label: 'Go to step 7',
           textColor: cs.onErrorContainer,
           onPressed: () {
-            // Bubble up through the wizard's prior-step affordance; the
-            // wizard screen handles the actual navigation via the Back button.
-            Navigator.of(context).maybePop();
+            // Use the wizard-provided backward-step hook. `maybePop` is
+            // wrong here: the wizard wraps its content in a PopScope with
+            // `canPop: false`, which would convert the pop into a Save &
+            // Exit dialog instead of moving the user to step 7.
+            widget.onGoToPrevStep?.call();
           },
         ),
       ),
