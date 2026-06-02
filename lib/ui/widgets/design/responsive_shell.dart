@@ -6,6 +6,16 @@ import 'package:mhad/ui/widgets/design/web_sidebar.dart';
 /// fixed-sidebar layout. Matches the prototype's web breakpoint.
 const double kWideLayoutBreakpoint = 1000;
 
+/// Soft cap on content width inside the desktop shell. The prototype's web
+/// artboards are 1200px wide; at viewport widths greater than that, the
+/// extra space becomes side gutters so the content keeps its editorial
+/// proportions instead of stretching to fill 1920+ px monitors. Screens
+/// that genuinely need the full width (e.g. the wizard's step rail layout)
+/// can ignore the cap by opting out — none currently do; the wizard's
+/// internal `_WideStepRail` + 760-max-width form column sits inside this
+/// envelope.
+const double kMaxContentWidth = 1100;
+
 /// Wraps [child] so the navigation chrome matches the prototype:
 ///
 ///  - **Wide screens (≥ [kWideLayoutBreakpoint])** — a persistent
@@ -36,7 +46,24 @@ class ResponsiveShell extends StatelessWidget {
         return Row(
           children: [
             WebSidebar(activeRoute: route),
-            Expanded(child: ClipRect(child: child)),
+            Expanded(
+              child: ClipRect(
+                // Soft max-content cap — keeps the editorial column
+                // proportional on 1920+ px monitors. The cap is applied
+                // INSIDE the sidebar-adjusted area, so a 1440px viewport
+                // with a 240px sidebar gives a 1200px content area which
+                // is already under the cap; a 1920px viewport gives a
+                // 1680px area, of which 1100 is used for content and
+                // ~290px gutters fall on each side.
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints:
+                        const BoxConstraints(maxWidth: kMaxContentWidth),
+                    child: child,
+                  ),
+                ),
+              ),
+            ),
           ],
         );
       },
