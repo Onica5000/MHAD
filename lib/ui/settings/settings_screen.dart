@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mhad/providers/app_providers.dart';
+import 'package:mhad/services/privacy_mode_service.dart';
 import 'package:mhad/services/screenshot_protection_service.dart';
 import 'package:mhad/ui/disclaimer/disclaimer_screen.dart';
 import 'package:mhad/ui/router.dart';
@@ -36,13 +38,19 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       body: ListView(
         padding: const EdgeInsets.fromLTRB(22, 4, 22, 24),
         children: [
-          const SectionLabel('Settings'),
+          const SectionLabel('Account'),
           const EditorialHeading(
-            text: 'How this works for you.',
-            size: 32,
-            height: 1.05,
-            letterSpacing: -0.6,
+            text: 'Settings',
+            size: 38,
+            height: 1.0,
+            letterSpacing: -0.5,
           ),
+          const SizedBox(height: 12),
+          // Profile chip — matches prototype `ScrSettings` profile chip
+          // (mobile-extra.jsx L1076-1088). Pulls the user's name from the
+          // most-recently-edited directive (same source as the home
+          // greeting); status pill reflects current privacy mode.
+          const _ProfileChip(),
           const SizedBox(height: 18),
           const SectionLabel('Appearance'),
           const SizedBox(height: 8),
@@ -356,6 +364,132 @@ class _ThemeModeSegment extends StatelessWidget {
             ),
           );
         }).toList(),
+      ),
+    );
+  }
+}
+
+/// Primary-filled profile chip rendered at the top of the settings page.
+///
+/// Matches prototype `ScrSettings` (mobile-extra.jsx L1076-1088):
+///   - 44pt circular avatar with the user's initials in a translucent
+///     onPrimary fill
+///   - Name in 15pt bold onPrimary
+///   - Monospace status line: "● [PRIVACY MODE] · [AUTH METHOD]"
+///
+/// Falls back to a generic profile when no directive carries a stored
+/// fullName — e.g. on a first launch before any wizard data is filled.
+class _ProfileChip extends ConsumerWidget {
+  const _ProfileChip();
+
+  String _initialsFor(String name) {
+    final parts =
+        name.split(RegExp(r'\s+')).where((p) => p.isNotEmpty).toList();
+    if (parts.isEmpty) return '—';
+    if (parts.length == 1) return parts.first.substring(0, 1).toUpperCase();
+    return (parts.first.substring(0, 1) + parts.last.substring(0, 1))
+        .toUpperCase();
+  }
+
+  String _statusFor(BuildContext context, PrivacyModeNotifier mode) {
+    final modeWord = mode.isPrivate
+        ? 'PRIVATE'
+        : (mode.isPublic ? 'PUBLIC' : 'NO SESSION');
+    // Auth method: web has no biometrics; mobile uses biometrics for
+    // private mode. Public mode shows the ephemeral storage caveat.
+    final authPart = kIsWeb
+        ? 'IN-MEMORY ONLY'
+        : (mode.isPrivate
+            ? 'BIOMETRICS'
+            : (mode.isPublic ? 'EPHEMERAL' : '—'));
+    return '● $modeWord MODE · $authPart';
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final p = Theme.of(context).mhadPalette;
+    final mode = ref.watch(privacyModeNotifierProvider);
+    final directivesAsync = ref.watch(allDirectivesProvider);
+
+    final name = directivesAsync.maybeWhen(
+      data: (list) {
+        if (list.isEmpty) return '';
+        final sorted = [...list]
+          ..sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
+        final src = sorted.firstWhere(
+          (d) => d.fullName.trim().isNotEmpty,
+          orElse: () => sorted.first,
+        );
+        return src.fullName.trim();
+      },
+      orElse: () => '',
+    );
+
+    final displayName = name.isEmpty ? 'PA MHAD user' : name;
+    final initials = _initialsFor(name);
+
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: p.primary,
+        borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              color: p.onPrimary.withValues(alpha: 0.18),
+              shape: BoxShape.circle,
+            ),
+            alignment: Alignment.center,
+            child: Text(
+              initials,
+              style: TextStyle(
+                fontFamily: 'DM Sans',
+                fontWeight: FontWeight.w700,
+                fontSize: 15,
+                color: p.onPrimary,
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  displayName,
+                  style: TextStyle(
+                    fontFamily: 'DM Sans',
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                    color: p.onPrimary,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 1),
+                Text(
+                  _statusFor(context, mode),
+                  style: TextStyle(
+                    fontFamily: 'JetBrains Mono',
+                    fontFamilyFallback: const [
+                      'Consolas',
+                      'Menlo',
+                      'Courier New',
+                      'monospace',
+                    ],
+                    fontSize: 11,
+                    letterSpacing: 0.4,
+                    color: p.onPrimary.withValues(alpha: 0.85),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
