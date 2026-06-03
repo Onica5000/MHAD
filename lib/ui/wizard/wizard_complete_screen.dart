@@ -6,8 +6,6 @@ import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
-import 'package:mhad/ui/widgets/design/design_card.dart';
-import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/design/wallet_card.dart';
@@ -74,60 +72,70 @@ class _WizardCompleteScreenState extends ConsumerState<WizardCompleteScreen> {
     final p = Theme.of(context).mhadPalette;
 
     return Scaffold(
+      // Prototype ScrDone (mobile.jsx L985-1076) has NO CrisisBar and NO
+      // AppBar — it's a quieter celebration moment. The Material AppBar
+      // (with home button) was removed 2026-06-03 to match. Users still
+      // reach Home via the floating MhadBottomNav at the bottom; the
+      // wallet-card / share / action affordances cover the post-export
+      // primary flows.
       backgroundColor: p.scaffoldBackground,
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.home_outlined),
-          tooltip: 'Go to home',
-          onPressed: () => context.go(AppRoutes.home),
-        ),
-      ),
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(22, 12, 22, 32),
+        // 60px top matches prototype padding `60px 22px 32px` (L990) —
+        // gives the editorial headline breathing room.
+        padding: const EdgeInsets.fromLTRB(22, 60, 22, 32),
         children: [
-          // Editorial header
-          Row(
-            children: [
-              Container(
-                width: 8,
-                height: 8,
-                decoration: BoxDecoration(
-                  color: p.primary,
-                  shape: BoxShape.circle,
-                ),
-              ),
-              const SizedBox(width: 6),
-              const SectionLabel('Complete'),
-            ],
+          // Editorial header: "● Packet ready" SectionLabel in primary color
+          // (prototype L991) instead of the prior neutral "Complete" pill.
+          SectionLabel(
+            '● Packet ready',
+            style: TextStyle(color: p.primary),
           ),
-          const SizedBox(height: 6),
-          EditorialHeading(
-            textSpan: TextSpan(
+          const SizedBox(height: 4),
+          // Headline matches prototype L992-997 verbatim: "One pen / away."
+          // 60pt italic-serif, no primary accent on the second line (the
+          // prototype puts the whole thing in p.text).
+          Text(
+            'One pen\naway.',
+            style: TextStyle(
+              fontFamily: 'Instrument Serif',
+              fontFamilyFallback: const ['Georgia', 'serif'],
+              fontStyle: FontStyle.italic,
+              fontSize: 60,
+              fontWeight: FontWeight.w400,
+              letterSpacing: -1.5,
+              height: 0.95,
+              color: p.text,
+            ),
+          ),
+          const SizedBox(height: 8),
+          // Subtitle reworded to match prototype L998-1000 sentence shape:
+          // "ready to print" + "becomes legally valid the moment you and
+          // two witnesses sign it on paper" + "make sure the right people
+          // have a copy."
+          Text.rich(
+            TextSpan(
+              style: TextStyle(
+                fontFamily: 'DM Sans',
+                fontSize: 15,
+                color: p.textMuted,
+                height: 1.5,
+              ),
               children: [
-                const TextSpan(text: 'You did\n'),
+                const TextSpan(text: 'Your directive is ready to print. It '
+                    'becomes '),
                 TextSpan(
-                  text: 'it.',
-                  style: TextStyle(color: p.primary),
+                  text:
+                      'legally valid the moment you and two witnesses sign it '
+                      'on paper',
+                  style: TextStyle(
+                    color: p.text,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const TextSpan(
+                  text: ' — then make sure the right people have a copy.',
                 ),
               ],
-            ),
-            size: 64,
-            height: 0.95,
-            letterSpacing: -1.5,
-          ),
-          const SizedBox(height: 10),
-          Text(
-            // Updated per Decision 6 + v2 prototype: the directive becomes
-            // legally valid only after you and two adult witnesses sign on
-            // paper in original ink. Until then, the saved version is a
-            // ready-to-print draft.
-            'Your directive is ready to print. It becomes legally valid once '
-            'you and two adult witnesses sign on paper in original ink.',
-            style: TextStyle(
-              fontFamily: 'DM Sans',
-              fontSize: 14.5,
-              color: p.textMuted,
-              height: 1.5,
             ),
           ),
           const SizedBox(height: 26),
@@ -226,66 +234,16 @@ class _WizardCompleteScreenState extends ConsumerState<WizardCompleteScreen> {
             ],
           ),
 
-          const SizedBox(height: 22),
-          const Divider(),
-          const SizedBox(height: 16),
+          const SizedBox(height: 18),
 
-          // What to do next — keep the existing checklist content
-          const SectionLabel('What to do next'),
-          const SizedBox(height: 4),
-          DesignCard(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: const [
-                _NextStep(
-                  number: '1',
-                  title: 'Print your directive',
-                  description: 'Export the PDF and print it on paper.',
-                ),
-                _NextStep(
-                  number: '2',
-                  title: 'Sign with ink',
-                  description:
-                      'Sign the printed directive with original ink '
-                      'signatures in the presence of two adult witnesses.',
-                ),
-                _NextStep(
-                  number: '3',
-                  title: 'Have witnesses sign',
-                  description:
-                      'Both witnesses must sign the printed document. '
-                      'They cannot be your agent, healthcare provider, or '
-                      'facility employee (unless related).',
-                ),
-                _NextStep(
-                  number: '4',
-                  title: 'Distribute copies',
-                  description:
-                      'Give copies to your agent, doctor, hospital, family, '
-                      'and anyone who may need it in a crisis.',
-                ),
-                _NextStep(
-                  number: '5',
-                  title: 'Make it findable in a crisis',
-                  description:
-                      'A directive only helps if the people treating you can '
-                      'find it. Carry the wallet card on your person, photograph '
-                      'your signed copy on your phone, and tell your agent, '
-                      'closest contacts, and primary providers that the '
-                      'directive exists and where the originals are. PA does '
-                      'not maintain a state MHAD registry — custody by you, '
-                      'your agent, and your providers is the only mechanism.',
-                  isLast: true,
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 16),
-
-          // FACTUAL_ANALYSIS C6 / F15+F18 — providers SHALL comply (§ 5837)
-          // but may decline instructions against accepted medical practice or
-          // when unavailable. Surfaced here for accurate expectations after
-          // the signed directive is distributed.
+          // FACTUAL_ANALYSIS C6 / F15+F18 — providers SHALL comply
+          // (§ 5837) but may decline instructions against accepted
+          // medical practice or when unavailable. Surfaced here for
+          // accurate expectations after the signed directive is
+          // distributed. Per user direction 2026-06-03 this is the only
+          // post-share banner kept (5-step "what to do next" checklist,
+          // export-backup banner, and trailing Export-PDF button were
+          // dropped to match prototype ScrDone's leaner shape).
           const InfoBanner(
             icon: Icons.info_outline,
             text:
@@ -294,25 +252,6 @@ class _WizardCompleteScreenState extends ConsumerState<WizardCompleteScreen> {
                 'they conflict with accepted medical practice, or when the '
                 'provider is not physically available.',
             variant: InfoBannerVariant.info,
-          ),
-          const SizedBox(height: 12),
-
-          const InfoBanner(
-            icon: Icons.backup_outlined,
-            text:
-                'Export and save a backup now. If you lose your device, your '
-                'directive data cannot be recovered without an exported copy.',
-            variant: InfoBannerVariant.error,
-          ),
-          const SizedBox(height: 8),
-          SizedBox(
-            width: double.infinity,
-            child: FilledButton.icon(
-              icon: const Icon(Icons.picture_as_pdf),
-              label: const Text('Export PDF'),
-              onPressed: () =>
-                  context.go(AppRoutes.exportRoute(widget.directiveId)),
-            ),
           ),
         ],
       ),
@@ -409,73 +348,6 @@ class _ShareRow extends StatelessWidget {
   }
 }
 
-class _NextStep extends StatelessWidget {
-  final String number;
-  final String title;
-  final String description;
-  final bool isLast;
-
-  const _NextStep({
-    required this.number,
-    required this.title,
-    required this.description,
-    this.isLast = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final p = Theme.of(context).mhadPalette;
-    return Padding(
-      padding: EdgeInsets.only(bottom: isLast ? 0 : 16),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 32,
-            height: 32,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: p.primary,
-              shape: BoxShape.circle,
-            ),
-            child: Text(
-              number,
-              style: TextStyle(
-                fontFamily: 'DM Sans',
-                color: p.onPrimary,
-                fontWeight: FontWeight.w700,
-                fontSize: 13,
-              ),
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontFamily: 'DM Sans',
-                    fontWeight: FontWeight.w700,
-                    fontSize: 15,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  description,
-                  style: TextStyle(
-                    fontFamily: 'DM Sans',
-                    fontSize: 13,
-                    color: p.textMuted,
-                    height: 1.5,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
+// _NextStep removed 2026-06-03 with the "What to do next" 5-step checklist
+// (see build method comment). The post-sign guidance now lives on the
+// prototype-matching Sign screen instead.
