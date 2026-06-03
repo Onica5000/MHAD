@@ -3,8 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
-import 'package:mhad/ui/widgets/design/editorial_heading.dart';
-import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -79,26 +77,79 @@ class ShareSheetScreen extends ConsumerWidget {
                 padding: const EdgeInsets.fromLTRB(20, 14, 20, 32),
                 children: [
                   const SectionLabel('Share my directive'),
-                  const SizedBox(height: 6),
-                  const EditorialHeading(
-                    text: 'Who needs a copy?',
-                    size: 30,
+                  const SizedBox(height: 4),
+                  // Editorial italic title — matches prototype ScrShare
+                  // (mobile-extra.jsx L659): "Who needs a copy?" in
+                  // 30pt serif italic
+                  Text(
+                    'Who needs a copy?',
+                    style: TextStyle(
+                      fontFamily: 'Instrument Serif',
+                      fontFamilyFallback: const ['Georgia', 'serif'],
+                      fontStyle: FontStyle.italic,
+                      fontSize: 30,
+                      fontWeight: FontWeight.w400,
+                      height: 1.05,
+                      letterSpacing: -0.5,
+                      color: p.text,
+                    ),
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    'Local-only. We use your phone\'s mail / SMS apps to '
-                    'send. No verified link, no read receipt, no expiry.',
+                    'Everything sends straight from your phone — your '
+                    'mail or messages app, a QR, or print. Nothing goes '
+                    'through our servers.',
                     style: TextStyle(
                       fontFamily: 'DM Sans',
-                      fontSize: 14,
+                      fontSize: 13,
                       color: p.textMuted,
                       height: 1.45,
                     ),
                   ),
+                  // Suggested-recipients pill carousel — matches prototype
+                  // L666-690. Surfaces the directive's stored agents with
+                  // big avatar circles; a dashed "+" pill at the end for
+                  // adding someone manually. Tapping an agent pre-fills
+                  // the email recipient when Email is the next channel.
+                  if (agents.isNotEmpty) ...[
+                    const SizedBox(height: 16),
+                    const SectionLabel('From your contacts & care team'),
+                    Text(
+                      'SESSION ONLY · NOT STORED',
+                      style: TextStyle(
+                        fontFamily: 'JetBrains Mono',
+                        fontFamilyFallback: const [
+                          'Consolas',
+                          'Menlo',
+                          'Courier New',
+                          'monospace',
+                        ],
+                        fontSize: 10.5,
+                        letterSpacing: 0.3,
+                        color: p.textMuted,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    _SuggestedRecipients(
+                      agents: agents,
+                      onAdd: () => _email(context, agents),
+                    ),
+                  ],
                   const SizedBox(height: 18),
-                  Wrap(
-                    spacing: 10,
-                    runSpacing: 10,
+                  const SectionLabel('Send via'),
+                  const SizedBox(height: 8),
+                  // 4-column grid (Email · Text · QR · Print) per prototype
+                  // L693-711. The existing 5th channel ("System share")
+                  // keeps its tile beneath as a 5th below the grid since
+                  // it remains functionally useful but isn't in the
+                  // prototype's 4-up.
+                  GridView.count(
+                    crossAxisCount: 4,
+                    mainAxisSpacing: 8,
+                    crossAxisSpacing: 8,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    childAspectRatio: 0.85,
                     children: [
                       _ChannelTile(
                         icon: Icons.mail_outline,
@@ -123,11 +174,6 @@ class ShareSheetScreen extends ConsumerWidget {
                         },
                       ),
                       _ChannelTile(
-                        icon: Icons.ios_share,
-                        label: 'System share',
-                        onTap: _systemShare,
-                      ),
-                      _ChannelTile(
                         icon: Icons.print_outlined,
                         label: 'Print',
                         onTap: () {
@@ -141,36 +187,76 @@ class ShareSheetScreen extends ConsumerWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 18),
-                  const SectionLabel('They get'),
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(14),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          _GetRow(
-                              label: 'Full directive PDF',
-                              value: 'You generate + attach manually'),
-                          Divider(),
-                          _GetRow(
-                              label: 'Wallet-card summary',
-                              value: 'From Done / Wallet'),
-                          Divider(),
-                          _GetRow(
-                              label: 'Verification',
-                              value: 'They call you to confirm — no server'),
-                        ],
-                      ),
+                  const SizedBox(height: 8),
+                  SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton.icon(
+                      onPressed: _systemShare,
+                      icon: const Icon(Icons.ios_share, size: 18),
+                      label: const Text('Other apps (system share)'),
                     ),
                   ),
-                  const SizedBox(height: 14),
-                  const InfoBanner(
-                    icon: Icons.privacy_tip_outlined,
-                    variant: InfoBannerVariant.info,
-                    text:
-                        'No verified links, one-time codes, expiry, or read '
-                        'receipts. This app has no server.',
+                  const SizedBox(height: 18),
+                  const SectionLabel('They get'),
+                  const SizedBox(height: 8),
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: p.surface,
+                      border: Border.all(color: p.border),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        _GetRow(
+                            label: 'Full directive PDF',
+                            value: '6 pages'),
+                        _DashedDivider(),
+                        _GetRow(
+                            label: 'Wallet-card summary',
+                            value: '1 page'),
+                        _DashedDivider(),
+                        _GetRow(
+                            label: 'Emergency QR (works offline)',
+                            value: 'Self-contained'),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  // Privacy reassurance footer — matches prototype L732-738.
+                  // Replaces the prior `InfoBanner` widget with the
+                  // prototype's surface-toned lock-line.
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 12, vertical: 10),
+                    decoration: BoxDecoration(
+                      color: p.surface,
+                      border: Border.all(color: p.border),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(Icons.lock_outline,
+                            size: 13, color: p.textMuted),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            'No tracking links, no expiry, no read '
+                            "receipts — we can't see who you send it "
+                            'to. The QR holds the summary itself, so '
+                            'it works even with no signal.',
+                            style: TextStyle(
+                              fontFamily: 'DM Sans',
+                              fontSize: 11,
+                              color: p.textMuted,
+                              height: 1.4,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               );
@@ -182,6 +268,9 @@ class ShareSheetScreen extends ConsumerWidget {
   }
 }
 
+/// Channel tile in the prototype's 4-up grid (Email · Text · QR · Print).
+/// Matches `ScrShare` L701-711: surface-toned card with a 36pt rounded
+/// primaryLight icon chip on top and a 11.5pt label beneath.
 class _ChannelTile extends StatelessWidget {
   final IconData icon;
   final String label;
@@ -194,29 +283,208 @@ class _ChannelTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
+    final p = Theme.of(context).mhadPalette;
+    return Material(
+      color: p.surface,
       borderRadius: BorderRadius.circular(12),
-      child: Container(
-        width: 96,
-        padding: const EdgeInsets.symmetric(vertical: 14),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
-          border: Border.all(color: Theme.of(context).colorScheme.outline),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Column(
-          children: [
-            Icon(icon, size: 26),
-            const SizedBox(height: 6),
-            Text(label,
-                style: const TextStyle(
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+          decoration: BoxDecoration(
+            border: Border.all(color: p.border),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(
+                  color: p.primaryLight,
+                  borderRadius: BorderRadius.circular(9),
+                ),
+                alignment: Alignment.center,
+                child: Icon(icon, size: 18, color: p.onPrimaryLight),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                label,
+                style: TextStyle(
                   fontFamily: 'DM Sans',
-                  fontSize: 12.5,
+                  fontSize: 11.5,
                   fontWeight: FontWeight.w600,
-                )),
-          ],
+                  color: p.text,
+                ),
+              ),
+            ],
+          ),
         ),
+      ),
+    );
+  }
+}
+
+/// Horizontally scrolling row of suggested-recipient pills. Each pill is
+/// a 56pt avatar with the agent's initials + the agent's first name +
+/// a monospace role label. The last tile is a dashed "+" "Add" affordance
+/// that opens the email composer (mirrors the prototype's quick-add).
+class _SuggestedRecipients extends StatelessWidget {
+  final List<Agent> agents;
+  final VoidCallback onAdd;
+  const _SuggestedRecipients({required this.agents, required this.onAdd});
+
+  static String _initials(String name) {
+    final parts =
+        name.split(RegExp(r'\s+')).where((p) => p.isNotEmpty).toList();
+    if (parts.isEmpty) return '—';
+    if (parts.length == 1) return parts.first.substring(0, 1).toUpperCase();
+    return (parts.first.substring(0, 1) + parts.last.substring(0, 1))
+        .toUpperCase();
+  }
+
+  static String _firstName(String name) {
+    final t = name.trim();
+    if (t.isEmpty) return 'Agent';
+    return t.split(RegExp(r'\s+')).first;
+  }
+
+  static String _roleFor(Agent a) {
+    if (a.agentType == 'primary') return 'AGENT';
+    if (a.agentType == 'alternate') return 'ALT';
+    return a.agentType.toUpperCase();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
+    return SizedBox(
+      height: 100,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(vertical: 4),
+        children: [
+          for (final a in agents) ...[
+            _RecipientPill(
+              initials: _initials(a.fullName),
+              name: _firstName(a.fullName),
+              role: _roleFor(a),
+              isPrimary: a.agentType == 'primary',
+            ),
+            const SizedBox(width: 10),
+          ],
+          // Trailing "+" Add pill — dashed border, neutral, opens the
+          // email composer so the user can pick a recipient in their
+          // mail app.
+          GestureDetector(
+            onTap: onAdd,
+            child: SizedBox(
+              width: 76,
+              child: Column(
+                children: [
+                  Container(
+                    width: 56,
+                    height: 56,
+                    decoration: BoxDecoration(
+                      color: p.surface,
+                      border: Border.all(
+                        color: p.border,
+                        width: 1.5,
+                      ),
+                      shape: BoxShape.circle,
+                    ),
+                    alignment: Alignment.center,
+                    child: Icon(Icons.add, size: 22, color: p.textMuted),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    'Add',
+                    style: TextStyle(
+                      fontFamily: 'DM Sans',
+                      fontSize: 11.5,
+                      fontWeight: FontWeight.w600,
+                      color: p.text,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _RecipientPill extends StatelessWidget {
+  final String initials;
+  final String name;
+  final String role;
+  final bool isPrimary;
+  const _RecipientPill({
+    required this.initials,
+    required this.name,
+    required this.role,
+    required this.isPrimary,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
+    return SizedBox(
+      width: 76,
+      child: Column(
+        children: [
+          Container(
+            width: 56,
+            height: 56,
+            decoration: BoxDecoration(
+              color: isPrimary ? p.primary : p.primaryLight,
+              shape: BoxShape.circle,
+            ),
+            alignment: Alignment.center,
+            child: Text(
+              initials,
+              style: TextStyle(
+                fontFamily: 'DM Sans',
+                fontWeight: FontWeight.w700,
+                fontSize: 18,
+                color: isPrimary ? p.onPrimary : p.onPrimaryLight,
+              ),
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            name,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontFamily: 'DM Sans',
+              fontSize: 11.5,
+              fontWeight: FontWeight.w600,
+              color: p.text,
+              height: 1.1,
+            ),
+          ),
+          Text(
+            role,
+            style: TextStyle(
+              fontFamily: 'JetBrains Mono',
+              fontFamilyFallback: const [
+                'Consolas',
+                'Menlo',
+                'Courier New',
+                'monospace',
+              ],
+              fontSize: 9.5,
+              letterSpacing: 0.5,
+              color: p.textMuted,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -229,22 +497,73 @@ class _GetRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
+      padding: const EdgeInsets.symmetric(vertical: 7),
       child: Row(
         children: [
           Expanded(
             child: Text(label,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'DM Sans',
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
+                  fontSize: 12.5,
+                  fontWeight: FontWeight.w500,
+                  color: p.text,
                 )),
           ),
-          Text(value,
-              style: Theme.of(context).textTheme.bodySmall),
+          Text(
+            value,
+            style: TextStyle(
+              fontFamily: 'JetBrains Mono',
+              fontFamilyFallback: const [
+                'Consolas',
+                'Menlo',
+                'Courier New',
+                'monospace',
+              ],
+              fontSize: 10.5,
+              color: p.textMuted,
+            ),
+          ),
         ],
       ),
     );
   }
+}
+
+/// Custom-painted dashed horizontal divider — the prototype uses
+/// `border-bottom: 1px dashed border-color` between `_GetRow` items.
+class _DashedDivider extends StatelessWidget {
+  const _DashedDivider();
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
+    return CustomPaint(
+      size: const Size(double.infinity, 1),
+      painter: _DashedLinePainter(color: p.border),
+    );
+  }
+}
+
+class _DashedLinePainter extends CustomPainter {
+  final Color color;
+  const _DashedLinePainter({required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    const dashWidth = 3.0;
+    const dashSpace = 3.0;
+    double x = 0;
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = 1;
+    while (x < size.width) {
+      canvas.drawLine(Offset(x, 0), Offset(x + dashWidth, 0), paint);
+      x += dashWidth + dashSpace;
+    }
+  }
+
+  @override
+  bool shouldRepaint(_DashedLinePainter old) => old.color != color;
 }
