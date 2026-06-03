@@ -7,7 +7,7 @@ import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
-import 'package:mhad/ui/widgets/design/editorial_heading.dart';
+import 'package:mhad/ui/widgets/design/action_row.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 
@@ -135,12 +135,11 @@ class _Body extends ConsumerWidget {
               )),
         ),
         const SizedBox(height: 10),
-        EditorialHeading(
-          text: directive.fullName.isEmpty
-              ? 'Untitled directive'
-              : directive.fullName,
-          size: 28,
-        ),
+        // Editorial title — prototype uses "Directive · <YEAR>" with the
+        // year in primary color. Year comes from executionDate if set,
+        // otherwise createdAt as a fallback. When the user's stored name
+        // is on file it goes into the subtitle line for context.
+        _PastDetailTitle(directive: directive),
         const SizedBox(height: 4),
         Text(
           [
@@ -148,8 +147,12 @@ class _Body extends ConsumerWidget {
                 .firstWhere((e) => e.name == directive.formType,
                     orElse: () => FormType.combined)
                 .displayName,
+            if (directive.executionDate != null)
+              'signed ${dateFmt.format(DateTime.fromMillisecondsSinceEpoch(directive.executionDate!))}',
             if (directive.expirationDate != null)
-              'expires ${dateFmt.format(DateTime.fromMillisecondsSinceEpoch(directive.expirationDate!))}',
+              status == 'Expired'
+                  ? 'expired ${dateFmt.format(DateTime.fromMillisecondsSinceEpoch(directive.expirationDate!))}'
+                  : 'expires ${dateFmt.format(DateTime.fromMillisecondsSinceEpoch(directive.expirationDate!))}',
           ].join(' · '),
           style: TextStyle(
             fontFamily: 'DM Sans',
@@ -157,6 +160,17 @@ class _Body extends ConsumerWidget {
             color: p.textMuted,
           ),
         ),
+        const SizedBox(height: 16),
+        // Editorial document-preview card — matches prototype ScrPastDetail
+        // L204-231 with the FileText icon + filename + "N pages · ~X MB"
+        // caption + ghost Preview button, then a 3-column dashed-divider
+        // grid for Signed by / Witness 1 / Witness 2. Page count / size
+        // are estimates since the PDF is generated on demand rather than
+        // stored. Witnesses pull from the Witnesses table; if none are
+        // recorded (e.g. directives signed under the new wet-ink-only
+        // model where witness names aren't captured in-app) we render an
+        // em-dash to match the prototype's "no data" treatment.
+        _DocPreviewCard(directive: directive),
         const SizedBox(height: 20),
         const SectionLabel('Who had a copy'),
         const SizedBox(height: 6),
@@ -194,43 +208,260 @@ class _Body extends ConsumerWidget {
         const SizedBox(height: 16),
         const SectionLabel('Actions'),
         const SizedBox(height: 6),
-        ListTile(
-          leading: const Icon(Icons.swap_vert),
-          title: const Text('Copy to a new directive'),
-          subtitle: const Text(
-              'Start a fresh directive with these answers pre-filled — '
-              'coming with renewal flow'),
-          // Wire to renewal/duplication once the renewal flow is built;
-          // for now the visible CTA tells the user it's pending so it isn't
-          // a silent no-op.
-          enabled: false,
+        // Editorial action rows — matches prototype ScrPastDetail L267-292.
+        // Tone variants drive icon-tile color: primary for the recommended
+        // "Copy to new directive" CTA, danger for "Delete from this
+        // device", neutral for the rest.
+        const ActionRow(
+          tone: ActionRowTone.primary,
+          icon: Icons.swap_vert,
+          title: 'Copy to a new directive',
+          subtitle:
+              'Start with these answers — coming with the renewal flow',
           onTap: null,
         ),
-        ListTile(
-          leading: const Icon(Icons.download_outlined),
-          title: const Text('Download the PDF'),
-          subtitle: const Text('Open the Export screen'),
+        const SizedBox(height: 8),
+        ActionRow(
+          icon: Icons.download_outlined,
+          title: 'Download the PDF',
+          subtitle: 'Keep for your records',
           onTap: () =>
               context.push(AppRoutes.exportRoute(directive.id)),
         ),
-        ListTile(
-          leading: const Icon(Icons.share_outlined),
-          title: const Text('Re-send to someone'),
-          subtitle: const Text('Open the share sheet'),
+        const SizedBox(height: 8),
+        ActionRow(
+          icon: Icons.share_outlined,
+          title: 'Re-send to someone',
+          subtitle: 'If your agent lost their copy',
           onTap: () =>
               context.push(AppRoutes.shareSheetRoute(directive.id)),
         ),
-        ListTile(
-          leading: Icon(Icons.delete_outline,
-              color: Theme.of(context).colorScheme.error),
-          title: Text('Delete from this device',
-              style: TextStyle(color: Theme.of(context).colorScheme.error)),
-          subtitle: const Text(
-              'Permanently removes the saved row from this device. Legal '
-              'effect of any signed paper copy is unchanged.'),
+        const SizedBox(height: 8),
+        ActionRow(
+          tone: ActionRowTone.danger,
+          icon: Icons.delete_outline,
+          title: 'Delete from this device',
+          subtitle: 'The directive remains $status regardless',
           onTap: () => _confirmDelete(context, ref),
         ),
       ],
     );
   }
+}
+
+/// Editorial "Directive · YEAR" title where the year is tinted primary.
+/// Falls back to the directive's full name if no execution / created date
+/// is available (e.g. an in-progress draft).
+class _PastDetailTitle extends StatelessWidget {
+  final Directive directive;
+  const _PastDetailTitle({required this.directive});
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
+    final ts = directive.executionDate ?? directive.createdAt;
+    final year = DateTime.fromMillisecondsSinceEpoch(ts).year.toString();
+    return Text.rich(
+      TextSpan(
+        children: [
+          const TextSpan(text: 'Directive · '),
+          TextSpan(
+            text: year,
+            style: TextStyle(color: p.primary),
+          ),
+        ],
+      ),
+      style: const TextStyle(
+        fontFamily: 'Instrument Serif',
+        fontFamilyFallback: ['Georgia', 'serif'],
+        fontStyle: FontStyle.italic,
+        fontSize: 38,
+        fontWeight: FontWeight.w400,
+        height: 1.05,
+        letterSpacing: -0.5,
+      ),
+    );
+  }
+}
+
+/// Document-preview card with filename, page-count caption, ghost
+/// "Preview" button, and a 3-column "Signed by / Witness 1 / Witness 2"
+/// grid separated from the header by a dashed divider.
+///
+/// Witness data is pulled from the Witnesses table; if the directive was
+/// signed under the new wet-ink-only model (no in-app witness capture),
+/// those columns render an em-dash.
+class _DocPreviewCard extends ConsumerWidget {
+  final Directive directive;
+  const _DocPreviewCard({required this.directive});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final p = Theme.of(context).mhadPalette;
+    final principal = directive.fullName.trim().isEmpty
+        ? 'You'
+        : directive.fullName.trim().split(RegExp(r'\s+')).first;
+    final filename =
+        'Directive_${DateTime.fromMillisecondsSinceEpoch(directive.executionDate ?? directive.createdAt).year}'
+        '_${directive.fullName.trim().split(RegExp(r'\s+')).lastOrNull ?? 'MHAD'}.pdf';
+
+    return FutureBuilder<List<WitnessesData>>(
+      future: ref
+          .read(directiveRepositoryProvider)
+          .getWitnesses(directive.id),
+      builder: (context, snapshot) {
+        final witnesses = snapshot.data ?? const <WitnessesData>[];
+        String witnessShort(int n) {
+          final matches = witnesses.where((w) => w.witnessNumber == n);
+          if (matches.isEmpty) return '—';
+          final match = matches.first;
+          if (match.fullName.trim().isEmpty) return '—';
+          final parts = match.fullName.trim().split(RegExp(r'\s+'));
+          if (parts.length == 1) return parts.first;
+          return '${parts.first[0]}. ${parts.last}';
+        }
+
+        return Container(
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            color: p.card,
+            border: Border.all(color: p.border),
+            borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(Icons.description_outlined,
+                      size: 20, color: p.textMuted),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          filename,
+                          style: TextStyle(
+                            fontFamily: 'DM Sans',
+                            fontSize: 13.5,
+                            fontWeight: FontWeight.w600,
+                            color: p.text,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        Text(
+                          'Generated on demand · ~6 pages',
+                          style: TextStyle(
+                            fontFamily: 'DM Sans',
+                            fontSize: 11.5,
+                            color: p.textMuted,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  TextButton.icon(
+                    onPressed: () => context
+                        .push(AppRoutes.exportRoute(directive.id)),
+                    icon: const Icon(Icons.visibility_outlined, size: 14),
+                    label: const Text('Preview'),
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
+                      minimumSize: const Size(0, 28),
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              // Dashed-style divider — drawn as a custom painted line
+              // since Flutter has no built-in dashed Divider widget.
+              CustomPaint(
+                size: const Size(double.infinity, 1),
+                painter: _DashedLinePainter(color: p.border),
+              ),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  Expanded(child: _SigCol(label: 'SIGNED BY', value: principal)),
+                  Expanded(
+                      child: _SigCol(
+                          label: 'WITNESS 1', value: witnessShort(1))),
+                  Expanded(
+                      child: _SigCol(
+                          label: 'WITNESS 2', value: witnessShort(2))),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _SigCol extends StatelessWidget {
+  final String label;
+  final String value;
+  const _SigCol({required this.label, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            fontFamily: 'JetBrains Mono',
+            fontFamilyFallback: const [
+              'Consolas',
+              'Menlo',
+              'Courier New',
+              'monospace',
+            ],
+            fontSize: 9.5,
+            letterSpacing: 0.4,
+            color: p.textMuted,
+          ),
+        ),
+        const SizedBox(height: 1),
+        Text(
+          value,
+          style: TextStyle(
+            fontFamily: 'DM Sans',
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            color: p.text,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _DashedLinePainter extends CustomPainter {
+  final Color color;
+  const _DashedLinePainter({required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    const dashWidth = 3.0;
+    const dashSpace = 3.0;
+    double x = 0;
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = 1;
+    while (x < size.width) {
+      canvas.drawLine(Offset(x, 0), Offset(x + dashWidth, 0), paint);
+      x += dashWidth + dashSpace;
+    }
+  }
+
+  @override
+  bool shouldRepaint(_DashedLinePainter old) => old.color != color;
 }
