@@ -65,9 +65,19 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
     if (!mounted) return;
 
     if (hasPin) {
-      final ok = await PinEntryDialog.show(context);
-      if (ok == true) {
-        widget.notifier.setPrivateMode();
+      // Three explicit outcomes:
+      //   - unlocked       → enter Private mode
+      //   - switchToPublic → enter Public mode (button on the dialog)
+      //   - cancelled      → no-op (stay on mode selection)
+      final result = await PinEntryDialog.show(context);
+      if (!mounted) return;
+      switch (result) {
+        case PinUnlockResult.unlocked:
+          widget.notifier.setPrivateMode();
+        case PinUnlockResult.switchToPublic:
+          await _pickPublic();
+        case PinUnlockResult.cancelled:
+          break;
       }
     } else {
       final passcode = await PinSetupDialog.show(context);

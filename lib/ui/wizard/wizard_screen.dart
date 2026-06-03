@@ -274,13 +274,19 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                 );
               },
             ),
+            // Bottom action bar — always shows BOTH a left affordance and
+            // the primary Continue / Finish CTA so the wizard never appears
+            // to be navigation-less. On step 1 the left button is "Exit"
+            // (save-and-return-to-home) instead of "Back to previous step"
+            // since there is no previous step; on step 2+ it's "Back" and
+            // decrements `_stepIndex` after auto-saving.
             bottomNavigationBar: WizardBottomBar(
               primaryLabel: isLastStep ? 'Finish & export' : 'Continue',
               primaryIcon:
                   isLastStep ? Icons.check_rounded : Icons.arrow_forward,
               primaryLoading: _isSaving,
               onPrimary: () => _goNext(context, isLastStep),
-              secondaryLabel: _stepIndex > 0 ? 'Back' : null,
+              secondaryLabel: _stepIndex > 0 ? 'Back' : 'Exit',
               onSecondary: _stepIndex > 0
                   ? () async {
                       FocusScope.of(context).unfocus();
@@ -297,7 +303,10 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                         await _persistStep();
                       }
                     }
-                  : null,
+                  // Step-1 Exit fires the same save-and-exit path the
+                  // PopScope + appbar overflow expose, so step-1 users
+                  // always have a visible way out of the wizard.
+                  : () => _saveAndExit(context),
               showGradient: false,
             ),
           ),

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/providers/app_providers.dart';
+import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -294,18 +296,17 @@ class _WalletVerifyScreenState extends ConsumerState<WalletVerifyScreen> {
                   const SizedBox(height: 12),
                   // Open full directive button (placeholder — would launch
                   // the PDF preview / signed copy if available).
+                  // "Open full directive" — routes to the export screen
+                  // where the user generates / views the full PDF. This is
+                  // the same flow a real EMS scan would land on, just
+                  // initiated from inside the preview rather than from a
+                  // wallet QR code.
                   Material(
                     color: cardBg,
                     borderRadius: BorderRadius.circular(12),
                     child: InkWell(
-                      onTap: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content:
-                                Text('Opens the full PDF in a real scan.'),
-                          ),
-                        );
-                      },
+                      onTap: () => context.push(
+                          AppRoutes.exportRoute(widget.directiveId)),
                       borderRadius: BorderRadius.circular(12),
                       child: Padding(
                         padding: const EdgeInsets.all(13),

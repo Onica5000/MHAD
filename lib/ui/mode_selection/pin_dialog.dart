@@ -120,21 +120,32 @@ class _PinSetupDialogState extends State<PinSetupDialog> {
   }
 }
 
+/// Outcome of the editorial unlock dialog. Three explicit states beat
+/// `Future<bool?>` because the "Switch to public mode" affordance needs
+/// to be distinguishable from a plain cancel.
+enum PinUnlockResult {
+  /// Passcode entered and verified.
+  unlocked,
+  /// User asked to switch to public mode instead. Caller should invoke
+  /// `setPublicMode()` on the privacy notifier.
+  switchToPublic,
+  /// User cancelled (closed the dialog without unlocking or switching).
+  cancelled,
+}
+
 /// Full-screen editorial unlock for entering an existing passcode.
 ///
 /// Visual mirror of prototype `ScrFaceID` (mobile-extra.jsx::ScrFaceID
 /// L9-88): brand row top-left, centered editorial italic "Use your
 /// passcode." heading + scanning-style icon tile, monospace status pill,
 /// passcode field, and a "Switch to public mode" fallback.
-///
-/// API unchanged: `PinEntryDialog.show(context)` returns
-/// `Future<bool?>` — `true` on success, `null` on cancel. All callers
-/// continue to work unmodified.
 class PinEntryDialog extends StatefulWidget {
   const PinEntryDialog({super.key});
 
-  static Future<bool?> show(BuildContext context) {
-    return showGeneralDialog<bool>(
+  /// Show the editorial unlock dialog. Resolves to a [PinUnlockResult]
+  /// indicating which path the user took.
+  static Future<PinUnlockResult> show(BuildContext context) async {
+    final result = await showGeneralDialog<PinUnlockResult>(
       context: context,
       barrierDismissible: false,
       barrierLabel: 'Unlock private mode',
@@ -153,6 +164,7 @@ class PinEntryDialog extends StatefulWidget {
         );
       },
     );
+    return result ?? PinUnlockResult.cancelled;
   }
 
   @override
@@ -189,7 +201,7 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
     if (!mounted) return;
 
     if (ok) {
-      Navigator.of(context).pop(true);
+      Navigator.of(context).pop(PinUnlockResult.unlocked);
     } else {
       _failedAttempts++;
       _controller.clear();
@@ -298,7 +310,8 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
                     tooltip: 'Cancel',
                     onPressed: _verifying
                         ? null
-                        : () => Navigator.of(context).pop(),
+                        : () => Navigator.of(context)
+                            .pop(PinUnlockResult.cancelled),
                   ),
                 ],
               ),
@@ -516,7 +529,8 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
               TextButton(
                 onPressed: _verifying
                     ? null
-                    : () => Navigator.of(context).pop(),
+                    : () => Navigator.of(context)
+                        .pop(PinUnlockResult.switchToPublic),
                 child: Text(
                   'Switch to public mode',
                   style: TextStyle(color: p.textMuted, fontSize: 13),
