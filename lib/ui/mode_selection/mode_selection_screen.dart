@@ -279,7 +279,12 @@ class _Card2 extends StatelessWidget {
                                               p.primary),
                                     ),
                                   )
-                                : Icon(icon, color: p.primary, size: 20),
+                                // Prototype `Card2` icon color is
+                                // `p.onPrimaryLight` (darker than `primary` on
+                                // the pale primaryLight tile) — mobile.jsx
+                                // L114-115. Using `primary` here washes out
+                                // the icon against navy's primaryLight.
+                                : Icon(icon, color: p.onPrimaryLight, size: 20),
                           ),
                           const SizedBox(width: 10),
                           Expanded(
@@ -333,13 +338,17 @@ class _Card2 extends StatelessWidget {
                       ),
                     ],
                   ),
+                  // Recommended badge — prototype puts it at top -10 left 16
+                  // (mobile.jsx L107-110) and uses the SANS Badge atom
+                  // (ds.jsx::Badge L169-186): DM Sans 11/700, letter-spacing
+                  // 0.4, padding 4×9, radius 6, text-transform uppercase.
                   if (recommended)
                     Positioned(
-                      top: -22,
-                      left: -2,
+                      top: -10,
+                      left: 16,
                       child: Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 9, vertical: 3),
+                            horizontal: 9, vertical: 4),
                         decoration: BoxDecoration(
                           color: p.primary,
                           borderRadius: BorderRadius.circular(6),
@@ -347,10 +356,10 @@ class _Card2 extends StatelessWidget {
                         child: Text(
                           'RECOMMENDED',
                           style: TextStyle(
-                            fontFamily: 'JetBrains Mono',
-                            fontSize: 10,
+                            fontFamily: 'DM Sans',
+                            fontSize: 11,
                             fontWeight: FontWeight.w700,
-                            letterSpacing: 0.6,
+                            letterSpacing: 0.4,
                             color: p.onPrimary,
                           ),
                         ),
