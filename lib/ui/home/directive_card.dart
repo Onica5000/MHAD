@@ -367,17 +367,14 @@ class DirectiveCard extends StatelessWidget {
                       ]),
                     ),
 
-                  // Phase-4 surfaces — visible for any non-revoked directive.
-                  if (!isRevoked) const PopupMenuDivider(),
-                  if (!isRevoked)
-                    const PopupMenuItem(
-                      value: _Action.clinicianView,
-                      child: Row(children: [
-                        Icon(Icons.medical_services_outlined, size: 18),
-                        SizedBox(width: 10),
-                        Text('Clinician view'),
-                      ]),
-                    ),
+                  // Share is high-frequency for completed directives — keep
+                  // it inline. All other Phase 4 destinations (Clinician
+                  // view / Legal toggle / Crisis plan / Ulysses / AI check
+                  // / QR view / Agent acceptance log / View past detail /
+                  // Renewal + check-in previews) moved to Settings →
+                  // My current directive per user direction 2026-06-03
+                  // (M5: trim card menu, no redundant UI on the same
+                  // page).
                   if (!isRevoked)
                     const PopupMenuItem(
                       value: _Action.share,
@@ -387,99 +384,6 @@ class DirectiveCard extends StatelessWidget {
                         Text('Share'),
                       ]),
                     ),
-                  if (!isRevoked)
-                    const PopupMenuItem(
-                      value: _Action.legalToggle,
-                      child: Row(children: [
-                        Icon(Icons.description_outlined, size: 18),
-                        SizedBox(width: 10),
-                        Text('Plain ⇄ Legal view'),
-                      ]),
-                    ),
-                  if (!isRevoked)
-                    const PopupMenuItem(
-                      value: _Action.crisisPlan,
-                      child: Row(children: [
-                        Icon(Icons.favorite_outline, size: 18),
-                        SizedBox(width: 10),
-                        Text('Crisis plan / WRAP'),
-                      ]),
-                    ),
-                  if (!isRevoked)
-                    const PopupMenuItem(
-                      value: _Action.ulysses,
-                      child: Row(children: [
-                        Icon(Icons.anchor_outlined, size: 18),
-                        SizedBox(width: 10),
-                        Text('Self-binding clause'),
-                      ]),
-                    ),
-                  if (!isRevoked)
-                    const PopupMenuItem(
-                      value: _Action.aiCheck,
-                      child: Row(children: [
-                        Icon(Icons.auto_awesome_outlined, size: 18),
-                        SizedBox(width: 10),
-                        Text('AI consistency check'),
-                      ]),
-                    ),
-                  if (status == DirectiveStatus.expired ||
-                      status == DirectiveStatus.revoked ||
-                      status == DirectiveStatus.complete)
-                    const PopupMenuItem(
-                      value: _Action.pastDetail,
-                      child: Row(children: [
-                        Icon(Icons.history, size: 18),
-                        SizedBox(width: 10),
-                        Text('View details'),
-                      ]),
-                    ),
-                  if (status == DirectiveStatus.complete && onRevoke != null)
-                    const PopupMenuItem(
-                      value: _Action.revokeFlow,
-                      child: Row(children: [
-                        Icon(Icons.cancel_presentation_outlined, size: 18),
-                        SizedBox(width: 10),
-                        Text('Revoke (full flow)'),
-                      ]),
-                    ),
-                  // Reminder previews — only meaningful once the directive
-                  // has been completed (drafts have no expiration date or
-                  // signing pressure yet).
-                  if (status == DirectiveStatus.complete) ...[
-                    const PopupMenuItem(
-                      value: _Action.checkInPreview,
-                      child: Row(children: [
-                        Icon(Icons.favorite_outline, size: 18),
-                        SizedBox(width: 10),
-                        Text('Quarterly check-in'),
-                      ]),
-                    ),
-                    const PopupMenuItem(
-                      value: _Action.renewPreview,
-                      child: Row(children: [
-                        Icon(Icons.event_outlined, size: 18),
-                        SizedBox(width: 10),
-                        Text('Renewal nudge'),
-                      ]),
-                    ),
-                    const PopupMenuItem(
-                      value: _Action.walletVerify,
-                      child: Row(children: [
-                        Icon(Icons.qr_code_2_outlined, size: 18),
-                        SizedBox(width: 10),
-                        Text('Preview QR view'),
-                      ]),
-                    ),
-                    const PopupMenuItem(
-                      value: _Action.agentAccept,
-                      child: Row(children: [
-                        Icon(Icons.handshake_outlined, size: 18),
-                        SizedBox(width: 10),
-                        Text('Agent acceptance log'),
-                      ]),
-                    ),
-                  ],
                   const PopupMenuDivider(),
                   PopupMenuItem(
                     value: _Action.delete,

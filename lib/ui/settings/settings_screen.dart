@@ -223,6 +223,15 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           const SizedBox(height: 20),
 
           // Phase 4 — surfaces that don't depend on a specific directive.
+          // "My current directive" — surfaces Phase 4 destinations for the
+          // most-recently-completed directive when one exists. Mirrors the
+          // prototype's `ScrSettings::My directive` group (mobile-extra.jsx
+          // L1091-1096) plus the Phase 4 routes the directive-card menu
+          // previously hosted (Clinician view / Legal toggle / Crisis plan /
+          // Self-binding / AI consistency check / QR view / Agent
+          // acceptance log).
+          const _CurrentDirectiveSection(),
+
           const SectionLabel('Help & accessibility'),
           const SizedBox(height: 8),
           DesignCard(
@@ -648,6 +657,114 @@ class _ProfileChip extends ConsumerWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// "My current directive" Settings group — surfaces Phase 4 destinations
+/// for the most-recently-completed directive when one exists. When no
+/// completed directive is on file, the section renders nothing.
+class _CurrentDirectiveSection extends ConsumerWidget {
+  const _CurrentDirectiveSection();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final p = Theme.of(context).mhadPalette;
+    final directivesAsync = ref.watch(allDirectivesProvider);
+
+    return directivesAsync.maybeWhen(
+      data: (list) {
+        // Pick the most-recently-edited completed directive. If none
+        // exist, render nothing — Phase 4 routes only apply to signed
+        // directives.
+        final completed = list
+            .where((d) => d.status == 'complete')
+            .toList()
+          ..sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
+        if (completed.isEmpty) return const SizedBox.shrink();
+        final d = completed.first;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SectionLabel('My current directive'),
+            const SizedBox(height: 8),
+            DesignCard(
+              padding: EdgeInsets.zero,
+              child: Column(
+                children: [
+                  _SettingsRow(
+                    icon: Icons.description_outlined,
+                    title: 'Open in clinician view',
+                    subtitle:
+                        'Read-only summary for paramedics / ER staff',
+                    onTap: () =>
+                        context.push(AppRoutes.clinicianViewRoute(d.id)),
+                  ),
+                  Divider(height: 1, color: p.border),
+                  _SettingsRow(
+                    icon: Icons.swap_horiz_outlined,
+                    title: 'Plain ↔ Legal language toggle',
+                    subtitle: 'Switch how the text reads',
+                    onTap: () =>
+                        context.push(AppRoutes.legalToggleRoute(d.id)),
+                  ),
+                  Divider(height: 1, color: p.border),
+                  _SettingsRow(
+                    icon: Icons.favorite_outline,
+                    title: 'Crisis plan / WRAP',
+                    subtitle: 'Optional add-on — what helps when not okay',
+                    onTap: () =>
+                        context.push(AppRoutes.crisisPlanRoute(d.id)),
+                  ),
+                  Divider(height: 1, color: p.border),
+                  _SettingsRow(
+                    icon: Icons.anchor_outlined,
+                    title: 'Self-binding (Ulysses) clause',
+                    subtitle: 'Opt-in confirmation under PA Act 194 § 5802',
+                    onTap: () =>
+                        context.push(AppRoutes.ulyssesRoute(d.id)),
+                  ),
+                  Divider(height: 1, color: p.border),
+                  _SettingsRow(
+                    icon: Icons.auto_awesome_outlined,
+                    title: 'AI consistency check',
+                    subtitle: 'Flag cross-step contradictions',
+                    onTap: () =>
+                        context.push(AppRoutes.aiCheckRoute(d.id)),
+                  ),
+                  Divider(height: 1, color: p.border),
+                  _SettingsRow(
+                    icon: Icons.qr_code_2_outlined,
+                    title: 'Preview QR / verifier view',
+                    subtitle: 'What an EMS scanner sees',
+                    onTap: () =>
+                        context.push(AppRoutes.walletVerifyRoute(d.id)),
+                  ),
+                  Divider(height: 1, color: p.border),
+                  _SettingsRow(
+                    icon: Icons.handshake_outlined,
+                    title: 'Agent acceptance log',
+                    subtitle: 'Record that each agent accepted in person',
+                    onTap: () =>
+                        context.push(AppRoutes.agentAcceptRoute(d.id)),
+                  ),
+                  Divider(height: 1, color: p.border),
+                  _SettingsRow(
+                    icon: Icons.history,
+                    title: 'View past-directive detail',
+                    subtitle:
+                        'Doc-preview, share log, copy-to-new options',
+                    onTap: () =>
+                        context.push(AppRoutes.pastDirectiveRoute(d.id)),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
+          ],
+        );
+      },
+      orElse: () => const SizedBox.shrink(),
     );
   }
 }
