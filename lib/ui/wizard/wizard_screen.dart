@@ -27,6 +27,7 @@ import 'package:mhad/ui/wizard/steps/review_and_sign_step.dart';
 import 'package:mhad/ui/wizard/steps/treatment_facility_step.dart';
 import 'package:mhad/ui/wizard/steps/when_it_kicks_in_step.dart';
 import 'package:mhad/ui/wizard/widgets/document_import_tip.dart';
+import 'package:mhad/ui/wizard/widgets/smart_fill_card.dart';
 import 'package:mhad/ui/wizard/widgets/document_pipeline_flow.dart';
 import 'package:mhad/ui/wizard/widgets/smart_fill_flow.dart';
 
@@ -246,6 +247,59 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                       subtitle: currentStep.subtitle,
                     ),
                     if (_stepIndex == 0) const DocumentImportTip(),
+                    // Editorial Smart Fill launcher on step 1 — matches
+                    // prototype `ScrWizardAbout::SmartFillCard`
+                    // (mobile.jsx::SmartFillCard L480-583) + the "OR BY
+                    // HAND" mono divider that separates it from the form
+                    // fields. Additive: the wizard `⋮` overflow menu's
+                    // Smart Fill + Document Import entries stay reachable
+                    // exactly as before.
+                    if (_stepIndex == 0)
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
+                        child: SmartFillCard(
+                          onPickTarget: (target) => _handleSmartFillTarget(
+                            context,
+                            directive,
+                            formType,
+                            target,
+                          ),
+                        ),
+                      ),
+                    if (_stepIndex == 0)
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 18, 20, 14),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                  height: 1, color: p.border),
+                            ),
+                            const SizedBox(width: 10),
+                            Text(
+                              'OR BY HAND',
+                              style: TextStyle(
+                                fontFamily: 'JetBrains Mono',
+                                fontFamilyFallback: const [
+                                  'Consolas',
+                                  'Menlo',
+                                  'Courier New',
+                                  'monospace',
+                                ],
+                                fontSize: 10,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 1,
+                                color: p.textMuted,
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Container(
+                                  height: 1, color: p.border),
+                            ),
+                          ],
+                        ),
+                      ),
                     Expanded(
                       child: _buildStep(
                         currentStep,
@@ -318,6 +372,42 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
   /// Dispatches the four overflow-menu actions to their respective handlers.
   /// Doc-import shows its own bottom sheet because [DocumentImportButton]
   /// owns that flow; we trigger it via a synthetic invocation here.
+  /// Dispatch a [SmartFillTarget] from the editorial step-1 SmartFillCard.
+  /// All four targets currently route to the same document-import pipeline
+  /// (the existing AI extractor already infers field types from the image);
+  /// the target is passed through as a hint so a follow-up pass can route
+  /// to dedicated prompts per target. The "ID" tile additionally routes
+  /// to the standalone smart-fill flow which can be filled from a typed
+  /// summary instead of a photo.
+  Future<void> _handleSmartFillTarget(
+    BuildContext context,
+    Directive directive,
+    FormType formType,
+    SmartFillTarget target,
+  ) async {
+    switch (target) {
+      case SmartFillTarget.id:
+        // "Photo of ID" is the prototype's recommended start — gives the
+        // user a choice between snap-to-fill and the typed smart-fill flow.
+        await _smartFill(context, directive.id, formType.name);
+      case SmartFillTarget.rx:
+      case SmartFillTarget.conditions:
+      case SmartFillTarget.other:
+        final apiKey = ref.read(apiKeyProvider).valueOrNull;
+        if (apiKey == null || apiKey.isEmpty) {
+          if (!context.mounted) return;
+          context.push(AppRoutes.aiSetup);
+          return;
+        }
+        if (!context.mounted) return;
+        await showDocumentPipelineFlow(
+          context,
+          directiveId: directive.id,
+          formType: formType.name,
+        );
+    }
+  }
+
   Future<void> _handleMenuAction(
     BuildContext context,
     _WizardMenuAction action,
