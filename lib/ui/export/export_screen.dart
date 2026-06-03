@@ -856,12 +856,54 @@ class _PdfPreviewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
     return Scaffold(
+      backgroundColor: p.scaffoldBackground,
+      // Editorial AppBar — matches prototype `ScrPdfPreview` top toolbar:
+      // X close, "Preview" 16pt bold, mono "US LETTER · 8.5×11"" sub,
+      // share action on the right. Drops the stock "PDF Preview" Material
+      // chrome.
       appBar: AppBar(
-        title: const Text('PDF Preview'),
+        backgroundColor: p.card,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.close),
+          tooltip: 'Close preview',
+          onPressed: () => Navigator.of(context).maybePop(),
+        ),
+        title: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Preview',
+              style: TextStyle(
+                fontFamily: 'DM Sans',
+                fontSize: 15,
+                fontWeight: FontWeight.w700,
+                color: p.text,
+              ),
+            ),
+            Text(
+              'US LETTER · 8.5×11"',
+              style: TextStyle(
+                fontFamily: 'JetBrains Mono',
+                fontFamilyFallback: const [
+                  'Consolas',
+                  'Menlo',
+                  'Courier New',
+                  'monospace',
+                ],
+                fontSize: 10,
+                letterSpacing: 0.5,
+                color: p.textMuted,
+              ),
+            ),
+          ],
+        ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.share),
+            icon: const Icon(Icons.ios_share),
             tooltip: 'Share',
             onPressed: () => Printing.sharePdf(
               bytes: pdfBytes,
@@ -872,10 +914,78 @@ class _PdfPreviewScreen extends StatelessWidget {
       ),
       body: PdfPreview(
         build: (_) async => pdfBytes,
-        allowPrinting: true,
-        allowSharing: true,
+        allowPrinting: false,
+        allowSharing: false,
         canChangePageFormat: false,
         canChangeOrientation: false,
+        // Hide PdfPreview's built-in toolbar; the editorial AppBar above
+        // and the bottomNavigationBar below take its place.
+        useActions: false,
+        scrollViewDecoration: BoxDecoration(color: p.scaffoldBackground),
+        pdfPreviewPageDecoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(color: p.border),
+          borderRadius: BorderRadius.circular(4),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.08),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        loadingWidget: Center(
+          child: CircularProgressIndicator(color: p.primary),
+        ),
+      ),
+      // Editorial action bar — matches prototype's 3-button Save / Print /
+      // **Share (primary)** footer.
+      bottomNavigationBar: SafeArea(
+        top: false,
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 14),
+          decoration: BoxDecoration(
+            color: p.card,
+            border: Border(top: BorderSide(color: p.border)),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: OutlinedButton.icon(
+                  onPressed: () => Printing.sharePdf(
+                    bytes: pdfBytes,
+                    filename: 'PA_MHAD.pdf',
+                  ),
+                  icon: const Icon(Icons.download_outlined, size: 17),
+                  label: const Text('Save'),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: OutlinedButton.icon(
+                  onPressed: () => Printing.layoutPdf(
+                    onLayout: (_) async => pdfBytes,
+                    name: 'PA_MHAD',
+                  ),
+                  icon: const Icon(Icons.print_outlined, size: 17),
+                  label: const Text('Print'),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                flex: 2,
+                child: FilledButton.icon(
+                  onPressed: () => Printing.sharePdf(
+                    bytes: pdfBytes,
+                    filename: 'PA_MHAD.pdf',
+                  ),
+                  icon: const Icon(Icons.ios_share, size: 17),
+                  label: const Text('Share'),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
