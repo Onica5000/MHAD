@@ -1,26 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
-import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/design_card.dart';
-import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/wizard/widgets/form_type_quiz.dart';
 
-/// Form-type picker (3 options: Combined / Declaration / POA).
+/// Form-type picker (Combined / Declaration / POA) — prototype-exact
+/// rebuild of mobile.jsx::ScrFormType (L365-447).
 ///
-/// Visual design follows the prototype `ScrFormType` (mobile.jsx): sans-serif
-/// H1, three radio-style option cards with title + sub + monospace tag pills,
-/// a primaryLight "Help me choose" banner that launches the 4-question quiz,
-/// then the AI-setup prompt and copy-from-existing helpers below.
+/// Behavior matches the prototype:
+///   * Cards are radio-style — tap to SELECT, no immediate side effect.
+///   * Combined is pre-selected (the prototype's `active` Opt).
+///   * A primary "Continue" CTA at the bottom commits the selection.
+///   * "Help me choose" pill banner opens the 4-question quiz; the
+///     quiz still creates a directive directly when the user finishes,
+///     mirroring the prior wiring.
 ///
-/// All wiring (`_createDirective`, POA-only confirmation dialog, AI setup,
-/// quiz launcher, copy-from-existing, loading overlay) is unchanged.
+/// AI-setup and copy-from-existing affordances that previously lived
+/// here were removed 2026-06-03 per user direction "drop both — strict
+/// prototype." AI setup is reachable from Home → Tools / Settings;
+/// copy-from-existing migrates to the past-directive detail screen.
 class FormTypeSelectionScreen extends ConsumerStatefulWidget {
   const FormTypeSelectionScreen({super.key});
 
@@ -31,12 +34,13 @@ class FormTypeSelectionScreen extends ConsumerStatefulWidget {
 
 class _FormTypeSelectionScreenState
     extends ConsumerState<FormTypeSelectionScreen> {
+  FormType _selected = FormType.combined;
   bool _creating = false;
 
-  Future<void> _createDirective(FormType formType) async {
+  Future<void> _continue() async {
     if (_creating) return;
 
-    if (formType == FormType.poa && mounted) {
+    if (_selected == FormType.poa && mounted) {
       final proceed = await showDialog<bool>(
         context: context,
         builder: (ctx) => AlertDialog(
@@ -48,7 +52,8 @@ class _FormTypeSelectionScreenState
             'will not include your personal treatment preferences.\n\n'
             'Consider using the Combined form instead to document both '
             'your preferences AND appoint an agent. This gives your care '
-            'team the most guidance.'),
+            'team the most guidance.',
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx, false),
@@ -68,7 +73,7 @@ class _FormTypeSelectionScreenState
     try {
       final id = await ref
           .read(directiveRepositoryProvider)
-          .createDirective(formType);
+          .createDirective(_selected);
       if (mounted) {
         context.go(AppRoutes.wizardRoute(id));
       }
@@ -77,8 +82,9 @@ class _FormTypeSelectionScreenState
       if (mounted) {
         setState(() => _creating = false);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text(
-              'Could not create directive. Please try again.')),
+          const SnackBar(
+            content: Text('Could not create directive. Please try again.'),
+          ),
         );
       }
     }
@@ -87,7 +93,20 @@ class _FormTypeSelectionScreenState
   Future<void> _openQuiz() async {
     if (_creating) return;
     final rec = await showFormTypeQuiz(context);
-    if (rec != null && mounted) _createDirective(rec);
+    if (rec != null && mounted) {
+      setState(() {
+        _selected = rec;
+        _creating = true;
+      });
+      try {
+        final id =
+            await ref.read(directiveRepositoryProvider).createDirective(rec);
+        if (mounted) context.go(AppRoutes.wizardRoute(id));
+      } catch (e) {
+        debugPrint('Failed to create directive from quiz: $e');
+        if (mounted) setState(() => _creating = false);
+      }
+    }
   }
 
   @override
@@ -99,7 +118,7 @@ class _FormTypeSelectionScreenState
       body: Stack(
         children: [
           ListView(
-            padding: const EdgeInsets.fromLTRB(22, 8, 22, 24),
+            padding: const EdgeInsets.fromLTRB(22, 8, 22, 32),
             children: [
               const SectionLabel('New directive · 1 of 2'),
               const SizedBox(height: 6),
@@ -127,19 +146,21 @@ class _FormTypeSelectionScreenState
               ),
               const SizedBox(height: 18),
 
-              // Three form-type option cards — prototype "Opt" style: radio
-              // dot on the left, title row with optional Recommended badge,
-              // subtitle paragraph, and monospace tag pills.
               _OptCard(
                 title: 'Combined',
                 subtitle:
                     'Both name people I trust to speak for me, and document '
                     'my treatment preferences. Most flexibility.',
-                tags: const ['11 steps', 'Agents + preferences', 'Most common'],
+                tags: const [
+                  '11 steps',
+                  'Agents + preferences',
+                  'Most common'
+                ],
                 recommended: true,
+                active: _selected == FormType.combined,
                 onTap: _creating
                     ? null
-                    : () => _createDirective(FormType.combined),
+                    : () => setState(() => _selected = FormType.combined),
               ),
               const SizedBox(height: 10),
               _OptCard(
@@ -148,9 +169,10 @@ class _FormTypeSelectionScreenState
                     'Just document my treatment preferences — no agent. '
                     'Decisions still go through doctors.',
                 tags: const ['9 steps', 'No agents'],
+                active: _selected == FormType.declaration,
                 onTap: _creating
                     ? null
-                    : () => _createDirective(FormType.declaration),
+                    : () => setState(() => _selected = FormType.declaration),
               ),
               const SizedBox(height: 10),
               _OptCard(
@@ -159,27 +181,41 @@ class _FormTypeSelectionScreenState
                     'Just name people to make decisions for me. They will '
                     'decide treatment in the moment.',
                 tags: const ['6 steps', 'Agents only'],
+                active: _selected == FormType.poa,
                 onTap: _creating
                     ? null
-                    : () => _createDirective(FormType.poa),
+                    : () => setState(() => _selected = FormType.poa),
               ),
 
               const SizedBox(height: 18),
 
-              // "Help me choose" — prototype's primaryLight pill banner.
               _HelpMeChooseBanner(
                 enabled: !_creating,
                 onTap: _openQuiz,
               ),
 
               const SizedBox(height: 22),
-              const _AiSetupPrompt(),
-              const SizedBox(height: 14),
-              _ImportFromExistingButton(
-                creating: _creating,
-                onCreated: (id) {
-                  if (mounted) context.go(AppRoutes.wizardRoute(id));
-                },
+              SizedBox(
+                height: DesignTokens.buttonHeightLg,
+                child: FilledButton.icon(
+                  onPressed: _creating ? null : _continue,
+                  icon: const Icon(Icons.arrow_forward, size: 18),
+                  label: const Text('Continue'),
+                  style: FilledButton.styleFrom(
+                    backgroundColor: p.primary,
+                    foregroundColor: p.onPrimary,
+                    iconAlignment: IconAlignment.end,
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(DesignTokens.buttonRadius),
+                    ),
+                    textStyle: const TextStyle(
+                      fontFamily: 'DM Sans',
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
               ),
             ],
           ),
@@ -196,8 +232,10 @@ class _FormTypeSelectionScreenState
                       children: [
                         const CircularProgressIndicator(),
                         const SizedBox(height: 16),
-                        Text('Creating directive...',
-                            style: Theme.of(context).textTheme.bodyMedium),
+                        Text(
+                          'Creating directive...',
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
                       ],
                     ),
                   ),
@@ -210,14 +248,17 @@ class _FormTypeSelectionScreenState
   }
 }
 
-/// Prototype `Opt` — a radio-style option card with a 22px dot, title row
-/// (plus optional "Recommended" badge), subtitle paragraph, and monospace
-/// tag pills.
+/// Prototype `Opt` — a radio-style option with a 22px dot, title row
+/// (optionally with a "Recommended" badge), subtitle paragraph, and
+/// monospace tag pills. Selecting flips the card to primaryTint bg +
+/// primary border and fills the radio dot. Mirrors mobile.jsx
+/// L368-396 widget-for-widget.
 class _OptCard extends StatelessWidget {
   final String title;
   final String subtitle;
   final List<String> tags;
   final bool recommended;
+  final bool active;
   final VoidCallback? onTap;
 
   const _OptCard({
@@ -225,6 +266,7 @@ class _OptCard extends StatelessWidget {
     required this.subtitle,
     required this.tags,
     this.recommended = false,
+    required this.active,
     required this.onTap,
   });
 
@@ -233,9 +275,10 @@ class _OptCard extends StatelessWidget {
     final p = Theme.of(context).mhadPalette;
     return Semantics(
       button: true,
+      selected: active,
       label: 'Select $title${recommended ? ' (recommended)' : ''}',
       child: Material(
-        color: recommended ? p.primaryLight : p.card,
+        color: active ? p.primaryTint : p.card,
         borderRadius: BorderRadius.circular(16),
         child: InkWell(
           onTap: onTap,
@@ -245,27 +288,27 @@ class _OptCard extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: recommended ? p.primary : p.border,
+                color: active ? p.primary : p.border,
                 width: 2,
               ),
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Radio dot (filled if recommended/active).
+                // Radio dot — filled inner circle when active.
                 Container(
                   width: 22,
                   height: 22,
                   margin: const EdgeInsets.only(top: 2),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: recommended ? p.primary : Colors.transparent,
+                    color: active ? p.primary : Colors.transparent,
                     border: Border.all(
-                      color: recommended ? p.primary : p.border,
+                      color: active ? p.primary : p.border,
                       width: 2,
                     ),
                   ),
-                  child: recommended
+                  child: active
                       ? Center(
                           child: Container(
                             width: 8,
@@ -299,21 +342,24 @@ class _OptCard extends StatelessWidget {
                           ),
                           if (recommended) ...[
                             const SizedBox(width: 8),
+                            // Primary-tinted Badge atom (ds.jsx L169-186):
+                            // DM Sans 11/700, letter-spacing 0.4, uppercase,
+                            // padding 4×9, radius 6, primaryLight bg.
                             Container(
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 7, vertical: 2),
+                                  horizontal: 9, vertical: 4),
                               decoration: BoxDecoration(
-                                color: p.primary,
-                                borderRadius: BorderRadius.circular(4),
+                                color: p.primaryLight,
+                                borderRadius: BorderRadius.circular(6),
                               ),
                               child: Text(
                                 'RECOMMENDED',
                                 style: TextStyle(
-                                  fontFamily: 'JetBrains Mono',
-                                  fontSize: 9.5,
+                                  fontFamily: 'DM Sans',
+                                  fontSize: 11,
                                   fontWeight: FontWeight.w700,
-                                  letterSpacing: 0.6,
-                                  color: p.onPrimary,
+                                  letterSpacing: 0.4,
+                                  color: p.onPrimaryLight,
                                 ),
                               ),
                             ),
@@ -339,13 +385,19 @@ class _OptCard extends StatelessWidget {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 7, vertical: 2),
                                   decoration: BoxDecoration(
-                                    color: p.scaffoldBackground,
+                                    color: p.surface,
                                     borderRadius: BorderRadius.circular(4),
                                   ),
                                   child: Text(
                                     t.toUpperCase(),
                                     style: TextStyle(
                                       fontFamily: 'JetBrains Mono',
+                                      fontFamilyFallback: const [
+                                        'Consolas',
+                                        'Menlo',
+                                        'Courier New',
+                                        'monospace',
+                                      ],
                                       fontSize: 10.5,
                                       fontWeight: FontWeight.w600,
                                       letterSpacing: 0.4,
@@ -368,6 +420,8 @@ class _OptCard extends StatelessWidget {
 }
 
 /// Prototype "Help me choose" pill — opens the 4-question quiz.
+/// Matches mobile.jsx L432-441: primaryLight bg, primary border at 30%,
+/// Sparkles icon, body span + bold "Help me choose →" CTA span.
 class _HelpMeChooseBanner extends StatelessWidget {
   final bool enabled;
   final VoidCallback onTap;
@@ -387,13 +441,11 @@ class _HelpMeChooseBanner extends StatelessWidget {
           onTap: enabled ? onTap : null,
           borderRadius: BorderRadius.circular(12),
           child: Container(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
             constraints: const BoxConstraints(minHeight: 48),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
-              border:
-                  Border.all(color: p.primary.withValues(alpha: 0.20)),
+              border: Border.all(color: p.primary.withValues(alpha: 0.20)),
             ),
             child: Row(
               children: [
@@ -426,159 +478,5 @@ class _HelpMeChooseBanner extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class _AiSetupPrompt extends ConsumerWidget {
-  const _AiSetupPrompt();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final p = Theme.of(context).mhadPalette;
-    final hasKey = ref.watch(apiKeyProvider).whenOrNull(
-              data: (k) => k != null && k.isNotEmpty,
-            ) ??
-        false;
-    final isEphemeral = isEphemeralApiKeyMode(ref);
-
-    if (hasKey) {
-      return InfoBanner(
-        icon: Icons.check_circle,
-        text: isEphemeral
-            ? 'AI Assistant Ready · API key set for this session'
-            : 'AI Assistant Ready · API key saved',
-        variant: InfoBannerVariant.success,
-        onAction: () => context.push(AppRoutes.aiSetup),
-        actionLabel: 'Manage',
-      );
-    }
-
-    return DesignCard(
-      variant: DesignCardVariant.primary,
-      onTap: () => context.push(AppRoutes.aiSetup),
-      padding: const EdgeInsets.all(14),
-      child: Row(
-        children: [
-          Container(
-            width: 42,
-            height: 42,
-            decoration: BoxDecoration(
-              color: p.primary,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Icon(Icons.auto_awesome,
-                color: p.onPrimary, size: 20),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Set Up AI Assistant',
-                  style: TextStyle(
-                    fontFamily: 'DM Sans',
-                    fontWeight: FontWeight.w700,
-                    fontSize: 15,
-                    color: p.onPrimaryLight,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  'Get a free Gemini API key to unlock AI suggestions, '
-                  'guided help, and document import. Takes ~30 seconds.',
-                  style: TextStyle(
-                    fontFamily: 'DM Sans',
-                    fontSize: 12,
-                    color: p.onPrimaryLight.withValues(alpha: 0.85),
-                    height: 1.4,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Icon(Icons.chevron_right, color: p.onPrimaryLight),
-        ],
-      ),
-    );
-  }
-}
-
-class _ImportFromExistingButton extends ConsumerWidget {
-  final bool creating;
-  final void Function(int newId) onCreated;
-
-  const _ImportFromExistingButton({
-    required this.creating,
-    required this.onCreated,
-  });
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final directivesAsync = ref.watch(allDirectivesProvider);
-    return directivesAsync.when(
-      loading: () => const SizedBox.shrink(),
-      error: (e, st) => const SizedBox.shrink(),
-      data: (directives) {
-        final eligible = directives.where((d) =>
-            d.status == 'complete' || d.status == 'expired').toList();
-        if (eligible.isEmpty) return const SizedBox.shrink();
-
-        final label = eligible.first.fullName.isNotEmpty
-            ? eligible.first.fullName
-            : 'previous directive';
-        return SizedBox(
-          width: double.infinity,
-          child: OutlinedButton.icon(
-            onPressed: creating
-                ? null
-                : () => _importFrom(context, ref, eligible.first),
-            icon: const Icon(Icons.content_copy_outlined),
-            label: Text('Copy from "$label"'),
-          ),
-        );
-      },
-    );
-  }
-
-  Future<void> _importFrom(
-      BuildContext context, WidgetRef ref, Directive source) async {
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Copy Previous Directive?'),
-        content: const Text(
-          'This will create a new directive and copy your treatment '
-          'preferences, medications, and additional instructions.\n\n'
-          'Personal information (name, address, phone) will NOT be copied '
-          'and must be re-entered.\n\n'
-          'You can edit everything after copying.'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Cancel'),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Copy & Create'),
-          ),
-        ],
-      ),
-    );
-    if (confirmed != true) return;
-
-    try {
-      final repo = ref.read(directiveRepositoryProvider);
-      final snap = await repo.snapshotDirective(source.id);
-      if (snap.isEmpty) return;
-      final newId = await repo.restoreFromSnapshot(snap);
-      onCreated(newId);
-    } catch (e) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Copy failed: $e')),
-        );
-      }
-    }
   }
 }
