@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_contacts/flutter_contacts.dart';
+import 'package:mhad/ui/wizard/widgets/contact_picker_sheet.dart';
 import 'package:mhad/utils/platform_utils.dart';
 
 /// Data extracted from a picked phone contact.
@@ -19,81 +19,31 @@ class PickedContactData {
   });
 }
 
-/// A button that opens the device contact picker and returns
-/// structured contact data for agent / witness / guardian fields.
+/// A button that opens the editorial in-app contact picker sheet and
+/// returns structured contact data for agent / witness / guardian fields.
+///
+/// Inner behavior changed (2026-06-03): the button now opens the
+/// `showContactPickerSheet` editorial bottom sheet (see prototype
+/// `ScrContactPicker`, mobile-extra.jsx L2327-2470) instead of the
+/// OS-native `FlutterContacts.native.showPicker()`. The sheet adds the
+/// prototype's eligibility heuristics (PA Act 194 § 5822 disqualifiers —
+/// under 18 is a hard block, provider-looking names get a soft warn).
+/// Function preserved: the button still says "Import from Contacts",
+/// still produces a `PickedContactData` on success, still surfaces a
+/// snackbar when fields are missing, and still no-ops on non-mobile.
 class ContactPickerButton extends StatelessWidget {
   final void Function(PickedContactData data) onContactPicked;
 
   const ContactPickerButton({required this.onContactPicked, super.key});
 
   Future<void> _pick(BuildContext context) async {
-    // Request read permission
-    final status =
-        await FlutterContacts.permissions.request(PermissionType.read);
-    if (status != PermissionStatus.granted &&
-        status != PermissionStatus.limited) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text('Contact permission is required to import.')),
-        );
-      }
-      return;
-    }
+    final data = await showContactPickerSheet(context);
+    if (data == null) return;
 
-    // Open native contact picker — returns the contact ID
-    final contactId = await FlutterContacts.native.showPicker();
-    if (contactId == null) return;
-
-    // Re-fetch with phone + address properties
-    final full = await FlutterContacts.get(contactId,
-        properties: {ContactProperty.phone, ContactProperty.address});
-    if (full == null) return;
-
-    final name = full.displayName ?? '';
-
-    // Build address from first available
-    String address = '';
-    if (full.addresses.isNotEmpty) {
-      final a = full.addresses.first;
-      final parts = [a.street, a.city, a.state, a.postalCode]
-          .whereType<String>()
-          .where((s) => s.isNotEmpty);
-      address = parts.join(', ');
-    }
-
-    // Sort phones by label
-    String home = '', work = '', cell = '';
-    for (final p in full.phones) {
-      final num = p.number;
-      final lbl = p.label.label;
-      switch (lbl) {
-        case PhoneLabel.home:
-          if (home.isEmpty) home = num;
-        case PhoneLabel.work:
-          if (work.isEmpty) work = num;
-        case PhoneLabel.mobile:
-          if (cell.isEmpty) cell = num;
-        default:
-          if (cell.isEmpty) {
-            cell = num;
-          } else if (home.isEmpty) {
-            home = num;
-          } else if (work.isEmpty) {
-            work = num;
-          }
-      }
-    }
-
-    final data = PickedContactData(
-      fullName: name,
-      address: address,
-      homePhone: home,
-      workPhone: work,
-      cellPhone: cell,
-    );
-
-    // Warn if key fields are missing
+    // Warn if key fields are missing — same heuristic the old native-picker
+    // path used. The editorial sheet's "Enter someone manually" tile pops
+    // an empty PickedContactData; in that case all fields are empty and
+    // we don't warn (the user explicitly chose manual entry).
     final missing = <String>[];
     if (data.fullName.isEmpty) missing.add('name');
     if (data.address.isEmpty) missing.add('address');
@@ -102,7 +52,12 @@ class ContactPickerButton extends StatelessWidget {
         data.cellPhone.isEmpty) {
       missing.add('phone number');
     }
-    if (missing.isNotEmpty && context.mounted) {
+    final isManualEntry = data.fullName.isEmpty &&
+        data.address.isEmpty &&
+        data.homePhone.isEmpty &&
+        data.workPhone.isEmpty &&
+        data.cellPhone.isEmpty;
+    if (missing.isNotEmpty && !isManualEntry && context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
