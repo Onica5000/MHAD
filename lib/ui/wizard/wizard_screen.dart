@@ -13,6 +13,7 @@ import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
 import 'package:mhad/ui/widgets/design/step_dots.dart';
 import 'package:mhad/ui/widgets/design/step_head.dart';
 import 'package:mhad/ui/widgets/design/wizard_bottom_bar.dart';
+import 'package:mhad/ui/widgets/design/wizard_header.dart';
 import 'package:mhad/ui/wizard/wizard_step_mixin.dart';
 import 'package:mhad/ui/wizard/steps/additional_instructions_step.dart';
 import 'package:mhad/ui/wizard/steps/allergies_step.dart';
@@ -155,26 +156,13 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
             await _saveAndExit(context);
           },
           child: Scaffold(
-            appBar: AppBar(
-              title: Text(currentStep.displayName),
-              backgroundColor: p.card,
-              // Wizard `⋮` overflow menu removed per user direction
-              // 2026-06-03 — the prototype `ScrWizard*` screens carry no
-              // overflow menu, and every destination the old menu offered
-              // is reachable through other surfaces that match the
-              // prototype's editorial pattern:
-              //   - Smart Fill            → SmartFillCard on step 1
-              //   - Import a document     → DocumentImportTip ribbon +
-              //                              SmartFillCard tiles on step 1
-              //   - Ask the AI            → bottom nav "Ask" tab
-              //   - Save & exit wizard    → bottom bar "Exit" button on
-              //                              step 1; PopScope's
-              //                              save-and-exit confirmation
-              //                              on every other step
-              // The `_handleMenuAction` switch + `_smartFill` helper stay
-              // wired so the SmartFillCard's tile callbacks still resolve
-              // through the same code path.
-            ),
+            backgroundColor: p.scaffoldBackground,
+            // Material AppBar removed 2026-06-03 — prototype ScrWizard*
+            // screens use a thin in-body WizardHeader (Back + Save&exit)
+            // sitting between the CrisisBar and the StepDots, not a
+            // standard Material chrome. The `_handleSmartFillTarget` +
+            // `_smartFill` helpers stay wired so the step-1 SmartFillCard
+            // tile callbacks still resolve through the same code path.
             body: LayoutBuilder(
               builder: (context, constraints) {
                 // Desktop / wide layout — step rail on the left, content
@@ -187,10 +175,38 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                 final mainColumn = Column(
                   children: [
                     const CrisisTopBar(compact: true),
+                    // Prototype `WizardHeader` (ds.jsx L251-263): thin row
+                    // with chevron+Back left and "Save & exit" right.
+                    // Replaces the legacy Material AppBar. The Back action
+                    // delegates to the same back-step path the bottom bar
+                    // uses (validate, save, decrement); Save & exit runs
+                    // the existing `_saveAndExit` flow.
+                    WizardHeader(
+                      onBack: _stepIndex > 0
+                          ? () async {
+                              FocusScope.of(context).unfocus();
+                              final state = _stepKey.currentState;
+                              if (state is WizardStepMixin) {
+                                try {
+                                  await (state as WizardStepMixin)
+                                      .validateAndSave();
+                                } catch (e) {
+                                  debugPrint('Auto-save on back failed: $e');
+                                }
+                              }
+                              if (mounted) {
+                                setState(() => _stepIndex--);
+                                await _persistStep();
+                              }
+                            }
+                          : () => _saveAndExit(context),
+                      backLabel: _stepIndex > 0 ? 'Back' : 'Exit',
+                      onAction: () => _saveAndExit(context),
+                    ),
                     if (!isWide)
                       Container(
-                        color: p.card,
-                        padding: const EdgeInsets.only(top: 8),
+                        color: p.scaffoldBackground,
+                        padding: const EdgeInsets.only(top: 4),
                         child: StepDots(
                           current: _stepIndex + 1,
                           total: steps.length,
