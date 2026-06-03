@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mhad/ai/ai_assistant.dart';
 import 'package:mhad/data/database/app_database.dart' show Directive;
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
@@ -42,7 +41,8 @@ class WizardScreen extends ConsumerStatefulWidget {
 /// Identifiers for the wizard top-bar overflow menu.
 /// Each maps to one of the four legacy AppBar action icons that were
 /// collapsed into a single `⋮` menu per PROTOTYPE_DIFF_DECISIONS.md § B.4.
-enum _WizardMenuAction { smartFill, documentImport, aiChat, close }
+// _WizardMenuAction enum removed with the wizard overflow menu
+// (2026-06-03). See the `_handleMenuAction` removal note above.
 
 class _WizardScreenState extends ConsumerState<WizardScreen> {
   int _stepIndex = 0;
@@ -158,66 +158,22 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
             appBar: AppBar(
               title: Text(currentStep.displayName),
               backgroundColor: p.card,
-              // Per PROTOTYPE_DIFF_DECISIONS.md § B.4 — collapse the four
-              // legacy action icons (Smart Fill / Document Import / AI Chat /
-              // Close) into a single overflow menu so the wizard chrome
-              // matches the prototype's minimal "Back ... Save & exit" row
-              // without losing the four functional destinations.
-              actions: [
-                PopupMenuButton<_WizardMenuAction>(
-                  tooltip: 'More actions',
-                  icon: const Icon(Icons.more_vert, size: 22),
-                  onSelected: (action) =>
-                      _handleMenuAction(context, action, directive, formType, currentStep),
-                  itemBuilder: (ctx) {
-                    final isPrivate =
-                        !kIsWeb && ref.read(privacyModeNotifierProvider).isPrivate;
-                    final closeLabel = isPrivate
-                        ? 'Save & exit wizard'
-                        : 'Exit wizard';
-                    return [
-                      const PopupMenuItem(
-                        value: _WizardMenuAction.smartFill,
-                        child: ListTile(
-                          dense: true,
-                          contentPadding: EdgeInsets.zero,
-                          leading: Icon(Icons.auto_awesome, size: 20),
-                          title: Text('Smart Fill'),
-                        ),
-                      ),
-                      const PopupMenuItem(
-                        value: _WizardMenuAction.documentImport,
-                        child: ListTile(
-                          dense: true,
-                          contentPadding: EdgeInsets.zero,
-                          leading: Icon(Icons.file_upload_outlined, size: 20),
-                          title: Text('Import a document'),
-                        ),
-                      ),
-                      const PopupMenuItem(
-                        value: _WizardMenuAction.aiChat,
-                        child: ListTile(
-                          dense: true,
-                          contentPadding: EdgeInsets.zero,
-                          leading: Icon(Icons.smart_toy_outlined, size: 20),
-                          title: Text('Ask the AI'),
-                        ),
-                      ),
-                      const PopupMenuDivider(),
-                      PopupMenuItem(
-                        value: _WizardMenuAction.close,
-                        enabled: !_isSaving,
-                        child: ListTile(
-                          dense: true,
-                          contentPadding: EdgeInsets.zero,
-                          leading: const Icon(Icons.close, size: 20),
-                          title: Text(closeLabel),
-                        ),
-                      ),
-                    ];
-                  },
-                ),
-              ],
+              // Wizard `⋮` overflow menu removed per user direction
+              // 2026-06-03 — the prototype `ScrWizard*` screens carry no
+              // overflow menu, and every destination the old menu offered
+              // is reachable through other surfaces that match the
+              // prototype's editorial pattern:
+              //   - Smart Fill            → SmartFillCard on step 1
+              //   - Import a document     → DocumentImportTip ribbon +
+              //                              SmartFillCard tiles on step 1
+              //   - Ask the AI            → bottom nav "Ask" tab
+              //   - Save & exit wizard    → bottom bar "Exit" button on
+              //                              step 1; PopScope's
+              //                              save-and-exit confirmation
+              //                              on every other step
+              // The `_handleMenuAction` switch + `_smartFill` helper stay
+              // wired so the SmartFillCard's tile callbacks still resolve
+              // through the same code path.
             ),
             body: LayoutBuilder(
               builder: (context, constraints) {
@@ -408,52 +364,11 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
     }
   }
 
-  Future<void> _handleMenuAction(
-    BuildContext context,
-    _WizardMenuAction action,
-    Directive directive,
-    FormType formType,
-    WizardStep currentStep,
-  ) async {
-    switch (action) {
-      case _WizardMenuAction.smartFill:
-        await _smartFill(context, directive.id, formType.name);
-      case _WizardMenuAction.documentImport:
-        // Mirrors DocumentImportButton's behavior: route to AI setup first if
-        // no key is configured, then launch the document-pipeline flow.
-        final apiKey = ref.read(apiKeyProvider).valueOrNull;
-        if (apiKey == null || apiKey.isEmpty) {
-          if (!context.mounted) return;
-          context.push(AppRoutes.aiSetup);
-          return;
-        }
-        if (!context.mounted) return;
-        await showDocumentPipelineFlow(
-          context,
-          directiveId: directive.id,
-          formType: formType.name,
-        );
-      case _WizardMenuAction.aiChat:
-        final fields = <String, String>{};
-        void add(String k, String v) {
-          if (v.isNotEmpty) fields[k] = v;
-        }
-        add('State', directive.state);
-        add('Effective Condition', directive.effectiveCondition);
-        if (!context.mounted) return;
-        await context.push(
-          AppRoutes.assistant,
-          extra: AssistantContext(
-            formType: formType.name,
-            stepName: currentStep.displayName,
-            filledFields: fields.isEmpty ? null : fields,
-          ),
-        );
-      case _WizardMenuAction.close:
-        if (_isSaving) return;
-        await _saveAndExit(context);
-    }
-  }
+  // _handleMenuAction / _WizardMenuAction enum removed with the
+  // overflow menu (2026-06-03). The Smart Fill and Document Import
+  // destinations are now reached through `_handleSmartFillTarget`
+  // (called by SmartFillCard tiles); Ask the AI is on the bottom nav;
+  // Save & exit is on the bottom bar (step 1) and PopScope (other steps).
 
   Widget _buildStep(WizardStep step, int directiveId, FormType formType) {
     return switch (step) {
