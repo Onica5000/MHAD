@@ -519,7 +519,7 @@ enum _Action {
   aiCheck,
   pastDetail,
   revokeFlow,
-  // Batch 4 — `7Mym` bundle reminder previews + wallet verifier preview.
+  // Batch 4 — reminder previews + wallet verifier preview.
   renewPreview,
   checkInPreview,
   walletVerify,

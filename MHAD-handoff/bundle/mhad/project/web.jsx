@@ -10,6 +10,32 @@ function Web({ name }) {
           case 'export': return <WebExport />;
           case 'learn': return <WebLearn />;
           case 'ai': return <WebAI />;
+          case 'snapfill': return <WebSnapFill />;
+          case 'snapreview': return <WebSnapReview />;
+          case 'diagnoses': return <WebDiagnoses />;
+          case 'allergies': return <WebAllergies />;
+          case 'medications': return <WebMedications />;
+          // Newly added desktop parity screens
+          case 'disclaimer': return <WebDisclaimer />;
+          case 'formtype': return <WebFormType />;
+          case 'quiz': return <WebQuiz />;
+          case 'wiz-about': return <WebWizAbout />;
+          case 'wiz-when': return <WebWizWhen />;
+          case 'wiz-guardian': return <WebWizGuardian />;
+          case 'wiz-care': return <WebWizCare />;
+          case 'wiz-procedures': return <WebWizProcedures />;
+          case 'wiz-else': return <WebWizElse />;
+          case 'review': return <WebReview />;
+          case 'conflict': return <WebConflict />;
+          case 'sign': return <WebSign />;
+          case 'done': return <WebDone />;
+          case 'share': return <WebShare />;
+          case 'crisis': return <WebCrisis />;
+          case 'article': return <WebArticle />;
+          case 'settings': return <WebSettings />;
+          case 'revoke': return <WebRevoke />;
+          case 'voice': return <WebVoice />;
+          case 'dataexport': return <WebDataExport />;
           default: return null;
         }
       })()}
@@ -33,10 +59,10 @@ function ChromeWindow({ children, tabs, url }) {
 function WebSidebar({ active = 'home' }) {
   const { palette: p } = React.useContext(MHADContext);
   const items = [
-    { id: 'home', icon: <Home size={18} />, label: 'My directives' },
+    { id: 'home', icon: <Home size={18} />, label: 'Start' },
     { id: 'learn', icon: <Book size={18} />, label: 'Learn' },
     { id: 'ai', icon: <Sparkles size={18} />, label: 'AI assistant' },
-    { id: 'export', icon: <FileText size={18} />, label: 'Export & share' },
+    { id: 'export', icon: <FileText size={18} />, label: 'Download & print' },
     { id: 'settings', icon: <Gear size={18} />, label: 'Settings' },
   ];
   return (
@@ -85,100 +111,133 @@ function WebSidebar({ active = 'home' }) {
         <div style={{ fontSize: 11.5, color: p.crisisText, opacity: 0.85, marginTop: 2 }}>Free, confidential, anytime.</div>
       </div>
 
-      {/* User chip */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 8px 0' }}>
+      {/* Anonymous session indicator (no account, nothing saved) */}
+      <div style={{
+        display: 'flex', alignItems: 'center', gap: 10,
+        padding: '12px 8px 0',
+      }}>
         <div style={{
-          width: 30, height: 30, borderRadius: 100, background: p.primary, color: p.onPrimary,
+          width: 30, height: 30, borderRadius: 8, flexShrink: 0,
+          background: p.surface, color: p.primary,
+          border: `1px dashed ${p.primary}`,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize: 11.5, fontWeight: 700,
-        }}>AK</div>
+        }}>
+          <Lock size={14} stroke={p.primary} />
+        </div>
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontSize: 12.5, fontWeight: 600, color: p.text }}>Alex Kowalski</div>
-          <div style={{ fontSize: 10.5, color: p.textMuted, fontFamily: MONO, letterSpacing: 0.4 }}>● PRIVATE · FACE ID</div>
+          <div style={{ fontSize: 12, fontWeight: 700, color: p.text }}>Anonymous session</div>
+          <div style={{ fontSize: 10, color: p.textMuted, fontFamily: MONO, letterSpacing: 0.4 }}>NOTHING SAVED · NO ACCOUNT</div>
         </div>
       </div>
     </div>
   );
 }
 
-// ─── Dashboard ──────────────────────────────────────────────────────────
+// ─── Dashboard / landing (anonymous — nothing saved) ──────────────────
 function WebDashboard() {
   const { palette: p } = React.useContext(MHADContext);
   return (
     <>
       <WebSidebar active="home" />
       <div style={{ flex: 1, overflow: 'auto', padding: '32px 40px 40px' }}>
-        {/* Hero */}
-        <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 26 }}>
-          <div>
-            <SectionLabel>Saturday · May 14, 2026</SectionLabel>
-            <h1 style={{
-              fontFamily: SERIF, fontStyle: 'italic', fontSize: 56, margin: '4px 0 0',
-              fontWeight: 400, letterSpacing: -1, lineHeight: 1,
-            }}>
-              Hi, Alex. <span style={{ color: p.textMuted }}>Pick up where you left off.</span>
-            </h1>
-          </div>
-          <Btn kind="primary" leading={<Plus size={16} />}>New directive</Btn>
-        </div>
 
-        {/* In-progress directive — full-width feature card */}
+        {/* Anonymous-mode banner — most important context */}
         <div style={{
-          background: p.primary, color: p.onPrimary, borderRadius: 20,
-          padding: '28px 32px', position: 'relative', overflow: 'hidden',
-          display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 32,
+          display: 'flex', alignItems: 'center', gap: 14,
+          padding: '12px 16px', marginBottom: 22,
+          background: p.primaryTint, border: `1px solid ${p.primaryLight}`,
+          borderRadius: 12,
         }}>
           <div style={{
-            position: 'absolute', right: -20, top: -60,
-            fontFamily: SERIF, fontStyle: 'italic', fontSize: 320, lineHeight: 1,
-            color: 'rgba(255,255,255,0.08)', fontWeight: 400,
-          }}>03</div>
-          <div style={{ position: 'relative' }}>
-            <Badge tone="primary" style={{ background: 'rgba(255,255,255,0.18)', color: p.onPrimary }}>● Draft · auto-saved</Badge>
-            <h2 style={{ fontSize: 28, fontWeight: 700, margin: '8px 0 4px', letterSpacing: -0.5 }}>My MHAD · Combined form</h2>
-            <p style={{ margin: 0, fontSize: 14, opacity: 0.85 }}>Step 3 of 9 · People I trust · last edited 2 hours ago</p>
-            <div style={{ display: 'flex', gap: 8, marginTop: 18 }}>
-              <Btn kind="dark" style={{ background: '#fff', color: p.primaryDark }} trailing={<Arrow size={16} />}>Continue draft</Btn>
-              <Btn kind="ghost" style={{ color: '#fff' }}>Preview PDF</Btn>
+            width: 32, height: 32, borderRadius: 8, flexShrink: 0,
+            background: p.primary, color: p.onPrimary,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
+            <Lock size={16} stroke={p.onPrimary} />
+          </div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: p.text }}>
+              You're working anonymously. Nothing is saved.
+            </div>
+            <div style={{ fontSize: 12, color: p.textMuted, marginTop: 1, lineHeight: 1.4 }}>
+              No account, no cloud, no cookies. Close the tab and everything is gone — download your PDF before you leave.
             </div>
           </div>
-          <div style={{ position: 'relative' }}>
-            {/* Step progress list */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-              {[
-                ['01', 'About you', 'done'],
-                ['02', 'When this kicks in', 'done'],
-                ['03', 'People I trust', 'current'],
-                ['04', 'Guardian', ''],
-                ['05', 'Where I want care', ''],
-                ['06', 'Medications', ''],
-                ['07', 'Procedures & research', ''],
-                ['08', 'Anything else', ''],
-                ['09', 'Sign & witness', ''],
-              ].map(([n, label, state]) => (
-                <div key={n} style={{
-                  display: 'flex', alignItems: 'center', gap: 10,
-                  padding: '5px 10px', borderRadius: 6,
-                  background: state === 'current' ? 'rgba(255,255,255,0.18)' : 'transparent',
-                  fontSize: 12.5,
-                }}>
-                  <span style={{ fontFamily: MONO, fontSize: 10.5, opacity: 0.7, width: 18 }}>{n}</span>
-                  <span style={{ flex: 1, fontWeight: state === 'current' ? 700 : 400, opacity: state ? 1 : 0.6 }}>{label}</span>
-                  {state === 'done' && <Check size={12} stroke={p.onPrimary} sw={3} />}
-                  {state === 'current' && <span style={{ fontSize: 10, fontWeight: 700, opacity: 0.85 }}>NOW</span>}
-                </div>
-              ))}
+          <span style={{ fontFamily: MONO, fontSize: 10, color: p.primary, letterSpacing: 0.6, fontWeight: 700 }}>HOW THIS WORKS →</span>
+        </div>
+
+        {/* Hero */}
+        <div style={{ marginBottom: 26 }}>
+          <SectionLabel>Pennsylvania · Act 194 of 2004</SectionLabel>
+          <h1 style={{
+            fontFamily: SERIF, fontStyle: 'italic', fontSize: 56, margin: '4px 0 0',
+            fontWeight: 400, letterSpacing: -1, lineHeight: 1,
+          }}>
+            Make a mental health <span style={{ color: p.primary }}>advance directive.</span>
+          </h1>
+          <p style={{ fontSize: 15, color: p.textMuted, margin: '14px 0 0', maxWidth: 620, lineHeight: 1.5 }}>
+            A legal document that tells doctors, family, and a person you trust how to care for you if you can't speak for yourself. Free, anonymous, and takes about 20 minutes.
+          </p>
+        </div>
+
+        {/* Two-form choice — full-width primary action */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 14 }}>
+          {/* Combined form */}
+          <div style={{
+            background: p.primary, color: p.onPrimary, borderRadius: 20,
+            padding: '24px 28px 22px', position: 'relative', overflow: 'hidden',
+          }}>
+            <div style={{
+              position: 'absolute', right: -16, top: -50,
+              fontFamily: SERIF, fontStyle: 'italic', fontSize: 240, lineHeight: 1,
+              color: 'rgba(255,255,255,0.08)', fontWeight: 400,
+            }}>★</div>
+            <Badge tone="primary" style={{ background: 'rgba(255,255,255,0.18)', color: p.onPrimary }}>Recommended</Badge>
+            <h2 style={{ fontSize: 24, fontWeight: 700, margin: '10px 0 4px', letterSpacing: -0.4, position: 'relative' }}>
+              Combined directive
+            </h2>
+            <p style={{ margin: 0, fontSize: 13.5, opacity: 0.9, position: 'relative', lineHeight: 1.5 }}>
+              Treatment preferences <em>and</em> a trusted decision-maker, in one document. 9 short steps · about 20 minutes.
+            </p>
+            <div style={{ display: 'flex', gap: 8, marginTop: 18, position: 'relative' }}>
+              <Btn kind="dark" style={{ background: '#fff', color: p.primaryDark }} trailing={<Arrow size={16} />}>Start now</Btn>
+              <Btn kind="ghost" style={{ color: '#fff' }}>See the form</Btn>
+            </div>
+          </div>
+
+          {/* Single-form options */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <div style={{
+              background: p.card, border: `1px solid ${p.border}`, borderRadius: 14,
+              padding: 16, display: 'flex', alignItems: 'flex-start', gap: 12,
+            }}>
+              <div style={{ width: 34, height: 34, borderRadius: 8, flexShrink: 0, background: p.primaryTint, color: p.primary, display: 'flex', alignItems: 'center', justifyContent: 'center' }}><FileText size={18} /></div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: 14, fontWeight: 700, color: p.text }}>Declaration only</div>
+                <div style={{ fontSize: 12, color: p.textMuted, marginTop: 2, lineHeight: 1.4 }}>Treatment preferences without naming an agent.</div>
+              </div>
+              <Arrow size={14} stroke={p.primary} />
+            </div>
+            <div style={{
+              background: p.card, border: `1px solid ${p.border}`, borderRadius: 14,
+              padding: 16, display: 'flex', alignItems: 'flex-start', gap: 12,
+            }}>
+              <div style={{ width: 34, height: 34, borderRadius: 8, flexShrink: 0, background: p.primaryTint, color: p.primary, display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Users size={18} /></div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: 14, fontWeight: 700, color: p.text }}>Power of attorney only</div>
+                <div style={{ fontSize: 12, color: p.textMuted, marginTop: 2, lineHeight: 1.4 }}>Name a decision-maker without listing preferences.</div>
+              </div>
+              <Arrow size={14} stroke={p.primary} />
             </div>
           </div>
         </div>
 
-        {/* Tools row */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 14, marginTop: 24 }}>
+        {/* Tools row — no reminders, no schedule, no account features */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 14, marginTop: 22 }}>
           {[
-            { icon: <Sparkles size={18} />, title: 'AI assistant', sub: 'Field suggestions, plain-language explanations.', cta: 'Ask anything' },
-            { icon: <Wallet size={18} />, title: 'Wallet card', sub: 'Carry an emergency-readable summary.', cta: 'Preview' },
-            { icon: <Share size={18} />, title: 'Share with provider', sub: 'Email, print, or generate a QR.', cta: 'Send' },
-            { icon: <Calendar size={18} />, title: 'Renew on schedule', sub: 'Active through May 14, 2028.', cta: '30-day reminder' },
+            { icon: <Sparkles size={18} />, title: 'AI assistant', sub: 'Plain-language explanations, suggested wording for any field.', cta: 'Open assistant' },
+            { icon: <Book size={18} />, title: 'Learn first', sub: 'A 4-minute primer on what an MHAD is and how it works.', cta: 'Read the basics' },
+            { icon: <Download size={18} />, title: 'Print the blank form', sub: 'Prefer paper? Download the blank PA MHAD as a PDF.', cta: 'Download blank' },
           ].map((t, i) => (
             <div key={i} style={{
               background: p.card, border: `1px solid ${p.border}`, borderRadius: 14,
@@ -192,30 +251,30 @@ function WebDashboard() {
           ))}
         </div>
 
-        {/* Past + Learn */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 18, marginTop: 24 }}>
-          <div>
-            <SectionLabel>Past directives</SectionLabel>
-            <div style={{ marginTop: 8, background: p.card, border: `1px solid ${p.border}`, borderRadius: 12, padding: '6px 14px' }}>
+        {/* Privacy promise + booklet quote */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 18, marginTop: 22 }}>
+          <div style={{
+            background: p.card, border: `1px solid ${p.border}`, borderRadius: 14, padding: '18px 20px',
+          }}>
+            <SectionLabel>Our privacy promise</SectionLabel>
+            <div style={{ marginTop: 10, display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
               {[
-                { title: 'Directive · 2023', sub: 'Combined · expired May 2025', badge: 'Expired', tone: 'warn' },
-                { title: 'Directive · 2021', sub: 'Declaration only · expired May 2023', badge: 'Expired', tone: 'warn' },
-              ].map((d, i) => (
-                <div key={i} style={{
-                  display: 'flex', alignItems: 'center', gap: 12, padding: '12px 0',
-                  borderBottom: i === 0 ? `1px solid ${p.border}` : 'none',
-                }}>
-                  <FileText size={18} stroke={p.textMuted} />
+                { i: <Lock size={14} />, t: 'No account required', s: 'No email, no password, no sign-up.' },
+                { i: <Shield size={14} />, t: 'Nothing leaves your browser', s: 'Your answers live in this tab. We never see them.' },
+                { i: <X size={14} sw={2.5} />, t: 'No cookies, no tracking', s: 'No analytics, no third-party scripts.' },
+                { i: <Download size={14} />, t: 'You keep the file', s: 'Download the PDF — that\'s the only copy.' },
+              ].map((row, i) => (
+                <div key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+                  <div style={{ width: 26, height: 26, borderRadius: 6, flexShrink: 0, background: p.primaryTint, color: p.primary, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{row.i}</div>
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: 13.5, fontWeight: 600 }}>{d.title}</div>
-                    <div style={{ fontSize: 12, color: p.textMuted }}>{d.sub}</div>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: p.text }}>{row.t}</div>
+                    <div style={{ fontSize: 12, color: p.textMuted, marginTop: 1, lineHeight: 1.4 }}>{row.s}</div>
                   </div>
-                  <Badge tone={d.tone}>{d.badge}</Badge>
-                  <DotsH size={16} stroke={p.textMuted} />
                 </div>
               ))}
             </div>
           </div>
+
           <div>
             <SectionLabel>From the booklet</SectionLabel>
             <div style={{
@@ -257,9 +316,10 @@ function WebWizard() {
           <div style={{ flex: 1, height: 6, background: p.border, borderRadius: 100, overflow: 'hidden', maxWidth: 380 }}>
             <div style={{ height: '100%', width: '33%', background: p.primary, borderRadius: 100 }} />
           </div>
-          <span style={{ fontSize: 12, color: p.textMuted, fontFamily: MONO }}>3 / 9</span>
+          <span style={{ fontSize: 12, color: p.textMuted, fontFamily: MONO }}>3 / 11</span>
           <div style={{ flex: 1 }} />
-          <Btn kind="ghost" size="sm">Save & exit</Btn>
+          <TabOnlyPill />
+          <Btn kind="ghost" size="sm" leading={<Download size={13} />}>Download draft</Btn>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: '180px 1fr 320px', gap: 0, minHeight: 'calc(100% - 56px)' }}>
@@ -271,10 +331,12 @@ function WebWizard() {
               ['03', 'People I trust', 'current'],
               ['04', 'Guardian', ''],
               ['05', 'Where I want care', ''],
-              ['06', 'Medications', ''],
-              ['07', 'Procedures', ''],
-              ['08', 'Anything else', ''],
-              ['09', 'Sign & witness', ''],
+              ['06', 'Diagnoses', ''],
+              ['07', 'Allergies', ''],
+              ['08', 'Medications', ''],
+              ['09', 'Procedures', ''],
+              ['10', 'Anything else', ''],
+              ['11', 'Review', ''],
             ].map(([n, label, state]) => (
               <div key={n} style={{
                 display: 'flex', alignItems: 'center', gap: 8, padding: '7px 12px 7px 0',
@@ -456,66 +518,91 @@ function WebWizard() {
 // ─── Export / PDF preview ─────────────────────────────────────────────
 function WebExport() {
   const { palette: p } = React.useContext(MHADContext);
+  const [zoom, setZoom] = React.useState(1);   // 1 = fit-to-page
+  const PAGE_H = 430;                            // base height that fits the viewport
+  const PAGE_W = PAGE_H * (8.5 / 11);            // true letter ratio
+  const pct = Math.round(zoom * 100);
+  const ZBtn = ({ children, onClick, disabled }) => (
+    <button onClick={onClick} disabled={disabled} style={{
+      width: 30, height: 30, borderRadius: 8, cursor: disabled ? 'default' : 'pointer',
+      background: p.card, border: `1px solid ${p.border}`, color: disabled ? p.border : p.text,
+      fontSize: 17, fontWeight: 600, lineHeight: 1, display: 'flex', alignItems: 'center', justifyContent: 'center',
+      fontFamily: SANS,
+    }}>{children}</button>
+  );
 
   return (
     <>
       <WebSidebar active="export" />
       <div style={{ flex: 1, overflow: 'auto', display: 'grid', gridTemplateColumns: '1fr 320px' }}>
         {/* PDF preview */}
-        <div style={{ padding: '24px 32px 40px', background: p.surface }}>
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, marginBottom: 12 }}>
-            <h1 style={{ fontFamily: SERIF, fontStyle: 'italic', fontSize: 38, margin: 0, fontWeight: 400, letterSpacing: -0.5 }}>
+        <div style={{ padding: '18px 32px 22px', background: p.surface }}>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, marginBottom: 6 }}>
+            <h1 style={{ fontFamily: SERIF, fontStyle: 'italic', fontSize: 28, margin: 0, fontWeight: 400, letterSpacing: -0.5 }}>
               Your directive, <span style={{ color: p.primary }}>on paper.</span>
             </h1>
           </div>
-          <p style={{ fontSize: 13, color: p.textMuted, margin: '0 0 14px', maxWidth: 540 }}>
-            Pixel-perfect to the official PA MHAD form. Print on letter-size paper.
+          <p style={{ fontSize: 12.5, color: p.textMuted, margin: '0 0 10px', maxWidth: 540 }}>
+            Sized for <strong>US Letter (8.5 × 11″)</strong> with 1-inch margins. The whole page fits below — use − / + to zoom.
           </p>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
             <Btn kind="ghost" size="sm">← Page 1 of 6</Btn>
             <div style={{ flex: 1 }} />
-            <span style={{ fontSize: 12, color: p.textMuted, fontFamily: MONO }}>ZOOM 90%</span>
-            <Btn kind="ghost" size="sm" leading={<Icon d="M21 21l-4.3-4.3M11 11m-7 0a7 7 0 1 0 14 0a7 7 0 1 0-14 0" size={14}/>}>Find</Btn>
+            <ZBtn onClick={() => setZoom((z) => Math.max(0.5, +(z - 0.1).toFixed(2)))} disabled={zoom <= 0.5}>−</ZBtn>
+            <button onClick={() => setZoom(1)} style={{
+              minWidth: 64, height: 30, borderRadius: 8, cursor: 'pointer',
+              background: zoom === 1 ? p.primaryTint : p.card, border: `1px solid ${zoom === 1 ? p.primary : p.border}`,
+              color: zoom === 1 ? p.primary : p.text, fontSize: 12, fontWeight: 700, fontFamily: MONO, letterSpacing: 0.4,
+            }}>{zoom === 1 ? 'FIT' : pct + '%'}</button>
+            <ZBtn onClick={() => setZoom((z) => Math.min(2.5, +(z + 0.1).toFixed(2)))} disabled={zoom >= 2.5}>+</ZBtn>
           </div>
 
-          {/* Mock PDF page */}
+          {/* Scroll viewport — whole page fits at FIT; scroll when zoomed in */}
+          <div style={{ overflow: 'auto', maxHeight: PAGE_H + 24, padding: '0 0 4px', display: 'flex', justifyContent: 'center' }}>
+          <div style={{
+            width: PAGE_W * zoom, height: PAGE_H * zoom, flexShrink: 0,
+            transition: 'width 0.15s, height 0.15s',
+          }}>
+          {/* True US Letter page: 8.5 × 11 in aspect ratio with ~1in margins */}
           <div style={{
             background: '#fff', boxShadow: '0 4px 24px rgba(0,0,0,0.08)',
-            border: `1px solid ${p.border}`, borderRadius: 4,
-            padding: '40px 48px', maxWidth: 620, margin: '0 auto',
+            border: `1px solid ${p.border}`, borderRadius: 2,
+            width: PAGE_W, height: PAGE_H,
+            transform: `scale(${zoom})`, transformOrigin: 'top center',
+            padding: '9.1% 11.7%', boxSizing: 'border-box', overflow: 'hidden',
             fontFamily: 'Times, Georgia, serif', color: '#1a1a1a',
           }}>
-            <div style={{ textAlign: 'center', fontSize: 11, letterSpacing: 1, color: '#555' }}>COMMONWEALTH OF PENNSYLVANIA · ACT 194 OF 2004</div>
-            <h1 style={{ textAlign: 'center', fontSize: 22, fontWeight: 700, margin: '14px 0 4px' }}>
+            <div style={{ textAlign: 'center', fontSize: 10, letterSpacing: 1, color: '#555' }}>COMMONWEALTH OF PENNSYLVANIA · ACT 194 OF 2004</div>
+            <h1 style={{ textAlign: 'center', fontSize: 19, fontWeight: 700, margin: '12px 0 4px' }}>
               MENTAL HEALTH ADVANCE DIRECTIVE
             </h1>
-            <div style={{ textAlign: 'center', fontSize: 12, color: '#555', marginBottom: 22 }}>Combined Declaration &amp; Power of Attorney</div>
+            <div style={{ textAlign: 'center', fontSize: 11, color: '#555', marginBottom: 18 }}>Combined Declaration &amp; Power of Attorney</div>
 
-            <div style={{ fontSize: 11.5, lineHeight: 1.55 }}>
+            <div style={{ fontSize: 10.5, lineHeight: 1.55 }}>
               <p style={{ margin: '8px 0' }}><strong>I, ALEX M. KOWALSKI</strong>, of Allegheny County, Pennsylvania, being of sound mind, voluntarily make this Mental Health Advance Directive under the provisions of Act 194 of 2004.</p>
 
-              <p style={{ margin: '14px 0 6px', fontWeight: 700 }}>SECTION 1. EFFECTIVE CONDITION</p>
-              <p style={{ margin: '4px 0' }}>This directive shall become effective when a physician and a mental health professional have determined that I am incapable of making mental health treatment decisions.</p>
+              <p style={{ margin: '13px 0 5px', fontWeight: 700 }}>SECTION 1. EFFECTIVE CONDITION</p>
+              <p style={{ margin: '4px 0' }}>This directive shall become effective upon examination by a psychiatrist and one of the following — another psychiatrist, psychologist, family physician, attending physician or mental health treatment professional — determining that I am incapable of making mental health care decisions.</p>
 
-              <p style={{ margin: '14px 0 6px', fontWeight: 700 }}>SECTION 2. DESIGNATION OF AGENT</p>
+              <p style={{ margin: '13px 0 5px', fontWeight: 700 }}>SECTION 2. DESIGNATION OF AGENT</p>
               <p style={{ margin: '4px 0' }}>I hereby appoint <strong>JORDAN LEE</strong>, my sister, residing at 87 Forbes Ave, Pittsburgh PA, telephone (412) 555-0188, as my mental health treatment agent…</p>
-
-              <div style={{ borderTop: '1px dashed #999', margin: '14px 0' }} />
-              <p style={{ fontSize: 10, color: '#777', textAlign: 'center' }}>— continued on page 2 —</p>
             </div>
           </div>
+          </div>
+          </div>
+          <div style={{ textAlign: 'center', fontSize: 10, color: p.textMuted, fontFamily: MONO, marginTop: 8, letterSpacing: 0.4 }}>— CONTINUED ON PAGE 2 · 8.5 × 11″ —</div>
 
           {/* page rail */}
-          <div style={{ display: 'flex', justifyContent: 'center', gap: 4, marginTop: 14 }}>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 4, marginTop: 10 }}>
             {Array.from({ length: 6 }).map((_, i) => (
               <div key={i} style={{
-                width: 28, height: 36,
+                width: 24, height: 31,
                 background: i === 0 ? p.primary : p.card,
                 border: `1px solid ${i === 0 ? p.primary : p.border}`,
                 borderRadius: 3,
                 color: i === 0 ? p.onPrimary : p.textMuted,
-                fontSize: 11, fontFamily: MONO, fontWeight: 600,
+                fontSize: 10, fontFamily: MONO, fontWeight: 600,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
               }}>{i + 1}</div>
             ))}
@@ -582,7 +669,7 @@ function WebExport() {
           }}>
             <AlertTri size={16} stroke={p.warnText} />
             <div>
-              <strong>Sign before sharing.</strong> The PDF is unsigned. Print, sign in front of 2 adult witnesses, then distribute.
+              <strong>Download before you close.</strong> Nothing is saved on our end — once this tab closes, your answers are gone. Print, sign in front of 2 adult witnesses, then distribute.
             </div>
           </div>
         </div>
@@ -629,6 +716,16 @@ function WebLearn() {
         </p>
 
         <div style={{ height: 24 }} />
+        <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
+          {['All', 'Articles', 'Glossary', 'FAQ', 'Checklists'].map((t, i) => (
+            <span key={i} style={{
+              fontSize: 13, fontWeight: 700, padding: '8px 16px', borderRadius: 100, cursor: 'pointer',
+              background: i === 0 ? p.primary : p.card,
+              color: i === 0 ? p.onPrimary : p.textMuted,
+              border: `1px solid ${i === 0 ? p.primary : p.border}`,
+            }}>{t}</span>
+          ))}
+        </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 14 }}>
           <Tile
             big
@@ -733,7 +830,7 @@ function WebAI() {
             <Msg
               from="ai"
               text="Here's a phrasing that's specific enough for providers to follow, in your voice:"
-              applyTo="STEP 08 · ANYTHING ELSE"
+              applyTo="STEP 10 · ANYTHING ELSE"
               suggestion="If I am admitted, I prefer to avoid physical restraints. Use them only if I pose an immediate safety risk to myself or others and de-escalation has failed. I would like my therapy dog, Olive, brought to me when permitted by the facility — my agent Jordan can coordinate."
             />
 
@@ -774,8 +871,8 @@ function WebAI() {
           <div style={{ marginTop: 10, display: 'flex', flexDirection: 'column', gap: 6 }}>
             {[
               ['Form type', 'Combined'],
-              ['Current step', '8 · Anything else'],
-              ['Filled sections', '7 of 9'],
+              ['Current step', '10 · Anything else'],
+              ['Filled sections', '9 of 11'],
               ['PII stripped', '4 fields'],
             ].map(([k, v]) => (
               <div key={k} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>

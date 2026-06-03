@@ -557,7 +557,7 @@ const mhadTealDark = Color(0xFF125A52);
 const mhadTealLight = Color(0xFF4ABFB1);
 
 /// Legacy helpers — still used by some older screens. They now build themes
-/// against the default Deep Navy palette (the ship-it choice from the v4
-/// Claude Design bundle `7MymEiPDh58jY_cchvUF8A`).
+/// against the default Deep Navy palette (the ship-it choice from the
+/// current Claude Design bundle at `MHAD-handoff/bundle/`).
 ThemeData get lightTheme => buildMhadTheme(ThemePalette.navy, Brightness.light);
 ThemeData get darkTheme => buildMhadTheme(ThemePalette.navy, Brightness.dark);

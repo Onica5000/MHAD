@@ -101,9 +101,21 @@ function Screen({ children, style = {}, scroll = true }) {
     <div style={{
       width: '100%', height: '100%', background: p.scaffold, color: p.text,
       fontFamily: SANS, fontSize: 15, lineHeight: 1.45,
+      display: 'flex', flexDirection: 'column',
       overflow: scroll ? 'auto' : 'hidden', position: 'relative',
+      boxSizing: 'border-box',
       ...style,
-    }}>{children}</div>
+    }}>
+      {children}
+      {scroll && (
+        <div aria-hidden="true" style={{
+          position: 'sticky', bottom: 0, left: 0, right: 0,
+          height: 48, marginTop: -48, flexShrink: 0, pointerEvents: 'none',
+          background: `linear-gradient(to top, ${(style && style.background) || p.scaffold} 40%, ${(style && style.background) || p.scaffold}00)`,
+          zIndex: 2,
+        }} />
+      )}
+    </div>
   );
 }
 
@@ -133,6 +145,7 @@ function Btn({ kind = 'primary', size = 'md', children, style = {}, leading, tra
     ghost: { background: 'transparent', color: p.primary },
     tonal: { background: p.primaryLight, color: p.onPrimaryLight },
     dark: { background: p.text, color: p.card },
+    danger: { background: p.crisisAccent, color: p.onPrimary },
     dangerOutline: { background: 'transparent', color: p.crisisAccent, border: `1.5px solid ${p.crisisAccent}`, height: h - 3 },
   };
   return <button style={{ ...base, ...variants[kind], ...style }}>{leading}{children}{trailing}</button>;
@@ -174,12 +187,16 @@ function Badge({ children, tone = 'primary', style = {} }) {
 }
 
 // Persistent crisis bar — calm, not alarming.
+// Includes 54px top spacer so it clears the iOS status bar + dynamic island.
 function CrisisBar({ compact }) {
   const { palette: p } = React.useContext(MHADContext);
   return (
     <div style={{
       display: 'flex', alignItems: 'center', gap: 10,
-      padding: compact ? '8px 14px' : '10px 16px',
+      paddingTop: (compact ? 8 : 10) + 54,
+      paddingBottom: compact ? 8 : 10,
+      paddingLeft: compact ? 14 : 16,
+      paddingRight: compact ? 14 : 16,
       background: p.crisisBg, borderBottom: `1px solid ${p.crisisBorder}`,
       color: p.crisisText, fontSize: 12.5, fontWeight: 500,
     }}>
@@ -229,14 +246,44 @@ function StepDots({ n, total }) {
   );
 }
 
+// Wizard top header — Back link + right-side action (default "Save & exit").
+// Centralizes the row repeated across ~25 wizard/content screens.
+function WizardHeader({ back = 'Back', onBack, right, action = 'Save & exit', onAction, pad = '8px 22px 0' }) {
+  const { palette: p } = React.useContext(MHADContext);
+  return (
+    <div style={{ padding: pad, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <span onClick={onBack} style={{ fontSize: 13, color: p.primary, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4, cursor: onBack ? 'pointer' : 'default' }}>
+        <Icon d="M15 18l-6-6 6-6" size={16} /> {back}
+      </span>
+      {right !== undefined
+        ? right
+        : (action && <span onClick={onAction} style={{ fontSize: 13, color: p.textMuted, fontWeight: 500, cursor: onAction ? 'pointer' : 'default' }}>{action}</span>)}
+    </div>
+  );
+}
+
+// Anonymous-session pill — "nothing saved" indicator for the web app.
+function TabOnlyPill({ label = 'THIS TAB ONLY' }) {
+  const { palette: p } = React.useContext(MHADContext);
+  return (
+    <span style={{
+      display: 'inline-flex', alignItems: 'center', gap: 5,
+      fontSize: 11, fontFamily: MONO, color: p.textMuted, letterSpacing: 0.4,
+      padding: '4px 8px', background: p.surface, borderRadius: 100,
+    }}>
+      <Lock size={10} stroke={p.textMuted} /> {label}
+    </span>
+  );
+}
+
 // Bottom sticky action bar
 function BottomBar({ left, right, primary, secondary }) {
   const { palette: p } = React.useContext(MHADContext);
   return (
     <div style={{
-      position: 'absolute', left: 0, right: 0, bottom: 0,
-      padding: '12px 18px 22px', display: 'flex', gap: 10,
-      background: `linear-gradient(to top, ${p.scaffold} 60%, ${p.scaffold}00)`,
+      flexShrink: 0, marginTop: 'auto',
+      padding: '12px 18px 40px', display: 'flex', gap: 10,
+      background: p.scaffold, borderTop: `1px solid ${p.border}`,
     }}>
       {left || (secondary ? <Btn kind="ghost">{secondary}</Btn> : null)}
       <div style={{ flex: 1 }} />
@@ -246,13 +293,16 @@ function BottomBar({ left, right, primary, secondary }) {
 }
 
 // Form field
-function Field({ label, value, placeholder, suffix, hint, multiline }) {
+function Field({ label, value, placeholder, suffix, hint, multiline, source }) {
   const { palette: p } = React.useContext(MHADContext);
   return (
     <div style={{ marginBottom: 14 }}>
-      <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: p.textMuted, marginBottom: 6, letterSpacing: 0.2 }}>
-        {label}
-      </label>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
+        <label style={{ fontSize: 12, fontWeight: 600, color: p.textMuted, letterSpacing: 0.2 }}>
+          {label}
+        </label>
+        {source && (typeof SourcePill !== 'undefined') && <SourcePill source={source} />}
+      </div>
       <div style={{
         display: 'flex', alignItems: multiline ? 'flex-start' : 'center', gap: 8,
         background: p.card, border: `1.5px solid ${p.border}`, borderRadius: TOK.rInput,
@@ -377,7 +427,7 @@ function BriefCard() {
       <div style={{ height: 28 }} />
       <p style={{ fontSize: 15, lineHeight: 1.55, maxWidth: 560, margin: 0, color: p.textMuted }}>
         PA Mental Health Advance Directive — redesigned around the idea that this is the user's <em>voice</em>, written in advance.
-        Plain-language microcopy, an editorial step layout, and a wizard that's been re-sequenced from 15 screens into 9 logical steps.
+        Plain-language microcopy, an editorial step layout, and a wizard that's been re-sequenced from 15 screens into 11 logical steps — including dedicated diagnoses and allergies intake powered by ICD-10 and RxTerms autocomplete.
       </p>
       <div style={{ height: 36 }} />
       <div style={{ display: 'flex', gap: 28, fontFamily: MONO, fontSize: 11.5, color: p.textMuted, letterSpacing: 0.8 }}>
@@ -473,7 +523,7 @@ function SystemCard() {
 // Expose to other scripts
 Object.assign(window, {
   MHAD_PALETTES, MHADContext, SANS, SERIF, MONO, TOK,
-  Screen, Card, Btn, Chip, Badge, CrisisBar, StepHead, StepDots, BottomBar, Field, ConsentRow, SectionLabel, Editorial,
+  Screen, Card, Btn, Chip, Badge, CrisisBar, StepHead, StepDots, WizardHeader, TabOnlyPill, BottomBar, Field, ConsentRow, SectionLabel, Editorial,
   BriefCard, SystemCard,
   Arrow, Plus, Check, ChevR, ChevD, Phone, Lock, Eye, EyeOff, Sparkles, Mic, FileText, Heart, Users, Pill, Calendar, Shield, Edit, QR, DotsH, Home, Book, Gear, Bookmark, Download, Share, Search, X, AlertTri, Info, MapPin, Flask, Zap, Brain, Wallet, SwapV, Icon,
 });

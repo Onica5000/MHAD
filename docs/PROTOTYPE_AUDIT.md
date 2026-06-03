@@ -1,11 +1,14 @@
-# Prototype audit — Claude Design bundle `7MymEiPDh58jY_cchvUF8A`
+# Prototype audit — current Claude Design bundle
 
-Authoritative source: `MHAD-handoff/bundle-7MymEiPDh58jY_cchvUF8A/`
-(opened from `Mental Health Advance Directive.html`).
+Authoritative source: **`MHAD-handoff/bundle/`** (opened from
+`Mental Health Advance Directive.html`).
 
-This bundle is the same design lineage as the v2/v3 bundles already
-implemented in Phases 1-4 — but ships the **final ratified prototype** with
-all 34 audit items resolved per chat3 of the bundle's chats directory.
+This bundle is the final ratified Claude Design prototype. Per user
+direction on 2026-06-02, all earlier handoff bundles (v2 / v3 / and the
+prior `7Mym` delivery) have been removed from the repo — this is the
+only design reference now in tree. The HTML and JSX prototype source
+delivered in this refresh is byte-identical to the prior delivery; the
+chat transcripts that previously accompanied the bundle were dropped.
 
 ## Foundational parity
 
@@ -114,8 +117,8 @@ pushed to `main`. This doc gets updated after each batch.
 
 ## Session decisions log (2026-06-02)
 
-Binding decisions made during the 7Mym bundle implementation. Each is
-implemented and pushed unless noted.
+Binding decisions made during the 2026-06-02 implementation pass
+against the current bundle. Each is implemented and pushed unless noted.
 
 | Decision | Choice | Where implemented |
 |---|---|---|

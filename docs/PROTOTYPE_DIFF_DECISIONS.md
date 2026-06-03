@@ -7,7 +7,7 @@
 > `§ B.4`), so the file stays in place even though the broader audit it
 > companioned (`PROTOTYPE_DIFF_AUDIT.md`) and the follow-up coverage docs
 > have been removed. The current state-of-the-world for prototype parity
-> lives in `docs/PROTOTYPE_AUDIT_BUNDLE_7Mym.md`.
+> lives in `docs/PROTOTYPE_AUDIT.md`.
 
 Originally a companion to a deleted `PROTOTYPE_DIFF_AUDIT.md`. Records
 each decision the user makes while walking through the audit, plus the

@@ -29,10 +29,12 @@ function FlowDiagram() {
     { n: 3, title: 'People I trust', sub: 'Primary agent, alternate, and what they can decide — one screen with progressive sections.', from: [10, 11, 12], tone: 'merged', poaOnly: true },
     { n: 4, title: 'If a court appoints a guardian', sub: 'Your preferred guardian, in case it ever comes to that.', from: [13], tone: 'core' },
     { n: 5, title: 'Where I want care', sub: 'Facilities I prefer, and ones I want to avoid.', from: [4], tone: 'core' },
-    { n: 6, title: 'Medications', sub: 'Meds I want, meds I don\'t, and known reactions.', from: [5], tone: 'core' },
-    { n: 7, title: 'Procedures & research', sub: 'ECT, experimental studies, drug trials — one screen, three consent tiles.', from: [6, 7, 8], tone: 'merged' },
-    { n: 8, title: 'Anything else', sub: 'Free-form preferences not covered above.', from: [9], tone: 'core' },
-    { n: 9, title: 'Review → Sign & witness', sub: 'Final review then signatures — same screen, two tabs.', from: [14, 15], tone: 'merged' },
+    { n: 6, title: 'Diagnoses', sub: 'ICD-10 autocomplete from the NLM clinical-tables API.', from: [], tone: 'new' },
+    { n: 7, title: 'Allergies & reactions', sub: 'RxTerms autocomplete + severity + reaction chips. Cross-links into meds.', from: [], tone: 'new' },
+    { n: 8, title: 'Medications', sub: 'Current meds (informational, RxTerms) and crisis preferences (binding).', from: [5, 6, 7], tone: 'merged' },
+    { n: 9, title: 'Procedures & research', sub: 'ECT, experimental studies, drug trials — one screen, three consent tiles.', from: [6, 7, 8], tone: 'merged' },
+    { n: 10, title: 'Anything else', sub: 'Free-form preferences not covered above.', from: [9], tone: 'core' },
+    { n: 11, title: 'Review', sub: 'Final pass through every field before Sign & witness.', from: [14], tone: 'core' },
   ];
 
   // Color for merge highlight on the left column
@@ -133,16 +135,16 @@ function FlowDiagram() {
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
             <Badge tone="primary">After</Badge>
-            <span style={{ fontSize: 12, color: p.textMuted }}>9 steps · proposed</span>
+            <span style={{ fontSize: 12, color: p.textMuted }}>11 steps · proposed</span>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
             {newSteps.map((s) => (
               <div key={s.n} style={{
                 display: 'flex', alignItems: 'flex-start', gap: 10,
                 padding: '8px 12px',
-                background: p.card,
-                border: `1px solid ${s.tone === 'merged' ? p.primary : p.border}`,
-                borderLeft: `3px solid ${s.tone === 'merged' ? p.primary : p.primaryLight}`,
+                background: s.tone === 'new' ? p.primaryTint : p.card,
+                border: `1px solid ${s.tone === 'merged' || s.tone === 'new' ? p.primary : p.border}`,
+                borderLeft: `3px solid ${s.tone === 'merged' || s.tone === 'new' ? p.primary : p.primaryLight}`,
                 borderRadius: 8, minHeight: 42, boxSizing: 'border-box',
               }}>
                 <span style={{
@@ -155,6 +157,11 @@ function FlowDiagram() {
                     {s.tone === 'merged' && (
                       <span style={{ fontFamily: MONO, fontSize: 9.5, fontWeight: 700, color: p.primary, background: p.primaryLight, padding: '2px 6px', borderRadius: 4 }}>
                         MERGES {s.from.length}
+                      </span>
+                    )}
+                    {s.tone === 'new' && (
+                      <span style={{ fontFamily: MONO, fontSize: 9.5, fontWeight: 700, color: p.onPrimary, background: p.primary, padding: '2px 6px', borderRadius: 4 }}>
+                        NEW
                       </span>
                     )}
                     {s.poaOnly && (

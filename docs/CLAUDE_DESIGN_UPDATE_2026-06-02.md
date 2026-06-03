@@ -1,9 +1,12 @@
 # Update for Claude Design — MHAD Implementation
 
-**Bundle implemented:** `7MymEiPDh58jY_cchvUF8A`
-(opened from `Mental Health Advance Directive.html`).
+**Bundle implemented:** the current handoff at `MHAD-handoff/bundle/`,
+opened from `Mental Health Advance Directive.html`. Prototype source is
+byte-identical to the 2026-06-02 refresh; all earlier handoff bundles
+have been removed from the repo so there is exactly one design
+reference in tree.
 **Implementation window:** 2026-06-02, single session.
-**Resulting commit range on `main`:** `dd36673` → `a24168f`.
+**Resulting commit range on `main`:** `dd36673` → `08596f4`.
 
 ## Headline
 
@@ -14,7 +17,7 @@ the user pending an infrastructure decision. Visual fidelity matches
 the prototype's editorial direction across the implemented set.
 
 Full per-artboard delta with file pointers is in
-[`PROTOTYPE_AUDIT_BUNDLE_7Mym.md`](./PROTOTYPE_AUDIT_BUNDLE_7Mym.md).
+[`PROTOTYPE_AUDIT.md`](./PROTOTYPE_AUDIT.md).
 
 ## What changed at the foundation level
 
@@ -144,8 +147,9 @@ questions for the design team rather than blocking issues:
 ## Files of interest in the Flutter repo
 
 ```
+MHAD-handoff/bundle/                   -- the single, current Claude Design handoff
 docs/
-  PROTOTYPE_AUDIT_BUNDLE_7Mym.md       -- full per-artboard delta table + session log
+  PROTOTYPE_AUDIT.md                   -- full per-artboard delta table + session log
   PROTOTYPE_DIFF_DECISIONS.md          -- historical binding decisions (§ refs cited in code)
   CLAUDE_DESIGN_UPDATE_2026-06-02.md   -- this document
 

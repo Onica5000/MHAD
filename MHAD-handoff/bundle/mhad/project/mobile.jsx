@@ -11,8 +11,12 @@ function Mobile({ name }) {
           case 'home': return <ScrHome />;
           case 'formtype': return <ScrFormType />;
           case 'wizard-about': return <ScrWizardAbout />;
+          case 'wizard-when': return <ScrWizardWhen />;
           case 'wizard-people': return <ScrWizardPeople />;
+          case 'wizard-guardian': return <ScrWizardGuardian />;
+          case 'wizard-care': return <ScrWizardCare />;
           case 'wizard-procedures': return <ScrWizardProcedures />;
+          case 'wizard-else': return <ScrWizardElse />;
           case 'review': return <ScrReview />;
           case 'sign': return <ScrSign />;
           case 'done': return <ScrDone />;
@@ -264,7 +268,7 @@ function ScrHome() {
           <div style={{ position: 'relative' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
               <Badge tone="primary" style={{ background: 'rgba(255,255,255,0.18)', color: p.onPrimary }}>● Draft</Badge>
-              <span style={{ fontSize: 11.5, color: 'rgba(255,255,255,0.75)', fontFamily: MONO }}>Step 3 of 9</span>
+              <span style={{ fontSize: 11.5, color: 'rgba(255,255,255,0.75)', fontFamily: MONO }}>Step 3 of 11</span>
             </div>
             <h2 style={{ margin: 0, fontSize: 22, fontWeight: 700, letterSpacing: -0.3 }}>My MHAD</h2>
             <p style={{ margin: '4px 0 14px', fontSize: 13, opacity: 0.85, lineHeight: 1.4 }}>
@@ -410,17 +414,17 @@ function ScrFormType() {
             recommended
             title="Combined"
             sub="Both name people I trust to speak for me, and document my treatment preferences. Most flexibility."
-            tags={['9 steps', 'Agents + preferences', 'Most common']}
+            tags={['11 steps', 'Agents + preferences', 'Most common']}
           />
           <Opt
             title="Declaration only"
             sub="Just document my treatment preferences — no agent. Decisions still go through doctors."
-            tags={['6 steps', 'No agents']}
+            tags={['9 steps', 'No agents']}
           />
           <Opt
             title="Power of Attorney only"
             sub="Just name people to make decisions for me. They'll decide treatment in the moment."
-            tags={['7 steps', 'Agents only']}
+            tags={['6 steps', 'Agents only']}
           />
         </div>
 
@@ -444,42 +448,180 @@ function ScrFormType() {
 }
 
 // ─── 06 Wizard: About you ───────────────────────────────────────────────
+
+// Source pill — small provenance badge that sits next to a field label.
+function SourcePill({ source }) {
+  const { palette: p } = React.useContext(MHADContext);
+  if (!source) return null;
+  const cfg = {
+    id:         { label: 'ID photo',      icon: <Icon size={9} sw={2}><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="12" r="2"/><path d="M14 10h5M14 14h3"/></Icon> },
+    conditions: { label: 'Med list photo',icon: <Icon size={9} sw={2}><path d="M9 2h6v3H9zM6 5h12v17H6zM9 11h6M9 15h6"/></Icon> },
+    meds:       { label: 'Rx label',      icon: <Icon size={9} sw={2}><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></Icon> },
+    other:      { label: 'Photo',         icon: <Icon size={9} sw={2}><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></Icon> },
+    contacts:   { label: 'Contacts',      icon: <Icon size={9} sw={2}><circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0 1 12 0M16 4h5M16 8h5M16 12h3"/></Icon> },
+    paste:      { label: 'Pasted',        icon: <Icon size={9} sw={2}><rect x="6" y="4" width="12" height="16" rx="2"/><path d="M9 4v2h6V4"/></Icon> },
+  }[source];
+  if (!cfg) return null;
+  return (
+    <span style={{
+      display: 'inline-flex', alignItems: 'center', gap: 3,
+      fontSize: 10, fontWeight: 700, fontFamily: MONO, letterSpacing: 0.4,
+      color: p.primary, background: p.primaryTint,
+      padding: '2px 6px 2px 5px', borderRadius: 4,
+      textTransform: 'uppercase',
+    }}>
+      <Check size={9} sw={3} stroke={p.primary} /> {cfg.label}
+    </span>
+  );
+}
+
+// Smart-fill card — "Snap a photo, AI fills the wizard."
+// Four targets: ID, conditions, medications, anything else.
+function SmartFillCard() {
+  const { palette: p } = React.useContext(MHADContext);
+
+  const Tile = ({ icon, label, fills, done, recommended }) => (
+    <div style={{
+      flex: 1, minWidth: 0,
+      background: done ? 'rgba(255,255,255,0.16)' : 'rgba(255,255,255,0.08)',
+      border: `1px solid ${done ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.18)'}`,
+      borderRadius: 12, padding: '10px 9px 11px',
+      display: 'flex', flexDirection: 'column', gap: 5,
+      position: 'relative', cursor: 'pointer', color: p.onPrimary,
+    }}>
+      {recommended && !done && (
+        <div style={{
+          position: 'absolute', top: -7, right: 6,
+          fontFamily: MONO, fontSize: 8.5, fontWeight: 700, letterSpacing: 0.6,
+          color: p.primaryDark, background: '#fff',
+          padding: '2px 5px', borderRadius: 3,
+        }}>START HERE</div>
+      )}
+      <div style={{
+        width: 28, height: 28, borderRadius: 7,
+        background: done ? '#fff' : 'rgba(255,255,255,0.18)',
+        color: done ? p.primaryDark : p.onPrimary,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+      }}>
+        {done ? <Check size={15} sw={3} stroke={p.primaryDark} /> : icon}
+      </div>
+      <div style={{ fontSize: 12, fontWeight: 700, lineHeight: 1.2 }}>{label}</div>
+      <div style={{ fontSize: 10, opacity: 0.78, fontFamily: MONO, letterSpacing: 0.3, lineHeight: 1.3 }}>
+        {done ? 'Filled · tap to review' : fills}
+      </div>
+    </div>
+  );
+
+  return (
+    <div style={{
+      background: p.primary, color: p.onPrimary,
+      borderRadius: TOK.rCard, padding: 16,
+      position: 'relative', overflow: 'hidden',
+    }}>
+      {/* decorative numeral */}
+      <div style={{
+        position: 'absolute', right: -8, top: -28,
+        fontFamily: SERIF, fontStyle: 'italic', fontSize: 130, lineHeight: 1,
+        color: 'rgba(255,255,255,0.10)', fontWeight: 400, pointerEvents: 'none',
+      }}>AI</div>
+
+      <div style={{ position: 'relative' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
+          <Icon size={14} stroke={p.onPrimary} sw={2}><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3.2"/></Icon>
+          <span style={{
+            fontFamily: MONO, fontSize: 10.5, fontWeight: 700,
+            letterSpacing: 1, textTransform: 'uppercase', opacity: 0.85,
+          }}>Snap to fill · AI-assisted</span>
+        </div>
+        <div style={{
+          fontFamily: SERIF, fontStyle: 'italic', fontSize: 25, lineHeight: 1.05,
+          fontWeight: 400, letterSpacing: -0.5, margin: '2px 0 2px',
+        }}>
+          Snap a photo. We'll read it and fill the wizard.
+        </div>
+        <p style={{ margin: '4px 0 14px', fontSize: 12, opacity: 0.85, lineHeight: 1.45 }}>
+          Pick what you have on hand. AI extracts the details — you review and edit before anything is locked in.
+        </p>
+      </div>
+
+      {/* Four capture targets */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 8 }}>
+        <Tile
+          recommended
+          icon={<Icon size={15} sw={2}><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="12" r="2.5"/><path d="M14 10h5M14 14h3M14 17h4"/></Icon>}
+          label="Photo of ID"
+          fills="Name · DOB · address"
+        />
+        <Tile
+          icon={<Icon size={15} sw={2}><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></Icon>}
+          label="Rx bottle / label"
+          fills="Drug · dose · frequency"
+        />
+        <Tile
+          done
+          icon={<Icon size={15} sw={2}><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/><circle cx="12" cy="12" r="3"/></Icon>}
+          label="Conditions list"
+          fills="Diagnoses · allergies"
+        />
+        <Tile
+          icon={<Icon size={15} sw={2}><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></Icon>}
+          label="Anything else"
+          fills="Old directive, notes…"
+        />
+      </div>
+
+      {/* Privacy footnote */}
+      <div style={{
+        display: 'flex', alignItems: 'center', gap: 6,
+        marginTop: 12, fontSize: 10.5, opacity: 0.82, lineHeight: 1.4,
+      }}>
+        <Lock size={11} stroke={p.onPrimary} />
+        <span>Your photo is sent to our AI to read it, then discarded · nothing is saved.</span>
+      </div>
+    </div>
+  );
+}
+
 function ScrWizardAbout() {
   const { palette: p } = React.useContext(MHADContext);
   return (
     <Screen scroll={false}>
       <CrisisBar compact />
       {/* Wizard header */}
-      <div style={{ padding: '8px 22px 0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <span style={{ fontSize: 13, color: p.primary, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
-          <Icon d="M15 18l-6-6 6-6" size={16} /> Back
-        </span>
-        <span style={{ fontSize: 13, color: p.textMuted, fontWeight: 500 }}>Save & exit</span>
-      </div>
-      <StepDots n={1} total={9} />
+      <WizardHeader />
+      <StepDots n={1} total={11} />
 
-      <div style={{ overflow: 'auto', height: `calc(100% - ${HOME_H + 110}px)` }}>
-        <StepHead n={1} total={9} title="About you" sub="Just the basics so this document is uniquely yours." />
+      <div style={{ overflow: 'auto', flex: 1, minHeight: 0 }}>
+        <StepHead n={1} total={11} title="About you" sub="Just the basics so this document is uniquely yours." />
 
         <div style={{ padding: '0 22px 24px' }}>
-          <Field label="Full legal name" value="Alex M. Kowalski" suffix={<Mic size={16} stroke={p.primary} />} />
-          <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: 12 }}>
-            <Field label="Date of birth" value="June 14, 1989" />
-            <Field label="Sex on ID" value="F" />
-          </div>
-          <Field label="Address" value="412 Maple St, Pittsburgh PA 15217" suffix={<MapPin size={16} stroke={p.textMuted} />} />
-          <Field label="Phone" value="(412) 555-0143" />
+          {/* ─── Smart fill: top-of-form launcher ─────────────────────── */}
+          <SmartFillCard />
 
-          <div style={{
-            background: p.primaryLight, border: `1px solid ${p.primary}30`,
-            borderRadius: 12, padding: 12, display: 'flex', gap: 10, marginTop: 4,
-          }}>
-            <Sparkles size={18} stroke={p.primary} />
-            <div style={{ flex: 1, fontSize: 12.5, color: p.onPrimaryLight, lineHeight: 1.4 }}>
-              <strong>Smart fill available.</strong> Import these from a photo of your ID, or paste from a previous directive.
-            </div>
-            <span style={{ fontSize: 12, fontWeight: 700, color: p.primary, alignSelf: 'center' }}>Import →</span>
+          {/* Divider with "or fill in by hand" */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, margin: '18px 0 14px' }}>
+            <div style={{ flex: 1, height: 1, background: p.border }} />
+            <span style={{ fontFamily: MONO, fontSize: 10, fontWeight: 600, color: p.textMuted, letterSpacing: 1, textTransform: 'uppercase' }}>or by hand</span>
+            <div style={{ flex: 1, height: 1, background: p.border }} />
           </div>
+
+          <Field
+            label="Full legal name"
+            value="Alex M. Kowalski"
+            suffix={<Mic size={16} stroke={p.primary} />}
+            source="id"
+          />
+          <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: 12 }}>
+            <Field label="Date of birth" value="June 14, 1989" source="id" />
+            <Field label="Sex on ID" value="F" source="id" />
+          </div>
+          <Field
+            label="Address"
+            value="412 Maple St, Pittsburgh PA 15217"
+            suffix={<MapPin size={16} stroke={p.textMuted} />}
+            source="id"
+          />
+          <Field label="Phone" value="(412) 555-0143" source="contacts" />
         </div>
       </div>
 
@@ -530,36 +672,48 @@ function ScrWizardPeople() {
   return (
     <Screen scroll={false}>
       <CrisisBar compact />
-      <div style={{ padding: '8px 22px 0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <span style={{ fontSize: 13, color: p.primary, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
-          <Icon d="M15 18l-6-6 6-6" size={16} /> Back
-        </span>
-        <span style={{ fontSize: 13, color: p.textMuted, fontWeight: 500 }}>Save & exit</span>
-      </div>
-      <StepDots n={3} total={9} />
+      <WizardHeader />
+      <StepDots n={3} total={11} />
 
-      <div style={{ overflow: 'auto', height: `calc(100% - ${HOME_H + 110}px)` }}>
-        <StepHead n={3} total={9} title="People I trust" sub="They speak for you if you can't speak for yourself." />
+      <div style={{ overflow: 'auto', flex: 1, minHeight: 0 }}>
+        <StepHead n={3} total={11} title="People I trust" sub="They speak for you if you can't speak for yourself." />
 
         <div style={{ padding: '0 22px 24px' }}>
           <AgentCard kind="Primary agent" name="Jordan Lee" rel="Sister" phone="(412) 555-0188" expanded primary />
           <AgentCard kind="Alternate agent" name="Sam Reyes" rel="Spouse" phone="(412) 555-0177" expanded={false} />
 
           <div style={{ height: 18 }} />
-          <SectionLabel>What can they decide?</SectionLabel>
+          <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
+            <SectionLabel>What can they decide?</SectionLabel>
+            <span style={{ fontFamily: MONO, fontSize: 9.5, color: p.textMuted, letterSpacing: 0.4 }}>20 Pa.C.S. § 5836</span>
+          </div>
+          <p style={{ fontSize: 12, color: p.textMuted, margin: '6px 0 2px', lineHeight: 1.45 }}>
+            These are the powers PA law lets you grant or withhold. Set each one.
+          </p>
           <div style={{ marginTop: 10, display: 'flex', flexDirection: 'column', gap: 12 }}>
             {[
-              { label: 'Talk to my doctors and review records', val: 'yes' },
-              { label: 'Admit me to a mental health facility', val: 'if' },
-              { label: 'Consent to medications on my behalf', val: 'agent' },
-              { label: 'Consent to ECT (electroconvulsive therapy)', val: 'no' },
-              { label: 'Decide where I live during treatment', val: 'agent' },
+              { label: 'Communicate with my providers and access my mental health records', val: 'yes' },
+              { label: 'Admit me to a treatment facility for up to 10 days', val: 'agent' },
+              { label: 'Consent to or refuse psychotropic medications', val: 'agent' },
+              { label: 'Consent to or refuse electroconvulsive therapy (ECT)', val: 'no' },
+              { label: 'Choose or rule out specific facilities and providers', val: 'agent' },
+              { label: 'Take effect even if I object at the time', val: 'if' },
             ].map((row, i) => (
               <div key={i}>
                 <div style={{ fontSize: 13.5, color: p.text, marginBottom: 6, fontWeight: 500 }}>{row.label}</div>
                 <ConsentRow value={row.val} />
               </div>
             ))}
+          </div>
+
+          <div style={{
+            marginTop: 14, background: p.surface, border: `1px dashed ${p.border}`,
+            borderRadius: 12, padding: 12, display: 'flex', gap: 10,
+          }}>
+            <Info size={16} stroke={p.textMuted} />
+            <div style={{ fontSize: 12, color: p.textMuted, lineHeight: 1.45 }}>
+              <strong style={{ color: p.text }}>"Agent decides"</strong> grants the power; <strong style={{ color: p.text }}>"No"</strong> withholds it entirely; <strong style={{ color: p.text }}>"If…"</strong> lets you add a condition in your own words.
+            </div>
           </div>
         </div>
       </div>
@@ -600,16 +754,11 @@ function ScrWizardProcedures() {
   return (
     <Screen scroll={false}>
       <CrisisBar compact />
-      <div style={{ padding: '8px 22px 0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <span style={{ fontSize: 13, color: p.primary, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
-          <Icon d="M15 18l-6-6 6-6" size={16} /> Back
-        </span>
-        <span style={{ fontSize: 13, color: p.textMuted, fontWeight: 500 }}>Save & exit</span>
-      </div>
-      <StepDots n={7} total={9} />
+      <WizardHeader />
+      <StepDots n={9} total={11} />
 
-      <div style={{ overflow: 'auto', height: `calc(100% - ${HOME_H + 110}px)` }}>
-        <StepHead n={7} total={9} title="Procedures & research" sub="Three treatments under PA law need your explicit consent." />
+      <div style={{ overflow: 'auto', flex: 1, minHeight: 0 }}>
+        <StepHead n={9} total={11} title="Procedures & research" sub="Three treatments under PA law need your explicit consent." />
 
         <div style={{ padding: '0 22px 24px' }}>
           <Tile
@@ -677,22 +826,17 @@ function ScrReview() {
   return (
     <Screen scroll={false}>
       <CrisisBar compact />
-      <div style={{ padding: '8px 22px 0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <span style={{ fontSize: 13, color: p.primary, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
-          <Icon d="M15 18l-6-6 6-6" size={16} /> Back
-        </span>
-        <span style={{ fontSize: 13, color: p.textMuted, fontWeight: 500 }}>Save & exit</span>
-      </div>
-      <StepDots n={9} total={9} />
+      <WizardHeader />
+      <StepDots n={11} total={11} />
 
-      <div style={{ overflow: 'auto', height: `calc(100% - ${HOME_H + 110}px)` }}>
+      <div style={{ overflow: 'auto', flex: 1, minHeight: 0 }}>
         <div style={{ padding: '20px 22px 12px' }}>
-          <SectionLabel>Step 9 of 9 · review</SectionLabel>
+          <SectionLabel>Step 11 of 11 · review</SectionLabel>
           <h1 style={{ fontFamily: SERIF, fontStyle: 'italic', fontSize: 40, margin: '4px 0 4px', fontWeight: 400, letterSpacing: -0.5, lineHeight: 1 }}>
             Almost there.
           </h1>
           <p style={{ fontSize: 14, color: p.textMuted, margin: 0, lineHeight: 1.5 }}>
-            One last look before you sign. Tap any section to edit.
+            One last look, then we'll make your signing packet. Tap any section to edit.
           </p>
 
           <div style={{
@@ -712,61 +856,53 @@ function ScrReview() {
           <Row n="03" label="People I trust" summary="Jordan Lee (sister), Sam Reyes (spouse) alt" />
           <Row n="04" label="Guardian" summary="Same as primary agent" ok={false} />
           <Row n="05" label="Where I want care" summary="UPMC Western Psych · prefer single room" />
-          <Row n="06" label="Medications" summary="Avoid: Haldol. Prefer: Zoloft, Lamictal" />
-          <Row n="07" label="Procedures & research" summary="ECT if agent agrees · no trials" />
-          <Row n="08" label="Anything else" summary="Therapy dog visits, no restraints if avoidable" />
+          <Row n="06" label="Diagnoses" summary="Bipolar II, GAD, insomnia" />
+          <Row n="07" label="Medications" summary="Current: Zoloft, Lamictal. Avoid: Haldol" />
+          <Row n="08" label="Allergies" summary="Haldol (severe), latex, shellfish" />
+          <Row n="09" label="Procedures & research" summary="ECT if agent agrees · no trials" />
+          <Row n="10" label="Anything else" summary="Therapy dog visits, no restraints if avoidable" />
         </div>
       </div>
 
       <div style={{
-        position: 'absolute', left: 0, right: 0, bottom: 0,
-        padding: '12px 18px 22px', display: 'flex', gap: 10,
-        background: `linear-gradient(to top, ${p.scaffold} 70%, ${p.scaffold}00)`,
+        flexShrink: 0, marginTop: 'auto',
+        padding: '12px 18px 40px', display: 'flex', gap: 10,
+        background: p.scaffold, borderTop: `1px solid ${p.border}`,
       }}>
         <Btn kind="ghost">Preview PDF</Btn>
         <div style={{ flex: 1 }} />
-        <Btn kind="primary" trailing={<Arrow size={16} />}>Continue to sign</Btn>
+        <Btn kind="primary" trailing={<Arrow size={16} />}>Generate signing packet</Btn>
       </div>
     </Screen>
   );
 }
 
-// ─── 10 Sign & witness ─────────────────────────────────────────────────
+// ─── 10b Make it legal · sign on paper ─────────────────────────────────
+// We deliberately do NOT collect a digital signature. PA Act 194 requires the
+// principal and two qualified witnesses to sign the same paper document, in
+// each other's presence. The app's job is to hand off a clean packet + guide.
 function ScrSign() {
   const { palette: p } = React.useContext(MHADContext);
 
-  const SigPad = ({ label, name, signed }) => (
-    <div style={{
-      background: p.card, border: `1.5px solid ${p.border}`,
-      borderRadius: TOK.rCard, padding: 12, marginBottom: 10,
-    }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
-        <div>
-          <SectionLabel>{label}</SectionLabel>
-          <div style={{ fontSize: 14, fontWeight: 600, marginTop: 2 }}>{name}</div>
-        </div>
-        {signed && <Badge tone="ok">● Signed</Badge>}
-      </div>
+  const Step = ({ n, title, body, last }) => (
+    <div style={{ display: 'flex', gap: 12, position: 'relative' }}>
+      {/* connector line */}
+      {!last && <div style={{ position: 'absolute', left: 15, top: 30, bottom: -6, width: 2, background: p.border }} />}
       <div style={{
-        height: 76, background: p.surface, borderRadius: 10,
-        border: `1px dashed ${p.border}`,
-        position: 'relative', overflow: 'hidden',
-      }}>
-        {signed ? (
-          <svg width="100%" height="100%" viewBox="0 0 280 76" preserveAspectRatio="xMidYMid meet">
-            <path d="M20 50 C 40 20, 60 70, 80 40 S 120 60, 150 30 S 200 55, 240 35" stroke={p.text} strokeWidth="2" fill="none" strokeLinecap="round" />
-          </svg>
-        ) : (
-          <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', color: p.textMuted, fontSize: 12, fontStyle: 'italic' }}>Tap to sign</div>
-        )}
-        <div style={{ position: 'absolute', bottom: 8, left: 12, right: 12, borderTop: `1px solid ${p.border}` }} />
-        <div style={{ position: 'absolute', bottom: 0, left: 12, color: p.textMuted, fontSize: 10, fontFamily: MONO }}>×</div>
+        width: 32, height: 32, borderRadius: 100, flexShrink: 0, zIndex: 1,
+        background: p.primary, color: p.onPrimary,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        fontFamily: SERIF, fontStyle: 'italic', fontSize: 16,
+      }}>{n}</div>
+      <div style={{ flex: 1, paddingBottom: 18 }}>
+        <div style={{ fontSize: 14.5, fontWeight: 700, color: p.text, marginTop: 5 }}>{title}</div>
+        <p style={{ fontSize: 12.5, color: p.textMuted, margin: '3px 0 0', lineHeight: 1.45 }}>{body}</p>
       </div>
     </div>
   );
 
   return (
-    <Screen>
+    <Screen scroll={true}>
       <CrisisBar compact />
       <div style={{ padding: '12px 22px 0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <span style={{ fontSize: 13, color: p.primary, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
@@ -774,44 +910,72 @@ function ScrSign() {
         </span>
       </div>
 
-      <div style={{ padding: '12px 22px 100px' }}>
-        <SectionLabel>Final step</SectionLabel>
-        <h1 style={{ fontFamily: SERIF, fontStyle: 'italic', fontSize: 40, margin: '4px 0 6px', fontWeight: 400, letterSpacing: -0.5, lineHeight: 1 }}>
-          Make it legal.
+      <div style={{ padding: '12px 22px 40px' }}>
+        <SectionLabel>Final step · on paper</SectionLabel>
+        <h1 style={{ fontFamily: SERIF, fontStyle: 'italic', fontSize: 38, margin: '4px 0 6px', fontWeight: 400, letterSpacing: -0.5, lineHeight: 1 }}>
+          Make it legal — <span style={{ color: p.primary }}>with a pen.</span>
         </h1>
         <p style={{ fontSize: 14, color: p.textMuted, margin: 0, lineHeight: 1.5 }}>
-          You and two adult witnesses must sign in the same place, at the same time.
+          Pennsylvania law requires a real signature on paper. We can't witness it for you — but here's exactly what to do.
         </p>
 
-        <div style={{ height: 18 }} />
-
-        <SigPad label="Principal · You" name="Alex M. Kowalski" signed />
-        <SigPad label="Witness 1" name="Maria Chen" signed />
-        <SigPad label="Witness 2 · Add name" name="Tap to add" />
-
+        {/* Why not digital */}
         <div style={{
-          background: p.warnBg, border: `1px solid ${p.warnBorder}`,
-          borderRadius: 12, padding: 12, marginTop: 4, display: 'flex', gap: 10,
+          marginTop: 16, marginBottom: 20,
+          background: p.surface, border: `1px solid ${p.border}`,
+          borderRadius: 12, padding: 12, display: 'flex', gap: 10,
         }}>
-          <Info size={16} stroke={p.warnText} />
-          <div style={{ fontSize: 12.5, color: p.warnText, lineHeight: 1.45 }}>
-            Witnesses must be <strong>18+</strong>, present when you sign, and <strong>not</strong> your designated agent.
+          <Info size={16} stroke={p.textMuted} />
+          <div style={{ fontSize: 12, color: p.textMuted, lineHeight: 1.45 }}>
+            <strong style={{ color: p.text }}>Why not sign in the app?</strong> Under Act 194 the directive is only valid when you and two qualified witnesses sign the <em>same paper document</em>, together. A tap-to-sign wouldn't hold up.
           </div>
         </div>
 
-        <div style={{ height: 16 }} />
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 13, color: p.textMuted }}>
-          <Calendar size={16} stroke={p.textMuted} />
-          Signed today, <strong style={{ color: p.text }}>May 14, 2026</strong> · valid through <strong style={{ color: p.text }}>May 14, 2028</strong>
-        </div>
-      </div>
+        {/* The steps */}
+        <Step n="1" title="Print the packet" body="Print the PDF we just made. It already has signature lines for you and two witnesses." />
+        <Step n="2" title="Gather two qualified witnesses" body="Both must be 18+, present at the same time, and NOT your agent, alternate, or a provider treating you." />
+        <Step n="3" title="Everyone signs, same place, same time" body="Sign and date page 4 in front of both witnesses. They sign right after you, while you watch." last />
 
-      <div style={{
-        position: 'absolute', left: 0, right: 0, bottom: 0,
-        padding: '12px 18px 22px',
-        background: `linear-gradient(to top, ${p.scaffold} 70%, ${p.scaffold}00)`,
-      }}>
-        <Btn kind="primary" size="lg" full trailing={<Arrow size={18} />}>Finish & export</Btn>
+        {/* Witness eligibility reminder */}
+        <div style={{
+          background: p.warnBg, border: `1px solid ${p.warnBorder}`,
+          borderRadius: 12, padding: 12, display: 'flex', gap: 10, marginBottom: 18,
+        }}>
+          <AlertTri size={16} stroke={p.warnText} />
+          <div style={{ fontSize: 12.5, color: p.warnText, lineHeight: 1.45 }}>
+            A witness <strong>cannot</strong> be your designated agent, your alternate, or anyone currently providing your treatment. Need help checking? The witness guide explains who qualifies.
+          </div>
+        </div>
+
+        {/* What you get */}
+        <SectionLabel>In your packet</SectionLabel>
+        <div style={{ marginTop: 8, display: 'flex', flexDirection: 'column', gap: 8 }}>
+          {[
+            ['Your completed MHAD', 'PDF · 4 pages · PA Act 194 format'],
+            ['Signature & witness page', 'Pre-filled with your name and the date lines'],
+            ['Witness eligibility guide', 'One page — who can and can\'t sign'],
+            ['What to do after signing', 'Who to give copies to, how to register'],
+          ].map((r, i) => (
+            <div key={i} style={{
+              display: 'flex', alignItems: 'center', gap: 12,
+              padding: '11px 14px', background: p.card, border: `1px solid ${p.border}`, borderRadius: 12,
+            }}>
+              <FileText size={16} stroke={p.primary} />
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: 13, fontWeight: 600, color: p.text }}>{r[0]}</div>
+                <div style={{ fontSize: 11.5, color: p.textMuted, marginTop: 1 }}>{r[1]}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div style={{ height: 22 }} />
+        <Btn kind="primary" size="lg" full trailing={<Download size={18} />}>Download signing packet (PDF)</Btn>
+        <div style={{ height: 8 }} />
+        <Btn kind="ghost" full leading={<Share size={16} stroke={p.primary} />}>Email it to myself</Btn>
+        <p style={{ fontSize: 11, color: p.textMuted, fontFamily: MONO, marginTop: 12, textAlign: 'center', letterSpacing: 0.3, lineHeight: 1.5 }}>
+          NOT YET VALID · BECOMES LEGAL ONCE SIGNED ON PAPER<br/>BY YOU + 2 WITNESSES
+        </p>
       </div>
     </Screen>
   );
@@ -824,15 +988,15 @@ function ScrDone() {
     <Screen>
       {/* No crisis bar on the celebration screen — quieter moment. */}
       <div style={{ padding: '60px 22px 32px' }}>
-        <SectionLabel style={{ color: p.primary }}>● Complete</SectionLabel>
+        <SectionLabel style={{ color: p.primary }}>● Packet ready</SectionLabel>
         <h1 style={{
-          fontFamily: SERIF, fontStyle: 'italic', fontSize: 64, margin: '4px 0 8px',
+          fontFamily: SERIF, fontStyle: 'italic', fontSize: 60, margin: '4px 0 8px',
           fontWeight: 400, letterSpacing: -1.5, lineHeight: 0.95,
         }}>
-          You did<br/>it.
+          One pen<br/>away.
         </h1>
         <p style={{ fontSize: 15, color: p.textMuted, margin: 0, lineHeight: 1.5 }}>
-          Your directive is legally valid. Now make sure the right people have a copy.
+          Your directive is ready to print. It becomes <strong style={{ color: p.text }}>legally valid the moment you and two witnesses sign it on paper</strong> — then make sure the right people have a copy.
         </p>
 
         {/* Wallet card preview */}
@@ -934,8 +1098,7 @@ function ScrCrisis() {
       <div style={{
         position: 'absolute', left: 0, right: 0, bottom: 0,
         background: p.card, borderRadius: `${TOK.rSheet}px ${TOK.rSheet}px 0 0`,
-        padding: '14px 0 30px',
-        boxShadow: '0 -10px 40px rgba(0,0,0,0.3)',
+        padding: '14px 0 40px', boxShadow: '0 -10px 40px rgba(0,0,0,0.3)',
       }}>
         <div style={{ width: 40, height: 4, background: p.border, borderRadius: 100, margin: '0 auto 14px' }} />
 
@@ -978,6 +1141,433 @@ function ScrCrisis() {
           <Btn kind="ghost" full style={{ marginTop: 4 }}>Close</Btn>
         </div>
       </div>
+    </Screen>
+  );
+}
+
+// ─── 02 Wizard: When this kicks in ──────────────────────────────────────
+function ScrWizardWhen() {
+  const { palette: p } = React.useContext(MHADContext);
+
+  const Trigger = ({ checked, title, desc }) => (
+    <div style={{
+      background: p.card, border: `1.5px solid ${checked ? p.primary : p.border}`,
+      borderRadius: TOK.rCard, padding: 14, display: 'flex', gap: 12, marginBottom: 10,
+    }}>
+      <div style={{
+        width: 22, height: 22, borderRadius: 6, flexShrink: 0, marginTop: 1,
+        background: checked ? p.primary : 'transparent',
+        border: checked ? 'none' : `1.5px solid ${p.border}`,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+      }}>
+        {checked && <Check size={14} stroke={p.onPrimary} sw={3} />}
+      </div>
+      <div style={{ flex: 1 }}>
+        <div style={{ fontSize: 14, fontWeight: 600, color: p.text }}>{title}</div>
+        <div style={{ fontSize: 12.5, color: p.textMuted, marginTop: 2, lineHeight: 1.45 }}>{desc}</div>
+      </div>
+    </div>
+  );
+
+  return (
+    <Screen scroll={false}>
+      <CrisisBar compact />
+      <WizardHeader />
+      <StepDots n={2} total={11} />
+
+      <div style={{ overflow: 'auto', flex: 1, minHeight: 0 }}>
+        <StepHead n={2} total={11} title="When this kicks in" sub="The conditions under which your directive becomes active — and any diagnoses worth flagging." />
+
+        <div style={{ padding: '0 22px 24px' }}>
+          <SectionLabel>Activation triggers</SectionLabel>
+          <p style={{ fontSize: 12.5, color: p.textMuted, margin: '6px 0 12px', lineHeight: 1.45 }}>
+            Pick at least one. Your directive only takes effect when a trigger is met.
+          </p>
+
+          <Trigger
+            checked
+            title="A psychiatrist + one other professional find me unable to decide"
+            desc="A psychiatrist and one of: another psychiatrist, psychologist, family physician, attending physician, or mental health treatment professional. When possible, one is a provider already treating me."
+          />
+          <Trigger
+            title="A court determines I lack capacity"
+            desc="An adjudication of incapacity by a Pennsylvania court."
+          />
+          <Trigger
+            checked
+            title="I'm involuntarily committed"
+            desc="Under sections 302, 303, or 304 of the Mental Health Procedures Act."
+          />
+
+          <div style={{ height: 16 }} />
+          <SectionLabel>Relevant context · optional</SectionLabel>
+          <p style={{ fontSize: 12.5, color: p.textMuted, margin: '6px 0 10px', lineHeight: 1.45 }}>
+            Diagnoses now have their own step (Step 6). Here, just note anything about <em>when</em> your directive should take effect.
+          </p>
+
+          <Field
+            label="Anything else providers should know about timing"
+            value=""
+            placeholder="e.g. I recover quickly once stabilized — revisit capacity often"
+            multiline
+          />
+
+          <div style={{
+            background: p.surface, border: `1px dashed ${p.border}`,
+            borderRadius: 12, padding: 12, display: 'flex', gap: 10, marginTop: 4,
+          }}>
+            <Info size={16} stroke={p.textMuted} />
+            <div style={{ fontSize: 12, color: p.textMuted, lineHeight: 1.45 }}>
+              <strong style={{ color: p.text }}>Your diagnoses and doctor go in Step 6.</strong> This step is only about the conditions that switch your directive on.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <BottomBar />
+    </Screen>
+  );
+}
+
+// ─── 04 Wizard: Guardian ────────────────────────────────────────────────
+function ScrWizardGuardian() {
+  const { palette: p } = React.useContext(MHADContext);
+
+  const Opt = ({ active, title, sub, tag }) => (
+    <div style={{
+      background: active ? p.primaryTint : p.card,
+      border: `2px solid ${active ? p.primary : p.border}`,
+      borderRadius: TOK.rCard, padding: 14, marginBottom: 10,
+      display: 'flex', gap: 12,
+    }}>
+      <div style={{
+        width: 20, height: 20, borderRadius: 100, flexShrink: 0, marginTop: 2,
+        border: `2px solid ${active ? p.primary : p.border}`,
+        background: active ? p.primary : 'transparent',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+      }}>
+        {active && <div style={{ width: 7, height: 7, borderRadius: 100, background: p.onPrimary }} />}
+      </div>
+      <div style={{ flex: 1 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <h3 style={{ margin: 0, fontSize: 14.5, fontWeight: 700, color: p.text }}>{title}</h3>
+          {tag && <span style={{ fontSize: 10, fontFamily: MONO, fontWeight: 700, color: p.textMuted, letterSpacing: 0.4, background: p.surface, padding: '2px 6px', borderRadius: 4, textTransform: 'uppercase' }}>{tag}</span>}
+        </div>
+        <p style={{ margin: '3px 0 0', fontSize: 12.5, color: p.textMuted, lineHeight: 1.45 }}>{sub}</p>
+      </div>
+    </div>
+  );
+
+  return (
+    <Screen scroll={false}>
+      <CrisisBar compact />
+      <WizardHeader />
+      <StepDots n={4} total={11} />
+
+      <div style={{ overflow: 'auto', flex: 1, minHeight: 0 }}>
+        <StepHead n={4} total={11} title="If a court appoints a guardian" sub="Rare, but worth planning for. A guardian is named by a court — not by you — and has broader authority than an agent." />
+
+        <div style={{ padding: '0 22px 24px' }}>
+          <div style={{
+            background: p.surface, border: `1px dashed ${p.border}`,
+            borderRadius: 10, padding: '8px 12px', display: 'flex', gap: 8, alignItems: 'center', marginBottom: 14,
+          }}>
+            <Info size={14} stroke={p.textMuted} />
+            <span style={{ fontSize: 11.5, color: p.textMuted, lineHeight: 1.4 }}>
+              This step only appears on Combined &amp; POA forms — Declaration-only skips it, since it names no people.
+            </span>
+          </div>
+          <SectionLabel>My preferred guardian, if needed</SectionLabel>
+          <div style={{ height: 10 }} />
+
+          <Opt
+            title="Same as my primary agent"
+            sub="Jordan Lee — the simplest path. The court isn't required to follow this, but it's strong guidance."
+            tag="Recommended"
+          />
+          <Opt
+            title="Same as my alternate agent"
+            sub="Sam Reyes — use this if your alternate would be a better fit for a longer-term guardianship role."
+          />
+          <Opt
+            active
+            title="Someone different"
+            sub="Choose another person — e.g. an attorney, sibling, or close friend not already named."
+          />
+          {/* Inline expansion shown when "Someone different" is selected */}
+          <div style={{
+            margin: '-2px 0 10px', padding: '14px 14px 4px',
+            background: p.primaryTint, border: `1.5px solid ${p.primary}`, borderTop: 'none',
+            borderRadius: `0 0 ${TOK.rCard}px ${TOK.rCard}px`,
+          }}>
+            <Field label="Full name" value="Dana Okafor" placeholder="Their legal name" />
+            <div style={{ display: 'flex', gap: 10 }}>
+              <div style={{ flex: 1 }}><Field label="Relationship" value="Attorney" placeholder="e.g. friend" /></div>
+              <div style={{ flex: 1 }}><Field label="Phone · optional" value="" placeholder="(412) 555-0000" /></div>
+            </div>
+            <div style={{ display: 'flex', gap: 8, marginTop: 4, marginBottom: 8 }}>
+              <span style={{ fontSize: 12, fontWeight: 700, color: p.primary, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                <Users size={13} stroke={p.primary} /> Pick from contacts
+              </span>
+            </div>
+          </div>
+          <Opt
+            title="No preference"
+            sub="Let the court decide. They'll usually appoint a family member or county guardianship office."
+          />
+
+          <div style={{ height: 14 }} />
+          <SectionLabel>Conditions on the guardianship</SectionLabel>
+          <div style={{ marginTop: 10, display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {[
+              { label: 'Can change my agent', val: 'no' },
+              { label: 'Can override this directive', val: 'no' },
+              { label: 'Must consult my agent first', val: 'yes' },
+            ].map((row, i) => (
+              <div key={i}>
+                <div style={{ fontSize: 13.5, color: p.text, marginBottom: 6, fontWeight: 500 }}>{row.label}</div>
+                <ConsentRow value={row.val} />
+              </div>
+            ))}
+          </div>
+
+          <div style={{
+            background: p.primaryLight, border: `1px solid ${p.primary}30`,
+            borderRadius: 12, padding: 12, display: 'flex', gap: 10, marginTop: 18,
+          }}>
+            <Sparkles size={18} stroke={p.primary} />
+            <div style={{ flex: 1, fontSize: 12.5, color: p.onPrimaryLight, lineHeight: 1.45 }}>
+              <strong>Most people pick their primary agent.</strong> Keeping it consistent reduces conflict if both roles ever activate.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <BottomBar />
+    </Screen>
+  );
+}
+
+// ─── 05 Wizard: Where I want care ───────────────────────────────────────
+function ScrWizardCare() {
+  const { palette: p } = React.useContext(MHADContext);
+
+  const Facility = ({ name, sub, tone }) => (
+    <div style={{
+      background: p.card, border: `1px solid ${p.border}`, borderRadius: 12,
+      padding: '12px 14px', display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8,
+    }}>
+      <div style={{
+        width: 8, height: 8, borderRadius: 100,
+        background: tone === 'prefer' ? p.okText : p.crisisAccent,
+      }} />
+      <div style={{ flex: 1 }}>
+        <div style={{ fontSize: 14, fontWeight: 600, color: p.text }}>{name}</div>
+        <div style={{ fontSize: 12, color: p.textMuted }}>{sub}</div>
+      </div>
+      <DotsH size={16} stroke={p.textMuted} />
+    </div>
+  );
+
+  return (
+    <Screen scroll={false}>
+      <CrisisBar compact />
+      <WizardHeader />
+      <StepDots n={5} total={11} />
+
+      <div style={{ overflow: 'auto', flex: 1, minHeight: 0 }}>
+        <StepHead n={5} total={11} title="Where I want care" sub="Facilities you prefer — and any you specifically want to avoid." />
+
+        <div style={{ padding: '0 22px 24px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+            <div style={{ width: 8, height: 8, borderRadius: 100, background: p.okText }} />
+            <SectionLabel>Preferred</SectionLabel>
+            <div style={{ flex: 1 }} />
+            <span style={{ fontSize: 11, color: p.textMuted, fontFamily: MONO }}>2 ADDED</span>
+          </div>
+          <Facility tone="prefer" name="UPMC Western Psychiatric" sub="Pittsburgh PA · primary choice" />
+          <Facility tone="prefer" name="Allegheny Health Network" sub="Pittsburgh PA · second choice" />
+          <button style={{
+            width: '100%', background: 'transparent',
+            border: `1.5px dashed ${p.border}`, borderRadius: 12,
+            padding: '10px 12px', fontSize: 13, fontWeight: 600, color: p.primary,
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+            cursor: 'pointer', fontFamily: SANS,
+          }}>
+            <Plus size={14} /> Add a preferred facility
+          </button>
+
+          <div style={{ height: 18 }} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+            <div style={{ width: 8, height: 8, borderRadius: 100, background: p.crisisAccent }} />
+            <SectionLabel>Avoid if possible</SectionLabel>
+            <div style={{ flex: 1 }} />
+            <span style={{ fontSize: 11, color: p.textMuted, fontFamily: MONO }}>1 ADDED</span>
+          </div>
+          <Facility tone="avoid" name="St. Margaret's State Hospital" sub="Prior negative experience" />
+          <button style={{
+            width: '100%', background: 'transparent',
+            border: `1.5px dashed ${p.border}`, borderRadius: 12,
+            padding: '10px 12px', fontSize: 13, fontWeight: 600, color: p.crisisAccent,
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+            cursor: 'pointer', fontFamily: SANS,
+          }}>
+            <Plus size={14} /> Add a facility to avoid
+          </button>
+
+          <div style={{ height: 18 }} />
+          <SectionLabel>Room & environment</SectionLabel>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 10 }}>
+            {[
+              { label: 'Single room', active: true },
+              { label: 'Window if possible', active: true },
+              { label: 'Quiet floor', active: true },
+              { label: 'No roommate', active: false },
+              { label: 'Same-gender roommate', active: true },
+              { label: 'Trans-affirming staff', active: true },
+              { label: 'Low-stimulation unit', active: false },
+            ].map((c, i) => (
+              <Chip key={i} active={c.active}>{c.label}</Chip>
+            ))}
+          </div>
+          {/* Sub-chip shown when "Same-gender roommate" is selected */}
+          <div style={{ marginTop: 8, paddingLeft: 12, borderLeft: `2px solid ${p.primaryLight}` }}>
+            <div style={{ fontSize: 11.5, color: p.textMuted, marginBottom: 6 }}>For "same-gender", match me with:</div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+              {[
+                { label: 'Women', active: true },
+                { label: 'Men', active: false },
+                { label: 'Same as my gender identity', active: false },
+                { label: 'Let me specify', active: false },
+              ].map((c, i) => (
+                <Chip key={i} active={c.active}>{c.label}</Chip>
+              ))}
+            </div>
+          </div>
+
+          <div style={{ height: 14 }} />
+          <Field
+            label="Anything else about location"
+            value="Prefer to stay within Allegheny County so my agent can visit."
+            multiline
+          />
+        </div>
+      </div>
+
+      <BottomBar />
+    </Screen>
+  );
+}
+
+// ─── 08 Wizard: Anything else ───────────────────────────────────────────
+function ScrWizardElse() {
+  const { palette: p } = React.useContext(MHADContext);
+
+  const Prompt = ({ icon, title, used }) => (
+    <div style={{
+      background: used ? p.primaryTint : p.card,
+      border: `1px solid ${used ? p.primary + '40' : p.border}`,
+      borderRadius: 12, padding: '10px 12px',
+      display: 'flex', alignItems: 'center', gap: 10,
+      marginBottom: 8, cursor: 'pointer',
+    }}>
+      <div style={{
+        width: 28, height: 28, borderRadius: 7, flexShrink: 0,
+        background: used ? p.primary : p.primaryLight,
+        color: used ? p.onPrimary : p.onPrimaryLight,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+      }}>{icon}</div>
+      <span style={{ flex: 1, fontSize: 13, fontWeight: 600, color: p.text }}>{title}</span>
+      {used ? <Check size={14} stroke={p.primary} sw={3} /> : <Plus size={14} stroke={p.textMuted} />}
+    </div>
+  );
+
+  return (
+    <Screen scroll={false}>
+      <CrisisBar compact />
+      <WizardHeader />
+      <StepDots n={10} total={11} />
+
+      <div style={{ overflow: 'auto', flex: 1, minHeight: 0 }}>
+        <StepHead n={10} total={11} title="Anything else" sub="Free-form preferences not covered above. This is your voice — write it how you'd say it." />
+
+        <div style={{ padding: '0 22px 24px' }}>
+          <SectionLabel>Your instructions</SectionLabel>
+          <div style={{ height: 10 }} />
+
+          {/* Big editable textarea */}
+          <div style={{
+            background: p.card, border: `1.5px solid ${p.border}`,
+            borderRadius: TOK.rInput, padding: '14px 16px',
+            minHeight: 180, position: 'relative',
+          }}>
+            <div style={{
+              fontSize: 14.5, color: p.text, lineHeight: 1.6, fontFamily: SANS,
+            }}>
+              <strong style={{ color: p.primary }}>Restraints &amp; seclusion:</strong> Avoid physical restraints. Use them only if I pose an immediate safety risk and de-escalation has failed.
+              <br/><br/>
+              <strong style={{ color: p.primary }}>Comfort items:</strong> Please allow my therapy dog, Olive, when the facility permits — my agent Jordan can coordinate.
+              <span style={{
+                display: 'inline-block', width: 2, height: 16, background: p.primary,
+                marginLeft: 2, verticalAlign: 'middle', animation: 'blink 1s infinite',
+              }} />
+            </div>
+            <div style={{
+              position: 'absolute', bottom: 8, right: 12,
+              fontFamily: MONO, fontSize: 10.5, color: p.textMuted,
+            }}>261 / 1000</div>
+          </div>
+
+          <div style={{
+            background: p.primaryLight, border: `1px solid ${p.primary}30`,
+            borderRadius: 12, padding: 12, display: 'flex', gap: 10, marginTop: 10,
+          }}>
+            <Sparkles size={18} stroke={p.primary} />
+            <div style={{ flex: 1, fontSize: 12.5, color: p.onPrimaryLight, lineHeight: 1.45 }}>
+              <strong>AI can help phrase this.</strong> Tap "Rephrase with AI" — your draft is sent with PII stripped.
+            </div>
+            <span style={{ fontSize: 12, fontWeight: 700, color: p.primary, alignSelf: 'center' }}>Rephrase →</span>
+          </div>
+
+          <div style={{ height: 18 }} />
+          <SectionLabel>Common things to consider</SectionLabel>
+          <p style={{ fontSize: 12, color: p.textMuted, margin: '6px 0 10px', lineHeight: 1.45 }}>
+            Tap one to drop a labeled heading into your text above — then write underneath it. The PDF prints each as its own sub-section.
+          </p>
+
+          <Prompt used icon={<Shield size={14} />} title="Restraints & seclusion" />
+          <Prompt used icon={<Heart size={14} />} title="Comfort items (pets, photos…)" />
+          <Prompt icon={<Users size={14} />} title="Visitors I want / don't want" />
+          <Prompt icon={<Phone size={14} />} title="Who to contact (and who not to)" />
+          <Prompt icon={<Book size={14} />} title="Religious or spiritual practices" />
+          <Prompt icon={<Calendar size={14} />} title="Care of pets, kids, plants at home" />
+
+          <div style={{ height: 20 }} />
+          <SectionLabel>Optional add-ons</SectionLabel>
+          <p style={{ fontSize: 12, color: p.textMuted, margin: '6px 0 10px', lineHeight: 1.45 }}>
+            Not required by Act 194, but powerful. Add them to your packet — or skip to Review.
+          </p>
+          {[
+            { icon: <Heart size={15} />, t: 'Crisis plan & wellness toolbox', sub: 'Warning signs, triggers, what helps — the WRAP add-on' },
+            { icon: <Shield size={15} />, t: 'Self-binding (Ulysses) clause', sub: 'Pre-consent to care even if future-you objects' },
+          ].map((a, i) => (
+            <div key={i} style={{
+              display: 'flex', alignItems: 'center', gap: 12,
+              padding: '12px 14px', background: p.primaryTint, border: `1px solid ${p.primaryLight}`,
+              borderRadius: 12, marginBottom: 8,
+            }}>
+              <div style={{ width: 30, height: 30, borderRadius: 8, background: p.primary, color: p.onPrimary, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{a.icon}</div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: 13, fontWeight: 700, color: p.text }}>{a.t}</div>
+                <div style={{ fontSize: 11.5, color: p.textMuted, lineHeight: 1.35 }}>{a.sub}</div>
+              </div>
+              <span style={{ fontSize: 12, fontWeight: 700, color: p.primary, flexShrink: 0 }}>Add ›</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <BottomBar />
     </Screen>
   );
 }

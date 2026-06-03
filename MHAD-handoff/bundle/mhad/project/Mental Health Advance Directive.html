@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MHAD — Design</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    html, body { margin: 0; padding: 0; height: 100%; background: #f0eee9; font-family: 'DM Sans', system-ui, sans-serif; }
+    #root { height: 100%; }
+    /* default body text rendering */
+    body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    /* Reset for our React-rendered card content (counter the dc-card *::-webkit-scrollbar trick is fine) */
+  </style>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel" src="design-canvas.jsx"></script>
+  <script type="text/babel" src="ios-frame.jsx"></script>
+  <script type="text/babel" src="browser-window.jsx"></script>
+  <script type="text/babel" src="tweaks-panel.jsx"></script>
+
+  <script type="text/babel" src="ds.jsx"></script>
+  <script type="text/babel" src="flow.jsx"></script>
+  <script type="text/babel" src="mobile.jsx"></script>
+  <script type="text/babel" src="mobile-extra.jsx"></script>
+  <script type="text/babel" src="mobile-extra2.jsx"></script>
+  <script type="text/babel" src="web.jsx"></script>
+  <script type="text/babel" src="web-snapfill.jsx"></script>
+  <script type="text/babel" src="health-steps.jsx"></script>
+  <script type="text/babel" src="web-health-steps.jsx"></script>
+  <script type="text/babel" src="web-wizard-steps.jsx"></script>
+  <script type="text/babel" src="web-flow-screens.jsx"></script>
+  <script type="text/babel" src="gap-analysis.jsx"></script>
+
+  <script type="text/babel" data-presets="react">
+    const { useState } = React;
+
+    // Tweakable defaults (palette + mode + density). Persisted by host.
+    const DEFAULTS = /*EDITMODE-BEGIN*/{
+      "palette": "navy",
+      "mode": "light",
+      "density": "comfortable"
+    }/*EDITMODE-END*/;
+
+    function App() {
+      const [t, setTweak] = useTweaks(DEFAULTS);
+
+      // Resolve palette from the design system
+      const p = MHAD_PALETTES[t.palette][t.mode];
+
+      return (
+        <MHADContext.Provider value={{ palette: p, paletteName: t.palette, mode: t.mode, density: t.density }}>
+          <DesignCanvas>
+
+            <DCSection id="cover" title="MHAD · Redesign" subtitle="Bolder editorial direction · plain-language wizard · mobile + web · v1">
+              <DCArtboard id="brief" label="Design brief" width={780} height={520}>
+                <BriefCard />
+              </DCArtboard>
+              <DCArtboard id="system" label="Visual system" width={780} height={520}>
+                <SystemCard />
+              </DCArtboard>
+            </DCSection>
+
+            <DCSection id="gap" title="Gap & improvement analysis" subtitle="Where the current design stands vs. peer-reviewed best practice — and what to ship next.">
+              <DCArtboard id="research" label="Research foundation" width={1180} height={620}>
+                <ResearchCard />
+              </DCArtboard>
+              <DCArtboard id="matrix" label="Coverage matrix" width={1180} height={620}>
+                <GapMatrix />
+              </DCArtboard>
+              <DCArtboard id="roadmap" label="Priority roadmap" width={1180} height={620}>
+                <PriorityRoadmap />
+              </DCArtboard>
+            </DCSection>
+
+            <DCSection id="new-screens" title="New screens · filling the gaps" subtitle="High-impact missing functionality, in roadmap priority order.">
+              <DCArtboard id="m-crisisplan"  label="P0 · Crisis plan & wellness toolbox"  width={422} height={894}><GapScreens name="crisisplan" /></DCArtboard>
+              <DCArtboard id="m-facilitator" label="P1 · Get help (referral + in-person)" width={422} height={894}><GapScreens name="facilitator" /></DCArtboard>
+              <DCArtboard id="m-clinician"   label="P1 · Clinician / verifier view"     width={422} height={894}><GapScreens name="clinician" /></DCArtboard>
+              <DCArtboard id="m-legaltoggle" label="P1 · Plain ⇄ Legal toggle"           width={422} height={894}><GapScreens name="legaltoggle" /></DCArtboard>
+              <DCArtboard id="m-ulysses"     label="P1 · Self-binding (Ulysses) clause" width={422} height={894}><GapScreens name="ulysses" /></DCArtboard>
+              <DCArtboard id="m-agentaccept" label="P2 · Agent acceptance receipt"      width={422} height={894}><GapScreens name="agentaccept" /></DCArtboard>
+              <DCArtboard id="m-a11y"        label="P2 · Accessibility settings"        width={422} height={894}><GapScreens name="a11y" /></DCArtboard>
+            </DCSection>
+
+            <DCSection id="flow" title="The wizard, reorganized" subtitle="15 steps → 11 steps. Tighter sequencing, plus dedicated diagnoses and allergies intake.">
+              <DCArtboard id="before-after" label="Before / After" width={1180} height={620}>
+                <FlowDiagram />
+              </DCArtboard>
+            </DCSection>
+
+            <DCSection id="audit" title="Coverage audit" subtitle="Every function the existing artboards reference — visualized at least once.">
+              <DCArtboard id="audit-board" label="Function inventory" width={1180} height={620}>
+                <CoverageAudit />
+              </DCArtboard>
+            </DCSection>
+
+            <DCSection id="mobile" title="Mobile · iOS" subtitle="Primary surface. Most users will draft on their phone.">
+              <DCArtboard id="m-welcome" label="01 · Welcome" width={422} height={894}><Mobile name="welcome" /></DCArtboard>
+              <DCArtboard id="m-mode" label="02 · Mode" width={422} height={894}><Mobile name="mode" /></DCArtboard>
+              <DCArtboard id="m-public" label="02b · Public mode home" width={422} height={894}><MobileExtra name="public" /></DCArtboard>
+              <DCArtboard id="m-disclaimer" label="03 · Disclaimer" width={422} height={894}><Mobile name="disclaimer" /></DCArtboard>
+              <DCArtboard id="m-faceid" label="04 · Face ID unlock" width={422} height={894}><MobileExtra name="faceid" /></DCArtboard>
+              <DCArtboard id="m-empty" label="05 · Home · first-time" width={422} height={894}><MobileExtra name="empty" /></DCArtboard>
+              <DCArtboard id="m-home" label="06 · Home · active draft" width={422} height={894}><Mobile name="home" /></DCArtboard>
+              <DCArtboard id="m-formtype" label="07 · Form type" width={422} height={894}><Mobile name="formtype" /></DCArtboard>
+              <DCArtboard id="m-quiz" label="08 · Help-me-choose quiz" width={422} height={894}><MobileExtra name="quiz" /></DCArtboard>
+              <DCArtboard id="m-scan" label="09a · Snap to fill (multi-target)" width={422} height={894}><MobileExtra name="scan" /></DCArtboard>
+              <DCArtboard id="m-snap-review" label="09a' · AI extraction review" width={422} height={894}><MobileExtra name="snap-review" /></DCArtboard>
+              <DCArtboard id="m-permission" label="09c · Camera permission" width={422} height={894}><MobileExtra2 name="permission" /></DCArtboard>
+              <DCArtboard id="m-wizard-about" label="Wizard · Step 01 · About you" width={422} height={894}><Mobile name="wizard-about" /></DCArtboard>
+              <DCArtboard id="m-voice" label="09b · Voice input" width={422} height={894}><MobileExtra name="voice" /></DCArtboard>
+              <DCArtboard id="m-wizard-when" label="Wizard · Step 02 · When this kicks in" width={422} height={894}><Mobile name="wizard-when" /></DCArtboard>
+              <DCArtboard id="m-wizard-people" label="Wizard · Step 03 · People I trust" width={422} height={894}><Mobile name="wizard-people" /></DCArtboard>
+              <DCArtboard id="m-contacts" label="11b · Contact picker" width={422} height={894}><MobileExtra name="contacts" /></DCArtboard>
+              <DCArtboard id="m-wizard-guardian" label="Wizard · Step 04 · Guardian" width={422} height={894}><Mobile name="wizard-guardian" /></DCArtboard>
+              <DCArtboard id="m-wizard-care" label="Wizard · Step 05 · Where I want care" width={422} height={894}><Mobile name="wizard-care" /></DCArtboard>
+              <DCArtboard id="m-diagnoses" label="Wizard · Step 06 · Diagnoses (ICD-10)" width={422} height={894}><HealthSteps name="diagnoses" /></DCArtboard>
+              <DCArtboard id="m-wizard-meds" label="Wizard · Step 07 · Medications (current + avoid)" width={422} height={894}><HealthSteps name="medications" /></DCArtboard>
+              <DCArtboard id="m-allergies" label="Wizard · Step 08 · Allergies (RxTerms + ICD-10)" width={422} height={894}><HealthSteps name="allergies" /></DCArtboard>
+              <DCArtboard id="m-wizard-procedures" label="Wizard · Step 09 · Procedures" width={422} height={894}><Mobile name="wizard-procedures" /></DCArtboard>
+              <DCArtboard id="m-wizard-else" label="Wizard · Step 10 · Anything else" width={422} height={894}><Mobile name="wizard-else" /></DCArtboard>
+              <DCArtboard id="m-review" label="Wizard · Step 11 · Review" width={422} height={894}><Mobile name="review" /></DCArtboard>
+              <DCArtboard id="m-conflict" label="17b · AI consistency warning" width={422} height={894}><MobileExtra2 name="conflict" /></DCArtboard>
+              <DCArtboard id="m-sign" label="18 · Make it legal (print & wet-ink)" width={422} height={894}><Mobile name="sign" /></DCArtboard>
+              <DCArtboard id="m-done" label="19 · Done + wallet" width={422} height={894}><Mobile name="done" /></DCArtboard>
+              <DCArtboard id="m-wallet" label="19a · Add to Apple Wallet" width={422} height={894}><MobileExtra2 name="wallet" /></DCArtboard>
+              <DCArtboard id="m-share" label="20 · Share sheet" width={422} height={894}><MobileExtra name="share" /></DCArtboard>
+              <DCArtboard id="m-pdf" label="21 · PDF preview" width={422} height={894}><MobileExtra name="pdf" /></DCArtboard>
+              <DCArtboard id="m-past" label="22 · Past directive · detail" width={422} height={894}><MobileExtra name="past" /></DCArtboard>
+              <DCArtboard id="m-verify" label="22b · Wallet QR · verifier view" width={422} height={894}><MobileExtra name="verify" /></DCArtboard>
+              <DCArtboard id="m-renew" label="23 · Renewal nudge (hard · 2-yr expiry)" width={422} height={894}><MobileExtra name="renew" /></DCArtboard>
+              <DCArtboard id="m-checkin" label="23b · Quarterly check-in (soft)" width={422} height={894}><MobileExtra name="checkin" /></DCArtboard>
+              <DCArtboard id="m-revoke" label="24 · Revocation" width={422} height={894}><MobileExtra name="revoke" /></DCArtboard>
+              <DCArtboard id="m-ai" label="25 · AI assistant" width={422} height={894}><MobileExtra name="ai" /></DCArtboard>
+              <DCArtboard id="m-learn" label="26 · Learn hub" width={422} height={894}><MobileExtra name="learn" /></DCArtboard>
+              <DCArtboard id="m-article" label="26b · Learn · article reader" width={422} height={894}><MobileExtra name="article" /></DCArtboard>
+              <DCArtboard id="m-settings" label="27 · Settings" width={422} height={894}><MobileExtra name="settings" /></DCArtboard>
+              <DCArtboard id="m-export" label="27a · Data export hub" width={422} height={894}><MobileExtra2 name="export" /></DCArtboard>
+              <DCArtboard id="m-crisis" label="28 · Crisis sheet" width={422} height={894}><Mobile name="crisis" /></DCArtboard>
+            </DCSection>
+
+            <DCSection id="web" title="Web · Desktop &amp; mobile browser" subtitle="Anonymous, in-browser. Full parity with the mobile flow (minus device-only screens).">
+              <DCArtboard id="w-disclaimer" label="Disclaimer / consent" width={1200} height={780}><Web name="disclaimer" /></DCArtboard>
+              <DCArtboard id="w-home" label="Dashboard" width={1200} height={780}><Web name="dashboard" /></DCArtboard>
+              <DCArtboard id="w-formtype" label="Form type" width={1200} height={780}><Web name="formtype" /></DCArtboard>
+              <DCArtboard id="w-quiz" label="Help-me-choose quiz" width={1200} height={780}><Web name="quiz" /></DCArtboard>
+              <DCArtboard id="w-snapfill" label="Snap / upload to fill · desktop" width={1200} height={780}><Web name="snapfill" /></DCArtboard>
+              <DCArtboard id="w-snapfill-mobile" label="Snap to fill · mobile browser" width={422} height={894}><WebMobileFrame><WebSnapFillMobile /></WebMobileFrame></DCArtboard>
+              <DCArtboard id="w-wiz-mobile" label="Wizard · mobile browser (AI rail → bottom sheet)" width={422} height={894}><WebMobileFrame><WebWizMobile /></WebMobileFrame></DCArtboard>
+              <DCArtboard id="w-snapreview" label="AI extraction review · desktop" width={1200} height={780}><Web name="snapreview" /></DCArtboard>
+              <DCArtboard id="w-voice" label="Voice input" width={1200} height={780}><Web name="voice" /></DCArtboard>
+              <DCArtboard id="w-wiz-about" label="Wizard · Step 01 · About you" width={1200} height={780}><Web name="wiz-about" /></DCArtboard>
+              <DCArtboard id="w-wiz-when" label="Wizard · Step 02 · When this kicks in" width={1200} height={780}><Web name="wiz-when" /></DCArtboard>
+              <DCArtboard id="w-wizard" label="Wizard · Step 03 · People I trust" width={1200} height={780}><Web name="wizard" /></DCArtboard>
+              <DCArtboard id="w-wiz-guardian" label="Wizard · Step 04 · Guardian" width={1200} height={780}><Web name="wiz-guardian" /></DCArtboard>
+              <DCArtboard id="w-wiz-care" label="Wizard · Step 05 · Where I want care" width={1200} height={780}><Web name="wiz-care" /></DCArtboard>
+              <DCArtboard id="w-diagnoses"   label="Wizard · Step 06 · Diagnoses"   width={1200} height={780}><Web name="diagnoses" /></DCArtboard>
+              <DCArtboard id="w-medications" label="Wizard · Step 07 · Medications" width={1200} height={780}><Web name="medications" /></DCArtboard>
+              <DCArtboard id="w-allergies"   label="Wizard · Step 08 · Allergies"   width={1200} height={780}><Web name="allergies" /></DCArtboard>
+              <DCArtboard id="w-wiz-procedures" label="Wizard · Step 09 · Procedures" width={1200} height={780}><Web name="wiz-procedures" /></DCArtboard>
+              <DCArtboard id="w-wiz-else" label="Wizard · Step 10 · Anything else" width={1200} height={780}><Web name="wiz-else" /></DCArtboard>
+              <DCArtboard id="w-review" label="Wizard · Step 11 · Review" width={1200} height={780}><Web name="review" /></DCArtboard>
+              <DCArtboard id="w-conflict" label="AI consistency warning" width={1200} height={780}><Web name="conflict" /></DCArtboard>
+              <DCArtboard id="w-sign" label="Make it legal (print & wet-ink)" width={1200} height={780}><Web name="sign" /></DCArtboard>
+              <DCArtboard id="w-done" label="Done" width={1200} height={780}><Web name="done" /></DCArtboard>
+              <DCArtboard id="w-export" label="Export · PDF preview" width={1200} height={780}><Web name="export" /></DCArtboard>
+              <DCArtboard id="w-dataexport" label="Export · all formats" width={1200} height={780}><Web name="dataexport" /></DCArtboard>
+              <DCArtboard id="w-share" label="Share sheet" width={1200} height={780}><Web name="share" /></DCArtboard>
+              <DCArtboard id="w-revoke" label="Revocation" width={1200} height={780}><Web name="revoke" /></DCArtboard>
+              <DCArtboard id="w-learn" label="Learn hub" width={1200} height={780}><Web name="learn" /></DCArtboard>
+              <DCArtboard id="w-article" label="Learn · article reader" width={1200} height={780}><Web name="article" /></DCArtboard>
+              <DCArtboard id="w-ai" label="AI assistant" width={1200} height={780}><Web name="ai" /></DCArtboard>
+              <DCArtboard id="w-settings" label="Settings" width={1200} height={780}><Web name="settings" /></DCArtboard>
+              <DCArtboard id="w-crisis" label="Crisis sheet (988)" width={1200} height={780}><Web name="crisis" /></DCArtboard>
+            </DCSection>
+
+          </DesignCanvas>
+
+          <TweaksPanel title="Tweaks" defaultOpen={false}>
+            <TweakSection title="Palette">
+              <TweakRadio
+                value={t.palette}
+                onChange={(v) => setTweak('palette', v)}
+                options={[
+                  { value: 'teal', label: 'Warm Teal' },
+                  { value: 'navy', label: 'Deep Navy' },
+                  { value: 'sage', label: 'Sage' },
+                ]}
+              />
+            </TweakSection>
+            <TweakSection title="Mode">
+              <TweakRadio
+                value={t.mode}
+                onChange={(v) => setTweak('mode', v)}
+                options={[
+                  { value: 'light', label: 'Light' },
+                  { value: 'dark', label: 'Dark' },
+                ]}
+              />
+            </TweakSection>
+            <TweakSection title="Density">
+              <TweakRadio
+                value={t.density}
+                onChange={(v) => setTweak('density', v)}
+                options={[
+                  { value: 'comfortable', label: 'Comfortable' },
+                  { value: 'compact', label: 'Compact' },
+                ]}
+              />
+            </TweakSection>
+          </TweaksPanel>
+        </MHADContext.Provider>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
