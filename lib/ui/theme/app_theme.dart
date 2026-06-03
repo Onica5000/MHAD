@@ -411,9 +411,17 @@ ThemeData buildMhadTheme(ThemePalette palette, Brightness brightness) {
       ),
     ),
 
+    // InputDecoration matches prototype `Field` atom (ds.jsx L296-320):
+    // 1.5px border, 12px radius, p.card fill, 14px horizontal padding.
+    // Prototype labels are 12/600 DM Sans textMuted sitting ABOVE the
+    // field, not Material's floating-label-when-focused — so we pin
+    // floatingLabelBehavior to `always` and tune floatingLabelStyle to
+    // the prototype's label spec. This applies project-wide without
+    // touching individual TextFormFields.
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
       fillColor: p.card,
+      floatingLabelBehavior: FloatingLabelBehavior.always,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
         borderSide: BorderSide(color: p.border, width: 1.5),
@@ -435,6 +443,13 @@ ThemeData buildMhadTheme(ThemePalette palette, Brightness brightness) {
         fontFamily: 'DM Sans',
         color: p.textMuted,
         fontSize: 14,
+      ),
+      floatingLabelStyle: TextStyle(
+        fontFamily: 'DM Sans',
+        color: p.textMuted,
+        fontSize: 12,
+        fontWeight: FontWeight.w600,
+        letterSpacing: 0.2,
       ),
       hintStyle: TextStyle(
         fontFamily: 'DM Sans',
