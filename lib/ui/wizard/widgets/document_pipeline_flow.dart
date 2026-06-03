@@ -10,6 +10,7 @@ import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/services/clinical_data_validator.dart';
 import 'package:mhad/services/gemini_rate_tracker.dart';
+import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/ai_consent_dialog.dart';
 import 'package:mhad/ui/widgets/friendly_error.dart';
 import 'package:mhad/ui/widgets/nlm_attribution.dart';
@@ -841,120 +842,204 @@ class _PipelineScreenState extends ConsumerState<_PipelineScreen> {
   // ── Review extracted data ───────────────────────────────────────────
 
   Widget _buildReviewStep() {
-    final cs = Theme.of(context).colorScheme;
+    final p = Theme.of(context).mhadPalette;
+    final dark = Theme.of(context).brightness == Brightness.dark;
     final keys = _reviewEdited.keys.toList();
+    final checkedCount =
+        _reviewChecked.values.where((v) => v).length;
 
-    // Group by section
-    String? lastSection;
+    final okText = dark
+        ? SemanticColors.successTextDark
+        : SemanticColors.successTextLight;
 
     return ListView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(20, 14, 20, 28),
       children: [
-        if (_piiStripped.isNotEmpty)
+        // Editorial header — matches prototype `ScrSnapReview`
+        // (mobile-extra.jsx L1978-1984): mono section label, italic
+        // serif headline, muted body.
+        Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 9, vertical: 4),
+              decoration: BoxDecoration(
+                color: p.primaryTint,
+                borderRadius: BorderRadius.circular(100),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.auto_awesome,
+                      size: 11, color: p.primary),
+                  const SizedBox(width: 5),
+                  Text(
+                    'AI READ THIS PHOTO',
+                    style: TextStyle(
+                      fontFamily: 'JetBrains Mono',
+                      fontFamilyFallback: const [
+                        'Consolas',
+                        'Menlo',
+                        'Courier New',
+                        'monospace',
+                      ],
+                      fontSize: 10.5,
+                      letterSpacing: 0.6,
+                      fontWeight: FontWeight.w700,
+                      color: p.primary,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        Text(
+          "Here's what we read.",
+          style: TextStyle(
+            fontFamily: 'Instrument Serif',
+            fontFamilyFallback: const ['Georgia', 'serif'],
+            fontStyle: FontStyle.italic,
+            fontSize: 32,
+            fontWeight: FontWeight.w400,
+            height: 1.05,
+            letterSpacing: -0.4,
+            color: p.text,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          'Tap any field to fix it. Uncheck items you do not want. '
+          'Nothing is added to your directive until you confirm.',
+          style: TextStyle(
+            fontFamily: 'DM Sans',
+            fontSize: 13,
+            color: p.textMuted,
+            height: 1.5,
+          ),
+        ),
+        if (_piiStripped.isNotEmpty) ...[
+          const SizedBox(height: 12),
           Container(
-            padding: const EdgeInsets.all(8),
-            margin: const EdgeInsets.only(bottom: 12),
+            padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: cs.primaryContainer,
-              borderRadius: BorderRadius.circular(8),
+              color: p.primaryTint,
+              border: Border.all(color: p.primary.withValues(alpha: 0.2)),
+              borderRadius: BorderRadius.circular(10),
             ),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(Icons.shield, size: 16, color: cs.onPrimaryContainer),
+                Icon(Icons.shield_outlined, size: 14, color: p.primary),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
                     'PII was detected and removed before analysis: '
                     '${_piiStripped.toSet().join(", ")}',
                     style: TextStyle(
-                        fontSize: 12, color: cs.onPrimaryContainer),
+                      fontFamily: 'DM Sans',
+                      fontSize: 11.5,
+                      height: 1.4,
+                      color: p.text,
+                    ),
                   ),
                 ),
               ],
             ),
           ),
-        Container(
-          padding: const EdgeInsets.all(8),
-          margin: const EdgeInsets.only(bottom: 12),
-          decoration: BoxDecoration(
-            color: cs.tertiaryContainer,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Text(
-            'Tap any item to edit. Medications and conditions have been '
-            'validated against NIH clinical databases. Uncheck items you '
-            'do not want.',
-            style: TextStyle(
-                fontSize: 12,
-                color: cs.onTertiaryContainer,
-                fontStyle: FontStyle.italic),
+        ],
+        const SizedBox(height: 16),
+        Text(
+          'Add to your directive',
+          style: TextStyle(
+            fontFamily: 'JetBrains Mono',
+            fontFamilyFallback: const [
+              'Consolas',
+              'Menlo',
+              'Courier New',
+              'monospace',
+            ],
+            fontSize: 10.5,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 1.2,
+            color: p.textMuted,
           ),
         ),
-        ...keys.map((key) {
-          final section = _sectionLabel(key);
-          final showHeader = section != lastSection;
-          lastSection = section;
-
-          return Column(
+        const SizedBox(height: 8),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14),
+          decoration: BoxDecoration(
+            color: p.card,
+            border: Border.all(color: p.border),
+            borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
+          ),
+          child: Column(
+            children: [
+              for (var i = 0; i < keys.length; i++) ...[
+                _SnapReviewRow(
+                  ok: _reviewChecked[keys[i]] ?? false,
+                  fieldLabel: _displayLabel(keys[i]),
+                  value: _reviewEdited[keys[i]] ?? '',
+                  target: _sectionLabel(keys[i]),
+                  onToggle: () => setState(() => _reviewChecked[keys[i]] =
+                      !(_reviewChecked[keys[i]] ?? false)),
+                  onEdit: () => _editField(keys[i]),
+                ),
+                if (i < keys.length - 1)
+                  Divider(height: 1, color: p.border),
+              ],
+            ],
+          ),
+        ),
+        const SizedBox(height: 14),
+        // Privacy reassurance lock-line — matches prototype L2082-2087.
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          decoration: BoxDecoration(
+            color: p.surface,
+            border: Border.all(color: p.border),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (showHeader)
-                Padding(
-                  padding: const EdgeInsets.only(top: 8, bottom: 4),
-                  child: Text(section,
-                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                            color: cs.primary,
-                            fontWeight: FontWeight.w600,
-                          )),
-                ),
-              Card(
-                margin: const EdgeInsets.only(bottom: 6),
-                color: (_reviewChecked[key] ?? false)
-                    ? cs.surfaceContainerLow
-                    : cs.surfaceContainerHighest.withValues(alpha: 0.5),
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(12),
-                  onTap: () => _editField(key),
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(4, 4, 12, 4),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Checkbox(
-                          value: _reviewChecked[key] ?? false,
-                          onChanged: (v) => setState(
-                              () => _reviewChecked[key] = v ?? false),
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(_displayLabel(key),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .labelSmall
-                                        ?.copyWith(color: cs.onSurfaceVariant)),
-                                const SizedBox(height: 2),
-                                Text(
-                                  _reviewEdited[key] ?? '',
-                                  style:
-                                      Theme.of(context).textTheme.bodySmall,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Icon(Icons.edit, size: 14, color: cs.onSurfaceVariant),
-                      ],
-                    ),
+              Icon(Icons.lock_outline, size: 14, color: p.textMuted),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  'Your photo was sent to the AI to read, then '
+                  'discarded. Nothing is stored after you confirm or '
+                  'discard.',
+                  style: TextStyle(
+                    fontFamily: 'DM Sans',
+                    fontSize: 11.5,
+                    color: p.textMuted,
+                    height: 1.4,
                   ),
                 ),
               ),
             ],
-          );
-        }),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          '$checkedCount of ${keys.length} fields ready to add',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontFamily: 'JetBrains Mono',
+            fontFamilyFallback: const [
+              'Consolas',
+              'Menlo',
+              'Courier New',
+              'monospace',
+            ],
+            fontSize: 10.5,
+            letterSpacing: 0.6,
+            color: checkedCount > 0 ? okText : p.textMuted,
+          ),
+        ),
+        const SizedBox(height: 12),
         const NlmAttribution(),
       ],
     );
@@ -1096,6 +1181,133 @@ class _PipelineScreenState extends ConsumerState<_PipelineScreen> {
               ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// Editorial extraction-review row matching prototype `ScrSnapReview`
+/// L2030-2067. Replaces the prior Material Card + Checkbox row.
+///
+/// Layout: 22pt rounded checkbox (filled primary when ok, surface with
+/// border + X when unchecked) → flex column with monospace UPPERCASE
+/// field name + right-aligned "→ Step N · Section" target chip → value
+/// in 14pt bold (line-through when unchecked) → 11.5pt muted subtitle
+/// → trailing edit pencil icon.
+class _SnapReviewRow extends StatelessWidget {
+  final bool ok;
+  final String fieldLabel;
+  final String value;
+  final String target;
+  final VoidCallback onToggle;
+  final VoidCallback onEdit;
+
+  const _SnapReviewRow({
+    required this.ok,
+    required this.fieldLabel,
+    required this.value,
+    required this.target,
+    required this.onToggle,
+    required this.onEdit,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          GestureDetector(
+            onTap: onToggle,
+            child: Container(
+              width: 22,
+              height: 22,
+              margin: const EdgeInsets.only(top: 1),
+              decoration: BoxDecoration(
+                color: ok ? p.primary : p.surface,
+                border: ok
+                    ? null
+                    : Border.all(color: p.border, width: 1.5),
+                borderRadius: BorderRadius.circular(6),
+              ),
+              alignment: Alignment.center,
+              child: ok
+                  ? Icon(Icons.check, size: 13, color: p.onPrimary)
+                  : Icon(Icons.close, size: 11, color: p.textMuted),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        fieldLabel.toUpperCase(),
+                        style: TextStyle(
+                          fontFamily: 'JetBrains Mono',
+                          fontFamilyFallback: const [
+                            'Consolas',
+                            'Menlo',
+                            'Courier New',
+                            'monospace',
+                          ],
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 0.5,
+                          color: p.textMuted,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      ok ? '→ $target' : 'Not added',
+                      style: TextStyle(
+                        fontFamily: 'JetBrains Mono',
+                        fontFamilyFallback: const [
+                          'Consolas',
+                          'Menlo',
+                          'Courier New',
+                          'monospace',
+                        ],
+                        fontSize: 10,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 0.4,
+                        color: ok ? p.primary : p.textMuted,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  value,
+                  style: TextStyle(
+                    fontFamily: 'DM Sans',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: ok ? p.text : p.textMuted,
+                    decoration:
+                        ok ? null : TextDecoration.lineThrough,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 6),
+          GestureDetector(
+            onTap: onEdit,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 2),
+              child: Icon(Icons.edit_outlined,
+                  size: 14, color: p.textMuted),
+            ),
+          ),
+        ],
       ),
     );
   }
