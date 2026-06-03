@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -194,52 +195,60 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
     return Scaffold(
       bottomNavigationBar: const MhadBottomNav(),
       appBar: AppBar(
+        // Editorial header chrome — matches prototype `ScrAI`
+        // (mobile-extra.jsx::ScrAI L753-767): 36pt rounded sparkle chip
+        // in primaryTint + 14.5pt bold title + monospace status pill that
+        // includes the "ON" word the previous version was missing.
+        titleSpacing: 12,
         title: Row(
           children: [
             Container(
-              width: 28,
-              height: 28,
+              width: 36,
+              height: 36,
               decoration: BoxDecoration(
-                color: Theme.of(context)
-                    .colorScheme
-                    .primary
-                    .withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(8),
+                color: Theme.of(context).mhadPalette.primaryTint,
+                borderRadius: BorderRadius.circular(9),
               ),
+              alignment: Alignment.center,
               child: Icon(
-                Icons.auto_awesome,
-                size: 16,
-                color: Theme.of(context).colorScheme.primary,
+                Icons.auto_awesome_outlined,
+                size: 18,
+                color: Theme.of(context).mhadPalette.primary,
               ),
             ),
             const SizedBox(width: 10),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text(
-                  'AI assistant',
-                  style: TextStyle(
-                    fontFamily: 'DM Sans',
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'AI assistant',
+                    style: TextStyle(
+                      fontFamily: 'DM Sans',
+                      fontSize: 14.5,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: -0.2,
+                      color: Theme.of(context).mhadPalette.text,
+                    ),
                   ),
-                ),
-                Text(
-                  '● GEMINI · PII STRIPPED',
-                  style: TextStyle(
-                    fontFamily: 'JetBrains Mono',
-                    fontFamilyFallback: const [
-                      'Consolas',
-                      'Courier New',
-                      'monospace'
-                    ],
-                    fontSize: 9,
-                    letterSpacing: 0.6,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  Text(
+                    '● ON · GEMINI · PII STRIPPED',
+                    style: TextStyle(
+                      fontFamily: 'JetBrains Mono',
+                      fontFamilyFallback: const [
+                        'Consolas',
+                        'Menlo',
+                        'Courier New',
+                        'monospace',
+                      ],
+                      fontSize: 10,
+                      letterSpacing: 0.5,
+                      color: Theme.of(context).mhadPalette.textMuted,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ],
         ),
