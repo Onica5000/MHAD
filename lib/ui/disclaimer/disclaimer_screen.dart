@@ -6,20 +6,31 @@ import 'package:mhad/ui/widgets/design/crisis_sheet.dart';
 
 /// First-launch legal disclaimer + read-only Settings variant.
 ///
-/// Layout — per `MHAD-handoff/mhad/project/Disclaimer Screen.html`:
-///  - "Need 988" pill pinned to top-right
-///  - Editorial italic header "A few _important_ things."
-///  - Read-progress meter ("X / 8 READ") that fills as sections are opened
-///  - Yellow "Short version" warning banner with the 25-word TL;DR
-///  - 8 expandable accordion sections (one open at a time, #1 open by default)
-///  - Pull-quote from the PA MHAD booklet
-///  - Sticky accept bar: two checkboxes (age + acknowledgment) and a primary
-///    Continue button that stays disabled until both are checked.
+/// Gate layout — prototype-exact match of mobile.jsx::ScrDisclaimer
+/// (L172-232):
+///   * SectionLabel "Before we begin"
+///   * 26pt sans bold header "A few important things."
+///   * 13.5 muted lead paragraph
+///   * Yellow warning banner: AlertTri + "This app helps you *document*
+///     your preferences. It is *not* legal or medical advice."
+///   * Four numbered bullets (26×26 primaryLight squares with italic
+///     serif numerals) — age, validity, witnesses, attorney resource.
+///   * Single checkbox: "I'm 18 or older, and I understand the above."
+///   * Primary "I understand · Continue" button.
+///
+/// The single check affirms both age and acknowledgment-of-non-advice,
+/// collapsing the prior dual-checkbox gate into one row per the
+/// prototype. The full 8-section legal text (kept for legal coverage)
+/// is reachable via a small "Read full legal sections" link beneath
+/// the checkbox, which opens the legacy accordion in a modal sheet.
+///
+/// Read-only variant (Settings → Legal) keeps the 8-section accordion
+/// as a scrollable list so users can browse the full disclosure.
 class DisclaimerScreen extends StatefulWidget {
   final DisclaimerNotifier? _notifier;
   final bool _readOnly;
 
-  /// First-launch gate variant — user must tick both checkboxes before
+  /// First-launch gate variant — user ticks one checkbox before
   /// they can tap Continue.
   const DisclaimerScreen.gate({
     required DisclaimerNotifier notifier,
@@ -27,7 +38,7 @@ class DisclaimerScreen extends StatefulWidget {
   })  : _notifier = notifier,
         _readOnly = false;
 
-  /// Read-only variant — the same accordion content with an AppBar back
+  /// Read-only variant — the 8-section accordion with an AppBar back
   /// button instead of the accept footer. Used from Settings → Legal.
   const DisclaimerScreen.readOnly({super.key})
       : _notifier = null,
@@ -38,21 +49,7 @@ class DisclaimerScreen extends StatefulWidget {
 }
 
 class _DisclaimerScreenState extends State<DisclaimerScreen> {
-  /// Index of the currently-expanded section (-1 = all collapsed).
-  int _open = 0;
-
-  /// Indices of every section the user has expanded at least once.
-  final Set<int> _read = {0};
-
-  bool _isAdult = false;
-  bool _notLegal = false;
-
-  void _toggle(int i) {
-    setState(() {
-      _open = _open == i ? -1 : i;
-      _read.add(i);
-    });
-  }
+  bool _accepted = false;
 
   Future<void> _accept() async {
     if (widget._notifier == null) return;
@@ -60,270 +57,418 @@ class _DisclaimerScreenState extends State<DisclaimerScreen> {
     await NotificationService.instance.requestPermission();
   }
 
+  void _openFullLegal() {
+    final p = Theme.of(context).mhadPalette;
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: p.scaffoldBackground,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (sheetCtx) {
+        return DraggableScrollableSheet(
+          initialChildSize: 0.92,
+          minChildSize: 0.5,
+          maxChildSize: 0.95,
+          expand: false,
+          builder: (_, controller) {
+            return _FullLegalSheet(scrollController: controller);
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
-    final dark = Theme.of(context).brightness == Brightness.dark;
     final readOnly = widget._readOnly;
-    final sections = _buildSections(p);
-    final readCount = _read.length;
-    final total = sections.length;
-    final pct = total == 0 ? 0.0 : readCount / total;
-    final canContinue = _isAdult && _notLegal;
 
-    return PopScope(
-      canPop: readOnly,
-      child: Scaffold(
-        backgroundColor: p.scaffoldBackground,
-        appBar: readOnly ? AppBar(title: const Text('Legal Disclaimer')) : null,
-        body: SafeArea(
-          child: Stack(
-            children: [
-              Column(
+    if (readOnly) {
+      return _ReadOnlyAccordion(palette: p);
+    }
+    return _GateLayout(
+      palette: p,
+      accepted: _accepted,
+      onAcceptToggle: () => setState(() => _accepted = !_accepted),
+      onContinue: _accepted ? _accept : null,
+      onOpenFull: _openFullLegal,
+    );
+  }
+}
+
+// ─── Gate layout (prototype-faithful) ───────────────────────────────────
+
+class _GateLayout extends StatelessWidget {
+  final MhadPalette palette;
+  final bool accepted;
+  final VoidCallback onAcceptToggle;
+  final VoidCallback? onContinue;
+  final VoidCallback onOpenFull;
+
+  const _GateLayout({
+    required this.palette,
+    required this.accepted,
+    required this.onAcceptToggle,
+    required this.onContinue,
+    required this.onOpenFull,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final dark = Theme.of(context).brightness == Brightness.dark;
+    return Scaffold(
+      backgroundColor: palette.scaffoldBackground,
+      body: SafeArea(
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(22, 18, 22, 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Editorial header + read-progress meter
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(22, 14, 22, 14),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'BEFORE WE BEGIN',
-                          style: TextStyle(
-                            fontFamily: 'JetBrains Mono',
-                            fontFamilyFallback: const [
-                              'Consolas',
-                              'Menlo',
-                              'Courier New',
-                              'monospace'
-                            ],
-                            fontSize: 10.5,
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: 1.2,
-                            color: p.textMuted,
-                          ),
+                  _SectionLabel('Before we begin', palette: palette),
+                  const SizedBox(height: 6),
+                  Text(
+                    'A few important things.',
+                    style: TextStyle(
+                      fontFamily: 'DM Sans',
+                      fontSize: 26,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: -0.3,
+                      color: palette.text,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    "Read carefully — these confirm what this app does and "
+                    "doesn't do.",
+                    style: TextStyle(
+                      fontFamily: 'DM Sans',
+                      fontSize: 13.5,
+                      color: palette.textMuted,
+                      height: 1.5,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  _WarnBanner(dark: dark),
+                  const SizedBox(height: 14),
+                  Expanded(
+                    child: ListView(
+                      padding: EdgeInsets.zero,
+                      children: const [
+                        _NumberedBullet(
+                          number: 1,
+                          title: 'You must be 18 or older',
+                          body:
+                              'Or an emancipated minor. PA Act 194 requires '
+                              'legal capacity at the time of signing.',
                         ),
-                        const SizedBox(height: 6),
-                        Text.rich(
-                          TextSpan(
-                            children: [
-                              const TextSpan(text: 'A few '),
-                              TextSpan(
-                                text: 'important',
-                                style: TextStyle(color: p.primary),
-                              ),
-                              const TextSpan(text: ' things.'),
-                            ],
-                          ),
-                          style: TextStyle(
-                            fontFamily: 'Instrument Serif',
-                            fontFamilyFallback: const [
-                              'Georgia',
-                              'Times New Roman',
-                              'serif'
-                            ],
-                            fontStyle: FontStyle.italic,
-                            fontSize: 44,
-                            fontWeight: FontWeight.w400,
-                            height: 0.98,
-                            letterSpacing: -1,
-                            color: p.text,
-                          ),
+                        SizedBox(height: 12),
+                        _NumberedBullet(
+                          number: 2,
+                          title: 'Your directive is valid for 2 years',
+                          body:
+                              "After that you'll need to renew it. We'll "
+                              'remind you 30 days before it expires.',
                         ),
-                        const SizedBox(height: 8),
-                        ConstrainedBox(
-                          constraints: const BoxConstraints(maxWidth: 340),
-                          child: Text.rich(
-                            TextSpan(
-                              style: TextStyle(
-                                fontFamily: 'DM Sans',
-                                fontSize: 14,
-                                color: p.textMuted,
-                                height: 1.5,
-                              ),
-                              children: [
-                                const TextSpan(
-                                    text:
-                                        "Read carefully — these confirm what this app does and doesn't do under "),
-                                TextSpan(
-                                  text: 'PA Act 194',
-                                  style: TextStyle(
-                                    color: p.text,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                const TextSpan(text: '.'),
-                              ],
-                            ),
-                          ),
+                        SizedBox(height: 12),
+                        _NumberedBullet(
+                          number: 3,
+                          title: 'Two adult witnesses are required',
+                          body:
+                              'They must be 18+ and present when you sign. '
+                              "They can't be your designated agent.",
                         ),
-                        const SizedBox(height: 14),
-                        // Read-progress micro-meter
-                        Row(
-                          children: [
-                            Expanded(
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(100),
-                                child: SizedBox(
-                                  height: 3,
-                                  child: LinearProgressIndicator(
-                                    value: pct,
-                                    backgroundColor: p.border,
-                                    valueColor: AlwaysStoppedAnimation(
-                                        p.primary),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                            Text(
-                              '$readCount / $total READ',
-                              style: TextStyle(
-                                fontFamily: 'JetBrains Mono',
-                                fontFamilyFallback: const [
-                                  'Consolas',
-                                  'Menlo',
-                                  'Courier New',
-                                  'monospace'
-                                ],
-                                fontSize: 10.5,
-                                fontWeight: FontWeight.w600,
-                                letterSpacing: 0.6,
-                                color: readCount == total
-                                    ? p.primary
-                                    : p.textMuted,
-                              ),
-                            ),
-                          ],
+                        SizedBox(height: 12),
+                        _NumberedBullet(
+                          number: 4,
+                          title: 'Consult a lawyer for legal questions',
+                          body:
+                              'PA Protection & Advocacy: 1-800-692-7443 '
+                              '(toll-free).',
                         ),
                       ],
                     ),
                   ),
-
-                  // Sections list (scrollable). Bottom 24px fades to the
-                  // scaffold — matches the prototype's maskImage gradient
-                  // (linear-gradient(to bottom, black calc(100% - 24px),
-                  // transparent)).
-                  Expanded(
-                    child: LayoutBuilder(
-                      builder: (context, constraints) {
-                        final fadeStop = constraints.maxHeight <= 0
-                            ? 1.0
-                            : (1 - 24 / constraints.maxHeight)
-                                .clamp(0.0, 1.0);
-                        return ShaderMask(
-                          shaderCallback: (rect) => LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            stops: [0, fadeStop, 1],
-                            colors: const [
-                              Colors.black,
-                              Colors.black,
-                              Colors.transparent,
-                            ],
-                          ).createShader(rect),
-                          blendMode: BlendMode.dstIn,
-                          child: ListView(
-                            padding:
-                                const EdgeInsets.fromLTRB(22, 0, 22, 24),
-                            children: [
-                        _ShortVersionBanner(),
-                        const SizedBox(height: 14),
-                        for (int i = 0; i < sections.length; i++) ...[
-                          _AccordionSection(
-                            number: sections[i].number,
-                            title: sections[i].title,
-                            body: sections[i].body,
-                            expanded: _open == i,
-                            onTap: () => _toggle(i),
-                          ),
-                          const SizedBox(height: 8),
-                        ],
-                        const SizedBox(height: 6),
-                        Center(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            child: Column(
-                              children: [
-                                Text(
-                                  '"Your directive is your voice — written in '
-                                  "advance, kept safe, honored when you can't "
-                                  'speak for yourself."',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontFamily: 'Instrument Serif',
-                                    fontFamilyFallback: const [
-                                      'Georgia',
-                                      'Times New Roman',
-                                      'serif'
-                                    ],
-                                    fontStyle: FontStyle.italic,
-                                    fontSize: 16,
-                                    color: p.textMuted,
-                                    height: 1.45,
-                                  ),
-                                ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  '— PA MHAD BOOKLET',
-                                  style: TextStyle(
-                                    fontFamily: 'JetBrains Mono',
-                                    fontFamilyFallback: const [
-                                      'Consolas',
-                                      'Menlo',
-                                      'Courier New',
-                                      'monospace'
-                                    ],
-                                    fontSize: 10,
-                                    letterSpacing: 0.6,
-                                    color: p.textMuted,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                  const SizedBox(height: 8),
+                  _AckRow(
+                    palette: palette,
+                    checked: accepted,
+                    onToggle: onAcceptToggle,
+                  ),
+                  const SizedBox(height: 8),
+                  Center(
+                    child: TextButton(
+                      onPressed: onOpenFull,
+                      style: TextButton.styleFrom(
+                        foregroundColor: palette.textMuted,
+                        textStyle: const TextStyle(
+                          fontFamily: 'DM Sans',
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
                         ),
-                            ],
-                          ),
-                        );
-                      },
+                      ),
+                      child: const Text('Read full legal sections'),
                     ),
                   ),
-
-                  // Sticky accept bar — gate only
-                  if (!readOnly)
-                    _AcceptFooter(
-                      isAdult: _isAdult,
-                      notLegal: _notLegal,
-                      onAdultToggle: () =>
-                          setState(() => _isAdult = !_isAdult),
-                      onNotLegalToggle: () =>
-                          setState(() => _notLegal = !_notLegal),
-                      canContinue: canContinue,
-                      onContinue: canContinue ? _accept : null,
+                  const SizedBox(height: 4),
+                  SizedBox(
+                    height: DesignTokens.buttonHeightLg,
+                    child: FilledButton(
+                      onPressed: onContinue,
+                      style: FilledButton.styleFrom(
+                        backgroundColor: palette.primary,
+                        foregroundColor: palette.onPrimary,
+                        disabledBackgroundColor: palette.border,
+                        disabledForegroundColor: palette.textMuted,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                              DesignTokens.buttonRadius),
+                        ),
+                        textStyle: const TextStyle(
+                          fontFamily: 'DM Sans',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 15,
+                        ),
+                      ),
+                      child: const Text('I understand · Continue'),
                     ),
+                  ),
                 ],
               ),
+            ),
+            // Persistent 988 chip pinned to top-right (gate only).
+            Positioned(
+              top: 12,
+              right: 16,
+              child: _Need988Pill(
+                bg: dark
+                    ? SemanticColors.errorBgDark
+                    : SemanticColors.errorBgLight,
+                border: dark
+                    ? SemanticColors.errorBorderDark
+                    : SemanticColors.errorBorderLight,
+                fg: dark
+                    ? SemanticColors.errorAccentDark
+                    : SemanticColors.errorAccentLight,
+                onTap: () => showCrisisSheet(context),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
-              // Persistent 988 chip pinned to top-right (gate only — Settings
-              // has its own AppBar and the route is already private).
-              if (!readOnly)
-                Positioned(
-                  top: 12,
-                  right: 16,
-                  child: _Need988Pill(
-                    bg: dark
-                        ? SemanticColors.errorBgDark
-                        : SemanticColors.errorBgLight,
-                    border: dark
-                        ? SemanticColors.errorBorderDark
-                        : SemanticColors.errorBorderLight,
-                    fg: dark
-                        ? SemanticColors.errorAccentDark
-                        : SemanticColors.errorAccentLight,
-                    onTap: () => showCrisisSheet(context),
+class _SectionLabel extends StatelessWidget {
+  final String text;
+  final MhadPalette palette;
+  const _SectionLabel(this.text, {required this.palette});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text.toUpperCase(),
+      style: TextStyle(
+        fontFamily: 'JetBrains Mono',
+        fontFamilyFallback: const [
+          'Consolas',
+          'Menlo',
+          'Courier New',
+          'monospace'
+        ],
+        fontSize: 10.5,
+        fontWeight: FontWeight.w600,
+        letterSpacing: 1.2,
+        color: palette.textMuted,
+      ),
+    );
+  }
+}
+
+class _WarnBanner extends StatelessWidget {
+  final bool dark;
+  const _WarnBanner({required this.dark});
+
+  @override
+  Widget build(BuildContext context) {
+    final bg = dark
+        ? SemanticColors.warningBgDark
+        : SemanticColors.warningBgLight;
+    final border = dark
+        ? SemanticColors.warningBorderDark
+        : SemanticColors.warningBorderLight;
+    final fg = dark
+        ? SemanticColors.warningTextDark
+        : SemanticColors.warningTextLight;
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: bg,
+        border: Border.all(color: border),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(Icons.warning_amber_rounded, size: 20, color: fg),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text.rich(
+              TextSpan(
+                style: TextStyle(
+                  fontFamily: 'DM Sans',
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  height: 1.45,
+                  color: fg,
+                ),
+                children: const [
+                  TextSpan(text: 'This app helps you '),
+                  TextSpan(
+                    text: 'document',
+                    style: TextStyle(fontStyle: FontStyle.italic),
+                  ),
+                  TextSpan(text: ' your preferences. It is '),
+                  TextSpan(
+                    text: 'not',
+                    style: TextStyle(fontWeight: FontWeight.w800),
+                  ),
+                  TextSpan(text: ' legal or medical advice.'),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _NumberedBullet extends StatelessWidget {
+  final int number;
+  final String title;
+  final String body;
+  const _NumberedBullet({
+    required this.number,
+    required this.title,
+    required this.body,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: 26,
+          height: 26,
+          decoration: BoxDecoration(
+            color: p.primaryLight,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          alignment: Alignment.center,
+          child: Text(
+            '$number',
+            style: TextStyle(
+              fontFamily: 'Instrument Serif',
+              fontFamilyFallback: const ['Georgia', 'serif'],
+              fontStyle: FontStyle.italic,
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+              color: p.onPrimaryLight,
+              height: 1,
+            ),
+          ),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: TextStyle(
+                  fontFamily: 'DM Sans',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: p.text,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                body,
+                style: TextStyle(
+                  fontFamily: 'DM Sans',
+                  fontSize: 12.5,
+                  height: 1.45,
+                  color: p.textMuted,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _AckRow extends StatelessWidget {
+  final MhadPalette palette;
+  final bool checked;
+  final VoidCallback onToggle;
+  const _AckRow({
+    required this.palette,
+    required this.checked,
+    required this.onToggle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      checked: checked,
+      child: InkWell(
+        onTap: onToggle,
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          // vertical 14 + 22 content = 50 keeps the row >= 48 for a11y while
+          // staying close to the prototype's tight checkbox row look.
+          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
+          child: Row(
+            children: [
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 120),
+                width: 22,
+                height: 22,
+                decoration: BoxDecoration(
+                  color: checked ? palette.primary : Colors.transparent,
+                  border: checked
+                      ? null
+                      : Border.all(color: palette.border, width: 1.5),
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                alignment: Alignment.center,
+                child: checked
+                    ? Icon(Icons.check,
+                        size: 14, color: palette.onPrimary)
+                    : null,
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  "I'm 18 or older, and I understand the above.",
+                  style: TextStyle(
+                    fontFamily: 'DM Sans',
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                    color: palette.text,
                   ),
                 ),
+              ),
             ],
           ),
         ),
@@ -332,7 +477,207 @@ class _DisclaimerScreenState extends State<DisclaimerScreen> {
   }
 }
 
-// ─── Data ────────────────────────────────────────────────────────────────
+// ─── 988 pill ───────────────────────────────────────────────────────────
+
+class _Need988Pill extends StatelessWidget {
+  final Color bg;
+  final Color border;
+  final Color fg;
+  final VoidCallback onTap;
+  const _Need988Pill({
+    required this.bg,
+    required this.border,
+    required this.fg,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      button: true,
+      label: 'Need 988 — open crisis resources',
+      child: Material(
+        color: bg,
+        borderRadius: BorderRadius.circular(100),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(100),
+          child: SizedBox(
+            height: 48,
+            child: Center(
+              widthFactor: 1,
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 10, vertical: 5),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(100),
+                  border: Border.all(color: border),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.phone_outlined, size: 11, color: fg),
+                    const SizedBox(width: 5),
+                    Text(
+                      'Need 988',
+                      style: TextStyle(
+                        fontFamily: 'DM Sans',
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                        color: fg,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ─── Read-only accordion (Settings → Legal) ─────────────────────────────
+
+class _ReadOnlyAccordion extends StatefulWidget {
+  final MhadPalette palette;
+  const _ReadOnlyAccordion({required this.palette});
+
+  @override
+  State<_ReadOnlyAccordion> createState() => _ReadOnlyAccordionState();
+}
+
+class _ReadOnlyAccordionState extends State<_ReadOnlyAccordion> {
+  int _open = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = widget.palette;
+    final sections = _buildSections(p);
+    return Scaffold(
+      backgroundColor: p.scaffoldBackground,
+      appBar: AppBar(title: const Text('Legal Disclaimer')),
+      body: SafeArea(
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(22, 16, 22, 24),
+          children: [
+            Text(
+              'Full legal disclosure',
+              style: TextStyle(
+                fontFamily: 'DM Sans',
+                fontSize: 22,
+                fontWeight: FontWeight.w700,
+                color: p.text,
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              'The eight sections below were accepted at first launch. '
+              'Tap to expand.',
+              style: TextStyle(
+                fontFamily: 'DM Sans',
+                fontSize: 13,
+                color: p.textMuted,
+                height: 1.5,
+              ),
+            ),
+            const SizedBox(height: 14),
+            for (int i = 0; i < sections.length; i++) ...[
+              _AccordionSection(
+                number: sections[i].number,
+                title: sections[i].title,
+                body: sections[i].body,
+                expanded: _open == i,
+                onTap: () =>
+                    setState(() => _open = _open == i ? -1 : i),
+              ),
+              const SizedBox(height: 8),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ─── Full-legal modal sheet (opened from gate) ──────────────────────────
+
+class _FullLegalSheet extends StatefulWidget {
+  final ScrollController scrollController;
+  const _FullLegalSheet({required this.scrollController});
+
+  @override
+  State<_FullLegalSheet> createState() => _FullLegalSheetState();
+}
+
+class _FullLegalSheetState extends State<_FullLegalSheet> {
+  int _open = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
+    final sections = _buildSections(p);
+    return Column(
+      children: [
+        // Drag handle
+        Container(
+          margin: const EdgeInsets.only(top: 10, bottom: 8),
+          width: 36,
+          height: 4,
+          decoration: BoxDecoration(
+            color: p.border,
+            borderRadius: BorderRadius.circular(100),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(22, 4, 22, 10),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  'Full legal sections',
+                  style: TextStyle(
+                    fontFamily: 'DM Sans',
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                    color: p.text,
+                  ),
+                ),
+              ),
+              IconButton(
+                onPressed: () => Navigator.of(context).pop(),
+                icon: const Icon(Icons.close),
+                tooltip: 'Close',
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          child: ListView(
+            controller: widget.scrollController,
+            padding: const EdgeInsets.fromLTRB(22, 0, 22, 24),
+            children: [
+              for (int i = 0; i < sections.length; i++) ...[
+                _AccordionSection(
+                  number: sections[i].number,
+                  title: sections[i].title,
+                  body: sections[i].body,
+                  expanded: _open == i,
+                  onTap: () =>
+                      setState(() => _open = _open == i ? -1 : i),
+                ),
+                const SizedBox(height: 8),
+              ],
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// ─── Section data (unchanged from prior implementation) ─────────────────
 
 class _SectionData {
   final String number;
@@ -425,7 +770,8 @@ List<_SectionData> _buildSections(MhadPalette p) {
         ], palette: p),
         _Bullet(spans: const [
           TextSpan(
-              text: 'Both witnesses meet eligibility requirements under Act 194'),
+              text:
+                  'Both witnesses meet eligibility requirements under Act 194'),
         ], palette: p),
         _Para(spans: [
           _bold('Witnesses cannot be: '),
@@ -478,7 +824,8 @@ List<_SectionData> _buildSections(MhadPalette p) {
                   'You may revoke this directive at any time while you have legal capacity by:'),
         ], palette: p),
         _Bullet(spans: const [
-          TextSpan(text: 'Notifying your healthcare provider or agent in writing'),
+          TextSpan(
+              text: 'Notifying your healthcare provider or agent in writing'),
         ], palette: p),
         _Bullet(spans: const [
           TextSpan(text: 'Destroying the directive'),
@@ -556,7 +903,7 @@ List<_SectionData> _buildSections(MhadPalette p) {
   ];
 }
 
-// ─── Building blocks ─────────────────────────────────────────────────────
+// ─── Building blocks (used by accordion sheet) ──────────────────────────
 
 InlineSpan _bold(String text) => TextSpan(
       text: text,
@@ -633,8 +980,6 @@ class _Bullet extends StatelessWidget {
   }
 }
 
-/// Bold spans inside body text get the full-text color (rather than the
-/// muted body color) — matches the prototype's `.disc-body strong` rule.
 InlineSpan _coloredBoldInBody(InlineSpan span, MhadPalette palette) {
   if (span is! TextSpan) return span;
   final isBold = (span.style?.fontWeight == FontWeight.w600 ||
@@ -707,8 +1052,6 @@ class _Resource extends StatelessWidget {
   }
 }
 
-// ─── Accordion section ──────────────────────────────────────────────────
-
 class _AccordionSection extends StatelessWidget {
   final String number;
   final String title;
@@ -748,39 +1091,29 @@ class _AccordionSection extends StatelessWidget {
             child: InkWell(
               onTap: onTap,
               child: SizedBox(
-                // Fixed accordion-header height â‰¥ 48 for the a11y guideline.
-                // The visible content (number + title + chevron) is centered
-                // within it, matching the prototype's tight header look.
                 height: 56,
                 child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 14),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: 30,
-                      child: Text(
-                        number,
-                        style: TextStyle(
-                          fontFamily: 'Instrument Serif',
-                          fontFamilyFallback: const [
-                            'Georgia',
-                            'Times New Roman',
-                            'serif'
-                          ],
-                          fontStyle: FontStyle.italic,
-                          fontSize: 24,
-                          fontWeight: FontWeight.w400,
-                          height: 1,
-                          letterSpacing: -0.5,
-                          color: p.primary,
+                  padding: const EdgeInsets.symmetric(horizontal: 14),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 30,
+                        child: Text(
+                          number,
+                          style: TextStyle(
+                            fontFamily: 'Instrument Serif',
+                            fontFamilyFallback: const ['Georgia', 'serif'],
+                            fontStyle: FontStyle.italic,
+                            fontSize: 24,
+                            fontWeight: FontWeight.w400,
+                            height: 1,
+                            letterSpacing: -0.5,
+                            color: p.primary,
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 2),
+                      const SizedBox(width: 12),
+                      Expanded(
                         child: Text(
                           title,
                           style: TextStyle(
@@ -792,16 +1125,15 @@ class _AccordionSection extends StatelessWidget {
                           ),
                         ),
                       ),
-                    ),
-                    AnimatedRotation(
-                      duration: const Duration(milliseconds: 200),
-                      turns: expanded ? 0.5 : 0,
-                      child: Icon(Icons.keyboard_arrow_down,
-                          size: 18, color: p.textMuted),
-                    ),
-                  ],
+                      AnimatedRotation(
+                        duration: const Duration(milliseconds: 200),
+                        turns: expanded ? 0.5 : 0,
+                        child: Icon(Icons.keyboard_arrow_down,
+                            size: 18, color: p.textMuted),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
               ),
             ),
           ),
@@ -814,325 +1146,6 @@ class _AccordionSection extends StatelessWidget {
               ),
             ),
         ],
-      ),
-    );
-  }
-}
-
-// ─── Short-version banner ───────────────────────────────────────────────
-
-class _ShortVersionBanner extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final dark = Theme.of(context).brightness == Brightness.dark;
-    final bg = dark ? SemanticColors.warningBgDark : SemanticColors.warningBgLight;
-    final border = dark
-        ? SemanticColors.warningBorderDark
-        : SemanticColors.warningBorderLight;
-    final fg = dark
-        ? SemanticColors.warningTextDark
-        : SemanticColors.warningTextLight;
-
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: bg,
-        border: Border.all(color: border),
-        borderRadius: BorderRadius.circular(14),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 28,
-            height: 28,
-            decoration: BoxDecoration(
-              color: border,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Icon(Icons.warning_amber_rounded, size: 16, color: fg),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Short version',
-                  style: TextStyle(
-                    fontFamily: 'DM Sans',
-                    fontSize: 13,
-                    fontWeight: FontWeight.w700,
-                    color: fg,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text.rich(
-                  TextSpan(
-                    style: TextStyle(
-                      fontFamily: 'DM Sans',
-                      fontSize: 12.5,
-                      color: fg,
-                      height: 1.5,
-                    ),
-                    children: [
-                      const TextSpan(text: 'This app helps you '),
-                      const TextSpan(
-                        text: 'document',
-                        style: TextStyle(fontStyle: FontStyle.italic),
-                      ),
-                      const TextSpan(text: ' your preferences. It is '),
-                      TextSpan(
-                        text: 'not',
-                        style: const TextStyle(fontWeight: FontWeight.w700),
-                      ),
-                      const TextSpan(
-                          text:
-                              ' legal or medical advice. To be valid, your directive must be signed in front of '),
-                      TextSpan(
-                        text: 'two adult witnesses',
-                        style: const TextStyle(fontWeight: FontWeight.w700),
-                      ),
-                      const TextSpan(text: '. Tap each section below to expand.'),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// ─── 988 pill ───────────────────────────────────────────────────────────
-
-class _Need988Pill extends StatelessWidget {
-  final Color bg;
-  final Color border;
-  final Color fg;
-  final VoidCallback onTap;
-  const _Need988Pill({
-    required this.bg,
-    required this.border,
-    required this.fg,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      button: true,
-      label: 'Need 988 — open crisis resources',
-      child: Material(
-        color: bg,
-        borderRadius: BorderRadius.circular(100),
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(100),
-          // 48px tap target around the ~29px visible pill (a11y guideline).
-          child: SizedBox(
-            height: 48,
-            child: Center(
-              widthFactor: 1,
-              child: Container(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(100),
-              border: Border.all(color: border),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.phone_outlined, size: 11, color: fg),
-                const SizedBox(width: 5),
-                Text(
-                  'Need 988',
-                  style: TextStyle(
-                    fontFamily: 'DM Sans',
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600,
-                    color: fg,
-                  ),
-                ),
-              ],
-            ),
-          ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-// ─── Accept footer (gate only) ──────────────────────────────────────────
-
-class _AcceptFooter extends StatelessWidget {
-  final bool isAdult;
-  final bool notLegal;
-  final VoidCallback onAdultToggle;
-  final VoidCallback onNotLegalToggle;
-  final bool canContinue;
-  final VoidCallback? onContinue;
-
-  const _AcceptFooter({
-    required this.isAdult,
-    required this.notLegal,
-    required this.onAdultToggle,
-    required this.onNotLegalToggle,
-    required this.canContinue,
-    required this.onContinue,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final p = Theme.of(context).mhadPalette;
-    return Container(
-      decoration: BoxDecoration(
-        color: p.card,
-        border: Border(top: BorderSide(color: p.border)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 24,
-            offset: const Offset(0, -8),
-          ),
-        ],
-      ),
-      padding: const EdgeInsets.fromLTRB(18, 14, 18, 28),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          _CheckRow(
-            checked: isAdult,
-            onToggle: onAdultToggle,
-            labelSpans: [
-              const TextSpan(text: "I'm "),
-              _bold('18 or older'),
-              const TextSpan(text: ', or an emancipated minor.'),
-            ],
-          ),
-          const SizedBox(height: 8),
-          _CheckRow(
-            checked: notLegal,
-            onToggle: onNotLegalToggle,
-            labelSpans: [
-              const TextSpan(text: 'I understand this app is '),
-              _bold('not legal or medical advice'),
-              const TextSpan(text: '.'),
-            ],
-          ),
-          const SizedBox(height: 12),
-          SizedBox(
-            height: DesignTokens.buttonHeightLg,
-            child: FilledButton.icon(
-              onPressed: onContinue,
-              icon: Icon(
-                Icons.arrow_forward,
-                size: 18,
-                color: canContinue ? p.onPrimary : p.textMuted,
-              ),
-              label: Text(
-                'I understand · Continue',
-                style: TextStyle(
-                  fontFamily: 'DM Sans',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 15,
-                  color: canContinue ? p.onPrimary : p.textMuted,
-                ),
-              ),
-              style: FilledButton.styleFrom(
-                iconAlignment: IconAlignment.end,
-                backgroundColor: canContinue ? p.primary : p.border,
-                disabledBackgroundColor: p.border,
-                shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(DesignTokens.buttonRadius),
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 10),
-          Text(
-            'You can re-read this anytime from Settings → Legal.',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontFamily: 'DM Sans',
-              fontSize: 10.5,
-              color: p.textMuted,
-              height: 1.45,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _CheckRow extends StatelessWidget {
-  final bool checked;
-  final VoidCallback onToggle;
-  final List<InlineSpan> labelSpans;
-  const _CheckRow({
-    required this.checked,
-    required this.onToggle,
-    required this.labelSpans,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final p = Theme.of(context).mhadPalette;
-    return Semantics(
-      checked: checked,
-      child: InkWell(
-        onTap: onToggle,
-        borderRadius: BorderRadius.circular(8),
-        child: Padding(
-          // Vertical 14 (â‰ˆ 22 + 28 = 50) keeps the row â‰¥ 48 for a11y while
-          // staying close to the prototype's tight checkbox row.
-          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 4),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 120),
-                margin: const EdgeInsets.only(top: 1),
-                width: 22,
-                height: 22,
-                decoration: BoxDecoration(
-                  color: checked ? p.primary : Colors.transparent,
-                  border: checked
-                      ? null
-                      : Border.all(color: p.border, width: 1.5),
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                alignment: Alignment.center,
-                child: checked
-                    ? Icon(Icons.check, size: 14, color: p.onPrimary)
-                    : null,
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text.rich(
-                  TextSpan(
-                    children: labelSpans
-                        .map((s) => _coloredBoldInBody(s, p))
-                        .toList(growable: false),
-                  ),
-                  style: TextStyle(
-                    fontFamily: 'DM Sans',
-                    fontSize: 13.5,
-                    color: p.text,
-                    height: 1.45,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }
