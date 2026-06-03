@@ -34,9 +34,16 @@ void main() {
     // Wait for async operations
     await tester.pumpAndSettle();
 
-    // Brand row in body shows the "PA MHAD" label (moved out of the
-    // removed AppBar in 2026-06-03's home restructure).
-    expect(find.text('PA MHAD'), findsOneWidget);
+    // The prototype-faithful home (mobile.jsx::ScrHome L235-362) has no
+    // brand row — it opens straight with the date SectionLabel + editorial
+    // greeting. With an empty database the anonymous editorial fallback
+    // "Your voice, / in your words." renders in the greeting slot. The
+    // previously-asserted "PA MHAD" brand row was removed 2026-06-03 to
+    // match the prototype.
+    expect(
+      find.textContaining('Your voice', findRichText: true),
+      findsWidgets,
+    );
 
     // The "Start my directive" CTA in the editorial empty-state card is
     // the canonical primary CTA on a fresh launch. The legacy duplicate

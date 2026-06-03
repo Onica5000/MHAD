@@ -10,9 +10,7 @@ import 'package:mhad/services/device_security_service.dart';
 import 'package:mhad/services/reminder_scheduler.dart';
 import 'package:mhad/services/web_session_cache.dart';
 import 'package:mhad/services/notification_service.dart';
-import 'package:mhad/services/privacy_mode_service.dart';
 import 'package:mhad/domain/model/directive.dart';
-import 'package:mhad/ui/home/directive_card.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/onboarding/onboarding_screen.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
@@ -69,168 +67,167 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     final dateLabel = DateFormat('EEEE · MMMM d').format(DateTime.now());
 
+    // Layout mirrors prototype `ScrHome` (mobile.jsx L235-362) exactly:
+    //   <Screen>
+    //     <CrisisBar />   ← persistent global banner already lives at the
+    //                       bottom of every screen via main.dart's Column.
+    //                       The prototype puts it at top; we keep the
+    //                       global bottom-position banner so this Scaffold
+    //                       body starts directly with the date label.
+    //     <div padding="20px 22px 100px">
+    //       SectionLabel(date)
+    //       row { greeting + avatar }
+    //       gap 22
+    //       active-directive hero  ← only when a draft exists
+    //       gap 18
+    //       outline "Start a new directive"  ← only when a draft exists
+    //       gap 22
+    //       SectionLabel(Tools)
+    //       gap 8
+    //       2x2 tools grid
+    //       gap 18
+    //       SectionLabel(Past directives)
+    //       gap 8
+    //       past-directive rows  ← compact tiles, tap → past_detail
+    //     </div>
     return Scaffold(
       backgroundColor: p.scaffoldBackground,
       bottomNavigationBar: const MhadBottomNav(),
-      // AppBar removed per user direction (2026-06-03). The prototype
-      // `ScrHome` has no Material AppBar — the brand row lives at the
-      // top of the body, and the lock-icon popup-menu actions
-      // (Export Data / Switch to Public / Delete All Data) now live in
-      // Settings → Data & privacy. The persistent CrisisResourcesBanner
-      // at the bottom of every screen (wired in main.dart) covers the
-      // crisis surface.
       body: SafeArea(
         bottom: false,
         child: ListView(
-        padding: const EdgeInsets.fromLTRB(22, 8, 22, 24),
-        children: [
-          // Brand row — moved from the (now-removed) AppBar to the top of
-          // the body. Editorial "m" italic chip + "PA MHAD" + monospace
-          // privacy-mode status.
-          _BrandRow(privacyMode: privacyMode),
-          const SizedBox(height: 12),
-          // Public-mode ephemeral status bar — matches prototype `ScrPublic`
-          // L1568-1577: a dark strip that sits above the rest of the home
-          // content reminding the user nothing is being saved.
-          if (privacyMode.isPublic) const _EphemeralBar(),
-          const _DeviceSecurityCheck(),
-          SectionLabel(dateLabel),
-          // Editorial greeting — three states:
-          //   - Public mode: "Welcome, guest. / Quick draft, no trace."
-          //     (italic editorial, replaces any name-based greeting)
-          //   - Private mode + any directive with a stored name:
-          //     "Hi, [Name]. / Let's keep your voice clear." + avatar pill
-          //   - Anonymous fallback: dual-color "Your voice, / in your words."
-          directivesAsync.maybeWhen(
-            data: (directives) => _HomeGreeting(
-              directives: directives,
-              isPublic: privacyMode.isPublic,
-            ),
-            orElse: () => privacyMode.isPublic
-                ? const _PublicGuestGreeting()
-                : EditorialHeading(
-                    textSpan: TextSpan(
-                      children: [
-                        const TextSpan(text: 'Your voice,\n'),
-                        TextSpan(
-                          text: 'in your words.',
-                          style: TextStyle(color: p.primary),
-                        ),
-                      ],
-                    ),
-                    size: 38,
-                    height: 1.05,
-                    letterSpacing: -0.6,
-                  ),
-          ),
-          const SizedBox(height: 20),
-          // (Removed: legal-disclaimer InfoBanner — covered by the
-          // Disclaimer screen, the Privacy Policy row in Settings, and
-          // the always-visible legal footer. Also removed: _LearnMoreCard
-          // — duplicates the Tools-grid "Learn" tile. Both removals per
-          // user direction 2026-06-03: no redundant UI on the same page.)
-          if (privacyMode.isPublic) ...[
-            _PublicModeNotice(
-              onEndSession: () => _confirmEndSession(context, ref),
-            ),
-            const SizedBox(height: 20),
-          ],
-          // Active directive hero — surfaces the most-recent in-progress
-          // draft with a progress bar and a "Continue where you left off"
-          // CTA (prototype ScrHome's primary visual). Pure addition: when
-          // no draft exists, this collapses to nothing and the regular
-          // directives list / empty-state below still drives behaviour.
-          directivesAsync.maybeWhen(
-            data: (directives) {
-              final drafts = directives
-                  .where((d) => d.status == 'draft')
-                  .toList()
-                ..sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
-              if (drafts.isEmpty) return const SizedBox.shrink();
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _ActiveDirectiveHero(directive: drafts.first),
-                  const SizedBox(height: 12),
-                  SizedBox(
-                    width: double.infinity,
-                    child: OutlinedButton.icon(
-                      onPressed: () =>
-                          context.go(AppRoutes.formTypeSelection),
-                      icon: const Icon(Icons.add),
-                      label: const Text('Start a new directive'),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                ],
-              );
-            },
-            orElse: () => const SizedBox.shrink(),
-          ),
-
-          // Tools grid — 2x2 of the most-used non-directive destinations
-          // (AI assistant, Learn, Wallet card from most-recent directive,
-          // Crisis help). Pure addition: everything here is already
-          // reachable elsewhere; this just gives users a visual entry.
-          const SectionLabel('Tools'),
-          const SizedBox(height: 8),
-          const _ToolsGrid(),
-          const SizedBox(height: 20),
-
-          directivesAsync.when(
-            data: (directives) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SectionLabel(
-                    privacyMode.isPublic
-                        ? 'Session Directives (${directives.length})'
-                        : 'Your Directives (${directives.length})',
-                  ),
-                  const SizedBox(height: 8),
-                  if (directives.isEmpty)
-                    _EmptyDirectives(
-                      onStart: () =>
-                          context.go(AppRoutes.formTypeSelection),
-                    )
-                  else
-                    ...directives.map((d) => _DirectiveCardWithAgent(
-                          key: ValueKey(d.id),
-                          directive: d,
-                          onExport: () =>
-                              context.push(AppRoutes.exportRoute(d.id)),
-                          onDelete: () => _confirmDelete(context, ref, d.id),
-                          onRevoke: () => _confirmRevoke(context, ref, d.id),
-                          onRenew: () => _renewDirective(context, ref, d),
-                        )),
-                ],
-              );
-            },
-            loading: () => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 32),
-              child: Center(
-                child: Semantics(
-                  label: 'Loading',
-                  child: const CircularProgressIndicator(),
-                ),
+          // Prototype: 20 top, 22 horizontal, 100 bottom (the 100 leaves
+          // room for the absolute-positioned floating pill nav).
+          padding: const EdgeInsets.fromLTRB(22, 20, 22, 100),
+          children: [
+            const _DeviceSecurityCheck(),
+            // Public-mode ephemeral status strip stays at the very top
+            // for Public sessions (prototype `ScrPublic` L1568-1577).
+            if (privacyMode.isPublic) const _EphemeralBar(),
+            SectionLabel(dateLabel),
+            // Greeting row — h1 italic serif + 40pt avatar circle on the
+            // right (prototype L243-253).
+            directivesAsync.maybeWhen(
+              data: (directives) => _GreetingRow(
+                directives: directives,
+                isPublic: privacyMode.isPublic,
+              ),
+              orElse: () => _GreetingRow(
+                directives: const [],
+                isPublic: privacyMode.isPublic,
               ),
             ),
-            error: (e, _) {
-              debugPrint('Error loading directives: $e');
-              return _EmptyDirectives(
-                onStart: () => context.go(AppRoutes.formTypeSelection),
-              );
-            },
-          ),
-          // (Removed: the second "New Directive" FilledButton — already
-          // surfaced by the "Start my directive" CTA in the editorial
-          // empty-state card AND by the outline "Start a new directive"
-          // button next to the active-draft hero. Also removed: the
-          // "Resources" SectionLabel + ProviderResourcesCard — they
-          // duplicated the Tools grid + the Learn / Crisis tiles that
-          // surface the same destinations. Per user direction
-          // 2026-06-03: no redundant UI on the same page.)
-        ],
+            if (privacyMode.isPublic) ...[
+              const SizedBox(height: 22),
+              _PublicModeNotice(
+                onEndSession: () => _confirmEndSession(context, ref),
+              ),
+            ],
+            // Active draft hero + outline "Start a new directive" button.
+            // Spacing matches prototype L255 (22 above hero) and L296
+            // (18 above outline button).
+            directivesAsync.maybeWhen(
+              data: (directives) {
+                final drafts = directives
+                    .where((d) => d.status == 'draft')
+                    .toList()
+                  ..sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
+                if (drafts.isEmpty) return const SizedBox.shrink();
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 22),
+                    _ActiveDirectiveHero(directive: drafts.first),
+                    const SizedBox(height: 18),
+                    // Outline "Start a new directive" matches prototype L297.
+                    SizedBox(
+                      width: double.infinity,
+                      child: OutlinedButton.icon(
+                        onPressed: () =>
+                            context.go(AppRoutes.formTypeSelection),
+                        icon: const Icon(Icons.add, size: 16),
+                        label: const Text('Start a new directive'),
+                        style: OutlinedButton.styleFrom(
+                          minimumSize: const Size.fromHeight(
+                              DesignTokens.buttonHeightMd),
+                          side: BorderSide(color: p.primary, width: 1.5),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                DesignTokens.buttonRadius),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              },
+              orElse: () => const SizedBox.shrink(),
+            ),
+            const SizedBox(height: 22),
+            const SectionLabel('Tools'),
+            const SizedBox(height: 8),
+            const _ToolsGrid(),
+            const SizedBox(height: 18),
+            // Past directives — completed / expired / revoked rendered as
+            // compact tiles matching prototype L326-334. The active draft
+            // is intentionally excluded (it lives in the hero above). When
+            // there are NO directives at all, render the editorial empty
+            // hero card in this slot.
+            directivesAsync.when(
+              data: (directives) {
+                final past = directives
+                    .where((d) => d.status != 'draft')
+                    .toList()
+                  ..sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
+                if (directives.isEmpty) {
+                  return _EmptyDirectives(
+                    onStart: () =>
+                        context.go(AppRoutes.formTypeSelection),
+                  );
+                }
+                if (past.isEmpty) return const SizedBox.shrink();
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SectionLabel('Past directives'),
+                    const SizedBox(height: 8),
+                    for (final d in past) ...[
+                      _PastDirectiveRow(
+                        directive: d,
+                        onTap: () => context
+                            .push(AppRoutes.pastDirectiveRoute(d.id)),
+                        onDelete: () =>
+                            _confirmDelete(context, ref, d.id),
+                        onRevoke: d.status == 'complete'
+                            ? () => _confirmRevoke(context, ref, d.id)
+                            : null,
+                        onRenew: () =>
+                            _renewDirective(context, ref, d),
+                        onExport: () => context
+                            .push(AppRoutes.exportRoute(d.id)),
+                      ),
+                      const SizedBox(height: 8),
+                    ],
+                  ],
+                );
+              },
+              loading: () => Padding(
+                padding: const EdgeInsets.symmetric(vertical: 32),
+                child: Center(
+                  child: Semantics(
+                    label: 'Loading',
+                    child: const CircularProgressIndicator(),
+                  ),
+                ),
+              ),
+              error: (e, _) {
+                debugPrint('Error loading directives: $e');
+                return _EmptyDirectives(
+                  onStart: () => context.go(AppRoutes.formTypeSelection),
+                );
+              },
+            ),
+          ],
         ),
       ),
     );
@@ -752,44 +749,6 @@ class _DeviceSecurityCheckState extends State<_DeviceSecurityCheck> {
   Widget build(BuildContext context) => const SizedBox.shrink();
 }
 
-class _DirectiveCardWithAgent extends ConsumerWidget {
-  final Directive directive;
-  final VoidCallback onDelete;
-  final VoidCallback? onRevoke;
-  final VoidCallback? onRenew;
-  final VoidCallback? onExport;
-
-  const _DirectiveCardWithAgent({
-    required this.directive,
-    required this.onDelete,
-    this.onRevoke,
-    this.onRenew,
-    this.onExport,
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final repo = ref.read(directiveRepositoryProvider);
-    return FutureBuilder<List<Agent>>(
-      future: repo.getAgents(directive.id),
-      builder: (context, snapshot) {
-        final agentName = (snapshot.data != null && snapshot.data!.isNotEmpty)
-            ? snapshot.data!.first.fullName
-            : null;
-        return DirectiveCard(
-          directive: directive,
-          onDelete: onDelete,
-          onRevoke: onRevoke,
-          onRenew: onRenew,
-          onExport: onExport,
-          agentName: agentName,
-        );
-      },
-    );
-  }
-}
-
 /// Prototype `ScrHome` active-directive hero card. Shows the most-recent
 /// draft directive with form type, last-edited stamp, progress bar, and a
 /// "Continue where you left off" CTA pointing at the wizard route.
@@ -1171,10 +1130,10 @@ class _ToolTileCard extends StatelessWidget {
 ///   - **Anonymous** (no directives yet): falls back to the v3 dual-color
 ///     "Your voice, in your words." editorial so first-launch still has a
 ///     hook. The caller handles this branch via `directivesAsync.maybeWhen`.
-class _HomeGreeting extends StatelessWidget {
+class _GreetingRow extends StatelessWidget {
   final List<Directive> directives;
   final bool isPublic;
-  const _HomeGreeting({
+  const _GreetingRow({
     required this.directives,
     this.isPublic = false,
   });
@@ -1377,81 +1336,170 @@ class _PublicGuestGreeting extends StatelessWidget {
   }
 }
 
-/// Editorial brand row that replaces the (removed) home AppBar.
+/// Prototype `ScrHome` past-directive compact row (mobile.jsx L327-334).
 ///
-/// Layout: 28pt teal-filled square with italic-serif lowercase "m" + a
-/// stacked text column with "PA MHAD" (DM Sans bold) + monospace
-/// privacy-mode status pill. Visual mirror of prototype `ScrHome`
-/// L235-262 where the brand info lives in the body, not a Material chrome.
-class _BrandRow extends StatelessWidget {
-  final PrivacyModeNotifier privacyMode;
-  const _BrandRow({required this.privacyMode});
+/// Layout: 14px-padded card, FileText icon (20pt muted) + flex column
+/// {name (13.5/600), sub (11.5 muted)} + trailing DotsH overflow icon (18pt
+/// muted). Tapping the row opens the past-directive detail screen; the
+/// overflow icon raises a sheet exposing Export / Renew / Revoke / Delete —
+/// all the affordances the prior `_DirectiveCardWithAgent` exposed inline.
+class _PastDirectiveRow extends StatelessWidget {
+  final Directive directive;
+  final VoidCallback onTap;
+  final VoidCallback onDelete;
+  final VoidCallback? onRevoke;
+  final VoidCallback? onRenew;
+  final VoidCallback? onExport;
+
+  const _PastDirectiveRow({
+    required this.directive,
+    required this.onTap,
+    required this.onDelete,
+    this.onRevoke,
+    this.onRenew,
+    this.onExport,
+  });
+
+  String _subLine() {
+    final status = directive.status;
+    final updated = DateTime.fromMillisecondsSinceEpoch(directive.updatedAt);
+    final stamp = DateFormat('MMM d, y').format(updated);
+    return switch (status) {
+      'complete' => 'Complete · $stamp',
+      'expired' => 'Expired · revoke or copy to new',
+      'revoked' => 'Revoked · $stamp',
+      _ => stamp,
+    };
+  }
+
+  String _nameLine() {
+    final year = DateTime.fromMillisecondsSinceEpoch(directive.updatedAt).year;
+    final n = directive.fullName.trim();
+    return n.isEmpty ? 'Directive · $year' : '$n · $year';
+  }
 
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
-    final statusText = privacyMode.isPrivate
-        ? '● PRIVATE · ENCRYPTED'
-        : (privacyMode.isPublic
-            ? '● PUBLIC · NOT SAVED'
-            : 'NO SESSION');
-    final statusColor = privacyMode.isPrivate
-        ? SemanticColors.successTextLight
-        : SemanticColors.warningTextLight;
-    return Row(
-      children: [
-        Container(
-          width: 28,
-          height: 28,
-          decoration: BoxDecoration(
-            color: p.primary,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          alignment: Alignment.center,
-          child: Text(
-            'm',
-            style: TextStyle(
-              fontFamily: 'Instrument Serif',
-              fontFamilyFallback: const ['Georgia', 'serif'],
-              fontStyle: FontStyle.italic,
-              fontSize: 18,
-              color: p.onPrimary,
+    return Semantics(
+      button: true,
+      label: '${_nameLine()}. ${_subLine()}. Tap to open.',
+      child: Material(
+        color: p.card,
+        borderRadius: BorderRadius.circular(12),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(12),
+          child: Container(
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: p.border),
+            ),
+            child: Row(
+              children: [
+                Icon(Icons.description_outlined,
+                    size: 20, color: p.textMuted),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        _nameLine(),
+                        style: TextStyle(
+                          fontFamily: 'DM Sans',
+                          fontSize: 13.5,
+                          fontWeight: FontWeight.w600,
+                          color: p.text,
+                        ),
+                      ),
+                      Text(
+                        _subLine(),
+                        style: TextStyle(
+                          fontFamily: 'DM Sans',
+                          fontSize: 11.5,
+                          color: p.textMuted,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                // Overflow → bottom sheet with all preserved actions.
+                IconButton(
+                  iconSize: 18,
+                  visualDensity: VisualDensity.compact,
+                  padding: EdgeInsets.zero,
+                  constraints:
+                      const BoxConstraints(minWidth: 32, minHeight: 32),
+                  icon: Icon(Icons.more_horiz, color: p.textMuted),
+                  tooltip: 'More',
+                  onPressed: () => _showActions(context),
+                ),
+              ],
             ),
           ),
         ),
-        const SizedBox(width: 10),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'PA MHAD',
-              style: TextStyle(
-                fontFamily: 'DM Sans',
-                fontSize: 13,
-                fontWeight: FontWeight.w700,
-                letterSpacing: -0.2,
-                color: p.text,
+      ),
+    );
+  }
+
+  Future<void> _showActions(BuildContext context) async {
+    final p = Theme.of(context).mhadPalette;
+    await showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: p.card,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (sheetCtx) {
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (onExport != null)
+                ListTile(
+                  leading: Icon(Icons.ios_share, color: p.primary),
+                  title: const Text('Export'),
+                  onTap: () {
+                    Navigator.pop(sheetCtx);
+                    onExport!();
+                  },
+                ),
+              if (onRenew != null)
+                ListTile(
+                  leading: Icon(Icons.refresh, color: p.primary),
+                  title: const Text('Renew (copy to new)'),
+                  onTap: () {
+                    Navigator.pop(sheetCtx);
+                    onRenew!();
+                  },
+                ),
+              if (onRevoke != null)
+                ListTile(
+                  leading: Icon(Icons.cancel_outlined,
+                      color: Theme.of(sheetCtx).colorScheme.error),
+                  title: const Text('Revoke'),
+                  onTap: () {
+                    Navigator.pop(sheetCtx);
+                    onRevoke!();
+                  },
+                ),
+              ListTile(
+                leading: Icon(Icons.delete_outline,
+                    color: Theme.of(sheetCtx).colorScheme.error),
+                title: const Text('Delete'),
+                onTap: () {
+                  Navigator.pop(sheetCtx);
+                  onDelete();
+                },
               ),
-            ),
-            Text(
-              statusText,
-              style: TextStyle(
-                fontFamily: 'JetBrains Mono',
-                fontFamilyFallback: const [
-                  'Consolas',
-                  'Menlo',
-                  'Courier New',
-                  'monospace',
-                ],
-                fontSize: 9.5,
-                letterSpacing: 0.6,
-                color: statusColor,
-              ),
-            ),
-          ],
-        ),
-      ],
+              const SizedBox(height: 8),
+            ],
+          ),
+        );
+      },
     );
   }
 }
