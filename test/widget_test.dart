@@ -34,19 +34,17 @@ void main() {
     // Wait for async operations
     await tester.pumpAndSettle();
 
-    // App bar shows the brand mark.
+    // Brand row in body shows the "PA MHAD" label (moved out of the
+    // removed AppBar in 2026-06-03's home restructure).
     expect(find.text('PA MHAD'), findsOneWidget);
 
-    // Learn More card is high on the home screen.
-    final learnCard = find.text('Learn About MHADs');
-    await tester.scrollUntilVisible(learnCard, 200);
-    expect(learnCard, findsOneWidget);
-
-    // The "New Directive" button sits further down the ListView; scroll to
-    // it before asserting so the test viewport doesn't matter.
-    final newBtn = find.text('New Directive');
-    await tester.scrollUntilVisible(newBtn, 200);
-    expect(newBtn, findsOneWidget);
+    // The "Start my directive" CTA in the editorial empty-state card is
+    // the canonical primary CTA on a fresh launch. The legacy duplicate
+    // "New Directive" button + Learn-More card were removed per the same
+    // restructure (Tools-grid Learn tile + empty-hero CTA cover both).
+    final startBtn = find.text('Start my directive');
+    await tester.scrollUntilVisible(startBtn, 200);
+    expect(startBtn, findsOneWidget);
 
     await db.close();
   });

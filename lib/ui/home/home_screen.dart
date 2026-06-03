@@ -6,7 +6,6 @@ import 'package:intl/intl.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/providers/assistant_providers.dart';
-import 'package:mhad/services/data_export_service.dart';
 import 'package:mhad/services/device_security_service.dart';
 import 'package:mhad/services/reminder_scheduler.dart';
 import 'package:mhad/services/web_session_cache.dart';
@@ -21,11 +20,8 @@ import 'package:mhad/ui/widgets/design/bottom_nav.dart';
 import 'package:mhad/ui/widgets/design/crisis_sheet.dart';
 import 'package:mhad/ui/widgets/design/design_card.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
-import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/draft_recovery_dialog.dart';
-import 'package:mhad/ui/widgets/provider_resources.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -76,169 +72,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return Scaffold(
       backgroundColor: p.scaffoldBackground,
       bottomNavigationBar: const MhadBottomNav(),
-      appBar: AppBar(
-        title: Row(
-          children: [
-            Container(
-              width: 28,
-              height: 28,
-              decoration: BoxDecoration(
-                color: p.primary,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              alignment: Alignment.center,
-              child: Text(
-                'm',
-                style: TextStyle(
-                  fontFamily: 'Instrument Serif',
-                  fontFamilyFallback: const ['Georgia', 'serif'],
-                  fontStyle: FontStyle.italic,
-                  fontSize: 18,
-                  color: p.onPrimary,
-                ),
-              ),
-            ),
-            const SizedBox(width: 10),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'PA MHAD',
-                  style: TextStyle(
-                    fontFamily: 'DM Sans',
-                    fontSize: 13,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: -0.2,
-                    color: p.text,
-                  ),
-                ),
-                Text(
-                  privacyMode.isPrivate
-                      ? '● PRIVATE · ENCRYPTED'
-                      : (privacyMode.isPublic
-                          ? '● PUBLIC · NOT SAVED'
-                          : 'NO SESSION'),
-                  style: TextStyle(
-                    fontFamily: 'JetBrains Mono',
-                    fontFamilyFallback: const [
-                      'Consolas',
-                      'Courier New',
-                      'monospace'
-                    ],
-                    fontSize: 9.5,
-                    letterSpacing: 0.6,
-                    color: privacyMode.isPrivate
-                        ? SemanticColors.successTextLight
-                        : SemanticColors.warningTextLight,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-        titleSpacing: 4,
-        actions: [
-          if (privacyMode.isPrivate)
-            PopupMenuButton<String>(
-              tooltip: 'Session options',
-              icon: Icon(Icons.lock_outline, color: p.text),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              onSelected: (value) {
-                if (value == 'switch_public') {
-                  _confirmSwitchToPublic(context, privacyMode);
-                } else if (value == 'export_data') {
-                  _exportData(context, ref);
-                } else if (value == 'delete_all') {
-                  _deleteAllData(context, ref);
-                }
-              },
-              itemBuilder: (_) => [
-                const PopupMenuItem(
-                  enabled: false,
-                  child: Text('Private session',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'DM Sans')),
-                ),
-                const PopupMenuDivider(),
-                const PopupMenuItem(
-                  value: 'export_data',
-                  child: Row(children: [
-                    Icon(Icons.download_outlined, size: 18),
-                    SizedBox(width: 10),
-                    Text('Export All Data'),
-                  ]),
-                ),
-                const PopupMenuItem(
-                  value: 'switch_public',
-                  child: Row(children: [
-                    Icon(Icons.visibility_off_outlined, size: 18),
-                    SizedBox(width: 10),
-                    Text('Switch to Public'),
-                  ]),
-                ),
-                const PopupMenuDivider(),
-                PopupMenuItem(
-                  value: 'delete_all',
-                  child: Row(children: [
-                    Icon(Icons.delete_forever,
-                        size: 18,
-                        color: Theme.of(context).colorScheme.error),
-                    const SizedBox(width: 10),
-                    Text(
-                      'Delete All Data',
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.error),
-                    ),
-                  ]),
-                ),
-              ],
-            )
-          else
-            PopupMenuButton<String>(
-              tooltip: 'Session options',
-              icon: Icon(Icons.visibility_off_outlined, color: p.text),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              onSelected: (value) {
-                if (value == 'delete_all') {
-                  _deleteAllData(context, ref);
-                }
-              },
-              itemBuilder: (_) => [
-                const PopupMenuItem(
-                  enabled: false,
-                  child: Text('Public session',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'DM Sans')),
-                ),
-                const PopupMenuDivider(),
-                PopupMenuItem(
-                  value: 'delete_all',
-                  child: Row(children: [
-                    Icon(Icons.delete_forever,
-                        size: 18,
-                        color: Theme.of(context).colorScheme.error),
-                    const SizedBox(width: 10),
-                    Text(
-                      'Delete All Data',
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.error),
-                    ),
-                  ]),
-                ),
-              ],
-            ),
-        ],
-      ),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(22, 4, 22, 24),
+      // AppBar removed per user direction (2026-06-03). The prototype
+      // `ScrHome` has no Material AppBar — the brand row lives at the
+      // top of the body, and the lock-icon popup-menu actions
+      // (Export Data / Switch to Public / Delete All Data) now live in
+      // Settings → Data & privacy. The persistent CrisisResourcesBanner
+      // at the bottom of every screen (wired in main.dart) covers the
+      // crisis surface.
+      body: SafeArea(
+        bottom: false,
+        child: ListView(
+        padding: const EdgeInsets.fromLTRB(22, 8, 22, 24),
         children: [
+          // Brand row — moved from the (now-removed) AppBar to the top of
+          // the body. Editorial "m" italic chip + "PA MHAD" + monospace
+          // privacy-mode status.
+          _BrandRow(privacyMode: privacyMode),
+          const SizedBox(height: 12),
           // Public-mode ephemeral status bar — matches prototype `ScrPublic`
           // L1568-1577: a dark strip that sits above the rest of the home
           // content reminding the user nothing is being saved.
@@ -273,18 +123,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     letterSpacing: -0.6,
                   ),
           ),
-          const SizedBox(height: 16),
-          const InfoBanner(
-            icon: Icons.gavel_rounded,
-            text:
-                'This app helps you document your mental health preferences. '
-                'It is not legal advice. Directives are valid for 2 years '
-                'under PA Act 194 of 2004.',
-            variant: InfoBannerVariant.warning,
-          ),
-          const SizedBox(height: 16),
-          _LearnMoreCard(),
           const SizedBox(height: 20),
+          // (Removed: legal-disclaimer InfoBanner — covered by the
+          // Disclaimer screen, the Privacy Policy row in Settings, and
+          // the always-visible legal footer. Also removed: _LearnMoreCard
+          // — duplicates the Tools-grid "Learn" tile. Both removals per
+          // user direction 2026-06-03: no redundant UI on the same page.)
           if (privacyMode.isPublic) ...[
             _PublicModeNotice(
               onEndSession: () => _confirmEndSession(context, ref),
@@ -378,21 +222,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               );
             },
           ),
-          const SizedBox(height: 20),
-          SizedBox(
-            width: double.infinity,
-            child: FilledButton.icon(
-              onPressed: () => context.go(AppRoutes.formTypeSelection),
-              icon: const Icon(Icons.add),
-              label: const Text('New Directive'),
-            ),
-          ),
-          const SizedBox(height: 24),
-          const SectionLabel('Resources'),
-          const SizedBox(height: 8),
-          const ProviderResourcesCard(),
-          const SizedBox(height: 16),
+          // (Removed: the second "New Directive" FilledButton — already
+          // surfaced by the "Start my directive" CTA in the editorial
+          // empty-state card AND by the outline "Start a new directive"
+          // button next to the active-draft hero. Also removed: the
+          // "Resources" SectionLabel + ProviderResourcesCard — they
+          // duplicated the Tools grid + the Learn / Crisis tiles that
+          // surface the same destinations. Per user direction
+          // 2026-06-03: no redundant UI on the same page.)
         ],
+        ),
       ),
     );
   }
@@ -469,45 +308,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     }
   }
 
-  Future<void> _exportData(BuildContext context, WidgetRef ref) async {
-    try {
-      final db = ref.read(appDatabaseProvider);
-      final service = DataExportService(db);
-      await service.exportAll();
-    } catch (e) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Export failed: $e')),
-        );
-      }
-    }
-  }
-
-  Future<void> _confirmSwitchToPublic(
-      BuildContext context, PrivacyModeNotifier notifier) async {
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: const Text('Switch to Public Mode?'),
-        content: const Text(
-          'Your saved directives will no longer be accessible in this session. '
-          'No data will be deleted — you can access your directives again in a '
-          'future Private session.\n\nYou cannot return to Private Mode without '
-          'restarting the app.'),
-        actions: [
-          TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: const Text('Cancel')),
-          TextButton(
-              onPressed: () => Navigator.pop(context, true),
-              child: const Text('Switch to Public')),
-        ],
-      ),
-    );
-    if (confirmed == true) {
-      notifier.downgradeToPublic();
-    }
-  }
+  // _exportData / _confirmSwitchToPublic / _deleteAllData moved to
+  // `lib/ui/settings/settings_screen.dart` per user direction
+  // 2026-06-03 — they're now reached through the Settings → Data &
+  // privacy section rather than the (removed) home AppBar popup menu.
 
   Future<void> _confirmDelete(
       BuildContext context, WidgetRef ref, int id) async {
@@ -615,111 +419,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     }
   }
 
-  Future<void> _deleteAllData(BuildContext context, WidgetRef ref) async {
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: const Text('Delete All Data?'),
-        content: const Text(
-          'This will permanently delete all your directives, preferences, '
-          'and local data. Data previously sent to Google\'s AI cannot be '
-          'recalled. This action cannot be undone.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, true),
-            style: TextButton.styleFrom(
-                foregroundColor:
-                    Theme.of(context).colorScheme.error),
-            child: const Text('Delete Everything'),
-          ),
-        ],
-      ),
-    );
-    if (confirmed != true) return;
-
-    try {
-      await ref.read(directiveRepositoryProvider).deleteAllDirectives();
-      const storage = FlutterSecureStorage();
-      await storage.deleteAll();
-      await WebSessionCache.clear();
-      await endPublicSession(ref);
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('All data deleted successfully.')),
-        );
-      }
-    } catch (e) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to delete data: $e')),
-        );
-      }
-    }
-  }
 }
 
-class _LearnMoreCard extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final p = Theme.of(context).mhadPalette;
-    return Semantics(
-      button: true,
-      label:
-          'Learn About MHADs — FAQ, instructions, glossary, legal details and checklist',
-      child: DesignCard(
-        variant: DesignCardVariant.primary,
-        onTap: () => context.push(AppRoutes.education),
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          children: [
-            Container(
-              width: 44,
-              height: 44,
-              decoration: BoxDecoration(
-                color: p.primary,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(Icons.menu_book,
-                  color: p.onPrimary, size: 22),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Learn About MHADs',
-                    style: TextStyle(
-                      fontFamily: 'DM Sans',
-                      fontWeight: FontWeight.w700,
-                      fontSize: 15,
-                      color: p.onPrimaryLight,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    'FAQ, instructions, glossary, legal details & checklist',
-                    style: TextStyle(
-                      fontFamily: 'DM Sans',
-                      fontSize: 12,
-                      color: p.onPrimaryLight.withValues(alpha: 0.85),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Icon(Icons.chevron_right, color: p.onPrimaryLight),
-          ],
-        ),
-      ),
-    );
-  }
-}
+// _LearnMoreCard removed 2026-06-03 — duplicated the Tools-grid "Learn"
+// tile that already routes to AppRoutes.education.
 
 class _PublicModeNotice extends StatelessWidget {
   final VoidCallback onEndSession;
@@ -1670,6 +1373,85 @@ class _PublicGuestGreeting extends StatelessWidget {
         letterSpacing: -0.5,
         fontWeight: FontWeight.w400,
       ),
+    );
+  }
+}
+
+/// Editorial brand row that replaces the (removed) home AppBar.
+///
+/// Layout: 28pt teal-filled square with italic-serif lowercase "m" + a
+/// stacked text column with "PA MHAD" (DM Sans bold) + monospace
+/// privacy-mode status pill. Visual mirror of prototype `ScrHome`
+/// L235-262 where the brand info lives in the body, not a Material chrome.
+class _BrandRow extends StatelessWidget {
+  final PrivacyModeNotifier privacyMode;
+  const _BrandRow({required this.privacyMode});
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
+    final statusText = privacyMode.isPrivate
+        ? '● PRIVATE · ENCRYPTED'
+        : (privacyMode.isPublic
+            ? '● PUBLIC · NOT SAVED'
+            : 'NO SESSION');
+    final statusColor = privacyMode.isPrivate
+        ? SemanticColors.successTextLight
+        : SemanticColors.warningTextLight;
+    return Row(
+      children: [
+        Container(
+          width: 28,
+          height: 28,
+          decoration: BoxDecoration(
+            color: p.primary,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          alignment: Alignment.center,
+          child: Text(
+            'm',
+            style: TextStyle(
+              fontFamily: 'Instrument Serif',
+              fontFamilyFallback: const ['Georgia', 'serif'],
+              fontStyle: FontStyle.italic,
+              fontSize: 18,
+              color: p.onPrimary,
+            ),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'PA MHAD',
+              style: TextStyle(
+                fontFamily: 'DM Sans',
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+                letterSpacing: -0.2,
+                color: p.text,
+              ),
+            ),
+            Text(
+              statusText,
+              style: TextStyle(
+                fontFamily: 'JetBrains Mono',
+                fontFamilyFallback: const [
+                  'Consolas',
+                  'Menlo',
+                  'Courier New',
+                  'monospace',
+                ],
+                fontSize: 9.5,
+                letterSpacing: 0.6,
+                color: statusColor,
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

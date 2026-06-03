@@ -1,10 +1,14 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/providers/app_providers.dart';
+import 'package:mhad/providers/assistant_providers.dart';
+import 'package:mhad/services/data_export_service.dart';
 import 'package:mhad/services/privacy_mode_service.dart';
 import 'package:mhad/services/screenshot_protection_service.dart';
+import 'package:mhad/services/web_session_cache.dart';
 import 'package:mhad/ui/disclaimer/disclaimer_screen.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
@@ -160,6 +164,51 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           ),
           const SizedBox(height: 20),
 
+          // Data & privacy actions — moved here from the home screen's
+          // (now-removed) AppBar popup menu. Visibility is mode-aware:
+          // Export and Switch-to-Public only apply when there's a
+          // Private session in progress; Delete All Data is always
+          // available.
+          const SectionLabel('Data & privacy'),
+          const SizedBox(height: 8),
+          DesignCard(
+            padding: EdgeInsets.zero,
+            child: Column(
+              children: [
+                if (ref.watch(privacyModeNotifierProvider).isPrivate) ...[
+                  _SettingsRow(
+                    icon: Icons.download_outlined,
+                    title: 'Export all data',
+                    subtitle:
+                        'Save every directive on this device as a JSON '
+                        'bundle',
+                    onTap: () => _exportAllData(context, ref),
+                  ),
+                  Divider(height: 1, color: p.border),
+                  _SettingsRow(
+                    icon: Icons.visibility_off_outlined,
+                    title: 'Switch to public mode',
+                    subtitle:
+                        'Start an in-memory session — nothing saved to '
+                        'disk',
+                    onTap: () => _confirmSwitchToPublic(context, ref),
+                  ),
+                  Divider(height: 1, color: p.border),
+                ],
+                _SettingsRow(
+                  icon: Icons.delete_forever,
+                  title: 'Delete all data',
+                  subtitle:
+                      'Permanently remove every directive on this device',
+                  iconTint: Theme.of(context).colorScheme.error,
+                  titleTint: Theme.of(context).colorScheme.error,
+                  onTap: () => _deleteAllData(context, ref),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 20),
+
           const SectionLabel('Learn More'),
           const SizedBox(height: 8),
           DesignCard(
@@ -235,6 +284,98 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       ),
     );
   }
+
+  // ─── Data & privacy actions (moved from home_screen.dart) ────────────────
+
+  Future<void> _exportAllData(BuildContext context, WidgetRef ref) async {
+    try {
+      final db = ref.read(appDatabaseProvider);
+      final service = DataExportService(db);
+      await service.exportAll();
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Export failed: $e')),
+        );
+      }
+    }
+  }
+
+  Future<void> _confirmSwitchToPublic(
+      BuildContext context, WidgetRef ref) async {
+    final notifier = ref.read(privacyModeNotifierProvider);
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Switch to Public Mode?'),
+        content: const Text(
+          'Your saved directives will no longer be accessible in this session. '
+          'No data will be deleted — you can access your directives again in a '
+          'future Private session.\n\nYou cannot return to Private Mode without '
+          'restarting the app.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Switch to Public'),
+          ),
+        ],
+      ),
+    );
+    if (confirmed == true) {
+      notifier.downgradeToPublic();
+    }
+  }
+
+  Future<void> _deleteAllData(BuildContext context, WidgetRef ref) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Delete All Data?'),
+        content: const Text(
+          'This will permanently delete all your directives, preferences, '
+          "and local data. Data previously sent to Google's AI cannot be "
+          'recalled. This action cannot be undone.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: TextButton.styleFrom(
+                foregroundColor: Theme.of(context).colorScheme.error),
+            child: const Text('Delete Everything'),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true) return;
+
+    try {
+      await ref.read(directiveRepositoryProvider).deleteAllDirectives();
+      const storage = FlutterSecureStorage();
+      await storage.deleteAll();
+      await WebSessionCache.clear();
+      await endPublicSession(ref);
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('All data deleted successfully.')),
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to delete data: $e')),
+        );
+      }
+    }
+  }
 }
 
 class _SettingsRow extends StatelessWidget {
@@ -243,16 +384,31 @@ class _SettingsRow extends StatelessWidget {
   final String subtitle;
   final VoidCallback onTap;
 
+  /// Optional override for the icon-tile foreground (icon color). Defaults
+  /// to the primary palette color. Used by the destructive rows in the
+  /// Data & privacy section to tint Delete in `colorScheme.error`.
+  final Color? iconTint;
+
+  /// Optional override for the title text color. Defaults to the inherited
+  /// text style. Used by the same destructive rows.
+  final Color? titleTint;
+
   const _SettingsRow({
     required this.icon,
     required this.title,
     required this.subtitle,
     required this.onTap,
+    this.iconTint,
+    this.titleTint,
   });
 
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
+    final fg = iconTint ?? p.primary;
+    final tBg = iconTint == null
+        ? p.primaryLight
+        : iconTint!.withValues(alpha: 0.12);
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
@@ -264,10 +420,10 @@ class _SettingsRow extends StatelessWidget {
               width: 36,
               height: 36,
               decoration: BoxDecoration(
-                color: p.primaryLight,
+                color: tBg,
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: Icon(icon, color: p.primary, size: 20),
+              child: Icon(icon, color: fg, size: 20),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -276,10 +432,11 @@ class _SettingsRow extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'DM Sans',
                       fontWeight: FontWeight.w600,
                       fontSize: 15,
+                      color: titleTint,
                     ),
                   ),
                   const SizedBox(height: 2),
