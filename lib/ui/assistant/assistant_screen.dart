@@ -291,39 +291,59 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
       ),
       body: Column(
         children: [
-          // Disclaimer banner
-          Semantics(
-            label: 'Disclaimer: Not legal advice. For legal questions contact '
-                'PA Protection and Advocacy: $paProtectionAdvocacyPhone',
-            container: true,
-            child: Material(
-              color: Theme.of(context).colorScheme.errorContainer,
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                child: Row(
-                  children: [
-                    ExcludeSemantics(
-                      child: Icon(
-                        Icons.info_outline,
-                        size: 14,
-                        color: Theme.of(context).colorScheme.onErrorContainer,
+          // First-time consent banner — matches prototype ScrAI L770-784:
+          // warning-yellow bg with shield icon. Previously used the red
+          // errorContainer styling, which read as alarming for a soft
+          // disclosure that's already on every AI response. The shield +
+          // warn palette matches the rest of the editorial design system.
+          Builder(
+            builder: (ctx) {
+              final dark = Theme.of(ctx).brightness == Brightness.dark;
+              final bg = dark
+                  ? SemanticColors.warningBgDark
+                  : SemanticColors.warningBgLight;
+              final border = dark
+                  ? SemanticColors.warningBorderDark
+                  : SemanticColors.warningBorderLight;
+              final fg = dark
+                  ? SemanticColors.warningTextDark
+                  : SemanticColors.warningTextLight;
+              return Semantics(
+                label:
+                    'Disclaimer: Not legal advice. For legal questions contact '
+                    'PA Protection and Advocacy: $paProtectionAdvocacyPhone',
+                container: true,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: bg,
+                    border:
+                        Border(bottom: BorderSide(color: border)),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 12, vertical: 8),
+                  child: Row(
+                    children: [
+                      ExcludeSemantics(
+                        child: Icon(Icons.shield_outlined, size: 14, color: fg),
                       ),
-                    ),
-                    const SizedBox(width: 6),
-                    Expanded(
-                      child: Text(
-                        'Not legal advice. For legal questions contact PA Protection & Advocacy: $paProtectionAdvocacyPhone',
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: Theme.of(context).colorScheme.onErrorContainer,
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          'Not legal advice. For legal questions contact PA '
+                          'Protection & Advocacy: $paProtectionAdvocacyPhone',
+                          style: TextStyle(
+                            fontFamily: 'DM Sans',
+                            fontSize: 11,
+                            fontWeight: FontWeight.w600,
+                            color: fg,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ),
+              );
+            },
           ),
 
           // Rate limit status bar
