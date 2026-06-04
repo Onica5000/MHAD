@@ -8,8 +8,10 @@ import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/action_row.dart';
+import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
+import 'package:mhad/ui/widgets/design/wizard_header.dart';
 
 /// Past directive detail (v2 prototype `m-past`).
 ///
@@ -29,16 +31,30 @@ class PastDirectiveDetailScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: p.scaffoldBackground,
-      appBar: AppBar(title: const Text('Past directive')),
-      body: directiveAsync.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text('Unable to load: $e')),
-        data: (d) {
-          if (d == null) {
-            return const Center(child: Text('Directive not found.'));
-          }
-          return _Body(directive: d, isPrivate: isPrivate);
-        },
+      // Prototype ScrPastDetail (mobile-extra.jsx L186-193) uses CrisisBar
+      // compact + an in-body 'Past directives' back link, not a Material
+      // AppBar.
+      body: Column(
+        children: [
+          const CrisisTopBar(compact: true),
+          WizardHeader(
+            backLabel: 'Past directives',
+            onBack: () => Navigator.of(context).maybePop(),
+            actionLabel: '',
+          ),
+          Expanded(
+            child: directiveAsync.when(
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (e, _) => Center(child: Text('Unable to load: $e')),
+              data: (d) {
+                if (d == null) {
+                  return const Center(child: Text('Directive not found.'));
+                }
+                return _Body(directive: d, isPrivate: isPrivate);
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
