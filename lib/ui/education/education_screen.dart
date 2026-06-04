@@ -16,38 +16,18 @@ class EducationScreen extends StatefulWidget {
 }
 
 class _EducationScreenState extends State<EducationScreen> {
-  EducationCategory? _selectedCategory;
-  // _query is now driven entirely by the inline search delegate inside
-  // _EditorialLearnHub; the screen-level state no longer mutates it,
-  // and the in-AppBar clear/search actions were dropped when the
-  // AppBar itself was dropped 2026-06-04.
-  final String _query = '';
+  // Selected tab (top-level enum, see [_TabKind]). Defaults to .all so
+  // the user sees every available section on first arrival.
+  _TabKind _activeTab = _TabKind.all;
 
   List<EducationSection> get _filteredSections {
     // When opened from a wizard Help button, show only the linked sections
+    // and ignore the tab filter entirely.
     if (widget.filterIds != null && widget.filterIds!.isNotEmpty) {
       final ids = widget.filterIds!.toSet();
       return allEducationSections.where((s) => ids.contains(s.id)).toList();
     }
-
-    var sections = allEducationSections;
-
-    if (_selectedCategory != null) {
-      sections = sections
-          .where((s) => s.category == _selectedCategory)
-          .toList();
-    }
-
-    if (_query.isNotEmpty) {
-      final q = _query.toLowerCase();
-      sections = sections
-          .where((s) =>
-              s.title.toLowerCase().contains(q) ||
-              s.content.toLowerCase().contains(q))
-          .toList();
-    }
-
-    return sections;
+    return _activeTab.filter(allEducationSections);
   }
 
   @override
@@ -93,9 +73,8 @@ class _EducationScreenState extends State<EducationScreen> {
                   )
                 : _EditorialLearnHub(
                     sections: _filteredSections,
-                    selectedCategory: _selectedCategory,
-                    onCategoryChange: (c) =>
-                        setState(() => _selectedCategory = c),
+                    activeTab: _activeTab,
+                    onTabChange: (t) => setState(() => _activeTab = t),
                   ),
           ),
         ],
@@ -117,17 +96,19 @@ class _EducationScreenState extends State<EducationScreen> {
 /// available via the AppBar search button.
 class _EditorialLearnHub extends StatelessWidget {
   final List<EducationSection> sections;
-  final EducationCategory? selectedCategory;
-  final ValueChanged<EducationCategory?> onCategoryChange;
+  final _TabKind activeTab;
+  final ValueChanged<_TabKind> onTabChange;
 
   const _EditorialLearnHub({
     required this.sections,
-    required this.selectedCategory,
-    required this.onCategoryChange,
+    required this.activeTab,
+    required this.onTabChange,
   });
 
-  // Map the prototype's 5 category pills onto the 8 internal
-  // EducationCategory enum values.
+  // Five category pills shown above the grid. Articles is a multi-cat
+  // bucket (intro + combined + declaration + poa + supplementary) — the
+  // mapping lives on _TabKind itself so the screen-level filter and the
+  // hub agree on what each tab means.
   static const _tabs = <(_TabKind, String)>[
     (_TabKind.all, 'All'),
     (_TabKind.articles, 'Articles'),
@@ -154,10 +135,13 @@ class _EditorialLearnHub extends StatelessWidget {
   /// "intro_overview" intro).
   EducationSection? _featured() => sections.isEmpty ? null : sections.first;
 
-  /// Other-than-featured grid sections, capped to keep the page compact.
+  /// Every section after the featured one. No cap — earlier builds
+  /// truncated to 8, which buried 50+ articles behind a Search tap.
+  /// "All" therefore shows the entire library; each filtered tab shows
+  /// its full bucket.
   List<EducationSection> _gridSections() {
     if (sections.length <= 1) return const [];
-    return sections.skip(1).take(8).toList();
+    return sections.skip(1).toList();
   }
 
   @override
@@ -166,7 +150,6 @@ class _EditorialLearnHub extends StatelessWidget {
     final featured = _featured();
     final grid = _gridSections();
     final glossary = _quickGlossary();
-    final activeTab = _activeTabFor(selectedCategory);
 
     return ListView(
       padding: const EdgeInsets.fromLTRB(22, 8, 22, 28),
@@ -257,9 +240,7 @@ class _EditorialLearnHub extends StatelessWidget {
                 _CategoryPill(
                   label: _tabs[i].$2,
                   active: activeTab == _tabs[i].$1,
-                  onTap: () => onCategoryChange(
-                    _categoryFor(_tabs[i].$1),
-                  ),
+                  onTap: () => onTabChange(_tabs[i].$1),
                 ),
                 if (i < _tabs.length - 1) const SizedBox(width: 6),
               ],
@@ -298,8 +279,7 @@ class _EditorialLearnHub extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(bottom: 8),
                 child: GestureDetector(
-                  onTap: () =>
-                      onCategoryChange(EducationCategory.glossary),
+                  onTap: () => onTabChange(_TabKind.glossary),
                   child: Text(
                     'See all ›',
                     style: TextStyle(
@@ -321,7 +301,7 @@ class _EditorialLearnHub extends StatelessWidget {
         ],
         const SizedBox(height: 14),
         // FAQ teaser
-        _FaqTeaser(onTap: () => onCategoryChange(EducationCategory.faq)),
+        _FaqTeaser(onTap: () => onTabChange(_TabKind.faq)),
         const SizedBox(height: 18),
         // Editorial pull-quote
         Container(
@@ -365,47 +345,261 @@ class _EditorialLearnHub extends StatelessWidget {
             ],
           ),
         ),
+        // Comprehensive topic index — always visible so users have a
+        // jump-list to any of the 8 EducationCategory buckets after the
+        // editorial grid. Earlier builds only surfaced 9 sections out of
+        // 136; this row guarantees the full library remains one tap away
+        // (2026-06-04 fix per user direction "make sure ALL that
+        // information is available").
+        const SizedBox(height: 24),
+        const SectionLabel('Browse all topics'),
+        const SizedBox(height: 8),
+        _BrowseByTopic(onTabChange: onTabChange),
       ],
     );
   }
 
-  static _TabKind _activeTabFor(EducationCategory? cat) {
-    if (cat == null) return _TabKind.all;
+}
+
+/// 8-row index listing every [EducationCategory] with its section count
+/// and a chevron. Tapping a row that maps onto a top-level tab switches
+/// the hub to that tab; rows for sub-buckets inside Articles (Combined /
+/// Declaration / POA / Supplementary) push a filtered list so the user
+/// can browse that sub-bucket in isolation.
+class _BrowseByTopic extends StatelessWidget {
+  final ValueChanged<_TabKind> onTabChange;
+  const _BrowseByTopic({required this.onTabChange});
+
+  static const _rows = <(EducationCategory, String, String)>[
+    (EducationCategory.intro, 'Introduction',
+        'What an MHAD is and who should sign one'),
+    (EducationCategory.combined, 'Combined Form',
+        'Both an agent and treatment preferences'),
+    (EducationCategory.declaration, 'Declaration Only',
+        'Treatment preferences without an agent'),
+    (EducationCategory.poa, 'Power of Attorney',
+        'Agent designation without preferences'),
+    (EducationCategory.faq, 'Frequently Asked',
+        'Common questions about MHADs'),
+    (EducationCategory.glossary, 'Glossary',
+        'Every legal term, defined'),
+    (EducationCategory.supplementary, 'Beyond the Booklet',
+        'Topics not covered in the official PA booklet'),
+    (EducationCategory.checklist, 'Your Checklist',
+        'Step-by-step distribution + revocation guides'),
+  ];
+
+  /// Maps an [EducationCategory] onto the top-level [_TabKind] whose
+  /// filter includes it. For sub-buckets of Articles we still need a way
+  /// to surface JUST that sub-bucket — we push a `_CategoryListScreen`
+  /// instead of switching tabs (the Articles tab itself is a 5-cat blend).
+  void _open(BuildContext context, EducationCategory cat) {
     switch (cat) {
-      case EducationCategory.glossary:
-        return _TabKind.glossary;
-      case EducationCategory.faq:
-        return _TabKind.faq;
-      case EducationCategory.checklist:
-        return _TabKind.checklists;
       case EducationCategory.intro:
       case EducationCategory.combined:
       case EducationCategory.declaration:
       case EducationCategory.poa:
       case EducationCategory.supplementary:
-        return _TabKind.articles;
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (_) => _CategoryListScreen(category: cat),
+        ));
+      case EducationCategory.glossary:
+        onTabChange(_TabKind.glossary);
+      case EducationCategory.faq:
+        onTabChange(_TabKind.faq);
+      case EducationCategory.checklist:
+        onTabChange(_TabKind.checklists);
     }
   }
 
-  static EducationCategory? _categoryFor(_TabKind tab) {
-    switch (tab) {
-      case _TabKind.all:
-        return null;
-      case _TabKind.glossary:
-        return EducationCategory.glossary;
-      case _TabKind.faq:
-        return EducationCategory.faq;
-      case _TabKind.checklists:
-        return EducationCategory.checklist;
-      // "Articles" is a multi-category bucket; default to the intro
-      // category which is the most-read article group.
-      case _TabKind.articles:
-        return EducationCategory.intro;
-    }
+  @override
+  Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
+    return Container(
+      decoration: BoxDecoration(
+        color: p.card,
+        border: Border.all(color: p.border),
+        borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Column(
+        children: [
+          for (var i = 0; i < _rows.length; i++) ...[
+            _BrowseRow(
+              category: _rows[i].$1,
+              title: _rows[i].$2,
+              sub: _rows[i].$3,
+              count: allEducationSections
+                  .where((s) => s.category == _rows[i].$1)
+                  .length,
+              onTap: () => _open(context, _rows[i].$1),
+            ),
+            if (i < _rows.length - 1)
+              Divider(height: 1, color: p.border),
+          ],
+        ],
+      ),
+    );
   }
 }
 
-enum _TabKind { all, articles, glossary, faq, checklists }
+class _BrowseRow extends StatelessWidget {
+  final EducationCategory category;
+  final String title;
+  final String sub;
+  final int count;
+  final VoidCallback onTap;
+
+  const _BrowseRow({
+    required this.category,
+    required this.title,
+    required this.sub,
+    required this.count,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
+    return Semantics(
+      button: true,
+      label: '$title, $count sections. $sub',
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: TextStyle(
+                        fontFamily: 'DM Sans',
+                        fontSize: 13.5,
+                        fontWeight: FontWeight.w600,
+                        color: p.text,
+                      ),
+                    ),
+                    const SizedBox(height: 1),
+                    Text(
+                      sub,
+                      style: TextStyle(
+                        fontFamily: 'DM Sans',
+                        fontSize: 11.5,
+                        color: p.textMuted,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
+              // Section count chip on the right — prototype mono caption
+              // style so it reads as a count, not a button.
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                decoration: BoxDecoration(
+                  color: p.primaryTint,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: Text(
+                  '$count',
+                  style: TextStyle(
+                    fontFamily: 'JetBrains Mono',
+                    fontFamilyFallback: const [
+                      'Consolas',
+                      'Menlo',
+                      'Courier New',
+                      'monospace',
+                    ],
+                    fontSize: 10.5,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 0.4,
+                    color: p.primary,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 6),
+              Icon(Icons.chevron_right, size: 18, color: p.textMuted),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Standalone list of every [EducationSection] in a single
+/// [EducationCategory] sub-bucket. Used when the user taps a row inside
+/// the Articles bucket (intro / combined / declaration / poa /
+/// supplementary) — those don't have their own top-level tab so we
+/// route through a dedicated screen instead of switching the hub.
+class _CategoryListScreen extends StatelessWidget {
+  final EducationCategory category;
+  const _CategoryListScreen({required this.category});
+
+  @override
+  Widget build(BuildContext context) {
+    final sections = allEducationSections
+        .where((s) => s.category == category)
+        .toList();
+    return Scaffold(
+      appBar: AppBar(title: Text(category.displayName)),
+      body: sections.isEmpty
+          ? const Center(
+              child: Text(
+                'No sections in this category yet.',
+                style: TextStyle(fontStyle: FontStyle.italic),
+              ),
+            )
+          : ListView.builder(
+              padding: const EdgeInsets.all(12),
+              itemCount: sections.length,
+              itemBuilder: (context, i) =>
+                  _SectionTile(section: sections[i]),
+            ),
+    );
+  }
+}
+
+/// Top-level tab kinds shown above the editorial grid. Each owns its own
+/// [filter] over [allEducationSections] so the hub and the screen-level
+/// state agree on what "Articles" means (it's a five-category bucket,
+/// not a single EducationCategory.intro mapping — that was the 2026-06-04
+/// bug that buried 58 article sections behind a Search tap).
+enum _TabKind {
+  all,
+  articles,
+  glossary,
+  faq,
+  checklists;
+
+  /// Categories included in this tab's bucket. Empty = no filter (the
+  /// "All" tab returns every section).
+  Set<EducationCategory> get _includes => switch (this) {
+        _TabKind.all => const {},
+        _TabKind.articles => const {
+            EducationCategory.intro,
+            EducationCategory.combined,
+            EducationCategory.declaration,
+            EducationCategory.poa,
+            EducationCategory.supplementary,
+          },
+        _TabKind.glossary => const {EducationCategory.glossary},
+        _TabKind.faq => const {EducationCategory.faq},
+        _TabKind.checklists => const {EducationCategory.checklist},
+      };
+
+  /// Apply this tab's filter to [source] and return matching sections.
+  List<EducationSection> filter(List<EducationSection> source) {
+    final inc = _includes;
+    if (inc.isEmpty) return List.of(source);
+    return source.where((s) => inc.contains(s.category)).toList();
+  }
+}
 
 class _CategoryPill extends StatelessWidget {
   final String label;
