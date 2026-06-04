@@ -284,7 +284,9 @@
       "PowerShell($fm = Invoke-WebRequest -Uri 'https://onica5000.github.io/MHAD/assets/FontManifest.json' -UseBasicParsing; Write-Output \"===RAW CONTENT===\"; $fm.Content; Write-Output \"===Length===\"; $fm.Content.Length)",
       "PowerShell($am = Invoke-WebRequest -Uri 'https://onica5000.github.io/MHAD/assets/AssetManifest.json' -UseBasicParsing; $j = $am.Content | ConvertFrom-Json; Write-Output \"===Has DMSans===\"; $j.PSObject.Properties.Name | Where-Object { $_ -match 'DMSans|Instrument|JetBrains' } | Select-Object -First 12)",
       "PowerShell(& 'D:\\\\flutter\\\\bin\\\\flutter.bat' analyze 2>&1 | Select-Object -Last 10)",
-      "PowerShell(Tee-Object *)"
+      "PowerShell(Tee-Object *)",
+      "Bash(/d/flutter/bin/flutter.bat analyze *)",
+      "Bash(/d/flutter/bin/flutter.bat test *)"
     ]
   }
 }

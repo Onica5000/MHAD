@@ -88,7 +88,10 @@ extension WizardStepExt on WizardStep {
         WizardStep.allergies => 'Allergies & reactions',
         WizardStep.proceduresResearch => 'Procedures & research',
         WizardStep.anythingElse => 'Anything else',
-        WizardStep.reviewAndSign => 'Review & sign',
+        // "Review" only — the sign step lives on its own post-wizard
+        // route (SignScreen) per user direction 2026-06-04 mirroring the
+        // prototype's ScrReview → ScrSign → ScrDone split.
+        WizardStep.reviewAndSign => 'Review',
       };
 
   /// One-line subhead shown under the step title.
@@ -114,6 +117,6 @@ extension WizardStepExt on WizardStep {
         WizardStep.anythingElse =>
           'Free-form preferences not covered above.',
         WizardStep.reviewAndSign =>
-          'Final review and signatures — review the summary, then sign.',
+          "One last look, then we'll make your signing packet.",
       };
 }

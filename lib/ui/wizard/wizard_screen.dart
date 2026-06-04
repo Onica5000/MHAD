@@ -307,9 +307,14 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
             // since there is no previous step; on step 2+ it's "Back" and
             // decrements `_stepIndex` after auto-saving.
             bottomNavigationBar: WizardBottomBar(
-              primaryLabel: isLastStep ? 'Finish & export' : 'Continue',
+              // Last step is now pure Review (prototype `ScrReview`,
+              // mobile.jsx L802-878). The primary CTA hands off to
+              // SignScreen — match the prototype's label "Generate
+              // signing packet" instead of the old "Finish & export."
+              primaryLabel:
+                  isLastStep ? 'Generate signing packet' : 'Continue',
               primaryIcon:
-                  isLastStep ? Icons.check_rounded : Icons.arrow_forward,
+                  isLastStep ? Icons.arrow_forward : Icons.arrow_forward,
               primaryLoading: _isSaving,
               onPrimary: () => _goNext(context, isLastStep),
               secondaryLabel: _stepIndex > 0 ? 'Back' : 'Exit',
@@ -515,7 +520,11 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
         if (isLastStep) {
           if (kIsWeb) WebSessionCache.clear();
           if (context.mounted) {
-            context.go(AppRoutes.wizardCompleteRoute(widget.directiveId));
+            // Prototype split (2026-06-04): Review → Sign → Done.
+            // The wizard's last step ends at Review; "Continue" hands
+            // off to the dedicated SignScreen at /sign/:id rather than
+            // jumping straight to the Done celebration.
+            context.go(AppRoutes.signRoute(widget.directiveId));
           }
         } else {
           setState(() => _stepIndex++);

@@ -26,6 +26,7 @@ import 'package:mhad/ui/verify/wallet_verify_screen.dart';
 import 'package:mhad/ui/mode_selection/mode_selection_screen.dart';
 import 'package:mhad/ui/ulysses/ulysses_clause_screen.dart';
 import 'package:mhad/ui/wizard/form_type_selection_screen.dart';
+import 'package:mhad/ui/wizard/sign_screen.dart';
 import 'package:mhad/ui/wizard/wizard_complete_screen.dart';
 import 'package:mhad/ui/wizard/wizard_screen.dart';
 
@@ -40,9 +41,15 @@ abstract class AppRoutes {
   static const export = '/export/:directiveId';
   static const aiSetup = '/ai-setup';
   static const wizardComplete = '/wizard-complete/:directiveId';
+  // Post-wizard sign-on-paper screen — prototype ScrSign (mobile.jsx
+  // L884-981). Sits between the wizard's Review step and the Done
+  // celebration. Lands stamp executionDate so the directive flips from
+  // draft to complete on arrival.
+  static const sign = '/sign/:directiveId';
 
   static String wizardCompleteRoute(int directiveId) =>
       '/wizard-complete/$directiveId';
+  static String signRoute(int directiveId) => '/sign/$directiveId';
   static const privacyPolicy = '/privacy-policy';
   static const settings = '/settings';
 
@@ -196,6 +203,15 @@ GoRouter _buildRouter(
                 int.tryParse(state.pathParameters['directiveId'] ?? '');
             if (directiveId == null) return const HomeScreen();
             return WizardCompleteScreen(directiveId: directiveId);
+          },
+        ),
+        GoRoute(
+          path: AppRoutes.sign,
+          builder: (context, state) {
+            final directiveId =
+                int.tryParse(state.pathParameters['directiveId'] ?? '');
+            if (directiveId == null) return const HomeScreen();
+            return SignScreen(directiveId: directiveId);
           },
         ),
         GoRoute(
