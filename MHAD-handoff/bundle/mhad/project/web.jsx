@@ -2,6 +2,7 @@
 
 function Web({ name }) {
   return (
+    <Surface kind="web-desktop">
     <ChromeWindow tabs={[{ title: 'PA MHAD · onica5000.github.io' }, { title: '988 Lifeline' }]} url="onica5000.github.io/MHAD/">
       {(() => {
         switch (name) {
@@ -40,6 +41,7 @@ function Web({ name }) {
         }
       })()}
     </ChromeWindow>
+    </Surface>
   );
 }
 

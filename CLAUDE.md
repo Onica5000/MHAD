@@ -2,9 +2,22 @@
 
 ## Project
 Pennsylvania Mental Health Advance Directive app — Flutter/Dart.
-Targets Android, iOS, Windows, macOS, and Web.
-iOS/macOS builds via Codemagic CI with macOS runner.
-Source PDF: `PA MHAD.pdf`. Plan: `ACTION_PLAN.md`.
+
+**Primary targets (2026-06-04 design pivot): Android native + Windows desktop + Chrome/Edge web.**
+iOS and macOS are deferred until the user can compile against an Xcode toolchain — the
+prototype no longer ships iOS frames (mobile artboards carry green ANDROID tags; web
+artboards carry blue WEB · Chrome/Edge tags). The `ios/` and `macos/` folders, their
+plugins, and `codemagic.yaml`'s iOS/macOS jobs **stay in the tree for now** until the user
+can verify Xcode builds; do not remove them without confirmation.
+
+When implementing screens from the design bundle (`MHAD-handoff/bundle/`), assume Material
+3 + Android-style gestures. The widget tree contents are identical across iOS/Android in
+this Flutter codebase, but lean toward Material affordances (`Scaffold`, `FilledButton`,
+`MaterialPageRoute`) and avoid `Cupertino*` widgets — the orphan audit (2026-06-04) found
+zero Cupertino imports today; keep it that way.
+
+Source PDF: `PA MHAD.pdf`. Plan: `ACTION_PLAN.md`. Design bundle: `MHAD-handoff/bundle/`
+(refreshed 2026-06-04 with Android/Chrome platform-tag chrome).
 
 ## Flutter / Dart
 - Flutter 3.41.4, Dart 3.11.1

@@ -440,25 +440,27 @@ function WebSnapReview() {
 function WebSnapFillMobile() {
   const { palette: p } = React.useContext(MHADContext);
 
-  // Mobile Safari URL bar
+  // Mobile Chrome (Android) URL bar
   const SafariBar = () => (
     <div style={{
-      paddingTop: 60,
-      background: 'rgba(245,245,247,0.92)',
-      backdropFilter: 'blur(20px)',
-      borderBottom: `1px solid ${p.border}`,
+      paddingTop: 38,
+      background: '#f1f3f4',
+      borderBottom: `1px solid rgba(0,0,0,0.07)`,
     }}>
       <div style={{
-        margin: '6px 14px 10px',
-        background: '#e6e6ea', borderRadius: 10,
-        padding: '7px 10px', display: 'flex', alignItems: 'center', gap: 8,
-        fontFamily: 'system-ui, sans-serif',
+        margin: '8px 12px 9px',
+        background: '#ffffff', borderRadius: 100,
+        padding: '8px 12px', display: 'flex', alignItems: 'center', gap: 9,
+        fontFamily: 'Roboto, system-ui, sans-serif',
+        boxShadow: '0 1px 2px rgba(0,0,0,0.10)',
       }}>
-        <Icon size={12} stroke="#666" sw={2}><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></Icon>
-        <span style={{ flex: 1, fontSize: 13, color: '#1a1a1a' }}>
-          <span style={{ color: '#666' }}>🔒 </span>onica5000.github.io
+        <Icon size={13} stroke="#5f6368" sw={2.2}><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></Icon>
+        <span style={{ flex: 1, fontSize: 13, color: '#202124', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+          onica5000.github.io
         </span>
-        <Icon size={14} stroke="#666" sw={2}><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></Icon>
+        <Icon size={15} stroke="#5f6368" sw={2}><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></Icon>
+        {/* Chrome 3-dot overflow */}
+        <svg width="4" height="16" viewBox="0 0 4 16" fill="#5f6368"><circle cx="2" cy="2" r="2"/><circle cx="2" cy="8" r="2"/><circle cx="2" cy="14" r="2"/></svg>
       </div>
     </div>
   );
@@ -645,11 +647,12 @@ function WebWizMobile() {
   const [sheetOpen, setSheetOpen] = React.useState(false);
 
   const SafariBar = () => (
-    <div style={{ paddingTop: 60, background: 'rgba(245,245,247,0.92)', backdropFilter: 'blur(20px)', borderBottom: `1px solid ${p.border}` }}>
-      <div style={{ margin: '6px 14px 10px', background: '#e6e6ea', borderRadius: 10, padding: '7px 10px', display: 'flex', alignItems: 'center', gap: 8, fontFamily: 'system-ui, sans-serif' }}>
-        <Icon size={12} stroke="#666" sw={2}><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></Icon>
-        <span style={{ flex: 1, fontSize: 13, color: '#1a1a1a' }}><span style={{ color: '#666' }}>🔒 </span>onica5000.github.io</span>
-        <Icon size={14} stroke="#666" sw={2}><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></Icon>
+    <div style={{ paddingTop: 38, background: '#f1f3f4', borderBottom: `1px solid rgba(0,0,0,0.07)` }}>
+      <div style={{ margin: '8px 12px 9px', background: '#ffffff', borderRadius: 100, padding: '8px 12px', display: 'flex', alignItems: 'center', gap: 9, fontFamily: 'Roboto, system-ui, sans-serif', boxShadow: '0 1px 2px rgba(0,0,0,0.10)' }}>
+        <Icon size={13} stroke="#5f6368" sw={2.2}><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></Icon>
+        <span style={{ flex: 1, fontSize: 13, color: '#202124', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>onica5000.github.io</span>
+        <Icon size={15} stroke="#5f6368" sw={2}><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></Icon>
+        <svg width="4" height="16" viewBox="0 0 4 16" fill="#5f6368"><circle cx="2" cy="2" r="2"/><circle cx="2" cy="8" r="2"/><circle cx="2" cy="14" r="2"/></svg>
       </div>
     </div>
   );
@@ -739,9 +742,15 @@ function WebWizMobile() {
   );
 }
 
-// Wrap mobile-web in an iOS device frame
+// Wrap mobile-web in an Android device frame. Tagged WEB · mobile browser. The
+// screens render their own browser URL bar, so they read as a website in a
+// phone browser — the tag makes the surface explicit too.
 function WebMobileFrame({ children }) {
-  return <IOSDevice width={422} height={894}>{children}</IOSDevice>;
+  return (
+    <Surface kind="web-mobile">
+      <AndroidShell width={422} height={860}>{children}</AndroidShell>
+    </Surface>
+  );
 }
 
 Object.assign(window, {

@@ -520,9 +520,110 @@ function SystemCard() {
   );
 }
 
+// ─── Handoff annotation: platform/surface tag baked into every screen ───
+// Captured inside the artboard itself (PNG/HTML export grabs only the card),
+// so anyone — or Claude Code — recreating a screen from a single frame can
+// always tell what surface it targets. Three kinds:
+//   ios         → native mobile app screen
+//   web-desktop → website, desktop browser
+//   web-mobile  → website, phone browser (same bezel as native — this is the
+//                 one that's otherwise impossible to tell apart)
+const SURFACE_TAGS = {
+  android:       { dot: '#3DDC84', a: 'ANDROID', b: 'Native Android app screen' },
+  'web-desktop': { dot: '#0A84FF', a: 'WEB',     b: 'Website · Chrome / Edge desktop' },
+  'web-mobile':  { dot: '#0A84FF', a: 'WEB',     b: 'Website · Chrome mobile (responsive)' },
+};
+
+function FrameTag({ kind }) {
+  const t = SURFACE_TAGS[kind] || SURFACE_TAGS.ios;
+  return (
+    <div style={{
+      flexShrink: 0, height: 34, boxSizing: 'border-box',
+      display: 'flex', alignItems: 'center', gap: 9, padding: '0 16px',
+      background: '#15171c', color: '#eef0f4',
+      fontFamily: MONO, fontSize: 11, lineHeight: 1,
+      borderBottom: '1px solid rgba(255,255,255,0.06)',
+    }}>
+      <span style={{ width: 8, height: 8, borderRadius: 4, background: t.dot, flexShrink: 0 }} />
+      <span style={{ fontWeight: 600, letterSpacing: 1.4 }}>{t.a}</span>
+      <span style={{ opacity: 0.35 }}>—</span>
+      <span style={{ opacity: 0.62, letterSpacing: 0.3, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{t.b}</span>
+    </div>
+  );
+}
+
+// Wraps a device/browser frame with the platform tag bar. The frame inside
+// is sized to (cardHeight − 34) by the router so the bar + frame fill the
+// artboard exactly with no clipping or letterbox.
+function Surface({ kind, children }) {
+  return (
+    <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', background: '#0c0d10', overflow: 'hidden' }}>
+      <FrameTag kind={kind} />
+      <div style={{ flex: 1, minHeight: 0, display: 'flex', alignItems: 'flex-start', justifyContent: 'center', overflow: 'hidden' }}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+// ─── Android (Material 3) device shell ──────────────────────────────────
+// Deliberately mirrors the IOSDevice layout *contract* so every existing
+// mobile screen drops in unchanged: status bar is absolutely positioned over
+// the top (screens already reserve STATUSBAR_H=60 to clear it), content fills
+// 100% height, and a gesture-nav pill floats at the bottom inside the HOME_H
+// =34 region the screens leave free. Only the chrome is Material — no app bar
+// or keyboard is injected (screens render their own).
+function AndroidShell({ children, width = 412, height = 860, dark = false }) {
+  const c = dark ? '#ffffff' : '#1a1c1e';
+  return (
+    <div style={{
+      width, height, borderRadius: 40, overflow: 'hidden', position: 'relative',
+      background: dark ? '#000000' : '#ffffff',
+      boxShadow: '0 40px 80px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.12)',
+      fontFamily: "Roboto, 'DM Sans', system-ui, sans-serif",
+      WebkitFontSmoothing: 'antialiased',
+    }}>
+      {/* centered punch-hole camera (Material — no notch / dynamic island) */}
+      <div style={{
+        position: 'absolute', top: 13, left: '50%', transform: 'translateX(-50%)',
+        width: 11, height: 11, borderRadius: '50%', background: '#0a0a0a', zIndex: 50,
+      }} />
+      {/* status bar — absolute, ~34px row within the 60px the screens reserve */}
+      <div style={{
+        position: 'absolute', top: 0, left: 0, right: 0, height: 34, zIndex: 10,
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        padding: '0 16px 0 22px',
+      }}>
+        <span style={{ fontFamily: "Roboto, system-ui", fontSize: 14, fontWeight: 600, letterSpacing: 0.2, color: c }}>9:30</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          {/* wifi */}
+          <svg width="15" height="12" viewBox="0 0 16 13" fill={c}><path d="M8 12.4L0.6 4.5a10.4 10.4 0 0 1 14.8 0L8 12.4z"/></svg>
+          {/* signal */}
+          <svg width="15" height="12" viewBox="0 0 16 13" fill={c}><path d="M15 1.2v10.6H1.4L15 1.2z"/></svg>
+          {/* battery */}
+          <svg width="22" height="12" viewBox="0 0 24 13" fill={c}><rect x="1" y="1.6" width="19" height="9.8" rx="2.6"/><rect x="21" y="4.6" width="2.2" height="3.8" rx="1"/></svg>
+        </div>
+      </div>
+      {/* content */}
+      <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+        <div style={{ flex: 1, overflow: 'auto' }}>{children}</div>
+      </div>
+      {/* gesture nav pill — absolute, inside the HOME_H region */}
+      <div style={{
+        position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 60, height: 24,
+        display: 'flex', justifyContent: 'center', alignItems: 'flex-end',
+        paddingBottom: 9, pointerEvents: 'none',
+      }}>
+        <div style={{ width: 120, height: 4, borderRadius: 2, background: dark ? 'rgba(255,255,255,0.65)' : 'rgba(0,0,0,0.55)' }} />
+      </div>
+    </div>
+  );
+}
+
 // Expose to other scripts
 Object.assign(window, {
   MHAD_PALETTES, MHADContext, SANS, SERIF, MONO, TOK,
+  FrameTag, Surface, AndroidShell,
   Screen, Card, Btn, Chip, Badge, CrisisBar, StepHead, StepDots, WizardHeader, TabOnlyPill, BottomBar, Field, ConsentRow, SectionLabel, Editorial,
   BriefCard, SystemCard,
   Arrow, Plus, Check, ChevR, ChevD, Phone, Lock, Eye, EyeOff, Sparkles, Mic, FileText, Heart, Users, Pill, Calendar, Shield, Edit, QR, DotsH, Home, Book, Gear, Bookmark, Download, Share, Search, X, AlertTri, Info, MapPin, Flask, Zap, Brain, Wallet, SwapV, Icon,

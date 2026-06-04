@@ -498,7 +498,8 @@ function ScrDataExport() {
 // (We append them via a wrapper component that the canvas calls directly.)
 function MobileExtra2({ name }) {
   return (
-    <IOSDevice width={422} height={894}>
+    <Surface kind="android">
+    <AndroidShell width={422} height={860}>
       {(() => {
         switch (name) {
           case 'wallet':      return <ScrAppleWallet />;
@@ -508,7 +509,8 @@ function MobileExtra2({ name }) {
           default: return null;
         }
       })()}
-    </IOSDevice>
+    </AndroidShell>
+    </Surface>
   );
 }
 

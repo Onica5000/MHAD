@@ -618,7 +618,8 @@ function ScrMedicationsV2() {
 // ─── Router for these new screens ─────────────────────────────────────
 function HealthSteps({ name }) {
   return (
-    <IOSDevice width={422} height={894}>
+    <Surface kind="android">
+    <AndroidShell width={422} height={860}>
       {(() => {
         switch (name) {
           case 'diagnoses':   return <ScrDiagnoses />;
@@ -627,7 +628,8 @@ function HealthSteps({ name }) {
           default: return null;
         }
       })()}
-    </IOSDevice>
+    </AndroidShell>
+    </Surface>
   );
 }
 

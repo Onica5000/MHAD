@@ -2472,7 +2472,8 @@ function ScrContactPicker() {
 // ─── Mobile-extra router ───────────────────────────────────────────────
 function MobileExtra({ name }) {
   return (
-    <IOSDevice width={422} height={894}>
+    <Surface kind="android">
+    <AndroidShell width={422} height={860}>
       {(() => {
         switch (name) {
           case 'faceid':     return <ScrFaceID />;
@@ -2497,7 +2498,8 @@ function MobileExtra({ name }) {
           default: return null;
         }
       })()}
-    </IOSDevice>
+    </AndroidShell>
+    </Surface>
   );
 }
 

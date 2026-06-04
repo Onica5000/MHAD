@@ -1405,7 +1405,8 @@ function ScrA11y() {
 // ─── ROUTER ───────────────────────────────────────────────────────────
 function GapScreens({ name }) {
   return (
-    <IOSDevice width={422} height={894}>
+    <Surface kind="android">
+    <AndroidShell width={422} height={860}>
       {(() => {
         switch (name) {
           case 'crisisplan': return <ScrCrisisPlan />;
@@ -1419,7 +1420,8 @@ function GapScreens({ name }) {
           default: return null;
         }
       })()}
-    </IOSDevice>
+    </AndroidShell>
+    </Surface>
   );
 }
 
