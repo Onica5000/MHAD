@@ -62,7 +62,11 @@ class _DocumentImportTipState extends State<DocumentImportTip>
       opacity: _fadeAnim,
       child: SizeTransition(
         sizeFactor: _fadeAnim,
-        axisAlignment: -1,
+        // axisAlignment is deprecated in newer Flutter; the modern
+        // `alignment` property gives full 2-axis control. -1 along the
+        // vertical axis collapses from the top, the same as the prior
+        // axisAlignment: -1.
+        alignment: const Alignment(0, -1),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
           child: Card(
