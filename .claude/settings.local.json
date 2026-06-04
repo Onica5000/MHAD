@@ -305,7 +305,9 @@
       "Bash(tar -xf bundle.tar)",
       "Bash(sed -n '117,180p' chat4.md)",
       "Bash(sed -n '261,268p' chat4.md)",
-      "Bash(xargs -I {} basename {})"
+      "Bash(xargs -I {} basename {})",
+      "Bash(grep -nE \"^        \\\\],\\\\s*$|^      \\\\\\),\\\\s*$|^    \\\\\\);\\\\s*$\" lib/ui/revocation/revocation_screen.dart)",
+      "Bash(grep -nE \"^              \\\\],\\\\s*$|^            \\\\\\),\\\\s*$|^      \\\\\\),\\\\s*$|^    \\\\\\);\\\\s*$\" lib/ui/legal_toggle/plain_legal_toggle_screen.dart)"
     ]
   }
 }

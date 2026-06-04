@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
+import 'package:mhad/ui/widgets/design/wizard_header.dart';
 import 'package:mhad/utils/platform_utils.dart';
 
 /// In-app privacy & permissions overview.
@@ -30,10 +32,17 @@ class PermissionsOverviewScreen extends StatelessWidget {
     final p = Theme.of(context).mhadPalette;
     return Scaffold(
       backgroundColor: p.scaffoldBackground,
-      appBar: AppBar(
-        title: const Text('Privacy & permissions'),
-      ),
-      body: ListView(
+      // Prototype ScrPermission (mobile-extra2.jsx L114-200) uses CrisisBar
+      // + in-body back chevron. The 'Only what we need.' 30pt editorial
+      // owns the header in the body.
+      body: Column(children: [
+        const CrisisTopBar(compact: true),
+        WizardHeader(
+          backLabel: 'Back',
+          onBack: () => Navigator.of(context).maybePop(),
+          actionLabel: '',
+        ),
+        Expanded(child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 14, 20, 32),
         children: [
           const SectionLabel('What this app may ask for'),
@@ -155,7 +164,8 @@ class PermissionsOverviewScreen extends StatelessWidget {
                 'lookups, both with PII stripping at a single chokepoint.',
           ),
         ],
-      ),
+      )),
+      ]),
     );
   }
 }

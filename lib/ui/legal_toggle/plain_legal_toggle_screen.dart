@@ -3,9 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
+import 'package:mhad/ui/widgets/design/wizard_header.dart';
 
 /// Plain ⇄ Legal toggle for an existing directive (Phase 4, v2 prototype
 /// `m-legaltoggle`). Per v3 spec: the Legal-language rendering shows a DRAFT
@@ -56,32 +58,35 @@ class _PlainLegalToggleScreenState
     final cs = Theme.of(context).colorScheme;
     return Scaffold(
       backgroundColor: p.scaffoldBackground,
-      appBar: AppBar(
-        title: const Text('Your directive · two registers'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.ios_share),
-            tooltip: 'Share',
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                content: Text(
-                    'Sharing routes through the Export screen — use that to '
-                    'download the PDF.'),
-              ));
-            },
-          ),
-        ],
-      ),
-      body: _directive == null
+      // Prototype ScrLegalToggle (gap-analysis.jsx L903-1051) uses CrisisBar
+      // + in-body back chevron, then the 40pt editorial heading. Share is
+      // available as a tap on the header's right side (replaces the AppBar
+      // action that previously lived there).
+      body: Column(children: [
+        const CrisisTopBar(compact: true),
+        WizardHeader(
+          backLabel: 'Back',
+          onBack: () => Navigator.of(context).maybePop(),
+          actionLabel: 'Share',
+          onAction: () {
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text(
+                  'Sharing routes through the Export screen — use that to '
+                  'download the PDF.'),
+            ));
+          },
+        ),
+        Expanded(child: _directive == null
           ? const Center(child: CircularProgressIndicator())
           : ListView(
               padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
               children: [
                 const SectionLabel('Your directive · two registers'),
                 const SizedBox(height: 6),
+                // Headline bumped 32 -> 40pt to match prototype L915.
                 const EditorialHeading(
                   text: 'Same meaning, two voices.',
-                  size: 32,
+                  size: 40,
                 ),
                 const SizedBox(height: 6),
                 Text(
@@ -146,7 +151,8 @@ class _PlainLegalToggleScreenState
                       'it under 20 Pa.C.S. Ch. 58.',
                 ),
               ],
-            ),
+            )),
+      ]),
     );
   }
 }

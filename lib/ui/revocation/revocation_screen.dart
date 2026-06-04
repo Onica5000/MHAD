@@ -3,9 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
+import 'package:mhad/ui/widgets/design/wizard_header.dart';
 
 /// Revocation flow (v2 prototype `m-revoke`, v3 canonical PA statutory
 /// wording).
@@ -108,10 +110,22 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
 
     return Scaffold(
       backgroundColor: p.scaffoldBackground,
-      appBar: AppBar(title: const Text('Revoke this directive?')),
-      body: ListView(
+      // Prototype ScrRevoke (mobile-extra.jsx L1551-1656) opens with
+      // CrisisBar + a thin in-body back row, then the editorial 'Are you
+      // sure?' headline. No Material AppBar.
+      body: Column(children: [
+        const CrisisTopBar(compact: true),
+        WizardHeader(
+          backLabel: 'Back',
+          onBack: () => Navigator.of(context).maybePop(),
+          actionLabel: '',
+        ),
+        Expanded(child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 14, 20, 32),
         children: [
+          // Editorial 'PERMANENT ACTION' pill replaces what was the
+          // AppBar's title. The 38pt 'Are you sure?' headline below
+          // matches the prototype L1568 wording exactly.
           Container(
             padding:
                 const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
@@ -135,7 +149,8 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
                 )),
           ),
           const SizedBox(height: 12),
-          const EditorialHeading(text: 'Revoke this directive?', size: 30),
+          // Headline bumped 30 -> 38pt to match prototype L1568.
+          const EditorialHeading(text: 'Are you sure?', size: 38),
           const SizedBox(height: 8),
           Text(
             'Your directive will no longer be legally binding once you '
@@ -275,7 +290,8 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
                 'clarification.',
           ),
         ],
-      ),
+      )),
+      ]),
     );
   }
 }

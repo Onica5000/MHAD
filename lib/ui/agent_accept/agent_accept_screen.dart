@@ -4,7 +4,9 @@ import 'package:intl/intl.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
+import 'package:mhad/ui/widgets/design/wizard_header.dart';
 
 /// Agent-acceptance log screen.
 ///
@@ -79,10 +81,17 @@ class _AgentAcceptScreenState extends ConsumerState<AgentAcceptScreen> {
     final p = Theme.of(context).mhadPalette;
     return Scaffold(
       backgroundColor: p.scaffoldBackground,
-      appBar: AppBar(
-        title: const Text('Agent acceptance'),
-      ),
-      body: _loading
+      // Prototype ScrAgentAccept (gap-analysis.jsx L1178-1263) uses
+      // CrisisBar + in-body back chevron. The 'Manual acceptance log'
+      // section label + body lead own the visual title.
+      body: Column(children: [
+        const CrisisTopBar(compact: true),
+        WizardHeader(
+          backLabel: 'Back',
+          onBack: () => Navigator.of(context).maybePop(),
+          actionLabel: '',
+        ),
+        Expanded(child: _loading
           ? const Center(child: CircularProgressIndicator())
           : _agents.isEmpty
               ? Center(
@@ -126,7 +135,8 @@ class _AgentAcceptScreenState extends ConsumerState<AgentAcceptScreen> {
                         ),
                       ),
                   ],
-                ),
+                )),
+      ]),
     );
   }
 }
