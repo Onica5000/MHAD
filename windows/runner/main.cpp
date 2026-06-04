@@ -26,7 +26,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
 
   FlutterWindow window(project);
   Win32Window::Point origin(10, 10);
-  Win32Window::Size size(1280, 720);
+  // 1440x900 gives the wizard step rail + content column its full prototype
+  // breathing room (sidebar 232 + content 1100 + 108 margin) without
+  // requiring a maximize on first launch. Bumped 2026-06-04 from the
+  // Flutter default 1280x720, which clipped the right edge of the
+  // editorial content area at narrow widths.
+  Win32Window::Size size(1440, 900);
   if (!window.Create(L"mhad", origin, size)) {
     return EXIT_FAILURE;
   }

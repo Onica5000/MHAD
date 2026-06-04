@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Modify this file to customize your launch splash screen -->
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="?android:colorBackground" />
+    <!--
+      Splash background = MhadPalette.navyLight.scaffoldBackground (#F7F9FC)
+      or navyDark.scaffoldBackground in night mode. Updated 2026-06-04 from
+      ?android:colorBackground (which resolved to white via the Light theme)
+      so the splash matches the navy palette continuously.
+    -->
+    <item android:drawable="@color/mhad_splash_background" />
 
     <!-- You can insert your own image assets here -->
     <!-- <item>

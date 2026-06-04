@@ -9,6 +9,17 @@ import 'package:timezone/timezone.dart' as tz;
 /// When a directive is executed, two reminders are scheduled:
 ///  • 60 days before expiration  (≈ 1 year 10 months after execution)
 ///  • 14 days before expiration  (≈ 1 year 11.5 months after execution)
+///
+/// **Platform support**: this service uses `flutter_local_notifications`,
+/// which through v18 still only declares Android / iOS / macOS / Linux as
+/// `flutter.plugin.platforms`. **Windows is not supported by the plugin.**
+/// On Windows, [isSupported] returns false and every public method is a
+/// safe no-op. Adopting a separate Windows toast plugin (e.g.
+/// `local_notifier` or `windows_notification`) is the path forward if
+/// Windows users need expiry reminders — see the 2026-06-04 audit row in
+/// CLAUDE.md / docs/GAP_ANALYSIS_V4.md for context. Web is also a no-op
+/// (the browser drops scheduled state on tab close anyway, so the
+/// reminder model doesn't apply).
 class NotificationService {
   NotificationService._();
   static final NotificationService instance = NotificationService._();
@@ -23,7 +34,11 @@ class NotificationService {
     importance: Importance.high,
   );
 
-  /// Whether notifications are supported on the current platform.
+  /// Whether the local-notification stack is reachable on this platform.
+  ///
+  /// Returns true only for the platforms the underlying plugin actually
+  /// supports: Android, iOS, macOS. Windows + Web are explicitly false —
+  /// see the class-level comment for why and what to do about it.
   static bool get isSupported =>
       !kIsWeb && (platformIsAndroid || platformIsIOS || platformIsMacOS);
 

@@ -124,23 +124,53 @@ class MhadApp extends ConsumerWidget {
           data: mq.copyWith(
             textScaler: TextScaler.linear(a11y.textScaleFactor),
           ),
-          child: Column(
-            children: [
-              Expanded(
-                // Remove the bottom safe-area padding from the content area
-                // because the CrisisResourcesBanner below already handles it.
-                // Without this, every Scaffold/SafeArea inside the Expanded
-                // adds redundant bottom padding, stealing vertical space.
-                child: MediaQuery.removePadding(
-                  context: context,
-                  removeBottom: true,
-                  child: ResponsiveShell(
-                    child: child ?? const SizedBox.shrink(),
-                  ),
+          // Desktop keyboard shortcuts (Windows + Chrome/Edge web). Mobile
+          // ignores these — Android's back gesture / system back button
+          // already covers the same intents. The map deliberately keeps a
+          // small surface (Esc only for now) so we don't interfere with
+          // existing PopScope handlers, TextField focus traversal, or
+          // browser-native shortcuts like Ctrl+R.
+          child: Shortcuts(
+            shortcuts: const <ShortcutActivator, Intent>{
+              SingleActivator(LogicalKeyboardKey.escape): DismissIntent(),
+            },
+            child: Actions(
+              actions: <Type, Action<Intent>>{
+                // Esc → pop topmost popup route (dialogs, bottom sheets,
+                // modal sheets). Routes that don't want this can override
+                // with their own DismissAction higher in the focus tree.
+                // The maybePop branch keeps us a no-op on the home route
+                // so Esc never accidentally exits the app on web.
+                DismissIntent: CallbackAction<DismissIntent>(
+                  onInvoke: (_) {
+                    final nav = Navigator.maybeOf(context, rootNavigator: true);
+                    if (nav != null && nav.canPop()) {
+                      nav.maybePop();
+                    }
+                    return null;
+                  },
                 ),
+              },
+              child: Column(
+                children: [
+                  Expanded(
+                    // Remove the bottom safe-area padding from the content
+                    // area because the CrisisResourcesBanner below already
+                    // handles it. Without this, every Scaffold/SafeArea
+                    // inside the Expanded adds redundant bottom padding,
+                    // stealing vertical space.
+                    child: MediaQuery.removePadding(
+                      context: context,
+                      removeBottom: true,
+                      child: ResponsiveShell(
+                        child: child ?? const SizedBox.shrink(),
+                      ),
+                    ),
+                  ),
+                  const CrisisResourcesBanner(),
+                ],
               ),
-              const CrisisResourcesBanner(),
-            ],
+            ),
           ),
         );
       },

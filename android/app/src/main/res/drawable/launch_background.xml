@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Modify this file to customize your launch splash screen -->
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@android:color/white" />
+    <!--
+      Splash background = MhadPalette.navyLight.scaffoldBackground (#F7F9FC)
+      or navyDark.scaffoldBackground in night mode (resolved via values-night).
+      Updated 2026-06-04 from @android:color/white so the splash → first-frame
+      transition no longer flashes white on launch.
+    -->
+    <item android:drawable="@color/mhad_splash_background" />
 
     <!-- You can insert your own image assets here -->
     <!-- <item>

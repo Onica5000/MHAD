@@ -295,7 +295,16 @@
       "Bash(chmod +x /tmp/check_orphans.sh)",
       "Bash(/tmp/check_orphans.sh)",
       "Bash(grep \": 1$\")",
-      "Bash(python3 *)"
+      "Bash(python3 *)",
+      "Bash(/d/flutter/bin/flutter.bat --version)",
+      "Bash(/d/flutter/bin/flutter.bat clean *)",
+      "Bash(awk '{print $NF}')",
+      "Bash(mkdir -p latest)",
+      "Bash(gzip -dk webfetch-1780596075532-kwqo27.bin -c)",
+      "Bash(tar -tf bundle.tar)",
+      "Bash(tar -xf bundle.tar)",
+      "Bash(sed -n '117,180p' chat4.md)",
+      "Bash(sed -n '261,268p' chat4.md)"
     ]
   }
 }

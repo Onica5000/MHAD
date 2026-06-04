@@ -3,10 +3,10 @@
     "short_name": "PA MHAD",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#FFFFFF",
-    "theme_color": "#009688",
+    "background_color": "#F7F9FC",
+    "theme_color": "#1E3A8A",
     "description": "Create, manage, and export your Pennsylvania Mental Health Advance Directive under PA Act 194.",
-    "orientation": "portrait-primary",
+    "orientation": "any",
     "prefer_related_applications": false,
     "icons": [
         {

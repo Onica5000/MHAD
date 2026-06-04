@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Adaptive launcher icon (API 26+). Modern Android launchers will mask
+  this into circle/squircle/teardrop shapes, so the icon must reserve a
+  72×72 dp "safe zone" inside the 108×108 dp canvas.
+
+  PLACEHOLDER — the foreground reuses the legacy ic_launcher PNG, which
+  was authored at 48×48 dp without an adaptive safe zone, so the
+  visible content may be cropped on round-mask launchers. The
+  background is the brand navy. To replace with a proper adaptive set:
+    1. Drop a 1024×1024 source PNG into assets/icon/icon.png
+    2. Drop a 1024×1024 transparent foreground PNG into
+       assets/icon/icon_foreground.png (icon glyph inside the inner
+       66% of the canvas to clear the safe-zone crop)
+    3. Run: `D:\flutter\bin\flutter.bat pub run flutter_launcher_icons`
+  The tool will regenerate mipmap-*/ic_launcher_foreground.png and
+  update this xml automatically. Until then this file at least gives
+  modern launchers the brand-navy background instead of the default
+  white-square legacy fallback.
+-->
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+    <background android:drawable="@color/ic_launcher_background" />
+    <foreground android:drawable="@mipmap/ic_launcher" />
+</adaptive-icon>

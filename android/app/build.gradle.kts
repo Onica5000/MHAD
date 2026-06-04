@@ -34,6 +34,12 @@ android {
 
     defaultConfig {
         applicationId = "com.mhad.mhad"
+        // Delegate SDK levels to the Flutter Gradle plugin. With Flutter 3.44.x
+        // (project pin), these resolve to: minSdk = 24 (Android 7.0 Nougat —
+        // required by sqlcipher_flutter_libs + nfc_manager), targetSdk = 35
+        // (Android 15), compileSdk = 35. Raising minSdk explicitly here
+        // would let us drop legacy compatibility shims; lowering would break
+        // SQLCipher. Material 3 is supported from minSdk 21+, so we're fine.
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode

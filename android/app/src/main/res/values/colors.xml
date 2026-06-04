@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Splash background colors for Android boot flash. These must match the
+  active MhadPalette so the splash → first-frame transition is seamless.
+  Light mode = navy palette scaffoldBackground (#F7F9FC, MhadPalette.navyLight).
+  Dark mode  = values-night/colors.xml overrides with navyDark scaffold.
+-->
+<resources>
+    <color name="mhad_splash_background">#F7F9FC</color>
+    <!--
+      Adaptive launcher icon background. Matches MhadPalette.navyLight.primary
+      (#1E3A8A) so the icon foreground (currently a placeholder reusing the
+      legacy ic_launcher PNG) sits on the brand color regardless of the
+      device's launcher theme. Replace once a proper 108×108dp foreground
+      asset is generated via `flutter pub run flutter_launcher_icons`.
+    -->
+    <color name="ic_launcher_background">#1E3A8A</color>
+</resources>

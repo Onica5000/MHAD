@@ -1,20 +1,31 @@
 # flutter_launcher_icons configuration
-# Run: flutter pub run flutter_launcher_icons
+# Run: D:\flutter\bin\flutter.bat pub run flutter_launcher_icons
 #
-# Replace assets/icon/icon.png with a 1024x1024 PNG of your actual app icon.
-# The icon should use the teal color scheme (approx. #006B6B) and clearly
-# represent a mental health advance directive (e.g., a document with a heart).
+# Source assets needed (NOT in repo yet — placeholder adaptive icon shipped
+# 2026-06-04 in android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+# uses the legacy ic_launcher PNG as foreground on the navy background):
+#   assets/icon/icon.png            — 1024×1024 PNG, the full app icon
+#   assets/icon/icon_foreground.png — 1024×1024 PNG, transparent bg, glyph
+#                                     inside the inner 66% (safe zone)
+#
+# Palette pinned to navy (matches MhadPalette.navyLight.primary #1E3A8A
+# and the launch_background colors). When teal/sage palettes return as
+# user-selectable, this background stays navy — the launcher icon is the
+# brand mark, not the in-app palette accent.
 
 flutter_launcher_icons:
   android: true
+  # ios stays declared so a later Xcode session regenerates iOS icons in
+  # one command. Has no effect on Android/Windows builds.
   ios: true
   image_path: "assets/icon/icon.png"
   min_sdk_android: 21
-  adaptive_icon_background: "#006B6B"
+  adaptive_icon_background: "#1E3A8A"
   adaptive_icon_foreground: "assets/icon/icon_foreground.png"
   web:
     generate: false
   windows:
+    # Windows now a primary target — flip this on once source assets exist.
     generate: false
   macos:
     generate: false

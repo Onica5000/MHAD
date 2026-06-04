@@ -355,6 +355,15 @@ ThemeData buildMhadTheme(ThemePalette palette, Brightness brightness) {
       surfaceTintColor: Colors.transparent,
     ),
 
+    // Material 3 overlay alpha defaults are tuned for low-contrast surfaces;
+    // on the navy primary they're nearly invisible. We over-ride hover /
+    // focus / pressed overlays with explicit alpha values so desktop users
+    // (Windows + Chrome/Edge web) get unambiguous visual feedback when
+    // moving the cursor over a button or tabbing to it.
+    //
+    // FilledButton: overlay is the foreground color (onPrimary = white in
+    // light navy), which lightens the primary background. Outlined and Text
+    // buttons sit on a neutral surface, so we tint with primary itself.
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(
         backgroundColor: p.primary,
@@ -370,6 +379,25 @@ ThemeData buildMhadTheme(ThemePalette palette, Brightness brightness) {
           fontSize: 15,
           fontWeight: FontWeight.w600,
         ),
+      ).copyWith(
+        overlayColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.pressed)) {
+            return p.onPrimary.withValues(alpha: 0.16);
+          }
+          if (states.contains(WidgetState.focused)) {
+            return p.onPrimary.withValues(alpha: 0.14);
+          }
+          if (states.contains(WidgetState.hovered)) {
+            return p.onPrimary.withValues(alpha: 0.10);
+          }
+          return null;
+        }),
+        mouseCursor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.disabled)) {
+            return SystemMouseCursors.basic;
+          }
+          return SystemMouseCursors.click;
+        }),
       ),
     ),
 
@@ -381,6 +409,19 @@ ThemeData buildMhadTheme(ThemePalette palette, Brightness brightness) {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(DesignTokens.buttonRadius),
         ),
+      ).copyWith(
+        overlayColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.pressed)) {
+            return p.onPrimary.withValues(alpha: 0.16);
+          }
+          if (states.contains(WidgetState.focused)) {
+            return p.onPrimary.withValues(alpha: 0.14);
+          }
+          if (states.contains(WidgetState.hovered)) {
+            return p.onPrimary.withValues(alpha: 0.10);
+          }
+          return null;
+        }),
       ),
     ),
 
@@ -397,6 +438,25 @@ ThemeData buildMhadTheme(ThemePalette palette, Brightness brightness) {
           fontSize: 15,
           fontWeight: FontWeight.w600,
         ),
+      ).copyWith(
+        overlayColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.pressed)) {
+            return p.primary.withValues(alpha: 0.16);
+          }
+          if (states.contains(WidgetState.focused)) {
+            return p.primary.withValues(alpha: 0.14);
+          }
+          if (states.contains(WidgetState.hovered)) {
+            return p.primary.withValues(alpha: 0.08);
+          }
+          return null;
+        }),
+        mouseCursor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.disabled)) {
+            return SystemMouseCursors.basic;
+          }
+          return SystemMouseCursors.click;
+        }),
       ),
     ),
 
@@ -408,6 +468,25 @@ ThemeData buildMhadTheme(ThemePalette palette, Brightness brightness) {
           fontSize: 14,
           fontWeight: FontWeight.w600,
         ),
+      ).copyWith(
+        overlayColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.pressed)) {
+            return p.primary.withValues(alpha: 0.16);
+          }
+          if (states.contains(WidgetState.focused)) {
+            return p.primary.withValues(alpha: 0.14);
+          }
+          if (states.contains(WidgetState.hovered)) {
+            return p.primary.withValues(alpha: 0.08);
+          }
+          return null;
+        }),
+        mouseCursor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.disabled)) {
+            return SystemMouseCursors.basic;
+          }
+          return SystemMouseCursors.click;
+        }),
       ),
     ),
 

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Dark-mode splash background. Matches MhadPalette.navyDark.scaffoldBackground
+  (#0A0F1B) so a user with system dark mode active doesn't see a white flash
+  before the Flutter engine draws its first frame.
+-->
+<resources>
+    <color name="mhad_splash_background">#0A0F1B</color>
+</resources>
