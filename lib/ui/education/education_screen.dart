@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mhad/data/educational_content.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/bottom_nav.dart';
+import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 
 class EducationScreen extends StatefulWidget {
@@ -16,7 +17,11 @@ class EducationScreen extends StatefulWidget {
 
 class _EducationScreenState extends State<EducationScreen> {
   EducationCategory? _selectedCategory;
-  String _query = '';
+  // _query is now driven entirely by the inline search delegate inside
+  // _EditorialLearnHub; the screen-level state no longer mutates it,
+  // and the in-AppBar clear/search actions were dropped when the
+  // AppBar itself was dropped 2026-06-04.
+  final String _query = '';
 
   List<EducationSection> get _filteredSections {
     // When opened from a wizard Help button, show only the linked sections
@@ -50,60 +55,51 @@ class _EducationScreenState extends State<EducationScreen> {
     final isFiltered =
         widget.filterIds != null && widget.filterIds!.isNotEmpty;
 
-    return Scaffold(
-      bottomNavigationBar: isFiltered ? null : const MhadBottomNav(),
-      appBar: AppBar(
-        title: Text(isFiltered ? 'Help' : 'Education & Resources'),
-        actions: [
-          if (!isFiltered) ...[
-            if (_query.isNotEmpty)
-              IconButton(
-                icon: const Icon(Icons.clear),
-                tooltip: 'Clear search',
-                onPressed: () => setState(() => _query = ''),
+    // Filtered view (deep-link from wizard Help) keeps the Material
+    // AppBar with a back arrow — it's a narrow utility view, not the
+    // prototype's Learn hub. The unfiltered hub matches prototype
+    // ScrLearn: no AppBar, CrisisTopBar at top, inline search pill
+    // already lives inside the body widget.
+    if (isFiltered) {
+      return Scaffold(
+        appBar: AppBar(title: const Text('Help')),
+        body: _filteredSections.isEmpty
+            ? const Center(
+                child: Text(
+                  'No results found.',
+                  style: TextStyle(fontStyle: FontStyle.italic),
+                ),
+              )
+            : ListView.builder(
+                padding: const EdgeInsets.all(12),
+                itemCount: _filteredSections.length,
+                itemBuilder: (context, i) =>
+                    _SectionTile(section: _filteredSections[i]),
               ),
-            IconButton(
-              icon: const Icon(Icons.search),
-              tooltip: 'Search',
-              onPressed: () async {
-                final result = await showSearch(
-                  context: context,
-                  delegate: _EducationSearchDelegate(),
-                  query: _query,
-                );
-                if (result != null && context.mounted) {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      fullscreenDialog: true,
-                      builder: (_) => _SectionDetailScreen(section: result),
+      );
+    }
+    return Scaffold(
+      bottomNavigationBar: const MhadBottomNav(),
+      body: Column(
+        children: [
+          const CrisisTopBar(compact: true),
+          Expanded(
+            child: _filteredSections.isEmpty
+                ? const Center(
+                    child: Text(
+                      'No results found.',
+                      style: TextStyle(fontStyle: FontStyle.italic),
                     ),
-                  );
-                }
-              },
-            ),
-          ],
+                  )
+                : _EditorialLearnHub(
+                    sections: _filteredSections,
+                    selectedCategory: _selectedCategory,
+                    onCategoryChange: (c) =>
+                        setState(() => _selectedCategory = c),
+                  ),
+          ),
         ],
       ),
-      body: _filteredSections.isEmpty
-          ? const Center(
-              child: Text(
-                'No results found.',
-                style: TextStyle(fontStyle: FontStyle.italic),
-              ),
-            )
-          : isFiltered
-              ? ListView.builder(
-                  padding: const EdgeInsets.all(12),
-                  itemCount: _filteredSections.length,
-                  itemBuilder: (context, i) =>
-                      _SectionTile(section: _filteredSections[i]),
-                )
-              : _EditorialLearnHub(
-                  sections: _filteredSections,
-                  selectedCategory: _selectedCategory,
-                  onCategoryChange: (c) =>
-                      setState(() => _selectedCategory = c),
-                ),
     );
   }
 }
