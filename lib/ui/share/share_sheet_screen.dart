@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
+import 'package:mhad/ui/widgets/design/wizard_header.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -62,8 +64,19 @@ class ShareSheetScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: p.scaffoldBackground,
-      appBar: AppBar(title: const Text('Share')),
-      body: agentsAsync.when(
+      // Prototype ScrShare (mobile-extra.jsx L634-746) is rendered as a
+      // bottom sheet over a blurred preview; we adapt that as a full
+      // screen with CrisisBar at the top + an in-body 'Back' chevron
+      // (no Material AppBar chrome).
+      body: Column(children: [
+        const CrisisTopBar(compact: true),
+        WizardHeader(
+          backLabel: 'Back',
+          onBack: () => Navigator.of(context).maybePop(),
+          actionLabel: '',
+        ),
+        Expanded(
+          child: agentsAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(child: Text('Unable to load: $e')),
         data: (d) {
@@ -264,6 +277,8 @@ class ShareSheetScreen extends ConsumerWidget {
           );
         },
       ),
+        ),
+      ]),
     );
   }
 }

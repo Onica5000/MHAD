@@ -10,8 +10,10 @@ import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/export/pdf/pdf_generator.dart';
 import 'package:mhad/ui/export/pdf/wallet_card_generator.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
+import 'package:mhad/ui/widgets/design/wizard_header.dart';
 import 'package:mhad/services/fhir_export_service.dart';
 import 'package:mhad/ui/export/nfc_write_button.dart';
 import 'package:mhad/utils/background_runner.dart';
@@ -441,8 +443,18 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
     final p = Theme.of(context).mhadPalette;
     return Scaffold(
       backgroundColor: p.scaffoldBackground,
-      appBar: AppBar(),
-      body: ListView(
+      // Prototype Export-class screens (ScrPdfPreview L1132+, ScrAppleWallet
+      // mobile-extra2.jsx L5-113) sit CrisisBar at the top with a thin
+      // in-body back chevron, not a Material AppBar.
+      body: Column(children: [
+        const CrisisTopBar(compact: true),
+        WizardHeader(
+          backLabel: 'Back',
+          onBack: () => Navigator.of(context).maybePop(),
+          actionLabel: '',
+        ),
+        Expanded(
+          child: ListView(
         padding: const EdgeInsets.fromLTRB(22, 4, 22, 16),
         children: [
           const SectionLabel('Export & share'),
@@ -726,6 +738,8 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
           const SizedBox(height: 40),
         ],
       ),
+        ),
+      ]),
     );
   }
 
