@@ -6,9 +6,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
+import 'package:mhad/ui/widgets/design/wizard_header.dart';
 
 /// Crisis plan / WRAP toolbox optional add-on (v2 prototype `m-crisisplan`).
 ///
@@ -104,13 +106,23 @@ class _CrisisPlanScreenState extends ConsumerState<CrisisPlanScreen> {
     final p = Theme.of(context).mhadPalette;
     return Scaffold(
       backgroundColor: p.scaffoldBackground,
-      appBar: AppBar(title: const Text('Crisis plan')),
-      body: ListView(
+      // Prototype ScrCrisisPlan (gap-analysis.jsx L434-626) uses CrisisBar
+      // + in-body back chevron, then a 38pt editorial heading. No Material
+      // AppBar — the "How I know I'm not okay" headline owns the title.
+      body: Column(children: [
+        const CrisisTopBar(compact: true),
+        WizardHeader(
+          backLabel: 'Back',
+          onBack: () => Navigator.of(context).maybePop(),
+          actionLabel: '',
+        ),
+        Expanded(child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 14, 20, 32),
         children: [
           const SectionLabel('Optional add-on · WRAP'),
           const SizedBox(height: 6),
-          const EditorialHeading(text: "How I know I'm not okay", size: 30),
+          // Headline bumped 30 -> 38pt to match prototype L446.
+          const EditorialHeading(text: "How I know I'm not okay", size: 38),
           const SizedBox(height: 6),
           Text(
             'Adapted from WRAP. Help the people around you spot trouble early — '
@@ -175,7 +187,8 @@ class _CrisisPlanScreenState extends ConsumerState<CrisisPlanScreen> {
                 'staff read first.',
           ),
         ],
-      ),
+      )),
+      ]),
     );
   }
 }

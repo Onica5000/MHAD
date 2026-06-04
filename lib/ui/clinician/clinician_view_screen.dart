@@ -5,6 +5,7 @@ import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
+import 'package:mhad/ui/widgets/design/wizard_header.dart';
 
 /// Clinician / paramedic 30-second summary view (v2 prototype `m-clinician` +
 /// `m-verify`, unified per v3 #29).
@@ -66,8 +67,14 @@ class _ClinicianViewScreenState extends ConsumerState<ClinicianViewScreen> {
     if (d == null) {
       return Scaffold(
         backgroundColor: p.scaffoldBackground,
-        appBar: AppBar(title: const Text('Clinician view')),
-        body: const Center(child: CircularProgressIndicator()),
+        body: Column(children: [
+          WizardHeader(
+            backLabel: 'Back',
+            onBack: () => Navigator.of(context).maybePop(),
+            actionLabel: '',
+          ),
+          const Expanded(child: Center(child: CircularProgressIndicator())),
+        ]),
       );
     }
 
@@ -94,12 +101,21 @@ class _ClinicianViewScreenState extends ConsumerState<ClinicianViewScreen> {
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      appBar: AppBar(
-        backgroundColor: p.primaryDark,
-        foregroundColor: Theme.of(context).colorScheme.onPrimary,
-        title: const Text('Clinician view · read-only'),
-      ),
-      body: ListView(
+      // Prototype ScrClinicianView (gap-analysis.jsx L1064-1177) drops the
+      // Material AppBar entirely — the dark primaryDark header card in
+      // the body IS the visual chrome (it identifies the directive holder
+      // and reads as a single, hand-the-clinician-the-phone artifact).
+      // No CrisisBar here either: this view is shown TO a clinician /
+      // paramedic during a crisis call, not consumed by the principal who
+      // would need 988. We just give the principal an in-body Back row to
+      // exit.
+      body: Column(children: [
+        WizardHeader(
+          backLabel: 'Back',
+          onBack: () => Navigator.of(context).maybePop(),
+          actionLabel: '',
+        ),
+        Expanded(child: ListView(
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
         children: [
           // Header — dark band identifying directive holder
@@ -240,7 +256,8 @@ class _ClinicianViewScreenState extends ConsumerState<ClinicianViewScreen> {
             style: Theme.of(context).textTheme.bodySmall,
           ),
         ],
-      ),
+      )),
+      ]),
     );
   }
 }
