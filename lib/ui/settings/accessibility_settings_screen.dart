@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/providers/accessibility_providers.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
+import 'package:mhad/ui/widgets/design/wizard_header.dart';
 
 /// Accessibility settings (v2 prototype `m-a11y`, v3 phased rollout).
 ///
@@ -27,8 +29,17 @@ class AccessibilitySettingsScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: p.scaffoldBackground,
-      appBar: AppBar(title: const Text('Accessibility')),
-      body: ListView(
+      // Prototype ScrA (gap-analysis.jsx L1067-1161) has CrisisBar + an
+      // in-body Back chevron — no Material AppBar. The editorial
+      // 'Make it readable.' heading owns the visual title.
+      body: Column(children: [
+        const CrisisTopBar(compact: true),
+        WizardHeader(
+          backLabel: 'Back',
+          onBack: () => Navigator.of(context).maybePop(),
+          actionLabel: '',
+        ),
+        Expanded(child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
         children: [
           const SectionLabel('Accessibility'),
@@ -131,7 +142,8 @@ class AccessibilitySettingsScreen extends ConsumerWidget {
             onChanged: null,
           ),
         ],
-      ),
+      )),
+      ]),
     );
   }
 }

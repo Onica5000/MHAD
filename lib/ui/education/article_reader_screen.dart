@@ -53,55 +53,73 @@ class _ArticleReaderScreenState extends State<ArticleReaderScreen> {
 
     return Scaffold(
       backgroundColor: p.scaffoldBackground,
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          tooltip: 'Back',
-          onPressed: () => Navigator.of(context).maybePop(),
-        ),
-        title: Text(
-          'LEARN · ${a.minutes} MIN',
-          style: const TextStyle(
-            fontFamily: 'JetBrains Mono',
-            fontFamilyFallback: [
-              'Consolas',
-              'Menlo',
-              'Courier New',
-              'monospace',
-            ],
-            fontSize: 11,
-            letterSpacing: 1,
-          ),
-        ),
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(2),
-          child: LinearProgressIndicator(
-            value: _pct,
-            minHeight: 2,
-            backgroundColor: p.border,
-            valueColor: AlwaysStoppedAnimation(p.primary),
-          ),
-        ),
-        actions: const [
-          // Bookmark + Share are placeholders for future article-level
-          // affordances; tooltips are required by the button-label audit
-          // even when disabled.
-          IconButton(
-            icon: Icon(Icons.bookmark_outline),
-            tooltip: 'Bookmark (coming soon)',
-            onPressed: null,
-          ),
-          IconButton(
-            icon: Icon(Icons.share_outlined),
-            tooltip: 'Share (coming soon)',
-            onPressed: null,
-          ),
-        ],
-      ),
-      body: ListView(
-        controller: _scroll,
-        padding: const EdgeInsets.fromLTRB(22, 14, 22, 80),
-        children: [
+      // Prototype ScrArticle (mobile-extra.jsx L1365-1459) pins a 2px
+      // reading-progress bar to the very top of the scaffold (above the
+      // status bar), then a thin in-body row with back chevron + "LEARN ·
+      // X MIN" + bookmark/share. No Material AppBar — the editorial
+      // article title owns the visual title in the body.
+      body: SafeArea(
+        top: true,
+        child: Column(
+          children: [
+            // Top reading progress bar (2px, prototype L1366-1368).
+            SizedBox(
+              height: 2,
+              child: LinearProgressIndicator(
+                value: _pct,
+                minHeight: 2,
+                backgroundColor: p.border,
+                valueColor: AlwaysStoppedAnimation(p.primary),
+              ),
+            ),
+            // Thin top row: back + reading-time pill + bookmark / share.
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8, 6, 8, 6),
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.arrow_back),
+                    tooltip: 'Back',
+                    onPressed: () => Navigator.of(context).maybePop(),
+                  ),
+                  const Spacer(),
+                  Text(
+                    'LEARN · ${a.minutes} MIN',
+                    style: TextStyle(
+                      fontFamily: 'JetBrains Mono',
+                      fontFamilyFallback: const [
+                        'Consolas',
+                        'Menlo',
+                        'Courier New',
+                        'monospace',
+                      ],
+                      fontSize: 11,
+                      letterSpacing: 1,
+                      color: p.textMuted,
+                    ),
+                  ),
+                  const Spacer(),
+                  // Bookmark + Share are placeholders for future article-
+                  // level affordances; tooltips are required by the
+                  // button-label audit even when disabled.
+                  IconButton(
+                    icon: const Icon(Icons.bookmark_outline),
+                    tooltip: 'Bookmark (coming soon)',
+                    onPressed: null,
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.share_outlined),
+                    tooltip: 'Share (coming soon)',
+                    onPressed: null,
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: ListView(
+                controller: _scroll,
+                padding: const EdgeInsets.fromLTRB(22, 6, 22, 80),
+                children: [
           SectionLabel(a.sectionLabel ?? 'Most read · this week'),
           const SizedBox(height: 8),
           EditorialHeading(text: a.title, size: 34, height: 1.05),
@@ -139,7 +157,11 @@ class _ArticleReaderScreenState extends State<ArticleReaderScreen> {
             const SizedBox(height: 6),
             for (final next in widget.upNext) _UpNextRow(article: next),
           ],
-        ],
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

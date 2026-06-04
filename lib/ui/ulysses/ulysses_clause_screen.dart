@@ -4,9 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
+import 'package:mhad/ui/widgets/design/wizard_header.dart';
 
 /// Self-binding ("Ulysses") clause (v2 prototype `m-ulysses`, v3 corrected
 /// framing).
@@ -95,8 +97,17 @@ class _UlyssesClauseScreenState extends ConsumerState<UlyssesClauseScreen> {
 
     return Scaffold(
       backgroundColor: p.scaffoldBackground,
-      appBar: AppBar(title: const Text('Self-binding clause')),
-      body: _loading
+      // Prototype ScrUlysses (gap-analysis.jsx L727-901) uses CrisisBar + an
+      // in-body back chevron. The editorial "If future-me refuses…" header
+      // owns the visual title rather than a Material AppBar string.
+      body: Column(children: [
+        const CrisisTopBar(compact: true),
+        WizardHeader(
+          backLabel: 'Back',
+          onBack: () => Navigator.of(context).maybePop(),
+          actionLabel: '',
+        ),
+        Expanded(child: _loading
           ? const Center(child: CircularProgressIndicator())
           : ListView(
               padding: const EdgeInsets.fromLTRB(20, 14, 20, 32),
@@ -211,7 +222,8 @@ class _UlyssesClauseScreenState extends ConsumerState<UlyssesClauseScreen> {
                       'clinician before saving. See "Get help" in Settings.',
                 ),
               ],
-            ),
+            )),
+      ]),
     );
   }
 }

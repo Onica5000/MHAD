@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
+import 'package:mhad/ui/widgets/design/wizard_header.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// "Get help" / Facilitator mode (v2 prototype `m-facilitator`, v3 re-spec).
@@ -35,8 +37,17 @@ class FacilitatorScreen extends StatelessWidget {
     final p = Theme.of(context).mhadPalette;
     return Scaffold(
       backgroundColor: p.scaffoldBackground,
-      appBar: AppBar(title: const Text("You don't have to do this alone")),
-      body: ListView(
+      // Prototype ScrFacilitator (gap-analysis.jsx L1254-1338) has CrisisBar
+      // + in-body Back chevron — the editorial "You don't have to do this
+      // alone." 32pt headline owns the visual title.
+      body: Column(children: [
+        const CrisisTopBar(compact: true),
+        WizardHeader(
+          backLabel: 'Back',
+          onBack: () => Navigator.of(context).maybePop(),
+          actionLabel: '',
+        ),
+        Expanded(child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 14, 20, 32),
         children: [
           const SectionLabel('Get help · evidence-based'),
@@ -132,7 +143,8 @@ class FacilitatorScreen extends StatelessWidget {
                 'where you left off.',
           ),
         ],
-      ),
+      )),
+      ]),
     );
   }
 }
