@@ -14,6 +14,7 @@ import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/theme/theme_controller.dart';
 import 'package:mhad/ui/widgets/design/bottom_nav.dart';
+import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
 import 'package:mhad/ui/widgets/design/design_card.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
@@ -38,26 +39,36 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     return Scaffold(
       backgroundColor: p.scaffoldBackground,
       bottomNavigationBar: const MhadBottomNav(),
-      appBar: AppBar(),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(22, 4, 22, 24),
+      // Material AppBar dropped 2026-06-04 — prototype ScrSettings
+      // (mobile-extra.jsx L1066-1129) sits the CrisisTopBar at the top of
+      // the screen body, not a Material chrome. The 38pt 'Settings'
+      // header is the in-body title.
+      body: Column(
         children: [
-          const SectionLabel('Account'),
-          const EditorialHeading(
-            text: 'Settings',
-            size: 38,
-            height: 1.0,
-            letterSpacing: -0.5,
-          ),
-          const SizedBox(height: 12),
-          // Profile chip — matches prototype `ScrSettings` profile chip
-          // (mobile-extra.jsx L1076-1088). Pulls the user's name from the
-          // most-recently-edited directive (same source as the home
-          // greeting); status pill reflects current privacy mode.
-          const _ProfileChip(),
-          const SizedBox(height: 18),
-          const SectionLabel('Appearance'),
-          const SizedBox(height: 8),
+          const CrisisTopBar(compact: true),
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(22, 20, 22, 24),
+              children: [
+                const SectionLabel('Account'),
+                const EditorialHeading(
+                  text: 'Settings',
+                  size: 38,
+                  height: 1.0,
+                  letterSpacing: -0.5,
+                ),
+                const SizedBox(height: 12),
+                // Profile chip — matches prototype `ScrSettings` profile chip
+                // (mobile-extra.jsx L1076-1088). Pulls the user's name from the
+                // most-recently-edited directive (same source as the home
+                // greeting); status pill reflects current privacy mode.
+                const _ProfileChip(),
+                const SizedBox(height: 18),
+                // "My directive" group hoisted to the top per prototype
+                // L1091-1096 (the first group after the profile chip).
+                const _CurrentDirectiveSection(),
+                const SectionLabel('Appearance'),
+                const SizedBox(height: 8),
           // Per user direction (2026-06-02): the app ships in the Deep Navy
           // palette only — no in-app palette picker. The teal/sage palettes
           // remain in `app_theme.dart` as inert tokens (the design system
@@ -128,35 +139,46 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 ),
                 if (platformIsAndroid && !kIsWeb) ...[
                   Divider(height: 1, color: p.border),
-                  SwitchListTile(
-                    secondary: Container(
-                      width: 36,
-                      height: 36,
-                      decoration: BoxDecoration(
-                        color: p.primaryLight,
-                        borderRadius: BorderRadius.circular(10),
+                  // SwitchListTile needs its own Material ancestor inside
+                  // DesignCard's DecoratedBox, otherwise its background and
+                  // ink splashes paint behind the card surface (Flutter
+                  // assertion: "ListTile background color or ink splashes
+                  // may be invisible"). Material(type: transparency) keeps
+                  // the parent card's bg visible while giving the tile a
+                  // valid Material parent.
+                  Material(
+                    type: MaterialType.transparency,
+                    child: SwitchListTile(
+                      secondary: Container(
+                        width: 36,
+                        height: 36,
+                        decoration: BoxDecoration(
+                          color: p.primaryLight,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Icon(
+                          ScreenshotProtectionService.isEnabled
+                              ? Icons.screen_lock_portrait
+                              : Icons.screenshot_outlined,
+                          color: p.primary,
+                          size: 20,
+                        ),
                       ),
-                      child: Icon(
+                      title: const Text('Screenshot Protection'),
+                      subtitle: Text(
                         ScreenshotProtectionService.isEnabled
-                            ? Icons.screen_lock_portrait
-                            : Icons.screenshot_outlined,
-                        color: p.primary,
-                        size: 20,
+                            ? 'Screenshots are blocked'
+                            : 'Screenshots are allowed',
+                        style: TextStyle(color: p.textMuted, fontSize: 12),
                       ),
+                      value: ScreenshotProtectionService.isEnabled,
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 16),
+                      onChanged: (_) async {
+                        await ScreenshotProtectionService.toggle();
+                        setState(() {});
+                      },
                     ),
-                    title: const Text('Screenshot Protection'),
-                    subtitle: Text(
-                      ScreenshotProtectionService.isEnabled
-                          ? 'Screenshots are blocked'
-                          : 'Screenshots are allowed',
-                      style: TextStyle(color: p.textMuted, fontSize: 12),
-                    ),
-                    value: ScreenshotProtectionService.isEnabled,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-                    onChanged: (_) async {
-                      await ScreenshotProtectionService.toggle();
-                      setState(() {});
-                    },
                   ),
                 ],
               ],
@@ -222,16 +244,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           ),
           const SizedBox(height: 20),
 
-          // Phase 4 — surfaces that don't depend on a specific directive.
-          // "My current directive" — surfaces Phase 4 destinations for the
-          // most-recently-completed directive when one exists. Mirrors the
-          // prototype's `ScrSettings::My directive` group (mobile-extra.jsx
-          // L1091-1096) plus the Phase 4 routes the directive-card menu
-          // previously hosted (Clinician view / Legal toggle / Crisis plan /
-          // Self-binding / AI consistency check / QR view / Agent
-          // acceptance log).
-          const _CurrentDirectiveSection(),
-
+          // _CurrentDirectiveSection was hoisted to the top of the
+          // ListView (right under the profile chip) 2026-06-04 to match
+          // prototype L1091-1096 — it used to live in this slot.
           const SectionLabel('Help & accessibility'),
           const SizedBox(height: 8),
           DesignCard(
@@ -286,6 +301,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     height: 1.5,
                   ),
                 ),
+              ],
+            ),
+          ),
               ],
             ),
           ),
