@@ -60,14 +60,6 @@ class AppThemeController extends Notifier<AppThemeSettings> {
     state = state.copyWith(mode: mode);
   }
 
-  /// Kept for source compatibility — no-op while the app is navy-locked.
-  /// If a future build re-introduces the picker, restore the body to:
-  ///   `state = state.copyWith(palette: palette);`
-  ///   `await _prefs?.setString(_paletteKey, palette.name);`
-  Future<void> setPalette(ThemePalette palette) async {
-    // Intentionally empty.
-  }
-
   Future<void> setMode(ThemeMode mode) async {
     state = state.copyWith(mode: mode);
     await _prefs?.setString(_modeKey, mode.name);

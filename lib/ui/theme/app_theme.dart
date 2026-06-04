@@ -562,17 +562,3 @@ TextTheme _buildTextTheme(Color text, Color muted) {
         fontFamily: family, fontSize: 11, fontWeight: FontWeight.w700, color: muted, letterSpacing: 1.0),
   );
 }
-
-// ─── Legacy aliases (kept to avoid breakage) ────────────────────────────────
-// Existing code imports these constants directly. They now map to the active
-// Warm Teal palette so existing screens render in the new style until they are
-// refactored to use `Theme.of(context).mhadPalette`.
-const mhadTeal = Color(0xFF1A7A6E);
-const mhadTealDark = Color(0xFF125A52);
-const mhadTealLight = Color(0xFF4ABFB1);
-
-/// Legacy helpers — still used by some older screens. They now build themes
-/// against the default Deep Navy palette (the ship-it choice from the
-/// current Claude Design bundle at `MHAD-handoff/bundle/`).
-ThemeData get lightTheme => buildMhadTheme(ThemePalette.navy, Brightness.light);
-ThemeData get darkTheme => buildMhadTheme(ThemePalette.navy, Brightness.dark);

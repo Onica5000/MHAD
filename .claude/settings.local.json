@@ -286,7 +286,16 @@
       "PowerShell(& 'D:\\\\flutter\\\\bin\\\\flutter.bat' analyze 2>&1 | Select-Object -Last 10)",
       "PowerShell(Tee-Object *)",
       "Bash(/d/flutter/bin/flutter.bat analyze *)",
-      "Bash(/d/flutter/bin/flutter.bat test *)"
+      "Bash(/d/flutter/bin/flutter.bat test *)",
+      "Bash(/d/flutter/bin/flutter.bat pub *)",
+      "Bash(dir \"F:\\\\Claude\\\\projects\\\\AndroidStudioProjects\\\\MHAD\\\\lib\" -Recurse -Filter \"*.dart\")",
+      "Bash(grep -rn \"^[a-zA-Z_][a-zA-Z0-9_]*\\\\s*\\(.*\\)\\\\s*{$\" lib/ui/export/pdf/pdf_helpers.dart)",
+      "Bash(cat)",
+      "Read(//tmp/**)",
+      "Bash(chmod +x /tmp/check_orphans.sh)",
+      "Bash(/tmp/check_orphans.sh)",
+      "Bash(grep \": 1$\")",
+      "Bash(python3 *)"
     ]
   }
 }

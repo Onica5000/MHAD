@@ -62,22 +62,6 @@ class PublicSessionCache {
     }
   }
 
-  /// How long ago the session was cached, or null if no cache exists.
-  static Future<Duration?> getCacheAge() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final ts = prefs.getString(_timestampKey);
-      if (ts == null) return null;
-      final savedAt = DateTime.tryParse(ts);
-      if (savedAt == null) return null;
-      final age = DateTime.now().difference(savedAt);
-      if (age > ttl) return null;
-      return age;
-    } catch (_) {
-      return null;
-    }
-  }
-
   // ── Cleanup ──────────────────────────────────────────────────────────
 
   /// Clear all cached public session data. Call on explicit session end.
