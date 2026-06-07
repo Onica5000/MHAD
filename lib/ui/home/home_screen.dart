@@ -203,6 +203,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             : null,
                         onRenew: () =>
                             _renewDirective(context, ref, d),
+                        onAmend: d.status == 'complete'
+                            ? () => _amendDirective(context, ref, d)
+                            : null,
                         onExport: () => context
                             .push(AppRoutes.exportRoute(d.id)),
                       ),
@@ -413,6 +416,53 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     if (context.mounted) {
       context.push(AppRoutes.wizardRoute(newId));
+    }
+  }
+
+  /// Amendment (F5) — distinct from Renew. Amending edits THIS directive in
+  /// place; under PA Act 194 an amendment must be re-executed the same way as
+  /// the original (re-signed and witnessed by two adults). So we revert the
+  /// directive to an unsigned draft and reopen the wizard at its own id; the
+  /// sign step re-stamps the execution date and wizard completion restores the
+  /// "complete" status once it is signed again.
+  Future<void> _amendDirective(
+      BuildContext context, WidgetRef ref, Directive d) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Amend this directive?'),
+        content: const Text(
+          'Amending opens this directive so you can change it — your existing '
+          'answers stay in place.\n\n'
+          'Important: an amendment is only valid once you re-sign it on paper '
+          'with two adult witnesses, the same way as the original (PA Act 194). '
+          'Until you re-sign, this directive will show as an unsigned draft, '
+          'and any printed copies of the old version stay in effect until you '
+          'replace them.\n\n'
+          'Prefer to keep the signed original untouched? Use “Renew (copy to '
+          'new)” instead.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Amend'),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !context.mounted) return;
+
+    final repo = ref.read(directiveRepositoryProvider);
+    // Revert to an unsigned draft so the user must re-execute it.
+    await repo.setExecutionDate(d.id, 0);
+    await repo.updateStatus(d.id, DirectiveStatus.draft);
+
+    if (context.mounted) {
+      context.push(AppRoutes.wizardRoute(d.id));
     }
   }
 
@@ -1349,6 +1399,7 @@ class _PastDirectiveRow extends StatelessWidget {
   final VoidCallback onDelete;
   final VoidCallback? onRevoke;
   final VoidCallback? onRenew;
+  final VoidCallback? onAmend;
   final VoidCallback? onExport;
 
   const _PastDirectiveRow({
@@ -1357,6 +1408,7 @@ class _PastDirectiveRow extends StatelessWidget {
     required this.onDelete,
     this.onRevoke,
     this.onRenew,
+    this.onAmend,
     this.onExport,
   });
 
@@ -1474,6 +1526,16 @@ class _PastDirectiveRow extends StatelessWidget {
                   onTap: () {
                     Navigator.pop(sheetCtx);
                     onRenew!();
+                  },
+                ),
+              if (onAmend != null)
+                ListTile(
+                  leading: Icon(Icons.edit_note, color: p.primary),
+                  title: const Text('Amend (edit this one)'),
+                  subtitle: const Text('Requires re-signing & re-witnessing'),
+                  onTap: () {
+                    Navigator.pop(sheetCtx);
+                    onAmend!();
                   },
                 ),
               if (onRevoke != null)
