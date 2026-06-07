@@ -309,7 +309,10 @@
       "Bash(grep -nE \"^        \\\\],\\\\s*$|^      \\\\\\),\\\\s*$|^    \\\\\\);\\\\s*$\" lib/ui/revocation/revocation_screen.dart)",
       "Bash(grep -nE \"^              \\\\],\\\\s*$|^            \\\\\\),\\\\s*$|^      \\\\\\),\\\\s*$|^    \\\\\\);\\\\s*$\" lib/ui/legal_toggle/plain_legal_toggle_screen.dart)",
       "Bash(grep -nE \"^      \\\\\\),\\\\s*$|^    \\\\\\);\\\\s*$|^  \\\\}\\\\s*$|^        \\\\],\\\\s*$\" lib/ui/crisis_plan/crisis_plan_screen.dart)",
-      "Bash(grep -nE \"^      \\\\\\),\\\\s*$|^    \\\\\\);\\\\s*$|^  \\\\}\\\\s*$|^        \\\\],\\\\s*$\" lib/ui/clinician/clinician_view_screen.dart)"
+      "Bash(grep -nE \"^      \\\\\\),\\\\s*$|^    \\\\\\);\\\\s*$|^  \\\\}\\\\s*$|^        \\\\],\\\\s*$\" lib/ui/clinician/clinician_view_screen.dart)",
+      "Bash(grep -E \"\\\\.dart$\")",
+      "Bash(xargs -I {} basename {} .dart)",
+      "Bash(pwd -W)"
     ]
   }
 }

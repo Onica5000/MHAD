@@ -12,6 +12,7 @@ import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/services/gemini_rate_tracker.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/widgets/design/bottom_nav.dart';
+import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/ai_consent_dialog.dart';
 import 'package:mhad/ui/widgets/friendly_error.dart';
@@ -290,38 +291,46 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
           ),
         ],
       ),
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          final chatColumn = _buildChatColumn(
-            context,
-            messages: messages,
-            isSending: isSending,
-            hasKey: hasKey,
-            apiKeyAsync: apiKeyAsync,
-          );
-          // Desktop wide layout (>=1000px): keep the chat column on the left
-          // and add a purely-presentational context panel on the right.
-          // Below 1000px the layout is unchanged (chat column fills width).
-          if (constraints.maxWidth >= 1000) {
-            return Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Expanded(child: chatColumn),
-                _AssistantContextPanel(
-                  context: widget.context,
-                  contextLabel: widget.context != null
-                      ? _contextLabel(widget.context!)
-                      : null,
-                  onPromptTap: (prompt) {
-                    _inputCtrl.text = prompt;
-                    _send();
-                  },
-                ),
-              ],
-            );
-          }
-          return chatColumn;
-        },
+      body: Column(
+        children: [
+          const CrisisTopBar(compact: true),
+          Expanded(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final chatColumn = _buildChatColumn(
+                  context,
+                  messages: messages,
+                  isSending: isSending,
+                  hasKey: hasKey,
+                  apiKeyAsync: apiKeyAsync,
+                );
+                // Desktop wide layout (>=1000px): keep the chat column on the
+                // left and add a purely-presentational context panel on the
+                // right. Below 1000px the layout is unchanged (chat column
+                // fills width).
+                if (constraints.maxWidth >= 1000) {
+                  return Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Expanded(child: chatColumn),
+                      _AssistantContextPanel(
+                        context: widget.context,
+                        contextLabel: widget.context != null
+                            ? _contextLabel(widget.context!)
+                            : null,
+                        onPromptTap: (prompt) {
+                          _inputCtrl.text = prompt;
+                          _send();
+                        },
+                      ),
+                    ],
+                  );
+                }
+                return chatColumn;
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

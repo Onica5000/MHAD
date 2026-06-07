@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 
@@ -62,6 +63,7 @@ class _ArticleReaderScreenState extends State<ArticleReaderScreen> {
         top: true,
         child: Column(
           children: [
+            const CrisisTopBar(compact: true),
             // Top reading progress bar (2px, prototype L1366-1368).
             SizedBox(
               height: 2,

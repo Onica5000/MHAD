@@ -16,7 +16,6 @@ import 'package:mhad/services/public_session_cache.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/theme/theme_controller.dart';
-import 'package:mhad/ui/widgets/crisis_resources_banner.dart';
 import 'package:mhad/ui/widgets/design/responsive_shell.dart';
 import 'package:mhad/utils/platform_utils.dart';
 
@@ -151,24 +150,13 @@ class MhadApp extends ConsumerWidget {
                   },
                 ),
               },
-              child: Column(
-                children: [
-                  Expanded(
-                    // Remove the bottom safe-area padding from the content
-                    // area because the CrisisResourcesBanner below already
-                    // handles it. Without this, every Scaffold/SafeArea
-                    // inside the Expanded adds redundant bottom padding,
-                    // stealing vertical space.
-                    child: MediaQuery.removePadding(
-                      context: context,
-                      removeBottom: true,
-                      child: ResponsiveShell(
-                        child: child ?? const SizedBox.shrink(),
-                      ),
-                    ),
-                  ),
-                  const CrisisResourcesBanner(),
-                ],
+              // Crisis access is now provided per-screen via CrisisTopBar /
+              // crisis sheet; the previous global bottom crisis banner was
+              // removed as a duplicate. The bottom safe-area padding that the
+              // banner used to absorb is restored to the content area, so we
+              // no longer strip it here.
+              child: ResponsiveShell(
+                child: child ?? const SizedBox.shrink(),
               ),
             ),
           ),

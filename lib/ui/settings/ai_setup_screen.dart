@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/ui/widgets/design/bottom_nav.dart';
+import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// Full-screen setup for the Gemini API key with step-by-step instructions.
@@ -144,7 +145,11 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
             ),
         ],
       ),
-      body: ListView(
+      body: Column(
+        children: [
+          const CrisisTopBar(compact: true),
+          Expanded(
+            child: ListView(
         padding: const EdgeInsets.all(20),
         children: [
           // ---- Ephemeral mode banner ----
@@ -500,6 +505,9 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                 'do not require an API key. AI is purely optional.',
           ),
           const SizedBox(height: 40),
+        ],
+            ),
+          ),
         ],
       ),
     );
