@@ -3,16 +3,29 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
+import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/design/editorial_heading.dart';
+import 'package:mhad/ui/widgets/design/info_banner.dart';
+import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/wizard/wizard_step_mixin.dart';
 
 class ReviewStep extends ConsumerStatefulWidget {
   final int directiveId;
   final FormType formType;
   final bool embedded;
+
+  /// Optional jump-to-step callback. When wired, the per-row "Edit" affordance
+  /// asks the host wizard to navigate back to the relevant [WizardStep]. The
+  /// wizard currently embeds this step without a callback, in which case the
+  /// Edit affordance is hidden (the review remains a read-only last check, the
+  /// same behavior the screen has always had).
+  final void Function(WizardStep step)? onEditStep;
+
   const ReviewStep({
     required this.directiveId,
     required this.formType,
     this.embedded = false,
+    this.onEditStep,
     super.key,
   });
 
@@ -40,8 +53,43 @@ class _ReviewData {
   });
 }
 
-class _ReviewStepState extends ConsumerState<ReviewStep>
-    with WizardStepMixin {
+/// One editorial review row: a serif numeral, the section label, a one-line
+/// summary of its contents, a per-row ok/needs-attention indicator, and an
+/// optional Edit affordance. Carries the raw key/value entries so they stay
+/// available to screen readers (preserving the data exposed by the old
+/// `_ReviewSection`).
+class _ReviewRowData {
+  final WizardStep step;
+  final String label;
+  final Map<String, String> entries;
+  final bool ok;
+
+  /// When false the summary line is shown muted/empty-toned rather than as
+  /// real content (mirrors the old "Empty / No information entered" state).
+  final bool hasContent;
+
+  const _ReviewRowData({
+    required this.step,
+    required this.label,
+    required this.entries,
+    required this.ok,
+    required this.hasContent,
+  });
+
+  /// Non-empty entries, used for both the summary string and a11y.
+  List<MapEntry<String, String>> get nonEmpty =>
+      entries.entries.where((e) => e.value.isNotEmpty).toList();
+
+  /// Compact one-line summary: joins the non-empty values (or "key: value"
+  /// where the key carries meaning, e.g. ICD codes) with middle dots.
+  String get summary {
+    final parts = nonEmpty.map((e) => e.value).toList();
+    if (parts.isEmpty) return 'Not provided yet';
+    return parts.join(' · ');
+  }
+}
+
+class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
   _ReviewData? _data;
 
   @override
@@ -60,8 +108,7 @@ class _ReviewStepState extends ConsumerState<ReviewStep>
     final additional =
         await repo.getAdditionalInstructions(widget.directiveId);
     final guardian = await repo.getGuardianNomination(widget.directiveId);
-    final medications =
-        await repo.watchMedications(widget.directiveId).first;
+    final medications = await repo.watchMedications(widget.directiveId).first;
     final diagnoses = await repo.getDiagnoses(widget.directiveId);
 
     if (mounted) {
@@ -82,6 +129,197 @@ class _ReviewStepState extends ConsumerState<ReviewStep>
   @override
   Future<bool> validateAndSave() async => true;
 
+  /// Builds the ordered list of editorial rows from loaded data. Every section
+  /// and field that the legacy `_ReviewSection` layout rendered is preserved
+  /// here — only the presentation changed.
+  List<_ReviewRowData> _buildRows(_ReviewData data) {
+    final d = data.directive;
+    final agents = data.agents;
+    final prefs = data.prefs;
+    final additional = data.additionalInstructions;
+    final guardian = data.guardian;
+    final meds = data.medications;
+
+    final primaryAgent =
+        agents.where((a) => a.agentType == 'primary').firstOrNull;
+    final altAgent =
+        agents.where((a) => a.agentType == 'alternate').firstOrNull;
+
+    final exceptions = meds.where((m) => m.entryType == 'exception').toList();
+    final limitations = meds.where((m) => m.entryType == 'limitation').toList();
+    final preferred = meds.where((m) => m.entryType == 'preferred').toList();
+
+    final rows = <_ReviewRowData>[];
+
+    // Personal Information — always shown (required identity fields).
+    final personalEntries = <String, String>{
+      'Name': d.fullName,
+      'Date of birth': d.dateOfBirth,
+      'Address': [d.address, d.address2, d.city, d.state]
+          .where((s) => s.isNotEmpty)
+          .join(', '),
+      'Phone': d.phone,
+    };
+    final personalHasContent =
+        personalEntries.values.any((v) => v.isNotEmpty);
+    rows.add(_ReviewRowData(
+      step: WizardStep.aboutYou,
+      label: 'Personal Information',
+      entries: personalEntries,
+      hasContent: personalHasContent,
+      // Identity is required for a valid directive — flag if name is blank.
+      ok: d.fullName.isNotEmpty,
+    ));
+
+    // Medical Diagnoses — only when present (matches legacy conditional).
+    if (data.diagnoses.isNotEmpty) {
+      rows.add(_ReviewRowData(
+        step: WizardStep.diagnoses,
+        label: 'Medical Diagnoses',
+        entries: {for (final dx in data.diagnoses) dx.icdCode: dx.name},
+        hasContent: true,
+        ok: true,
+      ));
+    }
+
+    // Effective Condition — always shown.
+    final effectiveEntries = {'Condition': d.effectiveCondition};
+    rows.add(_ReviewRowData(
+      step: WizardStep.whenItKicksIn,
+      label: 'Effective Condition',
+      entries: effectiveEntries,
+      hasContent: d.effectiveCondition.isNotEmpty,
+      ok: true,
+    ));
+
+    // Treatment & Consent.
+    if (prefs != null) {
+      rows.add(_ReviewRowData(
+        step: WizardStep.whereIWantCare,
+        label: 'Treatment & Consent',
+        entries: {
+          'Treatment facility': prefs.treatmentFacilityPref,
+          'Medication consent': prefs.medicationConsent,
+          'ECT consent': prefs.ectConsent,
+          'Experimental studies': prefs.experimentalConsent,
+          'Drug trials': prefs.drugTrialConsent,
+        },
+        hasContent: [
+          prefs.treatmentFacilityPref,
+          prefs.medicationConsent,
+          prefs.ectConsent,
+          prefs.experimentalConsent,
+          prefs.drugTrialConsent,
+        ].any((v) => v.isNotEmpty),
+        ok: true,
+      ));
+    }
+
+    // Medications.
+    if (exceptions.isNotEmpty ||
+        limitations.isNotEmpty ||
+        preferred.isNotEmpty) {
+      rows.add(_ReviewRowData(
+        step: WizardStep.medications,
+        label: 'Medications',
+        entries: {
+          if (exceptions.isNotEmpty)
+            'Never give': exceptions.map((m) => m.medicationName).join(', '),
+          if (limitations.isNotEmpty)
+            'With limits': limitations.map((m) => m.medicationName).join(', '),
+          if (preferred.isNotEmpty)
+            'Preferred': preferred.map((m) => m.medicationName).join(', '),
+        },
+        hasContent: true,
+        ok: true,
+      ));
+    }
+
+    // Additional Instructions.
+    if (additional != null) {
+      final addlEntries = <String, String>{
+        if (additional.activities.isNotEmpty)
+          'Activities': additional.activities,
+        if (additional.crisisIntervention.isNotEmpty)
+          'Crisis intervention': additional.crisisIntervention,
+        if (additional.healthHistory.isNotEmpty)
+          'Health history': additional.healthHistory,
+        if (additional.dietary.isNotEmpty) 'Dietary': additional.dietary,
+        if (additional.religious.isNotEmpty) 'Religious': additional.religious,
+        if (additional.childrenCustody.isNotEmpty)
+          'Children': additional.childrenCustody,
+        if (additional.familyNotification.isNotEmpty)
+          'Family notification': additional.familyNotification,
+        if (additional.recordsDisclosure.isNotEmpty)
+          'Records disclosure': additional.recordsDisclosure,
+        if (additional.petCustody.isNotEmpty) 'Pet care': additional.petCustody,
+        if (additional.other.isNotEmpty) 'Other': additional.other,
+      };
+      rows.add(_ReviewRowData(
+        step: WizardStep.anythingElse,
+        label: 'Additional Instructions',
+        entries: addlEntries,
+        hasContent: addlEntries.isNotEmpty,
+        ok: true,
+      ));
+    }
+
+    // Primary Agent.
+    if (primaryAgent != null) {
+      rows.add(_ReviewRowData(
+        step: WizardStep.peopleITrust,
+        label: 'Primary Agent',
+        entries: {
+          'Name': primaryAgent.fullName,
+          'Relationship': primaryAgent.relationship,
+          'Phone': [
+            primaryAgent.homePhone,
+            primaryAgent.workPhone,
+            primaryAgent.cellPhone,
+          ].firstWhere((p) => p.isNotEmpty, orElse: () => ''),
+        },
+        hasContent: primaryAgent.fullName.isNotEmpty,
+        ok: primaryAgent.fullName.isNotEmpty,
+      ));
+    }
+
+    // Alternate Agent.
+    if (altAgent != null) {
+      rows.add(_ReviewRowData(
+        step: WizardStep.peopleITrust,
+        label: 'Alternate Agent',
+        entries: {
+          'Name': altAgent.fullName,
+          'Relationship': altAgent.relationship,
+          'Phone': [
+            altAgent.homePhone,
+            altAgent.workPhone,
+            altAgent.cellPhone,
+          ].firstWhere((p) => p.isNotEmpty, orElse: () => ''),
+        },
+        hasContent: altAgent.fullName.isNotEmpty,
+        ok: true,
+      ));
+    }
+
+    // Guardian Nomination.
+    if (guardian != null && guardian.nomineeFullName.isNotEmpty) {
+      rows.add(_ReviewRowData(
+        step: WizardStep.guardianNomination,
+        label: 'Guardian Nomination',
+        entries: {
+          'Name': guardian.nomineeFullName,
+          'Relationship': guardian.nomineeRelationship,
+          'Phone': guardian.nomineePhone,
+        },
+        hasContent: true,
+        ok: true,
+      ));
+    }
+
+    return rows;
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_data == null) {
@@ -92,187 +330,99 @@ class _ReviewStepState extends ConsumerState<ReviewStep>
         ),
       );
     }
-    final d = _data!.directive;
-    final agents = _data!.agents;
-    final prefs = _data!.prefs;
-    final additional = _data!.additionalInstructions;
-    final guardian = _data!.guardian;
-    final meds = _data!.medications;
 
-    final primaryAgent = agents
-        .where((a) => a.agentType == 'primary')
-        .firstOrNull;
-    final altAgent = agents
-        .where((a) => a.agentType == 'alternate')
-        .firstOrNull;
-
-    final exceptions =
-        meds.where((m) => m.entryType == 'exception').toList();
-    final limitations =
-        meds.where((m) => m.entryType == 'limitation').toList();
-    final preferred =
-        meds.where((m) => m.entryType == 'preferred').toList();
+    final p = Theme.of(context).mhadPalette;
+    final rows = _buildRows(_data!);
+    final warnCount = rows.where((r) => !r.ok || !r.hasContent).length;
 
     return ListView(
       shrinkWrap: widget.embedded,
       physics: widget.embedded ? const NeverScrollableScrollPhysics() : null,
       padding: widget.embedded
           ? const EdgeInsets.symmetric(horizontal: 4)
-          : const EdgeInsets.all(16),
+          : const EdgeInsets.fromLTRB(20, 4, 20, 16),
       children: [
-        _ReviewSection(title: 'Personal Information', entries: {
-          'Name': d.fullName,
-          'Date of birth': d.dateOfBirth,
-          'Address': [d.address, d.address2, d.city, d.state]
-              .where((s) => s.isNotEmpty)
-              .join(', '),
-          'Phone': d.phone,
-        }),
-        if (_data!.diagnoses.isNotEmpty)
-          _ReviewSection(title: 'Medical Diagnoses', entries: {
-            for (final dx in _data!.diagnoses)
-              dx.icdCode: dx.name,
-          }),
-        _ReviewSection(title: 'Effective Condition', entries: {
-          'Condition': d.effectiveCondition,
-        }),
-        if (prefs != null)
-          _ReviewSection(title: 'Treatment & Consent', entries: {
-            'Treatment facility': prefs.treatmentFacilityPref,
-            'Medication consent': prefs.medicationConsent,
-            'ECT consent': prefs.ectConsent,
-            'Experimental studies': prefs.experimentalConsent,
-            'Drug trials': prefs.drugTrialConsent,
-          }),
-        if (exceptions.isNotEmpty || limitations.isNotEmpty || preferred.isNotEmpty)
-          _ReviewSection(title: 'Medications', entries: {
-            if (exceptions.isNotEmpty)
-              'Never give': exceptions.map((m) => m.medicationName).join(', '),
-            if (limitations.isNotEmpty)
-              'With limits': limitations.map((m) => m.medicationName).join(', '),
-            if (preferred.isNotEmpty)
-              'Preferred': preferred.map((m) => m.medicationName).join(', '),
-          }),
-        if (additional != null)
-          _ReviewSection(title: 'Additional Instructions', entries: {
-            if (additional.activities.isNotEmpty)
-              'Activities': additional.activities,
-            if (additional.crisisIntervention.isNotEmpty)
-              'Crisis intervention': additional.crisisIntervention,
-            if (additional.healthHistory.isNotEmpty)
-              'Health history': additional.healthHistory,
-            if (additional.dietary.isNotEmpty)
-              'Dietary': additional.dietary,
-            if (additional.religious.isNotEmpty)
-              'Religious': additional.religious,
-            if (additional.childrenCustody.isNotEmpty)
-              'Children': additional.childrenCustody,
-            if (additional.familyNotification.isNotEmpty)
-              'Family notification': additional.familyNotification,
-            if (additional.recordsDisclosure.isNotEmpty)
-              'Records disclosure': additional.recordsDisclosure,
-            if (additional.petCustody.isNotEmpty)
-              'Pet care': additional.petCustody,
-            if (additional.other.isNotEmpty) 'Other': additional.other,
-          }),
-        if (primaryAgent != null)
-          _ReviewSection(title: 'Primary Agent', entries: {
-            'Name': primaryAgent.fullName,
-            'Relationship': primaryAgent.relationship,
-            'Phone': [
-              primaryAgent.homePhone,
-              primaryAgent.workPhone,
-              primaryAgent.cellPhone,
-            ].firstWhere((p) => p.isNotEmpty, orElse: () => ''),
-          }),
-        if (altAgent != null)
-          _ReviewSection(title: 'Alternate Agent', entries: {
-            'Name': altAgent.fullName,
-            'Relationship': altAgent.relationship,
-            'Phone': [
-              altAgent.homePhone,
-              altAgent.workPhone,
-              altAgent.cellPhone,
-            ].firstWhere((p) => p.isNotEmpty, orElse: () => ''),
-          }),
-        if (guardian != null && guardian.nomineeFullName.isNotEmpty)
-          _ReviewSection(title: 'Guardian Nomination', entries: {
-            'Name': guardian.nomineeFullName,
-            'Relationship': guardian.nomineeRelationship,
-            'Phone': guardian.nomineePhone,
-          }),
-        const SizedBox(height: 16),
-        Card(
-          color: Theme.of(context).colorScheme.primaryContainer,
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Ready to sign?',
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleSmall
-                      ?.copyWith(fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'Review all sections above. When satisfied, tap Next '
-                  'to proceed to signing and dating the directive.',
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: Theme.of(context).colorScheme.onPrimaryContainer,
-                  ),
-                ),
-              ],
-            ),
+        // The wizard scaffold's StepHead already renders the "Review" title +
+        // subtitle above this step, so we avoid a duplicate H1 and instead
+        // lead with a short editorial summary line (prototype ScrReview copy).
+        Text(
+          "One last look, then we'll make your signing packet.",
+          style: TextStyle(
+            fontFamily: 'DM Sans',
+            fontSize: 14,
+            height: 1.5,
+            color: p.textMuted,
           ),
         ),
+        const SizedBox(height: 16),
+
+        // ok / warning summary banner.
+        if (warnCount > 0)
+          InfoBanner(
+            icon: Icons.warning_amber_rounded,
+            variant: InfoBannerVariant.warning,
+            text: warnCount == 1
+                ? '1 section still needs your attention before signing.'
+                : '$warnCount sections still need your attention before '
+                    'signing.',
+          )
+        else
+          const InfoBanner(
+            icon: Icons.check_circle_outline,
+            variant: InfoBannerVariant.success,
+            text: 'Everything looks good. All sections reviewed.',
+          ),
+
+        const SectionLabel('Your directive at a glance'),
+
+        // Numbered editorial rows.
+        ...List.generate(rows.length, (i) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: _ReviewRow(
+              number: i + 1,
+              data: rows[i],
+              onEdit: widget.onEditStep == null
+                  ? null
+                  : () => widget.onEditStep!(rows[i].step),
+            ),
+          );
+        }),
+
+        const SizedBox(height: 16),
+
+        // Ready-to-sign call-to-action card (preserved from legacy layout).
+        _CalloutCard(
+          variant: _CalloutVariant.primary,
+          title: 'Ready to sign?',
+          body: 'Review all sections above. When satisfied, tap '
+              'Generate signing packet to proceed to signing and dating '
+              'the directive.',
+        ),
         const SizedBox(height: 12),
+
         // FACTUAL_ANALYSIS C6 / F15+F18 — providers SHALL comply with the
         // directive (§ 5837), but a provider may decline to follow specific
         // instructions that are against accepted medical practice or when the
         // provider is not physically available. Surfacing this here sets
         // accurate expectations before signing.
-        Card(
-          color: Theme.of(context).colorScheme.surfaceContainerHighest,
-          child: Padding(
-            padding: const EdgeInsets.all(14),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Icon(
-                  Icons.info_outline,
-                  size: 18,
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text.rich(
-                    TextSpan(
-                      style: TextStyle(
-                        fontSize: 12.5,
-                        height: 1.45,
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onSurfaceVariant,
-                      ),
-                      children: const [
-                        TextSpan(
-                          text: 'Providers must comply ',
-                          style: TextStyle(fontWeight: FontWeight.w600),
-                        ),
-                        TextSpan(
-                          text:
-                              'with your directive under PA Act 194 § 5837. A provider may decline specific instructions only if they conflict with accepted medical practice, or when the provider is not physically available.',
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
+        const _CalloutCard(
+          variant: _CalloutVariant.surface,
+          icon: Icons.info_outline,
+          richBody: TextSpan(
+            children: [
+              TextSpan(
+                text: 'Providers must comply ',
+                style: TextStyle(fontWeight: FontWeight.w600),
+              ),
+              TextSpan(
+                text:
+                    'with your directive under PA Act 194 § 5837. A provider '
+                    'may decline specific instructions only if they conflict '
+                    'with accepted medical practice, or when the provider is '
+                    'not physically available.',
+              ),
+            ],
           ),
         ),
         const SizedBox(height: 80),
@@ -281,97 +431,231 @@ class _ReviewStepState extends ConsumerState<ReviewStep>
   }
 }
 
-class _ReviewSection extends StatelessWidget {
-  final String title;
-  final Map<String, String> entries;
+/// A single numbered editorial review row.
+class _ReviewRow extends StatelessWidget {
+  final int number;
+  final _ReviewRowData data;
+  final VoidCallback? onEdit;
 
-  const _ReviewSection({required this.title, required this.entries});
+  const _ReviewRow({
+    required this.number,
+    required this.data,
+    this.onEdit,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final nonEmpty =
-        entries.entries.where((e) => e.value.isNotEmpty).toList();
+    final theme = Theme.of(context);
+    final p = theme.mhadPalette;
+    final dark = theme.brightness == Brightness.dark;
 
-    return Card(
-      margin: const EdgeInsets.only(bottom: 12),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
+    final ok = data.ok && data.hasContent;
+    final okColor = dark
+        ? SemanticColors.successTextDark
+        : SemanticColors.successTextLight;
+    final warnColor = dark
+        ? SemanticColors.warningTextDark
+        : SemanticColors.warningTextLight;
+
+    // Build a full a11y description from every field (no data hidden from
+    // screen readers even though the visible summary is collapsed to one line).
+    final a11yEntries = data.nonEmpty
+        .map((e) => '${e.key}: ${e.value}')
+        .join(', ');
+    final a11yLabel = a11yEntries.isEmpty
+        ? '${data.label}. No information entered.'
+        : '${data.label}. $a11yEntries.';
+
+    final content = Semantics(
+      label: a11yLabel,
+      button: onEdit != null,
+      excludeSemantics: true,
+      child: Container(
+        decoration: BoxDecoration(
+          color: p.card,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: p.border),
+        ),
+        padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+        child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    title,
-                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                        fontWeight: FontWeight.w600),
-                  ),
-                ),
-                if (nonEmpty.isEmpty)
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 8, vertical: 2),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context)
-                          .colorScheme
-                          .tertiary
-                          .withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Text('Empty',
-                        style: TextStyle(
-                            fontSize: 11,
-                            color: Theme.of(context)
-                                .colorScheme
-                                .tertiary)),
-                  ),
-              ],
+            // Serif italic numeral chip.
+            Container(
+              width: 32,
+              height: 32,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: p.primaryTint,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: SerifNumeral(
+                value: number,
+                size: 18,
+                color: p.primary,
+              ),
             ),
-            if (nonEmpty.isNotEmpty) ...[
-              const SizedBox(height: 8),
-              ...nonEmpty.map((e) => Semantics(
-                    label: '${e.key}: ${e.value}',
-                    excludeSemantics: true,
-                    child: Padding(
-                    padding: const EdgeInsets.only(bottom: 4),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Flexible(
-                          flex: 2,
-                          child: Text(e.key,
-                              style: TextStyle(
-                                  fontSize: 12,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSurfaceVariant)),
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(e.value,
-                              style: const TextStyle(fontSize: 12),
-                              maxLines: 3,
-                              overflow: TextOverflow.ellipsis),
-                        ),
-                      ],
+            const SizedBox(width: 12),
+            // Label + one-line summary.
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    data.label,
+                    style: TextStyle(
+                      fontFamily: 'DM Sans',
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: p.text,
                     ),
-                  ))),
-            ] else
-              Padding(
-                padding: const EdgeInsets.only(top: 4),
-                child: Text(
-                  'No information entered',
-                  style: TextStyle(
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    data.hasContent ? data.summary : 'No information entered',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontFamily: 'DM Sans',
                       fontSize: 12,
-                      color:
-                          Theme.of(context).colorScheme.onSurfaceVariant,
-                      fontStyle: FontStyle.italic),
+                      height: 1.3,
+                      fontStyle:
+                          data.hasContent ? FontStyle.normal : FontStyle.italic,
+                      color: p.textMuted,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 10),
+            // Per-row ok / needs-attention indicator.
+            Padding(
+              padding: const EdgeInsets.only(top: 2),
+              child: Icon(
+                ok ? Icons.check_rounded : Icons.warning_amber_rounded,
+                size: 18,
+                color: ok ? okColor : warnColor,
+              ),
+            ),
+            // Edit affordance (only when a jump callback is wired).
+            if (onEdit != null) ...[
+              const SizedBox(width: 6),
+              Padding(
+                padding: const EdgeInsets.only(top: 1),
+                child: Icon(
+                  Icons.edit_outlined,
+                  size: 16,
+                  color: p.textMuted,
                 ),
               ),
+            ],
           ],
         ),
       ),
+    );
+
+    if (onEdit == null) return content;
+
+    return Material(
+      color: Colors.transparent,
+      borderRadius: BorderRadius.circular(12),
+      child: InkWell(
+        onTap: onEdit,
+        borderRadius: BorderRadius.circular(12),
+        child: content,
+      ),
+    );
+  }
+}
+
+enum _CalloutVariant { primary, surface }
+
+/// A small callout card supporting either plain body text or a styled
+/// [TextSpan], with an optional leading icon. Replaces the two bespoke
+/// Material `Card`s the legacy layout used for "Ready to sign?" and the
+/// provider-compliance note, themed via the editorial palette.
+class _CalloutCard extends StatelessWidget {
+  final _CalloutVariant variant;
+  final String? title;
+  final String? body;
+  final TextSpan? richBody;
+  final IconData? icon;
+
+  const _CalloutCard({
+    required this.variant,
+    this.title,
+    this.body,
+    this.richBody,
+    this.icon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
+
+    final (bg, border, fg) = switch (variant) {
+      _CalloutVariant.primary => (p.primaryLight, p.primary, p.onPrimaryLight),
+      _CalloutVariant.surface => (p.surface, p.border, p.textMuted),
+    };
+
+    final children = <Widget>[];
+    if (title != null) {
+      children.add(Text(
+        title!,
+        style: TextStyle(
+          fontFamily: 'DM Sans',
+          fontSize: 14,
+          fontWeight: FontWeight.w700,
+          color: fg,
+        ),
+      ));
+      children.add(const SizedBox(height: 6));
+    }
+    if (body != null) {
+      children.add(Text(
+        body!,
+        style: TextStyle(
+          fontFamily: 'DM Sans',
+          fontSize: 13,
+          height: 1.45,
+          color: fg,
+        ),
+      ));
+    }
+    if (richBody != null) {
+      children.add(Text.rich(
+        richBody!,
+        style: TextStyle(
+          fontFamily: 'DM Sans',
+          fontSize: 12.5,
+          height: 1.45,
+          color: fg,
+        ),
+      ));
+    }
+
+    final body0 = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: children,
+    );
+
+    return Container(
+      decoration: BoxDecoration(
+        color: bg,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: border),
+      ),
+      padding: const EdgeInsets.all(14),
+      child: icon == null
+          ? body0
+          : Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(icon, size: 18, color: fg),
+                const SizedBox(width: 8),
+                Expanded(child: body0),
+              ],
+            ),
     );
   }
 }

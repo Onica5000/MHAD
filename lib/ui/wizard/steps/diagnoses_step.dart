@@ -6,9 +6,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/services/clinical_data_service.dart';
+import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/design/health_chip.dart';
+import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/nlm_attribution.dart';
 import 'package:mhad/ui/wizard/widgets/wizard_help_button.dart';
 import 'package:mhad/ui/wizard/wizard_step_mixin.dart';
+
+const _kMono = 'JetBrains Mono';
+const _kMonoFallback = ['Consolas', 'Menlo', 'Courier New', 'monospace'];
+const _kSans = 'DM Sans';
 
 class DiagnosesStep extends ConsumerStatefulWidget {
   const DiagnosesStep({
@@ -18,6 +25,7 @@ class DiagnosesStep extends ConsumerStatefulWidget {
   });
 
   final int directiveId;
+
   /// When true, render as a non-scrolling Column suitable for embedding in a
   /// parent ListView. When false, render as a full ListView with its own scroll.
   final bool embedded;
@@ -64,8 +72,8 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
     }
   }
 
-  Future<void> _addDiagnosis(IcdCondition condition,
-      List<DiagnosisEntry> current) async {
+  Future<void> _addDiagnosis(
+      IcdCondition condition, List<DiagnosisEntry> current) async {
     // Skip if already added
     if (current.any((d) => d.icdCode == condition.code)) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -90,32 +98,173 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
     await ref.read(directiveRepositoryProvider).deleteDiagnosis(id);
   }
 
-  Widget _buildDiagnosisTile(DiagnosisEntry d, ColorScheme cs) {
-    return Card(
-      margin: const EdgeInsets.only(bottom: 6),
-      child: ListTile(
-        dense: true,
-        leading: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-          decoration: BoxDecoration(
-            color: cs.primaryContainer,
-            borderRadius: BorderRadius.circular(4),
-          ),
-          child: Text(
-            d.icdCode,
-            style: TextStyle(
-              fontSize: 11,
-              fontFamily: 'monospace',
-              color: cs.onPrimaryContainer,
-              fontWeight: FontWeight.w600,
+  // ─── Search field (editorial SearchField look) ──────────────────────────
+  Widget _buildSearchField(MhadPalette p) {
+    final active = _searchResults.isNotEmpty || _searching;
+    return Container(
+      decoration: BoxDecoration(
+        color: p.card,
+        border: Border.all(
+          color: active ? p.primary : p.border,
+          width: 1.5,
+        ),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+      child: Row(
+        children: [
+          Icon(Icons.search, size: 18, color: p.textMuted),
+          const SizedBox(width: 10),
+          Expanded(
+            child: TextField(
+              controller: _searchCtrl,
+              autofillHints: const [],
+              autocorrect: false,
+              enableSuggestions: false,
+              onChanged: _onSearchChanged,
+              style: TextStyle(
+                fontFamily: _kSans,
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: p.text,
+              ),
+              decoration: InputDecoration(
+                isDense: true,
+                contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                border: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                hintText: 'Search a condition (e.g. depression, ADHD)…',
+                hintStyle: TextStyle(
+                  fontFamily: _kSans,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: p.textMuted,
+                ),
+              ),
             ),
           ),
+          if (_searching)
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 4),
+              child: SizedBox(
+                width: 18,
+                height: 18,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              ),
+            )
+          else if (_searchCtrl.text.isNotEmpty)
+            Semantics(
+              button: true,
+              label: 'Clear search',
+              child: InkWell(
+                onTap: () {
+                  _searchCtrl.clear();
+                  setState(() => _searchResults = []);
+                },
+                borderRadius: BorderRadius.circular(8),
+                child: Padding(
+                  padding: const EdgeInsets.all(4),
+                  child: Icon(Icons.close, size: 16, color: p.textMuted),
+                ),
+              ),
+            )
+          else
+            // ICD-10 mono badge pill
+            Container(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+              decoration: BoxDecoration(
+                color: p.primaryTint,
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Text(
+                'ICD-10',
+                style: TextStyle(
+                  fontFamily: _kMono,
+                  fontFamilyFallback: _kMonoFallback,
+                  fontSize: 9,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.5,
+                  color: p.primary,
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  // ─── A result row in the autocomplete dropdown ──────────────────────────
+  Widget _buildResultTile(
+      IcdCondition c, bool alreadyAdded, List<DiagnosisEntry> current, MhadPalette p) {
+    return InkWell(
+      onTap: alreadyAdded ? null : () => _addDiagnosis(c, current),
+      borderRadius: BorderRadius.circular(7),
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              margin: const EdgeInsets.only(top: 1),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+              decoration: BoxDecoration(
+                color: p.card,
+                border: Border.all(color: p.primaryLight),
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Text(
+                c.code,
+                style: TextStyle(
+                  fontFamily: _kMono,
+                  fontFamilyFallback: _kMonoFallback,
+                  fontSize: 10,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.4,
+                  color: p.primary,
+                ),
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                c.name,
+                style: TextStyle(
+                  fontFamily: _kSans,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  height: 1.3,
+                  color: p.text,
+                ),
+              ),
+            ),
+            const SizedBox(width: 8),
+            Icon(
+              alreadyAdded ? Icons.check_circle : Icons.add_circle_outline,
+              color: p.primary,
+              size: 20,
+            ),
+          ],
         ),
-        title: Text(d.name, style: const TextStyle(fontSize: 14)),
-        trailing: IconButton(
-          icon: Icon(Icons.remove_circle_outline, color: cs.error, size: 20),
-          tooltip: 'Remove',
-          onPressed: () => _removeDiagnosis(d.id),
+      ),
+    );
+  }
+
+  // ─── Section sub-header inside the dropdown (Psychiatric / Medical) ──────
+  Widget _resultSectionHeader(String label, MhadPalette p) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(8, 6, 8, 4),
+      child: Text(
+        label.toUpperCase(),
+        style: TextStyle(
+          fontFamily: _kMono,
+          fontFamilyFallback: _kMonoFallback,
+          fontSize: 9.5,
+          fontWeight: FontWeight.w700,
+          letterSpacing: 0.6,
+          color: p.textMuted,
         ),
       ),
     );
@@ -123,9 +272,10 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
 
   @override
   Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
-    final diagnosesStream =
-        ref.watch(directiveRepositoryProvider).watchDiagnoses(widget.directiveId);
+    final p = Theme.of(context).mhadPalette;
+    final diagnosesStream = ref
+        .watch(directiveRepositoryProvider)
+        .watchDiagnoses(widget.directiveId);
 
     const helpText =
         'Search for your psychiatric and medical diagnoses using ICD-10 codes. '
@@ -144,238 +294,238 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
           ? const EdgeInsets.symmetric(horizontal: 4)
           : const EdgeInsets.all(16),
       children: [
-              WizardHelpButton(helpText: helpText, stepId: 'diagnoses'),
-              const SizedBox(height: 8),
-              Text(
-                'Diagnoses',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              const SizedBox(height: 4),
-              Text(
-                'Search and add your psychiatric and medical diagnoses. '
-                'These will be included in your directive.',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: cs.onSurfaceVariant),
-              ),
-              const SizedBox(height: 16),
+        WizardHelpButton(helpText: helpText, stepId: 'diagnoses'),
+        const SizedBox(height: 8),
 
-              // Search field
-              TextField(
-                controller: _searchCtrl,
-                autofillHints: const [],
-                autocorrect: false,
-                enableSuggestions: false,
-                onChanged: _onSearchChanged,
-                decoration: InputDecoration(
-                  labelText: 'Search ICD-10 diagnoses',
-                  hintText: 'e.g., bipolar, anxiety, PTSD, depression',
-                  border: const OutlineInputBorder(),
-                  prefixIcon: const Icon(Icons.search),
-                  suffixIcon: _searching
-                      ? const Padding(
-                          padding: EdgeInsets.all(12),
-                          child: SizedBox(
-                              width: 20,
-                              height: 20,
-                              child:
-                                  CircularProgressIndicator(strokeWidth: 2)),
-                        )
-                      : _searchCtrl.text.isNotEmpty
-                          ? Semantics(
-                              button: true,
-                              label: 'Clear search',
-                              child: IconButton(
-                                icon: const Icon(Icons.clear, size: 18),
-                                tooltip: 'Clear search',
-                                onPressed: () {
-                                  _searchCtrl.clear();
-                                  setState(() => _searchResults = []);
-                                },
-                              ),
-                            )
-                          : null,
+        // Search field
+        _buildSearchField(p),
+        const SizedBox(height: 8),
+
+        // Search results — grouped by psychiatric (F-codes) and medical
+        if (_searchResults.isNotEmpty)
+          StreamBuilder<List<DiagnosisEntry>>(
+            stream: diagnosesStream,
+            builder: (context, snap) {
+              final current = snap.data ?? [];
+              final psych =
+                  _searchResults.where((c) => c.code.startsWith('F')).toList();
+              final med =
+                  _searchResults.where((c) => !c.code.startsWith('F')).toList();
+
+              return Container(
+                decoration: BoxDecoration(
+                  color: p.card,
+                  border: Border.all(color: p.border),
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color(0x1A000000),
+                      blurRadius: 24,
+                      offset: Offset(0, 8),
+                    ),
+                  ],
                 ),
-              ),
-              const SizedBox(height: 8),
-
-              // Search results — grouped by psychiatric (F-codes) and medical
-              if (_searchResults.isNotEmpty)
-                StreamBuilder<List<DiagnosisEntry>>(
-                  stream: diagnosesStream,
-                  builder: (context, snap) {
-                    final current = snap.data ?? [];
-                    final psych = _searchResults
-                        .where((c) => c.code.startsWith('F'))
-                        .toList();
-                    final med = _searchResults
-                        .where((c) => !c.code.startsWith('F'))
-                        .toList();
-
-                    Widget buildResultTile(IcdCondition c) {
-                      final alreadyAdded =
-                          current.any((d) => d.icdCode == c.code);
-                      return ListTile(
-                        dense: true,
-                        leading: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 6, vertical: 2),
-                          decoration: BoxDecoration(
-                            color: c.code.startsWith('F')
-                                ? cs.primaryContainer
-                                : cs.tertiaryContainer,
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: Text(
-                            c.code,
-                            style: TextStyle(
-                              fontSize: 11,
-                              fontFamily: 'monospace',
-                              color: c.code.startsWith('F')
-                                  ? cs.onPrimaryContainer
-                                  : cs.onTertiaryContainer,
-                            ),
-                          ),
-                        ),
-                        title: Text(c.name,
-                            style: const TextStyle(fontSize: 14)),
-                        trailing: alreadyAdded
-                            ? Icon(Icons.check_circle,
-                                color: cs.primary, size: 20)
-                            : Icon(Icons.add_circle_outline,
-                                color: cs.primary, size: 20),
-                        onTap: alreadyAdded
-                            ? null
-                            : () => _addDiagnosis(c, current),
-                      );
-                    }
-
-                    Widget sectionHeader(String label) {
-                      return Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 4),
-                        color: cs.surfaceContainerHighest,
-                        child: Text(label,
-                            style: TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w700,
-                              color: cs.onSurfaceVariant,
-                            )),
-                      );
-                    }
-
-                    return Card(
-                      clipBehavior: Clip.antiAlias,
-                      child: ConstrainedBox(
-                        constraints: const BoxConstraints(maxHeight: 280),
-                        child: ListView(
-                          shrinkWrap: true,
-                          padding: EdgeInsets.zero,
-                          children: [
-                            if (psych.isNotEmpty) ...[
-                              sectionHeader('Psychiatric'),
-                              ...psych.expand((c) => [
-                                    buildResultTile(c),
-                                    Divider(
-                                        height: 1,
-                                        color: cs.outlineVariant),
-                                  ]),
-                            ],
-                            if (med.isNotEmpty) ...[
-                              sectionHeader('Medical'),
-                              ...med.expand((c) => [
-                                    buildResultTile(c),
-                                    Divider(
-                                        height: 1,
-                                        color: cs.outlineVariant),
-                                  ]),
-                            ],
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
-
-              if (_searchResults.isEmpty && _searchCtrl.text.length >= 2)
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  child: Text(
-                    _searching ? '' : 'No results found.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: cs.onSurfaceVariant),
-                  ),
-                ),
-
-              const SizedBox(height: 16),
-
-              // Selected diagnoses
-              StreamBuilder<List<DiagnosisEntry>>(
-                stream: diagnosesStream,
-                builder: (context, snap) {
-                  final diagnoses = snap.data ?? [];
-                  if (diagnoses.isEmpty) {
-                    return Card(
-                      color: cs.surfaceContainerHighest,
-                      child: Padding(
-                        padding: const EdgeInsets.all(24),
-                        child: Column(
-                          children: [
-                            Icon(Icons.medical_information_outlined,
-                                size: 36, color: cs.onSurfaceVariant),
-                            const SizedBox(height: 8),
-                            Text(
-                              'No diagnoses added yet',
-                              style: TextStyle(color: cs.onSurfaceVariant),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              'Use the search above to find and add your diagnoses.',
-                              style: TextStyle(
-                                  fontSize: 12, color: cs.onSurfaceVariant),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  }
-                  final psychiatric = diagnoses
-                      .where((d) => d.icdCode.startsWith('F'))
-                      .toList();
-                  final medical = diagnoses
-                      .where((d) => !d.icdCode.startsWith('F'))
-                      .toList();
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                padding: const EdgeInsets.all(6),
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxHeight: 280),
+                  child: ListView(
+                    shrinkWrap: true,
+                    padding: EdgeInsets.zero,
                     children: [
-                      if (psychiatric.isNotEmpty) ...[
-                        Text(
-                          'Psychiatric Diagnoses (${psychiatric.length})',
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleSmall
-                              ?.copyWith(fontWeight: FontWeight.w600),
-                        ),
-                        const SizedBox(height: 8),
-                        ...psychiatric.map((d) => _buildDiagnosisTile(d, cs)),
-                        const SizedBox(height: 16),
+                      if (psych.isNotEmpty) ...[
+                        _resultSectionHeader('Psychiatric', p),
+                        ...psych.map((c) => _buildResultTile(
+                              c,
+                              current.any((d) => d.icdCode == c.code),
+                              current,
+                              p,
+                            )),
                       ],
-                      if (medical.isNotEmpty) ...[
-                        Text(
-                          'Medical Diagnoses (${medical.length})',
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleSmall
-                              ?.copyWith(fontWeight: FontWeight.w600),
-                        ),
-                        const SizedBox(height: 8),
-                        ...medical.map((d) => _buildDiagnosisTile(d, cs)),
+                      if (med.isNotEmpty) ...[
+                        _resultSectionHeader('Medical', p),
+                        ...med.map((c) => _buildResultTile(
+                              c,
+                              current.any((d) => d.icdCode == c.code),
+                              current,
+                              p,
+                            )),
                       ],
                     ],
-                  );
-                },
+                  ),
+                ),
+              );
+            },
+          ),
+
+        if (_searchResults.isEmpty && _searchCtrl.text.length >= 2)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            child: Text(
+              _searching ? '' : 'No results found.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontFamily: _kSans,
+                color: p.textMuted,
               ),
+            ),
+          ),
+
+        // Added diagnoses
+        StreamBuilder<List<DiagnosisEntry>>(
+          stream: diagnosesStream,
+          builder: (context, snap) {
+            final diagnoses = snap.data ?? [];
+            if (diagnoses.isEmpty) {
+              return Padding(
+                padding: const EdgeInsets.only(top: 12),
+                child: Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: p.surface,
+                    border: Border.all(color: p.border),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  padding: const EdgeInsets.all(24),
+                  child: Column(
+                    children: [
+                      Icon(Icons.medical_information_outlined,
+                          size: 36, color: p.textMuted),
+                      const SizedBox(height: 8),
+                      Text(
+                        'No diagnoses added yet',
+                        style: TextStyle(
+                          fontFamily: _kSans,
+                          fontWeight: FontWeight.w600,
+                          color: p.text,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Use the search above to find and add your diagnoses.',
+                        style: TextStyle(
+                          fontFamily: _kSans,
+                          fontSize: 12,
+                          color: p.textMuted,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
+
+            final psychiatric =
+                diagnoses.where((d) => d.icdCode.startsWith('F')).toList();
+            final medical =
+                diagnoses.where((d) => !d.icdCode.startsWith('F')).toList();
+
+            HealthChip chip(DiagnosisEntry d) => HealthChip(
+                  code: d.icdCode,
+                  label: d.name,
+                  sourceTag: 'ICD-10',
+                  tone: HealthChipTone.primary,
+                  onRemove: () => _removeDiagnosis(d.id),
+                );
+
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SectionLabel('Added · ${diagnoses.length} '
+                    '${diagnoses.length == 1 ? 'condition' : 'conditions'}'),
+                if (psychiatric.isNotEmpty) ...[
+                  SectionLabel(
+                    'Psychiatric (${psychiatric.length})',
+                    padding: const EdgeInsets.fromLTRB(0, 4, 0, 8),
+                    style: TextStyle(color: p.primary),
+                  ),
+                  ...psychiatric.map((d) => Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: chip(d),
+                      )),
+                ],
+                if (medical.isNotEmpty) ...[
+                  SectionLabel(
+                    'Medical (${medical.length})',
+                    padding: const EdgeInsets.fromLTRB(0, 4, 0, 8),
+                    style: TextStyle(color: p.primary),
+                  ),
+                  ...medical.map((d) => Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: chip(d),
+                      )),
+                ],
+              ],
+            );
+          },
+        ),
+
+        const SizedBox(height: 12),
+
+        // AI-assist hint (static, mirrors the prototype)
+        Container(
+          decoration: BoxDecoration(
+            color: p.primaryTint,
+            border: Border.all(color: p.primaryLight),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          padding: const EdgeInsets.all(12),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(Icons.auto_awesome, size: 16, color: p.primary),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text.rich(
+                  TextSpan(
+                    style: TextStyle(
+                      fontFamily: _kSans,
+                      fontSize: 12.5,
+                      height: 1.45,
+                      color: p.text,
+                    ),
+                    children: const [
+                      TextSpan(text: "Don't know the official name? "),
+                      TextSpan(
+                        text: 'Describe how it shows up for you',
+                        style: TextStyle(fontWeight: FontWeight.w700),
+                      ),
+                      TextSpan(
+                          text: " and I'll suggest the closest ICD-10 code "
+                              'for you to confirm.'),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                'Try →',
+                style: TextStyle(
+                  fontFamily: _kSans,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  color: p.primary,
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        const SizedBox(height: 12),
+
+        // Footer note
+        Text(
+          "You're not required to list anything. Anything you do list is "
+          'shared only with the people your directive names.',
+          style: TextStyle(
+            fontFamily: _kSans,
+            fontSize: 11,
+            fontStyle: FontStyle.italic,
+            height: 1.45,
+            color: p.textMuted,
+          ),
+        ),
+
         const SizedBox(height: 12),
         const NlmAttribution(),
       ],
