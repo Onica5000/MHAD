@@ -289,9 +289,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 const SizedBox(height: 8),
                 Text(
                   'PA Mental Health Advance Directive\n'
-                  'Under Pennsylvania Act 194 of 2004\n\n'
+                  'Under Pennsylvania Act 194 of 2004 (effective January 29, '
+                  '2005)\n\n'
                   'This app helps you document your mental health treatment '
                   'preferences. It is not a substitute for legal advice.\n\n'
+                  'Your directive is valid for two years from the date you sign '
+                  'it — unless you are found incapable of making mental health '
+                  'decisions at the time it would expire, in which case it '
+                  'stays in effect until your capacity returns.\n\n'
                   'Form content based on the official PA MHAD booklet '
                   'published by the Disabilities Law Project (2005).',
                   style: TextStyle(

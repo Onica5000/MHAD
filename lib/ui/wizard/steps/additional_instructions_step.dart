@@ -32,7 +32,13 @@ class _AdditionalInstructionsStepState
   final _religiousCtrl = TextEditingController();
   final _childrenCustodyCtrl = TextEditingController();
   final _familyNotificationCtrl = TextEditingController();
-  final _recordsDisclosureCtrl = TextEditingController();
+  // Records disclosure is now a structured release/withhold/other control.
+  // All three round-trip through the single `recordsDisclosure` text column
+  // via labeled blocks (see _buildRecordsDisclosure / _parseRecordsDisclosure),
+  // so the PDF, FHIR export and review screen still read clean prose.
+  final _recordsReleaseCtrl = TextEditingController();
+  final _recordsWithholdCtrl = TextEditingController();
+  final _recordsOtherCtrl = TextEditingController();
   final _petCustodyCtrl = TextEditingController();
   final _deescalationCtrl = TextEditingController();
   final _triggersCtrl = TextEditingController();
@@ -71,7 +77,9 @@ class _AdditionalInstructionsStepState
     _religiousCtrl.dispose();
     _childrenCustodyCtrl.dispose();
     _familyNotificationCtrl.dispose();
-    _recordsDisclosureCtrl.dispose();
+    _recordsReleaseCtrl.dispose();
+    _recordsWithholdCtrl.dispose();
+    _recordsOtherCtrl.dispose();
     _petCustodyCtrl.dispose();
     _deescalationCtrl.dispose();
     _triggersCtrl.dispose();
@@ -93,7 +101,7 @@ class _AdditionalInstructionsStepState
         _religiousCtrl.text = data.religious;
         _childrenCustodyCtrl.text = data.childrenCustody;
         _familyNotificationCtrl.text = data.familyNotification;
-        _recordsDisclosureCtrl.text = data.recordsDisclosure;
+        _parseRecordsDisclosure(data.recordsDisclosure);
         _petCustodyCtrl.text = data.petCustody;
         _parseOtherField(data.other);
       });
@@ -136,6 +144,60 @@ class _AdditionalInstructionsStepState
     return parts.join('\n');
   }
 
+  // Records disclosure round-trips through the single `recordsDisclosure`
+  // column as labeled prose blocks. These exact labels are also what shows in
+  // the PDF / FHIR export / review screen, so they are written to read well.
+  static const _relTag = 'Authorized to receive my records:';
+  static const _witTag = 'Not authorized to receive my records:';
+  static const _othTag = 'Other limitations on disclosure:';
+
+  String _buildRecordsDisclosure() {
+    final rel = _recordsReleaseCtrl.text.trim();
+    final wit = _recordsWithholdCtrl.text.trim();
+    final oth = _recordsOtherCtrl.text.trim();
+    final parts = <String>[];
+    if (rel.isNotEmpty) parts.add('$_relTag $rel');
+    if (wit.isNotEmpty) parts.add('$_witTag $wit');
+    if (oth.isNotEmpty) parts.add('$_othTag $oth');
+    return parts.join('\n\n');
+  }
+
+  void _parseRecordsDisclosure(String raw) {
+    if (raw.trim().isEmpty) return;
+    const tags = {
+      'rel': _relTag,
+      'wit': _witTag,
+      'oth': _othTag,
+    };
+    final positions = <String, int>{};
+    tags.forEach((key, tag) {
+      final i = raw.indexOf(tag);
+      if (i >= 0) positions[key] = i;
+    });
+    if (positions.isEmpty) {
+      // Legacy free-text records disclosure — preserve it in "other".
+      _recordsOtherCtrl.text = raw.trim();
+      return;
+    }
+    final ordered = positions.entries.toList()
+      ..sort((a, b) => a.value.compareTo(b.value));
+    for (var idx = 0; idx < ordered.length; idx++) {
+      final key = ordered[idx].key;
+      final start = ordered[idx].value + tags[key]!.length;
+      final end =
+          idx + 1 < ordered.length ? ordered[idx + 1].value : raw.length;
+      final val = raw.substring(start, end).trim();
+      switch (key) {
+        case 'rel':
+          _recordsReleaseCtrl.text = val;
+        case 'wit':
+          _recordsWithholdCtrl.text = val;
+        case 'oth':
+          _recordsOtherCtrl.text = val;
+      }
+    }
+  }
+
   @override
   Future<bool> validateAndSave() async {
     _formKey.currentState?.validate();
@@ -150,7 +212,7 @@ class _AdditionalInstructionsStepState
             religious: Value(_religiousCtrl.text.trim()),
             childrenCustody: Value(_childrenCustodyCtrl.text.trim()),
             familyNotification: Value(_familyNotificationCtrl.text.trim()),
-            recordsDisclosure: Value(_recordsDisclosureCtrl.text.trim()),
+            recordsDisclosure: Value(_buildRecordsDisclosure()),
             petCustody: Value(_petCustodyCtrl.text.trim()),
             other: Value(_buildOtherField()),
           ),
@@ -204,6 +266,92 @@ class _AdditionalInstructionsStepState
               ),
             ),
           ),
+        ),
+      ],
+    );
+  }
+
+  // A single structured records-field (release / withhold / other) used inside
+  // the Records Disclosure section. Mirrors _buildSection's input styling.
+  Widget _recordsField({
+    required String label,
+    required TextEditingController ctrl,
+    required String hint,
+    required String guidance,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+      child: TextFormField(
+        controller: ctrl,
+        maxLines: 3,
+        maxLength: _maxFieldLength,
+        autofillHints: const [],
+        decoration: InputDecoration(
+          labelText: label,
+          hintText: hint,
+          border: const OutlineInputBorder(),
+          suffixIcon: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              VoiceInputButton(controller: ctrl),
+              AiSuggestButton(
+                controller: ctrl,
+                fieldName: label,
+                fieldGuidance: guidance,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Structured Records Disclosure section (F20 / 20 Pa.C.S. § 5836(e)) —
+  // replaces the prior single free-text field with explicit release / withhold
+  // controls plus the statutory supersession note.
+  Widget _buildRecordsDisclosureSection() {
+    final cs = Theme.of(context).colorScheme;
+    return ExpansionTile(
+      title: const Text('Records Disclosure & Limitations'),
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+          child: Text(
+            'Choose who may — and may not — receive copies of your mental '
+            'health records. Under 20 Pa.C.S. § 5836(e), the disclosure '
+            'authority you grant here can override certain confidentiality '
+            'protections (including drug & alcohol, mental-health-procedures, '
+            'and HIV confidentiality laws), so be specific.',
+            style: TextStyle(
+              fontSize: 12,
+              color: cs.onSurfaceVariant,
+              height: 1.4,
+            ),
+          ),
+        ),
+        _recordsField(
+          label: 'Who may receive my records',
+          ctrl: _recordsReleaseCtrl,
+          hint: 'e.g. my agent Jane Doe; my treatment team; Dr. Smith',
+          guidance:
+              'individuals or organizations the person authorizes to receive '
+              'copies of their mental health treatment records',
+        ),
+        _recordsField(
+          label: 'Who must NOT receive my records',
+          ctrl: _recordsWithholdCtrl,
+          hint: 'e.g. my ex-spouse; specific family members',
+          guidance:
+              'individuals or organizations the person wants excluded from '
+              'receiving any of their mental health treatment records',
+        ),
+        _recordsField(
+          label: 'Other limitations on disclosure',
+          ctrl: _recordsOtherCtrl,
+          hint: 'e.g. release only records from the last 12 months',
+          guidance:
+              'any other limits on how, when, or which mental health records '
+              'may be disclosed',
         ),
       ],
     );
@@ -333,20 +481,7 @@ class _AdditionalInstructionsStepState
             'information may be shared. You can also specify people who '
             'should NOT be contacted.',
           ),
-          _buildSection(
-            'Records Disclosure & Limitations',
-            _recordsDisclosureCtrl,
-            'Who may access your records, and any limitations on disclosure',
-            'individuals or organizations authorized to receive copies of your '
-                'mental health treatment records, and any limitations on who can '
-                'access them',
-            'Specify who is authorized to receive copies of your mental '
-            'health treatment records and any limitations on disclosure. '
-            'For example, you might limit access to your treatment team '
-            'only, authorize your agent to access records, or exclude '
-            'certain family members from receiving information about '
-            'your treatment.',
-          ),
+          _buildRecordsDisclosureSection(),
           _buildSection(
             'Pet Care',
             _petCustodyCtrl,

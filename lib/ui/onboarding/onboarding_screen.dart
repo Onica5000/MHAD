@@ -156,8 +156,59 @@ class OnboardingScreen extends StatelessWidget {
                       ),
                     ),
                   ),
+                  const SizedBox(height: 18),
+                  // A2 / F17: capacity-presumption reassurance — the single
+                  // biggest adoption fear is "does signing this take away my
+                  // choices now?". State plainly that it does not.
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 14, vertical: 12),
+                    decoration: BoxDecoration(
+                      color: p.primaryLight,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text.rich(
+                      TextSpan(
+                        children: [
+                          const TextSpan(text: 'Making this changes nothing '
+                              'today. '),
+                          TextSpan(
+                            text: 'You keep every decision',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              color: p.onPrimaryLight,
+                            ),
+                          ),
+                          const TextSpan(
+                              text: ' until two professionals find you '
+                                  'unable to decide for yourself.'),
+                        ],
+                      ),
+                      style: TextStyle(
+                        fontFamily: 'DM Sans',
+                        fontSize: 13.5,
+                        height: 1.4,
+                        color: p.onPrimaryLight,
+                      ),
+                    ),
+                  ),
                   const SizedBox(height: 28),
                   const _WelcomePills(),
+                  const SizedBox(height: 12),
+                  // C1: the "Valid 2 years" pill omits the statutory incapacity
+                  // exception — clarify it in small print under the pills.
+                  Text(
+                    'Valid two years from signing — unless you are incapable '
+                    'when it would expire, when it stays in effect until your '
+                    'capacity returns. (PA Act 194, effective 2005.)',
+                    style: TextStyle(
+                      fontFamily: 'DM Sans',
+                      fontSize: 11.5,
+                      height: 1.4,
+                      color: p.textMuted,
+                    ),
+                  ),
                   const Spacer(),
                   // Primary "Get started" (prototype L82-84).
                   SizedBox(

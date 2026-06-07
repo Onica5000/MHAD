@@ -161,6 +161,22 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
             ],
           ),
         ),
+        const SizedBox(height: 10),
+        // A3 / F19: reassure that any correctly-executed document is valid —
+        // the PA forms are recommended, not mandatory; content controls.
+        Text(
+          'You don’t have to use a specific form. Pennsylvania’s '
+          'official forms are recommended, not required — what makes your '
+          'directive valid is its content and being signed and witnessed '
+          'correctly. If a facility hands you a different form, this one '
+          'still counts.',
+          style: TextStyle(
+            fontFamily: 'DM Sans',
+            fontSize: 12,
+            color: p.textMuted,
+            height: 1.45,
+          ),
+        ),
         const SizedBox(height: 22),
         const _SignStep(
           n: 1,

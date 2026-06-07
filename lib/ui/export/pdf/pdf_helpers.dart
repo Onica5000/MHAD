@@ -358,6 +358,18 @@ pw.Widget pageHeader(String formTitle) {
           ],
         ),
       ),
+      // Effective-date / term caption under the header bar. The incapacity
+      // exception is stated in full in the document body; this line carries
+      // the statutory metadata the header was missing.
+      pw.Padding(
+        padding: const pw.EdgeInsets.only(top: 2),
+        child: pw.Text(
+          'Pennsylvania Act 194 of 2004 · effective January 29, 2005 · '
+          'valid two years from execution unless you are incapable when it '
+          'would expire (then it remains in effect until capacity returns).',
+          style: pw.TextStyle(fontSize: 6, color: kDarkGrey),
+        ),
+      ),
       pw.SizedBox(height: 4),
     ],
   );
