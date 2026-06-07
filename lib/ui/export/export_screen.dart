@@ -443,47 +443,38 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
     }
 
     final p = Theme.of(context).mhadPalette;
-    return Scaffold(
-      backgroundColor: p.scaffoldBackground,
-      // Prototype Export-class screens (ScrPdfPreview L1132+, ScrAppleWallet
-      // mobile-extra2.jsx L5-113) sit CrisisBar at the top with a thin
-      // in-body back chevron, not a Material AppBar.
-      body: Column(children: [
-        const CrisisTopBar(compact: true),
-        WizardHeader(
-          backLabel: 'Back',
-          onBack: () => Navigator.of(context).maybePop(),
-          actionLabel: '',
+
+    // --- Shared content lists (ADDITIVE: same widgets feed both the narrow
+    // single-column and the wide >=1000px two-pane layouts; zero behavior or
+    // logic change — only arrangement differs by width). ---
+
+    // Header / chrome shown above both layouts.
+    final headerChildren = <Widget>[
+      const SectionLabel('Export & share'),
+      EditorialHeading(
+        textSpan: TextSpan(
+          children: [
+            const TextSpan(text: 'Your directive,\n'),
+            TextSpan(
+              text: 'on paper.',
+              style: TextStyle(color: p.primary),
+            ),
+          ],
         ),
-        Expanded(
-          child: ListView(
-        padding: const EdgeInsets.fromLTRB(22, 4, 22, 16),
-        children: [
-          const SectionLabel('Export & share'),
-          EditorialHeading(
-            textSpan: TextSpan(
-              children: [
-                const TextSpan(text: 'Your directive,\n'),
-                TextSpan(
-                  text: 'on paper.',
-                  style: TextStyle(color: p.primary),
-                ),
-              ],
-            ),
-            size: 36,
-            height: 1.05,
-            letterSpacing: -0.8,
+        size: 36,
+        height: 1.05,
+        letterSpacing: -0.8,
+      ),
+      const SizedBox(height: 16),
+      if (_isGenerating)
+        Padding(
+          padding: const EdgeInsets.only(bottom: 12),
+          child: LinearProgressIndicator(
+            borderRadius: BorderRadius.circular(4),
           ),
-          const SizedBox(height: 16),
-          if (_isGenerating)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: LinearProgressIndicator(
-                borderRadius: BorderRadius.circular(4),
-              ),
-            ),
-          // Disclaimer
-          Semantics(
+        ),
+      // Disclaimer
+      Semantics(
             label: 'Important: Before sharing, ensure this directive has been '
                 'signed, dated, and witnessed by two adults as required by '
                 'PA Act 194. Give copies to your agent, physician, and '
@@ -536,7 +527,11 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
               ),
             ),
           const SizedBox(height: 16),
+    ];
 
+    // LEFT / "Document" pane on wide screens: pick which forms go into the
+    // PDF, then preview it. (Includes the V4-M8 unencrypted-file banner.)
+    final documentChildren = <Widget>[
           // Form selection
           Text('Select forms to include:',
               style: Theme.of(context)
@@ -642,6 +637,11 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
               ],
             ),
           ),
+    ];
+
+    // RIGHT / "Distribution" pane on wide screens: share, QR, NFC, machine-
+    // readable formats, password-protected copy, and draft review.
+    final distributionChildren = <Widget>[
           Semantics(
             button: true,
             label: 'Share or print the PDF directive (unencrypted file)',
@@ -809,9 +809,70 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
               label: const Text('Share Draft for Review'),
             ),
           ),
-          const SizedBox(height: 40),
-        ],
-      ),
+    ];
+
+    return Scaffold(
+      backgroundColor: p.scaffoldBackground,
+      // Prototype Export-class screens (ScrPdfPreview L1132+, ScrAppleWallet
+      // mobile-extra2.jsx L5-113) sit CrisisBar at the top with a thin
+      // in-body back chevron, not a Material AppBar.
+      body: Column(children: [
+        const CrisisTopBar(compact: true),
+        WizardHeader(
+          backLabel: 'Back',
+          onBack: () => Navigator.of(context).maybePop(),
+          actionLabel: '',
+        ),
+        Expanded(
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              // Wide >=1000px: prototype `w-export` two-pane structure —
+              // Document (forms + preview) on the left, Distribution
+              // (share/QR/NFC/data exports) on the right. Below 1000px the
+              // layout is the unchanged single stretched column.
+              if (constraints.maxWidth >= 1000) {
+                return ListView(
+                  padding: const EdgeInsets.fromLTRB(22, 4, 22, 40),
+                  children: [
+                    ...headerChildren,
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: ConstrainedBox(
+                            constraints: const BoxConstraints(maxWidth: 640),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: documentChildren,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 32),
+                        SizedBox(
+                          width: 360,
+                          child: SingleChildScrollView(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: distributionChildren,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                );
+              }
+              return ListView(
+                padding: const EdgeInsets.fromLTRB(22, 4, 22, 16),
+                children: [
+                  ...headerChildren,
+                  ...documentChildren,
+                  ...distributionChildren,
+                  const SizedBox(height: 40),
+                ],
+              );
+            },
+          ),
         ),
       ]),
     );

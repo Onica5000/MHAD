@@ -259,7 +259,19 @@ class _EditorialLearnHub extends StatelessWidget {
         LayoutBuilder(
           builder: (ctx, constraints) {
             const gap = 10.0;
-            final cardW = (constraints.maxWidth - gap) / 2;
+            // Desktop wide layout (>=1000px): render the hub tile list as a
+            // multi-column masonry grid instead of a stretched 2-column run.
+            // Cap each tile at ~360px so wide windows read as a desktop grid;
+            // narrow widths keep the existing 2-column arrangement untouched.
+            final int columns;
+            if (constraints.maxWidth >= 1000) {
+              columns =
+                  (constraints.maxWidth / 360).floor().clamp(2, 4);
+            } else {
+              columns = 2;
+            }
+            final cardW =
+                (constraints.maxWidth - gap * (columns - 1)) / columns;
             return Wrap(
               spacing: gap,
               runSpacing: gap,

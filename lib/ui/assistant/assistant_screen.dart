@@ -12,6 +12,7 @@ import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/services/gemini_rate_tracker.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/widgets/design/bottom_nav.dart';
+import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/ai_consent_dialog.dart';
 import 'package:mhad/ui/widgets/friendly_error.dart';
 
@@ -289,7 +290,53 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
           ),
         ],
       ),
-      body: Column(
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final chatColumn = _buildChatColumn(
+            context,
+            messages: messages,
+            isSending: isSending,
+            hasKey: hasKey,
+            apiKeyAsync: apiKeyAsync,
+          );
+          // Desktop wide layout (>=1000px): keep the chat column on the left
+          // and add a purely-presentational context panel on the right.
+          // Below 1000px the layout is unchanged (chat column fills width).
+          if (constraints.maxWidth >= 1000) {
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(child: chatColumn),
+                _AssistantContextPanel(
+                  context: widget.context,
+                  contextLabel: widget.context != null
+                      ? _contextLabel(widget.context!)
+                      : null,
+                  onPromptTap: (prompt) {
+                    _inputCtrl.text = prompt;
+                    _send();
+                  },
+                ),
+              ],
+            );
+          }
+          return chatColumn;
+        },
+      ),
+    );
+  }
+
+  /// The existing chat column (consent banner, rate bar, context chip,
+  /// messages, input). Extracted verbatim so the wide layout can place it
+  /// beside a context panel without changing any send/history logic.
+  Widget _buildChatColumn(
+    BuildContext context, {
+    required List<ChatMessage> messages,
+    required bool isSending,
+    required bool hasKey,
+    required AsyncValue<String?> apiKeyAsync,
+  }) {
+    return Column(
         children: [
           // First-time consent banner — matches prototype ScrAI L770-784:
           // warning-yellow bg with shield icon. Previously used the red
@@ -439,8 +486,7 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
             onSend: _send,
           ),
         ],
-      ),
-    );
+      );
   }
 
   String _contextLabel(AssistantContext ctx) {
@@ -768,6 +814,171 @@ class _InputBar extends StatelessWidget {
               tooltip: 'Send',
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Desktop-only right-hand context panel shown beside the chat at >=1000px.
+///
+/// Purely presentational: surfaces the current [AssistantContext] (form type
+/// + step) when the chat was opened from a wizard step, plus a short list of
+/// example prompts that fire the existing send path via [onPromptTap]. When
+/// there is no wizard context it falls back to a static "What I can help
+/// with" card so the panel is never empty. No send/history state lives here.
+class _AssistantContextPanel extends StatelessWidget {
+  final AssistantContext? context;
+  final String? contextLabel;
+  final ValueChanged<String> onPromptTap;
+
+  const _AssistantContextPanel({
+    required this.context,
+    required this.contextLabel,
+    required this.onPromptTap,
+  });
+
+  static const _examplePrompts = [
+    'What is a Mental Health Advance Directive?',
+    'Who can be my agent?',
+    'How long is the directive valid?',
+    'Can I change my directive later?',
+  ];
+
+  @override
+  Widget build(BuildContext buildContext) {
+    final p = Theme.of(buildContext).mhadPalette;
+    final hasContext = context != null;
+
+    return Container(
+      width: 300,
+      decoration: BoxDecoration(
+        color: p.surface,
+        border: Border(left: BorderSide(color: p.border)),
+      ),
+      child: ListView(
+        padding: const EdgeInsets.fromLTRB(18, 8, 18, 24),
+        children: [
+          if (hasContext) ...[
+            const SectionLabel('Current context'),
+            Container(
+              padding: const EdgeInsets.all(14),
+              decoration: BoxDecoration(
+                color: p.primaryTint,
+                border:
+                    Border.all(color: p.primary.withValues(alpha: 0.15)),
+                borderRadius:
+                    BorderRadius.circular(DesignTokens.cardRadius),
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.edit_note, size: 18, color: p.primary),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      contextLabel ?? 'General question',
+                      style: TextStyle(
+                        fontFamily: 'DM Sans',
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        height: 1.3,
+                        color: p.primaryDark,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 4),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 2),
+              child: Text(
+                'I\'ll tailor answers to this part of your directive.',
+                style: TextStyle(
+                  fontFamily: 'DM Sans',
+                  fontSize: 11.5,
+                  height: 1.4,
+                  color: p.textMuted,
+                ),
+              ),
+            ),
+            const SectionLabel('Example prompts'),
+          ] else ...[
+            const SectionLabel('What I can help with'),
+            Container(
+              padding: const EdgeInsets.all(14),
+              decoration: BoxDecoration(
+                color: p.card,
+                border: Border.all(color: p.border),
+                borderRadius:
+                    BorderRadius.circular(DesignTokens.cardRadius),
+              ),
+              child: Text(
+                'Ask about form types, agents, treatment preferences, or '
+                'anything in the PA MHAD booklet. Try one of these:',
+                style: TextStyle(
+                  fontFamily: 'DM Sans',
+                  fontSize: 12.5,
+                  height: 1.45,
+                  color: p.textMuted,
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+          ],
+          for (final prompt in _examplePrompts) ...[
+            _ContextPromptTile(text: prompt, onTap: () => onPromptTap(prompt)),
+            const SizedBox(height: 8),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _ContextPromptTile extends StatelessWidget {
+  final String text;
+  final VoidCallback onTap;
+  const _ContextPromptTile({required this.text, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
+    return Semantics(
+      button: true,
+      label: text,
+      child: Material(
+        color: p.card,
+        borderRadius: BorderRadius.circular(10),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(10),
+          child: Container(
+            constraints: const BoxConstraints(minHeight: 44),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            decoration: BoxDecoration(
+              border: Border.all(color: p.border),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    text,
+                    style: TextStyle(
+                      fontFamily: 'DM Sans',
+                      fontSize: 12.5,
+                      height: 1.3,
+                      color: p.text,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 6),
+                Icon(Icons.arrow_forward_ios, size: 11, color: p.textMuted),
+              ],
+            ),
+          ),
         ),
       ),
     );
