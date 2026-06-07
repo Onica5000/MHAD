@@ -156,3 +156,53 @@ against the current bundle. Each is implemented and pushed unless noted.
 | `a24168f` | Batch 6 part 2 — scan/voice/contacts reclassified |
 
 All on `main`. `flutter analyze` clean, 167/167 tests green throughout.
+
+---
+
+## Design-conformance pass (2026-06-07)
+
+Re-fetched the ratified design bundle from the Claude Design URL and confirmed
+it is **byte-identical** (md5 match) to the in-tree `MHAD-handoff/bundle/mhad/`.
+Ran a three-way verification (functional checklist · web artboards · mobile
+re-audit) against the code, then implemented the genuine gaps. All on `main`,
+`flutter analyze` clean, 172/172 tests green (5 new encryption tests).
+
+### Stale entries from earlier batches — corrected
+The re-audit found the earlier audit *undersold* completed work and overstated
+parity on three health screens:
+- **m-home** — the editorial greeting + decorative numeral are present; the old
+  🟡 was stale (now ✅).
+- **m-renew / m-checkin** — auto-trigger on launch is implemented in
+  `reminder_scheduler.dart`; the "deferred" note was stale (now ✅).
+- **m-wizard-people** — the tap-to-expand `_AgentCard` *was* adopted; the
+  "intentionally not adopted" note was wrong (now ✅).
+- **m-diagnoses / m-allergies / m-review** — were marked ✅ but had never been
+  converted to the editorial design system (Material `Card`/`ListTile` drift).
+  **Now restyled** to the design system.
+
+### Implemented this pass
+- **Chrome sweep finish** — `ai_consistency` + `form_type_selection` dropped
+  their Material `AppBar`; `WizardHeader` tap targets raised to 48dp (Android
+  a11y).
+- **FACTUAL_ANALYSIS §6 content gaps** — C1 expiry-exception/effective-date on
+  welcome chip + Settings + PDF header; capacity-presumption reassurance
+  (onboarding); "forms not mandatory" (sign step); structured records-disclosure
+  release/withhold control (§ 5836(e)).
+- **m-diagnoses / m-allergies / m-review** editorial restyle; new shared
+  `HealthChip` widget; allergies kind-toggle + autocomplete.
+- **Amendment flow** (F5) — distinct from renew/revoke.
+- **w-dataexport** — CSV + FHIR XML formats; AES-256 password-protect + in-app
+  unlock (new `encrypt` dep; the `pdf` package can't encrypt PDFs, so the *data*
+  export is protected).
+- **w-wizard / w-wiz-mobile** — desktop AI right rail + narrow peeking help bar.
+- **w-home** — desktop Tools sidebar.
+- **w-export / w-learn / w-ai** — two-pane export, responsive learn grid, AI
+  context panel.
+
+### Still deferred (unchanged)
+- **m-wallet** — Apple/Google Wallet pass (needs cert/PassKit infrastructure).
+- **w-snapfill** desktop drag-drop zone — OS file/image picker covers the
+  function; custom drop UI is low value.
+- True password-protected **PDF** and multi-file **.zip** bundle — pdf-package
+  limitation / would need an archive dep; the encrypted data export covers the
+  protection requirement self-containedly.
