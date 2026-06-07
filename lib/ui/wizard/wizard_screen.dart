@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mhad/ai/ai_assistant.dart' show AssistantContext;
 import 'package:mhad/data/database/app_database.dart' show Directive;
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
@@ -279,6 +280,17 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                         formType,
                       ),
                     ),
+                    // Prototype `w-wiz-mobile`: the desktop AI rail collapses to
+                    // a slim peeking "Need help?" bar above the bottom bar when
+                    // the rail can't fit. Only shown on narrow widths.
+                    if (!isWide)
+                      _WizardAiBar(
+                        onAsk: () => _openStepAi(
+                          context,
+                          formType,
+                          currentStep.displayName,
+                        ),
+                      ),
                   ],
                 );
                 if (!isWide) return mainColumn;
@@ -294,6 +306,18 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                       child: ConstrainedBox(
                         constraints: const BoxConstraints(maxWidth: 760),
                         child: mainColumn,
+                      ),
+                    ),
+                    // Prototype `w-wizard` right rail (320px): a contextual AI
+                    // helper beside the form. On narrow widths it collapses to
+                    // the peeking "Need help?" bar above the bottom bar (see
+                    // bottomNavigationBar).
+                    Container(width: 1, color: p.border),
+                    _WizardAiRail(
+                      onAsk: () => _openStepAi(
+                        context,
+                        formType,
+                        currentStep.displayName,
                       ),
                     ),
                   ],
@@ -390,6 +414,19 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
   // destinations are now reached through `_handleSmartFillTarget`
   // (called by SmartFillCard tiles); Ask the AI is on the bottom nav;
   // Save & exit is on the bottom bar (step 1) and PopScope (other steps).
+
+  /// Opens the AI assistant pre-loaded with this step's context. Used by both
+  /// the desktop right rail and the narrow peeking bar (prototype w-wizard /
+  /// w-wiz-mobile).
+  void _openStepAi(BuildContext context, FormType formType, String stepName) {
+    context.push(
+      AppRoutes.assistant,
+      extra: AssistantContext(
+        formType: formType.name,
+        stepName: stepName,
+      ),
+    );
+  }
 
   Widget _buildStep(WizardStep step, int directiveId, FormType formType) {
     return switch (step) {
@@ -628,6 +665,127 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
 /// does not let the user jump arbitrarily (which would skip per-step
 /// validation). Navigation still happens via Continue / Back at the
 /// bottom bar.
+/// Desktop right rail (prototype `w-wizard`, 320px): a contextual AI helper
+/// beside the form. Tapping opens the full assistant with this step's context.
+class _WizardAiRail extends StatelessWidget {
+  final VoidCallback onAsk;
+  const _WizardAiRail({required this.onAsk});
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
+    return Container(
+      width: 320,
+      color: p.card,
+      padding: const EdgeInsets.fromLTRB(20, 24, 20, 24),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(Icons.auto_awesome, size: 18, color: p.primary),
+                const SizedBox(width: 8),
+                Text(
+                  'AI assistant',
+                  style: TextStyle(
+                    fontFamily: 'DM Sans',
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                    color: p.text,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 6),
+            Text(
+              'Stuck on this step? Ask in plain language — the assistant knows '
+              'what you’re filling in and explains the legal terms.',
+              style: TextStyle(
+                fontFamily: 'DM Sans',
+                fontSize: 13,
+                height: 1.45,
+                color: p.textMuted,
+              ),
+            ),
+            const SizedBox(height: 16),
+            SizedBox(
+              width: double.infinity,
+              child: FilledButton.icon(
+                onPressed: onAsk,
+                icon: const Icon(Icons.chat_bubble_outline, size: 16),
+                label: const Text('Ask about this step'),
+              ),
+            ),
+            const SizedBox(height: 14),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: p.primaryTint,
+                border: Border.all(color: p.primaryLight),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                'Not legal advice. The assistant helps you understand and '
+                'express your wishes — it can’t make decisions for you.',
+                style: TextStyle(
+                  fontFamily: 'DM Sans',
+                  fontSize: 11.5,
+                  height: 1.4,
+                  color: p.onPrimaryLight,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Narrow-width collapse of [_WizardAiRail] (prototype `w-wiz-mobile`): a slim
+/// tappable "Need help?" bar above the bottom action bar.
+class _WizardAiBar extends StatelessWidget {
+  final VoidCallback onAsk;
+  const _WizardAiBar({required this.onAsk});
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
+    return Material(
+      color: p.primaryTint,
+      child: InkWell(
+        onTap: onAsk,
+        child: Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            border: Border(top: BorderSide(color: p.primaryLight)),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          child: Row(
+            children: [
+              Icon(Icons.auto_awesome, size: 16, color: p.primary),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  'Need help with this step? Ask the AI',
+                  style: TextStyle(
+                    fontFamily: 'DM Sans',
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    color: p.onPrimaryLight,
+                  ),
+                ),
+              ),
+              Icon(Icons.keyboard_arrow_up, size: 18, color: p.primary),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _WideStepRail extends StatelessWidget {
   final List<WizardStep> steps;
   final int currentIndex;
