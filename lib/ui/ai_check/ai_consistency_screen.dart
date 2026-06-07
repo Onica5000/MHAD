@@ -4,9 +4,11 @@ import 'package:go_router/go_router.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
+import 'package:mhad/ui/widgets/design/wizard_header.dart';
 
 /// AI consistency check (v2 prototype `m-conflict`).
 ///
@@ -95,11 +97,21 @@ class _AiConsistencyScreenState extends ConsumerState<AiConsistencyScreen> {
         : SemanticColors.successTextLight;
     return Scaffold(
       backgroundColor: p.scaffoldBackground,
-      appBar: AppBar(title: const Text('AI consistency check')),
-      body: _loading
-          ? const Center(child: CircularProgressIndicator())
-          : ListView(
-              padding: const EdgeInsets.fromLTRB(20, 14, 20, 32),
+      // Prototype ScrConflict has CrisisBar + an in-body Back chevron — no
+      // Material AppBar. The editorial "I noticed N things." heading owns the
+      // visual title (it duplicated the dropped AppBar title).
+      body: Column(children: [
+        const CrisisTopBar(compact: true),
+        WizardHeader(
+          backLabel: 'Back',
+          onBack: () => Navigator.of(context).maybePop(),
+          actionLabel: '',
+        ),
+        Expanded(
+          child: _loading
+              ? const Center(child: CircularProgressIndicator())
+              : ListView(
+                  padding: const EdgeInsets.fromLTRB(20, 14, 20, 32),
               children: [
                 Row(
                   children: [
@@ -164,6 +176,8 @@ class _AiConsistencyScreenState extends ConsumerState<AiConsistencyScreen> {
                 ),
               ],
             ),
+        ),
+      ]),
     );
   }
 }

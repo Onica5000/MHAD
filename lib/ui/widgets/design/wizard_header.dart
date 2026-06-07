@@ -51,8 +51,12 @@ class WizardHeader extends StatelessWidget {
     final p = Theme.of(context).mhadPalette;
     return Padding(
       padding: padding,
+      // Row sits 48dp tall so each side's InkWell renders a ≥48×48 tap target
+      // (Android a11y guideline). The visible chevron/label stays compact —
+      // it's vertically centred inside the taller hit area, so the editorial
+      // thinness is preserved while the touch region meets the guideline.
       child: SizedBox(
-        height: 40,
+        height: 48,
         child: Row(
           children: [
             Semantics(
@@ -61,24 +65,26 @@ class WizardHeader extends StatelessWidget {
               child: InkWell(
                 onTap: onBack,
                 borderRadius: BorderRadius.circular(8),
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.chevron_left, size: 16, color: p.primary),
-                      const SizedBox(width: 2),
-                      Text(
-                        backLabel,
-                        style: TextStyle(
-                          fontFamily: 'DM Sans',
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: p.primary,
+                child: SizedBox(
+                  height: 48,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.chevron_left, size: 16, color: p.primary),
+                        const SizedBox(width: 2),
+                        Text(
+                          backLabel,
+                          style: TextStyle(
+                            fontFamily: 'DM Sans',
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            color: p.primary,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -93,16 +99,21 @@ class WizardHeader extends StatelessWidget {
                 child: InkWell(
                   onTap: onAction,
                   borderRadius: BorderRadius.circular(8),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 6, vertical: 8),
-                    child: Text(
-                      actionLabel,
-                      style: TextStyle(
-                        fontFamily: 'DM Sans',
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500,
-                        color: p.textMuted,
+                  child: SizedBox(
+                    height: 48,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Center(
+                        widthFactor: 1,
+                        child: Text(
+                          actionLabel,
+                          style: TextStyle(
+                            fontFamily: 'DM Sans',
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                            color: p.textMuted,
+                          ),
+                        ),
                       ),
                     ),
                   ),

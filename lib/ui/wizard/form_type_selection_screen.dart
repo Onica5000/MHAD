@@ -5,8 +5,10 @@ import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
 import 'package:mhad/ui/widgets/design/design_card.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
+import 'package:mhad/ui/widgets/design/wizard_header.dart';
 import 'package:mhad/ui/wizard/widgets/form_type_quiz.dart';
 
 /// Form-type picker (Combined / Declaration / POA) — prototype-exact
@@ -114,8 +116,20 @@ class _FormTypeSelectionScreenState
     final p = Theme.of(context).mhadPalette;
     return Scaffold(
       backgroundColor: p.scaffoldBackground,
-      appBar: AppBar(),
-      body: Stack(
+      // Prototype ScrFormType has CrisisBar + an in-body Back chevron — no
+      // Material AppBar. Matches the sibling mode-selection screen's chrome so
+      // the new-directive flow reads as one piece. The 'New directive · 1 of 2'
+      // SectionLabel + 'Which form fits you?' heading own the visual title.
+      body: SafeArea(
+        child: Column(children: [
+          const CrisisTopBar(compact: true),
+          WizardHeader(
+            backLabel: 'Back',
+            onBack: () => Navigator.of(context).maybePop(),
+            actionLabel: '',
+          ),
+          Expanded(
+            child: Stack(
         children: [
           ListView(
             padding: const EdgeInsets.fromLTRB(22, 8, 22, 32),
@@ -243,6 +257,9 @@ class _FormTypeSelectionScreenState
               ),
             ),
         ],
+      ),
+          ),
+        ]),
       ),
     );
   }
