@@ -14,6 +14,7 @@ import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/design/wizard_header.dart';
+import 'package:mhad/services/export_formats_service.dart';
 import 'package:mhad/services/fhir_export_service.dart';
 import 'package:mhad/ui/export/nfc_write_button.dart';
 import 'package:mhad/utils/background_runner.dart';
@@ -699,15 +700,50 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
               ),
             ),
             ],
+            const SizedBox(height: 16),
+            Text('Machine-readable formats',
+                style: Theme.of(context).textTheme.titleSmall),
+            const SizedBox(height: 4),
+            Text(
+              'For your records, a spreadsheet, or an electronic health record. '
+              'Your PDF above is the document you sign — these are data exports.',
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+            ),
             const SizedBox(height: 8),
-            Semantics(
-              button: true,
-              label: 'Export as FHIR JSON for electronic health records',
-              child: OutlinedButton.icon(
-                onPressed: _exportFhir,
-                icon: const Icon(Icons.integration_instructions),
-                label: const Text('Export FHIR JSON'),
-              ),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                Semantics(
+                  button: true,
+                  label: 'Export as FHIR JSON for electronic health records',
+                  child: OutlinedButton.icon(
+                    onPressed: _exportFhir,
+                    icon: const Icon(Icons.integration_instructions),
+                    label: const Text('FHIR JSON'),
+                  ),
+                ),
+                Semantics(
+                  button: true,
+                  label: 'Export as FHIR XML for electronic health records',
+                  child: OutlinedButton.icon(
+                    onPressed: _exportFhirXml,
+                    icon: const Icon(Icons.code),
+                    label: const Text('FHIR XML'),
+                  ),
+                ),
+                Semantics(
+                  button: true,
+                  label: 'Export as CSV spreadsheet',
+                  child: OutlinedButton.icon(
+                    onPressed: _exportCsv,
+                    icon: const Icon(Icons.table_chart_outlined),
+                    label: const Text('CSV'),
+                  ),
+                ),
+              ],
             ),
           ],
           const SizedBox(height: 16),
@@ -772,6 +808,36 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       diagnoses: _diagnoses,
     );
     await _shareText(json, 'MHAD FHIR Consent Resource');
+  }
+
+  Future<void> _exportFhirXml() async {
+    if (_directive == null) return;
+    final xml = ExportFormatsService.exportAsFhirXml(
+      directive: _directive!,
+      agents: _agents,
+      medications: _medications,
+      prefs: _prefs,
+      additional: _additional,
+      witnesses: _witnesses,
+      guardian: _guardian,
+      diagnoses: _diagnoses,
+    );
+    await _shareText(xml, 'MHAD FHIR Consent Resource (XML)');
+  }
+
+  Future<void> _exportCsv() async {
+    if (_directive == null) return;
+    final csv = ExportFormatsService.exportAsCsv(
+      directive: _directive!,
+      agents: _agents,
+      medications: _medications,
+      prefs: _prefs,
+      additional: _additional,
+      witnesses: _witnesses,
+      guardian: _guardian,
+      diagnoses: _diagnoses,
+    );
+    await _shareText(csv, 'MHAD directive (CSV)');
   }
 
   Future<void> _shareDraftSummary() async {
