@@ -95,7 +95,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       bottomNavigationBar: const MhadBottomNav(),
       body: SafeArea(
         bottom: false,
-        child: ListView(
+        // Prototype `w-home`: at >=1000px the dashboard splits into the main
+        // content column + a right "Tools" sidebar (reusing _ToolsGrid). Below
+        // that the mobile single-column layout is unchanged.
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final isWide = constraints.maxWidth >= 1000;
+            final list = ListView(
           // Prototype: 20 top, 22 horizontal, 100 bottom (the 100 leaves
           // room for the absolute-positioned floating pill nav).
           padding: const EdgeInsets.fromLTRB(22, 20, 22, 100),
@@ -163,10 +169,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               },
               orElse: () => const SizedBox.shrink(),
             ),
-            const SizedBox(height: 22),
-            const SectionLabel('Tools'),
-            const SizedBox(height: 8),
-            const _ToolsGrid(),
+            // Tools — inline on narrow; relocated to the right sidebar on wide.
+            if (!isWide) ...[
+              const SizedBox(height: 22),
+              const SectionLabel('Tools'),
+              const SizedBox(height: 8),
+              const _ToolsGrid(),
+            ],
             const SizedBox(height: 18),
             // Past directives — completed / expired / revoked rendered as
             // compact tiles matching prototype L326-334. The active draft
@@ -231,6 +240,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               },
             ),
           ],
+            );
+            if (!isWide) return list;
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(child: list),
+                const _HomeToolsSidebar(),
+              ],
+            );
+          },
         ),
       ),
     );
@@ -1020,6 +1039,72 @@ class _ActiveDirectiveHero extends StatelessWidget {
 /// Prototype `ScrHome` tools grid — a 2×2 of icon tiles linking to the
 /// non-directive destinations users hit most often (AI assistant, Learn,
 /// the most-recent directive's wallet card / export, and the crisis sheet).
+/// Right sidebar shown on the wide (`w-home`) dashboard layout: the Tools grid
+/// plus a privacy reassurance card, in a fixed-width column.
+class _HomeToolsSidebar extends StatelessWidget {
+  const _HomeToolsSidebar();
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
+    return Container(
+      width: 340,
+      padding: const EdgeInsets.fromLTRB(8, 20, 22, 100),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SectionLabel('Tools'),
+            const SizedBox(height: 8),
+            const _ToolsGrid(),
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.all(14),
+              decoration: BoxDecoration(
+                color: p.primaryTint,
+                border: Border.all(color: p.primaryLight),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(Icons.lock_outline, size: 16, color: p.primary),
+                      const SizedBox(width: 8),
+                      Text(
+                        'Private by design',
+                        style: TextStyle(
+                          fontFamily: 'DM Sans',
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                          color: p.onPrimaryLight,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    'Your directive stays on your device. No ads, no tracking, '
+                    'no selling your data — only you choose who to share it '
+                    'with.',
+                    style: TextStyle(
+                      fontFamily: 'DM Sans',
+                      fontSize: 12.5,
+                      height: 1.45,
+                      color: p.onPrimaryLight,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _ToolsGrid extends ConsumerWidget {
   const _ToolsGrid();
 
