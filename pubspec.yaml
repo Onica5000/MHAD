@@ -69,6 +69,11 @@ dependencies:
   # Hashing (passcode fallback for private mode)
   crypto: ^3.0.6
 
+  # AES-256 encryption for password-protected data exports (pure Dart via
+  # pointycastle — works on Android/Windows/web; the pdf package cannot itself
+  # produce password-protected PDFs).
+  encrypt: ^5.0.3
+
   # Document import (camera, gallery, file picker)
   image_picker: ^1.1.2
   file_picker: ^8.1.6

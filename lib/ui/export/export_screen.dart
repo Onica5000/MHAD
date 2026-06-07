@@ -14,6 +14,7 @@ import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/design/wizard_header.dart';
+import 'package:mhad/services/export_encryption_service.dart';
 import 'package:mhad/services/export_formats_service.dart';
 import 'package:mhad/services/fhir_export_service.dart';
 import 'package:mhad/ui/export/nfc_write_button.dart';
@@ -745,6 +746,43 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
                 ),
               ],
             ),
+            const SizedBox(height: 16),
+            Text('Password-protect a copy',
+                style: Theme.of(context).textTheme.titleSmall),
+            const SizedBox(height: 4),
+            Text(
+              'Encrypt your data export with a passphrase (AES-256) before you '
+              'share it. Send the passphrase separately — anyone with the file '
+              'and passphrase can open it here under “Unlock”.',
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+            ),
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                Semantics(
+                  button: true,
+                  label: 'Password-protect an encrypted data export',
+                  child: OutlinedButton.icon(
+                    onPressed: _passwordProtectExport,
+                    icon: const Icon(Icons.lock_outline),
+                    label: const Text('Encrypt export'),
+                  ),
+                ),
+                Semantics(
+                  button: true,
+                  label: 'Unlock an encrypted data export',
+                  child: OutlinedButton.icon(
+                    onPressed: _unlockEncryptedExport,
+                    icon: const Icon(Icons.lock_open_outlined),
+                    label: const Text('Unlock'),
+                  ),
+                ),
+              ],
+            ),
           ],
           const SizedBox(height: 16),
           const Divider(),
@@ -838,6 +876,191 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       diagnoses: _diagnoses,
     );
     await _shareText(csv, 'MHAD directive (CSV)');
+  }
+
+  /// Build the plaintext bundle that password-protection encrypts — the CSV
+  /// (complete structured data) plus a readable header.
+  String _exportBundle() {
+    final csv = ExportFormatsService.exportAsCsv(
+      directive: _directive!,
+      agents: _agents,
+      medications: _medications,
+      prefs: _prefs,
+      additional: _additional,
+      witnesses: _witnesses,
+      guardian: _guardian,
+      diagnoses: _diagnoses,
+    );
+    return 'PA Mental Health Advance Directive — data export\r\n'
+        'Encrypted copy. Not a signed legal document.\r\n\r\n$csv';
+  }
+
+  Future<void> _passwordProtectExport() async {
+    if (_directive == null) return;
+    final passCtrl = TextEditingController();
+    final confirmCtrl = TextEditingController();
+    final formKey = GlobalKey<FormState>();
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (dialogCtx) => AlertDialog(
+        title: const Text('Encrypt export'),
+        content: Form(
+          key: formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                'Choose a passphrase. You’ll need it (and this app, or the '
+                '“Unlock” action) to open the file. We can’t recover it.',
+                style: TextStyle(fontSize: 13),
+              ),
+              const SizedBox(height: 12),
+              TextFormField(
+                controller: passCtrl,
+                obscureText: true,
+                autofillHints: const [],
+                decoration: const InputDecoration(
+                  labelText: 'Passphrase',
+                  border: OutlineInputBorder(),
+                ),
+                validator: (v) => (v == null || v.length < 8)
+                    ? 'Use at least 8 characters'
+                    : null,
+              ),
+              const SizedBox(height: 8),
+              TextFormField(
+                controller: confirmCtrl,
+                obscureText: true,
+                autofillHints: const [],
+                decoration: const InputDecoration(
+                  labelText: 'Confirm passphrase',
+                  border: OutlineInputBorder(),
+                ),
+                validator: (v) =>
+                    v != passCtrl.text ? 'Passphrases don’t match' : null,
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogCtx, false),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            onPressed: () {
+              if (formKey.currentState?.validate() ?? false) {
+                Navigator.pop(dialogCtx, true);
+              }
+            },
+            child: const Text('Encrypt & share'),
+          ),
+        ],
+      ),
+    );
+    if (ok == true) {
+      final envelope = ExportEncryptionService.encryptToEnvelope(
+        _exportBundle(),
+        passCtrl.text,
+      );
+      await _shareText(envelope, 'MHAD encrypted export (.mhadenc)');
+    }
+    passCtrl.dispose();
+    confirmCtrl.dispose();
+  }
+
+  Future<void> _unlockEncryptedExport() async {
+    final envCtrl = TextEditingController();
+    final passCtrl = TextEditingController();
+    final result = await showDialog<String>(
+      context: context,
+      builder: (dialogCtx) {
+        String? error;
+        return StatefulBuilder(
+          builder: (ctx, setLocal) => AlertDialog(
+            title: const Text('Unlock encrypted export'),
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextField(
+                    controller: envCtrl,
+                    maxLines: 4,
+                    autofillHints: const [],
+                    decoration: const InputDecoration(
+                      labelText: 'Paste the encrypted export',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  TextField(
+                    controller: passCtrl,
+                    obscureText: true,
+                    autofillHints: const [],
+                    decoration: InputDecoration(
+                      labelText: 'Passphrase',
+                      border: const OutlineInputBorder(),
+                      errorText: error,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(dialogCtx),
+                child: const Text('Close'),
+              ),
+              FilledButton(
+                onPressed: () {
+                  try {
+                    final text = ExportEncryptionService.decryptEnvelope(
+                      envCtrl.text.trim(),
+                      passCtrl.text,
+                    );
+                    Navigator.pop(dialogCtx, text);
+                  } on ExportDecryptException {
+                    setLocal(() => error = 'Wrong passphrase.');
+                  } on FormatException catch (e) {
+                    setLocal(() => error = e.message);
+                  }
+                },
+                child: const Text('Unlock'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+    envCtrl.dispose();
+    passCtrl.dispose();
+    if (result != null && mounted) {
+      await showDialog<void>(
+        context: context,
+        builder: (dialogCtx) => AlertDialog(
+          title: const Text('Decrypted export'),
+          content: SingleChildScrollView(
+            child: SelectableText(
+              result,
+              style: const TextStyle(fontSize: 12, height: 1.4),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Clipboard.setData(ClipboardData(text: result));
+                Navigator.pop(dialogCtx);
+              },
+              child: const Text('Copy'),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(dialogCtx),
+              child: const Text('Done'),
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   Future<void> _shareDraftSummary() async {
