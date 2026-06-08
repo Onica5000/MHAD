@@ -235,7 +235,7 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                     ),
                   ),
                   Text(
-                    '● ON · GEMINI · PII STRIPPED',
+                    '● ACTIVE · GEMINI 2.5 FLASH · PII STRIPPED',
                     style: TextStyle(
                       fontFamily: 'JetBrains Mono',
                       fontFamilyFallback: const [
@@ -869,49 +869,20 @@ class _AssistantContextPanel extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(18, 8, 18, 24),
         children: [
           if (hasContext) ...[
-            const SectionLabel('Current context'),
-            Container(
-              padding: const EdgeInsets.all(14),
-              decoration: BoxDecoration(
-                color: p.primaryTint,
-                border:
-                    Border.all(color: p.primary.withValues(alpha: 0.15)),
-                borderRadius:
-                    BorderRadius.circular(DesignTokens.cardRadius),
-              ),
-              child: Row(
-                children: [
-                  Icon(Icons.edit_note, size: 18, color: p.primary),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Text(
-                      contextLabel ?? 'General question',
-                      style: TextStyle(
-                        fontFamily: 'DM Sans',
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                        height: 1.3,
-                        color: p.primaryDark,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 4),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 2),
-              child: Text(
-                'I\'ll tailor answers to this part of your directive.',
-                style: TextStyle(
-                  fontFamily: 'DM Sans',
-                  fontSize: 11.5,
-                  height: 1.4,
-                  color: p.textMuted,
-                ),
-              ),
-            ),
-            const SectionLabel('Example prompts'),
+            // "Context the AI sees" — structured key/value list mirroring the
+            // Claude Design `WebAI` right panel.
+            const SectionLabel('Context the AI sees'),
+            const SizedBox(height: 8),
+            _ContextKV(label: 'Form type', value: _ctxFormType(context!)),
+            _ContextKV(
+                label: 'Current step',
+                value: context!.stepName ?? 'General question'),
+            _ContextKV(
+                label: 'Filled fields',
+                value: '${context!.filledFields?.length ?? 0}'),
+            const _ContextKV(label: 'PII', value: 'Stripped before send'),
+            const SizedBox(height: 16),
+            const SectionLabel('Suggested prompts'),
           ] else ...[
             const SectionLabel('What I can help with'),
             Container(
@@ -939,6 +910,108 @@ class _AssistantContextPanel extends StatelessWidget {
             _ContextPromptTile(text: prompt, onTap: () => onPromptTap(prompt)),
             const SizedBox(height: 8),
           ],
+          const SizedBox(height: 8),
+          const SectionLabel('Privacy'),
+          const SizedBox(height: 8),
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: p.primaryTint,
+              border: Border.all(color: p.primary.withValues(alpha: 0.15)),
+              borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(Icons.shield_outlined, size: 14, color: p.primary),
+                    const SizedBox(width: 6),
+                    Text(
+                      'PII REDACTION ON',
+                      style: TextStyle(
+                        fontFamily: 'JetBrains Mono',
+                        fontFamilyFallback: const ['Consolas', 'monospace'],
+                        fontSize: 10.5,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 0.6,
+                        color: p.primary,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  'Names, addresses, phone numbers, and dates are replaced '
+                  'with placeholders before sending to Gemini.',
+                  style: TextStyle(
+                    fontFamily: 'DM Sans',
+                    fontSize: 12,
+                    height: 1.45,
+                    color: p.text,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _ctxFormType(AssistantContext ctx) {
+    switch (ctx.formType) {
+      case 'combined':
+        return 'Combined';
+      case 'declaration':
+        return 'Declaration';
+      case 'poa':
+        return 'Power of attorney';
+      case null:
+        return '—';
+      default:
+        return ctx.formType!;
+    }
+  }
+}
+
+/// One "Context the AI sees" key/value row (label left, value right).
+class _ContextKV extends StatelessWidget {
+  final String label;
+  final String value;
+  const _ContextKV({required this.label, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Text(
+              label,
+              style: TextStyle(
+                fontFamily: 'DM Sans',
+                fontSize: 12,
+                color: p.textMuted,
+              ),
+            ),
+          ),
+          const SizedBox(width: 8),
+          Flexible(
+            child: Text(
+              value,
+              textAlign: TextAlign.right,
+              style: TextStyle(
+                fontFamily: 'DM Sans',
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: p.text,
+              ),
+            ),
+          ),
         ],
       ),
     );

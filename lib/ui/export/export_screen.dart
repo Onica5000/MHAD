@@ -651,7 +651,25 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
               label: const Text('Share / Print'),
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 12),
+          // Live gradient wallet-card preview (Claude Design `WebExport` right
+          // column) — shows what the generated credit-card-sized PDF carries.
+          if (_directive != null) ...[
+            Text(
+              'WALLET CARD',
+              style: TextStyle(
+                fontFamily: 'JetBrains Mono',
+                fontFamilyFallback: const ['Consolas', 'monospace'],
+                fontSize: 10.5,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 1.2,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+            ),
+            const SizedBox(height: 8),
+            _WalletCardPreview(directive: _directive!),
+            const SizedBox(height: 10),
+          ],
           Semantics(
             button: true,
             label: 'Generate a printable wallet card with essential directive info',
@@ -1349,6 +1367,142 @@ class _PdfPreviewScreen extends StatelessWidget {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// On-screen gradient wallet-card preview — mirrors the Claude Design
+/// `WebExport` wallet card. Read-only; the printable copy is still produced by
+/// [WalletCardGenerator] via the "Generate Wallet Card" button.
+class _WalletCardPreview extends StatelessWidget {
+  final Directive directive;
+  const _WalletCardPreview({required this.directive});
+
+  String _typeLabel() {
+    switch (directive.formType) {
+      case 'combined':
+        return 'Combined directive';
+      case 'declaration':
+        return 'Declaration only';
+      case 'poa':
+        return 'Power of attorney';
+      default:
+        return 'PA MHAD';
+    }
+  }
+
+  String _validLabel() {
+    final exp = directive.expirationDate;
+    if (exp == null || exp == 0) return 'sign to activate';
+    final d = DateTime.fromMillisecondsSinceEpoch(exp);
+    final mm = d.month.toString().padLeft(2, '0');
+    return 'valid $mm/${d.year}';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
+    final name =
+        directive.fullName.trim().isEmpty ? 'Your name' : directive.fullName;
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [p.primary, p.primaryDark],
+          ),
+        ),
+        child: Stack(
+          children: [
+            Positioned(
+              right: -8,
+              top: -22,
+              child: Text(
+                'MH',
+                style: TextStyle(
+                  fontFamily: 'Instrument Serif',
+                  fontStyle: FontStyle.italic,
+                  fontSize: 92,
+                  height: 1,
+                  color: p.onPrimary.withValues(alpha: 0.10),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(14),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'PA MHAD · ACT 194',
+                    style: TextStyle(
+                      fontFamily: 'JetBrains Mono',
+                      fontFamilyFallback: const ['Consolas', 'monospace'],
+                      fontSize: 9,
+                      letterSpacing: 1,
+                      color: p.onPrimary.withValues(alpha: 0.8),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontFamily: 'DM Sans',
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                      color: p.onPrimary,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    _typeLabel(),
+                    style: TextStyle(
+                      fontFamily: 'DM Sans',
+                      fontSize: 11,
+                      color: p.onPrimary.withValues(alpha: 0.85),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Container(
+                    height: 36,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.95),
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.qr_code_2, size: 22, color: p.primaryDark),
+                        const SizedBox(width: 8),
+                        Flexible(
+                          child: Text(
+                            'scan to verify · ${_validLabel()}',
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontFamily: 'JetBrains Mono',
+                              fontFamilyFallback: const [
+                                'Consolas',
+                                'monospace'
+                              ],
+                              fontSize: 10,
+                              color: p.primaryDark,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
