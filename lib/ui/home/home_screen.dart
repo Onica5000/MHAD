@@ -12,6 +12,7 @@ import 'package:mhad/services/web_session_cache.dart';
 import 'package:mhad/services/notification_service.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/ui/router.dart';
+import 'package:mhad/ui/home/web_landing.dart';
 import 'package:mhad/ui/onboarding/onboarding_screen.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/bottom_nav.dart';
@@ -285,132 +286,122 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       ),
     );
 
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(40, 20, 40, 60),
-      children: [
-        const _DeviceSecurityCheck(),
-        if (isPublic) const _EphemeralBar(),
-        SectionLabel(dateLabel),
-        directivesAsync.maybeWhen(
-          data: (d) => _GreetingRow(directives: d, isPublic: isPublic),
-          orElse: () =>
-              _GreetingRow(directives: const [], isPublic: isPublic),
-        ),
-        const SizedBox(height: 28),
-        directivesAsync.when(
-          data: (directives) {
-            final drafts = directives
-                .where((d) => d.status == 'draft')
-                .toList()
-              ..sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
-            final past = directives
-                .where((d) => d.status != 'draft')
-                .toList()
-              ..sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
+    return directivesAsync.when(
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (e, _) {
+        debugPrint('Error loading directives: $e');
+        return WebDashboardLanding(isPublic: isPublic);
+      },
+      data: (directives) {
+        // First-time / no-directive web user → the editorial landing
+        // (anonymous banner + serif hero + bold form-choice + tools row +
+        // privacy promise + booklet quote), a faithful port of the Claude
+        // Design `WebDashboard`. Returning users get the dashboard below.
+        if (directives.isEmpty) {
+          return WebDashboardLanding(isPublic: isPublic);
+        }
 
-            final Widget primary;
-            if (directives.isEmpty) {
-              primary = _EmptyDirectives(
-                onStart: () => context.go(AppRoutes.formTypeSelection),
-              );
-            } else if (drafts.isNotEmpty) {
-              primary = Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _ActiveDirectiveHero(directive: drafts.first),
-                  const SizedBox(height: 18),
-                  startNewButton,
-                ],
-              );
-            } else {
-              primary = startNewButton;
-            }
+        final drafts = directives
+            .where((d) => d.status == 'draft')
+            .toList()
+          ..sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
+        final past = directives
+            .where((d) => d.status != 'draft')
+            .toList()
+          ..sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
 
-            return Column(
+        final Widget primary;
+        if (drafts.isNotEmpty) {
+          primary = Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _ActiveDirectiveHero(directive: drafts.first),
+              const SizedBox(height: 18),
+              startNewButton,
+            ],
+          );
+        } else {
+          primary = startNewButton;
+        }
+
+        return ListView(
+          padding: const EdgeInsets.fromLTRB(40, 20, 40, 60),
+          children: [
+            const _DeviceSecurityCheck(),
+            if (isPublic) const _EphemeralBar(),
+            SectionLabel(dateLabel),
+            _GreetingRow(directives: directives, isPublic: isPublic),
+            const SizedBox(height: 28),
+            // Primary action column + Tools/info aside (3 : 2).
+            Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Primary action column + Tools/info aside (3 : 2).
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(flex: 3, child: primary),
-                    const SizedBox(width: 24),
-                    Expanded(
-                      flex: 2,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          if (isPublic) ...[
-                            _PublicModeNotice(
-                              onEndSession: () =>
-                                  _confirmEndSession(context, ref),
-                            ),
-                            const SizedBox(height: 16),
-                          ],
-                          const SectionLabel('Tools'),
-                          const SizedBox(height: 8),
-                          const _ToolsGrid(),
-                          const SizedBox(height: 16),
-                          const _PrivacyByDesignCard(),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                // Past directives — 2-column grid filling the full width.
-                if (past.isNotEmpty) ...[
-                  const SizedBox(height: 28),
-                  const SectionLabel('Past directives'),
-                  const SizedBox(height: 10),
-                  LayoutBuilder(
-                    builder: (context, c) {
-                      const gap = 12.0;
-                      final colW = (c.maxWidth - gap) / 2;
-                      return Wrap(
-                        spacing: gap,
-                        runSpacing: gap,
-                        children: [
-                          for (final d in past)
-                            SizedBox(
-                              width: colW,
-                              child: _PastDirectiveRow(
-                                directive: d,
-                                onTap: () => context
-                                    .push(AppRoutes.pastDirectiveRoute(d.id)),
-                                onDelete: () =>
-                                    _confirmDelete(context, ref, d.id),
-                                onRevoke: d.status == 'complete'
-                                    ? () => _confirmRevoke(context, ref, d.id)
-                                    : null,
-                                onRenew: () =>
-                                    _renewDirective(context, ref, d),
-                                onAmend: d.status == 'complete'
-                                    ? () => _amendDirective(context, ref, d)
-                                    : null,
-                                onExport: () => context
-                                    .push(AppRoutes.exportRoute(d.id)),
-                              ),
-                            ),
-                        ],
-                      );
-                    },
+                Expanded(flex: 3, child: primary),
+                const SizedBox(width: 24),
+                Expanded(
+                  flex: 2,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (isPublic) ...[
+                        _PublicModeNotice(
+                          onEndSession: () =>
+                              _confirmEndSession(context, ref),
+                        ),
+                        const SizedBox(height: 16),
+                      ],
+                      const SectionLabel('Tools'),
+                      const SizedBox(height: 8),
+                      const _ToolsGrid(),
+                      const SizedBox(height: 16),
+                      const _PrivacyByDesignCard(),
+                    ],
                   ),
-                ],
+                ),
               ],
-            );
-          },
-          loading: () => const Padding(
-            padding: EdgeInsets.symmetric(vertical: 48),
-            child: Center(child: CircularProgressIndicator()),
-          ),
-          error: (e, _) {
-            debugPrint('Error loading directives: $e');
-            return _EmptyDirectives(
-              onStart: () => context.go(AppRoutes.formTypeSelection),
-            );
-          },
-        ),
-      ],
+            ),
+            // Past directives — 2-column grid filling the full width.
+            if (past.isNotEmpty) ...[
+              const SizedBox(height: 28),
+              const SectionLabel('Past directives'),
+              const SizedBox(height: 10),
+              LayoutBuilder(
+                builder: (context, c) {
+                  const gap = 12.0;
+                  final colW = (c.maxWidth - gap) / 2;
+                  return Wrap(
+                    spacing: gap,
+                    runSpacing: gap,
+                    children: [
+                      for (final d in past)
+                        SizedBox(
+                          width: colW,
+                          child: _PastDirectiveRow(
+                            directive: d,
+                            onTap: () => context
+                                .push(AppRoutes.pastDirectiveRoute(d.id)),
+                            onDelete: () =>
+                                _confirmDelete(context, ref, d.id),
+                            onRevoke: d.status == 'complete'
+                                ? () => _confirmRevoke(context, ref, d.id)
+                                : null,
+                            onRenew: () =>
+                                _renewDirective(context, ref, d),
+                            onAmend: d.status == 'complete'
+                                ? () => _amendDirective(context, ref, d)
+                                : null,
+                            onExport: () => context
+                                .push(AppRoutes.exportRoute(d.id)),
+                          ),
+                        ),
+                    ],
+                  );
+                },
+              ),
+            ],
+          ],
+        );
+      },
     );
   }
 
