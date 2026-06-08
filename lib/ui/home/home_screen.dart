@@ -242,16 +242,175 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ],
             );
             if (!isWide) return list;
-            return Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(child: list),
-                const _HomeToolsSidebar(),
-              ],
+            return _buildWideDashboard(
+              context,
+              ref,
+              directivesAsync: directivesAsync,
+              isPublic: privacyMode.isPublic,
+              dateLabel: dateLabel,
             );
           },
         ),
       ),
+    );
+  }
+
+  /// Wide (desktop / web) dashboard — a multi-column layout matching the
+  /// Claude Design `WebDashboard`: a primary action column (active-draft hero
+  /// or first-directive hero) beside a Tools/info aside, with any past
+  /// directives in a 2-column grid below. This fills the content width with
+  /// structure instead of stretching single cards. The narrow (mobile) layout
+  /// in [build] is unchanged.
+  Widget _buildWideDashboard(
+    BuildContext context,
+    WidgetRef ref, {
+    required AsyncValue<List<Directive>> directivesAsync,
+    required bool isPublic,
+    required String dateLabel,
+  }) {
+    final p = Theme.of(context).mhadPalette;
+    final startNewButton = SizedBox(
+      width: double.infinity,
+      child: OutlinedButton.icon(
+        onPressed: () => context.go(AppRoutes.formTypeSelection),
+        icon: const Icon(Icons.add, size: 16),
+        label: const Text('Start a new directive'),
+        style: OutlinedButton.styleFrom(
+          minimumSize: const Size.fromHeight(DesignTokens.buttonHeightMd),
+          side: BorderSide(color: p.primary, width: 1.5),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(DesignTokens.buttonRadius),
+          ),
+        ),
+      ),
+    );
+
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(40, 20, 40, 60),
+      children: [
+        const _DeviceSecurityCheck(),
+        if (isPublic) const _EphemeralBar(),
+        SectionLabel(dateLabel),
+        directivesAsync.maybeWhen(
+          data: (d) => _GreetingRow(directives: d, isPublic: isPublic),
+          orElse: () =>
+              _GreetingRow(directives: const [], isPublic: isPublic),
+        ),
+        const SizedBox(height: 28),
+        directivesAsync.when(
+          data: (directives) {
+            final drafts = directives
+                .where((d) => d.status == 'draft')
+                .toList()
+              ..sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
+            final past = directives
+                .where((d) => d.status != 'draft')
+                .toList()
+              ..sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
+
+            final Widget primary;
+            if (directives.isEmpty) {
+              primary = _EmptyDirectives(
+                onStart: () => context.go(AppRoutes.formTypeSelection),
+              );
+            } else if (drafts.isNotEmpty) {
+              primary = Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _ActiveDirectiveHero(directive: drafts.first),
+                  const SizedBox(height: 18),
+                  startNewButton,
+                ],
+              );
+            } else {
+              primary = startNewButton;
+            }
+
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Primary action column + Tools/info aside (3 : 2).
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(flex: 3, child: primary),
+                    const SizedBox(width: 24),
+                    Expanded(
+                      flex: 2,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (isPublic) ...[
+                            _PublicModeNotice(
+                              onEndSession: () =>
+                                  _confirmEndSession(context, ref),
+                            ),
+                            const SizedBox(height: 16),
+                          ],
+                          const SectionLabel('Tools'),
+                          const SizedBox(height: 8),
+                          const _ToolsGrid(),
+                          const SizedBox(height: 16),
+                          const _PrivacyByDesignCard(),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                // Past directives — 2-column grid filling the full width.
+                if (past.isNotEmpty) ...[
+                  const SizedBox(height: 28),
+                  const SectionLabel('Past directives'),
+                  const SizedBox(height: 10),
+                  LayoutBuilder(
+                    builder: (context, c) {
+                      const gap = 12.0;
+                      final colW = (c.maxWidth - gap) / 2;
+                      return Wrap(
+                        spacing: gap,
+                        runSpacing: gap,
+                        children: [
+                          for (final d in past)
+                            SizedBox(
+                              width: colW,
+                              child: _PastDirectiveRow(
+                                directive: d,
+                                onTap: () => context
+                                    .push(AppRoutes.pastDirectiveRoute(d.id)),
+                                onDelete: () =>
+                                    _confirmDelete(context, ref, d.id),
+                                onRevoke: d.status == 'complete'
+                                    ? () => _confirmRevoke(context, ref, d.id)
+                                    : null,
+                                onRenew: () =>
+                                    _renewDirective(context, ref, d),
+                                onAmend: d.status == 'complete'
+                                    ? () => _amendDirective(context, ref, d)
+                                    : null,
+                                onExport: () => context
+                                    .push(AppRoutes.exportRoute(d.id)),
+                              ),
+                            ),
+                        ],
+                      );
+                    },
+                  ),
+                ],
+              ],
+            );
+          },
+          loading: () => const Padding(
+            padding: EdgeInsets.symmetric(vertical: 48),
+            child: Center(child: CircularProgressIndicator()),
+          ),
+          error: (e, _) {
+            debugPrint('Error loading directives: $e');
+            return _EmptyDirectives(
+              onStart: () => context.go(AppRoutes.formTypeSelection),
+            );
+          },
+        ),
+      ],
     );
   }
 
@@ -1041,65 +1200,53 @@ class _ActiveDirectiveHero extends StatelessWidget {
 /// the most-recent directive's wallet card / export, and the crisis sheet).
 /// Right sidebar shown on the wide (`w-home`) dashboard layout: the Tools grid
 /// plus a privacy reassurance card, in a fixed-width column.
-class _HomeToolsSidebar extends StatelessWidget {
-  const _HomeToolsSidebar();
+/// "Private by design" reassurance card — used in the wide dashboard's
+/// Tools/info aside. (Extracted from the former fixed-width tools sidebar,
+/// which the multi-column wide layout replaced.)
+class _PrivacyByDesignCard extends StatelessWidget {
+  const _PrivacyByDesignCard();
 
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
     return Container(
-      width: 340,
-      padding: const EdgeInsets.fromLTRB(8, 20, 22, 100),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SectionLabel('Tools'),
-            const SizedBox(height: 8),
-            const _ToolsGrid(),
-            const SizedBox(height: 16),
-            Container(
-              padding: const EdgeInsets.all(14),
-              decoration: BoxDecoration(
-                color: p.primaryTint,
-                border: Border.all(color: p.primaryLight),
-                borderRadius: BorderRadius.circular(16),
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: p.primaryTint,
+        border: Border.all(color: p.primaryLight),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.lock_outline, size: 16, color: p.primary),
+              const SizedBox(width: 8),
+              Text(
+                'Private by design',
+                style: TextStyle(
+                  fontFamily: 'DM Sans',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: p.onPrimaryLight,
+                ),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Icon(Icons.lock_outline, size: 16, color: p.primary),
-                      const SizedBox(width: 8),
-                      Text(
-                        'Private by design',
-                        style: TextStyle(
-                          fontFamily: 'DM Sans',
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                          color: p.onPrimaryLight,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    'Your directive stays on your device. No ads, no tracking, '
-                    'no selling your data — only you choose who to share it '
-                    'with.',
-                    style: TextStyle(
-                      fontFamily: 'DM Sans',
-                      fontSize: 12.5,
-                      height: 1.45,
-                      color: p.onPrimaryLight,
-                    ),
-                  ),
-                ],
-              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          Text(
+            'Your directive stays on your device. No ads, no tracking, '
+            'no selling your data — only you choose who to share it '
+            'with.',
+            style: TextStyle(
+              fontFamily: 'DM Sans',
+              fontSize: 12.5,
+              height: 1.45,
+              color: p.onPrimaryLight,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
