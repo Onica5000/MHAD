@@ -110,8 +110,14 @@ class OnboardingScreen extends StatelessWidget {
             // Main editorial column. Padding matches prototype L54
             // `padding: '64px 28px 0'` — but we let SafeArea push the
             // top so the 988 chip and content don't collide on devices
-            // with deep notches.
-            Padding(
+            // with deep notches. On wide web this screen is pushed over the
+            // (fill-mode) Home route, so cap + centre the column at the
+            // design's WebCenter measure (~640) — otherwise the banner and
+            // CTAs stretch the full viewport width. No-op on mobile (422 px).
+            Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 640),
+                child: Padding(
               padding: const EdgeInsets.fromLTRB(28, 64, 28, 24),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -265,6 +271,8 @@ class OnboardingScreen extends StatelessWidget {
                     ),
                   ),
                 ],
+              ),
+            ),
               ),
             ),
           ],

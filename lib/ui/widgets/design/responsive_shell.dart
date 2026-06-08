@@ -6,38 +6,55 @@ import 'package:mhad/ui/widgets/design/web_sidebar.dart';
 /// fixed-sidebar layout. Matches the prototype's web breakpoint.
 const double kWideLayoutBreakpoint = 1000;
 
-/// Comfortable reading measure for the *default* screen — prose, forms, and
-/// single-column layouts (privacy policy, settings, wizard steps, most
-/// detail screens). Long-form text and form fields read best at a
-/// constrained width, so on wide monitors the surplus becomes side gutters
-/// rather than stretching a paragraph to 180+ characters per line. The
-/// wizard's internal `_WideStepRail` + 760-max-width form column sits inside
-/// this envelope, so it is unaffected.
-const double kReadingMaxWidth = 1100;
+// The Claude Design web prototype (`web.jsx` / `web-flow-screens.jsx`) uses
+// exactly two desktop layout shells, and this shell reproduces both:
+//
+//   1. SIDEBAR + FILL — dense, multi-column app screens (dashboard, learn, AI,
+//      export, wizard). In the prototype these are `WebSidebar(232) + a
+//      flex:1 content column` that fills the full remaining width, flush to
+//      the sidebar; long paragraphs inside are capped per-element, while card
+//      grids span the whole width. See [_routeFills].
+//
+//   2. WEBCENTER — prose & pre-app flow screens (disclaimer, form-type, quiz,
+//      sign, done, crisis, settings, article, …). In the prototype these are a
+//      single column centered at `maxWidth 620–720`. The side gutters here are
+//      intentional editorial measure, not wasted space.
+//
+// The previous single centered cap got both wrong: it over-guttered the dense
+// screens (content floated in a centered island, detached from the sidebar)
+// and over-widened prose to ~1100px.
 
-/// Wider cap for screens whose layouts are explicitly built to use the extra
-/// horizontal space — multi-column dashboards, card grids, and two-pane
-/// views. Previously every route shared the 1100px reading cap, which
-/// starved these layouts and left large empty gutters on ≥1440px monitors
-/// (e.g. the education topic grid was pinned to 3 columns, the home
-/// dashboard column was needlessly narrow). At 1480 a 1440px viewport fills
-/// edge-to-edge (minus the sidebar) and a 1920px viewport keeps a modest,
-/// editorial gutter instead of a cavernous one.
-const double kWideContentMaxWidth = 1480;
+/// Reading measure for [WebCenter]-style screens — prose, forms, flow, and
+/// single-column detail screens. Mirrors the prototype's 620–720px column;
+/// 760 also matches the repo's existing wizard form-column width. Centered in
+/// the content area, so the surplus falls as symmetric gutters — the design's
+/// editorial intent for these screens.
+const double kReadingMaxWidth = 760;
 
-/// Routes that opt into [kWideContentMaxWidth]. Each already branches to a
-/// horizontal layout at ≥1000px and only needs the room to spread into:
+/// Upper bound for FILL screens. The prototype fills 100% with no cap, but it
+/// was drawn at 1200px artboards; on a real ultra-wide monitor an unbounded
+/// fill would stretch the grids past their editorial proportions. 1800 lets
+/// every common monitor up to 1920px fill completely (content area ≤ 1688)
+/// and only bounds genuine ultra-wide (>2032px viewport). Content is
+/// START-aligned (not centered) so it stays flush against the sidebar — never
+/// a centered island with a left gutter.
+const double kFillMaxWidth = 1800;
+
+/// Routes whose screens have purpose-built multi-column desktop layouts and
+/// should FILL the content area (prototype "sidebar + flex:1" pages):
 ///   - home (`/`)            — dashboard column + right "Tools" sidebar
 ///   - education             — 2–4 column topic grid (`(w/360).clamp(2,4)`)
 ///   - assistant             — chat column + right context panel
 ///   - export (`/export/…`)  — preview / options two-pane
-/// Everything else keeps [kReadingMaxWidth]. Matched against the concrete
-/// path, so the parameterized `export` route is checked by prefix.
-bool _routeUsesWideContent(String route) =>
+///   - wizard (`/wizard/…`)  — step rail + form + AI rail
+/// Everything else uses the centered [kReadingMaxWidth]. Parameterized routes
+/// are matched by path prefix.
+bool _routeFills(String route) =>
     route == AppRoutes.home ||
     route == AppRoutes.education ||
     route == AppRoutes.assistant ||
-    route.startsWith('/export/');
+    route.startsWith('/export/') ||
+    route.startsWith('/wizard/');
 
 /// Wraps [child] so the navigation chrome matches the prototype:
 ///
@@ -66,22 +83,24 @@ class ResponsiveShell extends StatelessWidget {
       builder: (context, _) {
         final route =
             appRouter.routerDelegate.currentConfiguration.uri.path;
-        // Route-aware content cap: space-using layouts (dashboard, grids,
-        // two-pane) get [kWideContentMaxWidth]; prose/forms keep the tighter
-        // [kReadingMaxWidth]. The cap is applied INSIDE the sidebar-adjusted
-        // area, so any surplus beyond the cap falls as symmetric side
-        // gutters, keeping each surface at its ideal measure.
-        final maxContentWidth = _routeUsesWideContent(route)
-            ? kWideContentMaxWidth
-            : kReadingMaxWidth;
+        // Two layout modes, matching the design's two web shells:
+        //   FILL    — dense screens fill the width flush to the sidebar
+        //             (START-aligned, generous cap).
+        //   READING — prose/flow screens sit in a centered reading column.
+        final fills = _routeFills(route);
         return Row(
           children: [
             WebSidebar(activeRoute: route),
             Expanded(
               child: ClipRect(
-                child: Center(
+                child: Align(
+                  // FILL: flush to the sidebar (top-left). READING: centered.
+                  alignment:
+                      fills ? Alignment.topLeft : Alignment.topCenter,
                   child: ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: maxContentWidth),
+                    constraints: BoxConstraints(
+                      maxWidth: fills ? kFillMaxWidth : kReadingMaxWidth,
+                    ),
                     child: child,
                   ),
                 ),
