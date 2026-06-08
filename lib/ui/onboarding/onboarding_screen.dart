@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/ui/router.dart';
@@ -32,6 +33,9 @@ class OnboardingScreen extends StatelessWidget {
 
   /// Returns true if onboarding has been completed.
   static Future<bool> isCompleted() async {
+    // On web the session is ephemeral (public mode, nothing persisted), so the
+    // "In your words" intro shows every visit — same policy as the disclaimer.
+    if (kIsWeb) return false;
     final prefs = await SharedPreferences.getInstance();
     return prefs.getBool(_prefKey) ?? false;
   }

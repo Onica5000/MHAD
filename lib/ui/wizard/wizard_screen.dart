@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -67,14 +69,22 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
   /// can resume after a page reload within the TTL window.
   Future<void> _cacheForWebReload() async {
     if (!kIsWeb) return;
+    // Best-effort crash-recovery snapshot. It must NEVER block wizard
+    // navigation: callers `await` this before advancing the step, so a hung
+    // DB read / storage write here would freeze "Continue". Bound every async
+    // hop with a timeout — a try/catch alone does not rescue a hang, only a
+    // throw. On timeout we simply skip caching this step.
     try {
       final repo = ref.read(directiveRepositoryProvider);
-      final snap = await repo.snapshotDirective(widget.directiveId);
+      final snap = await repo
+          .snapshotDirective(widget.directiveId)
+          .timeout(const Duration(seconds: 3));
       if (snap.isNotEmpty) {
-        await WebSessionCache.saveDirective(snap);
+        await WebSessionCache.saveDirective(snap)
+            .timeout(const Duration(seconds: 3));
       }
     } catch (e) {
-      debugPrint('Web cache save failed: $e');
+      debugPrint('Web cache save skipped (failed or timed out): $e');
     }
   }
 
@@ -182,27 +192,14 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                     // delegates to the same back-step path the bottom bar
                     // uses (validate, save, decrement); Save & exit runs
                     // the existing `_saveAndExit` flow.
+                    // Single exit-to-home affordance for the whole wizard.
+                    // "Back to previous step" lives ONLY on the bottom bar, so
+                    // there are no duplicate Back/Exit controls (the header
+                    // previously showed both an "Exit" and a "Save & exit").
                     WizardHeader(
-                      onBack: _stepIndex > 0
-                          ? () async {
-                              FocusScope.of(context).unfocus();
-                              final state = _stepKey.currentState;
-                              if (state is WizardStepMixin) {
-                                try {
-                                  await (state as WizardStepMixin)
-                                      .validateAndSave();
-                                } catch (e) {
-                                  debugPrint('Auto-save on back failed: $e');
-                                }
-                              }
-                              if (mounted) {
-                                setState(() => _stepIndex--);
-                                await _persistStep();
-                              }
-                            }
-                          : () => _saveAndExit(context),
-                      backLabel: _stepIndex > 0 ? 'Back' : 'Exit',
-                      onAction: () => _saveAndExit(context),
+                      onBack: () => _saveAndExit(context),
+                      backLabel: 'Exit',
+                      actionLabel: '',
                     ),
                     if (!isWide)
                       Container(
@@ -291,6 +288,21 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                           currentStep.displayName,
                         ),
                       ),
+                    // Narrow (mobile) keeps a bottom Back/Continue bar. On wide
+                    // the navigation lives under the step rail instead, so the
+                    // Scaffold has no bottomNavigationBar.
+                    if (!isWide)
+                      WizardBottomBar(
+                        primaryLabel: isLastStep
+                            ? 'Generate signing packet'
+                            : 'Continue',
+                        primaryIcon: Icons.arrow_forward,
+                        primaryLoading: _isSaving,
+                        onPrimary: () => _goNext(context, isLastStep),
+                        secondaryLabel: _stepIndex > 0 ? 'Back' : null,
+                        onSecondary: _stepIndex > 0 ? _goBack : null,
+                        showGradient: false,
+                      ),
                   ],
                 );
                 if (!isWide) return mainColumn;
@@ -300,6 +312,11 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                     _WideStepRail(
                       steps: steps,
                       currentIndex: _stepIndex,
+                      onNext: () => _goNext(context, isLastStep),
+                      onBack: _stepIndex > 0 ? _goBack : null,
+                      nextLabel:
+                          isLastStep ? 'Generate signing packet' : 'Next',
+                      nextLoading: _isSaving,
                     ),
                     Container(width: 1, color: p.border),
                     Expanded(
@@ -324,46 +341,9 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                 );
               },
             ),
-            // Bottom action bar — always shows BOTH a left affordance and
-            // the primary Continue / Finish CTA so the wizard never appears
-            // to be navigation-less. On step 1 the left button is "Exit"
-            // (save-and-return-to-home) instead of "Back to previous step"
-            // since there is no previous step; on step 2+ it's "Back" and
-            // decrements `_stepIndex` after auto-saving.
-            bottomNavigationBar: WizardBottomBar(
-              // Last step is now pure Review (prototype `ScrReview`,
-              // mobile.jsx L802-878). The primary CTA hands off to
-              // SignScreen — match the prototype's label "Generate
-              // signing packet" instead of the old "Finish & export."
-              primaryLabel:
-                  isLastStep ? 'Generate signing packet' : 'Continue',
-              primaryIcon:
-                  isLastStep ? Icons.arrow_forward : Icons.arrow_forward,
-              primaryLoading: _isSaving,
-              onPrimary: () => _goNext(context, isLastStep),
-              secondaryLabel: _stepIndex > 0 ? 'Back' : 'Exit',
-              onSecondary: _stepIndex > 0
-                  ? () async {
-                      FocusScope.of(context).unfocus();
-                      final state = _stepKey.currentState;
-                      if (state is WizardStepMixin) {
-                        try {
-                          await (state as WizardStepMixin).validateAndSave();
-                        } catch (e) {
-                          debugPrint('Auto-save on back failed: $e');
-                        }
-                      }
-                      if (mounted) {
-                        setState(() => _stepIndex--);
-                        await _persistStep();
-                      }
-                    }
-                  // Step-1 Exit fires the same save-and-exit path the
-                  // PopScope + appbar overflow expose, so step-1 users
-                  // always have a visible way out of the wizard.
-                  : () => _saveAndExit(context),
-              showGradient: false,
-            ),
+            // No Scaffold bottomNavigationBar: on wide screens navigation
+            // lives under the step rail (`_WideStepRail`); on narrow screens
+            // a `WizardBottomBar` is appended inside the body column above.
           ),
         );
       },
@@ -551,8 +531,6 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
         );
       }
 
-      await _cacheForWebReload();
-
       if (mounted) {
         if (isLastStep) {
           if (kIsWeb) WebSessionCache.clear();
@@ -564,12 +542,35 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
             context.go(AppRoutes.signRoute(widget.directiveId));
           }
         } else {
+          // Advance FIRST, then persist + web-cache in the background. The
+          // resume-index write and crash-recovery snapshot are best-effort —
+          // they must never gate "Continue" (a hung await here was freezing
+          // navigation on web).
           setState(() => _stepIndex++);
-          await _persistStep();
+          unawaited(_persistStep());
         }
       }
     } finally {
       if (mounted) setState(() => _isSaving = false);
+    }
+  }
+
+  /// Back to the previous step. Saves the current step first (best-effort),
+  /// then decrements immediately — persistence runs in the background so it can
+  /// never block navigation.
+  Future<void> _goBack() async {
+    FocusScope.of(context).unfocus();
+    final state = _stepKey.currentState;
+    if (state is WizardStepMixin) {
+      try {
+        await (state as WizardStepMixin).validateAndSave();
+      } catch (e) {
+        debugPrint('Auto-save on back failed: $e');
+      }
+    }
+    if (mounted) {
+      setState(() => _stepIndex--);
+      unawaited(_persistStep());
     }
   }
 
@@ -789,9 +790,19 @@ class _WizardAiBar extends StatelessWidget {
 class _WideStepRail extends StatelessWidget {
   final List<WizardStep> steps;
   final int currentIndex;
+  // Navigation lives directly under the step list on wide screens (there is
+  // no bottom bar in the desktop layout).
+  final VoidCallback onNext;
+  final VoidCallback? onBack;
+  final String nextLabel;
+  final bool nextLoading;
   const _WideStepRail({
     required this.steps,
     required this.currentIndex,
+    required this.onNext,
+    required this.onBack,
+    required this.nextLabel,
+    required this.nextLoading,
   });
 
   @override
@@ -846,6 +857,41 @@ class _WideStepRail extends StatelessWidget {
                         ? _RailStepState.current
                         : _RailStepState.pending,
               ),
+            // Back / Next directly under the "Your directive" list.
+            const SizedBox(height: 22),
+            SizedBox(
+              width: double.infinity,
+              child: FilledButton.icon(
+                onPressed: nextLoading ? null : onNext,
+                icon: nextLoading
+                    ? const SizedBox(
+                        width: 16,
+                        height: 16,
+                        child: CircularProgressIndicator(
+                            strokeWidth: 2, color: Colors.white),
+                      )
+                    : const Icon(Icons.arrow_forward, size: 18),
+                label: Text(nextLabel),
+                style: FilledButton.styleFrom(
+                  iconAlignment: IconAlignment.end,
+                  minimumSize: const Size.fromHeight(48),
+                ),
+              ),
+            ),
+            if (onBack != null) ...[
+              const SizedBox(height: 8),
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton.icon(
+                  onPressed: onBack,
+                  icon: const Icon(Icons.arrow_back, size: 16),
+                  label: const Text('Back'),
+                  style: OutlinedButton.styleFrom(
+                    minimumSize: const Size.fromHeight(44),
+                  ),
+                ),
+              ),
+            ],
           ],
         ),
       ),
