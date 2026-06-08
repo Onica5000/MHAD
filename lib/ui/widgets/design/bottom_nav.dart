@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/design/responsive_shell.dart';
 
 /// Floating pill bottom navigation for the top-level destinations.
 ///
@@ -22,6 +23,13 @@ class MhadBottomNav extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // On wide (desktop / web) screens the persistent WebSidebar provides
+    // navigation, so the floating pill must NOT also render — otherwise both
+    // nav systems show at once. Mirror ResponsiveShell's breakpoint.
+    if (MediaQuery.sizeOf(context).width >= kWideLayoutBreakpoint) {
+      return const SizedBox.shrink();
+    }
+
     final p = Theme.of(context).mhadPalette;
     final loc = GoRouterState.of(context).matchedLocation;
     final aiReady =
