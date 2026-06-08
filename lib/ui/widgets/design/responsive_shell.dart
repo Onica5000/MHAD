@@ -6,15 +6,38 @@ import 'package:mhad/ui/widgets/design/web_sidebar.dart';
 /// fixed-sidebar layout. Matches the prototype's web breakpoint.
 const double kWideLayoutBreakpoint = 1000;
 
-/// Soft cap on content width inside the desktop shell. The prototype's web
-/// artboards are 1200px wide; at viewport widths greater than that, the
-/// extra space becomes side gutters so the content keeps its editorial
-/// proportions instead of stretching to fill 1920+ px monitors. Screens
-/// that genuinely need the full width (e.g. the wizard's step rail layout)
-/// can ignore the cap by opting out — none currently do; the wizard's
-/// internal `_WideStepRail` + 760-max-width form column sits inside this
-/// envelope.
-const double kMaxContentWidth = 1100;
+/// Comfortable reading measure for the *default* screen — prose, forms, and
+/// single-column layouts (privacy policy, settings, wizard steps, most
+/// detail screens). Long-form text and form fields read best at a
+/// constrained width, so on wide monitors the surplus becomes side gutters
+/// rather than stretching a paragraph to 180+ characters per line. The
+/// wizard's internal `_WideStepRail` + 760-max-width form column sits inside
+/// this envelope, so it is unaffected.
+const double kReadingMaxWidth = 1100;
+
+/// Wider cap for screens whose layouts are explicitly built to use the extra
+/// horizontal space — multi-column dashboards, card grids, and two-pane
+/// views. Previously every route shared the 1100px reading cap, which
+/// starved these layouts and left large empty gutters on ≥1440px monitors
+/// (e.g. the education topic grid was pinned to 3 columns, the home
+/// dashboard column was needlessly narrow). At 1480 a 1440px viewport fills
+/// edge-to-edge (minus the sidebar) and a 1920px viewport keeps a modest,
+/// editorial gutter instead of a cavernous one.
+const double kWideContentMaxWidth = 1480;
+
+/// Routes that opt into [kWideContentMaxWidth]. Each already branches to a
+/// horizontal layout at ≥1000px and only needs the room to spread into:
+///   - home (`/`)            — dashboard column + right "Tools" sidebar
+///   - education             — 2–4 column topic grid (`(w/360).clamp(2,4)`)
+///   - assistant             — chat column + right context panel
+///   - export (`/export/…`)  — preview / options two-pane
+/// Everything else keeps [kReadingMaxWidth]. Matched against the concrete
+/// path, so the parameterized `export` route is checked by prefix.
+bool _routeUsesWideContent(String route) =>
+    route == AppRoutes.home ||
+    route == AppRoutes.education ||
+    route == AppRoutes.assistant ||
+    route.startsWith('/export/');
 
 /// Wraps [child] so the navigation chrome matches the prototype:
 ///
@@ -43,22 +66,22 @@ class ResponsiveShell extends StatelessWidget {
       builder: (context, _) {
         final route =
             appRouter.routerDelegate.currentConfiguration.uri.path;
+        // Route-aware content cap: space-using layouts (dashboard, grids,
+        // two-pane) get [kWideContentMaxWidth]; prose/forms keep the tighter
+        // [kReadingMaxWidth]. The cap is applied INSIDE the sidebar-adjusted
+        // area, so any surplus beyond the cap falls as symmetric side
+        // gutters, keeping each surface at its ideal measure.
+        final maxContentWidth = _routeUsesWideContent(route)
+            ? kWideContentMaxWidth
+            : kReadingMaxWidth;
         return Row(
           children: [
             WebSidebar(activeRoute: route),
             Expanded(
               child: ClipRect(
-                // Soft max-content cap — keeps the editorial column
-                // proportional on 1920+ px monitors. The cap is applied
-                // INSIDE the sidebar-adjusted area, so a 1440px viewport
-                // with a 240px sidebar gives a 1200px content area which
-                // is already under the cap; a 1920px viewport gives a
-                // 1680px area, of which 1100 is used for content and
-                // ~290px gutters fall on each side.
                 child: Center(
                   child: ConstrainedBox(
-                    constraints:
-                        const BoxConstraints(maxWidth: kMaxContentWidth),
+                    constraints: BoxConstraints(maxWidth: maxContentWidth),
                     child: child,
                   ),
                 ),
