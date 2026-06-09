@@ -1,3 +1,6 @@
+import 'dart:typed_data';
+
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:cross_file/cross_file.dart';
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:drift/drift.dart' show Value;
@@ -18,6 +21,7 @@ import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/friendly_error.dart';
 import 'package:mhad/ui/widgets/nlm_attribution.dart';
 import 'package:mhad/ui/wizard/widgets/document_import_sheet.dart';
+import 'package:mhad/utils/clipboard_paste.dart';
 import 'package:mhad/utils/platform_utils.dart';
 
 /// Launches the integrated document → validate → smart fill pipeline.
@@ -60,6 +64,31 @@ class _PipelineScreenState extends ConsumerState<_PipelineScreen> {
   // The documents being processed — retained so the review step can show a
   // source thumbnail of what the AI read.
   List<PickedDocument> _sourceDocs = const [];
+
+  // Clipboard-paste listener disposer (web only).
+  void Function()? _pasteDisposer;
+
+  @override
+  void initState() {
+    super.initState();
+    // ⌘V / Ctrl+V to paste an image straight into the Snap-to-fill zone (web).
+    _pasteDisposer = registerImagePaste((bytes, mime) {
+      if (!mounted || _step != _PipelineStep.pick) return;
+      _startPipeline([
+        PickedDocument(
+          path: 'pasted-image',
+          mimeType: mime,
+          bytes: Uint8List.fromList(bytes),
+        ),
+      ]);
+    });
+  }
+
+  @override
+  void dispose() {
+    _pasteDisposer?.call();
+    super.dispose();
+  }
 
   // Allowed dropped/pasted file extensions → mime type.
   static const _allowedMime = <String, String>{
@@ -951,7 +980,9 @@ class _PipelineScreenState extends ConsumerState<_PipelineScreen> {
             ),
             const SizedBox(height: 6),
             Text(
-              'JPG · PNG · HEIC · PDF · up to 10 MB',
+              kIsWeb
+                  ? 'JPG · PNG · HEIC · PDF · up to 10 MB — or paste with ⌘V'
+                  : 'JPG · PNG · HEIC · PDF · up to 10 MB',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontFamily: 'DM Sans',
