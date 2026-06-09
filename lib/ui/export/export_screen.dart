@@ -342,6 +342,81 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
     );
   }
 
+  /// Generates the selected-sections PDF bytes (off the UI thread). Shared by
+  /// the inline live preview and the full-screen preview / share paths.
+  Future<Uint8List> _buildPdfBytes() {
+    final generator = PdfGenerator(
+      includeCombined: _includeCombined,
+      includeDeclaration: _includeDeclaration,
+      includePoa: _includePoa,
+      includeSupplementary: _includeSupplementary,
+      includeNotes: _includeNotes,
+    );
+    return runInBackground(() => generator.generate(
+          directive: _directive!,
+          agents: _agents,
+          prefs: _prefs,
+          additional: _additional,
+          guardian: _guardian,
+          medications: _medications,
+          witnesses: _witnesses,
+          diagnoses: _diagnoses,
+        ));
+  }
+
+  /// A signature of the current section selection — used to key the inline
+  /// preview so it only re-renders when the selection actually changes.
+  String _selectionSignature() => [
+        _includeCombined,
+        _includeDeclaration,
+        _includePoa,
+        _includeSupplementary,
+        _includeNotes,
+        _directive?.updatedAt,
+      ].join('|');
+
+  /// Inline live PDF preview for the wide export layout (artboard `w-export`
+  /// left pane). Re-renders when the section selection changes.
+  Widget _inlinePdfPreview(MhadPalette p) {
+    final anySelected = _includeCombined ||
+        _includeDeclaration ||
+        _includePoa ||
+        _includeSupplementary ||
+        _includeNotes;
+    return Container(
+      height: 600,
+      decoration: BoxDecoration(
+        color: p.surface,
+        border: Border.all(color: p.border),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: (anySelected && _directive != null)
+          ? PdfPreview(
+              key: ValueKey(_selectionSignature()),
+              build: (format) => _buildPdfBytes(),
+              useActions: false,
+              canChangePageFormat: false,
+              canChangeOrientation: false,
+              canDebug: false,
+              loadingWidget: const Center(child: CircularProgressIndicator()),
+              scrollViewDecoration: BoxDecoration(color: p.surface),
+            )
+          : Center(
+              child: Text(
+                _directive == null
+                    ? 'Loading…'
+                    : 'Select a section to preview.',
+                style: TextStyle(
+                  fontFamily: 'DM Sans',
+                  fontSize: 13,
+                  color: p.textMuted,
+                ),
+              ),
+            ),
+    );
+  }
+
   Future<void> _previewPdf() async {
     if (!_includeCombined && !_includeDeclaration && !_includePoa &&
         !_includeSupplementary && !_includeNotes) {
@@ -354,32 +429,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
     setState(() => _isGenerating = true);
 
     try {
-      final generator = PdfGenerator(
-        includeCombined: _includeCombined,
-        includeDeclaration: _includeDeclaration,
-        includePoa: _includePoa,
-        includeSupplementary: _includeSupplementary,
-        includeNotes: _includeNotes,
-      );
-
-      final directive = _directive!;
-      final agents = _agents;
-      final prefs = _prefs;
-      final additional = _additional;
-      final guardian = _guardian;
-      final medications = _medications;
-      final witnesses = _witnesses;
-
-      final bytes = await runInBackground(() => generator.generate(
-        directive: directive,
-        agents: agents,
-        prefs: prefs,
-        additional: additional,
-        guardian: guardian,
-        medications: medications,
-        witnesses: witnesses,
-        diagnoses: _diagnoses,
-      ));
+      final bytes = await _buildPdfBytes();
 
       if (!mounted) return;
 
@@ -874,7 +924,12 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
                             constraints: const BoxConstraints(maxWidth: 640),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: documentChildren,
+                              children: [
+                                // Live PDF preview (artboard w-export left pane).
+                                _inlinePdfPreview(p),
+                                const SizedBox(height: 20),
+                                ...documentChildren,
+                              ],
                             ),
                           ),
                         ),
