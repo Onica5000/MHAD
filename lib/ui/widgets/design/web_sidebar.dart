@@ -146,7 +146,7 @@ class WebSidebar extends ConsumerWidget {
                             'Courier New',
                             'monospace'
                           ],
-                          fontSize: 9.5,
+                          fontSize: 10,
                           letterSpacing: 0.6,
                           color: p.textMuted,
                         ),
@@ -187,19 +187,24 @@ class WebSidebar extends ConsumerWidget {
               padding: const EdgeInsets.fromLTRB(14, 4, 14, 16),
               child: Row(
                 children: [
-                  Container(
-                    width: 30,
-                    height: 30,
-                    decoration: BoxDecoration(
-                      color: p.surface,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: p.primary),
-                    ),
-                    alignment: Alignment.center,
-                    child: Icon(
-                      mode.isPrivate ? Icons.lock : Icons.lock_outline,
-                      size: 14,
-                      color: p.primary,
+                  CustomPaint(
+                    // Dashed primary border = the artboard's "anonymous /
+                    // unverified" signal on the session chip avatar.
+                    foregroundPainter:
+                        _DashedRRectPainter(color: p.primary, radius: 8),
+                    child: Container(
+                      width: 30,
+                      height: 30,
+                      decoration: BoxDecoration(
+                        color: p.surface,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      alignment: Alignment.center,
+                      child: Icon(
+                        mode.isPrivate ? Icons.lock : Icons.lock_outline,
+                        size: 14,
+                        color: p.primary,
+                      ),
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -231,7 +236,7 @@ class WebSidebar extends ConsumerWidget {
                               'Courier New',
                               'monospace'
                             ],
-                            fontSize: 9.5,
+                            fontSize: 10,
                             letterSpacing: 0.4,
                             color: p.textMuted,
                           ),
@@ -249,6 +254,47 @@ class WebSidebar extends ConsumerWidget {
     );
   }
 
+}
+
+/// Paints a dashed rounded-rect stroke over a child (used for the session-chip
+/// avatar). Flutter has no built-in dashed border.
+class _DashedRRectPainter extends CustomPainter {
+  final Color color;
+  final double radius;
+  final double dash = 3;
+  final double gap = 2.5;
+  final double strokeWidth = 1;
+
+  _DashedRRectPainter({required this.color, this.radius = 8});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = strokeWidth;
+    final rrect = RRect.fromRectAndRadius(
+      Rect.fromLTWH(strokeWidth / 2, strokeWidth / 2,
+          size.width - strokeWidth, size.height - strokeWidth),
+      Radius.circular(radius),
+    );
+    final dashed = Path();
+    for (final metric in (Path()..addRRect(rrect)).computeMetrics()) {
+      var dist = 0.0;
+      while (dist < metric.length) {
+        dashed.addPath(
+            metric.extractPath(dist, dist + dash), Offset.zero);
+        dist += dash + gap;
+      }
+    }
+    canvas.drawPath(dashed, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant _DashedRRectPainter old) =>
+      old.color != color ||
+      old.radius != radius ||
+      old.strokeWidth != strokeWidth;
 }
 
 class _SidebarItem {

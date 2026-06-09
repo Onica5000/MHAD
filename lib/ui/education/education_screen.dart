@@ -175,7 +175,8 @@ class _EditorialLearnHub extends StatelessWidget {
         ),
         const SizedBox(height: 6),
         Text(
-          'Everything below comes verbatim from the PA MHAD booklet.',
+          'Everything below comes verbatim from the PA MHAD booklet. '
+          'No marketing, no opinions — just the rules and what they mean.',
           style: TextStyle(
             fontFamily: 'DM Sans',
             fontSize: 13.5,

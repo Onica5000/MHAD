@@ -282,6 +282,30 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
             ),
           ),
         ),
+        const SizedBox(height: 12),
+        // Validity status (artboard WebSign) — the generated PDF is NOT a
+        // legal document until it's printed and wet-signed by the principal
+        // plus two qualified witnesses.
+        Center(
+          child: Text(
+            'NOT YET VALID · BECOMES LEGAL ONCE SIGNED ON PAPER '
+            'BY YOU + 2 WITNESSES',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontFamily: 'JetBrains Mono',
+              fontFamilyFallback: const [
+                'Consolas',
+                'Menlo',
+                'Courier New',
+                'monospace',
+              ],
+              fontSize: 9.5,
+              letterSpacing: 0.6,
+              height: 1.4,
+              color: p.textMuted,
+            ),
+          ),
+        ),
       ],
     );
   }

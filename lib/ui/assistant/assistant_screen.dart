@@ -235,7 +235,7 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                     ),
                   ),
                   Text(
-                    '● ACTIVE · GEMINI 2.5 FLASH · PII STRIPPED',
+                    '● ACTIVE · GEMINI 2.5 FLASH · PII STRIPPED BEFORE SEND',
                     style: TextStyle(
                       fontFamily: 'JetBrains Mono',
                       fontFamilyFallback: const [
@@ -943,7 +943,8 @@ class _AssistantContextPanel extends StatelessWidget {
                 const SizedBox(height: 6),
                 Text(
                   'Names, addresses, phone numbers, and dates are replaced '
-                  'with placeholders before sending to Gemini.',
+                  'with placeholders before sending to Gemini. Suggestions '
+                  'come back with placeholders filled in locally.',
                   style: TextStyle(
                     fontFamily: 'DM Sans',
                     fontSize: 12,

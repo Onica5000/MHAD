@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -138,7 +139,18 @@ class _WizardCompleteScreenState extends ConsumerState<WizardCompleteScreen> {
               ],
             ),
           ),
-          const SizedBox(height: 26),
+          const SizedBox(height: 18),
+          // Web is an ephemeral anonymous session — once the tab closes there
+          // is nothing to come back to. Warn before they leave (artboard
+          // WebDone). Native sessions persist, so this is web-only.
+          if (kIsWeb)
+            const InfoBanner(
+              icon: Icons.download_outlined,
+              variant: InfoBannerVariant.warning,
+              text: 'Download before you close. Nothing is saved on our end — '
+                  'once this tab closes, your answers are gone.',
+            ),
+          const SizedBox(height: 8),
 
           // Wallet card preview
           const SectionLabel('Wallet card'),
