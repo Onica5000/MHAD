@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/ai/ai_assistant.dart';
 import 'package:mhad/services/disclaimer_service.dart';
+import 'package:mhad/services/onboarding_service.dart';
 import 'package:mhad/services/privacy_mode_service.dart';
 import 'package:mhad/ui/ai_check/ai_consistency_screen.dart';
 import 'package:mhad/ui/assistant/assistant_screen.dart';
@@ -24,6 +25,7 @@ import 'package:mhad/ui/agent_accept/agent_accept_screen.dart';
 import 'package:mhad/ui/permissions/permissions_overview_screen.dart';
 import 'package:mhad/ui/verify/wallet_verify_screen.dart';
 import 'package:mhad/ui/mode_selection/mode_selection_screen.dart';
+import 'package:mhad/ui/onboarding/onboarding_screen.dart';
 import 'package:mhad/ui/ulysses/ulysses_clause_screen.dart';
 import 'package:mhad/ui/wizard/form_type_selection_screen.dart';
 import 'package:mhad/ui/wizard/sign_screen.dart';
@@ -33,6 +35,7 @@ import 'package:mhad/ui/wizard/wizard_screen.dart';
 abstract class AppRoutes {
   static const home = '/';
   static const disclaimer = '/disclaimer';
+  static const onboarding = '/onboarding';
   static const modeSelection = '/mode';
   static const formTypeSelection = '/form-type';
   static const wizard = '/wizard/:directiveId';
@@ -99,15 +102,18 @@ abstract class AppRoutes {
 /// Must be called from [main()] before [runApp()].
 void initRouter(
     DisclaimerNotifier disclaimerNotifier,
+    OnboardingNotifier onboardingNotifier,
     PrivacyModeNotifier privacyModeNotifier) {
-  appRouter = _buildRouter(disclaimerNotifier, privacyModeNotifier);
+  appRouter =
+      _buildRouter(disclaimerNotifier, onboardingNotifier, privacyModeNotifier);
 }
 
 /// The single GoRouter instance used by [MhadApp].
-/// Defaults to "disclaimer accepted, mode already selected" — correct for
-/// widget tests that do not call [initRouter].
+/// Defaults to "disclaimer accepted, intro seen, mode already selected" —
+/// correct for widget tests that do not call [initRouter].
 GoRouter appRouter = _buildRouter(
   DisclaimerNotifier(initialValue: true),
+  OnboardingNotifier(initialValue: true),
   _defaultPrivacyMode(),
 );
 
@@ -117,11 +123,11 @@ PrivacyModeNotifier _defaultPrivacyMode() {
   return n;
 }
 
-GoRouter _buildRouter(
-    DisclaimerNotifier disclaimer, PrivacyModeNotifier privacy) =>
+GoRouter _buildRouter(DisclaimerNotifier disclaimer,
+        OnboardingNotifier onboarding, PrivacyModeNotifier privacy) =>
     GoRouter(
       initialLocation: AppRoutes.home,
-      refreshListenable: Listenable.merge([disclaimer, privacy]),
+      refreshListenable: Listenable.merge([disclaimer, onboarding, privacy]),
       redirect: (context, state) {
         final loc = state.matchedLocation;
 
@@ -145,6 +151,14 @@ GoRouter _buildRouter(
         // Mode selected: bounce away from mode-selection screen
         if (loc == AppRoutes.modeSelection) return AppRoutes.home;
 
+        // Step 3 — First-touch "In your words" intro. A real route gate (not
+        // an overlay over Home) so nothing renders between the disclaimer and
+        // the intro. The intro's CTAs navigate on explicitly, so we don't
+        // force a bounce off /onboarding here once it's complete.
+        if (!onboarding.completed && loc != AppRoutes.onboarding) {
+          return AppRoutes.onboarding;
+        }
+
         return null;
       },
       routes: [
@@ -155,6 +169,10 @@ GoRouter _buildRouter(
         GoRoute(
           path: AppRoutes.modeSelection,
           builder: (_, _) => ModeSelectionScreen(notifier: privacy),
+        ),
+        GoRoute(
+          path: AppRoutes.onboarding,
+          builder: (_, _) => OnboardingScreen(notifier: onboarding),
         ),
         GoRoute(
           path: AppRoutes.home,

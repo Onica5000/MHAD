@@ -6,6 +6,7 @@ import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/main.dart' show MhadApp;
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/services/disclaimer_service.dart';
+import 'package:mhad/services/onboarding_service.dart';
 import 'package:mhad/services/privacy_mode_service.dart';
 import 'package:mhad/ui/router.dart';
 
@@ -35,6 +36,7 @@ void main() {
       (tester) async {
     initRouter(
       DisclaimerNotifier(initialValue: false),
+      OnboardingNotifier(initialValue: true),
       PrivacyModeNotifier()..setPublicMode(),
     );
     final db = AppDatabase(NativeDatabase.memory());
@@ -49,6 +51,7 @@ void main() {
       (tester) async {
     initRouter(
       DisclaimerNotifier(initialValue: true),
+      OnboardingNotifier(initialValue: true),
       PrivacyModeNotifier(), // notSelected
     );
     final db = AppDatabase(NativeDatabase.memory());
@@ -64,6 +67,7 @@ void main() {
   testWidgets('accepted disclaimer + public mode lands on /', (tester) async {
     initRouter(
       DisclaimerNotifier(initialValue: true),
+      OnboardingNotifier(initialValue: true),
       PrivacyModeNotifier()..setPublicMode(),
     );
     final db = AppDatabase(NativeDatabase.memory());
@@ -78,6 +82,7 @@ void main() {
       (tester) async {
     initRouter(
       DisclaimerNotifier(initialValue: true),
+      OnboardingNotifier(initialValue: true),
       PrivacyModeNotifier()..setPublicMode(),
     );
     final db = AppDatabase(NativeDatabase.memory());

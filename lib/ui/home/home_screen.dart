@@ -13,7 +13,6 @@ import 'package:mhad/services/notification_service.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/home/web_landing.dart';
-import 'package:mhad/ui/onboarding/onboarding_screen.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/bottom_nav.dart';
 import 'package:mhad/ui/widgets/design/crisis_sheet.dart';
@@ -32,39 +31,17 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   static bool _checkedDraftRecovery = false;
 
-  /// On the first Home build of a web session the "In your words" intro is
-  /// pushed as an overlay from the post-frame callback below. Without this
-  /// gate the dashboard paints for a frame and then gets covered, which the
-  /// user sees as a page "flashing" before the intro. While this is true the
-  /// build renders a blank surface (matching the intro's background) so the
-  /// transition is seamless; it flips false once the intro is dismissed.
-  bool _gateForOnboarding = false;
-
   @override
   void initState() {
     super.initState();
-    final firstVisit = !_checkedDraftRecovery;
-    // The intro shows on every web visit (isCompleted() is always false on
-    // web), so on the first Home build of the session we can synchronously
-    // decide to gate. Native first-launch keeps its existing behaviour.
-    _gateForOnboarding = kIsWeb && firstVisit;
-    if (firstVisit) {
+    if (!_checkedDraftRecovery) {
       _checkedDraftRecovery = true;
+      // The "In your words" intro is no longer pushed from here — it's a
+      // router gate ([AppRoutes.onboarding]) that runs before Home, so by the
+      // time this screen builds the intro is already done. This callback now
+      // just handles session restore + draft recovery + reminders.
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         if (!mounted) return;
-        final onboarded = await OnboardingScreen.isCompleted();
-        if (!onboarded && mounted) {
-          await Navigator.of(context).push(MaterialPageRoute(
-            fullscreenDialog: true,
-            builder: (_) => OnboardingScreen(
-              onComplete: () => Navigator.of(context).pop(),
-            ),
-          ));
-        }
-        // Intro dismissed (or not needed) — reveal the dashboard.
-        if (mounted && _gateForOnboarding) {
-          setState(() => _gateForOnboarding = false);
-        }
         if (kIsWeb && mounted) {
           await _tryWebSessionRestore();
         }
@@ -79,16 +56,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final p = Theme.of(context).mhadPalette;
-
-    // Hold a blank surface (the intro's own background) until the "In your
-    // words" overlay is up, so the dashboard never flashes behind it.
-    if (_gateForOnboarding) {
-      return Scaffold(backgroundColor: p.surface);
-    }
-
     final directivesAsync = ref.watch(allDirectivesProvider);
     final privacyMode = ref.watch(privacyModeNotifierProvider);
+    final p = Theme.of(context).mhadPalette;
 
     final dateLabel = DateFormat('EEEE · MMMM d').format(DateTime.now());
 

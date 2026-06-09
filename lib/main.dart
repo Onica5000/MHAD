@@ -11,6 +11,7 @@ import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/services/database_encryption_service.dart';
 import 'package:mhad/services/disclaimer_service.dart';
 import 'package:mhad/services/notification_service.dart';
+import 'package:mhad/services/onboarding_service.dart';
 import 'package:mhad/services/privacy_mode_service.dart';
 import 'package:mhad/services/public_session_cache.dart';
 import 'package:mhad/ui/router.dart';
@@ -39,8 +40,9 @@ void main() {
         DeviceOrientation.portraitDown,
       ]);
     }
-    // Load persisted disclaimer state
+    // Load persisted disclaimer + onboarding state
     final disclaimerNotifier = await DisclaimerNotifier.load();
+    final onboardingNotifier = await OnboardingNotifier.load();
 
     // Resolve database encryption key from secure storage (generates on first
     // launch). This must complete before runApp so the key is available
@@ -55,8 +57,8 @@ void main() {
     // Privacy mode starts fresh every launch (not persisted)
     final privacyModeNotifier = PrivacyModeNotifier();
 
-    // Wire both notifiers into the router before runApp
-    initRouter(disclaimerNotifier, privacyModeNotifier);
+    // Wire the gate notifiers into the router before runApp
+    initRouter(disclaimerNotifier, onboardingNotifier, privacyModeNotifier);
 
     // Non-fatal background init
     await NotificationService.instance.initialize();

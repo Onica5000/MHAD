@@ -1,13 +1,10 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mhad/services/onboarding_service.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-const _prefKey = 'onboarding_completed';
 
 /// First-touch welcome — prototype-exact rebuild of mobile.jsx::ScrWelcome
 /// (L37-96).
@@ -16,44 +13,34 @@ const _prefKey = 'onboarding_completed';
 /// section label, 68pt italic-serif "In your / **words.**" headline,
 /// muted lead paragraph, four value chips, then two CTAs:
 ///
-///   * Primary "Get started" — saves the onboarded flag and dismisses,
-///     dropping the user on Home (where they pick a form type).
-///   * Ghost "I already have a directive" — saves the flag and routes
+///   * Primary "Get started" — marks the intro seen and continues to Home
+///     (where they pick a form type).
+///   * Ghost "I already have a directive" — marks it seen and routes
 ///     straight to the form-type selector, mirroring the prototype's
 ///     intent that returning users can jump to a new draft without
 ///     re-reading the intro.
+///
+/// This is a router gate ([AppRoutes.onboarding]) shown after the disclaimer
+/// and mode gates — *not* an overlay over Home — so nothing renders between
+/// the disclaimer and the intro. Completion is tracked by [OnboardingNotifier]
+/// (the router's [GoRouter.refreshListenable]); on web it re-shows every visit.
 ///
 /// The earlier 4-page PageView (What to Include / What to Have Ready /
 /// Time expectation) was removed 2026-06-03 per direction "match the
 /// claude design UI/UX EXACTLY." That content remains discoverable
 /// through the Learn screen.
 class OnboardingScreen extends StatelessWidget {
-  final VoidCallback onComplete;
-  const OnboardingScreen({required this.onComplete, super.key});
+  final OnboardingNotifier notifier;
+  const OnboardingScreen({required this.notifier, super.key});
 
-  /// Returns true if onboarding has been completed.
-  static Future<bool> isCompleted() async {
-    // On web the session is ephemeral (public mode, nothing persisted), so the
-    // "In your words" intro shows every visit — same policy as the disclaimer.
-    if (kIsWeb) return false;
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool(_prefKey) ?? false;
-  }
-
-  Future<void> _markCompleted() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(_prefKey, true);
-  }
-
-  Future<void> _getStarted() async {
-    await _markCompleted();
-    onComplete();
+  Future<void> _getStarted(BuildContext context) async {
+    await notifier.complete();
+    if (!context.mounted) return;
+    context.go(AppRoutes.home);
   }
 
   Future<void> _alreadyHave(BuildContext context) async {
-    await _markCompleted();
-    if (!context.mounted) return;
-    onComplete();
+    await notifier.complete();
     if (!context.mounted) return;
     context.go(AppRoutes.formTypeSelection);
   }
@@ -224,7 +211,7 @@ class OnboardingScreen extends StatelessWidget {
                   SizedBox(
                     width: double.infinity,
                     child: FilledButton.icon(
-                      onPressed: _getStarted,
+                      onPressed: () => _getStarted(context),
                       icon: const Icon(Icons.arrow_forward, size: 18),
                       label: const Text('Get started'),
                       style: FilledButton.styleFrom(
