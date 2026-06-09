@@ -375,6 +375,20 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         _directive?.updatedAt,
       ].join('|');
 
+  Agent? get _primaryAgent {
+    for (final a in _agents) {
+      if (a.agentType == 'primary') return a;
+    }
+    return null;
+  }
+
+  String _agentPhoneFor(Agent? a) {
+    if (a == null) return '';
+    if (a.cellPhone.trim().isNotEmpty) return a.cellPhone.trim();
+    if (a.homePhone.trim().isNotEmpty) return a.homePhone.trim();
+    return a.workPhone.trim();
+  }
+
   /// Inline live PDF preview for the wide export layout (artboard `w-export`
   /// left pane). Re-renders when the section selection changes.
   Widget _inlinePdfPreview(MhadPalette p) {
@@ -697,11 +711,11 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
     final distributionChildren = <Widget>[
           Semantics(
             button: true,
-            label: 'Share or print the PDF directive (unencrypted file)',
-            child: OutlinedButton.icon(
+            label: 'Download or print the PDF directive (unencrypted file)',
+            child: FilledButton.icon(
               onPressed: _isGenerating ? null : _generateAndShare,
-              icon: const Icon(Icons.share),
-              label: const Text('Share / Print'),
+              icon: const Icon(Icons.download),
+              label: const Text('Download PDF'),
             ),
           ),
           const SizedBox(height: 12),
@@ -720,7 +734,11 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
               ),
             ),
             const SizedBox(height: 8),
-            _WalletCardPreview(directive: _directive!),
+            _WalletCardPreview(
+              directive: _directive!,
+              agentName: _primaryAgent?.fullName,
+              agentPhone: _agentPhoneFor(_primaryAgent),
+            ),
             const SizedBox(height: 10),
           ],
           Semantics(
@@ -1539,7 +1557,20 @@ class _PdfPreviewScreen extends StatelessWidget {
 /// [WalletCardGenerator] via the "Generate Wallet Card" button.
 class _WalletCardPreview extends StatelessWidget {
   final Directive directive;
-  const _WalletCardPreview({required this.directive});
+  final String? agentName;
+  final String? agentPhone;
+  const _WalletCardPreview({
+    required this.directive,
+    this.agentName,
+    this.agentPhone,
+  });
+
+  String? _agentLine() {
+    final name = agentName?.trim() ?? '';
+    if (name.isEmpty) return null;
+    final phone = agentPhone?.trim() ?? '';
+    return phone.isEmpty ? 'Agent: $name' : 'Agent: $name · $phone';
+  }
 
   String _typeLabel() {
     switch (directive.formType) {
@@ -1630,6 +1661,19 @@ class _WalletCardPreview extends StatelessWidget {
                       color: p.onPrimary.withValues(alpha: 0.85),
                     ),
                   ),
+                  if (_agentLine() != null) ...[
+                    const SizedBox(height: 2),
+                    Text(
+                      _agentLine()!,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontFamily: 'DM Sans',
+                        fontSize: 10.5,
+                        color: p.onPrimary.withValues(alpha: 0.85),
+                      ),
+                    ),
+                  ],
                   const SizedBox(height: 10),
                   Container(
                     height: 36,
