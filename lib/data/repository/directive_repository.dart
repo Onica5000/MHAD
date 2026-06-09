@@ -31,6 +31,7 @@ class DirectiveRepository {
     required String address,
     required String address2,
     required String city,
+    String county = '',
     required String state,
     required String zip,
     required String phone,
@@ -42,6 +43,7 @@ class DirectiveRepository {
           address: Value(address),
           address2: Value(address2),
           city: Value(city),
+          county: Value(county),
           state: Value(state),
           zip: Value(zip),
           phone: Value(phone),
@@ -57,10 +59,24 @@ class DirectiveRepository {
         ),
       );
 
-  Future<void> updateEffectiveCondition(int id, String condition) =>
+  Future<void> updateEffectiveCondition(
+    int id,
+    String condition, {
+    bool? twoProfessionals,
+    bool? courtOrder,
+    bool? involuntaryCommitment,
+  }) =>
       (_db.update(_db.directives)..where((t) => t.id.equals(id))).write(
         DirectivesCompanion(
           effectiveCondition: Value(condition),
+          triggerTwoProfessionals: twoProfessionals == null
+              ? const Value.absent()
+              : Value(twoProfessionals),
+          triggerCourtOrder:
+              courtOrder == null ? const Value.absent() : Value(courtOrder),
+          triggerInvoluntaryCommitment: involuntaryCommitment == null
+              ? const Value.absent()
+              : Value(involuntaryCommitment),
           updatedAt: Value(DateTime.now().millisecondsSinceEpoch),
         ),
       );
@@ -274,6 +290,9 @@ class DirectiveRepository {
       'formType': d.formType,
       'lastStepIndex': d.lastStepIndex,
       'effectiveCondition': d.effectiveCondition,
+      'triggerTwoProfessionals': d.triggerTwoProfessionals,
+      'triggerCourtOrder': d.triggerCourtOrder,
+      'triggerInvoluntaryCommitment': d.triggerInvoluntaryCommitment,
       'preferredDoctorName': d.preferredDoctorName,
       'preferredDoctorContact': d.preferredDoctorContact,
       if (prefs != null) 'prefs': {
@@ -348,7 +367,18 @@ class DirectiveRepository {
 
     // Directive fields
     final ec = snap['effectiveCondition']?.toString() ?? '';
-    if (ec.isNotEmpty) await updateEffectiveCondition(id, ec);
+    final tTwo = snap['triggerTwoProfessionals'] == true;
+    final tCourt = snap['triggerCourtOrder'] == true;
+    final tCommit = snap['triggerInvoluntaryCommitment'] == true;
+    if (ec.isNotEmpty || tTwo || tCourt || tCommit) {
+      await updateEffectiveCondition(
+        id,
+        ec,
+        twoProfessionals: tTwo,
+        courtOrder: tCourt,
+        involuntaryCommitment: tCommit,
+      );
+    }
     final docName = snap['preferredDoctorName']?.toString() ?? '';
     final docContact = snap['preferredDoctorContact']?.toString() ?? '';
     if (docName.isNotEmpty || docContact.isNotEmpty) {

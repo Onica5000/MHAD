@@ -145,6 +145,16 @@ class $DirectivesTable extends Directives
     requiredDuringInsert: false,
     defaultValue: const Constant(''),
   );
+  static const VerificationMeta _countyMeta = const VerificationMeta('county');
+  @override
+  late final GeneratedColumn<String> county = GeneratedColumn<String>(
+    'county',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
   static const VerificationMeta _stateMeta = const VerificationMeta('state');
   @override
   late final GeneratedColumn<String> state = GeneratedColumn<String>(
@@ -186,6 +196,51 @@ class $DirectivesTable extends Directives
         type: DriftSqlType.string,
         requiredDuringInsert: false,
         defaultValue: const Constant(''),
+      );
+  static const VerificationMeta _triggerTwoProfessionalsMeta =
+      const VerificationMeta('triggerTwoProfessionals');
+  @override
+  late final GeneratedColumn<bool> triggerTwoProfessionals =
+      GeneratedColumn<bool>(
+        'trigger_two_professionals',
+        aliasedName,
+        false,
+        type: DriftSqlType.bool,
+        requiredDuringInsert: false,
+        defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("trigger_two_professionals" IN (0, 1))',
+        ),
+        defaultValue: const Constant(false),
+      );
+  static const VerificationMeta _triggerCourtOrderMeta = const VerificationMeta(
+    'triggerCourtOrder',
+  );
+  @override
+  late final GeneratedColumn<bool> triggerCourtOrder = GeneratedColumn<bool>(
+    'trigger_court_order',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("trigger_court_order" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _triggerInvoluntaryCommitmentMeta =
+      const VerificationMeta('triggerInvoluntaryCommitment');
+  @override
+  late final GeneratedColumn<bool> triggerInvoluntaryCommitment =
+      GeneratedColumn<bool>(
+        'trigger_involuntary_commitment',
+        aliasedName,
+        false,
+        type: DriftSqlType.bool,
+        requiredDuringInsert: false,
+        defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("trigger_involuntary_commitment" IN (0, 1))',
+        ),
+        defaultValue: const Constant(false),
       );
   static const VerificationMeta _preferredDoctorNameMeta =
       const VerificationMeta('preferredDoctorName');
@@ -237,10 +292,14 @@ class $DirectivesTable extends Directives
     address,
     address2,
     city,
+    county,
     state,
     zip,
     phone,
     effectiveCondition,
+    triggerTwoProfessionals,
+    triggerCourtOrder,
+    triggerInvoluntaryCommitment,
     preferredDoctorName,
     preferredDoctorContact,
     lastStepIndex,
@@ -341,6 +400,12 @@ class $DirectivesTable extends Directives
         city.isAcceptableOrUnknown(data['city']!, _cityMeta),
       );
     }
+    if (data.containsKey('county')) {
+      context.handle(
+        _countyMeta,
+        county.isAcceptableOrUnknown(data['county']!, _countyMeta),
+      );
+    }
     if (data.containsKey('state')) {
       context.handle(
         _stateMeta,
@@ -365,6 +430,33 @@ class $DirectivesTable extends Directives
         effectiveCondition.isAcceptableOrUnknown(
           data['effective_condition']!,
           _effectiveConditionMeta,
+        ),
+      );
+    }
+    if (data.containsKey('trigger_two_professionals')) {
+      context.handle(
+        _triggerTwoProfessionalsMeta,
+        triggerTwoProfessionals.isAcceptableOrUnknown(
+          data['trigger_two_professionals']!,
+          _triggerTwoProfessionalsMeta,
+        ),
+      );
+    }
+    if (data.containsKey('trigger_court_order')) {
+      context.handle(
+        _triggerCourtOrderMeta,
+        triggerCourtOrder.isAcceptableOrUnknown(
+          data['trigger_court_order']!,
+          _triggerCourtOrderMeta,
+        ),
+      );
+    }
+    if (data.containsKey('trigger_involuntary_commitment')) {
+      context.handle(
+        _triggerInvoluntaryCommitmentMeta,
+        triggerInvoluntaryCommitment.isAcceptableOrUnknown(
+          data['trigger_involuntary_commitment']!,
+          _triggerInvoluntaryCommitmentMeta,
         ),
       );
     }
@@ -452,6 +544,10 @@ class $DirectivesTable extends Directives
         DriftSqlType.string,
         data['${effectivePrefix}city'],
       )!,
+      county: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}county'],
+      )!,
       state: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}state'],
@@ -467,6 +563,18 @@ class $DirectivesTable extends Directives
       effectiveCondition: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}effective_condition'],
+      )!,
+      triggerTwoProfessionals: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}trigger_two_professionals'],
+      )!,
+      triggerCourtOrder: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}trigger_court_order'],
+      )!,
+      triggerInvoluntaryCommitment: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}trigger_involuntary_commitment'],
       )!,
       preferredDoctorName: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
@@ -502,10 +610,14 @@ class Directive extends DataClass implements Insertable<Directive> {
   final String address;
   final String address2;
   final String city;
+  final String county;
   final String state;
   final String zip;
   final String phone;
   final String effectiveCondition;
+  final bool triggerTwoProfessionals;
+  final bool triggerCourtOrder;
+  final bool triggerInvoluntaryCommitment;
   final String preferredDoctorName;
   final String preferredDoctorContact;
   final int lastStepIndex;
@@ -522,10 +634,14 @@ class Directive extends DataClass implements Insertable<Directive> {
     required this.address,
     required this.address2,
     required this.city,
+    required this.county,
     required this.state,
     required this.zip,
     required this.phone,
     required this.effectiveCondition,
+    required this.triggerTwoProfessionals,
+    required this.triggerCourtOrder,
+    required this.triggerInvoluntaryCommitment,
     required this.preferredDoctorName,
     required this.preferredDoctorContact,
     required this.lastStepIndex,
@@ -549,10 +665,16 @@ class Directive extends DataClass implements Insertable<Directive> {
     map['address'] = Variable<String>(address);
     map['address2'] = Variable<String>(address2);
     map['city'] = Variable<String>(city);
+    map['county'] = Variable<String>(county);
     map['state'] = Variable<String>(state);
     map['zip'] = Variable<String>(zip);
     map['phone'] = Variable<String>(phone);
     map['effective_condition'] = Variable<String>(effectiveCondition);
+    map['trigger_two_professionals'] = Variable<bool>(triggerTwoProfessionals);
+    map['trigger_court_order'] = Variable<bool>(triggerCourtOrder);
+    map['trigger_involuntary_commitment'] = Variable<bool>(
+      triggerInvoluntaryCommitment,
+    );
     map['preferred_doctor_name'] = Variable<String>(preferredDoctorName);
     map['preferred_doctor_contact'] = Variable<String>(preferredDoctorContact);
     map['last_step_index'] = Variable<int>(lastStepIndex);
@@ -577,10 +699,14 @@ class Directive extends DataClass implements Insertable<Directive> {
       address: Value(address),
       address2: Value(address2),
       city: Value(city),
+      county: Value(county),
       state: Value(state),
       zip: Value(zip),
       phone: Value(phone),
       effectiveCondition: Value(effectiveCondition),
+      triggerTwoProfessionals: Value(triggerTwoProfessionals),
+      triggerCourtOrder: Value(triggerCourtOrder),
+      triggerInvoluntaryCommitment: Value(triggerInvoluntaryCommitment),
       preferredDoctorName: Value(preferredDoctorName),
       preferredDoctorContact: Value(preferredDoctorContact),
       lastStepIndex: Value(lastStepIndex),
@@ -605,11 +731,19 @@ class Directive extends DataClass implements Insertable<Directive> {
       address: serializer.fromJson<String>(json['address']),
       address2: serializer.fromJson<String>(json['address2']),
       city: serializer.fromJson<String>(json['city']),
+      county: serializer.fromJson<String>(json['county']),
       state: serializer.fromJson<String>(json['state']),
       zip: serializer.fromJson<String>(json['zip']),
       phone: serializer.fromJson<String>(json['phone']),
       effectiveCondition: serializer.fromJson<String>(
         json['effectiveCondition'],
+      ),
+      triggerTwoProfessionals: serializer.fromJson<bool>(
+        json['triggerTwoProfessionals'],
+      ),
+      triggerCourtOrder: serializer.fromJson<bool>(json['triggerCourtOrder']),
+      triggerInvoluntaryCommitment: serializer.fromJson<bool>(
+        json['triggerInvoluntaryCommitment'],
       ),
       preferredDoctorName: serializer.fromJson<String>(
         json['preferredDoctorName'],
@@ -636,10 +770,18 @@ class Directive extends DataClass implements Insertable<Directive> {
       'address': serializer.toJson<String>(address),
       'address2': serializer.toJson<String>(address2),
       'city': serializer.toJson<String>(city),
+      'county': serializer.toJson<String>(county),
       'state': serializer.toJson<String>(state),
       'zip': serializer.toJson<String>(zip),
       'phone': serializer.toJson<String>(phone),
       'effectiveCondition': serializer.toJson<String>(effectiveCondition),
+      'triggerTwoProfessionals': serializer.toJson<bool>(
+        triggerTwoProfessionals,
+      ),
+      'triggerCourtOrder': serializer.toJson<bool>(triggerCourtOrder),
+      'triggerInvoluntaryCommitment': serializer.toJson<bool>(
+        triggerInvoluntaryCommitment,
+      ),
       'preferredDoctorName': serializer.toJson<String>(preferredDoctorName),
       'preferredDoctorContact': serializer.toJson<String>(
         preferredDoctorContact,
@@ -661,10 +803,14 @@ class Directive extends DataClass implements Insertable<Directive> {
     String? address,
     String? address2,
     String? city,
+    String? county,
     String? state,
     String? zip,
     String? phone,
     String? effectiveCondition,
+    bool? triggerTwoProfessionals,
+    bool? triggerCourtOrder,
+    bool? triggerInvoluntaryCommitment,
     String? preferredDoctorName,
     String? preferredDoctorContact,
     int? lastStepIndex,
@@ -685,10 +831,16 @@ class Directive extends DataClass implements Insertable<Directive> {
     address: address ?? this.address,
     address2: address2 ?? this.address2,
     city: city ?? this.city,
+    county: county ?? this.county,
     state: state ?? this.state,
     zip: zip ?? this.zip,
     phone: phone ?? this.phone,
     effectiveCondition: effectiveCondition ?? this.effectiveCondition,
+    triggerTwoProfessionals:
+        triggerTwoProfessionals ?? this.triggerTwoProfessionals,
+    triggerCourtOrder: triggerCourtOrder ?? this.triggerCourtOrder,
+    triggerInvoluntaryCommitment:
+        triggerInvoluntaryCommitment ?? this.triggerInvoluntaryCommitment,
     preferredDoctorName: preferredDoctorName ?? this.preferredDoctorName,
     preferredDoctorContact:
         preferredDoctorContact ?? this.preferredDoctorContact,
@@ -714,12 +866,22 @@ class Directive extends DataClass implements Insertable<Directive> {
       address: data.address.present ? data.address.value : this.address,
       address2: data.address2.present ? data.address2.value : this.address2,
       city: data.city.present ? data.city.value : this.city,
+      county: data.county.present ? data.county.value : this.county,
       state: data.state.present ? data.state.value : this.state,
       zip: data.zip.present ? data.zip.value : this.zip,
       phone: data.phone.present ? data.phone.value : this.phone,
       effectiveCondition: data.effectiveCondition.present
           ? data.effectiveCondition.value
           : this.effectiveCondition,
+      triggerTwoProfessionals: data.triggerTwoProfessionals.present
+          ? data.triggerTwoProfessionals.value
+          : this.triggerTwoProfessionals,
+      triggerCourtOrder: data.triggerCourtOrder.present
+          ? data.triggerCourtOrder.value
+          : this.triggerCourtOrder,
+      triggerInvoluntaryCommitment: data.triggerInvoluntaryCommitment.present
+          ? data.triggerInvoluntaryCommitment.value
+          : this.triggerInvoluntaryCommitment,
       preferredDoctorName: data.preferredDoctorName.present
           ? data.preferredDoctorName.value
           : this.preferredDoctorName,
@@ -747,10 +909,16 @@ class Directive extends DataClass implements Insertable<Directive> {
           ..write('address: $address, ')
           ..write('address2: $address2, ')
           ..write('city: $city, ')
+          ..write('county: $county, ')
           ..write('state: $state, ')
           ..write('zip: $zip, ')
           ..write('phone: $phone, ')
           ..write('effectiveCondition: $effectiveCondition, ')
+          ..write('triggerTwoProfessionals: $triggerTwoProfessionals, ')
+          ..write('triggerCourtOrder: $triggerCourtOrder, ')
+          ..write(
+            'triggerInvoluntaryCommitment: $triggerInvoluntaryCommitment, ',
+          )
           ..write('preferredDoctorName: $preferredDoctorName, ')
           ..write('preferredDoctorContact: $preferredDoctorContact, ')
           ..write('lastStepIndex: $lastStepIndex')
@@ -759,7 +927,7 @@ class Directive extends DataClass implements Insertable<Directive> {
   }
 
   @override
-  int get hashCode => Object.hash(
+  int get hashCode => Object.hashAll([
     id,
     formType,
     status,
@@ -772,14 +940,18 @@ class Directive extends DataClass implements Insertable<Directive> {
     address,
     address2,
     city,
+    county,
     state,
     zip,
     phone,
     effectiveCondition,
+    triggerTwoProfessionals,
+    triggerCourtOrder,
+    triggerInvoluntaryCommitment,
     preferredDoctorName,
     preferredDoctorContact,
     lastStepIndex,
-  );
+  ]);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -796,10 +968,15 @@ class Directive extends DataClass implements Insertable<Directive> {
           other.address == this.address &&
           other.address2 == this.address2 &&
           other.city == this.city &&
+          other.county == this.county &&
           other.state == this.state &&
           other.zip == this.zip &&
           other.phone == this.phone &&
           other.effectiveCondition == this.effectiveCondition &&
+          other.triggerTwoProfessionals == this.triggerTwoProfessionals &&
+          other.triggerCourtOrder == this.triggerCourtOrder &&
+          other.triggerInvoluntaryCommitment ==
+              this.triggerInvoluntaryCommitment &&
           other.preferredDoctorName == this.preferredDoctorName &&
           other.preferredDoctorContact == this.preferredDoctorContact &&
           other.lastStepIndex == this.lastStepIndex);
@@ -818,10 +995,14 @@ class DirectivesCompanion extends UpdateCompanion<Directive> {
   final Value<String> address;
   final Value<String> address2;
   final Value<String> city;
+  final Value<String> county;
   final Value<String> state;
   final Value<String> zip;
   final Value<String> phone;
   final Value<String> effectiveCondition;
+  final Value<bool> triggerTwoProfessionals;
+  final Value<bool> triggerCourtOrder;
+  final Value<bool> triggerInvoluntaryCommitment;
   final Value<String> preferredDoctorName;
   final Value<String> preferredDoctorContact;
   final Value<int> lastStepIndex;
@@ -838,10 +1019,14 @@ class DirectivesCompanion extends UpdateCompanion<Directive> {
     this.address = const Value.absent(),
     this.address2 = const Value.absent(),
     this.city = const Value.absent(),
+    this.county = const Value.absent(),
     this.state = const Value.absent(),
     this.zip = const Value.absent(),
     this.phone = const Value.absent(),
     this.effectiveCondition = const Value.absent(),
+    this.triggerTwoProfessionals = const Value.absent(),
+    this.triggerCourtOrder = const Value.absent(),
+    this.triggerInvoluntaryCommitment = const Value.absent(),
     this.preferredDoctorName = const Value.absent(),
     this.preferredDoctorContact = const Value.absent(),
     this.lastStepIndex = const Value.absent(),
@@ -859,10 +1044,14 @@ class DirectivesCompanion extends UpdateCompanion<Directive> {
     this.address = const Value.absent(),
     this.address2 = const Value.absent(),
     this.city = const Value.absent(),
+    this.county = const Value.absent(),
     this.state = const Value.absent(),
     this.zip = const Value.absent(),
     this.phone = const Value.absent(),
     this.effectiveCondition = const Value.absent(),
+    this.triggerTwoProfessionals = const Value.absent(),
+    this.triggerCourtOrder = const Value.absent(),
+    this.triggerInvoluntaryCommitment = const Value.absent(),
     this.preferredDoctorName = const Value.absent(),
     this.preferredDoctorContact = const Value.absent(),
     this.lastStepIndex = const Value.absent(),
@@ -882,10 +1071,14 @@ class DirectivesCompanion extends UpdateCompanion<Directive> {
     Expression<String>? address,
     Expression<String>? address2,
     Expression<String>? city,
+    Expression<String>? county,
     Expression<String>? state,
     Expression<String>? zip,
     Expression<String>? phone,
     Expression<String>? effectiveCondition,
+    Expression<bool>? triggerTwoProfessionals,
+    Expression<bool>? triggerCourtOrder,
+    Expression<bool>? triggerInvoluntaryCommitment,
     Expression<String>? preferredDoctorName,
     Expression<String>? preferredDoctorContact,
     Expression<int>? lastStepIndex,
@@ -903,10 +1096,16 @@ class DirectivesCompanion extends UpdateCompanion<Directive> {
       if (address != null) 'address': address,
       if (address2 != null) 'address2': address2,
       if (city != null) 'city': city,
+      if (county != null) 'county': county,
       if (state != null) 'state': state,
       if (zip != null) 'zip': zip,
       if (phone != null) 'phone': phone,
       if (effectiveCondition != null) 'effective_condition': effectiveCondition,
+      if (triggerTwoProfessionals != null)
+        'trigger_two_professionals': triggerTwoProfessionals,
+      if (triggerCourtOrder != null) 'trigger_court_order': triggerCourtOrder,
+      if (triggerInvoluntaryCommitment != null)
+        'trigger_involuntary_commitment': triggerInvoluntaryCommitment,
       if (preferredDoctorName != null)
         'preferred_doctor_name': preferredDoctorName,
       if (preferredDoctorContact != null)
@@ -928,10 +1127,14 @@ class DirectivesCompanion extends UpdateCompanion<Directive> {
     Value<String>? address,
     Value<String>? address2,
     Value<String>? city,
+    Value<String>? county,
     Value<String>? state,
     Value<String>? zip,
     Value<String>? phone,
     Value<String>? effectiveCondition,
+    Value<bool>? triggerTwoProfessionals,
+    Value<bool>? triggerCourtOrder,
+    Value<bool>? triggerInvoluntaryCommitment,
     Value<String>? preferredDoctorName,
     Value<String>? preferredDoctorContact,
     Value<int>? lastStepIndex,
@@ -949,10 +1152,16 @@ class DirectivesCompanion extends UpdateCompanion<Directive> {
       address: address ?? this.address,
       address2: address2 ?? this.address2,
       city: city ?? this.city,
+      county: county ?? this.county,
       state: state ?? this.state,
       zip: zip ?? this.zip,
       phone: phone ?? this.phone,
       effectiveCondition: effectiveCondition ?? this.effectiveCondition,
+      triggerTwoProfessionals:
+          triggerTwoProfessionals ?? this.triggerTwoProfessionals,
+      triggerCourtOrder: triggerCourtOrder ?? this.triggerCourtOrder,
+      triggerInvoluntaryCommitment:
+          triggerInvoluntaryCommitment ?? this.triggerInvoluntaryCommitment,
       preferredDoctorName: preferredDoctorName ?? this.preferredDoctorName,
       preferredDoctorContact:
           preferredDoctorContact ?? this.preferredDoctorContact,
@@ -999,6 +1208,9 @@ class DirectivesCompanion extends UpdateCompanion<Directive> {
     if (city.present) {
       map['city'] = Variable<String>(city.value);
     }
+    if (county.present) {
+      map['county'] = Variable<String>(county.value);
+    }
     if (state.present) {
       map['state'] = Variable<String>(state.value);
     }
@@ -1010,6 +1222,19 @@ class DirectivesCompanion extends UpdateCompanion<Directive> {
     }
     if (effectiveCondition.present) {
       map['effective_condition'] = Variable<String>(effectiveCondition.value);
+    }
+    if (triggerTwoProfessionals.present) {
+      map['trigger_two_professionals'] = Variable<bool>(
+        triggerTwoProfessionals.value,
+      );
+    }
+    if (triggerCourtOrder.present) {
+      map['trigger_court_order'] = Variable<bool>(triggerCourtOrder.value);
+    }
+    if (triggerInvoluntaryCommitment.present) {
+      map['trigger_involuntary_commitment'] = Variable<bool>(
+        triggerInvoluntaryCommitment.value,
+      );
     }
     if (preferredDoctorName.present) {
       map['preferred_doctor_name'] = Variable<String>(
@@ -1042,10 +1267,16 @@ class DirectivesCompanion extends UpdateCompanion<Directive> {
           ..write('address: $address, ')
           ..write('address2: $address2, ')
           ..write('city: $city, ')
+          ..write('county: $county, ')
           ..write('state: $state, ')
           ..write('zip: $zip, ')
           ..write('phone: $phone, ')
           ..write('effectiveCondition: $effectiveCondition, ')
+          ..write('triggerTwoProfessionals: $triggerTwoProfessionals, ')
+          ..write('triggerCourtOrder: $triggerCourtOrder, ')
+          ..write(
+            'triggerInvoluntaryCommitment: $triggerInvoluntaryCommitment, ',
+          )
           ..write('preferredDoctorName: $preferredDoctorName, ')
           ..write('preferredDoctorContact: $preferredDoctorContact, ')
           ..write('lastStepIndex: $lastStepIndex')
@@ -5950,10 +6181,14 @@ typedef $$DirectivesTableCreateCompanionBuilder =
       Value<String> address,
       Value<String> address2,
       Value<String> city,
+      Value<String> county,
       Value<String> state,
       Value<String> zip,
       Value<String> phone,
       Value<String> effectiveCondition,
+      Value<bool> triggerTwoProfessionals,
+      Value<bool> triggerCourtOrder,
+      Value<bool> triggerInvoluntaryCommitment,
       Value<String> preferredDoctorName,
       Value<String> preferredDoctorContact,
       Value<int> lastStepIndex,
@@ -5972,10 +6207,14 @@ typedef $$DirectivesTableUpdateCompanionBuilder =
       Value<String> address,
       Value<String> address2,
       Value<String> city,
+      Value<String> county,
       Value<String> state,
       Value<String> zip,
       Value<String> phone,
       Value<String> effectiveCondition,
+      Value<bool> triggerTwoProfessionals,
+      Value<bool> triggerCourtOrder,
+      Value<bool> triggerInvoluntaryCommitment,
       Value<String> preferredDoctorName,
       Value<String> preferredDoctorContact,
       Value<int> lastStepIndex,
@@ -6239,6 +6478,11 @@ class $$DirectivesTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
+  ColumnFilters<String> get county => $composableBuilder(
+    column: $table.county,
+    builder: (column) => ColumnFilters(column),
+  );
+
   ColumnFilters<String> get state => $composableBuilder(
     column: $table.state,
     builder: (column) => ColumnFilters(column),
@@ -6256,6 +6500,21 @@ class $$DirectivesTableFilterComposer
 
   ColumnFilters<String> get effectiveCondition => $composableBuilder(
     column: $table.effectiveCondition,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get triggerTwoProfessionals => $composableBuilder(
+    column: $table.triggerTwoProfessionals,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get triggerCourtOrder => $composableBuilder(
+    column: $table.triggerCourtOrder,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get triggerInvoluntaryCommitment => $composableBuilder(
+    column: $table.triggerInvoluntaryCommitment,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -6548,6 +6807,11 @@ class $$DirectivesTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get county => $composableBuilder(
+    column: $table.county,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get state => $composableBuilder(
     column: $table.state,
     builder: (column) => ColumnOrderings(column),
@@ -6565,6 +6829,21 @@ class $$DirectivesTableOrderingComposer
 
   ColumnOrderings<String> get effectiveCondition => $composableBuilder(
     column: $table.effectiveCondition,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get triggerTwoProfessionals => $composableBuilder(
+    column: $table.triggerTwoProfessionals,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get triggerCourtOrder => $composableBuilder(
+    column: $table.triggerCourtOrder,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get triggerInvoluntaryCommitment => $composableBuilder(
+    column: $table.triggerInvoluntaryCommitment,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -6635,6 +6914,9 @@ class $$DirectivesTableAnnotationComposer
   GeneratedColumn<String> get city =>
       $composableBuilder(column: $table.city, builder: (column) => column);
 
+  GeneratedColumn<String> get county =>
+      $composableBuilder(column: $table.county, builder: (column) => column);
+
   GeneratedColumn<String> get state =>
       $composableBuilder(column: $table.state, builder: (column) => column);
 
@@ -6646,6 +6928,21 @@ class $$DirectivesTableAnnotationComposer
 
   GeneratedColumn<String> get effectiveCondition => $composableBuilder(
     column: $table.effectiveCondition,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get triggerTwoProfessionals => $composableBuilder(
+    column: $table.triggerTwoProfessionals,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get triggerCourtOrder => $composableBuilder(
+    column: $table.triggerCourtOrder,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get triggerInvoluntaryCommitment => $composableBuilder(
+    column: $table.triggerInvoluntaryCommitment,
     builder: (column) => column,
   );
 
@@ -6921,10 +7218,14 @@ class $$DirectivesTableTableManager
                 Value<String> address = const Value.absent(),
                 Value<String> address2 = const Value.absent(),
                 Value<String> city = const Value.absent(),
+                Value<String> county = const Value.absent(),
                 Value<String> state = const Value.absent(),
                 Value<String> zip = const Value.absent(),
                 Value<String> phone = const Value.absent(),
                 Value<String> effectiveCondition = const Value.absent(),
+                Value<bool> triggerTwoProfessionals = const Value.absent(),
+                Value<bool> triggerCourtOrder = const Value.absent(),
+                Value<bool> triggerInvoluntaryCommitment = const Value.absent(),
                 Value<String> preferredDoctorName = const Value.absent(),
                 Value<String> preferredDoctorContact = const Value.absent(),
                 Value<int> lastStepIndex = const Value.absent(),
@@ -6941,10 +7242,14 @@ class $$DirectivesTableTableManager
                 address: address,
                 address2: address2,
                 city: city,
+                county: county,
                 state: state,
                 zip: zip,
                 phone: phone,
                 effectiveCondition: effectiveCondition,
+                triggerTwoProfessionals: triggerTwoProfessionals,
+                triggerCourtOrder: triggerCourtOrder,
+                triggerInvoluntaryCommitment: triggerInvoluntaryCommitment,
                 preferredDoctorName: preferredDoctorName,
                 preferredDoctorContact: preferredDoctorContact,
                 lastStepIndex: lastStepIndex,
@@ -6963,10 +7268,14 @@ class $$DirectivesTableTableManager
                 Value<String> address = const Value.absent(),
                 Value<String> address2 = const Value.absent(),
                 Value<String> city = const Value.absent(),
+                Value<String> county = const Value.absent(),
                 Value<String> state = const Value.absent(),
                 Value<String> zip = const Value.absent(),
                 Value<String> phone = const Value.absent(),
                 Value<String> effectiveCondition = const Value.absent(),
+                Value<bool> triggerTwoProfessionals = const Value.absent(),
+                Value<bool> triggerCourtOrder = const Value.absent(),
+                Value<bool> triggerInvoluntaryCommitment = const Value.absent(),
                 Value<String> preferredDoctorName = const Value.absent(),
                 Value<String> preferredDoctorContact = const Value.absent(),
                 Value<int> lastStepIndex = const Value.absent(),
@@ -6983,10 +7292,14 @@ class $$DirectivesTableTableManager
                 address: address,
                 address2: address2,
                 city: city,
+                county: county,
                 state: state,
                 zip: zip,
                 phone: phone,
                 effectiveCondition: effectiveCondition,
+                triggerTwoProfessionals: triggerTwoProfessionals,
+                triggerCourtOrder: triggerCourtOrder,
+                triggerInvoluntaryCommitment: triggerInvoluntaryCommitment,
                 preferredDoctorName: preferredDoctorName,
                 preferredDoctorContact: preferredDoctorContact,
                 lastStepIndex: lastStepIndex,

@@ -179,6 +179,24 @@ List<pw.Page> buildPoaPages({
           ),
           if (directive.effectiveCondition.isNotEmpty)
             dataLine('Condition', directive.effectiveCondition),
+          if (directive.triggerTwoProfessionals ||
+              directive.triggerCourtOrder ||
+              directive.triggerInvoluntaryCommitment) ...[
+            pw.SizedBox(height: 4),
+            pw.Text('This directive also takes effect when:',
+                style: boldStyle()),
+            if (directive.triggerTwoProfessionals)
+              checkRow(
+                  'A psychiatrist and one other qualified professional find '
+                  'that I lack capacity to make mental health treatment '
+                  'decisions.',
+                  checked: true),
+            if (directive.triggerCourtOrder)
+              checkRow('A court determines that I lack capacity.',
+                  checked: true),
+            if (directive.triggerInvoluntaryCommitment)
+              checkRow('I am involuntarily committed.', checked: true),
+          ],
           pw.SizedBox(height: 8),
 
           // D. Authority granted
@@ -615,6 +633,8 @@ List<pw.Page> buildPoaPages({
                 [directive.address, directive.address2, directive.city, directive.state, directive.zip]
                     .where((s) => s.isNotEmpty)
                     .join(', ')),
+            if (directive.county.isNotEmpty)
+              dataLine('County', directive.county),
             dataLine('Phone Number', directive.phone),
             pw.SizedBox(height: 10),
 

@@ -24,13 +24,21 @@ class Directives extends Table {
   TextColumn get address => text().withDefault(const Constant(''))();
   TextColumn get address2 => text().withDefault(const Constant(''))();
   TextColumn get city => text().withDefault(const Constant(''))();
+  TextColumn get county => text().withDefault(const Constant(''))();
   TextColumn get state => text().withDefault(const Constant('PA'))();
   TextColumn get zip => text().withDefault(const Constant(''))();
   TextColumn get phone => text().withDefault(const Constant(''))();
 
-  // Effective condition
+  // Effective condition — a free-text note plus the three statutory triggers
+  // the artboard "When this kicks in" step offers as checkable options.
   TextColumn get effectiveCondition =>
       text().withDefault(const Constant(''))();
+  BoolColumn get triggerTwoProfessionals =>
+      boolean().withDefault(const Constant(false))();
+  BoolColumn get triggerCourtOrder =>
+      boolean().withDefault(const Constant(false))();
+  BoolColumn get triggerInvoluntaryCommitment =>
+      boolean().withDefault(const Constant(false))();
 
   // Preferred evaluating doctor (official form field)
   TextColumn get preferredDoctorName =>
@@ -226,7 +234,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase(super.executor);
 
   @override
-  int get schemaVersion => 12;
+  int get schemaVersion => 13;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -337,6 +345,21 @@ class AppDatabase extends _$AppDatabase {
             await customStatement(
                 "ALTER TABLE directive_prefs ADD COLUMN room_preferences_note "
                 "TEXT NOT NULL DEFAULT ''");
+          }
+          if (from < 13) {
+            // County (official PA address field) + the three statutory
+            // "when this kicks in" triggers as checkable options.
+            await customStatement(
+                "ALTER TABLE directives ADD COLUMN county TEXT NOT NULL DEFAULT ''");
+            await customStatement(
+                'ALTER TABLE directives ADD COLUMN trigger_two_professionals '
+                'INTEGER NOT NULL DEFAULT 0');
+            await customStatement(
+                'ALTER TABLE directives ADD COLUMN trigger_court_order '
+                'INTEGER NOT NULL DEFAULT 0');
+            await customStatement(
+                'ALTER TABLE directives ADD COLUMN '
+                'trigger_involuntary_commitment INTEGER NOT NULL DEFAULT 0');
           }
         },
       );

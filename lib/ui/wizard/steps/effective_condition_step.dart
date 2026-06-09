@@ -30,6 +30,12 @@ class _EffectiveConditionStepState
   final _doctorNameCtrl = TextEditingController();
   final _doctorContactCtrl = TextEditingController();
 
+  // The three statutory "when this kicks in" triggers (artboard checkable
+  // options). The free-text field below is now an optional "anything else".
+  bool _triggerTwo = false;
+  bool _triggerCourt = false;
+  bool _triggerCommit = false;
+
   @override
   void initState() {
     super.initState();
@@ -63,6 +69,9 @@ class _EffectiveConditionStepState
         _ctrl.text = directive.effectiveCondition;
         _doctorNameCtrl.text = directive.preferredDoctorName;
         _doctorContactCtrl.text = directive.preferredDoctorContact;
+        _triggerTwo = directive.triggerTwoProfessionals;
+        _triggerCourt = directive.triggerCourtOrder;
+        _triggerCommit = directive.triggerInvoluntaryCommitment;
       });
     }
   }
@@ -72,7 +81,12 @@ class _EffectiveConditionStepState
     _formKey.currentState?.validate(); // Show warnings but don't block
     final repo = ref.read(directiveRepositoryProvider);
     await repo.updateEffectiveCondition(
-        widget.directiveId, _ctrl.text.trim());
+      widget.directiveId,
+      _ctrl.text.trim(),
+      twoProfessionals: _triggerTwo,
+      courtOrder: _triggerCourt,
+      involuntaryCommitment: _triggerCommit,
+    );
     await repo.updatePreferredDoctor(
       widget.directiveId,
       name: _doctorNameCtrl.text.trim(),
@@ -104,6 +118,41 @@ class _EffectiveConditionStepState
             : const EdgeInsets.all(16),
         children: [
           WizardHelpButton(helpText: helpText, stepId: 'effectiveCondition'),
+          Text(
+            'This directive should take effect when…',
+            style: Theme.of(context).textTheme.titleSmall,
+          ),
+          const SizedBox(height: 8),
+          _TriggerTile(
+            value: _triggerTwo,
+            onChanged: (v) => setState(() => _triggerTwo = v),
+            title: 'A psychiatrist + one other professional find I lack '
+                'capacity',
+            subtitle:
+                'The standard PA Act 194 trigger — two qualified professionals '
+                'certify you can\'t make mental-health treatment decisions.',
+          ),
+          _TriggerTile(
+            value: _triggerCourt,
+            onChanged: (v) => setState(() => _triggerCourt = v),
+            title: 'A court determines I lack capacity',
+          ),
+          _TriggerTile(
+            value: _triggerCommit,
+            onChanged: (v) => setState(() => _triggerCommit = v),
+            title: 'I am involuntarily committed',
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'Anything else about timing (optional)',
+            style: Theme.of(context).textTheme.titleSmall,
+          ),
+          const SizedBox(height: 4),
+          Text(
+            'Add your own words, or pick an example to start from.',
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+          const SizedBox(height: 8),
           const ExampleTextButton(
             fieldName: 'Effective Condition',
             examples: [
@@ -142,12 +191,10 @@ class _EffectiveConditionStepState
             maxLines: 5,
             maxLength: 2000,
             decoration: InputDecoration(
-              labelText: 'When this directive becomes effective',
+              labelText: 'In your own words (optional)',
               border: const OutlineInputBorder(),
               suffixIcon: VoiceInputButton(controller: _ctrl),
             ),
-            validator: (v) =>
-                (v == null || v.trim().isEmpty) ? 'Required' : null,
           ),
           const SizedBox(height: 24),
           Text(
@@ -177,6 +224,78 @@ class _EffectiveConditionStepState
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// A checkable statutory "effective condition" trigger (artboard option card).
+class _TriggerTile extends StatelessWidget {
+  final bool value;
+  final ValueChanged<bool> onChanged;
+  final String title;
+  final String? subtitle;
+  const _TriggerTile({
+    required this.value,
+    required this.onChanged,
+    required this.title,
+    this.subtitle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: InkWell(
+        onTap: () => onChanged(!value),
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(12, 10, 14, 10),
+          decoration: BoxDecoration(
+            color: value ? cs.primaryContainer.withValues(alpha: 0.4) : null,
+            border: Border.all(
+              color: value ? cs.primary : theme.dividerColor,
+              width: value ? 1.5 : 1,
+            ),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Checkbox(
+                value: value,
+                onChanged: (v) => onChanged(v ?? false),
+                visualDensity: VisualDensity.compact,
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 9),
+                      child: Text(
+                        title,
+                        style: theme.textTheme.bodyMedium
+                            ?.copyWith(fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                    if (subtitle != null) ...[
+                      const SizedBox(height: 2),
+                      Text(
+                        subtitle!,
+                        style: theme.textTheme.bodySmall,
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

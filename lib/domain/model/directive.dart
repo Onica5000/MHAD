@@ -66,8 +66,11 @@ extension FormTypeExt on FormType {
       // these five so the agent decides what's not written.
       if (!isPoa) WizardStep.whereIWantCare,
       if (!isPoa) WizardStep.diagnoses,
-      if (!isPoa) WizardStep.medications,
+      // Allergies BEFORE medications (artboard order): a severe allergy the
+      // user records here can be auto-added to the medications "never give"
+      // list on the next step, which only works if allergies come first.
       if (!isPoa) WizardStep.allergies,
+      if (!isPoa) WizardStep.medications,
       if (!isPoa) WizardStep.proceduresResearch,
       // "Anything else" is included for ALL three form types — POA keeps it
       // so the user can write free-form context for the agent.

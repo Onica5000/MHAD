@@ -22,6 +22,7 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
   late final TextEditingController _addressCtrl;
   late final TextEditingController _address2Ctrl;
   late final TextEditingController _cityCtrl;
+  late final TextEditingController _countyCtrl;
   late final TextEditingController _stateCtrl;
   late final TextEditingController _zipCtrl;
   late final TextEditingController _phoneCtrl;
@@ -34,6 +35,7 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
     _addressCtrl = TextEditingController();
     _address2Ctrl = TextEditingController();
     _cityCtrl = TextEditingController();
+    _countyCtrl = TextEditingController();
     _stateCtrl = TextEditingController(text: 'PA');
     _zipCtrl = TextEditingController();
     _phoneCtrl = TextEditingController();
@@ -45,7 +47,7 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
   void dispose() {
     for (final c in [
       _fullNameCtrl, _dobCtrl, _addressCtrl, _address2Ctrl,
-      _cityCtrl, _stateCtrl, _zipCtrl, _phoneCtrl
+      _cityCtrl, _countyCtrl, _stateCtrl, _zipCtrl, _phoneCtrl
     ]) {
       c.dispose();
     }
@@ -62,6 +64,7 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
         _addressCtrl.text = d.address;
         _address2Ctrl.text = d.address2;
         _cityCtrl.text = d.city;
+        _countyCtrl.text = d.county;
         _stateCtrl.text = d.state.isEmpty ? 'PA' : d.state;
         _zipCtrl.text = d.zip;
         _phoneCtrl.text = d.phone;
@@ -114,6 +117,7 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
         _addressCtrl.text = source.address;
         _address2Ctrl.text = source.address2;
         _cityCtrl.text = source.city;
+        _countyCtrl.text = source.county;
         _stateCtrl.text = source.state.isEmpty ? 'PA' : source.state;
         _zipCtrl.text = source.zip;
         _phoneCtrl.text = source.phone;
@@ -131,6 +135,7 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
       address: _addressCtrl.text.trim(),
       address2: _address2Ctrl.text.trim(),
       city: _cityCtrl.text.trim(),
+      county: _countyCtrl.text.trim(),
       state: _stateCtrl.text.trim(),
       zip: _zipCtrl.text.trim(),
       phone: _phoneCtrl.text.trim(),
@@ -249,7 +254,6 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
             Row(
               children: [
                 Expanded(
-                  flex: 3,
                   child: TextFormField(
                     controller: _cityCtrl,
                     decoration: const InputDecoration(
@@ -262,6 +266,23 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
                   ),
                 ),
                 const SizedBox(width: 8),
+                Expanded(
+                  child: TextFormField(
+                    controller: _countyCtrl,
+                    decoration: const InputDecoration(
+                      labelText: 'County',
+                      border: OutlineInputBorder(),
+                    ),
+                    autofillHints: const [],
+                    textCapitalization: TextCapitalization.words,
+                    textInputAction: TextInputAction.next,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
                 Expanded(
                   child: TextFormField(
                     controller: _stateCtrl,
