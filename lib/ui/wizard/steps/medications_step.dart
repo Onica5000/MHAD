@@ -23,6 +23,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
   final _formKey = GlobalKey<FormState>();
 
   // Each entry: {name controller, reason controller, existing id or null}
+  final List<_MedRow> _current = [];
   final List<_MedRow> _exceptions = [];
   final List<_MedRow> _limitations = [];
   final List<_MedRow> _preferred = [];
@@ -41,7 +42,12 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
 
   @override
   void dispose() {
-    for (final row in [..._exceptions, ..._limitations, ..._preferred]) {
+    for (final row in [
+      ..._current,
+      ..._exceptions,
+      ..._limitations,
+      ..._preferred
+    ]) {
       row.dispose();
     }
     super.dispose();
@@ -61,6 +67,8 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
         switch (MedicationEntryType.values
             .firstWhere((e) => e.name == m.entryType,
                 orElse: () => MedicationEntryType.exception)) {
+          case MedicationEntryType.current:
+            _current.add(row);
           case MedicationEntryType.exception:
             _exceptions.add(row);
           case MedicationEntryType.limitation:
@@ -111,6 +119,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
       }
     }
 
+    collectRows(_current, MedicationEntryType.current);
     collectRows(_exceptions, MedicationEntryType.exception);
     collectRows(_limitations, MedicationEntryType.limitation);
     collectRows(_preferred, MedicationEntryType.preferred);
@@ -256,6 +265,18 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
             ),
             const Divider(),
           ],
+          _MedTable(
+            title: 'Medications I am currently taking',
+            subtitle: 'For your care team’s reference — not a preference',
+            rows: _current,
+            accentColor: Theme.of(context).colorScheme.secondary,
+            onAdd: () => _addMedRow(_current),
+            onRemove: (i) => setState(() {
+              _current[i].dispose();
+              _current.removeAt(i);
+            }),
+          ),
+          const SizedBox(height: 16),
           _MedTable(
             title: 'Medications I NEVER want',
             subtitle: 'These medications should not be administered',

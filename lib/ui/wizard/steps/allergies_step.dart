@@ -199,8 +199,8 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
   }
 
   /// Backward nudge: a Severe allergy almost certainly belongs on the
-  /// Medications-Avoid list (step 7). Surface a snackbar with a quick-link
-  /// rather than auto-mutating step 7.
+  /// Medications "Never give" list (step 7). Rather than send the user back to
+  /// re-type it, offer to add it there automatically.
   void _showSevereNudge(String substance) {
     final cs = Theme.of(context).colorScheme;
     ScaffoldMessenger.of(context).showSnackBar(
@@ -209,23 +209,59 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
         behavior: SnackBarBehavior.floating,
         duration: const Duration(seconds: 6),
         content: Text(
-          'You marked $substance as Severe. Want to add it to "Never give" in '
-          'step 7 (Medications)?',
+          'You marked $substance as Severe. Add it to "Never give" in '
+          'Medications?',
           style: TextStyle(color: cs.onErrorContainer),
         ),
         action: SnackBarAction(
-          label: 'Go to step 7',
+          label: 'Add it',
           textColor: cs.onErrorContainer,
-          onPressed: () {
-            // Use the wizard-provided backward-step hook. `maybePop` is
-            // wrong here: the wizard wraps its content in a PopScope with
-            // `canPop: false`, which would convert the pop into a Save &
-            // Exit dialog instead of moving the user to step 7.
-            widget.onGoToPrevStep?.call();
-          },
+          onPressed: () => _addToNeverGive(substance),
         ),
       ),
     );
+  }
+
+  /// Auto-adds [substance] to the Medications "Never give" (Exceptions) list
+  /// for this directive — no need to navigate back to step 7. De-duplicates
+  /// case-insensitively so repeated nudges don't stack entries.
+  Future<void> _addToNeverGive(String substance) async {
+    final name = substance.trim();
+    if (name.isEmpty) return;
+    final repo = ref.read(directiveRepositoryProvider);
+    try {
+      final existing = await repo.watchMedications(widget.directiveId).first;
+      final already = existing.any((m) =>
+          m.entryType == MedicationEntryType.exception.name &&
+          m.medicationName.trim().toLowerCase() == name.toLowerCase());
+      if (!already) {
+        await repo.insertMedication(MedicationEntriesCompanion.insert(
+          directiveId: widget.directiveId,
+          entryType: MedicationEntryType.exception.name,
+          medicationName: Value(name),
+          reason: const Value('Severe allergy'),
+        ));
+      }
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          behavior: SnackBarBehavior.floating,
+          content: Text(already
+              ? '$name is already on your "Never give" list.'
+              : 'Added $name to "Never give" in Medications.'),
+        ),
+      );
+    } catch (e) {
+      debugPrint('Auto-add to Never give failed: $e');
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          behavior: SnackBarBehavior.floating,
+          content: Text('Could not add to "Never give" — please add it '
+              'manually in Medications.'),
+        ),
+      );
+    }
   }
 
   @override

@@ -27,6 +27,8 @@ List<pw.Page> buildCombinedPages({
   final altAgent =
       agents.where((a) => a.agentType == 'alternate').firstOrNull;
 
+  final current =
+      medications.where((m) => m.entryType == 'current').toList();
   final exceptions =
       medications.where((m) => m.entryType == 'exception').toList();
   final limitations =
@@ -225,6 +227,17 @@ List<pw.Page> buildCombinedPages({
           pw.Text('2. Preferences regarding medications for psychiatric treatment',
               style: boldStyle(fontSize: 9)),
           pw.SizedBox(height: 4),
+          if (current.isNotEmpty) ...[
+            medTable(
+              'Medications I am currently taking (for reference):',
+              current
+                  .map((m) =>
+                      {'medication': m.medicationName, 'reason': m.reason})
+                  .toList(),
+              false,
+            ),
+            pw.SizedBox(height: 4),
+          ],
           if (prefs != null) ...[
             checkRow(
               'I consent to the medications that my treating physician recommends.',

@@ -24,6 +24,9 @@ class _TreatmentFacilityStepState
   // Selected room-preference chip ids — see [_RoomChip.all] for the canonical
   // list. Persisted as a comma-separated string in `roomPreferences`.
   final Set<String> _roomPrefs = {};
+  // Free-form room-preference note that accompanies the chips. Persisted in
+  // `roomPreferencesNote`.
+  final TextEditingController _roomNoteCtrl = TextEditingController();
 
   @override
   void initState() {
@@ -36,6 +39,7 @@ class _TreatmentFacilityStepState
     for (final row in [..._preferred, ..._avoid]) {
       row.dispose();
     }
+    _roomNoteCtrl.dispose();
     super.dispose();
   }
 
@@ -52,6 +56,7 @@ class _TreatmentFacilityStepState
           ..addAll(pref.roomPreferences
               .split(',')
               .where((s) => s.trim().isNotEmpty));
+        _roomNoteCtrl.text = pref.roomPreferencesNote;
       });
     }
   }
@@ -99,6 +104,7 @@ class _TreatmentFacilityStepState
             preferredFacilityName: Value(preferred),
             avoidFacilityName: Value(avoid),
             roomPreferences: Value(_roomPrefs.join(',')),
+            roomPreferencesNote: Value(_roomNoteCtrl.text.trim()),
           ),
         );
     return true;
@@ -176,6 +182,23 @@ class _TreatmentFacilityStepState
                 _roomPrefs.add(id);
               }
             }),
+          ),
+          const SizedBox(height: 12),
+          // Free-form room preferences, in addition to the chips above.
+          TextField(
+            controller: _roomNoteCtrl,
+            minLines: 2,
+            maxLines: 5,
+            keyboardType: TextInputType.multiline,
+            textInputAction: TextInputAction.newline,
+            decoration: const InputDecoration(
+              labelText: 'Other room preferences',
+              hintText:
+                  'Anything else about your room or surroundings — e.g. '
+                  'low lighting, near a window, away from loud areas…',
+              alignLabelWithHint: true,
+              border: OutlineInputBorder(),
+            ),
           ),
         ],
       ),

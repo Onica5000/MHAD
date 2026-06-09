@@ -103,6 +103,9 @@ class DirectivePrefs extends Table {
   // Schema 8.
   TextColumn get roomPreferences =>
       text().withDefault(const Constant(''))();
+  // Free-form room-preference note, in addition to the chips above. Schema 12.
+  TextColumn get roomPreferencesNote =>
+      text().withDefault(const Constant(''))();
   // Phase 4 — Crisis plan / WRAP toolbox (optional add-on per v2 prototype).
   // JSON-encoded structure: {earlyWarning: [], triggers: [], helps: [],
   // sayToMe: [], dontDo: []}. Empty string = not yet filled.
@@ -223,7 +226,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase(super.executor);
 
   @override
-  int get schemaVersion => 11;
+  int get schemaVersion => 12;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -328,6 +331,12 @@ class AppDatabase extends _$AppDatabase {
             // Rather than guess-migrate, the existing rows stay in
             // medication_entries; users can re-enter allergies in step 8.
             // This preserves data without risking false-positive migration.
+          }
+          if (from < 12) {
+            // Free-form room-preference note alongside the chips.
+            await customStatement(
+                "ALTER TABLE directive_prefs ADD COLUMN room_preferences_note "
+                "TEXT NOT NULL DEFAULT ''");
           }
         },
       );

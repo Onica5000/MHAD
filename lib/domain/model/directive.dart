@@ -8,7 +8,9 @@ enum TreatmentFacilityPreference { noPreference, prefer, avoid }
 
 enum AgentType { primary, alternate }
 
-enum MedicationEntryType { exception, limitation, preferred }
+// `current` = informational "medications I'm currently taking" (not a legal
+// preference). exception/limitation/preferred are the Act-194 med preferences.
+enum MedicationEntryType { current, exception, limitation, preferred }
 
 /// Severity of an allergy entry. Mirrors the v2 prototype's Severity selector
 /// on `ScrAllergies` (Mild / Moderate / Severe).
