@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:archive/archive.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -762,6 +765,16 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
                     label: const Text('CSV'),
                   ),
                 ),
+                Semantics(
+                  button: true,
+                  label:
+                      'Download everything (PDF, JSON, XML, CSV) as a zip bundle',
+                  child: OutlinedButton.icon(
+                    onPressed: _isGenerating ? null : _exportZipBundle,
+                    icon: const Icon(Icons.folder_zip_outlined),
+                    label: const Text('.zip bundle'),
+                  ),
+                ),
               ],
             ),
             const SizedBox(height: 16),
@@ -955,6 +968,99 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       diagnoses: _diagnoses,
     );
     await _shareText(csv, 'MHAD directive (CSV)');
+  }
+
+  /// Artboard `WebDataExport` "bundle everything as a .zip" — packages the
+  /// signed-form PDF plus the machine-readable copies (FHIR JSON, FHIR XML,
+  /// CSV) into one .zip for handing off in a single file.
+  Future<void> _exportZipBundle() async {
+    if (_directive == null) return;
+    setState(() => _isGenerating = true);
+    try {
+      final generator = PdfGenerator(
+        includeCombined: _includeCombined,
+        includeDeclaration: _includeDeclaration,
+        includePoa: _includePoa,
+        includeSupplementary: _includeSupplementary,
+        includeNotes: _includeNotes,
+      );
+      final pdfBytes = await runInBackground(() => generator.generate(
+            directive: _directive!,
+            agents: _agents,
+            prefs: _prefs,
+            additional: _additional,
+            guardian: _guardian,
+            medications: _medications,
+            witnesses: _witnesses,
+            diagnoses: _diagnoses,
+          ));
+      final json = FhirExportService.exportAsJson(
+        directive: _directive!,
+        agents: _agents,
+        medications: _medications,
+        prefs: _prefs,
+        additional: _additional,
+        witnesses: _witnesses,
+        guardian: _guardian,
+        diagnoses: _diagnoses,
+      );
+      final xml = ExportFormatsService.exportAsFhirXml(
+        directive: _directive!,
+        agents: _agents,
+        medications: _medications,
+        prefs: _prefs,
+        additional: _additional,
+        witnesses: _witnesses,
+        guardian: _guardian,
+        diagnoses: _diagnoses,
+      );
+      final csv = ExportFormatsService.exportAsCsv(
+        directive: _directive!,
+        agents: _agents,
+        medications: _medications,
+        prefs: _prefs,
+        additional: _additional,
+        witnesses: _witnesses,
+        guardian: _guardian,
+        diagnoses: _diagnoses,
+      );
+
+      final safe = _directive!.fullName.trim().isEmpty
+          ? 'directive'
+          : _directive!.fullName.trim().replaceAll(RegExp(r'\s+'), '_');
+      final archive = Archive()
+        ..addFile(ArchiveFile('PA_MHAD_$safe.pdf', pdfBytes.length, pdfBytes))
+        ..addFile(_textFile('mhad_fhir.json', json))
+        ..addFile(_textFile('mhad_fhir.xml', xml))
+        ..addFile(_textFile('mhad_directive.csv', csv));
+      final zip = ZipEncoder().encode(archive);
+
+      if (!mounted) return;
+      await Share.shareXFiles(
+        [
+          XFile.fromData(
+            Uint8List.fromList(zip),
+            name: 'PA_MHAD_$safe.zip',
+            mimeType: 'application/zip',
+          ),
+        ],
+        subject: 'PA MHAD directive bundle',
+      );
+    } catch (e) {
+      debugPrint('Zip bundle export failed: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Could not build the .zip bundle.')),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isGenerating = false);
+    }
+  }
+
+  ArchiveFile _textFile(String name, String content) {
+    final bytes = utf8.encode(content);
+    return ArchiveFile(name, bytes.length, bytes);
   }
 
   /// Build the plaintext bundle that password-protection encrypts — the CSV

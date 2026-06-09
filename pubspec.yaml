@@ -91,6 +91,7 @@ dependencies:
   speech_to_text: ^7.3.0
   nfc_manager: ^4.1.1
   ndef_record: ^1.4.2
+  archive: ^4.0.9
 
 dev_dependencies:
   flutter_test:
