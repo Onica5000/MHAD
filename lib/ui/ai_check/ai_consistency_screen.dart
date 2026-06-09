@@ -177,7 +177,71 @@ class _AiConsistencyScreenState extends ConsumerState<AiConsistencyScreen> {
               ],
             ),
         ),
+        // Footer CTAs (artboard WebConflict): give the user an explicit way
+        // out — ignore the warnings and continue, or jump back to the wizard
+        // to resolve them.
+        if (!_loading)
+          _ConflictFooter(
+            hasConflicts: _conflicts.isNotEmpty,
+            onResolve: () =>
+                context.push(AppRoutes.wizardRoute(widget.directiveId)),
+            onContinue: () => Navigator.of(context).maybePop(),
+          ),
       ]),
+    );
+  }
+}
+
+/// Bottom action bar for the consistency screen. With conflicts it offers
+/// "Ignore & continue" (ghost) + "Resolve in wizard" (primary); with none, a
+/// single "Looks good — continue".
+class _ConflictFooter extends StatelessWidget {
+  final bool hasConflicts;
+  final VoidCallback onResolve;
+  final VoidCallback onContinue;
+  const _ConflictFooter({
+    required this.hasConflicts,
+    required this.onResolve,
+    required this.onContinue,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
+    return Container(
+      decoration: BoxDecoration(
+        color: p.card,
+        border: Border(top: BorderSide(color: p.border)),
+      ),
+      padding: EdgeInsets.fromLTRB(
+        20,
+        12,
+        20,
+        12 + MediaQuery.viewPaddingOf(context).bottom,
+      ),
+      child: hasConflicts
+          ? Row(
+              children: [
+                TextButton(
+                  onPressed: onContinue,
+                  child: const Text('Ignore & continue'),
+                ),
+                const Spacer(),
+                FilledButton.icon(
+                  onPressed: onResolve,
+                  icon: const Icon(Icons.edit_outlined, size: 16),
+                  label: const Text('Resolve in wizard'),
+                ),
+              ],
+            )
+          : SizedBox(
+              width: double.infinity,
+              child: FilledButton.icon(
+                onPressed: onContinue,
+                icon: const Icon(Icons.check, size: 16),
+                label: const Text('Looks good — continue'),
+              ),
+            ),
     );
   }
 }
