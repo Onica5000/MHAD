@@ -209,7 +209,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         onDelete: () =>
                             _confirmDelete(context, ref, d.id),
                         onRevoke: d.status == 'complete'
-                            ? () => _confirmRevoke(context, ref, d.id)
+                            ? () =>
+                                context.push(AppRoutes.revocationRoute(d.id))
                             : null,
                         onRenew: () =>
                             _renewDirective(context, ref, d),
@@ -383,7 +384,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             onDelete: () =>
                                 _confirmDelete(context, ref, d.id),
                             onRevoke: d.status == 'complete'
-                                ? () => _confirmRevoke(context, ref, d.id)
+                                ? () =>
+                                    context.push(AppRoutes.revocationRoute(d.id))
                                 : null,
                             onRenew: () =>
                                 _renewDirective(context, ref, d),
@@ -509,44 +511,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     }
   }
 
-  Future<void> _confirmRevoke(
-      BuildContext context, WidgetRef ref, int id) async {
-    final cs = Theme.of(context).colorScheme;
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: const Text('Revoke Directive?'),
-        content: const Text(
-          'Revoking means this directive is no longer in effect. '
-          'Under PA Act 194, you may revoke your directive at any time '
-          'while capable of making mental health decisions.\n\n'
-          'Important: Revoking in this app does NOT automatically revoke '
-          'printed copies. You must also:\n\n'
-          '  \u2022 Notify your agent in writing\n'
-          '  \u2022 Notify your healthcare providers\n'
-          '  \u2022 Destroy or mark "REVOKED" on all printed copies\n'
-          '  \u2022 Request return of copies you distributed\n\n'
-          'This action cannot be undone in the app.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.pop(context, true),
-            style: FilledButton.styleFrom(backgroundColor: cs.error),
-            child: const Text('Revoke'),
-          ),
-        ],
-      ),
-    );
-    if (confirmed == true) {
-      await ref
-          .read(directiveRepositoryProvider)
-          .updateStatus(id, DirectiveStatus.revoked);
-    }
-  }
+  // _confirmRevoke (inline dialog) removed \u2014 the "Revoke" action now opens the
+  // full RevocationScreen (AppRoutes.revocationRoute), matching the artboard's
+  // WebRevoke (statutory explanation + notify checklist + revocation PDF).
 
   Future<void> _renewDirective(
       BuildContext context, WidgetRef ref, Directive old) async {

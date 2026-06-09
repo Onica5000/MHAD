@@ -697,15 +697,16 @@ class _CurrentDirectiveSection extends ConsumerWidget {
 
     return directivesAsync.maybeWhen(
       data: (list) {
-        // Pick the most-recently-edited completed directive. If none
-        // exist, render nothing — Phase 4 routes only apply to signed
-        // directives.
-        final completed = list
-            .where((d) => d.status == 'complete')
-            .toList()
+        // Use the most-recently-edited directive of ANY status. These screens
+        // operate on a directive (clinician view, crisis plan, QR, etc.), so
+        // they only require that one exists — NOT that it's signed/complete.
+        // Web directives are signed on paper and rarely reach "complete", so
+        // gating on completion hid the whole section (and made these screens
+        // unreachable on web).
+        final sorted = [...list]
           ..sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
-        if (completed.isEmpty) return const SizedBox.shrink();
-        final d = completed.first;
+        if (sorted.isEmpty) return const SizedBox.shrink();
+        final d = sorted.first;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
