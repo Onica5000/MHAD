@@ -60,6 +60,7 @@ DirectivePref _makePrefs() => const DirectivePref(
       agentAuthorityLimitations: '',
       // Phase 2 — schema v8 additions.
       roomPreferences: '',
+      roomPreferencesNote: '',
       // Phase 4 — schema v10 additions.
       crisisPlanJson: '',
       selfBindingEnabled: false,

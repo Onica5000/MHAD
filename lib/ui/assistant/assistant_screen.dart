@@ -6,16 +6,15 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:mhad/ai/ai_assistant.dart';
 import 'package:mhad/ai/gemini_api_assistant.dart';
-import 'package:mhad/ai/pii_stripper.dart';
 import 'package:mhad/constants.dart';
 import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/services/gemini_rate_tracker.dart';
+import 'package:mhad/ui/assistant/assistant_send.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/widgets/design/bottom_nav.dart';
 import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/ai_consent_dialog.dart';
-import 'package:mhad/ui/widgets/friendly_error.dart';
 
 class AssistantScreen extends ConsumerStatefulWidget {
   /// Optional context from the wizard step that opened the chat.
@@ -57,127 +56,57 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
     final text = _inputCtrl.text.trim();
     if (text.isEmpty) return;
 
-    final assistant = ref.read(aiAssistantProvider);
-    if (assistant == null) {
+    _inputCtrl.clear();
+    final result = await sendAssistantMessage(
+      ref,
+      text: text,
+      assistantContext: widget.context,
+      requestConsent: () => showAiConsentDialog(context),
+      onSent: _scrollToBottom,
+    );
+    if (!mounted) return;
+
+    // No key / declined consent / rate-blocked / busy: restore the text so the
+    // user doesn't lose it, and surface why nothing happened.
+    if (result.needsKey) {
+      _inputCtrl.text = text;
       _openSetup();
       return;
     }
-
-    // Per-session AI consent gate
-    if (!ref.read(aiConsentGivenProvider)) {
-      final accepted = await showAiConsentDialog(context);
-      if (!accepted || !mounted) return;
-      ref.read(aiConsentGivenProvider.notifier).state = true;
+    if (result.consentDeclined || result.alreadySending) {
+      _inputCtrl.text = text;
+      return;
     }
-
-    final history = ref.read(conversationProvider);
-    final isSending = ref.read(isSendingProvider);
-    if (isSending) return;
-
-    // Check rate limits before sending
-    final tracker = ref.read(geminiRateTrackerProvider);
-    final blockReason = tracker.blockReason;
-    if (blockReason != null) {
+    if (result.blockReason != null) {
+      _inputCtrl.text = text;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(blockReason),
+          content: Text(result.blockReason!),
           duration: const Duration(seconds: 5),
         ),
       );
       return;
     }
 
-    // Strip PII from conversation history before sending to external API
-    var strippedHistory = history
-        .map((m) => ChatMessage(
-              role: m.role,
-              content: PiiStripper.strip(m.content),
-            ))
-        .toList();
-
-    // Check if PII was found in the user's message or history
-    final strippedUserText = PiiStripper.strip(text);
-    final historyHadPii = history.any(
-        (m) => PiiStripper.strip(m.content) != m.content);
-    if (strippedUserText != text || historyHadPii) {
+    if (result.piiStripped) {
       _piiTimer?.cancel();
       setState(() => _piiStripped = true);
       _piiTimer = Timer(const Duration(seconds: 3), () {
         if (mounted) setState(() => _piiStripped = false);
       });
     }
-
-    // Estimate tokens and auto-trim history to fit within budget.
-    // Reserve 80% of context for input (system + history + message),
-    // leaving 20% headroom for the AI's response.
-    final gemini = assistant as GeminiApiAssistant;
-    // Reserve 80% of context for input, leave 20% for AI response
-    final maxInputTokens = (GeminiApiAssistant.maxContextTokens * 0.8).toInt();
-    var tokens = gemini.estimateTokens(
-      userMessage: text,
-      chatHistory: strippedHistory,
-      context: widget.context,
-    );
-
-    // Auto-trim oldest messages if over budget
-    int trimmedCount = 0;
-    while (tokens.total > maxInputTokens && strippedHistory.length > 2) {
-      // Remove the two oldest messages (user + assistant pair)
-      strippedHistory = strippedHistory.sublist(2);
-      trimmedCount += 2;
-      tokens = gemini.estimateTokens(
-        userMessage: text,
-        chatHistory: strippedHistory,
-        context: widget.context,
-      );
-    }
-
-    _inputCtrl.clear();
-    ref.read(conversationProvider.notifier).add(
-          ChatMessage(role: MessageRole.user, content: text),
-        );
-    ref.read(isSendingProvider.notifier).state = true;
-    _scrollToBottom();
-
-    // Notify user if messages were trimmed
-    if (trimmedCount > 0 && mounted) {
+    if (result.trimmedCount > 0) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            '$trimmedCount older messages were trimmed to fit within '
+            '${result.trimmedCount} older messages were trimmed to fit within '
             'the AI\'s context limit. Recent messages are preserved.',
           ),
           duration: const Duration(seconds: 4),
         ),
       );
     }
-
-    try {
-      final reply = await assistant.sendMessage(
-        text,
-        history: strippedHistory,
-        context: widget.context,
-      );
-
-      // Record successful request with actual token estimate
-      tracker.recordRequest(estimatedTokens: tokens.total);
-
-      ref.read(conversationProvider.notifier).add(
-            ChatMessage(role: MessageRole.assistant, content: reply),
-          );
-    } catch (e) {
-      debugPrint('AI assistant error: $e');
-      ref.read(conversationProvider.notifier).add(
-            ChatMessage(
-              role: MessageRole.assistant,
-              content:
-                  'Sorry, I encountered an error: ${FriendlyError.from(e)}',
-            ),
-          );
-    } finally {
-      ref.read(isSendingProvider.notifier).state = false;
-      _scrollToBottom();
-    }
+    _scrollToBottom();
   }
 
   void _openSetup() {

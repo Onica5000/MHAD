@@ -198,6 +198,29 @@ final aiAssistantProvider = Provider<AiAssistant?>((ref) {
 });
 
 // ---------------------------------------------------------------------------
+// Wizard AI rail — live per-step "heads-up" + suggested-question chips
+// ---------------------------------------------------------------------------
+
+/// Key for [wizardRailSuggestionsProvider]: the form type + current step name
+/// (+ a coarse signature of answers so far). A record so Riverpod caches one
+/// generation per distinct step/context and re-uses it when revisiting.
+typedef RailSuggestionKey = ({String formType, String stepName, String answersDigest});
+
+/// Live-generated heads-up note + suggested-question chips for the wizard's
+/// inline AI rail. Null when there's no API key or generation fails (the rail
+/// then shows its static fallback / "set up AI" prompt). Cached per step.
+final wizardRailSuggestionsProvider = FutureProvider.family<
+    ({String headsUp, List<String> chips})?, RailSuggestionKey>(
+  (ref, key) async {
+    final assistant = ref.watch(aiAssistantProvider);
+    if (assistant is! GeminiApiAssistant) return null;
+    return assistant.generateStepSuggestions(
+      AssistantContext(formType: key.formType, stepName: key.stepName),
+    );
+  },
+);
+
+// ---------------------------------------------------------------------------
 // Gemini rate limit tracker (per-session, in-memory)
 // ---------------------------------------------------------------------------
 

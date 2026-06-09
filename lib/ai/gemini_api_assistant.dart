@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
@@ -120,6 +121,74 @@ class GeminiApiAssistant implements AiAssistant {
       }
     }
     throw Exception('Failed after $maxAttempts attempts. Please try again later.');
+  }
+
+  /// Generates a short, step-contextual "heads-up" note plus up to four
+  /// suggested questions for the wizard's inline AI rail (artboard `WebWizard`).
+  /// Uses Gemini JSON mode (same pattern as the document extractor) and returns
+  /// `null` on any failure so the caller can fall back gracefully.
+  Future<({String headsUp, List<String> chips})?> generateStepSuggestions(
+    AssistantContext context,
+  ) async {
+    final model = GenerativeModel(
+      model: _model,
+      apiKey: apiKey,
+      httpClient: _httpClient,
+      generationConfig: GenerationConfig(responseMimeType: 'application/json'),
+    );
+
+    final prompt = StringBuffer()
+      ..writeln(
+          'You help users fill out the Pennsylvania Mental Health Advance '
+          'Directive (PA Act 194 of 2004). Return ONLY a JSON object shaped '
+          'exactly like:')
+      ..writeln('{"headsUp": "<one short note, max 30 words>", '
+          '"chips": ["<question>", "<question>", "<question>", "<question>"]}')
+      ..writeln()
+      ..writeln('Rules:')
+      ..writeln('- "headsUp": ONE thing worth knowing or double-checking on '
+          'THIS step, specific to it. Plain language. Not legal advice.')
+      ..writeln('- "chips": up to 4 short questions (max ~8 words each) the '
+          'user might want to ask about THIS step, phrased in the user\'s '
+          'voice.')
+      ..writeln('- Never include personal information. Never invent statute '
+          'numbers, facts, medication names, or provider names.')
+      ..writeln()
+      ..writeln('Form type: ${_formTypeName(context.formType ?? '')}')
+      ..writeln('Current step: ${context.stepName ?? 'the current step'}');
+    if (context.filledFields != null && context.filledFields!.isNotEmpty) {
+      prompt.writeln('Answers so far (context only — do not echo verbatim):');
+      for (final e in context.filledFields!.entries) {
+        prompt.writeln('  • ${e.key}: ${e.value}');
+      }
+    }
+
+    try {
+      final response = await model
+          .generateContent([Content.text(sanitizeForApi(prompt.toString()))])
+          .timeout(const Duration(seconds: 20));
+      var text = response.text?.trim();
+      if (text == null || text.isEmpty) return null;
+      // Strip markdown code fences if the model wrapped the JSON.
+      if (text.startsWith('```')) {
+        text = text.replaceFirst(RegExp(r'^```(?:json)?'), '').trim();
+        if (text.endsWith('```')) {
+          text = text.substring(0, text.length - 3).trim();
+        }
+      }
+      final data = jsonDecode(text) as Map<String, dynamic>;
+      final headsUp = (data['headsUp'] as String?)?.trim() ?? '';
+      final chips = ((data['chips'] as List?) ?? const [])
+          .map((e) => e.toString().trim())
+          .where((s) => s.isNotEmpty)
+          .take(4)
+          .toList();
+      if (headsUp.isEmpty && chips.isEmpty) return null;
+      return (headsUp: headsUp, chips: chips);
+    } catch (e) {
+      debugPrint('generateStepSuggestions error: $e');
+      return null;
+    }
   }
 
   String _buildSystemPrompt(AssistantContext? context) {
