@@ -1,3 +1,5 @@
+import 'package:cross_file/cross_file.dart';
+import 'package:desktop_drop/desktop_drop.dart';
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -51,6 +53,54 @@ class _PipelineScreenState extends ConsumerState<_PipelineScreen> {
   _PipelineStep _step = _PipelineStep.pick;
   String _statusMessage = '';
   String? _error;
+
+  // True while a file is being dragged over the Snap-to-fill drop zone.
+  bool _dragOver = false;
+
+  // Allowed dropped/pasted file extensions → mime type.
+  static const _allowedMime = <String, String>{
+    'pdf': 'application/pdf',
+    'txt': 'text/plain',
+    'csv': 'text/csv',
+    'png': 'image/png',
+    'webp': 'image/webp',
+    'jpg': 'image/jpeg',
+    'jpeg': 'image/jpeg',
+    'heic': 'image/heic',
+  };
+
+  String? _mimeForName(String name) {
+    final dot = name.lastIndexOf('.');
+    if (dot < 0) return null;
+    return _allowedMime[name.substring(dot + 1).toLowerCase()];
+  }
+
+  Future<void> _handleDroppedFiles(List<XFile> files) async {
+    setState(() {
+      _dragOver = false;
+      _error = null;
+    });
+    if (files.isEmpty) return;
+    final docs = <PickedDocument>[];
+    for (final f in files) {
+      final mime = _mimeForName(f.name);
+      if (mime == null) continue; // skip unsupported types
+      final bytes = await f.readAsBytes();
+      docs.add(PickedDocument(
+        path: f.path.isNotEmpty ? f.path : f.name,
+        mimeType: mime,
+        bytes: bytes,
+      ));
+    }
+    if (!mounted) return;
+    if (docs.isEmpty) {
+      setState(() => _error =
+          'That file type isn\'t supported. Use a JPG, PNG, HEIC, PDF, or '
+          'text file.');
+      return;
+    }
+    _startPipeline(docs);
+  }
 
   // PII
   List<String> _piiStripped = [];
@@ -854,16 +904,24 @@ class _PipelineScreenState extends ConsumerState<_PipelineScreen> {
   }
 
   Widget _dropZone(MhadPalette p) {
-    return InkWell(
-      onTap: _browseFiles,
-      borderRadius: BorderRadius.circular(16),
-      child: Container(
-        decoration: BoxDecoration(
-          color: p.primaryTint,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: p.primary, width: 2),
-        ),
-        padding: const EdgeInsets.fromLTRB(24, 30, 24, 22),
+    return DropTarget(
+      onDragEntered: (_) => setState(() => _dragOver = true),
+      onDragExited: (_) => setState(() => _dragOver = false),
+      onDragDone: (detail) => _handleDroppedFiles(detail.files),
+      child: InkWell(
+        onTap: _browseFiles,
+        borderRadius: BorderRadius.circular(16),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 120),
+          decoration: BoxDecoration(
+            color: _dragOver ? p.primaryLight : p.primaryTint,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: p.primary,
+              width: _dragOver ? 3 : 2,
+            ),
+          ),
+          padding: const EdgeInsets.fromLTRB(24, 30, 24, 22),
         child: Column(
           children: [
             Container(
@@ -946,7 +1004,8 @@ class _PipelineScreenState extends ConsumerState<_PipelineScreen> {
           ],
         ),
       ),
-    );
+    ),
+  );
   }
 
   Widget _targetsPanel(MhadPalette p) {

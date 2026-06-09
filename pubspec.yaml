@@ -78,6 +78,10 @@ dependencies:
   image_picker: ^1.1.2
   file_picker: ^8.1.6
   image: ^4.5.4
+  # Drag-and-drop file upload for the Snap-to-fill drop zone (web + desktop;
+  # no-op on Android/iOS, which use the camera/file picker instead).
+  desktop_drop: ^0.5.0
+  cross_file: ^0.3.4
 
   # Utilities
   path: ^1.9.0
