@@ -131,12 +131,15 @@ class _GateLayout extends StatelessWidget {
                   _SectionLabel('Before we begin', palette: palette),
                   const SizedBox(height: 6),
                   Text(
-                    'A few important things.',
+                    'A few things to understand.',
                     style: TextStyle(
-                      fontFamily: 'DM Sans',
-                      fontSize: 26,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: -0.3,
+                      fontFamily: 'Instrument Serif',
+                      fontFamilyFallback: const ['Georgia', 'serif'],
+                      fontStyle: FontStyle.italic,
+                      fontSize: 36,
+                      fontWeight: FontWeight.w400,
+                      height: 1.05,
+                      letterSpacing: -0.5,
                       color: palette.text,
                     ),
                   ),
@@ -158,32 +161,32 @@ class _GateLayout extends StatelessWidget {
                     child: ListView(
                       padding: EdgeInsets.zero,
                       children: const [
-                        _NumberedBullet(
-                          number: 1,
+                        _DisclaimerCard(
+                          icon: Icons.badge_outlined,
                           title: 'You must be 18 or older',
                           body:
                               'Or an emancipated minor. PA Act 194 requires '
                               'legal capacity at the time of signing.',
                         ),
-                        SizedBox(height: 12),
-                        _NumberedBullet(
-                          number: 2,
+                        SizedBox(height: 10),
+                        _DisclaimerCard(
+                          icon: Icons.event_outlined,
                           title: 'Your directive is valid for 2 years',
                           body:
                               "After that you'll need to renew it. We'll "
                               'remind you 30 days before it expires.',
                         ),
-                        SizedBox(height: 12),
-                        _NumberedBullet(
-                          number: 3,
+                        SizedBox(height: 10),
+                        _DisclaimerCard(
+                          icon: Icons.groups_outlined,
                           title: 'Two adult witnesses are required',
                           body:
                               'They must be 18+ and present when you sign. '
                               "They can't be your designated agent.",
                         ),
-                        SizedBox(height: 12),
-                        _NumberedBullet(
-                          number: 4,
+                        SizedBox(height: 10),
+                        _DisclaimerCard(
+                          icon: Icons.gavel_outlined,
                           title: 'Consult a lawyer for legal questions',
                           body:
                               'PA Protection & Advocacy: 1-800-692-7443 '
@@ -348,12 +351,14 @@ class _WarnBanner extends StatelessWidget {
   }
 }
 
-class _NumberedBullet extends StatelessWidget {
-  final int number;
+/// Editorial icon card — mirrors the Claude Design `WebDisclaimer` cards
+/// (38px primaryTint icon square + title + body inside a bordered card).
+class _DisclaimerCard extends StatelessWidget {
+  final IconData icon;
   final String title;
   final String body;
-  const _NumberedBullet({
-    required this.number,
+  const _DisclaimerCard({
+    required this.icon,
     required this.title,
     required this.body,
   });
@@ -361,58 +366,55 @@ class _NumberedBullet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          width: 26,
-          height: 26,
-          decoration: BoxDecoration(
-            color: p.primaryLight,
-            borderRadius: BorderRadius.circular(8),
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      decoration: BoxDecoration(
+        color: p.card,
+        border: Border.all(color: p.border),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 38,
+            height: 38,
+            decoration: BoxDecoration(
+              color: p.primaryLight,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            alignment: Alignment.center,
+            child: Icon(icon, size: 19, color: p.primary),
           ),
-          alignment: Alignment.center,
-          child: Text(
-            '$number',
-            style: TextStyle(
-              fontFamily: 'Instrument Serif',
-              fontFamilyFallback: const ['Georgia', 'serif'],
-              fontStyle: FontStyle.italic,
-              fontSize: 16,
-              fontWeight: FontWeight.w400,
-              color: p.onPrimaryLight,
-              height: 1,
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontFamily: 'DM Sans',
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                    color: p.text,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  body,
+                  style: TextStyle(
+                    fontFamily: 'DM Sans',
+                    fontSize: 13,
+                    height: 1.5,
+                    color: p.textMuted,
+                  ),
+                ),
+              ],
             ),
           ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: TextStyle(
-                  fontFamily: 'DM Sans',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: p.text,
-                ),
-              ),
-              const SizedBox(height: 2),
-              Text(
-                body,
-                style: TextStyle(
-                  fontFamily: 'DM Sans',
-                  fontSize: 12.5,
-                  height: 1.45,
-                  color: p.textMuted,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
