@@ -32,10 +32,23 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   static bool _checkedDraftRecovery = false;
 
+  /// On the first Home build of a web session the "In your words" intro is
+  /// pushed as an overlay from the post-frame callback below. Without this
+  /// gate the dashboard paints for a frame and then gets covered, which the
+  /// user sees as a page "flashing" before the intro. While this is true the
+  /// build renders a blank surface (matching the intro's background) so the
+  /// transition is seamless; it flips false once the intro is dismissed.
+  bool _gateForOnboarding = false;
+
   @override
   void initState() {
     super.initState();
-    if (!_checkedDraftRecovery) {
+    final firstVisit = !_checkedDraftRecovery;
+    // The intro shows on every web visit (isCompleted() is always false on
+    // web), so on the first Home build of the session we can synchronously
+    // decide to gate. Native first-launch keeps its existing behaviour.
+    _gateForOnboarding = kIsWeb && firstVisit;
+    if (firstVisit) {
       _checkedDraftRecovery = true;
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         if (!mounted) return;
@@ -47,6 +60,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               onComplete: () => Navigator.of(context).pop(),
             ),
           ));
+        }
+        // Intro dismissed (or not needed) — reveal the dashboard.
+        if (mounted && _gateForOnboarding) {
+          setState(() => _gateForOnboarding = false);
         }
         if (kIsWeb && mounted) {
           await _tryWebSessionRestore();
@@ -62,9 +79,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
+
+    // Hold a blank surface (the intro's own background) until the "In your
+    // words" overlay is up, so the dashboard never flashes behind it.
+    if (_gateForOnboarding) {
+      return Scaffold(backgroundColor: p.surface);
+    }
+
     final directivesAsync = ref.watch(allDirectivesProvider);
     final privacyMode = ref.watch(privacyModeNotifierProvider);
-    final p = Theme.of(context).mhadPalette;
 
     final dateLabel = DateFormat('EEEE · MMMM d').format(DateTime.now());
 
