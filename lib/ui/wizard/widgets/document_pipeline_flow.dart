@@ -57,6 +57,10 @@ class _PipelineScreenState extends ConsumerState<_PipelineScreen> {
   // True while a file is being dragged over the Snap-to-fill drop zone.
   bool _dragOver = false;
 
+  // The documents being processed — retained so the review step can show a
+  // source thumbnail of what the AI read.
+  List<PickedDocument> _sourceDocs = const [];
+
   // Allowed dropped/pasted file extensions → mime type.
   static const _allowedMime = <String, String>{
     'pdf': 'application/pdf',
@@ -118,6 +122,7 @@ class _PipelineScreenState extends ConsumerState<_PipelineScreen> {
   // ── Pipeline orchestration ──────────────────────────────────────────
 
   Future<void> _startPipeline(List<PickedDocument> docs) async {
+    _sourceDocs = docs;
     // AI consent
     if (!ref.read(aiConsentGivenProvider)) {
       final ok = await showAiConsentDialog(context);
@@ -1169,6 +1174,81 @@ class _PipelineScreenState extends ConsumerState<_PipelineScreen> {
 
   // ── Review extracted data ───────────────────────────────────────────
 
+  /// Source thumbnail for the review step — shows what the AI read (first
+  /// document), with a frame. Images render inline; PDFs/text show an icon.
+  Widget _sourceThumb(MhadPalette p) {
+    final doc = _sourceDocs.first;
+    final isImage = doc.mimeType.startsWith('image/') && doc.bytes != null;
+    final name = doc.path.split(RegExp(r'[\\/]')).last;
+    final n = _sourceDocs.length;
+    return Container(
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: p.card,
+        border: Border.all(color: p.border),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: isImage
+                ? Image.memory(
+                    doc.bytes!,
+                    width: 72,
+                    height: 92,
+                    fit: BoxFit.cover,
+                    gaplessPlayback: true,
+                  )
+                : Container(
+                    width: 72,
+                    height: 92,
+                    color: p.primaryTint,
+                    child: Icon(
+                      doc.mimeType == 'application/pdf'
+                          ? Icons.picture_as_pdf_outlined
+                          : Icons.description_outlined,
+                      color: p.primary,
+                    ),
+                  ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  name,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontFamily: 'DM Sans',
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                    color: p.text,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  n == 1
+                      ? 'Read by the AI, then discarded.'
+                      : '$n files read by the AI, then discarded.',
+                  style: TextStyle(
+                    fontFamily: 'DM Sans',
+                    fontSize: 11.5,
+                    height: 1.4,
+                    color: p.textMuted,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildReviewStep() {
     final p = Theme.of(context).mhadPalette;
     final dark = Theme.of(context).brightness == Brightness.dark;
@@ -1247,6 +1327,10 @@ class _PipelineScreenState extends ConsumerState<_PipelineScreen> {
             height: 1.5,
           ),
         ),
+        if (_sourceDocs.isNotEmpty) ...[
+          const SizedBox(height: 14),
+          _sourceThumb(p),
+        ],
         if (_piiStripped.isNotEmpty) ...[
           const SizedBox(height: 12),
           Container(
