@@ -95,6 +95,16 @@ List<pw.Page> buildCombinedPages({
 
           // Diagnoses (from wizard diagnoses step)
           if (diagnoses.isNotEmpty) diagnosisList(diagnoses),
+          if (directive.primaryDoctorName.isNotEmpty ||
+              directive.primaryDoctorPhone.isNotEmpty)
+            dataLine(
+                'Primary Care Doctor',
+                [
+                  directive.primaryDoctorName,
+                  if (directive.primaryDoctorSpecialty.isNotEmpty)
+                    '(${directive.primaryDoctorSpecialty})',
+                  directive.primaryDoctorPhone,
+                ].where((s) => s.isNotEmpty).join(' · ')),
 
           partHeader('A. When this Combined Mental Health Declaration and Power of Attorney becomes effective'),
           pw.Text(

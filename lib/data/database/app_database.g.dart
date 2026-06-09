@@ -266,6 +266,43 @@ class $DirectivesTable extends Directives
         requiredDuringInsert: false,
         defaultValue: const Constant(''),
       );
+  static const VerificationMeta _primaryDoctorNameMeta = const VerificationMeta(
+    'primaryDoctorName',
+  );
+  @override
+  late final GeneratedColumn<String> primaryDoctorName =
+      GeneratedColumn<String>(
+        'primary_doctor_name',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: const Constant(''),
+      );
+  static const VerificationMeta _primaryDoctorSpecialtyMeta =
+      const VerificationMeta('primaryDoctorSpecialty');
+  @override
+  late final GeneratedColumn<String> primaryDoctorSpecialty =
+      GeneratedColumn<String>(
+        'primary_doctor_specialty',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: const Constant(''),
+      );
+  static const VerificationMeta _primaryDoctorPhoneMeta =
+      const VerificationMeta('primaryDoctorPhone');
+  @override
+  late final GeneratedColumn<String> primaryDoctorPhone =
+      GeneratedColumn<String>(
+        'primary_doctor_phone',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: const Constant(''),
+      );
   static const VerificationMeta _lastStepIndexMeta = const VerificationMeta(
     'lastStepIndex',
   );
@@ -302,6 +339,9 @@ class $DirectivesTable extends Directives
     triggerInvoluntaryCommitment,
     preferredDoctorName,
     preferredDoctorContact,
+    primaryDoctorName,
+    primaryDoctorSpecialty,
+    primaryDoctorPhone,
     lastStepIndex,
   ];
   @override
@@ -478,6 +518,33 @@ class $DirectivesTable extends Directives
         ),
       );
     }
+    if (data.containsKey('primary_doctor_name')) {
+      context.handle(
+        _primaryDoctorNameMeta,
+        primaryDoctorName.isAcceptableOrUnknown(
+          data['primary_doctor_name']!,
+          _primaryDoctorNameMeta,
+        ),
+      );
+    }
+    if (data.containsKey('primary_doctor_specialty')) {
+      context.handle(
+        _primaryDoctorSpecialtyMeta,
+        primaryDoctorSpecialty.isAcceptableOrUnknown(
+          data['primary_doctor_specialty']!,
+          _primaryDoctorSpecialtyMeta,
+        ),
+      );
+    }
+    if (data.containsKey('primary_doctor_phone')) {
+      context.handle(
+        _primaryDoctorPhoneMeta,
+        primaryDoctorPhone.isAcceptableOrUnknown(
+          data['primary_doctor_phone']!,
+          _primaryDoctorPhoneMeta,
+        ),
+      );
+    }
     if (data.containsKey('last_step_index')) {
       context.handle(
         _lastStepIndexMeta,
@@ -584,6 +651,18 @@ class $DirectivesTable extends Directives
         DriftSqlType.string,
         data['${effectivePrefix}preferred_doctor_contact'],
       )!,
+      primaryDoctorName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}primary_doctor_name'],
+      )!,
+      primaryDoctorSpecialty: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}primary_doctor_specialty'],
+      )!,
+      primaryDoctorPhone: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}primary_doctor_phone'],
+      )!,
       lastStepIndex: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}last_step_index'],
@@ -620,6 +699,9 @@ class Directive extends DataClass implements Insertable<Directive> {
   final bool triggerInvoluntaryCommitment;
   final String preferredDoctorName;
   final String preferredDoctorContact;
+  final String primaryDoctorName;
+  final String primaryDoctorSpecialty;
+  final String primaryDoctorPhone;
   final int lastStepIndex;
   const Directive({
     required this.id,
@@ -644,6 +726,9 @@ class Directive extends DataClass implements Insertable<Directive> {
     required this.triggerInvoluntaryCommitment,
     required this.preferredDoctorName,
     required this.preferredDoctorContact,
+    required this.primaryDoctorName,
+    required this.primaryDoctorSpecialty,
+    required this.primaryDoctorPhone,
     required this.lastStepIndex,
   });
   @override
@@ -677,6 +762,9 @@ class Directive extends DataClass implements Insertable<Directive> {
     );
     map['preferred_doctor_name'] = Variable<String>(preferredDoctorName);
     map['preferred_doctor_contact'] = Variable<String>(preferredDoctorContact);
+    map['primary_doctor_name'] = Variable<String>(primaryDoctorName);
+    map['primary_doctor_specialty'] = Variable<String>(primaryDoctorSpecialty);
+    map['primary_doctor_phone'] = Variable<String>(primaryDoctorPhone);
     map['last_step_index'] = Variable<int>(lastStepIndex);
     return map;
   }
@@ -709,6 +797,9 @@ class Directive extends DataClass implements Insertable<Directive> {
       triggerInvoluntaryCommitment: Value(triggerInvoluntaryCommitment),
       preferredDoctorName: Value(preferredDoctorName),
       preferredDoctorContact: Value(preferredDoctorContact),
+      primaryDoctorName: Value(primaryDoctorName),
+      primaryDoctorSpecialty: Value(primaryDoctorSpecialty),
+      primaryDoctorPhone: Value(primaryDoctorPhone),
       lastStepIndex: Value(lastStepIndex),
     );
   }
@@ -751,6 +842,13 @@ class Directive extends DataClass implements Insertable<Directive> {
       preferredDoctorContact: serializer.fromJson<String>(
         json['preferredDoctorContact'],
       ),
+      primaryDoctorName: serializer.fromJson<String>(json['primaryDoctorName']),
+      primaryDoctorSpecialty: serializer.fromJson<String>(
+        json['primaryDoctorSpecialty'],
+      ),
+      primaryDoctorPhone: serializer.fromJson<String>(
+        json['primaryDoctorPhone'],
+      ),
       lastStepIndex: serializer.fromJson<int>(json['lastStepIndex']),
     );
   }
@@ -786,6 +884,11 @@ class Directive extends DataClass implements Insertable<Directive> {
       'preferredDoctorContact': serializer.toJson<String>(
         preferredDoctorContact,
       ),
+      'primaryDoctorName': serializer.toJson<String>(primaryDoctorName),
+      'primaryDoctorSpecialty': serializer.toJson<String>(
+        primaryDoctorSpecialty,
+      ),
+      'primaryDoctorPhone': serializer.toJson<String>(primaryDoctorPhone),
       'lastStepIndex': serializer.toJson<int>(lastStepIndex),
     };
   }
@@ -813,6 +916,9 @@ class Directive extends DataClass implements Insertable<Directive> {
     bool? triggerInvoluntaryCommitment,
     String? preferredDoctorName,
     String? preferredDoctorContact,
+    String? primaryDoctorName,
+    String? primaryDoctorSpecialty,
+    String? primaryDoctorPhone,
     int? lastStepIndex,
   }) => Directive(
     id: id ?? this.id,
@@ -844,6 +950,10 @@ class Directive extends DataClass implements Insertable<Directive> {
     preferredDoctorName: preferredDoctorName ?? this.preferredDoctorName,
     preferredDoctorContact:
         preferredDoctorContact ?? this.preferredDoctorContact,
+    primaryDoctorName: primaryDoctorName ?? this.primaryDoctorName,
+    primaryDoctorSpecialty:
+        primaryDoctorSpecialty ?? this.primaryDoctorSpecialty,
+    primaryDoctorPhone: primaryDoctorPhone ?? this.primaryDoctorPhone,
     lastStepIndex: lastStepIndex ?? this.lastStepIndex,
   );
   Directive copyWithCompanion(DirectivesCompanion data) {
@@ -888,6 +998,15 @@ class Directive extends DataClass implements Insertable<Directive> {
       preferredDoctorContact: data.preferredDoctorContact.present
           ? data.preferredDoctorContact.value
           : this.preferredDoctorContact,
+      primaryDoctorName: data.primaryDoctorName.present
+          ? data.primaryDoctorName.value
+          : this.primaryDoctorName,
+      primaryDoctorSpecialty: data.primaryDoctorSpecialty.present
+          ? data.primaryDoctorSpecialty.value
+          : this.primaryDoctorSpecialty,
+      primaryDoctorPhone: data.primaryDoctorPhone.present
+          ? data.primaryDoctorPhone.value
+          : this.primaryDoctorPhone,
       lastStepIndex: data.lastStepIndex.present
           ? data.lastStepIndex.value
           : this.lastStepIndex,
@@ -921,6 +1040,9 @@ class Directive extends DataClass implements Insertable<Directive> {
           )
           ..write('preferredDoctorName: $preferredDoctorName, ')
           ..write('preferredDoctorContact: $preferredDoctorContact, ')
+          ..write('primaryDoctorName: $primaryDoctorName, ')
+          ..write('primaryDoctorSpecialty: $primaryDoctorSpecialty, ')
+          ..write('primaryDoctorPhone: $primaryDoctorPhone, ')
           ..write('lastStepIndex: $lastStepIndex')
           ..write(')'))
         .toString();
@@ -950,6 +1072,9 @@ class Directive extends DataClass implements Insertable<Directive> {
     triggerInvoluntaryCommitment,
     preferredDoctorName,
     preferredDoctorContact,
+    primaryDoctorName,
+    primaryDoctorSpecialty,
+    primaryDoctorPhone,
     lastStepIndex,
   ]);
   @override
@@ -979,6 +1104,9 @@ class Directive extends DataClass implements Insertable<Directive> {
               this.triggerInvoluntaryCommitment &&
           other.preferredDoctorName == this.preferredDoctorName &&
           other.preferredDoctorContact == this.preferredDoctorContact &&
+          other.primaryDoctorName == this.primaryDoctorName &&
+          other.primaryDoctorSpecialty == this.primaryDoctorSpecialty &&
+          other.primaryDoctorPhone == this.primaryDoctorPhone &&
           other.lastStepIndex == this.lastStepIndex);
 }
 
@@ -1005,6 +1133,9 @@ class DirectivesCompanion extends UpdateCompanion<Directive> {
   final Value<bool> triggerInvoluntaryCommitment;
   final Value<String> preferredDoctorName;
   final Value<String> preferredDoctorContact;
+  final Value<String> primaryDoctorName;
+  final Value<String> primaryDoctorSpecialty;
+  final Value<String> primaryDoctorPhone;
   final Value<int> lastStepIndex;
   const DirectivesCompanion({
     this.id = const Value.absent(),
@@ -1029,6 +1160,9 @@ class DirectivesCompanion extends UpdateCompanion<Directive> {
     this.triggerInvoluntaryCommitment = const Value.absent(),
     this.preferredDoctorName = const Value.absent(),
     this.preferredDoctorContact = const Value.absent(),
+    this.primaryDoctorName = const Value.absent(),
+    this.primaryDoctorSpecialty = const Value.absent(),
+    this.primaryDoctorPhone = const Value.absent(),
     this.lastStepIndex = const Value.absent(),
   });
   DirectivesCompanion.insert({
@@ -1054,6 +1188,9 @@ class DirectivesCompanion extends UpdateCompanion<Directive> {
     this.triggerInvoluntaryCommitment = const Value.absent(),
     this.preferredDoctorName = const Value.absent(),
     this.preferredDoctorContact = const Value.absent(),
+    this.primaryDoctorName = const Value.absent(),
+    this.primaryDoctorSpecialty = const Value.absent(),
+    this.primaryDoctorPhone = const Value.absent(),
     this.lastStepIndex = const Value.absent(),
   }) : formType = Value(formType),
        createdAt = Value(createdAt),
@@ -1081,6 +1218,9 @@ class DirectivesCompanion extends UpdateCompanion<Directive> {
     Expression<bool>? triggerInvoluntaryCommitment,
     Expression<String>? preferredDoctorName,
     Expression<String>? preferredDoctorContact,
+    Expression<String>? primaryDoctorName,
+    Expression<String>? primaryDoctorSpecialty,
+    Expression<String>? primaryDoctorPhone,
     Expression<int>? lastStepIndex,
   }) {
     return RawValuesInsertable({
@@ -1110,6 +1250,11 @@ class DirectivesCompanion extends UpdateCompanion<Directive> {
         'preferred_doctor_name': preferredDoctorName,
       if (preferredDoctorContact != null)
         'preferred_doctor_contact': preferredDoctorContact,
+      if (primaryDoctorName != null) 'primary_doctor_name': primaryDoctorName,
+      if (primaryDoctorSpecialty != null)
+        'primary_doctor_specialty': primaryDoctorSpecialty,
+      if (primaryDoctorPhone != null)
+        'primary_doctor_phone': primaryDoctorPhone,
       if (lastStepIndex != null) 'last_step_index': lastStepIndex,
     });
   }
@@ -1137,6 +1282,9 @@ class DirectivesCompanion extends UpdateCompanion<Directive> {
     Value<bool>? triggerInvoluntaryCommitment,
     Value<String>? preferredDoctorName,
     Value<String>? preferredDoctorContact,
+    Value<String>? primaryDoctorName,
+    Value<String>? primaryDoctorSpecialty,
+    Value<String>? primaryDoctorPhone,
     Value<int>? lastStepIndex,
   }) {
     return DirectivesCompanion(
@@ -1165,6 +1313,10 @@ class DirectivesCompanion extends UpdateCompanion<Directive> {
       preferredDoctorName: preferredDoctorName ?? this.preferredDoctorName,
       preferredDoctorContact:
           preferredDoctorContact ?? this.preferredDoctorContact,
+      primaryDoctorName: primaryDoctorName ?? this.primaryDoctorName,
+      primaryDoctorSpecialty:
+          primaryDoctorSpecialty ?? this.primaryDoctorSpecialty,
+      primaryDoctorPhone: primaryDoctorPhone ?? this.primaryDoctorPhone,
       lastStepIndex: lastStepIndex ?? this.lastStepIndex,
     );
   }
@@ -1246,6 +1398,17 @@ class DirectivesCompanion extends UpdateCompanion<Directive> {
         preferredDoctorContact.value,
       );
     }
+    if (primaryDoctorName.present) {
+      map['primary_doctor_name'] = Variable<String>(primaryDoctorName.value);
+    }
+    if (primaryDoctorSpecialty.present) {
+      map['primary_doctor_specialty'] = Variable<String>(
+        primaryDoctorSpecialty.value,
+      );
+    }
+    if (primaryDoctorPhone.present) {
+      map['primary_doctor_phone'] = Variable<String>(primaryDoctorPhone.value);
+    }
     if (lastStepIndex.present) {
       map['last_step_index'] = Variable<int>(lastStepIndex.value);
     }
@@ -1279,6 +1442,9 @@ class DirectivesCompanion extends UpdateCompanion<Directive> {
           )
           ..write('preferredDoctorName: $preferredDoctorName, ')
           ..write('preferredDoctorContact: $preferredDoctorContact, ')
+          ..write('primaryDoctorName: $primaryDoctorName, ')
+          ..write('primaryDoctorSpecialty: $primaryDoctorSpecialty, ')
+          ..write('primaryDoctorPhone: $primaryDoctorPhone, ')
           ..write('lastStepIndex: $lastStepIndex')
           ..write(')'))
         .toString();
@@ -6317,6 +6483,9 @@ typedef $$DirectivesTableCreateCompanionBuilder =
       Value<bool> triggerInvoluntaryCommitment,
       Value<String> preferredDoctorName,
       Value<String> preferredDoctorContact,
+      Value<String> primaryDoctorName,
+      Value<String> primaryDoctorSpecialty,
+      Value<String> primaryDoctorPhone,
       Value<int> lastStepIndex,
     });
 typedef $$DirectivesTableUpdateCompanionBuilder =
@@ -6343,6 +6512,9 @@ typedef $$DirectivesTableUpdateCompanionBuilder =
       Value<bool> triggerInvoluntaryCommitment,
       Value<String> preferredDoctorName,
       Value<String> preferredDoctorContact,
+      Value<String> primaryDoctorName,
+      Value<String> primaryDoctorSpecialty,
+      Value<String> primaryDoctorPhone,
       Value<int> lastStepIndex,
     });
 
@@ -6651,6 +6823,21 @@ class $$DirectivesTableFilterComposer
 
   ColumnFilters<String> get preferredDoctorContact => $composableBuilder(
     column: $table.preferredDoctorContact,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get primaryDoctorName => $composableBuilder(
+    column: $table.primaryDoctorName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get primaryDoctorSpecialty => $composableBuilder(
+    column: $table.primaryDoctorSpecialty,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get primaryDoctorPhone => $composableBuilder(
+    column: $table.primaryDoctorPhone,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -6983,6 +7170,21 @@ class $$DirectivesTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get primaryDoctorName => $composableBuilder(
+    column: $table.primaryDoctorName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get primaryDoctorSpecialty => $composableBuilder(
+    column: $table.primaryDoctorSpecialty,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get primaryDoctorPhone => $composableBuilder(
+    column: $table.primaryDoctorPhone,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<int> get lastStepIndex => $composableBuilder(
     column: $table.lastStepIndex,
     builder: (column) => ColumnOrderings(column),
@@ -7079,6 +7281,21 @@ class $$DirectivesTableAnnotationComposer
 
   GeneratedColumn<String> get preferredDoctorContact => $composableBuilder(
     column: $table.preferredDoctorContact,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get primaryDoctorName => $composableBuilder(
+    column: $table.primaryDoctorName,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get primaryDoctorSpecialty => $composableBuilder(
+    column: $table.primaryDoctorSpecialty,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get primaryDoctorPhone => $composableBuilder(
+    column: $table.primaryDoctorPhone,
     builder: (column) => column,
   );
 
@@ -7354,6 +7571,9 @@ class $$DirectivesTableTableManager
                 Value<bool> triggerInvoluntaryCommitment = const Value.absent(),
                 Value<String> preferredDoctorName = const Value.absent(),
                 Value<String> preferredDoctorContact = const Value.absent(),
+                Value<String> primaryDoctorName = const Value.absent(),
+                Value<String> primaryDoctorSpecialty = const Value.absent(),
+                Value<String> primaryDoctorPhone = const Value.absent(),
                 Value<int> lastStepIndex = const Value.absent(),
               }) => DirectivesCompanion(
                 id: id,
@@ -7378,6 +7598,9 @@ class $$DirectivesTableTableManager
                 triggerInvoluntaryCommitment: triggerInvoluntaryCommitment,
                 preferredDoctorName: preferredDoctorName,
                 preferredDoctorContact: preferredDoctorContact,
+                primaryDoctorName: primaryDoctorName,
+                primaryDoctorSpecialty: primaryDoctorSpecialty,
+                primaryDoctorPhone: primaryDoctorPhone,
                 lastStepIndex: lastStepIndex,
               ),
           createCompanionCallback:
@@ -7404,6 +7627,9 @@ class $$DirectivesTableTableManager
                 Value<bool> triggerInvoluntaryCommitment = const Value.absent(),
                 Value<String> preferredDoctorName = const Value.absent(),
                 Value<String> preferredDoctorContact = const Value.absent(),
+                Value<String> primaryDoctorName = const Value.absent(),
+                Value<String> primaryDoctorSpecialty = const Value.absent(),
+                Value<String> primaryDoctorPhone = const Value.absent(),
                 Value<int> lastStepIndex = const Value.absent(),
               }) => DirectivesCompanion.insert(
                 id: id,
@@ -7428,6 +7654,9 @@ class $$DirectivesTableTableManager
                 triggerInvoluntaryCommitment: triggerInvoluntaryCommitment,
                 preferredDoctorName: preferredDoctorName,
                 preferredDoctorContact: preferredDoctorContact,
+                primaryDoctorName: primaryDoctorName,
+                primaryDoctorSpecialty: primaryDoctorSpecialty,
+                primaryDoctorPhone: primaryDoctorPhone,
                 lastStepIndex: lastStepIndex,
               ),
           withReferenceMapper: (p0) => p0

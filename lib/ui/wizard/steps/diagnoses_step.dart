@@ -41,15 +41,50 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
   List<IcdCondition> _searchResults = [];
   bool _searching = false;
 
+  // Primary care doctor (artboard "optional" card on this step).
+  final _docNameCtrl = TextEditingController();
+  final _docSpecialtyCtrl = TextEditingController();
+  final _docPhoneCtrl = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final d = await ref
+          .read(directiveRepositoryProvider)
+          .getDirectiveById(widget.directiveId);
+      if (d != null && mounted) {
+        setState(() {
+          _docNameCtrl.text = d.primaryDoctorName;
+          _docSpecialtyCtrl.text = d.primaryDoctorSpecialty;
+          _docPhoneCtrl.text = d.primaryDoctorPhone;
+        });
+      }
+    });
+  }
+
   @override
   void dispose() {
     _debounce?.cancel();
     _searchCtrl.dispose();
+    _docNameCtrl.dispose();
+    _docSpecialtyCtrl.dispose();
+    _docPhoneCtrl.dispose();
     super.dispose();
   }
 
   @override
-  Future<bool> validateAndSave() async => true; // Data saved on each add/remove
+  Future<bool> validateAndSave() async {
+    // Diagnosis entries save on each add/remove; persist the primary-care
+    // doctor here on step change.
+    await ref.read(directiveRepositoryProvider).updatePrimaryDoctor(
+          widget.directiveId,
+          name: _docNameCtrl.text.trim(),
+          specialty: _docSpecialtyCtrl.text.trim(),
+          phone: _docPhoneCtrl.text.trim(),
+        );
+    return true;
+  }
 
   void _onSearchChanged(String query) {
     _debounce?.cancel();
@@ -460,7 +495,49 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
           },
         ),
 
-        const SizedBox(height: 12),
+        const SizedBox(height: 16),
+
+        // Primary care doctor (artboard optional card).
+        const SectionLabel('Primary care doctor · optional'),
+        const SizedBox(height: 8),
+        TextField(
+          controller: _docNameCtrl,
+          textCapitalization: TextCapitalization.words,
+          decoration: const InputDecoration(
+            labelText: 'Doctor name',
+            border: OutlineInputBorder(),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Row(
+          children: [
+            Expanded(
+              flex: 3,
+              child: TextField(
+                controller: _docSpecialtyCtrl,
+                textCapitalization: TextCapitalization.words,
+                decoration: const InputDecoration(
+                  labelText: 'Specialty',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              flex: 2,
+              child: TextField(
+                controller: _docPhoneCtrl,
+                keyboardType: TextInputType.phone,
+                decoration: const InputDecoration(
+                  labelText: 'Phone',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+            ),
+          ],
+        ),
+
+        const SizedBox(height: 16),
 
         // AI-assist hint (static, mirrors the prototype)
         Container(

@@ -68,6 +68,16 @@ List<pw.Page> buildDeclarationPages({
           pw.SizedBox(height: 6),
 
           if (diagnoses.isNotEmpty) diagnosisList(diagnoses),
+          if (directive.primaryDoctorName.isNotEmpty ||
+              directive.primaryDoctorPhone.isNotEmpty)
+            dataLine(
+                'Primary Care Doctor',
+                [
+                  directive.primaryDoctorName,
+                  if (directive.primaryDoctorSpecialty.isNotEmpty)
+                    '(${directive.primaryDoctorSpecialty})',
+                  directive.primaryDoctorPhone,
+                ].where((s) => s.isNotEmpty).join(' · ')),
 
           // A. When this Declaration becomes effective
           partHeader('A. When this Declaration becomes effective'),

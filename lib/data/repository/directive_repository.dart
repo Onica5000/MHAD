@@ -93,6 +93,20 @@ class DirectiveRepository {
         ),
       );
 
+  Future<void> updatePrimaryDoctor(int id, {
+    required String name,
+    required String specialty,
+    required String phone,
+  }) =>
+      (_db.update(_db.directives)..where((t) => t.id.equals(id))).write(
+        DirectivesCompanion(
+          primaryDoctorName: Value(name),
+          primaryDoctorSpecialty: Value(specialty),
+          primaryDoctorPhone: Value(phone),
+          updatedAt: Value(DateTime.now().millisecondsSinceEpoch),
+        ),
+      );
+
   /// Stamps the directive's `executionDate` to [now] (millis-since-epoch).
   /// Called by the wet-ink sign step when the user advances past the
   /// print-and-sign instructions — flips downstream "Signed in effect"
@@ -295,6 +309,9 @@ class DirectiveRepository {
       'triggerInvoluntaryCommitment': d.triggerInvoluntaryCommitment,
       'preferredDoctorName': d.preferredDoctorName,
       'preferredDoctorContact': d.preferredDoctorContact,
+      'primaryDoctorName': d.primaryDoctorName,
+      'primaryDoctorSpecialty': d.primaryDoctorSpecialty,
+      'primaryDoctorPhone': d.primaryDoctorPhone,
       if (prefs != null) 'prefs': {
         'treatmentFacilityPref': prefs.treatmentFacilityPref,
         'preferredFacilityName': prefs.preferredFacilityName,
@@ -385,6 +402,13 @@ class DirectiveRepository {
     final docContact = snap['preferredDoctorContact']?.toString() ?? '';
     if (docName.isNotEmpty || docContact.isNotEmpty) {
       await updatePreferredDoctor(id, name: docName, contact: docContact);
+    }
+    final pcpName = snap['primaryDoctorName']?.toString() ?? '';
+    final pcpSpec = snap['primaryDoctorSpecialty']?.toString() ?? '';
+    final pcpPhone = snap['primaryDoctorPhone']?.toString() ?? '';
+    if (pcpName.isNotEmpty || pcpSpec.isNotEmpty || pcpPhone.isNotEmpty) {
+      await updatePrimaryDoctor(id,
+          name: pcpName, specialty: pcpSpec, phone: pcpPhone);
     }
     final step = snap['lastStepIndex'];
     if (step is int && step > 0) await updateLastStepIndex(id, step);

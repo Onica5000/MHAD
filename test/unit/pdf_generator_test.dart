@@ -33,6 +33,9 @@ Directive _makeDirective() => const Directive(
       triggerInvoluntaryCommitment: false,
       preferredDoctorName: '',
       preferredDoctorContact: '',
+      primaryDoctorName: '',
+      primaryDoctorSpecialty: '',
+      primaryDoctorPhone: '',
       lastStepIndex: 0,
     );
 

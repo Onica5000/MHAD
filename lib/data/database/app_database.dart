@@ -40,10 +40,20 @@ class Directives extends Table {
   BoolColumn get triggerInvoluntaryCommitment =>
       boolean().withDefault(const Constant(false))();
 
-  // Preferred evaluating doctor (official form field)
+  // Preferred evaluating doctor (official form field) — the doctor the user
+  // prefers to certify their capacity ("when this kicks in" step).
   TextColumn get preferredDoctorName =>
       text().withDefault(const Constant(''))();
   TextColumn get preferredDoctorContact =>
+      text().withDefault(const Constant(''))();
+
+  // Primary care doctor (artboard Diagnoses step) — the user's regular doctor,
+  // distinct from the evaluating doctor above.
+  TextColumn get primaryDoctorName =>
+      text().withDefault(const Constant(''))();
+  TextColumn get primaryDoctorSpecialty =>
+      text().withDefault(const Constant(''))();
+  TextColumn get primaryDoctorPhone =>
       text().withDefault(const Constant(''))();
 
   // Wizard resume — tracks which step the user last visited
@@ -241,7 +251,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase(super.executor);
 
   @override
-  int get schemaVersion => 14;
+  int get schemaVersion => 15;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -377,6 +387,18 @@ class AppDatabase extends _$AppDatabase {
             await customStatement(
                 'ALTER TABLE guardian_nominations ADD COLUMN '
                 'guardian_must_consult_agent INTEGER NOT NULL DEFAULT 0');
+          }
+          if (from < 15) {
+            // Primary care doctor (artboard Diagnoses step).
+            await customStatement(
+                "ALTER TABLE directives ADD COLUMN primary_doctor_name "
+                "TEXT NOT NULL DEFAULT ''");
+            await customStatement(
+                "ALTER TABLE directives ADD COLUMN primary_doctor_specialty "
+                "TEXT NOT NULL DEFAULT ''");
+            await customStatement(
+                "ALTER TABLE directives ADD COLUMN primary_doctor_phone "
+                "TEXT NOT NULL DEFAULT ''");
           }
         },
       );
