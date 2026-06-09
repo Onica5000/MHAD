@@ -95,6 +95,10 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
 
   List<DirectiveAllergy> _entries = [];
 
+  // Severe allergens recorded here that are NOT yet on the Medications
+  // "Never give" list — drives the persistent backward-nudge banner(s).
+  List<String> _severeNotAvoided = [];
+
   @override
   void initState() {
     super.initState();
@@ -110,10 +114,29 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
   }
 
   Future<void> _loadData() async {
-    final list = await ref
-        .read(directiveRepositoryProvider)
-        .getAllergies(widget.directiveId);
-    if (mounted) setState(() => _entries = list);
+    final repo = ref.read(directiveRepositoryProvider);
+    final list = await repo.getAllergies(widget.directiveId);
+    final meds = await repo.watchMedications(widget.directiveId).first;
+    final avoided = meds
+        .where((m) => m.entryType == MedicationEntryType.exception.name)
+        .map((m) => m.medicationName.trim().toLowerCase())
+        .toSet();
+    final severe = <String>[];
+    final seen = <String>{};
+    for (final a in list) {
+      if (a.severity == AllergySeverity.severe.name) {
+        final key = a.substance.trim().toLowerCase();
+        if (key.isNotEmpty && !avoided.contains(key) && seen.add(key)) {
+          severe.add(a.substance.trim());
+        }
+      }
+    }
+    if (mounted) {
+      setState(() {
+        _entries = list;
+        _severeNotAvoided = severe;
+      });
+    }
   }
 
   // ── Autocomplete ───────────────────────────────────────────────────────
@@ -168,9 +191,6 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
   Future<void> _addAllergy() async {
     final name = _substanceCtrl.text.trim();
     if (name.isEmpty) return;
-    // Capture severity BEFORE the post-add setState wipes it back to
-    // Moderate — otherwise the severe-allergy nudge below can never fire.
-    final wasSevere = _severity == AllergySeverity.severe;
     await ref.read(directiveRepositoryProvider).addAllergy(
           DirectiveAllergiesCompanion.insert(
             directiveId: widget.directiveId,
@@ -187,39 +207,15 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
       _severity = AllergySeverity.moderate;
       _suggestions = [];
     });
+    // A Severe allergy surfaces the persistent "add to Never give" banner
+    // (computed in _loadData) rather than a transient snackbar — so the nudge
+    // stays visible until the user acts on it.
     await _loadData();
-    if (wasSevere && mounted) {
-      _showSevereNudge(name);
-    }
   }
 
   Future<void> _removeAllergy(int id) async {
     await ref.read(directiveRepositoryProvider).removeAllergy(id);
     await _loadData();
-  }
-
-  /// Backward nudge: a Severe allergy almost certainly belongs on the
-  /// Medications "Never give" list (step 7). Rather than send the user back to
-  /// re-type it, offer to add it there automatically.
-  void _showSevereNudge(String substance) {
-    final cs = Theme.of(context).colorScheme;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        backgroundColor: cs.errorContainer,
-        behavior: SnackBarBehavior.floating,
-        duration: const Duration(seconds: 6),
-        content: Text(
-          'You marked $substance as Severe. Add it to "Never give" in '
-          'Medications?',
-          style: TextStyle(color: cs.onErrorContainer),
-        ),
-        action: SnackBarAction(
-          label: 'Add it',
-          textColor: cs.onErrorContainer,
-          onPressed: () => _addToNeverGive(substance),
-        ),
-      ),
-    );
   }
 
   /// Auto-adds [substance] to the Medications "Never give" (Exceptions) list
@@ -242,6 +238,8 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
           reason: const Value('Severe allergy'),
         ));
       }
+      // Recompute the nudge banners — this substance is now on "Never give".
+      await _loadData();
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -301,6 +299,14 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
           stepId: 'allergies',
         ),
         const SizedBox(height: 8),
+
+        // Persistent backward-nudge: each Severe allergen not yet on the
+        // Medications "Never give" list gets a banner that stays put until
+        // the user adds it (replaces the old transient snackbar).
+        for (final s in _severeNotAvoided) ...[
+          _SevereNudgeBanner(substance: s, onAdd: () => _addToNeverGive(s)),
+          const SizedBox(height: 8),
+        ],
 
         // ── Add an allergy ────────────────────────────────────────────────
         const SectionLabel('Add an allergy'),
@@ -461,6 +467,86 @@ class _MonoLabel extends StatelessWidget {
         fontWeight: FontWeight.w700,
         letterSpacing: 0.6,
         color: p.textMuted,
+      ),
+    );
+  }
+}
+
+/// Persistent crisis-toned banner nudging the user to add a Severe allergen
+/// to the Medications "Never give" list. Mirrors the artboard's inline
+/// warn-banner (replaces the prior transient snackbar). Stays visible until
+/// the substance lands on "Never give".
+class _SevereNudgeBanner extends StatelessWidget {
+  final String substance;
+  final VoidCallback onAdd;
+  const _SevereNudgeBanner({required this.substance, required this.onAdd});
+
+  @override
+  Widget build(BuildContext context) {
+    final dark = Theme.of(context).brightness == Brightness.dark;
+    final bg = dark ? SemanticColors.errorBgDark : SemanticColors.errorBgLight;
+    final border =
+        dark ? SemanticColors.errorBorderDark : SemanticColors.errorBorderLight;
+    final fg =
+        dark ? SemanticColors.errorTextDark : SemanticColors.errorTextLight;
+    final accent =
+        dark ? SemanticColors.errorAccentDark : SemanticColors.errorAccentLight;
+    return Container(
+      decoration: BoxDecoration(
+        color: bg,
+        border: Border.all(color: border),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      padding: const EdgeInsets.fromLTRB(14, 12, 12, 12),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(Icons.warning_amber_rounded, size: 18, color: accent),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text.rich(
+                  TextSpan(
+                    children: [
+                      const TextSpan(text: 'You marked '),
+                      TextSpan(
+                        text: substance,
+                        style: const TextStyle(fontWeight: FontWeight.w700),
+                      ),
+                      const TextSpan(
+                          text: ' as Severe. Add it to “Never give” in '
+                              'Medications so a clinician can’t miss it.'),
+                    ],
+                  ),
+                  style: TextStyle(
+                    fontFamily: 'DM Sans',
+                    fontSize: 13,
+                    height: 1.4,
+                    color: fg,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: FilledButton.icon(
+                    onPressed: onAdd,
+                    icon: const Icon(Icons.block, size: 15),
+                    label: const Text('Add to “Never give”'),
+                    style: FilledButton.styleFrom(
+                      backgroundColor: accent,
+                      foregroundColor: Colors.white,
+                      visualDensity: VisualDensity.compact,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 6),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
