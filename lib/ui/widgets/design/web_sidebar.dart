@@ -285,7 +285,10 @@ class _SidebarItemRow extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 1),
       child: Material(
-        color: active ? p.primaryLight : Colors.transparent,
+        // Solid (not transparent) so the whole row reliably hit-tests on the
+        // web canvas; p.card matches the sidebar background, so it looks the
+        // same as a transparent row but always receives the tap.
+        color: active ? p.primaryLight : p.card,
         borderRadius: BorderRadius.circular(8),
         child: InkWell(
           onTap: onTap,
