@@ -13,6 +13,9 @@ const samhsaHelpline = '18006624357';
 /// Veterans Crisis Line — call 988, then press 1.
 const veteransCrisisPhone = '988';
 
+/// The Trevor Project — crisis support for LGBTQ+ young people (call/text/chat).
+const trevorProjectPhone = '1-866-488-7386';
+
 /// NAMI Helpline (National Alliance on Mental Illness).
 const namiHelpline = '18009506264';
 

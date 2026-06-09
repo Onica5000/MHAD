@@ -146,6 +146,18 @@ class _CrisisSheet extends StatelessWidget {
                 onTap: () => _launch(context, 'tel:$veteransCrisisPhone',
                     copyValue: veteransCrisisPhone),
               ),
+              _CrisisRow(
+                name: 'The Trevor Project (LGBTQ+ youth)',
+                detail: 'Call · text · chat',
+                icon: Icons.diversity_1_outlined,
+                onTap: () => _launch(context, 'tel:$trevorProjectPhone',
+                    copyValue: trevorProjectPhone),
+              ),
+              const SizedBox(height: 10),
+              // Immediate-danger callout (artboard WebCrisis). 911 is the right
+              // escalation when someone is in physical danger right now — kept
+              // visually distinct from the 24/7 support lines above.
+              const _Emergency911Callout(),
               const SizedBox(height: 10),
               const SectionLabel('Why these numbers?'),
               const SizedBox(height: 4),
@@ -167,6 +179,76 @@ class _CrisisSheet extends StatelessWidget {
                 child: TextButton(
                   onPressed: () => Navigator.of(context).pop(),
                   child: const Text('Close'),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Immediate-danger callout — "If you or someone else is in immediate danger,
+/// call 911." Mirrors the artboard `WebCrisis` primary-tinted card. On
+/// mobile it dials; elsewhere it copies 911 to the clipboard.
+class _Emergency911Callout extends StatelessWidget {
+  const _Emergency911Callout();
+
+  Future<void> _call(BuildContext context) async {
+    if (platformIsMobile && !kIsWeb) {
+      final url = Uri.parse('tel:911');
+      if (await canLaunchUrl(url)) {
+        await launchUrl(url);
+      }
+    } else {
+      await Clipboard.setData(const ClipboardData(text: '911'));
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('911 copied to clipboard')),
+        );
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
+    return Material(
+      color: p.primaryLight,
+      borderRadius: BorderRadius.circular(12),
+      child: InkWell(
+        onTap: () => _call(context),
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+          child: Row(
+            children: [
+              Icon(Icons.favorite, size: 18, color: p.primary),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text.rich(
+                  TextSpan(
+                    children: [
+                      const TextSpan(
+                          text: 'If you or someone else is in immediate '
+                              'danger, call '),
+                      TextSpan(
+                        text: '911',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w800,
+                          color: p.primary,
+                        ),
+                      ),
+                      const TextSpan(text: '.'),
+                    ],
+                  ),
+                  style: TextStyle(
+                    fontFamily: 'DM Sans',
+                    fontSize: 13,
+                    height: 1.4,
+                    color: p.onPrimaryLight,
+                  ),
                 ),
               ),
             ],
