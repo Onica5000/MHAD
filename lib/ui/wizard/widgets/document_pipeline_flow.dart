@@ -12,9 +12,11 @@ import 'package:mhad/services/clinical_data_validator.dart';
 import 'package:mhad/services/gemini_rate_tracker.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/ai_consent_dialog.dart';
+import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/friendly_error.dart';
 import 'package:mhad/ui/widgets/nlm_attribution.dart';
 import 'package:mhad/ui/wizard/widgets/document_import_sheet.dart';
+import 'package:mhad/utils/platform_utils.dart';
 
 /// Launches the integrated document → validate → smart fill pipeline.
 /// Returns true if data was applied.
@@ -723,7 +725,7 @@ class _PipelineScreenState extends ConsumerState<_PipelineScreen> {
   }
 
   String get _title => switch (_step) {
-        _PipelineStep.pick => 'Import Document',
+        _PipelineStep.pick => 'Snap to fill',
         _PipelineStep.extracting || _PipelineStep.validating => 'Processing',
         _PipelineStep.review => 'Review Extracted Data',
         _PipelineStep.generating => 'Generating Suggestions',
@@ -743,61 +745,328 @@ class _PipelineScreenState extends ConsumerState<_PipelineScreen> {
 
   // ── Pick ─────────────────────────────────────────────────────────────
 
+  // ── Snap-to-fill (artboard WebSnapFill): the full-page drop / browse /
+  //    webcam surface that feeds the extraction pipeline. ──────────────────
+
+  Future<void> _browseFiles() async {
+    setState(() => _error = null);
+    final docs = await pickDocumentFiles();
+    if (docs.isNotEmpty && mounted) _startPipeline(docs);
+  }
+
+  Future<void> _useWebcam() async {
+    setState(() => _error = null);
+    final docs = await pickDocumentCameraPhoto();
+    if (docs.isNotEmpty && mounted) _startPipeline(docs);
+  }
+
   Widget _buildPickStep() {
-    final cs = Theme.of(context).colorScheme;
-    return Padding(
-      padding: const EdgeInsets.all(24),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.document_scanner, size: 64, color: cs.primary),
-          const SizedBox(height: 16),
-          Text('Import a medical document',
-              style: Theme.of(context).textTheme.titleLarge),
-          const SizedBox(height: 8),
-          Text(
-            'The app will extract medications and conditions, validate them '
-            'against clinical databases, then use AI to fill remaining fields.',
-            textAlign: TextAlign.center,
-            style: TextStyle(color: cs.onSurfaceVariant),
-          ),
-          if (_error != null) ...[
-            const SizedBox(height: 16),
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: cs.errorContainer,
-                borderRadius: BorderRadius.circular(8),
+    final p = Theme.of(context).mhadPalette;
+    return LayoutBuilder(
+      builder: (context, c) {
+        final wide = c.maxWidth >= 720;
+        return SingleChildScrollView(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SectionLabel('Snap to fill · optional'),
+              const SizedBox(height: 6),
+              Text.rich(
+                TextSpan(children: [
+                  const TextSpan(text: 'Have a photo handy? '),
+                  TextSpan(
+                    text: "We'll read it.",
+                    style: TextStyle(color: p.primary),
+                  ),
+                ]),
+                style: TextStyle(
+                  fontFamily: 'Instrument Serif',
+                  fontFamilyFallback: const ['Georgia', 'serif'],
+                  fontStyle: FontStyle.italic,
+                  fontSize: 32,
+                  height: 1.05,
+                  letterSpacing: -0.5,
+                  color: p.text,
+                ),
               ),
-              child: Column(
+              const SizedBox(height: 8),
+              Text(
+                'Drop a photo or PDF — ID, medication list, prescription label, '
+                'an old directive — and the AI will extract what it can. You '
+                'review every field before it lands in the form. Or close this '
+                'and type it all yourself.',
+                style: TextStyle(
+                  fontFamily: 'DM Sans',
+                  fontSize: 14,
+                  height: 1.5,
+                  color: p.textMuted,
+                ),
+              ),
+              const SizedBox(height: 20),
+              if (_error != null) ...[
+                _errorCard(p),
+                const SizedBox(height: 16),
+              ],
+              if (wide)
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(flex: 3, child: _dropZone(p)),
+                    const SizedBox(width: 16),
+                    Expanded(flex: 2, child: _targetsPanel(p)),
+                  ],
+                )
+              else ...[
+                _dropZone(p),
+                const SizedBox(height: 16),
+                _targetsPanel(p),
+              ],
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _errorCard(MhadPalette p) {
+    final cs = Theme.of(context).colorScheme;
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: cs.errorContainer,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(_error!, style: TextStyle(color: cs.onErrorContainer)),
+          const SizedBox(height: 8),
+          TextButton.icon(
+            onPressed: _browseFiles,
+            icon: const Icon(Icons.refresh),
+            label: const Text('Try again'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _dropZone(MhadPalette p) {
+    return InkWell(
+      onTap: _browseFiles,
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        decoration: BoxDecoration(
+          color: p.primaryTint,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: p.primary, width: 2),
+        ),
+        padding: const EdgeInsets.fromLTRB(24, 30, 24, 22),
+        child: Column(
+          children: [
+            Container(
+              width: 60,
+              height: 60,
+              decoration: BoxDecoration(
+                color: p.primary,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Icon(Icons.upload_file, size: 28, color: p.onPrimary),
+            ),
+            const SizedBox(height: 14),
+            Text(
+              'Drop a photo, PDF, or screenshot',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontFamily: 'DM Sans',
+                fontSize: 19,
+                fontWeight: FontWeight.w700,
+                color: p.text,
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              'JPG · PNG · HEIC · PDF · up to 10 MB',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontFamily: 'DM Sans',
+                fontSize: 12.5,
+                color: p.textMuted,
+              ),
+            ),
+            const SizedBox(height: 18),
+            Wrap(
+              spacing: 10,
+              runSpacing: 8,
+              alignment: WrapAlignment.center,
+              children: [
+                FilledButton.icon(
+                  onPressed: _browseFiles,
+                  icon: const Icon(Icons.folder_open, size: 16),
+                  label: const Text('Browse files'),
+                ),
+                if (deviceHasCamera)
+                  OutlinedButton.icon(
+                    onPressed: _useWebcam,
+                    icon: const Icon(Icons.photo_camera_outlined, size: 16),
+                    label: const Text('Use webcam'),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 18),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              decoration: BoxDecoration(
+                color: p.card,
+                border: Border.all(color: p.primaryLight),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Row(
                 children: [
-                  Text(_error!,
-                      style: TextStyle(color: cs.onErrorContainer)),
-                  const SizedBox(height: 8),
-                  TextButton.icon(
-                    onPressed: () async {
-                      setState(() => _error = null);
-                      final docs = await showDocumentPickerSheet(context);
-                      if (docs != null && docs.isNotEmpty && mounted) _startPipeline(docs);
-                    },
-                    icon: const Icon(Icons.refresh),
-                    label: const Text('Try Again'),
+                  Icon(Icons.lock_outline, size: 14, color: p.primary),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'Your file is sent to the AI only to read it, then '
+                      "discarded. Nothing is saved — it's gone when this tab "
+                      'closes.',
+                      style: TextStyle(
+                        fontFamily: 'DM Sans',
+                        fontSize: 11.5,
+                        height: 1.4,
+                        color: p.text,
+                      ),
+                    ),
                   ),
                 ],
               ),
             ),
           ],
-          const SizedBox(height: 24),
-          FilledButton.icon(
-            onPressed: () async {
-              final doc = await showDocumentPickerSheet(context);
-              if (doc != null && mounted) _startPipeline(doc);
-            },
-            icon: const Icon(Icons.upload_file),
-            label: const Text('Choose Document'),
-          ),
-        ],
+        ),
       ),
+    );
+  }
+
+  Widget _targetsPanel(MhadPalette p) {
+    const targets = <(IconData, String, String)>[
+      (Icons.badge_outlined, 'Photo of ID', 'Name · DOB · address'),
+      (Icons.medication_outlined, 'Rx bottle / label', 'Drug · dose · schedule'),
+      (Icons.coronavirus_outlined, 'Conditions list', 'Diagnoses · allergies'),
+      (Icons.description_outlined, 'Anything else', 'Notes, old directive…'),
+    ];
+    Widget tile((IconData, String, String) t) => Expanded(
+          child: InkWell(
+            onTap: _browseFiles,
+            borderRadius: BorderRadius.circular(12),
+            child: Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: p.card,
+                border: Border.all(color: p.border),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 30,
+                    height: 30,
+                    decoration: BoxDecoration(
+                      color: p.primaryTint,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Icon(t.$1, size: 16, color: p.primary),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    t.$2,
+                    style: TextStyle(
+                      fontFamily: 'DM Sans',
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      color: p.text,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    t.$3,
+                    style: TextStyle(
+                      fontFamily: 'DM Sans',
+                      fontSize: 11,
+                      height: 1.3,
+                      color: p.textMuted,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SectionLabel('What you can drop here'),
+        const SizedBox(height: 8),
+        IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [tile(targets[0]), const SizedBox(width: 8), tile(targets[1])],
+          ),
+        ),
+        const SizedBox(height: 8),
+        IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [tile(targets[2]), const SizedBox(width: 8), tile(targets[3])],
+          ),
+        ),
+        const SizedBox(height: 12),
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: p.card,
+            border: Border.all(color: p.border),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(Icons.smartphone_outlined, size: 18, color: p.primary),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'On a phone?',
+                      style: TextStyle(
+                        fontFamily: 'DM Sans',
+                        fontSize: 12.5,
+                        fontWeight: FontWeight.w700,
+                        color: p.text,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      'Tap “Use webcam” to snap a page directly with your '
+                      'camera.',
+                      style: TextStyle(
+                        fontFamily: 'DM Sans',
+                        fontSize: 11.5,
+                        height: 1.35,
+                        color: p.textMuted,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 

@@ -37,6 +37,50 @@ Future<List<PickedDocument>?> showDocumentPickerSheet(BuildContext context) {
   );
 }
 
+/// Opens the OS file picker and returns the chosen documents (PDF / text /
+/// image, multi-select). Returns an empty list if cancelled. Used by the
+/// full-page Snap-to-fill drop zone (no bottom sheet).
+Future<List<PickedDocument>> pickDocumentFiles() async {
+  final result = await FilePicker.platform.pickFiles(
+    type: FileType.custom,
+    allowedExtensions: ['pdf', 'txt', 'csv', 'jpg', 'jpeg', 'png', 'webp'],
+    allowMultiple: true,
+  );
+  if (result == null) return const [];
+  final docs = <PickedDocument>[];
+  for (final f in result.files) {
+    if (f.path != null || f.bytes != null) {
+      docs.add(PickedDocument(
+        path: f.path ?? f.name,
+        mimeType: _fileMimeType(f.name),
+        bytes: f.bytes,
+      ));
+    }
+  }
+  return docs;
+}
+
+/// Captures a single photo from the camera (webcam on mobile web). Returns an
+/// empty list if cancelled.
+Future<List<PickedDocument>> pickDocumentCameraPhoto() async {
+  final picker = ImagePicker();
+  final image = await picker.pickImage(
+    source: ImageSource.camera,
+    maxWidth: 1024,
+    maxHeight: 1024,
+    imageQuality: 75,
+  );
+  if (image == null) return const [];
+  final bytes = await image.readAsBytes();
+  return [
+    PickedDocument(
+      path: image.path,
+      mimeType: _imageMimeType(image.path),
+      bytes: bytes,
+    ),
+  ];
+}
+
 class _DocumentPickerContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
