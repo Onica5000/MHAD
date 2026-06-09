@@ -206,8 +206,15 @@ class GuardianNominations extends Table {
   TextColumn get nomineePhone => text().withDefault(const Constant(''))();
   TextColumn get nomineeRelationship =>
       text().withDefault(const Constant(''))();
-  // true = guardian authorized to revoke; false = guardian cannot revoke
+  // true = guardian authorized to revoke ("can override this directive");
+  // false = guardian cannot revoke
   BoolColumn get guardianCanRevoke =>
+      boolean().withDefault(const Constant(false))();
+  // Artboard guardian "conditions": may the guardian change my agent, and
+  // must the guardian consult my agent before acting?
+  BoolColumn get guardianCanChangeAgent =>
+      boolean().withDefault(const Constant(false))();
+  BoolColumn get guardianMustConsultAgent =>
       boolean().withDefault(const Constant(false))();
   // Relation to existing agents: 'sameAsPrimary' | 'sameAsAlternate' |
   // 'different' | 'noPreference'. Existing rows with `nomineeFullName`
@@ -234,7 +241,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase(super.executor);
 
   @override
-  int get schemaVersion => 13;
+  int get schemaVersion => 14;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -360,6 +367,16 @@ class AppDatabase extends _$AppDatabase {
             await customStatement(
                 'ALTER TABLE directives ADD COLUMN '
                 'trigger_involuntary_commitment INTEGER NOT NULL DEFAULT 0');
+          }
+          if (from < 14) {
+            // Guardian "conditions": can change my agent / must consult my
+            // agent first (artboard guardian step).
+            await customStatement(
+                'ALTER TABLE guardian_nominations ADD COLUMN '
+                'guardian_can_change_agent INTEGER NOT NULL DEFAULT 0');
+            await customStatement(
+                'ALTER TABLE guardian_nominations ADD COLUMN '
+                'guardian_must_consult_agent INTEGER NOT NULL DEFAULT 0');
           }
         },
       );

@@ -319,6 +319,8 @@ class DirectiveRepository {
         'nomineePhone': guardian.nomineePhone,
         'nomineeRelationship': guardian.nomineeRelationship,
         'guardianCanRevoke': guardian.guardianCanRevoke,
+        'guardianCanChangeAgent': guardian.guardianCanChangeAgent,
+        'guardianMustConsultAgent': guardian.guardianMustConsultAgent,
         'guardianRelation': guardian.guardianRelation,
       },
       if (instr != null) 'instructions': {
@@ -419,6 +421,8 @@ class DirectiveRepository {
         nomineePhone: _v(g['nomineePhone']),
         nomineeRelationship: _v(g['nomineeRelationship']),
         guardianCanRevoke: _vBool(g['guardianCanRevoke']),
+        guardianCanChangeAgent: _vBool(g['guardianCanChangeAgent']),
+        guardianMustConsultAgent: _vBool(g['guardianMustConsultAgent']),
         guardianRelation: _v(g['guardianRelation']),
       ));
     }

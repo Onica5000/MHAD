@@ -50,6 +50,8 @@ class _GuardianNominationStepState
   late final TextEditingController _relationshipCtrl;
   int? _existingId;
   bool _guardianCanRevoke = false;
+  bool _guardianCanChangeAgent = false;
+  bool _guardianMustConsultAgent = false;
   _GuardianRel _relation = _GuardianRel.noPreference;
 
   @override
@@ -83,6 +85,8 @@ class _GuardianNominationStepState
         _phoneCtrl.text = g.nomineePhone;
         _relationshipCtrl.text = g.nomineeRelationship;
         _guardianCanRevoke = g.guardianCanRevoke;
+        _guardianCanChangeAgent = g.guardianCanChangeAgent;
+        _guardianMustConsultAgent = g.guardianMustConsultAgent;
         _relation = _GuardianRel.fromId(g.guardianRelation);
       });
     }
@@ -110,6 +114,8 @@ class _GuardianNominationStepState
             nomineePhone: Value(_phoneCtrl.text.trim()),
             nomineeRelationship: Value(_relationshipCtrl.text.trim()),
             guardianCanRevoke: Value(_guardianCanRevoke),
+            guardianCanChangeAgent: Value(_guardianCanChangeAgent),
+            guardianMustConsultAgent: Value(_guardianMustConsultAgent),
             guardianRelation: Value(_relation.id),
           ),
         );
@@ -249,41 +255,109 @@ class _GuardianNominationStepState
           ],
           const SizedBox(height: 24),
           Text(
-            'Guardian authority over this directive',
+            'Conditions on the guardianship',
             style: Theme.of(context).textTheme.titleSmall,
           ),
           const SizedBox(height: 4),
           Text(
-            'If a guardian is appointed, should they have the power to '
-            'revoke, suspend, or terminate this directive?',
+            'If a court appoints a guardian, set the limits you want it to '
+            'honor. These are guidance for the court, not binding.',
             style: Theme.of(context).textTheme.bodySmall,
           ),
-          // Wrapped in RadioGroup per Flutter ≥ 3.32 — replaces the
-          // deprecated per-tile groupValue / onChanged pattern.
-          RadioGroup<bool>(
-            groupValue: _guardianCanRevoke,
-            onChanged: (v) {
-              if (v != null) setState(() => _guardianCanRevoke = v);
-            },
-            child: const Column(
+          const SizedBox(height: 12),
+          _GuardianConditionRow(
+            label: 'Can change my agent',
+            value: _guardianCanChangeAgent,
+            onChanged: (v) => setState(() => _guardianCanChangeAgent = v),
+          ),
+          _GuardianConditionRow(
+            label: 'Can override this directive',
+            sub: 'Revoke, suspend, or terminate it.',
+            value: _guardianCanRevoke,
+            onChanged: (v) => setState(() => _guardianCanRevoke = v),
+          ),
+          _GuardianConditionRow(
+            label: 'Must consult my agent first',
+            value: _guardianMustConsultAgent,
+            onChanged: (v) => setState(() => _guardianMustConsultAgent = v),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// A single guardian "condition" — a label with a Yes/No segmented toggle,
+/// mirroring the artboard's ConsentRow.
+class _GuardianConditionRow extends StatelessWidget {
+  final String label;
+  final String? sub;
+  final bool value;
+  final ValueChanged<bool> onChanged;
+  const _GuardianConditionRow({
+    required this.label,
+    required this.value,
+    required this.onChanged,
+    this.sub,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    Widget pill(String text, bool isYes) {
+      final selected = value == isYes;
+      return InkWell(
+        onTap: () => onChanged(isYes),
+        borderRadius: BorderRadius.circular(100),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 6),
+          decoration: BoxDecoration(
+            color: selected ? cs.primary : Colors.transparent,
+            borderRadius: BorderRadius.circular(100),
+          ),
+          child: Text(
+            text,
+            style: TextStyle(
+              fontFamily: 'DM Sans',
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              color: selected ? cs.onPrimary : cs.onSurfaceVariant,
+            ),
+          ),
+        ),
+      );
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                RadioListTile<bool>(
-                  title: Text(
-                    'The guardian will NOT have the power to revoke, suspend, '
-                    'or terminate this directive.',
-                  ),
-                  value: false,
-                  contentPadding: EdgeInsets.zero,
+                Text(
+                  label,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(fontWeight: FontWeight.w600),
                 ),
-                RadioListTile<bool>(
-                  title: Text(
-                    'I authorize the guardian to revoke, suspend, or terminate '
-                    'this directive.',
-                  ),
-                  value: true,
-                  contentPadding: EdgeInsets.zero,
-                ),
+                if (sub != null)
+                  Text(sub!, style: Theme.of(context).textTheme.bodySmall),
               ],
+            ),
+          ),
+          const SizedBox(width: 12),
+          Container(
+            padding: const EdgeInsets.all(3),
+            decoration: BoxDecoration(
+              border: Border.all(color: cs.outlineVariant),
+              borderRadius: BorderRadius.circular(100),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [pill('No', false), pill('Yes', true)],
             ),
           ),
         ],

@@ -4695,6 +4695,36 @@ class $GuardianNominationsTable extends GuardianNominations
     ),
     defaultValue: const Constant(false),
   );
+  static const VerificationMeta _guardianCanChangeAgentMeta =
+      const VerificationMeta('guardianCanChangeAgent');
+  @override
+  late final GeneratedColumn<bool> guardianCanChangeAgent =
+      GeneratedColumn<bool>(
+        'guardian_can_change_agent',
+        aliasedName,
+        false,
+        type: DriftSqlType.bool,
+        requiredDuringInsert: false,
+        defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("guardian_can_change_agent" IN (0, 1))',
+        ),
+        defaultValue: const Constant(false),
+      );
+  static const VerificationMeta _guardianMustConsultAgentMeta =
+      const VerificationMeta('guardianMustConsultAgent');
+  @override
+  late final GeneratedColumn<bool> guardianMustConsultAgent =
+      GeneratedColumn<bool>(
+        'guardian_must_consult_agent',
+        aliasedName,
+        false,
+        type: DriftSqlType.bool,
+        requiredDuringInsert: false,
+        defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("guardian_must_consult_agent" IN (0, 1))',
+        ),
+        defaultValue: const Constant(false),
+      );
   static const VerificationMeta _guardianRelationMeta = const VerificationMeta(
     'guardianRelation',
   );
@@ -4716,6 +4746,8 @@ class $GuardianNominationsTable extends GuardianNominations
     nomineePhone,
     nomineeRelationship,
     guardianCanRevoke,
+    guardianCanChangeAgent,
+    guardianMustConsultAgent,
     guardianRelation,
   ];
   @override
@@ -4789,6 +4821,24 @@ class $GuardianNominationsTable extends GuardianNominations
         ),
       );
     }
+    if (data.containsKey('guardian_can_change_agent')) {
+      context.handle(
+        _guardianCanChangeAgentMeta,
+        guardianCanChangeAgent.isAcceptableOrUnknown(
+          data['guardian_can_change_agent']!,
+          _guardianCanChangeAgentMeta,
+        ),
+      );
+    }
+    if (data.containsKey('guardian_must_consult_agent')) {
+      context.handle(
+        _guardianMustConsultAgentMeta,
+        guardianMustConsultAgent.isAcceptableOrUnknown(
+          data['guardian_must_consult_agent']!,
+          _guardianMustConsultAgentMeta,
+        ),
+      );
+    }
     if (data.containsKey('guardian_relation')) {
       context.handle(
         _guardianRelationMeta,
@@ -4835,6 +4885,14 @@ class $GuardianNominationsTable extends GuardianNominations
         DriftSqlType.bool,
         data['${effectivePrefix}guardian_can_revoke'],
       )!,
+      guardianCanChangeAgent: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}guardian_can_change_agent'],
+      )!,
+      guardianMustConsultAgent: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}guardian_must_consult_agent'],
+      )!,
       guardianRelation: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}guardian_relation'],
@@ -4857,6 +4915,8 @@ class GuardianNomination extends DataClass
   final String nomineePhone;
   final String nomineeRelationship;
   final bool guardianCanRevoke;
+  final bool guardianCanChangeAgent;
+  final bool guardianMustConsultAgent;
   final String guardianRelation;
   const GuardianNomination({
     required this.id,
@@ -4866,6 +4926,8 @@ class GuardianNomination extends DataClass
     required this.nomineePhone,
     required this.nomineeRelationship,
     required this.guardianCanRevoke,
+    required this.guardianCanChangeAgent,
+    required this.guardianMustConsultAgent,
     required this.guardianRelation,
   });
   @override
@@ -4878,6 +4940,10 @@ class GuardianNomination extends DataClass
     map['nominee_phone'] = Variable<String>(nomineePhone);
     map['nominee_relationship'] = Variable<String>(nomineeRelationship);
     map['guardian_can_revoke'] = Variable<bool>(guardianCanRevoke);
+    map['guardian_can_change_agent'] = Variable<bool>(guardianCanChangeAgent);
+    map['guardian_must_consult_agent'] = Variable<bool>(
+      guardianMustConsultAgent,
+    );
     map['guardian_relation'] = Variable<String>(guardianRelation);
     return map;
   }
@@ -4891,6 +4957,8 @@ class GuardianNomination extends DataClass
       nomineePhone: Value(nomineePhone),
       nomineeRelationship: Value(nomineeRelationship),
       guardianCanRevoke: Value(guardianCanRevoke),
+      guardianCanChangeAgent: Value(guardianCanChangeAgent),
+      guardianMustConsultAgent: Value(guardianMustConsultAgent),
       guardianRelation: Value(guardianRelation),
     );
   }
@@ -4910,6 +4978,12 @@ class GuardianNomination extends DataClass
         json['nomineeRelationship'],
       ),
       guardianCanRevoke: serializer.fromJson<bool>(json['guardianCanRevoke']),
+      guardianCanChangeAgent: serializer.fromJson<bool>(
+        json['guardianCanChangeAgent'],
+      ),
+      guardianMustConsultAgent: serializer.fromJson<bool>(
+        json['guardianMustConsultAgent'],
+      ),
       guardianRelation: serializer.fromJson<String>(json['guardianRelation']),
     );
   }
@@ -4924,6 +4998,10 @@ class GuardianNomination extends DataClass
       'nomineePhone': serializer.toJson<String>(nomineePhone),
       'nomineeRelationship': serializer.toJson<String>(nomineeRelationship),
       'guardianCanRevoke': serializer.toJson<bool>(guardianCanRevoke),
+      'guardianCanChangeAgent': serializer.toJson<bool>(guardianCanChangeAgent),
+      'guardianMustConsultAgent': serializer.toJson<bool>(
+        guardianMustConsultAgent,
+      ),
       'guardianRelation': serializer.toJson<String>(guardianRelation),
     };
   }
@@ -4936,6 +5014,8 @@ class GuardianNomination extends DataClass
     String? nomineePhone,
     String? nomineeRelationship,
     bool? guardianCanRevoke,
+    bool? guardianCanChangeAgent,
+    bool? guardianMustConsultAgent,
     String? guardianRelation,
   }) => GuardianNomination(
     id: id ?? this.id,
@@ -4945,6 +5025,10 @@ class GuardianNomination extends DataClass
     nomineePhone: nomineePhone ?? this.nomineePhone,
     nomineeRelationship: nomineeRelationship ?? this.nomineeRelationship,
     guardianCanRevoke: guardianCanRevoke ?? this.guardianCanRevoke,
+    guardianCanChangeAgent:
+        guardianCanChangeAgent ?? this.guardianCanChangeAgent,
+    guardianMustConsultAgent:
+        guardianMustConsultAgent ?? this.guardianMustConsultAgent,
     guardianRelation: guardianRelation ?? this.guardianRelation,
   );
   GuardianNomination copyWithCompanion(GuardianNominationsCompanion data) {
@@ -4968,6 +5052,12 @@ class GuardianNomination extends DataClass
       guardianCanRevoke: data.guardianCanRevoke.present
           ? data.guardianCanRevoke.value
           : this.guardianCanRevoke,
+      guardianCanChangeAgent: data.guardianCanChangeAgent.present
+          ? data.guardianCanChangeAgent.value
+          : this.guardianCanChangeAgent,
+      guardianMustConsultAgent: data.guardianMustConsultAgent.present
+          ? data.guardianMustConsultAgent.value
+          : this.guardianMustConsultAgent,
       guardianRelation: data.guardianRelation.present
           ? data.guardianRelation.value
           : this.guardianRelation,
@@ -4984,6 +5074,8 @@ class GuardianNomination extends DataClass
           ..write('nomineePhone: $nomineePhone, ')
           ..write('nomineeRelationship: $nomineeRelationship, ')
           ..write('guardianCanRevoke: $guardianCanRevoke, ')
+          ..write('guardianCanChangeAgent: $guardianCanChangeAgent, ')
+          ..write('guardianMustConsultAgent: $guardianMustConsultAgent, ')
           ..write('guardianRelation: $guardianRelation')
           ..write(')'))
         .toString();
@@ -4998,6 +5090,8 @@ class GuardianNomination extends DataClass
     nomineePhone,
     nomineeRelationship,
     guardianCanRevoke,
+    guardianCanChangeAgent,
+    guardianMustConsultAgent,
     guardianRelation,
   );
   @override
@@ -5011,6 +5105,8 @@ class GuardianNomination extends DataClass
           other.nomineePhone == this.nomineePhone &&
           other.nomineeRelationship == this.nomineeRelationship &&
           other.guardianCanRevoke == this.guardianCanRevoke &&
+          other.guardianCanChangeAgent == this.guardianCanChangeAgent &&
+          other.guardianMustConsultAgent == this.guardianMustConsultAgent &&
           other.guardianRelation == this.guardianRelation);
 }
 
@@ -5022,6 +5118,8 @@ class GuardianNominationsCompanion extends UpdateCompanion<GuardianNomination> {
   final Value<String> nomineePhone;
   final Value<String> nomineeRelationship;
   final Value<bool> guardianCanRevoke;
+  final Value<bool> guardianCanChangeAgent;
+  final Value<bool> guardianMustConsultAgent;
   final Value<String> guardianRelation;
   const GuardianNominationsCompanion({
     this.id = const Value.absent(),
@@ -5031,6 +5129,8 @@ class GuardianNominationsCompanion extends UpdateCompanion<GuardianNomination> {
     this.nomineePhone = const Value.absent(),
     this.nomineeRelationship = const Value.absent(),
     this.guardianCanRevoke = const Value.absent(),
+    this.guardianCanChangeAgent = const Value.absent(),
+    this.guardianMustConsultAgent = const Value.absent(),
     this.guardianRelation = const Value.absent(),
   });
   GuardianNominationsCompanion.insert({
@@ -5041,6 +5141,8 @@ class GuardianNominationsCompanion extends UpdateCompanion<GuardianNomination> {
     this.nomineePhone = const Value.absent(),
     this.nomineeRelationship = const Value.absent(),
     this.guardianCanRevoke = const Value.absent(),
+    this.guardianCanChangeAgent = const Value.absent(),
+    this.guardianMustConsultAgent = const Value.absent(),
     this.guardianRelation = const Value.absent(),
   }) : directiveId = Value(directiveId);
   static Insertable<GuardianNomination> custom({
@@ -5051,6 +5153,8 @@ class GuardianNominationsCompanion extends UpdateCompanion<GuardianNomination> {
     Expression<String>? nomineePhone,
     Expression<String>? nomineeRelationship,
     Expression<bool>? guardianCanRevoke,
+    Expression<bool>? guardianCanChangeAgent,
+    Expression<bool>? guardianMustConsultAgent,
     Expression<String>? guardianRelation,
   }) {
     return RawValuesInsertable({
@@ -5062,6 +5166,10 @@ class GuardianNominationsCompanion extends UpdateCompanion<GuardianNomination> {
       if (nomineeRelationship != null)
         'nominee_relationship': nomineeRelationship,
       if (guardianCanRevoke != null) 'guardian_can_revoke': guardianCanRevoke,
+      if (guardianCanChangeAgent != null)
+        'guardian_can_change_agent': guardianCanChangeAgent,
+      if (guardianMustConsultAgent != null)
+        'guardian_must_consult_agent': guardianMustConsultAgent,
       if (guardianRelation != null) 'guardian_relation': guardianRelation,
     });
   }
@@ -5074,6 +5182,8 @@ class GuardianNominationsCompanion extends UpdateCompanion<GuardianNomination> {
     Value<String>? nomineePhone,
     Value<String>? nomineeRelationship,
     Value<bool>? guardianCanRevoke,
+    Value<bool>? guardianCanChangeAgent,
+    Value<bool>? guardianMustConsultAgent,
     Value<String>? guardianRelation,
   }) {
     return GuardianNominationsCompanion(
@@ -5084,6 +5194,10 @@ class GuardianNominationsCompanion extends UpdateCompanion<GuardianNomination> {
       nomineePhone: nomineePhone ?? this.nomineePhone,
       nomineeRelationship: nomineeRelationship ?? this.nomineeRelationship,
       guardianCanRevoke: guardianCanRevoke ?? this.guardianCanRevoke,
+      guardianCanChangeAgent:
+          guardianCanChangeAgent ?? this.guardianCanChangeAgent,
+      guardianMustConsultAgent:
+          guardianMustConsultAgent ?? this.guardianMustConsultAgent,
       guardianRelation: guardianRelation ?? this.guardianRelation,
     );
   }
@@ -5112,6 +5226,16 @@ class GuardianNominationsCompanion extends UpdateCompanion<GuardianNomination> {
     if (guardianCanRevoke.present) {
       map['guardian_can_revoke'] = Variable<bool>(guardianCanRevoke.value);
     }
+    if (guardianCanChangeAgent.present) {
+      map['guardian_can_change_agent'] = Variable<bool>(
+        guardianCanChangeAgent.value,
+      );
+    }
+    if (guardianMustConsultAgent.present) {
+      map['guardian_must_consult_agent'] = Variable<bool>(
+        guardianMustConsultAgent.value,
+      );
+    }
     if (guardianRelation.present) {
       map['guardian_relation'] = Variable<String>(guardianRelation.value);
     }
@@ -5128,6 +5252,8 @@ class GuardianNominationsCompanion extends UpdateCompanion<GuardianNomination> {
           ..write('nomineePhone: $nomineePhone, ')
           ..write('nomineeRelationship: $nomineeRelationship, ')
           ..write('guardianCanRevoke: $guardianCanRevoke, ')
+          ..write('guardianCanChangeAgent: $guardianCanChangeAgent, ')
+          ..write('guardianMustConsultAgent: $guardianMustConsultAgent, ')
           ..write('guardianRelation: $guardianRelation')
           ..write(')'))
         .toString();
@@ -9759,6 +9885,8 @@ typedef $$GuardianNominationsTableCreateCompanionBuilder =
       Value<String> nomineePhone,
       Value<String> nomineeRelationship,
       Value<bool> guardianCanRevoke,
+      Value<bool> guardianCanChangeAgent,
+      Value<bool> guardianMustConsultAgent,
       Value<String> guardianRelation,
     });
 typedef $$GuardianNominationsTableUpdateCompanionBuilder =
@@ -9770,6 +9898,8 @@ typedef $$GuardianNominationsTableUpdateCompanionBuilder =
       Value<String> nomineePhone,
       Value<String> nomineeRelationship,
       Value<bool> guardianCanRevoke,
+      Value<bool> guardianCanChangeAgent,
+      Value<bool> guardianMustConsultAgent,
       Value<String> guardianRelation,
     });
 
@@ -9848,6 +9978,16 @@ class $$GuardianNominationsTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
+  ColumnFilters<bool> get guardianCanChangeAgent => $composableBuilder(
+    column: $table.guardianCanChangeAgent,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get guardianMustConsultAgent => $composableBuilder(
+    column: $table.guardianMustConsultAgent,
+    builder: (column) => ColumnFilters(column),
+  );
+
   ColumnFilters<String> get guardianRelation => $composableBuilder(
     column: $table.guardianRelation,
     builder: (column) => ColumnFilters(column),
@@ -9916,6 +10056,16 @@ class $$GuardianNominationsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<bool> get guardianCanChangeAgent => $composableBuilder(
+    column: $table.guardianCanChangeAgent,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get guardianMustConsultAgent => $composableBuilder(
+    column: $table.guardianMustConsultAgent,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get guardianRelation => $composableBuilder(
     column: $table.guardianRelation,
     builder: (column) => ColumnOrderings(column),
@@ -9979,6 +10129,16 @@ class $$GuardianNominationsTableAnnotationComposer
 
   GeneratedColumn<bool> get guardianCanRevoke => $composableBuilder(
     column: $table.guardianCanRevoke,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get guardianCanChangeAgent => $composableBuilder(
+    column: $table.guardianCanChangeAgent,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get guardianMustConsultAgent => $composableBuilder(
+    column: $table.guardianMustConsultAgent,
     builder: (column) => column,
   );
 
@@ -10054,6 +10214,8 @@ class $$GuardianNominationsTableTableManager
                 Value<String> nomineePhone = const Value.absent(),
                 Value<String> nomineeRelationship = const Value.absent(),
                 Value<bool> guardianCanRevoke = const Value.absent(),
+                Value<bool> guardianCanChangeAgent = const Value.absent(),
+                Value<bool> guardianMustConsultAgent = const Value.absent(),
                 Value<String> guardianRelation = const Value.absent(),
               }) => GuardianNominationsCompanion(
                 id: id,
@@ -10063,6 +10225,8 @@ class $$GuardianNominationsTableTableManager
                 nomineePhone: nomineePhone,
                 nomineeRelationship: nomineeRelationship,
                 guardianCanRevoke: guardianCanRevoke,
+                guardianCanChangeAgent: guardianCanChangeAgent,
+                guardianMustConsultAgent: guardianMustConsultAgent,
                 guardianRelation: guardianRelation,
               ),
           createCompanionCallback:
@@ -10074,6 +10238,8 @@ class $$GuardianNominationsTableTableManager
                 Value<String> nomineePhone = const Value.absent(),
                 Value<String> nomineeRelationship = const Value.absent(),
                 Value<bool> guardianCanRevoke = const Value.absent(),
+                Value<bool> guardianCanChangeAgent = const Value.absent(),
+                Value<bool> guardianMustConsultAgent = const Value.absent(),
                 Value<String> guardianRelation = const Value.absent(),
               }) => GuardianNominationsCompanion.insert(
                 id: id,
@@ -10083,6 +10249,8 @@ class $$GuardianNominationsTableTableManager
                 nomineePhone: nomineePhone,
                 nomineeRelationship: nomineeRelationship,
                 guardianCanRevoke: guardianCanRevoke,
+                guardianCanChangeAgent: guardianCanChangeAgent,
+                guardianMustConsultAgent: guardianMustConsultAgent,
                 guardianRelation: guardianRelation,
               ),
           withReferenceMapper: (p0) => p0

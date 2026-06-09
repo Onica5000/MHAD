@@ -700,6 +700,17 @@ List<pw.Page> buildCombinedPages({
             'or terminate this Combined Mental Health Care Declaration and Power of Attorney.',
             checked: guardian != null && guardian.guardianCanRevoke,
           ),
+          if (guardian != null &&
+              (guardian.guardianCanChangeAgent ||
+                  guardian.guardianMustConsultAgent)) ...[
+            pw.SizedBox(height: 4),
+            if (guardian.guardianCanChangeAgent)
+              checkRow('The guardian may change my designated agent.',
+                  checked: true),
+            if (guardian.guardianMustConsultAgent)
+              checkRow('The guardian must consult my agent before acting.',
+                  checked: true),
+          ],
 
           pw.Spacer(),
           pageFooter('Page 5'),

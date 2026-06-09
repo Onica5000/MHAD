@@ -94,6 +94,8 @@ GuardianNomination _makeGuardian() => const GuardianNomination(
       nomineePhone: '717-555-9999',
       nomineeRelationship: 'Brother',
       guardianCanRevoke: false,
+      guardianCanChangeAgent: false,
+      guardianMustConsultAgent: false,
       // Phase 2 — schema v8 addition. 'different' = explicit named nominee
       // (matches the inline-expansion branch in guardian_nomination_step.dart).
       guardianRelation: 'different',
