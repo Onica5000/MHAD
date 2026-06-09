@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:mhad/constants.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/providers/assistant_providers.dart';
@@ -28,39 +27,64 @@ class WebSidebar extends ConsumerWidget {
     final mode = ref.watch(privacyModeNotifierProvider);
     final aiReady =
         ref.watch(apiKeyProvider).valueOrNull?.isNotEmpty ?? false;
+    // Most-recently-edited directive — the "Download & print" destination
+    // (export is a per-directive route).
+    final recentId = ref.watch(allDirectivesProvider).maybeWhen(
+      data: (list) {
+        if (list.isEmpty) return null;
+        final sorted = [...list]
+          ..sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
+        return sorted.first.id;
+      },
+      orElse: () => null,
+    );
 
+    // Items + destinations mirror the design `WebSidebar`:
+    // Start · Learn · AI assistant · Download & print · Settings.
+    // Navigation goes through the GLOBAL appRouter — the sidebar lives in
+    // MaterialApp.router's builder (above InheritedGoRouter), so
+    // context.go/push / GoRouterState.of(context) have no router to find and
+    // silently fail.
     final items = <_SidebarItem>[
       _SidebarItem(
         icon: Icons.home_outlined,
         activeIcon: Icons.home,
-        label: 'My directives',
-        route: AppRoutes.home,
-      ),
-      _SidebarItem(
-        icon: Icons.add_circle_outline,
-        activeIcon: Icons.add_circle,
-        label: 'New directive',
-        route: AppRoutes.formTypeSelection,
-        push: true,
+        label: 'Start',
+        isActive: activeRoute == AppRoutes.home,
+        onTap: () => appRouter.go(AppRoutes.home),
       ),
       _SidebarItem(
         icon: Icons.menu_book_outlined,
         activeIcon: Icons.menu_book,
         label: 'Learn',
-        route: AppRoutes.education,
+        isActive: activeRoute == AppRoutes.education,
+        onTap: () => appRouter.go(AppRoutes.education),
       ),
       _SidebarItem(
         icon: aiReady ? Icons.auto_awesome : Icons.auto_awesome_outlined,
         activeIcon: Icons.auto_awesome,
         label: 'AI assistant',
-        route: AppRoutes.aiSetup,
+        isActive: activeRoute == AppRoutes.assistant ||
+            activeRoute == AppRoutes.aiSetup,
         trailing: aiReady ? _Badge('READY', tone: 'ok') : _Badge('SET UP'),
+        onTap: () =>
+            appRouter.go(aiReady ? AppRoutes.assistant : AppRoutes.aiSetup),
+      ),
+      _SidebarItem(
+        icon: Icons.print_outlined,
+        activeIcon: Icons.print,
+        label: 'Download & print',
+        isActive: activeRoute.startsWith('/export/'),
+        onTap: () => recentId != null
+            ? appRouter.push(AppRoutes.exportRoute(recentId))
+            : appRouter.go(AppRoutes.home),
       ),
       _SidebarItem(
         icon: Icons.settings_outlined,
         activeIcon: Icons.settings,
         label: 'Settings',
-        route: AppRoutes.settings,
+        isActive: activeRoute == AppRoutes.settings,
+        onTap: () => appRouter.go(AppRoutes.settings),
       ),
     ];
 
@@ -143,8 +167,8 @@ class WebSidebar extends ConsumerWidget {
                   for (final item in items)
                     _SidebarItemRow(
                       item: item,
-                      active: _matchesActive(item.route, activeRoute),
-                      onTap: () => _navigate(context, item),
+                      active: item.isActive,
+                      onTap: item.onTap,
                     ),
                 ],
               ),
@@ -156,27 +180,26 @@ class WebSidebar extends ConsumerWidget {
               child: _CrisisCard(),
             ),
 
-            // Session-mode chip
+            // Session indicator — anonymous (web/public) or private (native).
+            // Mirrors the design `WebSidebar`: lock chip + "Anonymous session"
+            // / "NOTHING SAVED · NO ACCOUNT" (no account avatar).
             Padding(
               padding: const EdgeInsets.fromLTRB(14, 4, 14, 16),
               child: Row(
                 children: [
                   Container(
-                    width: 28,
-                    height: 28,
+                    width: 30,
+                    height: 30,
                     decoration: BoxDecoration(
-                      color: p.primary,
-                      shape: BoxShape.circle,
+                      color: p.surface,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: p.primary),
                     ),
                     alignment: Alignment.center,
-                    child: Text(
-                      'AK',
-                      style: TextStyle(
-                        fontFamily: 'DM Sans',
-                        fontSize: 11,
-                        fontWeight: FontWeight.w700,
-                        color: p.onPrimary,
-                      ),
+                    child: Icon(
+                      mode.isPrivate ? Icons.lock : Icons.lock_outline,
+                      size: 14,
+                      color: p.primary,
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -185,21 +208,21 @@ class WebSidebar extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          mode.isPrivate ? 'Private session' : 'Public session',
+                          mode.isPrivate
+                              ? 'Private session'
+                              : 'Anonymous session',
                           style: TextStyle(
                             fontFamily: 'DM Sans',
-                            fontSize: 12.5,
-                            fontWeight: FontWeight.w600,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
                             color: p.text,
                           ),
                           overflow: TextOverflow.ellipsis,
                         ),
                         Text(
                           mode.isPrivate
-                              ? '● ENCRYPTED'
-                              : (mode.isPublic
-                                  ? '● IN-MEMORY'
-                                  : '● NO SESSION'),
+                              ? 'ENCRYPTED · ON DEVICE'
+                              : 'NOTHING SAVED · NO ACCOUNT',
                           style: TextStyle(
                             fontFamily: 'JetBrains Mono',
                             fontFamilyFallback: const [
@@ -210,10 +233,9 @@ class WebSidebar extends ConsumerWidget {
                             ],
                             fontSize: 9.5,
                             letterSpacing: 0.4,
-                            color: mode.isPrivate
-                                ? SemanticColors.successTextLight
-                                : SemanticColors.warningTextLight,
+                            color: p.textMuted,
                           ),
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ],
                     ),
@@ -227,43 +249,22 @@ class WebSidebar extends ConsumerWidget {
     );
   }
 
-  static bool _matchesActive(String routeMatcher, String currentRoute) {
-    if (routeMatcher == currentRoute) return true;
-    // Home: also match nested wizard routes since they're still in the home
-    // workflow but should not highlight Home — return false there.
-    return false;
-  }
-
-  static void _navigate(BuildContext context, _SidebarItem item) {
-    if (item.push) {
-      context.push(item.route);
-    } else {
-      if (item.route == GoRouterState.of(context).matchedLocation) return;
-      // For routes that are "primary destinations", swap with go(); for
-      // others that are pushed onto the stack from primary screens, use push.
-      if (item.route == AppRoutes.home) {
-        context.go(item.route);
-      } else {
-        context.push(item.route);
-      }
-    }
-  }
 }
 
 class _SidebarItem {
   final IconData icon;
   final IconData? activeIcon;
   final String label;
-  final String route;
-  final bool push;
+  final bool isActive;
+  final VoidCallback onTap;
   final Widget? trailing;
 
   _SidebarItem({
     required this.icon,
     required this.label,
-    required this.route,
+    required this.isActive,
+    required this.onTap,
     this.activeIcon,
-    this.push = false,
     this.trailing,
   });
 }
