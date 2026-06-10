@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:mhad/services/disclaimer_service.dart';
 import 'package:mhad/services/notification_service.dart';
@@ -145,8 +146,9 @@ class _GateLayout extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    "Read carefully — these confirm what this app does and "
-                    "doesn't do.",
+                    'This tool helps you write a Pennsylvania Mental Health '
+                    'Advance Directive under Act 194. Please read these '
+                    'before you continue.',
                     style: TextStyle(
                       fontFamily: 'DM Sans',
                       fontSize: 13.5,
@@ -160,37 +162,61 @@ class _GateLayout extends StatelessWidget {
                   Expanded(
                     child: ListView(
                       padding: EdgeInsets.zero,
-                      children: const [
-                        _DisclaimerCard(
-                          icon: Icons.badge_outlined,
-                          title: 'You must be 18 or older',
+                      // Hybrid card set (user decision 2026-06-10): the two
+                      // legally-substantive cards keep full PA Act 194
+                      // nomenclature; the two reassurance cards adopt the
+                      // artboard WebDisclaimer framing. ("Not legal/medical
+                      // advice" is already the warning banner above; the 18+
+                      // requirement is affirmed in the ack checkbox below; the
+                      // PA P&A / lawyer resource lives in the full legal
+                      // sections.)
+                      children: [
+                        const _DisclaimerCard(
+                          icon: Icons.draw_outlined,
+                          title:
+                              'It becomes valid only when signed on paper',
                           body:
-                              'Or an emancipated minor. PA Act 194 requires '
-                              'legal capacity at the time of signing.',
+                              'Under PA Act 194, your directive is legally '
+                              'valid only when you sign it — in ink, in '
+                              'person — with two qualified adult witnesses '
+                              'present. The app cannot sign or witness it for '
+                              'you.',
                         ),
-                        SizedBox(height: 10),
-                        _DisclaimerCard(
+                        const SizedBox(height: 10),
+                        const _DisclaimerCard(
                           icon: Icons.event_outlined,
-                          title: 'Your directive is valid for 2 years',
+                          title: 'It stays valid for two years',
                           body:
-                              "After that you'll need to renew it. We'll "
-                              'remind you 30 days before it expires.',
+                              'Under PA Act 194, a Mental Health Advance '
+                              'Directive is valid for two years from the date '
+                              'of execution unless you revoke it sooner. '
+                              "We'll remind you 30 days before it expires.",
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         _DisclaimerCard(
-                          icon: Icons.groups_outlined,
-                          title: 'Two adult witnesses are required',
-                          body:
-                              'They must be 18+ and present when you sign. '
-                              "They can't be your designated agent.",
+                          icon: Icons.lock_outline,
+                          title: 'Nothing is saved or sent to us',
+                          // Accurate on each platform: web is in-memory only;
+                          // native Private Mode stores encrypted on-device.
+                          body: kIsWeb
+                              ? 'You work anonymously in this browser tab — no '
+                                  'account, no cloud, no tracking. Download '
+                                  'your PDF before you close it, or your '
+                                  'answers are gone.'
+                              : 'No account, no cloud, no tracking — nothing '
+                                  'goes to our servers. Anything you save '
+                                  'stays encrypted on this device, where only '
+                                  'you can open it.',
                         ),
-                        SizedBox(height: 10),
-                        _DisclaimerCard(
-                          icon: Icons.gavel_outlined,
-                          title: 'Consult a lawyer for legal questions',
+                        const SizedBox(height: 10),
+                        const _DisclaimerCard(
+                          icon: Icons.published_with_changes,
+                          title: 'You can stop or change anything, anytime',
                           body:
-                              'PA Protection & Advocacy: 1-800-692-7443 '
-                              '(toll-free).',
+                              'Skip questions, go back, or revoke the '
+                              'directive later — under PA Act 194 you may '
+                              'revoke at any time while you have capacity. '
+                              'This is your voice; you stay in control.',
                         ),
                       ],
                     ),
