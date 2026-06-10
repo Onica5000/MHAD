@@ -85,6 +85,19 @@ class _WizardCompleteScreenState extends ConsumerState<WizardCompleteScreen> {
         // gives the editorial headline breathing room.
         padding: const EdgeInsets.fromLTRB(22, 60, 22, 32),
         children: [
+          // Success check badge (artboard WebDone) — a 64px primaryTint
+          // rounded square with a primary check, above the editorial header.
+          Container(
+            width: 64,
+            height: 64,
+            decoration: BoxDecoration(
+              color: p.primaryTint,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            alignment: Alignment.center,
+            child: Icon(Icons.check, size: 34, color: p.primary),
+          ),
+          const SizedBox(height: 16),
           // Editorial header: "● Packet ready" SectionLabel in primary color
           // (prototype L991) instead of the prior neutral "Complete" pill.
           SectionLabel(

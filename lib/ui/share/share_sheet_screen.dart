@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/data/database/app_database.dart';
@@ -109,7 +110,8 @@ class ShareSheetScreen extends ConsumerWidget {
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    'Everything sends straight from your phone — your '
+                    'Everything sends straight from your '
+                    '${kIsWeb ? 'browser' : 'phone'} — your '
                     'mail or messages app, a QR, or print. Nothing goes '
                     'through our servers.',
                     style: TextStyle(
