@@ -166,6 +166,38 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
           ),
 
           const SizedBox(height: 16),
+          // Plain-language "how it works" steps (artboard WebRevoke) — sits
+          // above the verbatim statutory statement as an actionable summary.
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(14),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const [
+                  SectionLabel('How revocation works in PA'),
+                  SizedBox(height: 10),
+                  _RevokeStep(
+                    n: 1,
+                    text: 'Put it in writing — sign and date a short '
+                        'statement that you are revoking this directive.',
+                  ),
+                  _RevokeStep(
+                    n: 2,
+                    text: 'Tell your agent, your providers, and anyone '
+                        'holding a copy.',
+                  ),
+                  _RevokeStep(
+                    n: 3,
+                    text: 'Destroy old copies, or clearly mark them '
+                        '“REVOKED”.',
+                    last: true,
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 14),
           Card(
             child: Padding(
               padding: const EdgeInsets.all(14),
@@ -292,6 +324,67 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
         ],
       )),
       ]),
+    );
+  }
+}
+
+/// One numbered step in the "How revocation works in PA" card (artboard
+/// WebRevoke) — a small primary numeral chip beside the step text.
+class _RevokeStep extends StatelessWidget {
+  final int n;
+  final String text;
+  final bool last;
+  const _RevokeStep({required this.n, required this.text, this.last = false});
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
+    return Padding(
+      padding: EdgeInsets.only(bottom: last ? 0 : 10),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 22,
+            height: 22,
+            decoration: BoxDecoration(
+              color: p.primaryTint,
+              shape: BoxShape.circle,
+            ),
+            alignment: Alignment.center,
+            child: Text(
+              '$n',
+              style: TextStyle(
+                fontFamily: 'JetBrains Mono',
+                fontFamilyFallback: const [
+                  'Consolas',
+                  'Menlo',
+                  'Courier New',
+                  'monospace',
+                ],
+                fontSize: 11,
+                fontWeight: FontWeight.w700,
+                color: p.primary,
+              ),
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 2),
+              child: Text(
+                text,
+                style: TextStyle(
+                  fontFamily: 'DM Sans',
+                  fontSize: 13.5,
+                  height: 1.5,
+                  color: p.text,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
