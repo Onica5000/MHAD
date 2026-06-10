@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
@@ -35,22 +37,31 @@ class _QuizDialogState extends State<_QuizDialog> {
   /// Selected option per question (null = not yet answered).
   final List<int?> _picks = [null, null, null, null];
 
+  /// Pending auto-advance after an option tap (artboard `WebQuiz` behaviour).
+  Timer? _advanceTimer;
+
   static const _questions = _QuizQuestions.all;
 
-  void _pick(int q, int o) {
-    setState(() {
-      _picks[q] = o;
-    });
+  @override
+  void dispose() {
+    _advanceTimer?.cancel();
+    super.dispose();
   }
 
-  void _next() {
-    if (_picks[_step] == null) return;
-    setState(() {
-      _step = (_step + 1).clamp(0, _questions.length);
+  /// Tapping an option selects it and auto-advances after a short beat — the
+  /// artboard `WebQuiz` flow has no per-question Continue button. Re-tapping a
+  /// different option before the beat elapses resets the timer.
+  void _pick(int q, int o) {
+    setState(() => _picks[q] = o);
+    _advanceTimer?.cancel();
+    _advanceTimer = Timer(const Duration(milliseconds: 200), () {
+      if (!mounted) return;
+      setState(() => _step = (_step + 1).clamp(0, _questions.length));
     });
   }
 
   void _back() {
+    _advanceTimer?.cancel();
     if (_step == 0) {
       Navigator.pop(context);
       return;
@@ -61,6 +72,7 @@ class _QuizDialogState extends State<_QuizDialog> {
   }
 
   void _retake() {
+    _advanceTimer?.cancel();
     setState(() {
       _step = 0;
       for (var i = 0; i < _picks.length; i++) {
@@ -92,14 +104,6 @@ class _QuizDialogState extends State<_QuizDialog> {
     return s.entries.reduce((a, b) => a.value >= b.value ? a : b).key;
   }
 
-  int get _confidencePct {
-    final s = _scores;
-    final total = s.values.fold<int>(0, (a, b) => a + b);
-    if (total == 0) return 0;
-    final leaderScore = s[_leader] ?? 0;
-    return ((leaderScore / total) * 100).round();
-  }
-
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
@@ -125,10 +129,6 @@ class _QuizDialogState extends State<_QuizDialog> {
                 picked: _picks[_step],
                 onPick: (o) => _pick(_step, o),
                 onBack: _back,
-                onContinue: _next,
-                leader: _leader,
-                confidencePct: _confidencePct,
-                anyPicked: _picks.any((e) => e != null),
               ),
       ),
     );
@@ -144,10 +144,6 @@ class _QuestionBody extends StatelessWidget {
   final int? picked;
   final ValueChanged<int> onPick;
   final VoidCallback onBack;
-  final VoidCallback onContinue;
-  final FormType leader;
-  final int confidencePct;
-  final bool anyPicked;
 
   const _QuestionBody({
     required this.step,
@@ -156,10 +152,6 @@ class _QuestionBody extends StatelessWidget {
     required this.picked,
     required this.onPick,
     required this.onBack,
-    required this.onContinue,
-    required this.leader,
-    required this.confidencePct,
-    required this.anyPicked,
   });
 
   @override
@@ -239,37 +231,6 @@ class _QuestionBody extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
               ],
-              if (anyPicked) ...[
-                const SizedBox(height: 12),
-                _LeaningPreview(leader: leader, confidencePct: confidencePct),
-              ],
-            ],
-          ),
-        ),
-
-        // Footer
-        Container(
-          padding: const EdgeInsets.fromLTRB(18, 12, 18, 14),
-          decoration: BoxDecoration(
-            color: p.card,
-            border: Border(top: BorderSide(color: p.border)),
-          ),
-          child: Row(
-            children: [
-              TextButton(
-                onPressed: onBack,
-                child: Text(step == 0 ? 'Cancel' : 'Back'),
-              ),
-              const Spacer(),
-              FilledButton.icon(
-                onPressed: picked != null ? onContinue : null,
-                icon: const Icon(Icons.arrow_forward, size: 18),
-                label: Text(step == total - 1 ? 'See result' : 'Continue'),
-                style: FilledButton.styleFrom(
-                  iconAlignment: IconAlignment.end,
-                  padding: const EdgeInsets.symmetric(horizontal: 18),
-                ),
-              ),
             ],
           ),
         ),
@@ -383,99 +344,6 @@ class _OptCard extends StatelessWidget {
       ),
     );
   }
-}
-
-class _LeaningPreview extends StatelessWidget {
-  final FormType leader;
-  final int confidencePct;
-  const _LeaningPreview({required this.leader, required this.confidencePct});
-
-  @override
-  Widget build(BuildContext context) {
-    final p = Theme.of(context).mhadPalette;
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: p.primaryTint,
-        border: Border.all(color: p.primaryLight),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(Icons.auto_awesome, size: 14, color: p.primary),
-              const SizedBox(width: 6),
-              Text(
-                'So far we think you want',
-                style: TextStyle(
-                  fontFamily: 'JetBrains Mono',
-                  fontFamilyFallback: const [
-                    'Consolas',
-                    'Menlo',
-                    'Courier New',
-                    'monospace'
-                  ],
-                  fontSize: 10,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 0.8,
-                  color: p.textMuted,
-                  height: 1,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 6),
-          Text(
-            _leaderHeadline(leader),
-            style: TextStyle(
-              fontFamily: 'DM Sans',
-              fontSize: 15,
-              fontWeight: FontWeight.w700,
-              color: p.text,
-              height: 1.2,
-            ),
-          ),
-          const SizedBox(height: 8),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(100),
-            child: SizedBox(
-              height: 4,
-              child: LinearProgressIndicator(
-                value: (confidencePct / 100).clamp(0.0, 1.0),
-                backgroundColor: p.border,
-                valueColor: AlwaysStoppedAnimation(p.primary),
-              ),
-            ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            '$confidencePct% confident',
-            style: TextStyle(
-              fontFamily: 'JetBrains Mono',
-              fontFamilyFallback: const [
-                'Consolas',
-                'Menlo',
-                'Courier New',
-                'monospace'
-              ],
-              fontSize: 10,
-              letterSpacing: 0.6,
-              color: p.textMuted,
-              height: 1.1,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  String _leaderHeadline(FormType t) => switch (t) {
-        FormType.combined => 'Combined form (agents + preferences)',
-        FormType.declaration => 'Declaration only (preferences, no agent)',
-        FormType.poa => 'Power of Attorney (agent, no preferences)',
-      };
 }
 
 // ─── Result body ────────────────────────────────────────────────────────
