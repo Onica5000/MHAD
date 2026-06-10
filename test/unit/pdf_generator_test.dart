@@ -68,6 +68,8 @@ DirectivePref _makePrefs() => const DirectivePref(
       // Phase 2 — schema v8 additions.
       roomPreferences: '',
       roomPreferencesNote: '',
+      // Schema v16 addition.
+      roommateGenderMatch: '',
       // Phase 4 — schema v10 additions.
       crisisPlanJson: '',
       selfBindingEnabled: false,

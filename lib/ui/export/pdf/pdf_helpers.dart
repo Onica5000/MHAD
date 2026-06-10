@@ -120,10 +120,12 @@ pw.TextStyle boldStyle({double fontSize = 9}) => pw.TextStyle(
       color: kBlack,
     );
 
+/// Large teal "Part" header — matches the official form (e.g. "Part II.
+/// Mental Health Declaration" is rendered as teal *text*, not a filled bar).
 pw.TextStyle sectionHeaderStyle() => pw.TextStyle(
-      fontSize: 10,
+      fontSize: 13,
       fontWeight: pw.FontWeight.bold,
-      color: PdfColors.white,
+      color: kTeal,
     );
 
 pw.TextStyle labelStyle() => pw.TextStyle(
@@ -147,21 +149,28 @@ pw.EdgeInsets get pageMargins =>
 // Building blocks
 // ---------------------------------------------------------------------------
 
-/// Teal section header bar (like the original form headers).
+/// Large teal "Part" header — teal text matching the official form (the
+/// original prints these as teal text, not a white-on-teal filled bar).
 pw.Widget sectionHeader(String text) {
-  return pw.Container(
-    width: double.infinity,
-    color: kTeal,
-    padding: const pw.EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+  return pw.Padding(
+    padding: const pw.EdgeInsets.only(top: 6, bottom: 4),
     child: pw.Text(text, style: sectionHeaderStyle()),
   );
 }
 
-/// Sub-section label in bold (e.g., "Part I. Introduction").
+/// Teal sub-section label (e.g., "A. Treatment preferences") — the official
+/// form prints the A./B./C. headers in teal bold, like the Part headers.
 pw.Widget partHeader(String text) {
   return pw.Padding(
-    padding: const pw.EdgeInsets.only(top: 8, bottom: 4),
-    child: pw.Text(text, style: boldStyle(fontSize: 9.5)),
+    padding: const pw.EdgeInsets.only(top: 8, bottom: 3),
+    child: pw.Text(
+      text,
+      style: pw.TextStyle(
+        fontSize: 10,
+        fontWeight: pw.FontWeight.bold,
+        color: kTeal,
+      ),
+    ),
   );
 }
 
