@@ -124,6 +124,12 @@ class DirectivePrefs extends Table {
   // Free-form room-preference note, in addition to the chips above. Schema 12.
   TextColumn get roomPreferencesNote =>
       text().withDefault(const Constant(''))();
+  // Same-gender-roommate match preference (artboard WebWizCare sub-selector,
+  // shown only when the 'sameGenderRoommate' room chip is selected). Stores
+  // 'women' | 'men' | 'sameAsIdentity', or 'specify:<free text>'. Empty = not
+  // set. Schema 16.
+  TextColumn get roommateGenderMatch =>
+      text().withDefault(const Constant(''))();
   // Phase 4 — Crisis plan / WRAP toolbox (optional add-on per v2 prototype).
   // JSON-encoded structure: {earlyWarning: [], triggers: [], helps: [],
   // sayToMe: [], dontDo: []}. Empty string = not yet filled.
@@ -251,7 +257,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase(super.executor);
 
   @override
-  int get schemaVersion => 15;
+  int get schemaVersion => 16;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -398,6 +404,13 @@ class AppDatabase extends _$AppDatabase {
                 "TEXT NOT NULL DEFAULT ''");
             await customStatement(
                 "ALTER TABLE directives ADD COLUMN primary_doctor_phone "
+                "TEXT NOT NULL DEFAULT ''");
+          }
+          if (from < 16) {
+            // Same-gender-roommate match preference (artboard care-step
+            // sub-selector).
+            await customStatement(
+                "ALTER TABLE directive_prefs ADD COLUMN roommate_gender_match "
                 "TEXT NOT NULL DEFAULT ''");
           }
         },

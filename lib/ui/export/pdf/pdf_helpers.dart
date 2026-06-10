@@ -749,3 +749,56 @@ pw.Widget facilityList(String raw) {
     }).toList(),
   );
 }
+
+/// Human-readable room & environment preferences for the PDF — the selected
+/// chips, the same-gender-roommate match (schema 16), and the free-text note.
+/// Returns null when nothing is set, so callers can skip the block entirely.
+String? formatRoomPreferences(DirectivePref? prefs) {
+  if (prefs == null) return null;
+  const labels = <String, String>{
+    'singleRoom': 'Single room',
+    'windowIfPossible': 'Window if possible',
+    'quietFloor': 'Quiet floor',
+    'sameGenderRoommate': 'Same-gender roommate',
+    'noRoommate': 'No roommate',
+    'transAffirmingStaff': 'Trans-affirming staff',
+    'lowStimulationUnit': 'Low-stimulation unit',
+  };
+  final ids = prefs.roomPreferences
+      .split(',')
+      .map((s) => s.trim())
+      .where((s) => s.isNotEmpty);
+  final chips = <String>[];
+  for (final id in ids) {
+    var label = labels[id] ?? id;
+    if (id == 'sameGenderRoommate') {
+      final match = _roommateMatchLabel(prefs.roommateGenderMatch);
+      if (match != null) label = '$label (match with: $match)';
+    }
+    chips.add(label);
+  }
+  final note = prefs.roomPreferencesNote.trim();
+  final parts = <String>[
+    if (chips.isNotEmpty) chips.join(', '),
+    if (note.isNotEmpty) note,
+  ];
+  return parts.isEmpty ? null : parts.join('. ');
+}
+
+String? _roommateMatchLabel(String raw) {
+  final v = raw.trim();
+  if (v.isEmpty) return null;
+  switch (v) {
+    case 'women':
+      return 'Women';
+    case 'men':
+      return 'Men';
+    case 'sameAsIdentity':
+      return 'Same as my gender identity';
+  }
+  if (v.startsWith('specify:')) {
+    final t = v.substring('specify:'.length).trim();
+    return t.isEmpty ? null : t;
+  }
+  return v;
+}

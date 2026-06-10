@@ -2699,6 +2699,18 @@ class $DirectivePrefsTable extends DirectivePrefs
         requiredDuringInsert: false,
         defaultValue: const Constant(''),
       );
+  static const VerificationMeta _roommateGenderMatchMeta =
+      const VerificationMeta('roommateGenderMatch');
+  @override
+  late final GeneratedColumn<String> roommateGenderMatch =
+      GeneratedColumn<String>(
+        'roommate_gender_match',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: const Constant(''),
+      );
   static const VerificationMeta _crisisPlanJsonMeta = const VerificationMeta(
     'crisisPlanJson',
   );
@@ -2741,6 +2753,7 @@ class $DirectivePrefsTable extends DirectivePrefs
     agentAuthorityLimitations,
     roomPreferences,
     roomPreferencesNote,
+    roommateGenderMatch,
     crisisPlanJson,
     selfBindingEnabled,
   ];
@@ -2875,6 +2888,15 @@ class $DirectivePrefsTable extends DirectivePrefs
         ),
       );
     }
+    if (data.containsKey('roommate_gender_match')) {
+      context.handle(
+        _roommateGenderMatchMeta,
+        roommateGenderMatch.isAcceptableOrUnknown(
+          data['roommate_gender_match']!,
+          _roommateGenderMatchMeta,
+        ),
+      );
+    }
     if (data.containsKey('crisis_plan_json')) {
       context.handle(
         _crisisPlanJsonMeta,
@@ -2958,6 +2980,10 @@ class $DirectivePrefsTable extends DirectivePrefs
         DriftSqlType.string,
         data['${effectivePrefix}room_preferences_note'],
       )!,
+      roommateGenderMatch: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}roommate_gender_match'],
+      )!,
       crisisPlanJson: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}crisis_plan_json'],
@@ -2990,6 +3016,7 @@ class DirectivePref extends DataClass implements Insertable<DirectivePref> {
   final String agentAuthorityLimitations;
   final String roomPreferences;
   final String roomPreferencesNote;
+  final String roommateGenderMatch;
   final String crisisPlanJson;
   final bool selfBindingEnabled;
   const DirectivePref({
@@ -3007,6 +3034,7 @@ class DirectivePref extends DataClass implements Insertable<DirectivePref> {
     required this.agentAuthorityLimitations,
     required this.roomPreferences,
     required this.roomPreferencesNote,
+    required this.roommateGenderMatch,
     required this.crisisPlanJson,
     required this.selfBindingEnabled,
   });
@@ -3033,6 +3061,7 @@ class DirectivePref extends DataClass implements Insertable<DirectivePref> {
     );
     map['room_preferences'] = Variable<String>(roomPreferences);
     map['room_preferences_note'] = Variable<String>(roomPreferencesNote);
+    map['roommate_gender_match'] = Variable<String>(roommateGenderMatch);
     map['crisis_plan_json'] = Variable<String>(crisisPlanJson);
     map['self_binding_enabled'] = Variable<bool>(selfBindingEnabled);
     return map;
@@ -3054,6 +3083,7 @@ class DirectivePref extends DataClass implements Insertable<DirectivePref> {
       agentAuthorityLimitations: Value(agentAuthorityLimitations),
       roomPreferences: Value(roomPreferences),
       roomPreferencesNote: Value(roomPreferencesNote),
+      roommateGenderMatch: Value(roommateGenderMatch),
       crisisPlanJson: Value(crisisPlanJson),
       selfBindingEnabled: Value(selfBindingEnabled),
     );
@@ -3093,6 +3123,9 @@ class DirectivePref extends DataClass implements Insertable<DirectivePref> {
       roomPreferencesNote: serializer.fromJson<String>(
         json['roomPreferencesNote'],
       ),
+      roommateGenderMatch: serializer.fromJson<String>(
+        json['roommateGenderMatch'],
+      ),
       crisisPlanJson: serializer.fromJson<String>(json['crisisPlanJson']),
       selfBindingEnabled: serializer.fromJson<bool>(json['selfBindingEnabled']),
     );
@@ -3121,6 +3154,7 @@ class DirectivePref extends DataClass implements Insertable<DirectivePref> {
       ),
       'roomPreferences': serializer.toJson<String>(roomPreferences),
       'roomPreferencesNote': serializer.toJson<String>(roomPreferencesNote),
+      'roommateGenderMatch': serializer.toJson<String>(roommateGenderMatch),
       'crisisPlanJson': serializer.toJson<String>(crisisPlanJson),
       'selfBindingEnabled': serializer.toJson<bool>(selfBindingEnabled),
     };
@@ -3141,6 +3175,7 @@ class DirectivePref extends DataClass implements Insertable<DirectivePref> {
     String? agentAuthorityLimitations,
     String? roomPreferences,
     String? roomPreferencesNote,
+    String? roommateGenderMatch,
     String? crisisPlanJson,
     bool? selfBindingEnabled,
   }) => DirectivePref(
@@ -3161,6 +3196,7 @@ class DirectivePref extends DataClass implements Insertable<DirectivePref> {
         agentAuthorityLimitations ?? this.agentAuthorityLimitations,
     roomPreferences: roomPreferences ?? this.roomPreferences,
     roomPreferencesNote: roomPreferencesNote ?? this.roomPreferencesNote,
+    roommateGenderMatch: roommateGenderMatch ?? this.roommateGenderMatch,
     crisisPlanJson: crisisPlanJson ?? this.crisisPlanJson,
     selfBindingEnabled: selfBindingEnabled ?? this.selfBindingEnabled,
   );
@@ -3207,6 +3243,9 @@ class DirectivePref extends DataClass implements Insertable<DirectivePref> {
       roomPreferencesNote: data.roomPreferencesNote.present
           ? data.roomPreferencesNote.value
           : this.roomPreferencesNote,
+      roommateGenderMatch: data.roommateGenderMatch.present
+          ? data.roommateGenderMatch.value
+          : this.roommateGenderMatch,
       crisisPlanJson: data.crisisPlanJson.present
           ? data.crisisPlanJson.value
           : this.crisisPlanJson,
@@ -3235,6 +3274,7 @@ class DirectivePref extends DataClass implements Insertable<DirectivePref> {
           ..write('agentAuthorityLimitations: $agentAuthorityLimitations, ')
           ..write('roomPreferences: $roomPreferences, ')
           ..write('roomPreferencesNote: $roomPreferencesNote, ')
+          ..write('roommateGenderMatch: $roommateGenderMatch, ')
           ..write('crisisPlanJson: $crisisPlanJson, ')
           ..write('selfBindingEnabled: $selfBindingEnabled')
           ..write(')'))
@@ -3257,6 +3297,7 @@ class DirectivePref extends DataClass implements Insertable<DirectivePref> {
     agentAuthorityLimitations,
     roomPreferences,
     roomPreferencesNote,
+    roommateGenderMatch,
     crisisPlanJson,
     selfBindingEnabled,
   );
@@ -3279,6 +3320,7 @@ class DirectivePref extends DataClass implements Insertable<DirectivePref> {
           other.agentAuthorityLimitations == this.agentAuthorityLimitations &&
           other.roomPreferences == this.roomPreferences &&
           other.roomPreferencesNote == this.roomPreferencesNote &&
+          other.roommateGenderMatch == this.roommateGenderMatch &&
           other.crisisPlanJson == this.crisisPlanJson &&
           other.selfBindingEnabled == this.selfBindingEnabled);
 }
@@ -3298,6 +3340,7 @@ class DirectivePrefsCompanion extends UpdateCompanion<DirectivePref> {
   final Value<String> agentAuthorityLimitations;
   final Value<String> roomPreferences;
   final Value<String> roomPreferencesNote;
+  final Value<String> roommateGenderMatch;
   final Value<String> crisisPlanJson;
   final Value<bool> selfBindingEnabled;
   const DirectivePrefsCompanion({
@@ -3315,6 +3358,7 @@ class DirectivePrefsCompanion extends UpdateCompanion<DirectivePref> {
     this.agentAuthorityLimitations = const Value.absent(),
     this.roomPreferences = const Value.absent(),
     this.roomPreferencesNote = const Value.absent(),
+    this.roommateGenderMatch = const Value.absent(),
     this.crisisPlanJson = const Value.absent(),
     this.selfBindingEnabled = const Value.absent(),
   });
@@ -3333,6 +3377,7 @@ class DirectivePrefsCompanion extends UpdateCompanion<DirectivePref> {
     this.agentAuthorityLimitations = const Value.absent(),
     this.roomPreferences = const Value.absent(),
     this.roomPreferencesNote = const Value.absent(),
+    this.roommateGenderMatch = const Value.absent(),
     this.crisisPlanJson = const Value.absent(),
     this.selfBindingEnabled = const Value.absent(),
   }) : directiveId = Value(directiveId);
@@ -3351,6 +3396,7 @@ class DirectivePrefsCompanion extends UpdateCompanion<DirectivePref> {
     Expression<String>? agentAuthorityLimitations,
     Expression<String>? roomPreferences,
     Expression<String>? roomPreferencesNote,
+    Expression<String>? roommateGenderMatch,
     Expression<String>? crisisPlanJson,
     Expression<bool>? selfBindingEnabled,
   }) {
@@ -3376,6 +3422,8 @@ class DirectivePrefsCompanion extends UpdateCompanion<DirectivePref> {
       if (roomPreferences != null) 'room_preferences': roomPreferences,
       if (roomPreferencesNote != null)
         'room_preferences_note': roomPreferencesNote,
+      if (roommateGenderMatch != null)
+        'roommate_gender_match': roommateGenderMatch,
       if (crisisPlanJson != null) 'crisis_plan_json': crisisPlanJson,
       if (selfBindingEnabled != null)
         'self_binding_enabled': selfBindingEnabled,
@@ -3397,6 +3445,7 @@ class DirectivePrefsCompanion extends UpdateCompanion<DirectivePref> {
     Value<String>? agentAuthorityLimitations,
     Value<String>? roomPreferences,
     Value<String>? roomPreferencesNote,
+    Value<String>? roommateGenderMatch,
     Value<String>? crisisPlanJson,
     Value<bool>? selfBindingEnabled,
   }) {
@@ -3420,6 +3469,7 @@ class DirectivePrefsCompanion extends UpdateCompanion<DirectivePref> {
           agentAuthorityLimitations ?? this.agentAuthorityLimitations,
       roomPreferences: roomPreferences ?? this.roomPreferences,
       roomPreferencesNote: roomPreferencesNote ?? this.roomPreferencesNote,
+      roommateGenderMatch: roommateGenderMatch ?? this.roommateGenderMatch,
       crisisPlanJson: crisisPlanJson ?? this.crisisPlanJson,
       selfBindingEnabled: selfBindingEnabled ?? this.selfBindingEnabled,
     );
@@ -3482,6 +3532,11 @@ class DirectivePrefsCompanion extends UpdateCompanion<DirectivePref> {
         roomPreferencesNote.value,
       );
     }
+    if (roommateGenderMatch.present) {
+      map['roommate_gender_match'] = Variable<String>(
+        roommateGenderMatch.value,
+      );
+    }
     if (crisisPlanJson.present) {
       map['crisis_plan_json'] = Variable<String>(crisisPlanJson.value);
     }
@@ -3510,6 +3565,7 @@ class DirectivePrefsCompanion extends UpdateCompanion<DirectivePref> {
           ..write('agentAuthorityLimitations: $agentAuthorityLimitations, ')
           ..write('roomPreferences: $roomPreferences, ')
           ..write('roomPreferencesNote: $roomPreferencesNote, ')
+          ..write('roommateGenderMatch: $roommateGenderMatch, ')
           ..write('crisisPlanJson: $crisisPlanJson, ')
           ..write('selfBindingEnabled: $selfBindingEnabled')
           ..write(')'))
@@ -8693,6 +8749,7 @@ typedef $$DirectivePrefsTableCreateCompanionBuilder =
       Value<String> agentAuthorityLimitations,
       Value<String> roomPreferences,
       Value<String> roomPreferencesNote,
+      Value<String> roommateGenderMatch,
       Value<String> crisisPlanJson,
       Value<bool> selfBindingEnabled,
     });
@@ -8712,6 +8769,7 @@ typedef $$DirectivePrefsTableUpdateCompanionBuilder =
       Value<String> agentAuthorityLimitations,
       Value<String> roomPreferences,
       Value<String> roomPreferencesNote,
+      Value<String> roommateGenderMatch,
       Value<String> crisisPlanJson,
       Value<bool> selfBindingEnabled,
     });
@@ -8815,6 +8873,11 @@ class $$DirectivePrefsTableFilterComposer
 
   ColumnFilters<String> get roomPreferencesNote => $composableBuilder(
     column: $table.roomPreferencesNote,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get roommateGenderMatch => $composableBuilder(
+    column: $table.roommateGenderMatch,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -8927,6 +8990,11 @@ class $$DirectivePrefsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get roommateGenderMatch => $composableBuilder(
+    column: $table.roommateGenderMatch,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get crisisPlanJson => $composableBuilder(
     column: $table.crisisPlanJson,
     builder: (column) => ColumnOrderings(column),
@@ -9034,6 +9102,11 @@ class $$DirectivePrefsTableAnnotationComposer
     builder: (column) => column,
   );
 
+  GeneratedColumn<String> get roommateGenderMatch => $composableBuilder(
+    column: $table.roommateGenderMatch,
+    builder: (column) => column,
+  );
+
   GeneratedColumn<String> get crisisPlanJson => $composableBuilder(
     column: $table.crisisPlanJson,
     builder: (column) => column,
@@ -9113,6 +9186,7 @@ class $$DirectivePrefsTableTableManager
                 Value<String> agentAuthorityLimitations = const Value.absent(),
                 Value<String> roomPreferences = const Value.absent(),
                 Value<String> roomPreferencesNote = const Value.absent(),
+                Value<String> roommateGenderMatch = const Value.absent(),
                 Value<String> crisisPlanJson = const Value.absent(),
                 Value<bool> selfBindingEnabled = const Value.absent(),
               }) => DirectivePrefsCompanion(
@@ -9130,6 +9204,7 @@ class $$DirectivePrefsTableTableManager
                 agentAuthorityLimitations: agentAuthorityLimitations,
                 roomPreferences: roomPreferences,
                 roomPreferencesNote: roomPreferencesNote,
+                roommateGenderMatch: roommateGenderMatch,
                 crisisPlanJson: crisisPlanJson,
                 selfBindingEnabled: selfBindingEnabled,
               ),
@@ -9150,6 +9225,7 @@ class $$DirectivePrefsTableTableManager
                 Value<String> agentAuthorityLimitations = const Value.absent(),
                 Value<String> roomPreferences = const Value.absent(),
                 Value<String> roomPreferencesNote = const Value.absent(),
+                Value<String> roommateGenderMatch = const Value.absent(),
                 Value<String> crisisPlanJson = const Value.absent(),
                 Value<bool> selfBindingEnabled = const Value.absent(),
               }) => DirectivePrefsCompanion.insert(
@@ -9167,6 +9243,7 @@ class $$DirectivePrefsTableTableManager
                 agentAuthorityLimitations: agentAuthorityLimitations,
                 roomPreferences: roomPreferences,
                 roomPreferencesNote: roomPreferencesNote,
+                roommateGenderMatch: roommateGenderMatch,
                 crisisPlanJson: crisisPlanJson,
                 selfBindingEnabled: selfBindingEnabled,
               ),

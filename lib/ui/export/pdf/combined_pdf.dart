@@ -251,6 +251,15 @@ List<pw.Page> buildCombinedPages({
           ),
           pw.SizedBox(height: 8),
 
+          // Room & environment preferences (chips + same-gender match + note).
+          if (formatRoomPreferences(prefs) != null) ...[
+            pw.Text('Room and environment preferences:',
+                style: boldStyle(fontSize: 9)),
+            pw.SizedBox(height: 2),
+            pw.Text(formatRoomPreferences(prefs)!, style: bodyStyle()),
+            pw.SizedBox(height: 8),
+          ],
+
           // 2. Medications
           pw.Text('2. Preferences regarding medications for psychiatric treatment',
               style: boldStyle(fontSize: 9)),

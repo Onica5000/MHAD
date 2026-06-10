@@ -170,6 +170,14 @@ List<pw.Page> buildDeclarationPages({
             'I understand that my physician may have to place me in a facility that is not my preference.',
             style: smallBodyStyle(),
           ),
+          // Room & environment preferences (chips + same-gender match + note).
+          if (formatRoomPreferences(prefs) != null) ...[
+            pw.SizedBox(height: 8),
+            pw.Text('Room and environment preferences:',
+                style: boldStyle(fontSize: 9)),
+            pw.SizedBox(height: 2),
+            pw.Text(formatRoomPreferences(prefs)!, style: bodyStyle()),
+          ],
           pw.Spacer(),
           pageFooter('Page 1'),
         ],

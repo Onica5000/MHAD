@@ -27,6 +27,12 @@ class _TreatmentFacilityStepState
   // Free-form room-preference note that accompanies the chips. Persisted in
   // `roomPreferencesNote`.
   final TextEditingController _roomNoteCtrl = TextEditingController();
+  // Same-gender-roommate match preference (artboard WebWizCare sub-selector).
+  // One of 'women' | 'men' | 'sameAsIdentity' | 'specify' | '' (none). The
+  // free text for 'specify' lives in [_roommateSpecifyCtrl]. Persisted in
+  // `roommateGenderMatch` as the option id, or 'specify:<text>'.
+  String _roommateOption = '';
+  final TextEditingController _roommateSpecifyCtrl = TextEditingController();
 
   @override
   void initState() {
@@ -40,7 +46,47 @@ class _TreatmentFacilityStepState
       row.dispose();
     }
     _roomNoteCtrl.dispose();
+    _roommateSpecifyCtrl.dispose();
     super.dispose();
+  }
+
+  static const _roommateOptions = <(String, String)>[
+    ('women', 'Women'),
+    ('men', 'Men'),
+    ('sameAsIdentity', 'Same as my gender identity'),
+    ('specify', 'Let me specify'),
+  ];
+
+  void _parseRoommateMatch(String raw) {
+    final v = raw.trim();
+    if (v.isEmpty) {
+      _roommateOption = '';
+      return;
+    }
+    if (v.startsWith('specify:')) {
+      _roommateOption = 'specify';
+      _roommateSpecifyCtrl.text = v.substring('specify:'.length).trim();
+      return;
+    }
+    if (v == 'women' || v == 'men' || v == 'sameAsIdentity') {
+      _roommateOption = v;
+      return;
+    }
+    // Legacy / free-text value — treat as a "specify" entry.
+    _roommateOption = 'specify';
+    _roommateSpecifyCtrl.text = v;
+  }
+
+  String _buildRoommateMatch() {
+    // Only meaningful when the same-gender chip is selected.
+    if (!_roomPrefs.contains('sameGenderRoommate') || _roommateOption.isEmpty) {
+      return '';
+    }
+    if (_roommateOption == 'specify') {
+      final t = _roommateSpecifyCtrl.text.trim();
+      return t.isEmpty ? '' : 'specify:$t';
+    }
+    return _roommateOption;
   }
 
   Future<void> _loadData() async {
@@ -57,6 +103,7 @@ class _TreatmentFacilityStepState
               .split(',')
               .where((s) => s.trim().isNotEmpty));
         _roomNoteCtrl.text = pref.roomPreferencesNote;
+        _parseRoommateMatch(pref.roommateGenderMatch);
       });
     }
   }
@@ -105,6 +152,7 @@ class _TreatmentFacilityStepState
             avoidFacilityName: Value(avoid),
             roomPreferences: Value(_roomPrefs.join(',')),
             roomPreferencesNote: Value(_roomNoteCtrl.text.trim()),
+            roommateGenderMatch: Value(_buildRoommateMatch()),
           ),
         );
     return true;
@@ -183,6 +231,17 @@ class _TreatmentFacilityStepState
               }
             }),
           ),
+          // Same-gender-roommate match sub-selector (artboard WebWizCare) —
+          // only shown when the "Same-gender roommate" chip is selected.
+          if (_roomPrefs.contains('sameGenderRoommate')) ...[
+            const SizedBox(height: 10),
+            _RoommateMatchSelector(
+              options: _roommateOptions,
+              selected: _roommateOption,
+              specifyCtrl: _roommateSpecifyCtrl,
+              onSelect: (id) => setState(() => _roommateOption = id),
+            ),
+          ],
           const SizedBox(height: 12),
           // Free-form room preferences, in addition to the chips above.
           TextField(
@@ -273,6 +332,74 @@ class _RoomPreferencesCard extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// Sub-selector shown under the room chips when "Same-gender roommate" is on
+/// (artboard WebWizCare): "For 'same-gender', match me with…" + four choices,
+/// with a free-text field when "Let me specify" is picked.
+class _RoommateMatchSelector extends StatelessWidget {
+  final List<(String, String)> options;
+  final String selected;
+  final TextEditingController specifyCtrl;
+  final ValueChanged<String> onSelect;
+  const _RoommateMatchSelector({
+    required this.options,
+    required this.selected,
+    required this.specifyCtrl,
+    required this.onSelect,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    return Container(
+      margin: const EdgeInsets.only(left: 4),
+      padding: const EdgeInsets.only(left: 12),
+      decoration: BoxDecoration(
+        border: Border(
+          left: BorderSide(color: cs.primary.withValues(alpha: 0.35), width: 2),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'For "same-gender roommate", match me with:',
+            style: Theme.of(context)
+                .textTheme
+                .bodySmall
+                ?.copyWith(color: cs.onSurfaceVariant),
+          ),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              for (final (id, label) in options)
+                ChoiceChip(
+                  label: Text(label),
+                  selected: selected == id,
+                  onSelected: (_) => onSelect(selected == id ? '' : id),
+                  showCheckmark: false,
+                ),
+            ],
+          ),
+          if (selected == 'specify') ...[
+            const SizedBox(height: 10),
+            TextField(
+              controller: specifyCtrl,
+              decoration: const InputDecoration(
+                labelText: 'Match me with',
+                hintText: 'Describe your roommate-matching preference',
+                isDense: true,
+                border: OutlineInputBorder(),
+              ),
+            ),
+          ],
+        ],
       ),
     );
   }
