@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mhad/data/educational_content.dart';
+import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/bottom_nav.dart';
 import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
@@ -1038,11 +1039,33 @@ class _SectionDetailRoute extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
+    final source = section.category == EducationCategory.supplementary
+        ? 'BEYOND THE BOOKLET'
+        : 'FROM THE OFFICIAL BOOKLET';
     return Scaffold(
       appBar: AppBar(title: Text(section.title)),
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
+          // Source + read-time line (artboard WebArticle).
+          Text(
+            '$source · ${_estimatedMinutes(section.content)} MIN READ',
+            style: TextStyle(
+              fontFamily: 'JetBrains Mono',
+              fontFamilyFallback: const [
+                'Consolas',
+                'Menlo',
+                'Courier New',
+                'monospace',
+              ],
+              fontSize: 10.5,
+              letterSpacing: 0.6,
+              fontWeight: FontWeight.w700,
+              color: p.textMuted,
+            ),
+          ),
+          const SizedBox(height: 10),
           Text(
             section.title,
             style: const TextStyle(
@@ -1062,6 +1085,73 @@ class _SectionDetailRoute extends StatelessWidget {
               fontFamily: 'DM Sans',
               fontSize: 14.5,
               height: 1.6,
+            ),
+          ),
+          const SizedBox(height: 24),
+          // "TRY IT — Ready to write yours?" inline CTA (artboard WebArticle).
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: p.primaryTint,
+              border: Border.all(color: p.primaryLight),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'TRY IT',
+                  style: TextStyle(
+                    fontFamily: 'JetBrains Mono',
+                    fontFamilyFallback: const [
+                      'Consolas',
+                      'Menlo',
+                      'Courier New',
+                      'monospace',
+                    ],
+                    fontSize: 10,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 0.6,
+                    color: p.primary,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  'Ready to write yours?',
+                  style: TextStyle(
+                    fontFamily: 'DM Sans',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: p.text,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'The guided wizard takes about 20 minutes and works '
+                  'anonymously.',
+                  style: TextStyle(
+                    fontFamily: 'DM Sans',
+                    fontSize: 13,
+                    height: 1.5,
+                    color: p.textMuted,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                FilledButton.icon(
+                  // Close this article, then start the new-directive flow.
+                  // (The detail route is pushed imperatively, so pop first —
+                  // same pattern as the snap-to-fill → AI-setup hop.)
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    appRouter.go(AppRoutes.formTypeSelection);
+                  },
+                  icon: const Icon(Icons.arrow_forward, size: 16),
+                  label: const Text('Start my directive'),
+                  style: FilledButton.styleFrom(
+                    iconAlignment: IconAlignment.end,
+                  ),
+                ),
+              ],
             ),
           ),
         ],
