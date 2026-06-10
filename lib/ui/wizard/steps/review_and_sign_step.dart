@@ -17,9 +17,14 @@ import 'package:mhad/ui/wizard/wizard_step_mixin.dart';
 class ReviewAndSignStep extends ConsumerStatefulWidget {
   final int directiveId;
   final FormType formType;
+
+  /// Jump back to a wizard step to edit it (artboard WebReview: "Click any
+  /// section to edit"). Wired by the wizard to set its step index.
+  final void Function(WizardStep step)? onEditStep;
   const ReviewAndSignStep({
     required this.directiveId,
     required this.formType,
+    this.onEditStep,
     super.key,
   });
 
@@ -46,6 +51,7 @@ class _ReviewAndSignStepState extends ConsumerState<ReviewAndSignStep>
       key: _reviewKey,
       directiveId: widget.directiveId,
       formType: widget.formType,
+      onEditStep: widget.onEditStep,
     );
   }
 }

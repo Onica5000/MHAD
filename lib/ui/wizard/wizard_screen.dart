@@ -474,6 +474,13 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
           key: _stepKey,
           directiveId: directiveId,
           formType: formType,
+          // Artboard WebReview: "Click any section to edit." Jump straight to
+          // the relevant wizard step (always backward from Review, so no
+          // forward validation is skipped).
+          onEditStep: (target) {
+            final idx = formType.steps.indexOf(target);
+            if (idx >= 0) setState(() => _stepIndex = idx);
+          },
         ),
     };
   }

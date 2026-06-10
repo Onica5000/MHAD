@@ -135,6 +135,7 @@ extension WizardStepExt on WizardStep {
           'Free-form preferences not covered above. This is your voice — '
               "write it how you'd say it.",
         WizardStep.reviewAndSign =>
-          "One last look, then we'll make your signing packet.",
+          "One last look, then we'll make your signing packet. Tap any "
+              'section to edit.',
       };
 }
