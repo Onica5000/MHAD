@@ -389,47 +389,6 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
     return a.workPhone.trim();
   }
 
-  /// Inline live PDF preview for the wide export layout (artboard `w-export`
-  /// left pane). Re-renders when the section selection changes.
-  Widget _inlinePdfPreview(MhadPalette p) {
-    final anySelected = _includeCombined ||
-        _includeDeclaration ||
-        _includePoa ||
-        _includeSupplementary ||
-        _includeNotes;
-    return Container(
-      height: 600,
-      decoration: BoxDecoration(
-        color: p.surface,
-        border: Border.all(color: p.border),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: (anySelected && _directive != null)
-          ? PdfPreview(
-              key: ValueKey(_selectionSignature()),
-              build: (format) => _buildPdfBytes(),
-              useActions: false,
-              canChangePageFormat: false,
-              canChangeOrientation: false,
-              canDebug: false,
-              loadingWidget: const Center(child: CircularProgressIndicator()),
-              scrollViewDecoration: BoxDecoration(color: p.surface),
-            )
-          : Center(
-              child: Text(
-                _directive == null
-                    ? 'Loading…'
-                    : 'Select a section to preview.',
-                style: TextStyle(
-                  fontFamily: 'DM Sans',
-                  fontSize: 13,
-                  color: p.textMuted,
-                ),
-              ),
-            ),
-    );
-  }
 
   Future<void> _previewPdf() async {
     if (!_includeCombined && !_includeDeclaration && !_includePoa &&
@@ -516,6 +475,92 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
     // logic change — only arrangement differs by width). ---
 
     // Header / chrome shown above both layouts.
+    // --- Reusable chrome pieces shared by both the narrow single-column and
+    // the wide two-pane layouts. ---
+
+    // Legal "before sharing" disclaimer (PA Act 194 — legally substantive).
+    final legalDisclaimerCard = Semantics(
+      label: 'Important: Before sharing, ensure this directive has been '
+          'signed, dated, and witnessed by two adults as required by '
+          'PA Act 194. Give copies to your agent, physician, and '
+          'support people.',
+      container: true,
+      child: Card(
+        color: Theme.of(context).colorScheme.errorContainer,
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Text(
+            'Before sharing: ensure this directive has been signed, dated, '
+            'and witnessed by two adults (18+) as required by PA Act 194. '
+            'Give copies to your agent, physician, and support people.',
+            style: TextStyle(
+              fontSize: 12,
+              color: Theme.of(context).colorScheme.onErrorContainer,
+            ),
+          ),
+        ),
+      ),
+    );
+
+    // Principal info summary.
+    final Widget principalCard = _directive == null
+        ? const SizedBox.shrink()
+        : Card(
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('Principal',
+                      style: TextStyle(
+                          fontWeight: FontWeight.w600, fontSize: 13)),
+                  const SizedBox(height: 4),
+                  Text(_directive!.fullName,
+                      style: const TextStyle(fontSize: 13)),
+                  if (_directive!.executionDate != null)
+                    Text(
+                      'Executed: ${DateTime.fromMillisecondsSinceEpoch(_directive!.executionDate!).toString().split(' ').first}',
+                      style: const TextStyle(fontSize: 12),
+                    ),
+                  if (_directive!.expirationDate != null)
+                    Text(
+                      'Expires: ${DateTime.fromMillisecondsSinceEpoch(_directive!.expirationDate!).toString().split(' ').first}',
+                      style: const TextStyle(fontSize: 12),
+                    ),
+                ],
+              ),
+            ),
+          );
+
+    // V4-M8 — persistent banner: the PDF is unencrypted by design.
+    final unencryptedBanner = Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.errorContainer,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(Icons.lock_open_outlined,
+              size: 18,
+              color: Theme.of(context).colorScheme.onErrorContainer),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              'The exported PDF is not encrypted. Share only via '
+              'channels you trust.',
+              style: TextStyle(
+                fontSize: 12.5,
+                color: Theme.of(context).colorScheme.onErrorContainer,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+
     final headerChildren = <Widget>[
       const SectionLabel('Export & share'),
       EditorialHeading(
@@ -540,65 +585,15 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
             borderRadius: BorderRadius.circular(4),
           ),
         ),
-      // Disclaimer
-      Semantics(
-            label: 'Important: Before sharing, ensure this directive has been '
-                'signed, dated, and witnessed by two adults as required by '
-                'PA Act 194. Give copies to your agent, physician, and '
-                'support people.',
-            container: true,
-            child: Card(
-              color: Theme.of(context).colorScheme.errorContainer,
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: Text(
-                  'Before sharing: ensure this directive has been signed, dated, '
-                  'and witnessed by two adults (18+) as required by PA Act 194. '
-                  'Give copies to your agent, physician, and support people.',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Theme.of(context).colorScheme.onErrorContainer,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
-
-          // Principal info summary
-          if (_directive != null)
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text('Principal',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, fontSize: 13)),
-                    const SizedBox(height: 4),
-                    Text(_directive!.fullName,
-                        style: const TextStyle(fontSize: 13)),
-                    if (_directive!.executionDate != null)
-                      Text(
-                        'Executed: ${DateTime.fromMillisecondsSinceEpoch(_directive!.executionDate!).toString().split(' ').first}',
-                        style: const TextStyle(fontSize: 12),
-                      ),
-                    if (_directive!.expirationDate != null)
-                      Text(
-                        'Expires: ${DateTime.fromMillisecondsSinceEpoch(_directive!.expirationDate!).toString().split(' ').first}',
-                        style: const TextStyle(fontSize: 12),
-                      ),
-                  ],
-                ),
-              ),
-            ),
-          const SizedBox(height: 16),
+      legalDisclaimerCard,
+      const SizedBox(height: 16),
+      principalCard,
+      const SizedBox(height: 16),
     ];
 
-    // LEFT / "Document" pane on wide screens: pick which forms go into the
-    // PDF, then preview it. (Includes the V4-M8 unencrypted-file banner.)
-    final documentChildren = <Widget>[
+    // Form/section pickers — the "Include sections" list. Shared by the
+    // narrow Document column and the wide right-hand control rail.
+    final sectionCheckboxChildren = <Widget>[
           // Form selection
           Text('Select forms to include:',
               style: Theme.of(context)
@@ -652,6 +647,12 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
             value: _includeNotes,
             onChanged: (v) => setState(() => _includeNotes = v ?? false),
           ),
+    ];
+
+    // Narrow single-column "Document" block: section pickers, a Preview
+    // button (full-screen preview), then the unencrypted-file banner.
+    final documentChildren = <Widget>[
+          ...sectionCheckboxChildren,
           const SizedBox(height: 24),
 
           // Action buttons
@@ -676,34 +677,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
             ),
           ),
           const SizedBox(height: 8),
-          // V4-M8 — persistent banner: the PDF is unencrypted by design.
-          Container(
-            margin: const EdgeInsets.only(bottom: 8),
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.errorContainer,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Icon(Icons.lock_open_outlined,
-                    size: 18,
-                    color: Theme.of(context).colorScheme.onErrorContainer),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    'The exported PDF is not encrypted. Share only via '
-                    'channels you trust.',
-                    style: TextStyle(
-                      fontSize: 12.5,
-                      color: Theme.of(context).colorScheme.onErrorContainer,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          unencryptedBanner,
     ];
 
     // RIGHT / "Distribution" pane on wide screens: share, QR, NFC, machine-
@@ -925,43 +899,99 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         Expanded(
           child: LayoutBuilder(
             builder: (context, constraints) {
-              // Wide >=1000px: prototype `w-export` two-pane structure —
-              // Document (forms + preview) on the left, Distribution
-              // (share/QR/NFC/data exports) on the right. Below 1000px the
-              // layout is the unchanged single stretched column.
+              // Wide >=1000px: prototype `w-export` grid — the live PDF
+              // preview DOMINATES the left pane (heading + zoom/page-counter/
+              // page-rail), and a fixed control rail on the right carries the
+              // include-sections pickers, wallet card, Download/Share, and the
+              // extended app-only exports. Below 1000px it's the single
+              // stretched column (headerChildren + documentChildren + dist).
               if (constraints.maxWidth >= 1000) {
-                return ListView(
-                  padding: const EdgeInsets.fromLTRB(22, 4, 22, 40),
+                final anySelected = _includeCombined ||
+                    _includeDeclaration ||
+                    _includePoa ||
+                    _includeSupplementary ||
+                    _includeNotes;
+                return Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    ...headerChildren,
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: ConstrainedBox(
-                            constraints: const BoxConstraints(maxWidth: 640),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                // Live PDF preview (artboard w-export left pane).
-                                _inlinePdfPreview(p),
-                                const SizedBox(height: 20),
-                                ...documentChildren,
-                              ],
+                    // LEFT — dominant live preview.
+                    Expanded(
+                      child: Container(
+                        color: p.surface,
+                        padding: const EdgeInsets.fromLTRB(28, 16, 28, 16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SectionLabel('Export & share'),
+                            const SizedBox(height: 6),
+                            EditorialHeading(
+                              textSpan: TextSpan(
+                                children: [
+                                  const TextSpan(text: 'Your directive, '),
+                                  TextSpan(
+                                    text: 'on paper.',
+                                    style: TextStyle(color: p.primary),
+                                  ),
+                                ],
+                              ),
+                              size: 28,
+                              height: 1.05,
+                              letterSpacing: -0.5,
                             ),
-                          ),
-                        ),
-                        const SizedBox(width: 32),
-                        SizedBox(
-                          width: 360,
-                          child: SingleChildScrollView(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: distributionChildren,
+                            const SizedBox(height: 6),
+                            Text(
+                              'Sized for US Letter (8.5 × 11″) with 1-inch '
+                              'margins. The whole page fits below — use − / + '
+                              'to zoom.',
+                              style: TextStyle(
+                                fontFamily: 'DM Sans',
+                                fontSize: 12.5,
+                                height: 1.4,
+                                color: p.textMuted,
+                              ),
                             ),
-                          ),
+                            const SizedBox(height: 12),
+                            Expanded(
+                              child: _ExportPdfPreview(
+                                signature: _selectionSignature(),
+                                buildBytes: _buildPdfBytes,
+                                hasSelection: anySelected,
+                                ready: _directive != null,
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
+                    ),
+                    // RIGHT — control rail.
+                    Container(
+                      width: 360,
+                      decoration: BoxDecoration(
+                        color: p.card,
+                        border: Border(left: BorderSide(color: p.border)),
+                      ),
+                      child: SingleChildScrollView(
+                        padding: const EdgeInsets.fromLTRB(22, 22, 22, 40),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            if (_isGenerating)
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 12),
+                                child: LinearProgressIndicator(
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                              ),
+                            legalDisclaimerCard,
+                            const SizedBox(height: 16),
+                            ...sectionCheckboxChildren,
+                            const SizedBox(height: 16),
+                            unencryptedBanner,
+                            const SizedBox(height: 4),
+                            ...distributionChildren,
+                          ],
+                        ),
+                      ),
                     ),
                   ],
                 );
@@ -1545,6 +1575,331 @@ class _PdfPreviewScreen extends StatelessWidget {
                 ),
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Dominant live PDF preview for the wide export layout — rasterises the
+/// generated PDF and shows one page at a time with a page counter, − / FIT / +
+/// zoom controls, and a tappable page-rail of thumbnails. Mirrors the Claude
+/// Design `WebExport` left pane (re-renders when the selection changes).
+class _ExportPdfPreview extends StatefulWidget {
+  final String signature;
+  final Future<Uint8List> Function() buildBytes;
+  final bool hasSelection;
+  final bool ready;
+  const _ExportPdfPreview({
+    required this.signature,
+    required this.buildBytes,
+    required this.hasSelection,
+    required this.ready,
+  });
+
+  @override
+  State<_ExportPdfPreview> createState() => _ExportPdfPreviewState();
+}
+
+class _ExportPdfPreviewState extends State<_ExportPdfPreview> {
+  List<Uint8List> _pages = const [];
+  int _current = 0;
+  double _zoom = 1.0; // 1.0 == FIT
+  bool _error = false;
+  String? _renderedSig;
+  int _renderToken = 0;
+
+  static const double _kPageRatio = 8.5 / 11.0; // width / height
+
+  @override
+  void initState() {
+    super.initState();
+    _maybeRender();
+  }
+
+  @override
+  void didUpdateWidget(covariant _ExportPdfPreview old) {
+    super.didUpdateWidget(old);
+    if (old.signature != widget.signature ||
+        old.hasSelection != widget.hasSelection ||
+        old.ready != widget.ready) {
+      _maybeRender();
+    }
+  }
+
+  Future<void> _maybeRender() async {
+    if (!widget.ready || !widget.hasSelection) {
+      if (mounted) {
+        setState(() {
+          _pages = const [];
+          _renderedSig = null;
+          _error = false;
+        });
+      }
+      return;
+    }
+    if (_renderedSig == widget.signature && _pages.isNotEmpty) return;
+
+    final token = ++_renderToken;
+    setState(() {
+      _pages = const [];
+      _error = false;
+    });
+    try {
+      final bytes = await widget.buildBytes();
+      final pages = <Uint8List>[];
+      await for (final raster in Printing.raster(bytes, dpi: 120)) {
+        if (token != _renderToken) return; // superseded by a newer render
+        pages.add(await raster.toPng());
+      }
+      if (!mounted || token != _renderToken) return;
+      setState(() {
+        _pages = pages;
+        _current = pages.isEmpty ? 0 : _current.clamp(0, pages.length - 1);
+        _renderedSig = widget.signature;
+      });
+    } catch (_) {
+      if (mounted && token == _renderToken) {
+        setState(() => _error = true);
+      }
+    }
+  }
+
+  void _setZoom(double z) => setState(
+      () => _zoom = ((z * 10).roundToDouble() / 10).clamp(0.5, 2.5));
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
+
+    if (!widget.ready) return _centeredNote('Loading…', p);
+    if (!widget.hasSelection) {
+      return _centeredNote('Select a section to preview.', p);
+    }
+    if (_error) return _centeredNote('Could not render the preview.', p);
+    if (_pages.isEmpty) {
+      return Center(child: CircularProgressIndicator(color: p.primary));
+    }
+
+    final pageCount = _pages.length;
+    final pct = (_zoom * 100).round();
+    final isLast = _current >= pageCount - 1;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        // Toolbar — page counter (tap to go back) + zoom controls.
+        Row(
+          children: [
+            TextButton(
+              onPressed:
+                  _current > 0 ? () => setState(() => _current--) : null,
+              style: TextButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                minimumSize: const Size(0, 30),
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              ),
+              child: Text(
+                '← Page ${_current + 1} of $pageCount',
+                style: TextStyle(
+                  fontFamily: 'DM Sans',
+                  fontSize: 12.5,
+                  fontWeight: FontWeight.w600,
+                  color: _current > 0 ? p.text : p.textMuted,
+                ),
+              ),
+            ),
+            const Spacer(),
+            _zoomBtn(p, '−', _zoom > 0.5, () => _setZoom(_zoom - 0.1)),
+            const SizedBox(width: 6),
+            _fitToggle(p, pct),
+            const SizedBox(width: 6),
+            _zoomBtn(p, '+', _zoom < 2.5, () => _setZoom(_zoom + 0.1)),
+          ],
+        ),
+        const SizedBox(height: 8),
+        // Page viewport — fits at FIT, scrolls both axes when zoomed in.
+        Expanded(
+          child: ClipRect(
+            child: Container(
+              color: p.surface,
+              child: LayoutBuilder(
+                builder: (context, c) {
+                  const pad = 12.0;
+                  final availW =
+                      (c.maxWidth - pad * 2).clamp(1.0, double.infinity);
+                  final availH =
+                      (c.maxHeight - pad * 2).clamp(1.0, double.infinity);
+                  double h = availH;
+                  double w = h * _kPageRatio;
+                  if (w > availW) {
+                    w = availW;
+                    h = w / _kPageRatio;
+                  }
+                  final dw = w * _zoom;
+                  final dh = h * _zoom;
+                  return SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minWidth: c.maxWidth,
+                          minHeight: c.maxHeight,
+                        ),
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(pad),
+                            child: Container(
+                              width: dw,
+                              height: dh,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: Border.all(color: p.border),
+                                borderRadius: BorderRadius.circular(2),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color:
+                                        Colors.black.withValues(alpha: 0.08),
+                                    blurRadius: 24,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ],
+                              ),
+                              clipBehavior: Clip.antiAlias,
+                              child: Image.memory(
+                                _pages[_current],
+                                fit: BoxFit.fill,
+                                gaplessPlayback: true,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          isLast
+              ? '— END · 8.5 × 11″ —'
+              : '— CONTINUED ON PAGE ${_current + 2} · 8.5 × 11″ —',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontFamily: 'JetBrains Mono',
+            fontFamilyFallback: const ['Consolas', 'monospace'],
+            fontSize: 10,
+            letterSpacing: 0.4,
+            color: p.textMuted,
+          ),
+        ),
+        if (pageCount > 1) ...[
+          const SizedBox(height: 10),
+          SizedBox(
+            height: 42,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              shrinkWrap: true,
+              physics: const ClampingScrollPhysics(),
+              padding: EdgeInsets.zero,
+              itemCount: pageCount,
+              separatorBuilder: (_, _) => const SizedBox(width: 4),
+              itemBuilder: (context, i) {
+                final selected = i == _current;
+                return GestureDetector(
+                  onTap: () => setState(() => _current = i),
+                  child: Container(
+                    width: 30,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: selected ? p.primary : p.border,
+                        width: selected ? 2 : 1,
+                      ),
+                      borderRadius: BorderRadius.circular(3),
+                    ),
+                    clipBehavior: Clip.antiAlias,
+                    child: Image.memory(
+                      _pages[i],
+                      fit: BoxFit.cover,
+                      gaplessPlayback: true,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+
+  Widget _centeredNote(String text, MhadPalette p) => Container(
+        color: p.surface,
+        alignment: Alignment.center,
+        child: Text(
+          text,
+          style: TextStyle(
+            fontFamily: 'DM Sans',
+            fontSize: 13,
+            color: p.textMuted,
+          ),
+        ),
+      );
+
+  Widget _zoomBtn(
+      MhadPalette p, String label, bool enabled, VoidCallback onTap) {
+    return SizedBox(
+      width: 30,
+      height: 30,
+      child: OutlinedButton(
+        onPressed: enabled ? onTap : null,
+        style: OutlinedButton.styleFrom(
+          padding: EdgeInsets.zero,
+          minimumSize: const Size(30, 30),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          side: BorderSide(color: p.border),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            fontSize: 17,
+            fontWeight: FontWeight.w600,
+            height: 1,
+            color: enabled ? p.text : p.border,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _fitToggle(MhadPalette p, int pct) {
+    final isFit = _zoom == 1.0;
+    return GestureDetector(
+      onTap: () => _setZoom(1.0),
+      child: Container(
+        constraints: const BoxConstraints(minWidth: 64),
+        height: 30,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: isFit ? p.primaryTint : p.card,
+          border: Border.all(color: isFit ? p.primary : p.border),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Text(
+          isFit ? 'FIT' : '$pct%',
+          style: TextStyle(
+            fontFamily: 'JetBrains Mono',
+            fontFamilyFallback: const ['Consolas', 'monospace'],
+            fontSize: 12,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 0.4,
+            color: isFit ? p.primary : p.text,
           ),
         ),
       ),
