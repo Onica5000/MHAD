@@ -156,8 +156,8 @@ void main() {
 
     const generator = PdfGenerator(
       includeCombined: true,
-      includeDeclaration: false,
-      includePoa: false,
+      includeDeclaration: true,
+      includePoa: true,
       includeSupplementary: false,
       includeNotes: false,
     );

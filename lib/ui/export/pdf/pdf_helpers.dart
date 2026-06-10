@@ -111,29 +111,27 @@ const kDarkGrey = PdfColor.fromInt(0xFF444444);
 // Typography
 // ---------------------------------------------------------------------------
 
-pw.TextStyle bodyStyle({double fontSize = 9}) =>
+// Body text is sized to match the official PA MHAD form (~11pt) for
+// readability; earlier builds used 9pt to cram everything into 6 fixed pages.
+// With MultiPage flow the content paginates naturally, so we can use the
+// larger, more legible size.
+pw.TextStyle bodyStyle({double fontSize = 11}) =>
     pw.TextStyle(fontSize: fontSize, color: kBlack);
 
-pw.TextStyle boldStyle({double fontSize = 9}) => pw.TextStyle(
-      fontSize: fontSize,
-      fontWeight: pw.FontWeight.bold,
-      color: kBlack,
-    );
+pw.TextStyle boldStyle({double fontSize = 11}) => pw.TextStyle(
+  fontSize: fontSize,
+  fontWeight: pw.FontWeight.bold,
+  color: kBlack,
+);
 
 /// Large teal "Part" header — matches the official form (e.g. "Part II.
 /// Mental Health Declaration" is rendered as teal *text*, not a filled bar).
-pw.TextStyle sectionHeaderStyle() => pw.TextStyle(
-      fontSize: 13,
-      fontWeight: pw.FontWeight.bold,
-      color: kTeal,
-    );
+pw.TextStyle sectionHeaderStyle() =>
+    pw.TextStyle(fontSize: 15, fontWeight: pw.FontWeight.bold, color: kTeal);
 
-pw.TextStyle labelStyle() => pw.TextStyle(
-      fontSize: 8,
-      color: kDarkGrey,
-    );
+pw.TextStyle labelStyle() => pw.TextStyle(fontSize: 9.5, color: kDarkGrey);
 
-pw.TextStyle smallBodyStyle() => pw.TextStyle(fontSize: 7.5, color: kBlack);
+pw.TextStyle smallBodyStyle() => pw.TextStyle(fontSize: 9, color: kBlack);
 
 // ---------------------------------------------------------------------------
 // Page setup — US Letter with 0.75 inch margins
@@ -142,8 +140,7 @@ pw.TextStyle smallBodyStyle() => pw.TextStyle(fontSize: 7.5, color: kBlack);
 const kPageFormat = PdfPageFormat.letter;
 const kMargin = 54.0; // 0.75 inch
 
-pw.EdgeInsets get pageMargins =>
-    const pw.EdgeInsets.all(kMargin);
+pw.EdgeInsets get pageMargins => const pw.EdgeInsets.all(kMargin);
 
 // ---------------------------------------------------------------------------
 // Building blocks
@@ -166,7 +163,7 @@ pw.Widget partHeader(String text) {
     child: pw.Text(
       text,
       style: pw.TextStyle(
-        fontSize: 10,
+        fontSize: 12,
         fontWeight: pw.FontWeight.bold,
         color: kTeal,
       ),
@@ -184,19 +181,21 @@ pw.Widget blankLine(String label, {double width = double.infinity}) {
       pw.Container(
         width: width,
         decoration: const pw.BoxDecoration(
-          border: pw.Border(
-            bottom: pw.BorderSide(color: kBlack, width: 0.5),
-          ),
+          border: pw.Border(bottom: pw.BorderSide(color: kBlack, width: 0.5)),
         ),
-        height: 14,
+        height: 16,
       ),
-      pw.SizedBox(height: 4),
+      pw.SizedBox(height: 5),
     ],
   );
 }
 
 /// A labeled filled-in value line for user data.
-pw.Widget dataLine(String label, String value, {double width = double.infinity}) {
+pw.Widget dataLine(
+  String label,
+  String value, {
+  double width = double.infinity,
+}) {
   return pw.Column(
     crossAxisAlignment: pw.CrossAxisAlignment.start,
     children: [
@@ -205,17 +204,12 @@ pw.Widget dataLine(String label, String value, {double width = double.infinity})
       pw.Container(
         width: width,
         decoration: const pw.BoxDecoration(
-          border: pw.Border(
-            bottom: pw.BorderSide(color: kBlack, width: 0.5),
-          ),
+          border: pw.Border(bottom: pw.BorderSide(color: kBlack, width: 0.5)),
         ),
         padding: const pw.EdgeInsets.only(bottom: 2),
-        child: pw.Text(
-          value.isEmpty ? ' ' : value,
-          style: bodyStyle(fontSize: 9),
-        ),
+        child: pw.Text(value.isEmpty ? ' ' : value, style: bodyStyle()),
       ),
-      pw.SizedBox(height: 4),
+      pw.SizedBox(height: 5),
     ],
   );
 }
@@ -225,19 +219,16 @@ pw.Widget dataBlock(String label, String value, {int lines = 3}) {
   return pw.Column(
     crossAxisAlignment: pw.CrossAxisAlignment.start,
     children: [
-      pw.Text(label, style: boldStyle(fontSize: 8.5)),
+      pw.Text(label, style: boldStyle(fontSize: 10.5)),
       pw.SizedBox(height: 2),
       pw.Container(
         width: double.infinity,
-        constraints: const pw.BoxConstraints(minHeight: 36),
+        constraints: const pw.BoxConstraints(minHeight: 30),
         decoration: pw.BoxDecoration(
           border: pw.Border.all(color: kDarkGrey, width: 0.5),
         ),
-        padding: const pw.EdgeInsets.all(4),
-        child: pw.Text(
-          value.isEmpty ? ' ' : value,
-          style: bodyStyle(fontSize: 9),
-        ),
+        padding: const pw.EdgeInsets.all(5),
+        child: pw.Text(value.isEmpty ? ' ' : value, style: bodyStyle()),
       ),
       pw.SizedBox(height: 6),
     ],
@@ -253,8 +244,9 @@ bool isConsentYes(String value) =>
 bool isConsentNo(String value) => value == 'no';
 bool isConsentAgent(String value) => value == 'agentDecides';
 bool isConsentConditional(String value) => value.startsWith('conditional:');
-String consentConditionText(String value) =>
-    value.startsWith('conditional:') ? value.substring('conditional:'.length) : '';
+String consentConditionText(String value) => value.startsWith('conditional:')
+    ? value.substring('conditional:'.length)
+    : '';
 
 /// A checkbox row — checked or unchecked.
 /// Uses pw.CustomPaint with a raw-graphics closure (CustomPainter is a
@@ -265,41 +257,42 @@ pw.Widget checkRow(String text, {bool checked = false}) {
     child: pw.Row(
       crossAxisAlignment: pw.CrossAxisAlignment.start,
       children: [
-        pw.SizedBox(
-          width: 10,
-          height: 10,
-          child: pw.CustomPaint(
-            size: const PdfPoint(10, 10),
-            painter: (PdfGraphics canvas, PdfPoint size) {
-              final w = size.x;
-              final h = size.y;
-              const pad = 1.5;
+        pw.Padding(
+          padding: const pw.EdgeInsets.only(top: 1.5),
+          child: pw.SizedBox(
+            width: 12,
+            height: 12,
+            child: pw.CustomPaint(
+              size: const PdfPoint(12, 12),
+              painter: (PdfGraphics canvas, PdfPoint size) {
+                final w = size.x;
+                final h = size.y;
+                const pad = 1.5;
 
-              canvas.setFillColor(PdfColors.white);
-              canvas.drawRect(0, 0, w, h);
-              canvas.fillPath();
+                canvas.setFillColor(PdfColors.white);
+                canvas.drawRect(0, 0, w, h);
+                canvas.fillPath();
 
-              canvas.setStrokeColor(PdfColors.black);
-              canvas.setLineWidth(0.75);
-              canvas.drawRect(0, 0, w, h);
-              canvas.strokePath();
-
-              if (checked) {
-                canvas.setLineWidth(1.2);
-                canvas.moveTo(pad, pad);
-                canvas.lineTo(w - pad, h - pad);
+                canvas.setStrokeColor(PdfColors.black);
+                canvas.setLineWidth(0.75);
+                canvas.drawRect(0, 0, w, h);
                 canvas.strokePath();
-                canvas.moveTo(pad, h - pad);
-                canvas.lineTo(w - pad, pad);
-                canvas.strokePath();
-              }
-            },
+
+                if (checked) {
+                  canvas.setLineWidth(1.2);
+                  canvas.moveTo(pad, pad);
+                  canvas.lineTo(w - pad, h - pad);
+                  canvas.strokePath();
+                  canvas.moveTo(pad, h - pad);
+                  canvas.lineTo(w - pad, pad);
+                  canvas.strokePath();
+                }
+              },
+            ),
           ),
         ),
-        pw.SizedBox(width: 5),
-        pw.Expanded(
-          child: pw.Text(text, style: bodyStyle()),
-        ),
+        pw.SizedBox(width: 6),
+        pw.Expanded(child: pw.Text(text, style: bodyStyle())),
       ],
     ),
   );
@@ -314,9 +307,7 @@ pw.Widget signatureBlock(String label, {String? name, String? address}) {
       pw.Container(
         width: double.infinity,
         decoration: const pw.BoxDecoration(
-          border: pw.Border(
-            bottom: pw.BorderSide(color: kBlack, width: 0.5),
-          ),
+          border: pw.Border(bottom: pw.BorderSide(color: kBlack, width: 0.5)),
         ),
         height: 28,
       ),
@@ -396,7 +387,10 @@ pw.Widget pageFooter(String footerText) {
             'Disabilities Law Project 2005. All Rights Reserved.',
             style: pw.TextStyle(fontSize: 6.5, color: kDarkGrey),
           ),
-          pw.Text(footerText, style: pw.TextStyle(fontSize: 6.5, color: kDarkGrey)),
+          pw.Text(
+            footerText,
+            style: pw.TextStyle(fontSize: 6.5, color: kDarkGrey),
+          ),
         ],
       ),
     ],
@@ -408,10 +402,12 @@ pw.Widget twoCol(pw.Widget left, pw.Widget right) {
   return pw.Row(
     crossAxisAlignment: pw.CrossAxisAlignment.start,
     children: [
-      pw.Expanded(child: pw.Padding(
-        padding: const pw.EdgeInsets.only(right: 8),
-        child: left,
-      )),
+      pw.Expanded(
+        child: pw.Padding(
+          padding: const pw.EdgeInsets.only(right: 8),
+          child: left,
+        ),
+      ),
       pw.Expanded(child: right),
     ],
   );
@@ -426,11 +422,11 @@ pw.Widget medTableHeader() {
       children: [
         pw.Expanded(
           flex: 3,
-          child: pw.Text('Medication', style: boldStyle(fontSize: 8)),
+          child: pw.Text('Medication', style: boldStyle(fontSize: 10)),
         ),
         pw.Expanded(
           flex: 4,
-          child: pw.Text('Reason', style: boldStyle(fontSize: 8)),
+          child: pw.Text('Reason', style: boldStyle(fontSize: 10)),
         ),
       ],
     ),
@@ -445,15 +441,15 @@ pw.Widget medTableHeaderThree() {
       children: [
         pw.Expanded(
           flex: 3,
-          child: pw.Text('Medication', style: boldStyle(fontSize: 8)),
+          child: pw.Text('Medication', style: boldStyle(fontSize: 10)),
         ),
         pw.Expanded(
           flex: 3,
-          child: pw.Text('Limitation', style: boldStyle(fontSize: 8)),
+          child: pw.Text('Limitation', style: boldStyle(fontSize: 10)),
         ),
         pw.Expanded(
           flex: 4,
-          child: pw.Text('Reason', style: boldStyle(fontSize: 8)),
+          child: pw.Text('Reason', style: boldStyle(fontSize: 10)),
         ),
       ],
     ),
@@ -463,9 +459,7 @@ pw.Widget medTableHeaderThree() {
 pw.Widget medTableRow(String medication, String reason) {
   return pw.Container(
     decoration: const pw.BoxDecoration(
-      border: pw.Border(
-        bottom: pw.BorderSide(color: kLightGrey, width: 0.5),
-      ),
+      border: pw.Border(bottom: pw.BorderSide(color: kLightGrey, width: 0.5)),
     ),
     padding: const pw.EdgeInsets.symmetric(horizontal: 4, vertical: 3),
     child: pw.Row(
@@ -473,11 +467,11 @@ pw.Widget medTableRow(String medication, String reason) {
       children: [
         pw.Expanded(
           flex: 3,
-          child: pw.Text(medication, style: bodyStyle(fontSize: 8)),
+          child: pw.Text(medication, style: bodyStyle(fontSize: 10)),
         ),
         pw.Expanded(
           flex: 4,
-          child: pw.Text(reason, style: bodyStyle(fontSize: 8)),
+          child: pw.Text(reason, style: bodyStyle(fontSize: 10)),
         ),
       ],
     ),
@@ -485,12 +479,13 @@ pw.Widget medTableRow(String medication, String reason) {
 }
 
 pw.Widget medTableRowThree(
-    String medication, String limitation, String reason) {
+  String medication,
+  String limitation,
+  String reason,
+) {
   return pw.Container(
     decoration: const pw.BoxDecoration(
-      border: pw.Border(
-        bottom: pw.BorderSide(color: kLightGrey, width: 0.5),
-      ),
+      border: pw.Border(bottom: pw.BorderSide(color: kLightGrey, width: 0.5)),
     ),
     padding: const pw.EdgeInsets.symmetric(horizontal: 4, vertical: 3),
     child: pw.Row(
@@ -498,15 +493,15 @@ pw.Widget medTableRowThree(
       children: [
         pw.Expanded(
           flex: 3,
-          child: pw.Text(medication, style: bodyStyle(fontSize: 8)),
+          child: pw.Text(medication, style: bodyStyle(fontSize: 10)),
         ),
         pw.Expanded(
           flex: 3,
-          child: pw.Text(limitation, style: bodyStyle(fontSize: 8)),
+          child: pw.Text(limitation, style: bodyStyle(fontSize: 10)),
         ),
         pw.Expanded(
           flex: 4,
-          child: pw.Text(reason, style: bodyStyle(fontSize: 8)),
+          child: pw.Text(reason, style: bodyStyle(fontSize: 10)),
         ),
       ],
     ),
@@ -514,7 +509,10 @@ pw.Widget medTableRowThree(
 }
 
 pw.Widget medTable(
-    String label, List<Map<String, String>> rows, bool threeCol) {
+  String label,
+  List<Map<String, String>> rows,
+  bool threeCol,
+) {
   if (rows.isEmpty) return pw.SizedBox();
   return pw.Column(
     crossAxisAlignment: pw.CrossAxisAlignment.start,
@@ -528,13 +526,15 @@ pw.Widget medTable(
         child: pw.Column(
           children: [
             threeCol ? medTableHeaderThree() : medTableHeader(),
-            ...rows.map((r) => threeCol
-                ? medTableRowThree(
-                    r['medication'] ?? '',
-                    r['limitation'] ?? '',
-                    r['reason'] ?? '',
-                  )
-                : medTableRow(r['medication'] ?? '', r['reason'] ?? '')),
+            ...rows.map(
+              (r) => threeCol
+                  ? medTableRowThree(
+                      r['medication'] ?? '',
+                      r['limitation'] ?? '',
+                      r['reason'] ?? '',
+                    )
+                  : medTableRow(r['medication'] ?? '', r['reason'] ?? ''),
+            ),
           ],
         ),
       ),
@@ -647,8 +647,13 @@ pw.Widget signOnBehalfBlock(String formTypeDescription) {
 // ---------------------------------------------------------------------------
 
 /// Full witness detail block: Name, Address, City/State/Zip, Phone.
-pw.Widget witnessDetailBlock(String label, String? name, String? address,
-    {String? phone, int? signatureDate}) {
+pw.Widget witnessDetailBlock(
+  String label,
+  String? name,
+  String? address, {
+  String? phone,
+  int? signatureDate,
+}) {
   final dateStr = signatureDate != null
       ? formatExecDate(signatureDate)
       : '____________________';
@@ -668,7 +673,9 @@ pw.Widget witnessDetailBlock(String label, String? name, String? address,
 pw.Widget diagnosisList(List<dynamic> diagnoses) {
   if (diagnoses.isEmpty) return pw.SizedBox.shrink();
 
-  final psychiatric = diagnoses.where((d) => d.icdCode.startsWith('F')).toList();
+  final psychiatric = diagnoses
+      .where((d) => d.icdCode.startsWith('F'))
+      .toList();
   final medical = diagnoses.where((d) => !d.icdCode.startsWith('F')).toList();
 
   pw.Widget buildGroup(String title, List<dynamic> items) {
@@ -677,13 +684,15 @@ pw.Widget diagnosisList(List<dynamic> diagnoses) {
       children: [
         pw.Text('$title:', style: boldStyle(fontSize: 9)),
         pw.SizedBox(height: 2),
-        ...items.map((d) => pw.Padding(
-              padding: const pw.EdgeInsets.only(left: 8, bottom: 1),
-              child: pw.Text(
-                '\u2022 ${d.icdCode} — ${d.name}',
-                style: bodyStyle(),
-              ),
-            )),
+        ...items.map(
+          (d) => pw.Padding(
+            padding: const pw.EdgeInsets.only(left: 8, bottom: 1),
+            child: pw.Text(
+              '\u2022 ${d.icdCode} — ${d.name}',
+              style: bodyStyle(),
+            ),
+          ),
+        ),
         pw.SizedBox(height: 4),
       ],
     );
@@ -694,8 +703,7 @@ pw.Widget diagnosisList(List<dynamic> diagnoses) {
     children: [
       if (psychiatric.isNotEmpty)
         buildGroup('Psychiatric Diagnoses (ICD-10)', psychiatric),
-      if (medical.isNotEmpty)
-        buildGroup('Medical Diagnoses (ICD-10)', medical),
+      if (medical.isNotEmpty) buildGroup('Medical Diagnoses (ICD-10)', medical),
       pw.SizedBox(height: 2),
     ],
   );
@@ -707,8 +715,19 @@ pw.Widget diagnosisList(List<dynamic> diagnoses) {
 
 String monthName(int month) {
   const months = [
-    '', 'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
+    '',
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
   ];
   return months[month];
 }
@@ -735,10 +754,7 @@ String facilityLocation(String raw) {
 
 /// Render a list of facilities from a newline-delimited "Name | Location" string.
 pw.Widget facilityList(String raw) {
-  final entries = raw
-      .split('\n')
-      .where((l) => l.trim().isNotEmpty)
-      .toList();
+  final entries = raw.split('\n').where((l) => l.trim().isNotEmpty).toList();
   if (entries.isEmpty) return pw.SizedBox.shrink();
   return pw.Column(
     crossAxisAlignment: pw.CrossAxisAlignment.start,
