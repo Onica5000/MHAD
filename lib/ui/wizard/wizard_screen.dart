@@ -17,6 +17,7 @@ import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/ai_consent_dialog.dart';
 import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
+import 'package:mhad/ui/widgets/design/responsive_shell.dart';
 import 'package:mhad/ui/widgets/design/step_dots.dart';
 import 'package:mhad/ui/widgets/design/step_head.dart';
 import 'package:mhad/ui/widgets/design/wizard_bottom_bar.dart';
@@ -182,11 +183,22 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
               builder: (context, constraints) {
                 // Desktop / wide layout — step rail on the left, content
                 // column on the right. Matches the prototype's `w-wizard`
-                // pattern; below the 1000px breakpoint we collapse to the
-                // existing mobile-first column. The rail is read-only in
-                // this first pass: jumping mid-wizard would skip
-                // validation of intermediate steps.
-                final isWide = constraints.maxWidth >= 1000;
+                // pattern. The rail is read-only in this first pass: jumping
+                // mid-wizard would skip validation of intermediate steps.
+                //
+                // `shellActive` keys off the TOTAL window width (the
+                // desktop-shell signal), NOT this screen's post-sidebar
+                // constraints — the persistent WebSidebar eats 232px, so a
+                // content-based >=1000 check would leave a dead band
+                // (1000–1231px) where the sidebar shows but the wizard still
+                // rendered its mobile column. The 320px AI rail needs more
+                // room than the 240px step rail + a usable form, so it only
+                // appears once the content area is wide enough; below that it
+                // collapses to the peeking "Need help?" bar.
+                final shellActive =
+                    MediaQuery.sizeOf(context).width >= kWideLayoutBreakpoint;
+                final showAiRail =
+                    shellActive && constraints.maxWidth >= 1080;
                 final mainColumn = Column(
                   children: [
                     const CrisisTopBar(compact: true),
@@ -205,7 +217,7 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                       backLabel: 'Exit',
                       actionLabel: '',
                     ),
-                    if (!isWide)
+                    if (!shellActive)
                       Container(
                         color: p.scaffoldBackground,
                         padding: const EdgeInsets.only(top: 4),
@@ -281,10 +293,11 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                         formType,
                       ),
                     ),
-                    // Prototype `w-wiz-mobile`: the desktop AI rail collapses to
-                    // a slim peeking "Need help?" bar above the bottom bar when
-                    // the rail can't fit. Only shown on narrow widths.
-                    if (!isWide)
+                    // Prototype `w-wiz-mobile`: the AI rail collapses to a slim
+                    // peeking "Need help?" bar whenever the full 320px rail
+                    // isn't shown — i.e. on mobile AND in the desktop band
+                    // that's too narrow for the rail.
+                    if (!showAiRail)
                       _WizardAiBar(
                         onAsk: () => _openStepAi(
                           context,
@@ -292,10 +305,10 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                           currentStep.displayName,
                         ),
                       ),
-                    // Narrow (mobile) keeps a bottom Back/Continue bar. On wide
-                    // the navigation lives under the step rail instead, so the
-                    // Scaffold has no bottomNavigationBar.
-                    if (!isWide)
+                    // Narrow (mobile) keeps a bottom Back/Continue bar. With the
+                    // desktop shell active the navigation lives under the step
+                    // rail instead, so the Scaffold has no bottomNavigationBar.
+                    if (!shellActive)
                       WizardBottomBar(
                         primaryLabel: isLastStep
                             ? 'Generate signing packet'
@@ -309,7 +322,7 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                       ),
                   ],
                 );
-                if (!isWide) return mainColumn;
+                if (!shellActive) return mainColumn;
                 return Row(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -330,26 +343,28 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                       ),
                     ),
                     // Prototype `w-wizard` right rail (320px): a contextual AI
-                    // helper beside the form. On narrow widths it collapses to
-                    // the peeking "Need help?" bar above the bottom bar (see
-                    // bottomNavigationBar).
-                    Container(width: 1, color: p.border),
-                    _WizardAiRail(
-                      formType: formType.name,
-                      step: currentStep,
-                      stepName: currentStep.displayName,
-                      directiveId: directive.id,
-                      onOpenFull: () => _openStepAi(
-                        context,
-                        formType,
-                        currentStep.displayName,
-                      ),
-                      onSnapId: () => showDocumentPipelineFlow(
-                        context,
-                        directiveId: directive.id,
+                    // helper beside the form. Only shown when the content area
+                    // is wide enough; otherwise the peeking "Need help?" bar
+                    // inside mainColumn takes its place.
+                    if (showAiRail) ...[
+                      Container(width: 1, color: p.border),
+                      _WizardAiRail(
                         formType: formType.name,
+                        step: currentStep,
+                        stepName: currentStep.displayName,
+                        directiveId: directive.id,
+                        onOpenFull: () => _openStepAi(
+                          context,
+                          formType,
+                          currentStep.displayName,
+                        ),
+                        onSnapId: () => showDocumentPipelineFlow(
+                          context,
+                          directiveId: directive.id,
+                          formType: formType.name,
+                        ),
                       ),
-                    ),
+                    ],
                   ],
                 );
               },
