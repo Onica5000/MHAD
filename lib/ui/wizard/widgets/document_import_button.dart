@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:mhad/providers/assistant_providers.dart';
-import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/wizard/widgets/document_pipeline_flow.dart';
 
 /// A button that triggers the integrated document import pipeline:
@@ -36,10 +34,9 @@ class DocumentImportButton extends ConsumerWidget {
         ),
       ),
       onPressed: () {
-        if (!hasApiKey) {
-          context.push(AppRoutes.aiSetup);
-          return;
-        }
+        // Always open the snap-to-fill pipeline — it shows a "Set up AI"
+        // banner when no key is set, rather than the user being bounced to
+        // setup before they ever see the page.
         showDocumentPipelineFlow(
           context,
           directiveId: directiveId,

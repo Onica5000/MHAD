@@ -15,6 +15,7 @@ import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/services/clinical_data_validator.dart';
 import 'package:mhad/services/gemini_rate_tracker.dart';
+import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/ai_consent_dialog.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
@@ -90,6 +91,40 @@ class _PipelineScreenState extends ConsumerState<_PipelineScreen> {
     super.dispose();
   }
 
+  // Route to AI setup, closing this snap-to-fill dialog first. Used when
+  // extraction is attempted or requested without a Gemini key set.
+  void _goAiSetup() {
+    Navigator.of(context).pop();
+    appRouter.push(AppRoutes.aiSetup);
+  }
+
+  Future<void> _promptAiSetup() async {
+    final goSetup = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        icon: const Icon(Icons.auto_awesome, size: 36),
+        title: const Text('Set up AI to read documents'),
+        content: const Text(
+          'Snap-to-fill uses AI to read your photo or PDF and pull out '
+          'medications and conditions. It needs a free Gemini key — about 30 '
+          'seconds to set up. You review every field before anything lands in '
+          'your form.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Not now'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('Set up AI'),
+          ),
+        ],
+      ),
+    );
+    if (goSetup == true && mounted) _goAiSetup();
+  }
+
   // Allowed dropped/pasted file extensions → mime type.
   static const _allowedMime = <String, String>{
     'pdf': 'application/pdf',
@@ -152,15 +187,22 @@ class _PipelineScreenState extends ConsumerState<_PipelineScreen> {
 
   Future<void> _startPipeline(List<PickedDocument> docs) async {
     _sourceDocs = docs;
+
+    // Extraction needs a Gemini key. On web (public mode) the user often has
+    // none — prompt to set it up rather than silently doing nothing, so the
+    // snap-to-fill page never feels like a dead end.
+    final apiKey = ref.read(apiKeyProvider).valueOrNull;
+    if (apiKey == null || apiKey.isEmpty) {
+      await _promptAiSetup();
+      return;
+    }
+
     // AI consent
     if (!ref.read(aiConsentGivenProvider)) {
       final ok = await showAiConsentDialog(context);
       if (!ok || !mounted) return;
       ref.read(aiConsentGivenProvider.notifier).state = true;
     }
-
-    final apiKey = ref.read(apiKeyProvider).valueOrNull;
-    if (apiKey == null || apiKey.isEmpty) return;
 
     // Warn about PII in image/PDF documents (text files are stripped locally)
     final hasImageOrPdf = docs.any((d) =>
@@ -846,6 +888,7 @@ class _PipelineScreenState extends ConsumerState<_PipelineScreen> {
 
   Widget _buildPickStep() {
     final p = Theme.of(context).mhadPalette;
+    final hasKey = ref.watch(apiKeyProvider).valueOrNull?.isNotEmpty == true;
     return LayoutBuilder(
       builder: (context, c) {
         final wide = c.maxWidth >= 720;
@@ -888,6 +931,10 @@ class _PipelineScreenState extends ConsumerState<_PipelineScreen> {
                 ),
               ),
               const SizedBox(height: 20),
+              if (!hasKey) ...[
+                _noKeyBanner(p),
+                const SizedBox(height: 16),
+              ],
               if (_error != null) ...[
                 _errorCard(p),
                 const SizedBox(height: 16),
@@ -910,6 +957,61 @@ class _PipelineScreenState extends ConsumerState<_PipelineScreen> {
           ),
         );
       },
+    );
+  }
+
+  // Shown on the snap-to-fill page when no Gemini key is set (the common web
+  // case). The page stays visible so the user sees how it works; this explains
+  // that actually reading a document needs AI set up, with a one-tap CTA.
+  Widget _noKeyBanner(MhadPalette p) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: p.primaryTint,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: p.primaryLight),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.auto_awesome_outlined, size: 18, color: p.primary),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  "AI isn't set up yet",
+                  style: TextStyle(
+                    fontFamily: 'DM Sans',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: p.text,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          Text(
+            'You can see how snap-to-fill works below, but reading a real photo '
+            'or PDF needs a free Gemini key (about 30 seconds). You review '
+            'every field before it lands in your form.',
+            style: TextStyle(
+              fontFamily: 'DM Sans',
+              fontSize: 12.5,
+              height: 1.45,
+              color: p.textMuted,
+            ),
+          ),
+          const SizedBox(height: 10),
+          FilledButton.icon(
+            onPressed: _goAiSetup,
+            icon: const Icon(Icons.auto_awesome, size: 16),
+            label: const Text('Set up AI'),
+          ),
+        ],
+      ),
     );
   }
 

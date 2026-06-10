@@ -387,12 +387,11 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
       case SmartFillTarget.rx:
       case SmartFillTarget.conditions:
       case SmartFillTarget.other:
-        final apiKey = ref.read(apiKeyProvider).valueOrNull;
-        if (apiKey == null || apiKey.isEmpty) {
-          if (!context.mounted) return;
-          context.push(AppRoutes.aiSetup);
-          return;
-        }
+        // Open the snap-to-fill page regardless of whether AI is set up. The
+        // page renders fine without a key and shows a "Set up AI" banner;
+        // dropping a file then prompts for setup. (Previously this pre-diverted
+        // to AI setup, so web users without a key never saw the page at all —
+        // which is why snap-to-fill appeared "missing".)
         if (!context.mounted) return;
         await showDocumentPipelineFlow(
           context,
