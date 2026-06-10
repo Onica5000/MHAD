@@ -234,6 +234,33 @@ class _AnonBanner extends StatelessWidget {
               ],
             ),
           ),
+          const SizedBox(width: 10),
+          // "HOW THIS WORKS →" link (artboard WebDashboard anon banner) →
+          // the privacy policy, which explains the anonymous / nothing-saved
+          // model in full.
+          InkWell(
+            onTap: () => context.push(AppRoutes.privacyPolicy),
+            borderRadius: BorderRadius.circular(6),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+              child: Text(
+                'HOW THIS WORKS →',
+                style: TextStyle(
+                  fontFamily: 'JetBrains Mono',
+                  fontFamilyFallback: const [
+                    'Consolas',
+                    'Menlo',
+                    'Courier New',
+                    'monospace',
+                  ],
+                  fontSize: 10,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.6,
+                  color: p.primary,
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
