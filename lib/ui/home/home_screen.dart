@@ -16,6 +16,7 @@ import 'package:mhad/ui/home/web_landing.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/bottom_nav.dart';
 import 'package:mhad/ui/widgets/design/crisis_sheet.dart';
+import 'package:mhad/ui/widgets/design/responsive_shell.dart';
 import 'package:mhad/ui/widgets/design/design_card.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
@@ -93,9 +94,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         // Prototype `w-home`: at >=1000px the dashboard splits into the main
         // content column + a right "Tools" sidebar (reusing _ToolsGrid). Below
         // that the mobile single-column layout is unchanged.
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            final isWide = constraints.maxWidth >= 1000;
+        child: Builder(
+          builder: (context) {
+            // Wide vs narrow off the TOTAL window width (the desktop-shell
+            // signal), NOT this screen's post-sidebar content width: the
+            // persistent WebSidebar eats 232px, so a content-based >=1000
+            // check would leave a dead band (1000–1231px) where the sidebar
+            // shows but the dashboard still rendered its mobile column.
+            final isWide =
+                MediaQuery.sizeOf(context).width >= kWideLayoutBreakpoint;
             final list = ListView(
           // Prototype: 20 top, 22 horizontal, 100 bottom (the 100 leaves
           // room for the absolute-positioned floating pill nav).

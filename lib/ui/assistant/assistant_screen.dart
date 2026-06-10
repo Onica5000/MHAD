@@ -13,6 +13,7 @@ import 'package:mhad/ui/assistant/assistant_send.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/widgets/design/bottom_nav.dart';
 import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
+import 'package:mhad/ui/widgets/design/responsive_shell.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/ai_consent_dialog.dart';
 
@@ -224,8 +225,8 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
         children: [
           const CrisisTopBar(compact: true),
           Expanded(
-            child: LayoutBuilder(
-              builder: (context, constraints) {
+            child: Builder(
+              builder: (context) {
                 final chatColumn = _buildChatColumn(
                   context,
                   messages: messages,
@@ -233,11 +234,13 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                   hasKey: hasKey,
                   apiKeyAsync: apiKeyAsync,
                 );
-                // Desktop wide layout (>=1000px): keep the chat column on the
-                // left and add a purely-presentational context panel on the
-                // right. Below 1000px the layout is unchanged (chat column
-                // fills width).
-                if (constraints.maxWidth >= 1000) {
+                // Desktop wide layout: keep the chat column on the left and
+                // add a purely-presentational context panel on the right.
+                // Gate on the TOTAL window width (the desktop-shell signal),
+                // not this screen's post-sidebar content width — otherwise the
+                // 1000–1231px band shows the sidebar but the mobile chat-only
+                // layout (the WebSidebar already consumes 232px).
+                if (MediaQuery.sizeOf(context).width >= kWideLayoutBreakpoint) {
                   return Row(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
