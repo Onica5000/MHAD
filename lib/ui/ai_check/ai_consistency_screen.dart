@@ -52,6 +52,8 @@ class _AiConsistencyScreenState extends ConsumerState<AiConsistencyScreen> {
         body: "Doctors might not know which applies first if the agent "
             "wants ECT as a medication-adjacent measure. Most people pick "
             "one and remove the other.",
+        aStatement: 'Agent decides medications',
+        bStatement: 'ECT refused',
         actionEditA: 'Edit step 9 (Procedures)',
         actionEditB: 'Edit step 7 (Medications)',
       ));
@@ -72,6 +74,8 @@ class _AiConsistencyScreenState extends ConsumerState<AiConsistencyScreen> {
               '"Never give" medications list.',
           body: 'Add it to step 7 → Never give so prescribers see it as a '
               'refusal, not just an allergy.',
+          aStatement: '${a.substance} — severe allergy',
+          bStatement: 'Not on "Never give" list',
           actionEditA: 'Edit step 7 (Medications)',
           actionEditB: 'Edit step 8 (Allergies)',
         ));
@@ -250,12 +254,18 @@ class _Conflict {
   final String steps;
   final String title;
   final String body;
+  // The two contradicting statements, shown as side-by-side "A vs B" bubbles
+  // (artboard WebConflict).
+  final String aStatement;
+  final String bStatement;
   final String actionEditA;
   final String actionEditB;
   const _Conflict({
     required this.steps,
     required this.title,
     required this.body,
+    required this.aStatement,
+    required this.bStatement,
     required this.actionEditA,
     required this.actionEditB,
   });
@@ -273,6 +283,28 @@ class _ConflictCard extends StatelessWidget {
     required this.conflict,
     required this.directiveId,
   });
+
+  /// One of the two contradicting statements, in a bordered chip.
+  Widget _statementBubble(MhadPalette p, String text) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      decoration: BoxDecoration(
+        color: p.card,
+        border: Border.all(color: p.border),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Text(
+        text,
+        style: TextStyle(
+          fontFamily: 'DM Sans',
+          fontSize: 12.5,
+          height: 1.3,
+          fontWeight: FontWeight.w600,
+          color: p.text,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -319,7 +351,35 @@ class _ConflictCard extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 10),
+            // Side-by-side "A vs B" comparison of the two contradicting
+            // statements (artboard WebConflict).
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(child: _statementBubble(p, conflict.aStatement)),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Text(
+                    'vs',
+                    style: TextStyle(
+                      fontFamily: 'JetBrains Mono',
+                      fontFamilyFallback: const [
+                        'Consolas',
+                        'Menlo',
+                        'Courier New',
+                        'monospace',
+                      ],
+                      fontSize: 11,
+                      fontWeight: FontWeight.w700,
+                      color: warnText,
+                    ),
+                  ),
+                ),
+                Expanded(child: _statementBubble(p, conflict.bStatement)),
+              ],
+            ),
+            const SizedBox(height: 10),
             Text(
               conflict.title,
               style: TextStyle(
