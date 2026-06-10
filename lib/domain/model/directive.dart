@@ -99,28 +99,41 @@ extension WizardStepExt on WizardStep {
         WizardStep.reviewAndSign => 'Review',
       };
 
-  /// One-line subhead shown under the step title.
+  /// One-line subhead shown under the step title. Two-sentence copy matches
+  /// the design artboard's `WebWiz*` / `WebHealthShell` subtitles verbatim
+  /// (earlier builds shipped only the first clause of each).
   String get subtitle => switch (this) {
         WizardStep.aboutYou =>
-          'Just the basics so this document is uniquely yours.',
+          'Just the basics so this document is uniquely yours. Drop a photo '
+              "of your ID and we'll read these for you.",
         WizardStep.whenItKicksIn =>
-          "When you're considered unable to decide.",
+          'The conditions under which your directive becomes active. You can '
+              'pick more than one.',
         WizardStep.peopleITrust =>
-          "They speak for you if you can't speak for yourself.",
+          "They speak for you if you can't. You can name a primary, an "
+              'alternate, and set limits on what they decide.',
         WizardStep.guardianNomination =>
-          'Your preferred guardian, in case it ever comes to that.',
+          'Rare, but worth planning for. A guardian is named by a court — '
+              'not by you — and has broader authority than an agent.',
         WizardStep.whereIWantCare =>
-          'Facilities I prefer, and ones I want to avoid.',
+          'Facilities you prefer — and any you specifically want to avoid — '
+              'plus room and environment preferences.',
         WizardStep.diagnoses =>
-          'Your conditions — helps care teams see the whole picture.',
+          'Help your care team see the whole picture in a crisis. Search by '
+              'name — we attach the ICD-10 code your doctors use.',
         WizardStep.medications =>
-          'What you currently take, and what you refuse during a crisis.',
+          'What you take, and what to avoid. Two sections: meds you take now '
+              '(informational) and meds to refuse during a crisis (binding '
+              'under Act 194).',
         WizardStep.allergies =>
-          "Drug allergies, sensitivities, past adverse reactions.",
+          'Drug allergies, sensitivities, past adverse reactions. This is the '
+              'most-checked section by ER staff.',
         WizardStep.proceduresResearch =>
-          'Three treatments under PA law need your explicit consent.',
+          'Three treatments under PA law need your explicit consent. Set each '
+              'one — your agent fills any gaps.',
         WizardStep.anythingElse =>
-          'Free-form preferences not covered above.',
+          'Free-form preferences not covered above. This is your voice — '
+              "write it how you'd say it.",
         WizardStep.reviewAndSign =>
           "One last look, then we'll make your signing packet.",
       };
