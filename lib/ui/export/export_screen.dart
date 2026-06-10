@@ -14,6 +14,7 @@ import 'package:mhad/ui/export/pdf/pdf_generator.dart';
 import 'package:mhad/ui/export/pdf/wallet_card_generator.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
+import 'package:mhad/ui/widgets/design/responsive_shell.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/design/wizard_header.dart';
@@ -59,6 +60,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
   List<WitnessesData> _witnesses = [];
   List<DiagnosisEntry> _diagnoses = [];
   bool _loading = true;
+  bool _notFound = false;
 
   @override
   void initState() {
@@ -74,7 +76,16 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
   Future<void> _loadData() async {
     final repo = ref.read(directiveRepositoryProvider);
     final directive = await repo.getDirectiveById(widget.directiveId);
-    if (directive == null || !mounted) return;
+    if (!mounted) return;
+    if (directive == null) {
+      // The id didn't resolve (e.g. a stale link, or the in-memory web DB was
+      // cleared). Don't spin forever — surface a graceful empty state.
+      setState(() {
+        _loading = false;
+        _notFound = true;
+      });
+      return;
+    }
 
     final formType = FormType.values.firstWhere(
       (e) => e.name == directive.formType,
@@ -464,6 +475,66 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
             label: 'Loading',
             child: const CircularProgressIndicator(),
           ),
+        ),
+      );
+    }
+
+    if (_notFound || _directive == null) {
+      final p = Theme.of(context).mhadPalette;
+      return Scaffold(
+        backgroundColor: p.scaffoldBackground,
+        body: Column(
+          children: [
+            const CrisisTopBar(compact: true),
+            WizardHeader(
+              backLabel: 'Back',
+              onBack: () => Navigator.of(context).maybePop(),
+              actionLabel: '',
+            ),
+            Expanded(
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(32),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.description_outlined,
+                          size: 48, color: p.textMuted),
+                      const SizedBox(height: 16),
+                      Text(
+                        'Nothing to download yet',
+                        style: TextStyle(
+                          fontFamily: 'DM Sans',
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                          color: p.text,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Start a directive first — then come back here to '
+                        'preview, download, and print it.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontFamily: 'DM Sans',
+                          fontSize: 13,
+                          height: 1.4,
+                          color: p.textMuted,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      FilledButton.icon(
+                        onPressed: () =>
+                            context.go(AppRoutes.formTypeSelection),
+                        icon: const Icon(Icons.add),
+                        label: const Text('Start your directive'),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       );
     }
@@ -897,15 +968,21 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
           actionLabel: '',
         ),
         Expanded(
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              // Wide >=1000px: prototype `w-export` grid — the live PDF
-              // preview DOMINATES the left pane (heading + zoom/page-counter/
-              // page-rail), and a fixed control rail on the right carries the
-              // include-sections pickers, wallet card, Download/Share, and the
-              // extended app-only exports. Below 1000px it's the single
-              // stretched column (headerChildren + documentChildren + dist).
-              if (constraints.maxWidth >= 1000) {
+          child: Builder(
+            builder: (context) {
+              // Decide wide vs narrow off the TOTAL window width (the
+              // desktop-shell signal), NOT this screen's post-sidebar content
+              // width. The persistent `WebSidebar` already eats 232px, so a
+              // content-based `>=1000` check only flips to the two-pane
+              // artboard layout above a ~1232px window — leaving a dead band
+              // (1000–1231px) where the sidebar shows but export still rendered
+              // the narrow single column (no inline preview, just a "Preview
+              // PDF" button). Whenever the shell is active we render the
+              // prototype `w-export` grid: the live PDF preview DOMINATES the
+              // left pane (heading + zoom/page-counter/page-rail) and a fixed
+              // control rail sits on the right. Below the shell breakpoint it's
+              // the single stretched column (header + document + distribution).
+              if (MediaQuery.sizeOf(context).width >= kWideLayoutBreakpoint) {
                 final anySelected = _includeCombined ||
                     _includeDeclaration ||
                     _includePoa ||

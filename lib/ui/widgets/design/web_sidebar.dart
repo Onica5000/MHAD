@@ -75,9 +75,14 @@ class WebSidebar extends ConsumerWidget {
         activeIcon: Icons.print,
         label: 'Download & print',
         isActive: activeRoute.startsWith('/export/'),
+        // With a directive, open its export/preview screen. With none (the
+        // common web case — in-memory DB, nothing saved yet) DON'T silently
+        // bounce to Home: send the user into the new-directive flow so
+        // "Download & print" always leads somewhere coherent (you can't
+        // download a directive you haven't made yet).
         onTap: () => recentId != null
             ? appRouter.push(AppRoutes.exportRoute(recentId))
-            : appRouter.go(AppRoutes.home),
+            : appRouter.go(AppRoutes.formTypeSelection),
       ),
       _SidebarItem(
         icon: Icons.settings_outlined,
