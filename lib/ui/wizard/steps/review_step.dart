@@ -396,8 +396,7 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
           variant: _CalloutVariant.primary,
           title: 'Ready to sign?',
           body: 'Review all sections above. When satisfied, tap '
-              'Generate signing packet to proceed to signing and dating '
-              'the directive.',
+              'Preview to continue to signing and dating the directive.',
         ),
         const SizedBox(height: 12),
 

@@ -299,9 +299,7 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                     // rail instead, so the Scaffold has no bottomNavigationBar.
                     if (!shellActive)
                       WizardBottomBar(
-                        primaryLabel: isLastStep
-                            ? 'Generate signing packet'
-                            : 'Continue',
+                        primaryLabel: isLastStep ? 'Preview' : 'Continue',
                         primaryIcon: Icons.arrow_forward,
                         primaryLoading: _isSaving,
                         onPrimary: () => _goNext(context, isLastStep),
@@ -320,9 +318,9 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                       currentIndex: _stepIndex,
                       onNext: () => _goNext(context, isLastStep),
                       onBack: _stepIndex > 0 ? _goBack : null,
-                      nextLabel:
-                          isLastStep ? 'Generate signing packet' : 'Next',
+                      nextLabel: isLastStep ? 'Preview' : 'Next',
                       nextLoading: _isSaving,
+                      onStepTap: _jumpToStep,
                     ),
                     Container(width: 1, color: p.border),
                     Expanded(
@@ -593,6 +591,26 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
     }
     if (mounted) {
       setState(() => _stepIndex--);
+      unawaited(_persistStep());
+    }
+  }
+
+  /// Jump straight to [target] (tapping a step in the "Your directive" rail).
+  /// Best-effort saves the current step first — like [_goBack], the save never
+  /// blocks navigation, so the user can move freely between steps.
+  Future<void> _jumpToStep(int target) async {
+    if (target == _stepIndex) return;
+    FocusScope.of(context).unfocus();
+    final state = _stepKey.currentState;
+    if (state is WizardStepMixin) {
+      try {
+        await (state as WizardStepMixin).validateAndSave();
+      } catch (e) {
+        debugPrint('Auto-save on step-jump failed: $e');
+      }
+    }
+    if (mounted) {
+      setState(() => _stepIndex = target);
       unawaited(_persistStep());
     }
   }
@@ -1353,6 +1371,8 @@ class _WideStepRail extends StatelessWidget {
   final VoidCallback? onBack;
   final String nextLabel;
   final bool nextLoading;
+  // Jump straight to a step by tapping it in the "Your directive" list.
+  final ValueChanged<int> onStepTap;
   const _WideStepRail({
     required this.steps,
     required this.currentIndex,
@@ -1360,6 +1380,7 @@ class _WideStepRail extends StatelessWidget {
     required this.onBack,
     required this.nextLabel,
     required this.nextLoading,
+    required this.onStepTap,
   });
 
   @override
@@ -1413,6 +1434,7 @@ class _WideStepRail extends StatelessWidget {
                     : i == currentIndex
                         ? _RailStepState.current
                         : _RailStepState.pending,
+                onTap: i == currentIndex ? null : () => onStepTap(i),
               ),
             // Back / Next directly under the "Your directive" list.
             const SizedBox(height: 22),
@@ -1462,10 +1484,12 @@ class _RailStepRow extends StatelessWidget {
   final int index;
   final String title;
   final _RailStepState state;
+  final VoidCallback? onTap;
   const _RailStepRow({
     required this.index,
     required this.title,
     required this.state,
+    this.onTap,
   });
 
   @override
@@ -1495,13 +1519,18 @@ class _RailStepRow extends StatelessWidget {
         ? FontWeight.w700
         : FontWeight.w500;
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            width: 26,
-            height: 26,
+      padding: const EdgeInsets.only(bottom: 2),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(8),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                width: 26,
+                height: 26,
             decoration: BoxDecoration(
               color: dotBg,
               border: Border.all(color: dotBorder, width: 1.5),
@@ -1539,7 +1568,9 @@ class _RailStepRow extends StatelessWidget {
               ),
             ),
           ),
-        ],
+            ],
+          ),
+        ),
       ),
     );
   }
