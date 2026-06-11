@@ -187,8 +187,8 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
         const _SignStep(
           n: 2,
           title: 'Gather two qualified witnesses',
-          body: 'Both must be 18+, present at the same time, and NOT '
-              'your agent, alternate, or a provider treating you.',
+          body: 'Both must be 18 or older and in the room with you when '
+              'you sign. (Who can’t witness is below.)',
         ),
         const _SignStep(
           n: 3,
@@ -228,8 +228,11 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
                         style: TextStyle(fontWeight: FontWeight.w700),
                       ),
                       const TextSpan(
-                        text: ' be your designated agent, your alternate, '
-                            'or anyone currently providing your treatment.',
+                        text: ' be your agent or alternate agent, your mental '
+                            'health care provider, or an employee of the '
+                            'facility where you receive treatment — unless '
+                            'they are related to you by blood, marriage, or '
+                            'adoption.',
                       ),
                     ],
                   ),
