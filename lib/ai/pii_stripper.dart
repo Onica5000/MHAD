@@ -3,10 +3,14 @@
 ///
 /// PII includes: names, addresses, phone numbers, SSNs, DOBs, emails,
 /// insurance info, medical record numbers, credit card numbers, Medicare/
-/// Medicaid IDs, driver's license numbers, and PO Box addresses.
+/// Medicaid IDs, driver's license numbers, PO Box addresses, and healthcare
+/// facility names that appear in free-text narrative (e.g. "treated at Valley
+/// Center" → "[facility removed]").
 ///
-/// Medical data (medications, conditions, facilities) is NOT stripped — that
-/// is the information we intentionally send for analysis.
+/// Clinical data you enter in dedicated fields (medication names, conditions)
+/// is NOT stripped — that is the information we intentionally send for
+/// analysis. Note that a facility name written into a free-text field WILL be
+/// redacted, since it can identify a person.
 class PiiStripper {
   PiiStripper._();
 

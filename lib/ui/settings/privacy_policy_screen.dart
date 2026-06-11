@@ -95,8 +95,9 @@ class PrivacyPolicyScreen extends StatelessWidget {
                   '  - Retain data indefinitely (no automatic expiration)\n\n'
                   'The app strips common personally identifiable information '
                   '(SSNs, phone numbers, emails, dates of birth, addresses, '
-                  'names) before sending data to Google, but this is a '
-                  'best-effort filter and cannot guarantee complete removal.\n\n'
+                  'names, and facility names) before sending data to Google, '
+                  'but this is a best-effort filter and cannot guarantee '
+                  'complete removal.\n\n'
                   'AI features are entirely optional. The app is fully '
                   'functional without them.',
               headingStyle: headingStyle,
