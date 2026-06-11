@@ -1661,12 +1661,49 @@ class _ExportPdfPreviewState extends State<_ExportPdfPreview> {
   String? _renderedSig;
   int _renderToken = 0;
 
+  // The middle preview stacks every page in one continuous vertical scroll.
+  // These cache the per-page layout metrics (set during build) so the scroll
+  // listener can derive the in-view page and the thumbnails can jump to one.
+  final ScrollController _vCtrl = ScrollController();
+  double _topPad = 16.0;
+  double _pageStride = 1.0; // page height + inter-page gap, in px
+
   static const double _kPageRatio = 8.5 / 11.0; // width / height
 
   @override
   void initState() {
     super.initState();
+    _vCtrl.addListener(_syncCurrentFromScroll);
     _maybeRender();
+  }
+
+  @override
+  void dispose() {
+    _vCtrl.removeListener(_syncCurrentFromScroll);
+    _vCtrl.dispose();
+    super.dispose();
+  }
+
+  // Keep "Page X of Y" + the highlighted thumbnail in sync with scrolling.
+  void _syncCurrentFromScroll() {
+    if (!_vCtrl.hasClients || _pages.isEmpty) return;
+    final idx = ((_vCtrl.offset - _topPad + _pageStride / 2) / _pageStride)
+        .floor()
+        .clamp(0, _pages.length - 1);
+    if (idx != _current) setState(() => _current = idx);
+  }
+
+  // Scroll the continuous preview to a given page (from a thumbnail tap).
+  void _jumpToPage(int i) {
+    setState(() => _current = i);
+    if (!_vCtrl.hasClients) return;
+    final target =
+        (_topPad + i * _pageStride).clamp(0.0, _vCtrl.position.maxScrollExtent);
+    _vCtrl.animateTo(
+      target,
+      duration: const Duration(milliseconds: 280),
+      curve: Curves.easeOutCubic,
+    );
   }
 
   @override
@@ -1707,8 +1744,13 @@ class _ExportPdfPreviewState extends State<_ExportPdfPreview> {
       if (!mounted || token != _renderToken) return;
       setState(() {
         _pages = pages;
-        _current = pages.isEmpty ? 0 : _current.clamp(0, pages.length - 1);
+        _current = 0;
         _renderedSig = widget.signature;
+      });
+      // Fresh render (e.g. selection changed) — scroll back to the top so the
+      // page counter and the view agree.
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (_vCtrl.hasClients) _vCtrl.jumpTo(0);
       });
     } catch (_) {
       if (mounted && token == _renderToken) {
@@ -1751,9 +1793,10 @@ class _ExportPdfPreviewState extends State<_ExportPdfPreview> {
     );
   }
 
-  /// MIDDLE column — the rasterised page, fit to the width of the pane (so it
-  /// fills the space and the text is readable), scrolling vertically when it's
-  /// taller than the viewport. Falls back to a status note while it renders.
+  /// MIDDLE column — every page stacked in one continuous vertical scroll
+  /// (not page-limited), each fit to the width of the pane so the text is
+  /// readable; the ± zoom scales them all. Falls back to a status note while
+  /// it renders.
   Widget _pageArea(MhadPalette p) {
     if (!widget.ready) return _centeredNote('Loading…', p);
     if (!widget.hasSelection) {
@@ -1766,48 +1809,35 @@ class _ExportPdfPreviewState extends State<_ExportPdfPreview> {
     return LayoutBuilder(
       builder: (context, c) {
         const pad = 16.0;
+        const gap = 16.0;
         final availW = (c.maxWidth - pad * 2).clamp(1.0, double.infinity);
-        // Fit the page to the WIDTH of the pane (not its height) so the page
-        // fills the horizontal space and the text is large enough to read.
-        // Capped so it doesn't become enormous on very wide monitors; the ±
-        // zoom still overrides.
-        final double w = availW.clamp(1.0, 1000.0);
+        // Fit each page to the pane WIDTH (capped so it doesn't get enormous on
+        // very wide monitors); zoom scales from there.
+        final double w = availW.clamp(1.0, 1000.0) * _zoom;
         final double h = w / _kPageRatio;
-        final dw = w * _zoom;
-        final dh = h * _zoom;
-        return SingleChildScrollView(
-          scrollDirection: Axis.vertical,
+        // Cache metrics for the scroll listener / thumbnail jumps.
+        _topPad = pad;
+        _pageStride = h + gap;
+        return Scrollbar(
+          controller: _vCtrl,
+          thumbVisibility: true,
           child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minWidth: c.maxWidth,
-                minHeight: c.maxHeight,
-              ),
-              child: Center(
+            controller: _vCtrl,
+            scrollDirection: Axis.vertical,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minWidth: c.maxWidth),
                 child: Padding(
                   padding: const EdgeInsets.all(pad),
-                  child: Container(
-                    width: dw,
-                    height: dh,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(color: p.border),
-                      borderRadius: BorderRadius.circular(2),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.08),
-                          blurRadius: 24,
-                          offset: const Offset(0, 4),
-                        ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      for (var i = 0; i < _pages.length; i++) ...[
+                        if (i > 0) const SizedBox(height: gap),
+                        _pageCard(p, _pages[i], w, h),
                       ],
-                    ),
-                    clipBehavior: Clip.antiAlias,
-                    child: Image.memory(
-                      _pages[_current],
-                      fit: BoxFit.fill,
-                      gaplessPlayback: true,
-                    ),
+                    ],
                   ),
                 ),
               ),
@@ -1815,6 +1845,27 @@ class _ExportPdfPreviewState extends State<_ExportPdfPreview> {
           ),
         );
       },
+    );
+  }
+
+  Widget _pageCard(MhadPalette p, Uint8List bytes, double w, double h) {
+    return Container(
+      width: w,
+      height: h,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: p.border),
+        borderRadius: BorderRadius.circular(2),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.08),
+            blurRadius: 24,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Image.memory(bytes, fit: BoxFit.fill, gaplessPlayback: true),
     );
   }
 
@@ -1921,7 +1972,7 @@ class _ExportPdfPreviewState extends State<_ExportPdfPreview> {
               itemBuilder: (context, i) {
                 final selected = i == _current;
                 return GestureDetector(
-                  onTap: () => setState(() => _current = i),
+                  onTap: () => _jumpToPage(i),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
