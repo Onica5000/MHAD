@@ -1966,56 +1966,44 @@ class _ExportPdfPreviewState extends State<_ExportPdfPreview> {
             ),
           ),
           const SizedBox(height: 8),
-          // Page selectors stacked top to bottom — each thumbnail fills the
-          // panel width (true 8.5 × 11 aspect) so it uses the horizontal space;
-          // the list scrolls when the pages don't all fit the panel height.
+          // Page selectors stacked top to bottom — a small thumbnail + page
+          // number, so the panel stays a light control strip (not a second
+          // column of big page images) and the center preview keeps the room.
+          // The list scrolls when the pages don't all fit the panel height.
           Expanded(
             child: ListView.separated(
               padding: EdgeInsets.zero,
               itemCount: pageCount,
-              separatorBuilder: (_, _) => const SizedBox(height: 12),
+              separatorBuilder: (_, _) => const SizedBox(height: 8),
               itemBuilder: (context, i) {
                 final selected = i == _current;
                 return GestureDetector(
                   onTap: () => _jumpToPage(i),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                  child: Row(
                     children: [
-                      AspectRatio(
-                        aspectRatio: _kPageRatio,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: selected ? p.primary : p.border,
-                              width: selected ? 2 : 1,
-                            ),
-                            borderRadius: BorderRadius.circular(3),
-                            boxShadow: selected
-                                ? null
-                                : [
-                                    BoxShadow(
-                                      color: Colors.black
-                                          .withValues(alpha: 0.05),
-                                      blurRadius: 6,
-                                      offset: const Offset(0, 2),
-                                    ),
-                                  ],
+                      Container(
+                        width: 48,
+                        height: 62,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: selected ? p.primary : p.border,
+                            width: selected ? 2 : 1,
                           ),
-                          clipBehavior: Clip.antiAlias,
-                          child: Image.memory(
-                            _pages[i],
-                            fit: BoxFit.cover,
-                            gaplessPlayback: true,
-                          ),
+                          borderRadius: BorderRadius.circular(3),
+                        ),
+                        clipBehavior: Clip.antiAlias,
+                        child: Image.memory(
+                          _pages[i],
+                          fit: BoxFit.cover,
+                          gaplessPlayback: true,
                         ),
                       ),
-                      const SizedBox(height: 5),
+                      const SizedBox(width: 10),
                       Text(
                         'Page ${i + 1}',
-                        textAlign: TextAlign.center,
                         style: TextStyle(
                           fontFamily: 'DM Sans',
-                          fontSize: 11.5,
+                          fontSize: 12,
                           fontWeight:
                               selected ? FontWeight.w700 : FontWeight.w500,
                           color: selected ? p.primary : p.textMuted,
