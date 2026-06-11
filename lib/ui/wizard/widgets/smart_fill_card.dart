@@ -130,12 +130,14 @@ class SmartFillCard extends StatelessWidget {
                     color: p.onPrimary.withValues(alpha: 0.85),
                   ),
                 ),
-                const SizedBox(height: 14),
-                // 2×2 grid of capture targets.
-                Row(
-                  children: [
-                    Expanded(
-                      child: _SmartFillTile(
+                const SizedBox(height: 12),
+                // Capture targets in a single row to save the vertical space
+                // the old 2×2 grid used. Falls back to 2×2 only on very narrow
+                // phones where four across would be too cramped.
+                LayoutBuilder(
+                  builder: (context, c) {
+                    final tiles = <Widget>[
+                      _SmartFillTile(
                         icon: Icons.badge_outlined,
                         label: 'Photo of ID',
                         fills: 'Name · DOB · address',
@@ -143,45 +145,56 @@ class SmartFillCard extends StatelessWidget {
                         done: doneTargets.contains(SmartFillTarget.id),
                         onTap: () => onPickTarget(SmartFillTarget.id),
                       ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: _SmartFillTile(
+                      _SmartFillTile(
                         icon: Icons.medication_outlined,
                         label: 'Rx bottle / label',
                         fills: 'Drug · dose · frequency',
                         done: doneTargets.contains(SmartFillTarget.rx),
                         onTap: () => onPickTarget(SmartFillTarget.rx),
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Expanded(
-                      child: _SmartFillTile(
+                      _SmartFillTile(
                         icon: Icons.health_and_safety_outlined,
                         label: 'Conditions list',
                         fills: 'Diagnoses · allergies',
-                        done: doneTargets
-                            .contains(SmartFillTarget.conditions),
+                        done:
+                            doneTargets.contains(SmartFillTarget.conditions),
                         onTap: () =>
                             onPickTarget(SmartFillTarget.conditions),
                       ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: _SmartFillTile(
+                      _SmartFillTile(
                         icon: Icons.description_outlined,
                         label: 'Anything else',
                         fills: 'Old directive, notes…',
-                        done:
-                            doneTargets.contains(SmartFillTarget.other),
+                        done: doneTargets.contains(SmartFillTarget.other),
                         onTap: () => onPickTarget(SmartFillTarget.other),
                       ),
-                    ),
-                  ],
+                    ];
+                    if (c.maxWidth >= 420) {
+                      return Row(
+                        children: [
+                          for (var i = 0; i < tiles.length; i++) ...[
+                            if (i > 0) const SizedBox(width: 8),
+                            Expanded(child: tiles[i]),
+                          ],
+                        ],
+                      );
+                    }
+                    return Column(
+                      children: [
+                        Row(children: [
+                          Expanded(child: tiles[0]),
+                          const SizedBox(width: 8),
+                          Expanded(child: tiles[1]),
+                        ]),
+                        const SizedBox(height: 8),
+                        Row(children: [
+                          Expanded(child: tiles[2]),
+                          const SizedBox(width: 8),
+                          Expanded(child: tiles[3]),
+                        ]),
+                      ],
+                    );
+                  },
                 ),
                 const SizedBox(height: 12),
                 Row(
