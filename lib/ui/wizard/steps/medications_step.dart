@@ -146,8 +146,10 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
     final dark = Theme.of(context).brightness == Brightness.dark;
     final neverColor =
         dark ? SemanticColors.errorAccentDark : SemanticColors.errorAccentLight;
+    // A clearly golden-yellow — the SemanticColors warning text (0xFFB45309) is
+    // a burnt orange that reads as red next to the "never give" red box.
     final limitColor =
-        dark ? SemanticColors.warningTextDark : SemanticColors.warningTextLight;
+        dark ? const Color(0xFFFBBF24) : const Color(0xFFCA8A04);
     final preferColor =
         dark ? SemanticColors.successTextDark : SemanticColors.successTextLight;
     return Form(
