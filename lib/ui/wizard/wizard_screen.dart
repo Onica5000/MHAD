@@ -21,7 +21,6 @@ import 'package:mhad/ui/widgets/design/responsive_shell.dart';
 import 'package:mhad/ui/widgets/design/step_dots.dart';
 import 'package:mhad/ui/widgets/design/step_head.dart';
 import 'package:mhad/ui/widgets/design/wizard_bottom_bar.dart';
-import 'package:mhad/ui/widgets/design/wizard_header.dart';
 import 'package:mhad/ui/wizard/wizard_step_mixin.dart';
 import 'package:mhad/ui/wizard/steps/additional_instructions_step.dart';
 import 'package:mhad/ui/wizard/steps/allergies_step.dart';
@@ -202,21 +201,6 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                 final mainColumn = Column(
                   children: [
                     const CrisisTopBar(compact: true),
-                    // Prototype `WizardHeader` (ds.jsx L251-263): thin row
-                    // with chevron+Back left and "Save & exit" right.
-                    // Replaces the legacy Material AppBar. The Back action
-                    // delegates to the same back-step path the bottom bar
-                    // uses (validate, save, decrement); Save & exit runs
-                    // the existing `_saveAndExit` flow.
-                    // Single exit-to-home affordance for the whole wizard.
-                    // "Back to previous step" lives ONLY on the bottom bar, so
-                    // there are no duplicate Back/Exit controls (the header
-                    // previously showed both an "Exit" and a "Save & exit").
-                    WizardHeader(
-                      onBack: () => _saveAndExit(context),
-                      backLabel: 'Exit',
-                      actionLabel: '',
-                    ),
                     if (!shellActive)
                       Container(
                         color: p.scaffoldBackground,
@@ -226,11 +210,16 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                           total: steps.length,
                         ),
                       ),
+                    // The single exit-to-home affordance now lives in the
+                    // top-right of the StepHead (level with the step numeral),
+                    // so the step number rises to where the old "Exit" header
+                    // row sat. "Back to previous step" stays on the bottom bar.
                     StepHead(
                       stepNumber: _stepIndex + 1,
                       totalSteps: steps.length,
                       title: currentStep.displayName,
                       subtitle: currentStep.subtitle,
+                      onExit: () => _saveAndExit(context),
                     ),
                     if (_stepIndex == 0) const DocumentImportTip(),
                     // Editorial Smart Fill launcher on step 1 — matches

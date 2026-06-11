@@ -3,12 +3,18 @@ import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 
 /// Editorial wizard step header: oversized italic serif numeral on the left,
-/// "STEP n OF total" mono label, then bold sans title and subtitle.
+/// "STEP n OF total" mono label, then bold sans title and subtitle. An
+/// optional top-right [onExit] affordance sits level with the numeral (the
+/// wizard's "Exit" moved here from a separate header row above).
 class StepHead extends StatelessWidget {
   final int stepNumber; // 1-based
   final int totalSteps;
   final String title;
   final String? subtitle;
+
+  /// When set, renders an "Exit" button in the top-right of the header,
+  /// aligned with the step numeral.
+  final VoidCallback? onExit;
   final EdgeInsetsGeometry padding;
 
   const StepHead({
@@ -16,7 +22,8 @@ class StepHead extends StatelessWidget {
     required this.totalSteps,
     required this.title,
     this.subtitle,
-    this.padding = const EdgeInsets.fromLTRB(22, 24, 22, 16),
+    this.onExit,
+    this.padding = const EdgeInsets.fromLTRB(22, 10, 22, 16),
     super.key,
   });
 
@@ -29,14 +36,52 @@ class StepHead extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SerifNumeral(value: stepNumber, size: 54),
-              const SizedBox(width: 14),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: MonoCaption('Step $stepNumber of $totalSteps'),
+              Expanded(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    SerifNumeral(value: stepNumber, size: 54),
+                    const SizedBox(width: 14),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: MonoCaption('Step $stepNumber of $totalSteps'),
+                    ),
+                  ],
+                ),
               ),
+              if (onExit != null)
+                Semantics(
+                  button: true,
+                  label: 'Exit',
+                  child: InkWell(
+                    onTap: onExit,
+                    borderRadius: BorderRadius.circular(8),
+                    child: SizedBox(
+                      height: 44,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              'Exit',
+                              style: TextStyle(
+                                fontFamily: 'DM Sans',
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                                color: p.primary,
+                              ),
+                            ),
+                            const SizedBox(width: 3),
+                            Icon(Icons.close, size: 15, color: p.primary),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
             ],
           ),
           const SizedBox(height: 4),
