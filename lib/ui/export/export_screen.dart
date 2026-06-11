@@ -962,11 +962,14 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       // in-body back chevron, not a Material AppBar.
       body: Column(children: [
         const CrisisTopBar(compact: true),
-        WizardHeader(
-          backLabel: 'Back',
-          onBack: () => Navigator.of(context).maybePop(),
-          actionLabel: '',
-        ),
+        // The wide layout moves Back into the preview's left panel, so the
+        // full-width header is only needed in the narrow single-column layout.
+        if (MediaQuery.sizeOf(context).width < kWideLayoutBreakpoint)
+          WizardHeader(
+            backLabel: 'Back',
+            onBack: () => Navigator.of(context).maybePop(),
+            actionLabel: '',
+          ),
         Expanded(
           child: Builder(
             builder: (context) {
@@ -991,23 +994,18 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
                 return Row(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    // LEFT — the live preview OWNS the whole pane (the heading
-                    // moved to the right rail, and the preview now fits to
-                    // WIDTH so the page fills the space and is readable).
-                    // To revert this layout, see the commit that introduced it
-                    // (git revert <that commit>) — it restores the heading +
-                    // "Sized for US Letter…" caption above a fit-to-height
-                    // preview.
+                    // LEFT + MIDDLE — the preview widget renders its own
+                    // control panel (Export & share, Back, heading, page
+                    // counter, zoom, and the vertical page-thumbnail selector)
+                    // on the left and the page image, fit to width, in the
+                    // middle. The right rail below is the third column.
                     Expanded(
-                      child: Container(
-                        color: p.surface,
-                        padding: const EdgeInsets.all(16),
-                        child: _ExportPdfPreview(
-                          signature: _selectionSignature(),
-                          buildBytes: _buildPdfBytes,
-                          hasSelection: anySelected,
-                          ready: _directive != null,
-                        ),
+                      child: _ExportPdfPreview(
+                        signature: _selectionSignature(),
+                        buildBytes: _buildPdfBytes,
+                        hasSelection: anySelected,
+                        ready: _directive != null,
+                        onClose: () => Navigator.of(context).maybePop(),
                       ),
                     ),
                     // RIGHT — control rail.
@@ -1022,38 +1020,6 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            // Heading moved here off the preview pane so the
-                            // live page can own its full height (see the LEFT
-                            // pane comment for how to revert).
-                            const SectionLabel('Export & share'),
-                            const SizedBox(height: 6),
-                            EditorialHeading(
-                              textSpan: TextSpan(
-                                children: [
-                                  const TextSpan(text: 'Your directive, '),
-                                  TextSpan(
-                                    text: 'on paper.',
-                                    style: TextStyle(color: p.primary),
-                                  ),
-                                ],
-                              ),
-                              size: 24,
-                              height: 1.05,
-                              letterSpacing: -0.5,
-                            ),
-                            const SizedBox(height: 6),
-                            Text(
-                              'Sized for US Letter (8.5 × 11″) with 1-inch '
-                              'margins. The preview fills the width — use '
-                              '− / + to zoom.',
-                              style: TextStyle(
-                                fontFamily: 'DM Sans',
-                                fontSize: 12.5,
-                                height: 1.4,
-                                color: p.textMuted,
-                              ),
-                            ),
-                            const SizedBox(height: 18),
                             if (_isGenerating)
                               Padding(
                                 padding: const EdgeInsets.only(bottom: 12),
@@ -1670,11 +1636,17 @@ class _ExportPdfPreview extends StatefulWidget {
   final Future<Uint8List> Function() buildBytes;
   final bool hasSelection;
   final bool ready;
+
+  /// Called when the user taps "Back" in the left control panel — leaves the
+  /// Export screen. In the wide layout the full-width header is hidden, so this
+  /// is the screen's back affordance.
+  final VoidCallback onClose;
   const _ExportPdfPreview({
     required this.signature,
     required this.buildBytes,
     required this.hasSelection,
     required this.ready,
+    required this.onClose,
   });
 
   @override
@@ -1751,7 +1723,38 @@ class _ExportPdfPreviewState extends State<_ExportPdfPreview> {
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
+    // Two columns: a fixed-width control panel on the LEFT (Export & share,
+    // Back, heading, page counter, zoom, and the vertical page-thumbnail
+    // selector) and the page image in the MIDDLE (fit to width). The screen's
+    // right-hand rail is a sibling added by the parent, giving a 3-column feel.
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Container(
+          width: 236,
+          decoration: BoxDecoration(
+            color: p.card,
+            border: Border(right: BorderSide(color: p.border)),
+          ),
+          padding: const EdgeInsets.fromLTRB(18, 16, 18, 16),
+          child: _controlPanel(p),
+        ),
+        Expanded(
+          child: ClipRect(
+            child: Container(
+              color: p.surface,
+              child: _pageArea(p),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 
+  /// MIDDLE column — the rasterised page, fit to the width of the pane (so it
+  /// fills the space and the text is readable), scrolling vertically when it's
+  /// taller than the viewport. Falls back to a status note while it renders.
+  Widget _pageArea(MhadPalette p) {
     if (!widget.ready) return _centeredNote('Loading…', p);
     if (!widget.hasSelection) {
       return _centeredNote('Select a section to preview.', p);
@@ -1760,153 +1763,195 @@ class _ExportPdfPreviewState extends State<_ExportPdfPreview> {
     if (_pages.isEmpty) {
       return Center(child: CircularProgressIndicator(color: p.primary));
     }
-
-    final pageCount = _pages.length;
-    final pct = (_zoom * 100).round();
-    final isLast = _current >= pageCount - 1;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        // Toolbar — page counter (tap to go back) + zoom controls.
-        Row(
-          children: [
-            TextButton(
-              onPressed:
-                  _current > 0 ? () => setState(() => _current--) : null,
-              style: TextButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                minimumSize: const Size(0, 30),
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+    return LayoutBuilder(
+      builder: (context, c) {
+        const pad = 16.0;
+        final availW = (c.maxWidth - pad * 2).clamp(1.0, double.infinity);
+        // Fit the page to the WIDTH of the pane (not its height) so the page
+        // fills the horizontal space and the text is large enough to read.
+        // Capped so it doesn't become enormous on very wide monitors; the ±
+        // zoom still overrides.
+        final double w = availW.clamp(1.0, 1000.0);
+        final double h = w / _kPageRatio;
+        final dw = w * _zoom;
+        final dh = h * _zoom;
+        return SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minWidth: c.maxWidth,
+                minHeight: c.maxHeight,
               ),
-              child: Text(
-                '← Page ${_current + 1} of $pageCount',
-                style: TextStyle(
-                  fontFamily: 'DM Sans',
-                  fontSize: 12.5,
-                  fontWeight: FontWeight.w600,
-                  color: _current > 0 ? p.text : p.textMuted,
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(pad),
+                  child: Container(
+                    width: dw,
+                    height: dh,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(color: p.border),
+                      borderRadius: BorderRadius.circular(2),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.08),
+                          blurRadius: 24,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    clipBehavior: Clip.antiAlias,
+                    child: Image.memory(
+                      _pages[_current],
+                      fit: BoxFit.fill,
+                      gaplessPlayback: true,
+                    ),
+                  ),
                 ),
               ),
             ),
-            const Spacer(),
-            _zoomBtn(p, '−', _zoom > 0.5, () => _setZoom(_zoom - 0.1)),
-            const SizedBox(width: 6),
-            _fitToggle(p, pct),
-            const SizedBox(width: 6),
-            _zoomBtn(p, '+', _zoom < 2.5, () => _setZoom(_zoom + 0.1)),
-          ],
-        ),
-        const SizedBox(height: 8),
-        // Page viewport — page fills the width; scrolls vertically (and
-        // horizontally once zoomed past the pane width).
-        Expanded(
-          child: ClipRect(
-            child: Container(
-              color: p.surface,
-              child: LayoutBuilder(
-                builder: (context, c) {
-                  const pad = 12.0;
-                  final availW =
-                      (c.maxWidth - pad * 2).clamp(1.0, double.infinity);
-                  // Fit the page to the WIDTH of the pane (not its height) so
-                  // the page fills the horizontal space and the text is large
-                  // enough to read. Capped so it doesn't become enormous on
-                  // very wide monitors; the ± zoom still overrides. The page
-                  // scrolls vertically when it's taller than the viewport.
-                  final double w = availW.clamp(1.0, 1000.0);
-                  final double h = w / _kPageRatio;
-                  final dw = w * _zoom;
-                  final dh = h * _zoom;
-                  return SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: ConstrainedBox(
-                        constraints: BoxConstraints(
-                          minWidth: c.maxWidth,
-                          minHeight: c.maxHeight,
-                        ),
-                        child: Center(
-                          child: Padding(
-                            padding: const EdgeInsets.all(pad),
-                            child: Container(
-                              width: dw,
-                              height: dh,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border.all(color: p.border),
-                                borderRadius: BorderRadius.circular(2),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color:
-                                        Colors.black.withValues(alpha: 0.08),
-                                    blurRadius: 24,
-                                    offset: const Offset(0, 4),
-                                  ),
-                                ],
-                              ),
-                              clipBehavior: Clip.antiAlias,
-                              child: Image.memory(
-                                _pages[_current],
-                                fit: BoxFit.fill,
-                                gaplessPlayback: true,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                },
+          ),
+        );
+      },
+    );
+  }
+
+  /// LEFT column — title + Back, heading/caption, page counter, zoom, and the
+  /// vertical page-thumbnail selector (stacked top to bottom).
+  Widget _controlPanel(MhadPalette p) {
+    final hasPages = _pages.isNotEmpty;
+    final pageCount = _pages.length;
+    final pct = (_zoom * 100).round();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        // Title row — "Export & share" on the left, Back on the opposite right.
+        Row(
+          children: [
+            const Expanded(child: SectionLabel('Export & share')),
+            TextButton.icon(
+              onPressed: widget.onClose,
+              icon: const Icon(Icons.arrow_back, size: 16),
+              label: const Text('Back'),
+              style: TextButton.styleFrom(
+                foregroundColor: p.text,
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                minimumSize: const Size(0, 32),
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                textStyle: const TextStyle(
+                  fontFamily: 'DM Sans',
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
-          ),
+          ],
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 10),
+        EditorialHeading(
+          textSpan: TextSpan(
+            children: [
+              const TextSpan(text: 'Your directive, '),
+              TextSpan(text: 'on paper.', style: TextStyle(color: p.primary)),
+            ],
+          ),
+          size: 24,
+          height: 1.05,
+          letterSpacing: -0.5,
+        ),
+        const SizedBox(height: 6),
         Text(
-          isLast
-              ? '— END · 8.5 × 11″ —'
-              : '— CONTINUED ON PAGE ${_current + 2} · 8.5 × 11″ —',
-          textAlign: TextAlign.center,
+          'Sized for US Letter (8.5 × 11″) with 1-inch margins. The preview '
+          'fills the width — use − / + to zoom.',
           style: TextStyle(
-            fontFamily: 'JetBrains Mono',
-            fontFamilyFallback: const ['Consolas', 'monospace'],
-            fontSize: 10,
-            letterSpacing: 0.4,
+            fontFamily: 'DM Sans',
+            fontSize: 12,
+            height: 1.4,
             color: p.textMuted,
           ),
         ),
-        if (pageCount > 1) ...[
+        if (hasPages) ...[
+          const SizedBox(height: 16),
+          Divider(height: 1, color: p.border),
+          const SizedBox(height: 14),
+          Text(
+            'Page ${_current + 1} of $pageCount',
+            style: TextStyle(
+              fontFamily: 'DM Sans',
+              fontSize: 12.5,
+              fontWeight: FontWeight.w600,
+              color: p.text,
+            ),
+          ),
           const SizedBox(height: 10),
-          SizedBox(
-            height: 42,
+          Row(
+            children: [
+              _zoomBtn(p, '−', _zoom > 0.5, () => _setZoom(_zoom - 0.1)),
+              const SizedBox(width: 6),
+              _fitToggle(p, pct),
+              const SizedBox(width: 6),
+              _zoomBtn(p, '+', _zoom < 2.5, () => _setZoom(_zoom + 0.1)),
+            ],
+          ),
+        ],
+        if (hasPages && pageCount > 1) ...[
+          const SizedBox(height: 18),
+          Text(
+            'PAGES',
+            style: TextStyle(
+              fontFamily: 'JetBrains Mono',
+              fontFamilyFallback: const ['Consolas', 'monospace'],
+              fontSize: 10,
+              letterSpacing: 1,
+              fontWeight: FontWeight.w700,
+              color: p.textMuted,
+            ),
+          ),
+          const SizedBox(height: 8),
+          // Page selectors stacked top to bottom; scrolls if there are more
+          // pages than fit the panel height.
+          Expanded(
             child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              shrinkWrap: true,
-              physics: const ClampingScrollPhysics(),
               padding: EdgeInsets.zero,
               itemCount: pageCount,
-              separatorBuilder: (_, _) => const SizedBox(width: 4),
+              separatorBuilder: (_, _) => const SizedBox(height: 8),
               itemBuilder: (context, i) {
                 final selected = i == _current;
                 return GestureDetector(
                   onTap: () => setState(() => _current = i),
-                  child: Container(
-                    width: 30,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: selected ? p.primary : p.border,
-                        width: selected ? 2 : 1,
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 52,
+                        height: 67,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: selected ? p.primary : p.border,
+                            width: selected ? 2 : 1,
+                          ),
+                          borderRadius: BorderRadius.circular(3),
+                        ),
+                        clipBehavior: Clip.antiAlias,
+                        child: Image.memory(
+                          _pages[i],
+                          fit: BoxFit.cover,
+                          gaplessPlayback: true,
+                        ),
                       ),
-                      borderRadius: BorderRadius.circular(3),
-                    ),
-                    clipBehavior: Clip.antiAlias,
-                    child: Image.memory(
-                      _pages[i],
-                      fit: BoxFit.cover,
-                      gaplessPlayback: true,
-                    ),
+                      const SizedBox(width: 10),
+                      Text(
+                        '${i + 1}',
+                        style: TextStyle(
+                          fontFamily: 'DM Sans',
+                          fontSize: 12.5,
+                          fontWeight:
+                              selected ? FontWeight.w700 : FontWeight.w500,
+                          color: selected ? p.primary : p.textMuted,
+                        ),
+                      ),
+                    ],
                   ),
                 );
               },
