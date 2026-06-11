@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/utils/platform_utils.dart';
 
 /// Primary-filled "Snap to fill" launcher placed at the top of relevant
 /// wizard steps. Mirrors prototype `SmartFillCard` (mobile.jsx::480-583).
@@ -32,6 +33,10 @@ class SmartFillCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
+    // Reflect the real capability of the device: phones (native or mobile web)
+    // have a camera, so "snap a photo" is honest; desktop / PC web has no
+    // camera, so the action is to upload or drag-drop a photo or PDF instead.
+    final camera = deviceHasCamera;
     return Container(
       decoration: BoxDecoration(
         color: p.primary,
@@ -70,11 +75,17 @@ class SmartFillCard extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Icon(Icons.camera_alt_outlined,
-                        size: 14, color: p.onPrimary),
+                    Icon(
+                        camera
+                            ? Icons.camera_alt_outlined
+                            : Icons.upload_file_outlined,
+                        size: 14,
+                        color: p.onPrimary),
                     const SizedBox(width: 6),
                     Text(
-                      'SNAP TO FILL · AI-ASSISTED',
+                      camera
+                          ? 'SNAP TO FILL · AI-ASSISTED'
+                          : 'UPLOAD TO FILL · AI-ASSISTED',
                       style: TextStyle(
                         fontFamily: 'JetBrains Mono',
                         fontFamilyFallback: const [
@@ -93,7 +104,10 @@ class SmartFillCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  "Snap a photo. We'll read it and fill the wizard.",
+                  camera
+                      ? "Snap a photo. We'll read it and fill the wizard."
+                      : "Upload a photo or PDF. We'll read it and fill the "
+                          "wizard.",
                   style: TextStyle(
                     fontFamily: 'Instrument Serif',
                     fontFamilyFallback: const ['Georgia', 'serif'],
@@ -177,8 +191,11 @@ class SmartFillCard extends StatelessWidget {
                     const SizedBox(width: 6),
                     Expanded(
                       child: Text(
-                        'Your photo is sent to our AI to read it, then '
-                        'discarded · nothing is saved.',
+                        camera
+                            ? 'Your photo is sent to our AI to read it, then '
+                                'discarded · nothing is saved.'
+                            : 'Your file is sent to our AI to read it, then '
+                                'discarded · nothing is saved.',
                         style: TextStyle(
                           fontFamily: 'DM Sans',
                           fontSize: 10.5,

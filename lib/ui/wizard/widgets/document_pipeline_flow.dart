@@ -1071,7 +1071,10 @@ class _PipelineScreenState extends ConsumerState<_PipelineScreen> {
             ),
             const SizedBox(height: 14),
             Text(
-              'Drop a photo, PDF, or screenshot',
+              // Phones can't drag-and-drop files; desktop / PC web can.
+              deviceHasCamera
+                  ? 'Add a photo of your document'
+                  : 'Drop a photo, PDF, or screenshot',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontFamily: 'DM Sans',
@@ -1082,8 +1085,11 @@ class _PipelineScreenState extends ConsumerState<_PipelineScreen> {
             ),
             const SizedBox(height: 6),
             Text(
-              kIsWeb
-                  ? 'JPG · PNG · HEIC · PDF · up to 10 MB — or paste with ⌘V'
+              // Clipboard paste is a desktop-web affordance only; the shortcut
+              // label matches the OS (⌘V on Apple, Ctrl+V on Windows/Linux).
+              kIsWeb && !deviceHasCamera
+                  ? 'JPG · PNG · HEIC · PDF · up to 10 MB — or paste with '
+                      '$pasteShortcutLabel'
                   : 'JPG · PNG · HEIC · PDF · up to 10 MB',
               textAlign: TextAlign.center,
               style: TextStyle(
@@ -1107,7 +1113,7 @@ class _PipelineScreenState extends ConsumerState<_PipelineScreen> {
                   OutlinedButton.icon(
                     onPressed: _useWebcam,
                     icon: const Icon(Icons.photo_camera_outlined, size: 16),
-                    label: const Text('Use webcam'),
+                    label: const Text('Take a photo'),
                   ),
               ],
             ),
@@ -1205,7 +1211,8 @@ class _PipelineScreenState extends ConsumerState<_PipelineScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SectionLabel('What you can drop here'),
+        SectionLabel(
+            deviceHasCamera ? 'What you can add' : 'What you can drop here'),
         const SizedBox(height: 8),
         IntrinsicHeight(
           child: Row(
@@ -1220,49 +1227,53 @@ class _PipelineScreenState extends ConsumerState<_PipelineScreen> {
             children: [tile(targets[2]), const SizedBox(width: 8), tile(targets[3])],
           ),
         ),
-        const SizedBox(height: 12),
-        Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: p.card,
-            border: Border.all(color: p.border),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Icon(Icons.smartphone_outlined, size: 18, color: p.primary),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'On a phone?',
-                      style: TextStyle(
-                        fontFamily: 'DM Sans',
-                        fontSize: 12.5,
-                        fontWeight: FontWeight.w700,
-                        color: p.text,
+        // Cross-device nudge — desktop / PC web only (no camera here). On a
+        // phone this is redundant: the "Take a photo" button is right above.
+        if (!deviceHasCamera) ...[
+          const SizedBox(height: 12),
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: p.card,
+              border: Border.all(color: p.border),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(Icons.smartphone_outlined, size: 18, color: p.primary),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'On a phone instead?',
+                        style: TextStyle(
+                          fontFamily: 'DM Sans',
+                          fontSize: 12.5,
+                          fontWeight: FontWeight.w700,
+                          color: p.text,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      'Tap “Use webcam” to snap a page directly with your '
-                      'camera.',
-                      style: TextStyle(
-                        fontFamily: 'DM Sans',
-                        fontSize: 11.5,
-                        height: 1.35,
-                        color: p.textMuted,
+                      const SizedBox(height: 2),
+                      Text(
+                        'Open this page on your phone to snap a page directly '
+                        'with its camera.',
+                        style: TextStyle(
+                          fontFamily: 'DM Sans',
+                          fontSize: 11.5,
+                          height: 1.35,
+                          color: p.textMuted,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
+        ],
       ],
     );
   }

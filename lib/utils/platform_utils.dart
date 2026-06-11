@@ -34,3 +34,16 @@ bool get platformIsLinux =>
 
 bool get platformIsDesktop =>
     platformIsWindows || platformIsMacOS || platformIsLinux;
+
+/// True on Apple platforms (macOS / iOS), INCLUDING Apple browsers on web
+/// (here we intentionally do not gate on [kIsWeb] — `defaultTargetPlatform`
+/// follows the user-agent on web, which is what we want for picking the
+/// correct modifier-key nomenclature). Use for "⌘ vs Ctrl" UI copy only.
+bool get isApplePlatform =>
+    defaultTargetPlatform == TargetPlatform.macOS ||
+    defaultTargetPlatform == TargetPlatform.iOS;
+
+/// The clipboard-paste shortcut label for the current OS — "⌘V" on Apple,
+/// "Ctrl+V" on Windows / Linux. Matches the keys the user actually presses
+/// (on web this follows the browser's reported platform).
+String get pasteShortcutLabel => isApplePlatform ? '⌘V' : 'Ctrl+V';

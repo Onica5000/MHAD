@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/providers/assistant_providers.dart';
+import 'package:mhad/utils/platform_utils.dart';
 import 'package:mhad/ui/widgets/design/bottom_nav.dart';
 import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -115,8 +116,9 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
     } catch (_) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text('Could not paste. Try pasting manually (Ctrl+V).')),
+          SnackBar(
+              content: Text(
+                  'Could not paste. Try pasting manually ($pasteShortcutLabel).')),
         );
       }
     }
