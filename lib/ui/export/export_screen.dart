@@ -1013,7 +1013,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
                     ),
                     // RIGHT — control rail.
                     Container(
-                      width: 360,
+                      width: 300,
                       decoration: BoxDecoration(
                         color: p.card,
                         border: Border(left: BorderSide(color: p.border)),
@@ -1776,12 +1776,12 @@ class _ExportPdfPreviewState extends State<_ExportPdfPreview> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Container(
-          width: 236,
+          width: 186,
           decoration: BoxDecoration(
             color: p.card,
             border: Border(right: BorderSide(color: p.border)),
           ),
-          padding: const EdgeInsets.fromLTRB(18, 16, 18, 16),
+          padding: const EdgeInsets.fromLTRB(14, 16, 14, 16),
           child: _controlPanel(p),
         ),
         Expanded(
