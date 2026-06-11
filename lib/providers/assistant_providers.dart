@@ -54,7 +54,9 @@ final _persistedApiKeyProvider =
 });
 
 // ---------------------------------------------------------------------------
-// Ephemeral API key (public mode / web — in-memory only, never persisted)
+// Ephemeral API key (public mode / web — primarily in-memory, but also cached
+// to SharedPreferences for up to 10 minutes for crash recovery; see
+// PublicSessionCache. Not stored long-term / encrypted like private mode.)
 // ---------------------------------------------------------------------------
 
 class _EphemeralApiKeyNotifier extends StateNotifier<AsyncValue<String?>> {

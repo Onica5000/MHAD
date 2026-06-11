@@ -107,8 +107,9 @@ class GeminiApiAssistant implements AiAssistant {
             e.message.toLowerCase().contains('rate limit') ||
             e.message.toLowerCase().contains('quota')) {
           throw Exception(
-              'Too many requests. The free tier allows about 60 requests per '
-              'minute. Please wait 1\u20132 minutes and try again.');
+              'Too many requests. The free tier allows about 10 requests per '
+              'minute (250 per day). Please wait 1\u20132 minutes and try '
+              'again.');
         }
         // Retry on server errors (5xx)
         if (e.message.contains('500') || e.message.contains('503')) {

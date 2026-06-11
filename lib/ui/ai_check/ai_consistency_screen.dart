@@ -122,7 +122,7 @@ class _AiConsistencyScreenState extends ConsumerState<AiConsistencyScreen> {
                     Icon(Icons.auto_awesome, color: p.primary),
                     const SizedBox(width: 6),
                     const Expanded(
-                      child: SectionLabel('AI consistency check · checked at Review'),
+                      child: SectionLabel('Consistency check · checked at Review'),
                     ),
                   ],
                 ),
@@ -174,9 +174,11 @@ class _AiConsistencyScreenState extends ConsumerState<AiConsistencyScreen> {
                   icon: Icons.auto_awesome,
                   variant: InfoBannerVariant.info,
                   text:
-                      'Note from the AI. Consistency checks run on every '
-                      'save. Review any change before accepting. This screen '
-                      "warns — it doesn't block PDF generation.",
+                      'Automatic check. This runs when you reach Review and '
+                      'compares your answers across steps for contradictions '
+                      '— it is built-in rules, not AI. Review any change '
+                      "before accepting; this screen warns — it doesn't block "
+                      'PDF generation.',
                 ),
               ],
             ),

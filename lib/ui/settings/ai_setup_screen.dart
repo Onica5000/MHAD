@@ -168,9 +168,11 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                     const SizedBox(width: 10),
                     Expanded(
                       child: Text(
-                        'Your API key will not be saved permanently. '
-                        'It is held in memory only and discarded when '
-                        'you clear your data or close the app.',
+                        'Your API key will not be saved permanently. It is '
+                        'kept in memory for this session, with a temporary '
+                        'copy for up to 10 minutes so you can recover it if '
+                        'the app reloads — then discarded when you close the '
+                        'app or clear your data.',
                         style: TextStyle(
                             fontSize: 12.5,
                             color: cs.onTertiaryContainer,
@@ -424,9 +426,9 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                     'Do not include personally identifying details (full '
                     'legal name, Social Security number, date of birth, etc.) '
                     'in AI chat or when using AI Suggest.\n\n'
-                    '${_isEphemeral ? 'Your API key is held in memory only and will be '
-                        'discarded when this session ends. It is never '
-                        'written to disk.' : 'Your API key is stored securely on this device only and '
+                    '${_isEphemeral ? 'Your API key is kept in memory for this session, with a '
+                        'temporary copy for up to 10 minutes (for crash '
+                        'recovery); it is discarded when the session ends.' : 'Your API key is stored securely on this device only and '
                         'is never shared with anyone other than Google.'}',
                     style: TextStyle(fontSize: 12, color: cs.onErrorContainer),
                   ),
