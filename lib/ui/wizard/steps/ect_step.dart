@@ -96,13 +96,12 @@ class _EctStepState extends ConsumerState<EctStep> with WizardStepMixin {
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
+    // The agent-authorization caveat is shown in the visible InfoBanner below,
+    // so help only carries the plain-language background.
     const helpText =
         'ECT can be an effective treatment for severe depression and other '
         'conditions. Under PA law, you can consent in advance, refuse in '
-        'advance, or set conditions.\n\n'
-        'Important: Under PA Act 194, your agent is NOT allowed to consent '
-        'to ECT on your behalf unless you specifically authorize it here. '
-        'This authorization must be explicit in your directive.';
+        'advance, or set conditions.';
 
     return Form(
       key: _formKey,

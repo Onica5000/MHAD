@@ -173,11 +173,11 @@ class _GuardianNominationStepState
         padding: const EdgeInsets.all(16),
         children: [
           WizardHelpButton(
+            // The on-screen description below already says this is optional and
+            // what a nomination is; help only carries the binding-status detail.
             helpText:
-                'You may nominate someone to be your guardian if a court ever '
-                'appoints a guardian for you. This nomination is not binding — '
-                'the court will consider it but makes the final decision. '
-                'This section is optional.',
+                'Your nomination is not binding — the court will consider it '
+                'but makes the final decision on who to appoint.',
             stepId: 'guardianNomination',
           ),
           const SizedBox(height: 8),

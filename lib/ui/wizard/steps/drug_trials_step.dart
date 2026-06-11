@@ -97,12 +97,10 @@ class _DrugTrialsStepState extends ConsumerState<DrugTrialsStep>
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
+    // The agent-authorization caveat is shown in the visible InfoBanner below.
     const helpText =
         'Clinical drug trials test new medications. You can consent, refuse, '
-        'or set conditions for your participation.\n\n'
-        'Note: Under PA Act 194, your agent cannot consent to your '
-        'participation in drug trials unless you specifically authorize '
-        'it in this section.';
+        'or set conditions for your participation.';
 
     return Form(
       key: _formKey,

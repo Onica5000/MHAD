@@ -156,54 +156,19 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
         padding: const EdgeInsets.all(16),
         children: [
           WizardHelpButton(
+            // The meaning of each category (Never give / Limitations /
+            // Preferred) is shown inline as each section's subtitle below, so
+            // help only carries the detail that isn't already on screen.
             helpText:
-                'List medications by name. '
-                'Exceptions: medications you never want given. '
-                'Limitations: medications that may be given but only with restrictions (e.g., low dose only). '
-                'Preferred: medications that have worked well for you.\n\n'
-                'Your preferences apply to generic, brand name, and trade name '
-                'equivalents unless you specify otherwise in the notes.\n\n'
-                'NTI (Narrow Therapeutic Index) drugs like lithium, '
+                'List medications by name. Your preferences apply to generic, '
+                'brand name, and trade name equivalents unless you specify '
+                'otherwise in the notes — to request brand-name only, note it '
+                'in the reason field.\n\n'
+                'Narrow Therapeutic Index (NTI) drugs like lithium, '
                 'carbamazepine, and valproic acid cannot have generics '
                 'substituted under PA law (35 P.S. §960.3). These are '
                 'marked with an "NTI" badge when you search.',
             stepId: 'medications',
-          ),
-          const SizedBox(height: 8),
-          Card(
-            color: Theme.of(context).colorScheme.secondaryContainer,
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Medication categories',
-                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSecondaryContainer,
-                        ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    '\u2022 Never give (Exceptions): Medications you refuse under any circumstances\n'
-                    '\u2022 With limitations: Medications allowed but with restrictions (e.g., low dose only, only during acute crisis)\n'
-                    '\u2022 Preferred: Medications that have worked well for you\n\n'
-                    'Each preference applies to generic, brand name, and trade '
-                    'name equivalents. To request brand-name only, note it in '
-                    'the reason field.',
-                    style: TextStyle(
-                      fontSize: 13,
-                      height: 1.5,
-                      color: Theme.of(context)
-                          .colorScheme
-                          .onSecondaryContainer,
-                    ),
-                  ),
-                ],
-              ),
-            ),
           ),
           const SizedBox(height: 8),
           // FACTUAL_ANALYSIS C5 / F16 \u2014 PA Act 194 \u00a7 5823(B)(2) / \u00a7 5808:

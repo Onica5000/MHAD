@@ -149,8 +149,8 @@ class _MedicationAutocompleteFieldState
                                   ),
                                   if (isNti)
                                     Tooltip(
-                                      message: 'NTI drug — no generic '
-                                          'substitution in PA',
+                                      message: 'Narrow Therapeutic Index (NTI) '
+                                          'drug — no generic substitution in PA',
                                       child: Container(
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 5, vertical: 1),

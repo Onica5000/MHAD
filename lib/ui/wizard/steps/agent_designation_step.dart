@@ -131,13 +131,8 @@ class _AgentDesignationStepState
               'Primary Agent Designation',
               style: Theme.of(context).textTheme.titleLarge,
             ),
-            const SizedBox(height: 8),
-            const Text(
-              'Your agent (also called healthcare proxy) is the person you '
-              'authorize to make mental health treatment decisions for you when '
-              'this directive is in effect.',
-            ),
             const SizedBox(height: 12),
+            // Definition of "agent" lives in the info card below (kept once).
             Card(
               color: Theme.of(context).colorScheme.secondaryContainer,
               child: Padding(
