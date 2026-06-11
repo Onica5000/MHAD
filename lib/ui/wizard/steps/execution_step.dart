@@ -273,8 +273,8 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
           child: FilledButton.icon(
             onPressed: () =>
                 context.push(AppRoutes.exportRoute(widget.directiveId)),
-            icon: const Icon(Icons.download, size: 18),
-            label: const Text('Download signing packet (PDF)'),
+            icon: const Icon(Icons.visibility_outlined, size: 18),
+            label: const Text('Preview signing packet'),
             style: FilledButton.styleFrom(
               minimumSize:
                   const Size.fromHeight(DesignTokens.buttonHeightLg),

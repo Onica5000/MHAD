@@ -6,7 +6,6 @@ import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
-import 'package:mhad/ui/widgets/design/wizard_bottom_bar.dart';
 import 'package:mhad/ui/widgets/design/wizard_header.dart';
 import 'package:mhad/ui/wizard/steps/execution_step.dart';
 
@@ -104,16 +103,6 @@ class _SignScreenState extends ConsumerState<SignScreen> {
             ),
           ),
         ],
-      ),
-      bottomNavigationBar: WizardBottomBar(
-        primaryLabel: 'Continue to summary',
-        primaryIcon: Icons.arrow_forward,
-        onPrimary: () =>
-            context.go(AppRoutes.wizardCompleteRoute(widget.directiveId)),
-        secondaryLabel: 'Download PDF',
-        onSecondary: () =>
-            context.push(AppRoutes.exportRoute(widget.directiveId)),
-        showGradient: false,
       ),
     );
   }
