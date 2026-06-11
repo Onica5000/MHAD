@@ -166,9 +166,10 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
                 'brand name, and trade name equivalents unless you specify '
                 'otherwise in the notes — to request brand-name only, note it '
                 'in the reason field.\n\n'
-                'Narrow Therapeutic Index (NTI) drugs like lithium, '
-                'carbamazepine, and valproic acid cannot have generics '
-                'substituted under PA law (35 P.S. §960.3). These are '
+                'Narrow Therapeutic Index (NTI) drugs — ones with only a small '
+                'safety margin between a helpful dose and a harmful one, like '
+                'lithium, carbamazepine, and valproic acid — cannot have '
+                'generics substituted under PA law (35 P.S. §960.3). These are '
                 'marked with an "NTI" badge when you search.',
             stepId: 'medications',
           ),

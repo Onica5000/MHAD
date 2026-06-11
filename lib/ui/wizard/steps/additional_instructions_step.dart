@@ -392,7 +392,10 @@ class _AdditionalInstructionsStepState
             'Describe activities that help you feel better (e.g., walking, '
             'reading, music) and your preferences about your physical '
             'environment during treatment. You can also state whether you '
-            'consent to or refuse the use of restraints or seclusion.',
+            'consent to or refuse the use of restraints (being physically held '
+            'or strapped down, or given medication to restrict your movement '
+            'or behavior — a "chemical restraint") or seclusion (being '
+            'confined alone in a room).',
           ),
           _buildSection(
             'Crisis Intervention',

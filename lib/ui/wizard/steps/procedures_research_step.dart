@@ -164,7 +164,11 @@ class _NeverAuthorizedCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
-          _NeverItem(text: 'Psychosurgery', fg: fg, palette: p),
+          _NeverItem(
+              text: 'Psychosurgery (brain surgery meant to change mood or '
+                  'behavior)',
+              fg: fg,
+              palette: p),
           _NeverItem(text: 'Termination of parental rights', fg: fg, palette: p),
         ],
       ),

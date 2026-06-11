@@ -308,7 +308,8 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
     buf.writeln('If the hospital has questions, contact PA Protection '
         '& Advocacy at 1-800-692-7443.');
     buf.writeln('');
-    buf.writeln('This is a summary. Request the full directive from the principal.');
+    buf.writeln('This is a summary. Request the full directive from the '
+        'person who made it.');
 
     final payload = buf.toString();
 
@@ -333,7 +334,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
               ),
               const SizedBox(height: 12),
               Text(
-                'Scan to view directive summary\u2009\u2014\u2009request full copy from principal',
+                'Scan to view directive summary\u2009\u2014\u2009request the full copy from the person who made it',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 12,
@@ -840,8 +841,10 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
                 style: Theme.of(context).textTheme.titleSmall),
             const SizedBox(height: 4),
             Text(
-              'For your records, a spreadsheet, or an electronic health record. '
-              'Your PDF above is the document you sign — these are data exports.',
+              'Your PDF above is the document you sign — these are data exports '
+              'for your records, a spreadsheet, or a health system. FHIR is the '
+              'standard format hospitals use to exchange medical records; CSV is '
+              'a spreadsheet file (opens in Excel or Google Sheets).',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
