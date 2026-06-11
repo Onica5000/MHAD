@@ -142,18 +142,18 @@ class _EctStepState extends ConsumerState<EctStep> with WizardStepMixin {
           WizardHelpButton(helpText: helpText, stepId: 'ect'),
           const SizedBox(height: 16),
           ConsentOptionTile(
-            icon: Icons.check_circle_outline,
-            title: 'I consent to ECT',
-            description: 'My provider may perform ECT if indicated.',
-            selected: _consent == ConsentOption.yes,
-            onTap: () => setState(() => _consent = ConsentOption.yes),
-          ),
-          ConsentOptionTile(
             icon: Icons.block,
             title: 'I do not consent to ECT',
             description: 'ECT must not be performed on me.',
             selected: _consent == ConsentOption.no,
             onTap: () => setState(() => _consent = ConsentOption.no),
+          ),
+          ConsentOptionTile(
+            icon: Icons.check_circle_outline,
+            title: 'I consent to ECT',
+            description: 'My provider may perform ECT if indicated.',
+            selected: _consent == ConsentOption.yes,
+            onTap: () => setState(() => _consent = ConsentOption.yes),
           ),
           ConsentOptionTile(
             icon: Icons.rule,

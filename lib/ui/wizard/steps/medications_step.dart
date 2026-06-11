@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
+import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/wizard/widgets/medication_autocomplete_field.dart';
 import 'package:mhad/ui/wizard/widgets/wizard_help_button.dart';
 import 'package:mhad/ui/wizard/wizard_step_mixin.dart';
@@ -140,6 +141,15 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
 
   @override
   Widget build(BuildContext context) {
+    // Semantic accent colors for the medication sections (light/dark aware):
+    // red = never give, yellow = limitations, green = preferred.
+    final dark = Theme.of(context).brightness == Brightness.dark;
+    final neverColor =
+        dark ? SemanticColors.errorAccentDark : SemanticColors.errorAccentLight;
+    final limitColor =
+        dark ? SemanticColors.warningTextDark : SemanticColors.warningTextLight;
+    final preferColor =
+        dark ? SemanticColors.successTextDark : SemanticColors.successTextLight;
     return Form(
       key: _formKey,
       child: ListView(
@@ -281,7 +291,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
             title: 'Medications I NEVER want',
             subtitle: 'These medications should not be administered',
             rows: _exceptions,
-            accentColor: Theme.of(context).colorScheme.outline,
+            accentColor: neverColor,
             onAdd: () => _addMedRow(_exceptions),
             onRemove: (i) => setState(() {
               _exceptions[i].dispose();
@@ -293,7 +303,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
             title: 'Medications with limitations',
             subtitle: 'May be given but with restrictions',
             rows: _limitations,
-            accentColor: Theme.of(context).colorScheme.tertiary,
+            accentColor: limitColor,
             onAdd: () => _addMedRow(_limitations),
             onRemove: (i) => setState(() {
               _limitations[i].dispose();
@@ -305,7 +315,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
             title: 'Preferred medications',
             subtitle: 'Medications that have worked well for you',
             rows: _preferred,
-            accentColor: Theme.of(context).colorScheme.primary,
+            accentColor: preferColor,
             onAdd: () => _addMedRow(_preferred),
             onRemove: (i) => setState(() {
               _preferred[i].dispose();
@@ -364,7 +374,7 @@ class _MedTable extends StatelessWidget {
           children: [
             Text(title,
                 style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.w600)),
+                    fontWeight: FontWeight.w700, color: accentColor)),
             Text(subtitle,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: cs.onSurfaceVariant)),

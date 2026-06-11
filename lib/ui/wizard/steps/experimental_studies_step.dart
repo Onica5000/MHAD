@@ -141,19 +141,19 @@ class _ExperimentalStudiesStepState
           WizardHelpButton(helpText: helpText, stepId: 'experimentalStudies'),
           const SizedBox(height: 16),
           ConsentOptionTile(
+            icon: Icons.block,
+            title: 'I do not consent',
+            description: 'I refuse participation in experimental studies.',
+            selected: _consent == ConsentOption.no,
+            onTap: () => setState(() => _consent = ConsentOption.no),
+          ),
+          ConsentOptionTile(
             icon: Icons.check_circle_outline,
             title: 'I consent to experimental studies',
             description:
                 'I am willing to participate in research studies during treatment.',
             selected: _consent == ConsentOption.yes,
             onTap: () => setState(() => _consent = ConsentOption.yes),
-          ),
-          ConsentOptionTile(
-            icon: Icons.block,
-            title: 'I do not consent',
-            description: 'I refuse participation in experimental studies.',
-            selected: _consent == ConsentOption.no,
-            onTap: () => setState(() => _consent = ConsentOption.no),
           ),
           ConsentOptionTile(
             icon: Icons.rule,

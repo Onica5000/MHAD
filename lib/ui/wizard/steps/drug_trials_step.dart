@@ -142,19 +142,19 @@ class _DrugTrialsStepState extends ConsumerState<DrugTrialsStep>
           WizardHelpButton(helpText: helpText, stepId: 'drugTrials'),
           const SizedBox(height: 16),
           ConsentOptionTile(
+            icon: Icons.block,
+            title: 'I do not consent',
+            description: 'I refuse participation in drug trials.',
+            selected: _consent == ConsentOption.no,
+            onTap: () => setState(() => _consent = ConsentOption.no),
+          ),
+          ConsentOptionTile(
             icon: Icons.check_circle_outline,
             title: 'I consent to drug trials',
             description:
                 'I am willing to participate in clinical drug trials.',
             selected: _consent == ConsentOption.yes,
             onTap: () => setState(() => _consent = ConsentOption.yes),
-          ),
-          ConsentOptionTile(
-            icon: Icons.block,
-            title: 'I do not consent',
-            description: 'I refuse participation in drug trials.',
-            selected: _consent == ConsentOption.no,
-            onTap: () => setState(() => _consent = ConsentOption.no),
           ),
           ConsentOptionTile(
             icon: Icons.rule,
