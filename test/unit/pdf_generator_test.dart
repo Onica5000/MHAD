@@ -101,6 +101,9 @@ GuardianNomination _makeGuardian() => const GuardianNomination(
       guardianCanRevoke: false,
       guardianCanChangeAgent: false,
       guardianMustConsultAgent: false,
+      guardianCanRevokeNote: '',
+      guardianCanChangeAgentNote: '',
+      guardianMustConsultAgentNote: '',
       // Phase 2 — schema v8 addition. 'different' = explicit named nominee
       // (matches the inline-expansion branch in guardian_nomination_step.dart).
       guardianRelation: 'different',

@@ -232,6 +232,14 @@ class GuardianNominations extends Table {
       boolean().withDefault(const Constant(false))();
   BoolColumn get guardianMustConsultAgent =>
       boolean().withDefault(const Constant(false))();
+  // Free-form detail the user can add to qualify each "yes" condition above
+  // (shown only when the matching condition is Yes). Schema 17.
+  TextColumn get guardianCanRevokeNote =>
+      text().withDefault(const Constant(''))();
+  TextColumn get guardianCanChangeAgentNote =>
+      text().withDefault(const Constant(''))();
+  TextColumn get guardianMustConsultAgentNote =>
+      text().withDefault(const Constant(''))();
   // Relation to existing agents: 'sameAsPrimary' | 'sameAsAlternate' |
   // 'different' | 'noPreference'. Existing rows with `nomineeFullName`
   // populated migrate to 'different'; empty rows → 'noPreference'.
@@ -257,7 +265,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase(super.executor);
 
   @override
-  int get schemaVersion => 16;
+  int get schemaVersion => 17;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -412,6 +420,18 @@ class AppDatabase extends _$AppDatabase {
             await customStatement(
                 "ALTER TABLE directive_prefs ADD COLUMN roommate_gender_match "
                 "TEXT NOT NULL DEFAULT ''");
+          }
+          if (from < 17) {
+            // Free-form detail per guardianship "condition" (shown when Yes).
+            await customStatement(
+                "ALTER TABLE guardian_nominations ADD COLUMN "
+                "guardian_can_revoke_note TEXT NOT NULL DEFAULT ''");
+            await customStatement(
+                "ALTER TABLE guardian_nominations ADD COLUMN "
+                "guardian_can_change_agent_note TEXT NOT NULL DEFAULT ''");
+            await customStatement(
+                "ALTER TABLE guardian_nominations ADD COLUMN "
+                "guardian_must_consult_agent_note TEXT NOT NULL DEFAULT ''");
           }
         },
       );

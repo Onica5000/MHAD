@@ -50,6 +50,10 @@ class _GuardianNominationStepState
   late final TextEditingController _addressCtrl;
   late final TextEditingController _phoneCtrl;
   late final TextEditingController _relationshipCtrl;
+  // Free-form detail for each "yes" condition (revealed only when Yes).
+  late final TextEditingController _changeAgentNoteCtrl;
+  late final TextEditingController _revokeNoteCtrl;
+  late final TextEditingController _consultNoteCtrl;
   int? _existingId;
   bool _guardianCanRevoke = false;
   bool _guardianCanChangeAgent = false;
@@ -63,6 +67,9 @@ class _GuardianNominationStepState
     _addressCtrl = TextEditingController();
     _phoneCtrl = TextEditingController();
     _relationshipCtrl = TextEditingController();
+    _changeAgentNoteCtrl = TextEditingController();
+    _revokeNoteCtrl = TextEditingController();
+    _consultNoteCtrl = TextEditingController();
     WidgetsBinding.instance.addPostFrameCallback((_) => _loadData());
   }
 
@@ -72,6 +79,9 @@ class _GuardianNominationStepState
     _addressCtrl.dispose();
     _phoneCtrl.dispose();
     _relationshipCtrl.dispose();
+    _changeAgentNoteCtrl.dispose();
+    _revokeNoteCtrl.dispose();
+    _consultNoteCtrl.dispose();
     super.dispose();
   }
 
@@ -89,6 +99,9 @@ class _GuardianNominationStepState
         _guardianCanRevoke = g.guardianCanRevoke;
         _guardianCanChangeAgent = g.guardianCanChangeAgent;
         _guardianMustConsultAgent = g.guardianMustConsultAgent;
+        _changeAgentNoteCtrl.text = g.guardianCanChangeAgentNote;
+        _revokeNoteCtrl.text = g.guardianCanRevokeNote;
+        _consultNoteCtrl.text = g.guardianMustConsultAgentNote;
         _relation = _GuardianRel.fromId(g.guardianRelation);
       });
     }
@@ -118,10 +131,38 @@ class _GuardianNominationStepState
             guardianCanRevoke: Value(_guardianCanRevoke),
             guardianCanChangeAgent: Value(_guardianCanChangeAgent),
             guardianMustConsultAgent: Value(_guardianMustConsultAgent),
+            // Persist notes only while the matching condition is Yes; clear
+            // otherwise so a later "No" doesn't leave orphaned detail.
+            guardianCanChangeAgentNote: Value(
+                _guardianCanChangeAgent ? _changeAgentNoteCtrl.text.trim() : ''),
+            guardianCanRevokeNote: Value(
+                _guardianCanRevoke ? _revokeNoteCtrl.text.trim() : ''),
+            guardianMustConsultAgentNote: Value(
+                _guardianMustConsultAgent ? _consultNoteCtrl.text.trim() : ''),
             guardianRelation: Value(_relation.id),
           ),
         );
     return true;
+  }
+
+  /// Free-form detail box revealed under a guardianship condition set to Yes.
+  Widget _conditionNote(TextEditingController ctrl, String hint) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 8, top: 2, bottom: 8),
+      child: TextField(
+        controller: ctrl,
+        minLines: 1,
+        maxLines: 3,
+        keyboardType: TextInputType.multiline,
+        textInputAction: TextInputAction.newline,
+        textCapitalization: TextCapitalization.sentences,
+        decoration: InputDecoration(
+          hintText: hint,
+          isDense: true,
+          border: const OutlineInputBorder(),
+        ),
+      ),
+    );
   }
 
   @override
@@ -272,17 +313,32 @@ class _GuardianNominationStepState
             value: _guardianCanChangeAgent,
             onChanged: (v) => setState(() => _guardianCanChangeAgent = v),
           ),
+          if (_guardianCanChangeAgent)
+            _conditionNote(
+              _changeAgentNoteCtrl,
+              'When or how may the guardian change my agent? (optional)',
+            ),
           _GuardianConditionRow(
             label: 'Can override this directive',
             sub: 'Revoke, suspend, or terminate it.',
             value: _guardianCanRevoke,
             onChanged: (v) => setState(() => _guardianCanRevoke = v),
           ),
+          if (_guardianCanRevoke)
+            _conditionNote(
+              _revokeNoteCtrl,
+              'Any limits on overriding this directive? (optional)',
+            ),
           _GuardianConditionRow(
             label: 'Must consult my agent first',
             value: _guardianMustConsultAgent,
             onChanged: (v) => setState(() => _guardianMustConsultAgent = v),
           ),
+          if (_guardianMustConsultAgent)
+            _conditionNote(
+              _consultNoteCtrl,
+              'What should the guardian consult my agent about? (optional)',
+            ),
         ],
       ),
     );

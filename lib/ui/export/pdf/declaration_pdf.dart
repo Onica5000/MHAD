@@ -522,6 +522,8 @@ List<pw.Page> buildDeclarationPages({
           'suspend or terminate this Declaration.',
           checked: guardian != null && guardian.guardianCanRevoke,
         ),
+        if (guardian != null && guardian.guardianCanRevoke)
+          guardianNote(guardian.guardianCanRevokeNote),
         if (guardian != null &&
             (guardian.guardianCanChangeAgent ||
                 guardian.guardianMustConsultAgent)) ...[
@@ -531,11 +533,15 @@ List<pw.Page> buildDeclarationPages({
               'The guardian may change my designated agent.',
               checked: true,
             ),
+          if (guardian.guardianCanChangeAgent)
+            guardianNote(guardian.guardianCanChangeAgentNote),
           if (guardian.guardianMustConsultAgent)
             checkRow(
               'The guardian must consult my agent before acting.',
               checked: true,
             ),
+          if (guardian.guardianMustConsultAgent)
+            guardianNote(guardian.guardianMustConsultAgentNote),
         ],
         pw.SizedBox(height: 8),
 

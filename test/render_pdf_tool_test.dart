@@ -113,6 +113,9 @@ void main() {
       guardianCanRevoke: false,
       guardianCanChangeAgent: false,
       guardianMustConsultAgent: true,
+      guardianCanRevokeNote: '',
+      guardianCanChangeAgentNote: '',
+      guardianMustConsultAgentNote: 'Only about medication decisions.',
       guardianRelation: 'different',
     );
 

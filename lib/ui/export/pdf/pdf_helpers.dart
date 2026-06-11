@@ -248,6 +248,16 @@ String consentConditionText(String value) => value.startsWith('conditional:')
     ? value.substring('conditional:'.length)
     : '';
 
+/// Indented free-form detail printed under a guardianship "yes" condition
+/// (the user's qualification of that condition). Renders nothing when empty.
+pw.Widget guardianNote(String note) {
+  if (note.trim().isEmpty) return pw.SizedBox();
+  return pw.Padding(
+    padding: const pw.EdgeInsets.only(left: 22, top: 1, bottom: 2),
+    child: pw.Text('— ${note.trim()}', style: smallBodyStyle()),
+  );
+}
+
 /// A checkbox row — checked or unchecked.
 /// Uses pw.CustomPaint with a raw-graphics closure (CustomPainter is a
 /// typedef, not a class) to draw directly via PDF graphics operators.
