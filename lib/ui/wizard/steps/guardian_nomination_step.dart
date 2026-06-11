@@ -20,14 +20,16 @@ class GuardianNominationStep extends ConsumerStatefulWidget {
 /// Persists as a string in `guardianRelation`. The `different` branch is the
 /// only one that shows the inline name / address / phone fields.
 enum _GuardianRel {
+  // "No preference" is intentionally first (per user direction) — it's the
+  // default and the lowest-effort choice.
+  noPreference('noPreference', 'No preference',
+      'Let the court decide. They will usually appoint a family member or county guardianship office.'),
   sameAsPrimary('sameAsPrimary', 'Same as my primary agent',
       'The simplest path. The court is not required to follow this, but it is strong guidance.'),
   sameAsAlternate('sameAsAlternate', 'Same as my alternate agent',
       'Use this if your alternate would be a better fit for a longer-term guardianship role.'),
   different('different', 'Someone different',
-      'Choose another person — e.g. an attorney, sibling, or close friend not already named.'),
-  noPreference('noPreference', 'No preference',
-      'Let the court decide. They will usually appoint a family member or county guardianship office.');
+      'Choose another person — e.g. an attorney, sibling, or close friend not already named.');
 
   final String id;
   final String label;
