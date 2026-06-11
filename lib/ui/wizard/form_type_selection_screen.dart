@@ -165,6 +165,10 @@ class _FormTypeSelectionScreenState
                 subtitle:
                     'Both name people I trust to speak for me, and document '
                     'my treatment preferences. Most flexibility.',
+                blurb:
+                    'A Combined directive is two documents in one — a '
+                    'Declaration (your written treatment wishes) plus a '
+                    'Power of Attorney (the people you name to decide for you).',
                 tags: const [
                   '11 steps',
                   'Agents + preferences',
@@ -182,6 +186,9 @@ class _FormTypeSelectionScreenState
                 subtitle:
                     'Just document my treatment preferences — no agent. '
                     'Decisions still go through doctors.',
+                blurb:
+                    'A Declaration is a written statement of the mental-health '
+                    'treatment you do and don’t want.',
                 tags: const ['9 steps', 'No agents'],
                 active: _selected == FormType.declaration,
                 onTap: _creating
@@ -194,6 +201,9 @@ class _FormTypeSelectionScreenState
                 subtitle:
                     'Just name people to make decisions for me. They will '
                     'decide treatment in the moment.',
+                blurb:
+                    'A mental-health Power of Attorney names a person (your '
+                    '“agent”) to make treatment decisions when you can’t.',
                 tags: const ['6 steps', 'Agents only'],
                 active: _selected == FormType.poa,
                 onTap: _creating
@@ -273,6 +283,11 @@ class _FormTypeSelectionScreenState
 class _OptCard extends StatelessWidget {
   final String title;
   final String subtitle;
+
+  /// Plain-language definition of the form-type term itself (e.g. what a
+  /// "Declaration" is), shown as a small info line under the subtitle so a
+  /// first-time user doesn't have to know the jargon before choosing.
+  final String? blurb;
   final List<String> tags;
   final bool recommended;
   final bool active;
@@ -281,6 +296,7 @@ class _OptCard extends StatelessWidget {
   const _OptCard({
     required this.title,
     required this.subtitle,
+    this.blurb,
     required this.tags,
     this.recommended = false,
     required this.active,
@@ -393,6 +409,29 @@ class _OptCard extends StatelessWidget {
                           height: 1.45,
                         ),
                       ),
+                      if (blurb != null) ...[
+                        const SizedBox(height: 8),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Icon(Icons.info_outline,
+                                size: 13, color: p.textMuted),
+                            const SizedBox(width: 6),
+                            Expanded(
+                              child: Text(
+                                blurb!,
+                                style: TextStyle(
+                                  fontFamily: 'DM Sans',
+                                  fontSize: 12,
+                                  fontStyle: FontStyle.italic,
+                                  color: p.textMuted,
+                                  height: 1.4,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                       const SizedBox(height: 10),
                       Wrap(
                         spacing: 4,
