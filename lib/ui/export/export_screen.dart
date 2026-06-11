@@ -991,52 +991,22 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
                 return Row(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    // LEFT — dominant live preview.
+                    // LEFT — the live preview OWNS the whole pane (the heading
+                    // moved to the right rail, and the preview now fits to
+                    // WIDTH so the page fills the space and is readable).
+                    // To revert this layout, see the commit that introduced it
+                    // (git revert <that commit>) — it restores the heading +
+                    // "Sized for US Letter…" caption above a fit-to-height
+                    // preview.
                     Expanded(
                       child: Container(
                         color: p.surface,
-                        padding: const EdgeInsets.fromLTRB(28, 16, 28, 16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const SectionLabel('Export & share'),
-                            const SizedBox(height: 6),
-                            EditorialHeading(
-                              textSpan: TextSpan(
-                                children: [
-                                  const TextSpan(text: 'Your directive, '),
-                                  TextSpan(
-                                    text: 'on paper.',
-                                    style: TextStyle(color: p.primary),
-                                  ),
-                                ],
-                              ),
-                              size: 28,
-                              height: 1.05,
-                              letterSpacing: -0.5,
-                            ),
-                            const SizedBox(height: 6),
-                            Text(
-                              'Sized for US Letter (8.5 × 11″) with 1-inch '
-                              'margins. The whole page fits below — use − / + '
-                              'to zoom.',
-                              style: TextStyle(
-                                fontFamily: 'DM Sans',
-                                fontSize: 12.5,
-                                height: 1.4,
-                                color: p.textMuted,
-                              ),
-                            ),
-                            const SizedBox(height: 12),
-                            Expanded(
-                              child: _ExportPdfPreview(
-                                signature: _selectionSignature(),
-                                buildBytes: _buildPdfBytes,
-                                hasSelection: anySelected,
-                                ready: _directive != null,
-                              ),
-                            ),
-                          ],
+                        padding: const EdgeInsets.all(16),
+                        child: _ExportPdfPreview(
+                          signature: _selectionSignature(),
+                          buildBytes: _buildPdfBytes,
+                          hasSelection: anySelected,
+                          ready: _directive != null,
                         ),
                       ),
                     ),
@@ -1052,6 +1022,38 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
+                            // Heading moved here off the preview pane so the
+                            // live page can own its full height (see the LEFT
+                            // pane comment for how to revert).
+                            const SectionLabel('Export & share'),
+                            const SizedBox(height: 6),
+                            EditorialHeading(
+                              textSpan: TextSpan(
+                                children: [
+                                  const TextSpan(text: 'Your directive, '),
+                                  TextSpan(
+                                    text: 'on paper.',
+                                    style: TextStyle(color: p.primary),
+                                  ),
+                                ],
+                              ),
+                              size: 24,
+                              height: 1.05,
+                              letterSpacing: -0.5,
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              'Sized for US Letter (8.5 × 11″) with 1-inch '
+                              'margins. The preview fills the width — use '
+                              '− / + to zoom.',
+                              style: TextStyle(
+                                fontFamily: 'DM Sans',
+                                fontSize: 12.5,
+                                height: 1.4,
+                                color: p.textMuted,
+                              ),
+                            ),
+                            const SizedBox(height: 18),
                             if (_isGenerating)
                               Padding(
                                 padding: const EdgeInsets.only(bottom: 12),
@@ -1796,7 +1798,8 @@ class _ExportPdfPreviewState extends State<_ExportPdfPreview> {
           ],
         ),
         const SizedBox(height: 8),
-        // Page viewport — fits at FIT, scrolls both axes when zoomed in.
+        // Page viewport — page fills the width; scrolls vertically (and
+        // horizontally once zoomed past the pane width).
         Expanded(
           child: ClipRect(
             child: Container(
@@ -1806,14 +1809,13 @@ class _ExportPdfPreviewState extends State<_ExportPdfPreview> {
                   const pad = 12.0;
                   final availW =
                       (c.maxWidth - pad * 2).clamp(1.0, double.infinity);
-                  final availH =
-                      (c.maxHeight - pad * 2).clamp(1.0, double.infinity);
-                  double h = availH;
-                  double w = h * _kPageRatio;
-                  if (w > availW) {
-                    w = availW;
-                    h = w / _kPageRatio;
-                  }
+                  // Fit the page to the WIDTH of the pane (not its height) so
+                  // the page fills the horizontal space and the text is large
+                  // enough to read. Capped so it doesn't become enormous on
+                  // very wide monitors; the ± zoom still overrides. The page
+                  // scrolls vertically when it's taller than the viewport.
+                  final double w = availW.clamp(1.0, 1000.0);
+                  final double h = w / _kPageRatio;
                   final dw = w * _zoom;
                   final dh = h * _zoom;
                   return SingleChildScrollView(
