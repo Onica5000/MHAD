@@ -1195,9 +1195,17 @@ class _PrivacyByDesignCard extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           Text(
-            'Your directive stays on your device. No ads, no tracking, '
-            'no selling your data — only you choose who to share it '
-            'with.',
+            // Platform-accurate: on web nothing persists (in-memory, gone when
+            // the tab closes), so "stays on your device" would contradict the
+            // "nothing is saved" messaging elsewhere. Native keeps the
+            // on-device phrasing.
+            kIsWeb
+                ? 'Your directive never leaves this browser — no server, no '
+                    'account, no tracking. It lives only in this session, and '
+                    'only you choose who to share it with.'
+                : 'Your directive stays on your device. No ads, no tracking, '
+                    'no selling your data — only you choose who to share it '
+                    'with.',
             style: TextStyle(
               fontFamily: 'DM Sans',
               fontSize: 12.5,

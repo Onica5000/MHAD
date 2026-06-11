@@ -188,9 +188,11 @@ class _GateLayout extends StatelessWidget {
                           title: 'It stays valid for two years',
                           body:
                               'Under PA Act 194, a Mental Health Advance '
-                              'Directive is valid for two years from the date '
-                              'of execution unless you revoke it sooner. '
-                              "We'll remind you 30 days before it expires.",
+                              'Directive lasts two years from the date you sign '
+                              'it — unless you are incapable of making mental '
+                              'health decisions when it would expire, in which '
+                              'case it stays in effect until your capacity '
+                              'returns.',
                         ),
                         const SizedBox(height: 10),
                         _DisclaimerCard(
@@ -805,7 +807,7 @@ List<_SectionData> _buildSections(MhadPalette p) {
           _bold('Witnesses cannot be: '),
           const TextSpan(
               text:
-                  "your designated agent, your agent's spouse, your mental health care provider, or an employee of your treatment facility (unless related to you)."),
+                  'your designated agent or alternate agent, your mental health care provider, or an employee of the facility where you receive treatment — unless they are related to you by blood, marriage, or adoption.'),
         ], palette: p),
         _Para(spans: [
           const TextSpan(
