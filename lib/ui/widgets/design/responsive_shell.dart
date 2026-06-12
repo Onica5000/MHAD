@@ -88,11 +88,14 @@ class ResponsiveShell extends StatelessWidget {
         //             (START-aligned, generous cap).
         //   READING — prose/flow screens sit in a centered reading column.
         final fills = _routeFills(route);
-        // The export "Your directive, on paper" page is a dense 3-column tool
-        // (page-thumbnail panel · live preview · options rail). Let it use the
-        // FULL content width — no editorial cap — so the center preview isn't
-        // left with empty space beside it on a large monitor.
-        final bool fullBleed = route.startsWith('/export/');
+        // Pages that must use the FULL content width (no editorial cap, no
+        // centered gutters), handed TIGHT constraints below so their content
+        // fills flush from the sidebar to the window edge:
+        //   /export/ — the 3-column export tool (thumbnails · preview · rail)
+        //   /sign/   — the "Make it legal" signing screen (user wants the
+        //              content to fill the width, not sit centered with gaps)
+        final bool fullBleed =
+            route.startsWith('/export/') || route.startsWith('/sign/');
         return Row(
           children: [
             WebSidebar(activeRoute: route),
