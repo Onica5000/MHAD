@@ -14,8 +14,10 @@ concurrency:
   group: pages
   cancel-in-progress: true
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+# All actions below are pinned to versions that run natively on Node 24, so
+# the previous `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24` workaround (which forced
+# Node-20 actions onto Node 24 and produced the deprecation warning) is no
+# longer needed and has been removed.
 
 jobs:
   build-and-deploy:
@@ -24,7 +26,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - uses: subosito/flutter-action@v2
         with:
@@ -53,13 +55,13 @@ jobs:
         run: flutter build web --release --base-href "/MHAD/" --pwa-strategy=none
 
       - name: Setup Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: build/web
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
