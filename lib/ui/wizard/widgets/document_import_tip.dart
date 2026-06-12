@@ -62,8 +62,9 @@ class _DocumentImportTipState extends State<DocumentImportTip>
       opacity: _fadeAnim,
       child: SizeTransition(
         sizeFactor: _fadeAnim,
-        // -1 collapses from the top of the parent (default axis is vertical).
-        axisAlignment: -1,
+        // topCenter collapses from the top of the parent (vertical axis) —
+        // replaces the deprecated `axisAlignment: -1`.
+        alignment: Alignment.topCenter,
         child: Padding(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
           child: Card(

@@ -3,10 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
-import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
+import 'package:mhad/ui/wizard/widgets/form_type_quiz.dart';
 
 /// Editorial web landing — a faithful Flutter port of the Claude Design
 /// `WebDashboard` (web.jsx). Rendered as the Home screen's WIDE (desktop/web)
@@ -34,8 +34,6 @@ class WebDashboardLanding extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final p = Theme.of(context).mhadPalette;
-    final aiReady =
-        ref.watch(apiKeyProvider).valueOrNull?.isNotEmpty ?? false;
 
     return ListView(
       padding: const EdgeInsets.fromLTRB(40, 32, 40, 60),
@@ -59,7 +57,7 @@ class WebDashboardLanding extends ConsumerWidget {
             fontFamily: 'Instrument Serif',
             fontFamilyFallback: ['Georgia', 'serif'],
             fontStyle: FontStyle.italic,
-            fontSize: 52,
+            fontSize: 56, // artboard WebDashboard hero size
             height: 1,
             letterSpacing: -1,
             fontWeight: FontWeight.w400,
@@ -81,92 +79,34 @@ class WebDashboardLanding extends ConsumerWidget {
         ),
         const SizedBox(height: 24),
 
-        // ── 2-column form choice ─────────────────────────────────────────
-        IntrinsicHeight(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Expanded(
-                flex: 14,
-                child: _CombinedCard(
-                  onStart: () => _start(context, ref, FormType.combined),
-                  onSee: () => context.go(AppRoutes.formTypeSelection),
-                ),
-              ),
-              const SizedBox(width: 14),
-              Expanded(
-                flex: 10,
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: _SingleFormCard(
-                        icon: Icons.description_outlined,
-                        title: 'Declaration only',
-                        sub: 'Treatment preferences without naming an agent.',
-                        onTap: () =>
-                            _start(context, ref, FormType.declaration),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Expanded(
-                      child: _SingleFormCard(
-                        icon: Icons.people_alt_outlined,
-                        title: 'Power of attorney only',
-                        sub: 'Name a decision-maker without listing '
-                            'preferences.',
-                        // POA carries a statutory warning that lives on the
-                        // form-type screen — route there so it isn't skipped.
-                        onTap: () => context.go(AppRoutes.formTypeSelection),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+        // ── Form choice (reusable — also shown on the returning dashboard so
+        //    "Start a new directive" lands on the same picker) ──────────────
+        const DirectiveFormChoice(),
+        const SizedBox(height: 22),
+
+        // ── Print the blank form (single tool — still being built out) ────
+        Align(
+          alignment: Alignment.centerLeft,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 380),
+            child: _ToolCard(
+              icon: Icons.download_outlined,
+              title: 'Print the blank form',
+              sub: 'Prefer paper? Start a form and print it to fill by hand.',
+              cta: 'Start a form',
+              onTap: () => _start(context, ref, FormType.combined),
+            ),
           ),
         ),
         const SizedBox(height: 22),
 
-        // ── 3-column tools row ───────────────────────────────────────────
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(
-              child: _ToolCard(
-                icon: Icons.auto_awesome,
-                title: 'AI assistant',
-                sub: 'Plain-language explanations, suggested wording for any '
-                    'field.',
-                cta: 'Open assistant',
-                onTap: () => context.go(
-                    aiReady ? AppRoutes.assistant : AppRoutes.aiSetup),
-              ),
-            ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: _ToolCard(
-                icon: Icons.menu_book_outlined,
-                title: 'Learn first',
-                sub: 'A 4-minute primer on what an MHAD is and how it works.',
-                cta: 'Read the basics',
-                onTap: () => context.go(AppRoutes.education),
-              ),
-            ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: _ToolCard(
-                icon: Icons.download_outlined,
-                title: 'Print the blank form',
-                sub: 'Prefer paper? Start a form and print it to fill by hand.',
-                cta: 'Start a form',
-                onTap: () => context.go(AppRoutes.formTypeSelection),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 22),
-
         // ── Privacy promise + booklet quote ──────────────────────────────
+        // Both cards shrink-wrap (their Columns are mainAxisSize.min) so the
+        // Row can measure their heights. Earlier they used the default
+        // mainAxisSize.max, which under the Row's unbounded height blew up to
+        // an infinite height ("BoxConstraints forces an infinite height") and
+        // the whole section silently failed to paint — the bottom of the
+        // dashboard went missing.
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -179,6 +119,136 @@ class WebDashboardLanding extends ConsumerWidget {
               ),
             ),
           ],
+        ),
+      ],
+    );
+  }
+}
+
+/// Reusable form-type picker — the bold "Combined" card + Declaration/POA
+/// cards + the "Help me choose" quiz + a "you can switch later" line. Shown on
+/// the empty dashboard ([WebDashboardLanding]) AND on the returning dashboard,
+/// so picking a form type always happens on the dashboard (the form-type page
+/// was retired and folded in here).
+class DirectiveFormChoice extends ConsumerWidget {
+  const DirectiveFormChoice({super.key});
+
+  Future<void> _start(
+      BuildContext context, WidgetRef ref, FormType type) async {
+    final id =
+        await ref.read(directiveRepositoryProvider).createDirective(type);
+    if (context.mounted) context.go(AppRoutes.wizardRoute(id));
+  }
+
+  /// POA-only carries a statutory caveat (no personal treatment preferences) —
+  /// show the warning the form-type page used to, then create + open.
+  Future<void> _startPoa(BuildContext context, WidgetRef ref) async {
+    final proceed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        icon: const Icon(Icons.info_outline, size: 36),
+        title: const Text('Power of Attorney Only'),
+        content: const Text(
+          'With a POA-only form, your agent will have authority to make '
+          'mental health care decisions on your behalf, but the document '
+          'will not include your personal treatment preferences.\n\n'
+          'Consider using the Combined form instead to document both your '
+          'preferences AND appoint an agent. This gives your care team the '
+          'most guidance.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Go Back'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('Continue with POA'),
+          ),
+        ],
+      ),
+    );
+    if (proceed == true && context.mounted) {
+      await _start(context, ref, FormType.poa);
+    }
+  }
+
+  /// "Help me choose" 4-question quiz — recommends a form type, then creates it.
+  Future<void> _openQuiz(BuildContext context, WidgetRef ref) async {
+    final rec = await showFormTypeQuiz(context);
+    if (rec != null && context.mounted) await _start(context, ref, rec);
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final p = Theme.of(context).mhadPalette;
+    final combined = _CombinedCard(
+      onStart: () => _start(context, ref, FormType.combined),
+    );
+    final declaration = _SingleFormCard(
+      icon: Icons.description_outlined,
+      title: 'Declaration only',
+      sub: 'Treatment preferences without naming an agent.',
+      onTap: () => _start(context, ref, FormType.declaration),
+    );
+    final poa = _SingleFormCard(
+      icon: Icons.people_alt_outlined,
+      title: 'Power of attorney only',
+      sub: 'Name a decision-maker without listing preferences.',
+      onTap: () => _startPoa(context, ref),
+    );
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // Wide: bold Combined card beside stacked Declaration/POA. Narrow
+        // (mobile): all three stacked full-width.
+        LayoutBuilder(
+          builder: (context, c) {
+            if (c.maxWidth < 520) {
+              return Column(
+                children: [
+                  combined,
+                  const SizedBox(height: 10),
+                  declaration,
+                  const SizedBox(height: 10),
+                  poa,
+                ],
+              );
+            }
+            return IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(flex: 14, child: combined),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    flex: 10,
+                    child: Column(
+                      children: [
+                        Expanded(child: declaration),
+                        const SizedBox(height: 10),
+                        Expanded(child: poa),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+        const SizedBox(height: 12),
+        _HelpMeChooseBanner(onTap: () => _openQuiz(context, ref)),
+        const SizedBox(height: 8),
+        Text(
+          'You can switch form types later if you change your mind — '
+          'Combined is the broadest.',
+          style: TextStyle(
+            fontFamily: 'DM Sans',
+            fontSize: 12.5,
+            height: 1.4,
+            color: p.textMuted,
+          ),
         ),
       ],
     );
@@ -270,8 +340,7 @@ class _AnonBanner extends StatelessWidget {
 // ── Bold primary "Combined directive" card with ★ watermark ───────────────
 class _CombinedCard extends StatelessWidget {
   final VoidCallback onStart;
-  final VoidCallback onSee;
-  const _CombinedCard({required this.onStart, required this.onSee});
+  const _CombinedCard({required this.onStart});
 
   @override
   Widget build(BuildContext context) {
@@ -282,10 +351,10 @@ class _CombinedCard extends StatelessWidget {
         decoration: BoxDecoration(color: p.primary),
         child: Stack(
           children: [
-            // Oversized decorative serif star, low opacity.
+            // Oversized decorative serif star, low opacity (artboard position).
             Positioned(
-              right: -10,
-              top: -70,
+              right: -16,
+              top: -50,
               child: Text(
                 '★',
                 style: TextStyle(
@@ -344,34 +413,20 @@ class _CombinedCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 18),
-                  Row(
-                    children: [
-                      FilledButton.icon(
-                        onPressed: onStart,
-                        icon: const Icon(Icons.arrow_forward, size: 16),
-                        label: const Text('Start now'),
-                        style: FilledButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          foregroundColor: p.primaryDark,
-                          iconAlignment: IconAlignment.end,
-                          minimumSize: const Size(0, 44),
-                          padding:
-                              const EdgeInsets.symmetric(horizontal: 18),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                        ),
+                  FilledButton.icon(
+                    onPressed: onStart,
+                    icon: const Icon(Icons.arrow_forward, size: 16),
+                    label: const Text('Start now'),
+                    style: FilledButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: p.primaryDark,
+                      iconAlignment: IconAlignment.end,
+                      minimumSize: const Size(0, 44),
+                      padding: const EdgeInsets.symmetric(horizontal: 18),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
                       ),
-                      const SizedBox(width: 8),
-                      TextButton(
-                        onPressed: onSee,
-                        style: TextButton.styleFrom(
-                          foregroundColor: p.onPrimary,
-                          minimumSize: const Size(0, 44),
-                        ),
-                        child: const Text('See the form'),
-                      ),
-                    ],
+                    ),
                   ),
                 ],
               ),
@@ -537,6 +592,64 @@ class _ToolCard extends StatelessWidget {
   }
 }
 
+// ── "Help me choose" quiz pill (merged from the retired form-type page) ─────
+class _HelpMeChooseBanner extends StatelessWidget {
+  final VoidCallback onTap;
+  const _HelpMeChooseBanner({required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
+    return Semantics(
+      button: true,
+      label: 'Take the 4-question quiz to choose a form',
+      child: Material(
+        color: p.primaryLight,
+        borderRadius: BorderRadius.circular(12),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(12),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+            constraints: const BoxConstraints(minHeight: 48),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: p.primary.withValues(alpha: 0.20)),
+            ),
+            child: Row(
+              children: [
+                Icon(Icons.auto_awesome, size: 18, color: p.primary),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    'Not sure which form fits? Take the 4-question quiz.',
+                    style: TextStyle(
+                      fontFamily: 'DM Sans',
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      color: p.onPrimaryLight,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  'Help me choose →',
+                  style: TextStyle(
+                    fontFamily: 'DM Sans',
+                    fontSize: 12.5,
+                    fontWeight: FontWeight.w700,
+                    color: p.primary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 // ── "Our privacy promise" 2×2 grid ─────────────────────────────────────────
 class _PrivacyPromiseCard extends StatelessWidget {
   @override
@@ -561,6 +674,7 @@ class _PrivacyPromiseCard extends StatelessWidget {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           const SectionLabel('Our privacy promise'),
           const SizedBox(height: 12),
@@ -649,6 +763,7 @@ class _BookletQuoteCard extends StatelessWidget {
     final p = Theme.of(context).mhadPalette;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: [
         const SectionLabel('From the booklet'),
         const SizedBox(height: 8),

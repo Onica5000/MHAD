@@ -1143,7 +1143,7 @@ class _SectionDetailRoute extends StatelessWidget {
                   // same pattern as the snap-to-fill → AI-setup hop.)
                   onPressed: () {
                     Navigator.of(context).pop();
-                    appRouter.go(AppRoutes.formTypeSelection);
+                    appRouter.go(AppRoutes.home);
                   },
                   icon: const Icon(Icons.arrow_forward, size: 16),
                   label: const Text('Start my directive'),

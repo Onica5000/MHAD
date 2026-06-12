@@ -526,7 +526,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
                       const SizedBox(height: 20),
                       FilledButton.icon(
                         onPressed: () =>
-                            context.go(AppRoutes.formTypeSelection),
+                            context.go(AppRoutes.home),
                         icon: const Icon(Icons.add),
                         label: const Text('Start your directive'),
                       ),

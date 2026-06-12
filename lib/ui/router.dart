@@ -27,7 +27,6 @@ import 'package:mhad/ui/verify/wallet_verify_screen.dart';
 import 'package:mhad/ui/mode_selection/mode_selection_screen.dart';
 import 'package:mhad/ui/onboarding/onboarding_screen.dart';
 import 'package:mhad/ui/ulysses/ulysses_clause_screen.dart';
-import 'package:mhad/ui/wizard/form_type_selection_screen.dart';
 import 'package:mhad/ui/wizard/sign_screen.dart';
 import 'package:mhad/ui/wizard/wizard_complete_screen.dart';
 import 'package:mhad/ui/wizard/wizard_screen.dart';
@@ -37,7 +36,6 @@ abstract class AppRoutes {
   static const disclaimer = '/disclaimer';
   static const onboarding = '/onboarding';
   static const modeSelection = '/mode';
-  static const formTypeSelection = '/form-type';
   static const wizard = '/wizard/:directiveId';
   static const education = '/education';
   static const assistant = '/assistant';
@@ -177,10 +175,6 @@ GoRouter _buildRouter(DisclaimerNotifier disclaimer,
         GoRoute(
           path: AppRoutes.home,
           builder: (_, _) => const HomeScreen(),
-        ),
-        GoRoute(
-          path: AppRoutes.formTypeSelection,
-          builder: (_, _) => const FormTypeSelectionScreen(),
         ),
         GoRoute(
           path: AppRoutes.wizard,

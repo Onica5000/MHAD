@@ -42,7 +42,9 @@ class OnboardingScreen extends StatelessWidget {
   Future<void> _alreadyHave(BuildContext context) async {
     await notifier.complete();
     if (!context.mounted) return;
-    context.go(AppRoutes.formTypeSelection);
+    // TODO(upload): route to an "upload your existing directive (file/photo)"
+    // page once it's built. For now land on the dashboard.
+    context.go(AppRoutes.home);
   }
 
   Future<void> _dial988() async {

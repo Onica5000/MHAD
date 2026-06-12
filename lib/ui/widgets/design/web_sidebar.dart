@@ -82,7 +82,7 @@ class WebSidebar extends ConsumerWidget {
         // download a directive you haven't made yet).
         onTap: () => recentId != null
             ? appRouter.push(AppRoutes.exportRoute(recentId))
-            : appRouter.go(AppRoutes.formTypeSelection),
+            : appRouter.go(AppRoutes.home),
       ),
       _SidebarItem(
         icon: Icons.settings_outlined,
