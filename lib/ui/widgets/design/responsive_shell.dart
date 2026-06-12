@@ -56,6 +56,16 @@ bool _routeFills(String route) =>
     route.startsWith('/export/') ||
     route.startsWith('/wizard/');
 
+/// Pre-dashboard gate / welcome screens, shown BEFORE the user reaches the
+/// home dashboard (disclaimer → privacy mode → onboarding intro). The
+/// persistent [WebSidebar] is hidden on these so the first-run flow has no app
+/// navigation chrome yet — the sidebar first appears on the dashboard and
+/// stays for the rest of the app.
+bool _routeHidesSidebar(String route) =>
+    route == AppRoutes.disclaimer ||
+    route == AppRoutes.modeSelection ||
+    route == AppRoutes.onboarding;
+
 /// Wraps [child] so the navigation chrome matches the prototype:
 ///
 ///  - **Wide screens (≥ [kWideLayoutBreakpoint])** — a persistent
@@ -83,6 +93,20 @@ class ResponsiveShell extends StatelessWidget {
       builder: (context, _) {
         final route =
             appRouter.routerDelegate.currentConfiguration.uri.path;
+        // Pre-dashboard gate/welcome screens: no sidebar yet. Center the
+        // reading content in the full window (no nav rail) until the user
+        // reaches the dashboard.
+        if (_routeHidesSidebar(route)) {
+          return ClipRect(
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: kReadingMaxWidth),
+                child: child,
+              ),
+            ),
+          );
+        }
         // Two layout modes, matching the design's two web shells:
         //   FILL    — dense screens fill the width flush to the sidebar
         //             (START-aligned, generous cap).
