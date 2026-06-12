@@ -1811,17 +1811,18 @@ class _ExportPdfPreviewState extends State<_ExportPdfPreview> {
     }
     return LayoutBuilder(
       builder: (context, c) {
-        const pad = 16.0;
+        const hPad = 6.0;
+        const vPad = 16.0;
         const gap = 16.0;
-        final availW = (c.maxWidth - pad * 2).clamp(1.0, double.infinity);
+        final availW = (c.maxWidth - hPad * 2).clamp(1.0, double.infinity);
         // Fit each page to the FULL width of the pane so it fills the center
-        // section (no hard cap — that left the page floating small on wide
-        // monitors); the ± zoom scales from there, and − zooms back out if it
-        // ever feels too large.
+        // section edge-to-edge (no hard cap, only a hairline gutter); the ±
+        // zoom scales from there, and − zooms back out if it ever feels too
+        // large.
         final double w = availW * _zoom;
         final double h = w / _kPageRatio;
         // Cache metrics for the scroll listener / thumbnail jumps.
-        _topPad = pad;
+        _topPad = vPad;
         _pageStride = h + gap;
         return Scrollbar(
           controller: _vCtrl,
@@ -1834,7 +1835,8 @@ class _ExportPdfPreviewState extends State<_ExportPdfPreview> {
               child: ConstrainedBox(
                 constraints: BoxConstraints(minWidth: c.maxWidth),
                 child: Padding(
-                  padding: const EdgeInsets.all(pad),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: hPad, vertical: vPad),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [

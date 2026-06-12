@@ -88,6 +88,11 @@ class ResponsiveShell extends StatelessWidget {
         //             (START-aligned, generous cap).
         //   READING — prose/flow screens sit in a centered reading column.
         final fills = _routeFills(route);
+        // The export "Your directive, on paper" page is a dense 3-column tool
+        // (page-thumbnail panel · live preview · options rail). Let it use the
+        // FULL content width — no editorial cap — so the center preview isn't
+        // left with empty space beside it on a large monitor.
+        final bool fullBleed = route.startsWith('/export/');
         return Row(
           children: [
             WebSidebar(activeRoute: route),
@@ -99,7 +104,9 @@ class ResponsiveShell extends StatelessWidget {
                       fills ? Alignment.topLeft : Alignment.topCenter,
                   child: ConstrainedBox(
                     constraints: BoxConstraints(
-                      maxWidth: fills ? kFillMaxWidth : kReadingMaxWidth,
+                      maxWidth: fullBleed
+                          ? double.infinity
+                          : (fills ? kFillMaxWidth : kReadingMaxWidth),
                     ),
                     child: child,
                   ),
