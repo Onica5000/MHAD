@@ -10,6 +10,9 @@ import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/design/wallet_card.dart';
+import 'package:mhad/ui/export/pdf/wallet_card_generator.dart';
+import 'package:mhad/utils/background_runner.dart';
+import 'package:printing/printing.dart';
 
 /// "You did it." — shown after the user signs the directive. Mirrors the
 /// prototype's [m-done] screen: editorial italic display, wallet-card
@@ -25,8 +28,10 @@ class WizardCompleteScreen extends ConsumerStatefulWidget {
 
 class _WizardCompleteScreenState extends ConsumerState<WizardCompleteScreen> {
   Directive? _directive;
+  List<Agent> _agents = const [];
   Agent? _primaryAgent;
   Agent? _alternateAgent;
+  bool _generatingWallet = false;
 
   @override
   void initState() {
@@ -41,11 +46,43 @@ class _WizardCompleteScreenState extends ConsumerState<WizardCompleteScreen> {
     if (!mounted) return;
     setState(() {
       _directive = d;
+      _agents = agents;
       _primaryAgent =
           agents.where((a) => a.agentType == 'primary').firstOrNull;
       _alternateAgent =
           agents.where((a) => a.agentType == 'alternate').firstOrNull;
     });
+  }
+
+  /// Generate + share the credit-card-sized wallet PDF directly (the "Wallet"
+  /// quick action). There is no standalone wallet route — generation lives in
+  /// [WalletCardGenerator], the same one the export screen uses — so do it
+  /// inline here rather than dumping the user on the export screen.
+  Future<void> _generateWalletCard() async {
+    final directive = _directive;
+    if (directive == null || _generatingWallet) return;
+    setState(() => _generatingWallet = true);
+    try {
+      const generator = WalletCardGenerator();
+      final agents = _agents;
+      final bytes = await runInBackground(
+        () => generator.generate(directive: directive, agents: agents),
+      );
+      if (!mounted) return;
+      await Printing.sharePdf(
+        bytes: bytes,
+        filename:
+            'PA_MHAD_WalletCard_${directive.fullName.replaceAll(' ', '_')}.pdf',
+      );
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error generating wallet card: $e')),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _generatingWallet = false);
+    }
   }
 
   String _expirationLabel() {
@@ -226,15 +263,20 @@ class _WizardCompleteScreenState extends ConsumerState<WizardCompleteScreen> {
 
           const SizedBox(height: 20),
 
-          // Action buttons
+          // Action buttons — each now leads where its label says:
+          //   PDF    → the export/preview screen (download & print the packet)
+          //   Share  → the share sheet ("Who needs a copy?")
+          //   Wallet → generate the wallet-card PDF directly
+          // (Previously all three opened /export, so "Share" and "Wallet"
+          // didn't match their labels.)
           Row(
             children: [
               Expanded(
                 child: FilledButton.tonalIcon(
                   icon: const Icon(Icons.picture_as_pdf_outlined, size: 18),
                   label: const Text('PDF'),
-                  onPressed: () => context.go(
-                      AppRoutes.exportRoute(widget.directiveId)),
+                  onPressed: () => context
+                      .push(AppRoutes.exportRoute(widget.directiveId)),
                 ),
               ),
               const SizedBox(width: 8),
@@ -242,18 +284,23 @@ class _WizardCompleteScreenState extends ConsumerState<WizardCompleteScreen> {
                 child: FilledButton.tonalIcon(
                   icon: const Icon(Icons.ios_share, size: 18),
                   label: const Text('Share'),
-                  onPressed: () => context.go(
-                      AppRoutes.exportRoute(widget.directiveId)),
+                  onPressed: () => context
+                      .push(AppRoutes.shareSheetRoute(widget.directiveId)),
                 ),
               ),
               const SizedBox(width: 8),
               Expanded(
                 child: FilledButton.tonalIcon(
-                  icon: const Icon(Icons.account_balance_wallet_outlined,
-                      size: 18),
+                  icon: _generatingWallet
+                      ? const SizedBox(
+                          width: 18,
+                          height: 18,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : const Icon(Icons.account_balance_wallet_outlined,
+                          size: 18),
                   label: const Text('Wallet'),
-                  onPressed: () => context.go(
-                      AppRoutes.exportRoute(widget.directiveId)),
+                  onPressed: _generatingWallet ? null : _generateWalletCard,
                 ),
               ),
             ],
