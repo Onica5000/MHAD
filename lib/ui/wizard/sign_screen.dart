@@ -21,13 +21,14 @@ import 'package:mhad/ui/wizard/steps/execution_step.dart';
 /// the printed-and-signed workflow even if they haven't generated the PDF
 /// yet. The visible content is delegated to [ExecutionStep] (which already
 /// renders the prototype's 3-step timeline, witness eligibility banner,
-/// and packet checklist). The bottom bar offers two CTAs:
+/// and packet checklist). [ExecutionStep] offers two CTAs:
 ///
-///   * Primary: **Continue to summary** → `/wizard-complete/:id`. Goes
-///     to the Done screen where the user sees the wallet card + share
+///   * Primary (filled): **Preview signing packet** → `/export/:id`. Opens
+///     the export screen ("Your directive, on paper") to preview/print the
+///     PDF packet.
+///   * Secondary (outlined): **Continue to summary** → `/wizard-complete/:id`.
+///     Goes to the Done screen ("One pen away") with the wallet card + share
 ///     checklist + PDF/Share/Wallet trio.
-///   * Secondary: **Download PDF** → `/export/:id`. Lets the user
-///     generate the signing packet immediately without leaving Sign.
 ///
 /// "Back to review" at the top returns the user to the wizard.
 class SignScreen extends ConsumerStatefulWidget {
