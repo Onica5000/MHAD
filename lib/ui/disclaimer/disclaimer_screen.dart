@@ -7,23 +7,22 @@ import 'package:mhad/ui/widgets/design/crisis_sheet.dart';
 
 /// First-launch legal disclaimer + read-only Settings variant.
 ///
-/// Gate layout — prototype-exact match of mobile.jsx::ScrDisclaimer
-/// (L172-232):
-///   * SectionLabel "Before we begin"
-///   * 26pt sans bold header "A few important things."
-///   * 13.5 muted lead paragraph
-///   * Yellow warning banner: AlertTri + "This app helps you *document*
-///     your preferences. It is *not* legal or medical advice."
-///   * Four numbered bullets (26×26 primaryLight squares with italic
-///     serif numerals) — age, validity, witnesses, attorney resource.
-///   * Single checkbox: "I'm 18 or older, and I understand the above."
-///   * Primary "I understand · Continue" button.
+/// Gate layout — matches the Claude Design web `WebDisclaimer`
+/// (web-flow-screens.jsx) per user direction (2026-06-12):
+///   * SectionLabel "Before you begin"
+///   * Italic serif header "A few things to understand."
+///   * Muted lead paragraph (Act 194 framing)
+///   * Four editorial icon cards: not-legal-advice, signed-on-paper,
+///     nothing-saved (kIsWeb-adaptive), stop-or-change
+///   * Tinted acknowledgment row — "I'm 18 or older, and I understand and
+///     want to continue." (the 18+ requirement, which the artboard omits, is
+///     folded in here)
+///   * Footer row: "Read full disclaimer" ghost link + primary "Get started".
 ///
-/// The single check affirms both age and acknowledgment-of-non-advice,
-/// collapsing the prior dual-checkbox gate into one row per the
-/// prototype. The full 8-section legal text (kept for legal coverage)
-/// is reachable via a small "Read full legal sections" link beneath
-/// the checkbox, which opens the legacy accordion in a modal sheet.
+/// The single check affirms both age (18+) and acknowledgment. The full
+/// 8-section legal text (two-year validity, witness eligibility, PA P&A /
+/// attorney resources, etc.) is reachable via "Read full disclaimer", which
+/// opens the accordion in a modal sheet.
 ///
 /// Read-only variant (Settings → Legal) keeps the 8-section accordion
 /// as a scrollable list so users can browse the full disclosure.
@@ -129,7 +128,7 @@ class _GateLayout extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _SectionLabel('Before we begin', palette: palette),
+                  _SectionLabel('Before you begin', palette: palette),
                   const SizedBox(height: 6),
                   Text(
                     'A few things to understand.',
@@ -148,7 +147,7 @@ class _GateLayout extends StatelessWidget {
                   Text(
                     'This tool helps you write a Pennsylvania Mental Health '
                     'Advance Directive under Act 194. Please read these '
-                    'before you continue.',
+                    'before continuing.',
                     style: TextStyle(
                       fontFamily: 'DM Sans',
                       fontSize: 13.5,
@@ -156,43 +155,34 @@ class _GateLayout extends StatelessWidget {
                       height: 1.5,
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  _WarnBanner(dark: dark),
-                  const SizedBox(height: 14),
+                  const SizedBox(height: 22),
                   Expanded(
                     child: ListView(
                       padding: EdgeInsets.zero,
-                      // Hybrid card set (user decision 2026-06-10): the two
-                      // legally-substantive cards keep full PA Act 194
-                      // nomenclature; the two reassurance cards adopt the
-                      // artboard WebDisclaimer framing. ("Not legal/medical
-                      // advice" is already the warning banner above; the 18+
-                      // requirement is affirmed in the ack checkbox below; the
-                      // PA P&A / lawyer resource lives in the full legal
-                      // sections.)
+                      // Card set mirrors the Claude Design web `WebDisclaimer`.
+                      // "Not legal advice" is now the first card (it replaced
+                      // the old warning banner); the 18+ requirement is
+                      // affirmed in the acknowledgment row below; the two-year
+                      // validity and the PA P&A / attorney resources live in
+                      // the full legal sections ("Read full disclaimer").
                       children: [
+                        const _DisclaimerCard(
+                          icon: Icons.shield_outlined,
+                          title: 'This is not legal advice',
+                          body:
+                              'We give plain-language help, not legal counsel. '
+                              'For complex situations, talk to an attorney or '
+                              'advocate.',
+                        ),
+                        const SizedBox(height: 10),
                         const _DisclaimerCard(
                           icon: Icons.draw_outlined,
                           title:
                               'It becomes valid only when signed on paper',
                           body:
-                              'Under PA Act 194, your directive is legally '
-                              'valid only when you sign it — in ink, in '
-                              'person — with two qualified adult witnesses '
-                              'present. The app cannot sign or witness it for '
-                              'you.',
-                        ),
-                        const SizedBox(height: 10),
-                        const _DisclaimerCard(
-                          icon: Icons.event_outlined,
-                          title: 'It stays valid for two years',
-                          body:
-                              'Under PA Act 194, a Mental Health Advance '
-                              'Directive lasts two years from the date you sign '
-                              'it — unless you are incapable of making mental '
-                              'health decisions when it would expire, in which '
-                              'case it stays in effect until your capacity '
-                              'returns.',
+                              'PA law requires your signature plus two '
+                              'qualified adult witnesses, in ink, in person. '
+                              'The app cannot sign for you.',
                         ),
                         const SizedBox(height: 10),
                         _DisclaimerCard(
@@ -215,57 +205,65 @@ class _GateLayout extends StatelessWidget {
                           icon: Icons.published_with_changes,
                           title: 'You can stop or change anything, anytime',
                           body:
-                              'Skip questions, go back, or revoke the '
-                              'directive later — under PA Act 194 you may '
-                              'revoke at any time while you have capacity. '
-                              'This is your voice; you stay in control.',
+                              'Skip questions, go back, or revoke later. This '
+                              'is your voice — you stay in control.',
                         ),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 10),
                   _AckRow(
                     palette: palette,
                     checked: accepted,
                     onToggle: onAcceptToggle,
                   ),
-                  const SizedBox(height: 8),
-                  Center(
-                    child: TextButton(
-                      onPressed: onOpenFull,
-                      style: TextButton.styleFrom(
-                        foregroundColor: palette.textMuted,
-                        textStyle: const TextStyle(
-                          fontFamily: 'DM Sans',
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
+                  const SizedBox(height: 16),
+                  // Artboard footer: a "Read full disclaimer" ghost link on the
+                  // left and the primary "Get started" CTA on the right.
+                  Row(
+                    children: [
+                      TextButton(
+                        onPressed: onOpenFull,
+                        style: TextButton.styleFrom(
+                          foregroundColor: palette.text,
+                          textStyle: const TextStyle(
+                            fontFamily: 'DM Sans',
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        child: const Text('Read full disclaimer'),
+                      ),
+                      const Spacer(),
+                      SizedBox(
+                        height: DesignTokens.buttonHeightLg,
+                        child: FilledButton.icon(
+                          onPressed: onContinue,
+                          icon: const Icon(Icons.arrow_forward, size: 18),
+                          iconAlignment: IconAlignment.end,
+                          label: const Text('Get started'),
+                          style: FilledButton.styleFrom(
+                            backgroundColor: palette.primary,
+                            foregroundColor: palette.onPrimary,
+                            // Visible-but-muted when the 18+ box isn't checked,
+                            // so users can see the CTA waiting for them.
+                            disabledBackgroundColor: palette.primaryLight,
+                            disabledForegroundColor: palette.primary,
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 22),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                  DesignTokens.buttonRadius),
+                            ),
+                            textStyle: const TextStyle(
+                              fontFamily: 'DM Sans',
+                              fontWeight: FontWeight.w600,
+                              fontSize: 15,
+                            ),
+                          ),
                         ),
                       ),
-                      child: const Text('Read full legal sections'),
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  SizedBox(
-                    height: DesignTokens.buttonHeightLg,
-                    child: FilledButton(
-                      onPressed: onContinue,
-                      style: FilledButton.styleFrom(
-                        backgroundColor: palette.primary,
-                        foregroundColor: palette.onPrimary,
-                        disabledBackgroundColor: palette.border,
-                        disabledForegroundColor: palette.textMuted,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                              DesignTokens.buttonRadius),
-                        ),
-                        textStyle: const TextStyle(
-                          fontFamily: 'DM Sans',
-                          fontWeight: FontWeight.w600,
-                          fontSize: 15,
-                        ),
-                      ),
-                      child: const Text('I understand · Continue'),
-                    ),
+                    ],
                   ),
                 ],
               ),
@@ -315,65 +313,6 @@ class _SectionLabel extends StatelessWidget {
         fontWeight: FontWeight.w600,
         letterSpacing: 1.2,
         color: palette.textMuted,
-      ),
-    );
-  }
-}
-
-class _WarnBanner extends StatelessWidget {
-  final bool dark;
-  const _WarnBanner({required this.dark});
-
-  @override
-  Widget build(BuildContext context) {
-    final bg = dark
-        ? SemanticColors.warningBgDark
-        : SemanticColors.warningBgLight;
-    final border = dark
-        ? SemanticColors.warningBorderDark
-        : SemanticColors.warningBorderLight;
-    final fg = dark
-        ? SemanticColors.warningTextDark
-        : SemanticColors.warningTextLight;
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: bg,
-        border: Border.all(color: border),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(Icons.warning_amber_rounded, size: 20, color: fg),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Text.rich(
-              TextSpan(
-                style: TextStyle(
-                  fontFamily: 'DM Sans',
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                  height: 1.45,
-                  color: fg,
-                ),
-                children: const [
-                  TextSpan(text: 'This app helps you '),
-                  TextSpan(
-                    text: 'document',
-                    style: TextStyle(fontStyle: FontStyle.italic),
-                  ),
-                  TextSpan(text: ' your preferences. It is '),
-                  TextSpan(
-                    text: 'not',
-                    style: TextStyle(fontWeight: FontWeight.w800),
-                  ),
-                  TextSpan(text: ' legal or medical advice.'),
-                ],
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
@@ -459,47 +398,55 @@ class _AckRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Tinted acknowledgment row (artboard WebDisclaimer). The 18+ requirement
+    // — which the artboard omits — is folded into the affirmation here.
     return Semantics(
       checked: checked,
-      child: InkWell(
-        onTap: onToggle,
+      button: true,
+      child: Material(
+        color: palette.primaryTint,
         borderRadius: BorderRadius.circular(12),
-        child: Padding(
-          // vertical 14 + 22 content = 50 keeps the row >= 48 for a11y while
-          // staying close to the prototype's tight checkbox row look.
-          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
-          child: Row(
-            children: [
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 120),
-                width: 22,
-                height: 22,
-                decoration: BoxDecoration(
-                  color: checked ? palette.primary : Colors.transparent,
-                  border: checked
-                      ? null
-                      : Border.all(color: palette.border, width: 1.5),
-                  borderRadius: BorderRadius.circular(6),
+        child: InkWell(
+          onTap: onToggle,
+          borderRadius: BorderRadius.circular(12),
+          child: Container(
+            constraints: const BoxConstraints(minHeight: 48),
+            padding:
+                const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: palette.primaryLight),
+            ),
+            child: Row(
+              children: [
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 120),
+                  width: 22,
+                  height: 22,
+                  decoration: BoxDecoration(
+                    color: checked ? palette.primary : Colors.transparent,
+                    border: Border.all(color: palette.primary, width: 1.8),
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  alignment: Alignment.center,
+                  child: checked
+                      ? Icon(Icons.check, size: 14, color: palette.onPrimary)
+                      : null,
                 ),
-                alignment: Alignment.center,
-                child: checked
-                    ? Icon(Icons.check,
-                        size: 14, color: palette.onPrimary)
-                    : null,
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Text(
-                  "I'm 18 or older, and I understand the above.",
-                  style: TextStyle(
-                    fontFamily: 'DM Sans',
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
-                    color: palette.text,
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    "I'm 18 or older, and I understand and want to continue.",
+                    style: TextStyle(
+                      fontFamily: 'DM Sans',
+                      fontSize: 13.5,
+                      fontWeight: FontWeight.w600,
+                      color: palette.text,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
