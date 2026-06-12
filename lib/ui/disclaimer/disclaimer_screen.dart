@@ -235,31 +235,35 @@ class _GateLayout extends StatelessWidget {
                         child: const Text('Read full disclaimer'),
                       ),
                       const Spacer(),
-                      SizedBox(
-                        height: DesignTokens.buttonHeightLg,
-                        child: FilledButton.icon(
-                          onPressed: onContinue,
-                          icon: const Icon(Icons.arrow_forward, size: 18),
-                          iconAlignment: IconAlignment.end,
-                          label: const Text('Get started'),
-                          style: FilledButton.styleFrom(
-                            backgroundColor: palette.primary,
-                            foregroundColor: palette.onPrimary,
-                            // Visible-but-muted when the 18+ box isn't checked,
-                            // so users can see the CTA waiting for them.
-                            disabledBackgroundColor: palette.primaryLight,
-                            disabledForegroundColor: palette.primary,
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 22),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                  DesignTokens.buttonRadius),
-                            ),
-                            textStyle: const TextStyle(
-                              fontFamily: 'DM Sans',
-                              fontWeight: FontWeight.w600,
-                              fontSize: 15,
-                            ),
+                      // NOTE: set the height via minimumSize, NOT a wrapping
+                      // SizedBox(height:). Inside a Row with a Spacer, a
+                      // SizedBox(height:) lets the button be measured at
+                      // UNBOUNDED width ("BoxConstraints forces an infinite
+                      // width"), so it silently fails to lay out / paint.
+                      FilledButton.icon(
+                        onPressed: onContinue,
+                        icon: const Icon(Icons.arrow_forward, size: 18),
+                        iconAlignment: IconAlignment.end,
+                        label: const Text('Get started'),
+                        style: FilledButton.styleFrom(
+                          backgroundColor: palette.primary,
+                          foregroundColor: palette.onPrimary,
+                          // Visible-but-muted when the 18+ box isn't checked,
+                          // so users can see the CTA waiting for them.
+                          disabledBackgroundColor: palette.primaryLight,
+                          disabledForegroundColor: palette.primary,
+                          minimumSize:
+                              const Size(0, DesignTokens.buttonHeightLg),
+                          padding:
+                              const EdgeInsets.symmetric(horizontal: 22),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                DesignTokens.buttonRadius),
+                          ),
+                          textStyle: const TextStyle(
+                            fontFamily: 'DM Sans',
+                            fontWeight: FontWeight.w600,
+                            fontSize: 15,
                           ),
                         ),
                       ),
