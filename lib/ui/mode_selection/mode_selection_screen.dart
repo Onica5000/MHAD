@@ -107,7 +107,11 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SectionLabel('Step 1 of 3 · setup'),
+                      // Eyebrow — was 'Step 1 of 3 · setup', but neither the
+                      // disclaimer gate before this nor the onboarding intro
+                      // after it shows a step counter, so the "of 3" promised a
+                      // numbered sequence that doesn't exist. Use a plain label.
+                      const SectionLabel('Privacy · setup'),
                       const SizedBox(height: 6),
                       Text(
                         'How should we handle your data?',
