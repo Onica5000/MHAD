@@ -1824,30 +1824,40 @@ class _ExportPdfPreviewState extends State<_ExportPdfPreview> {
         // Cache metrics for the scroll listener / thumbnail jumps.
         _topPad = vPad;
         _pageStride = h + gap;
+        // A SINGLE vertical scroll view (one clean viewport for the Scrollbar
+        // to measure). Earlier this nested a horizontal SingleChildScrollView
+        // *inside* the vertical one — the inner viewport then had an unbounded
+        // height, a fragile arrangement that could leave a RenderBox un-laid-
+        // out during scroll/hover gesture handling ("RenderBox was not laid
+        // out"). When the page is zoomed wider than the pane, only THAT page
+        // scrolls horizontally, inside its own fixed-height (h) viewport — so
+        // no scroll view is ever given an unbounded cross-axis.
         return Scrollbar(
           controller: _vCtrl,
           thumbVisibility: true,
           child: SingleChildScrollView(
             controller: _vCtrl,
             scrollDirection: Axis.vertical,
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: ConstrainedBox(
-                constraints: BoxConstraints(minWidth: c.maxWidth),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: hPad, vertical: vPad),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      for (var i = 0; i < _pages.length; i++) ...[
-                        if (i > 0) const SizedBox(height: gap),
-                        _pageCard(p, _pages[i], w, h),
-                      ],
-                    ],
-                  ),
-                ),
-              ),
+            padding:
+                const EdgeInsets.symmetric(horizontal: hPad, vertical: vPad),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                for (var i = 0; i < _pages.length; i++) ...[
+                  if (i > 0) const SizedBox(height: gap),
+                  if (w <= availW)
+                    _pageCard(p, _pages[i], w, h)
+                  else
+                    SizedBox(
+                      width: availW,
+                      height: h,
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: _pageCard(p, _pages[i], w, h),
+                      ),
+                    ),
+                ],
+              ],
             ),
           ),
         );
