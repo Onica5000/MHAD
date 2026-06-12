@@ -62,9 +62,12 @@ class _DocumentImportTipState extends State<DocumentImportTip>
       opacity: _fadeAnim,
       child: SizeTransition(
         sizeFactor: _fadeAnim,
-        // topCenter collapses from the top of the parent (vertical axis) —
-        // replaces the deprecated `axisAlignment: -1`.
-        alignment: Alignment.topCenter,
+        // -1 collapses from the top of the parent (default axis is vertical).
+        // NOTE: this is the current API on the project's pinned Flutter 3.41.4.
+        // Newer Flutter deprecates `axisAlignment` in favour of `alignment:`,
+        // but that param does not exist in 3.41.4 — switching to it breaks the
+        // dart2js web build. Leave as-is until the project bumps Flutter.
+        axisAlignment: -1,
         child: Padding(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
           child: Card(
