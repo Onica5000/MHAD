@@ -96,23 +96,29 @@ class ResponsiveShell extends StatelessWidget {
         return Row(
           children: [
             WebSidebar(activeRoute: route),
-            Expanded(
-              child: ClipRect(
-                child: Align(
-                  // FILL: flush to the sidebar (top-left). READING: centered.
-                  alignment:
-                      fills ? Alignment.topLeft : Alignment.topCenter,
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                      maxWidth: fullBleed
-                          ? double.infinity
-                          : (fills ? kFillMaxWidth : kReadingMaxWidth),
+            // FULL-BLEED (export): hand the child the Expanded's TIGHT width
+            // directly. The Align path below passes *loose* constraints, which
+            // lets a self-sizing Scaffold/Row collapse to its columns' intrinsic
+            // width (~760px) and float centered with empty gutters on a wide
+            // monitor — the bug we keep chasing. A direct child forces it to
+            // fill the whole content area, flush from sidebar to window edge.
+            if (fullBleed)
+              Expanded(child: child)
+            else
+              Expanded(
+                child: ClipRect(
+                  child: Align(
+                    // FILL: flush to the sidebar (top-left). READING: centered.
+                    alignment: fills ? Alignment.topLeft : Alignment.topCenter,
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxWidth: fills ? kFillMaxWidth : kReadingMaxWidth,
+                      ),
+                      child: child,
                     ),
-                    child: child,
                   ),
                 ),
               ),
-            ),
           ],
         );
       },
