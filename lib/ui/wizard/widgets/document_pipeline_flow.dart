@@ -1147,6 +1147,17 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                     Expanded(flex: 2, child: _targetsPanel(p)),
                   ],
                 )
+              // Narrow + camera (phone): the artboard mobile chooser —
+              // "Take a photo" / "Pick a file" cards + a vertical targets
+              // list (WebSnapFillMobile jsx L505-586). Narrow desktop window
+              // (no camera) keeps the drag-and-drop zone.
+              else if (deviceHasCamera) ...[
+                _mobileChooser(p),
+                const SizedBox(height: 18),
+                _mobileTargets(p),
+                const SizedBox(height: 14),
+                _privacyLockLine(p),
+              ]
               else ...[
                 _dropZone(p),
                 const SizedBox(height: 16),
@@ -1681,6 +1692,252 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
           ),
         ],
       ],
+    );
+  }
+
+  // Mobile capture chooser (WebSnapFillMobile jsx L505-548): two big cards —
+  // "Take a photo" (primary, opens the camera) and "Pick a file" (from the
+  // gallery / files). The real native picker appears on tap.
+  Widget _mobileChooser(MhadPalette p) {
+    return IntrinsicHeight(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            child: _chooserCard(
+              onTap: _useWebcam,
+              filled: true,
+              bg: p.primary,
+              fg: p.onPrimary,
+              icon: Icons.photo_camera_outlined,
+              iconBg: p.onPrimary.withValues(alpha: 0.20),
+              title: 'Take a photo',
+              subtitle: 'Opens your camera. Snap your ID, Rx label, anything.',
+              subtitleColor: p.onPrimary.withValues(alpha: 0.85),
+            ),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: _chooserCard(
+              onTap: _browseFiles,
+              filled: false,
+              bg: p.card,
+              fg: p.text,
+              icon: Icons.image_outlined,
+              iconBg: p.primaryTint,
+              iconFg: p.primary,
+              title: 'Pick a file',
+              subtitle: 'From your photos or files. JPG, PNG, HEIC, PDF.',
+              subtitleColor: p.textMuted,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _chooserCard({
+    required VoidCallback onTap,
+    required bool filled,
+    required Color bg,
+    required Color fg,
+    required IconData icon,
+    required Color iconBg,
+    Color? iconFg,
+    required String title,
+    required String subtitle,
+    required Color subtitleColor,
+  }) {
+    final p = Theme.of(context).mhadPalette;
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(14),
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(14, 16, 14, 14),
+        decoration: BoxDecoration(
+          color: bg,
+          borderRadius: BorderRadius.circular(14),
+          border: filled ? null : Border.all(color: p.border, width: 1.5),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(
+                color: iconBg,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(icon, size: 18, color: iconFg ?? fg),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              title,
+              style: TextStyle(
+                fontFamily: 'DM Sans',
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
+                color: fg,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              subtitle,
+              style: TextStyle(
+                fontFamily: 'DM Sans',
+                fontSize: 11,
+                height: 1.35,
+                color: subtitleColor,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Vertical "What helps most" targets list (WebSnapFillMobile jsx L550-586):
+  // each row is an icon tile + label (+ FASTEST tag on ID) + what it fills +
+  // a trailing chevron. Tapping any row opens the file picker.
+  Widget _mobileTargets(MhadPalette p) {
+    const targets = <(IconData, String, String, bool)>[
+      (Icons.badge_outlined, 'Photo of ID', 'Name · DOB · address', true),
+      (Icons.medication_outlined, 'Rx bottle / label', 'Drug · dose · schedule',
+          false),
+      (Icons.coronavirus_outlined, 'Conditions list', 'Diagnoses · allergies',
+          false),
+      (Icons.description_outlined, 'Anything else', 'Old directive, notes…',
+          false),
+    ];
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SectionLabel('What helps most'),
+        const SizedBox(height: 8),
+        for (final t in targets) ...[
+          InkWell(
+            onTap: _browseFiles,
+            borderRadius: BorderRadius.circular(10),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              decoration: BoxDecoration(
+                color: p.card,
+                border: Border.all(color: p.border),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 28,
+                    height: 28,
+                    decoration: BoxDecoration(
+                      color: p.primaryTint,
+                      borderRadius: BorderRadius.circular(7),
+                    ),
+                    child: Icon(t.$1, size: 14, color: p.primary),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Flexible(
+                              child: Text(
+                                t.$2,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontFamily: 'DM Sans',
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w700,
+                                  color: p.text,
+                                ),
+                              ),
+                            ),
+                            if (t.$4) ...[
+                              const SizedBox(width: 6),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 5, vertical: 1),
+                                decoration: BoxDecoration(
+                                  color: p.primaryLight,
+                                  borderRadius: BorderRadius.circular(3),
+                                ),
+                                child: Text(
+                                  'FASTEST',
+                                  style: TextStyle(
+                                    fontFamily: 'JetBrains Mono',
+                                    fontFamilyFallback: const [
+                                      'Consolas',
+                                      'Menlo',
+                                      'Courier New',
+                                      'monospace',
+                                    ],
+                                    fontSize: 8.5,
+                                    fontWeight: FontWeight.w700,
+                                    letterSpacing: 0.5,
+                                    color: p.onPrimaryLight,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ],
+                        ),
+                        const SizedBox(height: 1),
+                        Text(
+                          t.$3,
+                          style: TextStyle(
+                            fontFamily: 'DM Sans',
+                            fontSize: 11.5,
+                            color: p.textMuted,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Icon(Icons.arrow_forward, size: 12, color: p.textMuted),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 6),
+        ],
+      ],
+    );
+  }
+
+  // Standalone privacy reassurance line shared by the mobile chooser
+  // (WebSnapFillMobile jsx L621-631).
+  Widget _privacyLockLine(MhadPalette p) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(
+        color: p.surface,
+        border: Border.all(color: p.border),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(Icons.lock_outline, size: 14, color: p.textMuted),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              'Your photo is sent to the AI only to read it, then discarded. '
+              'Nothing is saved.',
+              style: TextStyle(
+                fontFamily: 'DM Sans',
+                fontSize: 11,
+                height: 1.4,
+                color: p.textMuted,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
