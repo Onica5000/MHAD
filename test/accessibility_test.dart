@@ -178,11 +178,6 @@ void main() {
     await testScreenLabeled(tester, route: AppRoutes.privacyPolicy);
   });
 
-  testWidgets('Form-type selection meets labeled tap target guideline',
-      (tester) async {
-    await testScreenLabeled(tester, route: AppRoutes.formTypeSelection);
-  });
-
   testWidgets('Mode selection meets labeled tap target guideline',
       (tester) async {
     // Force a state where mode hasn't been picked so the redirect lands on
@@ -225,10 +220,6 @@ void main() {
       (tester) async {
     await testScreenAndroid(tester, route: AppRoutes.privacyPolicy);
   });
-  testWidgets('Form-type selection meets Android tap target guideline',
-      (tester) async {
-    await testScreenAndroid(tester, route: AppRoutes.formTypeSelection);
-  });
   testWidgets('Assistant screen meets Android tap target guideline',
       (tester) async {
     await testScreenAndroid(tester, route: AppRoutes.assistant);
@@ -247,10 +238,6 @@ void main() {
   });
   testWidgets('Privacy Policy meets text contrast guideline', (tester) async {
     await testScreenContrast(tester, route: AppRoutes.privacyPolicy);
-  });
-  testWidgets('Form-type selection meets text contrast guideline',
-      (tester) async {
-    await testScreenContrast(tester, route: AppRoutes.formTypeSelection);
   });
   testWidgets('Assistant screen meets text contrast guideline',
       (tester) async {

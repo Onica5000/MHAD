@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/ai/ai_assistant.dart'
     show AssistantContext, MessageRole;
-import 'package:mhad/data/database/app_database.dart' show Directive;
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/providers/assistant_providers.dart';
@@ -33,10 +32,6 @@ import 'package:mhad/ui/wizard/steps/procedures_research_step.dart';
 import 'package:mhad/ui/wizard/steps/review_and_sign_step.dart';
 import 'package:mhad/ui/wizard/steps/treatment_facility_step.dart';
 import 'package:mhad/ui/wizard/steps/when_it_kicks_in_step.dart';
-import 'package:mhad/ui/wizard/widgets/document_import_tip.dart';
-import 'package:mhad/ui/wizard/widgets/smart_fill_card.dart';
-import 'package:mhad/ui/wizard/widgets/document_pipeline_flow.dart';
-import 'package:mhad/ui/wizard/widgets/smart_fill_flow.dart';
 
 class WizardScreen extends ConsumerStatefulWidget {
   final int directiveId;
@@ -60,7 +55,7 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
 
   /// Re-keyed after Smart Fill to force the step widget to rebuild with the
   /// freshly persisted values.
-  GlobalKey _stepKey = GlobalKey();
+  final GlobalKey _stepKey = GlobalKey();
 
   Future<void> _persistStep() async {
     await ref
@@ -175,9 +170,9 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
             // Material AppBar removed 2026-06-03 — prototype ScrWizard*
             // screens use a thin in-body WizardHeader (Back + Save&exit)
             // sitting between the CrisisBar and the StepDots, not a
-            // standard Material chrome. The `_handleSmartFillTarget` +
-            // `_smartFill` helpers stay wired so the step-1 SmartFillCard
-            // tile callbacks still resolve through the same code path.
+            // standard Material chrome. Snap-to-fill / upload-to-fill was
+            // moved out of step 1 to the standalone `/upload/:id` page
+            // (2026-06-13); the wizard now starts straight on the form.
             body: LayoutBuilder(
               builder: (context, constraints) {
                 // Desktop / wide layout — step rail on the left, content
@@ -221,60 +216,6 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                       subtitle: currentStep.subtitle,
                       onExit: () => _saveAndExit(context),
                     ),
-                    if (_stepIndex == 0) const DocumentImportTip(),
-                    // Editorial Smart Fill launcher on step 1 — matches
-                    // prototype `ScrWizardAbout::SmartFillCard`
-                    // (mobile.jsx::SmartFillCard L480-583) + the "OR BY
-                    // HAND" mono divider that separates it from the form
-                    // fields. Additive: the wizard `⋮` overflow menu's
-                    // Smart Fill + Document Import entries stay reachable
-                    // exactly as before.
-                    if (_stepIndex == 0)
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
-                        child: SmartFillCard(
-                          onPickTarget: (target) => _handleSmartFillTarget(
-                            context,
-                            directive,
-                            formType,
-                            target,
-                          ),
-                        ),
-                      ),
-                    if (_stepIndex == 0)
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 18, 20, 14),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Container(
-                                  height: 1, color: p.border),
-                            ),
-                            const SizedBox(width: 10),
-                            Text(
-                              'OR BY HAND',
-                              style: TextStyle(
-                                fontFamily: 'JetBrains Mono',
-                                fontFamilyFallback: const [
-                                  'Consolas',
-                                  'Menlo',
-                                  'Courier New',
-                                  'monospace',
-                                ],
-                                fontSize: 10,
-                                fontWeight: FontWeight.w600,
-                                letterSpacing: 1,
-                                color: p.textMuted,
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: Container(
-                                  height: 1, color: p.border),
-                            ),
-                          ],
-                        ),
-                      ),
                     Expanded(
                       child: _buildStep(
                         currentStep,
@@ -345,11 +286,6 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                           formType,
                           currentStep.displayName,
                         ),
-                        onSnapId: () => showDocumentPipelineFlow(
-                          context,
-                          directiveId: directive.id,
-                          formType: formType.name,
-                        ),
                       ),
                     ],
                   ],
@@ -365,49 +301,11 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
     );
   }
 
-  /// Dispatches the four overflow-menu actions to their respective handlers.
-  /// Doc-import shows its own bottom sheet because [DocumentImportButton]
-  /// owns that flow; we trigger it via a synthetic invocation here.
-  /// Dispatch a [SmartFillTarget] from the editorial step-1 SmartFillCard.
-  /// All four targets currently route to the same document-import pipeline
-  /// (the existing AI extractor already infers field types from the image);
-  /// the target is passed through as a hint so a follow-up pass can route
-  /// to dedicated prompts per target. The "ID" tile additionally routes
-  /// to the standalone smart-fill flow which can be filled from a typed
-  /// summary instead of a photo.
-  Future<void> _handleSmartFillTarget(
-    BuildContext context,
-    Directive directive,
-    FormType formType,
-    SmartFillTarget target,
-  ) async {
-    switch (target) {
-      case SmartFillTarget.id:
-        // "Photo of ID" is the prototype's recommended start — gives the
-        // user a choice between snap-to-fill and the typed smart-fill flow.
-        await _smartFill(context, directive.id, formType.name);
-      case SmartFillTarget.rx:
-      case SmartFillTarget.conditions:
-      case SmartFillTarget.other:
-        // Open the snap-to-fill page regardless of whether AI is set up. The
-        // page renders fine without a key and shows a "Set up AI" banner;
-        // dropping a file then prompts for setup. (Previously this pre-diverted
-        // to AI setup, so web users without a key never saw the page at all —
-        // which is why snap-to-fill appeared "missing".)
-        if (!context.mounted) return;
-        await showDocumentPipelineFlow(
-          context,
-          directiveId: directive.id,
-          formType: formType.name,
-        );
-    }
-  }
-
-  // _handleMenuAction / _WizardMenuAction enum removed with the
-  // overflow menu (2026-06-03). The Smart Fill and Document Import
-  // destinations are now reached through `_handleSmartFillTarget`
-  // (called by SmartFillCard tiles); Ask the AI is on the bottom nav;
-  // Save & exit is on the bottom bar (step 1) and PopScope (other steps).
+  // Snap-to-fill / upload-to-fill dispatch (`_handleSmartFillTarget`,
+  // `_smartFill`) was removed 2026-06-13 along with the step-1 SmartFillCard;
+  // that flow now lives on the standalone `/upload/:id` page, reached from
+  // onboarding's "Upload a document to autofill". Ask the AI is on the bottom
+  // nav; Save & exit is on the bottom bar (step 1) and PopScope (other steps).
 
   /// Opens the AI assistant pre-loaded with this step's context. Used by both
   /// the desktop right rail and the narrow peeking bar (prototype w-wizard /
@@ -470,60 +368,6 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
           },
         ),
     };
-  }
-
-  Future<void> _smartFill(
-      BuildContext context, int directiveId, String formTypeName) async {
-    final apiKey = ref.read(apiKeyProvider).valueOrNull;
-    if (apiKey == null || apiKey.isEmpty) {
-      if (!context.mounted) return;
-      final goSetup = await showDialog<bool>(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          icon: const Icon(Icons.auto_awesome, size: 36),
-          title: const Text('AI Not Set Up'),
-          content: const Text(
-            'Smart Fill uses AI to generate personalized suggestions based on '
-            'your conditions and medications.\n\n'
-            'You need a free Gemini API key to use this feature. It takes '
-            'about 30 seconds to set up.',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(ctx, false),
-              child: const Text('Not Now'),
-            ),
-            FilledButton(
-              onPressed: () => Navigator.pop(ctx, true),
-              child: const Text('Set Up AI'),
-            ),
-          ],
-        ),
-      );
-      if (goSetup == true && context.mounted) {
-        context.push(AppRoutes.aiSetup);
-      }
-      return;
-    }
-    final applied = await showSmartFillFlow(
-      context,
-      directiveId: directiveId,
-      formType: formTypeName,
-    );
-    if (applied == true && mounted) {
-      ref.invalidate(directiveByIdProvider(directiveId));
-      setState(() {
-        _stepKey = GlobalKey();
-      });
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-                'Smart Fill suggestions applied. Review your form to confirm.'),
-          ),
-        );
-      }
-    }
   }
 
   Future<void> _goNext(BuildContext context, bool isLastStep) async {
@@ -720,14 +564,12 @@ class _WizardAiRail extends ConsumerStatefulWidget {
   final String stepName;
   final int directiveId;
   final VoidCallback onOpenFull;
-  final VoidCallback onSnapId;
   const _WizardAiRail({
     required this.formType,
     required this.step,
     required this.stepName,
     required this.directiveId,
     required this.onOpenFull,
-    required this.onSnapId,
   });
 
   @override
@@ -884,8 +726,6 @@ class _WizardAiRailState extends ConsumerState<_WizardAiRail> {
               stepName: widget.stepName,
               onAsk: _send,
             ),
-            if (widget.step == WizardStep.aboutYou)
-              _RailSnapId(onTap: widget.onSnapId),
             if (widget.step == WizardStep.whereIWantCare)
               _RailFacilitySearch(
                 controller: _facilityCtrl,
@@ -1085,67 +925,6 @@ class _RailHeadsUp extends ConsumerWidget {
           ],
         );
       },
-    );
-  }
-}
-
-/// Step-1 "snap your ID" affordance — routes into the AI document pipeline,
-/// which fills name / DOB / address from a photo (artboard `WebWizard` step 1).
-class _RailSnapId extends StatelessWidget {
-  final VoidCallback onTap;
-  const _RailSnapId({required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    final p = Theme.of(context).mhadPalette;
-    return Padding(
-      padding: const EdgeInsets.only(top: 10),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: p.primaryTint,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: p.primaryLight),
-          ),
-          child: Row(
-            children: [
-              Icon(Icons.add_a_photo_outlined, size: 18, color: p.primary),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Snap your ID',
-                      style: TextStyle(
-                        fontFamily: 'DM Sans',
-                        fontSize: 12.5,
-                        fontWeight: FontWeight.w700,
-                        color: p.onPrimaryLight,
-                      ),
-                    ),
-                    const SizedBox(height: 1),
-                    Text(
-                      'Fills name, DOB & address. Read, then discarded.',
-                      style: TextStyle(
-                        fontFamily: 'DM Sans',
-                        fontSize: 11,
-                        height: 1.3,
-                        color: p.onPrimaryLight,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Icon(Icons.arrow_forward, size: 14, color: p.primary),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

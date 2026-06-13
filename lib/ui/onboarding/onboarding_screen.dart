@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mhad/domain/model/directive.dart';
+import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/services/onboarding_service.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
@@ -15,10 +18,10 @@ import 'package:url_launcher/url_launcher.dart';
 ///
 ///   * Primary "Get started" — marks the intro seen and continues to Home
 ///     (where they pick a form type).
-///   * Ghost "I already have a directive" — marks it seen and routes
-///     straight to the form-type selector, mirroring the prototype's
-///     intent that returning users can jump to a new draft without
-///     re-reading the intro.
+///   * Ghost "Upload a document to autofill" — marks the intro seen, creates
+///     a fresh Combined directive, and routes to the standalone snap-to-fill
+///     page (`/upload/:id`) so a returning user can autofill from an ID, Rx
+///     label, conditions list, or an old directive before the wizard.
 ///
 /// This is a router gate ([AppRoutes.onboarding]) shown after the disclaimer
 /// and mode gates — *not* an overlay over Home — so nothing renders between
@@ -29,7 +32,7 @@ import 'package:url_launcher/url_launcher.dart';
 /// Time expectation) was removed 2026-06-03 per direction "match the
 /// claude design UI/UX EXACTLY." That content remains discoverable
 /// through the Learn screen.
-class OnboardingScreen extends StatelessWidget {
+class OnboardingScreen extends ConsumerWidget {
   final OnboardingNotifier notifier;
   const OnboardingScreen({required this.notifier, super.key});
 
@@ -39,12 +42,16 @@ class OnboardingScreen extends StatelessWidget {
     context.go(AppRoutes.home);
   }
 
-  Future<void> _alreadyHave(BuildContext context) async {
+  Future<void> _alreadyHave(BuildContext context, WidgetRef ref) async {
     await notifier.complete();
+    // Create a fresh directive to autofill, then open the standalone
+    // snap-to-fill page (mirrors web_landing.dart::_start).
+    final id =
+        await ref.read(directiveRepositoryProvider).createDirective(
+              FormType.combined,
+            );
     if (!context.mounted) return;
-    // TODO(upload): route to an "upload your existing directive (file/photo)"
-    // page once it's built. For now land on the dashboard.
-    context.go(AppRoutes.home);
+    context.go(AppRoutes.uploadRoute(id));
   }
 
   Future<void> _dial988() async {
@@ -55,7 +62,7 @@ class OnboardingScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final p = Theme.of(context).mhadPalette;
     return Scaffold(
       backgroundColor: p.surface,
@@ -230,12 +237,13 @@ class OnboardingScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  // Ghost secondary "I already have a directive" — routes
-                  // to form-type selection per user 2026-06-03 direction.
+                  // Ghost secondary — creates a directive and opens the
+                  // standalone snap-to-fill page to autofill from an existing
+                  // document before the wizard.
                   SizedBox(
                     width: double.infinity,
                     child: TextButton(
-                      onPressed: () => _alreadyHave(context),
+                      onPressed: () => _alreadyHave(context, ref),
                       style: TextButton.styleFrom(
                         foregroundColor: p.text,
                         minimumSize: const Size.fromHeight(
@@ -246,7 +254,7 @@ class OnboardingScreen extends StatelessWidget {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      child: const Text('I already have a directive'),
+                      child: const Text('Upload a document to autofill'),
                     ),
                   ),
                   const SizedBox(height: 18),

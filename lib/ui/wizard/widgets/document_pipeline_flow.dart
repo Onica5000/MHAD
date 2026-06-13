@@ -25,8 +25,16 @@ import 'package:mhad/ui/wizard/widgets/document_import_sheet.dart';
 import 'package:mhad/utils/clipboard_paste.dart';
 import 'package:mhad/utils/platform_utils.dart';
 
-/// Launches the integrated document → validate → smart fill pipeline.
-/// Returns true if data was applied.
+/// How [PipelineScreen] is presented:
+///   * [modal] — pushed over the wizard as a fullscreen dialog; closing pops
+///     back, applying pops with `true`.
+///   * [standalone] — a routed page (`/upload/:id`) reached BEFORE the wizard;
+///     applying or skipping navigates on into the wizard, and "set up AI"
+///     pushes the setup route (never pops the page off the router stack).
+enum PipelineMode { modal, standalone }
+
+/// Launches the integrated document → validate → smart fill pipeline as a
+/// modal over the wizard. Returns true if data was applied.
 Future<bool?> showDocumentPipelineFlow(
   BuildContext context, {
   required int directiveId,
@@ -35,7 +43,7 @@ Future<bool?> showDocumentPipelineFlow(
   return Navigator.of(context).push<bool>(
     MaterialPageRoute(
       fullscreenDialog: true,
-      builder: (_) => _PipelineScreen(
+      builder: (_) => PipelineScreen(
         directiveId: directiveId,
         formType: formType,
       ),
@@ -43,18 +51,108 @@ Future<bool?> showDocumentPipelineFlow(
   );
 }
 
-class _PipelineScreen extends ConsumerStatefulWidget {
+/// The snap-to-fill / upload-to-fill screen. Used BOTH as a wizard modal
+/// ([PipelineMode.modal]) and as the standalone pre-wizard `/upload/:id` page
+/// ([PipelineMode.standalone]).
+class PipelineScreen extends ConsumerStatefulWidget {
   final int directiveId;
   final String formType;
-  const _PipelineScreen({required this.directiveId, required this.formType});
+  final PipelineMode mode;
+  const PipelineScreen({
+    required this.directiveId,
+    required this.formType,
+    this.mode = PipelineMode.modal,
+    super.key,
+  });
 
   @override
-  ConsumerState<_PipelineScreen> createState() => _PipelineScreenState();
+  ConsumerState<PipelineScreen> createState() => _PipelineScreenState();
 }
 
 enum _PipelineStep { pick, extracting, validating, review, generating, results }
 
-class _PipelineScreenState extends ConsumerState<_PipelineScreen> {
+class _PipelineScreenState extends ConsumerState<PipelineScreen> {
+  bool get _standalone => widget.mode == PipelineMode.standalone;
+
+  /// Standalone: leave the /upload page for the wizard. The directive already
+  /// holds whatever fields were applied this session.
+  void _toWizard() {
+    if (!mounted) return;
+    appRouter.go(AppRoutes.wizardRoute(widget.directiveId));
+  }
+
+  /// Skip / close / back. Standalone → into the wizard; modal → pop(false).
+  void _exit() {
+    if (!mounted) return;
+    if (_standalone) {
+      _toWizard();
+    } else {
+      Navigator.pop(context, false);
+    }
+  }
+
+  /// Called once extracted fields are written to the directive. Modal pops
+  /// back to the wizard with `true`; standalone records the file in the
+  /// "In this session" row and returns to the pick step for another pass.
+  void _onApplied(int appliedCount) {
+    if (!mounted) return;
+    if (!_standalone) {
+      Navigator.pop(context, true);
+      return;
+    }
+    final doc = _sourceDocs.isNotEmpty ? _sourceDocs.first : null;
+    setState(() {
+      if (doc != null) {
+        final extra = _sourceDocs.length - 1;
+        _sessionFiles.add(_SessionFile(
+          name: extra > 0 ? '${_docName(doc)} +$extra more' : _docName(doc),
+          kind: _docKind(doc),
+          fieldsAdded: appliedCount,
+        ));
+      }
+      _resetExtraction();
+      _step = _PipelineStep.pick;
+    });
+  }
+
+  /// Discard the current extraction without writing anything. Standalone →
+  /// back to the pick step (session files kept); modal → pop(false).
+  void _discardExtraction() {
+    if (!mounted) return;
+    if (!_standalone) {
+      Navigator.pop(context, false);
+      return;
+    }
+    setState(() {
+      _resetExtraction();
+      _step = _PipelineStep.pick;
+    });
+  }
+
+  void _resetExtraction() {
+    _validated = null;
+    _reviewChecked = {};
+    _reviewEdited = {};
+    _smartResult = null;
+    _smartChecked = {};
+    _smartEdited = {};
+    _piiStripped = [];
+    _sourceDocs = const [];
+    _error = null;
+  }
+
+  String _docName(PickedDocument d) {
+    if (d.path == 'pasted-image') return 'Pasted image';
+    final base = d.path.replaceAll('\\', '/').split('/').last;
+    return base.isNotEmpty ? base : 'Document';
+  }
+
+  String _docKind(PickedDocument d) {
+    if (d.mimeType == 'application/pdf') return 'PDF';
+    if (d.mimeType.startsWith('image/')) return 'Photo';
+    if (d.mimeType.startsWith('text/')) return 'Text';
+    return 'File';
+  }
   _PipelineStep _step = _PipelineStep.pick;
   String _statusMessage = '';
   String? _error;
@@ -65,6 +163,13 @@ class _PipelineScreenState extends ConsumerState<_PipelineScreen> {
   // The documents being processed — retained so the review step can show a
   // source thumbnail of what the AI read.
   List<PickedDocument> _sourceDocs = const [];
+
+  // Standalone only: files brought in across this session, accumulated so the
+  // pick step can show the artboard "In this session · N FILES" row. A file is
+  // recorded once its extracted fields are applied (see _returnToPickWithFile);
+  // cleared when the tab closes (web in-memory). Modal mode pops after a single
+  // apply, so this stays empty there.
+  final List<_SessionFile> _sessionFiles = [];
 
   // Clipboard-paste listener disposer (web only).
   void Function()? _pasteDisposer;
@@ -94,7 +199,10 @@ class _PipelineScreenState extends ConsumerState<_PipelineScreen> {
   // Route to AI setup, closing this snap-to-fill dialog first. Used when
   // extraction is attempted or requested without a Gemini key set.
   void _goAiSetup() {
-    Navigator.of(context).pop();
+    // Modal: close the dialog first. Standalone: the page is a GoRoute, so
+    // popping it would corrupt the router stack — just push setup over it and
+    // the user returns to /upload on back.
+    if (!_standalone) Navigator.of(context).pop();
     appRouter.push(AppRoutes.aiSetup);
   }
 
@@ -703,7 +811,9 @@ class _PipelineScreenState extends ConsumerState<_PipelineScreen> {
       );
     }
 
-    if (mounted) Navigator.pop(context, true);
+    final appliedCount = _reviewChecked.values.where((v) => v).length +
+        _smartChecked.values.where((v) => v).length;
+    _onApplied(appliedCount);
   }
 
   Future<void> _editField(String key) async {
@@ -816,37 +926,126 @@ class _PipelineScreenState extends ConsumerState<_PipelineScreen> {
         }
       },
       child: Scaffold(
-      appBar: AppBar(
-        title: Text(_title),
-        leading: IconButton(
-          icon: const Icon(Icons.close),
-          tooltip: 'Close',
-          onPressed: isProcessing
-              ? null
-              : () => Navigator.pop(context, false),
-        ),
-      ),
-      body: Column(
-        children: [
-          LinearProgressIndicator(
-            value: (_step.index + 1) / _PipelineStep.values.length,
-            backgroundColor: cs.surfaceContainerHighest,
-          ),
-          Semantics(
-            liveRegion: true,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-              child: Text(
-                _title,
-                style: Theme.of(context).textTheme.labelSmall,
+      // Modal (over the wizard): standard Material AppBar. Standalone (the
+      // routed /upload page): no AppBar — the artboard top bar lives in-body
+      // (progress row on pick; back row elsewhere), matching WebSnapFill.
+      appBar: _standalone
+          ? null
+          : AppBar(
+              title: Text(_title),
+              leading: IconButton(
+                icon: const Icon(Icons.close),
+                tooltip: 'Close',
+                onPressed: isProcessing ? null : _exit,
               ),
             ),
-          ),
-          Expanded(child: _buildBody()),
-        ],
+      body: SafeArea(
+        child: Column(
+          children: [
+            if (_standalone)
+              _standaloneTopBar(isProcessing)
+            else ...[
+              LinearProgressIndicator(
+                value: (_step.index + 1) / _PipelineStep.values.length,
+                backgroundColor: cs.surfaceContainerHighest,
+              ),
+              Semantics(
+                liveRegion: true,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                  child: Text(
+                    _title,
+                    style: Theme.of(context).textTheme.labelSmall,
+                  ),
+                ),
+              ),
+            ],
+            Expanded(child: _buildBody()),
+          ],
+        ),
       ),
       bottomNavigationBar: _buildBottom(),
     ),
+    );
+  }
+
+  // Artboard top bar for the standalone /upload page (WebSnapFill jsx L41-51).
+  // Pick: "‹ Wizard" + a thin progress bar + "Step 1 of 11". Review/results: a
+  // back chevron to the previous step. Processing: a plain title (no back).
+  Widget _standaloneTopBar(bool isProcessing) {
+    final p = Theme.of(context).mhadPalette;
+    final mono = const TextStyle(
+      fontFamily: 'JetBrains Mono',
+      fontFamilyFallback: ['Consolas', 'Menlo', 'Courier New', 'monospace'],
+      fontSize: 12,
+    );
+
+    Widget backLink(String label, VoidCallback? onTap) => InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(6),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.chevron_left, size: 18, color: p.textMuted),
+                const SizedBox(width: 2),
+                Text(label,
+                    style: TextStyle(
+                        fontFamily: 'DM Sans',
+                        fontSize: 13,
+                        color: p.textMuted)),
+              ],
+            ),
+          ),
+        );
+
+    if (_step == _PipelineStep.pick) {
+      return Padding(
+        padding: const EdgeInsets.fromLTRB(24, 14, 24, 0),
+        child: Row(
+          children: [
+            backLink('Wizard', _toWizard),
+            const SizedBox(width: 12),
+            Flexible(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 360),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(100),
+                  child: LinearProgressIndicator(
+                    value: 1 / 11,
+                    minHeight: 6,
+                    backgroundColor: p.border,
+                    color: p.primary,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Text('Step 1 of 11', style: mono.copyWith(color: p.textMuted)),
+            const Spacer(),
+          ],
+        ),
+      );
+    }
+
+    // Processing / review / results: a back affordance (disabled mid-process).
+    final (label, onBack) = switch (_step) {
+      _PipelineStep.results => (
+          'Review',
+          isProcessing ? null : () => setState(() => _step = _PipelineStep.review)
+        ),
+      _ => ('Snap to fill', isProcessing ? null : _discardExtraction),
+    };
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(24, 14, 24, 0),
+      child: Row(
+        children: [
+          backLink(label, onBack),
+          const Spacer(),
+        ],
+      ),
     );
   }
 
@@ -921,8 +1120,8 @@ class _PipelineScreenState extends ConsumerState<_PipelineScreen> {
               Text(
                 'Drop a photo or PDF — ID, medication list, prescription label, '
                 'an old directive — and the AI will extract what it can. You '
-                'review every field before it lands in the form. Or close this '
-                'and type it all yourself.',
+                'review every field before it lands in the form. Or skip and '
+                'type it all yourself.',
                 style: TextStyle(
                   fontFamily: 'DM Sans',
                   fontSize: 14,
@@ -953,10 +1152,217 @@ class _PipelineScreenState extends ConsumerState<_PipelineScreen> {
                 const SizedBox(height: 16),
                 _targetsPanel(p),
               ],
+              // "In this session" — files whose fields were applied this
+              // session (standalone accumulation). WebSnapFill jsx L174-251.
+              if (_sessionFiles.isNotEmpty) ...[
+                const SizedBox(height: 22),
+                _sessionFilesRow(p),
+              ],
+              // Skip / Continue footer (standalone only; the modal uses its
+              // AppBar close). WebSnapFill jsx L253-258.
+              if (_standalone) ...[
+                const SizedBox(height: 24),
+                Row(
+                  children: [
+                    TextButton(
+                      onPressed: _toWizard,
+                      child: const Text("Skip — I'll type it all"),
+                    ),
+                    const Spacer(),
+                    FilledButton(
+                      onPressed: _toWizard,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: const [
+                          Text('Continue to step 2'),
+                          SizedBox(width: 6),
+                          Icon(Icons.arrow_forward, size: 16),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ],
           ),
         );
       },
+    );
+  }
+
+  // The "In this session · N FILES · CLEARED ON TAB CLOSE" grid: one card per
+  // applied file + a dashed "Add another" tile. Uses a Wrap so cards reflow at
+  // any width (the artboard's fixed 3-column grid).
+  Widget _sessionFilesRow(MhadPalette p) {
+    final n = _sessionFiles.length;
+    return LayoutBuilder(builder: (context, c) {
+      // Aim for 3 columns on wide, fewer when narrow.
+      final cols = c.maxWidth >= 720 ? 3 : (c.maxWidth >= 460 ? 2 : 1);
+      final cardW = (c.maxWidth - (cols - 1) * 10) / cols;
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const SectionLabel('In this session'),
+              const SizedBox(width: 8),
+              Flexible(
+                child: Text(
+                  '$n FILE${n == 1 ? '' : 'S'} · CLEARED ON TAB CLOSE',
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontFamily: 'JetBrains Mono',
+                    fontFamilyFallback: const [
+                      'Consolas',
+                      'Menlo',
+                      'Courier New',
+                      'monospace',
+                    ],
+                    fontSize: 10,
+                    letterSpacing: 0.4,
+                    color: p.textMuted,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 10,
+            runSpacing: 10,
+            children: [
+              for (final f in _sessionFiles)
+                SizedBox(width: cardW, child: _sessionFileCard(p, f)),
+              SizedBox(width: cardW, child: _addAnotherTile(p)),
+            ],
+          ),
+        ],
+      );
+    });
+  }
+
+  Widget _sessionFileCard(MhadPalette p, _SessionFile f) {
+    final okText = Theme.of(context).brightness == Brightness.dark
+        ? SemanticColors.successTextDark
+        : SemanticColors.successTextLight;
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: p.card,
+        border: Border.all(color: p.border),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 40,
+            height: 48,
+            decoration: BoxDecoration(
+              color: p.surface,
+              border: Border.all(color: p.border),
+              borderRadius: BorderRadius.circular(6),
+            ),
+            alignment: Alignment.center,
+            child: Icon(
+              f.kind == 'PDF'
+                  ? Icons.picture_as_pdf_outlined
+                  : f.kind == 'Photo'
+                      ? Icons.image_outlined
+                      : Icons.description_outlined,
+              size: 18,
+              color: p.textMuted,
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                  decoration: BoxDecoration(
+                    color: p.primaryTint,
+                    borderRadius: BorderRadius.circular(3),
+                  ),
+                  child: Text(
+                    f.kind.toUpperCase(),
+                    style: TextStyle(
+                      fontFamily: 'JetBrains Mono',
+                      fontFamilyFallback: const [
+                        'Consolas',
+                        'Menlo',
+                        'Courier New',
+                        'monospace',
+                      ],
+                      fontSize: 9,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 0.5,
+                      color: p.primary,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  f.name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontFamily: 'DM Sans',
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: p.text,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  '● ${f.fieldsAdded} field${f.fieldsAdded == 1 ? '' : 's'} added',
+                  style: TextStyle(
+                    fontFamily: 'DM Sans',
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                    color: okText,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _addAnotherTile(MhadPalette p) {
+    return InkWell(
+      onTap: _browseFiles,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.all(14),
+        constraints: const BoxConstraints(minHeight: 72),
+        decoration: BoxDecoration(
+          color: p.surface,
+          border: Border.all(color: p.border, width: 1.5, style: BorderStyle.solid),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        alignment: Alignment.center,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.add, size: 16, color: p.textMuted),
+            const SizedBox(width: 8),
+            Text(
+              'Add another',
+              style: TextStyle(
+                fontFamily: 'DM Sans',
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: p.textMuted,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -1404,79 +1810,118 @@ class _PipelineScreenState extends ConsumerState<_PipelineScreen> {
         ? SemanticColors.successTextDark
         : SemanticColors.successTextLight;
 
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(20, 14, 20, 28),
-      children: [
-        // Editorial header — matches prototype `ScrSnapReview`
-        // (mobile-extra.jsx L1978-1984): mono section label, italic
-        // serif headline, muted body.
-        Row(
+    // Editorial header (full width) — mono AI pill, italic serif headline,
+    // muted body. Below it the artboard forks into a 1fr / 1.4fr two-pane on
+    // wide (photo left, fields right); narrow stacks them.
+    final header = <Widget>[
+      Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+            decoration: BoxDecoration(
+              color: p.primaryTint,
+              borderRadius: BorderRadius.circular(100),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.auto_awesome, size: 11, color: p.primary),
+                const SizedBox(width: 5),
+                Text(
+                  'AI READ THIS PHOTO',
+                  style: TextStyle(
+                    fontFamily: 'JetBrains Mono',
+                    fontFamilyFallback: const [
+                      'Consolas',
+                      'Menlo',
+                      'Courier New',
+                      'monospace',
+                    ],
+                    fontSize: 10.5,
+                    letterSpacing: 0.6,
+                    fontWeight: FontWeight.w700,
+                    color: p.primary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+      const SizedBox(height: 12),
+      Text(
+        "Here's what we read.",
+        style: TextStyle(
+          fontFamily: 'Instrument Serif',
+          fontFamilyFallback: const ['Georgia', 'serif'],
+          fontStyle: FontStyle.italic,
+          fontSize: 32,
+          fontWeight: FontWeight.w400,
+          height: 1.05,
+          letterSpacing: -0.4,
+          color: p.text,
+        ),
+      ),
+      const SizedBox(height: 4),
+      Text(
+        'Tap any field to fix it. Uncheck items you do not want. '
+        'Nothing is added to your directive until you confirm.',
+        style: TextStyle(
+          fontFamily: 'DM Sans',
+          fontSize: 13,
+          color: p.textMuted,
+          height: 1.5,
+        ),
+      ),
+    ];
+
+    return LayoutBuilder(
+      builder: (context, c) {
+        final twoPane = c.maxWidth >= 720 && _sourceDocs.isNotEmpty;
+        return ListView(
+          padding: const EdgeInsets.fromLTRB(20, 14, 20, 28),
           children: [
-            Container(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 9, vertical: 4),
-              decoration: BoxDecoration(
-                color: p.primaryTint,
-                borderRadius: BorderRadius.circular(100),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
+            ...header,
+            const SizedBox(height: 18),
+            if (twoPane)
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(Icons.auto_awesome,
-                      size: 11, color: p.primary),
-                  const SizedBox(width: 5),
-                  Text(
-                    'AI READ THIS PHOTO',
-                    style: TextStyle(
-                      fontFamily: 'JetBrains Mono',
-                      fontFamilyFallback: const [
-                        'Consolas',
-                        'Menlo',
-                        'Courier New',
-                        'monospace',
-                      ],
-                      fontSize: 10.5,
-                      letterSpacing: 0.6,
-                      fontWeight: FontWeight.w700,
-                      color: p.primary,
-                    ),
+                  Expanded(flex: 10, child: _sourceThumb(p)),
+                  const SizedBox(width: 18),
+                  Expanded(
+                    flex: 14,
+                    child: _reviewFieldsPane(p, keys, checkedCount, okText),
                   ),
                 ],
-              ),
-            ),
+              )
+            else ...[
+              if (_sourceDocs.isNotEmpty) ...[
+                _sourceThumb(p),
+                const SizedBox(height: 16),
+              ],
+              _reviewFieldsPane(p, keys, checkedCount, okText),
+            ],
           ],
-        ),
-        const SizedBox(height: 12),
-        Text(
-          "Here's what we read.",
-          style: TextStyle(
-            fontFamily: 'Instrument Serif',
-            fontFamilyFallback: const ['Georgia', 'serif'],
-            fontStyle: FontStyle.italic,
-            fontSize: 32,
-            fontWeight: FontWeight.w400,
-            height: 1.05,
-            letterSpacing: -0.4,
-            color: p.text,
-          ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          'Tap any field to fix it. Uncheck items you do not want. '
-          'Nothing is added to your directive until you confirm.',
-          style: TextStyle(
-            fontFamily: 'DM Sans',
-            fontSize: 13,
-            color: p.textMuted,
-            height: 1.5,
-          ),
-        ),
-        if (_sourceDocs.isNotEmpty) ...[
-          const SizedBox(height: 14),
-          _sourceThumb(p),
-        ],
+        );
+      },
+    );
+  }
+
+  // The extracted-fields column of the review screen (right pane on wide):
+  // PII notice → "Add to your directive" label → field rows → privacy lock
+  // line → ready-count → NLM attribution.
+  Widget _reviewFieldsPane(
+    MhadPalette p,
+    List<String> keys,
+    int checkedCount,
+    Color okText,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
         if (_piiStripped.isNotEmpty) ...[
-          const SizedBox(height: 12),
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
@@ -1504,8 +1949,8 @@ class _PipelineScreenState extends ConsumerState<_PipelineScreen> {
               ],
             ),
           ),
+          const SizedBox(height: 16),
         ],
-        const SizedBox(height: 16),
         Text(
           'Add to your directive',
           style: TextStyle(
@@ -1542,8 +1987,7 @@ class _PipelineScreenState extends ConsumerState<_PipelineScreen> {
                       !(_reviewChecked[keys[i]] ?? false)),
                   onEdit: () => _editField(keys[i]),
                 ),
-                if (i < keys.length - 1)
-                  Divider(height: 1, color: p.border),
+                if (i < keys.length - 1) Divider(height: 1, color: p.border),
               ],
             ],
           ),
@@ -1701,11 +2145,25 @@ class _PipelineScreenState extends ConsumerState<_PipelineScreen> {
         ? _reviewChecked.values.where((v) => v).length
         : _smartChecked.values.where((v) => v).length;
 
+    // Artboard WebSnapReview footer: "Discard all" (left) · "Generate more"
+    // (Smart Fill, when conditions/meds were validated) · primary "Add N
+    // fields to directive". Results step keeps Back · Apply All.
+    final canSmartFill = _validated?.hasValidatedConditions == true ||
+        _validated?.hasValidatedMeds == true;
+    final addLabel = checkedCount == 0
+        ? 'Add fields'
+        : 'Add $checkedCount field${checkedCount == 1 ? '' : 's'} to directive';
+
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
         child: Row(
           children: [
+            if (_step == _PipelineStep.review)
+              OutlinedButton(
+                onPressed: _discardExtraction,
+                child: const Text('Discard all'),
+              ),
             if (_step == _PipelineStep.results)
               OutlinedButton(
                 onPressed: () => setState(() => _step = _PipelineStep.review),
@@ -1713,20 +2171,26 @@ class _PipelineScreenState extends ConsumerState<_PipelineScreen> {
               ),
             const Spacer(),
             if (_step == _PipelineStep.review) ...[
-              // Option to skip Smart Fill and just apply extracted data
-              OutlinedButton(
+              if (canSmartFill) ...[
+                TextButton.icon(
+                  onPressed: _runSmartFill,
+                  icon: const Icon(Icons.auto_awesome, size: 16),
+                  label: const Text('Generate more'),
+                ),
+                const SizedBox(width: 8),
+              ],
+              FilledButton(
                 onPressed: checkedCount > 0 ? _applyAll : null,
-                child: const Text('Apply Only'),
-              ),
-              const SizedBox(width: 8),
-              FilledButton.icon(
-                onPressed:
-                    (_validated?.hasValidatedConditions == true ||
-                            _validated?.hasValidatedMeds == true)
-                        ? _runSmartFill
-                        : null,
-                icon: const Icon(Icons.auto_awesome, size: 18),
-                label: const Text('Generate More'),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Flexible(
+                      child: Text(addLabel, overflow: TextOverflow.ellipsis),
+                    ),
+                    const SizedBox(width: 6),
+                    const Icon(Icons.arrow_forward, size: 16),
+                  ],
+                ),
               ),
             ],
             if (_step == _PipelineStep.results)
@@ -1867,4 +2331,18 @@ class _SnapReviewRow extends StatelessWidget {
       ),
     );
   }
+}
+
+/// One file brought into the standalone snap-to-fill page this session,
+/// recorded after its extracted fields are applied. Powers the artboard
+/// "In this session · N FILES" row (WebSnapFill jsx L174-251).
+class _SessionFile {
+  final String name;
+  final String kind; // 'Photo' · 'PDF' · 'Text' · 'File'
+  final int fieldsAdded;
+  const _SessionFile({
+    required this.name,
+    required this.kind,
+    required this.fieldsAdded,
+  });
 }

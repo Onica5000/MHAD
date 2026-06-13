@@ -54,7 +54,8 @@ bool _routeFills(String route) =>
     route == AppRoutes.education ||
     route == AppRoutes.assistant ||
     route.startsWith('/export/') ||
-    route.startsWith('/wizard/');
+    route.startsWith('/wizard/') ||
+    route.startsWith('/upload/');
 
 /// Pre-dashboard gate / welcome screens, shown BEFORE the user reaches the
 /// home dashboard (disclaimer → privacy mode → onboarding intro). The

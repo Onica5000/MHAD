@@ -30,6 +30,8 @@ import 'package:mhad/ui/ulysses/ulysses_clause_screen.dart';
 import 'package:mhad/ui/wizard/sign_screen.dart';
 import 'package:mhad/ui/wizard/wizard_complete_screen.dart';
 import 'package:mhad/ui/wizard/wizard_screen.dart';
+import 'package:mhad/ui/wizard/widgets/document_pipeline_flow.dart';
+import 'package:mhad/domain/model/directive.dart';
 
 abstract class AppRoutes {
   static const home = '/';
@@ -47,6 +49,12 @@ abstract class AppRoutes {
   // celebration. Lands stamp executionDate so the directive flips from
   // draft to complete on arrival.
   static const sign = '/sign/:directiveId';
+  // Standalone snap-to-fill / upload-to-fill page (prototype WebSnapFill).
+  // Reached from onboarding's "Upload a document to autofill" — lets a user
+  // autofill a freshly-created directive BEFORE entering the wizard.
+  static const upload = '/upload/:directiveId';
+
+  static String uploadRoute(int directiveId) => '/upload/$directiveId';
 
   static String wizardCompleteRoute(int directiveId) =>
       '/wizard-complete/$directiveId';
@@ -215,6 +223,19 @@ GoRouter _buildRouter(DisclaimerNotifier disclaimer,
                 int.tryParse(state.pathParameters['directiveId'] ?? '');
             if (directiveId == null) return const HomeScreen();
             return WizardCompleteScreen(directiveId: directiveId);
+          },
+        ),
+        GoRoute(
+          path: AppRoutes.upload,
+          builder: (context, state) {
+            final directiveId =
+                int.tryParse(state.pathParameters['directiveId'] ?? '');
+            if (directiveId == null) return const HomeScreen();
+            return PipelineScreen(
+              directiveId: directiveId,
+              formType: FormType.combined.name,
+              mode: PipelineMode.standalone,
+            );
           },
         ),
         GoRoute(
