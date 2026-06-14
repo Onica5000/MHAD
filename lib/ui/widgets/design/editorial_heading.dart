@@ -22,8 +22,11 @@ class EditorialHeading extends StatelessWidget {
     this.text,
     this.textSpan,
     this.size = 40,
-    this.height = 1.05,
-    this.letterSpacing = -0.8,
+    // Tracking/line-height match the design-system `Editorial` atom
+    // (ds.jsx: lineHeight 1.02, letterSpacing -1). Callers set their own
+    // `size`, but inherit this pull-quote tracking unless they override it.
+    this.height = 1.02,
+    this.letterSpacing = -1,
     this.color,
     this.align = TextAlign.start,
     this.fontStyle = FontStyle.italic,

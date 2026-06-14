@@ -36,13 +36,13 @@ class CrisisTopBar extends StatelessWidget {
               border: Border(bottom: BorderSide(color: border)),
             ),
             padding: EdgeInsets.symmetric(
-              horizontal: 16,
+              horizontal: compact ? 14 : 16,
               vertical: compact ? 8 : 10,
             ),
             child: Row(
               children: [
-                Icon(Icons.phone_outlined, size: 14, color: accent),
-                const SizedBox(width: 8),
+                Icon(Icons.phone_outlined, size: 13, color: accent),
+                const SizedBox(width: 10),
                 Expanded(
                   child: RichText(
                     overflow: TextOverflow.ellipsis,
@@ -63,7 +63,7 @@ class CrisisTopBar extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 10),
                 Text(
                   '24/7',
                   style: TextStyle(

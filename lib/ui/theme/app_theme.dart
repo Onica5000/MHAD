@@ -19,7 +19,7 @@ class DesignTokens {
 
   static List<BoxShadow> cardShadow(Brightness b) => [
         BoxShadow(
-          color: Colors.black.withValues(alpha: b == Brightness.dark ? 0.3 : 0.06),
+          color: Colors.black.withValues(alpha: b == Brightness.dark ? 0.3 : 0.04),
           blurRadius: 3,
           offset: const Offset(0, 1),
         ),
@@ -351,7 +351,7 @@ ThemeData buildMhadTheme(ThemePalette palette, Brightness brightness) {
         borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
         side: BorderSide(color: p.border, width: 1),
       ),
-      shadowColor: Colors.black.withValues(alpha: 0.06),
+      shadowColor: Colors.black.withValues(alpha: 0.04),
       surfaceTintColor: Colors.transparent,
     ),
 
