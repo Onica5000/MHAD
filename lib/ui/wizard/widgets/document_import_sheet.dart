@@ -43,19 +43,27 @@ Future<List<PickedDocument>?> showDocumentPickerSheet(BuildContext context) {
 Future<List<PickedDocument>> pickDocumentFiles() async {
   final result = await FilePicker.platform.pickFiles(
     type: FileType.custom,
-    allowedExtensions: ['pdf', 'txt', 'csv', 'jpg', 'jpeg', 'png', 'webp'],
+    allowedExtensions: [
+      'pdf', 'txt', 'csv', 'jpg', 'jpeg', 'png', 'webp', 'heic', 'heif',
+    ],
     allowMultiple: true,
+    // REQUIRED: load the file bytes into memory. On native (Android/iOS/
+    // desktop) FilePicker returns only a path unless withData is set, and the
+    // extraction pipeline reads `PickedDocument.bytes` — without this every
+    // picked file was silently skipped. On web bytes are already loaded.
+    withData: true,
   );
   if (result == null) return const [];
   final docs = <PickedDocument>[];
   for (final f in result.files) {
-    if (f.path != null || f.bytes != null) {
-      docs.add(PickedDocument(
-        path: f.path ?? f.name,
-        mimeType: _fileMimeType(f.name),
-        bytes: f.bytes,
-      ));
-    }
+    // With withData:true, bytes are loaded on every platform (web preloads
+    // them regardless). Skip anything that still has no bytes.
+    if (f.bytes == null) continue;
+    docs.add(PickedDocument(
+      path: f.path ?? f.name,
+      mimeType: _fileMimeType(f.name),
+      bytes: f.bytes,
+    ));
   }
   return docs;
 }

@@ -18,6 +18,12 @@
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <!-- Mobile viewport: without this, mobile browsers render at a ~980px
+       virtual width (zoomed-out desktop view), which shrinks the bottom
+       nav off-screen and trips the desktop layout breakpoint. device-width
+       makes Flutter see the real phone width so the mobile layout + floating
+       nav render correctly. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="description" content="Pennsylvania Mental Health Advance Directive - Create, manage, and export your mental health treatment preferences under PA Act 194.">
 
   <!--
