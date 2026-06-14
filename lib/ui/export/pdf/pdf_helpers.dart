@@ -275,11 +275,9 @@ List<pw.Widget> experiencedSideEffectsBlocks(String? sideEffectsJson) {
 }
 
 /// Parse a consent value that may be 'yes', 'no', 'agentDecides', or
-/// 'conditional:...' and compare against a target.
-/// For 'conditional:...' values, [isConsentYes] returns true (user consented
-/// with conditions), [isConsentConditional] returns true, [isConsentNo] false.
-bool isConsentYes(String value) =>
-    value == 'yes' || value.startsWith('conditional:');
+/// 'conditional:...'. [isConsentConditional] returns true for 'conditional:...'
+/// values (the user consented with conditions); [isConsentNo] / [isConsentAgent]
+/// match 'no' / 'agentDecides'.
 bool isConsentNo(String value) => value == 'no';
 bool isConsentAgent(String value) => value == 'agentDecides';
 bool isConsentConditional(String value) => value.startsWith('conditional:');
