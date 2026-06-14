@@ -40,7 +40,9 @@ Future<List<PickedDocument>?> showDocumentPickerSheet(BuildContext context) {
 /// Opens the OS file picker and returns the chosen documents (PDF / text /
 /// image, multi-select). Returns an empty list if cancelled. Used by the
 /// full-page Snap-to-fill drop zone (no bottom sheet).
-Future<List<PickedDocument>> pickDocumentFiles() async {
+/// Returns null if the user cancelled the picker, an empty list if files
+/// were selected but none could be read (no bytes), or the readable docs.
+Future<List<PickedDocument>?> pickDocumentFiles() async {
   final result = await FilePicker.platform.pickFiles(
     type: FileType.custom,
     allowedExtensions: [
@@ -53,7 +55,7 @@ Future<List<PickedDocument>> pickDocumentFiles() async {
     // picked file was silently skipped. On web bytes are already loaded.
     withData: true,
   );
-  if (result == null) return const [];
+  if (result == null) return null; // cancelled
   final docs = <PickedDocument>[];
   for (final f in result.files) {
     // With withData:true, bytes are loaded on every platform (web preloads

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/constants.dart';
+import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/ui/router.dart';
@@ -59,6 +60,23 @@ class WebSidebar extends ConsumerWidget {
         label: 'Learn',
         isActive: activeRoute == AppRoutes.education,
         onTap: () => appRouter.go(AppRoutes.education),
+      ),
+      _SidebarItem(
+        icon: Icons.document_scanner_outlined,
+        activeIcon: Icons.document_scanner,
+        label: 'Upload to autofill',
+        isActive: activeRoute.startsWith('/upload/'),
+        // Reuse the most-recent directive (the one you're working on) so the
+        // page autofills it; with none on file (fresh web session), create a
+        // Combined directive first. Either way the upload page is reachable
+        // again after the AI-setup hop drops you in the assistant.
+        onTap: () async {
+          final id = recentId ??
+              await ref
+                  .read(directiveRepositoryProvider)
+                  .createDirective(FormType.combined);
+          appRouter.go(AppRoutes.uploadRoute(id));
+        },
       ),
       _SidebarItem(
         icon: aiReady ? Icons.auto_awesome : Icons.auto_awesome_outlined,

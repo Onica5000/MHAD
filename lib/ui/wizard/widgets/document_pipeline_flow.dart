@@ -975,11 +975,6 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
   // back chevron to the previous step. Processing: a plain title (no back).
   Widget _standaloneTopBar(bool isProcessing) {
     final p = Theme.of(context).mhadPalette;
-    final mono = const TextStyle(
-      fontFamily: 'JetBrains Mono',
-      fontFamilyFallback: ['Consolas', 'Menlo', 'Courier New', 'monospace'],
-      fontSize: 12,
-    );
 
     Widget backLink(String label, VoidCallback? onTap) => InkWell(
           onTap: onTap,
@@ -1007,23 +1002,6 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
         child: Row(
           children: [
             backLink('Wizard', _toWizard),
-            const SizedBox(width: 12),
-            Flexible(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 360),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(100),
-                  child: LinearProgressIndicator(
-                    value: 1 / 11,
-                    minHeight: 6,
-                    backgroundColor: p.border,
-                    color: p.primary,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(width: 12),
-            Text('Step 1 of 11', style: mono.copyWith(color: p.textMuted)),
             const Spacer(),
           ],
         ),
@@ -1076,7 +1054,15 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
   Future<void> _browseFiles() async {
     setState(() => _error = null);
     final docs = await pickDocumentFiles();
-    if (docs.isNotEmpty && mounted) _startPipeline(docs);
+    if (!mounted || docs == null) return; // null = cancelled, stay quiet
+    if (docs.isEmpty) {
+      // Files were chosen but none could be read — never fail silently.
+      setState(() => _error =
+          'We couldn\'t read that file. Please use a PDF, JPG, PNG, WEBP, '
+          'HEIC, or plain-text file under 10 MB.');
+      return;
+    }
+    _startPipeline(docs);
   }
 
   Future<void> _useWebcam() async {
