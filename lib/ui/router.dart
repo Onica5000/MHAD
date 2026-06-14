@@ -6,7 +6,6 @@ import 'package:mhad/services/onboarding_service.dart';
 import 'package:mhad/services/privacy_mode_service.dart';
 import 'package:mhad/ui/ai_check/ai_consistency_screen.dart';
 import 'package:mhad/ui/assistant/assistant_screen.dart';
-import 'package:mhad/ui/clinician/clinician_view_screen.dart';
 import 'package:mhad/ui/crisis_plan/crisis_plan_screen.dart';
 import 'package:mhad/ui/side_effects/side_effects_screen.dart';
 import 'package:mhad/ui/disclaimer/disclaimer_screen.dart';
@@ -22,9 +21,7 @@ import 'package:mhad/ui/settings/ai_setup_screen.dart';
 import 'package:mhad/ui/settings/settings_screen.dart';
 import 'package:mhad/ui/settings/privacy_policy_screen.dart';
 import 'package:mhad/ui/share/share_sheet_screen.dart';
-import 'package:mhad/ui/agent_accept/agent_accept_screen.dart';
 import 'package:mhad/ui/permissions/permissions_overview_screen.dart';
-import 'package:mhad/ui/verify/wallet_verify_screen.dart';
 import 'package:mhad/ui/mode_selection/mode_selection_screen.dart';
 import 'package:mhad/ui/onboarding/onboarding_screen.dart';
 import 'package:mhad/ui/ulysses/ulysses_clause_screen.dart';
@@ -71,7 +68,6 @@ abstract class AppRoutes {
   static const accessibility = '/accessibility';
   static const facilitator = '/facilitator';
   static const legalToggle = '/legal-toggle/:directiveId';
-  static const clinicianView = '/clinician/:directiveId';
   static const crisisPlan = '/crisis-plan/:directiveId';
   static const ulysses = '/ulysses/:directiveId';
   static const sideEffects = '/side-effects/:directiveId';
@@ -79,21 +75,11 @@ abstract class AppRoutes {
   static const aiCheck = '/ai-check/:directiveId';
   static const pastDirective = '/past/:directiveId';
   static const shareSheet = '/share/:directiveId';
-  // Batch 4 — wallet-QR verifier preview (what an EMS/clinician sees on
-  // scan). The screen is read-only and reachable from the directive card
-  // overflow menu so the principal can rehearse the receiver experience.
-  static const walletVerify = '/verify/:directiveId';
-  // Batch 5 — manual agent-acceptance log (m-agentaccept repurposed per
-  // user decision: principal records that each agent verbally accepted
-  // in person; no online flow).
-  static const agentAccept = '/agent-accept/:directiveId';
   // Batch 6 — in-app privacy & permissions overview.
   static const permissions = '/permissions';
 
   static String legalToggleRoute(int directiveId) =>
       '/legal-toggle/$directiveId';
-  static String clinicianViewRoute(int directiveId) =>
-      '/clinician/$directiveId';
   static String crisisPlanRoute(int directiveId) =>
       '/crisis-plan/$directiveId';
   static String ulyssesRoute(int directiveId) => '/ulysses/$directiveId';
@@ -103,9 +89,6 @@ abstract class AppRoutes {
   static String aiCheckRoute(int directiveId) => '/ai-check/$directiveId';
   static String pastDirectiveRoute(int directiveId) => '/past/$directiveId';
   static String shareSheetRoute(int directiveId) => '/share/$directiveId';
-  static String walletVerifyRoute(int directiveId) => '/verify/$directiveId';
-  static String agentAcceptRoute(int directiveId) =>
-      '/agent-accept/$directiveId';
 }
 
 /// Initializes the global [appRouter] with the loaded service notifiers.
@@ -283,14 +266,6 @@ GoRouter _buildRouter(DisclaimerNotifier disclaimer,
           },
         ),
         GoRoute(
-          path: AppRoutes.clinicianView,
-          builder: (_, state) {
-            final id = int.tryParse(state.pathParameters['directiveId'] ?? '');
-            if (id == null) return const HomeScreen();
-            return ClinicianViewScreen(directiveId: id);
-          },
-        ),
-        GoRoute(
           path: AppRoutes.crisisPlan,
           builder: (_, state) {
             final id = int.tryParse(state.pathParameters['directiveId'] ?? '');
@@ -344,22 +319,6 @@ GoRouter _buildRouter(DisclaimerNotifier disclaimer,
             final id = int.tryParse(state.pathParameters['directiveId'] ?? '');
             if (id == null) return const HomeScreen();
             return ShareSheetScreen(directiveId: id);
-          },
-        ),
-        GoRoute(
-          path: AppRoutes.walletVerify,
-          builder: (_, state) {
-            final id = int.tryParse(state.pathParameters['directiveId'] ?? '');
-            if (id == null) return const HomeScreen();
-            return WalletVerifyScreen(directiveId: id);
-          },
-        ),
-        GoRoute(
-          path: AppRoutes.agentAccept,
-          builder: (_, state) {
-            final id = int.tryParse(state.pathParameters['directiveId'] ?? '');
-            if (id == null) return const HomeScreen();
-            return AgentAcceptScreen(directiveId: id);
           },
         ),
         GoRoute(

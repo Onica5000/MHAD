@@ -612,6 +612,9 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
     // ── Apply extracted + validated data ─────────────────────────────
     final existingMeds = await repo.watchMedications(id).first;
     int medOrder = existingMeds.length;
+    // Count only what's actually written so the "N fields added" message is
+    // honest (skips duplicates and already-set fields).
+    var applied = 0;
 
     // Dedup: compare full name (including dosage/form) AND entry type.
     // "Sertraline 50 MG" and "Sertraline 100 MG" are different entries.
@@ -637,6 +640,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
             reason: Value(med.reason),
             sortOrder: Value(medOrder++),
           ));
+          applied++;
         }
       } else if (key.startsWith('med_avoid_')) {
         final med = _validated!.avoidMeds
@@ -649,6 +653,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
             reason: Value(med.reason),
             sortOrder: Value(medOrder++),
           ));
+          applied++;
         }
       } else if (key == 'facility_prefer') {
         await repo.upsertPreferences(DirectivePrefsCompanion(
@@ -656,12 +661,14 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
           treatmentFacilityPref: Value(TreatmentFacilityPreference.prefer.name),
           preferredFacilityName: Value(_reviewEdited[key] ?? ''),
         ));
+        applied++;
       } else if (key == 'facility_avoid') {
         await repo.upsertPreferences(DirectivePrefsCompanion(
           directiveId: Value(id),
           treatmentFacilityPref: Value(TreatmentFacilityPreference.avoid.name),
           avoidFacilityName: Value(_reviewEdited[key] ?? ''),
         ));
+        applied++;
       }
     }
 
@@ -679,6 +686,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
           'health treatment decisions as determined by qualified professionals. '
           'Relevant conditions: ${condNames.join(", ")}.',
         );
+        applied++;
       }
     }
 
@@ -714,6 +722,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
         final d = await repo.getDirectiveById(id);
         if (d != null && d.effectiveCondition.isEmpty) {
           await repo.updateEffectiveCondition(id, ec);
+          applied++;
         }
       }
 
@@ -787,9 +796,10 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
       );
     }
 
-    final appliedCount = _reviewChecked.values.where((v) => v).length +
-        _smartChecked.values.where((v) => v).length;
-    _onApplied(appliedCount);
+    // Each additional-instruction field actually written counts once (review
+    // pass-throughs + smart-fill both land in instrMap).
+    applied += instrMap.length;
+    _onApplied(applied);
   }
 
   Future<void> _editField(String key) async {
