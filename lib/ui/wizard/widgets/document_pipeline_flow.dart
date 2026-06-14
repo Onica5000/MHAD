@@ -514,12 +514,11 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
           c.isValidated ? ' [${c.code}]' : ' [no ICD match]';
       _reviewEdited[key] = '${c.displayName}$badge';
     }
-    for (final c in v.healthHistoryConditions) {
-      final key = 'hh_${c.originalText}';
-      _reviewChecked[key] = true;
-      final badge =
-          c.isValidated ? ' [${c.code}]' : ' [no ICD match]';
-      _reviewEdited[key] = '${c.displayName}$badge';
+    // Health history is verbatim prose (one reviewable note), not split into
+    // ICD-matched fragments — preserves everything the document said.
+    if (v.healthHistory != null) {
+      _reviewChecked['hh_note'] = true;
+      _reviewEdited['hh_note'] = v.healthHistory!;
     }
     // Pass-through text fields
     if (v.preferredFacility != null) {
@@ -692,14 +691,8 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
       }
     }
 
-    // Health history from validated conditions
-    final hhNames = _validated!.healthHistoryConditions
-        .where((c) => _reviewChecked['hh_${c.originalText}'] == true)
-        .map((c) => c.displayName)
-        .toList();
-    if (hhNames.isNotEmpty) {
-      instrMap['healthHistory'] = hhNames.join('; ');
-    }
+    // Health history — verbatim prose the user reviewed (single note).
+    addInstr('hh_note', 'healthHistory');
 
     addInstr('dietary', 'dietary');
     addInstr('religious', 'religious');
@@ -1107,31 +1100,50 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                 _errorCard(p),
                 const SizedBox(height: 16),
               ],
-              if (wide)
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(flex: 3, child: _dropZone(p)),
-                    const SizedBox(width: 16),
-                    Expanded(flex: 2, child: _targetsPanel(p)),
-                  ],
-                )
-              // Narrow + camera (phone): the artboard mobile chooser —
-              // "Take a photo" / "Pick a file" cards + a vertical targets
-              // list (WebSnapFillMobile jsx L505-586). Narrow desktop window
-              // (no camera) keeps the drag-and-drop zone.
-              else if (deviceHasCamera) ...[
-                _mobileChooser(p),
-                const SizedBox(height: 18),
-                _mobileTargets(p),
-                const SizedBox(height: 14),
-                _privacyLockLine(p),
-              ]
-              else ...[
-                _dropZone(p),
-                const SizedBox(height: 16),
-                _targetsPanel(p),
-              ],
+              // Document-gathering affordances. Autofill REQUIRES the AI to
+              // read documents, so every gather action here is DISABLED (and
+              // dimmed) until a Gemini key is set up — the "Set up AI" banner
+              // above is then the only thing to act on. The Skip/Continue
+              // footer stays enabled so the user can always leave and type by
+              // hand.
+              Opacity(
+                opacity: hasKey ? 1.0 : 0.45,
+                child: IgnorePointer(
+                  ignoring: !hasKey,
+                  child: wide
+                      ? Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(flex: 3, child: _dropZone(p)),
+                            const SizedBox(width: 16),
+                            Expanded(flex: 2, child: _targetsPanel(p)),
+                          ],
+                        )
+                      // Narrow + camera (phone): the artboard mobile chooser
+                      // ("Take a photo" / "Pick a file" cards + a vertical
+                      // targets list, WebSnapFillMobile jsx L505-586). Narrow
+                      // desktop (no camera) keeps the drag-and-drop zone.
+                      : deviceHasCamera
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                _mobileChooser(p),
+                                const SizedBox(height: 18),
+                                _mobileTargets(p),
+                                const SizedBox(height: 14),
+                                _privacyLockLine(p),
+                              ],
+                            )
+                          : Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                _dropZone(p),
+                                const SizedBox(height: 16),
+                                _targetsPanel(p),
+                              ],
+                            ),
+                ),
+              ),
               // "In this session" — files whose fields were applied this
               // session (standalone accumulation). WebSnapFill jsx L174-251.
               if (_sessionFiles.isNotEmpty) ...[

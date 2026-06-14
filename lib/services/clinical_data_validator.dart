@@ -13,10 +13,14 @@ class ClinicalDataValidator {
       List<ExtractedMedication> rawMeds) async {
     final results = <ValidatedMedication>[];
     for (final med in rawMeds) {
-      final matches = await ClinicalDataService.searchMedications(
-        med.name,
-        count: 3,
-      );
+      // If the NIH lookup is unreachable (offline / outage), keep the med as
+      // an unvalidated free-text item rather than aborting the whole pipeline.
+      List<String> matches;
+      try {
+        matches = await ClinicalDataService.searchMedications(med.name, count: 3);
+      } catch (_) {
+        matches = const [];
+      }
       // Pick the first match — it's the best fuzzy match from RxNorm
       final bestMatch = matches.isNotEmpty ? matches.first : null;
       results.add(ValidatedMedication(
@@ -46,10 +50,14 @@ class ClinicalDataValidator {
     final seenCodes = <String>{};
 
     for (final term in terms) {
-      final matches = await ClinicalDataService.searchConditions(
-        term,
-        count: 3,
-      );
+      // Degrade gracefully on a network/API failure — keep the term as an
+      // unvalidated free-text condition instead of losing the extraction.
+      List<IcdCondition> matches;
+      try {
+        matches = await ClinicalDataService.searchConditions(term, count: 3);
+      } catch (_) {
+        matches = const [];
+      }
       final bestMatch = matches.isNotEmpty ? matches.first : null;
       // Avoid duplicates if multiple terms match the same code
       if (bestMatch != null && seenCodes.contains(bestMatch.code)) continue;
@@ -72,14 +80,17 @@ class ClinicalDataValidator {
       validateMedications(raw.medicationsPreferred),
       validateMedications(raw.medicationsToAvoid),
       validateConditions(raw.effectiveCondition),
-      validateConditions(raw.healthHistory),
     ]);
 
     return ValidatedExtractionResult(
       preferredMeds: futures[0] as List<ValidatedMedication>,
       avoidMeds: futures[1] as List<ValidatedMedication>,
       conditions: futures[2] as List<ValidatedCondition>,
-      healthHistoryConditions: futures[3] as List<ValidatedCondition>,
+      // Health history is free-form narrative (and, per the extractor, where
+      // current-medication mentions land) — keep it as verbatim prose for the
+      // user to review. Do NOT run it through the condition/ICD splitter,
+      // which fragments sentences and drops anything it can't match.
+      healthHistory: raw.healthHistory,
       preferredFacility: raw.preferredFacility,
       avoidFacility: raw.avoidFacility,
       dietary: raw.dietary,
@@ -132,8 +143,8 @@ class ValidatedExtractionResult {
   final List<ValidatedMedication> preferredMeds;
   final List<ValidatedMedication> avoidMeds;
   final List<ValidatedCondition> conditions;
-  final List<ValidatedCondition> healthHistoryConditions;
   // Pass-through fields (no validation needed)
+  final String? healthHistory;
   final String? preferredFacility;
   final String? avoidFacility;
   final String? dietary;
@@ -146,7 +157,7 @@ class ValidatedExtractionResult {
     this.preferredMeds = const [],
     this.avoidMeds = const [],
     this.conditions = const [],
-    this.healthHistoryConditions = const [],
+    this.healthHistory,
     this.preferredFacility,
     this.avoidFacility,
     this.dietary,
@@ -156,21 +167,15 @@ class ValidatedExtractionResult {
     this.other,
   });
 
-  bool get hasValidatedConditions =>
-      conditions.any((c) => c.isValidated) ||
-      healthHistoryConditions.any((c) => c.isValidated);
+  bool get hasValidatedConditions => conditions.any((c) => c.isValidated);
 
   bool get hasValidatedMeds =>
       preferredMeds.any((m) => m.isValidated) ||
       avoidMeds.any((m) => m.isValidated);
 
   /// Convert validated conditions to IcdCondition list for Smart Fill input.
-  List<IcdCondition> get icdConditions => [
-        ...conditions.where((c) => c.isValidated).map((c) => c.icdMatch!),
-        ...healthHistoryConditions
-            .where((c) => c.isValidated)
-            .map((c) => c.icdMatch!),
-      ];
+  List<IcdCondition> get icdConditions =>
+      conditions.where((c) => c.isValidated).map((c) => c.icdMatch!).toList();
 
   /// Validated preferred medication names for Smart Fill input.
   List<String> get validatedPreferredMedNames =>
