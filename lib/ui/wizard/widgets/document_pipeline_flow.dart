@@ -199,11 +199,16 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
   // Route to AI setup, closing this snap-to-fill dialog first. Used when
   // extraction is attempted or requested without a Gemini key set.
   void _goAiSetup() {
-    // Modal: close the dialog first. Standalone: the page is a GoRoute, so
-    // popping it would corrupt the router stack — just push setup over it and
-    // the user returns to /upload on back.
-    if (!_standalone) Navigator.of(context).pop();
-    appRouter.push(AppRoutes.aiSetup);
+    // Modal: close the dialog first, then plain setup (back returns to the
+    // wizard). Standalone: pass this /upload route as the return target so
+    // saving the key lands the user back here, not in the assistant chat.
+    if (!_standalone) {
+      Navigator.of(context).pop();
+      appRouter.push(AppRoutes.aiSetup);
+      return;
+    }
+    final ret = Uri.encodeComponent(AppRoutes.uploadRoute(widget.directiveId));
+    appRouter.push('${AppRoutes.aiSetup}?return=$ret');
   }
 
   Future<void> _promptAiSetup() async {

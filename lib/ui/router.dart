@@ -249,7 +249,8 @@ GoRouter _buildRouter(DisclaimerNotifier disclaimer,
         ),
         GoRoute(
           path: AppRoutes.aiSetup,
-          builder: (_, _) => const AiSetupScreen(),
+          builder: (_, state) =>
+              AiSetupScreen(returnRoute: state.uri.queryParameters['return']),
         ),
         GoRoute(
           path: AppRoutes.privacyPolicy,

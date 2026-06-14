@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/utils/platform_utils.dart';
 import 'package:mhad/ui/widgets/design/bottom_nav.dart';
@@ -15,7 +16,12 @@ import 'package:url_launcher/url_launcher.dart';
 /// In **public mode** (or web), the key is held in memory only and is
 /// automatically discarded when the app closes or the session ends.
 class AiSetupScreen extends ConsumerStatefulWidget {
-  const AiSetupScreen({super.key});
+  /// Where to go after the key is saved. When set (e.g. arriving from the
+  /// snap-to-fill `/upload` page), saving navigates here instead of just
+  /// popping — so the user lands back where they started rather than in the
+  /// assistant chat.
+  final String? returnRoute;
+  const AiSetupScreen({this.returnRoute, super.key});
 
   @override
   ConsumerState<AiSetupScreen> createState() => _AiSetupScreenState();
@@ -74,7 +80,13 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
               : 'API key saved'),
         ),
       );
-      Navigator.pop(context);
+      final ret = widget.returnRoute;
+      if (ret != null && ret.isNotEmpty) {
+        // Came from a specific page (e.g. /upload) — go back there.
+        context.go(ret);
+      } else {
+        Navigator.pop(context);
+      }
     }
   }
 
