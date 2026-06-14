@@ -715,8 +715,19 @@ List<_SectionData> _buildSections(MhadPalette p) {
     ),
     _SectionData(
       number: '03',
-      title: 'No warranty',
+      title: 'Use at your own risk',
       body: [
+        _Para(spans: const [
+          TextSpan(
+              text:
+                  'In plain terms: this app helps you put your own wishes into '
+                  'a directive, and you use it at your own risk. Please review '
+                  'the finished document for accuracy — mistakes can happen, '
+                  'and details you entered may be out of date or incomplete. '
+                  'If you are ever unsure whether something is legally right '
+                  'for your situation, feel free to talk with an attorney. '
+                  'The formal version:'),
+        ], palette: p),
         _Para(spans: const [
           TextSpan(text: 'This app is provided '),
           TextSpan(
@@ -725,7 +736,7 @@ List<_SectionData> _buildSections(MhadPalette p) {
           ),
           TextSpan(
               text:
-                  ' without warranty of any kind. The developer assumes no liability for damages arising from use of the app or any document created with it, and is not responsible for ensuring the legal validity of any directive.'),
+                  ', without warranties of any kind, and you use it at your own risk. To the fullest extent permitted by law, the developer is not liable for any damages arising from use of the app or any document created with it. You are responsible for reviewing your directive for accuracy and completeness; for legal questions specific to your situation, consult a licensed Pennsylvania attorney.'),
         ], palette: p),
       ],
     ),

@@ -17,7 +17,7 @@ List<pw.Page> buildSupplementaryPages() {
           pw.Text(
             'The following information summarizes key statutory provisions not '
             'included in the standard PA MHAD booklet. This is for informational '
-            'purposes only and does not constitute legal advice.',
+            'purposes only and does not constitute legal or medical advice.',
             style: bodyStyle(fontSize: 8),
           ),
           pw.SizedBox(height: 8),

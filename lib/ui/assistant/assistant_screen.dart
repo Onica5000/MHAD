@@ -298,8 +298,9 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                   : SemanticColors.warningTextLight;
               return Semantics(
                 label:
-                    'Disclaimer: Not legal advice. For legal questions contact '
-                    'PA Protection and Advocacy: $paProtectionAdvocacyPhone',
+                    'Disclaimer: Not legal or medical advice. For legal '
+                    'questions contact PA Protection and Advocacy: '
+                    '$paProtectionAdvocacyPhone',
                 container: true,
                 child: Container(
                   decoration: BoxDecoration(
@@ -317,8 +318,9 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
-                          'Not legal advice. For legal questions contact PA '
-                          'Protection & Advocacy: $paProtectionAdvocacyPhone',
+                          'Not legal or medical advice. For legal questions '
+                          'contact PA Protection & Advocacy: '
+                          '$paProtectionAdvocacyPhone',
                           style: TextStyle(
                             fontFamily: 'DM Sans',
                             fontSize: 11,
@@ -578,7 +580,7 @@ class _MessageBubble extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(top: 2),
                       child: Text(
-                        'AI-generated \u00b7 Not legal, medical, or therapeutic advice',
+                        aiNotAdvice,
                         style: TextStyle(
                           fontSize: 10,
                           fontStyle: FontStyle.italic,

@@ -740,7 +740,7 @@ class _WizardAiRailState extends ConsumerState<_WizardAiRail> {
             ),
             const SizedBox(height: 6),
             Text(
-              'Not legal advice.',
+              'Not legal or medical advice.',
               style: TextStyle(
                 fontFamily: 'DM Sans',
                 fontSize: 10.5,

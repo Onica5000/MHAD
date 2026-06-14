@@ -1,6 +1,11 @@
 /// PA Protection & Advocacy toll-free phone number.
 const paProtectionAdvocacyPhone = '1-800-692-7443';
 
+/// Canonical short caveat shown wherever AI generates content (chat replies,
+/// field suggestions). Keep this exact wording so the app's voice stays
+/// consistent — see the legal-wording canon.
+const aiNotAdvice = 'AI-generated — not legal or medical advice.';
+
 /// 988 Suicide & Crisis Lifeline — call or text.
 const crisis988Phone = '988';
 

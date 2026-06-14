@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/ai/pii_stripper.dart';
+import 'package:mhad/constants.dart';
 import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/services/gemini_rate_tracker.dart';
 import 'package:mhad/ui/router.dart';
@@ -179,8 +180,7 @@ Return only the improved text — no explanation, no quotes, no preamble.''';
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'AI suggestions are not legal or medical advice. '
-                  'Review carefully.',
+                  '$aiNotAdvice Review carefully.',
                   style: Theme.of(ctx).textTheme.bodySmall?.copyWith(
                       color: cs.onSurfaceVariant,
                       fontStyle: FontStyle.italic),
