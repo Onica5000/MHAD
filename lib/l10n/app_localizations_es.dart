@@ -157,14 +157,6 @@ class AppLocalizationsEs extends AppLocalizations {
       'Su progreso en este paso se guardará. Puede regresar para continuar más tarde (solo en Modo Privado).';
 
   @override
-  String get legalDisclaimer =>
-      'Esta aplicación no proporciona asesoramiento legal. La información es solo para fines educativos y no sustituye el consejo de un abogado con licencia. Consulte a un profesional legal antes de ejecutar cualquier documento legal.';
-
-  @override
-  String get aiDisclaimer =>
-      'El asistente de IA proporciona información general únicamente. No es un sustituto de asesoramiento legal, médico o profesional.';
-
-  @override
   String get previewPdf => 'Vista Previa del PDF';
 
   @override
