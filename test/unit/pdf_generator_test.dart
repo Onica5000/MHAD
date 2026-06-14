@@ -73,6 +73,7 @@ DirectivePref _makePrefs() => const DirectivePref(
       // Phase 4 — schema v10 additions.
       crisisPlanJson: '',
       selfBindingEnabled: false,
+      sideEffectsJson: '',
     );
 
 AdditionalInstructionsTableData _makeAdditional() =>

@@ -86,6 +86,7 @@ void main() {
       roommateGenderMatch: 'women',
       crisisPlanJson: '',
       selfBindingEnabled: false,
+      sideEffectsJson: '',
     );
 
     const additional = AdditionalInstructionsTableData(

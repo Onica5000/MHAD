@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:mhad/ai/ai_assistant.dart';
 import 'package:mhad/ai/ai_clinical_policy.dart';
 import 'package:mhad/ai/pii_stripper.dart';
+import 'package:mhad/ai/side_effect_item.dart';
 import 'package:mhad/data/educational_content.dart';
 import 'package:mhad/services/certificate_pinning_service.dart';
 
@@ -192,6 +193,80 @@ class GeminiApiAssistant implements AiAssistant {
     } catch (e) {
       debugPrint('generateStepSuggestions error: $e');
       return null;
+    }
+  }
+
+  /// Lists common, well-documented side effects of the user's CURRENT
+  /// medications for the "Are you experiencing these?" checklist. Informational
+  /// only — follows the clinical policy (never recommends/changes meds, never
+  /// says how to treat, flags genuinely serious effects to raise with a doctor,
+  /// never fabricates a side effect). Returns [] on any failure.
+  Future<List<SideEffectItem>> generateSideEffects(List<String> meds) async {
+    final cleaned =
+        meds.map((m) => m.trim()).where((m) => m.isNotEmpty).toSet().toList();
+    if (cleaned.isEmpty) return const [];
+
+    final model = GenerativeModel(
+      model: _model,
+      apiKey: apiKey,
+      httpClient: _httpClient,
+      generationConfig: GenerationConfig(responseMimeType: 'application/json'),
+    );
+
+    final prompt = StringBuffer()
+      ..writeln(
+          'A user is documenting a PA Mental Health Advance Directive. For '
+          'EACH medication they are CURRENTLY taking (listed below), list its '
+          'most common, well-documented side effects so the user can check '
+          'which they actually experience. Return ONLY a JSON object:')
+      ..writeln('{"items": [{"med": "<the medication>", "effect": "<one common '
+          'side effect, plain language>", "adl": "<if it can affect a daily '
+          'activity such as driving, working, sleeping, or caring for others, '
+          'name it briefly; otherwise empty>", "serious": <true ONLY if this '
+          'effect can be dangerous and should be raised with a doctor '
+          'promptly>}]}')
+      ..writeln()
+      ..writeln('Rules:')
+      ..writeln('- Only list side effects that are well-established for that '
+          'specific medication. If you are not sure, OMIT it — NEVER invent or '
+          'guess a side effect.')
+      ..writeln('- One row per effect; short plain-language phrase. At most ~6 '
+          'effects per medication, most common first.')
+      ..writeln('- Do NOT recommend, change, rank, or comment on the '
+          'medications themselves, and do NOT say how to treat any effect.')
+      ..writeln('- "serious": reserve for genuinely dangerous effects (e.g., '
+          'signs of serotonin syndrome, suicidal thoughts, severe allergic '
+          'reaction). When in doubt, set false.')
+      ..writeln()
+      ..writeln(aiClinicalPolicy)
+      ..writeln()
+      ..writeln('Current medications:');
+    for (final m in cleaned) {
+      prompt.writeln('  • $m');
+    }
+
+    try {
+      final response = await model
+          .generateContent([Content.text(sanitizeForApi(prompt.toString()))])
+          .timeout(const Duration(seconds: 30));
+      var text = response.text?.trim();
+      if (text == null || text.isEmpty) return const [];
+      if (text.startsWith('```')) {
+        text = text.replaceFirst(RegExp(r'^```(?:json)?'), '').trim();
+        if (text.endsWith('```')) {
+          text = text.substring(0, text.length - 3).trim();
+        }
+      }
+      final data = jsonDecode(text) as Map<String, dynamic>;
+      return ((data['items'] as List?) ?? const [])
+          .whereType<Map<String, dynamic>>()
+          .map(SideEffectItem.fromJson)
+          .where((i) => i.med.isNotEmpty && i.effect.isNotEmpty)
+          .take(60)
+          .toList();
+    } catch (e) {
+      debugPrint('generateSideEffects error: $e');
+      return const [];
     }
   }
 

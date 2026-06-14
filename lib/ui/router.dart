@@ -8,6 +8,7 @@ import 'package:mhad/ui/ai_check/ai_consistency_screen.dart';
 import 'package:mhad/ui/assistant/assistant_screen.dart';
 import 'package:mhad/ui/clinician/clinician_view_screen.dart';
 import 'package:mhad/ui/crisis_plan/crisis_plan_screen.dart';
+import 'package:mhad/ui/side_effects/side_effects_screen.dart';
 import 'package:mhad/ui/disclaimer/disclaimer_screen.dart';
 import 'package:mhad/ui/education/education_screen.dart';
 import 'package:mhad/ui/export/export_screen.dart';
@@ -73,6 +74,7 @@ abstract class AppRoutes {
   static const clinicianView = '/clinician/:directiveId';
   static const crisisPlan = '/crisis-plan/:directiveId';
   static const ulysses = '/ulysses/:directiveId';
+  static const sideEffects = '/side-effects/:directiveId';
   static const revocation = '/revoke/:directiveId';
   static const aiCheck = '/ai-check/:directiveId';
   static const pastDirective = '/past/:directiveId';
@@ -95,6 +97,8 @@ abstract class AppRoutes {
   static String crisisPlanRoute(int directiveId) =>
       '/crisis-plan/$directiveId';
   static String ulyssesRoute(int directiveId) => '/ulysses/$directiveId';
+  static String sideEffectsRoute(int directiveId) =>
+      '/side-effects/$directiveId';
   static String revocationRoute(int directiveId) => '/revoke/$directiveId';
   static String aiCheckRoute(int directiveId) => '/ai-check/$directiveId';
   static String pastDirectiveRoute(int directiveId) => '/past/$directiveId';
@@ -292,6 +296,14 @@ GoRouter _buildRouter(DisclaimerNotifier disclaimer,
             final id = int.tryParse(state.pathParameters['directiveId'] ?? '');
             if (id == null) return const HomeScreen();
             return CrisisPlanScreen(directiveId: id);
+          },
+        ),
+        GoRoute(
+          path: AppRoutes.sideEffects,
+          builder: (_, state) {
+            final id = int.tryParse(state.pathParameters['directiveId'] ?? '');
+            if (id == null) return const HomeScreen();
+            return SideEffectsScreen(directiveId: id);
           },
         ),
         GoRoute(

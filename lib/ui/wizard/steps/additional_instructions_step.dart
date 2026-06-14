@@ -551,6 +551,17 @@ class _AdditionalInstructionsStepState
             onTap: () =>
                 context.push(AppRoutes.ulyssesRoute(widget.directiveId)),
           ),
+          const SizedBox(height: 8),
+          _addOnCard(
+            icon: Icons.healing_outlined,
+            title: 'Side effects you may be experiencing',
+            subtitle:
+                'For the medications you take now, check common side effects — '
+                'especially any that affect your daily activities — so your '
+                'care team knows. Needs AI set up. Not medical advice.',
+            onTap: () =>
+                context.push(AppRoutes.sideEffectsRoute(widget.directiveId)),
+          ),
         ],
       ),
     );

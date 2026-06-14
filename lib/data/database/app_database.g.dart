@@ -2737,6 +2737,18 @@ class $DirectivePrefsTable extends DirectivePrefs
     ),
     defaultValue: const Constant(false),
   );
+  static const VerificationMeta _sideEffectsJsonMeta = const VerificationMeta(
+    'sideEffectsJson',
+  );
+  @override
+  late final GeneratedColumn<String> sideEffectsJson = GeneratedColumn<String>(
+    'side_effects_json',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -2756,6 +2768,7 @@ class $DirectivePrefsTable extends DirectivePrefs
     roommateGenderMatch,
     crisisPlanJson,
     selfBindingEnabled,
+    sideEffectsJson,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -2915,6 +2928,15 @@ class $DirectivePrefsTable extends DirectivePrefs
         ),
       );
     }
+    if (data.containsKey('side_effects_json')) {
+      context.handle(
+        _sideEffectsJsonMeta,
+        sideEffectsJson.isAcceptableOrUnknown(
+          data['side_effects_json']!,
+          _sideEffectsJsonMeta,
+        ),
+      );
+    }
     return context;
   }
 
@@ -2992,6 +3014,10 @@ class $DirectivePrefsTable extends DirectivePrefs
         DriftSqlType.bool,
         data['${effectivePrefix}self_binding_enabled'],
       )!,
+      sideEffectsJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}side_effects_json'],
+      )!,
     );
   }
 
@@ -3019,6 +3045,7 @@ class DirectivePref extends DataClass implements Insertable<DirectivePref> {
   final String roommateGenderMatch;
   final String crisisPlanJson;
   final bool selfBindingEnabled;
+  final String sideEffectsJson;
   const DirectivePref({
     required this.id,
     required this.directiveId,
@@ -3037,6 +3064,7 @@ class DirectivePref extends DataClass implements Insertable<DirectivePref> {
     required this.roommateGenderMatch,
     required this.crisisPlanJson,
     required this.selfBindingEnabled,
+    required this.sideEffectsJson,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -3064,6 +3092,7 @@ class DirectivePref extends DataClass implements Insertable<DirectivePref> {
     map['roommate_gender_match'] = Variable<String>(roommateGenderMatch);
     map['crisis_plan_json'] = Variable<String>(crisisPlanJson);
     map['self_binding_enabled'] = Variable<bool>(selfBindingEnabled);
+    map['side_effects_json'] = Variable<String>(sideEffectsJson);
     return map;
   }
 
@@ -3086,6 +3115,7 @@ class DirectivePref extends DataClass implements Insertable<DirectivePref> {
       roommateGenderMatch: Value(roommateGenderMatch),
       crisisPlanJson: Value(crisisPlanJson),
       selfBindingEnabled: Value(selfBindingEnabled),
+      sideEffectsJson: Value(sideEffectsJson),
     );
   }
 
@@ -3128,6 +3158,7 @@ class DirectivePref extends DataClass implements Insertable<DirectivePref> {
       ),
       crisisPlanJson: serializer.fromJson<String>(json['crisisPlanJson']),
       selfBindingEnabled: serializer.fromJson<bool>(json['selfBindingEnabled']),
+      sideEffectsJson: serializer.fromJson<String>(json['sideEffectsJson']),
     );
   }
   @override
@@ -3157,6 +3188,7 @@ class DirectivePref extends DataClass implements Insertable<DirectivePref> {
       'roommateGenderMatch': serializer.toJson<String>(roommateGenderMatch),
       'crisisPlanJson': serializer.toJson<String>(crisisPlanJson),
       'selfBindingEnabled': serializer.toJson<bool>(selfBindingEnabled),
+      'sideEffectsJson': serializer.toJson<String>(sideEffectsJson),
     };
   }
 
@@ -3178,6 +3210,7 @@ class DirectivePref extends DataClass implements Insertable<DirectivePref> {
     String? roommateGenderMatch,
     String? crisisPlanJson,
     bool? selfBindingEnabled,
+    String? sideEffectsJson,
   }) => DirectivePref(
     id: id ?? this.id,
     directiveId: directiveId ?? this.directiveId,
@@ -3199,6 +3232,7 @@ class DirectivePref extends DataClass implements Insertable<DirectivePref> {
     roommateGenderMatch: roommateGenderMatch ?? this.roommateGenderMatch,
     crisisPlanJson: crisisPlanJson ?? this.crisisPlanJson,
     selfBindingEnabled: selfBindingEnabled ?? this.selfBindingEnabled,
+    sideEffectsJson: sideEffectsJson ?? this.sideEffectsJson,
   );
   DirectivePref copyWithCompanion(DirectivePrefsCompanion data) {
     return DirectivePref(
@@ -3252,6 +3286,9 @@ class DirectivePref extends DataClass implements Insertable<DirectivePref> {
       selfBindingEnabled: data.selfBindingEnabled.present
           ? data.selfBindingEnabled.value
           : this.selfBindingEnabled,
+      sideEffectsJson: data.sideEffectsJson.present
+          ? data.sideEffectsJson.value
+          : this.sideEffectsJson,
     );
   }
 
@@ -3276,7 +3313,8 @@ class DirectivePref extends DataClass implements Insertable<DirectivePref> {
           ..write('roomPreferencesNote: $roomPreferencesNote, ')
           ..write('roommateGenderMatch: $roommateGenderMatch, ')
           ..write('crisisPlanJson: $crisisPlanJson, ')
-          ..write('selfBindingEnabled: $selfBindingEnabled')
+          ..write('selfBindingEnabled: $selfBindingEnabled, ')
+          ..write('sideEffectsJson: $sideEffectsJson')
           ..write(')'))
         .toString();
   }
@@ -3300,6 +3338,7 @@ class DirectivePref extends DataClass implements Insertable<DirectivePref> {
     roommateGenderMatch,
     crisisPlanJson,
     selfBindingEnabled,
+    sideEffectsJson,
   );
   @override
   bool operator ==(Object other) =>
@@ -3322,7 +3361,8 @@ class DirectivePref extends DataClass implements Insertable<DirectivePref> {
           other.roomPreferencesNote == this.roomPreferencesNote &&
           other.roommateGenderMatch == this.roommateGenderMatch &&
           other.crisisPlanJson == this.crisisPlanJson &&
-          other.selfBindingEnabled == this.selfBindingEnabled);
+          other.selfBindingEnabled == this.selfBindingEnabled &&
+          other.sideEffectsJson == this.sideEffectsJson);
 }
 
 class DirectivePrefsCompanion extends UpdateCompanion<DirectivePref> {
@@ -3343,6 +3383,7 @@ class DirectivePrefsCompanion extends UpdateCompanion<DirectivePref> {
   final Value<String> roommateGenderMatch;
   final Value<String> crisisPlanJson;
   final Value<bool> selfBindingEnabled;
+  final Value<String> sideEffectsJson;
   const DirectivePrefsCompanion({
     this.id = const Value.absent(),
     this.directiveId = const Value.absent(),
@@ -3361,6 +3402,7 @@ class DirectivePrefsCompanion extends UpdateCompanion<DirectivePref> {
     this.roommateGenderMatch = const Value.absent(),
     this.crisisPlanJson = const Value.absent(),
     this.selfBindingEnabled = const Value.absent(),
+    this.sideEffectsJson = const Value.absent(),
   });
   DirectivePrefsCompanion.insert({
     this.id = const Value.absent(),
@@ -3380,6 +3422,7 @@ class DirectivePrefsCompanion extends UpdateCompanion<DirectivePref> {
     this.roommateGenderMatch = const Value.absent(),
     this.crisisPlanJson = const Value.absent(),
     this.selfBindingEnabled = const Value.absent(),
+    this.sideEffectsJson = const Value.absent(),
   }) : directiveId = Value(directiveId);
   static Insertable<DirectivePref> custom({
     Expression<int>? id,
@@ -3399,6 +3442,7 @@ class DirectivePrefsCompanion extends UpdateCompanion<DirectivePref> {
     Expression<String>? roommateGenderMatch,
     Expression<String>? crisisPlanJson,
     Expression<bool>? selfBindingEnabled,
+    Expression<String>? sideEffectsJson,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -3427,6 +3471,7 @@ class DirectivePrefsCompanion extends UpdateCompanion<DirectivePref> {
       if (crisisPlanJson != null) 'crisis_plan_json': crisisPlanJson,
       if (selfBindingEnabled != null)
         'self_binding_enabled': selfBindingEnabled,
+      if (sideEffectsJson != null) 'side_effects_json': sideEffectsJson,
     });
   }
 
@@ -3448,6 +3493,7 @@ class DirectivePrefsCompanion extends UpdateCompanion<DirectivePref> {
     Value<String>? roommateGenderMatch,
     Value<String>? crisisPlanJson,
     Value<bool>? selfBindingEnabled,
+    Value<String>? sideEffectsJson,
   }) {
     return DirectivePrefsCompanion(
       id: id ?? this.id,
@@ -3472,6 +3518,7 @@ class DirectivePrefsCompanion extends UpdateCompanion<DirectivePref> {
       roommateGenderMatch: roommateGenderMatch ?? this.roommateGenderMatch,
       crisisPlanJson: crisisPlanJson ?? this.crisisPlanJson,
       selfBindingEnabled: selfBindingEnabled ?? this.selfBindingEnabled,
+      sideEffectsJson: sideEffectsJson ?? this.sideEffectsJson,
     );
   }
 
@@ -3543,6 +3590,9 @@ class DirectivePrefsCompanion extends UpdateCompanion<DirectivePref> {
     if (selfBindingEnabled.present) {
       map['self_binding_enabled'] = Variable<bool>(selfBindingEnabled.value);
     }
+    if (sideEffectsJson.present) {
+      map['side_effects_json'] = Variable<String>(sideEffectsJson.value);
+    }
     return map;
   }
 
@@ -3567,7 +3617,8 @@ class DirectivePrefsCompanion extends UpdateCompanion<DirectivePref> {
           ..write('roomPreferencesNote: $roomPreferencesNote, ')
           ..write('roommateGenderMatch: $roommateGenderMatch, ')
           ..write('crisisPlanJson: $crisisPlanJson, ')
-          ..write('selfBindingEnabled: $selfBindingEnabled')
+          ..write('selfBindingEnabled: $selfBindingEnabled, ')
+          ..write('sideEffectsJson: $sideEffectsJson')
           ..write(')'))
         .toString();
   }
@@ -8938,6 +8989,7 @@ typedef $$DirectivePrefsTableCreateCompanionBuilder =
       Value<String> roommateGenderMatch,
       Value<String> crisisPlanJson,
       Value<bool> selfBindingEnabled,
+      Value<String> sideEffectsJson,
     });
 typedef $$DirectivePrefsTableUpdateCompanionBuilder =
     DirectivePrefsCompanion Function({
@@ -8958,6 +9010,7 @@ typedef $$DirectivePrefsTableUpdateCompanionBuilder =
       Value<String> roommateGenderMatch,
       Value<String> crisisPlanJson,
       Value<bool> selfBindingEnabled,
+      Value<String> sideEffectsJson,
     });
 
 final class $$DirectivePrefsTableReferences
@@ -9077,6 +9130,11 @@ class $$DirectivePrefsTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
+  ColumnFilters<String> get sideEffectsJson => $composableBuilder(
+    column: $table.sideEffectsJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
   $$DirectivesTableFilterComposer get directiveId {
     final $$DirectivesTableFilterComposer composer = $composerBuilder(
       composer: this,
@@ -9188,6 +9246,11 @@ class $$DirectivePrefsTableOrderingComposer
 
   ColumnOrderings<bool> get selfBindingEnabled => $composableBuilder(
     column: $table.selfBindingEnabled,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get sideEffectsJson => $composableBuilder(
+    column: $table.sideEffectsJson,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -9303,6 +9366,11 @@ class $$DirectivePrefsTableAnnotationComposer
     builder: (column) => column,
   );
 
+  GeneratedColumn<String> get sideEffectsJson => $composableBuilder(
+    column: $table.sideEffectsJson,
+    builder: (column) => column,
+  );
+
   $$DirectivesTableAnnotationComposer get directiveId {
     final $$DirectivesTableAnnotationComposer composer = $composerBuilder(
       composer: this,
@@ -9375,6 +9443,7 @@ class $$DirectivePrefsTableTableManager
                 Value<String> roommateGenderMatch = const Value.absent(),
                 Value<String> crisisPlanJson = const Value.absent(),
                 Value<bool> selfBindingEnabled = const Value.absent(),
+                Value<String> sideEffectsJson = const Value.absent(),
               }) => DirectivePrefsCompanion(
                 id: id,
                 directiveId: directiveId,
@@ -9393,6 +9462,7 @@ class $$DirectivePrefsTableTableManager
                 roommateGenderMatch: roommateGenderMatch,
                 crisisPlanJson: crisisPlanJson,
                 selfBindingEnabled: selfBindingEnabled,
+                sideEffectsJson: sideEffectsJson,
               ),
           createCompanionCallback:
               ({
@@ -9414,6 +9484,7 @@ class $$DirectivePrefsTableTableManager
                 Value<String> roommateGenderMatch = const Value.absent(),
                 Value<String> crisisPlanJson = const Value.absent(),
                 Value<bool> selfBindingEnabled = const Value.absent(),
+                Value<String> sideEffectsJson = const Value.absent(),
               }) => DirectivePrefsCompanion.insert(
                 id: id,
                 directiveId: directiveId,
@@ -9432,6 +9503,7 @@ class $$DirectivePrefsTableTableManager
                 roommateGenderMatch: roommateGenderMatch,
                 crisisPlanJson: crisisPlanJson,
                 selfBindingEnabled: selfBindingEnabled,
+                sideEffectsJson: sideEffectsJson,
               ),
           withReferenceMapper: (p0) => p0
               .map(

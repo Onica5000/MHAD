@@ -142,6 +142,13 @@ class DirectivePrefs extends Table {
   // Schema 10.
   BoolColumn get selfBindingEnabled =>
       boolean().withDefault(const Constant(false))();
+  // "Are you experiencing these side effects?" checklist (Schema 18). JSON:
+  // {"items":[{"med":"..","effect":"..","adl":"..","serious":bool,
+  // "experiencing":bool}], "generatedForMeds":[".."]}. Empty = not yet used.
+  // The AI lists common side effects of the user's CURRENT meds; the user
+  // verifies which they experience and notes any daily-activity impact.
+  TextColumn get sideEffectsJson =>
+      text().withDefault(const Constant(''))();
 }
 
 class AdditionalInstructionsTable extends Table {
@@ -265,7 +272,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase(super.executor);
 
   @override
-  int get schemaVersion => 17;
+  int get schemaVersion => 18;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -432,6 +439,12 @@ class AppDatabase extends _$AppDatabase {
             await customStatement(
                 "ALTER TABLE guardian_nominations ADD COLUMN "
                 "guardian_must_consult_agent_note TEXT NOT NULL DEFAULT ''");
+          }
+          if (from < 18) {
+            // "Are you experiencing these side effects?" checklist JSON.
+            await customStatement(
+                "ALTER TABLE directive_prefs ADD COLUMN "
+                "side_effects_json TEXT NOT NULL DEFAULT ''");
           }
         },
       );
