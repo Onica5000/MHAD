@@ -310,12 +310,16 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
   /// Opens the AI assistant pre-loaded with this step's context. Used by both
   /// the desktop right rail and the narrow peeking bar (prototype w-wizard /
   /// w-wiz-mobile).
-  void _openStepAi(BuildContext context, FormType formType, String stepName) {
+  Future<void> _openStepAi(
+      BuildContext context, FormType formType, String stepName) async {
+    final filled = await buildAiFilledFields(ref, widget.directiveId);
+    if (!context.mounted) return;
     context.push(
       AppRoutes.assistant,
       extra: AssistantContext(
         formType: formType.name,
         stepName: stepName,
+        filledFields: filled.isEmpty ? null : filled,
       ),
     );
   }
@@ -605,12 +609,15 @@ class _WizardAiRailState extends ConsumerState<_WizardAiRail> {
     final text = raw.trim();
     if (text.isEmpty) return;
     _inputCtrl.clear();
+    final filled = await buildAiFilledFields(ref, widget.directiveId);
+    if (!mounted) return;
     final result = await sendAssistantMessage(
       ref,
       text: text,
       assistantContext: AssistantContext(
         formType: widget.formType,
         stepName: widget.stepName,
+        filledFields: filled.isEmpty ? null : filled,
       ),
       requestConsent: () => showAiConsentDialog(context),
       onSent: _scrollToBottom,
@@ -1353,4 +1360,50 @@ class _RailStepRow extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Builds a NON-PII clinical/preference context map for the AI assistant from
+/// the directive's data, so the chat can tailor answers to what the user has
+/// entered. Deliberately excludes identity (name, DOB, address, phone, agent
+/// names) — only clinical context the policy already allows sending. Values are
+/// additionally PII-stripped when injected into the prompt. Best-effort: never
+/// throws (a failed read just yields less context).
+Future<Map<String, String>> buildAiFilledFields(
+    WidgetRef ref, int directiveId) async {
+  final repo = ref.read(directiveRepositoryProvider);
+  final map = <String, String>{};
+  try {
+    final d = await repo.getDirectiveById(directiveId);
+    if (d != null && d.effectiveCondition.trim().isNotEmpty) {
+      map['When it takes effect'] = d.effectiveCondition.trim();
+    }
+    final diags = await repo.getDiagnoses(directiveId);
+    final diagNames =
+        diags.map((x) => x.name.trim()).where((x) => x.isNotEmpty).toList();
+    if (diagNames.isNotEmpty) map['Diagnoses listed'] = diagNames.join(', ');
+    final meds = await repo.watchMedications(directiveId).first;
+    final preferred = meds
+        .where((m) => m.entryType == 'preferred' || m.entryType == 'current')
+        .map((m) => m.medicationName.trim())
+        .where((x) => x.isNotEmpty)
+        .toList();
+    final avoid = meds
+        .where((m) => m.entryType == 'exception' || m.entryType == 'limitation')
+        .map((m) => m.medicationName.trim())
+        .where((x) => x.isNotEmpty)
+        .toList();
+    if (preferred.isNotEmpty) {
+      map['Medications (current/preferred)'] = preferred.join(', ');
+    }
+    if (avoid.isNotEmpty) map['Medications to avoid'] = avoid.join(', ');
+    final prefs = await repo.getPreferences(directiveId);
+    if (prefs != null &&
+        prefs.treatmentFacilityPref.isNotEmpty &&
+        prefs.treatmentFacilityPref != 'noPreference') {
+      map['Treatment-facility preference'] = prefs.treatmentFacilityPref;
+    }
+  } catch (_) {
+    // Best-effort context only — never block the chat on a read failure.
+  }
+  return map;
 }

@@ -252,7 +252,8 @@ class GeminiApiAssistant implements AiAssistant {
     if (context.filledFields != null && context.filledFields!.isNotEmpty) {
       prompt.writeln('Answers so far (context only — do not echo verbatim):');
       for (final e in context.filledFields!.entries) {
-        prompt.writeln('  • ${e.key}: ${e.value}');
+        // PII-strip values: the system prompt is NOT sanitized elsewhere.
+        prompt.writeln('  • ${e.key}: ${sanitizeForApi(e.value)}');
       }
     }
 
@@ -402,7 +403,8 @@ class GeminiApiAssistant implements AiAssistant {
       if (context.filledFields != null && context.filledFields!.isNotEmpty) {
         buf.writeln('\nFields the user has already filled in:');
         for (final entry in context.filledFields!.entries) {
-          buf.writeln('  • ${entry.key}: ${entry.value}');
+          // PII-strip values: the system prompt is NOT sanitized elsewhere.
+          buf.writeln('  • ${entry.key}: ${sanitizeForApi(entry.value)}');
         }
       }
       buf.writeln();
