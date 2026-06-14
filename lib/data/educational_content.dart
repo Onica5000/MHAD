@@ -152,50 +152,38 @@ const _faq = [
   EducationSection(
     id: 'faq_combined',
     category: EducationCategory.faq,
-    title: 'What is a Combined Mental Health Declaration and Power of Attorney?',
+    title: 'What are the three types — Combined, Declaration, and Power of '
+        'Attorney?',
     content:
-        '**In simple terms: It lets you write down your wishes AND pick '
-        'someone to make decisions for you.**\n\n'
-        'Pennsylvania\'s law allows you to make a combined Mental Health '
-        'Declaration and Power of Attorney. This lets you make decisions about '
-        'some things, but also lets you give an agent power to make other '
-        'decisions for you. You choose the decisions that you want your agent '
-        'to make for you, as many or as few as you like. This makes your Mental '
-        'Health Advance Directive more flexible in dealing with future '
-        'situations, such as new treatment options, that you would have no way '
-        'of knowing about now.\n\n'
-        'Your agent should be someone you trust, and you should be sure to '
-        'discuss with your agent your feelings about different treatment choices '
-        'so that your agent can make decisions that will be most like the ones '
-        'you would have made for yourself.',
-  ),
-  EducationSection(
-    id: 'faq_declaration',
-    category: EducationCategory.faq,
-    title: 'What is a Declaration?',
-    content:
-        '**In simple terms: It\'s a written list of instructions you give '
-        'to your doctors about your care.**\n\n'
-        'A Declaration contains instructions to doctors, hospitals, and other '
-        'mental health care providers about your treatment in the event that '
-        'you become unable to communicate your wishes. A Declaration usually '
-        'deals with specific situations and does not allow much flexibility for '
+        'Pennsylvania law lets you make a Mental Health Advance Directive as a '
+        '**Declaration**, a **Power of Attorney**, or a **combination of '
+        'both**. You pick whichever fits how much you want to decide in '
+        'advance versus how much you want a trusted person to decide for '
+        'you.\n\n'
+        '**Declaration** — *a written list of instructions to your care '
+        'team.* A Declaration contains instructions to doctors, hospitals, and '
+        'other mental health care providers about your treatment in the event '
+        'that you become unable to communicate your wishes. It usually deals '
+        'with specific situations and does not allow much flexibility for '
         'changes that come up after the document is written, such as a new type '
-        'of medical crisis, new kinds of medication, or different treatment '
-        'choices.',
-  ),
-  EducationSection(
-    id: 'faq_poa',
-    category: EducationCategory.faq,
-    title: 'What is a Mental Health Power of Attorney?',
-    content:
-        '**In simple terms: It lets you choose a trusted person to make '
-        'mental health decisions for you during a crisis.**\n\n'
-        'A Mental Health Power of Attorney allows you to designate someone '
-        'else, called an agent, to make treatment decisions for you in the '
-        'event of a mental health crisis. A Mental Health Power of Attorney '
-        'provides flexibility to deal with a situation as it occurs rather than '
-        'attempting to anticipate every possible situation in advance.',
+        'of crisis, new kinds of medication, or different treatment '
+        'choices.\n\n'
+        '**Power of Attorney** — *you choose a trusted person to decide for '
+        'you.* A Mental Health Power of Attorney lets you designate someone '
+        'else, called an agent, to make treatment decisions for you during a '
+        'mental health crisis. It provides flexibility to deal with a situation '
+        'as it occurs rather than trying to anticipate every possible '
+        'situation in advance.\n\n'
+        '**Combined Declaration and Power of Attorney** — *write your wishes '
+        'AND pick someone to decide.* A combined directive lets you make some '
+        'decisions yourself while giving an agent power to make others — as '
+        'many or as few as you like. This makes your directive more flexible '
+        'for future situations, such as new treatment options, that you have '
+        'no way of knowing about now.\n\n'
+        'Whichever you choose, your agent should be someone you trust, and you '
+        'should discuss your feelings about different treatment choices with '
+        'them so they can make decisions most like the ones you would make '
+        'yourself.',
   ),
   EducationSection(
     id: 'faq_valid',
@@ -235,49 +223,44 @@ const _faq = [
   EducationSection(
     id: 'faq_capacity',
     category: EducationCategory.faq,
-    title: 'What is Capacity?',
+    title: 'What is capacity, and do I need to prove it?',
     content:
         'Capacity is the basic ability to understand your diagnosis and to '
         'understand the risks, benefits, and alternative treatments of your '
         'mental health care. It also includes the ability to understand what '
-        'may happen if you do not receive treatment.',
-  ),
-  EducationSection(
-    id: 'faq_capacity_proof',
-    category: EducationCategory.faq,
-    title: 'Do I need to include proof of my capacity with the document?',
-    content:
-        'No, unless you have a guardian or are currently under an involuntary '
-        'commitment, you are presumed to have capacity when you make a Mental '
-        'Health Advance Directive. However, at a later time it is possible for '
-        'someone to challenge whether you had capacity.\n\n'
-        'If you want to be very sure that no one can challenge your Mental '
-        'Health Advance Directive later, you can include a letter from your '
-        'treating doctor from the same time period that you made your directive '
-        'stating that you had capacity at that time.',
+        'may happen if you do not receive treatment.\n\n'
+        '**Do I need to include proof of my capacity?** No. Unless you have a '
+        'guardian or are currently under an involuntary commitment, you are '
+        'presumed to have capacity when you make a Mental Health Advance '
+        'Directive. However, at a later time it is possible for someone to '
+        'challenge whether you had capacity.\n\n'
+        'If you want to be very sure that no one can challenge your directive '
+        'later, you can include a letter from your treating doctor, from the '
+        'same time period that you made your directive, stating that you had '
+        'capacity at that time.',
   ),
   EducationSection(
     id: 'faq_effective',
     category: EducationCategory.faq,
-    title: 'When would my Mental Health Advance Directive take effect?',
+    title: 'When does my directive take effect, and who decides I lack '
+        'capacity?',
     content:
-        'You can write in your Mental Health Advance Directive when you want '
-        'the directive to take effect — for example, when involuntary '
-        'commitment occurs, or when a psychiatrist and another mental health '
-        'treatment professional states you no longer have capacity to make '
-        'mental health treatment decisions.',
-  ),
-  EducationSection(
-    id: 'faq_incapacity_determination',
-    category: EducationCategory.faq,
-    title: 'Who will determine that I don\'t have capacity?',
-    content:
-        'For the purpose of your Mental Health Advance Directive, incapacity '
-        'will be determined after you are examined by a psychiatrist and one of '
-        'the following: another psychiatrist, psychologist, family physician, '
-        'attending physician, or mental health treatment professional. Whenever '
-        'possible, one of the decision makers will be one of your current '
-        'treating professionals.',
+        '**When it takes effect.** You can write in your Mental Health Advance '
+        'Directive when you want the directive to take effect — for example, '
+        'when involuntary commitment occurs, or when a psychiatrist and '
+        'another mental health treatment professional state that you no longer '
+        'have capacity to make mental health treatment decisions.\n\n'
+        '**Who determines incapacity.** For the purpose of your directive, '
+        'incapacity is determined after you are examined by a psychiatrist and '
+        'one of the following: another psychiatrist, psychologist, family '
+        'physician, attending physician, or mental health treatment '
+        'professional. Whenever possible, one of the decision makers will be '
+        'one of your current treating professionals.\n\n'
+        '**If the evaluators disagree.** If the two professionals disagree '
+        'about whether you lack capacity, the directive does NOT become '
+        'operative — you are presumed to have capacity unless both evaluators '
+        'agree. You or your agent may request additional evaluations if you '
+        'believe the determination is incorrect.',
   ),
   EducationSection(
     id: 'faq_guardian',
@@ -310,19 +293,6 @@ const _faq = [
         'Remember that your agent and your guardian are different roles: your '
         'agent makes decisions under the power of attorney, while a guardian '
         'has broader court-granted authority over your personal affairs.',
-  ),
-  EducationSection(
-    id: 'faq_changes',
-    category: EducationCategory.faq,
-    title: 'May I make changes to my Mental Health Advance Directive?',
-    content:
-        'You may change your Mental Health Advance Directive in writing at any '
-        'time, as long as you have capacity. If you make significant changes, '
-        'you should make a new document so that there are no conflicts or '
-        'misunderstandings. Remember that your changes or a new directive must '
-        'be witnessed by two individuals, at least 18 years of age, and you '
-        'should give new copies to your provider, agent, and other support '
-        'people.',
   ),
   EducationSection(
     id: 'faq_providers_follow',
@@ -385,17 +355,37 @@ const _faq = [
   EducationSection(
     id: 'faq_involuntary',
     category: EducationCategory.faq,
-    title: 'How does a Mental Health Advance Directive affect involuntary commitment?',
+    title: 'How does my directive interact with involuntary commitment '
+        '(sections 302–305)?',
     content:
-        'The voluntary and involuntary commitment provisions of the Mental '
-        'Health Procedures Act are not affected by having a Mental Health Care '
-        'Advance Directive. What may be affected is how you can be treated '
-        'after you are committed.',
+        'Having a Mental Health Advance Directive does not change '
+        'Pennsylvania\'s voluntary and involuntary commitment provisions under '
+        'the Mental Health Procedures Act. What it can affect is how you are '
+        'treated *after* you are committed.\n\n'
+        'The commitment sections (50 P.S. §§ 7301–7306) are distinct from Act '
+        '194 but often come up together, because a directive may take effect '
+        'during an involuntary admission:\n\n'
+        '• **Section 302** — Emergency examination and treatment for up to '
+        '**120 hours** (5 days). Initiated by a physician, peace officer, or '
+        'any responsible adult through a written petition.\n'
+        '• **Section 303** — Extended emergency involuntary treatment for up '
+        'to **20 days** following a 302. Requires a court hearing within 120 '
+        'hours of the initial 302 admission.\n'
+        '• **Section 304** — Court-ordered involuntary treatment for up to '
+        '**90 days** (renewable for additional 90-day periods). Requires a '
+        'formal certification and an additional hearing.\n'
+        '• **Section 305** — A further 180-day extension after a 304.\n\n'
+        'Your MHAD continues to apply during a 302/303/304 admission to the '
+        'extent permitted by law. Your agent (if you have one) retains '
+        'authority over the decisions the agent has been given, and your '
+        'preferences should still inform the care team. The commitment '
+        'procedure itself, however, is governed by the Mental Health '
+        'Procedures Act, not by Act 194.',
   ),
   EducationSection(
     id: 'faq_revoke',
     category: EducationCategory.faq,
-    title: 'May I revoke my Mental Health Advance Directive, and how?',
+    title: 'Can I change or revoke my directive?',
     content:
         '**You may revoke, or cancel, a part or the whole of your Mental '
         'Health Advance Directive at any time, as long as you have capacity** '
@@ -424,6 +414,12 @@ const _faq = [
         '**You can also revoke only part of your directive** while keeping the '
         'rest in effect — for example, revoke the agent designation but keep '
         'your treatment preferences.\n\n'
+        '**Changing it instead of revoking.** You may change your directive in '
+        'writing at any time, as long as you have capacity. For significant '
+        'changes it is best to make a new document so there are no conflicts '
+        'or misunderstandings. Any change or new directive must be witnessed '
+        'by two individuals at least 18 years old, and you should give new '
+        'copies to your provider, agent, and other support people.\n\n'
         '**If you do not revoke it,** your Advance Directive automatically ends '
         'two years from the date you signed it — unless you do not have '
         'capacity to make mental health care decisions at that time, in which '
@@ -446,23 +442,30 @@ const _faq = [
   EducationSection(
     id: 'faq_who_to_give',
     category: EducationCategory.faq,
-    title: 'Who should I give my Mental Health Advance Directive to?',
+    title: 'Who should get a copy, and how do providers access it?',
     content:
-        'The only way that your providers will know what your choices are is '
-        'if you give them your Mental Health Advance Directive. You should also '
-        'give copies to your treating physician, agent, and family members or '
-        'other people that would be notified in the event of a crisis. Keep '
-        'the original in a safe place, and be sure that someone who would be '
-        'told of any crisis can get the original so it can be given to the '
-        'attending physician.\n\n'
-        'You may wish to carry a card in your wallet that states that you have '
-        'a Mental Health Advance Directive, and who should be called in the '
-        'event that you lack capacity to make mental health care decisions. '
-        'Include that person\'s phone numbers, and also name another person in '
-        'case the first person is not available.\n\n'
-        'Remember that if you make changes or create a new Mental Health '
-        'Advance Directive you must be sure that everyone has copies of the '
-        'most recent version.',
+        'The only way your providers will know your choices is if you give '
+        'them your Mental Health Advance Directive — PA law does not create a '
+        'central registry, so access depends on you and your agent sharing '
+        'copies.\n\n'
+        'Give copies to your treating physician, psychiatrist and other mental '
+        'health providers, your agent, and family members or other people who '
+        'would be notified in the event of a crisis. Consider giving a copy to '
+        'your local emergency room or crisis center too. Keep the original in '
+        'a safe place, and be sure that someone who would be told of any '
+        'crisis can get the original so it can be given to the attending '
+        'physician.\n\n'
+        'Make it findable in an emergency:\n'
+        '• Carry a wallet card stating that you have a Mental Health Advance '
+        'Directive and who to call if you lack capacity — include that '
+        'person\'s phone numbers, and name a backup in case the first person '
+        'is unavailable (this app can generate the card).\n'
+        '• Tell your agent where the original is stored.\n'
+        '• Keep a digital copy on your phone for emergencies.\n'
+        '• Some hospitals and health systems let you upload advance directives '
+        'to your patient portal or electronic health record.\n\n'
+        'Remember that if you make changes or create a new directive, you must '
+        'be sure everyone has copies of the most recent version.',
   ),
   EducationSection(
     id: 'faq_out_of_state',
@@ -491,32 +494,34 @@ const _faq = [
         'Advocacy (1-800-692-7443).',
   ),
   EducationSection(
-    id: 'faq_capacity_disagreement',
-    category: EducationCategory.faq,
-    title: 'What if the doctors disagree about my capacity?',
-    content:
-        'Under PA Act 194, incapacity must be determined by a psychiatrist '
-        'and one additional qualified professional. If the two professionals '
-        'disagree about whether you lack capacity, the directive does NOT '
-        'become operative — you are presumed to have capacity unless both '
-        'evaluators agree. You or your agent may request additional '
-        'evaluations if you believe the determination is incorrect.',
-  ),
-  EducationSection(
     id: 'faq_agent_unavailable',
     category: EducationCategory.faq,
-    title: 'What if my agent is unavailable during a crisis?',
+    title: 'What if my agent is unavailable or disagrees with my wishes?',
     content:
-        'If your primary agent cannot be reached or is unable to serve, your '
-        'alternate agent (if you designated one) will step in. This is why '
-        'naming an alternate agent is strongly recommended.\n\n'
+        '**If your agent is unavailable.** If your primary agent cannot be '
+        'reached or is unable to serve, your alternate agent (if you '
+        'designated one) will step in. This is why naming an alternate agent '
+        'is strongly recommended.\n\n'
         'If neither agent is available, your directive\'s written treatment '
         'preferences still guide your care team. Providers must follow your '
         'documented wishes to the extent possible, even without an agent '
-        'present to interpret them.\n\n'
-        'If no agent is available and your directive does not address the '
-        'specific treatment decision, providers will use their clinical '
-        'judgment consistent with accepted medical practice.',
+        'present to interpret them. If no agent is available and your '
+        'directive does not address the specific treatment decision, providers '
+        'will use their clinical judgment consistent with accepted medical '
+        'practice.\n\n'
+        '**If your agent disagrees with what you wrote.** Your agent is '
+        'legally required to act on your stated wishes when your directive is '
+        'in effect; their personal disagreement does not authorize them to '
+        'override your written instructions. The best safeguard is to have the '
+        'conversation now, before any crisis: walk through your directive with '
+        'your agent in person — explain why you chose each preference, what '
+        'experiences led you to it, and what "honoring" the directive means in '
+        'concrete situations (medications, ECT, facilities). An agent who has '
+        'had this conversation is far more likely to follow your wishes '
+        'confidently and advocate for you with providers. If your agent '
+        'indicates they cannot or will not follow your directive, name a '
+        'different agent (or move them to the alternate slot and choose a new '
+        'primary).',
   ),
   EducationSection(
     id: 'faq_finding_witnesses',
@@ -535,24 +540,6 @@ const _faq = [
         'center. You can also ask an attorney or notary public.\n\n'
         'Both witnesses must be physically present when you sign the '
         'directive. Remote or video witnessing is not accepted under PA law.',
-  ),
-  EducationSection(
-    id: 'faq_how_providers_access',
-    category: EducationCategory.faq,
-    title: 'How do healthcare providers access my directive?',
-    content:
-        'Providers can only access your directive if you or your agent '
-        'gives them a copy. PA law does not create a central registry.\n\n'
-        'Best practices for ensuring access:\n\n'
-        '\u2022 Give copies to your primary care physician, psychiatrist, '
-        'and any mental health providers\n'
-        '\u2022 Give a copy to your local emergency room or crisis center\n'
-        '\u2022 Carry a wallet card with a summary and contact info for '
-        'your agent (this app can generate one)\n'
-        '\u2022 Tell your agent where the original is stored\n'
-        '\u2022 Keep a digital copy on your phone for emergencies\n\n'
-        'Some hospitals and health systems allow you to upload advance '
-        'directives to your patient portal or electronic health record.',
   ),
   EducationSection(
     id: 'faq_deescalation',
@@ -598,25 +585,6 @@ const _faq = [
         'template that addresses these issues in detail.',
   ),
   EducationSection(
-    id: 'faq_agent_disagreement',
-    category: EducationCategory.faq,
-    title: 'What if my agent disagrees with what I wrote?',
-    content:
-        'Your agent is legally required to act on your stated wishes when '
-        'your directive is in effect. Their personal disagreement does not '
-        'authorize them to override your written instructions.\n\n'
-        'Practical advice: have the conversation now, before you are in a '
-        'crisis. Walk through your directive with your agent in person — '
-        'explain why you chose each preference, what experiences led you to '
-        'it, and what "honoring" the directive means in concrete situations '
-        '(medications, ECT, facilities). An agent who has had this '
-        'conversation is far more likely to follow your wishes confidently '
-        'and to advocate for you with providers.\n\n'
-        'If your agent indicates they cannot or will not follow your '
-        'directive, name a different agent (or move them to the alternate '
-        'slot and choose a new primary).',
-  ),
-  EducationSection(
     id: 'faq_capacity_restoration',
     category: EducationCategory.faq,
     title: 'What happens when I regain capacity?',
@@ -634,33 +602,6 @@ const _faq = [
         'Act 194 — typically a physician, certified registered nurse '
         'practitioner, or psychologist familiar with the patient. The '
         'determination must be documented in the medical record.',
-  ),
-  EducationSection(
-    id: 'faq_sections_302_303_304_305',
-    category: EducationCategory.faq,
-    title: 'What are sections 302, 303, 304, and 305 (involuntary commitment)?',
-    content:
-        'These are sections of Pennsylvania\'s Mental Health Procedures Act '
-        '(50 P.S. §§ 7301–7306), which governs *involuntary* mental health '
-        'treatment. They are distinct from Act 194 but often come up '
-        'together because a directive may take effect during an involuntary '
-        'admission.\n\n'
-        '• **Section 302** — Emergency examination and treatment for up to '
-        '**120 hours** (5 days). Initiated by a physician, peace officer, '
-        'or any responsible adult through a written petition.\n'
-        '• **Section 303** — Extended emergency involuntary treatment for '
-        'up to **20 days** following a 302. Requires a court hearing within '
-        '120 hours of the initial 302 admission.\n'
-        '• **Section 304** — Court-ordered involuntary treatment for up to '
-        '**90 days** (renewable for additional 90-day periods). Requires a '
-        'formal certification and an additional hearing.\n'
-        '• **Section 305** — A further 180-day extension after a 304.\n\n'
-        'Your MHAD continues to apply during a 302/303/304 admission to the '
-        'extent permitted by law. Your agent (if you have one) retains '
-        'authority over decisions the agent has been given, and your '
-        'preferences should still inform the care team. The commitment '
-        'procedure itself, however, is governed by the Mental Health '
-        'Procedures Act, not by Act 194.',
   ),
   EducationSection(
     id: 'faq_emancipated_minor',
@@ -2052,7 +1993,7 @@ const _supplementary = [
   EducationSection(
     id: 'supp_agent_removal',
     category: EducationCategory.supplementary,
-    title: 'When an Agent Can Be Removed',
+    title: 'When an Agent Loses Authority (Removal & Divorce)',
     content:
         'Under 20 Pa.C.S. §5837, an agent may be removed for any of the '
         'following reasons:\n'
@@ -2062,22 +2003,16 @@ const _supplementary = [
         '• Coercion of you\n'
         '• Voluntary withdrawal — the agent must notify you, and if the POA '
         'is in effect, must also notify your providers\n'
-        '• Divorce (see "Divorce and Agent Authority")\n\n'
+        '• Divorce (see below)\n\n'
         'Third parties may challenge an agent\'s authority by filing a '
-        'petition in orphan\'s court.',
-  ),
-  EducationSection(
-    id: 'supp_divorce_effect',
-    category: EducationCategory.supplementary,
-    title: 'Divorce and Agent Authority',
-    content:
-        'Under 20 Pa.C.S. §5838, if you designated your spouse as your '
-        'agent, that designation is AUTOMATICALLY REVOKED when either spouse '
-        'files a divorce action.\n\n'
+        'petition in orphan\'s court.\n\n'
+        '**Divorce automatically revokes a spouse-agent.** Under 20 Pa.C.S. '
+        '§5838, if you designated your spouse as your agent, that designation '
+        'is AUTOMATICALLY REVOKED when either spouse files a divorce action. '
         'The only exception is if your power of attorney clearly shows your '
-        'intent for the designation to continue despite a divorce filing.\n\n'
-        'If your spouse is your agent and you are considering divorce, you '
-        'should plan to designate a new agent.',
+        'intent for the designation to continue despite a divorce filing. If '
+        'your spouse is your agent and you are considering divorce, plan to '
+        'designate a new agent.',
   ),
   EducationSection(
     id: 'supp_penalties',
@@ -2681,7 +2616,6 @@ const wizardStepEducationMap = <String, List<String>>{
     'decl_effective',
     'poa_effective',
     'faq_effective',
-    'faq_incapacity_determination',
   ],
   'treatmentFacility': [
     'combined_facility',
@@ -2722,7 +2656,7 @@ const wizardStepEducationMap = <String, List<String>>{
   'agentDesignation': [
     'combined_agent',
     'poa_agent',
-    'faq_poa',
+    'faq_combined',
     'faq_agent_unavailable',
     'gloss_agent',
   ],
@@ -2746,7 +2680,7 @@ const wizardStepEducationMap = <String, List<String>>{
     'faq_guardian',
     'gloss_declaration',
   ],
-  'review': ['faq_who_to_give', 'faq_changes', 'faq_how_providers_access'],
+  'review': ['faq_who_to_give', 'faq_revoke'],
   'execution': [
     'combined_execution',
     'decl_execution',
