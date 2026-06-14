@@ -717,15 +717,6 @@ class _CurrentDirectiveSection extends ConsumerWidget {
               child: Column(
                 children: [
                   _SettingsRow(
-                    icon: Icons.description_outlined,
-                    title: 'Open in clinician view',
-                    subtitle:
-                        'Read-only summary for paramedics / ER staff',
-                    onTap: () =>
-                        context.push(AppRoutes.clinicianViewRoute(d.id)),
-                  ),
-                  Divider(height: 1, color: p.border),
-                  _SettingsRow(
                     icon: Icons.swap_horiz_outlined,
                     title: 'Plain ↔ Legal language toggle',
                     subtitle: 'Switch how the text reads',
@@ -755,31 +746,6 @@ class _CurrentDirectiveSection extends ConsumerWidget {
                     subtitle: 'Flag cross-step contradictions',
                     onTap: () =>
                         context.push(AppRoutes.aiCheckRoute(d.id)),
-                  ),
-                  Divider(height: 1, color: p.border),
-                  _SettingsRow(
-                    icon: Icons.qr_code_2_outlined,
-                    title: 'Preview QR / verifier view',
-                    subtitle: 'What an EMS scanner sees',
-                    onTap: () =>
-                        context.push(AppRoutes.walletVerifyRoute(d.id)),
-                  ),
-                  Divider(height: 1, color: p.border),
-                  _SettingsRow(
-                    icon: Icons.handshake_outlined,
-                    title: 'Agent acceptance log',
-                    subtitle: 'Record that each agent accepted in person',
-                    onTap: () =>
-                        context.push(AppRoutes.agentAcceptRoute(d.id)),
-                  ),
-                  Divider(height: 1, color: p.border),
-                  _SettingsRow(
-                    icon: Icons.history,
-                    title: 'View past-directive detail',
-                    subtitle:
-                        'Doc-preview, share log, copy-to-new options',
-                    onTap: () =>
-                        context.push(AppRoutes.pastDirectiveRoute(d.id)),
                   ),
                 ],
               ),
