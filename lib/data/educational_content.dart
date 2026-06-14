@@ -319,8 +319,14 @@ const _faq = [
         'medical standards; or\n'
         '• The treatment is physically unavailable at the facility; or\n'
         '• Provider/institutional policy or insurance coverage precludes '
-        'compliance; or\n'
-        '• The provider has a good-faith conscience objection.\n\n'
+        'compliance (see the Supplementary section "Insurance, coverage, and '
+        'provider-policy limits"); or\n'
+        '• The provider has a good-faith conscience objection; or\n'
+        '• The directive is not legally effective — for example, it was not '
+        'properly executed, has expired (past the two-year period while you '
+        'still have capacity), was revoked, or has not yet been activated '
+        'under the trigger you specified (such as involuntary commitment or a '
+        'capacity determination by a psychiatrist and another professional).\n\n'
         'When a provider cannot comply, **§5804** requires them to (a) '
         'tell you, your agent, and any guardian as soon as possible, '
         '(b) document the reason, (c) make a reasonable effort to '
@@ -380,7 +386,14 @@ const _faq = [
         'authority over the decisions the agent has been given, and your '
         'preferences should still inform the care team. The commitment '
         'procedure itself, however, is governed by the Mental Health '
-        'Procedures Act, not by Act 194.',
+        'Procedures Act, not by Act 194.\n\n'
+        'Being committed does not by itself let staff ignore your directive. '
+        'During a genuine safety emergency they may give necessary treatment '
+        'over your objection while the emergency lasts; outside an emergency '
+        'your directive still governs, and a medication refusal in it is '
+        'treated as a contemporaneous objection that must be honored while '
+        'valid (see the Supplementary section "Emergency Override & Section '
+        '302").',
   ),
   EducationSection(
     id: 'faq_revoke',
@@ -1979,6 +1992,52 @@ const _supplementary = [
         '169 of 2006).',
   ),
   EducationSection(
+    id: 'supp_coverage_policy_limits',
+    category: EducationCategory.supplementary,
+    title: 'Insurance, coverage, and provider-policy limits',
+    content:
+        'Your directive is about **consent** — it makes your wishes known and '
+        'binding under the "shall comply" rule — but it is not a blank check '
+        'that forces a provider or insurer to give you anything you write '
+        'down. "Provider policies or coverage limits" is the statute\'s way of '
+        'saying a provider still has to honor its insurance contract and its '
+        'own program rules. Your consent and preferences still matter; they '
+        'just cannot override:\n\n'
+        '• **Insurance contracts** — what the plan will pay for.\n'
+        '• **Provider–insurer contracts** — what the provider may bill or '
+        'offer under that benefit.\n'
+        '• **Facility / program rules** — who a setting can accept and what '
+        'level of care it provides.\n\n'
+        '**Drug-formulary example.** If your directive asks for a specific '
+        'brand-name drug your plan does not cover, the doctor is not forced to '
+        'break insurance rules to obtain it. They may prescribe a covered '
+        'equivalent that is on the formulary — unless you specifically '
+        'withheld consent to that alternative — or pursue a '
+        'prior-authorization appeal, or help transfer you to a provider who '
+        'can honor the request within its policies.\n\n'
+        '**Level-of-care example.** If your directive says "treat me only in a '
+        'small private facility" but you arrive in crisis at a large public '
+        'hospital, that hospital is not required to break its admission or '
+        'transfer policies or absorb uncovered costs. It must treat you within '
+        'its own rules and your coverage and make reasonable efforts to '
+        'transfer you if that is feasible.\n\n'
+        '**Non-covered or excluded services.** If your directive demands a '
+        'service your plan excludes — for example an out-of-state residential '
+        'program, daily one-on-one inpatient psychotherapy, or a treatment '
+        'the plan labels experimental — a provider cannot ignore those '
+        'coverage and contract limits simply because the directive says so.\n\n'
+        '**What the provider still owes you.** Even when policy or coverage '
+        'blocks part of your directive, the provider must tell you or your '
+        'agent as soon as possible, make every reasonable effort to transfer '
+        'you to a provider or facility that can honor it, and treat you as '
+        'consistently with the directive as possible in the meantime.\n\n'
+        '**Tip: write policy-savvy instructions.** Instead of demanding a '
+        'single option, give ranked, flexible choices — for example, "if Drug '
+        'X is unavailable or not covered, use Y or Z, but never A or B." That '
+        'way you work with coverage limits instead of being blindsided by '
+        'them.',
+  ),
+  EducationSection(
     id: 'supp_emergency_override',
     category: EducationCategory.supplementary,
     title: 'Emergency Override & Section 302',
@@ -1993,7 +2052,15 @@ const _supplementary = [
         'In non-emergency situations, if lack of medication poses a serious '
         'danger or renders you unable to care for yourself, the provider must '
         'initiate court-ordered involuntary commitment under Section 304(c) '
-        'before overriding your directive.',
+        'before overriding your directive.\n\n'
+        'Either way, a valid directive that refuses a specific medication is '
+        'treated as a **contemporaneous objection** and must be honored for as '
+        'long as the directive remains valid. If staff believe they cannot '
+        'effectively treat you without that medication, they must either '
+        'transfer you to a physician or facility willing to honor the '
+        'directive, or seek a court order authorizing treatment contrary to it '
+        '— being involuntarily committed does not, by itself, create a blanket '
+        'exception that lets staff ignore an otherwise-valid directive.',
   ),
   EducationSection(
     id: 'supp_substituted_judgment',
