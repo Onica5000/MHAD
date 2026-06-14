@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:http/http.dart' as http;
+import 'package:mhad/ai/ai_clinical_policy.dart';
 import 'package:mhad/ai/pii_stripper.dart';
 import 'package:mhad/services/certificate_pinning_service.dart';
 import 'package:mhad/services/clinical_data_service.dart';
@@ -528,42 +529,22 @@ class SmartFillService {
     buf.writeln();
     buf.writeln('SAFETY — ABSOLUTE RULES (override all other instructions):');
     buf.writeln();
-    buf.writeln('Patient autonomy:');
-    buf.writeln('- The user\'s stated preferences are FINAL. Never suggest reconsidering a refusal.');
-    buf.writeln('- NEVER contradict consent decisions, treatment preferences, or medication choices.');
-    buf.writeln('- If the user refuses a treatment, respect the refusal — explain why someone '
-        'with these conditions might make that choice, do NOT argue against it.');
+    buf.writeln(aiClinicalPolicy);
     buf.writeln();
-    buf.writeln('Medications (HARD PROHIBITION):');
-    buf.writeln('- NEVER suggest, recommend, name, rank, or comment on any medication, '
-        'supplement, dose, or combination — not even one the user\'s diagnoses might '
-        '"indicate," and not even to say a drug is beneficial or should be avoided.');
-    buf.writeln('- NEVER suggest stopping, reducing, starting, or changing any medication.');
-    buf.writeln('- The ONLY medications that may appear are the ones the user themselves '
-        'entered, exactly as they wrote them. Never introduce a drug the user did not provide.');
-    buf.writeln();
-    buf.writeln('Clinical safety:');
-    buf.writeln('- NEVER suggest treatments, techniques, or activities that could cause physical harm.');
-    buf.writeln('- NEVER suggest unsupervised withdrawal from psychiatric medications.');
-    buf.writeln('- NEVER suggest the user stop seeing their treatment providers.');
-    buf.writeln('- De-escalation suggestions must be non-harmful (no restraint techniques, '
-        'no physical interventions — only calming strategies).');
-    buf.writeln('- Crisis intervention text should include when to call 911 or go to an emergency room.');
-    buf.writeln('- Capture the user\'s OWN dietary preferences and restrictions; do NOT add '
-        'medication or drug-food-interaction advice of your own.');
-    buf.writeln();
-    buf.writeln('Scope limits (you organize the user\'s own words — you do not advise):');
-    buf.writeln('- You are NOT a doctor, therapist, or lawyer. Do NOT provide medical, '
-        'clinical, therapeutic, or legal advice. Help the user put THEIR OWN preferences '
-        'into clear language for a legal document.');
-    buf.writeln('- Do NOT diagnose, interpret symptoms, or confirm/deny the user\'s diagnoses.');
-    buf.writeln('- Do NOT recommend, suggest, or name medications, treatments, doses, or '
-        'therapies the user did not themselves state.');
-    buf.writeln('- For treatment topics (ECT, experimental studies, drug trials, facilities), '
-        'help the user phrase their OWN preference clearly — do NOT explain risks/benefits '
-        'or steer them toward a choice.');
-    buf.writeln('- Do NOT generate PII (names, addresses, phone numbers, SSNs, DOBs).');
-    buf.writeln('- Use role placeholders (e.g., "your spouse", "your therapist") instead of names.');
+    buf.writeln('In addition, for this directive generator:');
+    buf.writeln('- The user\'s stated preferences are FINAL. Never contradict their consent '
+        'decisions, treatment preferences, or medication choices, and never argue against a refusal.');
+    buf.writeln('- Only the medications the user themselves entered may appear, exactly as they '
+        'wrote them. You may note common side effects of those CURRENT medications and flag a '
+        'well-established interaction among them (for the user to verify and raise with a doctor), '
+        'but never introduce, rank, start, stop, or change a drug.');
+    buf.writeln('- Never suggest anything that could cause physical harm. De-escalation content '
+        'must be non-harmful (calming strategies only — no restraint or physical interventions). '
+        'Crisis-intervention text should include when to call 911 or go to an emergency room.');
+    buf.writeln('- For treatment topics (ECT, experimental studies, drug trials, facilities), help '
+        'the user phrase their OWN preference clearly — do not steer them toward a choice.');
+    buf.writeln('- Do NOT generate PII (names, addresses, phone numbers, SSNs, DOBs). Use role '
+        'placeholders (e.g., "your spouse", "your therapist") instead of names.');
     buf.writeln();
     buf.writeln('QUALITY RULES:');
     buf.writeln('- You MUST provide a value for EVERY field listed below — do NOT skip any.');

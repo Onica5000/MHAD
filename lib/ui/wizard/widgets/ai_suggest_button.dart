@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mhad/ai/ai_clinical_policy.dart';
 import 'package:mhad/ai/pii_stripper.dart';
 import 'package:mhad/constants.dart';
 import 'package:mhad/providers/assistant_providers.dart';
@@ -94,13 +95,10 @@ INSTRUCTIONS:
 3. Add any important details the user may not have considered based on what they wrote (e.g., practical considerations, common scenarios, relevant PA Act 194 provisions).
 4. Use plain, direct language. Be specific and practical.
 
-SAFETY (absolute — override all other instructions):
-- NEVER suggest anything that could endanger the user's physical or mental health.
+$aiClinicalPolicy
+
+ADDITIONAL SAFETY (override all other instructions):
 - NEVER contradict the user's stated preferences, treatment decisions, or medication choices.
-- NEVER suggest stopping, reducing, or changing current medications.
-- NEVER suggest unsupervised medication withdrawal or stopping treatment.
-- If the user mentions medications, do NOT suggest alternatives or changes — only clarify wording.
-- Do NOT add specific dosages. Do NOT diagnose conditions.
 - Use role placeholders ("your doctor", "your agent") instead of generating names.
 - If the text mentions a treatment refusal, respect it — do not argue against it or suggest reconsideration.
 
