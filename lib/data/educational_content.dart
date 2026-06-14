@@ -295,7 +295,21 @@ const _faq = [
         'unless you say otherwise in your Mental Health Advance Directive. If '
         'the court decides to grant the powers that you gave to an agent to the '
         'guardian, the guardian would still have to make decisions as written '
-        'in your Advance Directive.',
+        'in your Advance Directive.\n\n'
+        '**You decide whether a guardian can override your directive.** If a '
+        'court later appoints a guardian for you (under 20 Pa.C.S. §5511), '
+        'your directive lets you choose one of two options:\n\n'
+        '• The guardian CANNOT revoke, suspend, or terminate your directive — '
+        'your pre-stated wishes remain in effect.\n'
+        '• The guardian CAN revoke, suspend, or terminate your directive — '
+        'giving the guardian full authority.\n\n'
+        'This is an important decision. If you have strong feelings about your '
+        'treatment preferences, consider preventing the guardian from '
+        'overriding them. If you trust that a future guardian would act in '
+        'your best interest, you may allow revocation.\n\n'
+        'Remember that your agent and your guardian are different roles: your '
+        'agent makes decisions under the power of attorney, while a guardian '
+        'has broader court-granted authority over your personal affairs.',
   ),
   EducationSection(
     id: 'faq_changes',
@@ -357,7 +371,16 @@ const _faq = [
         'Even when you consent in advance to a specific medication or '
         'treatment, the clinical decision to use it at any given time '
         'still must be appropriate to your condition at that moment and '
-        'within accepted standards of care.',
+        'within accepted standards of care.\n\n'
+        '**If you believe your directive is being ignored:** a provider '
+        'cannot decline simply because they personally disagree with your '
+        'choice. If transfer to a complying provider is not possible, the '
+        'provider must continue to act in your best interest while consulting '
+        'your agent. Contact Disability Rights Pennsylvania (formerly PA '
+        'Protection & Advocacy) at 1-800-692-7443 — they handle Act 194 '
+        'complaints. A court can also set aside specific provisions of a '
+        'directive, but only through the §5843 petition process (see the '
+        'Supplementary section "Court Petition for Irreparable Harm").',
   ),
   EducationSection(
     id: 'faq_involuntary',
@@ -372,17 +395,39 @@ const _faq = [
   EducationSection(
     id: 'faq_revoke',
     category: EducationCategory.faq,
-    title: 'May I revoke my Mental Health Advance Directive?',
+    title: 'May I revoke my Mental Health Advance Directive, and how?',
     content:
-        'You may revoke, or in other words cancel, a part or the whole Mental '
-        'Health Advance Directive at any time, as long as you have capacity. '
-        'This may be done either orally or in writing. It is effective as soon '
-        'as you tell your provider.\n\n'
-        'Your Advance Directive will automatically end after two years from '
-        'the date you signed it unless you do not have capacity to make mental '
-        'health care decisions at that time. If you do not have capacity at '
-        'the time it would end, the Mental Health Advance Directive will stay '
-        'in force until you regain capacity.',
+        '**You may revoke, or cancel, a part or the whole of your Mental '
+        'Health Advance Directive at any time, as long as you have capacity** '
+        'to make mental health care decisions. A revocation can be oral or in '
+        'writing, and it is effective as soon as you communicate it to your '
+        'attending physician or mental health care provider — either directly '
+        'or through a witness to your revocation.\n\n'
+        '**Three ways to revoke:**\n\n'
+        '1. **In writing** — sign and date a statement saying you are revoking '
+        'the directive.\n'
+        '2. **By destroying the original** — physically tear up, shred, or '
+        'otherwise destroy the original document with the intent to revoke.\n'
+        '3. **By executing a new directive** — signing a new Mental Health '
+        'Advance Directive automatically revokes any prior one.\n\n'
+        '**Make the revocation stick — notify everyone who has a copy.** '
+        'Notification matters as much as the act itself: a directive whose '
+        'revocation you forgot to communicate may still be used in good faith '
+        'by a provider who has an old copy. A complete revocation usually '
+        'means:\n\n'
+        '1. Notify your agent(s) in writing.\n'
+        '2. Notify your healthcare providers (psychiatrist, therapist, primary '
+        'care doctor).\n'
+        '3. Notify any hospital or facility that has a copy.\n'
+        '4. Destroy or clearly mark "REVOKED" on all printed copies.\n'
+        '5. Request the return of copies you distributed.\n\n'
+        '**You can also revoke only part of your directive** while keeping the '
+        'rest in effect — for example, revoke the agent designation but keep '
+        'your treatment preferences.\n\n'
+        '**If you do not revoke it,** your Advance Directive automatically ends '
+        'two years from the date you signed it — unless you do not have '
+        'capacity to make mental health care decisions at that time, in which '
+        'case it stays in force until you regain capacity.',
   ),
   EducationSection(
     id: 'faq_what_to_include',
@@ -422,28 +467,28 @@ const _faq = [
   EducationSection(
     id: 'faq_out_of_state',
     category: EducationCategory.faq,
-    title: 'Will my PA directive be recognized in another state?',
+    title: 'Will my PA directive be recognized if I travel or move to '
+        'another state?',
     content:
         'Pennsylvania law (20 Pa.C.S. §5845) provides that a mental health '
         'advance directive executed in another state is valid in PA if it was '
-        'valid where executed. However, there is no guarantee that other '
-        'states will recognize a Pennsylvania directive. If you travel or '
-        'receive treatment in another state, check that state\'s laws or '
-        'consult an attorney. Carrying your directive with you is always '
-        'recommended.',
-  ),
-  EducationSection(
-    id: 'faq_provider_refuses',
-    category: EducationCategory.faq,
-    title: 'What if a provider refuses to follow my directive?',
-    content:
-        'Under PA Act 194, a provider who is unwilling or unable to comply '
-        'with your directive must make a reasonable effort to transfer your '
-        'care to a provider who will comply. A provider may override your '
-        'directive ONLY in limited circumstances — for example, if a court '
-        'order exists, or if the treatment you requested is not available at '
-        'the facility. If you believe your directive is being ignored, '
-        'contact PA Protection & Advocacy at 1-800-692-7443.',
+        'valid where it was executed. The reverse, however, is not '
+        'guaranteed: other states are not required to honor a Pennsylvania '
+        'directive the way PA providers are, though many extend "reasonable '
+        'recognition" to out-of-state directives as a matter of clinical '
+        'practice.\n\n'
+        'If you travel or move between states:\n\n'
+        '• Bring a copy of your PA directive AND a brief cover sheet '
+        'identifying it as a "mental health advance directive under '
+        'Pennsylvania Act 194 of 2004 (20 Pa.C.S. Ch. 58)."\n'
+        '• Carry the wallet card and the names and phone numbers of your PA '
+        'agent.\n'
+        '• If you settle in another state, consider executing a new directive '
+        'under that state\'s law in addition to your PA one.\n'
+        '• Check the other state\'s laws or consult an attorney about '
+        'cross-border recognition.\n\n'
+        'For specific cross-border questions, contact PA Protection & '
+        'Advocacy (1-800-692-7443).',
   ),
   EducationSection(
     id: 'faq_capacity_disagreement',
@@ -553,68 +598,6 @@ const _faq = [
         'template that addresses these issues in detail.',
   ),
   EducationSection(
-    id: 'faq_revocation_how',
-    category: EducationCategory.faq,
-    title: 'How do I properly revoke my directive?',
-    content:
-        'Under PA Act 194, you may revoke your directive at any time while '
-        'you have capacity to make mental health decisions. You can revoke '
-        'orally or in writing.\n\n'
-        'Steps for a complete revocation:\n\n'
-        '1. Notify your agent(s) in writing that the directive is revoked\n'
-        '2. Notify your healthcare providers (psychiatrist, therapist, '
-        'primary care doctor)\n'
-        '3. Notify any hospital or facility that has a copy\n'
-        '4. Destroy or clearly mark "REVOKED" on all printed copies\n'
-        '5. Request return of copies you distributed\n\n'
-        'Your revocation is effective as soon as you communicate it to '
-        'your attending physician or mental health care provider — either '
-        'by you directly or through a witness to your revocation.\n\n'
-        'You may also revoke only part of your directive while keeping the '
-        'rest in effect. For example, you could revoke the agent designation '
-        'but keep your treatment preferences.',
-  ),
-  EducationSection(
-    id: 'faq_guardianship_interaction',
-    category: EducationCategory.faq,
-    title: 'How does my directive interact with a court-appointed guardian?',
-    content:
-        'If a court appoints a guardian for you under 20 Pa.C.S. \u00A75511, '
-        'you choose whether the guardian can revoke your directive.\n\n'
-        'In your directive, you select one of two options:\n\n'
-        '\u2022 The guardian CANNOT revoke, suspend, or terminate your '
-        'directive — your pre-stated wishes remain in effect\n'
-        '\u2022 The guardian CAN revoke, suspend, or terminate your '
-        'directive — giving the guardian full authority\n\n'
-        'This is an important decision. If you have strong feelings about '
-        'your treatment preferences, consider preventing the guardian from '
-        'overriding them. If you trust that a future guardian would act in '
-        'your best interest, you may allow revocation.\n\n'
-        'Note: Your agent (healthcare proxy) and your guardian are different '
-        'roles. Your agent makes decisions under the power of attorney; a '
-        'guardian has broader court-granted authority over personal affairs.',
-  ),
-  EducationSection(
-    id: 'faq_revocation_specifics',
-    category: EducationCategory.faq,
-    title: 'How exactly do I revoke my directive?',
-    content:
-        'Under PA Act 194, you can revoke your directive at any time you have '
-        'capacity. Revocation can be done in any of three ways:\n\n'
-        '1. **In writing** — sign and date a written statement saying you are '
-        'revoking the directive. Give a copy to your agent, your providers, '
-        'and anyone who has a copy of the original directive.\n\n'
-        '2. **By destroying the original** — physically tear up, shred, or '
-        'otherwise destroy the original document with the intent to revoke. '
-        'Still tell anyone who has a copy.\n\n'
-        '3. **By executing a new directive** — signing a new directive '
-        'automatically revokes any prior one.\n\n'
-        'Important: notification matters as much as the act of revoking. A '
-        'directive whose revocation you forgot to communicate may still be '
-        'used in good faith by a provider who has the old copy. Always '
-        'notify everyone who has a copy.',
-  ),
-  EducationSection(
     id: 'faq_agent_disagreement',
     category: EducationCategory.faq,
     title: 'What if my agent disagrees with what I wrote?',
@@ -632,43 +615,6 @@ const _faq = [
         'If your agent indicates they cannot or will not follow your '
         'directive, name a different agent (or move them to the alternate '
         'slot and choose a new primary).',
-  ),
-  EducationSection(
-    id: 'faq_travel_other_states',
-    category: EducationCategory.faq,
-    title: 'What should I do if I travel or move out of Pennsylvania?',
-    content:
-        'A Pennsylvania MHAD is created under PA Act 194 of 2004. Other '
-        'states are not required to honor it the way PA providers are, '
-        'though many states extend "reasonable recognition" to out-of-state '
-        'directives as a matter of clinical practice.\n\n'
-        'If you regularly travel or move between states:\n\n'
-        '• Bring a copy of your PA directive AND a brief cover sheet '
-        'identifying it as a "mental health advance directive under '
-        'Pennsylvania Act 194 of 2004 (20 Pa.C.S. Ch. 58)."\n'
-        '• Carry the wallet card and the names/numbers of your PA agent.\n'
-        '• If you settle in another state, consider executing a new '
-        'directive under that state\'s law in addition to your PA one.\n\n'
-        'For specific cross-border questions, contact PA Protection & '
-        'Advocacy (1-800-692-7443).',
-  ),
-  EducationSection(
-    id: 'faq_provider_refusal',
-    category: EducationCategory.faq,
-    title: 'Can a provider refuse to follow my directive?',
-    content:
-        'A Pennsylvania provider must follow a valid directive in good '
-        'faith. They can decline to provide specific care only if it would '
-        'be medically inappropriate or unavailable — they cannot decline '
-        'simply because they disagree.\n\n'
-        'If a provider believes following your directive would conflict '
-        'with accepted medical standards, they are required to attempt to '
-        'transfer your care to a provider who will follow it. If transfer '
-        'is not possible, the provider must continue to act in your best '
-        'interest while consulting with your agent.\n\n'
-        'If you believe a provider is improperly refusing to follow your '
-        'directive, contact PA Protection & Advocacy (1-800-692-7443) — '
-        'they handle complaints under Act 194.',
   ),
   EducationSection(
     id: 'faq_capacity_restoration',
@@ -1750,10 +1696,17 @@ const _glossary = [
     content:
         'A clinical determination that a person lacks sufficient understanding '
         'or ability to make or communicate responsible decisions about mental '
-        'health treatment. Under PA Act 194, incapacity is determined by a '
-        'psychiatrist and one additional qualified professional (another '
-        'psychiatrist, licensed psychologist, family physician, attending '
-        'physician, or mental health treatment professional).',
+        'health treatment — the absence of capacity for a given decision at a '
+        'given time. A finding of incapacity is what activates the operative '
+        'parts of your MHAD.\n\n'
+        'Under PA Act 194, incapacity is determined by a psychiatrist and one '
+        'additional qualified professional (another psychiatrist, licensed '
+        'psychologist, family physician, attending physician, or mental health '
+        'treatment professional).\n\n'
+        'Incapacity is NOT the same as a psychiatric diagnosis, an involuntary '
+        'commitment, or a finding of legal incompetence — a person can be '
+        'hospitalised under section 302 and still have capacity for some '
+        'decisions.',
   ),
   EducationSection(
     id: 'gloss_psychotropic',
@@ -1818,18 +1771,6 @@ const _glossary = [
         'and time-specific (it can come and go). Under PA Act 194, capacity '
         'is determined by a qualified clinician and documented in the '
         'medical record.',
-  ),
-  EducationSection(
-    id: 'glossary_incapacity',
-    category: EducationCategory.glossary,
-    title: 'Incapacity',
-    content:
-        'The absence of capacity for a given decision at a given time. A '
-        'finding of incapacity is what activates the operative parts of '
-        'your MHAD. Incapacity is NOT the same as a psychiatric diagnosis, '
-        'an involuntary commitment, or a finding of legal incompetence — a '
-        'person can be hospitalised under section 302 and still have '
-        'capacity for some decisions.',
   ),
   EducationSection(
     id: 'glossary_competence',
@@ -2196,9 +2137,19 @@ const _supplementary = [
     content:
         'Under 20 Pa.C.S. §5845, a mental health power of attorney executed '
         'in another state or jurisdiction is valid in Pennsylvania if it '
-        'conforms to the laws of that jurisdiction.\n\n'
-        'Exception: An out-of-state directive will not be honored if an '
-        'agent\'s decisions would conflict with Pennsylvania law.',
+        'conforms to the laws of that jurisdiction — as long as it does not '
+        'permit decisions inconsistent with Pennsylvania law. (An out-of-state '
+        'directive will not be honored if an agent\'s decisions would conflict '
+        'with Pennsylvania law.)\n\n'
+        'However, your Pennsylvania directive may not be automatically honored '
+        'in other states. Each state has its own laws governing mental health '
+        'advance directives.\n\n'
+        'If you travel frequently or live part-time in another state, '
+        'consider:\n'
+        '• Having your directive notarized (not required by PA law, but may '
+        'help with out-of-state acceptance)\n'
+        '• Creating a directive in each state where you receive care\n'
+        '• Carrying a copy of your directive when traveling',
   ),
   EducationSection(
     id: 'supp_court_petition',
@@ -2215,47 +2166,36 @@ const _supplementary = [
   EducationSection(
     id: 'supp_guardian_hierarchy',
     category: EducationCategory.supplementary,
-    title: 'Guardian vs. Agent Authority',
+    title: 'Guardian vs. Your Directive and Agent',
     content:
-        'Under 20 Pa.C.S. §5841, if a guardianship proceeding is initiated:\n'
-        '• Your provider must notify both the court and your agent about '
-        'your advance directive\n'
+        'Your directive is built to protect your autonomy even if a guardian '
+        'is later appointed for you. Two sections of Act 194 work together '
+        'here.\n\n'
+        '**Precedence (20 Pa.C.S. §5833).** A valid MHAD takes precedence '
+        'over a court-appointed guardian\'s decisions about your mental health '
+        'care — your written wishes come first. A guardian can override your '
+        'directive only if a court specifically authorizes it; without a court '
+        'order, the guardian must follow it. If there is a conflict between '
+        'your directive and what a guardian wants, your directive controls '
+        'unless a court rules otherwise. This protection exists because the '
+        'directive represents choices you made while you had capacity, and '
+        'Pennsylvania law respects those choices even if a guardian is '
+        'appointed later.\n\n'
+        '**Procedure when a guardianship is initiated (20 Pa.C.S. §5841).**\n'
+        '• Your provider must notify both the court and your agent about your '
+        'advance directive\n'
         '• Your agent must inform the court of the directive\'s contents\n'
-        '• If you are later adjudicated incapacitated, your mental health '
-        'POA remains effective\n'
+        '• If you are later adjudicated incapacitated, your mental health POA '
+        'remains effective\n'
         '• The court SHALL PREFER allowing your agent to continue making '
-        'decisions per the directive\n'
-        '• Exception: unless you specified that a guardian has power to '
-        'terminate, revoke, or suspend the directive\n'
+        'decisions per the directive — unless you specified that a guardian '
+        'has power to terminate, revoke, or suspend it\n'
         '• If the court grants a guardian mental health care powers, the '
         'guardian is bound by the same obligations as an agent\n\n'
-        'You may nominate a guardian of your person in your directive. The '
-        'court shall appoint per your nomination unless there is good cause '
-        'or disqualification.',
-  ),
-  EducationSection(
-    id: 'supp_guardian_directive_precedence',
-    category: EducationCategory.supplementary,
-    title: 'Your Directive Takes Precedence Over a Guardian',
-    content:
-        'Under 20 Pa.C.S. §5833 (Act 194), your Mental Health Advance '
-        'Directive is designed to protect your autonomy even if a guardian '
-        'is later appointed for you.\n\n'
-        'Key points:\n\n'
-        '• A valid MHAD takes precedence over a court-appointed guardian\'s '
-        'decisions regarding your mental health care. Your written wishes '
-        'come first.\n\n'
-        '• A guardian can only override your directive if a court '
-        'specifically authorizes it. Without a court order, the guardian '
-        'must follow your directive.\n\n'
-        '• If there is a conflict between what your directive says and what '
-        'a guardian wants, your directive controls unless a court rules '
-        'otherwise.\n\n'
-        '• This protection exists because the directive represents choices '
-        'you made while you had capacity. Pennsylvania law respects those '
-        'choices even if your circumstances change and a guardian is '
-        'appointed later.\n\n'
-        'This means that creating a directive now provides lasting '
+        '**Nominating a guardian.** You may nominate a guardian of your person '
+        'in your directive. The court shall appoint the person you nominate '
+        'unless there is good cause or a disqualification.\n\n'
+        'The practical takeaway: creating a directive now provides lasting '
         'protection for your treatment preferences, regardless of what '
         'happens in the future.',
   ),
@@ -2282,25 +2222,6 @@ const _supplementary = [
         'termination has lifelong consequences. ECT and experimental '
         'treatments carry significant risks that warrant explicit personal '
         'authorization rather than delegated authority.',
-  ),
-  EducationSection(
-    id: 'supp_interstate_validity',
-    category: EducationCategory.supplementary,
-    title: 'Interstate Validity',
-    content:
-        'Under PA Act 194 \u00a75845, out-of-state mental health powers of '
-        'attorney are valid in Pennsylvania if they conform to their origin '
-        'state\'s law, as long as they don\'t permit decisions inconsistent '
-        'with Pennsylvania law.\n\n'
-        'However, your Pennsylvania directive may not be automatically '
-        'honored in other states. Each state has its own laws governing '
-        'mental health advance directives.\n\n'
-        'If you travel frequently or live part-time in another state, '
-        'consider:\n'
-        '\u2022 Having your directive notarized (not required by PA law, but '
-        'may help with out-of-state acceptance)\n'
-        '\u2022 Creating a directive in each state where you receive care\n'
-        '\u2022 Carrying a copy of your directive when traveling',
   ),
   EducationSection(
     id: 'supp_incapacity_declaration',
@@ -2823,7 +2744,6 @@ const wizardStepEducationMap = <String, List<String>>{
     'decl_guardian',
     'poa_guardian',
     'faq_guardian',
-    'faq_guardianship_interaction',
     'gloss_declaration',
   ],
   'review': ['faq_who_to_give', 'faq_changes', 'faq_how_providers_access'],
@@ -2833,7 +2753,7 @@ const wizardStepEducationMap = <String, List<String>>{
     'poa_execution',
     'faq_valid',
     'faq_finding_witnesses',
-    'faq_revocation_how',
+    'faq_revoke',
     'gloss_execute',
     'supp_governing_law',
   ],
