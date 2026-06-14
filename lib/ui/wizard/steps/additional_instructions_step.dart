@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:drift/drift.dart' show Value;
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/providers/app_providers.dart';
+import 'package:mhad/ui/router.dart';
+import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/wizard/auto_save_mixin.dart';
 import 'package:mhad/ui/wizard/widgets/ai_suggest_button.dart';
 import 'package:mhad/ui/wizard/widgets/example_text_button.dart';
@@ -519,7 +523,98 @@ class _AdditionalInstructionsStepState
             'a catch-all for anything else you want to communicate about '
             'your care preferences.',
           ),
+
+          // Optional add-ons, moved here from Settings (2026-06-13). Each opens
+          // its own full screen, which keeps the complete explanation; these
+          // cards just carry a short summary and the entry point.
+          const SizedBox(height: 8),
+          const SectionLabel('Optional add-ons'),
+          const SizedBox(height: 8),
+          _addOnCard(
+            icon: Icons.favorite_outline,
+            title: 'Crisis plan / WRAP',
+            subtitle:
+                'Your early-warning signs, triggers, what genuinely helps, and '
+                "what not to do. Not required by Act 194 — but it's the part "
+                'agents and ER staff read first.',
+            onTap: () =>
+                context.push(AppRoutes.crisisPlanRoute(widget.directiveId)),
+          ),
+          const SizedBox(height: 8),
+          _addOnCard(
+            icon: Icons.anchor_outlined,
+            title: 'Self-binding (Ulysses) clause',
+            subtitle:
+                'Acknowledge that, once two professionals find you incapable, '
+                'what you wrote stands even over your in-the-moment protest, '
+                'until capacity returns (PA Act 194 § 5808).',
+            onTap: () =>
+                context.push(AppRoutes.ulyssesRoute(widget.directiveId)),
+          ),
         ],
+      ),
+    );
+  }
+
+  /// A tappable card linking to an optional add-on screen (Crisis plan,
+  /// Ulysses clause). The destination screen owns the full explanation.
+  Widget _addOnCard({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required VoidCallback onTap,
+  }) {
+    final p = Theme.of(context).mhadPalette;
+    return Card(
+      margin: EdgeInsets.zero,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(
+                  color: p.primaryLight,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(icon, color: p.primary, size: 20),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        fontFamily: 'DM Sans',
+                        fontWeight: FontWeight.w600,
+                        fontSize: 15,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      subtitle,
+                      style: TextStyle(
+                        fontFamily: 'DM Sans',
+                        fontSize: 12,
+                        height: 1.4,
+                        color: p.textMuted,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
+              Icon(Icons.chevron_right, color: p.textMuted, size: 20),
+            ],
+          ),
+        ),
       ),
     );
   }

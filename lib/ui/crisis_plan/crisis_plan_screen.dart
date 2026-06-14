@@ -14,7 +14,7 @@ import 'package:mhad/ui/widgets/design/wizard_header.dart';
 
 /// Crisis plan / WRAP toolbox optional add-on (v2 prototype `m-crisisplan`).
 ///
-/// Reachable from Settings → My directive and from Step 10 (Anything else).
+/// Reachable from the wizard's "Anything else" step (Optional add-ons).
 /// Five sections per WRAP:
 /// 1. Early warning signs
 /// 2. Triggers (red tone)

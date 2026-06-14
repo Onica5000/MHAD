@@ -724,22 +724,8 @@ class _CurrentDirectiveSection extends ConsumerWidget {
                         context.push(AppRoutes.legalToggleRoute(d.id)),
                   ),
                   Divider(height: 1, color: p.border),
-                  _SettingsRow(
-                    icon: Icons.favorite_outline,
-                    title: 'Crisis plan / WRAP',
-                    subtitle: 'Optional add-on — what helps when not okay',
-                    onTap: () =>
-                        context.push(AppRoutes.crisisPlanRoute(d.id)),
-                  ),
-                  Divider(height: 1, color: p.border),
-                  _SettingsRow(
-                    icon: Icons.anchor_outlined,
-                    title: 'Self-binding (Ulysses) clause',
-                    subtitle: 'Opt-in confirmation under PA Act 194 § 5802',
-                    onTap: () =>
-                        context.push(AppRoutes.ulyssesRoute(d.id)),
-                  ),
-                  Divider(height: 1, color: p.border),
+                  // Crisis plan / WRAP and the Self-binding (Ulysses) clause
+                  // moved into the wizard's "Anything else" step (2026-06-13).
                   _SettingsRow(
                     icon: Icons.auto_awesome_outlined,
                     title: 'AI consistency check',
