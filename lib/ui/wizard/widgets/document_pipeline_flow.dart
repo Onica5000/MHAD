@@ -755,30 +755,8 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
             ? '${instrMap['other']}\n$ag'
             : ag;
       }
-
-      // AI-suggested additional meds
-      if (_smartChecked['Additional Medications to Consider'] == true) {
-        for (final m in _smartResult!.additionalMedsToConsider) {
-          await repo.insertMedication(MedicationEntriesCompanion.insert(
-            directiveId: id,
-            entryType: MedicationEntryType.preferred.name,
-            medicationName: Value(m.name),
-            reason: Value(m.reason),
-            sortOrder: Value(medOrder++),
-          ));
-        }
-      }
-      if (_smartChecked['Additional Medications to Avoid'] == true) {
-        for (final m in _smartResult!.additionalMedsToAvoid) {
-          await repo.insertMedication(MedicationEntriesCompanion.insert(
-            directiveId: id,
-            entryType: MedicationEntryType.exception.name,
-            medicationName: Value(m.name),
-            reason: Value(m.reason),
-            sortOrder: Value(medOrder++),
-          ));
-        }
-      }
+      // Smart-fill no longer suggests medications — the AI must never
+      // recommend or name drugs the user didn't enter (see smart_fill_service).
     }
 
     // Write all accumulated instruction fields

@@ -179,7 +179,8 @@ Return only the improved text — no explanation, no quotes, no preamble.''';
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'AI suggestions are not legal advice. Review carefully.',
+                  'AI suggestions are not legal or medical advice. '
+                  'Review carefully.',
                   style: Theme.of(ctx).textTheme.bodySmall?.copyWith(
                       color: cs.onSurfaceVariant,
                       fontStyle: FontStyle.italic),

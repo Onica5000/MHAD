@@ -154,6 +154,10 @@ class GeminiApiAssistant implements AiAssistant {
           'voice.')
       ..writeln('- Never include personal information. Never invent statute '
           'numbers, facts, medication names, or provider names.')
+      ..writeln('- CLINICAL SAFETY (absolute): never diagnose or interpret '
+          'symptoms; never name, suggest, or recommend any medication, dose, '
+          'or treatment; never give medical, therapeutic, or legal advice. '
+          'Only help the user think about and phrase their OWN preferences.')
       ..writeln()
       ..writeln('Form type: ${_formTypeName(context.formType ?? '')}')
       ..writeln('Current step: ${context.stepName ?? 'the current step'}');
@@ -400,10 +404,13 @@ class GeminiApiAssistant implements AiAssistant {
     buf.writeln();
     buf.writeln('CLINICAL SAFETY RULES (absolute):');
     buf.writeln(
-        '11. NEVER suggest stopping, reducing, or changing medications — '
-        'tell the user to discuss any medication changes with their prescriber.');
+        '11. NEVER suggest stopping, reducing, starting, or changing '
+        'medications — tell the user to discuss any medication changes with '
+        'their prescriber.');
     buf.writeln(
-        '12. NEVER suggest specific medication dosages or adjustments.');
+        '12. NEVER recommend, suggest, name, or rank a medication, dose, or '
+        'treatment the user did not themselves raise. You may only help the '
+        'user record, in their own words, a medication they already named.');
     buf.writeln(
         '13. NEVER suggest unsupervised withdrawal from psychiatric medications.');
     buf.writeln(

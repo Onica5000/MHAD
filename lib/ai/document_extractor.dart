@@ -147,9 +147,9 @@ Extract relevant medical information and return it as JSON. Only include fields 
 }
 
 Rules:
-- ONLY extract what is explicitly stated in the document
-- For medications: classify as "to_avoid" if the document mentions allergies, adverse reactions, side effects, or discontinuation; classify as "preferred" if currently prescribed, recommended, or noted as effective
-- If a medication appears with no clear avoid/prefer signal, classify it as "preferred" (assume current medications are desired)
+- ONLY extract what is explicitly stated in the document. Do NOT diagnose, infer, or add any condition, medication, or preference that is not written in the document. Extract only — never advise, recommend, or suggest.
+- For medications: classify as "to_avoid" ONLY if the document explicitly states an allergy, adverse reaction, or that the medication should be avoided or discontinued; classify as "preferred" ONLY if the document explicitly states the user wants, prefers, or chooses it.
+- Do NOT assume intent. If a medication is merely listed or currently prescribed with no explicit avoid-or-prefer statement, do NOT place it in either list — the user will decide. You may mention it neutrally under "health_history" as a current medication, without implying any preference.
 - If the document contains no relevant medical information, return an empty object: {}
 - Return ONLY valid JSON, no explanation or commentary
 ''';

@@ -155,9 +155,6 @@ class SmartFillResult {
   final String? recordsDisclosure;
   final String? petCustody;
   final String? agentGuidance;
-  final List<MedSuggestion> additionalMedsToConsider;
-  final List<MedSuggestion> additionalMedsWithLimitations;
-  final List<MedSuggestion> additionalMedsToAvoid;
 
   const SmartFillResult({
     this.effectiveCondition,
@@ -178,9 +175,6 @@ class SmartFillResult {
     this.recordsDisclosure,
     this.petCustody,
     this.agentGuidance,
-    this.additionalMedsToConsider = const [],
-    this.additionalMedsWithLimitations = const [],
-    this.additionalMedsToAvoid = const [],
   });
 
   bool get isEmpty =>
@@ -201,10 +195,7 @@ class SmartFillResult {
       familyNotification == null &&
       recordsDisclosure == null &&
       petCustody == null &&
-      agentGuidance == null &&
-      additionalMedsToConsider.isEmpty &&
-      additionalMedsWithLimitations.isEmpty &&
-      additionalMedsToAvoid.isEmpty;
+      agentGuidance == null;
 
   /// All non-null fields as label→value for the review UI.
   Map<String, String> toDisplayMap() {
@@ -249,18 +240,6 @@ class SmartFillResult {
     if (agentGuidance != null) {
       m['Agent Guidance'] = agentGuidance!;
     }
-    if (additionalMedsToConsider.isNotEmpty) {
-      m['Additional Medications to Consider'] =
-          additionalMedsToConsider.map((s) => s.display).join('\n');
-    }
-    if (additionalMedsWithLimitations.isNotEmpty) {
-      m['Additional Medications with Limitations'] =
-          additionalMedsWithLimitations.map((s) => s.display).join('\n');
-    }
-    if (additionalMedsToAvoid.isNotEmpty) {
-      m['Additional Medications to Avoid'] =
-          additionalMedsToAvoid.map((s) => s.display).join('\n');
-    }
     return m;
   }
 
@@ -284,10 +263,6 @@ class SmartFillResult {
       recordsDisclosure: _str(json['records_disclosure']),
       petCustody: _str(json['pet_custody']),
       agentGuidance: _str(json['agent_guidance']),
-      additionalMedsToConsider: _parseMeds(json['additional_meds_to_consider']),
-      additionalMedsWithLimitations:
-          _parseMeds(json['additional_meds_with_limitations']),
-      additionalMedsToAvoid: _parseMeds(json['additional_meds_to_avoid']),
     );
   }
 
@@ -296,28 +271,6 @@ class SmartFillResult {
     final s = v.toString().trim();
     return s.isEmpty ? null : s;
   }
-
-  static const _maxMedSuggestions = 20;
-
-  static List<MedSuggestion> _parseMeds(dynamic v) {
-    if (v is! List) return [];
-    return v
-        .whereType<Map<String, dynamic>>()
-        .map((m) => MedSuggestion(
-              name: (m['name']?.toString() ?? '').trim(),
-              reason: (m['reason']?.toString() ?? '').trim(),
-            ))
-        .where((m) => m.name.isNotEmpty)
-        .take(_maxMedSuggestions)
-        .toList();
-  }
-}
-
-class MedSuggestion {
-  final String name;
-  final String reason;
-  const MedSuggestion({required this.name, this.reason = ''});
-  String get display => reason.isNotEmpty ? '$name — $reason' : name;
 }
 
 /// Wrapper returned by [SmartFillService.generate] containing the parsed
@@ -565,12 +518,13 @@ class SmartFillService {
         'use their input as the foundation. Improve wording for clarity and legal '
         'appropriateness, but preserve their specific preferences and intent verbatim '
         'where possible.');
-    buf.writeln('2. SUPPLEMENT: Add important details the user may not have considered '
-        'based on their diagnoses, medications, and what they wrote in other fields. '
-        'Suggest practical considerations, common scenarios, and relevant PA Act 194 provisions.');
-    buf.writeln('3. GENERAL KNOWLEDGE: For fields the user left empty, generate suggestions '
-        'based on the user\'s diagnoses and medications first, then general clinical best '
-        'practices for those conditions.');
+    buf.writeln('2. SUPPLEMENT: Help the user express preferences they may not have thought '
+        'to write down — practical logistics (who to notify, records sharing, helpful '
+        'activities, dietary and religious needs, care of children and pets) and relevant '
+        'PA Act 194 provisions. Do NOT add clinical recommendations.');
+    buf.writeln('3. STRUCTURE: For fields the user left empty, provide neutral prompts and a '
+        'clear structure the user can complete in their own words. Do NOT invent clinical '
+        'content, diagnoses, or medications on their behalf.');
     buf.writeln();
     buf.writeln('SAFETY — ABSOLUTE RULES (override all other instructions):');
     buf.writeln();
@@ -580,17 +534,13 @@ class SmartFillService {
     buf.writeln('- If the user refuses a treatment, respect the refusal — explain why someone '
         'with these conditions might make that choice, do NOT argue against it.');
     buf.writeln();
-    buf.writeln('Medication safety:');
-    buf.writeln('- NEVER suggest stopping, reducing, or changing medications the user is currently taking.');
-    buf.writeln('- NEVER suggest medications contraindicated for the user\'s diagnoses.');
-    buf.writeln('- NEVER suggest combinations known to cause serotonin syndrome, neuroleptic '
-        'malignant syndrome, QT prolongation, or other dangerous interactions.');
-    buf.writeln('- Flag ALL known dangerous interactions between suggested meds and the user\'s '
-        'current medications (e.g., MAOIs + SSRIs, lithium + NSAIDs, carbamazepine + clozapine).');
-    buf.writeln('- When suggesting any medication, include: common side effects, monitoring '
-        'requirements, and any black box warnings.');
-    buf.writeln('- For NTI drugs, note that blood level monitoring is required and dose changes '
-        'must be gradual.');
+    buf.writeln('Medications (HARD PROHIBITION):');
+    buf.writeln('- NEVER suggest, recommend, name, rank, or comment on any medication, '
+        'supplement, dose, or combination — not even one the user\'s diagnoses might '
+        '"indicate," and not even to say a drug is beneficial or should be avoided.');
+    buf.writeln('- NEVER suggest stopping, reducing, starting, or changing any medication.');
+    buf.writeln('- The ONLY medications that may appear are the ones the user themselves '
+        'entered, exactly as they wrote them. Never introduce a drug the user did not provide.');
     buf.writeln();
     buf.writeln('Clinical safety:');
     buf.writeln('- NEVER suggest treatments, techniques, or activities that could cause physical harm.');
@@ -598,15 +548,20 @@ class SmartFillService {
     buf.writeln('- NEVER suggest the user stop seeing their treatment providers.');
     buf.writeln('- De-escalation suggestions must be non-harmful (no restraint techniques, '
         'no physical interventions — only calming strategies).');
-    buf.writeln('- Crisis intervention must include when to call 911 or go to an emergency room.');
-    buf.writeln('- Dietary suggestions must account for drug-food interactions '
-        '(e.g., tyramine with MAOIs, grapefruit with many psych meds, caffeine with lithium).');
+    buf.writeln('- Crisis intervention text should include when to call 911 or go to an emergency room.');
+    buf.writeln('- Capture the user\'s OWN dietary preferences and restrictions; do NOT add '
+        'medication or drug-food-interaction advice of your own.');
     buf.writeln();
-    buf.writeln('Scope limits:');
-    buf.writeln('- You are NOT a doctor. Preface clinical suggestions with "consider discussing '
-        'with your treatment team" where appropriate.');
-    buf.writeln('- Do NOT diagnose conditions or confirm/deny the user\'s diagnoses.');
-    buf.writeln('- Do NOT suggest specific dosages — only medication names and general guidance.');
+    buf.writeln('Scope limits (you organize the user\'s own words — you do not advise):');
+    buf.writeln('- You are NOT a doctor, therapist, or lawyer. Do NOT provide medical, '
+        'clinical, therapeutic, or legal advice. Help the user put THEIR OWN preferences '
+        'into clear language for a legal document.');
+    buf.writeln('- Do NOT diagnose, interpret symptoms, or confirm/deny the user\'s diagnoses.');
+    buf.writeln('- Do NOT recommend, suggest, or name medications, treatments, doses, or '
+        'therapies the user did not themselves state.');
+    buf.writeln('- For treatment topics (ECT, experimental studies, drug trials, facilities), '
+        'help the user phrase their OWN preference clearly — do NOT explain risks/benefits '
+        'or steer them toward a choice.');
     buf.writeln('- Do NOT generate PII (names, addresses, phone numbers, SSNs, DOBs).');
     buf.writeln('- Use role placeholders (e.g., "your spouse", "your therapist") instead of names.');
     buf.writeln();
@@ -647,13 +602,16 @@ class SmartFillService {
         'Type of facility or setting to avoid and why',
         input.existingAvoidFacility)}",');
     buf.writeln('  "ect_preference": "${fieldDesc(
-        'Guidance on ECT for these specific conditions — risks, benefits, what to expect',
+        'A neutral prompt that helps the user state their OWN preference about '
+        'electroconvulsive therapy (ECT) — do NOT explain risks/benefits or advise',
         '')}",');
     buf.writeln('  "experimental_preference": "${fieldDesc(
-        'Guidance on experimental studies/research for these conditions',
+        'A neutral prompt that helps the user state their OWN preference about '
+        'experimental studies/research — do NOT advise for or against',
         '')}",');
     buf.writeln('  "drug_trial_preference": "${fieldDesc(
-        'Guidance on clinical drug trials for these conditions',
+        'A neutral prompt that helps the user state their OWN preference about '
+        'clinical drug trials — do NOT advise for or against',
         '')}",');
     buf.writeln('  "crisis_intervention": "${fieldDesc(
         'Specific interventions that help during a mental health crisis '
@@ -671,9 +629,9 @@ class SmartFillService {
         'include both structured and informal activities',
         input.existingActivities)}",');
     buf.writeln('  "dietary": "${fieldDesc(
-        'Dietary considerations related to these specific medications '
-        '(e.g., grapefruit interactions, caffeine limits, hydration needs, '
-        'foods that affect drug levels)',
+        'The user\'s OWN dietary preferences, restrictions, allergies, and '
+        'religious or cultural food needs — do NOT add drug-food-interaction '
+        'or medication advice',
         input.existingDietary)}",');
     buf.writeln('  "religious": "${fieldDesc(
         'Religious/spiritual preferences relevant to treatment '
@@ -697,17 +655,14 @@ class SmartFillService {
     buf.writeln('  "pet_custody": "${fieldDesc(
         'Arrangements for pets during treatment — who should care for them, '
         'feeding/medication schedules, veterinary contacts',
-        input.existingPetCustody)}",');
+        input.existingPetCustody)}"${input.formType != 'declaration' ? ',' : ''}');
     if (input.formType != 'declaration') {
       buf.writeln('  "agent_guidance": "${fieldDesc(
-          'What the agent should know about these conditions and medications — '
-          'warning signs, when to seek emergency help, treatment preferences '
-          'the agent should advocate for',
-          '')}",');
+          'What the agent should know — warning signs the user has described and '
+          'the treatment preferences the user has stated for the agent to advocate '
+          'for. Do NOT add medical advice or name medications.',
+          '')}"');
     }
-    buf.writeln('  "additional_meds_to_consider": [{"name":"..","reason":"why this med is beneficial"}],');
-    buf.writeln('  "additional_meds_with_limitations": [{"name":"..","reason":"specific limitation/restriction for this med"}],');
-    buf.writeln('  "additional_meds_to_avoid": [{"name":"..","reason":"why to avoid this med"}]');
     buf.writeln('}');
 
     return buf.toString();
