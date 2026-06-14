@@ -547,11 +547,13 @@ class SmartFillService {
         'placeholders (e.g., "your spouse", "your therapist") instead of names.');
     buf.writeln();
     buf.writeln('QUALITY RULES:');
-    buf.writeln('- You MUST provide a value for EVERY field listed below — do NOT skip any.');
-    buf.writeln('- Cross-reference ALL user data: diagnoses inform crisis plans, medications '
-        'inform dietary needs, conditions inform activity suggestions, etc.');
-    buf.writeln('- Be specific and practical — include concrete examples, names of techniques, '
-        'and actionable instructions rather than generic advice.');
+    buf.writeln('- Only fill a field when you have something well-established and accurate to '
+        'add for it. If you have nothing reliable to say for a field, return an empty string '
+        'for it — NEVER invent or pad content just to fill it in.');
+    buf.writeln('- Draw only on what the user actually entered: their stated diagnoses, '
+        'medications, and other fields. Do not assume facts they did not provide.');
+    buf.writeln('- Be specific and practical where you are confident — concrete examples and '
+        'actionable phrasing rather than generic filler — but never at the expense of accuracy.');
     buf.writeln('- Use plain language suitable for a legal document.');
     buf.writeln('- Do NOT include patient name, DOB, or any PII.');
     buf.writeln('- PA NTI drug rule: Narrow Therapeutic Index drugs (lithium, carbamazepine, '
