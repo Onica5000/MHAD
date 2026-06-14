@@ -1627,6 +1627,67 @@ const _glossary = [
         'of the person making the Advance Directive.',
   ),
   EducationSection(
+    id: 'glossary_capacity',
+    category: EducationCategory.glossary,
+    title: 'Capacity',
+    content:
+        'A clinical determination that a person can understand, weigh, and '
+        'communicate a decision about their own care. Capacity is decision-'
+        'specific (you may have capacity for one decision and not another) '
+        'and time-specific (it can come and go). Under PA Act 194, capacity '
+        'is determined by a qualified clinician and documented in the '
+        'medical record.',
+  ),
+  EducationSection(
+    id: 'glossary_chapter_54_vs_58',
+    category: EducationCategory.glossary,
+    title: 'Chapter 54 vs Chapter 58 (the two PA advance-directive laws)',
+    content:
+        'Pennsylvania has two parallel advance-directive statutes in '
+        'Title 20 of the Consolidated Statutes:\n\n'
+        '• **Chapter 54 — Health Care (Act 169 of 2006).** General '
+        'health-care decisions: living wills, end-of-life care, '
+        'life-preserving treatment, surgery consent, general '
+        'health-care power of attorney, default health-care '
+        'representative hierarchy. Provider-duty section: §5462.\n\n'
+        '• **Chapter 58 — Mental Health Care (Act 194 of 2004).** '
+        'Mental-health treatment decisions: psychiatric '
+        'hospitalization, psychotropic medications, ECT, experimental '
+        'psychiatric studies, drug trials, facility preferences, '
+        'mental-health agent. Provider-duty section: §5842. This is '
+        'the law your MHAD is written under.\n\n'
+        'Both chapters use mandatory "shall comply" language for '
+        'provider duties. The same person can be named as your agent '
+        'under both — and often it is simplest if they are. See the '
+        'Supplementary section "How Chapter 54 and Chapter 58 work '
+        'together" for how each statute applies in specific clinical '
+        'situations.',
+  ),
+  EducationSection(
+    id: 'glossary_competence',
+    category: EducationCategory.glossary,
+    title: 'Competence (vs. capacity)',
+    content:
+        '"Competence" is a *legal* status determined by a court (for '
+        'example, after a guardianship hearing). "Capacity" is a *clinical* '
+        'judgment that can be made on a moment-by-moment basis by a '
+        'physician, psychologist, or certified RN practitioner. Your MHAD '
+        'is triggered by a clinical finding of incapacity — it does not '
+        'require a court declaration of incompetence.',
+  ),
+  EducationSection(
+    id: 'glossary_county_mh_idd',
+    category: EducationCategory.glossary,
+    title: 'County MH/IDD program',
+    content:
+        'Each PA county operates a Mental Health / Intellectual '
+        'Disabilities (MH/IDD) program that serves as the local entry '
+        'point for public mental-health services, crisis intervention, '
+        'and case management. Your county MH/IDD office is often a useful '
+        'contact to list in your directive — they can help coordinate '
+        'care across providers.',
+  ),
+  EducationSection(
     id: 'gloss_declaration',
     category: EducationCategory.glossary,
     title: 'Declaration',
@@ -1639,6 +1700,50 @@ const _glossary = [
     category: EducationCategory.glossary,
     title: 'Execute',
     content: 'To sign, date, and have the signature witnessed.',
+  ),
+  EducationSection(
+    id: 'gloss_incapacity',
+    category: EducationCategory.glossary,
+    title: 'Incapacity',
+    content:
+        'A clinical determination that a person lacks sufficient understanding '
+        'or ability to make or communicate responsible decisions about mental '
+        'health treatment — the absence of capacity for a given decision at a '
+        'given time. A finding of incapacity is what activates the operative '
+        'parts of your MHAD.\n\n'
+        'Under PA Act 194, incapacity is determined by a psychiatrist and one '
+        'additional qualified professional (another psychiatrist, licensed '
+        'psychologist, family physician, attending physician, or mental health '
+        'treatment professional).\n\n'
+        'Incapacity is NOT the same as a psychiatric diagnosis, an involuntary '
+        'commitment, or a finding of legal incompetence — a person can be '
+        'hospitalised under section 302 and still have capacity for some '
+        'decisions.',
+  ),
+  EducationSection(
+    id: 'gloss_involuntary_commitment',
+    category: EducationCategory.glossary,
+    title: 'Involuntary Commitment',
+    content:
+        'A legal process under Pennsylvania\'s Mental Health Procedures Act '
+        '(50 P.S. §7301 et seq.) by which a person may be hospitalized for '
+        'psychiatric treatment without their consent, typically when they '
+        'pose a clear and present danger to themselves or others. A person '
+        'who is involuntarily committed cannot execute a new Mental Health '
+        'Advance Directive during the commitment period, but a previously '
+        'executed directive remains in effect.',
+  ),
+  EducationSection(
+    id: 'glossary_least_restrictive',
+    category: EducationCategory.glossary,
+    title: 'Least restrictive alternative',
+    content:
+        'A foundational principle in PA mental-health law: treatment '
+        'should be provided in the setting and manner that imposes the '
+        'least limit on the person\'s freedom consistent with effective '
+        'care. Your directive can specify preferred settings (outpatient, '
+        'partial hospitalisation, specific facilities) that align with '
+        'this principle.',
   ),
   EducationSection(
     id: 'gloss_mhad',
@@ -1676,6 +1781,18 @@ const _glossary = [
         'or nursing who has a graduate degree and clinical experience.',
   ),
   EducationSection(
+    id: 'glossary_pmhca',
+    category: EducationCategory.glossary,
+    title: 'PMHCA — PA Mental Health Consumers\' Association',
+    content:
+        'A statewide consumer-run organisation providing peer support, '
+        'advocacy, and self-help resources for Pennsylvanians with mental-'
+        'health conditions. Helpline: 1-800-887-6422. They are a useful '
+        'point of contact for peer specialists, recovery groups, and '
+        'community resources to name in your directive\'s additional-'
+        'instructions section.',
+  ),
+  EducationSection(
     id: 'gloss_poa',
     category: EducationCategory.glossary,
     title: 'Power of Attorney',
@@ -1684,29 +1801,14 @@ const _glossary = [
         'care decisions on behalf of the person.',
   ),
   EducationSection(
-    id: 'gloss_revoke',
+    id: 'glossary_principal',
     category: EducationCategory.glossary,
-    title: 'Revoke',
-    content: 'To cancel or end.',
-  ),
-  EducationSection(
-    id: 'gloss_incapacity',
-    category: EducationCategory.glossary,
-    title: 'Incapacity',
+    title: 'Principal',
     content:
-        'A clinical determination that a person lacks sufficient understanding '
-        'or ability to make or communicate responsible decisions about mental '
-        'health treatment — the absence of capacity for a given decision at a '
-        'given time. A finding of incapacity is what activates the operative '
-        'parts of your MHAD.\n\n'
-        'Under PA Act 194, incapacity is determined by a psychiatrist and one '
-        'additional qualified professional (another psychiatrist, licensed '
-        'psychologist, family physician, attending physician, or mental health '
-        'treatment professional).\n\n'
-        'Incapacity is NOT the same as a psychiatric diagnosis, an involuntary '
-        'commitment, or a finding of legal incompetence — a person can be '
-        'hospitalised under section 302 and still have capacity for some '
-        'decisions.',
+        'The person creating the directive — that is, you. The term comes '
+        'from the language of legal instruments: the principal is the one '
+        'whose wishes are being expressed and on whose behalf the agent '
+        'acts.',
   ),
   EducationSection(
     id: 'gloss_psychotropic',
@@ -1721,80 +1823,10 @@ const _glossary = [
         'refusals for specific psychotropic medications.',
   ),
   EducationSection(
-    id: 'gloss_involuntary_commitment',
+    id: 'gloss_revoke',
     category: EducationCategory.glossary,
-    title: 'Involuntary Commitment',
-    content:
-        'A legal process under Pennsylvania\'s Mental Health Procedures Act '
-        '(50 P.S. §7301 et seq.) by which a person may be hospitalized for '
-        'psychiatric treatment without their consent, typically when they '
-        'pose a clear and present danger to themselves or others. A person '
-        'who is involuntarily committed cannot execute a new Mental Health '
-        'Advance Directive during the commitment period, but a previously '
-        'executed directive remains in effect.',
-  ),
-  EducationSection(
-    id: 'gloss_substituted_judgment',
-    category: EducationCategory.glossary,
-    title: 'Substituted Judgment',
-    content:
-        'The legal standard used by mental health care agents when making '
-        'decisions on behalf of the principal. Under PA Act 194 §5836, the '
-        'agent must decide based on what the principal WOULD want — not what '
-        'the agent personally thinks is best for the principal.\n\n'
-        'This means the agent should:\n'
-        '• Follow the specific instructions in the directive\n'
-        '• Consider the principal\'s known values, beliefs, and preferences\n'
-        '• Make the decision the principal would make if capable\n\n'
-        'This is different from the "best interests" standard used in some '
-        'other contexts, which focuses on what an objective person would '
-        'consider best for the patient.',
-  ),
-  EducationSection(
-    id: 'glossary_principal',
-    category: EducationCategory.glossary,
-    title: 'Principal',
-    content:
-        'The person creating the directive — that is, you. The term comes '
-        'from the language of legal instruments: the principal is the one '
-        'whose wishes are being expressed and on whose behalf the agent '
-        'acts.',
-  ),
-  EducationSection(
-    id: 'glossary_capacity',
-    category: EducationCategory.glossary,
-    title: 'Capacity',
-    content:
-        'A clinical determination that a person can understand, weigh, and '
-        'communicate a decision about their own care. Capacity is decision-'
-        'specific (you may have capacity for one decision and not another) '
-        'and time-specific (it can come and go). Under PA Act 194, capacity '
-        'is determined by a qualified clinician and documented in the '
-        'medical record.',
-  ),
-  EducationSection(
-    id: 'glossary_competence',
-    category: EducationCategory.glossary,
-    title: 'Competence (vs. capacity)',
-    content:
-        '"Competence" is a *legal* status determined by a court (for '
-        'example, after a guardianship hearing). "Capacity" is a *clinical* '
-        'judgment that can be made on a moment-by-moment basis by a '
-        'physician, psychologist, or certified RN practitioner. Your MHAD '
-        'is triggered by a clinical finding of incapacity — it does not '
-        'require a court declaration of incompetence.',
-  ),
-  EducationSection(
-    id: 'glossary_least_restrictive',
-    category: EducationCategory.glossary,
-    title: 'Least restrictive alternative',
-    content:
-        'A foundational principle in PA mental-health law: treatment '
-        'should be provided in the setting and manner that imposes the '
-        'least limit on the person\'s freedom consistent with effective '
-        'care. Your directive can specify preferred settings (outpatient, '
-        'partial hospitalisation, specific facilities) that align with '
-        'this principle.',
+    title: 'Revoke',
+    content: 'To cancel or end.',
   ),
   EducationSection(
     id: 'glossary_section_302',
@@ -1819,43 +1851,6 @@ const _glossary = [
         'hearing in front of a mental-health review officer within 120 '
         'hours of the 302 admission. You have the right to counsel and '
         'to be present.',
-  ),
-  EducationSection(
-    id: 'glossary_pmhca',
-    category: EducationCategory.glossary,
-    title: 'PMHCA — PA Mental Health Consumers\' Association',
-    content:
-        'A statewide consumer-run organisation providing peer support, '
-        'advocacy, and self-help resources for Pennsylvanians with mental-'
-        'health conditions. Helpline: 1-800-887-6422. They are a useful '
-        'point of contact for peer specialists, recovery groups, and '
-        'community resources to name in your directive\'s additional-'
-        'instructions section.',
-  ),
-  EducationSection(
-    id: 'glossary_county_mh_idd',
-    category: EducationCategory.glossary,
-    title: 'County MH/IDD program',
-    content:
-        'Each PA county operates a Mental Health / Intellectual '
-        'Disabilities (MH/IDD) program that serves as the local entry '
-        'point for public mental-health services, crisis intervention, '
-        'and case management. Your county MH/IDD office is often a useful '
-        'contact to list in your directive — they can help coordinate '
-        'care across providers.',
-  ),
-  EducationSection(
-    id: 'glossary_treatment_over_objection',
-    category: EducationCategory.glossary,
-    title: 'Treatment over objection',
-    content:
-        'Treatment provided despite the patient\'s contemporaneous '
-        'objection. Under PA law and constitutional protections, treatment '
-        'over objection is generally permitted only with strict procedural '
-        'safeguards (court order or qualifying involuntary-commitment '
-        'status) and only for treatments where the benefit substantially '
-        'outweighs the burden. Your directive\'s preferences are part of '
-        'the analysis a court would weigh.',
   ),
   EducationSection(
     id: 'glossary_shall_comply',
@@ -1885,29 +1880,34 @@ const _glossary = [
         'process).',
   ),
   EducationSection(
-    id: 'glossary_chapter_54_vs_58',
+    id: 'gloss_substituted_judgment',
     category: EducationCategory.glossary,
-    title: 'Chapter 54 vs Chapter 58 (the two PA advance-directive laws)',
+    title: 'Substituted Judgment',
     content:
-        'Pennsylvania has two parallel advance-directive statutes in '
-        'Title 20 of the Consolidated Statutes:\n\n'
-        '• **Chapter 54 — Health Care (Act 169 of 2006).** General '
-        'health-care decisions: living wills, end-of-life care, '
-        'life-preserving treatment, surgery consent, general '
-        'health-care power of attorney, default health-care '
-        'representative hierarchy. Provider-duty section: §5462.\n\n'
-        '• **Chapter 58 — Mental Health Care (Act 194 of 2004).** '
-        'Mental-health treatment decisions: psychiatric '
-        'hospitalization, psychotropic medications, ECT, experimental '
-        'psychiatric studies, drug trials, facility preferences, '
-        'mental-health agent. Provider-duty section: §5842. This is '
-        'the law your MHAD is written under.\n\n'
-        'Both chapters use mandatory "shall comply" language for '
-        'provider duties. The same person can be named as your agent '
-        'under both — and often it is simplest if they are. See the '
-        'Supplementary section "How Chapter 54 and Chapter 58 work '
-        'together" for how each statute applies in specific clinical '
-        'situations.',
+        'The legal standard used by mental health care agents when making '
+        'decisions on behalf of the principal. Under PA Act 194 §5836, the '
+        'agent must decide based on what the principal WOULD want — not what '
+        'the agent personally thinks is best for the principal.\n\n'
+        'This means the agent should:\n'
+        '• Follow the specific instructions in the directive\n'
+        '• Consider the principal\'s known values, beliefs, and preferences\n'
+        '• Make the decision the principal would make if capable\n\n'
+        'This is different from the "best interests" standard used in some '
+        'other contexts, which focuses on what an objective person would '
+        'consider best for the patient.',
+  ),
+  EducationSection(
+    id: 'glossary_treatment_over_objection',
+    category: EducationCategory.glossary,
+    title: 'Treatment over objection',
+    content:
+        'Treatment provided despite the patient\'s contemporaneous '
+        'objection. Under PA law and constitutional protections, treatment '
+        'over objection is generally permitted only with strict procedural '
+        'safeguards (court order or qualifying involuntary-commitment '
+        'status) and only for treatments where the benefit substantially '
+        'outweighs the burden. Your directive\'s preferences are part of '
+        'the analysis a court would weigh.',
   ),
 ];
 
