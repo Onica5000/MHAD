@@ -149,3 +149,74 @@ Future<AssistantSendResult> sendAssistantMessage(
     trimmedCount: trimmedCount,
   );
 }
+
+/// "Verify on the web": re-answers [question] with Gemini's Google-Search
+/// grounding and appends a grounded assistant turn (with web sources) to the
+/// conversation. Same gates as [sendAssistantMessage] (key / consent / rate /
+/// in-flight). Does NOT append a user turn — it re-verifies an existing one.
+Future<AssistantSendResult> verifyOnWeb(
+  WidgetRef ref, {
+  required String question,
+  required Future<bool> Function() requestConsent,
+  AssistantContext? assistantContext,
+}) async {
+  final q = question.trim();
+  if (q.isEmpty) return const AssistantSendResult();
+
+  final assistant = ref.read(aiAssistantProvider);
+  if (assistant is! GeminiApiAssistant) {
+    return const AssistantSendResult(needsKey: true);
+  }
+
+  if (!ref.read(aiConsentGivenProvider)) {
+    final accepted = await requestConsent();
+    if (!accepted) return const AssistantSendResult(consentDeclined: true);
+    ref.read(aiConsentGivenProvider.notifier).state = true;
+  }
+
+  if (ref.read(isSendingProvider)) {
+    return const AssistantSendResult(alreadySending: true);
+  }
+
+  final tracker = ref.read(geminiRateTrackerProvider);
+  final blockReason = tracker.blockReason;
+  if (blockReason != null) {
+    return AssistantSendResult(blockReason: blockReason);
+  }
+
+  final history = ref
+      .read(conversationProvider)
+      .map((m) => ChatMessage(role: m.role, content: PiiStripper.strip(m.content)))
+      .toList();
+
+  ref.read(isSendingProvider.notifier).state = true;
+  try {
+    final res = await assistant.sendGroundedQuery(
+      q,
+      history: history,
+      context: assistantContext,
+    );
+    tracker.recordRequest(estimatedTokens: (q.length / 4).ceil() + 400);
+    ref.read(conversationProvider.notifier).add(
+          ChatMessage(
+            role: MessageRole.assistant,
+            content: res.text,
+            grounded: true,
+            sources: res.sources,
+          ),
+        );
+  } catch (e) {
+    debugPrint('verifyOnWeb error: $e');
+    ref.read(conversationProvider.notifier).add(
+          ChatMessage(
+            role: MessageRole.assistant,
+            content:
+                'Sorry, I couldn\'t verify that on the web: ${FriendlyError.from(e)}',
+          ),
+        );
+  } finally {
+    ref.read(isSendingProvider.notifier).state = false;
+  }
+
+  return const AssistantSendResult(sent: true);
+}

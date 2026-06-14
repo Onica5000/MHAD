@@ -10,6 +10,7 @@ import 'package:mhad/constants.dart';
 import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/services/gemini_rate_tracker.dart';
 import 'package:mhad/ui/assistant/assistant_send.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/widgets/design/bottom_nav.dart';
 import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
@@ -106,6 +107,33 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
           duration: const Duration(seconds: 4),
         ),
       );
+    }
+    _scrollToBottom();
+  }
+
+  /// "Verify on the web" on a reply — re-answers [question] with Google-Search
+  /// grounding and appends a grounded reply (with sources).
+  Future<void> _verify(String question) async {
+    final result = await verifyOnWeb(
+      ref,
+      question: question,
+      assistantContext: widget.context,
+      requestConsent: () => showAiConsentDialog(context),
+    );
+    if (!mounted) return;
+    if (result.needsKey) {
+      _openSetup();
+      return;
+    }
+    if (result.consentDeclined || result.alreadySending) return;
+    if (result.blockReason != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(result.blockReason!),
+          duration: const Duration(seconds: 5),
+        ),
+      );
+      return;
     }
     _scrollToBottom();
   }
@@ -401,7 +429,27 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                       if (i == messages.length) {
                         return const _TypingIndicator();
                       }
-                      return _MessageBubble(message: messages[i]);
+                      final m = messages[i];
+                      // Offer "Verify on the web" on a plain AI reply (not an
+                      // error, not already grounded), re-verifying the user
+                      // question that prompted it.
+                      String? priorQuestion;
+                      if (m.role == MessageRole.assistant &&
+                          !m.grounded &&
+                          !m.content.startsWith('Sorry,')) {
+                        for (var j = i - 1; j >= 0; j--) {
+                          if (messages[j].role == MessageRole.user) {
+                            priorQuestion = messages[j].content;
+                            break;
+                          }
+                        }
+                      }
+                      return _MessageBubble(
+                        message: m,
+                        onVerify: priorQuestion == null
+                            ? null
+                            : () => _verify(priorQuestion!),
+                      );
                     },
                   ),
           ),
@@ -512,7 +560,10 @@ class _RateLimitBar extends ConsumerWidget {
 
 class _MessageBubble extends StatelessWidget {
   final ChatMessage message;
-  const _MessageBubble({required this.message});
+
+  /// When non-null, shows a "Verify on the web" action under this reply.
+  final VoidCallback? onVerify;
+  const _MessageBubble({required this.message, this.onVerify});
 
   @override
   Widget build(BuildContext context) {
@@ -585,6 +636,82 @@ class _MessageBubble extends StatelessWidget {
                           fontSize: 10,
                           fontStyle: FontStyle.italic,
                           color: cs.onSurfaceVariant,
+                        ),
+                      ),
+                    ),
+                  if (message.grounded)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.travel_explore,
+                              size: 12, color: cs.primary),
+                          const SizedBox(width: 4),
+                          Text(
+                            'Verified with web search',
+                            style: TextStyle(
+                              fontSize: 10.5,
+                              fontWeight: FontWeight.w700,
+                              color: cs.primary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  if (message.sources != null &&
+                      message.sources!.isNotEmpty) ...[
+                    const SizedBox(height: 4),
+                    Text(
+                      'Sources',
+                      style: TextStyle(
+                        fontSize: 10.5,
+                        fontWeight: FontWeight.w700,
+                        color: cs.onSurfaceVariant,
+                      ),
+                    ),
+                    for (final s in message.sources!)
+                      InkWell(
+                        onTap: () => launchUrl(Uri.parse(s.uri),
+                            mode: LaunchMode.externalApplication),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 2),
+                          child: Text(
+                            '• ${s.title}',
+                            style: TextStyle(
+                              fontSize: 11,
+                              color: cs.primary,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                  if (onVerify != null)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4),
+                      child: InkWell(
+                        onTap: onVerify,
+                        borderRadius: BorderRadius.circular(6),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 4, vertical: 2),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.travel_explore,
+                                  size: 13, color: cs.primary),
+                              const SizedBox(width: 4),
+                              Text(
+                                'Verify on the web',
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w700,
+                                  color: cs.primary,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),

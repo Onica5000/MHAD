@@ -3,15 +3,32 @@ library;
 
 enum MessageRole { user, assistant }
 
+/// A web source returned by Gemini's Google-Search grounding ("Verify on the
+/// web"). Shown under a grounded reply so the user can check the source.
+class GroundingSource {
+  final String title;
+  final String uri;
+  const GroundingSource({required this.title, required this.uri});
+}
+
 class ChatMessage {
   final MessageRole role;
   final String content;
   final DateTime timestamp;
 
+  /// True when this reply was produced with web-search grounding (shows a
+  /// "Verified with web search" badge + the [sources] below it).
+  final bool grounded;
+
+  /// Web sources backing a grounded reply (empty/null otherwise).
+  final List<GroundingSource>? sources;
+
   ChatMessage({
     required this.role,
     required this.content,
     DateTime? timestamp,
+    this.grounded = false,
+    this.sources,
   }) : timestamp = timestamp ?? DateTime.now();
 }
 

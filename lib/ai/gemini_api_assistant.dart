@@ -126,6 +126,94 @@ class GeminiApiAssistant implements AiAssistant {
     throw Exception('Failed after $maxAttempts attempts. Please try again later.');
   }
 
+  /// "Verify on the web": re-answers [question] with Gemini's Google-Search
+  /// grounding so the reply is backed by current web sources. The package
+  /// (0.4.7) can't enable the google_search tool, so this calls the REST
+  /// endpoint directly through the same cert-pinned client. Returns the
+  /// grounded answer plus the web sources to display. Still bound by the same
+  /// system prompt (clinical + accuracy rules).
+  Future<({String text, List<GroundingSource> sources})> sendGroundedQuery(
+    String question, {
+    List<ChatMessage> history = const [],
+    AssistantContext? context,
+  }) async {
+    final systemPrompt = _buildSystemPrompt(context);
+    final uri = Uri.parse('https://generativelanguage.googleapis.com/v1beta/'
+        'models/$_model:generateContent?key=$apiKey');
+
+    final contents = <Map<String, dynamic>>[
+      for (final m in history)
+        {
+          'role': m.role == MessageRole.user ? 'user' : 'model',
+          'parts': [
+            {'text': sanitizeForApi(m.content)}
+          ],
+        },
+      {
+        'role': 'user',
+        'parts': [
+          {'text': sanitizeForApi(question)}
+        ],
+      },
+    ];
+    final body = jsonEncode({
+      'systemInstruction': {
+        'parts': [
+          {'text': systemPrompt}
+        ]
+      },
+      'contents': contents,
+      'tools': [
+        {'google_search': <String, dynamic>{}}
+      ],
+    });
+
+    try {
+      final resp = await _httpClient
+          .post(uri,
+              headers: {'Content-Type': 'application/json'}, body: body)
+          .timeout(const Duration(seconds: 40));
+      if (resp.statusCode == 429) {
+        throw Exception('Too many requests. Please wait a minute and try '
+            'again.');
+      }
+      if (resp.statusCode != 200) {
+        throw Exception(
+            'Web verification failed (${resp.statusCode}). Please try again.');
+      }
+      final data = jsonDecode(resp.body) as Map<String, dynamic>;
+      final candidates = (data['candidates'] as List?) ?? const [];
+      if (candidates.isEmpty) {
+        throw Exception('No verified answer was returned. Please try again.');
+      }
+      final cand = candidates.first as Map<String, dynamic>;
+      final parts =
+          ((cand['content'] as Map?)?['parts'] as List?) ?? const [];
+      final text = parts
+          .whereType<Map<String, dynamic>>()
+          .map((p) => (p['text'] ?? '').toString())
+          .join()
+          .trim();
+      if (text.isEmpty) {
+        throw Exception('No verified answer was returned. Please try again.');
+      }
+      final gm = cand['groundingMetadata'] as Map<String, dynamic>?;
+      final chunks = (gm?['groundingChunks'] as List?) ?? const [];
+      final sources = <GroundingSource>[];
+      final seen = <String>{};
+      for (final c in chunks.whereType<Map<String, dynamic>>()) {
+        final web = c['web'] as Map<String, dynamic>?;
+        final u = (web?['uri'] ?? '').toString();
+        final t = (web?['title'] ?? '').toString();
+        if (u.isEmpty || !seen.add(u)) continue;
+        sources.add(GroundingSource(title: t.isEmpty ? u : t, uri: u));
+      }
+      return (text: text, sources: sources);
+    } on TimeoutException {
+      throw Exception('Web verification timed out. Please try again.');
+    }
+  }
+
   /// Generates a short, step-contextual "heads-up" note plus up to four
   /// suggested questions for the wizard's inline AI rail (artboard `WebWizard`).
   /// Uses Gemini JSON mode (same pattern as the document extractor) and returns
