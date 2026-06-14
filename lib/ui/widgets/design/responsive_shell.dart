@@ -116,11 +116,14 @@ class ResponsiveShell extends StatelessWidget {
         // Pages that must use the FULL content width (no editorial cap, no
         // centered gutters), handed TIGHT constraints below so their content
         // fills flush from the sidebar to the window edge:
-        //   /export/ — the 3-column export tool (thumbnails · preview · rail)
-        //   /sign/   — the "Make it legal" signing screen (user wants the
-        //              content to fill the width, not sit centered with gaps)
-        final bool fullBleed =
-            route.startsWith('/export/') || route.startsWith('/sign/');
+        //   /export/          — the 3-column export tool (thumbnails · preview · rail)
+        //   /sign/            — the "Make it legal" signing screen (fill, not centered)
+        //   /wizard-complete/ — the "One pen away" Done screen; same post-wizard
+        //                       full-page treatment as /sign so the two match
+        //                       (otherwise it sat centered with the old white-space gaps)
+        final bool fullBleed = route.startsWith('/export/') ||
+            route.startsWith('/sign/') ||
+            route.startsWith('/wizard-complete/');
         return Row(
           children: [
             WebSidebar(activeRoute: route),
