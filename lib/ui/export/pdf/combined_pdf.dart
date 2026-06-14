@@ -526,6 +526,7 @@ List<pw.Page> buildCombinedPages({
           if (parsed.otherText.isNotEmpty)
             dataBlock('Other matters of importance:', parsed.otherText),
         ],
+        ...experiencedSideEffectsBlocks(prefs?.sideEffectsJson),
         pw.SizedBox(height: 8),
 
         // ---- Part III — Power of Attorney (Agent + Alt Agent) ----

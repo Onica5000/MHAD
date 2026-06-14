@@ -431,6 +431,7 @@ List<pw.Page> buildDeclarationPages({
           if (parsed.otherText.isNotEmpty)
             dataBlock('Other matters of importance:', parsed.otherText),
         ],
+        ...experiencedSideEffectsBlocks(prefs?.sideEffectsJson),
         pw.SizedBox(height: 8),
 
         // C. Revocation and Amendments

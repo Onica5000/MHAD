@@ -1,6 +1,8 @@
 /// Shared drawing primitives for PA MHAD PDF forms.
 library;
 
+import 'dart:convert';
+
 import 'package:mhad/data/database/app_database.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -233,6 +235,43 @@ pw.Widget dataBlock(String label, String value, {int lines = 3}) {
       pw.SizedBox(height: 6),
     ],
   );
+}
+
+/// Formats the medication side effects the user CONFIRMED they are experiencing
+/// (from the `directive_prefs.side_effects_json` checklist) into a directive
+/// block so the care team can see and handle them. Returns `[]` when none are
+/// confirmed. Informational only — never a treatment instruction.
+List<pw.Widget> experiencedSideEffectsBlocks(String? sideEffectsJson) {
+  if (sideEffectsJson == null || sideEffectsJson.isEmpty) return const [];
+  List<dynamic> items;
+  try {
+    final m = jsonDecode(sideEffectsJson) as Map<String, dynamic>;
+    items = (m['items'] as List?) ?? const [];
+  } catch (_) {
+    return const [];
+  }
+  final lines = <String>[];
+  for (final raw in items.whereType<Map<String, dynamic>>()) {
+    if (raw['experiencing'] != true) continue;
+    final effect = (raw['effect'] ?? '').toString().trim();
+    if (effect.isEmpty) continue;
+    final med = (raw['med'] ?? '').toString().trim();
+    final adl = (raw['adl'] ?? '').toString().trim();
+    final serious = raw['serious'] == true;
+    final buf = StringBuffer('• $effect');
+    if (med.isNotEmpty) buf.write(' ($med)');
+    if (adl.isNotEmpty) buf.write(' — may affect: $adl');
+    if (serious) buf.write(' — flagged to discuss with my doctor');
+    lines.add(buf.toString());
+  }
+  if (lines.isEmpty) return const [];
+  return [
+    dataBlock(
+      'Medication side effects I am currently experiencing:',
+      lines.join('\n'),
+      lines: lines.length.clamp(1, 12),
+    ),
+  ];
 }
 
 /// Parse a consent value that may be 'yes', 'no', 'agentDecides', or
