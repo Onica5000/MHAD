@@ -1,3 +1,4 @@
+import 'package:mhad/constants.dart';
 import 'package:mhad/data/database/app_database.dart';
 
 /// Additional machine-readable export formats beyond the FHIR JSON produced by
@@ -174,7 +175,7 @@ class ExportFormatsService {
     if (prefs != null) {
       b.writeln('    <provision>');
       b.writeln('      <type value="'
-          '${prefs.ectConsent == 'yes' ? 'permit' : 'deny'}"/>');
+          '${prefs.ectConsent == consentYes ? 'permit' : 'deny'}"/>');
       b.writeln('      <code>');
       b.writeln('        <coding>');
       b.writeln('          <system value="http://snomed.info/sct"/>');

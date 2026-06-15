@@ -2,6 +2,7 @@
 /// Matches the official PA MHAD POA form pages 39-46 (Disabilities Law Project 2005).
 library;
 
+import 'package:mhad/constants.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'pdf_helpers.dart';
@@ -306,8 +307,8 @@ List<pw.Page> buildPoaPages({
             'I consent to the medications that my agent agrees to after consultation '
             'with my treating physician and any other persons my agent considers appropriate.',
             checked:
-                (prefs.medicationConsent == 'yes' ||
-                    prefs.medicationConsent == 'agentDecides') &&
+                (prefs.medicationConsent == consentYes ||
+                    prefs.medicationConsent == consentAgentDecides) &&
                 exceptions.isEmpty &&
                 limitations.isEmpty &&
                 preferred.isEmpty,
@@ -316,8 +317,8 @@ List<pw.Page> buildPoaPages({
             'I consent to the medications that my agent agrees to, with the following '
             'exceptions, limitations, and/or preferences:',
             checked:
-                (prefs.medicationConsent == 'yes' ||
-                    prefs.medicationConsent == 'agentDecides') &&
+                (prefs.medicationConsent == consentYes ||
+                    prefs.medicationConsent == consentAgentDecides) &&
                 (exceptions.isNotEmpty ||
                     limitations.isNotEmpty ||
                     preferred.isNotEmpty),
@@ -373,7 +374,7 @@ List<pw.Page> buildPoaPages({
           ],
           checkRow(
             'My agent is not authorized to consent to the use of any medications.',
-            checked: prefs.medicationConsent == 'no',
+            checked: prefs.medicationConsent == consentNo,
           ),
         ],
         pw.SizedBox(height: 6),

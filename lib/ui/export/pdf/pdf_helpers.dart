@@ -3,6 +3,7 @@ library;
 
 import 'dart:convert';
 
+import 'package:mhad/constants.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -278,11 +279,11 @@ List<pw.Widget> experiencedSideEffectsBlocks(String? sideEffectsJson) {
 /// 'conditional:...'. [isConsentConditional] returns true for 'conditional:...'
 /// values (the user consented with conditions); [isConsentNo] / [isConsentAgent]
 /// match 'no' / 'agentDecides'.
-bool isConsentNo(String value) => value == 'no';
-bool isConsentAgent(String value) => value == 'agentDecides';
-bool isConsentConditional(String value) => value.startsWith('conditional:');
-String consentConditionText(String value) => value.startsWith('conditional:')
-    ? value.substring('conditional:'.length)
+bool isConsentNo(String value) => value == consentNo;
+bool isConsentAgent(String value) => value == consentAgentDecides;
+bool isConsentConditional(String value) => value.startsWith(consentConditionalPrefix);
+String consentConditionText(String value) => value.startsWith(consentConditionalPrefix)
+    ? value.substring(consentConditionalPrefix.length)
     : '';
 
 /// Indented free-form detail printed under a guardianship "yes" condition

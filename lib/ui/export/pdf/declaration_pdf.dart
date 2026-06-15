@@ -2,6 +2,7 @@
 /// Matches the official PA MHAD Declaration form pages 33-38 (Disabilities Law Project 2005).
 library;
 
+import 'package:mhad/constants.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'pdf_helpers.dart';
@@ -216,7 +217,7 @@ List<pw.Page> buildDeclarationPages({
           checkRow(
             'I consent to the medications that my treating physician recommends.',
             checked:
-                prefs.medicationConsent == 'yes' &&
+                prefs.medicationConsent == consentYes &&
                 exceptions.isEmpty &&
                 limitations.isEmpty &&
                 preferred.isEmpty,
@@ -225,7 +226,7 @@ List<pw.Page> buildDeclarationPages({
             'I consent to the medications that my treating physician recommends with '
             'the following exceptions, limitations and/or preferences:',
             checked:
-                prefs.medicationConsent == 'yes' &&
+                prefs.medicationConsent == consentYes &&
                 (exceptions.isNotEmpty ||
                     limitations.isNotEmpty ||
                     preferred.isNotEmpty),
@@ -281,7 +282,7 @@ List<pw.Page> buildDeclarationPages({
           ],
           checkRow(
             'I do not consent to the use of any medications.',
-            checked: prefs.medicationConsent == 'no',
+            checked: prefs.medicationConsent == consentNo,
           ),
         ],
         pw.SizedBox(height: 6),
@@ -295,7 +296,7 @@ List<pw.Page> buildDeclarationPages({
         if (prefs != null) ...[
           checkRow(
             'I consent to the administration of electroconvulsive therapy.',
-            checked: prefs.ectConsent == 'yes',
+            checked: prefs.ectConsent == consentYes,
           ),
           if (isConsentConditional(prefs.ectConsent)) ...[
             checkRow(
@@ -318,7 +319,7 @@ List<pw.Page> buildDeclarationPages({
           checkRow(
             'I consent to participation in experimental studies if my treating physician '
             'believes that the potential benefits to me outweigh the possible risks to me.',
-            checked: prefs.experimentalConsent == 'yes',
+            checked: prefs.experimentalConsent == consentYes,
           ),
           if (isConsentConditional(prefs.experimentalConsent)) ...[
             checkRow(
@@ -344,7 +345,7 @@ List<pw.Page> buildDeclarationPages({
           checkRow(
             'I consent to participation in drug trials if my treating physician believes '
             'that the potential benefits to me outweigh the possible risks to me.',
-            checked: prefs.drugTrialConsent == 'yes',
+            checked: prefs.drugTrialConsent == consentYes,
           ),
           if (isConsentConditional(prefs.drugTrialConsent)) ...[
             checkRow(

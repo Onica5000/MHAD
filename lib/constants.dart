@@ -1,6 +1,15 @@
 /// PA Protection & Advocacy toll-free phone number.
 const paProtectionAdvocacyPhone = '1-800-692-7443';
 
+/// Consent / authority values persisted in the directive's string preference
+/// fields (medicationConsent, ectConsent, experimentalConsent, drugTrialConsent).
+/// A value may also be a bare `conditional:<text>` carrying the user's
+/// qualification — test it with [consentConditionalPrefix].
+const consentYes = 'yes';
+const consentNo = 'no';
+const consentAgentDecides = 'agentDecides';
+const consentConditionalPrefix = 'conditional:';
+
 /// The Gemini model id used across the AI assistant, document extractor, and
 /// smart-fill service. Bump this in one place when changing models.
 const geminiFlashModel = 'gemini-2.5-flash';

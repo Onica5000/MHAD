@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mhad/constants.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
@@ -79,7 +80,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
         }
       }
       if (prefs != null && _hasAgentSections) {
-        _agentDecidesMeds = prefs.medicationConsent == 'agentDecides';
+        _agentDecidesMeds = prefs.medicationConsent == consentAgentDecides;
       }
     });
   }
@@ -132,7 +133,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
       await repo.upsertPreferences(DirectivePrefsCompanion(
         directiveId: Value(widget.directiveId),
         medicationConsent:
-            Value(_agentDecidesMeds ? 'agentDecides' : 'yes'),
+            Value(_agentDecidesMeds ? consentAgentDecides : consentYes),
       ));
     }
 

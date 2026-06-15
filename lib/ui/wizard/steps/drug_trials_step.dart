@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:drift/drift.dart' show Value;
+import 'package:mhad/constants.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
@@ -61,9 +62,9 @@ class _DrugTrialsStepState extends ConsumerState<DrugTrialsStep>
 
       if (pref != null) {
         final raw = pref.drugTrialConsent;
-        if (raw.startsWith('conditional:')) {
+        if (raw.startsWith(consentConditionalPrefix)) {
           _consent = ConsentOption.conditional;
-          _conditionsCtrl.text = raw.substring('conditional:'.length);
+          _conditionsCtrl.text = raw.substring(consentConditionalPrefix.length);
         } else {
           _consent = ConsentOption.values.firstWhere(
             (e) => e.name == raw,

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:mhad/constants.dart';
 import 'package:mhad/data/database/app_database.dart';
 
 /// Generates a FHIR R4 Consent resource JSON from a completed directive.
@@ -88,7 +89,7 @@ class FhirExportService {
     // ECT preference
     if (prefs != null) {
       provisions.add({
-        'type': prefs.ectConsent == 'yes' ? 'permit' : 'deny',
+        'type': prefs.ectConsent == consentYes ? 'permit' : 'deny',
         'code': [
           {
             'coding': [

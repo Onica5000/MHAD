@@ -655,11 +655,11 @@ class SmartFillService {
   /// Translate stored consent values into clear human-readable descriptions
   /// so the AI understands the user's hard decisions.
   static String _describeConsent(String value) {
-    if (value == 'yes') return 'YES — user consents';
-    if (value == 'no') return 'NO — user refuses (hard no, do NOT suggest otherwise)';
-    if (value == 'agentDecides') return 'AGENT DECIDES — user delegated to agent';
-    if (value.startsWith('conditional:')) {
-      return 'CONDITIONAL — user consents only if: ${value.substring('conditional:'.length)}';
+    if (value == consentYes) return 'YES — user consents';
+    if (value == consentNo) return 'NO — user refuses (hard no, do NOT suggest otherwise)';
+    if (value == consentAgentDecides) return 'AGENT DECIDES — user delegated to agent';
+    if (value.startsWith(consentConditionalPrefix)) {
+      return 'CONDITIONAL — user consents only if: ${value.substring(consentConditionalPrefix.length)}';
     }
     return value;
   }

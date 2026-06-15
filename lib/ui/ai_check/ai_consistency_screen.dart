@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mhad/constants.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
@@ -45,7 +46,7 @@ class _AiConsistencyScreenState extends ConsumerState<AiConsistencyScreen> {
     final found = <_Conflict>[];
 
     // Rule 1: ECT consent vs medication consent ambiguity.
-    if (prefs?.ectConsent == 'no' && prefs?.medicationConsent == 'agentDecides') {
+    if (prefs?.ectConsent == consentNo && prefs?.medicationConsent == consentAgentDecides) {
       found.add(const _Conflict(
         steps: 'Step 7 + Step 9',
         title: 'You said the agent decides medications, but refused ECT.',
