@@ -21,13 +21,17 @@ void main() {
     );
   });
 
-  testWidgets('App renders home screen with correct title', (tester) async {
+  testWidgets('Home renders the public-mode guest greeting', (tester) async {
     final db = AppDatabase(NativeDatabase.memory());
 
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
           appDatabaseProvider.overrideWithValue(db),
+          // Public mode so the home renders the anonymous guest greeting (the
+          // screen reads this provider, not the router's notifier from setUp).
+          privacyModeNotifierProvider
+              .overrideWith((ref) => PrivacyModeNotifier()..setPublicMode()),
         ],
         child: const MhadApp(),
       ),
@@ -36,29 +40,18 @@ void main() {
     // Wait for async operations
     await tester.pumpAndSettle();
 
-    // The prototype-faithful home (mobile.jsx::ScrHome L235-362) has no
-    // brand row — it opens straight with the date SectionLabel + editorial
-    // greeting. With an empty database the anonymous editorial fallback
-    // "Your voice, / in your words." renders in the greeting slot. The
-    // previously-asserted "PA MHAD" brand row was removed 2026-06-03 to
-    // match the prototype.
+    // The home opens with the editorial greeting. In Public mode (set in
+    // setUp) the anonymous "Welcome, guest. / Quick draft, no trace."
+    // greeting renders regardless of any session name.
     expect(
-      find.textContaining('Your voice', findRichText: true),
+      find.textContaining('Welcome, guest', findRichText: true),
       findsWidgets,
     );
-
-    // The "Start my directive" CTA in the editorial empty-state card is
-    // the canonical primary CTA on a fresh launch. The legacy duplicate
-    // "New Directive" button + Learn-More card were removed per the same
-    // restructure (Tools-grid Learn tile + empty-hero CTA cover both).
-    final startBtn = find.text('Start my directive');
-    await tester.scrollUntilVisible(startBtn, 200);
-    expect(startBtn, findsOneWidget);
 
     await db.close();
   });
 
-  testWidgets('Home screen shows empty directives message initially',
+  testWidgets('Empty home shows the "Start your directive" form picker',
       (tester) async {
     final db = AppDatabase(NativeDatabase.memory());
 
@@ -66,6 +59,10 @@ void main() {
       ProviderScope(
         overrides: [
           appDatabaseProvider.overrideWithValue(db),
+          // Public mode so the home renders the anonymous guest greeting (the
+          // screen reads this provider, not the router's notifier from setUp).
+          privacyModeNotifierProvider
+              .overrideWith((ref) => PrivacyModeNotifier()..setPublicMode()),
         ],
         child: const MhadApp(),
       ),
@@ -73,16 +70,17 @@ void main() {
 
     await tester.pumpAndSettle();
 
-    // The editorial empty-hero card lives in the home ListView. Scroll
-    // until it's on screen, then assert. The home screen now uses the
-    // prototype's "Your first directive" hero copy + "Start my directive"
-    // CTA in place of the prior "No directives yet" line.
-    final emptyFinder = find.text('Start my directive');
-    await tester.scrollUntilVisible(emptyFinder, 200);
+    // With an empty database the home surfaces the form-type picker
+    // (DirectiveFormChoice) under a "Start your directive" section label,
+    // led by the bold "Combined directive" card with its "Start now" CTA.
+    // This replaced the old single "Start my directive" empty-hero card.
+    final combined = find.text('Combined directive');
+    await tester.scrollUntilVisible(combined, 200);
     await tester.pumpAndSettle();
 
-    expect(emptyFinder, findsOneWidget);
-    expect(find.text('Your first directive'.toUpperCase()), findsOneWidget);
+    expect(combined, findsOneWidget);
+    expect(find.text('Start your directive'.toUpperCase()), findsOneWidget);
+    expect(find.text('Start now'), findsWidgets);
 
     await db.close();
   });
