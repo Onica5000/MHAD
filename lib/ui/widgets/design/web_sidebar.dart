@@ -62,7 +62,7 @@ class WebSidebar extends ConsumerWidget {
       _SidebarItem(
         icon: Icons.document_scanner_outlined,
         activeIcon: Icons.document_scanner,
-        label: 'Upload to autofill',
+        label: 'Autofill from a document',
         isActive: activeRoute.startsWith('/upload/'),
         // Reuse the most-recent directive (the one you're working on) so the
         // page autofills it; with none on file (fresh web session), create a

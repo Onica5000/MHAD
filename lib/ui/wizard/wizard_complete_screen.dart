@@ -325,6 +325,18 @@ class _WizardCompleteScreenState extends ConsumerState<WizardCompleteScreen> {
                 'provider is not physically available.',
             variant: InfoBannerVariant.info,
           ),
+          const SizedBox(height: 18),
+          // Explicit way out of the summary back to Home — previously the only
+          // actions were PDF/Share/Wallet, leaving no clear "I'm done" exit
+          // (decision-flow D1). `go` resets the stack so the user isn't left
+          // with a deep back-stack through sign/wizard.
+          Center(
+            child: TextButton.icon(
+              onPressed: () => context.go(AppRoutes.home),
+              icon: const Icon(Icons.home_outlined, size: 18),
+              label: const Text('Done — back to home'),
+            ),
+          ),
         ],
       ),
     );

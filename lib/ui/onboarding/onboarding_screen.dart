@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -261,7 +262,12 @@ class _WelcomePills extends StatelessWidget {
     (Icons.calendar_today_outlined, 'Valid 2 years'),
     (Icons.people_alt_outlined, '2 witnesses'),
     (Icons.shield_outlined, 'PA Act 194'),
-    (Icons.lock_outline, 'Stays on your device'),
+    // Web is in-memory only (nothing persists), so "stays on your device"
+    // would be false there; kIsWeb is const so this stays a const list.
+    (
+      Icons.lock_outline,
+      kIsWeb ? 'Nothing is saved' : 'Stays on your device'
+    ),
   ];
 
   @override
