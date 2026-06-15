@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/constants.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
@@ -96,8 +97,8 @@ class FacilitatorScreen extends StatelessWidget {
           ),
           _ReferralRow(
             label: 'PA Protection & Advocacy',
-            sub: 'Your rights under Act 194 · 1-800-692-7443',
-            onCall: () => _tel(context, '1-800-692-7443'),
+            sub: 'Your rights under Act 194 · $paProtectionAdvocacyPhone',
+            onCall: () => _tel(context, paProtectionAdvocacyPhone),
             onWeb: () => _open(context, 'https://www.disabilityrightspa.org/'),
           ),
           _ReferralRow(

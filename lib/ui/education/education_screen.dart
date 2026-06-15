@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/constants.dart';
 import 'package:mhad/data/educational_content.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
@@ -1322,7 +1323,7 @@ class _SectionDetailScreen extends StatelessWidget {
             const Divider(),
             const SizedBox(height: 8),
             Text(
-              'Questions? Contact PA Protection & Advocacy: 1-800-692-7443',
+              'Questions? Contact PA Protection & Advocacy: $paProtectionAdvocacyPhone',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     fontStyle: FontStyle.italic,
                     color: Theme.of(context).colorScheme.onSurfaceVariant,

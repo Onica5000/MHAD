@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:mhad/constants.dart';
 import 'package:mhad/services/disclaimer_service.dart';
 import 'package:mhad/services/notification_service.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
@@ -812,7 +813,7 @@ List<_SectionData> _buildSections(MhadPalette p) {
         _Resource(
             title: 'PA Protection & Advocacy',
             sub: 'Your rights under Act 194',
-            mono: '1-800-692-7443 · TDD/TTY 1-877-375-7139',
+            mono: '$paProtectionAdvocacyPhone · TDD/TTY 1-877-375-7139',
             palette: p),
         const SizedBox(height: 10),
         _Resource(
