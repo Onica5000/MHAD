@@ -32,6 +32,7 @@ import 'package:mhad/ui/wizard/steps/procedures_research_step.dart';
 import 'package:mhad/ui/wizard/steps/review_and_sign_step.dart';
 import 'package:mhad/ui/wizard/steps/treatment_facility_step.dart';
 import 'package:mhad/ui/wizard/steps/when_it_kicks_in_step.dart';
+import 'package:mhad/utils/unsaved_guard.dart';
 
 class WizardScreen extends ConsumerStatefulWidget {
   final int directiveId;
@@ -56,6 +57,21 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
   /// Re-keyed after Smart Fill to force the step widget to rebuild with the
   /// freshly persisted values.
   final GlobalKey _stepKey = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+    // On web the directive lives only in memory, so a reload/tab-close while
+    // editing silently loses the work. Arm the browser "leave site?" prompt
+    // while the wizard is open. No-op on native (data persists).
+    setUnsavedGuard(true);
+  }
+
+  @override
+  void dispose() {
+    setUnsavedGuard(false);
+    super.dispose();
+  }
 
   Future<void> _persistStep() async {
     await ref
