@@ -4,6 +4,7 @@ import 'package:mhad/ai/ai_assistant.dart';
 import 'package:mhad/services/disclaimer_service.dart';
 import 'package:mhad/services/onboarding_service.dart';
 import 'package:mhad/services/privacy_mode_service.dart';
+import 'package:mhad/ui/admin/admin_update_screen.dart';
 import 'package:mhad/ui/ai_check/ai_consistency_screen.dart';
 import 'package:mhad/ui/assistant/assistant_screen.dart';
 import 'package:mhad/ui/crisis_plan/crisis_plan_screen.dart';
@@ -77,6 +78,9 @@ abstract class AppRoutes {
   static const shareSheet = '/share/:directiveId';
   // Batch 6 — in-app privacy & permissions overview.
   static const permissions = '/permissions';
+  // Hidden admin tool (AI-drafted data updates). Reached only via a hidden
+  // long-press on Settings → About, behind a passphrase. Not in any nav.
+  static const admin = '/admin';
 
   static String legalToggleRoute(int directiveId) =>
       '/legal-toggle/$directiveId';
@@ -256,6 +260,10 @@ GoRouter _buildRouter(DisclaimerNotifier disclaimer,
         GoRoute(
           path: AppRoutes.facilitator,
           builder: (_, _) => const FacilitatorScreen(),
+        ),
+        GoRoute(
+          path: AppRoutes.admin,
+          builder: (_, _) => const AdminUpdateScreen(),
         ),
         GoRoute(
           path: AppRoutes.legalToggle,

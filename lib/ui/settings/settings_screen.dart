@@ -279,12 +279,17 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'About',
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleSmall
-                      ?.copyWith(fontWeight: FontWeight.w700),
+                // Long-press opens the hidden admin data-update tool (behind a
+                // passphrase). Deliberately undiscoverable for normal users.
+                GestureDetector(
+                  onLongPress: () => context.push(AppRoutes.admin),
+                  child: Text(
+                    'About',
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleSmall
+                        ?.copyWith(fontWeight: FontWeight.w700),
+                  ),
                 ),
                 const SizedBox(height: 8),
                 Text(
