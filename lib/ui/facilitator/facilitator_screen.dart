@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mhad/constants.dart';
+import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
@@ -83,30 +83,19 @@ class FacilitatorScreen extends StatelessWidget {
             meta: const ['~45 min', 'Free', 'PA-based'],
           ),
           const SizedBox(height: 8),
-          _ReferralRow(
-            label: 'PA Mental Health Consumers\' Association',
-            sub: 'Statewide peer support · 1-800-887-6422',
-            onCall: () => _tel(context, '1-800-887-6422'),
-            onWeb: () => _open(context, 'https://www.pmhca.org/'),
-          ),
-          _ReferralRow(
-            label: 'Mental Health Association in PA',
-            sub: 'Advocacy + education · 1-866-578-3659',
-            onCall: () => _tel(context, '1-866-578-3659'),
-            onWeb: () => _open(context, 'https://www.mhapa.org/'),
-          ),
-          _ReferralRow(
-            label: 'PA Protection & Advocacy',
-            sub: 'Your rights under Act 194 · $paProtectionAdvocacyPhone',
-            onCall: () => _tel(context, paProtectionAdvocacyPhone),
-            onWeb: () => _open(context, 'https://www.disabilityrightspa.org/'),
-          ),
-          _ReferralRow(
-            label: 'National Resource Center on PAD',
-            sub: 'State-specific PAD information',
-            onCall: null,
-            onWeb: () => _open(context, 'https://nrc-pad.org/states/pennsylvania-faq/'),
-          ),
+          // Referral partners come from app_data.json (assets/data) so the
+          // numbers/links can be updated without touching code.
+          for (final partner in appData.referralPartners)
+            _ReferralRow(
+              label: partner.contact.name,
+              sub: partner.sub,
+              onCall: partner.contact.phone == null
+                  ? null
+                  : () => _tel(context, partner.contact.phone!),
+              onWeb: partner.contact.web == null
+                  ? null
+                  : () => _open(context, partner.contact.web!),
+            ),
 
           const SizedBox(height: 18),
 

@@ -1,0 +1,111 @@
+{
+  "_meta": {
+    "schemaVersion": 1,
+    "lastReviewed": "2026-06-15",
+    "note": "Source of truth for the app's dynamic/updatable facts. Edited via the admin propose/approve flow. 'autonomy': 'auto' = an AI may update without human sign-off; 'verify' = a human must approve the diff before it ships. Keep 'source' current so updates are checkable."
+  },
+  "contacts": {
+    "crisis988": {
+      "name": "988 Suicide & Crisis Lifeline",
+      "phone": "988",
+      "tagline": "Call or text 988",
+      "availability": "24/7, free, confidential",
+      "autonomy": "auto",
+      "source": "988lifeline.org"
+    },
+    "crisisTextLine": {
+      "name": "Crisis Text Line",
+      "phone": "741741",
+      "tagline": "Text HOME to 741741",
+      "autonomy": "auto",
+      "source": "crisistextline.org"
+    },
+    "samhsa": {
+      "name": "SAMHSA National Helpline",
+      "phone": "18006624357",
+      "tagline": "treatment referrals",
+      "autonomy": "auto",
+      "source": "samhsa.gov"
+    },
+    "veteransCrisis": {
+      "name": "Veterans Crisis Line",
+      "phone": "988",
+      "tagline": "Call 988, press 1",
+      "autonomy": "auto",
+      "source": "veteranscrisisline.net"
+    },
+    "trevorProject": {
+      "name": "The Trevor Project (LGBTQ+ youth)",
+      "phone": "1-866-488-7386",
+      "tagline": "Call · text · chat",
+      "autonomy": "auto",
+      "source": "thetrevorproject.org"
+    },
+    "nami": {
+      "name": "NAMI Helpline",
+      "phone": "18009506264",
+      "web": "https://namipa.org",
+      "autonomy": "auto",
+      "source": "nami.org"
+    },
+    "paProtectionAdvocacy": {
+      "name": "PA Protection & Advocacy",
+      "phone": "1-800-692-7443",
+      "tdd": "1-877-375-7139",
+      "office": "717-236-8110",
+      "web": "https://www.disabilityrightspa.org/",
+      "tagline": "Your rights under Act 194",
+      "autonomy": "auto",
+      "source": "disabilityrightspa.org"
+    },
+    "pmhca": {
+      "name": "PA Mental Health Consumers' Association",
+      "phone": "1-800-887-6422",
+      "office": "717-346-0549",
+      "web": "https://www.pmhca.org/",
+      "tagline": "Statewide peer support",
+      "autonomy": "auto",
+      "source": "pmhca.org"
+    },
+    "mhapa": {
+      "name": "Mental Health Association in PA",
+      "phone": "1-866-578-3659",
+      "web": "https://www.mhapa.org/",
+      "tagline": "Advocacy + education",
+      "autonomy": "auto",
+      "source": "mhapa.org"
+    },
+    "nrcPad": {
+      "name": "National Resource Center on PAD",
+      "web": "https://nrc-pad.org/states/pennsylvania-faq/",
+      "tagline": "State-specific PAD information",
+      "autonomy": "auto",
+      "source": "nrc-pad.org"
+    },
+    "pa211": {
+      "name": "Pennsylvania 211",
+      "phone": "211",
+      "tagline": "free, confidential local-resource line, 24/7",
+      "autonomy": "auto",
+      "source": "pa211.org"
+    }
+  },
+  "referralPartners": [
+    {
+      "contact": "pmhca",
+      "sub": "Statewide peer support · 1-800-887-6422"
+    },
+    {
+      "contact": "mhapa",
+      "sub": "Advocacy + education · 1-866-578-3659"
+    },
+    {
+      "contact": "paProtectionAdvocacy",
+      "sub": "Your rights under Act 194 · 1-800-692-7443"
+    },
+    {
+      "contact": "nrcPad",
+      "sub": "State-specific PAD information"
+    }
+  ]
+}

@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:mhad/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/providers/accessibility_providers.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/providers/assistant_providers.dart';
@@ -32,6 +33,11 @@ void main() {
   // the "Zone mismatch" fatal error.
   runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
+
+    // Load the app's dynamic facts (contacts/resources, later AI config + legal
+    // facts) from assets/data/app_data.json into the AppData singleton before
+    // the first frame, so every read site has it synchronously.
+    await AppData.load();
 
     // Lock to portrait orientation on mobile (irrelevant on desktop/web)
     if (platformIsMobile) {
