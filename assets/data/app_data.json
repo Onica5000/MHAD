@@ -4,6 +4,20 @@
     "lastReviewed": "2026-06-15",
     "note": "Source of truth for the app's dynamic/updatable facts. Edited via the admin propose/approve flow. 'autonomy': 'auto' = an AI may update without human sign-off; 'verify' = a human must approve the diff before it ships. Keep 'source' current so updates are checkable."
   },
+  "ai": {
+    "model": "gemini-2.5-flash",
+    "maxContextTokens": 1048576,
+    "rpm": 10,
+    "rpd": 250,
+    "tpm": 250000,
+    "maxOutputTokens": 65536,
+    "rateLimitsAsOf": "Dec 2025",
+    "autonomy": "auto",
+    "source": "ai.google.dev/gemini-api/docs/rate-limits"
+  },
+  "urls": {
+    "privacyPolicy": "https://onica5000.github.io/mhad/privacy"
+  },
   "contacts": {
     "crisis988": {
       "name": "988 Suicide & Crisis Lifeline",

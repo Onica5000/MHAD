@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:mhad/ai/ai_clinical_policy.dart';
 import 'package:mhad/ai/pii_stripper.dart';
 import 'package:mhad/constants.dart';
+import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/services/certificate_pinning_service.dart';
 import 'package:mhad/services/clinical_data_service.dart';
 import 'package:mhad/services/gemini_rate_tracker.dart';
@@ -298,7 +299,7 @@ class SmartFillService {
   SmartFillService({required this.apiKey})
       : _httpClient = CertificatePinningService.createPinnedClient();
 
-  static const _model = geminiFlashModel;
+  static String get _model => appData.ai.model;
 
   /// Given structured clinical data, ask Gemini to generate directive content.
   /// Returns [SmartFillResponse] containing the parsed result and actual token

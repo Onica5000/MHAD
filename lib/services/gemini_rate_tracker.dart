@@ -1,7 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/foundation.dart';
-import 'package:mhad/constants.dart';
+import 'package:mhad/data/app_data/app_data.dart';
 
 /// Tracks Gemini API usage against the free tier limits.
 ///
@@ -17,11 +17,11 @@ import 'package:mhad/constants.dart';
 ///   - Usage info for the UI (remaining requests, estimated tokens)
 ///   - Estimated wait time when rate-limited
 class GeminiRateTracker extends ChangeNotifier {
-  // ── Free tier limits ─────────────────────────────────────────────────
-  static const int maxRpm = 10;
-  static const int maxRpd = 250;
-  static const int maxTpm = 250000;
-  static const int maxContextTokens = geminiMaxContextTokens;
+  // ── Free tier limits (from assets/data/app_data.json, updatable) ───────
+  static int get maxRpm => appData.ai.rpm;
+  static int get maxRpd => appData.ai.rpd;
+  static int get maxTpm => appData.ai.tpm;
+  static int get maxContextTokens => appData.ai.maxContextTokens;
 
   /// Rough estimate: 1 token ≈ 4 characters in English.
   static const double charsPerToken = 4.0;

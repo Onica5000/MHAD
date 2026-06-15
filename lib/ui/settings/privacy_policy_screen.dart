@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mhad/constants.dart';
+import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -294,7 +294,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
                   'two contact methods — we provide three):\n\n'
                   '  - In-app: an in-app breach notice will be shown on next '
                   'launch if a breach affects you.\n'
-                  '  - Online: $privacyPolicyUrl (also used for breach '
+                  '  - Online: ${appData.privacyPolicyUrl} (also used for breach '
                   'postings if direct contact information is insufficient).\n'
                   '  - App store listing: the developer support address shown '
                   'on the Google Play / App Store product page.',
@@ -321,11 +321,11 @@ class PrivacyPolicyScreen extends StatelessWidget {
 }
 
 Future<void> _openPolicyUrl(BuildContext context) async {
-  final uri = Uri.parse(privacyPolicyUrl);
+  final uri = Uri.parse(appData.privacyPolicyUrl);
   final ok =
       await canLaunchUrl(uri) && await launchUrl(uri, mode: LaunchMode.externalApplication);
   if (!ok && context.mounted) {
-    await Clipboard.setData(const ClipboardData(text: privacyPolicyUrl));
+    await Clipboard.setData(ClipboardData(text: appData.privacyPolicyUrl));
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Privacy policy URL copied to clipboard.')),

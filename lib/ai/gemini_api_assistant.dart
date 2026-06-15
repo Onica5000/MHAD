@@ -8,7 +8,6 @@ import 'package:mhad/ai/ai_assistant.dart';
 import 'package:mhad/ai/ai_clinical_policy.dart';
 import 'package:mhad/ai/pii_stripper.dart';
 import 'package:mhad/ai/side_effect_item.dart';
-import 'package:mhad/constants.dart';
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/data/educational_content.dart';
 import 'package:mhad/services/certificate_pinning_service.dart';
@@ -24,10 +23,10 @@ class GeminiApiAssistant implements AiAssistant {
   GeminiApiAssistant({required this.apiKey})
       : _httpClient = CertificatePinningService.createPinnedClient();
 
-  static const _model = geminiFlashModel;
+  static String get _model => appData.ai.model;
 
-  /// Maximum input tokens for Gemini 2.5 Flash (1M context window).
-  static const maxContextTokens = geminiMaxContextTokens;
+  /// Maximum input tokens for the model (from app_data.json).
+  static int get maxContextTokens => appData.ai.maxContextTokens;
 
   /// PII-stripping chokepoint applied to every outbound user payload before
   /// it reaches Google. Centralised here so tests can pin the contract and
@@ -111,9 +110,9 @@ class GeminiApiAssistant implements AiAssistant {
             e.message.toLowerCase().contains('rate limit') ||
             e.message.toLowerCase().contains('quota')) {
           throw Exception(
-              'Too many requests. The free tier allows about 10 requests per '
-              'minute (250 per day). Please wait 1\u20132 minutes and try '
-              'again.');
+              'Too many requests. The free tier allows about ${appData.ai.rpm} '
+              'requests per minute (${appData.ai.rpd} per day). Please wait '
+              '1\u20132 minutes and try again.');
         }
         // Retry on server errors (5xx)
         if (e.message.contains('500') || e.message.contains('503')) {

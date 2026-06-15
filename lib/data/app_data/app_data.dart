@@ -40,6 +40,39 @@ class ReferralPartner {
   const ReferralPartner({required this.contact, required this.sub});
 }
 
+/// Vendor-driven AI facts that drift over time (Google changes models/quotas).
+class AiConfig {
+  final String model;
+  final int maxContextTokens;
+  final int rpm;
+  final int rpd;
+  final int tpm;
+  final int maxOutputTokens;
+
+  /// When the rate limits were last verified, e.g. "Dec 2025".
+  final String rateLimitsAsOf;
+
+  const AiConfig({
+    this.model = 'gemini-2.5-flash',
+    this.maxContextTokens = 1048576,
+    this.rpm = 10,
+    this.rpd = 250,
+    this.tpm = 250000,
+    this.maxOutputTokens = 65536,
+    this.rateLimitsAsOf = '',
+  });
+
+  factory AiConfig.fromJson(Map<String, dynamic> m) => AiConfig(
+        model: (m['model'] ?? 'gemini-2.5-flash').toString(),
+        maxContextTokens: (m['maxContextTokens'] as num?)?.toInt() ?? 1048576,
+        rpm: (m['rpm'] as num?)?.toInt() ?? 10,
+        rpd: (m['rpd'] as num?)?.toInt() ?? 250,
+        tpm: (m['tpm'] as num?)?.toInt() ?? 250000,
+        maxOutputTokens: (m['maxOutputTokens'] as num?)?.toInt() ?? 65536,
+        rateLimitsAsOf: (m['rateLimitsAsOf'] ?? '').toString(),
+      );
+}
+
 /// The app's dynamic, updatable facts — loaded once from
 /// `assets/data/app_data.json` at startup (see [load]). This is the source of
 /// truth for data that drifts over time (contacts now; AI config and legal
@@ -54,8 +87,18 @@ class ReferralPartner {
 class AppData {
   final Map<String, ContactEntry> contacts;
   final List<ReferralPartner> referralPartners;
+  final AiConfig ai;
+  final Map<String, String> urls;
 
-  const AppData({required this.contacts, required this.referralPartners});
+  const AppData({
+    required this.contacts,
+    required this.referralPartners,
+    this.ai = const AiConfig(),
+    this.urls = const {},
+  });
+
+  /// Public privacy-policy URL (must match the Play Console + developer site).
+  String get privacyPolicyUrl => urls['privacyPolicy'] ?? '';
 
   /// Look up a contact by its key (e.g. `'crisis988'`). Returns an empty
   /// [ContactEntry] rather than null so call sites never crash on a missing key.
@@ -85,7 +128,19 @@ class AppData {
             ReferralPartner(contact: c, sub: (m['sub'] ?? '').toString()));
       }
     }
-    return AppData(contacts: contacts, referralPartners: partners);
+    final urls = <String, String>{
+      for (final e in ((json['urls'] as Map?)?.cast<String, dynamic>() ??
+              const {})
+          .entries)
+        e.key: e.value.toString(),
+    };
+    return AppData(
+      contacts: contacts,
+      referralPartners: partners,
+      ai: AiConfig.fromJson(
+          (json['ai'] as Map?)?.cast<String, dynamic>() ?? const {}),
+      urls: urls,
+    );
   }
 
   /// The loaded data. Initialised to a minimal [_fallback] so reads never throw
