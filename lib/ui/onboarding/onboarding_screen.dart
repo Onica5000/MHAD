@@ -6,8 +6,9 @@ import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/services/onboarding_service.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/design/crisis_988_pill.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:mhad/utils/launch_utils.dart';
 
 /// First-touch welcome — prototype-exact rebuild of mobile.jsx::ScrWelcome
 /// (L37-96).
@@ -54,13 +55,6 @@ class OnboardingScreen extends ConsumerWidget {
     context.go(AppRoutes.uploadRoute(id));
   }
 
-  Future<void> _dial988() async {
-    final uri = Uri(scheme: 'tel', path: '988');
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
-    }
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final p = Theme.of(context).mhadPalette;
@@ -73,38 +67,13 @@ class OnboardingScreen extends ConsumerWidget {
             Positioned(
               top: 8,
               right: 16,
-              child: Semantics(
-                button: true,
-                label: 'Call 988 Suicide and Crisis Lifeline',
-                child: InkWell(
-                  onTap: _dial988,
-                  borderRadius: BorderRadius.circular(100),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: SemanticColors.errorBgLight,
-                      borderRadius: BorderRadius.circular(100),
-                      border: Border.all(color: SemanticColors.errorBorderLight),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.phone, size: 12, color: SemanticColors.errorAccentLight),
-                        const SizedBox(width: 5),
-                        Text(
-                          '988',
-                          style: TextStyle(
-                            fontFamily: 'DM Sans',
-                            fontSize: 11.5,
-                            fontWeight: FontWeight.w600,
-                            color: SemanticColors.errorAccentLight,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+              child: Crisis988Pill(
+                bg: SemanticColors.errorBgLight,
+                border: SemanticColors.errorBorderLight,
+                fg: SemanticColors.errorAccentLight,
+                label: '988',
+                onTap: () =>
+                    launchOrCopy(context, 'tel:988', copyValue: '988'),
               ),
             ),
             // Main editorial column. Padding matches prototype L54

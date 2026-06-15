@@ -5,6 +5,7 @@ import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/design/wizard_header.dart';
+import 'package:mhad/utils/launch_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// "Get help" / Facilitator mode (v2 prototype `m-facilitator`, v3 re-spec).
@@ -21,16 +22,15 @@ import 'package:url_launcher/url_launcher.dart';
 class FacilitatorScreen extends StatelessWidget {
   const FacilitatorScreen({super.key});
 
-  Future<void> _open(BuildContext context, String url) async {
-    final uri = Uri.parse(url);
-    final ok = await canLaunchUrl(uri);
-    if (!ok) return;
-    await launchUrl(uri, mode: LaunchMode.externalApplication);
-  }
+  Future<void> _open(BuildContext context, String url) =>
+      launchOrCopy(context, url, mode: LaunchMode.externalApplication);
 
-  Future<void> _tel(BuildContext context, String number) async {
-    await _open(context, 'tel:${number.replaceAll(RegExp(r'[^0-9+]'), '')}');
-  }
+  Future<void> _tel(BuildContext context, String number) => launchOrCopy(
+        context,
+        'tel:${number.replaceAll(RegExp(r'[^0-9+]'), '')}',
+        copyValue: number,
+        mode: LaunchMode.externalApplication,
+      );
 
   @override
   Widget build(BuildContext context) {

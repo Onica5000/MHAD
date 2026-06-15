@@ -1,12 +1,9 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:mhad/constants.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
-import 'package:mhad/utils/platform_utils.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:mhad/utils/launch_utils.dart';
 
 /// Shows the crisis resources bottom sheet (988, Crisis Text Line, SAMHSA,
 /// PA Protection & Advocacy). Mirrors the prototype's `ScrCrisis`.
@@ -23,21 +20,8 @@ class _CrisisSheet extends StatelessWidget {
   const _CrisisSheet();
 
   Future<void> _launch(BuildContext context, String uri,
-      {String? copyValue}) async {
-    if (platformIsMobile && !kIsWeb) {
-      final url = Uri.parse(uri);
-      if (await canLaunchUrl(url)) {
-        await launchUrl(url);
-      }
-    } else if (copyValue != null) {
-      await Clipboard.setData(ClipboardData(text: copyValue));
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('$copyValue copied to clipboard')),
-        );
-      }
-    }
-  }
+          {String? copyValue}) =>
+      launchOrCopy(context, uri, copyValue: copyValue);
 
   @override
   Widget build(BuildContext context) {
@@ -195,21 +179,8 @@ class _CrisisSheet extends StatelessWidget {
 class _Emergency911Callout extends StatelessWidget {
   const _Emergency911Callout();
 
-  Future<void> _call(BuildContext context) async {
-    if (platformIsMobile && !kIsWeb) {
-      final url = Uri.parse('tel:911');
-      if (await canLaunchUrl(url)) {
-        await launchUrl(url);
-      }
-    } else {
-      await Clipboard.setData(const ClipboardData(text: '911'));
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('911 copied to clipboard')),
-        );
-      }
-    }
-  }
+  Future<void> _call(BuildContext context) =>
+      launchOrCopy(context, 'tel:911', copyValue: '911');
 
   @override
   Widget build(BuildContext context) {

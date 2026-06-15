@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mhad/services/disclaimer_service.dart';
 import 'package:mhad/services/notification_service.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/design/crisis_988_pill.dart';
 import 'package:mhad/ui/widgets/design/crisis_sheet.dart';
 
 /// First-launch legal disclaimer + read-only Settings variant.
@@ -276,7 +277,7 @@ class _GateLayout extends StatelessWidget {
             Positioned(
               top: 12,
               right: 16,
-              child: _Need988Pill(
+              child: Crisis988Pill(
                 bg: dark
                     ? SemanticColors.errorBgDark
                     : SemanticColors.errorBgLight,
@@ -459,65 +460,6 @@ class _AckRow extends StatelessWidget {
 }
 
 // ─── 988 pill ───────────────────────────────────────────────────────────
-
-class _Need988Pill extends StatelessWidget {
-  final Color bg;
-  final Color border;
-  final Color fg;
-  final VoidCallback onTap;
-  const _Need988Pill({
-    required this.bg,
-    required this.border,
-    required this.fg,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      button: true,
-      label: 'Need 988 — open crisis resources',
-      child: Material(
-        color: bg,
-        borderRadius: BorderRadius.circular(100),
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(100),
-          child: SizedBox(
-            height: 48,
-            child: Center(
-              widthFactor: 1,
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 10, vertical: 5),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(100),
-                  border: Border.all(color: border),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.phone_outlined, size: 11, color: fg),
-                    const SizedBox(width: 5),
-                    Text(
-                      'Need 988',
-                      style: TextStyle(
-                        fontFamily: 'DM Sans',
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
-                        color: fg,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 // ─── Read-only accordion (Settings → Legal) ─────────────────────────────
 

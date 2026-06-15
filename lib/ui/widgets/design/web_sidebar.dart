@@ -1,6 +1,4 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/constants.dart';
 import 'package:mhad/domain/model/directive.dart';
@@ -8,7 +6,7 @@ import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:mhad/utils/launch_utils.dart';
 
 /// Persistent left-rail navigation for wide (desktop / web) screens.
 ///
@@ -437,19 +435,8 @@ class _Badge extends StatelessWidget {
 }
 
 class _CrisisCard extends StatelessWidget {
-  Future<void> _call(BuildContext context) async {
-    if (!kIsWeb) {
-      final url = Uri.parse('tel:$crisis988Phone');
-      if (await canLaunchUrl(url)) await launchUrl(url);
-    } else {
-      await Clipboard.setData(const ClipboardData(text: crisis988Phone));
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('988 copied to clipboard')),
-        );
-      }
-    }
-  }
+  Future<void> _call(BuildContext context) =>
+      launchOrCopy(context, 'tel:$crisis988Phone', copyValue: crisis988Phone);
 
   @override
   Widget build(BuildContext context) {
