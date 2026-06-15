@@ -62,6 +62,13 @@ class AppData {
   ContactEntry contact(String key) =>
       contacts[key] ?? const ContactEntry(name: '');
 
+  /// Null-safe phone for [key] — empty string if absent (a `tel:` built from it
+  /// just won't launch, rather than crashing or printing "null").
+  String phoneOf(String key) => contact(key).phone ?? '';
+
+  /// Null-safe website URL for [key] — empty string if absent.
+  String webOf(String key) => contact(key).web ?? '';
+
   factory AppData.fromJson(Map<String, dynamic> json) {
     final contactsJson =
         (json['contacts'] as Map?)?.cast<String, dynamic>() ?? const {};

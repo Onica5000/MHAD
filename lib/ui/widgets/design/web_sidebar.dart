@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mhad/constants.dart';
+import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/providers/assistant_providers.dart';
@@ -436,7 +436,8 @@ class _Badge extends StatelessWidget {
 
 class _CrisisCard extends StatelessWidget {
   Future<void> _call(BuildContext context) =>
-      launchOrCopy(context, 'tel:$crisis988Phone', copyValue: crisis988Phone);
+      launchOrCopy(context, 'tel:${appData.phoneOf('crisis988')}',
+          copyValue: appData.phoneOf('crisis988'));
 
   @override
   Widget build(BuildContext context) {

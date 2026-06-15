@@ -1,5 +1,6 @@
-/// PA Protection & Advocacy toll-free phone number.
-const paProtectionAdvocacyPhone = '1-800-692-7443';
+// Contact / resource phone numbers moved to assets/data/app_data.json (read via
+// `appData.contact(...)` / `appData.phoneOf(...)`) so they can be updated via
+// the admin propose/approve flow. See lib/data/app_data/app_data.dart.
 
 /// Consent / authority values persisted in the directive's string preference
 /// fields (medicationConsent, ectConsent, experimentalConsent, drugTrialConsent).
@@ -26,24 +27,6 @@ const sessionCacheTtl = Duration(minutes: 10);
 /// field suggestions). Keep this exact wording so the app's voice stays
 /// consistent — see the legal-wording canon.
 const aiNotAdvice = 'AI-generated — not legal or medical advice.';
-
-/// 988 Suicide & Crisis Lifeline — call or text.
-const crisis988Phone = '988';
-
-/// Crisis Text Line — text HOME to this number.
-const crisisTextLine = '741741';
-
-/// SAMHSA National Helpline (Substance Abuse and Mental Health Services).
-const samhsaHelpline = '18006624357';
-
-/// Veterans Crisis Line — call 988, then press 1.
-const veteransCrisisPhone = '988';
-
-/// The Trevor Project — crisis support for LGBTQ+ young people (call/text/chat).
-const trevorProjectPhone = '1-866-488-7386';
-
-/// NAMI Helpline (National Alliance on Mental Illness).
-const namiHelpline = '18009506264';
 
 /// Public privacy-policy URL.
 ///

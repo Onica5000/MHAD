@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mhad/constants.dart';
+import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/data/educational_content.dart';
 import 'package:mhad/ui/router.dart';
 
@@ -99,7 +99,7 @@ class _HelpSheet extends StatelessWidget {
           ],
           const SizedBox(height: 8),
           Text(
-            'Questions? Contact PA Protection & Advocacy: $paProtectionAdvocacyPhone',
+            'Questions? Contact PA Protection & Advocacy: ${appData.phoneOf('paProtectionAdvocacy')}',
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   fontStyle: FontStyle.italic,
                 ),

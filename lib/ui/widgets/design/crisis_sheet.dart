@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mhad/constants.dart';
+import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
@@ -98,44 +98,45 @@ class _CrisisSheet extends StatelessWidget {
                 detail: 'Call or text 988',
                 icon: Icons.phone_outlined,
                 accent: true,
-                onTap: () => _launch(context, 'tel:$crisis988Phone',
-                    copyValue: crisis988Phone),
+                onTap: () => _launch(context, 'tel:${appData.phoneOf('crisis988')}',
+                    copyValue: appData.phoneOf('crisis988')),
               ),
               _CrisisRow(
                 name: 'Crisis Text Line',
-                detail: 'Text HOME to $crisisTextLine',
+                detail: 'Text HOME to ${appData.phoneOf('crisisTextLine')}',
                 icon: Icons.sms_outlined,
                 onTap: () => _launch(
-                    context, 'sms:$crisisTextLine?body=HOME',
-                    copyValue: crisisTextLine),
+                    context, 'sms:${appData.phoneOf('crisisTextLine')}?body=HOME',
+                    copyValue: appData.phoneOf('crisisTextLine')),
               ),
               _CrisisRow(
                 name: 'SAMHSA National Helpline',
-                detail: '$samhsaHelpline · treatment referrals',
+                detail: '${appData.phoneOf('samhsa')} · treatment referrals',
                 icon: Icons.favorite_border,
-                onTap: () => _launch(context, 'tel:$samhsaHelpline',
-                    copyValue: samhsaHelpline),
+                onTap: () => _launch(context, 'tel:${appData.phoneOf('samhsa')}',
+                    copyValue: appData.phoneOf('samhsa')),
               ),
               _CrisisRow(
                 name: 'PA Protection & Advocacy',
-                detail: '$paProtectionAdvocacyPhone · know your rights',
+                detail: '${appData.phoneOf('paProtectionAdvocacy')} · know your rights',
                 icon: Icons.shield_outlined,
-                onTap: () => _launch(context, 'tel:$paProtectionAdvocacyPhone',
-                    copyValue: paProtectionAdvocacyPhone),
+                onTap: () => _launch(context,
+                    'tel:${appData.phoneOf('paProtectionAdvocacy')}',
+                    copyValue: appData.phoneOf('paProtectionAdvocacy')),
               ),
               _CrisisRow(
                 name: 'Veterans Crisis Line',
                 detail: 'Call 988, press 1',
                 icon: Icons.military_tech_outlined,
-                onTap: () => _launch(context, 'tel:$veteransCrisisPhone',
-                    copyValue: veteransCrisisPhone),
+                onTap: () => _launch(context, 'tel:${appData.phoneOf('veteransCrisis')}',
+                    copyValue: appData.phoneOf('veteransCrisis')),
               ),
               _CrisisRow(
                 name: 'The Trevor Project (LGBTQ+ youth)',
                 detail: 'Call · text · chat',
                 icon: Icons.diversity_1_outlined,
-                onTap: () => _launch(context, 'tel:$trevorProjectPhone',
-                    copyValue: trevorProjectPhone),
+                onTap: () => _launch(context, 'tel:${appData.phoneOf('trevorProject')}',
+                    copyValue: appData.phoneOf('trevorProject')),
               ),
               const SizedBox(height: 10),
               // Immediate-danger callout (artboard WebCrisis). 911 is the right

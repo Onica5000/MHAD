@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'package:mhad/constants.dart';
+import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/services/disclaimer_service.dart';
 import 'package:mhad/services/notification_service.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
@@ -813,19 +813,20 @@ List<_SectionData> _buildSections(MhadPalette p) {
         _Resource(
             title: 'PA Protection & Advocacy',
             sub: 'Your rights under Act 194',
-            mono: '$paProtectionAdvocacyPhone · TDD/TTY 1-877-375-7139',
+            mono:
+                '${appData.phoneOf('paProtectionAdvocacy')} · TDD/TTY ${appData.contact('paProtectionAdvocacy').tdd ?? ''}',
             palette: p),
         const SizedBox(height: 10),
         _Resource(
             title: "PA Mental Health Consumers' Association",
             sub: null,
-            mono: '1-800-887-6422',
+            mono: appData.phoneOf('pmhca'),
             palette: p),
         const SizedBox(height: 10),
         _Resource(
             title: 'Mental Health Association in Pennsylvania',
             sub: null,
-            mono: '1-866-578-3659',
+            mono: appData.phoneOf('mhapa'),
             palette: p),
         const SizedBox(height: 10),
         _Resource(

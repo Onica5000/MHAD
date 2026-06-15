@@ -4,7 +4,7 @@ library;
 
 import 'dart:typed_data';
 
-import 'package:mhad/constants.dart';
+import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -110,7 +110,7 @@ class WalletCardGenerator {
                   child: pw.Text(
                     'If the hospital has questions about its legal '
                     'responsibilities to honor my decisions, it should '
-                    'contact Pennsylvania Protection and Advocacy at: $paProtectionAdvocacyPhone',
+                    'contact Pennsylvania Protection and Advocacy at: ${appData.phoneOf('paProtectionAdvocacy')}',
                     style: pw.TextStyle(
                       fontSize: 5.5,
                       fontStyle: pw.FontStyle.italic,

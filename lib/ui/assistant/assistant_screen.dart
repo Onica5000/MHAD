@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:mhad/ai/ai_assistant.dart';
 import 'package:mhad/ai/gemini_api_assistant.dart';
 import 'package:mhad/constants.dart';
+import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/services/gemini_rate_tracker.dart';
 import 'package:mhad/ui/assistant/assistant_send.dart';
@@ -328,7 +329,7 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                 label:
                     'Disclaimer: Not legal or medical advice. For legal '
                     'questions contact PA Protection and Advocacy: '
-                    '$paProtectionAdvocacyPhone',
+                    '${appData.phoneOf('paProtectionAdvocacy')} ',
                 container: true,
                 child: Container(
                   decoration: BoxDecoration(
@@ -348,7 +349,7 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                         child: Text(
                           'Not legal or medical advice. For legal questions '
                           'contact PA Protection & Advocacy: '
-                          '$paProtectionAdvocacyPhone',
+                          '${appData.phoneOf('paProtectionAdvocacy')}',
                           style: TextStyle(
                             fontFamily: 'DM Sans',
                             fontSize: 11,

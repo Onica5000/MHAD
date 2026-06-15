@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mhad/constants.dart';
+import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
@@ -307,7 +307,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
     }
     buf.writeln('');
     buf.writeln('If the hospital has questions, contact PA Protection '
-        '& Advocacy at $paProtectionAdvocacyPhone.');
+        '& Advocacy at ${appData.phoneOf('paProtectionAdvocacy')}.');
     buf.writeln('');
     buf.writeln('This is a summary. Request the full directive from the '
         'person who made it.');

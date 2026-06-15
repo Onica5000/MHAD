@@ -9,6 +9,7 @@ import 'package:mhad/ai/ai_clinical_policy.dart';
 import 'package:mhad/ai/pii_stripper.dart';
 import 'package:mhad/ai/side_effect_item.dart';
 import 'package:mhad/constants.dart';
+import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/data/educational_content.dart';
 import 'package:mhad/services/certificate_pinning_service.dart';
 
@@ -369,7 +370,7 @@ class GeminiApiAssistant implements AiAssistant {
         'the PA MHAD process, answer questions about the forms, and guide them '
         'in completing their directive. You are NOT a lawyer and CANNOT provide '
         'legal advice. Always recommend PA Protection & Advocacy '
-        '($paProtectionAdvocacyPhone) for legal questions.\n');
+        '(${appData.phoneOf('paProtectionAdvocacy')}) for legal questions.\n');
 
     // ── Facilitator mode ────────────────────────────────────────────────
     if (context != null && context.facilitatorMode) {
@@ -527,7 +528,7 @@ class GeminiApiAssistant implements AiAssistant {
     buf.writeln(
         '2. If the answer is not in the reference material, say: '
         '"I don\'t have specific information about that in my reference material. '
-        'For accurate guidance, contact PA Protection & Advocacy at $paProtectionAdvocacyPhone."');
+        'For accurate guidance, contact PA Protection & Advocacy at ${appData.phoneOf('paProtectionAdvocacy')}."');
     buf.writeln(
         '3. NEVER invent or fabricate: statute section numbers, case citations, '
         'legal requirements, medication names, provider names, phone numbers, '
@@ -542,7 +543,7 @@ class GeminiApiAssistant implements AiAssistant {
     buf.writeln(
         '6. For ANY legal question — even if the reference material covers the '
         'topic — always add: "For legal advice specific to your situation, '
-        'contact PA Protection & Advocacy at $paProtectionAdvocacyPhone."');
+        'contact PA Protection & Advocacy at ${appData.phoneOf('paProtectionAdvocacy')}."');
     buf.writeln(
         '7. Keep responses concise and friendly.');
     buf.writeln(
