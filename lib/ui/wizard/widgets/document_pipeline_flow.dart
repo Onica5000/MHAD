@@ -22,6 +22,7 @@ import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/friendly_error.dart';
 import 'package:mhad/ui/widgets/nlm_attribution.dart';
 import 'package:mhad/ui/wizard/widgets/document_import_sheet.dart';
+import 'package:mhad/ui/wizard/widgets/pipeline_reconciliation.dart';
 import 'package:mhad/utils/clipboard_paste.dart';
 import 'package:mhad/utils/platform_utils.dart';
 
@@ -291,6 +292,10 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
   Map<String, bool> _reviewChecked = {};
   Map<String, String> _reviewEdited = {};
 
+  /// Reconciliation items (priority + conflict) for the review step, built from
+  /// the extracted values vs the directive's current values.
+  List<ReconItem> _reconItems = [];
+
   // Smart Fill results
   SmartFillResult? _smartResult;
   Map<String, bool> _smartChecked = {};
@@ -474,9 +479,11 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
       final validated = await ClinicalDataValidator.validate(merged);
       if (!mounted) return;
 
-      // Build review data
+      // Build review data + reconcile against the directive's current values
       _validated = validated;
       _buildReviewData(validated);
+      await _buildReconciliation();
+      if (!mounted) return;
 
       setState(() => _step = _PipelineStep.review);
     } catch (e) {
@@ -548,6 +555,37 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
     if (v.other != null) {
       _reviewChecked['other'] = true;
       _reviewEdited['other'] = v.other!;
+    }
+  }
+
+  /// After extraction, classify each field by priority and detect conflicts
+  /// against the directive's CURRENT scalar values. Low-priority items stay
+  /// pre-selected (autofilled silently); conflicting scalars start UNSELECTED
+  /// so the user makes a deliberate keep/replace choice, with the more-complete
+  /// value pre-filled as the suggested default.
+  Future<void> _buildReconciliation() async {
+    final repo = ref.read(directiveRepositoryProvider);
+    final id = widget.directiveId;
+    final prefs = await repo.getPreferences(id);
+    final instr = await repo.getAdditionalInstructions(id);
+    final existing = <String, String>{
+      'facility_prefer': prefs?.preferredFacilityName ?? '',
+      'facility_avoid': prefs?.avoidFacilityName ?? '',
+      'dietary': instr?.dietary ?? '',
+      'religious': instr?.religious ?? '',
+      'activities': instr?.activities ?? '',
+      'crisis': instr?.crisisIntervention ?? '',
+      'other': instr?.other ?? '',
+      'hh_note': instr?.healthHistory ?? '',
+    };
+    _reconItems = buildReconItems(
+      extracted: Map<String, String>.of(_reviewEdited),
+      existing: existing,
+    );
+    for (final it in _reconItems) {
+      _reviewChecked[it.key] = it.selected;
+      // Pre-fill the conflict default (the more-complete value); editable.
+      if (it.isConflict) _reviewEdited[it.key] = it.suggestedValue;
     }
   }
 
@@ -2216,30 +2254,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
           ),
         ),
         const SizedBox(height: 8),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14),
-          decoration: BoxDecoration(
-            color: p.card,
-            border: Border.all(color: p.border),
-            borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
-          ),
-          child: Column(
-            children: [
-              for (var i = 0; i < keys.length; i++) ...[
-                _SnapReviewRow(
-                  ok: _reviewChecked[keys[i]] ?? false,
-                  fieldLabel: _displayLabel(keys[i]),
-                  value: _reviewEdited[keys[i]] ?? '',
-                  target: _sectionLabel(keys[i]),
-                  onToggle: () => setState(() => _reviewChecked[keys[i]] =
-                      !(_reviewChecked[keys[i]] ?? false)),
-                  onEdit: () => _editField(keys[i]),
-                ),
-                if (i < keys.length - 1) Divider(height: 1, color: p.border),
-              ],
-            ],
-          ),
-        ),
+        _buildReconGroups(p, keys),
         const SizedBox(height: 14),
         // Privacy reassurance lock-line — matches prototype L2082-2087.
         Container(
@@ -2292,6 +2307,124 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
       ],
     );
   }
+
+  /// The extracted fields, grouped into "needs your decision" (high-priority or
+  /// conflicting — start unchecked when they'd replace an existing value) and
+  /// "autofilled for you" (low-priority, pre-checked). Falls back to a flat
+  /// list if reconciliation wasn't built.
+  Widget _buildReconGroups(MhadPalette p, List<String> keys) {
+    Widget groupCard(List<ReconItem> group) => Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14),
+          decoration: BoxDecoration(
+            color: p.card,
+            border: Border.all(color: p.border),
+            borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
+          ),
+          child: Column(
+            children: [
+              for (var i = 0; i < group.length; i++) ...[
+                _reconRow(group[i], p),
+                if (i < group.length - 1)
+                  Divider(height: 1, color: p.border),
+              ],
+            ],
+          ),
+        );
+
+    if (_reconItems.isEmpty) {
+      // Safety fallback: original flat list.
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14),
+        decoration: BoxDecoration(
+          color: p.card,
+          border: Border.all(color: p.border),
+          borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
+        ),
+        child: Column(
+          children: [
+            for (var i = 0; i < keys.length; i++) ...[
+              _SnapReviewRow(
+                ok: _reviewChecked[keys[i]] ?? false,
+                fieldLabel: _displayLabel(keys[i]),
+                value: _reviewEdited[keys[i]] ?? '',
+                target: _sectionLabel(keys[i]),
+                onToggle: () => setState(() => _reviewChecked[keys[i]] =
+                    !(_reviewChecked[keys[i]] ?? false)),
+                onEdit: () => _editField(keys[i]),
+              ),
+              if (i < keys.length - 1) Divider(height: 1, color: p.border),
+            ],
+          ],
+        ),
+      );
+    }
+
+    final groups = ReconGroups.from(_reconItems);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (groups.needsDecision.isNotEmpty) ...[
+          _groupLabel('Needs your decision', p),
+          const SizedBox(height: 6),
+          groupCard(groups.needsDecision),
+          const SizedBox(height: 14),
+        ],
+        if (groups.autoApplied.isNotEmpty) ...[
+          _groupLabel('Autofilled for you — review optional', p),
+          const SizedBox(height: 6),
+          groupCard(groups.autoApplied),
+        ],
+      ],
+    );
+  }
+
+  Widget _reconRow(ReconItem it, MhadPalette p) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // A conflict replaces something you already entered — show what.
+        if (it.isConflict)
+          Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Text(
+              'Replaces what you have: "${it.existing}"',
+              style: TextStyle(
+                fontFamily: 'DM Sans',
+                fontSize: 11.5,
+                fontStyle: FontStyle.italic,
+                color: p.textMuted,
+              ),
+            ),
+          ),
+        _SnapReviewRow(
+          ok: _reviewChecked[it.key] ?? false,
+          fieldLabel: _displayLabel(it.key),
+          value: _reviewEdited[it.key] ?? '',
+          target: _sectionLabel(it.key),
+          onToggle: () => setState(() =>
+              _reviewChecked[it.key] = !(_reviewChecked[it.key] ?? false)),
+          onEdit: () => _editField(it.key),
+        ),
+      ],
+    );
+  }
+
+  Widget _groupLabel(String text, MhadPalette p) => Text(
+        text.toUpperCase(),
+        style: TextStyle(
+          fontFamily: 'JetBrains Mono',
+          fontFamilyFallback: const [
+            'Consolas',
+            'Menlo',
+            'Courier New',
+            'monospace',
+          ],
+          fontSize: 10.5,
+          fontWeight: FontWeight.w700,
+          letterSpacing: 1.2,
+          color: p.textMuted,
+        ),
+      );
 
   // ── Smart Fill results ──────────────────────────────────────────────
 
