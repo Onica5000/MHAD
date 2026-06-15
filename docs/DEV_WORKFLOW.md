@@ -26,8 +26,12 @@ flowchart TD
   subgraph CI[GitHub Actions - deploy-web.yml]
     direction TD
     C1[checkout] --> C2[subosito flutter-action\nFlutter 3.41.4 - pinned]
-    C2 --> C3[flutter build web --release\n--base-href /MHAD/ --pwa-strategy=none]
-    C3 -- fail --> CIfail[(deploy skipped)]
+    C2 --> CA[flutter analyze]
+    CA -- fail --> CIfail[(deploy skipped)]
+    CA -- pass --> CT[flutter test]
+    CT -- fail --> CIfail
+    CT -- pass --> C3[flutter build web --release\n--base-href /MHAD/ --pwa-strategy=none]
+    C3 -- fail --> CIfail
     C3 -- ok --> C4[deploy to GitHub Pages]
   end
 
@@ -38,11 +42,27 @@ flowchart TD
   Verify -- "UI tweak" --> Incognito[Incognito / curl -I main.dart.js\nbypass stale service worker]
   Verify -- "DB-backed screen" --> Manual[Manual: walk gates in a real browser]
 
-  CItest{{Note: CI does NOT run flutter test}}
-  C3 -. tests never run in CI .-> CItest
-  SkewNote{{Local Flutter 3.44.1 != CI 3.41.4}}
+  CInote{{CI now gates analyze + test before build/deploy - fixed 2026-06-15}}
+  SkewNote{{Local Flutter 3.44.1 != CI 3.41.4 - now caught by CI analyze/test}}
   WebBuild -. local build can pass code that breaks CI .-> SkewNote
 ```
+
+---
+
+## Resolution status (2026-06-15)
+
+| ID | Status | Resolution |
+|----|--------|-----------|
+| D1 | ✅ Fixed | `deploy-web.yml` now runs **Analyze + Test** before build/deploy — tests can no longer rot, and a failing test/analyze blocks the deploy |
+| C4 | ✅ Fixed | Same — analyze + test are now enforced in the pipeline, not just by habit |
+| C1 | ✅ Mitigated | Analyze + test now run on the pinned **3.41.4** in CI, so local-only (3.44.x) skew is caught; still watch CI per push |
+| C2 | ✓ Inherent | `analyze` ≠ dart2js — covered by the CI **build web** step (run local build before claiming web-safe) |
+| C3 | ✅ Already fixed | Service worker disabled via `--pwa-strategy=none`; verify via `curl -I` + Incognito |
+| U3 | ✓ Closed | A "regenerate + git diff" check would be flaky under 3.44↔3.41 codegen skew; the build already fails to compile if generated Drift code is stale |
+| U1/U2 | ✓ Inherent | Build-twice (local + CI) and analyze-as-subset are accepted, intentional redundancy |
+| D2/D3 | ✓ By choice | Kept **direct-to-main** (solo workflow); the new CI gate is the mitigation — a broken push fails CI and the deploy is skipped |
+
+Detailed analysis (as originally found) below.
 
 ---
 

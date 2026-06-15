@@ -69,7 +69,7 @@ flowchart TD
   Complete -- Share --> ShareSheet
   Complete -- Export --> Export
   Complete -- Wallet card --> Wallet[Generate wallet card]
-  Complete -. no explicit 'Done -> Home' .-> Complete
+  Complete -- "Done — back to home" --> Home
 
   %% ---------- PIPELINE ----------
   subgraph Upload[Upload / Snap-to-fill pipeline]
@@ -105,6 +105,27 @@ flowchart TD
   Education[Learn: articles / FAQ / glossary]
   Assistant[AI assistant chat\n+ Verify on the web]
 ```
+
+---
+
+## Resolution status (2026-06-15)
+
+All findings below were addressed. Summary:
+
+| ID | Status | Resolution |
+|----|--------|-----------|
+| D1 | ✅ Fixed | "Done — back to home" added to the summary (`wizard_complete_screen.dart`, `go` resets the stack) |
+| D2 | ✓ By design | Gate already makes acceptance explicit (disabled CTA + ack wording); forced-accept is correct for a legal gate |
+| D3 | ✅ Mitigated | Web `beforeunload` unsaved-work guard while the wizard is open (`utils/unsaved_guard*`); full fix is the parked portable-file work |
+| D4 | ✓ Verified | Settings hides directive actions with no directive (`_CurrentDirectiveSection` → `shrink()`); add-ons live in the wizard — no dead-end |
+| U1/U4/U5 | ✓ Intentional | Many entry points to export/AI-setup/education/crisis are deliberate convenience/safety redundancy |
+| U2 | ✓ Verified | Form-type quiz + cards both route through the same `_start` — can't disagree |
+| U3 | ✅ Fixed | Sidebar door relabeled "Autofill from a document" (distinct from the planned "Continue from a saved file") |
+| C1 | ✅ Fixed | Onboarding "Stays on your device" → "Nothing is saved" on web (`kIsWeb`); privacy policy already Public/Private-mode-aware |
+| C2/C3 | ✓ Verified | Post-sign uses `go` for forward progress, `push` for side-trips; stack depth ~2 — no deep-stack issue |
+| C4 | ⏳ In build | "Two editors" is handled by the pipeline reconciliation work (diff-against-existing + guaranteed final review) |
+
+Detailed analysis (as originally found) below.
 
 ---
 
