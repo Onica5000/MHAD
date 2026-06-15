@@ -273,7 +273,13 @@ class DirectiveRepository {
   // ── Snapshot / Restore (for web reload recovery) ───────────────────────
 
   /// Export all non-PII data for a directive as a JSON-safe map.
-  Future<Map<String, dynamic>> snapshotDirective(int directiveId) async {
+  /// Serialize a directive to a Map. [full] = true additionally includes the
+  /// personal-identity fields and designated agents — used for the user-owned
+  /// ENCRYPTED export file (portable, the user holds it). The default
+  /// (PII-stripped) form is used for the unencrypted web-reload cache, which
+  /// must not persist identity. Round-trips with [restoreFromSnapshot].
+  Future<Map<String, dynamic>> snapshotDirective(int directiveId,
+      {bool full = false}) async {
     final d = await getDirectiveById(directiveId);
     if (d == null) return {};
 
@@ -283,8 +289,31 @@ class DirectiveRepository {
     final diags = await getDiagnoses(directiveId);
     final allergies = await getAllergies(directiveId);
     final guardian = await getGuardianNomination(directiveId);
+    final agents = full ? await getAgents(directiveId) : const <Agent>[];
 
     return {
+      if (full) 'personal': {
+        'fullName': d.fullName,
+        'dateOfBirth': d.dateOfBirth,
+        'address': d.address,
+        'address2': d.address2,
+        'city': d.city,
+        'county': d.county,
+        'state': d.state,
+        'zip': d.zip,
+        'phone': d.phone,
+      },
+      if (full && agents.isNotEmpty) 'agents': agents
+          .map((a) => {
+                'agentType': a.agentType,
+                'fullName': a.fullName,
+                'relationship': a.relationship,
+                'address': a.address,
+                'homePhone': a.homePhone,
+                'workPhone': a.workPhone,
+                'cellPhone': a.cellPhone,
+              })
+          .toList(),
       'formType': d.formType,
       'lastStepIndex': d.lastStepIndex,
       'effectiveCondition': d.effectiveCondition,
@@ -313,6 +342,7 @@ class DirectiveRepository {
         'roomPreferences': prefs.roomPreferences,
         'crisisPlanJson': prefs.crisisPlanJson,
         'selfBindingEnabled': prefs.selfBindingEnabled,
+        'sideEffectsJson': prefs.sideEffectsJson,
       },
       if (guardian != null) 'guardian': {
         'nomineeFullName': guardian.nomineeFullName,
@@ -416,7 +446,44 @@ class DirectiveRepository {
         roomPreferences: _v(p['roomPreferences']),
         crisisPlanJson: _v(p['crisisPlanJson']),
         selfBindingEnabled: _vBool(p['selfBindingEnabled']),
+        sideEffectsJson: _v(p['sideEffectsJson']),
       ));
+    }
+
+    // Personal identity (only present in a `full` / encrypted-export snapshot).
+    final personal = snap['personal'];
+    if (personal is Map<String, dynamic>) {
+      await updatePersonalInfo(
+        id,
+        fullName: personal['fullName']?.toString() ?? '',
+        dateOfBirth: personal['dateOfBirth']?.toString() ?? '',
+        address: personal['address']?.toString() ?? '',
+        address2: personal['address2']?.toString() ?? '',
+        city: personal['city']?.toString() ?? '',
+        county: personal['county']?.toString() ?? '',
+        state: personal['state']?.toString() ?? 'PA',
+        zip: personal['zip']?.toString() ?? '',
+        phone: personal['phone']?.toString() ?? '',
+      );
+    }
+
+    // Designated agents (only present in a `full` / encrypted-export snapshot).
+    final agents = snap['agents'];
+    if (agents is List) {
+      for (final raw in agents) {
+        if (raw is! Map) continue;
+        final a = raw.cast<String, dynamic>();
+        await upsertAgent(AgentsCompanion(
+          directiveId: Value(id),
+          agentType: Value(a['agentType']?.toString() ?? 'primary'),
+          fullName: _v(a['fullName']),
+          relationship: _v(a['relationship']),
+          address: _v(a['address']),
+          homePhone: _v(a['homePhone']),
+          workPhone: _v(a['workPhone']),
+          cellPhone: _v(a['cellPhone']),
+        ));
+      }
     }
 
     // Guardian (Phase 2 — includes the new `guardianRelation` enum).
