@@ -348,18 +348,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                   _searchResults.where((c) => !c.code.startsWith('F')).toList();
 
               return Container(
-                decoration: BoxDecoration(
-                  color: p.card,
-                  border: Border.all(color: p.border),
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Color(0x1A000000),
-                      blurRadius: 24,
-                      offset: Offset(0, 8),
-                    ),
-                  ],
-                ),
+                decoration: p.dropdownDecoration,
                 padding: const EdgeInsets.all(6),
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(maxHeight: 280),

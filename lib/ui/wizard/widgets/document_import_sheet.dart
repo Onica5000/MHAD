@@ -79,9 +79,13 @@ String _fileMimeType(String path) {
   if (lower.endsWith('.pdf')) return 'application/pdf';
   if (lower.endsWith('.txt')) return 'text/plain';
   if (lower.endsWith('.csv')) return 'text/csv';
-  if (lower.endsWith('.png')) return 'image/png';
-  if (lower.endsWith('.webp')) return 'image/webp';
-  if (lower.endsWith('.heic') || lower.endsWith('.heif')) return 'image/heic';
-  if (lower.endsWith('.jpg') || lower.endsWith('.jpeg')) return 'image/jpeg';
+  if (lower.endsWith('.png') ||
+      lower.endsWith('.webp') ||
+      lower.endsWith('.heic') ||
+      lower.endsWith('.heif') ||
+      lower.endsWith('.jpg') ||
+      lower.endsWith('.jpeg')) {
+    return _imageMimeType(lower);
+  }
   return 'application/octet-stream';
 }

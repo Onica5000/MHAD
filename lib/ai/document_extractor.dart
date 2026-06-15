@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:image/image.dart' as img;
 import 'package:mhad/ai/document_extraction_result.dart';
 import 'package:mhad/ai/pii_stripper.dart';
+import 'package:mhad/constants.dart';
 import 'package:mhad/services/certificate_pinning_service.dart';
 
 /// Sends a document (image, PDF, or text) to Gemini and extracts structured
@@ -17,7 +18,7 @@ class DocumentExtractor {
   DocumentExtractor({required this.apiKey})
       : _httpClient = CertificatePinningService.createPinnedClient();
 
-  static const _model = 'gemini-2.5-flash';
+  static const _model = geminiFlashModel;
 
   // Gemini tiles images into 768x768 chunks at ~258 tokens each.
   // 1024px max keeps a portrait document to ~2 tiles (~516 tokens).

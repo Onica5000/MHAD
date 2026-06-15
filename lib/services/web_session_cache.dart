@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:mhad/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Caches the current directive data to SharedPreferences on web so that
@@ -14,7 +15,7 @@ class WebSessionCache {
 
   static const _dataKey = 'web_session_directive';
   static const _tsKey = 'web_session_timestamp';
-  static const ttl = Duration(minutes: 10);
+  static const ttl = sessionCacheTtl;
 
   /// Save a directive snapshot.
   static Future<void> saveDirective(Map<String, dynamic> snapshot) async {

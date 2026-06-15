@@ -1,6 +1,18 @@
 /// PA Protection & Advocacy toll-free phone number.
 const paProtectionAdvocacyPhone = '1-800-692-7443';
 
+/// The Gemini model id used across the AI assistant, document extractor, and
+/// smart-fill service. Bump this in one place when changing models.
+const geminiFlashModel = 'gemini-2.5-flash';
+
+/// Gemini 2.5 Flash context window (input tokens). Shared by the assistant's
+/// budgeting and the rate tracker so the two never drift.
+const geminiMaxContextTokens = 1048576;
+
+/// Public-mode session-cache TTL. Confirmed work is held in memory only this
+/// long (public/web halves of the same ephemeral-session feature share it).
+const sessionCacheTtl = Duration(minutes: 10);
+
 /// Canonical short caveat shown wherever AI generates content (chat replies,
 /// field suggestions). Keep this exact wording so the app's voice stays
 /// consistent — see the legal-wording canon.

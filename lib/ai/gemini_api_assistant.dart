@@ -8,6 +8,7 @@ import 'package:mhad/ai/ai_assistant.dart';
 import 'package:mhad/ai/ai_clinical_policy.dart';
 import 'package:mhad/ai/pii_stripper.dart';
 import 'package:mhad/ai/side_effect_item.dart';
+import 'package:mhad/constants.dart';
 import 'package:mhad/data/educational_content.dart';
 import 'package:mhad/services/certificate_pinning_service.dart';
 
@@ -22,10 +23,10 @@ class GeminiApiAssistant implements AiAssistant {
   GeminiApiAssistant({required this.apiKey})
       : _httpClient = CertificatePinningService.createPinnedClient();
 
-  static const _model = 'gemini-2.5-flash';
+  static const _model = geminiFlashModel;
 
   /// Maximum input tokens for Gemini 2.5 Flash (1M context window).
-  static const maxContextTokens = 1048576;
+  static const maxContextTokens = geminiMaxContextTokens;
 
   /// PII-stripping chokepoint applied to every outbound user payload before
   /// it reaches Google. Centralised here so tests can pin the contract and

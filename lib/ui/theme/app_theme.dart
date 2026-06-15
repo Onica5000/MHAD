@@ -105,6 +105,21 @@ class MhadPalette {
     required this.onPrimaryLight,
   });
 
+  /// Floating-overlay decoration shared by the autocomplete dropdowns
+  /// (diagnoses / allergies search). A bordered card with a soft drop shadow.
+  BoxDecoration get dropdownDecoration => BoxDecoration(
+        color: card,
+        border: Border.all(color: border),
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x1A000000),
+            blurRadius: 24,
+            offset: Offset(0, 8),
+          ),
+        ],
+      );
+
   // ─── Warm Teal ─────────────────────────────────────────────────────────
   static const tealLight = MhadPalette(
     primary: Color(0xFF1A7A6E),

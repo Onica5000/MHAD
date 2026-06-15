@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:mhad/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Manages a short-lived cache for public mode session data.
@@ -18,7 +19,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class PublicSessionCache {
   PublicSessionCache._();
 
-  static const ttl = Duration(minutes: 10);
+  static const ttl = sessionCacheTtl;
 
   static const _apiKeyKey = 'public_session_api_key';
   static const _timestampKey = 'public_session_timestamp';

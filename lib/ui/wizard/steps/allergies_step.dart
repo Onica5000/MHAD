@@ -781,18 +781,7 @@ class _AutoComplete extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
     return Container(
-      decoration: BoxDecoration(
-        color: p.card,
-        border: Border.all(color: p.border),
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x1A000000),
-            blurRadius: 24,
-            offset: Offset(0, 8),
-          ),
-        ],
-      ),
+      decoration: p.dropdownDecoration,
       padding: const EdgeInsets.all(6),
       child: Column(
         mainAxisSize: MainAxisSize.min,
