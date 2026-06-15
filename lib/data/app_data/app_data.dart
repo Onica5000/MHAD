@@ -210,6 +210,13 @@ class AppData {
   /// before [load] runs (tests, probes) or if the asset fails to parse.
   static AppData instance = _fallback;
 
+  /// The raw bundled JSON map — the base the admin update flow edits before
+  /// emitting an updated file to commit.
+  static Future<Map<String, dynamic>> loadRawJson() async {
+    final raw = await rootBundle.loadString('assets/data/app_data.json');
+    return jsonDecode(raw) as Map<String, dynamic>;
+  }
+
   /// Parse `assets/data/app_data.json` and publish it to [instance]. Called
   /// from `main()` before `runApp`. Falls back to [_fallback] on any error so a
   /// corrupt asset can never brick startup.
