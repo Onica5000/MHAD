@@ -36,6 +36,18 @@ jobs:
       - name: Get dependencies
         run: flutter pub get
 
+      # ── Quality gates (block the deploy if they fail) ──────────────────
+      # Previously CI only built+deployed web, so `flutter test` never ran in
+      # CI and tests could rot without blocking a deploy. These steps make
+      # analyze + the test suite a hard gate before the build/deploy. They run
+      # on the pinned 3.41.4 toolchain, so they also catch local↔CI skew that a
+      # local (3.44.x) run would miss.
+      - name: Analyze
+        run: flutter analyze
+
+      - name: Test
+        run: flutter test
+
       - name: Build web
         # `--pwa-strategy=none` makes Flutter generate a flutter_bootstrap.js
         # that registers NO service worker (verified honored on 3.41.4: the
