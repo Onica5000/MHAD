@@ -73,6 +73,65 @@ class AiConfig {
       );
 }
 
+/// Canonical PA MHAD legal facts (the `verify`-tier block). These are authored
+/// as prose throughout the app; this is the single structured reference and the
+/// admin-flow update target — NOT a runtime template. [proseLocations] lists the
+/// source files whose prose must be human-verified alongside any change here.
+class LegalFacts {
+  final String act;
+  final String actEffectiveDate;
+  final int validityYears;
+  final int witnessMinAge;
+  final int courtPetitionHours;
+  final List<String> ntiDrugs;
+  final String ntiCitation;
+  final Map<String, int> involuntaryCommitment;
+  final Map<String, String> citations;
+  final List<String> proseLocations;
+
+  const LegalFacts({
+    this.act = '',
+    this.actEffectiveDate = '',
+    this.validityYears = 2,
+    this.witnessMinAge = 18,
+    this.courtPetitionHours = 72,
+    this.ntiDrugs = const [],
+    this.ntiCitation = '',
+    this.involuntaryCommitment = const {},
+    this.citations = const {},
+    this.proseLocations = const [],
+  });
+
+  factory LegalFacts.fromJson(Map<String, dynamic> m) => LegalFacts(
+        act: (m['act'] ?? '').toString(),
+        actEffectiveDate: (m['actEffectiveDate'] ?? '').toString(),
+        validityYears: (m['validityYears'] as num?)?.toInt() ?? 2,
+        witnessMinAge: (m['witnessMinAge'] as num?)?.toInt() ?? 18,
+        courtPetitionHours: (m['courtPetitionHours'] as num?)?.toInt() ?? 72,
+        ntiDrugs: [
+          for (final d in (m['ntiDrugs'] as List?) ?? const []) d.toString(),
+        ],
+        ntiCitation: (m['ntiCitation'] ?? '').toString(),
+        involuntaryCommitment: {
+          for (final e in ((m['involuntaryCommitment'] as Map?)
+                      ?.cast<String, dynamic>() ??
+                  const {})
+              .entries)
+            if (e.value is num) e.key: (e.value as num).toInt(),
+        },
+        citations: {
+          for (final e
+              in ((m['citations'] as Map?)?.cast<String, dynamic>() ?? const {})
+                  .entries)
+            e.key: e.value.toString(),
+        },
+        proseLocations: [
+          for (final p in (m['proseLocations'] as List?) ?? const [])
+            p.toString(),
+        ],
+      );
+}
+
 /// The app's dynamic, updatable facts — loaded once from
 /// `assets/data/app_data.json` at startup (see [load]). This is the source of
 /// truth for data that drifts over time (contacts now; AI config and legal
@@ -89,12 +148,14 @@ class AppData {
   final List<ReferralPartner> referralPartners;
   final AiConfig ai;
   final Map<String, String> urls;
+  final LegalFacts legal;
 
   const AppData({
     required this.contacts,
     required this.referralPartners,
     this.ai = const AiConfig(),
     this.urls = const {},
+    this.legal = const LegalFacts(),
   });
 
   /// Public privacy-policy URL (must match the Play Console + developer site).
@@ -140,6 +201,8 @@ class AppData {
       ai: AiConfig.fromJson(
           (json['ai'] as Map?)?.cast<String, dynamic>() ?? const {}),
       urls: urls,
+      legal: LegalFacts.fromJson(
+          (json['legal'] as Map?)?.cast<String, dynamic>() ?? const {}),
     );
   }
 

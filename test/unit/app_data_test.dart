@@ -84,4 +84,29 @@ void main() {
       expect(ai.rpd, 250);
     });
   });
+
+  group('LegalFacts (verify tier)', () {
+    test('bundled asset carries the canonical legal facts', () async {
+      final data = await AppData.load();
+      final l = data.legal;
+      expect(l.validityYears, 2);
+      expect(l.witnessMinAge, 18);
+      expect(l.ntiDrugs, contains('lithium'));
+      expect(l.ntiDrugs, contains('valproic acid'));
+      expect(l.involuntaryCommitment['section302Hours'], 120);
+      expect(l.involuntaryCommitment['section304Days'], 90);
+      expect(l.citations['providerMustComply'], '20 Pa.C.S. §5842');
+      // The prose-location manifest the Phase-4 admin flow uses for verify-tier
+      // edits must point at the real source files.
+      expect(l.proseLocations, contains('lib/data/educational_content.dart'));
+    });
+
+    test('defaults are sane when the block is absent', () {
+      final l = LegalFacts.fromJson(const {});
+      expect(l.validityYears, 2);
+      expect(l.witnessMinAge, 18);
+      expect(l.ntiDrugs, isEmpty);
+      expect(l.citations, isEmpty);
+    });
+  });
 }

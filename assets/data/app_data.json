@@ -18,6 +18,43 @@
   "urls": {
     "privacyPolicy": "https://onica5000.github.io/mhad/privacy"
   },
+  "legal": {
+    "_note": "Canonical PA MHAD legal facts. VERIFY tier — a human must approve any change (AND the matching prose edits in proseLocations) before it ships. These facts are authored as prose throughout the app; this block is the single structured reference + the admin-flow update target, NOT a runtime template (the legal-wording-canon governs the prose).",
+    "autonomy": "verify",
+    "act": "Act 194 of 2004 (20 Pa.C.S. Chapter 58)",
+    "actEffectiveDate": "2005-01-29",
+    "validityYears": 2,
+    "witnessMinAge": 18,
+    "courtPetitionHours": 72,
+    "ntiDrugs": ["lithium", "carbamazepine", "valproic acid", "phenytoin", "clonazepam"],
+    "ntiCitation": "35 P.S. §960.3",
+    "involuntaryCommitment": {
+      "section302Hours": 120,
+      "section303Days": 20,
+      "section304Days": 90,
+      "section305Days": 180,
+      "citation": "50 P.S. §7301-7306"
+    },
+    "citations": {
+      "providerMustComply": "20 Pa.C.S. §5842",
+      "incapacityDetermination": "20 Pa.C.S. §5811",
+      "revocation": "20 Pa.C.S. §5808",
+      "substitutedJudgment": "20 Pa.C.S. §5836",
+      "conflictingDirectives": "20 Pa.C.S. §5844",
+      "interstateValidity": "20 Pa.C.S. §5845",
+      "criminalPenalty": "20 Pa.C.S. §5806",
+      "goodFaithImmunity": "20 Pa.C.S. §5805",
+      "psychosurgeryProhibition": "20 Pa.C.S. §5804"
+    },
+    "proseLocations": [
+      "lib/data/educational_content.dart",
+      "lib/ui/disclaimer/disclaimer_screen.dart",
+      "lib/ui/export/pdf/combined_pdf.dart",
+      "lib/ui/export/pdf/declaration_pdf.dart",
+      "lib/ui/export/pdf/poa_pdf.dart",
+      "lib/ui/export/pdf/supplementary_pdf.dart"
+    ]
+  },
   "contacts": {
     "crisis988": {
       "name": "988 Suicide & Crisis Lifeline",
