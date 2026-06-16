@@ -9,7 +9,10 @@ import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/action_row.dart';
 import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
+import 'package:mhad/ui/widgets/design/dashed_divider.dart';
+import 'package:mhad/ui/widgets/design/directive_status_style.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
+import 'package:mhad/ui/widgets/design/mono_pill.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/design/wizard_header.dart';
 
@@ -106,49 +109,17 @@ class _Body extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final p = Theme.of(context).mhadPalette;
     final dateFmt = DateFormat('MMM d, y');
-    final status = directive.status == DirectiveStatus.revoked.name
-        ? 'Revoked'
-        : directive.status == DirectiveStatus.expired.name
-            ? 'Expired'
-            : directive.status == DirectiveStatus.complete.name
-                ? 'Active'
-                : 'Draft';
+    final status = directiveStatusLabel(directive.status);
     final dark = Theme.of(context).brightness == Brightness.dark;
-    final statusColor = status == 'Revoked'
-        ? (dark
-            ? SemanticColors.errorAccentDark
-            : SemanticColors.errorAccentLight)
-        : status == 'Expired'
-            ? (dark
-                ? SemanticColors.warningTextDark
-                : SemanticColors.warningTextLight)
-            : (dark
-                ? SemanticColors.successTextDark
-                : SemanticColors.successTextLight);
+    final statusColor = directiveStatusColor(directive.status, dark: dark);
 
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 14, 20, 32),
       children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-          decoration: BoxDecoration(
-            color: statusColor.withValues(alpha: 0.15),
-            borderRadius: BorderRadius.circular(100),
-          ),
-          child: Text('● ${status.toUpperCase()}',
-              style: TextStyle(
-                fontFamily: 'JetBrains Mono',
-                fontFamilyFallback: const [
-                  'Consolas',
-                  'Menlo',
-                  'Courier New',
-                  'monospace'
-                ],
-                fontSize: 11,
-                letterSpacing: 1,
-                fontWeight: FontWeight.w700,
-                color: statusColor,
-              )),
+        MonoPill(
+          label: status,
+          foreground: statusColor,
+          background: statusColor.withValues(alpha: 0.15),
         ),
         const SizedBox(height: 10),
         // Editorial title — prototype uses "Directive · <YEAR>" with the
@@ -395,10 +366,7 @@ class _DocPreviewCard extends ConsumerWidget {
               const SizedBox(height: 10),
               // Dashed-style divider — drawn as a custom painted line
               // since Flutter has no built-in dashed Divider widget.
-              CustomPaint(
-                size: const Size(double.infinity, 1),
-                painter: _DashedLinePainter(color: p.border),
-              ),
+              DashedDivider(color: p.border),
               const SizedBox(height: 10),
               Row(
                 children: [
@@ -460,24 +428,3 @@ class _SigCol extends StatelessWidget {
   }
 }
 
-class _DashedLinePainter extends CustomPainter {
-  final Color color;
-  const _DashedLinePainter({required this.color});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    const dashWidth = 3.0;
-    const dashSpace = 3.0;
-    double x = 0;
-    final paint = Paint()
-      ..color = color
-      ..strokeWidth = 1;
-    while (x < size.width) {
-      canvas.drawLine(Offset(x, 0), Offset(x + dashWidth, 0), paint);
-      x += dashWidth + dashSpace;
-    }
-  }
-
-  @override
-  bool shouldRepaint(_DashedLinePainter old) => old.color != color;
-}

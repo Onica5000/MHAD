@@ -5,6 +5,7 @@ import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
+import 'package:mhad/ui/widgets/design/dashed_divider.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/design/wizard_header.dart';
 import 'package:share_plus/share_plus.dart';
@@ -554,33 +555,6 @@ class _DashedDivider extends StatelessWidget {
   const _DashedDivider();
 
   @override
-  Widget build(BuildContext context) {
-    final p = Theme.of(context).mhadPalette;
-    return CustomPaint(
-      size: const Size(double.infinity, 1),
-      painter: _DashedLinePainter(color: p.border),
-    );
-  }
-}
-
-class _DashedLinePainter extends CustomPainter {
-  final Color color;
-  const _DashedLinePainter({required this.color});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    const dashWidth = 3.0;
-    const dashSpace = 3.0;
-    double x = 0;
-    final paint = Paint()
-      ..color = color
-      ..strokeWidth = 1;
-    while (x < size.width) {
-      canvas.drawLine(Offset(x, 0), Offset(x + dashWidth, 0), paint);
-      x += dashWidth + dashSpace;
-    }
-  }
-
-  @override
-  bool shouldRepaint(_DashedLinePainter old) => old.color != color;
+  Widget build(BuildContext context) =>
+      DashedDivider(color: Theme.of(context).mhadPalette.border);
 }

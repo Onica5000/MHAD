@@ -6,6 +6,7 @@ import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
+import 'package:mhad/ui/widgets/design/mono_pill.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/design/wizard_header.dart';
 
@@ -126,27 +127,10 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
           // Editorial 'PERMANENT ACTION' pill replaces what was the
           // AppBar's title. The 38pt 'Are you sure?' headline below
           // matches the prototype L1568 wording exactly.
-          Container(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-            decoration: BoxDecoration(
-              color: cs.errorContainer,
-              borderRadius: BorderRadius.circular(100),
-            ),
-            child: Text('● PERMANENT ACTION',
-                style: TextStyle(
-                  fontFamily: 'JetBrains Mono',
-                  fontFamilyFallback: const [
-                    'Consolas',
-                    'Menlo',
-                    'Courier New',
-                    'monospace'
-                  ],
-                  fontSize: 11,
-                  letterSpacing: 1,
-                  fontWeight: FontWeight.w700,
-                  color: cs.onErrorContainer,
-                )),
+          MonoPill(
+            label: 'Permanent action',
+            foreground: cs.onErrorContainer,
+            background: cs.errorContainer,
           ),
           const SizedBox(height: 12),
           // Headline bumped 30 -> 38pt to match prototype L1568.
