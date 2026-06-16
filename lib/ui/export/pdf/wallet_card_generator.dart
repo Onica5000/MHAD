@@ -6,6 +6,7 @@ import 'dart:typed_data';
 
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/data/database/app_database.dart';
+import 'package:mhad/domain/agent_ext.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
@@ -34,9 +35,8 @@ class WalletCardGenerator {
       subject: 'PA Mental Health Advance Directive — Wallet Card',
     );
 
-    final primaryAgent =
-        agents.where((a) => a.agentType == 'primary').firstOrNull;
-    final agentPhone = _bestPhone(primaryAgent);
+    final primaryAgent = agents.primaryAgent;
+    final agentPhone = primaryAgent?.bestPhone ?? '';
 
     // Format phone for display: xxx-xxx-xxxx
     final phoneDisplay = agentPhone.isNotEmpty
@@ -150,14 +150,6 @@ class WalletCardGenerator {
     );
 
     return pdf.save();
-  }
-
-  static String _bestPhone(Agent? agent) {
-    if (agent == null) return '';
-    if (agent.cellPhone.isNotEmpty) return agent.cellPhone;
-    if (agent.homePhone.isNotEmpty) return agent.homePhone;
-    if (agent.workPhone.isNotEmpty) return agent.workPhone;
-    return '';
   }
 
   static String _fmtDate(int ms) {

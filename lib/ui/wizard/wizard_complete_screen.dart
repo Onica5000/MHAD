@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:mhad/data/database/app_database.dart';
+import 'package:mhad/domain/agent_ext.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
@@ -47,10 +48,8 @@ class _WizardCompleteScreenState extends ConsumerState<WizardCompleteScreen> {
     setState(() {
       _directive = d;
       _agents = agents;
-      _primaryAgent =
-          agents.where((a) => a.agentType == 'primary').firstOrNull;
-      _alternateAgent =
-          agents.where((a) => a.agentType == 'alternate').firstOrNull;
+      _primaryAgent = agents.primaryAgent;
+      _alternateAgent = agents.alternateAgent;
     });
   }
 
@@ -99,11 +98,7 @@ class _WizardCompleteScreenState extends ConsumerState<WizardCompleteScreen> {
     return n.isEmpty ? 'Principal' : n;
   }
 
-  String _agentPhone(Agent? a) {
-    if (a == null) return '';
-    final pieces = [a.cellPhone, a.homePhone, a.workPhone];
-    return pieces.firstWhere((p) => p.isNotEmpty, orElse: () => '');
-  }
+  String _agentPhone(Agent? a) => a?.bestPhone ?? '';
 
   @override
   Widget build(BuildContext context) {

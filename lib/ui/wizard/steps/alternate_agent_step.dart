@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:drift/drift.dart' show Value;
 import 'package:mhad/data/database/app_database.dart';
+import 'package:mhad/domain/agent_ext.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/wizard/widgets/contact_picker_button.dart';
 import 'package:mhad/ui/wizard/widgets/wizard_help_button.dart';
@@ -51,8 +52,7 @@ class _AlternateAgentStepState
     final agents = await ref
         .read(directiveRepositoryProvider)
         .getAgents(widget.directiveId);
-    final alternate =
-        agents.where((a) => a.agentType == 'alternate').firstOrNull;
+    final alternate = agents.alternateAgent;
     if (alternate != null && mounted) {
       setState(() {
         _existingAgentId = alternate.id;

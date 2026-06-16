@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/data/database/app_database.dart';
+import 'package:mhad/domain/agent_ext.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
@@ -140,10 +141,8 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
     final guardian = data.guardian;
     final meds = data.medications;
 
-    final primaryAgent =
-        agents.where((a) => a.agentType == 'primary').firstOrNull;
-    final altAgent =
-        agents.where((a) => a.agentType == 'alternate').firstOrNull;
+    final primaryAgent = agents.primaryAgent;
+    final altAgent = agents.alternateAgent;
 
     final exceptions = meds.where((m) => m.entryType == 'exception').toList();
     final limitations = meds.where((m) => m.entryType == 'limitation').toList();

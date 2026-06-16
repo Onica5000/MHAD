@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/data/database/app_database.dart';
+import 'package:mhad/domain/agent_ext.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
@@ -165,9 +166,8 @@ class _PlainBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
-    final primary = agents.where((a) => a.agentType == 'primary').firstOrNull;
-    final alternate =
-        agents.where((a) => a.agentType == 'alternate').firstOrNull;
+    final primary = agents.primaryAgent;
+    final alternate = agents.alternateAgent;
     final name = directive.fullName.isEmpty ? '(your name)' : directive.fullName;
 
     final paragraphs = <String>[
@@ -212,7 +212,7 @@ class _LegalBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
-    final primary = agents.where((a) => a.agentType == 'primary').firstOrNull;
+    final primary = agents.primaryAgent;
     final name = directive.fullName.isEmpty
         ? '(PRINCIPAL NAME)'
         : directive.fullName.toUpperCase();

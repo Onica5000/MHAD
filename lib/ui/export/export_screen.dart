@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/data/database/app_database.dart';
+import 'package:mhad/domain/agent_ext.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/router.dart';
@@ -398,19 +399,9 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         _directive?.updatedAt,
       ].join('|');
 
-  Agent? get _primaryAgent {
-    for (final a in _agents) {
-      if (a.agentType == 'primary') return a;
-    }
-    return null;
-  }
+  Agent? get _primaryAgent => _agents.primaryAgent;
 
-  String _agentPhoneFor(Agent? a) {
-    if (a == null) return '';
-    if (a.cellPhone.trim().isNotEmpty) return a.cellPhone.trim();
-    if (a.homePhone.trim().isNotEmpty) return a.homePhone.trim();
-    return a.workPhone.trim();
-  }
+  String _agentPhoneFor(Agent? a) => a?.bestPhone ?? '';
 
 
   Future<void> _previewPdf() async {

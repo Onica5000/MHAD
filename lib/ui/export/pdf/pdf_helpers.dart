@@ -5,6 +5,7 @@ import 'dart:convert';
 
 import 'package:mhad/constants.dart';
 import 'package:mhad/data/database/app_database.dart';
+import 'package:mhad/domain/agent_ext.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
@@ -101,14 +102,8 @@ GuardianDisplay resolveGuardianDisplay(
   List<Agent> agents,
 ) {
   if (guardian == null) return GuardianDisplay.empty;
-  Agent? agentByType(String type) =>
-      agents.where((a) => a.agentType == type).firstOrNull;
-  String pickPhone(Agent a) {
-    for (final p in [a.cellPhone, a.homePhone, a.workPhone]) {
-      if (p.isNotEmpty) return p;
-    }
-    return '';
-  }
+    Agent? agentByType(String type) => agents.agentByType(type);
+    String pickPhone(Agent a) => a.bestPhone;
 
   switch (guardian.guardianRelation) {
     case 'sameAsPrimary':

@@ -4,6 +4,7 @@ library;
 
 import 'package:mhad/constants.dart';
 import 'package:mhad/data/database/app_database.dart';
+import 'package:mhad/domain/agent_ext.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'pdf_helpers.dart';
 
@@ -24,10 +25,8 @@ List<pw.Page> buildCombinedPages({
       ? 'Combined Declaration & Power of Attorney  ·  DRAFT — UNSIGNED'
       : 'Combined Declaration & Power of Attorney';
 
-  final primaryAgent = agents
-      .where((a) => a.agentType == 'primary')
-      .firstOrNull;
-  final altAgent = agents.where((a) => a.agentType == 'alternate').firstOrNull;
+  final primaryAgent = agents.primaryAgent;
+  final altAgent = agents.alternateAgent;
 
   final current = medications.where((m) => m.entryType == 'current').toList();
   final exceptions = medications
@@ -853,12 +852,5 @@ List<pw.Page> buildCombinedPages({
   ];
 }
 
-/// Get the first non-empty phone from an agent.
-String _agentPhone(Agent? agent) {
-  if (agent == null) return '';
-  return [
-    agent.homePhone,
-    agent.workPhone,
-    agent.cellPhone,
-  ].firstWhere((p) => p.isNotEmpty, orElse: () => '');
-}
+/// First non-empty phone from an agent (cell → home → work, trimmed).
+String _agentPhone(Agent? agent) => agent?.bestPhone ?? '';
