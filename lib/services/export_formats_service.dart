@@ -1,5 +1,6 @@
 import 'package:mhad/constants.dart';
 import 'package:mhad/data/database/app_database.dart';
+import 'package:mhad/services/instruction_fields.dart';
 
 /// Additional machine-readable export formats beyond the FHIR JSON produced by
 /// [FhirExportService] — a flat CSV and a FHIR R4 Consent in XML. Both are
@@ -244,16 +245,9 @@ class ExportFormatsService {
         b.writeln('  </note>');
       }
 
-      note('Health History', additional.healthHistory);
-      note('Crisis Intervention', additional.crisisIntervention);
-      note('Activities', additional.activities);
-      note('Dietary', additional.dietary);
-      note('Religious', additional.religious);
-      note('Children/Custody', additional.childrenCustody);
-      note('Family Notification', additional.familyNotification);
-      note('Records Disclosure', additional.recordsDisclosure);
-      note('Pet Custody', additional.petCustody);
-      note('Other', additional.other);
+      for (final n in additionalInstructionNotes(additional)) {
+        note(n.label, n.value);
+      }
     }
 
     b.writeln('</Consent>');

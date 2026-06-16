@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:mhad/constants.dart';
 import 'package:mhad/data/database/app_database.dart';
+import 'package:mhad/services/instruction_fields.dart';
 
 /// Generates a FHIR R4 Consent resource JSON from a completed directive.
 /// This enables future EHR integration. The output conforms to the FHIR
@@ -208,16 +209,9 @@ class FhirExportService {
       void addNote(String label, String value) {
         if (value.isNotEmpty) notes.add({'text': '$label: $value'});
       }
-      addNote('Health History', additional.healthHistory);
-      addNote('Crisis Intervention', additional.crisisIntervention);
-      addNote('Activities', additional.activities);
-      addNote('Dietary', additional.dietary);
-      addNote('Religious', additional.religious);
-      addNote('Children/Custody', additional.childrenCustody);
-      addNote('Family Notification', additional.familyNotification);
-      addNote('Records Disclosure', additional.recordsDisclosure);
-      addNote('Pet Custody', additional.petCustody);
-      addNote('Other', additional.other);
+      for (final n in additionalInstructionNotes(additional)) {
+        addNote(n.label, n.value);
+      }
     }
     if (notes.isNotEmpty) resource['note'] = notes;
 
