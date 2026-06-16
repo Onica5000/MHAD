@@ -34,11 +34,28 @@ enum WizardStep {
   reviewAndSign,
 }
 
+/// Parse a stored form-type name (e.g. 'combined') to a [FormType], or null
+/// if unrecognized. Lets string-keyed call sites reuse the label getters.
+FormType? formTypeFromName(String? name) {
+  for (final t in FormType.values) {
+    if (t.name == name) return t;
+  }
+  return null;
+}
+
 extension FormTypeExt on FormType {
   String get displayName => switch (this) {
         FormType.combined => 'Combined Declaration & Power of Attorney',
         FormType.declaration => 'Declaration Only',
         FormType.poa => 'Power of Attorney Only',
+      };
+
+  /// Short label for chips / context lines where [displayName] is too long.
+  /// Previously forked into "Combined form" / "Combined" / etc.
+  String get shortName => switch (this) {
+        FormType.combined => 'Combined',
+        FormType.declaration => 'Declaration',
+        FormType.poa => 'Power of Attorney',
       };
 
   bool get hasAgentSections =>

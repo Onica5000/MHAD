@@ -2223,18 +2223,8 @@ class _WalletCardPreview extends StatelessWidget {
     return phone.isEmpty ? 'Agent: $name' : 'Agent: $name · $phone';
   }
 
-  String _typeLabel() {
-    switch (directive.formType) {
-      case 'combined':
-        return 'Combined directive';
-      case 'declaration':
-        return 'Declaration only';
-      case 'poa':
-        return 'Power of attorney';
-      default:
-        return 'PA MHAD';
-    }
-  }
+  String _typeLabel() =>
+      formTypeFromName(directive.formType)?.shortName ?? 'PA MHAD';
 
   String _validLabel() {
     final exp = directive.expirationDate;

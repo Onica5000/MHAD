@@ -10,6 +10,7 @@ import 'package:mhad/ai/pii_stripper.dart';
 import 'package:mhad/ai/side_effect_item.dart';
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/data/educational_content.dart';
+import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/services/certificate_pinning_service.dart';
 
 /// Calls the Google Gemini API (free tier).
@@ -687,16 +688,6 @@ class GeminiApiAssistant implements AiAssistant {
     return buf.toString();
   }
 
-  String _formTypeName(String formType) {
-    switch (formType) {
-      case 'combined':
-        return 'Combined Declaration and Power of Attorney';
-      case 'declaration':
-        return 'Declaration Only';
-      case 'poa':
-        return 'Power of Attorney Only';
-      default:
-        return formType;
-    }
-  }
+  String _formTypeName(String formType) =>
+      formTypeFromName(formType)?.displayName ?? formType;
 }

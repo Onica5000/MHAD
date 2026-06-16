@@ -8,6 +8,7 @@ import 'package:mhad/ai/ai_assistant.dart';
 import 'package:mhad/ai/gemini_api_assistant.dart';
 import 'package:mhad/constants.dart';
 import 'package:mhad/data/app_data/app_data.dart';
+import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/services/gemini_rate_tracker.dart';
 import 'package:mhad/ui/assistant/assistant_send.dart';
@@ -483,16 +484,8 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
 
   String _contextLabel(AssistantContext ctx) {
     final parts = <String>[];
-    if (ctx.formType != null) {
-      switch (ctx.formType) {
-        case 'combined':
-          parts.add('Combined form');
-        case 'declaration':
-          parts.add('Declaration');
-        case 'poa':
-          parts.add('Power of Attorney');
-      }
-    }
+    final ft = formTypeFromName(ctx.formType);
+    if (ft != null) parts.add(ft.shortName);
     if (ctx.stepName != null) parts.add(ctx.stepName!);
     return parts.isEmpty ? 'General question' : parts.join(' › ');
   }
@@ -1022,20 +1015,8 @@ class _AssistantContextPanel extends StatelessWidget {
     );
   }
 
-  String _ctxFormType(AssistantContext ctx) {
-    switch (ctx.formType) {
-      case 'combined':
-        return 'Combined';
-      case 'declaration':
-        return 'Declaration';
-      case 'poa':
-        return 'Power of attorney';
-      case null:
-        return '—';
-      default:
-        return ctx.formType!;
-    }
-  }
+  String _ctxFormType(AssistantContext ctx) =>
+      formTypeFromName(ctx.formType)?.shortName ?? '—';
 }
 
 /// One "Context the AI sees" key/value row (label left, value right).

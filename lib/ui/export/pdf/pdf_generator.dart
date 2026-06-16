@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/foundation.dart' show debugPrint;
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:mhad/data/database/app_database.dart';
+import 'package:mhad/domain/model/directive.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
@@ -150,16 +151,6 @@ class PdfGenerator {
     return pdf.save();
   }
 
-  static String _formTypeLabel(String formType) {
-    switch (formType) {
-      case 'combined':
-        return 'Combined Declaration and Power of Attorney';
-      case 'declaration':
-        return 'Declaration Only';
-      case 'poa':
-        return 'Power of Attorney Only';
-      default:
-        return formType;
-    }
-  }
+  static String _formTypeLabel(String formType) =>
+      formTypeFromName(formType)?.displayName ?? formType;
 }
