@@ -8,6 +8,51 @@ import 'package:mhad/data/database/app_database.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
+/// Draft export modes. A draft prints a light per-page watermark so a copy
+/// can be sent out while the user keeps the signed paper original.
+enum DraftMode {
+  /// No watermark — the normal copy.
+  finalCopy,
+
+  /// Plain draft.
+  draftGeneral,
+
+  /// Draft that signals a signed, witnessed original exists.
+  draftSignedAvailable,
+}
+
+/// A very light, rotated full-page watermark for draft exports. Returns an
+/// empty widget for [DraftMode.finalCopy]. Used as a MultiPage background, so
+/// it repeats on every page behind the form content.
+pw.Widget draftWatermark(DraftMode mode) {
+  final text = switch (mode) {
+    DraftMode.finalCopy => '',
+    DraftMode.draftGeneral => 'DRAFT — not the signed copy',
+    DraftMode.draftSignedAvailable =>
+      'DRAFT — a signed, witnessed original exists',
+  };
+  if (text.isEmpty) return pw.SizedBox();
+  return pw.FullPage(
+    ignoreMargins: true,
+    child: pw.Center(
+      child: pw.Transform.rotate(
+        angle: 0.7,
+        child: pw.Opacity(
+          opacity: 0.07,
+          child: pw.Text(
+            text,
+            style: pw.TextStyle(
+              fontSize: 26,
+              fontWeight: pw.FontWeight.bold,
+              color: PdfColors.grey700,
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
 /// Resolves the four nominee display fields for the Guardian section based
 /// on the `guardian_relation` choice. The Phase-2 GuardianNominationStep
 /// blanks the persisted nominee columns for the three non-"different"

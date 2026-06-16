@@ -12,6 +12,7 @@ import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/export/pdf/pdf_generator.dart';
+import 'package:mhad/ui/export/pdf/pdf_helpers.dart';
 import 'package:mhad/ui/export/pdf/wallet_card_generator.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
@@ -48,6 +49,9 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
 
   /// Whether the "editable copy" download is obfuscated (default) or plaintext.
   bool _encryptEditableCopy = true;
+
+  /// Draft watermark applied to the printable PDF.
+  DraftMode _draftMode = DraftMode.finalCopy;
 
   // The `pdf` Dart package does not support native PDF encryption, so the
   // file produced here is unprotected by design. We compensate at the UX
@@ -224,6 +228,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         includePoa: _includePoa,
         includeSupplementary: _includeSupplementary,
         includeNotes: _includeNotes,
+        draftMode: _draftMode,
       );
 
       final directive = _directive!;
@@ -368,6 +373,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       includePoa: _includePoa,
       includeSupplementary: _includeSupplementary,
       includeNotes: _includeNotes,
+      draftMode: _draftMode,
     );
     return runInBackground(() => generator.generate(
           directive: _directive!,
@@ -899,6 +905,41 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
               ],
             ),
             const SizedBox(height: 16),
+            Text('Printed copy type',
+                style: Theme.of(context).textTheme.titleSmall),
+            const SizedBox(height: 4),
+            Text(
+              'A draft prints a light "DRAFT" watermark on every page — for '
+              'sending a copy while you keep the signed paper original.',
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+            ),
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 8,
+              children: [
+                ChoiceChip(
+                  label: const Text('Final copy'),
+                  selected: _draftMode == DraftMode.finalCopy,
+                  onSelected: (_) =>
+                      setState(() => _draftMode = DraftMode.finalCopy),
+                ),
+                ChoiceChip(
+                  label: const Text('Draft'),
+                  selected: _draftMode == DraftMode.draftGeneral,
+                  onSelected: (_) =>
+                      setState(() => _draftMode = DraftMode.draftGeneral),
+                ),
+                ChoiceChip(
+                  label: const Text('Draft · signed copy exists'),
+                  selected: _draftMode == DraftMode.draftSignedAvailable,
+                  onSelected: (_) => setState(
+                      () => _draftMode = DraftMode.draftSignedAvailable),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
             Text('Save an editable copy',
                 style: Theme.of(context).textTheme.titleSmall),
             const SizedBox(height: 4),
@@ -1200,6 +1241,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         includePoa: _includePoa,
         includeSupplementary: _includeSupplementary,
         includeNotes: _includeNotes,
+        draftMode: _draftMode,
       );
       final pdfBytes = await runInBackground(() => generator.generate(
             directive: _directive!,

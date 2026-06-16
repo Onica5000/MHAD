@@ -16,6 +16,7 @@ List<pw.Page> buildCombinedPages({
   required List<MedicationEntry> medications,
   required List<WitnessesData> witnesses,
   List<DiagnosisEntry> diagnoses = const [],
+  DraftMode draftMode = DraftMode.finalCopy,
 }) {
   // Draft indicator: appended to the header-bar form title (not the big
   // page-1 form title) so an unsigned export is unmistakable when printed.
@@ -55,8 +56,11 @@ List<pw.Page> buildCombinedPages({
 
   return [
     pw.MultiPage(
-      pageFormat: kPageFormat,
-      margin: pageMargins,
+      pageTheme: pw.PageTheme(
+        pageFormat: kPageFormat,
+        margin: pageMargins,
+        buildBackground: (ctx) => draftWatermark(draftMode),
+      ),
       header: (ctx) => pageHeader(formTitle),
       footer: (ctx) =>
           pageFooter('Page ${ctx.pageNumber} of ${ctx.pagesCount}'),

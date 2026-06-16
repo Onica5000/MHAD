@@ -16,6 +16,7 @@ List<pw.Page> buildPoaPages({
   required List<MedicationEntry> medications,
   required List<WitnessesData> witnesses,
   List<DiagnosisEntry> diagnoses = const [],
+  DraftMode draftMode = DraftMode.finalCopy,
 }) {
   final formTitle = directive.status == 'draft'
       ? 'Mental Health Power of Attorney  ·  DRAFT — UNSIGNED'
@@ -46,8 +47,11 @@ List<pw.Page> buildPoaPages({
 
   return [
     pw.MultiPage(
-      pageFormat: kPageFormat,
-      margin: pageMargins,
+      pageTheme: pw.PageTheme(
+        pageFormat: kPageFormat,
+        margin: pageMargins,
+        buildBackground: (ctx) => draftWatermark(draftMode),
+      ),
       header: (ctx) => pageHeader(formTitle),
       footer: (ctx) =>
           pageFooter('Page ${ctx.pageNumber} of ${ctx.pagesCount}'),

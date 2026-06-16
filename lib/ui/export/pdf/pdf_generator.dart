@@ -7,6 +7,7 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
 import 'combined_pdf.dart';
+import 'pdf_helpers.dart';
 import 'declaration_pdf.dart';
 import 'notes_pdf.dart';
 import 'poa_pdf.dart';
@@ -21,12 +22,16 @@ class PdfGenerator {
   final bool includeSupplementary;
   final bool includeNotes;
 
+  /// Draft watermark mode applied to the form pages.
+  final DraftMode draftMode;
+
   const PdfGenerator({
     required this.includeCombined,
     required this.includeDeclaration,
     required this.includePoa,
     this.includeSupplementary = false,
     this.includeNotes = false,
+    this.draftMode = DraftMode.finalCopy,
   });
 
   /// Loads the editorial typeface trio (DM Sans regular + bold, Instrument
@@ -99,6 +104,7 @@ class PdfGenerator {
         medications: medications,
         witnesses: witnesses,
         diagnoses: diagnoses,
+        draftMode: draftMode,
       ));
     }
 
@@ -111,6 +117,7 @@ class PdfGenerator {
         medications: medications,
         witnesses: witnesses,
         diagnoses: diagnoses,
+        draftMode: draftMode,
       ));
     }
 
@@ -124,6 +131,7 @@ class PdfGenerator {
         medications: medications,
         witnesses: witnesses,
         diagnoses: diagnoses,
+        draftMode: draftMode,
       ));
     }
 
