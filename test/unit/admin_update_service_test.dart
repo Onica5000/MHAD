@@ -109,6 +109,25 @@ Sure! Here is the proposal:
       expect((result['contacts'] as Map).containsKey('madeUpOrg'), isFalse);
     });
 
+    test('refuses to create a new leaf under an existing parent', () {
+      // `legal` exists but `validityMonths` does not. The AI must not be able
+      // to invent a new field even though the parent map is real.
+      final base = baseData();
+      final result = AdminUpdateService.applyApproved(base, [
+        ProposedChange(
+            path: 'legal.validityMonths',
+            oldValue: null,
+            newValue: '24',
+            autonomy: 'auto',
+            source: 's',
+            rationale: 'r',
+            approved: true),
+      ]);
+      expect((result['legal'] as Map).containsKey('validityMonths'), isFalse);
+      // existing sibling untouched.
+      expect(result['legal']['validityYears'], 2);
+    });
+
     test('prettyJson round-trips', () {
       final s = AdminUpdateService.prettyJson(baseData());
       expect(jsonDecode(s), equals(baseData()));

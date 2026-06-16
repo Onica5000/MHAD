@@ -163,12 +163,18 @@ $pretty
       if (next is Map<String, dynamic>) {
         node = next;
       } else if (next is Map) {
+        // .cast writes through to the underlying map, so descending is enough —
+        // no self-assignment (an earlier version wrote `node[keys[i]] = node`,
+        // creating a self-referential cycle).
         node = next.cast<String, dynamic>();
-        node[keys[i]] = node;
       } else {
-        return; // path doesn't exist — refuse to create new structure
+        return; // intermediate path doesn't exist — refuse to create structure
       }
     }
+    // Only overwrite a leaf that already exists. The AI may UPDATE known
+    // dynamic facts but must never invent a brand-new field, even under an
+    // existing parent (e.g. a fabricated `legal.somethingNew`).
+    if (!node.containsKey(keys.last)) return;
     node[keys.last] = value;
   }
 
