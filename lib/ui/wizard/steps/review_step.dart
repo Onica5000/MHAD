@@ -101,30 +101,20 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
 
   Future<void> _loadData() async {
     final repo = ref.read(directiveRepositoryProvider);
-    final directive = await repo.getDirectiveById(widget.directiveId);
-    if (directive == null || !mounted) return;
+    final bundle = await repo.loadBundle(widget.directiveId);
+    if (bundle == null || !mounted) return;
 
-    final agents = await repo.getAgents(widget.directiveId);
-    final prefs = await repo.getPreferences(widget.directiveId);
-    final additional =
-        await repo.getAdditionalInstructions(widget.directiveId);
-    final guardian = await repo.getGuardianNomination(widget.directiveId);
-    final medications = await repo.watchMedications(widget.directiveId).first;
-    final diagnoses = await repo.getDiagnoses(widget.directiveId);
-
-    if (mounted) {
-      setState(() {
-        _data = _ReviewData(
-          directive: directive,
-          agents: agents,
-          prefs: prefs,
-          additionalInstructions: additional,
-          guardian: guardian,
-          medications: medications,
-          diagnoses: diagnoses,
-        );
-      });
-    }
+    setState(() {
+      _data = _ReviewData(
+        directive: bundle.directive,
+        agents: bundle.agents,
+        prefs: bundle.prefs,
+        additionalInstructions: bundle.additional,
+        guardian: bundle.guardian,
+        medications: bundle.medications,
+        diagnoses: bundle.diagnoses,
+      );
+    });
   }
 
   @override

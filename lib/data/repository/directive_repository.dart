@@ -2,6 +2,31 @@ import 'package:drift/drift.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/model/directive.dart';
 
+/// All of a directive's related rows loaded together — replaces the
+/// directive→agents→prefs→additional→guardian→meds→witnesses→diagnoses read
+/// that was hand-written in each consuming screen. See [DirectiveRepository.loadBundle].
+class DirectiveBundle {
+  final Directive directive;
+  final List<Agent> agents;
+  final DirectivePref? prefs;
+  final AdditionalInstructionsTableData? additional;
+  final GuardianNomination? guardian;
+  final List<MedicationEntry> medications;
+  final List<WitnessesData> witnesses;
+  final List<DiagnosisEntry> diagnoses;
+
+  const DirectiveBundle({
+    required this.directive,
+    required this.agents,
+    required this.prefs,
+    required this.additional,
+    required this.guardian,
+    required this.medications,
+    required this.witnesses,
+    required this.diagnoses,
+  });
+}
+
 class DirectiveRepository {
   final AppDatabase _db;
   DirectiveRepository(this._db);
@@ -269,6 +294,23 @@ class DirectiveRepository {
 
   Future<void> removeAllergy(int id) =>
       (_db.delete(_db.directiveAllergies)..where((t) => t.id.equals(id))).go();
+
+  /// Load a directive and all its related rows in one call. Returns null if
+  /// the id doesn't resolve. Replaces the repeated per-screen load sequence.
+  Future<DirectiveBundle?> loadBundle(int directiveId) async {
+    final directive = await getDirectiveById(directiveId);
+    if (directive == null) return null;
+    return DirectiveBundle(
+      directive: directive,
+      agents: await getAgents(directiveId),
+      prefs: await getPreferences(directiveId),
+      additional: await getAdditionalInstructions(directiveId),
+      guardian: await getGuardianNomination(directiveId),
+      medications: await watchMedications(directiveId).first,
+      witnesses: await getWitnesses(directiveId),
+      diagnoses: await getDiagnoses(directiveId),
+    );
+  }
 
   // ── Snapshot / Restore (for web reload recovery) ───────────────────────
 

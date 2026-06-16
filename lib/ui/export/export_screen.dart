@@ -86,9 +86,9 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
 
   Future<void> _loadData() async {
     final repo = ref.read(directiveRepositoryProvider);
-    final directive = await repo.getDirectiveById(widget.directiveId);
+    final bundle = await repo.loadBundle(widget.directiveId);
     if (!mounted) return;
-    if (directive == null) {
+    if (bundle == null) {
       // The id didn't resolve (e.g. a stale link, or the in-memory web DB was
       // cleared). Don't spin forever — surface a graceful empty state.
       setState(() {
@@ -98,37 +98,28 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       return;
     }
 
+    final directive = bundle.directive;
     final formType = FormType.values.firstWhere(
       (e) => e.name == directive.formType,
       orElse: () => FormType.combined,
     );
 
-    final agents = await repo.getAgents(widget.directiveId);
-    final prefs = await repo.getPreferences(widget.directiveId);
-    final additional = await repo.getAdditionalInstructions(widget.directiveId);
-    final guardian = await repo.getGuardianNomination(widget.directiveId);
-    final medications = await repo.watchMedications(widget.directiveId).first;
-    final witnesses = await repo.getWitnesses(widget.directiveId);
-    final diagnoses = await repo.getDiagnoses(widget.directiveId);
+    setState(() {
+      _directive = directive;
+      _agents = bundle.agents;
+      _prefs = bundle.prefs;
+      _additional = bundle.additional;
+      _guardian = bundle.guardian;
+      _medications = bundle.medications;
+      _witnesses = bundle.witnesses;
+      _diagnoses = bundle.diagnoses;
+      _loading = false;
 
-    if (mounted) {
-      setState(() {
-        _directive = directive;
-        _agents = agents;
-        _prefs = prefs;
-        _additional = additional;
-        _guardian = guardian;
-        _medications = medications;
-        _witnesses = witnesses;
-        _diagnoses = diagnoses;
-        _loading = false;
-
-        // Pre-select the form type the user filled in
-        _includeCombined = formType == FormType.combined;
-        _includeDeclaration = formType == FormType.declaration;
-        _includePoa = formType == FormType.poa;
-      });
-    }
+      // Pre-select the form type the user filled in
+      _includeCombined = formType == FormType.combined;
+      _includeDeclaration = formType == FormType.declaration;
+      _includePoa = formType == FormType.poa;
+    });
   }
 
   Future<void> _generateAndShare() async {
