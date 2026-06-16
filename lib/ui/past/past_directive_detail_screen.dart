@@ -217,14 +217,6 @@ class _Body extends ConsumerWidget {
         ),
         const SizedBox(height: 8),
         ActionRow(
-          icon: Icons.share_outlined,
-          title: 'Re-send to someone',
-          subtitle: 'If your agent lost their copy',
-          onTap: () =>
-              context.push(AppRoutes.shareSheetRoute(directive.id)),
-        ),
-        const SizedBox(height: 8),
-        ActionRow(
           tone: ActionRowTone.danger,
           icon: Icons.delete_outline,
           title: 'Delete from this device',

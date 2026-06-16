@@ -21,13 +21,11 @@ import 'package:mhad/ui/settings/accessibility_settings_screen.dart';
 import 'package:mhad/ui/settings/ai_setup_screen.dart';
 import 'package:mhad/ui/settings/settings_screen.dart';
 import 'package:mhad/ui/settings/privacy_policy_screen.dart';
-import 'package:mhad/ui/share/share_sheet_screen.dart';
 import 'package:mhad/ui/permissions/permissions_overview_screen.dart';
 import 'package:mhad/ui/mode_selection/mode_selection_screen.dart';
 import 'package:mhad/ui/onboarding/onboarding_screen.dart';
 import 'package:mhad/ui/ulysses/ulysses_clause_screen.dart';
 import 'package:mhad/ui/wizard/sign_screen.dart';
-import 'package:mhad/ui/wizard/wizard_complete_screen.dart';
 import 'package:mhad/ui/wizard/wizard_screen.dart';
 import 'package:mhad/ui/wizard/widgets/document_pipeline_flow.dart';
 import 'package:mhad/domain/model/directive.dart';
@@ -42,7 +40,6 @@ abstract class AppRoutes {
   static const assistant = '/assistant';
   static const export = '/export/:directiveId';
   static const aiSetup = '/ai-setup';
-  static const wizardComplete = '/wizard-complete/:directiveId';
   // Post-wizard sign-on-paper screen — prototype ScrSign (mobile.jsx
   // L884-981). Sits between the wizard's Review step and the Done
   // celebration. Lands stamp executionDate so the directive flips from
@@ -55,8 +52,6 @@ abstract class AppRoutes {
 
   static String uploadRoute(int directiveId) => '/upload/$directiveId';
 
-  static String wizardCompleteRoute(int directiveId) =>
-      '/wizard-complete/$directiveId';
   static String signRoute(int directiveId) => '/sign/$directiveId';
   static const privacyPolicy = '/privacy-policy';
   static const settings = '/settings';
@@ -75,7 +70,6 @@ abstract class AppRoutes {
   static const revocation = '/revoke/:directiveId';
   static const aiCheck = '/ai-check/:directiveId';
   static const pastDirective = '/past/:directiveId';
-  static const shareSheet = '/share/:directiveId';
   // Batch 6 — in-app privacy & permissions overview.
   static const permissions = '/permissions';
   // Hidden admin tool (AI-drafted data updates). Reached only via a hidden
@@ -92,7 +86,6 @@ abstract class AppRoutes {
   static String revocationRoute(int directiveId) => '/revoke/$directiveId';
   static String aiCheckRoute(int directiveId) => '/ai-check/$directiveId';
   static String pastDirectiveRoute(int directiveId) => '/past/$directiveId';
-  static String shareSheetRoute(int directiveId) => '/share/$directiveId';
 }
 
 /// Initializes the global [appRouter] with the loaded service notifiers.
@@ -208,15 +201,6 @@ GoRouter _buildRouter(DisclaimerNotifier disclaimer,
           },
         ),
         GoRoute(
-          path: AppRoutes.wizardComplete,
-          builder: (context, state) {
-            final directiveId =
-                int.tryParse(state.pathParameters['directiveId'] ?? '');
-            if (directiveId == null) return const HomeScreen();
-            return WizardCompleteScreen(directiveId: directiveId);
-          },
-        ),
-        GoRoute(
           path: AppRoutes.upload,
           builder: (context, state) {
             final directiveId =
@@ -319,14 +303,6 @@ GoRouter _buildRouter(DisclaimerNotifier disclaimer,
             final id = int.tryParse(state.pathParameters['directiveId'] ?? '');
             if (id == null) return const HomeScreen();
             return PastDirectiveDetailScreen(directiveId: id);
-          },
-        ),
-        GoRoute(
-          path: AppRoutes.shareSheet,
-          builder: (_, state) {
-            final id = int.tryParse(state.pathParameters['directiveId'] ?? '');
-            if (id == null) return const HomeScreen();
-            return ShareSheetScreen(directiveId: id);
           },
         ),
         GoRoute(

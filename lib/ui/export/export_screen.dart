@@ -6,29 +6,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/data/database/app_database.dart';
+import 'package:mhad/domain/agent_ext.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/export/pdf/pdf_generator.dart';
 import 'package:mhad/ui/export/pdf/pdf_helpers.dart';
+import 'package:mhad/ui/export/pdf/wallet_card_service.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
 import 'package:mhad/ui/widgets/design/responsive_shell.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
+import 'package:mhad/ui/widgets/design/wallet_card.dart';
 import 'package:mhad/ui/widgets/design/wizard_header.dart';
 import 'package:mhad/services/directive_export_service.dart';
 import 'package:mhad/services/export_encryption_service.dart';
 import 'package:mhad/services/export_formats_service.dart';
 import 'package:mhad/services/fhir_export_service.dart';
-import 'package:mhad/ui/export/nfc_write_button.dart';
 import 'package:mhad/utils/background_runner.dart';
-import 'package:mhad/utils/platform_utils.dart';
 import 'package:printing/printing.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 
 class ExportScreen extends ConsumerStatefulWidget {
   final int directiveId;
@@ -297,98 +296,6 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
     } finally {
       if (mounted) setState(() => _isGenerating = false);
     }
-  }
-
-  void _showQrCode() {
-    if (_directive == null) return;
-
-    final directive = _directive!;
-    final formType = FormType.values.firstWhere(
-      (e) => e.name == directive.formType,
-      orElse: () => FormType.combined,
-    );
-
-    final agentName = _agents.isNotEmpty ? _agents.first.fullName : null;
-    final agentPhone = _agents.isNotEmpty
-        ? [_agents.first.cellPhone, _agents.first.homePhone, _agents.first.workPhone]
-            .firstWhere((p) => p.isNotEmpty, orElse: () => '')
-        : '';
-
-    final execDate = directive.executionDate != null
-        ? DateTime.fromMillisecondsSinceEpoch(directive.executionDate!)
-        : null;
-    final expDate = directive.expirationDate != null
-        ? DateTime.fromMillisecondsSinceEpoch(directive.expirationDate!)
-        : null;
-
-    final buf = StringBuffer();
-    buf.writeln('PA MENTAL HEALTH ADVANCE DIRECTIVE');
-    buf.writeln('');
-    buf.writeln('I, ${directive.fullName}, have executed an advance directive '
-        'specifying my decisions about my mental health care.');
-    buf.writeln('');
-    if (agentName != null && agentName.isNotEmpty) {
-      buf.writeln('My Mental Health Care Agent is $agentName.');
-      if (agentPhone.isNotEmpty) {
-        buf.writeln('Contact Agent at: $agentPhone');
-      }
-      buf.writeln('');
-    }
-    buf.writeln('Form: ${formType.displayName}');
-    if (execDate != null) {
-      buf.writeln('Executed: ${execDate.month}/${execDate.day}/${execDate.year}');
-    }
-    if (expDate != null) {
-      buf.writeln('Expires: ${expDate.month}/${expDate.day}/${expDate.year}');
-    }
-    buf.writeln('');
-    buf.writeln('If the hospital has questions, contact PA Protection '
-        '& Advocacy at ${appData.phoneOf('paProtectionAdvocacy')}.');
-    buf.writeln('');
-    buf.writeln('This is a summary. Request the full directive from the '
-        'person who made it.');
-
-    final payload = buf.toString();
-
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Directive QR Code'),
-        content: ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width * 0.85,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              LayoutBuilder(
-                builder: (ctx, constraints) => QrImageView(
-                  data: payload,
-                  version: QrVersions.auto,
-                  size: constraints.maxWidth.clamp(160, 240),
-                  backgroundColor: Colors.white,
-                ),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                'Scan to view directive summary\u2009\u2014\u2009request the full copy from the person who made it',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Theme.of(ctx).colorScheme.onSurfaceVariant,
-                ),
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(),
-            child: const Text('Close'),
-          ),
-        ],
-      ),
-    );
   }
 
   /// Generates the selected-sections PDF bytes (off the UI thread). Shared by
@@ -754,38 +661,31 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
               label: const Text('Download PDF'),
             ),
           ),
-          const SizedBox(height: 12),
-          // The wallet card lives on the summary/"Packet ready" screen now
-          // (it was duplicated here and there); export stays focused on the
-          // signable PDF, machine-readable formats, and backup copies.
-          Semantics(
-            button: true,
-            label: 'Generate a QR code with directive summary',
-            child: OutlinedButton.icon(
-              onPressed: _directive != null ? _showQrCode : null,
-              icon: const Icon(Icons.qr_code),
-              label: const Text('Generate QR Code'),
-            ),
-          ),
+          const SizedBox(height: 16),
           if (_directive != null) ...[
-            if (platformIsMobile) ...[
+            // Wallet card (moved here from the removed "One pen away" page): a
+            // credit-card-sized summary the user can print and carry.
+            Text('Wallet card',
+                style: Theme.of(context).textTheme.titleSmall),
+            const SizedBox(height: 6),
+            WalletCard(
+              principalName: _directive!.fullName.trim().isEmpty
+                  ? 'Your name'
+                  : _directive!.fullName,
+              agentName: _walletAgent?.fullName,
+              agentPhone: _walletAgent?.bestPhone,
+              validThrough: _walletValidThrough(),
+              qrPayload: 'MHAD-${widget.directiveId}',
+            ),
             const SizedBox(height: 8),
-            Semantics(
-              button: true,
-              label: 'Write directive summary to NFC tag',
-              child: NfcWriteButton(
-                principalName: _directive!.fullName,
-                formType: _directive!.formType,
-                executionDate: _directive!.executionDate != null
-                    ? DateTime.fromMillisecondsSinceEpoch(
-                            _directive!.executionDate!)
-                        .toIso8601String()
-                    : null,
-                agentName: _agents.isNotEmpty ? _agents.first.fullName : null,
-                agentPhone: _agents.isNotEmpty ? _agents.first.cellPhone : null,
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: _isGenerating ? null : _generateWalletCard,
+                icon: const Icon(Icons.credit_card),
+                label: const Text('Download wallet card (PDF)'),
               ),
             ),
-            ],
             const SizedBox(height: 16),
             Text('Machine-readable formats',
                 style: Theme.of(context).textTheme.titleSmall),
@@ -951,48 +851,18 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
               ],
             ),
           ],
-          const SizedBox(height: 16),
-          const Divider(),
-          const SizedBox(height: 8),
-          Text('Share for Review',
-              style: Theme.of(context).textTheme.titleSmall),
-          const SizedBox(height: 4),
-          Text(
-            'Share a read-only summary with your agent, therapist, or '
-            'family member for feedback before signing.',
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-          ),
-          const SizedBox(height: 8),
-          Semantics(
-            button: true,
-            label: 'Share a draft summary for review',
-            child: OutlinedButton.icon(
-              onPressed: _directive != null && _directive!.status == 'draft'
-                  ? _shareDraftSummary
-                  : null,
-              icon: const Icon(Icons.rate_review_outlined),
-              label: const Text('Share Draft for Review'),
-            ),
-          ),
-          // Forward step in the sign → download → done flow: once they have
-          // the packet, continue to the "Packet ready" summary (wallet card +
-          // who-to-share-with checklist). Replaces the old dead-end / the
-          // duplicate "Continue to summary" button that used to sit on the
-          // sign step beside "Preview signing packet".
+          // Export is the end of the flow now (the old "One pen away" summary
+          // was removed), so close with a clear way back home.
           const SizedBox(height: 16),
           const Divider(),
           const SizedBox(height: 12),
           Semantics(
             button: true,
-            label: 'Continue to the packet-ready summary',
+            label: 'Done — back to home',
             child: FilledButton.icon(
-              onPressed: () => context
-                  .go(AppRoutes.wizardCompleteRoute(widget.directiveId)),
-              icon: const Icon(Icons.arrow_forward),
-              iconAlignment: IconAlignment.end,
-              label: const Text('Continue'),
+              onPressed: () => context.go(AppRoutes.home),
+              icon: const Icon(Icons.home_outlined),
+              label: const Text('Done — back to home'),
               style: FilledButton.styleFrom(
                 minimumSize: const Size.fromHeight(48),
               ),
@@ -1470,40 +1340,29 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
     }
   }
 
-  Future<void> _shareDraftSummary() async {
-    if (_directive == null) return;
-    final d = _directive!;
-    final buf = StringBuffer();
-    buf.writeln('DRAFT — PA Mental Health Advance Directive');
-    buf.writeln('This is a DRAFT for review. NOT a signed legal document.\n');
-    buf.writeln('Principal: ${d.fullName.isNotEmpty ? d.fullName : "(not yet entered)"}');
-    buf.writeln('Form Type: ${d.formType}');
-    buf.writeln('Effective Condition: ${d.effectiveCondition.isNotEmpty ? d.effectiveCondition : "(not yet entered)"}');
-    if (_medications.isNotEmpty) {
-      buf.writeln('\nMedications:');
-      for (final m in _medications) {
-        final type = m.entryType == 'preferred' ? 'Preferred' : m.entryType == 'exception' ? 'AVOID' : 'Limitation';
-        buf.writeln('  [$type] ${m.medicationName}${m.reason.isNotEmpty ? " — ${m.reason}" : ""}');
-      }
-    }
-    if (_agents.isNotEmpty) {
-      buf.writeln('\nAgents:');
-      for (final a in _agents) {
-        buf.writeln('  ${a.agentType}: ${a.fullName} (${a.relationship})');
-      }
-    }
-    if (_additional != null) {
-      if (_additional!.healthHistory.isNotEmpty) {
-        buf.writeln('\nHealth History: ${_additional!.healthHistory}');
-      }
-      if (_additional!.crisisIntervention.isNotEmpty) {
-        buf.writeln('Crisis Intervention: ${_additional!.crisisIntervention}');
-      }
-    }
-    buf.writeln('\n--- END DRAFT ---');
-    buf.writeln('Please review and provide feedback to the principal.');
+  Agent? get _walletAgent => _agents.primaryAgent;
 
-    await _shareText(buf.toString(), 'MHAD Draft for Review');
+  String _walletValidThrough() {
+    final exp = _directive?.expirationDate;
+    if (exp == null || exp == 0) return 'sign to activate';
+    final d = DateTime.fromMillisecondsSinceEpoch(exp);
+    return '${d.month.toString().padLeft(2, '0')} · ${d.year}';
+  }
+
+  Future<void> _generateWalletCard() async {
+    if (_directive == null) return;
+    setState(() => _isGenerating = true);
+    try {
+      await WalletCardService.generateAndShare(_directive!, _agents);
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error generating wallet card: $e')),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isGenerating = false);
+    }
   }
 }
 
