@@ -8,14 +8,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/data/database/app_database.dart';
-import 'package:mhad/domain/agent_ext.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/export/pdf/pdf_generator.dart';
 import 'package:mhad/ui/export/pdf/pdf_helpers.dart';
-import 'package:mhad/ui/export/pdf/wallet_card_generator.dart';
-import 'package:mhad/ui/export/pdf/wallet_card_service.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
 import 'package:mhad/ui/widgets/design/responsive_shell.dart';
@@ -391,11 +388,6 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         _directive?.updatedAt,
       ].join('|');
 
-  Agent? get _primaryAgent => _agents.primaryAgent;
-
-  String _agentPhoneFor(Agent? a) => a?.bestPhone ?? '';
-
-
   Future<void> _previewPdf() async {
     if (!_includeCombined && !_includeDeclaration && !_includePoa &&
         !_includeSupplementary && !_includeNotes) {
@@ -421,24 +413,6 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error generating PDF: $e')),
-        );
-      }
-    } finally {
-      if (mounted) setState(() => _isGenerating = false);
-    }
-  }
-
-  Future<void> _generateWalletCard() async {
-    if (_directive == null) return;
-
-    setState(() => _isGenerating = true);
-
-    try {
-      await WalletCardService.generateAndShare(_directive!, _agents);
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error generating wallet card: $e')),
         );
       }
     } finally {
@@ -744,49 +718,9 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
             ),
           ),
           const SizedBox(height: 12),
-          // Live gradient wallet-card preview (Claude Design `WebExport` right
-          // column) — shows what the generated credit-card-sized PDF carries.
-          if (_directive != null) ...[
-            Text(
-              'WALLET CARD',
-              style: TextStyle(
-                fontFamily: 'JetBrains Mono',
-                fontFamilyFallback: const ['Consolas', 'monospace'],
-                fontSize: 10.5,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 1.2,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
-            ),
-            const SizedBox(height: 8),
-            _WalletCardPreview(
-              directive: _directive!,
-              agentName: _primaryAgent?.fullName,
-              agentPhone: _agentPhoneFor(_primaryAgent),
-            ),
-            const SizedBox(height: 10),
-          ],
-          Semantics(
-            button: true,
-            label: 'Generate a printable wallet card with essential directive info',
-            child: OutlinedButton.icon(
-              onPressed: _isGenerating ? null : _generateWalletCard,
-              icon: const Icon(Icons.credit_card),
-              label: const Text('Generate Wallet Card'),
-            ),
-          ),
-          const SizedBox(height: 4),
-          Padding(
-            padding: const EdgeInsets.only(left: 16),
-            child: Text(
-              'Credit-card-sized PDF with essential directive info',
-              style: TextStyle(
-                fontSize: 11,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
-            ),
-          ),
-          const SizedBox(height: 8),
+          // The wallet card lives on the summary/"Packet ready" screen now
+          // (it was duplicated here and there); export stays focused on the
+          // signable PDF, machine-readable formats, and backup copies.
           Semantics(
             button: true,
             label: 'Generate a QR code with directive summary',
@@ -1001,6 +935,28 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
                   : null,
               icon: const Icon(Icons.rate_review_outlined),
               label: const Text('Share Draft for Review'),
+            ),
+          ),
+          // Forward step in the sign → download → done flow: once they have
+          // the packet, continue to the "Packet ready" summary (wallet card +
+          // who-to-share-with checklist). Replaces the old dead-end / the
+          // duplicate "Continue to summary" button that used to sit on the
+          // sign step beside "Preview signing packet".
+          const SizedBox(height: 16),
+          const Divider(),
+          const SizedBox(height: 12),
+          Semantics(
+            button: true,
+            label: 'Continue to the packet-ready summary',
+            child: FilledButton.icon(
+              onPressed: () => context
+                  .go(AppRoutes.wizardCompleteRoute(widget.directiveId)),
+              icon: const Icon(Icons.arrow_forward),
+              iconAlignment: IconAlignment.end,
+              label: const Text('Continue'),
+              style: FilledButton.styleFrom(
+                minimumSize: const Size.fromHeight(48),
+              ),
             ),
           ),
     ];
@@ -2178,158 +2134,6 @@ class _ExportPdfPreviewState extends State<_ExportPdfPreview> {
             letterSpacing: 0.4,
             color: isFit ? p.primary : p.text,
           ),
-        ),
-      ),
-    );
-  }
-}
-
-/// On-screen gradient wallet-card preview — mirrors the Claude Design
-/// `WebExport` wallet card. Read-only; the printable copy is still produced by
-/// [WalletCardGenerator] via the "Generate Wallet Card" button.
-class _WalletCardPreview extends StatelessWidget {
-  final Directive directive;
-  final String? agentName;
-  final String? agentPhone;
-  const _WalletCardPreview({
-    required this.directive,
-    this.agentName,
-    this.agentPhone,
-  });
-
-  String? _agentLine() {
-    final name = agentName?.trim() ?? '';
-    if (name.isEmpty) return null;
-    final phone = agentPhone?.trim() ?? '';
-    return phone.isEmpty ? 'Agent: $name' : 'Agent: $name · $phone';
-  }
-
-  String _typeLabel() =>
-      formTypeFromName(directive.formType)?.shortName ?? 'PA MHAD';
-
-  String _validLabel() {
-    final exp = directive.expirationDate;
-    if (exp == null || exp == 0) return 'sign to activate';
-    final d = DateTime.fromMillisecondsSinceEpoch(exp);
-    final mm = d.month.toString().padLeft(2, '0');
-    return 'valid $mm/${d.year}';
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final p = Theme.of(context).mhadPalette;
-    final name =
-        directive.fullName.trim().isEmpty ? 'Your name' : directive.fullName;
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [p.primary, p.primaryDark],
-          ),
-        ),
-        child: Stack(
-          children: [
-            Positioned(
-              right: -8,
-              top: -22,
-              child: Text(
-                'MH',
-                style: TextStyle(
-                  fontFamily: 'Instrument Serif',
-                  fontStyle: FontStyle.italic,
-                  fontSize: 92,
-                  height: 1,
-                  color: p.onPrimary.withValues(alpha: 0.10),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(14),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'PA MHAD · ACT 194',
-                    style: TextStyle(
-                      fontFamily: 'JetBrains Mono',
-                      fontFamilyFallback: const ['Consolas', 'monospace'],
-                      fontSize: 9,
-                      letterSpacing: 1,
-                      color: p.onPrimary.withValues(alpha: 0.8),
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    name,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontFamily: 'DM Sans',
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
-                      color: p.onPrimary,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    _typeLabel(),
-                    style: TextStyle(
-                      fontFamily: 'DM Sans',
-                      fontSize: 11,
-                      color: p.onPrimary.withValues(alpha: 0.85),
-                    ),
-                  ),
-                  if (_agentLine() != null) ...[
-                    const SizedBox(height: 2),
-                    Text(
-                      _agentLine()!,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontFamily: 'DM Sans',
-                        fontSize: 10.5,
-                        color: p.onPrimary.withValues(alpha: 0.85),
-                      ),
-                    ),
-                  ],
-                  const SizedBox(height: 10),
-                  Container(
-                    height: 36,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.95),
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.qr_code_2, size: 22, color: p.primaryDark),
-                        const SizedBox(width: 8),
-                        Flexible(
-                          child: Text(
-                            'scan to verify · ${_validLabel()}',
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontFamily: 'JetBrains Mono',
-                              fontFamilyFallback: const [
-                                'Consolas',
-                                'monospace'
-                              ],
-                              fontSize: 10,
-                              color: p.primaryDark,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
         ),
       ),
     );

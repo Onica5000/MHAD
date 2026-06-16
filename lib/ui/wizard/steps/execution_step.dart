@@ -274,7 +274,7 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
             onPressed: () =>
                 context.push(AppRoutes.exportRoute(widget.directiveId)),
             icon: const Icon(Icons.visibility_outlined, size: 18),
-            label: const Text('Preview signing packet'),
+            label: const Text('Preview & download packet'),
             style: FilledButton.styleFrom(
               minimumSize:
                   const Size.fromHeight(DesignTokens.buttonHeightLg),
@@ -285,23 +285,9 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
             ),
           ),
         ),
-        const SizedBox(height: 8),
-        // Secondary path to the Done/summary screen (the bottom bar that used
-        // to carry "Continue to summary" was removed; this keeps it reachable).
-        if (!widget.embedded)
-          SizedBox(
-            width: double.infinity,
-            child: OutlinedButton.icon(
-              onPressed: () => context
-                  .go(AppRoutes.wizardCompleteRoute(widget.directiveId)),
-              icon: const Icon(Icons.arrow_forward, size: 16),
-              label: const Text('Continue to summary'),
-              style: OutlinedButton.styleFrom(
-                minimumSize: const Size.fromHeight(48),
-                iconAlignment: IconAlignment.end,
-              ),
-            ),
-          ),
+        // The "Continue to summary" fork was removed here: the packet-ready
+        // summary now follows the export screen (Sign → preview/download →
+        // Continue → summary), so there's a single forward path.
         const SizedBox(height: 12),
         // Validity status (artboard WebSign) — the generated PDF is NOT a
         // legal document until it's printed and wet-signed by the principal
