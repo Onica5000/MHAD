@@ -19,6 +19,7 @@ import 'package:mhad/ui/widgets/design/responsive_shell.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/design/wizard_header.dart';
+import 'package:mhad/services/directive_export_service.dart';
 import 'package:mhad/services/export_encryption_service.dart';
 import 'package:mhad/services/export_formats_service.dart';
 import 'package:mhad/services/fhir_export_service.dart';
@@ -44,6 +45,9 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
   bool _includeSupplementary = false;
   bool _includeNotes = false;
   bool _isGenerating = false;
+
+  /// Whether the "editable copy" download is obfuscated (default) or plaintext.
+  bool _encryptEditableCopy = true;
 
   // The `pdf` Dart package does not support native PDF encryption, so the
   // file produced here is unprotected by design. We compensate at the UX
@@ -895,6 +899,39 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
               ],
             ),
             const SizedBox(height: 16),
+            Text('Save an editable copy',
+                style: Theme.of(context).textTheme.titleSmall),
+            const SizedBox(height: 4),
+            Text(
+              'Download a file you keep. Re-upload it later (or on another '
+              'device) to continue editing — nothing is stored online. '
+              'Encrypting hinders others from reading it; the app still opens '
+              'it with no passphrase.',
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+            ),
+            const SizedBox(height: 4),
+            Row(
+              children: [
+                Checkbox(
+                  value: _encryptEditableCopy,
+                  onChanged: (v) =>
+                      setState(() => _encryptEditableCopy = v ?? true),
+                ),
+                const Expanded(child: Text('Encrypt the file')),
+                Semantics(
+                  button: true,
+                  label: 'Download an editable copy of your directive',
+                  child: FilledButton.tonalIcon(
+                    onPressed: _isGenerating ? null : _downloadEditableCopy,
+                    icon: const Icon(Icons.download_outlined),
+                    label: const Text('Download'),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
             Text('Password-protect a copy',
                 style: Theme.of(context).textTheme.titleSmall),
             const SizedBox(height: 4),
@@ -1072,6 +1109,34 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Copied to clipboard.')),
+        );
+      }
+    }
+  }
+
+  /// Build + download the portable directive file (encrypted or plaintext per
+  /// [_encryptEditableCopy]). Re-importable via "Continue from a saved file".
+  Future<void> _downloadEditableCopy() async {
+    try {
+      final repo = ref.read(directiveRepositoryProvider);
+      final bytes = await DirectiveExportService(repo).buildFile(
+        widget.directiveId,
+        encrypted: _encryptEditableCopy,
+        nowMillis: DateTime.now().millisecondsSinceEpoch,
+      );
+      final name =
+          _encryptEditableCopy ? 'directive.mhad' : 'directive-readable.mhad';
+      await Share.shareXFiles(
+        [
+          XFile.fromData(bytes,
+              mimeType: 'application/octet-stream', name: name)
+        ],
+        subject: 'MHAD editable directive copy',
+      );
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Could not create the file: $e')),
         );
       }
     }

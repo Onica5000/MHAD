@@ -9,6 +9,7 @@ import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/crisis_988_pill.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
+import 'package:mhad/ui/wizard/widgets/saved_file_import.dart';
 import 'package:mhad/utils/launch_utils.dart';
 
 /// First-touch welcome — prototype-exact rebuild of mobile.jsx::ScrWelcome
@@ -225,6 +226,26 @@ class OnboardingScreen extends ConsumerWidget {
                         ),
                       ),
                       child: const Text('Upload a document to autofill'),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  // Re-open a directive file the user previously downloaded
+                  // (the exact export, encrypted or plaintext) and continue.
+                  SizedBox(
+                    width: double.infinity,
+                    child: TextButton(
+                      onPressed: () => importSavedDirectiveFile(context, ref),
+                      style: TextButton.styleFrom(
+                        foregroundColor: p.text,
+                        minimumSize:
+                            const Size.fromHeight(DesignTokens.buttonHeightMd),
+                        textStyle: const TextStyle(
+                          fontFamily: 'DM Sans',
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      child: const Text('Continue from a saved file'),
                     ),
                   ),
                   const SizedBox(height: 18),
