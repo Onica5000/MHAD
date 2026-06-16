@@ -49,8 +49,34 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
   /// Whether the "editable copy" download is obfuscated (default) or plaintext.
   bool _encryptEditableCopy = true;
 
-  /// Draft watermark applied to the printable PDF.
-  DraftMode _draftMode = DraftMode.finalCopy;
+  /// Printed-copy types to produce. The user can tick more than one and get a
+  /// separate PDF for each (e.g. a clean final copy AND a watermarked draft).
+  final Set<DraftMode> _draftModes = {DraftMode.finalCopy};
+
+  /// Canonical order for the copy types (used for stable file ordering + UI).
+  static const _draftModeOrder = [
+    DraftMode.finalCopy,
+    DraftMode.draftGeneral,
+    DraftMode.draftSignedAvailable,
+  ];
+
+  /// The single copy type used where only one PDF makes sense (the on-screen
+  /// preview and the .zip bundle): prefer the final copy, else the first ticked.
+  DraftMode get _previewMode => _draftModes.contains(DraftMode.finalCopy)
+      ? DraftMode.finalCopy
+      : (_draftModes.isEmpty ? DraftMode.finalCopy : _draftModes.first);
+
+  String _draftModeLabel(DraftMode m) => switch (m) {
+        DraftMode.finalCopy => 'Final copy',
+        DraftMode.draftGeneral => 'Draft',
+        DraftMode.draftSignedAvailable => 'Draft · signed copy exists',
+      };
+
+  String _draftModeFileSuffix(DraftMode m) => switch (m) {
+        DraftMode.finalCopy => 'final',
+        DraftMode.draftGeneral => 'draft',
+        DraftMode.draftSignedAvailable => 'draft-signed-copy-available',
+      };
 
   // The `pdf` Dart package does not support native PDF encryption, so the
   // file produced here is unprotected by design. We compensate at the UX
@@ -212,15 +238,6 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
     setState(() => _isGenerating = true);
 
     try {
-      final generator = PdfGenerator(
-        includeCombined: _includeCombined,
-        includeDeclaration: _includeDeclaration,
-        includePoa: _includePoa,
-        includeSupplementary: _includeSupplementary,
-        includeNotes: _includeNotes,
-        draftMode: _draftMode,
-      );
-
       final directive = _directive!;
       final agents = _agents;
       final prefs = _prefs;
@@ -229,26 +246,46 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       final medications = _medications;
       final witnesses = _witnesses;
 
-      final bytes = await runInBackground(() => generator.generate(
-        directive: directive,
-        agents: agents,
-        prefs: prefs,
-        additional: additional,
-        guardian: guardian,
-        medications: medications,
-        witnesses: witnesses,
-        diagnoses: _diagnoses,
-      ));
+      // One PDF per ticked copy type (final / draft / draft-signed-available),
+      // so the user can grab several at once. Suffix filenames only when more
+      // than one is produced.
+      final modes = _draftModeOrder.where(_draftModes.contains).toList();
+      if (modes.isEmpty) modes.add(DraftMode.finalCopy);
+      final safeName = directive.fullName.replaceAll(' ', '_');
 
-      if (!mounted) return;
-
-      await Printing.sharePdf(
-        bytes: bytes,
-        filename: 'PA_MHAD_${_directive!.fullName.replaceAll(' ', '_')}.pdf',
-      );
+      for (final mode in modes) {
+        final generator = PdfGenerator(
+          includeCombined: _includeCombined,
+          includeDeclaration: _includeDeclaration,
+          includePoa: _includePoa,
+          includeSupplementary: _includeSupplementary,
+          includeNotes: _includeNotes,
+          draftMode: mode,
+        );
+        final bytes = await runInBackground(() => generator.generate(
+          directive: directive,
+          agents: agents,
+          prefs: prefs,
+          additional: additional,
+          guardian: guardian,
+          medications: medications,
+          witnesses: witnesses,
+          diagnoses: _diagnoses,
+        ));
+        if (!mounted) return;
+        final suffix = modes.length > 1 ? '_${_draftModeFileSuffix(mode)}' : '';
+        await Printing.sharePdf(
+          bytes: bytes,
+          filename: 'PA_MHAD_$safeName$suffix.pdf',
+        );
+      }
       if (kIsWeb && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('PDF downloaded to your Downloads folder.')),
+          SnackBar(
+            content: Text(modes.length > 1
+                ? '${modes.length} PDFs downloaded to your Downloads folder.'
+                : 'PDF downloaded to your Downloads folder.'),
+          ),
         );
       }
     } catch (e) {
@@ -363,7 +400,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       includePoa: _includePoa,
       includeSupplementary: _includeSupplementary,
       includeNotes: _includeNotes,
-      draftMode: _draftMode,
+      draftMode: _previewMode,
     );
     return runInBackground(() => generator.generate(
           directive: _directive!,
@@ -812,35 +849,29 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
             const SizedBox(height: 4),
             Text(
               'A draft prints a light "DRAFT" watermark on every page — for '
-              'sending a copy while you keep the signed paper original.',
+              'sending a copy while you keep the signed paper original. Tick as '
+              'many as you like — Download gives you one PDF of each.',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
             ),
-            const SizedBox(height: 8),
-            Wrap(
-              spacing: 8,
-              children: [
-                ChoiceChip(
-                  label: const Text('Final copy'),
-                  selected: _draftMode == DraftMode.finalCopy,
-                  onSelected: (_) =>
-                      setState(() => _draftMode = DraftMode.finalCopy),
-                ),
-                ChoiceChip(
-                  label: const Text('Draft'),
-                  selected: _draftMode == DraftMode.draftGeneral,
-                  onSelected: (_) =>
-                      setState(() => _draftMode = DraftMode.draftGeneral),
-                ),
-                ChoiceChip(
-                  label: const Text('Draft · signed copy exists'),
-                  selected: _draftMode == DraftMode.draftSignedAvailable,
-                  onSelected: (_) => setState(
-                      () => _draftMode = DraftMode.draftSignedAvailable),
-                ),
-              ],
-            ),
+            const SizedBox(height: 4),
+            for (final m in _draftModeOrder)
+              CheckboxListTile(
+                value: _draftModes.contains(m),
+                onChanged: (v) => setState(() {
+                  if (v == true) {
+                    _draftModes.add(m);
+                  } else if (_draftModes.length > 1) {
+                    // Keep at least one selected so Download always has a copy.
+                    _draftModes.remove(m);
+                  }
+                }),
+                title: Text(_draftModeLabel(m)),
+                dense: true,
+                contentPadding: EdgeInsets.zero,
+                controlAffinity: ListTileControlAffinity.leading,
+              ),
             const SizedBox(height: 16),
             Text('Save an editable copy',
                 style: Theme.of(context).textTheme.titleSmall),
@@ -1173,7 +1204,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         includePoa: _includePoa,
         includeSupplementary: _includeSupplementary,
         includeNotes: _includeNotes,
-        draftMode: _draftMode,
+        draftMode: _previewMode,
       );
       final pdfBytes = await runInBackground(() => generator.generate(
             directive: _directive!,
