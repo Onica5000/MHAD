@@ -3,13 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
-import 'package:mhad/ui/wizard/steps/drug_trials_step.dart';
-import 'package:mhad/ui/wizard/steps/ect_step.dart';
-import 'package:mhad/ui/wizard/steps/experimental_studies_step.dart';
+import 'package:mhad/ui/wizard/steps/consent_choice_step.dart';
 import 'package:mhad/ui/wizard/wizard_step_mixin.dart';
 
-/// Merged wizard step that combines [EctStep], [ExperimentalStudiesStep],
-/// and [DrugTrialsStep]. Matches the prototype's step 07
+/// Merged wizard step that combines the three [ConsentChoiceStep] decisions
+/// (ECT, experimental studies, drug trials). Matches the prototype's step 07
 /// "Procedures & research" — the three treatments PA Act 194 calls out
 /// as requiring explicit, documented consent.
 class ProceduresResearchStep extends ConsumerStatefulWidget {
@@ -23,9 +21,9 @@ class ProceduresResearchStep extends ConsumerStatefulWidget {
 
 class _ProceduresResearchStepState
     extends ConsumerState<ProceduresResearchStep> with WizardStepMixin {
-  final _ectKey = GlobalKey<State<EctStep>>();
-  final _experimentalKey = GlobalKey<State<ExperimentalStudiesStep>>();
-  final _drugTrialsKey = GlobalKey<State<DrugTrialsStep>>();
+  final _ectKey = GlobalKey<State<ConsentChoiceStep>>();
+  final _experimentalKey = GlobalKey<State<ConsentChoiceStep>>();
+  final _drugTrialsKey = GlobalKey<State<ConsentChoiceStep>>();
 
   @override
   Future<bool> validateAndSave() async {
@@ -47,9 +45,10 @@ class _ProceduresResearchStepState
       children: [
         const SectionLabel('Electroconvulsive therapy (ECT)'),
         const SizedBox(height: 4),
-        EctStep(
+        ConsentChoiceStep(
           key: _ectKey,
           directiveId: widget.directiveId,
+          config: ConsentChoiceConfig.ect,
           embedded: true,
         ),
         const SizedBox(height: 16),
@@ -57,9 +56,10 @@ class _ProceduresResearchStepState
         const SizedBox(height: 8),
         const SectionLabel('Experimental studies'),
         const SizedBox(height: 4),
-        ExperimentalStudiesStep(
+        ConsentChoiceStep(
           key: _experimentalKey,
           directiveId: widget.directiveId,
+          config: ConsentChoiceConfig.experimental,
           embedded: true,
         ),
         const SizedBox(height: 16),
@@ -67,9 +67,10 @@ class _ProceduresResearchStepState
         const SizedBox(height: 8),
         const SectionLabel('Drug trials'),
         const SizedBox(height: 4),
-        DrugTrialsStep(
+        ConsentChoiceStep(
           key: _drugTrialsKey,
           directiveId: widget.directiveId,
+          config: ConsentChoiceConfig.drugTrials,
           embedded: true,
         ),
         const SizedBox(height: 24),
