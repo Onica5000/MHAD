@@ -256,7 +256,7 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                     // rail instead, so the Scaffold has no bottomNavigationBar.
                     if (!shellActive)
                       WizardBottomBar(
-                        primaryLabel: isLastStep ? 'Preview' : 'Continue',
+                        primaryLabel: isLastStep ? 'Continue to signing' : 'Continue',
                         primaryIcon: Icons.arrow_forward,
                         primaryLoading: _isSaving,
                         onPrimary: () => _goNext(context, isLastStep),
@@ -275,7 +275,7 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                       currentIndex: _stepIndex,
                       onNext: () => _goNext(context, isLastStep),
                       onBack: _stepIndex > 0 ? _goBack : null,
-                      nextLabel: isLastStep ? 'Preview' : 'Next',
+                      nextLabel: isLastStep ? 'Continue to signing' : 'Next',
                       nextLoading: _isSaving,
                       onStepTap: _jumpToStep,
                     ),
@@ -410,7 +410,7 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
           SnackBar(
             content: Text(isPrivate
                 ? 'Some fields are incomplete — you can come back to finish later.'
-                : 'Some fields are incomplete — complete them before exporting.'),
+                : 'Some fields are incomplete — you can fill them in before you finish.'),
             duration: const Duration(seconds: 3),
           ),
         );

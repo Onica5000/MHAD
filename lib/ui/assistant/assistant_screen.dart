@@ -195,7 +195,9 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                     ),
                   ),
                   Text(
-                    '● ACTIVE · GEMINI 2.5 FLASH · PII STRIPPED BEFORE SEND',
+                    hasKey
+                        ? '● ACTIVE · GEMINI 2.5 FLASH · TEXT PII STRIPPED BEFORE SEND'
+                        : '○ NOT SET UP · ADD A FREE KEY TO USE THE AI',
                     style: TextStyle(
                       fontFamily: 'JetBrains Mono',
                       fontFamilyFallback: const [
