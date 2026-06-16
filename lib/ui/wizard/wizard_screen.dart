@@ -257,7 +257,7 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                     // rail instead, so the Scaffold has no bottomNavigationBar.
                     if (!shellActive)
                       WizardBottomBar(
-                        primaryLabel: isLastStep ? 'Continue to signing' : 'Continue',
+                        primaryLabel: isLastStep ? 'Preview' :'Continue',
                         primaryIcon: Icons.arrow_forward,
                         primaryLoading: _isSaving,
                         onPrimary: () => _goNext(context, isLastStep),
@@ -276,7 +276,7 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                       currentIndex: _stepIndex,
                       onNext: () => _goNext(context, isLastStep),
                       onBack: _stepIndex > 0 ? _goBack : null,
-                      nextLabel: isLastStep ? 'Continue to signing' : 'Next',
+                      nextLabel: isLastStep ? 'Preview' :'Next',
                       nextLoading: _isSaving,
                       onStepTap: _jumpToStep,
                     ),

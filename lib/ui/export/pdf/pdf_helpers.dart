@@ -214,26 +214,34 @@ pw.Widget partHeader(String text) {
   );
 }
 
-/// A labeled blank line for text entry.
+// Shared layout metrics for every labeled fill-in line so blank lines, data
+// lines, and signature lines are spaced identically (label ALWAYS above the
+// line, same gap above and below). See [blankLine] / [dataLine] /
+// [signatureBlock].
+const double _kLineLabelGap = 2; // label → line
+const double _kLineTrailing = 6; // line → next field
+const double _kLineHeight = 16; // empty entry / signature line height
+
+/// A labeled blank line for text entry. Label above the line.
 pw.Widget blankLine(String label, {double width = double.infinity}) {
   return pw.Column(
     crossAxisAlignment: pw.CrossAxisAlignment.start,
     children: [
       pw.Text(label, style: labelStyle()),
-      pw.SizedBox(height: 2),
+      pw.SizedBox(height: _kLineLabelGap),
       pw.Container(
         width: width,
         decoration: const pw.BoxDecoration(
           border: pw.Border(bottom: pw.BorderSide(color: kBlack, width: 0.5)),
         ),
-        height: 16,
+        height: _kLineHeight,
       ),
-      pw.SizedBox(height: 5),
+      pw.SizedBox(height: _kLineTrailing),
     ],
   );
 }
 
-/// A labeled filled-in value line for user data.
+/// A labeled filled-in value line for user data. Label above the line.
 pw.Widget dataLine(
   String label,
   String value, {
@@ -243,7 +251,7 @@ pw.Widget dataLine(
     crossAxisAlignment: pw.CrossAxisAlignment.start,
     children: [
       pw.Text(label, style: labelStyle()),
-      pw.SizedBox(height: 1),
+      pw.SizedBox(height: _kLineLabelGap),
       pw.Container(
         width: width,
         decoration: const pw.BoxDecoration(
@@ -252,7 +260,7 @@ pw.Widget dataLine(
         padding: const pw.EdgeInsets.only(bottom: 2),
         child: pw.Text(value.isEmpty ? ' ' : value, style: bodyStyle()),
       ),
-      pw.SizedBox(height: 5),
+      pw.SizedBox(height: _kLineTrailing),
     ],
   );
 }
@@ -386,28 +394,24 @@ pw.Widget checkRow(String text, {bool checked = false}) {
   );
 }
 
-/// A signature block with a line and label below.
+/// A signature block: label above the line (uniform with [blankLine] /
+/// [dataLine]), then optional filled-in Name / Address lines.
 pw.Widget signatureBlock(String label, {String? name, String? address}) {
   return pw.Column(
     crossAxisAlignment: pw.CrossAxisAlignment.start,
     children: [
-      pw.SizedBox(height: 8),
+      pw.Text(label, style: labelStyle()),
+      pw.SizedBox(height: _kLineLabelGap),
       pw.Container(
         width: double.infinity,
         decoration: const pw.BoxDecoration(
           border: pw.Border(bottom: pw.BorderSide(color: kBlack, width: 0.5)),
         ),
-        height: 28,
+        height: _kLineHeight,
       ),
-      pw.Text(label, style: labelStyle()),
-      if (name != null && name.isNotEmpty) ...[
-        pw.SizedBox(height: 3),
-        dataLine('Name', name),
-      ],
-      if (address != null && address.isNotEmpty) ...[
-        dataLine('Address', address),
-      ],
-      pw.SizedBox(height: 6),
+      pw.SizedBox(height: _kLineTrailing),
+      if (name != null && name.isNotEmpty) dataLine('Name', name),
+      if (address != null && address.isNotEmpty) dataLine('Address', address),
     ],
   );
 }
