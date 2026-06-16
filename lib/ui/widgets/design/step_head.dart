@@ -30,7 +30,15 @@ class StepHead extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
-    return Padding(
+    // One clean spoken announcement that re-fires on every step change
+    // (liveRegion) instead of the screen reader reading the decorative serif
+    // numeral, the mono caption, and the title as three separate nodes.
+    final announcement = StringBuffer('Step $stepNumber of $totalSteps. $title');
+    if (subtitle != null) announcement.write('. $subtitle');
+    return Semantics(
+      liveRegion: true,
+      label: announcement.toString(),
+      child: Padding(
       padding: padding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,7 +47,8 @@ class StepHead extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                child: Row(
+                child: ExcludeSemantics(
+                  child: Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     SerifNumeral(value: stepNumber, size: 54),
@@ -49,6 +58,7 @@ class StepHead extends StatelessWidget {
                       child: MonoCaption('Step $stepNumber of $totalSteps'),
                     ),
                   ],
+                ),
                 ),
               ),
               if (onExit != null)
@@ -85,30 +95,35 @@ class StepHead extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 4),
-          Text(
-            title,
-            style: TextStyle(
-              fontFamily: 'DM Sans',
-              fontSize: 26,
-              fontWeight: FontWeight.w700,
-              letterSpacing: -0.4,
-              height: 1.15,
-              color: p.text,
+          ExcludeSemantics(
+            child: Text(
+              title,
+              style: TextStyle(
+                fontFamily: 'DM Sans',
+                fontSize: 26,
+                fontWeight: FontWeight.w700,
+                letterSpacing: -0.4,
+                height: 1.15,
+                color: p.text,
+              ),
             ),
           ),
           if (subtitle != null) ...[
             const SizedBox(height: 6),
-            Text(
-              subtitle!,
-              style: TextStyle(
-                fontFamily: 'DM Sans',
-                fontSize: 14,
-                color: p.textMuted,
-                height: 1.45,
+            ExcludeSemantics(
+              child: Text(
+                subtitle!,
+                style: TextStyle(
+                  fontFamily: 'DM Sans',
+                  fontSize: 14,
+                  color: p.textMuted,
+                  height: 1.45,
+                ),
               ),
             ),
           ],
         ],
+      ),
       ),
     );
   }
