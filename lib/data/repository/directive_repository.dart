@@ -432,7 +432,15 @@ class DirectiveRepository {
     };
   }
 
-  /// Restore a directive from a snapshot map. Returns the new directive ID.
+  /// Restore a directive from a snapshot map into a NEW directive. Returns the
+  /// new id.
+  ///
+  /// By design this produces an editable **draft**: `executionDate`, `status`,
+  /// and witness signatures are intentionally NOT carried over (they aren't in
+  /// the snapshot). Because the imported copy can be edited, it must be
+  /// re-signed and re-witnessed to be valid again — silently inheriting the old
+  /// signed state would let an edited document falsely appear validly executed.
+  /// The import UI tells the user this (see [importSavedDirectiveFile]).
   Future<int> restoreFromSnapshot(Map<String, dynamic> snap) async {
     final formType = FormType.values.firstWhere(
       (e) => e.name == (snap['formType'] ?? 'combined'),

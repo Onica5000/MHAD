@@ -329,14 +329,15 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
       final proceed = await showDialog<bool>(
         context: context,
         builder: (ctx) => AlertDialog(
-          title: const Text('Document Upload Notice'),
+          icon: const Icon(Icons.privacy_tip_outlined),
+          title: const Text('Heads up'),
           content: const Text(
-            'Images and PDFs are sent to Google\'s servers for analysis. '
-            'The app cannot strip personal information from images or PDFs '
-            'before uploading.\n\n'
-            'Only upload documents that do not contain sensitive personal '
-            'information (names, SSNs, dates of birth). Medical data '
-            '(medications, conditions) is safe to include.',
+            'We can\'t remove personal details from images or PDFs before '
+            'the AI reads them — they\'re sent to Google as-is.\n\n'
+            'That\'s fine for the details you want to fill in (your name, '
+            'medications, conditions). But if your file shows something you\'d '
+            'rather not share — an ID or card number, a full address, or '
+            'someone else\'s information — cover it first.',
           ),
           actions: [
             TextButton(
@@ -345,7 +346,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
             ),
             FilledButton(
               onPressed: () => Navigator.pop(ctx, true),
-              child: const Text('Upload Anyway'),
+              child: const Text('Upload anyway'),
             ),
           ],
         ),
