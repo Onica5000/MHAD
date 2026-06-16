@@ -15,6 +15,7 @@ import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/export/pdf/pdf_generator.dart';
 import 'package:mhad/ui/export/pdf/pdf_helpers.dart';
 import 'package:mhad/ui/export/pdf/wallet_card_generator.dart';
+import 'package:mhad/ui/export/pdf/wallet_card_service.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
 import 'package:mhad/ui/widgets/design/responsive_shell.dart';
@@ -442,22 +443,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
     setState(() => _isGenerating = true);
 
     try {
-      const generator = WalletCardGenerator();
-
-      final directive = _directive!;
-      final agents = _agents;
-
-      final bytes = await runInBackground(
-        () => generator.generate(directive: directive, agents: agents),
-      );
-
-      if (!mounted) return;
-
-      await Printing.sharePdf(
-        bytes: bytes,
-        filename:
-            'PA_MHAD_WalletCard_${_directive!.fullName.replaceAll(' ', '_')}.pdf',
-      );
+      await WalletCardService.generateAndShare(_directive!, _agents);
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

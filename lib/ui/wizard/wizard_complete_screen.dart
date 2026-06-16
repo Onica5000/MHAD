@@ -11,9 +11,7 @@ import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/design/wallet_card.dart';
-import 'package:mhad/ui/export/pdf/wallet_card_generator.dart';
-import 'package:mhad/utils/background_runner.dart';
-import 'package:printing/printing.dart';
+import 'package:mhad/ui/export/pdf/wallet_card_service.dart';
 
 /// "You did it." — shown after the user signs the directive. Mirrors the
 /// prototype's [m-done] screen: editorial italic display, wallet-card
@@ -62,17 +60,7 @@ class _WizardCompleteScreenState extends ConsumerState<WizardCompleteScreen> {
     if (directive == null || _generatingWallet) return;
     setState(() => _generatingWallet = true);
     try {
-      const generator = WalletCardGenerator();
-      final agents = _agents;
-      final bytes = await runInBackground(
-        () => generator.generate(directive: directive, agents: agents),
-      );
-      if (!mounted) return;
-      await Printing.sharePdf(
-        bytes: bytes,
-        filename:
-            'PA_MHAD_WalletCard_${directive.fullName.replaceAll(' ', '_')}.pdf',
-      );
+      await WalletCardService.generateAndShare(directive, _agents);
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
