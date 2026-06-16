@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/providers/assistant_providers.dart';
+import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/utils/platform_utils.dart';
 import 'package:mhad/ui/widgets/design/bottom_nav.dart';
@@ -85,8 +86,15 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
       if (ret != null && ret.isNotEmpty) {
         // Came from a specific page (e.g. /upload) — go back there.
         context.go(ret);
+      } else if (context.canPop()) {
+        // Pushed on top of another page — return to it.
+        context.pop();
       } else {
-        Navigator.pop(context);
+        // Reached via a stack-replacing `go` (e.g. the sidebar) — there is
+        // nothing to pop, so Navigator.pop would blank the page. Navigate to a
+        // real route and let the router's redirect place the user correctly
+        // (e.g. onto the "In your words" onboarding intro if it isn't done).
+        context.go(AppRoutes.home);
       }
     }
   }

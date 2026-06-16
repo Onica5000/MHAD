@@ -324,7 +324,10 @@ class _EditorialLearnHub extends StatelessWidget {
         // Articles bucket if there's no featured section.
         LayoutBuilder(
           builder: (ctx, c) {
-            final wide = c.maxWidth >= 560;
+            // Quote + "Read the booklet" sit side by side once there's room for
+            // both; only the narrowest phone widths stack them. (Was 560, which
+            // left moderately-sized windows stacked/vertical.)
+            final wide = c.maxWidth >= 420;
             final quoteBlock = Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
