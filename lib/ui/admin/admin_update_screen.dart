@@ -18,7 +18,7 @@ class AdminUpdateScreen extends ConsumerStatefulWidget {
   const AdminUpdateScreen({super.key});
 
   /// Change this before shipping. Obscurity gate, not security.
-  static const passphrase = 'mhad-admin';
+  static const passphrase = '0000';
 
   @override
   ConsumerState<AdminUpdateScreen> createState() => _AdminUpdateScreenState();

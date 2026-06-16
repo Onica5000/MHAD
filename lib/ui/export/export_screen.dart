@@ -855,6 +855,10 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
                   ),
             ),
             const SizedBox(height: 4),
+            // Checkbox + label on their own row, Download full-width below.
+            // (Previously all three shared one Row; in the narrow control rail
+            // the button squeezed the label to ~zero width, wrapping it one
+            // letter per line — looked vertical.)
             Row(
               children: [
                 Checkbox(
@@ -863,16 +867,20 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
                       setState(() => _encryptEditableCopy = v ?? true),
                 ),
                 const Expanded(child: Text('Encrypt the file')),
-                Semantics(
-                  button: true,
-                  label: 'Download an editable copy of your directive',
-                  child: FilledButton.tonalIcon(
-                    onPressed: _isGenerating ? null : _downloadEditableCopy,
-                    icon: const Icon(Icons.download_outlined),
-                    label: const Text('Download'),
-                  ),
-                ),
               ],
+            ),
+            const SizedBox(height: 4),
+            Semantics(
+              button: true,
+              label: 'Download an editable copy of your directive',
+              child: SizedBox(
+                width: double.infinity,
+                child: FilledButton.tonalIcon(
+                  onPressed: _isGenerating ? null : _downloadEditableCopy,
+                  icon: const Icon(Icons.download_outlined),
+                  label: const Text('Download'),
+                ),
+              ),
             ),
             const SizedBox(height: 16),
             Text('Password-protect a copy',

@@ -37,6 +37,16 @@ class WebSidebar extends ConsumerWidget {
       },
       orElse: () => null,
     );
+    // Directive currently in focus: prefer the one in the active route
+    // (/wizard/:id, /sign/:id, /export/:id, /upload/:id, /wizard-complete/:id),
+    // else the most-recently-edited. This lets "Download & print" open the SAME
+    // directive's export as the wizard's "Preview & download packet" button,
+    // instead of guessing via most-recent (which differs when you have more
+    // than one directive).
+    final routeSegs =
+        activeRoute.split('/').where((s) => s.isNotEmpty).toList();
+    final routeId = routeSegs.length >= 2 ? int.tryParse(routeSegs.last) : null;
+    final focusedId = routeId ?? recentId;
 
     // Items + destinations mirror the design `WebSidebar`:
     // Start · Learn · AI assistant · Download & print · Settings.
@@ -62,7 +72,7 @@ class WebSidebar extends ConsumerWidget {
       _SidebarItem(
         icon: Icons.document_scanner_outlined,
         activeIcon: Icons.document_scanner,
-        label: 'Autofill from a document',
+        label: 'Autofill',
         isActive: activeRoute.startsWith('/upload/'),
         // Reuse the most-recent directive (the one you're working on) so the
         // page autofills it; with none on file (fresh web session), create a
@@ -91,14 +101,18 @@ class WebSidebar extends ConsumerWidget {
         activeIcon: Icons.print,
         label: 'Download & print',
         isActive: activeRoute.startsWith('/export/'),
-        // With a directive, open its export/preview screen. With none (the
-        // common web case — in-memory DB, nothing saved yet) DON'T silently
-        // bounce to Home: send the user into the new-directive flow so
-        // "Download & print" always leads somewhere coherent (you can't
-        // download a directive you haven't made yet).
-        onTap: () => recentId != null
-            ? appRouter.push(AppRoutes.exportRoute(recentId))
-            : appRouter.go(AppRoutes.home),
+        // Open the export/preview screen for the directive you're working on
+        // (same destination as the wizard's "Preview & download packet"). With
+        // none on file (fresh web session — in-memory DB, nothing saved yet)
+        // create a Combined directive first rather than bouncing to Home, so
+        // this always lands on the export screen.
+        onTap: () async {
+          final id = focusedId ??
+              await ref
+                  .read(directiveRepositoryProvider)
+                  .createDirective(FormType.combined);
+          appRouter.push(AppRoutes.exportRoute(id));
+        },
       ),
       _SidebarItem(
         icon: Icons.settings_outlined,
