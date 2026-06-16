@@ -334,10 +334,12 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
           content: const Text(
             'We can\'t remove personal details from images or PDFs before '
             'the AI reads them — they\'re sent to Google as-is.\n\n'
-            'That\'s fine for the details you want to fill in (your name, '
-            'medications, conditions). But if your file shows something you\'d '
-            'rather not share — an ID or card number, a full address, or '
-            'someone else\'s information — cover it first.',
+            'Uploading is only a shortcut. You never have to share personal '
+            'information to use it:\n'
+            '• Black out anything sensitive (ID or card numbers, addresses, '
+            'other people\'s details) before uploading.\n'
+            '• Anything you don\'t upload can simply be typed in by hand — '
+            'every field can be filled manually to keep it private.',
           ),
           actions: [
             TextButton(
@@ -1139,6 +1141,28 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                   height: 1.5,
                   color: p.textMuted,
                 ),
+              ),
+              const SizedBox(height: 10),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(Icons.privacy_tip_outlined, size: 15, color: p.textMuted),
+                  const SizedBox(width: 7),
+                  Expanded(
+                    child: Text(
+                      'Your privacy: black out anything sensitive before '
+                      'uploading. You never have to upload personal details at '
+                      'all — any field can be typed in by hand to keep it '
+                      'confidential.',
+                      style: TextStyle(
+                        fontFamily: 'DM Sans',
+                        fontSize: 12.5,
+                        height: 1.45,
+                        color: p.textMuted,
+                      ),
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 20),
               if (!hasKey) ...[

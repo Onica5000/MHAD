@@ -790,14 +790,37 @@ List<_SectionData> _buildSections(MhadPalette p) {
           _bold('not'),
           const TextSpan(text: ' HIPAA-compliant.'),
         ], palette: p),
+        _Para(spans: const [
+          TextSpan(
+              text:
+                  "If you use the optional AI Assistant (Google Gemini), text you send is transmitted to Google's servers. On the free tier, Google may use this data to improve their products and human reviewers may read inputs."),
+        ], palette: p),
+        _Para(spans: [
+          const TextSpan(text: 'To protect you, the app '),
+          _bold('automatically keeps identifying details out of what it sends '
+              'to the AI'),
+          const TextSpan(
+              text:
+                  ' — your name, date of birth, address, and the names and '
+                  'contact details of your agents and guardian are never '
+                  'included. Only non-identifying context (such as conditions, '
+                  'medications, and care preferences) is shared, and only if '
+                  'you choose to use the assistant.'),
+        ], palette: p),
         _Para(spans: [
           const TextSpan(
               text:
-                  "If you use the optional AI Assistant (Google Gemini), text you send is transmitted to Google's servers. On the free tier, Google may use this data to improve their products and human reviewers may read inputs. "),
-          _bold('Do not include personally identifying information'),
+                  'Photos and PDFs you upload for autofill are different: they '
+                  'are sent to Google as-is, because the app cannot remove '
+                  'personal details from an image. '),
+          _bold('Black out anything sensitive before uploading'),
           const TextSpan(
               text:
-                  ' (full name, SSN, date of birth, address) in AI requests.'),
+                  ', and remember you never have to upload personal '
+                  'information at all — any field can be typed in by hand to '
+                  'keep it private. Also avoid typing personal identifiers '
+                  '(full name, SSN, date of birth, address) directly into chat '
+                  'messages.'),
         ], palette: p),
         _Para(spans: const [
           TextSpan(
