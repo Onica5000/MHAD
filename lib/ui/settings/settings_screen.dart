@@ -273,6 +273,24 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           ),
           const SizedBox(height: 24),
 
+          // Maintainer tool: visible (so the owner can find and test it) but
+          // still passphrase-gated on the screen itself. The long-press on the
+          // "About" heading below remains as a discreet alternate entry point.
+          DesignCard(
+            variant: DesignCardVariant.surface,
+            padding: EdgeInsets.zero,
+            child: _SettingsRow(
+              icon: Icons.admin_panel_settings_outlined,
+              title: 'AI data update tool',
+              subtitle:
+                  'Maintainer tool — have the AI propose updates to the app’s '
+                  'information (contacts, AI limits, legal facts) and review them '
+                  'before applying. Passphrase-protected.',
+              onTap: () => context.push(AppRoutes.admin),
+            ),
+          ),
+          const SizedBox(height: 24),
+
           DesignCard(
             variant: DesignCardVariant.surface,
             padding: const EdgeInsets.all(16),
@@ -280,7 +298,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Long-press opens the hidden admin data-update tool (behind a
-                // passphrase). Deliberately undiscoverable for normal users.
+                // passphrase). Kept as a discreet alternate to the visible row
+                // added above.
                 GestureDetector(
                   onLongPress: () => context.push(AppRoutes.admin),
                   child: Text(
