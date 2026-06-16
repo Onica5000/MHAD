@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:safe_device/safe_device.dart';
 
 /// Service that checks for root/jailbreak and warns the user.
@@ -59,9 +60,9 @@ class DeviceSecurityService {
       context: context,
       barrierDismissible: false,
       builder: (ctx) => AlertDialog(
-        icon: const Icon(
+        icon: Icon(
           Icons.security_rounded,
-          color: Colors.orange,
+          color: SemanticColors.warningText(Theme.of(ctx).brightness),
           size: 48,
         ),
         title: const Text('Device Security Warning'),

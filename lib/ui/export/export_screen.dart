@@ -1548,12 +1548,16 @@ class _FormCheckbox extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
               child: Row(
                 children: [
-                  const Icon(Icons.warning_amber, size: 14, color: Colors.orange),
+                  Icon(Icons.warning_amber,
+                      size: 14,
+                      color: SemanticColors.warningText(cs.brightness)),
                   const SizedBox(width: 6),
                   Expanded(
                     child: Text(
                       warning!,
-                      style: const TextStyle(fontSize: 11, color: Colors.orange),
+                      style: TextStyle(
+                          fontSize: 11,
+                          color: SemanticColors.warningText(cs.brightness)),
                     ),
                   ),
                 ],

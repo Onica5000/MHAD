@@ -58,6 +58,21 @@ class SemanticColors {
   // Purple (POA accent)
   static const purpleText = Color(0xFF6D28D9);
   static const purpleBg = Color(0xFFF5F3FF);
+
+  // Brightness-aware resolvers for single-color icon/text usages (replaces
+  // hardcoded Colors.orange/green/red that ignored the active theme).
+  static Color warningText(Brightness b) =>
+      b == Brightness.dark ? warningTextDark : warningTextLight;
+  static Color errorText(Brightness b) =>
+      b == Brightness.dark ? errorTextDark : errorTextLight;
+  static Color errorAccent(Brightness b) =>
+      b == Brightness.dark ? errorAccentDark : errorAccentLight;
+  static Color successText(Brightness b) =>
+      b == Brightness.dark ? successTextDark : successTextLight;
+  static Color warningBg(Brightness b) =>
+      b == Brightness.dark ? warningBgDark : warningBgLight;
+  static Color successBg(Brightness b) =>
+      b == Brightness.dark ? successBgDark : successBgLight;
 }
 
 /// A full palette = primary family + supporting surface/text tokens for a

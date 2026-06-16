@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/services/admin_update_service.dart';
+import 'package:mhad/ui/theme/app_theme.dart';
 
 /// Hidden, non-user-facing admin tool: the AI drafts updates to the app's
 /// dynamic data (app_data.json) WITH sources, a human approves a per-field diff,
@@ -113,7 +114,10 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
       ? const SizedBox.shrink()
       : Padding(
           padding: const EdgeInsets.only(top: 12),
-          child: Text(e, style: const TextStyle(color: Colors.red)),
+          child: Text(e,
+              style: TextStyle(
+                  color: SemanticColors.errorText(
+                      Theme.of(context).brightness))),
         );
 
   Widget _buildGate() {
@@ -196,7 +200,11 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
                     ? '$verifyCount verify-tier change(s) not yet approved'
                     : 'Ready',
                 style: TextStyle(
-                    color: verifyCount > 0 ? Colors.orange : Colors.green),
+                    color: verifyCount > 0
+                        ? SemanticColors.warningText(
+                            Theme.of(context).brightness)
+                        : SemanticColors.successText(
+                            Theme.of(context).brightness)),
               ),
             ),
             FilledButton(
@@ -219,7 +227,9 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
               padding:
                   const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
               decoration: BoxDecoration(
-                color: c.isVerify ? Colors.orange.shade100 : Colors.green.shade100,
+                color: c.isVerify
+                    ? SemanticColors.warningBg(Theme.of(context).brightness)
+                    : SemanticColors.successBg(Theme.of(context).brightness),
                 borderRadius: BorderRadius.circular(4),
               ),
               child: Text(c.autonomy.toUpperCase(),

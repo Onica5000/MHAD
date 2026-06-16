@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/providers/assistant_providers.dart';
+import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/utils/platform_utils.dart';
 import 'package:mhad/ui/widgets/design/bottom_nav.dart';
 import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
@@ -341,22 +342,25 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                 'The key starts with "AIza..." — copy it, then '
                 'use the paste button or paste it manually.',
             trailing: hasKey
-                ? Row(
-                    children: [
-                      const Icon(Icons.check_circle,
-                          color: Colors.green, size: 18),
-                      const SizedBox(width: 6),
-                      Text(
-                        _isEphemeral
-                            ? 'Key set for this session'
-                            : 'Key saved',
-                        style: const TextStyle(
-                            color: Colors.green,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 13),
-                      ),
-                    ],
-                  )
+                ? Builder(builder: (context) {
+                    final success = SemanticColors.successText(
+                        Theme.of(context).brightness);
+                    return Row(
+                      children: [
+                        Icon(Icons.check_circle, color: success, size: 18),
+                        const SizedBox(width: 6),
+                        Text(
+                          _isEphemeral
+                              ? 'Key set for this session'
+                              : 'Key saved',
+                          style: TextStyle(
+                              color: success,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 13),
+                        ),
+                      ],
+                    );
+                  })
                 : null,
           ),
           const SizedBox(height: 20),
