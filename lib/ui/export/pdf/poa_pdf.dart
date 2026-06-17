@@ -211,10 +211,13 @@ List<pw.Page> buildPoaPages({
         ),
         pw.SizedBox(height: 6),
 
-        // 1. Treatment preferences — (a) Treatment facility
-        pw.Text('1. Treatment preferences.', style: boldStyle()),
+        // Treatment preferences — numbered 1-6 (facility, meds, ECT,
+        // experimental, drug trials, additional) to match the Declaration and
+        // Combined forms (per user direction — the official POA uses letters,
+        // but we keep all three forms on one numbering system).
+        pw.Text('Treatment preferences.', style: boldStyle()),
         pw.SizedBox(height: 4),
-        pw.Text('(a). Choice of treatment facility.', style: boldStyle()),
+        pw.Text('1. Choice of treatment facility.', style: boldStyle()),
         pw.SizedBox(height: 4),
         if (prefs != null) ...[
           checkRow(
@@ -291,7 +294,7 @@ List<pw.Page> buildPoaPages({
 
         // (b). Medications
         pw.Text(
-          '(b). Preferences regarding medications for psychiatric treatment.',
+          '2. Preferences regarding medications for psychiatric treatment.',
           style: boldStyle(),
         ),
         pw.SizedBox(height: 4),
@@ -386,7 +389,7 @@ List<pw.Page> buildPoaPages({
 
         // (c). ECT
         pw.Text(
-          '(c). Preferences regarding electroconvulsive therapy (ECT).',
+          '3. Preferences regarding electroconvulsive therapy (ECT).',
           style: boldStyle(),
         ),
         pw.SizedBox(height: 4),
@@ -417,7 +420,7 @@ List<pw.Page> buildPoaPages({
 
         // (d). Experimental studies
         pw.Text(
-          '(d). Preferences for experimental studies.',
+          '4. Preferences for experimental studies.',
           style: boldStyle(),
         ),
         pw.SizedBox(height: 4),
@@ -449,7 +452,7 @@ List<pw.Page> buildPoaPages({
         pw.SizedBox(height: 6),
 
         // (e). Drug trials
-        pw.Text('(e). Preferences regarding drug trials.', style: boldStyle()),
+        pw.Text('5. Preferences regarding drug trials.', style: boldStyle()),
         pw.SizedBox(height: 4),
         if (prefs != null) ...[
           checkRow(
@@ -486,7 +489,7 @@ List<pw.Page> buildPoaPages({
         pw.SizedBox(height: 8),
 
         pw.Text(
-          '(f). Additional instructions or information.',
+          '6. Additional instructions or information.',
           style: boldStyle(),
         ),
         pw.Text(
