@@ -68,6 +68,12 @@ class Agents extends Table {
   TextColumn get fullName => text().withDefault(const Constant(''))();
   TextColumn get relationship => text().withDefault(const Constant(''))();
   TextColumn get address => text().withDefault(const Constant(''))();
+  // Address components (schema 19) — `address` is line 1; these split out so
+  // every form uses the same Address 1/2 · City · State · ZIP boxes.
+  TextColumn get address2 => text().withDefault(const Constant(''))();
+  TextColumn get city => text().withDefault(const Constant(''))();
+  TextColumn get state => text().withDefault(const Constant(''))();
+  TextColumn get zip => text().withDefault(const Constant(''))();
   TextColumn get homePhone => text().withDefault(const Constant(''))();
   TextColumn get workPhone => text().withDefault(const Constant(''))();
   TextColumn get cellPhone => text().withDefault(const Constant(''))();
@@ -181,6 +187,11 @@ class Witnesses extends Table {
   IntColumn get witnessNumber => integer()(); // 1 or 2
   TextColumn get fullName => text().withDefault(const Constant(''))();
   TextColumn get address => text().withDefault(const Constant(''))();
+  // Address components (schema 19) — `address` is line 1.
+  TextColumn get address2 => text().withDefault(const Constant(''))();
+  TextColumn get city => text().withDefault(const Constant(''))();
+  TextColumn get state => text().withDefault(const Constant(''))();
+  TextColumn get zip => text().withDefault(const Constant(''))();
   TextColumn get phone => text().withDefault(const Constant(''))();
   TextColumn get signatureBase64 => text().nullable()();
   IntColumn get signatureDate => integer().nullable()();
@@ -226,6 +237,11 @@ class GuardianNominations extends Table {
       .references(Directives, #id, onDelete: KeyAction.cascade)();
   TextColumn get nomineeFullName => text().withDefault(const Constant(''))();
   TextColumn get nomineeAddress => text().withDefault(const Constant(''))();
+  // Address components (schema 19) — `nomineeAddress` is line 1.
+  TextColumn get nomineeAddress2 => text().withDefault(const Constant(''))();
+  TextColumn get nomineeCity => text().withDefault(const Constant(''))();
+  TextColumn get nomineeState => text().withDefault(const Constant(''))();
+  TextColumn get nomineeZip => text().withDefault(const Constant(''))();
   TextColumn get nomineePhone => text().withDefault(const Constant(''))();
   TextColumn get nomineeRelationship =>
       text().withDefault(const Constant(''))();
@@ -272,7 +288,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase(super.executor);
 
   @override
-  int get schemaVersion => 18;
+  int get schemaVersion => 19;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -445,6 +461,27 @@ class AppDatabase extends _$AppDatabase {
             await customStatement(
                 "ALTER TABLE directive_prefs ADD COLUMN "
                 "side_effects_json TEXT NOT NULL DEFAULT ''");
+          }
+          if (from < 19) {
+            // Standardized address components for agents, witnesses, and the
+            // guardian nominee (Address 1/2 · City · State · ZIP). `address`
+            // (and `nominee_address`) remains line 1.
+            for (final col in ['address2', 'city', 'state', 'zip']) {
+              await customStatement(
+                  "ALTER TABLE agents ADD COLUMN $col TEXT NOT NULL DEFAULT ''");
+              await customStatement(
+                  "ALTER TABLE witnesses ADD COLUMN $col TEXT NOT NULL DEFAULT ''");
+            }
+            for (final col in [
+              'nominee_address2',
+              'nominee_city',
+              'nominee_state',
+              'nominee_zip'
+            ]) {
+              await customStatement(
+                  "ALTER TABLE guardian_nominations ADD COLUMN $col "
+                  "TEXT NOT NULL DEFAULT ''");
+            }
           }
         },
       );

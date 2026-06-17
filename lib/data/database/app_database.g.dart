@@ -1530,6 +1530,48 @@ class $AgentsTable extends Agents with TableInfo<$AgentsTable, Agent> {
     requiredDuringInsert: false,
     defaultValue: const Constant(''),
   );
+  static const VerificationMeta _address2Meta = const VerificationMeta(
+    'address2',
+  );
+  @override
+  late final GeneratedColumn<String> address2 = GeneratedColumn<String>(
+    'address2',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  static const VerificationMeta _cityMeta = const VerificationMeta('city');
+  @override
+  late final GeneratedColumn<String> city = GeneratedColumn<String>(
+    'city',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  static const VerificationMeta _stateMeta = const VerificationMeta('state');
+  @override
+  late final GeneratedColumn<String> state = GeneratedColumn<String>(
+    'state',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  static const VerificationMeta _zipMeta = const VerificationMeta('zip');
+  @override
+  late final GeneratedColumn<String> zip = GeneratedColumn<String>(
+    'zip',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
   static const VerificationMeta _homePhoneMeta = const VerificationMeta(
     'homePhone',
   );
@@ -1597,6 +1639,10 @@ class $AgentsTable extends Agents with TableInfo<$AgentsTable, Agent> {
     fullName,
     relationship,
     address,
+    address2,
+    city,
+    state,
+    zip,
     homePhone,
     workPhone,
     cellPhone,
@@ -1656,6 +1702,30 @@ class $AgentsTable extends Agents with TableInfo<$AgentsTable, Agent> {
       context.handle(
         _addressMeta,
         address.isAcceptableOrUnknown(data['address']!, _addressMeta),
+      );
+    }
+    if (data.containsKey('address2')) {
+      context.handle(
+        _address2Meta,
+        address2.isAcceptableOrUnknown(data['address2']!, _address2Meta),
+      );
+    }
+    if (data.containsKey('city')) {
+      context.handle(
+        _cityMeta,
+        city.isAcceptableOrUnknown(data['city']!, _cityMeta),
+      );
+    }
+    if (data.containsKey('state')) {
+      context.handle(
+        _stateMeta,
+        state.isAcceptableOrUnknown(data['state']!, _stateMeta),
+      );
+    }
+    if (data.containsKey('zip')) {
+      context.handle(
+        _zipMeta,
+        zip.isAcceptableOrUnknown(data['zip']!, _zipMeta),
       );
     }
     if (data.containsKey('home_phone')) {
@@ -1724,6 +1794,22 @@ class $AgentsTable extends Agents with TableInfo<$AgentsTable, Agent> {
         DriftSqlType.string,
         data['${effectivePrefix}address'],
       )!,
+      address2: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}address2'],
+      )!,
+      city: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}city'],
+      )!,
+      state: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}state'],
+      )!,
+      zip: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}zip'],
+      )!,
       homePhone: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}home_phone'],
@@ -1760,6 +1846,10 @@ class Agent extends DataClass implements Insertable<Agent> {
   final String fullName;
   final String relationship;
   final String address;
+  final String address2;
+  final String city;
+  final String state;
+  final String zip;
   final String homePhone;
   final String workPhone;
   final String cellPhone;
@@ -1772,6 +1862,10 @@ class Agent extends DataClass implements Insertable<Agent> {
     required this.fullName,
     required this.relationship,
     required this.address,
+    required this.address2,
+    required this.city,
+    required this.state,
+    required this.zip,
     required this.homePhone,
     required this.workPhone,
     required this.cellPhone,
@@ -1787,6 +1881,10 @@ class Agent extends DataClass implements Insertable<Agent> {
     map['full_name'] = Variable<String>(fullName);
     map['relationship'] = Variable<String>(relationship);
     map['address'] = Variable<String>(address);
+    map['address2'] = Variable<String>(address2);
+    map['city'] = Variable<String>(city);
+    map['state'] = Variable<String>(state);
+    map['zip'] = Variable<String>(zip);
     map['home_phone'] = Variable<String>(homePhone);
     map['work_phone'] = Variable<String>(workPhone);
     map['cell_phone'] = Variable<String>(cellPhone);
@@ -1805,6 +1903,10 @@ class Agent extends DataClass implements Insertable<Agent> {
       fullName: Value(fullName),
       relationship: Value(relationship),
       address: Value(address),
+      address2: Value(address2),
+      city: Value(city),
+      state: Value(state),
+      zip: Value(zip),
       homePhone: Value(homePhone),
       workPhone: Value(workPhone),
       cellPhone: Value(cellPhone),
@@ -1827,6 +1929,10 @@ class Agent extends DataClass implements Insertable<Agent> {
       fullName: serializer.fromJson<String>(json['fullName']),
       relationship: serializer.fromJson<String>(json['relationship']),
       address: serializer.fromJson<String>(json['address']),
+      address2: serializer.fromJson<String>(json['address2']),
+      city: serializer.fromJson<String>(json['city']),
+      state: serializer.fromJson<String>(json['state']),
+      zip: serializer.fromJson<String>(json['zip']),
       homePhone: serializer.fromJson<String>(json['homePhone']),
       workPhone: serializer.fromJson<String>(json['workPhone']),
       cellPhone: serializer.fromJson<String>(json['cellPhone']),
@@ -1844,6 +1950,10 @@ class Agent extends DataClass implements Insertable<Agent> {
       'fullName': serializer.toJson<String>(fullName),
       'relationship': serializer.toJson<String>(relationship),
       'address': serializer.toJson<String>(address),
+      'address2': serializer.toJson<String>(address2),
+      'city': serializer.toJson<String>(city),
+      'state': serializer.toJson<String>(state),
+      'zip': serializer.toJson<String>(zip),
       'homePhone': serializer.toJson<String>(homePhone),
       'workPhone': serializer.toJson<String>(workPhone),
       'cellPhone': serializer.toJson<String>(cellPhone),
@@ -1859,6 +1969,10 @@ class Agent extends DataClass implements Insertable<Agent> {
     String? fullName,
     String? relationship,
     String? address,
+    String? address2,
+    String? city,
+    String? state,
+    String? zip,
     String? homePhone,
     String? workPhone,
     String? cellPhone,
@@ -1871,6 +1985,10 @@ class Agent extends DataClass implements Insertable<Agent> {
     fullName: fullName ?? this.fullName,
     relationship: relationship ?? this.relationship,
     address: address ?? this.address,
+    address2: address2 ?? this.address2,
+    city: city ?? this.city,
+    state: state ?? this.state,
+    zip: zip ?? this.zip,
     homePhone: homePhone ?? this.homePhone,
     workPhone: workPhone ?? this.workPhone,
     cellPhone: cellPhone ?? this.cellPhone,
@@ -1889,6 +2007,10 @@ class Agent extends DataClass implements Insertable<Agent> {
           ? data.relationship.value
           : this.relationship,
       address: data.address.present ? data.address.value : this.address,
+      address2: data.address2.present ? data.address2.value : this.address2,
+      city: data.city.present ? data.city.value : this.city,
+      state: data.state.present ? data.state.value : this.state,
+      zip: data.zip.present ? data.zip.value : this.zip,
       homePhone: data.homePhone.present ? data.homePhone.value : this.homePhone,
       workPhone: data.workPhone.present ? data.workPhone.value : this.workPhone,
       cellPhone: data.cellPhone.present ? data.cellPhone.value : this.cellPhone,
@@ -1910,6 +2032,10 @@ class Agent extends DataClass implements Insertable<Agent> {
           ..write('fullName: $fullName, ')
           ..write('relationship: $relationship, ')
           ..write('address: $address, ')
+          ..write('address2: $address2, ')
+          ..write('city: $city, ')
+          ..write('state: $state, ')
+          ..write('zip: $zip, ')
           ..write('homePhone: $homePhone, ')
           ..write('workPhone: $workPhone, ')
           ..write('cellPhone: $cellPhone, ')
@@ -1927,6 +2053,10 @@ class Agent extends DataClass implements Insertable<Agent> {
     fullName,
     relationship,
     address,
+    address2,
+    city,
+    state,
+    zip,
     homePhone,
     workPhone,
     cellPhone,
@@ -1943,6 +2073,10 @@ class Agent extends DataClass implements Insertable<Agent> {
           other.fullName == this.fullName &&
           other.relationship == this.relationship &&
           other.address == this.address &&
+          other.address2 == this.address2 &&
+          other.city == this.city &&
+          other.state == this.state &&
+          other.zip == this.zip &&
           other.homePhone == this.homePhone &&
           other.workPhone == this.workPhone &&
           other.cellPhone == this.cellPhone &&
@@ -1957,6 +2091,10 @@ class AgentsCompanion extends UpdateCompanion<Agent> {
   final Value<String> fullName;
   final Value<String> relationship;
   final Value<String> address;
+  final Value<String> address2;
+  final Value<String> city;
+  final Value<String> state;
+  final Value<String> zip;
   final Value<String> homePhone;
   final Value<String> workPhone;
   final Value<String> cellPhone;
@@ -1969,6 +2107,10 @@ class AgentsCompanion extends UpdateCompanion<Agent> {
     this.fullName = const Value.absent(),
     this.relationship = const Value.absent(),
     this.address = const Value.absent(),
+    this.address2 = const Value.absent(),
+    this.city = const Value.absent(),
+    this.state = const Value.absent(),
+    this.zip = const Value.absent(),
     this.homePhone = const Value.absent(),
     this.workPhone = const Value.absent(),
     this.cellPhone = const Value.absent(),
@@ -1982,6 +2124,10 @@ class AgentsCompanion extends UpdateCompanion<Agent> {
     this.fullName = const Value.absent(),
     this.relationship = const Value.absent(),
     this.address = const Value.absent(),
+    this.address2 = const Value.absent(),
+    this.city = const Value.absent(),
+    this.state = const Value.absent(),
+    this.zip = const Value.absent(),
     this.homePhone = const Value.absent(),
     this.workPhone = const Value.absent(),
     this.cellPhone = const Value.absent(),
@@ -1996,6 +2142,10 @@ class AgentsCompanion extends UpdateCompanion<Agent> {
     Expression<String>? fullName,
     Expression<String>? relationship,
     Expression<String>? address,
+    Expression<String>? address2,
+    Expression<String>? city,
+    Expression<String>? state,
+    Expression<String>? zip,
     Expression<String>? homePhone,
     Expression<String>? workPhone,
     Expression<String>? cellPhone,
@@ -2009,6 +2159,10 @@ class AgentsCompanion extends UpdateCompanion<Agent> {
       if (fullName != null) 'full_name': fullName,
       if (relationship != null) 'relationship': relationship,
       if (address != null) 'address': address,
+      if (address2 != null) 'address2': address2,
+      if (city != null) 'city': city,
+      if (state != null) 'state': state,
+      if (zip != null) 'zip': zip,
       if (homePhone != null) 'home_phone': homePhone,
       if (workPhone != null) 'work_phone': workPhone,
       if (cellPhone != null) 'cell_phone': cellPhone,
@@ -2024,6 +2178,10 @@ class AgentsCompanion extends UpdateCompanion<Agent> {
     Value<String>? fullName,
     Value<String>? relationship,
     Value<String>? address,
+    Value<String>? address2,
+    Value<String>? city,
+    Value<String>? state,
+    Value<String>? zip,
     Value<String>? homePhone,
     Value<String>? workPhone,
     Value<String>? cellPhone,
@@ -2037,6 +2195,10 @@ class AgentsCompanion extends UpdateCompanion<Agent> {
       fullName: fullName ?? this.fullName,
       relationship: relationship ?? this.relationship,
       address: address ?? this.address,
+      address2: address2 ?? this.address2,
+      city: city ?? this.city,
+      state: state ?? this.state,
+      zip: zip ?? this.zip,
       homePhone: homePhone ?? this.homePhone,
       workPhone: workPhone ?? this.workPhone,
       cellPhone: cellPhone ?? this.cellPhone,
@@ -2066,6 +2228,18 @@ class AgentsCompanion extends UpdateCompanion<Agent> {
     if (address.present) {
       map['address'] = Variable<String>(address.value);
     }
+    if (address2.present) {
+      map['address2'] = Variable<String>(address2.value);
+    }
+    if (city.present) {
+      map['city'] = Variable<String>(city.value);
+    }
+    if (state.present) {
+      map['state'] = Variable<String>(state.value);
+    }
+    if (zip.present) {
+      map['zip'] = Variable<String>(zip.value);
+    }
     if (homePhone.present) {
       map['home_phone'] = Variable<String>(homePhone.value);
     }
@@ -2093,6 +2267,10 @@ class AgentsCompanion extends UpdateCompanion<Agent> {
           ..write('fullName: $fullName, ')
           ..write('relationship: $relationship, ')
           ..write('address: $address, ')
+          ..write('address2: $address2, ')
+          ..write('city: $city, ')
+          ..write('state: $state, ')
+          ..write('zip: $zip, ')
           ..write('homePhone: $homePhone, ')
           ..write('workPhone: $workPhone, ')
           ..write('cellPhone: $cellPhone, ')
@@ -4417,6 +4595,48 @@ class $WitnessesTable extends Witnesses
     requiredDuringInsert: false,
     defaultValue: const Constant(''),
   );
+  static const VerificationMeta _address2Meta = const VerificationMeta(
+    'address2',
+  );
+  @override
+  late final GeneratedColumn<String> address2 = GeneratedColumn<String>(
+    'address2',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  static const VerificationMeta _cityMeta = const VerificationMeta('city');
+  @override
+  late final GeneratedColumn<String> city = GeneratedColumn<String>(
+    'city',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  static const VerificationMeta _stateMeta = const VerificationMeta('state');
+  @override
+  late final GeneratedColumn<String> state = GeneratedColumn<String>(
+    'state',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  static const VerificationMeta _zipMeta = const VerificationMeta('zip');
+  @override
+  late final GeneratedColumn<String> zip = GeneratedColumn<String>(
+    'zip',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
   static const VerificationMeta _phoneMeta = const VerificationMeta('phone');
   @override
   late final GeneratedColumn<String> phone = GeneratedColumn<String>(
@@ -4456,6 +4676,10 @@ class $WitnessesTable extends Witnesses
     witnessNumber,
     fullName,
     address,
+    address2,
+    city,
+    state,
+    zip,
     phone,
     signatureBase64,
     signatureDate,
@@ -4507,6 +4731,30 @@ class $WitnessesTable extends Witnesses
       context.handle(
         _addressMeta,
         address.isAcceptableOrUnknown(data['address']!, _addressMeta),
+      );
+    }
+    if (data.containsKey('address2')) {
+      context.handle(
+        _address2Meta,
+        address2.isAcceptableOrUnknown(data['address2']!, _address2Meta),
+      );
+    }
+    if (data.containsKey('city')) {
+      context.handle(
+        _cityMeta,
+        city.isAcceptableOrUnknown(data['city']!, _cityMeta),
+      );
+    }
+    if (data.containsKey('state')) {
+      context.handle(
+        _stateMeta,
+        state.isAcceptableOrUnknown(data['state']!, _stateMeta),
+      );
+    }
+    if (data.containsKey('zip')) {
+      context.handle(
+        _zipMeta,
+        zip.isAcceptableOrUnknown(data['zip']!, _zipMeta),
       );
     }
     if (data.containsKey('phone')) {
@@ -4562,6 +4810,22 @@ class $WitnessesTable extends Witnesses
         DriftSqlType.string,
         data['${effectivePrefix}address'],
       )!,
+      address2: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}address2'],
+      )!,
+      city: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}city'],
+      )!,
+      state: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}state'],
+      )!,
+      zip: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}zip'],
+      )!,
       phone: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}phone'],
@@ -4589,6 +4853,10 @@ class WitnessesData extends DataClass implements Insertable<WitnessesData> {
   final int witnessNumber;
   final String fullName;
   final String address;
+  final String address2;
+  final String city;
+  final String state;
+  final String zip;
   final String phone;
   final String? signatureBase64;
   final int? signatureDate;
@@ -4598,6 +4866,10 @@ class WitnessesData extends DataClass implements Insertable<WitnessesData> {
     required this.witnessNumber,
     required this.fullName,
     required this.address,
+    required this.address2,
+    required this.city,
+    required this.state,
+    required this.zip,
     required this.phone,
     this.signatureBase64,
     this.signatureDate,
@@ -4610,6 +4882,10 @@ class WitnessesData extends DataClass implements Insertable<WitnessesData> {
     map['witness_number'] = Variable<int>(witnessNumber);
     map['full_name'] = Variable<String>(fullName);
     map['address'] = Variable<String>(address);
+    map['address2'] = Variable<String>(address2);
+    map['city'] = Variable<String>(city);
+    map['state'] = Variable<String>(state);
+    map['zip'] = Variable<String>(zip);
     map['phone'] = Variable<String>(phone);
     if (!nullToAbsent || signatureBase64 != null) {
       map['signature_base64'] = Variable<String>(signatureBase64);
@@ -4627,6 +4903,10 @@ class WitnessesData extends DataClass implements Insertable<WitnessesData> {
       witnessNumber: Value(witnessNumber),
       fullName: Value(fullName),
       address: Value(address),
+      address2: Value(address2),
+      city: Value(city),
+      state: Value(state),
+      zip: Value(zip),
       phone: Value(phone),
       signatureBase64: signatureBase64 == null && nullToAbsent
           ? const Value.absent()
@@ -4648,6 +4928,10 @@ class WitnessesData extends DataClass implements Insertable<WitnessesData> {
       witnessNumber: serializer.fromJson<int>(json['witnessNumber']),
       fullName: serializer.fromJson<String>(json['fullName']),
       address: serializer.fromJson<String>(json['address']),
+      address2: serializer.fromJson<String>(json['address2']),
+      city: serializer.fromJson<String>(json['city']),
+      state: serializer.fromJson<String>(json['state']),
+      zip: serializer.fromJson<String>(json['zip']),
       phone: serializer.fromJson<String>(json['phone']),
       signatureBase64: serializer.fromJson<String?>(json['signatureBase64']),
       signatureDate: serializer.fromJson<int?>(json['signatureDate']),
@@ -4662,6 +4946,10 @@ class WitnessesData extends DataClass implements Insertable<WitnessesData> {
       'witnessNumber': serializer.toJson<int>(witnessNumber),
       'fullName': serializer.toJson<String>(fullName),
       'address': serializer.toJson<String>(address),
+      'address2': serializer.toJson<String>(address2),
+      'city': serializer.toJson<String>(city),
+      'state': serializer.toJson<String>(state),
+      'zip': serializer.toJson<String>(zip),
       'phone': serializer.toJson<String>(phone),
       'signatureBase64': serializer.toJson<String?>(signatureBase64),
       'signatureDate': serializer.toJson<int?>(signatureDate),
@@ -4674,6 +4962,10 @@ class WitnessesData extends DataClass implements Insertable<WitnessesData> {
     int? witnessNumber,
     String? fullName,
     String? address,
+    String? address2,
+    String? city,
+    String? state,
+    String? zip,
     String? phone,
     Value<String?> signatureBase64 = const Value.absent(),
     Value<int?> signatureDate = const Value.absent(),
@@ -4683,6 +4975,10 @@ class WitnessesData extends DataClass implements Insertable<WitnessesData> {
     witnessNumber: witnessNumber ?? this.witnessNumber,
     fullName: fullName ?? this.fullName,
     address: address ?? this.address,
+    address2: address2 ?? this.address2,
+    city: city ?? this.city,
+    state: state ?? this.state,
+    zip: zip ?? this.zip,
     phone: phone ?? this.phone,
     signatureBase64: signatureBase64.present
         ? signatureBase64.value
@@ -4702,6 +4998,10 @@ class WitnessesData extends DataClass implements Insertable<WitnessesData> {
           : this.witnessNumber,
       fullName: data.fullName.present ? data.fullName.value : this.fullName,
       address: data.address.present ? data.address.value : this.address,
+      address2: data.address2.present ? data.address2.value : this.address2,
+      city: data.city.present ? data.city.value : this.city,
+      state: data.state.present ? data.state.value : this.state,
+      zip: data.zip.present ? data.zip.value : this.zip,
       phone: data.phone.present ? data.phone.value : this.phone,
       signatureBase64: data.signatureBase64.present
           ? data.signatureBase64.value
@@ -4720,6 +5020,10 @@ class WitnessesData extends DataClass implements Insertable<WitnessesData> {
           ..write('witnessNumber: $witnessNumber, ')
           ..write('fullName: $fullName, ')
           ..write('address: $address, ')
+          ..write('address2: $address2, ')
+          ..write('city: $city, ')
+          ..write('state: $state, ')
+          ..write('zip: $zip, ')
           ..write('phone: $phone, ')
           ..write('signatureBase64: $signatureBase64, ')
           ..write('signatureDate: $signatureDate')
@@ -4734,6 +5038,10 @@ class WitnessesData extends DataClass implements Insertable<WitnessesData> {
     witnessNumber,
     fullName,
     address,
+    address2,
+    city,
+    state,
+    zip,
     phone,
     signatureBase64,
     signatureDate,
@@ -4747,6 +5055,10 @@ class WitnessesData extends DataClass implements Insertable<WitnessesData> {
           other.witnessNumber == this.witnessNumber &&
           other.fullName == this.fullName &&
           other.address == this.address &&
+          other.address2 == this.address2 &&
+          other.city == this.city &&
+          other.state == this.state &&
+          other.zip == this.zip &&
           other.phone == this.phone &&
           other.signatureBase64 == this.signatureBase64 &&
           other.signatureDate == this.signatureDate);
@@ -4758,6 +5070,10 @@ class WitnessesCompanion extends UpdateCompanion<WitnessesData> {
   final Value<int> witnessNumber;
   final Value<String> fullName;
   final Value<String> address;
+  final Value<String> address2;
+  final Value<String> city;
+  final Value<String> state;
+  final Value<String> zip;
   final Value<String> phone;
   final Value<String?> signatureBase64;
   final Value<int?> signatureDate;
@@ -4767,6 +5083,10 @@ class WitnessesCompanion extends UpdateCompanion<WitnessesData> {
     this.witnessNumber = const Value.absent(),
     this.fullName = const Value.absent(),
     this.address = const Value.absent(),
+    this.address2 = const Value.absent(),
+    this.city = const Value.absent(),
+    this.state = const Value.absent(),
+    this.zip = const Value.absent(),
     this.phone = const Value.absent(),
     this.signatureBase64 = const Value.absent(),
     this.signatureDate = const Value.absent(),
@@ -4777,6 +5097,10 @@ class WitnessesCompanion extends UpdateCompanion<WitnessesData> {
     required int witnessNumber,
     this.fullName = const Value.absent(),
     this.address = const Value.absent(),
+    this.address2 = const Value.absent(),
+    this.city = const Value.absent(),
+    this.state = const Value.absent(),
+    this.zip = const Value.absent(),
     this.phone = const Value.absent(),
     this.signatureBase64 = const Value.absent(),
     this.signatureDate = const Value.absent(),
@@ -4788,6 +5112,10 @@ class WitnessesCompanion extends UpdateCompanion<WitnessesData> {
     Expression<int>? witnessNumber,
     Expression<String>? fullName,
     Expression<String>? address,
+    Expression<String>? address2,
+    Expression<String>? city,
+    Expression<String>? state,
+    Expression<String>? zip,
     Expression<String>? phone,
     Expression<String>? signatureBase64,
     Expression<int>? signatureDate,
@@ -4798,6 +5126,10 @@ class WitnessesCompanion extends UpdateCompanion<WitnessesData> {
       if (witnessNumber != null) 'witness_number': witnessNumber,
       if (fullName != null) 'full_name': fullName,
       if (address != null) 'address': address,
+      if (address2 != null) 'address2': address2,
+      if (city != null) 'city': city,
+      if (state != null) 'state': state,
+      if (zip != null) 'zip': zip,
       if (phone != null) 'phone': phone,
       if (signatureBase64 != null) 'signature_base64': signatureBase64,
       if (signatureDate != null) 'signature_date': signatureDate,
@@ -4810,6 +5142,10 @@ class WitnessesCompanion extends UpdateCompanion<WitnessesData> {
     Value<int>? witnessNumber,
     Value<String>? fullName,
     Value<String>? address,
+    Value<String>? address2,
+    Value<String>? city,
+    Value<String>? state,
+    Value<String>? zip,
     Value<String>? phone,
     Value<String?>? signatureBase64,
     Value<int?>? signatureDate,
@@ -4820,6 +5156,10 @@ class WitnessesCompanion extends UpdateCompanion<WitnessesData> {
       witnessNumber: witnessNumber ?? this.witnessNumber,
       fullName: fullName ?? this.fullName,
       address: address ?? this.address,
+      address2: address2 ?? this.address2,
+      city: city ?? this.city,
+      state: state ?? this.state,
+      zip: zip ?? this.zip,
       phone: phone ?? this.phone,
       signatureBase64: signatureBase64 ?? this.signatureBase64,
       signatureDate: signatureDate ?? this.signatureDate,
@@ -4844,6 +5184,18 @@ class WitnessesCompanion extends UpdateCompanion<WitnessesData> {
     if (address.present) {
       map['address'] = Variable<String>(address.value);
     }
+    if (address2.present) {
+      map['address2'] = Variable<String>(address2.value);
+    }
+    if (city.present) {
+      map['city'] = Variable<String>(city.value);
+    }
+    if (state.present) {
+      map['state'] = Variable<String>(state.value);
+    }
+    if (zip.present) {
+      map['zip'] = Variable<String>(zip.value);
+    }
     if (phone.present) {
       map['phone'] = Variable<String>(phone.value);
     }
@@ -4864,6 +5216,10 @@ class WitnessesCompanion extends UpdateCompanion<WitnessesData> {
           ..write('witnessNumber: $witnessNumber, ')
           ..write('fullName: $fullName, ')
           ..write('address: $address, ')
+          ..write('address2: $address2, ')
+          ..write('city: $city, ')
+          ..write('state: $state, ')
+          ..write('zip: $zip, ')
           ..write('phone: $phone, ')
           ..write('signatureBase64: $signatureBase64, ')
           ..write('signatureDate: $signatureDate')
@@ -4923,6 +5279,54 @@ class $GuardianNominationsTable extends GuardianNominations
   @override
   late final GeneratedColumn<String> nomineeAddress = GeneratedColumn<String>(
     'nominee_address',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  static const VerificationMeta _nomineeAddress2Meta = const VerificationMeta(
+    'nomineeAddress2',
+  );
+  @override
+  late final GeneratedColumn<String> nomineeAddress2 = GeneratedColumn<String>(
+    'nominee_address2',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  static const VerificationMeta _nomineeCityMeta = const VerificationMeta(
+    'nomineeCity',
+  );
+  @override
+  late final GeneratedColumn<String> nomineeCity = GeneratedColumn<String>(
+    'nominee_city',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  static const VerificationMeta _nomineeStateMeta = const VerificationMeta(
+    'nomineeState',
+  );
+  @override
+  late final GeneratedColumn<String> nomineeState = GeneratedColumn<String>(
+    'nominee_state',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  static const VerificationMeta _nomineeZipMeta = const VerificationMeta(
+    'nomineeZip',
+  );
+  @override
+  late final GeneratedColumn<String> nomineeZip = GeneratedColumn<String>(
+    'nominee_zip',
     aliasedName,
     false,
     type: DriftSqlType.string,
@@ -5052,6 +5456,10 @@ class $GuardianNominationsTable extends GuardianNominations
     directiveId,
     nomineeFullName,
     nomineeAddress,
+    nomineeAddress2,
+    nomineeCity,
+    nomineeState,
+    nomineeZip,
     nomineePhone,
     nomineeRelationship,
     guardianCanRevoke,
@@ -5104,6 +5512,39 @@ class $GuardianNominationsTable extends GuardianNominations
           data['nominee_address']!,
           _nomineeAddressMeta,
         ),
+      );
+    }
+    if (data.containsKey('nominee_address2')) {
+      context.handle(
+        _nomineeAddress2Meta,
+        nomineeAddress2.isAcceptableOrUnknown(
+          data['nominee_address2']!,
+          _nomineeAddress2Meta,
+        ),
+      );
+    }
+    if (data.containsKey('nominee_city')) {
+      context.handle(
+        _nomineeCityMeta,
+        nomineeCity.isAcceptableOrUnknown(
+          data['nominee_city']!,
+          _nomineeCityMeta,
+        ),
+      );
+    }
+    if (data.containsKey('nominee_state')) {
+      context.handle(
+        _nomineeStateMeta,
+        nomineeState.isAcceptableOrUnknown(
+          data['nominee_state']!,
+          _nomineeStateMeta,
+        ),
+      );
+    }
+    if (data.containsKey('nominee_zip')) {
+      context.handle(
+        _nomineeZipMeta,
+        nomineeZip.isAcceptableOrUnknown(data['nominee_zip']!, _nomineeZipMeta),
       );
     }
     if (data.containsKey('nominee_phone')) {
@@ -5212,6 +5653,22 @@ class $GuardianNominationsTable extends GuardianNominations
         DriftSqlType.string,
         data['${effectivePrefix}nominee_address'],
       )!,
+      nomineeAddress2: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}nominee_address2'],
+      )!,
+      nomineeCity: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}nominee_city'],
+      )!,
+      nomineeState: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}nominee_state'],
+      )!,
+      nomineeZip: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}nominee_zip'],
+      )!,
       nomineePhone: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}nominee_phone'],
@@ -5263,6 +5720,10 @@ class GuardianNomination extends DataClass
   final int directiveId;
   final String nomineeFullName;
   final String nomineeAddress;
+  final String nomineeAddress2;
+  final String nomineeCity;
+  final String nomineeState;
+  final String nomineeZip;
   final String nomineePhone;
   final String nomineeRelationship;
   final bool guardianCanRevoke;
@@ -5277,6 +5738,10 @@ class GuardianNomination extends DataClass
     required this.directiveId,
     required this.nomineeFullName,
     required this.nomineeAddress,
+    required this.nomineeAddress2,
+    required this.nomineeCity,
+    required this.nomineeState,
+    required this.nomineeZip,
     required this.nomineePhone,
     required this.nomineeRelationship,
     required this.guardianCanRevoke,
@@ -5294,6 +5759,10 @@ class GuardianNomination extends DataClass
     map['directive_id'] = Variable<int>(directiveId);
     map['nominee_full_name'] = Variable<String>(nomineeFullName);
     map['nominee_address'] = Variable<String>(nomineeAddress);
+    map['nominee_address2'] = Variable<String>(nomineeAddress2);
+    map['nominee_city'] = Variable<String>(nomineeCity);
+    map['nominee_state'] = Variable<String>(nomineeState);
+    map['nominee_zip'] = Variable<String>(nomineeZip);
     map['nominee_phone'] = Variable<String>(nomineePhone);
     map['nominee_relationship'] = Variable<String>(nomineeRelationship);
     map['guardian_can_revoke'] = Variable<bool>(guardianCanRevoke);
@@ -5318,6 +5787,10 @@ class GuardianNomination extends DataClass
       directiveId: Value(directiveId),
       nomineeFullName: Value(nomineeFullName),
       nomineeAddress: Value(nomineeAddress),
+      nomineeAddress2: Value(nomineeAddress2),
+      nomineeCity: Value(nomineeCity),
+      nomineeState: Value(nomineeState),
+      nomineeZip: Value(nomineeZip),
       nomineePhone: Value(nomineePhone),
       nomineeRelationship: Value(nomineeRelationship),
       guardianCanRevoke: Value(guardianCanRevoke),
@@ -5340,6 +5813,10 @@ class GuardianNomination extends DataClass
       directiveId: serializer.fromJson<int>(json['directiveId']),
       nomineeFullName: serializer.fromJson<String>(json['nomineeFullName']),
       nomineeAddress: serializer.fromJson<String>(json['nomineeAddress']),
+      nomineeAddress2: serializer.fromJson<String>(json['nomineeAddress2']),
+      nomineeCity: serializer.fromJson<String>(json['nomineeCity']),
+      nomineeState: serializer.fromJson<String>(json['nomineeState']),
+      nomineeZip: serializer.fromJson<String>(json['nomineeZip']),
       nomineePhone: serializer.fromJson<String>(json['nomineePhone']),
       nomineeRelationship: serializer.fromJson<String>(
         json['nomineeRelationship'],
@@ -5371,6 +5848,10 @@ class GuardianNomination extends DataClass
       'directiveId': serializer.toJson<int>(directiveId),
       'nomineeFullName': serializer.toJson<String>(nomineeFullName),
       'nomineeAddress': serializer.toJson<String>(nomineeAddress),
+      'nomineeAddress2': serializer.toJson<String>(nomineeAddress2),
+      'nomineeCity': serializer.toJson<String>(nomineeCity),
+      'nomineeState': serializer.toJson<String>(nomineeState),
+      'nomineeZip': serializer.toJson<String>(nomineeZip),
       'nomineePhone': serializer.toJson<String>(nomineePhone),
       'nomineeRelationship': serializer.toJson<String>(nomineeRelationship),
       'guardianCanRevoke': serializer.toJson<bool>(guardianCanRevoke),
@@ -5394,6 +5875,10 @@ class GuardianNomination extends DataClass
     int? directiveId,
     String? nomineeFullName,
     String? nomineeAddress,
+    String? nomineeAddress2,
+    String? nomineeCity,
+    String? nomineeState,
+    String? nomineeZip,
     String? nomineePhone,
     String? nomineeRelationship,
     bool? guardianCanRevoke,
@@ -5408,6 +5893,10 @@ class GuardianNomination extends DataClass
     directiveId: directiveId ?? this.directiveId,
     nomineeFullName: nomineeFullName ?? this.nomineeFullName,
     nomineeAddress: nomineeAddress ?? this.nomineeAddress,
+    nomineeAddress2: nomineeAddress2 ?? this.nomineeAddress2,
+    nomineeCity: nomineeCity ?? this.nomineeCity,
+    nomineeState: nomineeState ?? this.nomineeState,
+    nomineeZip: nomineeZip ?? this.nomineeZip,
     nomineePhone: nomineePhone ?? this.nomineePhone,
     nomineeRelationship: nomineeRelationship ?? this.nomineeRelationship,
     guardianCanRevoke: guardianCanRevoke ?? this.guardianCanRevoke,
@@ -5434,6 +5923,18 @@ class GuardianNomination extends DataClass
       nomineeAddress: data.nomineeAddress.present
           ? data.nomineeAddress.value
           : this.nomineeAddress,
+      nomineeAddress2: data.nomineeAddress2.present
+          ? data.nomineeAddress2.value
+          : this.nomineeAddress2,
+      nomineeCity: data.nomineeCity.present
+          ? data.nomineeCity.value
+          : this.nomineeCity,
+      nomineeState: data.nomineeState.present
+          ? data.nomineeState.value
+          : this.nomineeState,
+      nomineeZip: data.nomineeZip.present
+          ? data.nomineeZip.value
+          : this.nomineeZip,
       nomineePhone: data.nomineePhone.present
           ? data.nomineePhone.value
           : this.nomineePhone,
@@ -5471,6 +5972,10 @@ class GuardianNomination extends DataClass
           ..write('directiveId: $directiveId, ')
           ..write('nomineeFullName: $nomineeFullName, ')
           ..write('nomineeAddress: $nomineeAddress, ')
+          ..write('nomineeAddress2: $nomineeAddress2, ')
+          ..write('nomineeCity: $nomineeCity, ')
+          ..write('nomineeState: $nomineeState, ')
+          ..write('nomineeZip: $nomineeZip, ')
           ..write('nomineePhone: $nomineePhone, ')
           ..write('nomineeRelationship: $nomineeRelationship, ')
           ..write('guardianCanRevoke: $guardianCanRevoke, ')
@@ -5492,6 +5997,10 @@ class GuardianNomination extends DataClass
     directiveId,
     nomineeFullName,
     nomineeAddress,
+    nomineeAddress2,
+    nomineeCity,
+    nomineeState,
+    nomineeZip,
     nomineePhone,
     nomineeRelationship,
     guardianCanRevoke,
@@ -5510,6 +6019,10 @@ class GuardianNomination extends DataClass
           other.directiveId == this.directiveId &&
           other.nomineeFullName == this.nomineeFullName &&
           other.nomineeAddress == this.nomineeAddress &&
+          other.nomineeAddress2 == this.nomineeAddress2 &&
+          other.nomineeCity == this.nomineeCity &&
+          other.nomineeState == this.nomineeState &&
+          other.nomineeZip == this.nomineeZip &&
           other.nomineePhone == this.nomineePhone &&
           other.nomineeRelationship == this.nomineeRelationship &&
           other.guardianCanRevoke == this.guardianCanRevoke &&
@@ -5527,6 +6040,10 @@ class GuardianNominationsCompanion extends UpdateCompanion<GuardianNomination> {
   final Value<int> directiveId;
   final Value<String> nomineeFullName;
   final Value<String> nomineeAddress;
+  final Value<String> nomineeAddress2;
+  final Value<String> nomineeCity;
+  final Value<String> nomineeState;
+  final Value<String> nomineeZip;
   final Value<String> nomineePhone;
   final Value<String> nomineeRelationship;
   final Value<bool> guardianCanRevoke;
@@ -5541,6 +6058,10 @@ class GuardianNominationsCompanion extends UpdateCompanion<GuardianNomination> {
     this.directiveId = const Value.absent(),
     this.nomineeFullName = const Value.absent(),
     this.nomineeAddress = const Value.absent(),
+    this.nomineeAddress2 = const Value.absent(),
+    this.nomineeCity = const Value.absent(),
+    this.nomineeState = const Value.absent(),
+    this.nomineeZip = const Value.absent(),
     this.nomineePhone = const Value.absent(),
     this.nomineeRelationship = const Value.absent(),
     this.guardianCanRevoke = const Value.absent(),
@@ -5556,6 +6077,10 @@ class GuardianNominationsCompanion extends UpdateCompanion<GuardianNomination> {
     required int directiveId,
     this.nomineeFullName = const Value.absent(),
     this.nomineeAddress = const Value.absent(),
+    this.nomineeAddress2 = const Value.absent(),
+    this.nomineeCity = const Value.absent(),
+    this.nomineeState = const Value.absent(),
+    this.nomineeZip = const Value.absent(),
     this.nomineePhone = const Value.absent(),
     this.nomineeRelationship = const Value.absent(),
     this.guardianCanRevoke = const Value.absent(),
@@ -5571,6 +6096,10 @@ class GuardianNominationsCompanion extends UpdateCompanion<GuardianNomination> {
     Expression<int>? directiveId,
     Expression<String>? nomineeFullName,
     Expression<String>? nomineeAddress,
+    Expression<String>? nomineeAddress2,
+    Expression<String>? nomineeCity,
+    Expression<String>? nomineeState,
+    Expression<String>? nomineeZip,
     Expression<String>? nomineePhone,
     Expression<String>? nomineeRelationship,
     Expression<bool>? guardianCanRevoke,
@@ -5586,6 +6115,10 @@ class GuardianNominationsCompanion extends UpdateCompanion<GuardianNomination> {
       if (directiveId != null) 'directive_id': directiveId,
       if (nomineeFullName != null) 'nominee_full_name': nomineeFullName,
       if (nomineeAddress != null) 'nominee_address': nomineeAddress,
+      if (nomineeAddress2 != null) 'nominee_address2': nomineeAddress2,
+      if (nomineeCity != null) 'nominee_city': nomineeCity,
+      if (nomineeState != null) 'nominee_state': nomineeState,
+      if (nomineeZip != null) 'nominee_zip': nomineeZip,
       if (nomineePhone != null) 'nominee_phone': nomineePhone,
       if (nomineeRelationship != null)
         'nominee_relationship': nomineeRelationship,
@@ -5609,6 +6142,10 @@ class GuardianNominationsCompanion extends UpdateCompanion<GuardianNomination> {
     Value<int>? directiveId,
     Value<String>? nomineeFullName,
     Value<String>? nomineeAddress,
+    Value<String>? nomineeAddress2,
+    Value<String>? nomineeCity,
+    Value<String>? nomineeState,
+    Value<String>? nomineeZip,
     Value<String>? nomineePhone,
     Value<String>? nomineeRelationship,
     Value<bool>? guardianCanRevoke,
@@ -5624,6 +6161,10 @@ class GuardianNominationsCompanion extends UpdateCompanion<GuardianNomination> {
       directiveId: directiveId ?? this.directiveId,
       nomineeFullName: nomineeFullName ?? this.nomineeFullName,
       nomineeAddress: nomineeAddress ?? this.nomineeAddress,
+      nomineeAddress2: nomineeAddress2 ?? this.nomineeAddress2,
+      nomineeCity: nomineeCity ?? this.nomineeCity,
+      nomineeState: nomineeState ?? this.nomineeState,
+      nomineeZip: nomineeZip ?? this.nomineeZip,
       nomineePhone: nomineePhone ?? this.nomineePhone,
       nomineeRelationship: nomineeRelationship ?? this.nomineeRelationship,
       guardianCanRevoke: guardianCanRevoke ?? this.guardianCanRevoke,
@@ -5655,6 +6196,18 @@ class GuardianNominationsCompanion extends UpdateCompanion<GuardianNomination> {
     }
     if (nomineeAddress.present) {
       map['nominee_address'] = Variable<String>(nomineeAddress.value);
+    }
+    if (nomineeAddress2.present) {
+      map['nominee_address2'] = Variable<String>(nomineeAddress2.value);
+    }
+    if (nomineeCity.present) {
+      map['nominee_city'] = Variable<String>(nomineeCity.value);
+    }
+    if (nomineeState.present) {
+      map['nominee_state'] = Variable<String>(nomineeState.value);
+    }
+    if (nomineeZip.present) {
+      map['nominee_zip'] = Variable<String>(nomineeZip.value);
     }
     if (nomineePhone.present) {
       map['nominee_phone'] = Variable<String>(nomineePhone.value);
@@ -5703,6 +6256,10 @@ class GuardianNominationsCompanion extends UpdateCompanion<GuardianNomination> {
           ..write('directiveId: $directiveId, ')
           ..write('nomineeFullName: $nomineeFullName, ')
           ..write('nomineeAddress: $nomineeAddress, ')
+          ..write('nomineeAddress2: $nomineeAddress2, ')
+          ..write('nomineeCity: $nomineeCity, ')
+          ..write('nomineeState: $nomineeState, ')
+          ..write('nomineeZip: $nomineeZip, ')
           ..write('nomineePhone: $nomineePhone, ')
           ..write('nomineeRelationship: $nomineeRelationship, ')
           ..write('guardianCanRevoke: $guardianCanRevoke, ')
@@ -8194,6 +8751,10 @@ typedef $$AgentsTableCreateCompanionBuilder =
       Value<String> fullName,
       Value<String> relationship,
       Value<String> address,
+      Value<String> address2,
+      Value<String> city,
+      Value<String> state,
+      Value<String> zip,
       Value<String> homePhone,
       Value<String> workPhone,
       Value<String> cellPhone,
@@ -8208,6 +8769,10 @@ typedef $$AgentsTableUpdateCompanionBuilder =
       Value<String> fullName,
       Value<String> relationship,
       Value<String> address,
+      Value<String> address2,
+      Value<String> city,
+      Value<String> state,
+      Value<String> zip,
       Value<String> homePhone,
       Value<String> workPhone,
       Value<String> cellPhone,
@@ -8270,6 +8835,26 @@ class $$AgentsTableFilterComposer
 
   ColumnFilters<String> get address => $composableBuilder(
     column: $table.address,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get address2 => $composableBuilder(
+    column: $table.address2,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get city => $composableBuilder(
+    column: $table.city,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get state => $composableBuilder(
+    column: $table.state,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get zip => $composableBuilder(
+    column: $table.zip,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -8356,6 +8941,26 @@ class $$AgentsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get address2 => $composableBuilder(
+    column: $table.address2,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get city => $composableBuilder(
+    column: $table.city,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get state => $composableBuilder(
+    column: $table.state,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get zip => $composableBuilder(
+    column: $table.zip,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get homePhone => $composableBuilder(
     column: $table.homePhone,
     builder: (column) => ColumnOrderings(column),
@@ -8430,6 +9035,18 @@ class $$AgentsTableAnnotationComposer
 
   GeneratedColumn<String> get address =>
       $composableBuilder(column: $table.address, builder: (column) => column);
+
+  GeneratedColumn<String> get address2 =>
+      $composableBuilder(column: $table.address2, builder: (column) => column);
+
+  GeneratedColumn<String> get city =>
+      $composableBuilder(column: $table.city, builder: (column) => column);
+
+  GeneratedColumn<String> get state =>
+      $composableBuilder(column: $table.state, builder: (column) => column);
+
+  GeneratedColumn<String> get zip =>
+      $composableBuilder(column: $table.zip, builder: (column) => column);
 
   GeneratedColumn<String> get homePhone =>
       $composableBuilder(column: $table.homePhone, builder: (column) => column);
@@ -8508,6 +9125,10 @@ class $$AgentsTableTableManager
                 Value<String> fullName = const Value.absent(),
                 Value<String> relationship = const Value.absent(),
                 Value<String> address = const Value.absent(),
+                Value<String> address2 = const Value.absent(),
+                Value<String> city = const Value.absent(),
+                Value<String> state = const Value.absent(),
+                Value<String> zip = const Value.absent(),
                 Value<String> homePhone = const Value.absent(),
                 Value<String> workPhone = const Value.absent(),
                 Value<String> cellPhone = const Value.absent(),
@@ -8520,6 +9141,10 @@ class $$AgentsTableTableManager
                 fullName: fullName,
                 relationship: relationship,
                 address: address,
+                address2: address2,
+                city: city,
+                state: state,
+                zip: zip,
                 homePhone: homePhone,
                 workPhone: workPhone,
                 cellPhone: cellPhone,
@@ -8534,6 +9159,10 @@ class $$AgentsTableTableManager
                 Value<String> fullName = const Value.absent(),
                 Value<String> relationship = const Value.absent(),
                 Value<String> address = const Value.absent(),
+                Value<String> address2 = const Value.absent(),
+                Value<String> city = const Value.absent(),
+                Value<String> state = const Value.absent(),
+                Value<String> zip = const Value.absent(),
                 Value<String> homePhone = const Value.absent(),
                 Value<String> workPhone = const Value.absent(),
                 Value<String> cellPhone = const Value.absent(),
@@ -8546,6 +9175,10 @@ class $$AgentsTableTableManager
                 fullName: fullName,
                 relationship: relationship,
                 address: address,
+                address2: address2,
+                city: city,
+                state: state,
+                zip: zip,
                 homePhone: homePhone,
                 workPhone: workPhone,
                 cellPhone: cellPhone,
@@ -10071,6 +10704,10 @@ typedef $$WitnessesTableCreateCompanionBuilder =
       required int witnessNumber,
       Value<String> fullName,
       Value<String> address,
+      Value<String> address2,
+      Value<String> city,
+      Value<String> state,
+      Value<String> zip,
       Value<String> phone,
       Value<String?> signatureBase64,
       Value<int?> signatureDate,
@@ -10082,6 +10719,10 @@ typedef $$WitnessesTableUpdateCompanionBuilder =
       Value<int> witnessNumber,
       Value<String> fullName,
       Value<String> address,
+      Value<String> address2,
+      Value<String> city,
+      Value<String> state,
+      Value<String> zip,
       Value<String> phone,
       Value<String?> signatureBase64,
       Value<int?> signatureDate,
@@ -10137,6 +10778,26 @@ class $$WitnessesTableFilterComposer
 
   ColumnFilters<String> get address => $composableBuilder(
     column: $table.address,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get address2 => $composableBuilder(
+    column: $table.address2,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get city => $composableBuilder(
+    column: $table.city,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get state => $composableBuilder(
+    column: $table.state,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get zip => $composableBuilder(
+    column: $table.zip,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -10208,6 +10869,26 @@ class $$WitnessesTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get address2 => $composableBuilder(
+    column: $table.address2,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get city => $composableBuilder(
+    column: $table.city,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get state => $composableBuilder(
+    column: $table.state,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get zip => $composableBuilder(
+    column: $table.zip,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get phone => $composableBuilder(
     column: $table.phone,
     builder: (column) => ColumnOrderings(column),
@@ -10269,6 +10950,18 @@ class $$WitnessesTableAnnotationComposer
 
   GeneratedColumn<String> get address =>
       $composableBuilder(column: $table.address, builder: (column) => column);
+
+  GeneratedColumn<String> get address2 =>
+      $composableBuilder(column: $table.address2, builder: (column) => column);
+
+  GeneratedColumn<String> get city =>
+      $composableBuilder(column: $table.city, builder: (column) => column);
+
+  GeneratedColumn<String> get state =>
+      $composableBuilder(column: $table.state, builder: (column) => column);
+
+  GeneratedColumn<String> get zip =>
+      $composableBuilder(column: $table.zip, builder: (column) => column);
 
   GeneratedColumn<String> get phone =>
       $composableBuilder(column: $table.phone, builder: (column) => column);
@@ -10340,6 +11033,10 @@ class $$WitnessesTableTableManager
                 Value<int> witnessNumber = const Value.absent(),
                 Value<String> fullName = const Value.absent(),
                 Value<String> address = const Value.absent(),
+                Value<String> address2 = const Value.absent(),
+                Value<String> city = const Value.absent(),
+                Value<String> state = const Value.absent(),
+                Value<String> zip = const Value.absent(),
                 Value<String> phone = const Value.absent(),
                 Value<String?> signatureBase64 = const Value.absent(),
                 Value<int?> signatureDate = const Value.absent(),
@@ -10349,6 +11046,10 @@ class $$WitnessesTableTableManager
                 witnessNumber: witnessNumber,
                 fullName: fullName,
                 address: address,
+                address2: address2,
+                city: city,
+                state: state,
+                zip: zip,
                 phone: phone,
                 signatureBase64: signatureBase64,
                 signatureDate: signatureDate,
@@ -10360,6 +11061,10 @@ class $$WitnessesTableTableManager
                 required int witnessNumber,
                 Value<String> fullName = const Value.absent(),
                 Value<String> address = const Value.absent(),
+                Value<String> address2 = const Value.absent(),
+                Value<String> city = const Value.absent(),
+                Value<String> state = const Value.absent(),
+                Value<String> zip = const Value.absent(),
                 Value<String> phone = const Value.absent(),
                 Value<String?> signatureBase64 = const Value.absent(),
                 Value<int?> signatureDate = const Value.absent(),
@@ -10369,6 +11074,10 @@ class $$WitnessesTableTableManager
                 witnessNumber: witnessNumber,
                 fullName: fullName,
                 address: address,
+                address2: address2,
+                city: city,
+                state: state,
+                zip: zip,
                 phone: phone,
                 signatureBase64: signatureBase64,
                 signatureDate: signatureDate,
@@ -10446,6 +11155,10 @@ typedef $$GuardianNominationsTableCreateCompanionBuilder =
       required int directiveId,
       Value<String> nomineeFullName,
       Value<String> nomineeAddress,
+      Value<String> nomineeAddress2,
+      Value<String> nomineeCity,
+      Value<String> nomineeState,
+      Value<String> nomineeZip,
       Value<String> nomineePhone,
       Value<String> nomineeRelationship,
       Value<bool> guardianCanRevoke,
@@ -10462,6 +11175,10 @@ typedef $$GuardianNominationsTableUpdateCompanionBuilder =
       Value<int> directiveId,
       Value<String> nomineeFullName,
       Value<String> nomineeAddress,
+      Value<String> nomineeAddress2,
+      Value<String> nomineeCity,
+      Value<String> nomineeState,
+      Value<String> nomineeZip,
       Value<String> nomineePhone,
       Value<String> nomineeRelationship,
       Value<bool> guardianCanRevoke,
@@ -10530,6 +11247,26 @@ class $$GuardianNominationsTableFilterComposer
 
   ColumnFilters<String> get nomineeAddress => $composableBuilder(
     column: $table.nomineeAddress,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get nomineeAddress2 => $composableBuilder(
+    column: $table.nomineeAddress2,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get nomineeCity => $composableBuilder(
+    column: $table.nomineeCity,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get nomineeState => $composableBuilder(
+    column: $table.nomineeState,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get nomineeZip => $composableBuilder(
+    column: $table.nomineeZip,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -10626,6 +11363,26 @@ class $$GuardianNominationsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get nomineeAddress2 => $composableBuilder(
+    column: $table.nomineeAddress2,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get nomineeCity => $composableBuilder(
+    column: $table.nomineeCity,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get nomineeState => $composableBuilder(
+    column: $table.nomineeState,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get nomineeZip => $composableBuilder(
+    column: $table.nomineeZip,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get nomineePhone => $composableBuilder(
     column: $table.nomineePhone,
     builder: (column) => ColumnOrderings(column),
@@ -10715,6 +11472,26 @@ class $$GuardianNominationsTableAnnotationComposer
 
   GeneratedColumn<String> get nomineeAddress => $composableBuilder(
     column: $table.nomineeAddress,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get nomineeAddress2 => $composableBuilder(
+    column: $table.nomineeAddress2,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get nomineeCity => $composableBuilder(
+    column: $table.nomineeCity,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get nomineeState => $composableBuilder(
+    column: $table.nomineeState,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get nomineeZip => $composableBuilder(
+    column: $table.nomineeZip,
     builder: (column) => column,
   );
 
@@ -10828,6 +11605,10 @@ class $$GuardianNominationsTableTableManager
                 Value<int> directiveId = const Value.absent(),
                 Value<String> nomineeFullName = const Value.absent(),
                 Value<String> nomineeAddress = const Value.absent(),
+                Value<String> nomineeAddress2 = const Value.absent(),
+                Value<String> nomineeCity = const Value.absent(),
+                Value<String> nomineeState = const Value.absent(),
+                Value<String> nomineeZip = const Value.absent(),
                 Value<String> nomineePhone = const Value.absent(),
                 Value<String> nomineeRelationship = const Value.absent(),
                 Value<bool> guardianCanRevoke = const Value.absent(),
@@ -10843,6 +11624,10 @@ class $$GuardianNominationsTableTableManager
                 directiveId: directiveId,
                 nomineeFullName: nomineeFullName,
                 nomineeAddress: nomineeAddress,
+                nomineeAddress2: nomineeAddress2,
+                nomineeCity: nomineeCity,
+                nomineeState: nomineeState,
+                nomineeZip: nomineeZip,
                 nomineePhone: nomineePhone,
                 nomineeRelationship: nomineeRelationship,
                 guardianCanRevoke: guardianCanRevoke,
@@ -10859,6 +11644,10 @@ class $$GuardianNominationsTableTableManager
                 required int directiveId,
                 Value<String> nomineeFullName = const Value.absent(),
                 Value<String> nomineeAddress = const Value.absent(),
+                Value<String> nomineeAddress2 = const Value.absent(),
+                Value<String> nomineeCity = const Value.absent(),
+                Value<String> nomineeState = const Value.absent(),
+                Value<String> nomineeZip = const Value.absent(),
                 Value<String> nomineePhone = const Value.absent(),
                 Value<String> nomineeRelationship = const Value.absent(),
                 Value<bool> guardianCanRevoke = const Value.absent(),
@@ -10874,6 +11663,10 @@ class $$GuardianNominationsTableTableManager
                 directiveId: directiveId,
                 nomineeFullName: nomineeFullName,
                 nomineeAddress: nomineeAddress,
+                nomineeAddress2: nomineeAddress2,
+                nomineeCity: nomineeCity,
+                nomineeState: nomineeState,
+                nomineeZip: nomineeZip,
                 nomineePhone: nomineePhone,
                 nomineeRelationship: nomineeRelationship,
                 guardianCanRevoke: guardianCanRevoke,
