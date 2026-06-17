@@ -28,24 +28,34 @@ class ExportEncryptionService {
     final ivBytes =
         Uint8List.fromList(List<int>.generate(16, (_) => rnd.nextInt(256)));
 
-    final keyBytes = _pbkdf2(
-      utf8.encode(passphrase),
-      salt,
-      _iterations,
-      32,
-    );
+    // 64-byte derived key: first 32 = AES key, next 32 = HMAC (auth) key.
+    // PBKDF2 block 1 is identical whether dkLen is 32 or 64, so the AES key is
+    // unchanged from the original v1 envelopes (they still decrypt).
+    final dk = _pbkdf2(utf8.encode(passphrase), salt, _iterations, 64);
+    final aesKey = Uint8List.sublistView(dk, 0, 32);
+    final macKey = Uint8List.sublistView(dk, 32, 64);
+
     final encrypter =
-        enc.Encrypter(enc.AES(enc.Key(keyBytes), mode: enc.AESMode.cbc));
+        enc.Encrypter(enc.AES(enc.Key(aesKey), mode: enc.AESMode.cbc));
     final encrypted = encrypter.encrypt(plaintext, iv: enc.IV(ivBytes));
+
+    // Encrypt-then-MAC: authenticate salt‖iv‖ciphertext so a wrong passphrase
+    // (or any tampering) is detected deterministically, instead of relying on
+    // PKCS7 unpadding to happen to fail (which it only does ~99.6% of the time
+    // — the source of a flaky "wrong passphrase" failure).
+    final mac =
+        _hmac(macKey, [...salt, ...ivBytes, ...encrypted.bytes]);
 
     return const JsonEncoder.withIndent('  ').convert({
       'fmt': _format,
       'kdf': 'pbkdf2-hmac-sha256',
       'iter': _iterations,
       'cipher': 'aes-256-cbc',
+      'mac': 'hmac-sha256-encrypt-then-mac',
       'salt': base64Encode(salt),
       'iv': base64Encode(ivBytes),
       'ct': encrypted.base64,
+      'tag': base64Encode(mac),
     });
   }
 
@@ -64,19 +74,50 @@ class ExportEncryptionService {
     final salt = base64Decode(json['salt'] as String);
     final ivBytes = base64Decode(json['iv'] as String);
     final iter = (json['iter'] as num?)?.toInt() ?? _iterations;
+    final ctBytes = base64Decode(json['ct'] as String);
 
-    final keyBytes = _pbkdf2(utf8.encode(passphrase), salt, iter, 32);
+    final dk = _pbkdf2(utf8.encode(passphrase), salt, iter, 64);
+    final aesKey = Uint8List.sublistView(dk, 0, 32);
+    final macKey = Uint8List.sublistView(dk, 32, 64);
+
+    // If the envelope carries an auth tag (new format), verify it FIRST: a
+    // wrong passphrase yields a wrong MAC key → mismatch → wrong-passphrase,
+    // deterministically. Legacy envelopes without a tag fall back to the
+    // PKCS7-unpad heuristic below.
+    final tag = json['tag'];
+    if (tag is String) {
+      final expected = _hmac(macKey, [...salt, ...ivBytes, ...ctBytes]);
+      if (!_constantTimeEquals(expected, base64Decode(tag))) {
+        throw const ExportDecryptException();
+      }
+    }
+
     final encrypter =
-        enc.Encrypter(enc.AES(enc.Key(keyBytes), mode: enc.AESMode.cbc));
+        enc.Encrypter(enc.AES(enc.Key(aesKey), mode: enc.AESMode.cbc));
     try {
       return encrypter.decrypt(
-        enc.Encrypted.fromBase64(json['ct'] as String),
+        enc.Encrypted(ctBytes),
         iv: enc.IV(ivBytes),
       );
     } catch (_) {
       // Wrong key → PKCS7 unpad fails (or garbage). Treat as wrong passphrase.
       throw const ExportDecryptException();
     }
+  }
+
+  /// HMAC-SHA256 of [data] under [key].
+  static Uint8List _hmac(List<int> key, List<int> data) =>
+      Uint8List.fromList(Hmac(sha256, key).convert(data).bytes);
+
+  /// Length-and-content equality in (close to) constant time — avoids leaking
+  /// where two MACs first differ via early-exit timing.
+  static bool _constantTimeEquals(List<int> a, List<int> b) {
+    if (a.length != b.length) return false;
+    var diff = 0;
+    for (var i = 0; i < a.length; i++) {
+      diff |= a[i] ^ b[i];
+    }
+    return diff == 0;
   }
 
   /// PBKDF2-HMAC-SHA256 using only the `crypto` package.
