@@ -240,7 +240,7 @@ List<pw.Page> buildPoaPages({
         pw.SizedBox(height: 4),
         pw.Text(
           'In the event that I require commitment to a psychiatric treatment facility, '
-          'I would prefer to be admitted to the following facilities:',
+          'I would prefer to be admitted to the following facility:',
           style: bodyStyle(),
         ),
         pw.SizedBox(height: 2),
@@ -249,11 +249,12 @@ List<pw.Page> buildPoaPages({
         else ...[
           blankLine('Name of facility'),
           blankLine('Address'),
+          blankLine('City, State, Zip Code'),
         ],
         pw.SizedBox(height: 4),
         pw.Text(
           'In the event that I require commitment to a psychiatric treatment facility, '
-          'I do not wish to be committed to the following facilities:',
+          'I do not wish to be committed to the following facility:',
           style: bodyStyle(),
         ),
         pw.SizedBox(height: 2),
@@ -262,6 +263,7 @@ List<pw.Page> buildPoaPages({
         else ...[
           blankLine('Name of facility'),
           blankLine('Address'),
+          blankLine('City, State, Zip Code'),
         ],
         pw.Text(
           'I understand that my physician may have to place me in a facility that is not my preference.',
