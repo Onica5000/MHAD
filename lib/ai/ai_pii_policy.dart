@@ -42,6 +42,10 @@ class AiPiiPolicy {
     'fullName',
     'relationship',
     'address',
+    'address2',
+    'city',
+    'state',
+    'zip',
     'homePhone',
     'workPhone',
     'cellPhone',
@@ -52,8 +56,23 @@ class AiPiiPolicy {
   static const guardianIdentityFields = <String>[
     'nomineeFullName',
     'nomineeAddress',
+    'nomineeAddress2',
+    'nomineeCity',
+    'nomineeState',
+    'nomineeZip',
     'nomineePhone',
     'nomineeRelationship',
+  ];
+
+  /// `witnesses` columns that identify a WITNESS. Never sent.
+  static const witnessIdentityFields = <String>[
+    'fullName',
+    'address',
+    'address2',
+    'city',
+    'state',
+    'zip',
+    'phone',
   ];
 
   /// Care-provider / facility fields. NOT PII per project policy (a treating
@@ -67,11 +86,12 @@ class AiPiiPolicy {
     'primaryDoctorPhone',
   ];
 
-  /// Every PII field across the three identity-bearing entities. Used by the
-  /// lock test as the exhaustive set that must never appear in AI context.
+  /// Every PII field across the identity-bearing entities. Used by the lock
+  /// test as the exhaustive set that must never appear in AI context.
   static const allIdentityFields = <String>[
     ...userIdentityFields,
     ...agentIdentityFields,
     ...guardianIdentityFields,
+    ...witnessIdentityFields,
   ];
 }

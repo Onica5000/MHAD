@@ -4,6 +4,7 @@ library;
 
 import 'package:mhad/constants.dart';
 import 'package:mhad/data/database/app_database.dart';
+import 'package:mhad/domain/agent_ext.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'pdf_helpers.dart';
 
@@ -588,14 +589,14 @@ List<pw.Page> buildDeclarationPages({
         witnessDetailBlock(
           'Witness 1',
           w1?.fullName,
-          w1?.address,
+          w1?.fullAddress,
           phone: w1?.phone,
           signatureDate: w1?.signatureDate,
         ),
         witnessDetailBlock(
           'Witness 2',
           w2?.fullName,
-          w2?.address,
+          w2?.fullAddress,
           phone: w2?.phone,
           signatureDate: w2?.signatureDate,
         ),

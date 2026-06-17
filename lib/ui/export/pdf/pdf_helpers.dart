@@ -111,7 +111,7 @@ GuardianDisplay resolveGuardianDisplay(
       if (a == null || a.fullName.isEmpty) return GuardianDisplay.empty;
       return GuardianDisplay(
         fullName: a.fullName,
-        address: a.address,
+        address: a.fullAddress,
         phone: pickPhone(a),
         relationship: a.relationship,
         hasNominee: true,
@@ -121,7 +121,7 @@ GuardianDisplay resolveGuardianDisplay(
       if (a == null || a.fullName.isEmpty) return GuardianDisplay.empty;
       return GuardianDisplay(
         fullName: a.fullName,
-        address: a.address,
+        address: a.fullAddress,
         phone: pickPhone(a),
         relationship: a.relationship,
         hasNominee: true,
@@ -130,7 +130,7 @@ GuardianDisplay resolveGuardianDisplay(
       if (guardian.nomineeFullName.isEmpty) return GuardianDisplay.empty;
       return GuardianDisplay(
         fullName: guardian.nomineeFullName,
-        address: guardian.nomineeAddress,
+        address: guardian.fullNomineeAddress,
         phone: guardian.nomineePhone,
         relationship: guardian.nomineeRelationship,
         hasNominee: true,

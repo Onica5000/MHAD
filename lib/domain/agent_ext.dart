@@ -1,4 +1,5 @@
 import 'package:mhad/data/database/app_database.dart';
+import 'package:mhad/utils/address_format.dart';
 
 /// Shared agent lookups — previously reimplemented at ~11 sites as
 /// `agents.where((a) => a.agentType == '…').firstOrNull`.
@@ -25,4 +26,24 @@ extension AgentX on Agent {
     }
     return '';
   }
+
+  /// Full composed address (line 1/2 · city · state · ZIP) as one line.
+  String get fullAddress => composeAddressInline(
+      line1: address, line2: address2, city: city, state: state, zip: zip);
+}
+
+extension GuardianAddressX on GuardianNomination {
+  /// Full composed nominee address (line 1/2 · city · state · ZIP) as one line.
+  String get fullNomineeAddress => composeAddressInline(
+      line1: nomineeAddress,
+      line2: nomineeAddress2,
+      city: nomineeCity,
+      state: nomineeState,
+      zip: nomineeZip);
+}
+
+extension WitnessAddressX on WitnessesData {
+  /// Full composed address (line 1/2 · city · state · ZIP) as one line.
+  String get fullAddress => composeAddressInline(
+      line1: address, line2: address2, city: city, state: state, zip: zip);
 }

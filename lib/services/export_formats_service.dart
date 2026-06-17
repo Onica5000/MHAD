@@ -1,5 +1,6 @@
 import 'package:mhad/constants.dart';
 import 'package:mhad/data/database/app_database.dart';
+import 'package:mhad/domain/agent_ext.dart';
 import 'package:mhad/services/instruction_fields.dart';
 
 /// Additional machine-readable export formats beyond the FHIR JSON produced by
@@ -49,8 +50,10 @@ class ExportFormatsService {
 
     for (final a in agents) {
       if (a.fullName.isEmpty) continue;
-      row('Agent (${a.agentType})', a.fullName,
+      final section = 'Agent (${a.agentType})';
+      row(section, a.fullName,
           [a.relationship, a.cellPhone].where((s) => s.isNotEmpty).join(' · '));
+      row(section, 'Address', a.fullAddress);
     }
 
     for (final m in medications) {
@@ -89,12 +92,17 @@ class ExportFormatsService {
     if (witnesses != null) {
       for (final w in witnesses) {
         if (w.fullName.isEmpty) continue;
-        row('Witness ${w.witnessNumber}', w.fullName, '');
+        final section = 'Witness ${w.witnessNumber}';
+        row(section, w.fullName, '');
+        row(section, 'Address', w.fullAddress);
+        row(section, 'Phone', w.phone);
       }
     }
 
     if (guardian != null && guardian.nomineeFullName.isNotEmpty) {
       row('Guardian', guardian.nomineeFullName, guardian.nomineeRelationship);
+      row('Guardian', 'Address', guardian.fullNomineeAddress);
+      row('Guardian', 'Phone', guardian.nomineePhone);
     }
 
     return rows.map((r) => r.map(_csvCell).join(',')).join('\r\n');
@@ -203,6 +211,11 @@ class ExportFormatsService {
     }
     for (final a in agents) {
       if (a.fullName.isEmpty) continue;
+      final display = [
+        '${a.fullName} (${a.agentType})',
+        if (a.fullAddress.isNotEmpty) a.fullAddress,
+        if (a.bestPhone.isNotEmpty) a.bestPhone,
+      ].join(' · ');
       b.writeln('    <actor>');
       b.writeln('      <role>');
       b.writeln('        <coding>');
@@ -213,12 +226,16 @@ class ExportFormatsService {
       b.writeln('        </coding>');
       b.writeln('      </role>');
       b.writeln('      <reference>');
-      b.writeln('        <display value="'
-          '${_xml('${a.fullName} (${a.agentType})')}"/>');
+      b.writeln('        <display value="${_xml(display)}"/>');
       b.writeln('      </reference>');
       b.writeln('    </actor>');
     }
     if (guardian != null && guardian.nomineeFullName.isNotEmpty) {
+      final display = [
+        '${guardian.nomineeFullName} (${guardian.nomineeRelationship})',
+        if (guardian.fullNomineeAddress.isNotEmpty) guardian.fullNomineeAddress,
+        if (guardian.nomineePhone.isNotEmpty) guardian.nomineePhone,
+      ].join(' · ');
       b.writeln('    <actor>');
       b.writeln('      <role>');
       b.writeln('        <coding>');
@@ -229,9 +246,7 @@ class ExportFormatsService {
       b.writeln('        </coding>');
       b.writeln('      </role>');
       b.writeln('      <reference>');
-      b.writeln('        <display value="'
-          '${_xml('${guardian.nomineeFullName} '
-              '(${guardian.nomineeRelationship})')}"/>');
+      b.writeln('        <display value="${_xml(display)}"/>');
       b.writeln('      </reference>');
       b.writeln('    </actor>');
     }

@@ -108,7 +108,7 @@ List<pw.Page> buildPoaPages({
         dataLine('Name of designated person', primaryAgent?.fullName ?? ''),
         if (primaryAgent != null && primaryAgent.relationship.isNotEmpty)
           dataLine('Relationship', primaryAgent.relationship),
-        dataLine('Address', primaryAgent?.address ?? ''),
+        dataLine('Address', primaryAgent?.fullAddress ?? ''),
         twoCol(
           blankLine('City, State, Zip Code'),
           dataLine('Phone Number', _agentPhone(primaryAgent)),
@@ -136,7 +136,7 @@ List<pw.Page> buildPoaPages({
         dataLine('Name of designated person', altAgent?.fullName ?? ''),
         if (altAgent != null && altAgent.relationship.isNotEmpty)
           dataLine('Relationship', altAgent.relationship),
-        dataLine('Address', altAgent?.address ?? ''),
+        dataLine('Address', altAgent?.fullAddress ?? ''),
         twoCol(
           blankLine('City, State, Zip Code'),
           dataLine('Phone Number', _agentPhone(altAgent)),
@@ -703,14 +703,14 @@ List<pw.Page> buildPoaPages({
         witnessDetailBlock(
           'Witness 1',
           w1?.fullName,
-          w1?.address,
+          w1?.fullAddress,
           phone: w1?.phone,
           signatureDate: w1?.signatureDate,
         ),
         witnessDetailBlock(
           'Witness 2',
           w2?.fullName,
-          w2?.address,
+          w2?.fullAddress,
           phone: w2?.phone,
           signatureDate: w2?.signatureDate,
         ),

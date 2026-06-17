@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:mhad/constants.dart';
 import 'package:mhad/data/database/app_database.dart';
+import 'package:mhad/domain/agent_ext.dart';
 import 'package:mhad/services/instruction_fields.dart';
 
 /// Generates a FHIR R4 Consent resource JSON from a completed directive.
@@ -127,7 +128,11 @@ class FhirExportService {
           ],
         },
         'reference': {
-          'display': '${agent.fullName} (${agent.agentType})',
+          'display': [
+            '${agent.fullName} (${agent.agentType})',
+            if (agent.fullAddress.isNotEmpty) agent.fullAddress,
+            if (agent.bestPhone.isNotEmpty) agent.bestPhone,
+          ].join(' · '),
         },
       });
     }
@@ -147,7 +152,11 @@ class FhirExportService {
             ],
           },
           'reference': {
-            'display': '${w.fullName} (Witness ${w.witnessNumber})',
+            'display': [
+              '${w.fullName} (Witness ${w.witnessNumber})',
+              if (w.fullAddress.isNotEmpty) w.fullAddress,
+              if (w.phone.isNotEmpty) w.phone,
+            ].join(' · '),
           },
         });
       }
@@ -167,8 +176,12 @@ class FhirExportService {
           ],
         },
         'reference': {
-          'display':
-              '${guardian.nomineeFullName} (${guardian.nomineeRelationship})',
+          'display': [
+            '${guardian.nomineeFullName} (${guardian.nomineeRelationship})',
+            if (guardian.fullNomineeAddress.isNotEmpty)
+              guardian.fullNomineeAddress,
+            if (guardian.nomineePhone.isNotEmpty) guardian.nomineePhone,
+          ].join(' · '),
         },
       });
     }
