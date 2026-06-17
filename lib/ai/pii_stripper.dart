@@ -14,18 +14,6 @@
 class PiiStripper {
   PiiStripper._();
 
-  /// Detects PII in [text] and returns a report of what was found.
-  /// Returns an empty list if no PII was detected.
-  static List<String> detect(String text) {
-    final found = <String>{};
-    for (final entry in _allPatterns) {
-      if (entry.pattern.hasMatch(text)) {
-        found.add(entry.label);
-      }
-    }
-    return found.toList();
-  }
-
   /// Strips detected PII from [text] and returns a [PiiStripResult]
   /// containing the sanitized text and a list of what was removed.
   static PiiStripResult stripWithReport(String text) {
@@ -48,25 +36,6 @@ class PiiStripper {
   /// Strips detected PII from [text] and returns the sanitized version.
   /// Use [stripWithReport] if you need to know what was removed.
   static String strip(String text) => stripWithReport(text).sanitizedText;
-
-  /// Strips PII from each value in a map of fields.
-  /// Keys are preserved; only values are sanitized.
-  /// Returns the sanitized map and a merged list of all removed categories.
-  static PiiStripResult stripMapValues(Map<String, String> fields) {
-    final sanitized = <String, String>{};
-    final allRemoved = <String>{};
-    for (final entry in fields.entries) {
-      final result = stripWithReport(entry.value);
-      sanitized[entry.key] = result.sanitizedText;
-      allRemoved.addAll(result.removedCategories);
-    }
-    return PiiStripResult(
-      sanitizedText:
-          sanitized.entries.map((e) => '${e.key}: ${e.value}').join('\n'),
-      removedCategories: allRemoved.toList(),
-      sanitizedMap: sanitized,
-    );
-  }
 
   // ── Pattern definitions ─────────────────────────────────────────────
 
@@ -314,14 +283,9 @@ class PiiStripResult {
   final String sanitizedText;
   final List<String> removedCategories;
 
-  /// When [PiiStripper.stripMapValues] is used, contains the sanitized
-  /// key-value pairs. Null for plain text stripping.
-  final Map<String, String>? sanitizedMap;
-
   const PiiStripResult({
     required this.sanitizedText,
     required this.removedCategories,
-    this.sanitizedMap,
   });
 
   bool get hadPii => removedCategories.isNotEmpty;

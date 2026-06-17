@@ -429,48 +429,5 @@ void main() {
       });
     });
 
-    group('stripMapValues', () {
-      test('strips PII from map values', () {
-        final result = PiiStripper.stripMapValues({
-          'Health history': 'Dr. Jane Smith treated me at 123 Oak Street',
-          'Crisis plan': 'Call my sister Maria at (215) 555-1234',
-        });
-        expect(result.hadPii, isTrue);
-        expect(result.sanitizedMap, isNotNull);
-        expect(
-            result.sanitizedMap!['Health history'],
-            isNot(contains('Jane Smith')));
-        expect(
-            result.sanitizedMap!['Crisis plan'],
-            isNot(contains('Maria')));
-        expect(
-            result.sanitizedMap!['Crisis plan'],
-            isNot(contains('555-1234')));
-      });
-
-      test('preserves clean map values', () {
-        final result = PiiStripper.stripMapValues({
-          'Activities': 'Walking, reading, music therapy',
-        });
-        expect(result.hadPii, isFalse);
-        expect(
-            result.sanitizedMap!['Activities'],
-            'Walking, reading, music therapy');
-      });
-    });
-
-    group('detect', () {
-      test('detects PII categories without stripping', () {
-        final found = PiiStripper.detect(
-          'SSN 123-45-6789, email test@example.com',
-        );
-        expect(found, contains('SSN'));
-        expect(found, contains('email address'));
-      });
-
-      test('returns empty for clean text', () {
-        expect(PiiStripper.detect('I prefer quiet environments'), isEmpty);
-      });
-    });
   });
 }

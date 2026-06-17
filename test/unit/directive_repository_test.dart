@@ -165,20 +165,5 @@ void main() {
       final witnesses = await repo.getWitnesses(id);
       expect(witnesses, isEmpty);
     });
-
-    test('upsertWitness creates witness record', () async {
-      final id = await repo.createDirective(FormType.combined);
-      await repo.upsertWitness(WitnessesCompanion.insert(
-        directiveId: id,
-        witnessNumber: 1,
-        fullName: const Value('Witness One'),
-        address: const Value('1 Witness Way'),
-      ));
-
-      final witnesses = await repo.getWitnesses(id);
-      expect(witnesses, hasLength(1));
-      expect(witnesses.first.fullName, 'Witness One');
-      expect(witnesses.first.witnessNumber, 1);
-    });
   });
 }

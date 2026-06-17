@@ -189,17 +189,6 @@ class DirectiveRepository {
   Future<int> insertMedication(MedicationEntriesCompanion entry) =>
       _db.into(_db.medicationEntries).insert(entry);
 
-  Future<void> updateMedication(int id, String name, String reason) =>
-      (_db.update(_db.medicationEntries)..where((t) => t.id.equals(id))).write(
-        MedicationEntriesCompanion(
-          medicationName: Value(name),
-          reason: Value(reason),
-        ),
-      );
-
-  Future<void> deleteMedication(int id) =>
-      (_db.delete(_db.medicationEntries)..where((t) => t.id.equals(id))).go();
-
   Future<void> replaceMedications(int directiveId, List<MedicationEntriesCompanion> newEntries) async {
     await _db.transaction(() async {
       await (_db.delete(_db.medicationEntries)
@@ -242,14 +231,14 @@ class DirectiveRepository {
 
   // ── Witnesses ─────────────────────────────────────────────────────────────
 
+  // Witnesses are captured on paper (the witnesses sign the printed copy), not
+  // in-app — see execution_step.dart. The table is kept for backward compat and
+  // read here for the PDF / snapshot; there is no in-app writer.
   Future<List<WitnessesData>> getWitnesses(int directiveId) =>
       (_db.select(_db.witnesses)
             ..where((t) => t.directiveId.equals(directiveId))
             ..orderBy([(t) => OrderingTerm.asc(t.witnessNumber)]))
           .get();
-
-  Future<void> upsertWitness(WitnessesCompanion witness) =>
-      _db.into(_db.witnesses).insertOnConflictUpdate(witness);
 
   // ── Guardian Nomination ───────────────────────────────────────────────────
 
