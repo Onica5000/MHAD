@@ -26,7 +26,7 @@ The app supports all three PA Act 194 form types: **Combined Declaration + Power
 - **Self-binding (Ulysses) clause** — explicit opt-in confirming the structural effect of PA Act 194 § 5802 (a signed directive binds you when you later refuse care during a crisis).
 - **Revocation flow** with the verbatim statutory revocation statement (20 Pa.C.S. § 5808), per-recipient notification opt-in, and honest copy about what marking a directive revoked locally does and does not communicate to providers.
 - **Local share sheet** (email · SMS · QR · system share · print) using your device's native composers — no verified links, one-time codes, expiry, or read receipts. Mailto/sms URIs follow RFC 6068 / RFC 5724.
-- **Clinician view + Legal toggle** — two read-only render modes of a signed directive: a plain-language clinician summary, and a strict statutory-citation rendering for legal review.
+- **Legal toggle** — a read-only render mode of a signed directive in strict statutory-citation language for legal review, alongside the plain-language official form. (A separate clinician-summary view was considered and dropped: the full signed directive / PDF is the authoritative clinician-facing artifact, and a paraphrased summary would only risk misrepresenting it.)
 - **Past directives + revocation history** — every superseded directive stays viewable on the device with status pill (Active / Expired / Revoked), explicit Delete confirmation, and the v3 promise that no share log is kept in Public Mode.
 - **PDF generation** with coordinate-based, pixel-faithful layout matching the official PA MHAD forms, including guardian-relation-aware nominee resolution (same-as-primary / same-as-alternate / specific / no preference).
 - **Encrypted storage** (SQLCipher AES-256) in Private Mode, with biometric / passcode unlock and a device-secure-keystore-backed key. Public Mode keeps everything in memory only.
@@ -132,7 +132,6 @@ lib/
   ui/
     ai_check/                          -- AI consistency check (cross-step contradictions)
     assistant/                         -- AI chat UI (Gemini)
-    clinician/                         -- Read-only clinician view of a signed directive
     crisis_plan/                       -- WRAP toolbox (5 sections, JSON-stored)
     disclaimer/                        -- First-launch gate + Settings read-only variant
     education/                         -- FAQ, glossary, articles, Ch. 54 ↔ Ch. 58 bridge

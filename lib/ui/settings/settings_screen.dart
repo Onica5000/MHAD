@@ -547,8 +547,8 @@ class _CurrentDirectiveSection extends ConsumerWidget {
     return directivesAsync.maybeWhen(
       data: (list) {
         // Use the most-recently-edited directive of ANY status. These screens
-        // operate on a directive (clinician view, crisis plan, QR, etc.), so
-        // they only require that one exists — NOT that it's signed/complete.
+        // operate on a directive (legal toggle, crisis plan, etc.), so they
+        // only require that one exists — NOT that it's signed/complete.
         // Web directives are signed on paper and rarely reach "complete", so
         // gating on completion hid the whole section (and made these screens
         // unreachable on web).
