@@ -51,6 +51,10 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
   /// separate PDF for each (e.g. a clean final copy AND a watermarked draft).
   final Set<DraftMode> _draftModes = {DraftMode.finalCopy};
 
+  /// false = the canonical official form (signed/used, recommended default);
+  /// true = the informational legal-language rendering. Convenience only.
+  bool _legalLanguage = false;
+
   /// Canonical order for the copy types (used for stable file ordering + UI).
   static const _draftModeOrder = [
     DraftMode.finalCopy,
@@ -259,6 +263,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
           includeSupplementary: _includeSupplementary,
           includeNotes: _includeNotes,
           draftMode: mode,
+          legalLanguage: _legalLanguage,
         );
         final bytes = await runInBackground(() => generator.generate(
           directive: directive,
@@ -307,6 +312,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       includeSupplementary: _includeSupplementary,
       includeNotes: _includeNotes,
       draftMode: _previewMode,
+      legalLanguage: _legalLanguage,
     );
     return runInBackground(() => generator.generate(
           directive: _directive!,
@@ -770,6 +776,47 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
                 contentPadding: EdgeInsets.zero,
                 controlAffinity: ListTileControlAffinity.leading,
               ),
+            const SizedBox(height: 16),
+            Text('Document language',
+                style: Theme.of(context).textTheme.titleSmall),
+            const SizedBox(height: 4),
+            Text(
+              'The plain-language official form is the one you sign and use — '
+              'it is the legally valid directive. The legal-language version '
+              'restates it in formal statutory wording for reference only and '
+              'is not the document you sign.',
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+            ),
+            const SizedBox(height: 8),
+            SegmentedButton<bool>(
+              segments: const [
+                ButtonSegment(
+                  value: false,
+                  label: Text('Plain (signable)'),
+                  icon: Icon(Icons.verified_outlined),
+                ),
+                ButtonSegment(
+                  value: true,
+                  label: Text('Legal (info only)'),
+                  icon: Icon(Icons.description_outlined),
+                ),
+              ],
+              selected: {_legalLanguage},
+              onSelectionChanged: (s) =>
+                  setState(() => _legalLanguage = s.first),
+            ),
+            if (_legalLanguage) ...[
+              const SizedBox(height: 8),
+              Text(
+                'Heads up: the legal-language version is for reference only. '
+                'Sign and use the plain-language official form.',
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(context).colorScheme.error,
+                    ),
+              ),
+            ],
             const SizedBox(height: 16),
             Text('Save an editable copy',
                 style: Theme.of(context).textTheme.titleSmall),

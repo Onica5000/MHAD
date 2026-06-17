@@ -10,6 +10,7 @@ import 'package:pdf/widgets.dart' as pw;
 import 'combined_pdf.dart';
 import 'pdf_helpers.dart';
 import 'declaration_pdf.dart';
+import 'legal_language_pdf.dart';
 import 'notes_pdf.dart';
 import 'poa_pdf.dart';
 import 'supplementary_pdf.dart';
@@ -26,6 +27,11 @@ class PdfGenerator {
   /// Draft watermark mode applied to the form pages.
   final DraftMode draftMode;
 
+  /// When true, produce the informational legal-language (statutory-voice)
+  /// rendering instead of the official form. NOT the signed document — the
+  /// canonical form is authoritative.
+  final bool legalLanguage;
+
   const PdfGenerator({
     required this.includeCombined,
     required this.includeDeclaration,
@@ -33,6 +39,7 @@ class PdfGenerator {
     this.includeSupplementary = false,
     this.includeNotes = false,
     this.draftMode = DraftMode.finalCopy,
+    this.legalLanguage = false,
   });
 
   /// Loads the editorial typeface trio (DM Sans regular + bold, Instrument
@@ -94,6 +101,19 @@ class PdfGenerator {
     );
 
     final pages = <pw.Page>[];
+
+    // Legal-language (informational) rendering replaces the form entirely —
+    // the user picked it as an alternate view, not the signable document.
+    if (legalLanguage) {
+      pages.addAll(buildLegalLanguagePages(
+        directive: directive,
+        agents: agents,
+      ));
+      for (final page in pages) {
+        pdf.addPage(page);
+      }
+      return pdf.save();
+    }
 
     if (includeCombined) {
       pages.addAll(buildCombinedPages(
