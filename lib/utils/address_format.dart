@@ -1,6 +1,6 @@
-/// Composes standardized address components (line 1 / line 2 / city / state /
-/// ZIP) into display strings. Shared by the UI, PDF generators, and exports so
-/// an address reads identically everywhere. Empty parts are skipped.
+// Composes standardized address components (line 1 / line 2 / city / state /
+// ZIP) into display strings. Shared by the UI, PDF generators, and exports so
+// an address reads identically everywhere. Empty parts are skipped.
 
 String _cityStateZip(String city, String state, String zip) => <String>[
       if (city.trim().isNotEmpty) city.trim(),
