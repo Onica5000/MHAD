@@ -320,15 +320,9 @@ class _EditorialLearnHub extends StatelessWidget {
           ],
         ],
         const SizedBox(height: 18),
-        // Editorial pull-quote with a "Read the booklet" CTA (artboard
-        // WebLearn). The CTA opens the booklet's intro article — the hub
-        // content is the official booklet verbatim — or falls back to the
-        // Articles bucket if there's no featured section.
-        // Full-width editorial pull-quote: the quote text spans the whole card
-        // so it always reads horizontally, with the "Read the booklet" CTA on
-        // its own line below. (An earlier side-by-side Row squeezed the quote
-        // next to the button at moderate widths, wrapping it one or two words
-        // per line — it looked vertical.)
+        // Full-width editorial pull-quote, centered. (The "Read the booklet"
+        // CTA was removed — the topic index + tabs above already lead into the
+        // booklet content.)
         Container(
           width: double.infinity,
           padding: const EdgeInsets.fromLTRB(18, 18, 18, 16),
@@ -338,11 +332,12 @@ class _EditorialLearnHub extends StatelessWidget {
             borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
           ),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
                 '"Your directive is your voice — written in advance, '
                 "kept safe, honored when you can't speak for yourself.\"",
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: 'Instrument Serif',
                   fontFamilyFallback: const ['Georgia', 'serif'],
@@ -356,6 +351,7 @@ class _EditorialLearnHub extends StatelessWidget {
               Text(
                 '— PA OFFICE OF MENTAL HEALTH & SUBSTANCE ABUSE '
                 'SERVICES · BOOKLET P.3',
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: 'JetBrains Mono',
                   fontFamilyFallback: const [
@@ -367,26 +363,6 @@ class _EditorialLearnHub extends StatelessWidget {
                   fontSize: 10,
                   letterSpacing: 0.6,
                   color: p.textMuted,
-                ),
-              ),
-              const SizedBox(height: 14),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: FilledButton.icon(
-                  onPressed: () {
-                    if (featured != null) {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (_) => _SectionDetailRoute(section: featured),
-                      ));
-                    } else {
-                      onTabChange(_TabKind.articles);
-                    }
-                  },
-                  icon: const Icon(Icons.arrow_forward, size: 16),
-                  label: const Text('Read the booklet'),
-                  style: FilledButton.styleFrom(
-                    iconAlignment: IconAlignment.end,
-                  ),
                 ),
               ),
             ],
