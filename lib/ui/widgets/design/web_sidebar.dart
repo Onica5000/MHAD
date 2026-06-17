@@ -5,6 +5,7 @@ import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/design/crisis_sheet.dart';
 
 /// Persistent left-rail navigation for wide (desktop / web) screens.
 ///
@@ -207,8 +208,12 @@ class WebSidebar extends ConsumerWidget {
               ),
             ),
 
-            // (Crisis access is the global floating GlobalCrisisButton now —
-            // the sidebar crisis card was removed.)
+            // Crisis card pinned at bottom (in addition to the global floating
+            // button). Opens the full crisis-resources sheet.
+            Padding(
+              padding: const EdgeInsets.fromLTRB(12, 4, 12, 8),
+              child: _CrisisCard(),
+            ),
 
             // Session indicator — anonymous (web/public) or private (native).
             // Mirrors the design `WebSidebar`: lock chip + "Anonymous session"
@@ -437,6 +442,76 @@ class _Badge extends StatelessWidget {
           fontWeight: FontWeight.w700,
           letterSpacing: 0.6,
           color: fg,
+        ),
+      ),
+    );
+  }
+}
+
+/// Sidebar crisis card. Tapping opens the full crisis-resources sheet (via the
+/// root navigator, since the sidebar sits above the router). Complements the
+/// global floating crisis button.
+class _CrisisCard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: SemanticColors.errorBgLight,
+      borderRadius: BorderRadius.circular(12),
+      child: InkWell(
+        onTap: () {
+          final ctx = rootNavigatorKey.currentContext;
+          if (ctx != null) showCrisisSheet(ctx);
+        },
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: SemanticColors.errorBorderLight),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                children: const [
+                  Icon(Icons.health_and_safety_outlined,
+                      size: 14, color: SemanticColors.errorAccentLight),
+                  SizedBox(width: 6),
+                  Text(
+                    '24/7 LIFELINE',
+                    style: TextStyle(
+                      fontFamily: 'JetBrains Mono',
+                      fontFamilyFallback: ['Consolas', 'Courier New', 'monospace'],
+                      fontSize: 9.5,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 0.7,
+                      color: SemanticColors.errorTextLight,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 4),
+              const Text(
+                '988 · Crisis help',
+                style: TextStyle(
+                  fontFamily: 'DM Sans',
+                  fontSize: 13,
+                  fontWeight: FontWeight.w700,
+                  color: SemanticColors.errorTextLight,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                'Click for more information',
+                style: TextStyle(
+                  fontFamily: 'DM Sans',
+                  fontSize: 11,
+                  color: SemanticColors.errorTextLight.withValues(alpha: 0.85),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
