@@ -92,8 +92,19 @@ class ResponsiveShell extends StatelessWidget {
     return ListenableBuilder(
       listenable: appRouter.routerDelegate,
       builder: (context, _) {
+        // Use the TOP match's concrete location, not `.uri.path`.
+        // RouteMatchList.uri intentionally ignores ImperativeRouteMatches, so
+        // after an imperative `push()` it reports the route *underneath* the
+        // pushed one. That made a pushed `/export/…` inherit the layout of
+        // wherever it was opened from — full-bleed when pushed from a fill
+        // route (Learn), but crammed into the 760px reading column when pushed
+        // from a reading route (Settings, past-directive detail). `last`
+        // includes imperative matches and exposes the real concrete path
+        // (e.g. `/export/5`), so the shell always picks the right shell.
+        final matchList =
+            appRouter.routerDelegate.currentConfiguration;
         final route =
-            appRouter.routerDelegate.currentConfiguration.uri.path;
+            matchList.lastOrNull?.matchedLocation ?? matchList.uri.path;
         // Pre-dashboard gate/welcome screens: no sidebar yet. Center the
         // reading content in the full window (no nav rail) until the user
         // reaches the dashboard.

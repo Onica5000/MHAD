@@ -105,12 +105,22 @@ class WebSidebar extends ConsumerWidget {
         // none on file (fresh web session — in-memory DB, nothing saved yet)
         // create a Combined directive first rather than bouncing to Home, so
         // this always lands on the export screen.
+        //
+        // Use go(), NOT push(): every other global-nav item uses go(), and the
+        // ResponsiveShell picks the page layout from
+        // `routerDelegate.currentConfiguration.uri.path`, which IGNORES
+        // ImperativeRouteMatches (i.e. push()). After a push the shell would
+        // read the *underlying* route instead — so opening export from a
+        // reading route (Settings) rendered the export tool inside the centered
+        // 760px reading column, while opening it from a fill route (Learn)
+        // looked right. go() replaces the stack so the shell always sees
+        // /export/… and gives it the correct full-bleed layout.
         onTap: () async {
           final id = focusedId ??
               await ref
                   .read(directiveRepositoryProvider)
                   .createDirective(FormType.combined);
-          appRouter.push(AppRoutes.exportRoute(id));
+          appRouter.go(AppRoutes.exportRoute(id));
         },
       ),
       _SidebarItem(
