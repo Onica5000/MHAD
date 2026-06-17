@@ -1,10 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/services/admin_update_service.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// Hidden, non-user-facing admin tool: the AI drafts updates to the app's
 /// dynamic data (app_data.json) WITH sources, a human approves a per-field diff,
@@ -30,16 +32,29 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
   _Stage _stage = _Stage.gate;
   final _passCtrl = TextEditingController();
   final _requestCtrl = TextEditingController();
+  final _focusCtrl = TextEditingController();
+  AdminDataTarget _target = AdminDataTarget.appData;
   Map<String, dynamic> _base = const {};
+  Map<String, dynamic> _backup = const {};
   List<ProposedChange> _changes = const [];
   String _output = '';
   bool _loading = false;
+  bool _isRevert = false;
   String? _error;
+
+  // The roll-back backup is stored in SharedPreferences keyed per target. It is
+  // INTENTIONALLY persistent across sessions (it survives closing the page —
+  // on web it lives in localStorage) so a roll-back is available later. It is
+  // admin-only (behind the passphrase gate) and holds only app config/content
+  // — no user PII or protected data — so it is exempt from the app's ephemeral
+  // session-clearing. Do not wipe it on session end.
+  static String _backupKey(AdminDataTarget t) => 'admin_backup_${t.name}';
 
   @override
   void dispose() {
     _passCtrl.dispose();
     _requestCtrl.dispose();
+    _focusCtrl.dispose();
     super.dispose();
   }
 
@@ -48,7 +63,6 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
       setState(() => _error = 'Incorrect passphrase.');
       return;
     }
-    _base = await AppData.loadRawJson();
     setState(() {
       _error = null;
       _stage = _Stage.draft;
@@ -65,10 +79,17 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
     setState(() {
       _loading = true;
       _error = null;
+      _isRevert = false;
     });
     try {
-      final raw = await AdminUpdateService(apiKey: key)
-          .draftRaw(_requestCtrl.text.trim(), _base);
+      // Load the base for the SELECTED target so paths + emitted file match.
+      _base = await AdminUpdateService.currentData(_target);
+      final raw = await AdminUpdateService(apiKey: key).draftRaw(
+        _requestCtrl.text.trim(),
+        _base,
+        target: _target,
+        focusArea: _focusCtrl.text.trim(),
+      );
       final changes = AdminUpdateService.parseProposal(raw, _base);
       setState(() {
         _changes = changes;
@@ -86,12 +107,68 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
     }
   }
 
-  void _build() {
-    final updated = AdminUpdateService.applyApproved(_base, _changes);
+  Future<void> _build() async {
+    final updated = _isRevert
+        ? AdminUpdateService.applyRestore(_base, _backup, _changes)
+        : AdminUpdateService.applyApproved(_base, _changes);
+    // Stash the pre-change version as a backup so this (and a future) change
+    // can be rolled back — the file is committed to the repo; this is the
+    // in-app safety net. Keyed per target.
+    await _saveBackup(_target, _base);
     setState(() {
       _output = AdminUpdateService.prettyJson(updated);
       _stage = _Stage.output;
     });
+  }
+
+  Future<void> _saveBackup(AdminDataTarget t, Map<String, dynamic> data) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(_backupKey(t), AdminUpdateService.prettyJson(data));
+    } catch (_) {
+      // Non-fatal: a missing backup just means revert is unavailable.
+    }
+  }
+
+  /// Start a roll-back: load the saved backup for the current target, diff it
+  /// against the live file, and present each differing field so the maintainer
+  /// can pick WHICH part(s) to restore (not just whole-file). The backup is
+  /// admin-only (behind the gate) and never user-facing.
+  Future<void> _revert() async {
+    String? backupStr;
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      backupStr = prefs.getString(_backupKey(_target));
+    } catch (_) {
+      backupStr = null;
+    }
+    if (backupStr == null || backupStr.isEmpty) {
+      setState(() => _error =
+          'No backup for ${_target.label} yet — a backup is saved each time '
+          'you build an update for this file.');
+      return;
+    }
+    try {
+      _backup =
+          jsonDecode(backupStr) as Map<String, dynamic>; // previous version
+      _base = await AdminUpdateService.currentData(_target); // live version
+      final diff = AdminUpdateService.diffForRestore(_base, _backup,
+          target: _target);
+      if (diff.isEmpty) {
+        setState(() => _error =
+            'The live ${_target.assetPath} already matches the backup — '
+            'nothing to restore.');
+        return;
+      }
+      setState(() {
+        _error = null;
+        _changes = diff;
+        _isRevert = true;
+        _stage = _Stage.review;
+      });
+    } catch (e) {
+      setState(() => _error = 'Could not read the backup: $e');
+    }
   }
 
   @override
@@ -142,36 +219,76 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
   }
 
   Widget _buildDraft() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-            'Describe the update. The AI drafts changes to app_data.json with '
-            'sources; you review and approve before anything is emitted. '
-            'Legal/statutory changes always need your explicit sign-off.'),
-        const SizedBox(height: 12),
-        TextField(
-          controller: _requestCtrl,
-          maxLines: 4,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            labelText: 'e.g. "The Trevor Project number changed to ..." or '
-                '"Check Gemini\'s current free-tier rate limits"',
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+              'Describe the update. The AI drafts changes to the selected file '
+              'with sources; you review and approve before anything is emitted. '
+              'Legal/statutory and educational changes always need your explicit '
+              'sign-off.'),
+          const SizedBox(height: 12),
+          // Which dynamic-data file to edit.
+          DropdownButtonFormField<AdminDataTarget>(
+            initialValue: _target,
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'What to update',
+            ),
+            items: [
+              for (final t in AdminDataTarget.values)
+                DropdownMenuItem(value: t, child: Text(t.label)),
+            ],
+            onChanged: (t) =>
+                setState(() => _target = t ?? AdminDataTarget.appData),
           ),
-        ),
-        const SizedBox(height: 12),
-        FilledButton.icon(
-          onPressed: _loading ? null : _draft,
-          icon: _loading
-              ? const SizedBox(
-                  width: 16,
-                  height: 16,
-                  child: CircularProgressIndicator(strokeWidth: 2))
-              : const Icon(Icons.auto_awesome),
-          label: Text(_loading ? 'Drafting…' : 'Draft with AI'),
-        ),
-        _error_(_error),
-      ],
+          const SizedBox(height: 12),
+          TextField(
+            controller: _requestCtrl,
+            maxLines: 4,
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'e.g. "The Trevor Project number changed to ..." or '
+                  '"Check Gemini\'s current free-tier rate limits"',
+            ),
+          ),
+          const SizedBox(height: 12),
+          // Optional: point the AI at a specific area/path not otherwise
+          // called out (the maintainer can scope the proposal themselves).
+          TextField(
+            controller: _focusCtrl,
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Focus area / path (optional)',
+              helperText: 'Restrict the AI to one spot, e.g. '
+                  '"config.timeoutsSeconds" or "sections.faq_valid".',
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              FilledButton.icon(
+                onPressed: _loading ? null : _draft,
+                icon: _loading
+                    ? const SizedBox(
+                        width: 16,
+                        height: 16,
+                        child: CircularProgressIndicator(strokeWidth: 2))
+                    : const Icon(Icons.auto_awesome),
+                label: Text(_loading ? 'Drafting…' : 'Draft with AI'),
+              ),
+              const SizedBox(width: 8),
+              OutlinedButton.icon(
+                onPressed: _loading ? null : _revert,
+                icon: const Icon(Icons.history),
+                label: const Text('Revert'),
+              ),
+            ],
+          ),
+          _error_(_error),
+        ],
+      ),
     );
   }
 
@@ -180,8 +297,12 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('${_changes.length} proposed change(s). '
-            'Review each — tick VERIFY items only if you have confirmed them.'),
+        Text(_isRevert
+            ? 'Restore from backup: ${_changes.length} field(s) differ from the '
+                'previous version of ${_target.assetPath}. Tick the part(s) to '
+                'roll back (all pre-ticked = full revert).'
+            : '${_changes.length} proposed change(s). '
+                'Review each — tick VERIFY items only if you have confirmed them.'),
         _error_(_error),
         const SizedBox(height: 8),
         Expanded(
@@ -209,7 +330,7 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
             ),
             FilledButton(
               onPressed: _changes.any((c) => c.approved) ? _build : null,
-              child: const Text('Build updated JSON'),
+              child: Text(_isRevert ? 'Build restored JSON' : 'Build updated JSON'),
             ),
           ],
         ),
@@ -263,9 +384,28 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-            'Updated app_data.json. Replace assets/data/app_data.json with this '
-            'and commit — the release makes it live for everyone.'),
+        if (_isRevert)
+          Container(
+            width: double.infinity,
+            margin: const EdgeInsets.only(bottom: 8),
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: SemanticColors.warningBg(Theme.of(context).brightness),
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: Text(
+              'RESTORED — the selected field(s) have been rolled back to the '
+              'backup. Commit this over ${_target.assetPath} to apply the '
+              'roll-back.',
+              style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  color: SemanticColors.warningText(
+                      Theme.of(context).brightness)),
+            ),
+          ),
+        Text(
+            'Updated ${_target.assetPath}. Replace that file with this and '
+            'commit — the release makes it live for everyone.'),
         const SizedBox(height: 8),
         Expanded(
           child: Container(

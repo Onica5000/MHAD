@@ -2,6 +2,31 @@ import 'dart:convert';
 
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:mhad/data/app_data/app_data.dart';
+import 'package:mhad/data/educational_content.dart';
+
+/// Which dynamic-data file the admin flow is editing. Each is a separate
+/// bundled JSON asset committed to the repo; the AI drafts changes against the
+/// chosen one and the screen emits the updated file.
+enum AdminDataTarget {
+  appData,
+  educational;
+
+  String get label => switch (this) {
+        appData => 'App data (contacts · AI · config · legal · dated · facts)',
+        educational => 'Educational corpus (Learn page + AI reference)',
+      };
+
+  String get assetPath => switch (this) {
+        appData => 'assets/data/app_data.json',
+        educational => 'assets/data/educational_content.json',
+      };
+
+  /// Read the current bundled JSON for this target (the base the AI edits).
+  Future<Map<String, dynamic>> loadRawJson() async => switch (this) {
+        appData => AppData.loadRawJson(),
+        educational => EducationalContent.loadRawJson(),
+      };
+}
 
 /// One AI-proposed change to app_data.json, awaiting human review.
 class ProposedChange {
@@ -53,37 +78,65 @@ class AdminUpdateService {
   final String apiKey;
   AdminUpdateService({required this.apiKey});
 
-  /// Reads the current bundled data as a JSON map (the base the AI edits).
-  static Future<Map<String, dynamic>> currentData() async {
-    return await AppData.loadRawJson();
-  }
+  /// Reads the current bundled data as a JSON map (the base the AI edits) for
+  /// [target] (defaults to the main app-data file).
+  static Future<Map<String, dynamic>> currentData(
+          [AdminDataTarget target = AdminDataTarget.appData]) =>
+      target.loadRawJson();
 
   /// Ask the AI to draft changes for [request] against [current]. Returns the
   /// raw model text (expected to be a JSON object). Live call — not exercised
-  /// in CI.
+  /// in CI. [focusArea] (optional) scopes the AI to one path/area; [target]
+  /// selects the file's update rules.
   Future<String> draftRaw(
-      String request, Map<String, dynamic> current) async {
+    String request,
+    Map<String, dynamic> current, {
+    AdminDataTarget target = AdminDataTarget.appData,
+    String focusArea = '',
+  }) async {
     final model = GenerativeModel(model: appData.ai.model, apiKey: apiKey);
-    final prompt = buildPrompt(request, current);
+    final prompt =
+        buildPrompt(request, current, target: target, focusArea: focusArea);
     final resp = await model.generateContent([Content.text(prompt)]);
     return resp.text ?? '';
   }
 
-  /// The drafting prompt. Public so it can be inspected/tested.
-  static String buildPrompt(String request, Map<String, dynamic> current) {
+  /// The drafting prompt. Public so it can be inspected/tested. [target] picks
+  /// the per-file tier rules; [focusArea] (optional) is a free-text area/path
+  /// the maintainer wants the AI to restrict itself to — this is how the
+  /// maintainer points the AI at a spot that isn't otherwise called out.
+  static String buildPrompt(
+    String request,
+    Map<String, dynamic> current, {
+    AdminDataTarget target = AdminDataTarget.appData,
+    String focusArea = '',
+  }) {
     final pretty = prettyJson(current);
+    final tierRules = switch (target) {
+      AdminDataTarget.appData => '''
+- "autonomy": use "verify" for ANYTHING under "legal" or "dated" (legal/statutory facts, compliance statements, version/effective dates); use "auto" for "contacts", "ai", "urls", "config", and "facts".
+- "path" examples: "contacts.trevorProject.phone", "ai.rpm", "config.timeoutsSeconds.chat", "config.reminders.renewalWindowDays", "legal.validityYears", "dated.privacyPolicyVersion", "facts.facilitatorCompletionStat". Only paths that already exist.''',
+      AdminDataTarget.educational => '''
+- This is the educational corpus (Learn-page + AI-reference prose). EVERY change is "autonomy":"verify" — a human must confirm accuracy (the legal-wording canon governs it).
+- "path" is always "sections.<id>.title", "sections.<id>.content", or "sections.<id>.category" for an EXISTING section id. Only change leaf values; never add/remove/rename sections or change ids.''',
+    };
+    final focus = focusArea.trim().isEmpty
+        ? ''
+        : '\nFOCUS: Restrict your proposal to this area/path only — '
+            '"${focusArea.trim()}". Do NOT propose changes anywhere else.\n';
     return '''
-You maintain the data file for a Pennsylvania Mental Health Advance Directive
-app. Propose updates to the JSON below based on the maintainer's request.
+You maintain the "${target.assetPath}" data file for a Pennsylvania Mental
+Health Advance Directive app. Propose updates to the JSON below based on the
+maintainer's request.
 
 RULES (non-negotiable):
 - Return ONLY a JSON object: {"changes":[{"path","newValue","autonomy","source","rationale"}]}.
-- "path" is a dotted path into the JSON (e.g. "contacts.trevorProject.phone", "ai.rpm", "legal.validityYears"). Only paths that already exist.
-- "autonomy": use "verify" for ANYTHING under "legal" or any legal/statutory fact; "auto" for contacts and "ai"/"urls" config.
+- "path" is a dotted path into the JSON. Only paths that already exist.
+$tierRules
 - "source": a citation or URL you based the change on. REQUIRED. For "verify" changes it must be an authoritative legal/government source.
 - NEVER guess or fabricate. If you are not certain of a value, DO NOT include a change for it. If unsure about everything, return {"changes":[]}.
 - Do not restructure the JSON; only change leaf values.
-
+$focus
 Maintainer request:
 $request
 
@@ -137,6 +190,83 @@ $pretty
     }
     return copy;
   }
+
+  // ── Revert / restore ─────────────────────────────────────────────────────
+
+  /// Decide the autonomy tier for a restore of [path] (so the review UI shows
+  /// the right badge and verify-tier restores are visibly deliberate).
+  static String tierForPath(AdminDataTarget target, String path) {
+    if (target == AdminDataTarget.educational) return 'verify';
+    if (path.startsWith('legal.') || path.startsWith('dated.')) return 'verify';
+    return 'auto';
+  }
+
+  /// Leaf-level diff for a roll-back: every path present in BOTH the [current]
+  /// live data and the [backup] whose value differs, as a restore proposal
+  /// (newValue shows the backup value). The maintainer ticks which parts to
+  /// roll back; [applyRestore] writes the real typed backup values. Skips
+  /// `_meta`/`_note` keys and only restores leaves that still exist (it never
+  /// resurrects a removed field or changes structure).
+  static List<ProposedChange> diffForRestore(
+    Map<String, dynamic> current,
+    Map<String, dynamic> backup, {
+    required AdminDataTarget target,
+  }) {
+    final out = <ProposedChange>[];
+    void walk(String prefix, Map<dynamic, dynamic> cur, Map<dynamic, dynamic> bak) {
+      for (final e in bak.entries) {
+        final key = e.key.toString();
+        if (key.startsWith('_')) continue; // skip _meta / _note metadata
+        if (!cur.containsKey(key)) continue; // only restore existing leaves
+        final path = prefix.isEmpty ? key : '$prefix.$key';
+        final bVal = e.value;
+        final cVal = cur[key];
+        if (bVal is Map && cVal is Map) {
+          walk(path, cVal, bVal);
+        } else {
+          final differs = (bVal is List || bVal is Map || cVal is List || cVal is Map)
+              ? jsonEncode(bVal) != jsonEncode(cVal)
+              : bVal.toString() != cVal.toString();
+          if (differs) {
+            out.add(ProposedChange(
+              path: path,
+              oldValue: _displayValue(cVal),
+              newValue: _displayValue(bVal),
+              autonomy: tierForPath(target, path),
+              source: 'Backup — previous version of ${target.assetPath}',
+              rationale: 'Restore the previous value',
+              // Pre-ticked so a one-click full roll-back works; untick rows to
+              // restore only some parts.
+              approved: true,
+            ));
+          }
+        }
+      }
+    }
+
+    walk('', current, backup);
+    return out;
+  }
+
+  /// Apply the approved restore [changes] onto a deep copy of [base], writing
+  /// the REAL typed value from [backup] at each path (so lists/numbers/bools
+  /// round-trip, unlike the string-coercing forward apply). Pure.
+  static Map<String, dynamic> applyRestore(
+    Map<String, dynamic> base,
+    Map<String, dynamic> backup,
+    Iterable<ProposedChange> changes,
+  ) {
+    final copy = jsonDecode(jsonEncode(base)) as Map<String, dynamic>;
+    for (final c in changes) {
+      if (!c.approved) continue;
+      final raw = _readPath(backup, c.path);
+      if (raw != null) _writePath(copy, c.path, raw);
+    }
+    return copy;
+  }
+
+  static String _displayValue(Object? v) =>
+      (v is Map || v is List) ? jsonEncode(v) : (v?.toString() ?? '(none)');
 
   static String prettyJson(Object data) =>
       const JsonEncoder.withIndent('  ').convert(data);

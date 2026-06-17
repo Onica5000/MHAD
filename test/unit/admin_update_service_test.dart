@@ -133,4 +133,126 @@ Sure! Here is the proposal:
       expect(jsonDecode(s), equals(baseData()));
     });
   });
+
+  group('buildPrompt (target + focus)', () {
+    test('app-data target spells out the auto/verify tiers for new blocks', () {
+      final p = AdminUpdateService.buildPrompt('update timeouts', baseData());
+      expect(p, contains('app_data.json'));
+      expect(p, contains('config'));
+      expect(p, contains('dated'));
+      // verify tier covers legal + dated; auto covers config/facts/contacts.
+      expect(p, contains('"verify" for ANYTHING under "legal" or "dated"'));
+    });
+
+    test('educational target forces verify + the sections.<id> path shape', () {
+      final p = AdminUpdateService.buildPrompt(
+        'fix a typo',
+        {
+          'sections': {
+            'faq_valid': {'title': 'T', 'content': 'C', 'category': 'faq'}
+          }
+        },
+        target: AdminDataTarget.educational,
+      );
+      expect(p, contains('educational_content.json'));
+      expect(p, contains('EVERY change is "autonomy":"verify"'));
+      expect(p, contains('sections.<id>'));
+    });
+
+    test('focus area scopes the proposal and is injected verbatim', () {
+      final p = AdminUpdateService.buildPrompt(
+        'tune it',
+        baseData(),
+        focusArea: 'config.timeoutsSeconds',
+      );
+      expect(p, contains('FOCUS:'));
+      expect(p, contains('config.timeoutsSeconds'));
+    });
+
+    test('targets expose the right asset path + a human label', () {
+      expect(AdminDataTarget.appData.assetPath, 'assets/data/app_data.json');
+      expect(AdminDataTarget.educational.assetPath,
+          'assets/data/educational_content.json');
+      for (final t in AdminDataTarget.values) {
+        expect(t.label, isNotEmpty);
+      }
+    });
+  });
+
+  group('revert / restore (granular)', () {
+    Map<String, dynamic> live() => {
+          '_meta': {'note': 'x'},
+          'contacts': {
+            'trevorProject': {'phone': '1-866-555-0000'}, // changed
+          },
+          'config': {
+            'maxChatMessages': 200, // changed (int)
+            'retry': {
+              'backoffsMs': [0, 999] // changed (list)
+            },
+          },
+          'legal': {'validityYears': 3}, // changed (verify)
+        };
+    Map<String, dynamic> backup() => {
+          '_meta': {'note': 'older'},
+          'contacts': {
+            'trevorProject': {'phone': '1-866-488-7386'},
+          },
+          'config': {
+            'maxChatMessages': 100,
+            'retry': {
+              'backoffsMs': [0, 500, 2000]
+            },
+          },
+          'legal': {'validityYears': 2},
+        };
+
+    test('diffForRestore lists only the changed leaves, skips _meta', () {
+      final diff = AdminUpdateService.diffForRestore(live(), backup(),
+          target: AdminDataTarget.appData);
+      final paths = diff.map((c) => c.path).toSet();
+      expect(
+          paths,
+          {
+            'contacts.trevorProject.phone',
+            'config.maxChatMessages',
+            'config.retry.backoffsMs',
+            'legal.validityYears',
+          });
+      // _meta.note differs but must be ignored.
+      expect(paths.any((p) => p.startsWith('_meta')), isFalse);
+      // verify-tier path is flagged as verify; auto for config/contacts.
+      final legal = diff.firstWhere((c) => c.path == 'legal.validityYears');
+      expect(legal.isVerify, isTrue);
+      final cfg = diff.firstWhere((c) => c.path == 'config.maxChatMessages');
+      expect(cfg.isVerify, isFalse);
+    });
+
+    test('applyRestore writes REAL typed values (int + list round-trip)', () {
+      final diff = AdminUpdateService.diffForRestore(live(), backup(),
+          target: AdminDataTarget.appData);
+      final restored =
+          AdminUpdateService.applyRestore(live(), backup(), diff);
+      expect(restored['config']['maxChatMessages'], 100);
+      expect(restored['config']['maxChatMessages'], isA<int>());
+      expect(restored['config']['retry']['backoffsMs'], [0, 500, 2000]);
+      expect(restored['legal']['validityYears'], 2);
+      expect(restored['contacts']['trevorProject']['phone'], '1-866-488-7386');
+    });
+
+    test('applyRestore only rolls back the ticked parts', () {
+      final diff = AdminUpdateService.diffForRestore(live(), backup(),
+          target: AdminDataTarget.appData);
+      // Untick everything except the phone.
+      for (final c in diff) {
+        c.approved = c.path == 'contacts.trevorProject.phone';
+      }
+      final restored =
+          AdminUpdateService.applyRestore(live(), backup(), diff);
+      expect(restored['contacts']['trevorProject']['phone'], '1-866-488-7386');
+      // The unticked ones keep the live values.
+      expect(restored['config']['maxChatMessages'], 200);
+      expect(restored['legal']['validityYears'], 3);
+    });
+  });
 }
