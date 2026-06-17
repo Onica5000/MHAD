@@ -371,7 +371,7 @@ class _GuardianNominationStepState
 }
 
 /// A single guardian "condition" — a label with a Yes/No segmented toggle,
-/// mirroring the artboard's ConsentRow.
+/// mirroring the artboard's consent-row pattern.
 class _GuardianConditionRow extends StatelessWidget {
   final String label;
   final String? sub;

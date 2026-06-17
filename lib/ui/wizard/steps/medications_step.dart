@@ -6,6 +6,7 @@ import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
+import 'package:mhad/services/clinical_data_service.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/wizard/widgets/medication_autocomplete_field.dart';
 import 'package:mhad/ui/wizard/widgets/wizard_help_button.dart';
@@ -359,6 +360,43 @@ class _MedTable extends StatelessWidget {
                         children: [
                           MedicationAutocompleteField(
                             controller: rows[i].nameCtrl,
+                          ),
+                          // NTI monitoring note — shows only when the entered
+                          // medication is a narrow-therapeutic-index drug.
+                          // Rebuilds as the name changes; informational only.
+                          ListenableBuilder(
+                            listenable: rows[i].nameCtrl,
+                            builder: (context, _) {
+                              final note = NtiDrugReference.ntiNote(
+                                  rows[i].nameCtrl.text);
+                              if (note == null) return const SizedBox.shrink();
+                              return Padding(
+                                padding: const EdgeInsets.only(top: 6),
+                                child: Row(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                  children: [
+                                    Icon(Icons.info_outline,
+                                        size: 14, color: cs.tertiary),
+                                    const SizedBox(width: 6),
+                                    Expanded(
+                                      child: Text(
+                                        'Narrow therapeutic index drug — $note. '
+                                        'Pennsylvania law bars generic '
+                                        'substitution for these; note any '
+                                        'monitoring needs below. (Informational, '
+                                        'not medical advice.)',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall
+                                            ?.copyWith(
+                                                color: cs.onSurfaceVariant),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
                           ),
                           const SizedBox(height: 8),
                           TextFormField(
