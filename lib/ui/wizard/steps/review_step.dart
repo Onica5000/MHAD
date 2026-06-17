@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/agent_ext.dart';
 import 'package:mhad/utils/address_format.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
+import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
@@ -424,6 +426,33 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
             ),
           );
         }),
+
+        const SizedBox(height: 18),
+        // Opt-in consistency check (moved here from Settings). The user runs it
+        // on demand to flag cross-step contradictions before signing.
+        const SectionLabel('Optional check'),
+        const SizedBox(height: 8),
+        SizedBox(
+          width: double.infinity,
+          child: OutlinedButton.icon(
+            onPressed: () =>
+                context.push(AppRoutes.aiCheckRoute(widget.directiveId)),
+            icon: const Icon(Icons.fact_check_outlined, size: 18),
+            label: const Text('Run a consistency check'),
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          'Scans your answers for cross-step contradictions (e.g. an agent-'
+          'consent that conflicts with an avoid list). Optional — you can sign '
+          'without it.',
+          style: TextStyle(
+            fontFamily: 'DM Sans',
+            fontSize: 12,
+            height: 1.4,
+            color: p.textMuted,
+          ),
+        ),
 
         const SizedBox(height: 16),
 

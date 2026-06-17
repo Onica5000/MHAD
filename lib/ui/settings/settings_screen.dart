@@ -542,7 +542,6 @@ class _CurrentDirectiveSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final p = Theme.of(context).mhadPalette;
     final directivesAsync = ref.watch(allDirectivesProvider);
 
     return directivesAsync.maybeWhen(
@@ -562,28 +561,16 @@ class _CurrentDirectiveSection extends ConsumerWidget {
           children: [
             const SectionLabel('My current directive'),
             const SizedBox(height: 8),
+            // The AI consistency check moved to the wizard's Review step (an
+            // opt-in button there). Crisis plan / Ulysses moved to "Anything
+            // else" earlier.
             DesignCard(
               padding: EdgeInsets.zero,
-              child: Column(
-                children: [
-                  _SettingsRow(
-                    icon: Icons.swap_horiz_outlined,
-                    title: 'Plain ↔ Legal language toggle',
-                    subtitle: 'Switch how the text reads',
-                    onTap: () =>
-                        context.push(AppRoutes.legalToggleRoute(d.id)),
-                  ),
-                  Divider(height: 1, color: p.border),
-                  // Crisis plan / WRAP and the Self-binding (Ulysses) clause
-                  // moved into the wizard's "Anything else" step (2026-06-13).
-                  _SettingsRow(
-                    icon: Icons.auto_awesome_outlined,
-                    title: 'AI consistency check',
-                    subtitle: 'Flag cross-step contradictions',
-                    onTap: () =>
-                        context.push(AppRoutes.aiCheckRoute(d.id)),
-                  ),
-                ],
+              child: _SettingsRow(
+                icon: Icons.swap_horiz_outlined,
+                title: 'Plain ↔ Legal language toggle',
+                subtitle: 'Switch how the text reads',
+                onTap: () => context.push(AppRoutes.legalToggleRoute(d.id)),
               ),
             ),
             const SizedBox(height: 20),
