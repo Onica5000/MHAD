@@ -208,10 +208,18 @@ class WebSidebar extends ConsumerWidget {
               ),
             ),
 
+            // "Get help" pinned directly above the crisis card — peer
+            // specialists, rights advocates, clinician referral. Promoted here
+            // from Settings so this important info is prominent.
+            Padding(
+              padding: const EdgeInsets.fromLTRB(12, 4, 12, 4),
+              child: _GetHelpCard(),
+            ),
+
             // Crisis card pinned at bottom (in addition to the global floating
             // button). Opens the full crisis-resources sheet.
             Padding(
-              padding: const EdgeInsets.fromLTRB(12, 4, 12, 8),
+              padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
               child: _CrisisCard(),
             ),
 
@@ -508,6 +516,63 @@ class _CrisisCard extends StatelessWidget {
                   fontFamily: 'DM Sans',
                   fontSize: 11,
                   color: SemanticColors.errorTextLight.withValues(alpha: 0.85),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Prominent "Get help" card in the sidebar (above the crisis card): peer
+/// specialists, rights advocates, clinician referral. Opens the facilitator
+/// screen. Promoted here from Settings so it's clearly visible.
+class _GetHelpCard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
+    return Material(
+      color: p.primaryTint,
+      borderRadius: BorderRadius.circular(12),
+      child: InkWell(
+        onTap: () => appRouter.push(AppRoutes.facilitator),
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: p.primary.withValues(alpha: 0.20)),
+          ),
+          child: Row(
+            children: [
+              Icon(Icons.support_agent_outlined, size: 20, color: p.primary),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Get help',
+                      style: TextStyle(
+                        fontFamily: 'DM Sans',
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                        color: p.text,
+                      ),
+                    ),
+                    const SizedBox(height: 1),
+                    Text(
+                      'Peer support · advocates · referrals',
+                      style: TextStyle(
+                        fontFamily: 'DM Sans',
+                        fontSize: 11,
+                        color: p.textMuted,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
