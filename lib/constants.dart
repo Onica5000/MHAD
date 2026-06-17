@@ -1,6 +1,7 @@
 // Contact / resource phone numbers moved to assets/data/app_data.json (read via
 // `appData.contact(...)` / `appData.phoneOf(...)`) so they can be updated via
 // the admin propose/approve flow. See lib/data/app_data/app_data.dart.
+import 'package:mhad/data/app_data/app_data.dart';
 
 /// Consent / authority values persisted in the directive's string preference
 /// fields (medicationConsent, ectConsent, experimentalConsent, drugTrialConsent).
@@ -17,7 +18,8 @@ const consentConditionalPrefix = 'conditional:';
 
 /// Public-mode session-cache TTL. Confirmed work is held in memory only this
 /// long (public/web halves of the same ephemeral-session feature share it).
-const sessionCacheTtl = Duration(minutes: 10);
+/// Read from the dynamic `config` block (`config.sessionCacheMinutes`).
+Duration get sessionCacheTtl => appData.config.sessionCacheTtl;
 
 /// Canonical short caveat shown wherever AI generates content (chat replies,
 /// field suggestions). Keep this exact wording so the app's voice stays

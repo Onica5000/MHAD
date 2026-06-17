@@ -73,6 +73,151 @@ class AiConfig {
       );
 }
 
+/// Backend behavioral knobs (timeouts, retries, reminder windows, caps) — the
+/// `auto`-tier `config` block. Defaults mirror the previous code constants, so a
+/// missing/corrupt block leaves behaviour unchanged. Read via the [appData]
+/// singleton at each runtime site so they can be tuned without a code edit.
+class AppConfig {
+  // AI request timeouts (seconds).
+  final int chatTimeoutSeconds;
+  final int groundingTimeoutSeconds;
+  final int stepSuggestionTimeoutSeconds;
+  final int sideEffectsTimeoutSeconds;
+  final int documentExtractionTimeoutSeconds;
+  final int smartFillTimeoutSeconds;
+  final int clinicalApiTimeoutSeconds;
+  // Retry / backoff.
+  final int retryMaxAttempts;
+  final List<int> retryBackoffsMs;
+  final int rateLimitBackoffSeconds;
+  // Reminder scheduling windows / cooldowns (days).
+  final int renewalWindowDays;
+  final int checkInWindowDays;
+  final int renewalCooldownDays;
+  final int checkInCooldownDays;
+  // Ephemeral session cache TTL (minutes).
+  final int sessionCacheMinutes;
+  // NIH clinical-data service.
+  final int clinicalCacheHours;
+  final int clinicalMaxCacheEntries;
+  final int clinicalMaxRequestsPerSecond;
+  // AI input caps.
+  final int maxIcdConditions;
+  final int maxMedicationsPerCategory;
+  final int maxFieldChars;
+  final int maxImageDimension;
+  final int jpegQuality;
+  // Misc.
+  final int maxChatMessages;
+  final int maxUploadBytes;
+  final int textFieldMaxChars;
+  final int medicationNoteMaxChars;
+
+  const AppConfig({
+    this.chatTimeoutSeconds = 30,
+    this.groundingTimeoutSeconds = 40,
+    this.stepSuggestionTimeoutSeconds = 20,
+    this.sideEffectsTimeoutSeconds = 30,
+    this.documentExtractionTimeoutSeconds = 60,
+    this.smartFillTimeoutSeconds = 45,
+    this.clinicalApiTimeoutSeconds = 5,
+    this.retryMaxAttempts = 3,
+    this.retryBackoffsMs = const [0, 500, 2000],
+    this.rateLimitBackoffSeconds = 10,
+    this.renewalWindowDays = 28,
+    this.checkInWindowDays = 90,
+    this.renewalCooldownDays = 7,
+    this.checkInCooldownDays = 90,
+    this.sessionCacheMinutes = 10,
+    this.clinicalCacheHours = 12,
+    this.clinicalMaxCacheEntries = 500,
+    this.clinicalMaxRequestsPerSecond = 20,
+    this.maxIcdConditions = 30,
+    this.maxMedicationsPerCategory = 50,
+    this.maxFieldChars = 2000,
+    this.maxImageDimension = 1024,
+    this.jpegQuality = 75,
+    this.maxChatMessages = 100,
+    this.maxUploadBytes = 10485760,
+    this.textFieldMaxChars = 2000,
+    this.medicationNoteMaxChars = 500,
+  });
+
+  // Convenience Duration accessors for the call sites.
+  Duration get chatTimeout => Duration(seconds: chatTimeoutSeconds);
+  Duration get groundingTimeout => Duration(seconds: groundingTimeoutSeconds);
+  Duration get stepSuggestionTimeout =>
+      Duration(seconds: stepSuggestionTimeoutSeconds);
+  Duration get sideEffectsTimeout =>
+      Duration(seconds: sideEffectsTimeoutSeconds);
+  Duration get documentExtractionTimeout =>
+      Duration(seconds: documentExtractionTimeoutSeconds);
+  Duration get smartFillTimeout => Duration(seconds: smartFillTimeoutSeconds);
+  Duration get clinicalApiTimeout =>
+      Duration(seconds: clinicalApiTimeoutSeconds);
+  Duration get rateLimitBackoff => Duration(seconds: rateLimitBackoffSeconds);
+  List<Duration> get retryBackoffs =>
+      [for (final ms in retryBackoffsMs) Duration(milliseconds: ms)];
+  Duration get sessionCacheTtl => Duration(minutes: sessionCacheMinutes);
+  Duration get clinicalCacheTtl => Duration(hours: clinicalCacheHours);
+
+  factory AppConfig.fromJson(Map<String, dynamic> m) {
+    final t = (m['timeoutsSeconds'] as Map?)?.cast<String, dynamic>() ?? const {};
+    final r = (m['retry'] as Map?)?.cast<String, dynamic>() ?? const {};
+    final rem =
+        (m['reminders'] as Map?)?.cast<String, dynamic>() ?? const {};
+    final cl = (m['clinical'] as Map?)?.cast<String, dynamic>() ?? const {};
+    final ai = (m['aiInput'] as Map?)?.cast<String, dynamic>() ?? const {};
+    const d = AppConfig();
+    int i(Map<String, dynamic> src, String k, int fallback) =>
+        (src[k] as num?)?.toInt() ?? fallback;
+    return AppConfig(
+      chatTimeoutSeconds: i(t, 'chat', d.chatTimeoutSeconds),
+      groundingTimeoutSeconds: i(t, 'grounding', d.groundingTimeoutSeconds),
+      stepSuggestionTimeoutSeconds:
+          i(t, 'stepSuggestion', d.stepSuggestionTimeoutSeconds),
+      sideEffectsTimeoutSeconds:
+          i(t, 'sideEffects', d.sideEffectsTimeoutSeconds),
+      documentExtractionTimeoutSeconds:
+          i(t, 'documentExtraction', d.documentExtractionTimeoutSeconds),
+      smartFillTimeoutSeconds: i(t, 'smartFill', d.smartFillTimeoutSeconds),
+      clinicalApiTimeoutSeconds:
+          i(t, 'clinicalApi', d.clinicalApiTimeoutSeconds),
+      retryMaxAttempts: i(r, 'maxAttempts', d.retryMaxAttempts),
+      retryBackoffsMs: [
+        for (final v in (r['backoffsMs'] as List?) ?? d.retryBackoffsMs)
+          (v as num).toInt(),
+      ],
+      rateLimitBackoffSeconds:
+          i(r, 'rateLimitBackoffSeconds', d.rateLimitBackoffSeconds),
+      renewalWindowDays: i(rem, 'renewalWindowDays', d.renewalWindowDays),
+      checkInWindowDays: i(rem, 'checkInWindowDays', d.checkInWindowDays),
+      renewalCooldownDays:
+          i(rem, 'renewalCooldownDays', d.renewalCooldownDays),
+      checkInCooldownDays:
+          i(rem, 'checkInCooldownDays', d.checkInCooldownDays),
+      sessionCacheMinutes:
+          i(m, 'sessionCacheMinutes', d.sessionCacheMinutes),
+      clinicalCacheHours: i(cl, 'cacheHours', d.clinicalCacheHours),
+      clinicalMaxCacheEntries:
+          i(cl, 'maxCacheEntries', d.clinicalMaxCacheEntries),
+      clinicalMaxRequestsPerSecond:
+          i(cl, 'maxRequestsPerSecond', d.clinicalMaxRequestsPerSecond),
+      maxIcdConditions: i(ai, 'maxIcdConditions', d.maxIcdConditions),
+      maxMedicationsPerCategory:
+          i(ai, 'maxMedicationsPerCategory', d.maxMedicationsPerCategory),
+      maxFieldChars: i(ai, 'maxFieldChars', d.maxFieldChars),
+      maxImageDimension: i(ai, 'maxImageDimension', d.maxImageDimension),
+      jpegQuality: i(ai, 'jpegQuality', d.jpegQuality),
+      maxChatMessages: i(m, 'maxChatMessages', d.maxChatMessages),
+      maxUploadBytes: i(m, 'maxUploadBytes', d.maxUploadBytes),
+      textFieldMaxChars: i(m, 'textFieldMaxChars', d.textFieldMaxChars),
+      medicationNoteMaxChars:
+          i(m, 'medicationNoteMaxChars', d.medicationNoteMaxChars),
+    );
+  }
+}
+
 /// Canonical PA MHAD legal facts (the `verify`-tier block). These are authored
 /// as prose throughout the app; this is the single structured reference and the
 /// admin-flow update target — NOT a runtime template. [proseLocations] lists the
@@ -149,6 +294,9 @@ class AppData {
   final AiConfig ai;
   final Map<String, String> urls;
   final LegalFacts legal;
+  final AppConfig config;
+  final Map<String, String> dated;
+  final Map<String, String> facts;
 
   const AppData({
     required this.contacts,
@@ -156,10 +304,23 @@ class AppData {
     this.ai = const AiConfig(),
     this.urls = const {},
     this.legal = const LegalFacts(),
+    this.config = const AppConfig(),
+    this.dated = const {},
+    this.facts = const {},
   });
 
   /// Public privacy-policy URL (must match the Play Console + developer site).
   String get privacyPolicyUrl => urls['privacyPolicy'] ?? '';
+
+  /// Where users manage their Gemini API key.
+  String get geminiApiKeyUrl =>
+      urls['geminiApiKeyManagement'] ?? 'https://aistudio.google.com/apikey';
+
+  /// Null-safe lookup into the `dated` block (version/date strings).
+  String dateFact(String key) => dated[key] ?? '';
+
+  /// Null-safe lookup into the `facts` block (updatable user-facing copy).
+  String fact(String key) => facts[key] ?? '';
 
   /// Look up a contact by its key (e.g. `'crisis988'`). Returns an empty
   /// [ContactEntry] rather than null so call sites never crash on a missing key.
@@ -203,8 +364,22 @@ class AppData {
       urls: urls,
       legal: LegalFacts.fromJson(
           (json['legal'] as Map?)?.cast<String, dynamic>() ?? const {}),
+      config: AppConfig.fromJson(
+          (json['config'] as Map?)?.cast<String, dynamic>() ?? const {}),
+      dated: _stringMap(json['dated']),
+      facts: _stringMap(json['facts']),
     );
   }
+
+  /// Flatten a JSON object into a String→String map, dropping nested
+  /// objects/lists (keeps simple version/fact strings; `_note`/`autonomy`
+  /// metadata is harmless to carry).
+  static Map<String, String> _stringMap(Object? raw) => {
+        for (final e in ((raw as Map?)?.cast<String, dynamic>() ?? const {})
+            .entries)
+          if (e.value is String || e.value is num || e.value is bool)
+            e.key: e.value.toString(),
+      };
 
   /// The loaded data. Initialised to a minimal [_fallback] so reads never throw
   /// before [load] runs (tests, probes) or if the asset fails to parse.

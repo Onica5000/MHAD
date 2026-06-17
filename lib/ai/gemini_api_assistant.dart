@@ -81,15 +81,20 @@ class GeminiApiAssistant implements AiAssistant {
     // Strip PII before sending to external API (V4-L15 chokepoint).
     final sanitizedMessage = sanitizeForApi(userMessage);
 
-    // Retry transient failures with increasing backoff
-    const maxAttempts = 3;
-    const backoffs = [Duration.zero, Duration(milliseconds: 500), Duration(seconds: 2)];
+    // Retry transient failures with increasing backoff (tunable via config).
+    final maxAttempts = appData.config.retryMaxAttempts;
+    final backoffList = appData.config.retryBackoffs;
+    // Clamp the index so a config with more attempts than backoff steps reuses
+    // the last (largest) delay instead of throwing a range error.
+    Duration backoffs(int i) => backoffList.isEmpty
+        ? Duration.zero
+        : backoffList[i < backoffList.length ? i : backoffList.length - 1];
 
     for (var attempt = 0; attempt < maxAttempts; attempt++) {
       try {
         final response = await chat
             .sendMessage(Content.text(sanitizedMessage))
-            .timeout(const Duration(seconds: 30));
+            .timeout(appData.config.chatTimeout);
         final text = response.text;
         if (text == null || text.isEmpty) {
           throw Exception(
@@ -100,7 +105,7 @@ class GeminiApiAssistant implements AiAssistant {
       } on TimeoutException catch (e) {
         debugPrint('Gemini API timeout (attempt ${attempt + 1}): $e');
         if (attempt < maxAttempts - 1) {
-          await Future.delayed(backoffs[attempt]);
+          await Future.delayed(backoffs(attempt));
           continue;
         }
         throw Exception(
@@ -118,7 +123,7 @@ class GeminiApiAssistant implements AiAssistant {
         // Retry on server errors (5xx)
         if (e.message.contains('500') || e.message.contains('503')) {
           if (attempt < maxAttempts - 1) {
-            await Future.delayed(backoffs[attempt]);
+            await Future.delayed(backoffs(attempt));
             continue;
           }
         }
@@ -174,7 +179,7 @@ class GeminiApiAssistant implements AiAssistant {
       final resp = await _httpClient
           .post(uri,
               headers: {'Content-Type': 'application/json'}, body: body)
-          .timeout(const Duration(seconds: 40));
+          .timeout(appData.config.groundingTimeout);
       if (resp.statusCode == 429) {
         throw Exception('Too many requests. Please wait a minute and try '
             'again.');
@@ -262,7 +267,7 @@ class GeminiApiAssistant implements AiAssistant {
     try {
       final response = await model
           .generateContent([Content.text(sanitizeForApi(prompt.toString()))])
-          .timeout(const Duration(seconds: 20));
+          .timeout(appData.config.stepSuggestionTimeout);
       var text = response.text?.trim();
       if (text == null || text.isEmpty) return null;
       // Strip markdown code fences if the model wrapped the JSON.
@@ -339,7 +344,7 @@ class GeminiApiAssistant implements AiAssistant {
     try {
       final response = await model
           .generateContent([Content.text(sanitizeForApi(prompt.toString()))])
-          .timeout(const Duration(seconds: 30));
+          .timeout(appData.config.sideEffectsTimeout);
       var text = response.text?.trim();
       if (text == null || text.isEmpty) return const [];
       if (text.startsWith('```')) {

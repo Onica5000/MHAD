@@ -24,7 +24,7 @@ class DraftRecoveryService {
 
   /// 10 minutes — matches [sessionCacheTtl] / [WebSessionCache] so every
   /// crash-recovery window in the app is the same length.
-  static const ttl = sessionCacheTtl;
+  static Duration get ttl => sessionCacheTtl;
 
   /// Fields that are safe to auto-save (non-PII).
   static const safeFields = {

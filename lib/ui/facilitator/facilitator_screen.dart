@@ -57,9 +57,8 @@ class FacilitatorScreen extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           Text(
-            'People who fill this out with help finish it about 20× more '
-            'often (Swanson et al. 2006). Pick the kind of support that '
-            'fits today.',
+            '${appData.fact('facilitatorCompletionStat')} '
+            'Pick the kind of support that fits today.',
             style: TextStyle(
               fontFamily: 'DM Sans',
               fontSize: 14,

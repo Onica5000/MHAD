@@ -109,4 +109,45 @@ void main() {
       expect(l.citations, isEmpty);
     });
   });
+
+  group('AppConfig (auto tier — backend knobs)', () {
+    test('bundled asset carries the config knobs', () async {
+      final data = await AppData.load();
+      final c = data.config;
+      expect(c.chatTimeoutSeconds, 30);
+      expect(c.documentExtractionTimeoutSeconds, 60);
+      expect(c.retryMaxAttempts, 3);
+      expect(c.retryBackoffsMs, [0, 500, 2000]);
+      expect(c.renewalWindowDays, 28);
+      expect(c.checkInWindowDays, 90);
+      expect(c.sessionCacheMinutes, 10);
+      expect(c.clinicalMaxRequestsPerSecond, 20);
+      expect(c.maxImageDimension, 1024);
+      expect(c.maxUploadBytes, 10485760);
+      // Duration helpers compose correctly.
+      expect(c.chatTimeout, const Duration(seconds: 30));
+      expect(c.sessionCacheTtl, const Duration(minutes: 10));
+      expect(c.retryBackoffs.last, const Duration(seconds: 2));
+    });
+
+    test('defaults mirror the old code constants when the block is absent', () {
+      final c = AppConfig.fromJson(const {});
+      expect(c.chatTimeoutSeconds, 30);
+      expect(c.smartFillTimeoutSeconds, 45);
+      expect(c.renewalCooldownDays, 7);
+      expect(c.maxChatMessages, 100);
+      expect(c.textFieldMaxChars, 2000);
+      expect(c.medicationNoteMaxChars, 500);
+    });
+  });
+
+  group('dated + facts blocks', () {
+    test('bundled asset carries dated/version + facts copy', () async {
+      final data = await AppData.load();
+      expect(data.dateFact('privacyPolicyVersion'), 'v1.1');
+      expect(data.dateFact('privacyPolicyUpdated'), 'May 2026');
+      expect(data.fact('facilitatorCompletionStat'), contains('20×'));
+      expect(data.geminiApiKeyUrl, startsWith('https://'));
+    });
+  });
 }

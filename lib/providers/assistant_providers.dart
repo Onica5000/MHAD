@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mhad/ai/ai_assistant.dart';
 import 'package:mhad/ai/gemini_api_assistant.dart';
+import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/services/draft_recovery_service.dart';
 import 'package:mhad/services/gemini_rate_tracker.dart';
@@ -156,7 +157,7 @@ Future<void> endPublicSession(WidgetRef ref) async {
 class ConversationNotifier extends StateNotifier<List<ChatMessage>> {
   ConversationNotifier() : super([]);
 
-  static const maxMessages = 100;
+  static int get maxMessages => appData.config.maxChatMessages;
 
   void add(ChatMessage message) {
     final updated = [...state, message];

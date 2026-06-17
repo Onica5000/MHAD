@@ -19,7 +19,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class PublicSessionCache {
   PublicSessionCache._();
 
-  static const ttl = sessionCacheTtl;
+  static Duration get ttl => sessionCacheTtl;
 
   static const _apiKeyKey = 'public_session_api_key';
   static const _timestampKey = 'public_session_timestamp';

@@ -16,7 +16,61 @@
     "source": "ai.google.dev/gemini-api/docs/rate-limits"
   },
   "urls": {
-    "privacyPolicy": "https://onica5000.github.io/mhad/privacy"
+    "privacyPolicy": "https://onica5000.github.io/mhad/privacy",
+    "geminiApiKeyManagement": "https://aistudio.google.com/apikey"
+  },
+  "config": {
+    "_note": "Backend behavioral knobs (timeouts, retries, reminder windows, caps). 'auto' tier — tuning/vendor-driven; an AI may propose updates for review. Pure-internal math constants (the token-estimate divisor and PBKDF2 iteration count) intentionally stay in code because changing them silently affects correctness, not behavior tuning.",
+    "autonomy": "auto",
+    "timeoutsSeconds": {
+      "chat": 30,
+      "grounding": 40,
+      "stepSuggestion": 20,
+      "sideEffects": 30,
+      "documentExtraction": 60,
+      "smartFill": 45,
+      "clinicalApi": 5
+    },
+    "retry": {
+      "maxAttempts": 3,
+      "backoffsMs": [0, 500, 2000],
+      "rateLimitBackoffSeconds": 10
+    },
+    "reminders": {
+      "renewalWindowDays": 28,
+      "checkInWindowDays": 90,
+      "renewalCooldownDays": 7,
+      "checkInCooldownDays": 90
+    },
+    "sessionCacheMinutes": 10,
+    "clinical": {
+      "cacheHours": 12,
+      "maxCacheEntries": 500,
+      "maxRequestsPerSecond": 20
+    },
+    "aiInput": {
+      "maxIcdConditions": 30,
+      "maxMedicationsPerCategory": 50,
+      "maxFieldChars": 2000,
+      "maxImageDimension": 1024,
+      "jpegQuality": 75
+    },
+    "maxChatMessages": 100,
+    "maxUploadBytes": 10485760,
+    "textFieldMaxChars": 2000,
+    "medicationNoteMaxChars": 500
+  },
+  "dated": {
+    "_note": "Date/version-stamped facts shown to users that go stale. VERIFY tier — confirm before changing.",
+    "autonomy": "verify",
+    "privacyPolicyVersion": "v1.1",
+    "privacyPolicyUpdated": "May 2026",
+    "playStoreRulesAsOf": "Jan 2026"
+  },
+  "facts": {
+    "_note": "Updatable user-facing factual copy (research stats, etc.). 'auto' tier for low-risk resource/research facts.",
+    "autonomy": "auto",
+    "facilitatorCompletionStat": "People who fill this out with help finish it about 20× more often (Swanson et al. 2006)."
   },
   "legal": {
     "_note": "Canonical PA MHAD legal facts. VERIFY tier — a human must approve any change (AND the matching prose edits in proseLocations) before it ships. These facts are authored as prose throughout the app; this block is the single structured reference + the admin-flow update target, NOT a runtime template (the legal-wording-canon governs the prose).",

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:drift/drift.dart' show Value;
+import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/wizard/widgets/example_text_button.dart';
@@ -226,7 +227,7 @@ class _AgentAuthorityStepState
           TextFormField(
             controller: _limitationsCtrl,
             maxLines: 4,
-            maxLength: 2000,
+            maxLength: appData.config.textFieldMaxChars,
             decoration: InputDecoration(
               labelText: 'Additional limitations or instructions (optional)',
               border: const OutlineInputBorder(),

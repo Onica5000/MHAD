@@ -15,7 +15,7 @@ class WebSessionCache {
 
   static const _dataKey = 'web_session_directive';
   static const _tsKey = 'web_session_timestamp';
-  static const ttl = sessionCacheTtl;
+  static Duration get ttl => sessionCacheTtl;
 
   /// Save a directive snapshot.
   static Future<void> saveDirective(Map<String, dynamic> snapshot) async {

@@ -34,7 +34,8 @@ class PrivacyPolicyScreen extends StatelessWidget {
             Text('PA MHAD App Privacy Policy', style: headingStyle),
             const SizedBox(height: 4),
             Text(
-              'Last updated: May 2026 (v1.1)',
+              'Last updated: ${appData.dateFact('privacyPolicyUpdated')} '
+              '(${appData.dateFact('privacyPolicyVersion')})',
               style: bodyStyle?.copyWith(color: cs.onSurfaceVariant),
             ),
             const SizedBox(height: 8),

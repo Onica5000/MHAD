@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
@@ -144,7 +145,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
     }
   }
 
-  static final _aiStudioUri = Uri.parse('https://aistudio.google.com/apikey');
+  static Uri get _aiStudioUri => Uri.parse(appData.geminiApiKeyUrl);
 
   @override
   Widget build(BuildContext context) {

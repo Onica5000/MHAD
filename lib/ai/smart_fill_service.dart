@@ -15,9 +15,10 @@ import 'package:mhad/services/gemini_rate_tracker.dart';
 /// The structured input collected from the user via NIH APIs (zero tokens),
 /// plus existing wizard data so the AI can supplement rather than duplicate.
 class SmartFillInput {
-  static const maxConditions = 30;
-  static const maxMedsPerCategory = 50;
-  static const maxFieldLength = 2000;
+  // AI input caps — read from the dynamic `config` block (`config.aiInput.*`).
+  static int get maxConditions => appData.config.maxIcdConditions;
+  static int get maxMedsPerCategory => appData.config.maxMedicationsPerCategory;
+  static int get maxFieldLength => appData.config.maxFieldChars;
   static const _validFormTypes = {'combined', 'declaration', 'poa'};
 
   final List<IcdCondition> conditions;
@@ -329,7 +330,7 @@ class SmartFillService {
         try {
           response = await model
               .generateContent([Content.text(prompt)]).timeout(
-            const Duration(seconds: 45),
+            appData.config.smartFillTimeout,
           );
           break; // success
         } on GenerativeAIException catch (e) {
@@ -337,7 +338,7 @@ class SmartFillService {
                   e.message.toLowerCase().contains('rate limit')) &&
               attempt == 0) {
             // Wait and retry once
-            await Future<void>.delayed(const Duration(seconds: 10));
+            await Future<void>.delayed(appData.config.rateLimitBackoff);
             continue;
           }
           rethrow;

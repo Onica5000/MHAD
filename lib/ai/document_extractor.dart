@@ -22,8 +22,9 @@ class DocumentExtractor {
 
   // Gemini tiles images into 768x768 chunks at ~258 tokens each.
   // 1024px max keeps a portrait document to ~2 tiles (~516 tokens).
-  static const _maxImageDimension = 1024;
-  static const _jpegQuality = 75;
+  // Read from the dynamic `config` block (`config.aiInput.*`).
+  static int get _maxImageDimension => appData.config.maxImageDimension;
+  static int get _jpegQuality => appData.config.jpegQuality;
 
   /// Extract structured data from raw bytes.
   Future<ExtractionWithPiiReport> extractFromBytes(
@@ -59,7 +60,7 @@ class DocumentExtractor {
 
     final response = await model
         .generateContent([Content.multi(parts)]).timeout(
-      const Duration(seconds: 60),
+      appData.config.documentExtractionTimeout,
     );
 
     final text = response.text;

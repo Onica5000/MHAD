@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/reminders/reminder_sheets.dart';
@@ -30,13 +31,15 @@ class ReminderScheduler {
   static const _kRenewLastShown = 'reminder_renew_last_shown_';
   static const _kCheckInLastShown = 'reminder_checkin_last_shown_';
 
-  /// Window thresholds in days.
-  static const _renewWindow = 28;
-  static const _checkInWindow = 90;
-
-  /// Re-show cooldowns (so we don't nag every single launch once due).
-  static const _renewCooldown = Duration(days: 7);
-  static const _checkInCooldown = Duration(days: 90);
+  /// Window thresholds in days + re-show cooldowns (so we don't nag every
+  /// launch once due). Read from the dynamic `config` block so they can be
+  /// tuned without a code release.
+  static int get _renewWindow => appData.config.renewalWindowDays;
+  static int get _checkInWindow => appData.config.checkInWindowDays;
+  static Duration get _renewCooldown =>
+      Duration(days: appData.config.renewalCooldownDays);
+  static Duration get _checkInCooldown =>
+      Duration(days: appData.config.checkInCooldownDays);
 
   /// Walk every completed directive, find the most urgent due reminder,
   /// and present its sheet. Called from `HomeScreen.initState` after the

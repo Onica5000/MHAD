@@ -2,6 +2,7 @@ import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/constants.dart';
+import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
@@ -362,7 +363,7 @@ class _MedTable extends StatelessWidget {
                           const SizedBox(height: 8),
                           TextFormField(
                             controller: rows[i].reasonCtrl,
-                            maxLength: 500,
+                            maxLength: appData.config.medicationNoteMaxChars,
                             decoration: const InputDecoration(
                               labelText: 'Reason / notes (optional)',
                               border: OutlineInputBorder(),

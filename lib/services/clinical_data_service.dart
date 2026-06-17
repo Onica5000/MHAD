@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
+import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/services/certificate_pinning_service.dart';
 
 /// Wraps the NIH Clinical Table Search Service for both RxTerms (medications)
@@ -18,10 +19,10 @@ class ClinicalDataService {
 
   static final _client = CertificatePinningService.createPinnedClient();
 
-  // ── Cache (12h TTL per NLM recommendation) ──────────────────────────
+  // ── Cache (TTL per NLM recommendation; from the dynamic config block) ──
   static final _cache = <String, _CacheEntry>{};
-  static const _cacheTtl = Duration(hours: 12);
-  static const _maxCacheSize = 500;
+  static Duration get _cacheTtl => appData.config.clinicalCacheTtl;
+  static int get _maxCacheSize => appData.config.clinicalMaxCacheEntries;
 
   static String? _getCached(String key) {
     final entry = _cache[key];
@@ -46,7 +47,8 @@ class ClinicalDataService {
   // Uses a Completer-based mutex to prevent concurrent requests from
   // bypassing the rate limit.
   static final _requestTimestamps = <DateTime>[];
-  static const _maxRequestsPerSecond = 20;
+  static int get _maxRequestsPerSecond =>
+      appData.config.clinicalMaxRequestsPerSecond;
   static Completer<void>? _rateLimitLock;
 
   static Future<void> _rateLimit() async {
@@ -81,7 +83,7 @@ class ClinicalDataService {
     if (cached != null) return cached;
 
     await _rateLimit();
-    final resp = await _client.get(uri).timeout(const Duration(seconds: 5));
+    final resp = await _client.get(uri).timeout(appData.config.clinicalApiTimeout);
     if (resp.statusCode != 200) {
       debugPrint('ClinicalDataService: ${uri.path} returned ${resp.statusCode}');
       return null;

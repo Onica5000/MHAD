@@ -7,6 +7,7 @@ import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/ai/document_extraction_result.dart';
+import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/ai/document_extractor.dart';
 import 'package:mhad/ai/smart_fill_service.dart';
 import 'package:mhad/data/database/app_database.dart';
@@ -393,8 +394,8 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
       return;
     }
 
-    // Check for oversized files (>10MB per file — Gemini limit for inline data)
-    const maxFileSizeBytes = 10 * 1024 * 1024; // 10 MB
+    // Check for oversized files (Gemini limit for inline data; from config)
+    final maxFileSizeBytes = appData.config.maxUploadBytes;
     for (final doc in docs) {
       if (doc.bytes != null && doc.bytes!.length > maxFileSizeBytes) {
         if (mounted) {

@@ -195,7 +195,7 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                   ),
                   Text(
                     hasKey
-                        ? '● ACTIVE · GEMINI 2.5 FLASH · TEXT PII STRIPPED BEFORE SEND'
+                        ? '● ACTIVE · ${appData.ai.model.toUpperCase().replaceAll('-', ' ')} · TEXT PII STRIPPED BEFORE SEND'
                         : '○ NOT SET UP · ADD A FREE KEY TO USE THE AI',
                     style: TextStyle(
                       fontFamily: 'JetBrains Mono',
