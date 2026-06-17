@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/providers/assistant_providers.dart';
+import 'package:mhad/services/admin_backup_store.dart';
 import 'package:mhad/services/admin_update_service.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 /// Hidden, non-user-facing admin tool: the AI drafts updates to the app's
 /// dynamic data (app_data.json) WITH sources, a human approves a per-field diff,
@@ -41,14 +41,6 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
   bool _loading = false;
   bool _isRevert = false;
   String? _error;
-
-  // The roll-back backup is stored in SharedPreferences keyed per target. It is
-  // INTENTIONALLY persistent across sessions (it survives closing the page —
-  // on web it lives in localStorage) so a roll-back is available later. It is
-  // admin-only (behind the passphrase gate) and holds only app config/content
-  // — no user PII or protected data — so it is exempt from the app's ephemeral
-  // session-clearing. Do not wipe it on session end.
-  static String _backupKey(AdminDataTarget t) => 'admin_backup_${t.name}';
 
   @override
   void dispose() {
@@ -111,52 +103,52 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
     final updated = _isRevert
         ? AdminUpdateService.applyRestore(_base, _backup, _changes)
         : AdminUpdateService.applyApproved(_base, _changes);
-    // Stash the pre-change version as a backup so this (and a future) change
-    // can be rolled back — the file is committed to the repo; this is the
-    // in-app safety net. Keyed per target.
-    await _saveBackup(_target, _base);
+    // Append the pre-change version to the per-target backup history so this
+    // (and any future) change can be rolled back. Snapshots are kept a year,
+    // then gzip-archived (see AdminBackupStore). The files are committed to the
+    // repo; this is the in-app safety net.
+    try {
+      await AdminBackupStore.append(
+        _target.name,
+        AdminUpdateService.prettyJson(_base),
+        DateTime.now().millisecondsSinceEpoch,
+      );
+    } catch (_) {
+      // Non-fatal: a missing backup just means revert is unavailable.
+    }
     setState(() {
       _output = AdminUpdateService.prettyJson(updated);
       _stage = _Stage.output;
     });
   }
 
-  Future<void> _saveBackup(AdminDataTarget t, Map<String, dynamic> data) async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString(_backupKey(t), AdminUpdateService.prettyJson(data));
-    } catch (_) {
-      // Non-fatal: a missing backup just means revert is unavailable.
-    }
-  }
-
-  /// Start a roll-back: load the saved backup for the current target, diff it
-  /// against the live file, and present each differing field so the maintainer
-  /// can pick WHICH part(s) to restore (not just whole-file). The backup is
-  /// admin-only (behind the gate) and never user-facing.
+  /// Start a roll-back: let the maintainer pick WHICH saved snapshot to restore
+  /// from (the backup history, newest first; archived ones decompress on
+  /// demand), then diff it against the live file so they can pick WHICH
+  /// field(s) to roll back. Admin-only (behind the gate), never user-facing.
   Future<void> _revert() async {
-    String? backupStr;
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      backupStr = prefs.getString(_backupKey(_target));
-    } catch (_) {
-      backupStr = null;
-    }
-    if (backupStr == null || backupStr.isEmpty) {
+    final backups = await AdminBackupStore.list(_target.name);
+    if (backups.isEmpty) {
       setState(() => _error =
-          'No backup for ${_target.label} yet — a backup is saved each time '
-          'you build an update for this file.');
+          'No backups for ${_target.label} yet — one is saved each time you '
+          'build an update for this file.');
       return;
     }
+    final chosen = await _pickBackup(backups);
+    if (chosen == null) return; // cancelled
     try {
-      _backup =
-          jsonDecode(backupStr) as Map<String, dynamic>; // previous version
+      final json = await AdminBackupStore.read(_target.name, chosen.ts);
+      if (json == null) {
+        setState(() => _error = 'That backup could not be read.');
+        return;
+      }
+      _backup = jsonDecode(json) as Map<String, dynamic>;
       _base = await AdminUpdateService.currentData(_target); // live version
       final diff = AdminUpdateService.diffForRestore(_base, _backup,
           target: _target);
       if (diff.isEmpty) {
         setState(() => _error =
-            'The live ${_target.assetPath} already matches the backup — '
+            'The live ${_target.assetPath} already matches that backup — '
             'nothing to restore.');
         return;
       }
@@ -169,6 +161,33 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
     } catch (e) {
       setState(() => _error = 'Could not read the backup: $e');
     }
+  }
+
+  /// Modal list of saved snapshots (newest first; archived ones tagged) so the
+  /// maintainer chooses which version to roll back to. Returns null if cancelled.
+  Future<BackupEntry?> _pickBackup(List<BackupEntry> backups) {
+    return showDialog<BackupEntry>(
+      context: context,
+      builder: (ctx) => SimpleDialog(
+        title: const Text('Restore from which backup?'),
+        children: [
+          for (final b in backups)
+            SimpleDialogOption(
+              onPressed: () => Navigator.pop(ctx, b),
+              child: Row(
+                children: [
+                  const Icon(Icons.history, size: 18),
+                  const SizedBox(width: 8),
+                  Expanded(child: Text(b.label)),
+                  if (b.archived)
+                    const Text('archived',
+                        style: TextStyle(fontSize: 11, color: Colors.grey)),
+                ],
+              ),
+            ),
+        ],
+      ),
+    );
   }
 
   @override
