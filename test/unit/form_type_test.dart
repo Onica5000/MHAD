@@ -27,22 +27,22 @@ void main() {
       expect(steps, contains(WizardStep.reviewAndSign));
     });
 
-    test('poa form keeps agents + guardian + free-form, drops clinical steps',
+    test('poa form keeps agents + guardian, drops clinical steps + free-form',
         () {
       final steps = FormType.poa.steps;
       expect(steps, contains(WizardStep.peopleITrust));
       expect(steps, contains(WizardStep.guardianNomination));
-      // POA still includes "Anything else" so the user has a place to write
-      // free-form context for the agent.
-      expect(steps, contains(WizardStep.anythingElse));
+      // POA is purely about appointing the agent — it drops "Anything else"
+      // (only Declaration + Combined carry the free-form step).
+      expect(steps, isNot(contains(WizardStep.anythingElse)));
       // POA drops the five preference-only clinical steps.
       expect(steps, isNot(contains(WizardStep.whereIWantCare)));
       expect(steps, isNot(contains(WizardStep.diagnoses)));
       expect(steps, isNot(contains(WizardStep.medications)));
       expect(steps, isNot(contains(WizardStep.allergies)));
       expect(steps, isNot(contains(WizardStep.proceduresResearch)));
-      // 11 - 5 = 6
-      expect(steps.length, 6);
+      // aboutYou, whenItKicksIn, peopleITrust, guardian, reviewAndSign
+      expect(steps.length, 5);
     });
 
     test('combined form has more steps than declaration', () {
