@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/agent_ext.dart';
+import 'package:mhad/utils/address_format.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
@@ -144,9 +145,12 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
     final personalEntries = <String, String>{
       'Name': d.fullName,
       'Date of birth': d.dateOfBirth,
-      'Address': [d.address, d.address2, d.city, d.state]
-          .where((s) => s.isNotEmpty)
-          .join(', '),
+      'Address': composeAddressInline(
+          line1: d.address,
+          line2: d.address2,
+          city: d.city,
+          state: d.state,
+          zip: d.zip),
       'Phone': d.phone,
     };
     final personalHasContent =

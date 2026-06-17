@@ -506,10 +506,7 @@ List<pw.Page> buildDeclarationPages({
               if (g.relationship.isNotEmpty)
                 dataLine('Relationship', g.relationship),
               dataLine('Address', g.address),
-              twoCol(
-                blankLine('City, State, Zip Code'),
-                dataLine('Phone Number', g.phone),
-              ),
+              dataLine('Phone Number', g.phone),
             ] else ...[
               blankLine('Name of Person'),
               blankLine('Address'),
