@@ -3,18 +3,21 @@
 ## Project
 Pennsylvania Mental Health Advance Directive app — Flutter/Dart.
 
-**Primary targets (2026-06-04 design pivot): Android native + Windows desktop + Chrome/Edge web.**
-iOS and macOS are deferred until the user can compile against an Xcode toolchain — the
-prototype no longer ships iOS frames (mobile artboards carry green ANDROID tags; web
-artboards carry blue WEB · Chrome/Edge tags). The `ios/` and `macos/` folders, their
-plugins, and `codemagic.yaml`'s iOS/macOS jobs **stay in the tree for now** until the user
-can verify Xcode builds; do not remove them without confirmation.
+**Primary target (2026-06-16 pivot): the Chrome/Edge WEB app — responsive for both PC and
+mobile browsers. This is the ONLY actively-developed surface.**
+
+**Native mobile (Android + iOS) and desktop (macOS) are POSTPONED INDEFINITELY.** Do not
+spend effort on Android/iOS-specific behavior, and never let native concerns compromise the
+PC/Mobile web app's functionality — web is what ships. When a feature is mobile-only by
+nature (camera/gallery, NFC, biometrics, notifications), it stays gracefully degraded/absent
+on web and is fine to leave unfinished for native. The `android/`, `ios/`, and `macos/`
+folders, their plugins, and `codemagic.yaml`'s native jobs **stay in the tree** (do not
+remove without confirmation) — they're just not a development priority. Windows desktop
+remains buildable but is secondary to web.
 
 When implementing screens from the design bundle (`MHAD-handoff/bundle/`), assume Material
-3 + Android-style gestures. The widget tree contents are identical across iOS/Android in
-this Flutter codebase, but lean toward Material affordances (`Scaffold`, `FilledButton`,
-`MaterialPageRoute`) and avoid `Cupertino*` widgets — the orphan audit (2026-06-04) found
-zero Cupertino imports today; keep it that way.
+3 + a responsive web layout. Lean toward Material affordances (`Scaffold`, `FilledButton`,
+`MaterialPageRoute`) and avoid `Cupertino*` widgets — keep the codebase Cupertino-free.
 
 Source PDF: `PA MHAD.pdf`. Plan: `ACTION_PLAN.md`. Design bundle: `MHAD-handoff/bundle/`
 (refreshed 2026-06-04 with Android/Chrome platform-tag chrome).
