@@ -28,6 +28,22 @@ class WebSessionCache {
     }
   }
 
+  /// Refresh the freshness timestamp WITHOUT rewriting the snapshot. Called on
+  /// a heartbeat while the tab is open so the [ttl] window effectively starts
+  /// when the page is CLOSED or crashes — not when data was last saved. While
+  /// the app stays open the timestamp keeps advancing, so the cached work never
+  /// expires during active use; once the heartbeat stops (close/crash) the
+  /// 10-minute countdown begins from that last beat.
+  static Future<void> touch() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      if (prefs.getString(_dataKey) == null) return; // nothing cached yet
+      await prefs.setString(_tsKey, DateTime.now().toIso8601String());
+    } catch (e) {
+      debugPrint('WebSessionCache: touch failed: $e');
+    }
+  }
+
   /// Read the cached directive if within TTL. Returns null if expired or absent.
   static Future<Map<String, dynamic>?> getCachedDirective() async {
     try {

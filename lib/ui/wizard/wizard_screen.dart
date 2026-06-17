@@ -59,6 +59,11 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
   /// freshly persisted values.
   final GlobalKey _stepKey = GlobalKey();
 
+  /// Web only: keeps the crash-recovery cache's freshness timestamp current
+  /// while the tab is open, so the 10-minute recovery window starts when the
+  /// page is closed/crashes rather than at the last step save.
+  Timer? _webCacheHeartbeat;
+
   @override
   void initState() {
     super.initState();
@@ -66,10 +71,17 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
     // editing silently loses the work. Arm the browser "leave site?" prompt
     // while the wizard is open. No-op on native (data persists).
     setUnsavedGuard(true);
+    if (kIsWeb) {
+      _webCacheHeartbeat = Timer.periodic(
+        const Duration(minutes: 1),
+        (_) => WebSessionCache.touch(),
+      );
+    }
   }
 
   @override
   void dispose() {
+    _webCacheHeartbeat?.cancel();
     setUnsavedGuard(false);
     super.dispose();
   }
@@ -499,11 +511,11 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
         title: const Text('Exit Without Saving?'),
         content: Text(
             kIsWeb
-                ? 'The web app does not save your progress permanently. '
-                  'If you leave now, your work on this step will be lost.\n\n'
-                  'Your session data is kept in memory for 10 minutes '
-                  'in case the browser closes unexpectedly, but you '
-                  'should export or print your document before leaving.'
+                ? 'The web app does not save your progress permanently.\n\n'
+                  'If you leave, close the tab, or the app crashes, your work '
+                  'is kept on this device for 10 minutes so you can reopen and '
+                  'recover it — then it’s erased. Export or print your document '
+                  'to keep a copy.'
                 : 'You are in Public Mode — your data is stored in memory '
                   'only and will be lost when the app closes.\n\n'
                   'Export or print your document before leaving. '

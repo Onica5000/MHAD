@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:mhad/constants.dart';
 
 import 'draft_recovery_stub.dart'
     if (dart.library.io) 'draft_recovery_native.dart'
@@ -15,12 +16,15 @@ import 'draft_recovery_stub.dart'
 /// Privacy rules:
 /// - NEVER stores PII (name, DOB, address, phone, SSN, email)
 /// - Only stores medical/treatment preference data
-/// - Draft files auto-delete after [ttl] (default 30 minutes)
+/// - Draft files auto-delete after [ttl] (10 minutes — same window as the
+///   other session caches, [sessionCacheTtl])
 /// - Draft files are deleted on successful wizard completion
 class DraftRecoveryService {
   DraftRecoveryService._();
 
-  static const ttl = Duration(minutes: 30);
+  /// 10 minutes — matches [sessionCacheTtl] / [WebSessionCache] so every
+  /// crash-recovery window in the app is the same length.
+  static const ttl = sessionCacheTtl;
 
   /// Fields that are safe to auto-save (non-PII).
   static const safeFields = {

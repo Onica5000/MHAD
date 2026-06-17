@@ -293,8 +293,10 @@ class _AnonBanner extends StatelessWidget {
                 ),
                 const SizedBox(height: 1),
                 Text(
-                  'No account, no cloud, no cookies. Close the tab and '
-                  'everything is gone — download your PDF before you leave.',
+                  'No account, no cloud. If you close the tab or the app '
+                  'crashes, your work is kept on this device for 10 minutes so '
+                  'you can reopen and recover it — then it’s erased for good. '
+                  'Download your PDF to keep it.',
                   style: TextStyle(
                       fontFamily: 'DM Sans',
                       fontSize: 12,
