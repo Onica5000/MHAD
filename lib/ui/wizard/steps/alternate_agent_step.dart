@@ -4,9 +4,11 @@ import 'package:drift/drift.dart' show Value;
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/agent_ext.dart';
 import 'package:mhad/providers/app_providers.dart';
+import 'package:mhad/ui/widgets/forms/address_fields.dart';
 import 'package:mhad/ui/wizard/widgets/contact_picker_button.dart';
 import 'package:mhad/ui/wizard/widgets/wizard_help_button.dart';
 import 'package:mhad/ui/wizard/wizard_step_mixin.dart';
+import 'package:mhad/utils/input_formatters.dart';
 
 class AlternateAgentStep extends ConsumerStatefulWidget {
   const AlternateAgentStep({
@@ -29,6 +31,10 @@ class _AlternateAgentStepState
   final _nameCtrl = TextEditingController();
   final _relationshipCtrl = TextEditingController();
   final _addressCtrl = TextEditingController();
+  final _address2Ctrl = TextEditingController();
+  final _cityCtrl = TextEditingController();
+  final _stateCtrl = TextEditingController();
+  final _zipCtrl = TextEditingController();
   final _phoneCtrl = TextEditingController();
 
   int? _existingAgentId;
@@ -44,6 +50,10 @@ class _AlternateAgentStepState
     _nameCtrl.dispose();
     _relationshipCtrl.dispose();
     _addressCtrl.dispose();
+    _address2Ctrl.dispose();
+    _cityCtrl.dispose();
+    _stateCtrl.dispose();
+    _zipCtrl.dispose();
     _phoneCtrl.dispose();
     super.dispose();
   }
@@ -59,6 +69,10 @@ class _AlternateAgentStepState
         _nameCtrl.text = alternate.fullName;
         _relationshipCtrl.text = alternate.relationship;
         _addressCtrl.text = alternate.address;
+        _address2Ctrl.text = alternate.address2;
+        _cityCtrl.text = alternate.city;
+        _stateCtrl.text = alternate.state;
+        _zipCtrl.text = alternate.zip;
         _phoneCtrl.text = [
           alternate.cellPhone,
           alternate.homePhone,
@@ -85,6 +99,10 @@ class _AlternateAgentStepState
               fullName: Value(name),
               relationship: Value(_relationshipCtrl.text.trim()),
               address: Value(_addressCtrl.text.trim()),
+              address2: Value(_address2Ctrl.text.trim()),
+              city: Value(_cityCtrl.text.trim()),
+              state: Value(_stateCtrl.text.trim()),
+              zip: Value(_zipCtrl.text.trim()),
               homePhone: const Value(''),
               workPhone: const Value(''),
               cellPhone: Value(_phoneCtrl.text.trim()),
@@ -166,14 +184,12 @@ class _AlternateAgentStepState
               textInputAction: TextInputAction.next,
             ),
             const SizedBox(height: 12),
-            TextFormField(
-              controller: _addressCtrl,
-              decoration: const InputDecoration(
-                labelText: 'Address',
-                border: OutlineInputBorder(),
-              ),
-              autofillHints: const [],
-              textInputAction: TextInputAction.next,
+            AddressFields(
+              line1: _addressCtrl,
+              line2: _address2Ctrl,
+              city: _cityCtrl,
+              state: _stateCtrl,
+              zip: _zipCtrl,
             ),
             const SizedBox(height: 12),
             TextFormField(
@@ -181,10 +197,14 @@ class _AlternateAgentStepState
               keyboardType: TextInputType.phone,
               decoration: const InputDecoration(
                 labelText: 'Phone number',
+                hintText: '(215) 555-1234',
                 border: OutlineInputBorder(),
               ),
               autofillHints: const [],
               textInputAction: TextInputAction.done,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              inputFormatters: const [PhoneInputFormatter()],
+              validator: optionalPhoneValidator,
             ),
           ],
         ),

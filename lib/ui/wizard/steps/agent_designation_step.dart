@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:drift/drift.dart' show Value;
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/agent_ext.dart';
 import 'package:mhad/providers/app_providers.dart';
+import 'package:mhad/ui/widgets/forms/address_fields.dart';
 import 'package:mhad/ui/wizard/widgets/contact_picker_button.dart';
 import 'package:mhad/ui/wizard/widgets/wizard_help_button.dart';
 import 'package:mhad/ui/wizard/wizard_step_mixin.dart';
+import 'package:mhad/utils/input_formatters.dart';
 
 class AgentDesignationStep extends ConsumerStatefulWidget {
   const AgentDesignationStep({
@@ -31,6 +32,10 @@ class _AgentDesignationStepState
   final _nameCtrl = TextEditingController();
   final _relationshipCtrl = TextEditingController();
   final _addressCtrl = TextEditingController();
+  final _address2Ctrl = TextEditingController();
+  final _cityCtrl = TextEditingController();
+  final _stateCtrl = TextEditingController();
+  final _zipCtrl = TextEditingController();
   final _phoneCtrl = TextEditingController();
 
   int? _existingAgentId;
@@ -46,6 +51,10 @@ class _AgentDesignationStepState
     _nameCtrl.dispose();
     _relationshipCtrl.dispose();
     _addressCtrl.dispose();
+    _address2Ctrl.dispose();
+    _cityCtrl.dispose();
+    _stateCtrl.dispose();
+    _zipCtrl.dispose();
     _phoneCtrl.dispose();
     super.dispose();
   }
@@ -61,6 +70,10 @@ class _AgentDesignationStepState
         _nameCtrl.text = primary.fullName;
         _relationshipCtrl.text = primary.relationship;
         _addressCtrl.text = primary.address;
+        _address2Ctrl.text = primary.address2;
+        _cityCtrl.text = primary.city;
+        _stateCtrl.text = primary.state;
+        _zipCtrl.text = primary.zip;
         _phoneCtrl.text = [
           primary.cellPhone,
           primary.homePhone,
@@ -68,18 +81,6 @@ class _AgentDesignationStepState
         ].firstWhere((p) => p.isNotEmpty, orElse: () => '');
       });
     }
-  }
-
-  String? _validatePhone(String? value) {
-    final v = value?.trim() ?? '';
-    if (v.isEmpty) {
-      return 'Phone number is required';
-    }
-    final digits = v.replaceAll(RegExp(r'\D'), '');
-    if (digits.length < 10) {
-      return 'Enter a valid phone number (10+ digits)';
-    }
-    return null;
   }
 
   @override
@@ -99,6 +100,10 @@ class _AgentDesignationStepState
             fullName: Value(_nameCtrl.text.trim()),
             relationship: Value(_relationshipCtrl.text.trim()),
             address: Value(_addressCtrl.text.trim()),
+            address2: Value(_address2Ctrl.text.trim()),
+            city: Value(_cityCtrl.text.trim()),
+            state: Value(_stateCtrl.text.trim()),
+            zip: Value(_zipCtrl.text.trim()),
             homePhone: const Value(''),
             workPhone: const Value(''),
             cellPhone: Value(phone),
@@ -229,14 +234,12 @@ class _AgentDesignationStepState
               ),
             ),
             const SizedBox(height: 12),
-            TextFormField(
-              controller: _addressCtrl,
-              decoration: const InputDecoration(
-                labelText: 'Address',
-                border: OutlineInputBorder(),
-              ),
-              autofillHints: const [],
-              textInputAction: TextInputAction.next,
+            AddressFields(
+              line1: _addressCtrl,
+              line2: _address2Ctrl,
+              city: _cityCtrl,
+              state: _stateCtrl,
+              zip: _zipCtrl,
             ),
             const SizedBox(height: 12),
             TextFormField(
@@ -244,15 +247,14 @@ class _AgentDesignationStepState
               keyboardType: TextInputType.phone,
               decoration: const InputDecoration(
                 labelText: 'Phone number',
+                hintText: '(215) 555-1234',
                 border: OutlineInputBorder(),
               ),
               autofillHints: const [],
               textInputAction: TextInputAction.done,
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp(r'[0-9()\-+.\s]')),
-              ],
-              validator: _validatePhone,
+              inputFormatters: const [PhoneInputFormatter()],
+              validator: optionalPhoneValidator,
             ),
           ],
         ),

@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/providers/app_providers.dart';
+import 'package:mhad/ui/widgets/forms/address_fields.dart';
 import 'package:mhad/ui/wizard/widgets/contact_picker_button.dart';
 import 'package:mhad/ui/wizard/widgets/wizard_help_button.dart';
 import 'package:mhad/ui/wizard/wizard_step_mixin.dart';
+import 'package:mhad/utils/input_formatters.dart';
 
 class GuardianNominationStep extends ConsumerStatefulWidget {
   final int directiveId;
@@ -48,6 +50,10 @@ class _GuardianNominationStepState
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _nameCtrl;
   late final TextEditingController _addressCtrl;
+  late final TextEditingController _address2Ctrl;
+  late final TextEditingController _cityCtrl;
+  late final TextEditingController _stateCtrl;
+  late final TextEditingController _zipCtrl;
   late final TextEditingController _phoneCtrl;
   late final TextEditingController _relationshipCtrl;
   // Free-form detail for each "yes" condition (revealed only when Yes).
@@ -65,6 +71,10 @@ class _GuardianNominationStepState
     super.initState();
     _nameCtrl = TextEditingController();
     _addressCtrl = TextEditingController();
+    _address2Ctrl = TextEditingController();
+    _cityCtrl = TextEditingController();
+    _stateCtrl = TextEditingController();
+    _zipCtrl = TextEditingController();
     _phoneCtrl = TextEditingController();
     _relationshipCtrl = TextEditingController();
     _changeAgentNoteCtrl = TextEditingController();
@@ -77,6 +87,10 @@ class _GuardianNominationStepState
   void dispose() {
     _nameCtrl.dispose();
     _addressCtrl.dispose();
+    _address2Ctrl.dispose();
+    _cityCtrl.dispose();
+    _stateCtrl.dispose();
+    _zipCtrl.dispose();
     _phoneCtrl.dispose();
     _relationshipCtrl.dispose();
     _changeAgentNoteCtrl.dispose();
@@ -94,6 +108,10 @@ class _GuardianNominationStepState
         _existingId = g.id;
         _nameCtrl.text = g.nomineeFullName;
         _addressCtrl.text = g.nomineeAddress;
+        _address2Ctrl.text = g.nomineeAddress2;
+        _cityCtrl.text = g.nomineeCity;
+        _stateCtrl.text = g.nomineeState;
+        _zipCtrl.text = g.nomineeZip;
         _phoneCtrl.text = g.nomineePhone;
         _relationshipCtrl.text = g.nomineeRelationship;
         _guardianCanRevoke = g.guardianCanRevoke;
@@ -126,6 +144,10 @@ class _GuardianNominationStepState
             directiveId: Value(widget.directiveId),
             nomineeFullName: Value(_nameCtrl.text.trim()),
             nomineeAddress: Value(_addressCtrl.text.trim()),
+            nomineeAddress2: Value(_address2Ctrl.text.trim()),
+            nomineeCity: Value(_cityCtrl.text.trim()),
+            nomineeState: Value(_stateCtrl.text.trim()),
+            nomineeZip: Value(_zipCtrl.text.trim()),
             nomineePhone: Value(_phoneCtrl.text.trim()),
             nomineeRelationship: Value(_relationshipCtrl.text.trim()),
             guardianCanRevoke: Value(_guardianCanRevoke),
@@ -278,22 +300,25 @@ class _GuardianNominationStepState
               textCapitalization: TextCapitalization.words,
             ),
             const SizedBox(height: 16),
-            TextFormField(
-              controller: _addressCtrl,
-              decoration: const InputDecoration(
-                labelText: 'Address',
-                border: OutlineInputBorder(),
-              ),
-              textCapitalization: TextCapitalization.words,
+            AddressFields(
+              line1: _addressCtrl,
+              line2: _address2Ctrl,
+              city: _cityCtrl,
+              state: _stateCtrl,
+              zip: _zipCtrl,
             ),
             const SizedBox(height: 16),
             TextFormField(
               controller: _phoneCtrl,
               decoration: const InputDecoration(
                 labelText: 'Phone number',
+                hintText: '(215) 555-1234',
                 border: OutlineInputBorder(),
               ),
               keyboardType: TextInputType.phone,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              inputFormatters: const [PhoneInputFormatter()],
+              validator: optionalPhoneValidator,
             ),
           ],
           const SizedBox(height: 24),
