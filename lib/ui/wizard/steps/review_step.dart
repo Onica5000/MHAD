@@ -309,6 +309,35 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
     return rows;
   }
 
+  /// Optional-but-recommended contact details that are missing for people the
+  /// user named. These never block signing (everything's optional), but the
+  /// review step nudges the user to acquire them so the care team can actually
+  /// reach the agent / guardian.
+  List<String> _missingRecommended(_ReviewData data) {
+    final out = <String>[];
+    void check(String who, bool hasPhone, bool hasAddress) {
+      if (!hasPhone) out.add("$who's phone number");
+      if (!hasAddress) out.add("$who's address");
+    }
+
+    final primary = data.agents.primaryAgent;
+    if (primary != null && primary.fullName.isNotEmpty) {
+      check('your primary agent', primary.bestPhone.isNotEmpty,
+          primary.fullAddress.isNotEmpty);
+    }
+    final alt = data.agents.alternateAgent;
+    if (alt != null && alt.fullName.isNotEmpty) {
+      check('your alternate agent', alt.bestPhone.isNotEmpty,
+          alt.fullAddress.isNotEmpty);
+    }
+    final g = data.guardian;
+    if (g != null && g.nomineeFullName.isNotEmpty) {
+      check('your guardian nominee', g.nomineePhone.isNotEmpty,
+          g.fullNomineeAddress.isNotEmpty);
+    }
+    return out;
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_data == null) {
@@ -361,6 +390,20 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
             variant: InfoBannerVariant.success,
             text: 'Everything looks good. All sections reviewed.',
           ),
+
+        // Optional-but-recommended contact details that are still blank. These
+        // don't block signing — just a nudge to gather them if you can.
+        if (_missingRecommended(_data!).isNotEmpty) ...[
+          const SizedBox(height: 8),
+          InfoBanner(
+            icon: Icons.info_outline,
+            variant: InfoBannerVariant.info,
+            text: 'Optional, but worth gathering before you sign: '
+                '${_missingRecommended(_data!).join('; ')}. '
+                'They help your care team reach the people you named — you can '
+                'still sign without them.',
+          ),
+        ],
 
         const SectionLabel('Your directive at a glance'),
 
