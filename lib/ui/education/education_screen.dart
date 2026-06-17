@@ -88,8 +88,7 @@ class _EducationScreenState extends State<EducationScreen> {
 ///
 /// Stacks: editorial header → inline search pill → "Browse all topics" index →
 /// horizontal category-tab row → 2-column section grid with a primary-filled
-/// featured card spanning both columns → "Glossary · quick reference"
-/// mini-list → italic pull-quote card.
+/// featured card spanning both columns → centered italic pull-quote card.
 ///
 /// Replaces the prior Dropdown category picker + flat ListView with the
 /// prototype's grid + tabs layout. Existing search delegate stays
@@ -117,19 +116,6 @@ class _EditorialLearnHub extends StatelessWidget {
     (_TabKind.checklists, 'Checklists'),
   ];
 
-  /// Returns up to 3 glossary entries to surface inline below the grid.
-  /// Falls back to fewer when fewer are available.
-  List<(String, String)> _quickGlossary() {
-    final all =
-        sections.where((s) => s.category == EducationCategory.glossary);
-    return all.take(3).map((g) {
-      final firstPara = g.content.split('\n\n').first.trim();
-      final firstSentence =
-          firstPara.split(RegExp(r'(?<=[.!?])\s+')).first.trim();
-      return (g.title, firstSentence);
-    }).toList();
-  }
-
   /// Picks the section to render as the prototype's featured card —
   /// the first section in the filtered list (which is typically the
   /// "intro_overview" intro).
@@ -149,7 +135,6 @@ class _EditorialLearnHub extends StatelessWidget {
     final p = Theme.of(context).mhadPalette;
     final featured = _featured();
     final grid = _gridSections();
-    final glossary = _quickGlossary();
 
     return ListView(
       padding: const EdgeInsets.fromLTRB(22, 8, 22, 28),
@@ -290,35 +275,6 @@ class _EditorialLearnHub extends StatelessWidget {
             );
           },
         ),
-        if (glossary.isNotEmpty) ...[
-          const SizedBox(height: 20),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              const Expanded(child: SectionLabel('Glossary · quick reference')),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: GestureDetector(
-                  onTap: () => onTabChange(_TabKind.glossary),
-                  child: Text(
-                    'See all ›',
-                    style: TextStyle(
-                      fontFamily: 'DM Sans',
-                      fontSize: 11.5,
-                      fontWeight: FontWeight.w700,
-                      color: p.primary,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 4),
-          for (final (term, def) in glossary) ...[
-            _GlossaryRow(term: term, definition: def),
-            const SizedBox(height: 6),
-          ],
-        ],
         const SizedBox(height: 18),
         // Full-width editorial pull-quote, centered. (The "Read the booklet"
         // CTA was removed — the topic index + tabs above already lead into the
@@ -862,63 +818,6 @@ class _GridCard extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _GlossaryRow extends StatelessWidget {
-  final String term;
-  final String definition;
-  const _GlossaryRow({required this.term, required this.definition});
-
-  @override
-  Widget build(BuildContext context) {
-    final p = Theme.of(context).mhadPalette;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      decoration: BoxDecoration(
-        color: p.card,
-        border: Border.all(color: p.border),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: 90,
-            child: Text(
-              term,
-              style: TextStyle(
-                fontFamily: 'JetBrains Mono',
-                fontFamilyFallback: const [
-                  'Consolas',
-                  'Menlo',
-                  'Courier New',
-                  'monospace',
-                ],
-                fontSize: 11,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 0.2,
-                color: p.primary,
-              ),
-            ),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Text(
-              definition,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontFamily: 'DM Sans',
-                fontSize: 12,
-                height: 1.4,
-                color: p.textMuted,
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
