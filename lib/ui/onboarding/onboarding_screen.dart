@@ -7,10 +7,8 @@ import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/services/onboarding_service.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
-import 'package:mhad/ui/widgets/design/crisis_988_pill.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/wizard/widgets/saved_file_import.dart';
-import 'package:mhad/utils/launch_utils.dart';
 
 /// First-touch welcome — prototype-exact rebuild of mobile.jsx::ScrWelcome
 /// (L37-96).
@@ -65,19 +63,8 @@ class OnboardingScreen extends ConsumerWidget {
       body: SafeArea(
         child: Stack(
           children: [
-            // Subtle 988 link in upper right (prototype L43-51).
-            Positioned(
-              top: 8,
-              right: 16,
-              child: Crisis988Pill(
-                bg: SemanticColors.errorBgLight,
-                border: SemanticColors.errorBorderLight,
-                fg: SemanticColors.errorAccentLight,
-                label: '988',
-                onTap: () =>
-                    launchOrCopy(context, 'tel:988', copyValue: '988'),
-              ),
-            ),
+            // Crisis access is the global floating button (GlobalCrisisButton),
+            // shown on every screen including this intro — no per-screen chip.
             // Main editorial column. Padding matches prototype L54
             // `padding: '64px 28px 0'` — but we let SafeArea push the
             // top so the 988 chip and content don't collide on devices

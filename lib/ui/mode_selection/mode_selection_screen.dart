@@ -4,7 +4,6 @@ import 'package:mhad/services/pin_auth_service.dart';
 import 'package:mhad/services/privacy_mode_service.dart';
 import 'package:mhad/ui/mode_selection/pin_dialog.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
-import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 
 /// Shown on every app launch (after the one-time disclaimer).
@@ -100,7 +99,6 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
         body: SafeArea(
           child: Column(
             children: [
-              const CrisisTopBar(compact: true),
               Expanded(
                 child: SingleChildScrollView(
                   padding: const EdgeInsets.fromLTRB(22, 20, 22, 40),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
-import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
@@ -42,7 +41,6 @@ class FacilitatorScreen extends StatelessWidget {
       // + in-body Back chevron — the editorial "You don't have to do this
       // alone." 32pt headline owns the visual title.
       body: Column(children: [
-        const CrisisTopBar(compact: true),
         WizardHeader(
           backLabel: 'Back',
           onBack: () => Navigator.of(context).maybePop(),

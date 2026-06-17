@@ -18,6 +18,7 @@ import 'package:mhad/services/public_session_cache.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/theme/theme_controller.dart';
+import 'package:mhad/ui/widgets/design/global_crisis_button.dart';
 import 'package:mhad/ui/widgets/design/responsive_shell.dart';
 import 'package:mhad/utils/platform_utils.dart';
 
@@ -158,13 +159,17 @@ class MhadApp extends ConsumerWidget {
                   },
                 ),
               },
-              // Crisis access is now provided per-screen via CrisisTopBar /
-              // crisis sheet; the previous global bottom crisis banner was
-              // removed as a duplicate. The bottom safe-area padding that the
-              // banner used to absorb is restored to the content area, so we
-              // no longer strip it here.
-              child: ResponsiveShell(
-                child: child ?? const SizedBox.shrink(),
+              // Crisis access is a SINGLE global affordance: the floating
+              // GlobalCrisisButton (bottom-right, every screen). The old
+              // per-screen CrisisTopBar / corner Crisis988Pill instances were
+              // removed in favour of this one prominent button.
+              child: Stack(
+                children: [
+                  ResponsiveShell(
+                    child: child ?? const SizedBox.shrink(),
+                  ),
+                  const GlobalCrisisButton(),
+                ],
               ),
             ),
           ),

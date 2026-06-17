@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
-import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
@@ -101,7 +100,6 @@ class _UlyssesClauseScreenState extends ConsumerState<UlyssesClauseScreen> {
       // in-body back chevron. The editorial "If future-me refuses…" header
       // owns the visual title rather than a Material AppBar string.
       body: Column(children: [
-        const CrisisTopBar(compact: true),
         WizardHeader(
           backLabel: 'Back',
           onBack: () => Navigator.of(context).maybePop(),

@@ -15,7 +15,6 @@ import 'package:mhad/ui/assistant/assistant_send.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/ai_consent_dialog.dart';
-import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/design/responsive_shell.dart';
 import 'package:mhad/ui/widgets/design/step_dots.dart';
@@ -224,7 +223,6 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                     shellActive && constraints.maxWidth >= 1080;
                 final mainColumn = Column(
                   children: [
-                    const CrisisTopBar(compact: true),
                     if (!shellActive)
                       Container(
                         color: p.scaffoldBackground,

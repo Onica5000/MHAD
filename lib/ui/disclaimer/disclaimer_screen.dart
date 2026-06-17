@@ -4,8 +4,6 @@ import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/services/disclaimer_service.dart';
 import 'package:mhad/services/notification_service.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
-import 'package:mhad/ui/widgets/design/crisis_988_pill.dart';
-import 'package:mhad/ui/widgets/design/crisis_sheet.dart';
 
 /// First-launch legal disclaimer + read-only Settings variant.
 ///
@@ -119,7 +117,6 @@ class _GateLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       backgroundColor: palette.scaffoldBackground,
       body: SafeArea(
@@ -274,23 +271,8 @@ class _GateLayout extends StatelessWidget {
                 ],
               ),
             ),
-            // Persistent 988 chip pinned to top-right (gate only).
-            Positioned(
-              top: 12,
-              right: 16,
-              child: Crisis988Pill(
-                bg: dark
-                    ? SemanticColors.errorBgDark
-                    : SemanticColors.errorBgLight,
-                border: dark
-                    ? SemanticColors.errorBorderDark
-                    : SemanticColors.errorBorderLight,
-                fg: dark
-                    ? SemanticColors.errorAccentDark
-                    : SemanticColors.errorAccentLight,
-                onTap: () => showCrisisSheet(context),
-              ),
-            ),
+            // Crisis access is the global floating button (GlobalCrisisButton),
+            // shown on every screen including this gate — no per-screen chip.
           ],
         ),
       ),

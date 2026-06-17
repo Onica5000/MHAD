@@ -7,7 +7,6 @@ import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/utils/platform_utils.dart';
 import 'package:mhad/ui/widgets/design/bottom_nav.dart';
-import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// Full-screen setup for the Gemini API key with step-by-step instructions.
@@ -170,7 +169,6 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
       ),
       body: Column(
         children: [
-          const CrisisTopBar(compact: true),
           Expanded(
             child: ListView(
         padding: const EdgeInsets.all(20),

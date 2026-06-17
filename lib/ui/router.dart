@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/ai/ai_assistant.dart';
 import 'package:mhad/services/disclaimer_service.dart';
@@ -98,6 +99,10 @@ void initRouter(
       _buildRouter(disclaimerNotifier, onboardingNotifier, privacyModeNotifier);
 }
 
+/// Root navigator key — lets the global crisis button (rendered above the
+/// router in MhadApp's builder) open the crisis sheet through a real Navigator.
+final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
+
 /// The single GoRouter instance used by [MhadApp].
 /// Defaults to "disclaimer accepted, intro seen, mode already selected" —
 /// correct for widget tests that do not call [initRouter].
@@ -116,6 +121,7 @@ PrivacyModeNotifier _defaultPrivacyMode() {
 GoRouter _buildRouter(DisclaimerNotifier disclaimer,
         OnboardingNotifier onboarding, PrivacyModeNotifier privacy) =>
     GoRouter(
+      navigatorKey: rootNavigatorKey,
       initialLocation: AppRoutes.home,
       refreshListenable: Listenable.merge([disclaimer, onboarding, privacy]),
       redirect: (context, state) {

@@ -4,7 +4,6 @@ import 'package:mhad/data/educational_content.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/bottom_nav.dart';
-import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 
 class EducationScreen extends StatefulWidget {
@@ -64,7 +63,6 @@ class _EducationScreenState extends State<EducationScreen> {
       bottomNavigationBar: const MhadBottomNav(),
       body: Column(
         children: [
-          const CrisisTopBar(compact: true),
           Expanded(
             child: _filteredSections.isEmpty
                 ? const Center(

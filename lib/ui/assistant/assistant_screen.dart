@@ -15,7 +15,6 @@ import 'package:mhad/ui/assistant/assistant_send.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/widgets/design/bottom_nav.dart';
-import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
 import 'package:mhad/ui/widgets/design/responsive_shell.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/ai_consent_dialog.dart';
@@ -255,7 +254,6 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
       ),
       body: Column(
         children: [
-          const CrisisTopBar(compact: true),
           Expanded(
             child: Builder(
               builder: (context) {

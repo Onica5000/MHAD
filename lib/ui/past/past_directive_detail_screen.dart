@@ -8,7 +8,6 @@ import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/action_row.dart';
-import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
 import 'package:mhad/ui/widgets/design/dashed_divider.dart';
 import 'package:mhad/ui/widgets/design/directive_status_style.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
@@ -39,7 +38,6 @@ class PastDirectiveDetailScreen extends ConsumerWidget {
       // AppBar.
       body: Column(
         children: [
-          const CrisisTopBar(compact: true),
           WizardHeader(
             backLabel: 'Past directives',
             onBack: () => Navigator.of(context).maybePop(),

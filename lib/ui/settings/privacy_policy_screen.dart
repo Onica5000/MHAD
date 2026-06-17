@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/ui/router.dart';
-import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// In-app privacy policy accessible from settings and disclaimer screen.
@@ -26,7 +25,6 @@ class PrivacyPolicyScreen extends StatelessWidget {
       appBar: AppBar(title: const Text('Privacy Policy')),
       body: Column(
         children: [
-          const CrisisTopBar(compact: true),
           Expanded(
             child: SingleChildScrollView(
         padding: const EdgeInsets.all(20),

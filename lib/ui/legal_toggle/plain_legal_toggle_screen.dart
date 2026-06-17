@@ -4,7 +4,6 @@ import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/agent_ext.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
-import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
@@ -64,7 +63,6 @@ class _PlainLegalToggleScreenState
       // available as a tap on the header's right side (replaces the AppBar
       // action that previously lived there).
       body: Column(children: [
-        const CrisisTopBar(compact: true),
         WizardHeader(
           backLabel: 'Back',
           onBack: () => Navigator.of(context).maybePop(),

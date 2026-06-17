@@ -15,7 +15,6 @@ import 'package:mhad/ui/export/pdf/pdf_generator.dart';
 import 'package:mhad/ui/export/pdf/pdf_helpers.dart';
 import 'package:mhad/ui/export/pdf/wallet_card_service.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
-import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
 import 'package:mhad/ui/widgets/design/responsive_shell.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
@@ -383,7 +382,6 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         backgroundColor: p.scaffoldBackground,
         body: Column(
           children: [
-            const CrisisTopBar(compact: true),
             WizardHeader(
               backLabel: 'Back',
               onBack: () => Navigator.of(context).maybePop(),
@@ -876,7 +874,6 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       // mobile-extra2.jsx L5-113) sit CrisisBar at the top with a thin
       // in-body back chevron, not a Material AppBar.
       body: Column(children: [
-        const CrisisTopBar(compact: true),
         // The wide layout moves Back into the preview's left panel, so the
         // full-width header is only needed in the narrow single-column layout.
         if (MediaQuery.sizeOf(context).width < kWideLayoutBreakpoint)

@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
-import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
@@ -110,7 +109,6 @@ class _CrisisPlanScreenState extends ConsumerState<CrisisPlanScreen> {
       // + in-body back chevron, then a 38pt editorial heading. No Material
       // AppBar — the "How I know I'm not okay" headline owns the title.
       body: Column(children: [
-        const CrisisTopBar(compact: true),
         WizardHeader(
           backLabel: 'Back',
           onBack: () => Navigator.of(context).maybePop(),

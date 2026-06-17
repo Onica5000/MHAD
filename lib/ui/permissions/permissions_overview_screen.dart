@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
-import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
@@ -36,7 +35,6 @@ class PermissionsOverviewScreen extends StatelessWidget {
       // + in-body back chevron. The 'Only what we need.' 30pt editorial
       // owns the header in the body.
       body: Column(children: [
-        const CrisisTopBar(compact: true),
         WizardHeader(
           backLabel: 'Back',
           onBack: () => Navigator.of(context).maybePop(),

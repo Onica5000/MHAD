@@ -5,7 +5,6 @@ import 'package:mhad/constants.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
-import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
@@ -106,7 +105,6 @@ class _AiConsistencyScreenState extends ConsumerState<AiConsistencyScreen> {
       // Material AppBar. The editorial "I noticed N things." heading owns the
       // visual title (it duplicated the dropped AppBar title).
       body: Column(children: [
-        const CrisisTopBar(compact: true),
         WizardHeader(
           backLabel: 'Back',
           onBack: () => Navigator.of(context).maybePop(),

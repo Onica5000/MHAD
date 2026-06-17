@@ -5,7 +5,6 @@ import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
-import 'package:mhad/ui/widgets/design/crisis_top_bar.dart';
 import 'package:mhad/ui/widgets/design/wizard_header.dart';
 import 'package:mhad/ui/wizard/steps/execution_step.dart';
 
@@ -85,7 +84,6 @@ class _SignScreenState extends ConsumerState<SignScreen> {
       backgroundColor: p.scaffoldBackground,
       body: Column(
         children: [
-          const CrisisTopBar(compact: true),
           WizardHeader(
             backLabel: 'Back to review',
             onBack: () =>
