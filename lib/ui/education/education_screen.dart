@@ -322,88 +322,73 @@ class _EditorialLearnHub extends StatelessWidget {
         // WebLearn). The CTA opens the booklet's intro article — the hub
         // content is the official booklet verbatim — or falls back to the
         // Articles bucket if there's no featured section.
-        LayoutBuilder(
-          builder: (ctx, c) {
-            // Quote + "Read the booklet" sit side by side once there's room for
-            // both; only the narrowest phone widths stack them. (Was 560, which
-            // left moderately-sized windows stacked/vertical.)
-            final wide = c.maxWidth >= 420;
-            final quoteBlock = Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  '"Your directive is your voice — written in advance, '
-                  "kept safe, honored when you can't speak for yourself.\"",
-                  style: TextStyle(
-                    fontFamily: 'Instrument Serif',
-                    fontFamilyFallback: const ['Georgia', 'serif'],
-                    fontStyle: FontStyle.italic,
-                    fontSize: 19,
-                    height: 1.3,
-                    color: p.primaryDark,
+        // Full-width editorial pull-quote: the quote text spans the whole card
+        // so it always reads horizontally, with the "Read the booklet" CTA on
+        // its own line below. (An earlier side-by-side Row squeezed the quote
+        // next to the button at moderate widths, wrapping it one or two words
+        // per line — it looked vertical.)
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.fromLTRB(18, 18, 18, 16),
+          decoration: BoxDecoration(
+            color: p.primaryTint,
+            border: Border.all(color: p.primary.withValues(alpha: 0.15)),
+            borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '"Your directive is your voice — written in advance, '
+                "kept safe, honored when you can't speak for yourself.\"",
+                style: TextStyle(
+                  fontFamily: 'Instrument Serif',
+                  fontFamilyFallback: const ['Georgia', 'serif'],
+                  fontStyle: FontStyle.italic,
+                  fontSize: 19,
+                  height: 1.3,
+                  color: p.primaryDark,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                '— PA OFFICE OF MENTAL HEALTH & SUBSTANCE ABUSE '
+                'SERVICES · BOOKLET P.3',
+                style: TextStyle(
+                  fontFamily: 'JetBrains Mono',
+                  fontFamilyFallback: const [
+                    'Consolas',
+                    'Menlo',
+                    'Courier New',
+                    'monospace',
+                  ],
+                  fontSize: 10,
+                  letterSpacing: 0.6,
+                  color: p.textMuted,
+                ),
+              ),
+              const SizedBox(height: 14),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: FilledButton.icon(
+                  onPressed: () {
+                    if (featured != null) {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (_) => _SectionDetailRoute(section: featured),
+                      ));
+                    } else {
+                      onTabChange(_TabKind.articles);
+                    }
+                  },
+                  icon: const Icon(Icons.arrow_forward, size: 16),
+                  label: const Text('Read the booklet'),
+                  style: FilledButton.styleFrom(
+                    iconAlignment: IconAlignment.end,
                   ),
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  '— PA OFFICE OF MENTAL HEALTH & SUBSTANCE ABUSE '
-                  'SERVICES · BOOKLET P.3',
-                  style: TextStyle(
-                    fontFamily: 'JetBrains Mono',
-                    fontFamilyFallback: const [
-                      'Consolas',
-                      'Menlo',
-                      'Courier New',
-                      'monospace',
-                    ],
-                    fontSize: 10,
-                    letterSpacing: 0.6,
-                    color: p.textMuted,
-                  ),
-                ),
-              ],
-            );
-            final readButton = FilledButton.icon(
-              onPressed: () {
-                if (featured != null) {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (_) => _SectionDetailRoute(section: featured),
-                  ));
-                } else {
-                  onTabChange(_TabKind.articles);
-                }
-              },
-              icon: const Icon(Icons.arrow_forward, size: 16),
-              label: const Text('Read the booklet'),
-              style: FilledButton.styleFrom(
-                iconAlignment: IconAlignment.end,
               ),
-            );
-            return Container(
-              padding: const EdgeInsets.fromLTRB(18, 18, 18, 16),
-              decoration: BoxDecoration(
-                color: p.primaryTint,
-                border: Border.all(color: p.primary.withValues(alpha: 0.15)),
-                borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
-              ),
-              child: wide
-                  ? Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Expanded(child: quoteBlock),
-                        const SizedBox(width: 16),
-                        readButton,
-                      ],
-                    )
-                  : Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        quoteBlock,
-                        const SizedBox(height: 14),
-                        readButton,
-                      ],
-                    ),
-            );
-          },
+            ],
+          ),
         ),
         // Comprehensive topic index — always visible so users have a
         // jump-list to any of the 8 EducationCategory buckets after the
