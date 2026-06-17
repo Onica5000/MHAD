@@ -21,12 +21,16 @@ class GlobalCrisisButton extends StatelessWidget {
         ? SemanticColors.errorAccentDark
         : SemanticColors.errorAccentLight;
     final wide = MediaQuery.sizeOf(context).width >= kWideLayoutBreakpoint;
+    // On wide screens the left sidebar's crisis card is the crisis affordance,
+    // so the floating button is hidden there. It stays on narrow/mobile, which
+    // has no sidebar — otherwise mobile would lose its only quick 988 access.
+    if (wide) return const SizedBox.shrink();
     final bottomInset = MediaQuery.viewPaddingOf(context).bottom;
 
     return Positioned(
       right: 16,
-      // On narrow screens lift it clear of the floating mobile bottom nav.
-      bottom: (wide ? 20.0 : 84.0) + bottomInset,
+      // Lift it clear of the floating mobile bottom nav.
+      bottom: 84.0 + bottomInset,
       child: Semantics(
         button: true,
         label: 'Crisis help — call or text 988',
