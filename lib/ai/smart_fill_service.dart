@@ -559,9 +559,9 @@ class SmartFillService {
         'actionable phrasing rather than generic filler — but never at the expense of accuracy.');
     buf.writeln('- Use plain language suitable for a legal document.');
     buf.writeln('- Do NOT include patient name, DOB, or any PII.');
-    buf.writeln('- PA NTI drug rule: Narrow Therapeutic Index drugs (lithium, carbamazepine, '
-        'valproic acid, phenytoin, clonazepam) CANNOT have generics substituted under '
-        'PA law (35 P.S. §960.3). Note monitoring requirements in the reason field.');
+    buf.writeln('- PA NTI drug rule: Narrow Therapeutic Index drugs '
+        '(${appData.legal.ntiDrugs.join(', ')}) CANNOT have generics substituted under '
+        'PA law (${appData.legal.ntiCitation}). Note monitoring requirements in the reason field.');
 
     buf.writeln();
     buf.writeln('{');
