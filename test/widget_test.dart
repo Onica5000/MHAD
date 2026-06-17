@@ -41,10 +41,10 @@ void main() {
     await tester.pumpAndSettle();
 
     // The home opens with the editorial greeting. In Public mode (set in
-    // setUp) the anonymous "Welcome, guest. / Quick draft, no trace."
-    // greeting renders regardless of any session name.
+    // setUp) the anonymous "Let's get started." greeting renders regardless
+    // of any session name.
     expect(
-      find.textContaining('Welcome, guest', findRichText: true),
+      find.textContaining("Let's get started", findRichText: true),
       findsWidgets,
     );
 

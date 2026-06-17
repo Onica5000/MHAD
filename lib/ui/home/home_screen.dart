@@ -145,13 +145,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 22),
-                    _ActiveDirectiveHero(directive: drafts.first),
-                    const SizedBox(height: 28),
                     // Start-a-new-directive picker (the form-type page was
                     // retired — picking happens on the dashboard now).
                     const SectionLabel('Start a new directive'),
                     const SizedBox(height: 12),
                     const DirectiveFormChoice(),
+                    const SizedBox(height: 28),
+                    // "Continue where you left off" sits BELOW the form picker
+                    // (under "You can switch form types later").
+                    _ActiveDirectiveHero(directive: drafts.first),
                   ],
                 );
               },
@@ -1324,25 +1326,15 @@ class _EphemeralBar extends StatelessWidget {
   }
 }
 
-/// Editorial greeting for Public-mode home — "Welcome, guest. / Quick
-/// draft, no trace." (mobile-extra.jsx::ScrPublic L1582-1586).
+/// Editorial greeting for Public-mode home.
 class _PublicGuestGreeting extends StatelessWidget {
   const _PublicGuestGreeting();
 
   @override
   Widget build(BuildContext context) {
-    final p = Theme.of(context).mhadPalette;
-    return Text.rich(
-      TextSpan(
-        children: [
-          const TextSpan(text: 'Welcome, guest.\n'),
-          TextSpan(
-            text: 'Quick draft, no trace.',
-            style: TextStyle(color: p.textMuted, fontSize: 22),
-          ),
-        ],
-      ),
-      style: const TextStyle(
+    return const Text(
+      "Let's get started.",
+      style: TextStyle(
         fontFamily: 'Instrument Serif',
         fontFamilyFallback: ['Georgia', 'serif'],
         fontStyle: FontStyle.italic,
