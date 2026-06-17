@@ -86,10 +86,10 @@ class _EducationScreenState extends State<EducationScreen> {
 /// Editorial Learn-hub body matching prototype `ScrLearn`
 /// (mobile-extra.jsx::ScrLearn L882-1029).
 ///
-/// Stacks: editorial header → inline search pill → horizontal category-
-/// tab row → 2-column section grid with a primary-filled featured card
-/// spanning both columns → "Glossary · quick reference" mini-list →
-/// "Frequently asked" teaser → italic pull-quote card.
+/// Stacks: editorial header → inline search pill → "Browse all topics" index →
+/// horizontal category-tab row → 2-column section grid with a primary-filled
+/// featured card spanning both columns → "Glossary · quick reference"
+/// mini-list → italic pull-quote card.
 ///
 /// Replaces the prior Dropdown category picker + flat ListView with the
 /// prototype's grid + tabs layout. Existing search delegate stays
@@ -232,7 +232,14 @@ class _EditorialLearnHub extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: 14),
+        const SizedBox(height: 16),
+        // Comprehensive topic index — moved up here (right under the search
+        // box) so the full library of EducationCategory buckets is immediately
+        // browsable, before the editorial tabs/grid.
+        const SectionLabel('Browse all topics'),
+        const SizedBox(height: 8),
+        _BrowseByTopic(onTabChange: onTabChange),
+        const SizedBox(height: 18),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
@@ -312,9 +319,6 @@ class _EditorialLearnHub extends StatelessWidget {
             const SizedBox(height: 6),
           ],
         ],
-        const SizedBox(height: 14),
-        // FAQ teaser
-        _FaqTeaser(onTap: () => onTabChange(_TabKind.faq)),
         const SizedBox(height: 18),
         // Editorial pull-quote with a "Read the booklet" CTA (artboard
         // WebLearn). The CTA opens the booklet's intro article — the hub
@@ -388,16 +392,6 @@ class _EditorialLearnHub extends StatelessWidget {
             ],
           ),
         ),
-        // Comprehensive topic index — always visible so users have a
-        // jump-list to any of the 8 EducationCategory buckets after the
-        // editorial grid. Earlier builds only surfaced 9 sections out of
-        // 136; this row guarantees the full library remains one tap away
-        // (2026-06-04 fix per user direction "make sure ALL that
-        // information is available").
-        const SizedBox(height: 24),
-        const SectionLabel('Browse all topics'),
-        const SizedBox(height: 8),
-        _BrowseByTopic(onTabChange: onTabChange),
       ],
     );
   }
@@ -949,72 +943,6 @@ class _GlossaryRow extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _FaqTeaser extends StatelessWidget {
-  final VoidCallback onTap;
-  const _FaqTeaser({required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    final p = Theme.of(context).mhadPalette;
-    return Material(
-      color: p.surface,
-      borderRadius: BorderRadius.circular(12),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-          decoration: BoxDecoration(
-            border: Border.all(color: p.border),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Row(
-            children: [
-              Container(
-                width: 30,
-                height: 30,
-                decoration: BoxDecoration(
-                  color: p.primaryTint,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                alignment: Alignment.center,
-                child: Icon(Icons.help_outline,
-                    size: 15, color: p.primary),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Frequently asked',
-                      style: TextStyle(
-                        fontFamily: 'DM Sans',
-                        fontSize: 13,
-                        fontWeight: FontWeight.w700,
-                        color: p.text,
-                      ),
-                    ),
-                    Text(
-                      'Can I change it later? Does it expire? Tap to read.',
-                      style: TextStyle(
-                        fontFamily: 'DM Sans',
-                        fontSize: 11.5,
-                        color: p.textMuted,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Icon(Icons.chevron_right, size: 18, color: p.textMuted),
-            ],
-          ),
-        ),
       ),
     );
   }
