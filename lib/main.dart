@@ -6,6 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:mhad/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/data/app_data/app_data.dart';
+import 'package:mhad/data/educational_content.dart';
 import 'package:mhad/providers/accessibility_providers.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/providers/assistant_providers.dart';
@@ -39,6 +40,12 @@ void main() {
     // facts) from assets/data/app_data.json into the AppData singleton before
     // the first frame, so every read site has it synchronously.
     await AppData.load();
+
+    // Load the educational corpus (Learn page + AI assistant reference) from
+    // assets/data/educational_content.json into the EducationalContent store
+    // before the first frame, so the Learn UI and AI prompt builder read it
+    // synchronously.
+    await EducationalContent.load();
 
     // Lock to portrait orientation on mobile (irrelevant on desktop/web)
     if (platformIsMobile) {

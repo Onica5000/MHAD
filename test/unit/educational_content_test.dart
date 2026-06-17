@@ -2,6 +2,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mhad/data/educational_content.dart';
 
 void main() {
+  // The corpus now lives in assets/data/educational_content.json and is loaded
+  // at runtime (main() calls EducationalContent.load before runApp); load it
+  // here so these assertions validate the bundled JSON end-to-end.
+  TestWidgetsFlutterBinding.ensureInitialized();
+  setUpAll(() async => EducationalContent.load());
+
   group('Educational content', () {
     test('allEducationSections is non-empty', () {
       expect(allEducationSections, isNotEmpty);
