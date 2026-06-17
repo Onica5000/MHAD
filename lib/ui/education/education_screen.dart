@@ -135,24 +135,13 @@ class _EditorialLearnHub extends StatelessWidget {
     (_TabKind.checklists, 'Checklists'),
   ];
 
-  /// Picks the section to render as the prototype's featured card —
-  /// the first section in the filtered list (which is typically the
-  /// "intro_overview" intro).
-  EducationSection? _featured() => sections.isEmpty ? null : sections.first;
-
-  /// Every section after the featured one. No cap — earlier builds
-  /// truncated to 8, which buried 50+ articles behind a Search tap.
-  /// "All" therefore shows the entire library; each filtered tab shows
-  /// its full bucket.
-  List<EducationSection> _gridSections() {
-    if (sections.length <= 1) return const [];
-    return sections.skip(1).toList();
-  }
+  /// All sections in the active filter, as grid tiles (the former "featured"
+  /// intro card is now just the first tile). No cap.
+  List<EducationSection> _gridSections() => sections;
 
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
-    final featured = _featured();
     final grid = _gridSections();
 
     return ListView(
@@ -244,26 +233,32 @@ class _EditorialLearnHub extends StatelessWidget {
         const SizedBox(height: 8),
         _BrowseByTopic(onTabChange: onTabChange),
         const SizedBox(height: 18),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
+        // Category filter pills, centered in a blue box (replaces the old
+        // featured "What is the PA MHAD" card — that section is now a normal
+        // grid tile below).
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+          decoration: BoxDecoration(
+            color: p.primaryTint,
+            border: Border.all(color: p.primary.withValues(alpha: 0.15)),
+            borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
+          ),
+          child: Wrap(
+            alignment: WrapAlignment.center,
+            spacing: 8,
+            runSpacing: 8,
             children: [
-              for (var i = 0; i < _tabs.length; i++) ...[
+              for (final t in _tabs)
                 _CategoryPill(
-                  label: _tabs[i].$2,
-                  active: activeTab == _tabs[i].$1,
-                  onTap: () => onTabChange(_tabs[i].$1),
+                  label: t.$2,
+                  active: activeTab == t.$1,
+                  onTap: () => onTabChange(t.$1),
                 ),
-                if (i < _tabs.length - 1) const SizedBox(width: 6),
-              ],
             ],
           ),
         ),
         const SizedBox(height: 18),
-        if (featured != null) ...[
-          _FeaturedCard(section: featured),
-          const SizedBox(height: 10),
-        ],
         // 2-column grid for the remaining sections — built as a Wrap
         // of FixedExtentColumns instead of GridView so the children
         // size naturally to their content (the prototype's cards are
@@ -626,109 +621,6 @@ class _CategoryPill extends StatelessWidget {
               color: active ? p.onPrimary : p.textMuted,
             ),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class _FeaturedCard extends StatelessWidget {
-  final EducationSection section;
-  const _FeaturedCard({required this.section});
-
-  @override
-  Widget build(BuildContext context) {
-    final p = Theme.of(context).mhadPalette;
-    return Material(
-      color: p.primary,
-      borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: () => Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (_) => _SectionDetailRoute(section: section),
-          ),
-        ),
-        child: Stack(
-          children: [
-            Positioned(
-              right: -8,
-              top: -22,
-              child: ExcludeSemantics(
-                child: Text(
-                  '?',
-                  style: TextStyle(
-                    fontFamily: 'Instrument Serif',
-                    fontFamilyFallback: const ['Georgia', 'serif'],
-                    fontStyle: FontStyle.italic,
-                    fontSize: 130,
-                    height: 1,
-                    fontWeight: FontWeight.w400,
-                    color: p.onPrimary.withValues(alpha: 0.1),
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(18),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: 32,
-                    height: 32,
-                    decoration: BoxDecoration(
-                      color: p.onPrimary.withValues(alpha: 0.18),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    alignment: Alignment.center,
-                    child: Icon(Icons.menu_book,
-                        size: 18, color: p.onPrimary),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    section.title,
-                    style: TextStyle(
-                      fontFamily: 'DM Sans',
-                      fontSize: 17,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: -0.2,
-                      height: 1.2,
-                      color: p.onPrimary,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    _previewOf(section.content),
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontFamily: 'DM Sans',
-                      fontSize: 11.5,
-                      height: 1.4,
-                      color: p.onPrimary.withValues(alpha: 0.8),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    '${_estimatedMinutes(section.content)} MIN · MOST READ',
-                    style: TextStyle(
-                      fontFamily: 'JetBrains Mono',
-                      fontFamilyFallback: const [
-                        'Consolas',
-                        'Menlo',
-                        'Courier New',
-                        'monospace',
-                      ],
-                      fontSize: 10,
-                      letterSpacing: 0.6,
-                      color: p.onPrimary.withValues(alpha: 0.7),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
         ),
       ),
     );
