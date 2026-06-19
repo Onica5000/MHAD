@@ -25,7 +25,7 @@ The app supports all three PA Act 194 form types: **Combined Declaration + Power
 - **Crisis plan / WRAP toolbox** — optional add-on capturing early warning signs, triggers, what genuinely helps, things to say, and what *not* to do; mirrors the v2 prototype's WRAP layout and is read by agents and ER staff first.
 - **Self-binding (Ulysses) clause** — explicit opt-in confirming the structural effect of PA Act 194 § 5802 (a signed directive binds you when you later refuse care during a crisis).
 - **Revocation flow** with the verbatim statutory revocation statement (20 Pa.C.S. § 5808), per-recipient notification opt-in, and honest copy about what marking a directive revoked locally does and does not communicate to providers.
-- **Local share sheet** (email · SMS · QR · system share · print) using your device's native composers — no verified links, one-time codes, expiry, or read receipts. Mailto/sms URIs follow RFC 6068 / RFC 5724.
+- **Local share sheet** (email · SMS · QR · system share · print) routed through your device's native OS share sheet (`share_plus` / `Printing.sharePdf`) — no verified links, one-time codes, expiry, or read receipts. (The only RFC-style URIs in the app are the crisis contacts' `tel:` / `sms:` links, not the directive share.)
 - **Legal toggle** — a read-only render mode of a signed directive in strict statutory-citation language for legal review, alongside the plain-language official form. (A separate clinician-summary view was considered and dropped: the full signed directive / PDF is the authoritative clinician-facing artifact, and a paraphrased summary would only risk misrepresenting it.)
 - **Past directives + revocation history** — every superseded directive stays viewable on the device with status pill (Active / Expired / Revoked), explicit Delete confirmation, and the v3 promise that no share log is kept in Public Mode.
 - **PDF generation** with coordinate-based, pixel-faithful layout matching the official PA MHAD forms, including guardian-relation-aware nominee resolution (same-as-primary / same-as-alternate / specific / no preference).
@@ -142,7 +142,7 @@ lib/
     past/                              -- Past directive detail + delete confirm
     revocation/                        -- 20 Pa.C.S. § 5808 flow + per-recipient notify
     settings/                          -- Settings, AI setup, accessibility, privacy
-    share/                             -- Local share sheet (RFC 6068 mailto, RFC 5724 sms)
+    share/                             -- (reserved/empty; sharing lives in export/ via share_plus)
     ulysses/                           -- Self-binding clause opt-in (§ 5802)
     wizard/                            -- Adaptive 6/9/11-step flow per FormType
     widgets/design/                    -- bottom_nav, web_sidebar, responsive_shell, …

@@ -219,7 +219,13 @@ typedef RailSuggestionKey = ({String formType, String stepName, int directiveId}
 /// PII-safe correlating fields ([buildAiFilledFields]) for this directive and
 /// passes them as context, so a step's heads-up/chips reflect what's already
 /// filled (e.g. medications listed earlier) rather than being generic.
-final wizardRailSuggestionsProvider = FutureProvider.family<
+///
+/// `autoDispose`: the result is dropped when the user leaves the step (the rail
+/// unmounts), so RE-ENTERING a step regenerates with the latest answers — if
+/// they go back and change an earlier answer, the rail refreshes on return.
+/// Within a step it stays cached (one generation per visit), so it never
+/// regenerates on every keystroke and stays within the free-tier rate budget.
+final wizardRailSuggestionsProvider = FutureProvider.autoDispose.family<
     ({String headsUp, List<String> chips})?, RailSuggestionKey>(
   (ref, key) async {
     final assistant = ref.watch(aiAssistantProvider);
