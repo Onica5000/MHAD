@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:go_router/go_router.dart';
 import 'package:mhad/data/app_data/app_data.dart';
-import 'package:mhad/ui/router.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:mhad/ui/disclaimer/disclaimer_screen.dart';
 
 /// In-app privacy policy accessible from settings and disclaimer screen.
 class PrivacyPolicyScreen extends StatelessWidget {
@@ -37,14 +34,6 @@ class PrivacyPolicyScreen extends StatelessWidget {
               'Last updated: ${appData.dateFact('privacyPolicyUpdated')} '
               '(${appData.dateFact('privacyPolicyVersion')})',
               style: bodyStyle?.copyWith(color: cs.onSurfaceVariant),
-            ),
-            const SizedBox(height: 8),
-            // Public, non-PDF URL — required by Google Play Jan 2026 health-app
-            // rules. The hosted page mirrors this in-app content.
-            OutlinedButton.icon(
-              icon: const Icon(Icons.open_in_new, size: 16),
-              label: const Text('View this policy online'),
-              onPressed: () => _openPolicyUrl(context),
             ),
             const SizedBox(height: 16),
 
@@ -306,7 +295,14 @@ class PrivacyPolicyScreen extends StatelessWidget {
             TextButton.icon(
               icon: const Icon(Icons.description_outlined, size: 18),
               label: const Text('Review Legal Disclaimer'),
-              onPressed: () => context.push(AppRoutes.disclaimer),
+              // Navigator.push (not GoRouter) so the redirect — which bounces
+              // away from /disclaimer once it's accepted — doesn't intercept
+              // this read-only review. Mirrors the Settings disclaimer entry.
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => const DisclaimerScreen.readOnly(),
+                ),
+              ),
             ),
             const SizedBox(height: 20),
           ],
@@ -316,20 +312,6 @@ class PrivacyPolicyScreen extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-Future<void> _openPolicyUrl(BuildContext context) async {
-  final uri = Uri.parse(appData.privacyPolicyUrl);
-  final ok =
-      await canLaunchUrl(uri) && await launchUrl(uri, mode: LaunchMode.externalApplication);
-  if (!ok && context.mounted) {
-    await Clipboard.setData(ClipboardData(text: appData.privacyPolicyUrl));
-    if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Privacy policy URL copied to clipboard.')),
-      );
-    }
   }
 }
 

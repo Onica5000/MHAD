@@ -58,9 +58,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 // greeting); status pill reflects current privacy mode.
                 const _ProfileChip(),
                 const SizedBox(height: 18),
-                // "My directive" group hoisted to the top per prototype
-                // L1091-1096 (the first group after the profile chip).
-                const _CurrentDirectiveSection(),
                 const SectionLabel('Appearance'),
                 const SizedBox(height: 8),
           // Per user direction (2026-06-02): the app ships in the Deep Navy
@@ -184,9 +181,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           // Learn lives in the main nav, and session/end-session controls live
           // on the public-mode notice.)
 
-          // _CurrentDirectiveSection was hoisted to the top of the
-          // ListView (right under the profile chip) 2026-06-04 to match
-          // prototype L1091-1096 — it used to live in this slot.
           // "Get help" moved to the left sidebar (above the crisis card) for
           // prominence. Accessibility stays here.
           const SectionLabel('Accessibility'),
@@ -534,50 +528,3 @@ class _ProfileChip extends ConsumerWidget {
   }
 }
 
-/// "My current directive" Settings group — surfaces Phase 4 destinations
-/// for the most-recently-completed directive when one exists. When no
-/// completed directive is on file, the section renders nothing.
-class _CurrentDirectiveSection extends ConsumerWidget {
-  const _CurrentDirectiveSection();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final directivesAsync = ref.watch(allDirectivesProvider);
-
-    return directivesAsync.maybeWhen(
-      data: (list) {
-        // Use the most-recently-edited directive of ANY status. These screens
-        // operate on a directive (legal toggle, crisis plan, etc.), so they
-        // only require that one exists — NOT that it's signed/complete.
-        // Web directives are signed on paper and rarely reach "complete", so
-        // gating on completion hid the whole section (and made these screens
-        // unreachable on web).
-        final sorted = [...list]
-          ..sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
-        if (sorted.isEmpty) return const SizedBox.shrink();
-        final d = sorted.first;
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SectionLabel('My current directive'),
-            const SizedBox(height: 8),
-            // The AI consistency check moved to the wizard's Review step (an
-            // opt-in button there). Crisis plan / Ulysses moved to "Anything
-            // else" earlier.
-            DesignCard(
-              padding: EdgeInsets.zero,
-              child: _SettingsRow(
-                icon: Icons.swap_horiz_outlined,
-                title: 'Plain ↔ Legal language toggle',
-                subtitle: 'Switch how the text reads',
-                onTap: () => context.push(AppRoutes.legalToggleRoute(d.id)),
-              ),
-            ),
-            const SizedBox(height: 20),
-          ],
-        );
-      },
-      orElse: () => const SizedBox.shrink(),
-    );
-  }
-}

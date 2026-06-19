@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
+import 'package:mhad/services/blank_form_service.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
@@ -23,13 +24,6 @@ import 'package:mhad/ui/wizard/widgets/form_type_quiz.dart';
 class WebDashboardLanding extends ConsumerWidget {
   final bool isPublic;
   const WebDashboardLanding({required this.isPublic, super.key});
-
-  Future<void> _start(
-      BuildContext context, WidgetRef ref, FormType type) async {
-    final id =
-        await ref.read(directiveRepositoryProvider).createDirective(type);
-    if (context.mounted) context.go(AppRoutes.wizardRoute(id));
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -84,17 +78,19 @@ class WebDashboardLanding extends ConsumerWidget {
         const DirectiveFormChoice(),
         const SizedBox(height: 22),
 
-        // ── Print the blank form (single tool — still being built out) ────
+        // ── Print the blank form — generates the empty official form and
+        //    opens the print dialog directly; does NOT start a wizard draft.
         Align(
           alignment: Alignment.centerLeft,
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 380),
             child: _ToolCard(
-              icon: Icons.download_outlined,
+              icon: Icons.print_outlined,
               title: 'Print the blank form',
-              sub: 'Prefer paper? Start a form and print it to fill by hand.',
-              cta: 'Start a form',
-              onTap: () => _start(context, ref, FormType.combined),
+              sub: 'Prefer paper? Open the empty form to print and fill in by '
+                  'hand — no account or wizard needed.',
+              cta: 'Print blank form',
+              onTap: () => printBlankForm(context),
             ),
           ),
         ),
