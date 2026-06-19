@@ -264,6 +264,7 @@ class _AdditionalInstructionsStepState
                   VoiceInputButton(controller: ctrl),
                   AiSuggestButton(
                     controller: ctrl,
+                    directiveId: widget.directiveId,
                     fieldName: title,
                     fieldGuidance: guidance,
                   ),
@@ -301,6 +302,7 @@ class _AdditionalInstructionsStepState
               VoiceInputButton(controller: ctrl),
               AiSuggestButton(
                 controller: ctrl,
+                directiveId: widget.directiveId,
                 fieldName: label,
                 fieldGuidance: guidance,
               ),
