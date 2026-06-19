@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mhad/ai/ai_assistant.dart';
+import 'package:mhad/ai/ai_context_builder.dart';
 import 'package:mhad/ai/gemini_api_assistant.dart';
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/providers/app_providers.dart';
@@ -205,20 +206,32 @@ final aiAssistantProvider = Provider<AiAssistant?>((ref) {
 // ---------------------------------------------------------------------------
 
 /// Key for [wizardRailSuggestionsProvider]: the form type + current step name
-/// (+ a coarse signature of answers so far). A record so Riverpod caches one
-/// generation per distinct step/context and re-uses it when revisiting.
-typedef RailSuggestionKey = ({String formType, String stepName, String answersDigest});
+/// + the directive id (so the rail can ground its suggestions in the answers
+/// already entered). A record so Riverpod caches one generation per distinct
+/// step/directive and re-uses it when revisiting the step.
+typedef RailSuggestionKey = ({String formType, String stepName, int directiveId});
 
 /// Live-generated heads-up note + suggested-question chips for the wizard's
 /// inline AI rail. Null when there's no API key or generation fails (the rail
 /// then shows its static fallback / "set up AI" prompt). Cached per step.
+///
+/// The suggestions are grounded in the user's answers so far: it pulls the
+/// PII-safe correlating fields ([buildAiFilledFields]) for this directive and
+/// passes them as context, so a step's heads-up/chips reflect what's already
+/// filled (e.g. medications listed earlier) rather than being generic.
 final wizardRailSuggestionsProvider = FutureProvider.family<
     ({String headsUp, List<String> chips})?, RailSuggestionKey>(
   (ref, key) async {
     final assistant = ref.watch(aiAssistantProvider);
     if (assistant is! GeminiApiAssistant) return null;
+    final repo = ref.read(directiveRepositoryProvider);
+    final filled = await buildAiFilledFields(repo, key.directiveId);
     return assistant.generateStepSuggestions(
-      AssistantContext(formType: key.formType, stepName: key.stepName),
+      AssistantContext(
+        formType: key.formType,
+        stepName: key.stepName,
+        filledFields: filled.isEmpty ? null : filled,
+      ),
     );
   },
 );

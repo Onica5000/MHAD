@@ -760,6 +760,7 @@ class _WizardAiRailState extends ConsumerState<_WizardAiRail> {
             _RailHeadsUp(
               formType: widget.formType,
               stepName: widget.stepName,
+              directiveId: widget.directiveId,
               onAsk: _send,
             ),
             if (widget.step == WizardStep.whereIWantCare)
@@ -841,10 +842,12 @@ class _RailNoAiCard extends StatelessWidget {
 class _RailHeadsUp extends ConsumerWidget {
   final String formType;
   final String stepName;
+  final int directiveId;
   final void Function(String) onAsk;
   const _RailHeadsUp({
     required this.formType,
     required this.stepName,
+    required this.directiveId,
     required this.onAsk,
   });
 
@@ -852,7 +855,7 @@ class _RailHeadsUp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final p = Theme.of(context).mhadPalette;
     final async = ref.watch(wizardRailSuggestionsProvider(
-      (formType: formType, stepName: stepName, answersDigest: ''),
+      (formType: formType, stepName: stepName, directiveId: directiveId),
     ));
 
     Widget card(Widget child) => Container(
