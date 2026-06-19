@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math' as math;
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
@@ -17,7 +18,10 @@ import 'package:speech_to_text/speech_to_text.dart' as stt;
 ///   - Drag handle
 ///   - "● Recording" primary SectionLabel
 ///   - Italic 28pt "Say it your way."
-///   - Muted body "We'll transcribe locally — you can edit before saving."
+///   - Muted body: honest transcription note. The recognizer is the
+///     browser/OS speech service, NOT on-device-only — on web (Chrome/Edge)
+///     and Android the audio is sent to a cloud service (often Google) to
+///     transcribe. The copy says so rather than claiming "locally".
 ///   - 19-bar animated waveform (4px bars with random heights pulsing
 ///     while listening — speech_to_text doesn't expose raw audio levels
 ///     so this is decorative pulsation)
@@ -26,8 +30,8 @@ import 'package:speech_to_text/speech_to_text.dart' as stt;
 ///     partial transcript in italic muted, blinking cursor at end
 ///   - Three circular controls: Cancel (52pt surface) · Record/Stop
 ///     (76pt crisis-accent toggle) · Confirm (52pt primary check)
-///   - Monospace footer "AUDIO ISN'T SAVED · TRANSCRIPT STAYS IN THIS
-///     SESSION"
+///   - Monospace footer making the honest privacy claim: the app stores
+///     nothing, but the browser/OS speech service does the transcribing.
 Future<String?> showVoiceRecordOverlay(BuildContext context) {
   return showModalBottomSheet<String>(
     context: context,
@@ -103,8 +107,9 @@ class _VoiceRecordSheetState extends State<_VoiceRecordSheet>
       _initialized = true;
       if (!_available) {
         if (mounted) {
-          setState(() => _error =
-              'Speech recognition is not available on this device.');
+          setState(() => _error = kIsWeb
+              ? 'Voice needs Chrome, Edge, or Safari.'
+              : 'Speech recognition is not available on this device.');
         }
         return;
       }
@@ -232,7 +237,15 @@ class _VoiceRecordSheetState extends State<_VoiceRecordSheet>
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    "We'll transcribe locally — you can edit before saving.",
+                    // Honest about where transcription happens. On web the
+                    // browser streams audio to its speech service (often
+                    // Google); we never claim it's local.
+                    kIsWeb
+                        ? 'To transcribe, your browser sends the audio to its '
+                            "speech service (often Google). We don't keep the "
+                            'audio or text — edit it before saving.'
+                        : 'Your device turns speech into text. We never store '
+                            'the audio — you can edit before saving.',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontFamily: 'DM Sans',
@@ -318,20 +331,25 @@ class _VoiceRecordSheetState extends State<_VoiceRecordSheet>
               ),
             ),
             const SizedBox(height: 14),
-            Text(
-              "AUDIO ISN'T SAVED · TRANSCRIPT STAYS IN THIS SESSION",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontFamily: 'JetBrains Mono',
-                fontFamilyFallback: const [
-                  'Consolas',
-                  'Menlo',
-                  'Courier New',
-                  'monospace',
-                ],
-                fontSize: 10.5,
-                letterSpacing: 0.5,
-                color: p.textMuted,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Text(
+                kIsWeb
+                    ? "WE STORE NOTHING · YOUR BROWSER'S SPEECH SERVICE TRANSCRIBES THE AUDIO"
+                    : "AUDIO ISN'T SAVED · TRANSCRIPT STAYS IN THIS SESSION",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: 'JetBrains Mono',
+                  fontFamilyFallback: const [
+                    'Consolas',
+                    'Menlo',
+                    'Courier New',
+                    'monospace',
+                  ],
+                  fontSize: 10.5,
+                  letterSpacing: 0.5,
+                  color: p.textMuted,
+                ),
               ),
             ),
           ],

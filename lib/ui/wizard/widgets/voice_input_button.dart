@@ -32,33 +32,14 @@ class VoiceInputButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // On web, show a disabled button with tooltip instead of hiding —
-    // matches prior behaviour. `speech_to_text` doesn't have web support.
-    if (kIsWeb) {
-      return Tooltip(
-        message: 'Voice input available on mobile only',
-        child: IconButton(
-          icon: Icon(
-            Icons.mic_none,
-            size: 20,
-            color: Theme.of(context)
-                .colorScheme
-                .onSurfaceVariant
-                .withValues(alpha: 0.4),
-          ),
-          onPressed: null,
-          padding: EdgeInsets.zero,
-          // 48pt hit target meets the a11y guideline; the visible icon
-          // stays at 20pt thanks to padding: EdgeInsets.zero.
-          constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
-        ),
-      );
-    }
-
-    // speech_to_text only works on Android, iOS, and macOS.
-    if (!platformIsAndroid && !platformIsIOS && !platformIsMacOS) {
-      return const SizedBox.shrink();
-    }
+    // Voice dictation works on Android, iOS, macOS, and web (Chrome/Edge/
+    // Safari via the browser Web Speech API — speech_to_text 7.x ships a web
+    // plugin). A browser without a speech service (e.g. Firefox) can't be
+    // detected synchronously here, so we show the button and let the overlay's
+    // `initialize()` report "not available" gracefully on tap.
+    final supported =
+        kIsWeb || platformIsAndroid || platformIsIOS || platformIsMacOS;
+    if (!supported) return const SizedBox.shrink();
 
     final cs = Theme.of(context).colorScheme;
     return Semantics(
