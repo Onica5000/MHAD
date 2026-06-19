@@ -1,12 +1,14 @@
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mhad/constants.dart';
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/services/clinical_data_service.dart';
+import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/wizard/widgets/medication_autocomplete_field.dart';
 import 'package:mhad/ui/wizard/widgets/wizard_help_button.dart';
@@ -293,7 +295,74 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
               _preferred.removeAt(i);
             }),
           ),
+          const SizedBox(height: 16),
+          // Side-effects checklist — about the medications you take now, so it
+          // lives here (moved from "Anything else" 2026-06-19). The destination
+          // screen owns the full explanation.
+          _sideEffectsCard(),
         ],
+      ),
+    );
+  }
+
+  /// Tappable card linking to the side-effects checklist. Mirrors the add-on
+  /// card style used elsewhere in the wizard for visual consistency.
+  Widget _sideEffectsCard() {
+    final p = Theme.of(context).mhadPalette;
+    return Card(
+      margin: EdgeInsets.zero,
+      child: InkWell(
+        onTap: () =>
+            context.push(AppRoutes.sideEffectsRoute(widget.directiveId)),
+        borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(
+                  color: p.primaryLight,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(Icons.healing_outlined, color: p.primary, size: 20),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Side effects you may be experiencing',
+                      style: TextStyle(
+                        fontFamily: 'DM Sans',
+                        fontWeight: FontWeight.w600,
+                        fontSize: 15,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      'For the medications you take now, check common side '
+                      'effects — especially any that affect your daily '
+                      'activities — so your care team knows. Needs AI set up. '
+                      'Not medical advice.',
+                      style: TextStyle(
+                        fontFamily: 'DM Sans',
+                        fontSize: 12,
+                        height: 1.4,
+                        color: p.textMuted,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
+              Icon(Icons.chevron_right, color: p.textMuted, size: 20),
+            ],
+          ),
+        ),
       ),
     );
   }
