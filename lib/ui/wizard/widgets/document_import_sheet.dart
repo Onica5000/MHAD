@@ -18,11 +18,13 @@ class PickedDocument {
 /// Returns null if the user cancelled the picker, an empty list if files
 /// were selected but none could be read (no bytes), or the readable docs.
 Future<List<PickedDocument>?> pickDocumentFiles() async {
+  // Use FileType.any and filter by extension ourselves. On web,
+  // FileType.custom + allowedExtensions builds an `accept` attribute that some
+  // browsers reject, so the picker would open but selecting a file returned
+  // nothing — drag-and-drop worked but Browse did not. FileType.any is robust
+  // everywhere; we drop unsupported types below.
   final result = await FilePicker.platform.pickFiles(
-    type: FileType.custom,
-    allowedExtensions: [
-      'pdf', 'txt', 'csv', 'jpg', 'jpeg', 'png', 'webp', 'heic', 'heif',
-    ],
+    type: FileType.any,
     allowMultiple: true,
     // REQUIRED: load the file bytes into memory. On native (Android/iOS/
     // desktop) FilePicker returns only a path unless withData is set, and the
@@ -36,9 +38,11 @@ Future<List<PickedDocument>?> pickDocumentFiles() async {
     // With withData:true, bytes are loaded on every platform (web preloads
     // them regardless). Skip anything that still has no bytes.
     if (f.bytes == null) continue;
+    final mime = _fileMimeType(f.name);
+    if (mime == 'application/octet-stream') continue; // unsupported extension
     docs.add(PickedDocument(
       path: f.path ?? f.name,
-      mimeType: _fileMimeType(f.name),
+      mimeType: mime,
       bytes: f.bytes,
     ));
   }

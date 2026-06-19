@@ -115,6 +115,22 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
       _resetExtraction();
       _step = _PipelineStep.pick;
     });
+    // Give an explicit way to continue and verify: jump into the wizard where
+    // the autofilled fields are visible. (Staying on this page lets the user
+    // add another document; the snackbar action takes them to the form.)
+    final messenger = ScaffoldMessenger.of(context)..clearSnackBars();
+    messenger.showSnackBar(
+      SnackBar(
+        content: Text(appliedCount > 0
+            ? 'Added $appliedCount field${appliedCount == 1 ? '' : 's'} to your form.'
+            : 'Nothing new to add — those fields may already be filled.'),
+        duration: const Duration(seconds: 6),
+        action: SnackBarAction(
+          label: 'Review in form',
+          onPressed: _toWizard,
+        ),
+      ),
+    );
   }
 
   /// Discard the current extraction without writing anything. Standalone →
@@ -1094,7 +1110,19 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
 
   Future<void> _browseFiles() async {
     setState(() => _error = null);
-    final docs = await pickDocumentFiles();
+    List<PickedDocument>? docs;
+    try {
+      docs = await pickDocumentFiles();
+    } catch (e) {
+      // The picker threw (seen on web with some browsers) — surface it instead
+      // of leaving the Browse button feeling dead.
+      if (mounted) {
+        setState(() => _error =
+            'Couldn\'t open the file picker ($e). Try dragging the file onto '
+            'the box above instead.');
+      }
+      return;
+    }
     if (!mounted || docs == null) return; // null = cancelled, stay quiet
     if (docs.isEmpty) {
       // Files were chosen but none could be read — never fail silently.
