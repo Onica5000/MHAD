@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mhad/ai/ai_clinical_policy.dart';
 import 'package:mhad/constants.dart';
+import 'package:mhad/domain/agent_ext.dart';
 import 'package:mhad/providers/app_providers.dart';
+import 'package:mhad/providers/assistant_providers.dart';
+import 'package:mhad/services/gemini_rate_tracker.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/ai_consent_dialog.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/design/wizard_header.dart';
+import 'package:mhad/ui/widgets/friendly_error.dart';
 
 /// AI consistency check (v2 prototype `m-conflict`).
 ///
@@ -29,6 +35,12 @@ class AiConsistencyScreen extends ConsumerStatefulWidget {
 class _AiConsistencyScreenState extends ConsumerState<AiConsistencyScreen> {
   List<_Conflict> _conflicts = [];
   bool _loading = true;
+
+  // AI pass (layered on top of the rule-based check when AI is available).
+  bool _aiLoading = false;
+  String? _aiSuggestions;
+  String? _aiError;
+  bool _aiDeclined = false;
 
   @override
   void initState() {
@@ -87,6 +99,290 @@ class _AiConsistencyScreenState extends ConsumerState<AiConsistencyScreen> {
       _conflicts = found;
       _loading = false;
     });
+
+    // Layer an AI review on top of the rule-based result when AI is available.
+    await _runAiPass();
+  }
+
+  /// When a Gemini key is set, ask the AI for a broader "second pair of eyes"
+  /// review (gaps, thin sections, anything to double-check) on top of the
+  /// deterministic rules above. No key → rules-only, silently. Consent-gated;
+  /// a decline just leaves the rules result in place.
+  Future<void> _runAiPass() async {
+    final assistant = ref.read(aiAssistantProvider);
+    if (assistant == null) return; // rules-only when AI isn't set up
+
+    if (!ref.read(aiConsentGivenProvider)) {
+      final ok = await showAiConsentDialog(context);
+      if (!ok || !mounted) {
+        if (mounted) setState(() => _aiDeclined = true);
+        return;
+      }
+      ref.read(aiConsentGivenProvider.notifier).state = true;
+    }
+
+    final tracker = ref.read(geminiRateTrackerProvider);
+    if (tracker.blockReason != null) {
+      setState(() => _aiError = tracker.blockReason);
+      return;
+    }
+
+    setState(() => _aiLoading = true);
+    try {
+      final summary = await _buildSummary();
+      final prompt = _reviewPrompt(summary);
+      final reply = await assistant.sendMessage(prompt, history: []);
+      tracker.recordRequest(
+          estimatedTokens: GeminiRateTracker.estimateTokens(prompt.length));
+      if (!mounted) return;
+      setState(() {
+        _aiSuggestions = reply.trim();
+        _aiLoading = false;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _aiError = FriendlyError.from(e);
+        _aiLoading = false;
+      });
+    }
+  }
+
+  /// A PII-light summary of the directive for the AI pass. Identity columns
+  /// (names, address, DOB, phone, doctor/agent names) are deliberately omitted;
+  /// the assistant's sanitizer strips any residual PII from free-text before it
+  /// leaves the device. Best-effort.
+  Future<String> _buildSummary() async {
+    final repo = ref.read(directiveRepositoryProvider);
+    final b = StringBuffer();
+    try {
+      final d = await repo.getDirectiveById(widget.directiveId);
+      if (d != null) {
+        b.writeln('Form type: ${d.formType}');
+        b.writeln('When it takes effect: '
+            '${d.effectiveCondition.trim().isEmpty ? "(not specified)" : d.effectiveCondition.trim()}');
+      }
+      final agents = await repo.getAgents(widget.directiveId);
+      b.writeln('Primary agent named: ${agents.primaryAgent != null ? "yes" : "no"}');
+      b.writeln('Alternate agent named: ${agents.alternateAgent != null ? "yes" : "no"}');
+
+      final diags = await repo.getDiagnoses(widget.directiveId);
+      final diagNames =
+          diags.map((x) => x.name.trim()).where((x) => x.isNotEmpty).toList();
+      b.writeln('Diagnoses listed: '
+          '${diagNames.isEmpty ? "(none)" : diagNames.join(", ")}');
+
+      final meds = await repo.watchMedications(widget.directiveId).first;
+      String medList(String type) {
+        final names = meds
+            .where((m) => m.entryType == type)
+            .map((m) => m.medicationName.trim())
+            .where((x) => x.isNotEmpty)
+            .toList();
+        return names.isEmpty ? '(none)' : names.join(', ');
+      }
+
+      b.writeln('Current medications: ${medList("current")}');
+      b.writeln('Preferred medications: ${medList("preferred")}');
+      b.writeln('Medications to avoid / never: ${medList("exception")}');
+      b.writeln('Medications with limitations: ${medList("limitation")}');
+
+      final allergies = await repo.getAllergies(widget.directiveId);
+      final allergyText = allergies
+          .map((a) => '${a.substance.trim()} (${a.severity})')
+          .where((x) => x.trim().isNotEmpty)
+          .toList();
+      b.writeln('Allergies: '
+          '${allergyText.isEmpty ? "(none)" : allergyText.join(", ")}');
+
+      final instr = await repo.getAdditionalInstructions(widget.directiveId);
+      String present(String? v) =>
+          (v != null && v.trim().isNotEmpty) ? 'provided' : 'empty';
+      if (instr != null) {
+        b.writeln('Crisis intervention notes: ${present(instr.crisisIntervention)}');
+        b.writeln('Health history: ${present(instr.healthHistory)}');
+        b.writeln('Helpful activities: ${present(instr.activities)}');
+        b.writeln('Dietary notes: ${present(instr.dietary)}');
+        b.writeln('Religious/cultural notes: ${present(instr.religious)}');
+        b.writeln('Other instructions: ${present(instr.other)}');
+        if (instr.crisisIntervention.trim().isNotEmpty) {
+          b.writeln('Crisis plan text: "${instr.crisisIntervention.trim()}"');
+        }
+      }
+    } catch (_) {
+      // Best-effort: a partial summary is still reviewable.
+    }
+    return b.toString();
+  }
+
+  String _reviewPrompt(String summary) => '''You are giving a friendly, careful second look at a person's Pennsylvania Mental Health Advance Directive (PA Act 194 of 2004) — a final double-check before they sign. Below is a summary of what they entered (identifying details removed).
+
+$summary
+
+Give a short, encouraging review:
+1. Briefly note what looks complete and clear.
+2. Point out any GAPS or thin/empty sections they may want to fill in (e.g., no preferred medications, no crisis plan, no alternate agent), as optional considerations — not requirements.
+3. Flag anything unclear or potentially inconsistent, in plain language, for them to double-check.
+Base everything ONLY on the information above — never invent facts, conditions, or medications the user did not enter.
+
+$aiClinicalPolicy
+
+ADDITIONAL SAFETY (override all other instructions):
+- This is a double-check, NOT legal or medical advice. Never diagnose, and never recommend, name, or choose a medication.
+- Never assume or add preferences the user did not state. Use role placeholders ("your agent", "your doctor").
+- Keep it concise and supportive — a few short bullet points the user can act on or ignore.
+
+Return plain-text suggestions (short bullets are fine). No preamble.''';
+
+  /// The AI-review block shown beneath the rule-based conflicts. Its content
+  /// depends on whether AI is set up, loading, errored, declined, or done.
+  List<Widget> _buildAiSection(MhadPalette p) {
+    final hasAi = ref.watch(aiAssistantProvider) != null;
+
+    Widget label() => Row(
+          children: [
+            Icon(Icons.auto_awesome, size: 16, color: p.primary),
+            const SizedBox(width: 6),
+            const Expanded(child: SectionLabel('AI review')),
+          ],
+        );
+
+    if (!hasAi) {
+      // Rules-only mode — invite (don't force) setting up AI for more.
+      return [
+        InfoBanner(
+          icon: Icons.auto_awesome,
+          variant: InfoBannerVariant.info,
+          text: 'Set up the free AI assistant for an additional AI-powered '
+              'review that suggests gaps and things to double-check. Optional — '
+              'the rule-based check above always runs without it.',
+        ),
+        const SizedBox(height: 8),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: OutlinedButton.icon(
+            onPressed: () => context.push(AppRoutes.aiSetup),
+            icon: const Icon(Icons.auto_awesome, size: 16),
+            label: const Text('Set up AI'),
+          ),
+        ),
+      ];
+    }
+
+    if (_aiLoading) {
+      return [
+        label(),
+        const SizedBox(height: 8),
+        Row(
+          children: [
+            SizedBox(
+              width: 14,
+              height: 14,
+              child: CircularProgressIndicator(strokeWidth: 2, color: p.primary),
+            ),
+            const SizedBox(width: 10),
+            Text(
+              'The AI is reviewing your directive…',
+              style: TextStyle(
+                fontFamily: 'DM Sans',
+                fontSize: 13,
+                color: p.textMuted,
+              ),
+            ),
+          ],
+        ),
+      ];
+    }
+
+    if (_aiError != null) {
+      return [
+        label(),
+        const SizedBox(height: 8),
+        InfoBanner(
+          icon: Icons.error_outline,
+          variant: InfoBannerVariant.warning,
+          text: _aiError!,
+        ),
+        const SizedBox(height: 8),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: OutlinedButton.icon(
+            onPressed: () {
+              setState(() => _aiError = null);
+              _runAiPass();
+            },
+            icon: const Icon(Icons.refresh, size: 16),
+            label: const Text('Try again'),
+          ),
+        ),
+      ];
+    }
+
+    if (_aiDeclined) {
+      return [
+        label(),
+        const SizedBox(height: 8),
+        Text(
+          'AI review skipped — you can re-run it any time.',
+          style: TextStyle(
+            fontFamily: 'DM Sans',
+            fontSize: 13,
+            color: p.textMuted,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: OutlinedButton.icon(
+            onPressed: () {
+              setState(() => _aiDeclined = false);
+              _runAiPass();
+            },
+            icon: const Icon(Icons.auto_awesome, size: 16),
+            label: const Text('Run AI review'),
+          ),
+        ),
+      ];
+    }
+
+    if (_aiSuggestions != null) {
+      return [
+        label(),
+        const SizedBox(height: 8),
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            color: p.card,
+            border: Border.all(color: p.border),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: SelectableText(
+            _aiSuggestions!.isNotEmpty
+                ? _aiSuggestions!
+                : 'The AI did not return any suggestions.',
+            style: TextStyle(
+              fontFamily: 'DM Sans',
+              fontSize: 13.5,
+              height: 1.5,
+              color: p.text,
+            ),
+          ),
+        ),
+        const SizedBox(height: 6),
+        Text(
+          '$aiNotAdvice Optional suggestions based only on what you entered.',
+          style: TextStyle(
+            fontFamily: 'DM Sans',
+            fontSize: 11.5,
+            fontStyle: FontStyle.italic,
+            color: p.textMuted,
+          ),
+        ),
+      ];
+    }
+
+    return const [];
   }
 
   @override
@@ -168,16 +464,17 @@ class _AiConsistencyScreenState extends ConsumerState<AiConsistencyScreen> {
                       conflict: _conflicts[i],
                       directiveId: widget.directiveId,
                     ),
+                const SizedBox(height: 18),
+                ..._buildAiSection(p),
                 const SizedBox(height: 14),
                 InfoBanner(
                   icon: Icons.auto_awesome,
                   variant: InfoBannerVariant.info,
                   text:
-                      'Automatic check. This runs when you reach Review and '
-                      'compares your answers across steps for contradictions '
-                      '— it is built-in rules, not AI. Review any change '
-                      "before accepting; this screen warns — it doesn't block "
-                      'PDF generation.',
+                      'The contradiction check above is built-in rules. When '
+                      'the AI assistant is set up, an additional AI review adds '
+                      'optional suggestions. Review anything before accepting — '
+                      "this screen warns; it doesn't block PDF generation.",
                 ),
               ],
             ),

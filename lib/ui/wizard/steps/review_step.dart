@@ -428,8 +428,9 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
         }),
 
         const SizedBox(height: 18),
-        // Opt-in consistency check (moved here from Settings). The user runs it
-        // on demand to flag cross-step contradictions before signing.
+        // Opt-in review (moved here from Settings). Built-in rules flag
+        // cross-step contradictions; when the AI is set up it adds an optional
+        // AI review (gaps + things to double-check) on the same screen.
         const SectionLabel('Optional check'),
         const SizedBox(height: 8),
         SizedBox(
@@ -444,8 +445,9 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
         const SizedBox(height: 4),
         Text(
           'Scans your answers for cross-step contradictions (e.g. an agent-'
-          'consent that conflicts with an avoid list). Optional — you can sign '
-          'without it.',
+          'consent that conflicts with an avoid list), and — if the AI is set '
+          'up — adds an optional AI review of gaps to double-check. Optional; '
+          'you can sign without it.',
           style: TextStyle(
             fontFamily: 'DM Sans',
             fontSize: 12,
