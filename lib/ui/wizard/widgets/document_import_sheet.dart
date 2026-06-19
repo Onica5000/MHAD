@@ -1,7 +1,9 @@
 import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:image_picker/image_picker.dart';
+import 'package:mhad/utils/web_file_browse.dart';
 
 /// Result from the document picker bottom sheet.
 class PickedDocument {
@@ -18,11 +20,23 @@ class PickedDocument {
 /// Returns null if the user cancelled the picker, an empty list if files
 /// were selected but none could be read (no bytes), or the readable docs.
 Future<List<PickedDocument>?> pickDocumentFiles() async {
-  // Use FileType.any and filter by extension ourselves. On web,
-  // FileType.custom + allowedExtensions builds an `accept` attribute that some
-  // browsers reject, so the picker would open but selecting a file returned
-  // nothing — drag-and-drop worked but Browse did not. FileType.any is robust
-  // everywhere; we drop unsupported types below.
+  // On web, use a native <input type="file"> instead of file_picker, whose
+  // web interop was throwing here ("couldn't open the file picker") even
+  // though drag-and-drop worked. Native platforms keep using file_picker.
+  if (kIsWeb) {
+    const accept = '.pdf,.txt,.csv,.jpg,.jpeg,.png,.webp,.heic,.heif';
+    final picked = await browseWebFiles(accept: accept, multiple: true);
+    if (picked == null) return null; // cancelled
+    final docs = <PickedDocument>[];
+    for (final f in picked) {
+      final mime = _fileMimeType(f.name);
+      if (mime == 'application/octet-stream') continue; // unsupported type
+      docs.add(PickedDocument(path: f.name, mimeType: mime, bytes: f.bytes));
+    }
+    return docs;
+  }
+
+  // Native: file_picker with FileType.any + Dart-side extension filtering.
   final result = await FilePicker.platform.pickFiles(
     type: FileType.any,
     allowMultiple: true,
