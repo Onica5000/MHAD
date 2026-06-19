@@ -5,15 +5,27 @@ import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/utils/launch_utils.dart';
 
+/// True while the crisis sheet is on screen. Guards against stacking multiple
+/// copies when the 988 / "Get help" box is tapped repeatedly (each tap would
+/// otherwise push another identical bottom sheet).
+bool _crisisSheetOpen = false;
+
 /// Shows the crisis resources bottom sheet (988, Crisis Text Line, SAMHSA,
-/// PA Protection & Advocacy). Mirrors the prototype's `ScrCrisis`.
-Future<void> showCrisisSheet(BuildContext context) {
-  return showModalBottomSheet(
-    context: context,
-    isScrollControlled: true,
-    backgroundColor: Colors.transparent,
-    builder: (_) => const _CrisisSheet(),
-  );
+/// PA Protection & Advocacy). Mirrors the prototype's `ScrCrisis`. A no-op if
+/// the sheet is already open, so repeated taps only ever show one.
+Future<void> showCrisisSheet(BuildContext context) async {
+  if (_crisisSheetOpen) return;
+  _crisisSheetOpen = true;
+  try {
+    await showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => const _CrisisSheet(),
+    );
+  } finally {
+    _crisisSheetOpen = false;
+  }
 }
 
 class _CrisisSheet extends StatelessWidget {

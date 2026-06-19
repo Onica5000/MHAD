@@ -1177,7 +1177,7 @@ class _LearnAiPanelState extends ConsumerState<_LearnAiPanel> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(18, 18, 18, 8),
+              padding: const EdgeInsets.fromLTRB(18, 18, 18, 4),
               child: Row(
                 children: [
                   Icon(Icons.auto_awesome, size: 18, color: p.primary),
@@ -1194,16 +1194,24 @@ class _LearnAiPanelState extends ConsumerState<_LearnAiPanel> {
                 ],
               ),
             ),
+            // Mirror the wizard step rail's AI-panel header — the
+            // "GEMINI · PII STRIPPED" badge — for a consistent AI panel
+            // across the app. (The "not advice" line moves down by the input.)
             Padding(
-              padding: const EdgeInsets.fromLTRB(18, 0, 18, 8),
+              padding: const EdgeInsets.fromLTRB(18, 0, 18, 12),
               child: Text(
-                'Questions about anything on this page? Ask here. Not legal or '
-                'medical advice.',
+                '● GEMINI · PII STRIPPED',
                 style: TextStyle(
-                  fontFamily: 'DM Sans',
-                  fontSize: 11.5,
-                  height: 1.4,
-                  color: p.textMuted,
+                  fontFamily: 'JetBrains Mono',
+                  fontFamilyFallback: const [
+                    'Consolas',
+                    'Menlo',
+                    'Courier New',
+                    'monospace',
+                  ],
+                  fontSize: 9.5,
+                  letterSpacing: 0.5,
+                  color: hasKey ? p.primary : p.textMuted,
                 ),
               ),
             ),
@@ -1282,6 +1290,18 @@ class _LearnAiPanelState extends ConsumerState<_LearnAiPanel> {
                         label: const Text('Set up AI assistant'),
                       ),
                     ),
+            ),
+            // Disclaimer by the input, mirroring the wizard step rail.
+            Padding(
+              padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
+              child: Text(
+                'Not legal or medical advice.',
+                style: TextStyle(
+                  fontFamily: 'DM Sans',
+                  fontSize: 10.5,
+                  color: p.textMuted,
+                ),
+              ),
             ),
           ],
         ),
