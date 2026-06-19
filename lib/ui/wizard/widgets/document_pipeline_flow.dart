@@ -140,6 +140,10 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
     _smartEdited = {};
     _piiStripped = [];
     _sourceDocs = const [];
+    // The held batch was just consumed (applied) or thrown away (discarded);
+    // an extraction that errored returns to pick WITHOUT calling this, so the
+    // pending docs survive there for a retry.
+    _pendingDocs.clear();
     _error = null;
   }
 
@@ -173,16 +177,25 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
   // apply, so this stays empty there.
   final List<_SessionFile> _sessionFiles = [];
 
+  // Documents the user has selected/dropped/pasted/snapped but NOT yet sent to
+  // the AI. They're held here (in-memory, this session only) and shown as a
+  // pending tray on the pick step; the extractor/AI is only called when the
+  // user explicitly taps "Read with AI" (see _readPendingDocs). This is the
+  // select → store → hold → send pipeline — selecting a file no longer fires
+  // the AI automatically.
+  final List<PickedDocument> _pendingDocs = [];
+
   // Clipboard-paste listener disposer (web only).
   void Function()? _pasteDisposer;
 
   @override
   void initState() {
     super.initState();
-    // ⌘V / Ctrl+V to paste an image straight into the Snap-to-fill zone (web).
+    // ⌘V / Ctrl+V to paste an image into the Snap-to-fill zone (web). The
+    // pasted image is HELD in the pending tray, not sent to the AI yet.
     _pasteDisposer = registerImagePaste((bytes, mime) {
       if (!mounted || _step != _PipelineStep.pick) return;
-      _startPipeline([
+      _addPending([
         PickedDocument(
           path: 'pasted-image',
           mimeType: mime,
@@ -282,7 +295,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
           'text file.');
       return;
     }
-    _startPipeline(docs);
+    _addPending(docs);
   }
 
   // PII
@@ -1090,13 +1103,48 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
           'HEIC, or plain-text file under 10 MB.');
       return;
     }
-    _startPipeline(docs);
+    _addPending(docs);
   }
 
   Future<void> _useWebcam() async {
     setState(() => _error = null);
     final docs = await pickDocumentCameraPhoto();
-    if (docs.isNotEmpty && mounted) _startPipeline(docs);
+    if (docs.isNotEmpty && mounted) _addPending(docs);
+  }
+
+  // ── Pending tray (held documents, not yet sent to the AI) ────────────
+
+  /// Append newly picked/dropped/pasted/snapped documents to the held tray,
+  /// de-duplicating by name + byte length so re-picking the same file doesn't
+  /// create a duplicate. Nothing is sent to the AI here — the user reads the
+  /// batch explicitly via [_readPendingDocs].
+  void _addPending(List<PickedDocument> docs) {
+    if (docs.isEmpty) return;
+    setState(() {
+      _error = null;
+      for (final d in docs) {
+        final dup = _pendingDocs.any((e) =>
+            _docName(e) == _docName(d) &&
+            (e.bytes?.length ?? -1) == (d.bytes?.length ?? -2));
+        if (!dup) _pendingDocs.add(d);
+      }
+    });
+  }
+
+  void _removePending(PickedDocument doc) {
+    setState(() => _pendingDocs.remove(doc));
+  }
+
+  void _clearPending() {
+    setState(() => _pendingDocs.clear());
+  }
+
+  /// The explicit "send to AI" action. Snapshots the held tray (so removing a
+  /// pending file mid-extraction can't mutate what's being read) and runs the
+  /// extraction → validate → review pipeline over it.
+  void _readPendingDocs() {
+    if (_pendingDocs.isEmpty) return;
+    _startPipeline(List<PickedDocument>.of(_pendingDocs));
   }
 
   Widget _buildPickStep() {
@@ -1218,6 +1266,12 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                             ),
                 ),
               ),
+              // Held documents the user picked but hasn't sent yet. The AI is
+              // only called when they tap "Read … with AI" inside this tray.
+              if (_pendingDocs.isNotEmpty) ...[
+                const SizedBox(height: 22),
+                _pendingDocsTray(p, hasKey),
+              ],
               // "In this session" — files whose fields were applied this
               // session (standalone accumulation). WebSnapFill jsx L174-251.
               if (_sessionFiles.isNotEmpty) ...[
@@ -1253,6 +1307,169 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
           ),
         );
       },
+    );
+  }
+
+  // Human-readable byte size for the pending-file rows ("1.4 MB", "812 KB").
+  String _humanSize(int? bytes) {
+    if (bytes == null) return '';
+    if (bytes >= 1024 * 1024) {
+      return '${(bytes / 1024 / 1024).toStringAsFixed(1)} MB';
+    }
+    if (bytes >= 1024) return '${(bytes / 1024).round()} KB';
+    return '$bytes B';
+  }
+
+  IconData _docIcon(PickedDocument d) {
+    if (d.mimeType == 'application/pdf') return Icons.picture_as_pdf_outlined;
+    if (d.mimeType.startsWith('image/')) return Icons.image_outlined;
+    return Icons.description_outlined;
+  }
+
+  // The held-documents tray: files the user selected/dropped/pasted/snapped
+  // but has NOT sent to the AI yet. Each row can be removed; the primary
+  // button is the only thing that actually calls the extractor (_readPendingDocs).
+  Widget _pendingDocsTray(MhadPalette p, bool hasKey) {
+    final n = _pendingDocs.length;
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: p.card,
+        border: Border.all(color: p.border),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const SectionLabel('Ready to read'),
+              const SizedBox(width: 8),
+              Flexible(
+                child: Text(
+                  '$n FILE${n == 1 ? '' : 'S'} · HELD, NOT SENT YET',
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontFamily: 'JetBrains Mono',
+                    fontFamilyFallback: const [
+                      'Consolas',
+                      'Menlo',
+                      'Courier New',
+                      'monospace',
+                    ],
+                    fontSize: 10,
+                    letterSpacing: 0.4,
+                    color: p.textMuted,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 4),
+              TextButton(
+                onPressed: _clearPending,
+                style: TextButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  minimumSize: const Size(0, 32),
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+                child: const Text('Clear all'),
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          for (final d in _pendingDocs) _pendingDocRow(p, d),
+          const SizedBox(height: 10),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(Icons.lock_outline, size: 13, color: p.textMuted),
+              const SizedBox(width: 7),
+              Expanded(
+                child: Text(
+                  hasKey
+                      ? 'Held on this device. Nothing is sent until you tap '
+                          'Read — then it goes to the AI to read and is discarded.'
+                      : 'Held on this device. Reading needs AI set up first '
+                          '(free, ~30 seconds) — nothing is sent until then.',
+                  style: TextStyle(
+                    fontFamily: 'DM Sans',
+                    fontSize: 11.5,
+                    height: 1.4,
+                    color: p.textMuted,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            width: double.infinity,
+            child: FilledButton.icon(
+              onPressed: _readPendingDocs,
+              icon: const Icon(Icons.auto_awesome, size: 16),
+              label: Text(
+                n == 1 ? 'Read this document with AI' : 'Read $n documents with AI',
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _pendingDocRow(MhadPalette p, PickedDocument d) {
+    final size = _humanSize(d.bytes?.length);
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5),
+      child: Row(
+        children: [
+          Container(
+            width: 34,
+            height: 40,
+            decoration: BoxDecoration(
+              color: p.surface,
+              border: Border.all(color: p.border),
+              borderRadius: BorderRadius.circular(6),
+            ),
+            alignment: Alignment.center,
+            child: Icon(_docIcon(d), size: 16, color: p.textMuted),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  _docName(d),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontFamily: 'DM Sans',
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    color: p.text,
+                  ),
+                ),
+                if (size.isNotEmpty)
+                  Text(
+                    '${_docKind(d)} · $size',
+                    style: TextStyle(
+                      fontFamily: 'DM Sans',
+                      fontSize: 11,
+                      color: p.textMuted,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.close, size: 16),
+            tooltip: 'Remove',
+            visualDensity: VisualDensity.compact,
+            color: p.textMuted,
+            onPressed: () => _removePending(d),
+          ),
+        ],
+      ),
     );
   }
 
