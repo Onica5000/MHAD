@@ -33,6 +33,11 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
   final _passCtrl = TextEditingController();
   final _requestCtrl = TextEditingController();
   final _focusCtrl = TextEditingController();
+  // AI provider to draft with + its model and API key (admin-only; the key is
+  // entered here, ephemeral to this screen, and never persisted).
+  AdminAiProvider _provider = AdminAiProvider.gemini;
+  final _modelCtrl = TextEditingController();
+  final _keyCtrl = TextEditingController();
   AdminDataTarget _target = AdminDataTarget.appData;
   Map<String, dynamic> _base = const {};
   Map<String, dynamic> _backup = const {};
@@ -47,6 +52,8 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
     _passCtrl.dispose();
     _requestCtrl.dispose();
     _focusCtrl.dispose();
+    _modelCtrl.dispose();
+    _keyCtrl.dispose();
     super.dispose();
   }
 
@@ -62,9 +69,17 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
   }
 
   Future<void> _draft() async {
-    final key = ref.read(apiKeyProvider).valueOrNull;
-    if (key == null || key.isEmpty) {
-      setState(() => _error = 'Set up the AI (API key) first.');
+    // For Gemini, fall back to the app's stored key if the field is blank
+    // (preserves the prior behavior); other providers must supply a key here.
+    final typedKey = _keyCtrl.text.trim();
+    final key = typedKey.isNotEmpty
+        ? typedKey
+        : (_provider == AdminAiProvider.gemini
+            ? (ref.read(apiKeyProvider).valueOrNull ?? '')
+            : '');
+    if (key.isEmpty) {
+      setState(() => _error =
+          'Enter the ${_provider.label} API key first (${_provider.keyHint}).');
       return;
     }
     if (_requestCtrl.text.trim().isEmpty) return;
@@ -76,7 +91,11 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
     try {
       // Load the base for the SELECTED target so paths + emitted file match.
       _base = await AdminUpdateService.currentData(_target);
-      final raw = await AdminUpdateService(apiKey: key).draftRaw(
+      final raw = await AdminUpdateService(
+        apiKey: key,
+        provider: _provider,
+        model: _modelCtrl.text.trim(),
+      ).draftRaw(
         _requestCtrl.text.trim(),
         _base,
         target: _target,
@@ -261,6 +280,46 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
             ],
             onChanged: (t) =>
                 setState(() => _target = t ?? AdminDataTarget.appData),
+          ),
+          const SizedBox(height: 12),
+          // AI provider — Gemini (bundled), Anthropic Claude, or OpenAI GPT.
+          // Admin-only; switching providers just changes which API is called.
+          DropdownButtonFormField<AdminAiProvider>(
+            initialValue: _provider,
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'AI provider',
+            ),
+            items: [
+              for (final p in AdminAiProvider.values)
+                DropdownMenuItem(value: p, child: Text(p.label)),
+            ],
+            onChanged: (p) =>
+                setState(() => _provider = p ?? AdminAiProvider.gemini),
+          ),
+          const SizedBox(height: 12),
+          TextField(
+            controller: _modelCtrl,
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              labelText: 'Model (optional)',
+              hintText: _provider.defaultModel,
+              helperText: 'Leave blank to use ${_provider.defaultModel}.',
+            ),
+          ),
+          const SizedBox(height: 12),
+          TextField(
+            controller: _keyCtrl,
+            obscureText: true,
+            autofillHints: const [],
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              labelText: '${_provider.label} API key',
+              hintText: _provider.keyHint,
+              helperText: _provider == AdminAiProvider.gemini
+                  ? 'Blank = use the app\'s saved Gemini key. Not stored.'
+                  : 'Entered for this session only — not stored.',
+            ),
           ),
           const SizedBox(height: 12),
           TextField(

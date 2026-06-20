@@ -1,8 +1,30 @@
 import 'dart:convert';
 
 import 'package:google_generative_ai/google_generative_ai.dart';
+import 'package:http/http.dart' as http;
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/data/educational_content.dart';
+
+/// Which major AI provider the admin tool drafts updates with. Gemini uses the
+/// bundled `google_generative_ai` package; Anthropic and OpenAI are called
+/// directly over their REST APIs. This is ONLY reachable inside the gated admin
+/// tool — it is not a user-facing setting.
+enum AdminAiProvider {
+  gemini('Google Gemini', 'gemini-2.5-flash', 'Gemini API key (AIza…)'),
+  anthropic('Anthropic Claude', 'claude-opus-4-8', 'Anthropic key (sk-ant-…)'),
+  openai('OpenAI GPT', 'gpt-4o', 'OpenAI key (sk-…)');
+
+  const AdminAiProvider(this.label, this.defaultModel, this.keyHint);
+
+  /// Human-facing provider name for the dropdown.
+  final String label;
+
+  /// Default model id (the maintainer can override it in the model field).
+  final String defaultModel;
+
+  /// Placeholder/help shown on the API-key field for this provider.
+  final String keyHint;
+}
 
 /// Which dynamic-data file the admin flow is editing. Each is a separate
 /// bundled JSON asset committed to the repo; the AI drafts changes against the
@@ -76,7 +98,18 @@ class ProposedChange {
 /// educational facts (`verify` tier) never auto-apply.
 class AdminUpdateService {
   final String apiKey;
-  AdminUpdateService({required this.apiKey});
+
+  /// Provider to draft with (defaults to Gemini for backward compatibility).
+  final AdminAiProvider provider;
+
+  /// Model id for [provider]. Empty → the provider's default model.
+  final String model;
+
+  AdminUpdateService({
+    required this.apiKey,
+    this.provider = AdminAiProvider.gemini,
+    String model = '',
+  }) : model = model.trim().isEmpty ? provider.defaultModel : model.trim();
 
   /// Reads the current bundled data as a JSON map (the base the AI edits) for
   /// [target] (defaults to the main app-data file).
@@ -94,11 +127,74 @@ class AdminUpdateService {
     AdminDataTarget target = AdminDataTarget.appData,
     String focusArea = '',
   }) async {
-    final model = GenerativeModel(model: appData.ai.model, apiKey: apiKey);
     final prompt =
         buildPrompt(request, current, target: target, focusArea: focusArea);
-    final resp = await model.generateContent([Content.text(prompt)]);
+    return switch (provider) {
+      AdminAiProvider.gemini => _draftGemini(prompt),
+      AdminAiProvider.anthropic => _draftAnthropic(prompt),
+      AdminAiProvider.openai => _draftOpenai(prompt),
+    };
+  }
+
+  Future<String> _draftGemini(String prompt) async {
+    final m = GenerativeModel(model: model, apiKey: apiKey);
+    final resp = await m.generateContent([Content.text(prompt)]);
     return resp.text ?? '';
+  }
+
+  /// Anthropic Messages API (REST). content is an array of blocks; we
+  /// concatenate the text blocks.
+  Future<String> _draftAnthropic(String prompt) async {
+    final resp = await http.post(
+      Uri.parse('https://api.anthropic.com/v1/messages'),
+      headers: {
+        'content-type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+      },
+      body: jsonEncode({
+        'model': model,
+        'max_tokens': 4096,
+        'messages': [
+          {'role': 'user', 'content': prompt},
+        ],
+      }),
+    );
+    if (resp.statusCode != 200) {
+      throw Exception('Anthropic API ${resp.statusCode}: ${resp.body}');
+    }
+    final data = jsonDecode(resp.body) as Map<String, dynamic>;
+    final blocks = (data['content'] as List?) ?? const [];
+    final buf = StringBuffer();
+    for (final b in blocks) {
+      if (b is Map && b['type'] == 'text') buf.write(b['text'] ?? '');
+    }
+    return buf.toString();
+  }
+
+  /// OpenAI Chat Completions API (REST). Reads choices[0].message.content.
+  Future<String> _draftOpenai(String prompt) async {
+    final resp = await http.post(
+      Uri.parse('https://api.openai.com/v1/chat/completions'),
+      headers: {
+        'content-type': 'application/json',
+        'authorization': 'Bearer $apiKey',
+      },
+      body: jsonEncode({
+        'model': model,
+        'messages': [
+          {'role': 'user', 'content': prompt},
+        ],
+      }),
+    );
+    if (resp.statusCode != 200) {
+      throw Exception('OpenAI API ${resp.statusCode}: ${resp.body}');
+    }
+    final data = jsonDecode(resp.body) as Map<String, dynamic>;
+    final choices = (data['choices'] as List?) ?? const [];
+    if (choices.isEmpty) return '';
+    final msg = (choices.first as Map)['message'] as Map?;
+    return msg?['content']?.toString() ?? '';
   }
 
   /// The drafting prompt. Public so it can be inspected/tested. [target] picks
