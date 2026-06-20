@@ -108,9 +108,9 @@ List<pw.Page> buildPoaPages({
         dataLine('Name of designated person', primaryAgent?.fullName ?? ''),
         if (primaryAgent != null && primaryAgent.relationship.isNotEmpty)
           dataLine('Relationship', primaryAgent.relationship),
-        dataLine('Address', primaryAgent?.fullAddress ?? ''),
+        dataLine('Address', primaryAgent?.streetAddress ?? ''),
         twoCol(
-          blankLine('City, State, Zip Code'),
+          dataLine('City, State, Zip Code', primaryAgent?.cityStateZip ?? ''),
           dataLine('Phone Number', _agentPhone(primaryAgent)),
         ),
         pw.SizedBox(height: 4),
@@ -136,9 +136,9 @@ List<pw.Page> buildPoaPages({
         dataLine('Name of designated person', altAgent?.fullName ?? ''),
         if (altAgent != null && altAgent.relationship.isNotEmpty)
           dataLine('Relationship', altAgent.relationship),
-        dataLine('Address', altAgent?.fullAddress ?? ''),
+        dataLine('Address', altAgent?.streetAddress ?? ''),
         twoCol(
-          blankLine('City, State, Zip Code'),
+          dataLine('City, State, Zip Code', altAgent?.cityStateZip ?? ''),
           dataLine('Phone Number', _agentPhone(altAgent)),
         ),
         pw.SizedBox(height: 8),
@@ -624,7 +624,7 @@ List<pw.Page> buildPoaPages({
                 dataLine('Relationship', g.relationship),
               dataLine('Address', g.address),
               twoCol(
-                blankLine('City, State, Zip Code'),
+                dataLine('City, State, Zip Code', g.cityStateZip),
                 dataLine('Phone Number', g.phone),
               ),
             ] else ...[
@@ -685,16 +685,18 @@ List<pw.Page> buildPoaPages({
         dataLine('Name of Principal', directive.fullName),
         dataLine(
           'Address',
-          [
-            directive.address,
-            directive.address2,
-            directive.city,
-            directive.state,
-            directive.zip,
-          ].where((s) => s.isNotEmpty).join(', '),
+          [directive.address, directive.address2]
+              .where((s) => s.isNotEmpty)
+              .join(', '),
+        ),
+        twoCol(
+          dataLine(
+            'City, State, Zip Code',
+            composeCityStateZip(directive.city, directive.state, directive.zip),
+          ),
+          dataLine('Phone Number', directive.phone),
         ),
         if (directive.county.isNotEmpty) dataLine('County', directive.county),
-        dataLine('Phone Number', directive.phone),
         pw.SizedBox(height: 10),
 
         // Witness signatures
@@ -707,14 +709,16 @@ List<pw.Page> buildPoaPages({
         witnessDetailBlock(
           'Witness 1',
           w1?.fullName,
-          w1?.fullAddress,
+          w1?.streetAddress,
+          cityStateZip: w1?.cityStateZip,
           phone: w1?.phone,
           signatureDate: w1?.signatureDate,
         ),
         witnessDetailBlock(
           'Witness 2',
           w2?.fullName,
-          w2?.fullAddress,
+          w2?.streetAddress,
+          cityStateZip: w2?.cityStateZip,
           phone: w2?.phone,
           signatureDate: w2?.signatureDate,
         ),

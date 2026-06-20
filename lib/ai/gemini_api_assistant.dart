@@ -592,14 +592,16 @@ class GeminiApiAssistant implements AiAssistant {
         'material you are drawing from (e.g., "According to the FAQ section…" '
         'or "The glossary defines this as…").');
     buf.writeln(
-        '6. For ANY legal question, statutory requirement question, validity '
-        'question, or question about what providers are legally required to '
-        'do — even if the reference material covers the topic — always add: '
-        '"For legal advice specific to your situation, contact PA Protection '
-        '& Advocacy at ${appData.phoneOf('paProtectionAdvocacy')}." This '
-        'includes questions about what makes a directive binding, whether '
-        'specific circumstances affect validity, and provider obligations '
-        'under Act 194.');
+        '6. Whenever a question touches on legal effect, rights, or '
+        'obligations — including validity, enforceability, statutory '
+        'requirements, provider obligations under Act 194, capacity '
+        'determinations, what an agent is legally permitted to decide, '
+        'or whether a specific situation affects the directive — always '
+        'add: "For legal advice specific to your situation, contact PA '
+        'Protection & Advocacy at '
+        '${appData.phoneOf('paProtectionAdvocacy')}." Do not wait for '
+        'the user to say "legally" — if the topic could have legal '
+        'consequences, include the disclaimer.');
     buf.writeln(
         '7. Keep responses concise and friendly.');
     buf.writeln(

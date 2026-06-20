@@ -564,16 +564,18 @@ List<pw.Page> buildDeclarationPages({
         dataLine('My Name', directive.fullName),
         dataLine(
           'Address',
-          [
-            directive.address,
-            directive.address2,
-            directive.city,
-            directive.state,
-            directive.zip,
-          ].where((s) => s.isNotEmpty).join(', '),
+          [directive.address, directive.address2]
+              .where((s) => s.isNotEmpty)
+              .join(', '),
+        ),
+        twoCol(
+          dataLine(
+            'City, State, Zip Code',
+            composeCityStateZip(directive.city, directive.state, directive.zip),
+          ),
+          dataLine('Phone Number', directive.phone),
         ),
         if (directive.county.isNotEmpty) dataLine('County', directive.county),
-        dataLine('Phone Number', directive.phone),
         pw.SizedBox(height: 10),
 
         // Witness signatures
@@ -586,14 +588,16 @@ List<pw.Page> buildDeclarationPages({
         witnessDetailBlock(
           'Witness 1',
           w1?.fullName,
-          w1?.fullAddress,
+          w1?.streetAddress,
+          cityStateZip: w1?.cityStateZip,
           phone: w1?.phone,
           signatureDate: w1?.signatureDate,
         ),
         witnessDetailBlock(
           'Witness 2',
           w2?.fullName,
-          w2?.fullAddress,
+          w2?.streetAddress,
+          cityStateZip: w2?.cityStateZip,
           phone: w2?.phone,
           signatureDate: w2?.signatureDate,
         ),

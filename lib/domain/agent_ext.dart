@@ -1,6 +1,16 @@
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/utils/address_format.dart';
 
+/// "City, State ZIP" helper — mirrors the private function in address_format.dart
+/// but exposed here for PDF rendering sites that need city/state/zip separately.
+String composeCityStateZip(String city, String state, String zip) {
+  final stateZip = [state.trim(), zip.trim()].where((s) => s.isNotEmpty).join(' ');
+  return [
+    if (city.trim().isNotEmpty) city.trim(),
+    if (stateZip.isNotEmpty) stateZip,
+  ].join(', ');
+}
+
 /// Shared agent lookups — previously reimplemented at ~11 sites as
 /// `agents.where((a) => a.agentType == '…').firstOrNull`.
 extension AgentListX on List<Agent> {
@@ -17,8 +27,6 @@ extension AgentListX on List<Agent> {
 
 extension AgentX on Agent {
   /// First non-empty phone, preferring cell → home → work (trimmed).
-  /// Unifies the 3-4 separate "best phone" pickers (one of which trimmed,
-  /// the others didn't — trimming is now consistent).
   String get bestPhone {
     for (final p in [cellPhone, homePhone, workPhone]) {
       final t = p.trim();
@@ -30,6 +38,13 @@ extension AgentX on Agent {
   /// Full composed address (line 1/2 · city · state · ZIP) as one line.
   String get fullAddress => composeAddressInline(
       line1: address, line2: address2, city: city, state: state, zip: zip);
+
+  /// Street part only (line 1 + optional line 2, no city/state/zip).
+  String get streetAddress =>
+      [address.trim(), address2.trim()].where((p) => p.isNotEmpty).join(', ');
+
+  /// "City, State ZIP" — for displaying below the street address line.
+  String get cityStateZip => composeCityStateZip(city, state, zip);
 }
 
 extension GuardianAddressX on GuardianNomination {
@@ -40,10 +55,27 @@ extension GuardianAddressX on GuardianNomination {
       city: nomineeCity,
       state: nomineeState,
       zip: nomineeZip);
+
+  /// Street part only (line 1 + optional line 2).
+  String get nomineeStreetAddress =>
+      [nomineeAddress.trim(), nomineeAddress2.trim()]
+          .where((p) => p.isNotEmpty)
+          .join(', ');
+
+  /// "City, State ZIP" for the nominee.
+  String get nomineeCityStateZip =>
+      composeCityStateZip(nomineeCity, nomineeState, nomineeZip);
 }
 
 extension WitnessAddressX on WitnessesData {
   /// Full composed address (line 1/2 · city · state · ZIP) as one line.
   String get fullAddress => composeAddressInline(
       line1: address, line2: address2, city: city, state: state, zip: zip);
+
+  /// Street part only (line 1 + optional line 2).
+  String get streetAddress =>
+      [address.trim(), address2.trim()].where((p) => p.isNotEmpty).join(', ');
+
+  /// "City, State ZIP".
+  String get cityStateZip => composeCityStateZip(city, state, zip);
 }

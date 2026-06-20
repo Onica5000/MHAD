@@ -70,7 +70,7 @@
   "facts": {
     "_note": "Updatable user-facing factual copy (research stats, etc.). 'auto' tier for low-risk resource/research facts.",
     "autonomy": "auto",
-    "facilitatorCompletionStat": "People who fill this out with help finish it about 20× more often (Swanson et al. 2006)."
+    "facilitatorCompletionStat": "People who complete this with facilitator support are estimated to be substantially more likely to finish the process (Swanson et al. 2006; individual results vary)."
   },
   "legal": {
     "_note": "Canonical PA MHAD legal facts. VERIFY tier — a human must approve any change (AND the matching prose edits in proseLocations) before it ships. These facts are authored as prose throughout the app; this block is the single structured reference + the admin-flow update target, NOT a runtime template (the legal-wording-canon governs the prose).",
@@ -80,7 +80,7 @@
     "validityYears": 2,
     "witnessMinAge": 18,
     "courtPetitionHours": 72,
-    "ntiDrugs": ["lithium", "carbamazepine", "valproic acid", "phenytoin", "clonazepam"],
+    "ntiDrugs": ["lithium", "carbamazepine", "valproic acid"],
     "ntiCitation": "35 P.S. §960.3",
     "involuntaryCommitment": {
       "section302Hours": 120,

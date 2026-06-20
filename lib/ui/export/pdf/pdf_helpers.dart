@@ -63,7 +63,8 @@ pw.Widget draftWatermark(DraftMode mode) {
 /// review finding "PDFs gate guardian on nomineeFullName".
 class GuardianDisplay {
   final String fullName;
-  final String address;
+  final String address;       // street only (line 1 + line 2)
+  final String cityStateZip;  // "City, State ZIP"
   final String phone;
   final String relationship;
 
@@ -75,6 +76,7 @@ class GuardianDisplay {
   const GuardianDisplay({
     required this.fullName,
     required this.address,
+    this.cityStateZip = '',
     required this.phone,
     required this.relationship,
     required this.hasNominee,
@@ -83,6 +85,7 @@ class GuardianDisplay {
   static const empty = GuardianDisplay(
     fullName: '',
     address: '',
+    cityStateZip: '',
     phone: '',
     relationship: '',
     hasNominee: false,
@@ -111,7 +114,8 @@ GuardianDisplay resolveGuardianDisplay(
       if (a == null || a.fullName.isEmpty) return GuardianDisplay.empty;
       return GuardianDisplay(
         fullName: a.fullName,
-        address: a.fullAddress,
+        address: a.streetAddress,
+        cityStateZip: a.cityStateZip,
         phone: pickPhone(a),
         relationship: a.relationship,
         hasNominee: true,
@@ -121,7 +125,8 @@ GuardianDisplay resolveGuardianDisplay(
       if (a == null || a.fullName.isEmpty) return GuardianDisplay.empty;
       return GuardianDisplay(
         fullName: a.fullName,
-        address: a.fullAddress,
+        address: a.streetAddress,
+        cityStateZip: a.cityStateZip,
         phone: pickPhone(a),
         relationship: a.relationship,
         hasNominee: true,
@@ -130,7 +135,8 @@ GuardianDisplay resolveGuardianDisplay(
       if (guardian.nomineeFullName.isEmpty) return GuardianDisplay.empty;
       return GuardianDisplay(
         fullName: guardian.nomineeFullName,
-        address: guardian.fullNomineeAddress,
+        address: guardian.nomineeStreetAddress,
+        cityStateZip: guardian.nomineeCityStateZip,
         phone: guardian.nomineePhone,
         relationship: guardian.nomineeRelationship,
         hasNominee: true,
@@ -791,6 +797,7 @@ pw.Widget witnessDetailBlock(
   String label,
   String? name,
   String? address, {
+  String? cityStateZip,
   String? phone,
   int? signatureDate,
 }) {
@@ -802,6 +809,7 @@ pw.Widget witnessDetailBlock(
     children: [
       dataLine('Name of Witness', name ?? ''),
       dataLine('Address', address ?? ''),
+      dataLine('City, State, Zip Code', cityStateZip ?? ''),
       dataLine('Phone Number', phone ?? ''),
       dataLine('Date Signed', dateStr),
       pw.SizedBox(height: 6),

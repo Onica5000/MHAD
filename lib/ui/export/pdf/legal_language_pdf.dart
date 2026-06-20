@@ -49,6 +49,10 @@ List<pw.Page> buildLegalLanguagePages({
         'unless, at the time of expiration, I am incapable of making mental '
         'health treatment decisions, in which case it shall remain in effect '
         'until my capacity returns.',
+    'I have additionally stated preferences regarding treatment modalities, '
+        'medications, treatment facility, and other instructions in the '
+        'accompanying official form, which constitutes the complete and '
+        'authoritative expression of my wishes.',
   ];
 
   return [
