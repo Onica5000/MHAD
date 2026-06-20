@@ -45,6 +45,7 @@ class _ReviewData {
   final GuardianNomination? guardian;
   final List<MedicationEntry> medications;
   final List<DiagnosisEntry> diagnoses;
+  final List<DirectiveAllergy> allergies;
 
   const _ReviewData({
     required this.directive,
@@ -54,6 +55,7 @@ class _ReviewData {
     required this.guardian,
     required this.medications,
     required this.diagnoses,
+    required this.allergies,
   });
 }
 
@@ -106,6 +108,10 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
     final repo = ref.read(directiveRepositoryProvider);
     final bundle = await repo.loadBundle(widget.directiveId);
     if (bundle == null || !mounted) return;
+    // Allergies aren't part of DirectiveBundle — fetch separately for the
+    // Allergies review row.
+    final allergies = await repo.getAllergies(widget.directiveId);
+    if (!mounted) return;
 
     setState(() {
       _data = _ReviewData(
@@ -116,6 +122,7 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
         guardian: bundle.guardian,
         medications: bundle.medications,
         diagnoses: bundle.diagnoses,
+        allergies: allergies,
       );
     });
   }
@@ -141,175 +148,126 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
     final limitations = meds.where((m) => m.entryType == 'limitation').toList();
     final preferred = meds.where((m) => m.entryType == 'preferred').toList();
 
+    String firstPhone(Agent? a) => a == null
+        ? ''
+        : [a.homePhone, a.workPhone, a.cellPhone]
+            .firstWhere((p) => p.isNotEmpty, orElse: () => '');
+
+    // Build a row; hasContent reflects whether ANY value was provided so empty
+    // steps render the muted "Not provided yet" state. `ok` defaults to true
+    // (optional) — pass false only for a genuine blocker (e.g. missing name).
+    _ReviewRowData row(WizardStep step, String label,
+        Map<String, String> entries, {bool? ok}) {
+      final has = entries.values.any((v) => v.trim().isNotEmpty);
+      return _ReviewRowData(
+        step: step,
+        label: label,
+        entries: entries,
+        hasContent: has,
+        ok: ok ?? true,
+      );
+    }
+
     final rows = <_ReviewRowData>[];
 
-    // Personal Information — always shown (required identity fields).
-    final personalEntries = <String, String>{
-      'Name': d.fullName,
-      'Date of birth': d.dateOfBirth,
-      'Address': composeAddressInline(
-          line1: d.address,
-          line2: d.address2,
-          city: d.city,
-          state: d.state,
-          zip: d.zip),
-      'Phone': d.phone,
-    };
-    final personalHasContent =
-        personalEntries.values.any((v) => v.isNotEmpty);
-    rows.add(_ReviewRowData(
-      step: WizardStep.aboutYou,
-      label: 'Personal Information',
-      entries: personalEntries,
-      hasContent: personalHasContent,
-      // Identity is required for a valid directive — flag if name is blank.
-      ok: d.fullName.isNotEmpty,
-    ));
+    // Drive the rows off THIS form type's own step list, so EVERY step the user
+    // could fill is shown for review (with its data, or "Not provided yet") and
+    // the set respects the form type: POA shows the agent/guardian steps only,
+    // Declaration omits the agent steps, Combined shows them all. The Review
+    // step itself has no row.
+    for (final step in widget.formType.steps) {
+      switch (step) {
+        case WizardStep.aboutYou:
+          rows.add(row(step, 'Personal Information', {
+            'Name': d.fullName,
+            'Date of birth': d.dateOfBirth,
+            'Address': composeAddressInline(
+                line1: d.address,
+                line2: d.address2,
+                city: d.city,
+                state: d.state,
+                zip: d.zip),
+            'Phone': d.phone,
+          }, ok: d.fullName.trim().isNotEmpty));
 
-    // Medical Diagnoses — only when present (matches legacy conditional).
-    if (data.diagnoses.isNotEmpty) {
-      rows.add(_ReviewRowData(
-        step: WizardStep.diagnoses,
-        label: 'Medical Diagnoses',
-        entries: {for (final dx in data.diagnoses) dx.icdCode: dx.name},
-        hasContent: true,
-        ok: true,
-      ));
-    }
+        case WizardStep.whenItKicksIn:
+          rows.add(row(step, 'Effective Condition',
+              {'Condition': d.effectiveCondition}));
 
-    // Effective Condition — always shown.
-    final effectiveEntries = {'Condition': d.effectiveCondition};
-    rows.add(_ReviewRowData(
-      step: WizardStep.whenItKicksIn,
-      label: 'Effective Condition',
-      entries: effectiveEntries,
-      hasContent: d.effectiveCondition.isNotEmpty,
-      ok: true,
-    ));
+        case WizardStep.peopleITrust:
+          rows.add(row(step, 'Primary Agent', {
+            'Name': primaryAgent?.fullName ?? '',
+            'Relationship': primaryAgent?.relationship ?? '',
+            'Phone': firstPhone(primaryAgent),
+          }));
+          // Alternate agent is optional — only its own row when one is named.
+          if (altAgent != null) {
+            rows.add(row(step, 'Alternate Agent', {
+              'Name': altAgent.fullName,
+              'Relationship': altAgent.relationship,
+              'Phone': firstPhone(altAgent),
+            }));
+          }
 
-    // Treatment & Consent.
-    if (prefs != null) {
-      rows.add(_ReviewRowData(
-        step: WizardStep.whereIWantCare,
-        label: 'Treatment & Consent',
-        entries: {
-          'Treatment facility': prefs.treatmentFacilityPref,
-          'Medication consent': prefs.medicationConsent,
-          'ECT consent': prefs.ectConsent,
-          'Experimental studies': prefs.experimentalConsent,
-          'Drug trials': prefs.drugTrialConsent,
-        },
-        hasContent: [
-          prefs.treatmentFacilityPref,
-          prefs.medicationConsent,
-          prefs.ectConsent,
-          prefs.experimentalConsent,
-          prefs.drugTrialConsent,
-        ].any((v) => v.isNotEmpty),
-        ok: true,
-      ));
-    }
+        case WizardStep.guardianNomination:
+          rows.add(row(step, 'Guardian Nomination', {
+            'Name': guardian?.nomineeFullName ?? '',
+            'Relationship': guardian?.nomineeRelationship ?? '',
+            'Phone': guardian?.nomineePhone ?? '',
+          }));
 
-    // Medications.
-    if (exceptions.isNotEmpty ||
-        limitations.isNotEmpty ||
-        preferred.isNotEmpty) {
-      rows.add(_ReviewRowData(
-        step: WizardStep.medications,
-        label: 'Medications',
-        entries: {
-          if (exceptions.isNotEmpty)
+        case WizardStep.whereIWantCare:
+          rows.add(row(step, 'Where I want care', {
+            'Treatment facility': prefs?.treatmentFacilityPref ?? '',
+            'Medication consent': prefs?.medicationConsent ?? '',
+          }));
+
+        case WizardStep.diagnoses:
+          rows.add(row(step, 'Medical Diagnoses', {
+            for (final dx in data.diagnoses) dx.icdCode: dx.name,
+          }));
+
+        case WizardStep.allergies:
+          rows.add(row(step, 'Allergies & reactions', {
+            'Allergies': data.allergies
+                .map((a) => a.severity.isNotEmpty
+                    ? '${a.substance} (${a.severity})'
+                    : a.substance)
+                .where((s) => s.trim().isNotEmpty)
+                .join(', '),
+          }));
+
+        case WizardStep.medications:
+          rows.add(row(step, 'Medications', {
             'Never give': exceptions.map((m) => m.medicationName).join(', '),
-          if (limitations.isNotEmpty)
             'With limits': limitations.map((m) => m.medicationName).join(', '),
-          if (preferred.isNotEmpty)
             'Preferred': preferred.map((m) => m.medicationName).join(', '),
-        },
-        hasContent: true,
-        ok: true,
-      ));
-    }
+          }));
 
-    // Additional Instructions.
-    if (additional != null) {
-      final addlEntries = <String, String>{
-        if (additional.activities.isNotEmpty)
-          'Activities': additional.activities,
-        if (additional.crisisIntervention.isNotEmpty)
-          'Crisis intervention': additional.crisisIntervention,
-        if (additional.healthHistory.isNotEmpty)
-          'Health history': additional.healthHistory,
-        if (additional.dietary.isNotEmpty) 'Dietary': additional.dietary,
-        if (additional.religious.isNotEmpty) 'Religious': additional.religious,
-        if (additional.childrenCustody.isNotEmpty)
-          'Children': additional.childrenCustody,
-        if (additional.familyNotification.isNotEmpty)
-          'Family notification': additional.familyNotification,
-        if (additional.recordsDisclosure.isNotEmpty)
-          'Records disclosure': additional.recordsDisclosure,
-        if (additional.petCustody.isNotEmpty) 'Pet care': additional.petCustody,
-        if (additional.other.isNotEmpty) 'Other': additional.other,
-      };
-      rows.add(_ReviewRowData(
-        step: WizardStep.anythingElse,
-        label: 'Additional Instructions',
-        entries: addlEntries,
-        hasContent: addlEntries.isNotEmpty,
-        ok: true,
-      ));
-    }
+        case WizardStep.proceduresResearch:
+          rows.add(row(step, 'Procedures & research', {
+            'ECT consent': prefs?.ectConsent ?? '',
+            'Experimental studies': prefs?.experimentalConsent ?? '',
+            'Drug trials': prefs?.drugTrialConsent ?? '',
+          }));
 
-    // Primary Agent.
-    if (primaryAgent != null) {
-      rows.add(_ReviewRowData(
-        step: WizardStep.peopleITrust,
-        label: 'Primary Agent',
-        entries: {
-          'Name': primaryAgent.fullName,
-          'Relationship': primaryAgent.relationship,
-          'Phone': [
-            primaryAgent.homePhone,
-            primaryAgent.workPhone,
-            primaryAgent.cellPhone,
-          ].firstWhere((p) => p.isNotEmpty, orElse: () => ''),
-        },
-        hasContent: primaryAgent.fullName.isNotEmpty,
-        ok: primaryAgent.fullName.isNotEmpty,
-      ));
-    }
+        case WizardStep.anythingElse:
+          rows.add(row(step, 'Additional Instructions', {
+            'Activities': additional?.activities ?? '',
+            'Crisis intervention': additional?.crisisIntervention ?? '',
+            'Health history': additional?.healthHistory ?? '',
+            'Dietary': additional?.dietary ?? '',
+            'Religious': additional?.religious ?? '',
+            'Children': additional?.childrenCustody ?? '',
+            'Family notification': additional?.familyNotification ?? '',
+            'Records disclosure': additional?.recordsDisclosure ?? '',
+            'Pet care': additional?.petCustody ?? '',
+            'Other': additional?.other ?? '',
+          }));
 
-    // Alternate Agent.
-    if (altAgent != null) {
-      rows.add(_ReviewRowData(
-        step: WizardStep.peopleITrust,
-        label: 'Alternate Agent',
-        entries: {
-          'Name': altAgent.fullName,
-          'Relationship': altAgent.relationship,
-          'Phone': [
-            altAgent.homePhone,
-            altAgent.workPhone,
-            altAgent.cellPhone,
-          ].firstWhere((p) => p.isNotEmpty, orElse: () => ''),
-        },
-        hasContent: altAgent.fullName.isNotEmpty,
-        ok: true,
-      ));
-    }
-
-    // Guardian Nomination.
-    if (guardian != null && guardian.nomineeFullName.isNotEmpty) {
-      rows.add(_ReviewRowData(
-        step: WizardStep.guardianNomination,
-        label: 'Guardian Nomination',
-        entries: {
-          'Name': guardian.nomineeFullName,
-          'Relationship': guardian.nomineeRelationship,
-          'Phone': guardian.nomineePhone,
-        },
-        hasContent: true,
-        ok: true,
-      ));
+        case WizardStep.reviewAndSign:
+          break; // the Review step itself — no row to review
+      }
     }
 
     return rows;
@@ -357,7 +315,10 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
 
     final p = Theme.of(context).mhadPalette;
     final rows = _buildRows(_data!);
-    final warnCount = rows.where((r) => !r.ok || !r.hasContent).length;
+    // Only genuine blockers (e.g. missing name) count as "needs attention".
+    // Empty OPTIONAL steps still render (as "Not provided yet") but don't
+    // inflate the warning banner now that every step is always shown.
+    final warnCount = rows.where((r) => !r.ok).length;
 
     return ListView(
       shrinkWrap: widget.embedded,
