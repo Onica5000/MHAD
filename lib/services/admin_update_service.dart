@@ -12,7 +12,8 @@ import 'package:mhad/data/educational_content.dart';
 enum AdminAiProvider {
   gemini('Google Gemini', 'gemini-2.5-flash', 'Gemini API key (AIza…)'),
   anthropic('Anthropic Claude', 'claude-opus-4-8', 'Anthropic key (sk-ant-…)'),
-  openai('OpenAI GPT', 'gpt-4o', 'OpenAI key (sk-…)');
+  openai('OpenAI GPT', 'gpt-4o', 'OpenAI key (sk-…)'),
+  grok('xAI Grok', 'grok-4', 'xAI key (xai-…)');
 
   const AdminAiProvider(this.label, this.defaultModel, this.keyHint);
 
@@ -132,7 +133,11 @@ class AdminUpdateService {
     return switch (provider) {
       AdminAiProvider.gemini => _draftGemini(prompt),
       AdminAiProvider.anthropic => _draftAnthropic(prompt),
-      AdminAiProvider.openai => _draftOpenai(prompt),
+      // xAI's API is OpenAI-compatible — same request/response, different host.
+      AdminAiProvider.openai =>
+        _draftChatCompletions(prompt, 'https://api.openai.com/v1/chat/completions'),
+      AdminAiProvider.grok =>
+        _draftChatCompletions(prompt, 'https://api.x.ai/v1/chat/completions'),
     };
   }
 
@@ -172,10 +177,11 @@ class AdminUpdateService {
     return buf.toString();
   }
 
-  /// OpenAI Chat Completions API (REST). Reads choices[0].message.content.
-  Future<String> _draftOpenai(String prompt) async {
+  /// OpenAI-compatible Chat Completions API (used by OpenAI and xAI Grok —
+  /// same wire format, [url] differs). Reads choices[0].message.content.
+  Future<String> _draftChatCompletions(String prompt, String url) async {
     final resp = await http.post(
-      Uri.parse('https://api.openai.com/v1/chat/completions'),
+      Uri.parse(url),
       headers: {
         'content-type': 'application/json',
         'authorization': 'Bearer $apiKey',
@@ -188,7 +194,7 @@ class AdminUpdateService {
       }),
     );
     if (resp.statusCode != 200) {
-      throw Exception('OpenAI API ${resp.statusCode}: ${resp.body}');
+      throw Exception('${provider.label} API ${resp.statusCode}: ${resp.body}');
     }
     final data = jsonDecode(resp.body) as Map<String, dynamic>;
     final choices = (data['choices'] as List?) ?? const [];
