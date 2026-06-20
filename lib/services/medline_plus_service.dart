@@ -14,8 +14,13 @@ import 'package:mhad/services/certificate_pinning_service.dart';
 class MedlinePlusService {
   static const _base = 'https://connect.medlineplus.gov/service';
 
-  /// HL7 OID for the ICD-10-CM code system (MedlinePlus Connect's `v.cs`).
-  static const _icd10Cs = '2.16.840.1.113883.6.90';
+  /// RxNav endpoint to resolve a drug NAME → RxCUI (MedlinePlus Connect keys
+  /// medications off RxNorm codes, not free-text names).
+  static const _rxNavBase = 'https://rxnav.nlm.nih.gov/REST/rxcui.json';
+
+  /// HL7 OIDs for the code systems MedlinePlus Connect accepts (`v.cs`).
+  static const _icd10Cs = '2.16.840.1.113883.6.90'; // ICD-10-CM
+  static const _rxNormCs = '2.16.840.1.113883.6.88'; // RxNorm
 
   static final _client = CertificatePinningService.createPinnedClient();
 
@@ -28,26 +33,78 @@ class MedlinePlusService {
   static Future<MedlinePlusTopic?> forIcd10(String code) async {
     final c = code.trim();
     if (c.isEmpty) return null;
-    if (_cache.containsKey(c)) return _cache[c];
+    final key = 'icd:$c';
+    if (_cache.containsKey(key)) return _cache[key];
+    final topic = await _forCode(_icd10Cs, c);
+    _cache[key] = topic;
+    return topic;
+  }
 
+  /// Look up plain-language education for a medication by NAME. Resolves the
+  /// name → RxCUI via RxNav first (MedlinePlus keys meds off RxNorm codes),
+  /// then fetches the topic. Returns null when the drug can't be resolved or
+  /// MedlinePlus has nothing for it.
+  static Future<MedlinePlusTopic?> forMedication(String medName) async {
+    final base = _drugBaseName(medName);
+    if (base.length < 2) return null;
+    final key = 'med:$base';
+    if (_cache.containsKey(key)) return _cache[key];
+    final rxcui = await _rxcuiForName(base);
+    final topic = rxcui == null ? null : await _forCode(_rxNormCs, rxcui);
+    _cache[key] = topic;
+    return topic;
+  }
+
+  /// Fetch + parse a MedlinePlus Connect topic for a code in code-system [cs].
+  static Future<MedlinePlusTopic?> _forCode(String cs, String code) async {
     final uri = Uri.parse('$_base?knowledgeResponseType=application/json'
-        '&mainSearchCriteria.v.cs=$_icd10Cs'
-        '&mainSearchCriteria.v.c=${Uri.encodeComponent(c)}');
+        '&mainSearchCriteria.v.cs=$cs'
+        '&mainSearchCriteria.v.c=${Uri.encodeComponent(code)}');
     try {
       final resp =
           await _client.get(uri).timeout(appData.config.clinicalApiTimeout);
-      if (resp.statusCode != 200) {
-        _cache[c] = null;
-        return null;
-      }
-      final topic = _parse(resp.body);
-      _cache[c] = topic;
-      return topic;
+      if (resp.statusCode != 200) return null;
+      return _parse(resp.body);
     } catch (e) {
       debugPrint('MedlinePlusService: $e');
-      _cache[c] = null;
       return null;
     }
+  }
+
+  /// Resolve a drug name to its RxNorm RxCUI via RxNav. `search=1` allows a
+  /// normalized/approximate match so common spellings still resolve.
+  static Future<String?> _rxcuiForName(String name) async {
+    final uri = Uri.parse(
+        '$_rxNavBase?name=${Uri.encodeComponent(name)}&search=1');
+    try {
+      final resp =
+          await _client.get(uri).timeout(appData.config.clinicalApiTimeout);
+      if (resp.statusCode != 200) return null;
+      final json = jsonDecode(resp.body);
+      if (json is Map) {
+        final idGroup = json['idGroup'];
+        if (idGroup is Map) {
+          final ids = idGroup['rxnormId'];
+          if (ids is List && ids.isNotEmpty) return ids.first.toString();
+        }
+      }
+    } catch (e) {
+      debugPrint('MedlinePlusService rxcui: $e');
+    }
+    return null;
+  }
+
+  /// Strip a strength/form suffix so "Sertraline 50 MG Tab" → "sertraline",
+  /// which resolves cleanly through RxNav.
+  static String _drugBaseName(String medName) {
+    var s = medName.trim().toLowerCase();
+    final firstDigit = s.indexOf(RegExp(r'\d'));
+    if (firstDigit > 0) s = s.substring(0, firstDigit);
+    s = s.replaceAll(
+        RegExp(r'\b(tab|tablet|tablets|cap|capsule|capsules|oral|solution|'
+            r'suspension|injection|er|xr|sr|hcl|hydrochloride)\b'),
+        ' ');
+    return s.replaceAll(RegExp(r'\s+'), ' ').trim();
   }
 
   /// Parse the Atom-as-JSON feed MedlinePlus Connect returns. Defensive: the

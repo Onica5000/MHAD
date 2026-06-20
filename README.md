@@ -48,7 +48,7 @@ The app supports all three PA Act 194 form types: **Combined Declaration + Power
 ## Privacy, security, and legal posture
 
 - **Local-first.** All directive data stays on your device. There is no app server, no cloud sync, no developer-side copy.
-- **No analytics, no tracking, no cookies, no ads.** Outbound flows are limited to (1) the **opt-in** Google Gemini AI feature and (2) free public U.S. government reference lookups — NIH/NLM Clinical Tables (medication / condition / provider-NPI), NLM MedlinePlus Connect (plain-language condition info), and FDA openFDA (drug labels that ground the side-effects list). **The reference lookups send only the term, code, or provider name being searched — never your identity or your directive.** AI chat/suggestions are PII-stripped; document **autofill** is the one deliberate exception (the uploaded file is sent so the AI can read its personal details to fill the form, reviewed before saving, and never required).
+- **No analytics, no tracking, no cookies, no ads.** Outbound flows are limited to (1) the **opt-in** Google Gemini AI feature and (2) free public U.S. government reference lookups — NIH/NLM Clinical Tables (medication / condition / provider-NPI), NLM MedlinePlus Connect + RxNav (plain-language condition & medication info), and FDA openFDA (drug labels that ground the side-effects list). **The reference lookups send only the term, code, or provider name being searched — never your identity or your directive.** AI chat/suggestions are PII-stripped; document **autofill** is the one deliberate exception (the uploaded file is sent so the AI can read its personal details to fill the form, reviewed before saving, and never required).
 - **Strict TLS + certificate pinning** on the Gemini path, with a host allowlist covering the Gemini and the NIH/NLM/FDA reference hosts; **SQLCipher AES-256** for Private Mode; key in the platform secure keystore.
 - **Per-session affirmative consent** for AI features, with prominent PII warnings.
 - **Public Mode** holds data in memory only and can be erased at any time. **Private Mode** uses encrypted on-device storage with biometric / passcode unlock.
@@ -117,7 +117,7 @@ These are downloaded from the [sqlite3.dart](https://github.com/simolus3/sqlite3
 - **AI:** Google Gemini 2.5 Flash (free tier, optional, opt-in)
 - **PDF:** `pdf` + `printing` packages (coordinate-based layout)
 - **Fonts (bundled):** Instrument Serif, DM Sans, JetBrains Mono
-- **Medical reference data (free, no key, no PII sent):** NIH/NLM Clinical Tables — RxTerms (medications), ICD-10-CM (conditions), NPI registry (provider lookup); NLM MedlinePlus Connect (plain-language condition education); FDA openFDA (drug labels, used to ground the AI side-effects list)
+- **Medical reference data (free, no key, no PII sent):** NIH/NLM Clinical Tables — RxTerms (medications), ICD-10-CM (conditions), NPI registry (provider lookup); NLM MedlinePlus Connect + RxNav (plain-language condition & medication education); FDA openFDA (drug labels, used to ground the AI side-effects list)
 
 ## Project layout
 

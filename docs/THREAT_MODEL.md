@@ -16,10 +16,10 @@
      the form (declarant + agents/guardian); the user reviews everything before it
      is saved, and uploading is never required.
   2. Free public U.S. government reference lookups — NIH/NLM Clinical Tables
-     (medication / condition / provider-NPI), NLM MedlinePlus Connect (plain-language
-     education), and FDA openFDA (drug labels, used to ground the side-effects list).
-     Each request carries **only the term, code, or provider name being looked up —
-     no user PII, no directive.**
+     (medication / condition / provider-NPI), NLM MedlinePlus Connect + RxNav
+     (plain-language condition & medication education), and FDA openFDA (drug labels,
+     used to ground the side-effects list). Each request carries **only the term, code,
+     or provider name being looked up — no user PII, no directive.**
 
 ## MASVS coverage (deliberate scope)
 
@@ -28,7 +28,7 @@
 | Storage (MASVS-STORAGE) | ✅ L1/L2 | SQLCipher AES-256 (private), in-memory (public), secure keystore for keys |
 | Crypto (MASVS-CRYPTO) | ✅ | Platform keystore; random 32-byte key |
 | Auth (MASVS-AUTH) | ✅ | Biometric/passcode gate for private mode |
-| Network (MASVS-NETWORK) | ✅ | Strict TLS + cert pinning + host allowlist (Gemini + NIH/NLM Clinical Tables, MedlinePlus, FDA openFDA) |
+| Network (MASVS-NETWORK) | ✅ | Strict TLS + cert pinning + host allowlist (Gemini + NIH/NLM Clinical Tables, MedlinePlus, RxNav, FDA openFDA) |
 | Platform (MASVS-PLATFORM) | ✅ | FLAG_SECURE screenshot protection; least-permission |
 | Code (MASVS-CODE) | ✅ | Release obfuscation + split-debug-info |
 | Resilience (MASVS-RESILIENCE) | ⚠️ **Partial — deliberate** | Root/jailbreak warn (non-blocking). **No** anti-Frida/anti-hooking/anti-debug/tamper RASP. |

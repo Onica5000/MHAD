@@ -75,8 +75,9 @@ address, phone), the people you name, or your saved directive.**
 
 - **NIH/NLM Clinical Table Search Service** — medication autocomplete (RxTerms), condition
   lookup (ICD-10-CM), and an optional provider (doctor) search in the public NPI registry.
-- **NLM MedlinePlus Connect** — plain-language explanations of a condition you added (sends
-  only its ICD-10 code).
+- **NLM MedlinePlus Connect** (with **NLM RxNav**) — plain-language explanations of a
+  condition or a medication (sends only the condition's ICD-10 code, or the medication name,
+  which RxNav resolves to a drug code).
 - **FDA openFDA** — a medication's official FDA label, used to ground the side-effects list
   (sends only the medication name).
 

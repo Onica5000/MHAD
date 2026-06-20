@@ -8,7 +8,7 @@ import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/services/clinical_data_service.dart';
 import 'package:mhad/services/medline_plus_service.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
-import 'package:mhad/utils/launch_utils.dart';
+import 'package:mhad/ui/widgets/medline_plus_dialog.dart';
 import 'package:mhad/ui/widgets/design/health_chip.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/nlm_attribution.dart';
@@ -113,89 +113,11 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
   }
 
   // ── MedlinePlus plain-language condition info ────────────────────────
-  Future<void> _showConditionInfo(String icdCode, String name) async {
-    // Kick off the fetch, show a dialog that resolves it. Cached per session.
-    final future = MedlinePlusService.forIcd10(icdCode);
-    if (!mounted) return;
-    await showDialog<void>(
-      context: context,
-      builder: (ctx) {
-        final p = Theme.of(ctx).mhadPalette;
-        return AlertDialog(
-          title: Text(name, style: const TextStyle(fontFamily: _kSans)),
-          content: SizedBox(
-            width: 420,
-            child: FutureBuilder<MedlinePlusTopic?>(
-              future: future,
-              builder: (context, snap) {
-                if (snap.connectionState != ConnectionState.done) {
-                  return const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 24),
-                    child: Center(child: CircularProgressIndicator()),
-                  );
-                }
-                final topic = snap.data;
-                if (topic == null) {
-                  return Text(
-                    'No plain-language summary is available for this condition '
-                    'right now. You can search it on MedlinePlus.',
-                    style: TextStyle(
-                        fontFamily: _kSans, fontSize: 13, color: p.textMuted),
-                  );
-                }
-                return SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        topic.summary.isNotEmpty
-                            ? topic.summary
-                            : topic.title,
-                        style: TextStyle(
-                          fontFamily: _kSans,
-                          fontSize: 13,
-                          height: 1.5,
-                          color: p.text,
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      Text(
-                        'Plain-language information from the U.S. National '
-                        'Library of Medicine (MedlinePlus). Educational only — '
-                        'not medical advice.',
-                        style: TextStyle(
-                          fontFamily: _kSans,
-                          fontSize: 10.5,
-                          fontStyle: FontStyle.italic,
-                          color: p.textMuted,
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-          ),
-          actions: [
-            FutureBuilder<MedlinePlusTopic?>(
-              future: future,
-              builder: (context, snap) {
-                final url = snap.data?.url ?? '';
-                if (url.isEmpty) return const SizedBox.shrink();
-                return TextButton(
-                  onPressed: () => launchOrCopy(context, url),
-                  child: const Text('Read more on MedlinePlus'),
-                );
-              },
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(ctx),
-              child: const Text('Close'),
-            ),
-          ],
-        );
-      },
+  void _showConditionInfo(String icdCode, String name) {
+    showMedlinePlusDialog(
+      context,
+      title: name,
+      future: MedlinePlusService.forIcd10(icdCode),
     );
   }
 

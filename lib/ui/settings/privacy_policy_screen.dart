@@ -192,8 +192,9 @@ class PrivacyPolicyScreen extends StatelessWidget {
                   '  - A doctor / provider name you type into the optional '
                   'doctor search → NLM NPI registry, used only to look that '
                   'provider up in the public registry of healthcare providers.\n'
-                  '  - The ICD-10 code of a condition you added → NLM '
-                  'MedlinePlus Connect, to fetch a plain-language explanation.\n'
+                  '  - A condition (by its ICD-10 code) or a medication (by '
+                  'name, resolved to a code via NLM RxNav) → NLM MedlinePlus '
+                  'Connect, to fetch a plain-language explanation.\n'
                   '  - A medication name → openFDA (U.S. Food & Drug '
                   'Administration), to fetch that drug\'s official FDA label, '
                   'which is used to ground the side-effects list.\n\n'
@@ -206,8 +207,8 @@ class PrivacyPolicyScreen extends StatelessWidget {
                   'qualified professional. The NLM Clinical Table services are '
                   'rate-limited to 20 requests/second.\n\n'
                   'Sources: U.S. National Library of Medicine (RxTerms, '
-                  'ICD-10-CM, NPI registry, MedlinePlus Connect); U.S. Food & '
-                  'Drug Administration (openFDA).',
+                  'ICD-10-CM, NPI registry, RxNav, MedlinePlus Connect); U.S. '
+                  'Food & Drug Administration (openFDA).',
               headingStyle: headingStyle,
               bodyStyle: bodyStyle,
             ),
@@ -248,8 +249,9 @@ class PrivacyPolicyScreen extends StatelessWidget {
                   '  - Google Gemini API (only when you use AI features)\n'
                   '  - NIH/NLM Clinical Table Search Service — medication, '
                   'condition, and provider (doctor) lookups\n'
-                  '  - NLM MedlinePlus Connect — plain-language condition '
-                  'explanations (sends only an ICD-10 code)\n'
+                  '  - NLM MedlinePlus Connect & RxNav — plain-language '
+                  'condition and medication explanations (sends only an ICD-10 '
+                  'code or a medication name)\n'
                   '  - openFDA / U.S. FDA — official drug labels used to ground '
                   'the side-effects list (sends only a medication name)\n\n'
                   'Each of these receives only the term or code being looked '

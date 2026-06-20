@@ -8,8 +8,10 @@ import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/services/clinical_data_service.dart';
+import 'package:mhad/services/medline_plus_service.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/medline_plus_dialog.dart';
 import 'package:mhad/ui/wizard/widgets/medication_autocomplete_field.dart';
 import 'package:mhad/ui/wizard/widgets/wizard_help_button.dart';
 import 'package:mhad/ui/wizard/wizard_step_mixin.dart';
@@ -102,6 +104,18 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
       return;
     }
     setState(() => rows.add(_MedRow()));
+  }
+
+  // Plain-language MedlinePlus education for a medication (resolves the name →
+  // RxCUI → MedlinePlus topic). Educational only.
+  void _showMedInfo(String medName) {
+    final name = medName.trim();
+    if (name.isEmpty) return;
+    showMedlinePlusDialog(
+      context,
+      title: name,
+      future: MedlinePlusService.forMedication(name),
+    );
   }
 
   @override
@@ -254,6 +268,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
             rows: _current,
             accentColor: Theme.of(context).colorScheme.secondary,
             onAdd: () => _addMedRow(_current),
+            onInfo: _showMedInfo,
             onRemove: (i) => setState(() {
               _current[i].dispose();
               _current.removeAt(i);
@@ -266,6 +281,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
             rows: _exceptions,
             accentColor: neverColor,
             onAdd: () => _addMedRow(_exceptions),
+            onInfo: _showMedInfo,
             onRemove: (i) => setState(() {
               _exceptions[i].dispose();
               _exceptions.removeAt(i);
@@ -278,6 +294,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
             rows: _limitations,
             accentColor: limitColor,
             onAdd: () => _addMedRow(_limitations),
+            onInfo: _showMedInfo,
             onRemove: (i) => setState(() {
               _limitations[i].dispose();
               _limitations.removeAt(i);
@@ -290,6 +307,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
             rows: _preferred,
             accentColor: preferColor,
             onAdd: () => _addMedRow(_preferred),
+            onInfo: _showMedInfo,
             onRemove: (i) => setState(() {
               _preferred[i].dispose();
               _preferred.removeAt(i);
@@ -385,6 +403,7 @@ class _MedTable extends StatelessWidget {
   final List<_MedRow> rows;
   final VoidCallback onAdd;
   final void Function(int index) onRemove;
+  final void Function(String medName)? onInfo;
   final Color? accentColor;
 
   const _MedTable({
@@ -393,6 +412,7 @@ class _MedTable extends StatelessWidget {
     required this.rows,
     required this.onAdd,
     required this.onRemove,
+    this.onInfo,
     this.accentColor,
   });
 
@@ -480,6 +500,20 @@ class _MedTable extends StatelessWidget {
                         ],
                       ),
                     ),
+                    if (onInfo != null)
+                      ListenableBuilder(
+                        listenable: rows[i].nameCtrl,
+                        builder: (context, _) {
+                          final name = rows[i].nameCtrl.text.trim();
+                          if (name.isEmpty) return const SizedBox.shrink();
+                          return IconButton(
+                            icon: const Icon(Icons.info_outline),
+                            color: cs.primary,
+                            tooltip: 'Learn about $name',
+                            onPressed: () => onInfo!(name),
+                          );
+                        },
+                      ),
                     IconButton(
                       icon:
                           const Icon(Icons.remove_circle_outline),

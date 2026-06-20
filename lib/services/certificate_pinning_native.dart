@@ -7,7 +7,8 @@ const _allowedHosts = {
   'generativelanguage.googleapis.com',
   'clinicaltables.nlm.nih.gov',
   // Free public reference lookups (no user PII sent — only a term/code).
-  'connect.medlineplus.gov', // NLM MedlinePlus Connect — condition education
+  'connect.medlineplus.gov', // NLM MedlinePlus Connect — condition/med education
+  'rxnav.nlm.nih.gov', // NLM RxNav — drug name → RxCUI for MedlinePlus
   'api.fda.gov', // openFDA — FDA drug labels (grounds side-effects)
 };
 

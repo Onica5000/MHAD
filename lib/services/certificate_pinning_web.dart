@@ -11,6 +11,7 @@ bool isAllowedHost(String host) {
     'generativelanguage.googleapis.com',
     'clinicaltables.nlm.nih.gov',
     'connect.medlineplus.gov',
+    'rxnav.nlm.nih.gov',
     'api.fda.gov',
   };
   return allowedHosts.contains(host);
