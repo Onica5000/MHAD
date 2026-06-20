@@ -11,14 +11,20 @@ void main() {
         'personal_info': {
           'full_name': 'Jane Q. Public',
           'date_of_birth': '1980-05-01',
-          'address': '123 Main St, Philadelphia, PA 19103',
+          'address_line1': '123 Main St',
+          'city': 'Philadelphia',
+          'state': 'PA',
+          'zip': '19103',
           'phone': '(215) 555-1234',
           'primary_doctor_name': 'Dr. Smith',
           'primary_doctor_phone': '(215) 555-9000',
           'agent': {
             'name': 'John Public',
             'relationship': 'Spouse',
-            'address': '123 Main St, Philadelphia, PA 19103',
+            'address_line1': '123 Main St',
+            'city': 'Philadelphia',
+            'state': 'PA',
+            'zip': '19103',
             'phone': '(215) 555-5678',
           },
           'alternate_agent': {'name': 'Mary Public', 'relationship': 'Sister'},
@@ -30,7 +36,10 @@ void main() {
       expect(pi.isEmpty, isFalse);
       expect(pi.fullName, 'Jane Q. Public');
       expect(pi.dateOfBirth, '1980-05-01');
-      expect(pi.address, '123 Main St, Philadelphia, PA 19103');
+      expect(pi.addressLine1, '123 Main St');
+      expect(pi.city, 'Philadelphia');
+      expect(pi.state, 'PA');
+      expect(pi.zip, '19103');
       expect(pi.phone, '(215) 555-1234');
       expect(pi.primaryDoctorName, 'Dr. Smith');
       expect(pi.primaryDoctorPhone, '(215) 555-9000');
@@ -65,13 +74,13 @@ void main() {
       });
       final page2 = DocumentExtractionResult.fromJson({
         'personal_info': {
-          'address': '123 Main St',
+          'address_line1': '123 Main St',
           'agent': {'name': 'John Public'},
         },
       });
       final merged = page1.merge(page2).personalInfo;
       expect(merged.fullName, 'Jane Public');
-      expect(merged.address, '123 Main St');
+      expect(merged.addressLine1, '123 Main St');
       expect(merged.agent?.name, 'John Public');
     });
 
