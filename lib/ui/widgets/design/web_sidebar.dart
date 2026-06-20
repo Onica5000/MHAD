@@ -68,7 +68,6 @@ class WebSidebar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final p = Theme.of(context).mhadPalette;
-    final mode = ref.watch(privacyModeNotifierProvider);
     final aiReady =
         ref.watch(apiKeyProvider).valueOrNull?.isNotEmpty ?? false;
     // Most-recently-edited directive — the "Download & print" destination
@@ -284,125 +283,14 @@ class WebSidebar extends ConsumerWidget {
             // Crisis card pinned at bottom (in addition to the global floating
             // button). Opens the full crisis-resources sheet.
             Padding(
-              padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
+              padding: const EdgeInsets.fromLTRB(12, 0, 12, 16),
               child: _CrisisCard(),
-            ),
-
-            // Session indicator — anonymous (web/public) or private (native).
-            // Mirrors the design `WebSidebar`: lock chip + "Anonymous session"
-            // / "NOTHING SAVED · NO ACCOUNT" (no account avatar).
-            Padding(
-              padding: const EdgeInsets.fromLTRB(14, 4, 14, 16),
-              child: Row(
-                children: [
-                  CustomPaint(
-                    // Dashed primary border = the artboard's "anonymous /
-                    // unverified" signal on the session chip avatar.
-                    foregroundPainter:
-                        _DashedRRectPainter(color: p.primary, radius: 8),
-                    child: Container(
-                      width: 30,
-                      height: 30,
-                      decoration: BoxDecoration(
-                        color: p.surface,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      alignment: Alignment.center,
-                      child: Icon(
-                        mode.isPrivate ? Icons.lock : Icons.lock_outline,
-                        size: 14,
-                        color: p.primary,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          mode.isPrivate
-                              ? 'Private session'
-                              : 'Anonymous session',
-                          style: TextStyle(
-                            fontFamily: 'DM Sans',
-                            fontSize: 12,
-                            fontWeight: FontWeight.w700,
-                            color: p.text,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Text(
-                          mode.isPrivate
-                              ? 'ENCRYPTED · ON DEVICE'
-                              : 'NOTHING SAVED · NO ACCOUNT',
-                          style: TextStyle(
-                            fontFamily: 'JetBrains Mono',
-                            fontFamilyFallback: const [
-                              'Consolas',
-                              'Menlo',
-                              'Courier New',
-                              'monospace'
-                            ],
-                            fontSize: 10,
-                            letterSpacing: 0.4,
-                            color: p.textMuted,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
             ),
           ],
         ),
       ),
     );
   }
-
-}
-
-/// Paints a dashed rounded-rect stroke over a child (used for the session-chip
-/// avatar). Flutter has no built-in dashed border.
-class _DashedRRectPainter extends CustomPainter {
-  final Color color;
-  final double radius;
-  final double dash = 3;
-  final double gap = 2.5;
-  final double strokeWidth = 1;
-
-  _DashedRRectPainter({required this.color, this.radius = 8});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = color
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = strokeWidth;
-    final rrect = RRect.fromRectAndRadius(
-      Rect.fromLTWH(strokeWidth / 2, strokeWidth / 2,
-          size.width - strokeWidth, size.height - strokeWidth),
-      Radius.circular(radius),
-    );
-    final dashed = Path();
-    for (final metric in (Path()..addRRect(rrect)).computeMetrics()) {
-      var dist = 0.0;
-      while (dist < metric.length) {
-        dashed.addPath(
-            metric.extractPath(dist, dist + dash), Offset.zero);
-        dist += dash + gap;
-      }
-    }
-    canvas.drawPath(dashed, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant _DashedRRectPainter old) =>
-      old.color != color ||
-      old.radius != radius ||
-      old.strokeWidth != strokeWidth;
 }
 
 class _SidebarItem {
