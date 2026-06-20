@@ -2807,23 +2807,17 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
       return null;
     }
 
-    final checkedCount = _step == _PipelineStep.review
-        ? _reviewChecked.values.where((v) => v).length
-        : _smartChecked.values.where((v) => v).length;
-
     // Artboard WebSnapReview footer: "Discard all" (left) · "Generate more"
-    // (Smart Fill, when conditions/meds were validated) · primary "Add N
-    // fields to directive". Results step keeps Back · Apply All.
+    // (Smart Fill, when conditions/meds were validated) · primary button.
+    // Results step keeps Back · Apply All.
     final canSmartFill = _validated?.hasValidatedConditions == true ||
         _validated?.hasValidatedMeds == true;
-    // Standalone (/upload page): the primary button autofills AND continues
-    // into the wizard so the user can verify the result, so it reads "Autofill
-    // Information". Modal (over the wizard) keeps the field-count label.
-    final addLabel = _standalone
-        ? 'Autofill Information'
-        : (checkedCount == 0
-            ? 'Add fields'
-            : 'Add $checkedCount field${checkedCount == 1 ? '' : 's'} to directive');
+    // The primary review button is "Autofill Information" in BOTH modes — it
+    // applies the checked fields and continues into the wizard (standalone
+    // navigates there; the modal pops back to the wizard it was opened over),
+    // so the user can verify the autofill. The "N of M fields ready to add"
+    // line in the fields pane already communicates the count.
+    const addLabel = 'Autofill Information';
 
     return SafeArea(
       child: Padding(
@@ -2851,10 +2845,10 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                 const SizedBox(width: 8),
               ],
               FilledButton(
-                // Standalone always allows continuing to the wizard (even with
-                // nothing ticked, so the user is never stranded on this page).
-                onPressed:
-                    (_standalone || checkedCount > 0) ? _applyAll : null,
+                // Always enabled so the page is never a dead end — applies the
+                // checked fields (none if nothing ticked) and continues to the
+                // wizard. A greyed-out button is easy to miss as "no button".
+                onPressed: _applyAll,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
