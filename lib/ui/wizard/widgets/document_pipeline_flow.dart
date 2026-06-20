@@ -673,12 +673,21 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
           m.entryType == entryType);
     }
 
+    // Promote the nullable field to a local so the med/condition branches
+    // below are null-safe. `_applyAll` can be invoked from the always-enabled
+    // "Autofill Information" button before any successful extraction (or after
+    // a reset clears `_validated` at the top of the flow); the validated-data
+    // branches must simply no-op in that case rather than throw
+    // "Null check operator used on a null value". Smart Fill (which reads
+    // `_smartResult`, not `_validated`) still runs below.
+    final validated = _validated;
+
     for (final entry in _reviewChecked.entries) {
       if (!entry.value) continue;
       final key = entry.key;
 
-      if (key.startsWith('med_prefer_')) {
-        final med = _validated!.preferredMeds
+      if (validated != null && key.startsWith('med_prefer_')) {
+        final med = validated.preferredMeds
             .firstWhere((m) => 'med_prefer_${m.originalName}' == key);
         if (!medExists(med.displayName, MedicationEntryType.preferred.name)) {
           await repo.insertMedication(MedicationEntriesCompanion.insert(
@@ -690,8 +699,8 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
           ));
           applied++;
         }
-      } else if (key.startsWith('med_avoid_')) {
-        final med = _validated!.avoidMeds
+      } else if (validated != null && key.startsWith('med_avoid_')) {
+        final med = validated.avoidMeds
             .firstWhere((m) => 'med_avoid_${m.originalName}' == key);
         if (!medExists(med.displayName, MedicationEntryType.exception.name)) {
           await repo.insertMedication(MedicationEntriesCompanion.insert(
@@ -721,10 +730,12 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
     }
 
     // Write conditions to effective condition field
-    final condNames = _validated!.conditions
-        .where((c) => _reviewChecked['cond_${c.originalText}'] == true)
-        .map((c) => c.displayName)
-        .toList();
+    final condNames = validated == null
+        ? <String>[]
+        : validated.conditions
+            .where((c) => _reviewChecked['cond_${c.originalText}'] == true)
+            .map((c) => c.displayName)
+            .toList();
     if (condNames.isNotEmpty) {
       final directive = await repo.getDirectiveById(id);
       if (directive != null && directive.effectiveCondition.isEmpty) {
