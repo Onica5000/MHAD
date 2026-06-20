@@ -2822,53 +2822,68 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-        child: Row(
-          children: [
-            if (_step == _PipelineStep.review)
-              OutlinedButton(
-                onPressed: _discardExtraction,
-                child: const Text('Discard all'),
-              ),
-            if (_step == _PipelineStep.results)
-              OutlinedButton(
-                onPressed: () => setState(() => _step = _PipelineStep.review),
-                child: const Text('Back'),
-              ),
-            const Spacer(),
-            if (_step == _PipelineStep.review) ...[
-              if (canSmartFill) ...[
-                TextButton.icon(
-                  onPressed: _runSmartFill,
-                  icon: const Icon(Icons.auto_awesome, size: 16),
-                  label: const Text('Generate more'),
-                ),
-                const SizedBox(width: 8),
-              ],
-              FilledButton(
-                // Always enabled so the page is never a dead end — applies the
-                // checked fields (none if nothing ticked) and continues to the
-                // wizard. A greyed-out button is easy to miss as "no button".
-                onPressed: _applyAll,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Flexible(
-                      child: Text(addLabel, overflow: TextOverflow.ellipsis),
+        // The primary action is a FULL-WIDTH button on its own line so it can
+        // never be clipped off the right edge by a too-narrow footer (the old
+        // single-Row layout with a Spacer overflowed and hid this button when
+        // "Generate more" was also present or the window was narrow).
+        child: _step == _PipelineStep.results
+            ? Row(
+                children: [
+                  OutlinedButton(
+                    onPressed: () =>
+                        setState(() => _step = _PipelineStep.review),
+                    child: const Text('Back'),
+                  ),
+                  const Spacer(),
+                  FilledButton.icon(
+                    onPressed: _applyAll,
+                    icon: const Icon(Icons.check),
+                    label: const Text('Apply All'),
+                  ),
+                ],
+              )
+            : Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Secondary actions row.
+                  Row(
+                    children: [
+                      OutlinedButton(
+                        onPressed: _discardExtraction,
+                        child: const Text('Discard all'),
+                      ),
+                      const Spacer(),
+                      if (canSmartFill)
+                        TextButton.icon(
+                          onPressed: _runSmartFill,
+                          icon: const Icon(Icons.auto_awesome, size: 16),
+                          label: const Text('Generate more'),
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  // Primary: always enabled, full width — applies the checked
+                  // fields and continues into the wizard to verify.
+                  SizedBox(
+                    width: double.infinity,
+                    child: FilledButton(
+                      onPressed: _applyAll,
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Flexible(
+                            child: Text(addLabel,
+                                overflow: TextOverflow.ellipsis),
+                          ),
+                          SizedBox(width: 8),
+                          Icon(Icons.arrow_forward, size: 18),
+                        ],
+                      ),
                     ),
-                    const SizedBox(width: 6),
-                    const Icon(Icons.arrow_forward, size: 16),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-            if (_step == _PipelineStep.results)
-              FilledButton.icon(
-                onPressed: _applyAll,
-                icon: const Icon(Icons.check),
-                label: const Text('Apply All'),
-              ),
-          ],
-        ),
       ),
     );
   }
