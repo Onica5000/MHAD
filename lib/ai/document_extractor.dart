@@ -37,6 +37,14 @@ class DocumentExtractor {
       httpClient: _httpClient,
       generationConfig: GenerationConfig(
         responseMimeType: 'application/json',
+        // A strict schema forces a complete, consistent shape every run.
+        responseSchema: _extractionSchema,
+        // Deterministic extraction: temperature 0 means the same document
+        // yields the same fields each time. Gemini defaults to ~1.0, which is
+        // why the number of extracted fields varied run to run.
+        temperature: 0.0,
+        // Headroom so a long document (many meds / long notes) is never cut off.
+        maxOutputTokens: appData.ai.maxOutputTokens,
       ),
     );
 
@@ -119,6 +127,38 @@ class DocumentExtractor {
     }
   }
 
+  /// Strict response schema — every field optional (the model omits what it
+  /// can't find), so the JSON shape is consistent without forcing fabrication.
+  /// Medication lists are arrays of {name, reason}. Pairs with temperature 0
+  /// for repeatable extractions.
+  static final Schema _extractionSchema = Schema.object(
+    properties: {
+      'medications_to_avoid': Schema.array(
+        nullable: true,
+        items: Schema.object(properties: {
+          'name': Schema.string(),
+          'reason': Schema.string(nullable: true),
+        }),
+      ),
+      'medications_preferred': Schema.array(
+        nullable: true,
+        items: Schema.object(properties: {
+          'name': Schema.string(),
+          'reason': Schema.string(nullable: true),
+        }),
+      ),
+      'preferred_facility': Schema.string(nullable: true),
+      'avoid_facility': Schema.string(nullable: true),
+      'effective_condition': Schema.string(nullable: true),
+      'health_history': Schema.string(nullable: true),
+      'dietary': Schema.string(nullable: true),
+      'religious': Schema.string(nullable: true),
+      'activities': Schema.string(nullable: true),
+      'crisis_intervention': Schema.string(nullable: true),
+      'other': Schema.string(nullable: true),
+    },
+  );
+
   static const _extractionPrompt = '''
 You are analyzing a document provided by a user who is filling out a Pennsylvania Mental Health Advance Directive (PA Act 194 of 2004).
 
@@ -149,6 +189,7 @@ Extract relevant medical information and return it as JSON. Only include fields 
 }
 
 Rules:
+- BE EXHAUSTIVE AND PRECISE. Read the ENTIRE document carefully and extract EVERY relevant item that is explicitly stated — every medication, every condition, every preference, every note. If the document lists multiple medications, return ALL of them, not a subset. Do not summarize, group, shorten, or omit anything relevant. Work methodically through the whole document so nothing is missed.
 - ONLY extract what is explicitly stated in the document. Do NOT diagnose, infer, or add any condition, medication, or preference that is not written in the document. Extract only — never advise, recommend, or suggest.
 - For medications: classify as "to_avoid" ONLY if the document explicitly states an allergy, adverse reaction, or that the medication should be avoided or discontinued; classify as "preferred" ONLY if the document explicitly states the user wants, prefers, or chooses it.
 - Do NOT assume intent. If a medication is merely listed or currently prescribed with no explicit avoid-or-prefer statement, do NOT place it in either list — the user will decide. You may mention it neutrally under "health_history" as a current medication, without implying any preference.
