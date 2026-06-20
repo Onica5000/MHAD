@@ -53,7 +53,7 @@ class AiConfig {
   final String rateLimitsAsOf;
 
   const AiConfig({
-    this.model = 'gemini-2.5-flash',
+    this.model = 'gemini-3.5-flash',
     this.maxContextTokens = 1048576,
     this.rpm = 10,
     this.rpd = 250,
@@ -63,7 +63,7 @@ class AiConfig {
   });
 
   factory AiConfig.fromJson(Map<String, dynamic> m) => AiConfig(
-        model: (m['model'] ?? 'gemini-2.5-flash').toString(),
+        model: (m['model'] ?? 'gemini-3.5-flash').toString(),
         maxContextTokens: (m['maxContextTokens'] as num?)?.toInt() ?? 1048576,
         rpm: (m['rpm'] as num?)?.toInt() ?? 10,
         rpd: (m['rpd'] as num?)?.toInt() ?? 250,

@@ -13,6 +13,7 @@ enum AdminAiProvider {
   // A short, curated set of the most useful models per provider (not the full
   // catalog). First entry is the default. Edit these lists as models change.
   gemini('Google Gemini', 'Gemini API key (AIza…)', [
+    'gemini-3.5-flash',
     'gemini-2.5-flash',
     'gemini-2.5-pro',
     'gemini-2.5-flash-lite',

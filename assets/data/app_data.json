@@ -5,7 +5,7 @@
     "note": "Source of truth for the app's dynamic/updatable facts. Edited via the admin propose/approve flow. 'autonomy': 'auto' = an AI may update without human sign-off; 'verify' = a human must approve the diff before it ships. Keep 'source' current so updates are checkable."
   },
   "ai": {
-    "model": "gemini-2.5-flash",
+    "model": "gemini-3.5-flash",
     "maxContextTokens": 1048576,
     "rpm": 10,
     "rpd": 250,
