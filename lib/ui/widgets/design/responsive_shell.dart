@@ -144,17 +144,33 @@ class ResponsiveShell extends StatelessWidget {
               Expanded(child: child)
             else
               Expanded(
-                child: ClipRect(
-                  child: Align(
-                    // FILL: flush to the sidebar (top-left). READING: centered.
-                    alignment: fills ? Alignment.topLeft : Alignment.topCenter,
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(
-                        maxWidth: fills ? kFillMaxWidth : kReadingMaxWidth,
+                // Hand the child a TIGHT width, not a capped-but-loose one.
+                // The old `Align > ConstrainedBox(maxWidth:…)` only bounded the
+                // *max* width; Align passes loose constraints, so a self-sizing
+                // Scaffold/ListView could collapse toward a degenerate width. In
+                // a --release build (asserts stripped) that degenerate width is
+                // effectively unbounded: a plain Text then renders at its full
+                // natural width (looks fine) while every `Row > Expanded` inside
+                // collapses to 0 and its text wraps one word per line — the
+                // "vertical text" bug (seen on /side-effects, latent on every
+                // reading route). A LayoutBuilder + SizedBox(width:) gives the
+                // child an exact width so it can never self-collapse.
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final cap = fills ? kFillMaxWidth : kReadingMaxWidth;
+                    final w = constraints.maxWidth < cap
+                        ? constraints.maxWidth
+                        : cap;
+                    return ClipRect(
+                      child: Align(
+                        // FILL: flush to the sidebar (top-left).
+                        // READING: centered reading column.
+                        alignment:
+                            fills ? Alignment.topLeft : Alignment.topCenter,
+                        child: SizedBox(width: w, child: child),
                       ),
-                      child: child,
-                    ),
-                  ),
+                    );
+                  },
                 ),
               ),
           ],
