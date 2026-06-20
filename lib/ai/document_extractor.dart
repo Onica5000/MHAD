@@ -130,8 +130,7 @@ class DocumentExtractor {
 
   /// Strict response schema — every field optional (the model omits what it
   /// can't find), so the JSON shape is consistent without forcing fabrication.
-  /// Medication lists are arrays of {name, reason}. Pairs with temperature 0
-  /// for repeatable extractions.
+  /// Medication lists are arrays of {name, reason}.
   static final Schema _extractionSchema = Schema.object(
     properties: {
       'medications_to_avoid': Schema.array(
@@ -188,53 +187,103 @@ class DocumentExtractor {
   });
 
   static const _extractionPrompt = '''
-You are analyzing a document provided by a user who is filling out a Pennsylvania Mental Health Advance Directive (PA Act 194 of 2004). This is AUTOFILL: the user uploaded this document so its details can pre-fill their form, so you SHOULD extract their personal information when present.
+You are analyzing a document uploaded by a user who is filling out a Pennsylvania Mental Health Advance Directive (PA Act 194 of 2004). This is AUTOFILL — the user uploaded this document so its contents can pre-fill their form. You MUST extract personal information (PII); that is the primary purpose of this step.
 
-Extract the relevant information and return it as JSON. Only include fields where you can confidently identify information.
+═══ STEP 1: EXTRACT PERSONAL INFORMATION FIRST ═══
+Before reading anything else, locate and extract personal details into "personal_info":
 
-{
-  "medications_to_avoid": [
-    {"name": "medication name", "reason": "why to avoid (side effects, allergies, etc.)"}
-  ],
-  "medications_preferred": [
-    {"name": "medication name", "reason": "why preferred (currently taking, works well, etc.)"}
-  ],
-  "preferred_facility": "name of a hospital/treatment facility the person PREFERS to be treated at",
-  "avoid_facility": "name of a hospital/treatment facility the person wants to AVOID",
-  "effective_condition": "the conditions/circumstances under which this directive takes effect, or the mental-health condition(s) it concerns",
-  "health_history": "relevant mental-health history: diagnoses, past hospitalizations, what has/hasn't worked, current medications listed without an explicit preference",
-  "dietary": "dietary restrictions, allergies-to-food, or nutrition needs/preferences",
-  "religious": "religious, spiritual, or cultural preferences and practices (e.g., clergy to call, observances, prayer)",
-  "activities": "therapeutic activities, coping strategies, comfort items, or things that help (music, walks, grounding techniques, etc.)",
-  "crisis_intervention": "what helps or harms during a crisis: de-escalation preferences, early warning signs, what NOT to do, restraint/seclusion preferences, who to contact",
-  "pet_custody": "instructions for the care of the person's PET(S) while they are hospitalized — who feeds/houses them, vet info, etc. (look for any mention of pets, dogs, cats, animals)",
-  "children_custody": "instructions for the care of the person's CHILDREN or other dependents while they are hospitalized — who looks after them",
-  "family_notification": "who should be notified/contacted (or NOT notified) if the person is hospitalized — names and how to reach them",
-  "records_disclosure": "preferences about releasing or withholding medical records / information, and to whom",
-  "other": "any other directive-relevant instruction that does not fit a field above — financial/work matters to handle, plants/home to care for, anything important. NEVER drop an instruction just because it lacks a category.",
-  "personal_info": {
-    "full_name": "the declarant's / patient's full name (the person the directive is FOR)",
-    "date_of_birth": "the declarant's date of birth, as written",
-    "address": "the declarant's full mailing address on one line (street, city, state, ZIP)",
-    "phone": "the declarant's phone number",
-    "primary_doctor_name": "the declarant's primary doctor / treating physician name",
-    "primary_doctor_phone": "that doctor's phone number",
-    "agent": {"name": "...", "relationship": "relationship to the declarant", "address": "full address on one line", "phone": "..."},
-    "alternate_agent": {"name": "...", "relationship": "...", "address": "...", "phone": "..."},
-    "guardian": {"name": "...", "relationship": "...", "address": "...", "phone": "..."}
-  }
-}
+• full_name — the DECLARANT's full legal name (the person this directive is FOR). Look for labels: patient, principal, declarant, "I" / "me". Format: as written.
+• date_of_birth — the declarant's date of birth. Format: MM/DD/YYYY (e.g., 03/15/1975). Convert from any other format.
+• address — the declarant's full mailing address on ONE line: street, city, state, ZIP. ZIP code: 5 digits only (e.g., 17101 — drop the +4 suffix if present).
+• phone — the declarant's phone number. Format: (xxx) xxx-xxxx (e.g., (215) 555-1234).
+• primary_doctor_name — the declarant's treating physician / primary doctor name only.
+• primary_doctor_phone — that doctor's phone. Same (xxx) xxx-xxxx format.
+• agent — the PRIMARY designated health-care agent / proxy / representative (not the backup). Fields: name, relationship to declarant, address (one line, 5-digit ZIP), phone (xxx) xxx-xxxx.
+• alternate_agent — the BACKUP / second / alternate agent. Same fields.
+• guardian — any nominated guardian. Same fields.
 
-Rules:
-- BE EXHAUSTIVE AND PRECISE. Read the ENTIRE document carefully and extract EVERY relevant item that is explicitly stated — every medication, every condition, every preference, every note. If the document lists multiple medications, return ALL of them, not a subset. Do not summarize, group, shorten, or omit anything relevant. Work methodically through the whole document so nothing is missed.
-- BE COMPLETE, NOT BRIEF. This is data extraction, not summarization — favor capturing more over less. Do not shorten, skip, or judge something as unimportant; if it is an instruction or preference in the document, capture it. A missed instruction (for example, who will care for the person's pet or children) is a serious error.
-- USE EVERY APPLICABLE FIELD and place each piece of information where it most logically belongs. The fields map directly to the app's form: medications → the medication lists; conditions/circumstances → "effective_condition"; history/diagnoses/hospitalizations → "health_history"; food needs → "dietary"; religious/spiritual/cultural → "religious"; coping strategies/comfort items → "activities"; crisis/de-escalation preferences → "crisis_intervention"; **pet care → "pet_custody"; child/dependent care → "children_custody"; who to notify → "family_notification"; record-release preferences → "records_disclosure"**; facilities → the facility fields; people/identity → "personal_info". Anything important that does NOT clearly fit a specific field MUST go in "other" — never drop it. Do not duplicate the same item across multiple fields; pick the single best-fitting field.
-- ONLY extract what is explicitly stated in the document. Do NOT diagnose, infer, or add any condition, medication, or preference that is not written in the document. Extract only — never advise, recommend, or suggest.
-- PERSONAL INFO: Extract personal details (names, date of birth, addresses, phone numbers) ONLY into the "personal_info" block, and ONLY when they are clearly present. The "full_name"/"date_of_birth"/"address"/"phone" fields are for the DECLARANT — the person this directive is FOR (often labelled patient, principal, declarant, or "I/me"). Put a designated health-care agent / proxy / representative under "agent", a backup/second one under "alternate_agent", and any nominated guardian under "guardian". Never put a person's name, address, or phone into any medical field. Omit any personal field you are not confident about.
-- For medications: classify as "to_avoid" ONLY if the document explicitly states an allergy, adverse reaction, or that the medication should be avoided or discontinued; classify as "preferred" ONLY if the document explicitly states the user wants, prefers, or chooses it.
-- Do NOT assume intent. If a medication is merely listed or currently prescribed with no explicit avoid-or-prefer statement, do NOT place it in either list — the user will decide. You may mention it neutrally under "health_history" as a current medication, without implying any preference.
-- If the document contains no relevant information, return an empty object: {}
-- Return ONLY valid JSON, no explanation or commentary
+RULE: NEVER put a person's name, phone number, or address into any care/medical field (health_history, activities, crisis_intervention, family_notification, etc.). Every person goes in personal_info ONLY. family_notification is for notification PREFERENCES (who to call/not call), not for storing contact details as personal_info entries.
+
+═══ STEP 2: EXTRACT CARE INSTRUCTIONS — ONE FIELD PER FACT, NO DUPLICATION ═══
+Each piece of information goes in EXACTLY ONE field. Once placed, it must NOT appear in any other field.
+
+FIELD DEFINITIONS (each with its exclusive scope):
+
+medications_to_avoid
+  → ONLY if the document EXPLICITLY says: allergy, adverse reaction, avoid, discontinue, do not give, or do not use.
+  → NOT for medications merely listed, currently prescribed, or mentioned with no explicit avoid signal.
+
+medications_preferred
+  → ONLY if the document EXPLICITLY says: prefers, wants, currently taking and working well, or chooses this medication.
+  → NOT for medications merely listed or mentioned with no preference stated.
+
+preferred_facility
+  → Name of a hospital or treatment center the person WANTS to be treated at.
+  → NOT a doctor's name, clinic, or office unless explicitly stated as a preferred facility.
+
+avoid_facility
+  → Name of a hospital or treatment center the person wants to AVOID.
+  → NOT a general preference to avoid treatment.
+
+effective_condition
+  → The specific mental health condition(s) or circumstances that trigger this directive (e.g., "bipolar episode requiring hospitalization", "loss of capacity to make decisions").
+  → NOT treatment preferences. NOT medications. NOT general history.
+
+health_history
+  → Relevant mental-health history: past diagnoses, past hospitalizations, what has/has not worked historically. Also: current medications listed with NO explicit avoid/prefer label.
+  → NOT crisis management plans. NOT comfort activities. NOT current care preferences.
+
+dietary
+  → Dietary restrictions, food allergies, nutrition needs or preferences.
+  → NOT medications. NOT general health conditions. NOT religious observances (unless the restriction is purely dietary, e.g., kosher/halal food — then it goes here, not religious).
+
+religious
+  → Religious, spiritual, or cultural preferences and practices: clergy to contact, prayer, observances, rituals, sacraments.
+  → NOT general comfort activities. NOT food restrictions that are purely nutritional.
+
+activities
+  → Therapeutic activities, coping strategies, comfort items, and things that HELP during treatment or hospitalization: music, walks, crafts, grounding techniques, having a pet nearby as comfort.
+  → NOT crisis de-escalation plans. NOT dietary restrictions. NOT general health history.
+
+crisis_intervention
+  → Instructions specifically for CRISIS situations: de-escalation preferences, early warning signs, what NOT to do, restraint/seclusion preferences, who to call in an emergency.
+  → NOT general health history. NOT non-crisis comfort activities. NOT general preferences.
+
+pet_custody
+  → Who cares for the person's PET(S) while they are hospitalized: who feeds/houses them, vet contact info. Look for: dog, cat, bird, fish, animal, pet.
+  → NOT pets as comfort items during hospitalization (those go in "activities").
+
+children_custody
+  → Who cares for the person's CHILDREN or other dependents while they are hospitalized: guardian, school/daycare info.
+  → NOT family notification preferences.
+
+family_notification
+  → Who SHOULD or SHOULD NOT be notified/contacted if the person is hospitalized — stated as a preference or instruction (e.g., "call my sister Jane first", "do not contact my father").
+  → NOT storage of contact details for personal_info people. NOT family relationships in general.
+
+records_disclosure
+  → Preferences about sharing, releasing, or withholding medical records and information, and to whom.
+  → NOT general privacy statements.
+
+other
+  → ANYTHING directive-relevant that does NOT clearly fit a field above: financial matters, home/plant care, mail, work arrangements, specific instructions to named people. NEVER drop an instruction because it lacks a category — put it here.
+
+═══ NO-DUPLICATION RULE ═══
+Each fact belongs to EXACTLY ONE field. Do NOT repeat it in another. When a fact could fit two fields, pick the more specific one. Examples:
+  • Medication listed with no preference → health_history ONLY (not also medications_preferred)
+  • Person's name + phone → personal_info ONLY (not also family_notification)
+  • Pet as comfort → activities ONLY (not also pet_custody)
+  • Crisis de-escalation → crisis_intervention ONLY (not also activities or health_history)
+  • Doctor's name → personal_info.primary_doctor_name ONLY (not also health_history)
+
+═══ GENERAL RULES ═══
+1. READ THE ENTIRE DOCUMENT before extracting — do not stop early.
+2. EXTRACT ONLY what is explicitly stated. Do not diagnose, infer, fabricate, advise, or add anything not written.
+3. BE EXHAUSTIVE — if the document lists 10 medications, return all 10. Do not summarize or omit.
+4. OMIT EMPTY FIELDS — if you have nothing confident for a field, leave it null. Do not invent.
+5. PERSONAL INFO FIRST — always complete personal_info before filling any other field.
+
+Return ONLY valid JSON matching the schema. No explanation, commentary, or markdown.
 ''';
 }
 
