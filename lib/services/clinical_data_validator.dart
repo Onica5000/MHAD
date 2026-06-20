@@ -97,6 +97,10 @@ class ClinicalDataValidator {
       religious: raw.religious,
       activities: raw.activities,
       crisisIntervention: raw.crisisIntervention,
+      petCustody: raw.petCustody,
+      childrenCustody: raw.childrenCustody,
+      familyNotification: raw.familyNotification,
+      recordsDisclosure: raw.recordsDisclosure,
       other: raw.other,
       // Personal info (PII) passes straight through — no NIH validation needed.
       personalInfo: raw.personalInfo,
@@ -153,6 +157,10 @@ class ValidatedExtractionResult {
   final String? religious;
   final String? activities;
   final String? crisisIntervention;
+  final String? petCustody;
+  final String? childrenCustody;
+  final String? familyNotification;
+  final String? recordsDisclosure;
   final String? other;
   // Personal info (PII) extracted for autofill — pass-through, no validation.
   final ExtractedPersonalInfo personalInfo;
@@ -168,6 +176,10 @@ class ValidatedExtractionResult {
     this.religious,
     this.activities,
     this.crisisIntervention,
+    this.petCustody,
+    this.childrenCustody,
+    this.familyNotification,
+    this.recordsDisclosure,
     this.other,
     this.personalInfo = const ExtractedPersonalInfo(),
   });

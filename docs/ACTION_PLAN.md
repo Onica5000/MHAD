@@ -8,7 +8,7 @@
 >   indefinitely** (2026-06-16 pivot). The "targeting Android and iOS" / Codemagic
 >   App-Store phases below are **deferred**. Ship command: `flutter build web --release`.
 > - **AI = Google Gemini** (`lib/ai/gemini_api_assistant.dart`, `google_generative_ai`,
->   model `gemini-2.5-flash`). *Not* Claude — ignore "Claude"/`ClaudeApiAssistant` below.
+>   model `gemini-3.5-flash`). *Not* Claude — ignore "Claude"/`ClaudeApiAssistant` below.
 > - **`drift_flutter` is NOT used** (removed — caused a DEX conflict). DB stack is
 >   `drift` + `sqlite3` + `sqlcipher_flutter_libs`.
 > - **Wizard is adaptive: Combined 11 / Declaration 9 / POA 6 steps** (old granular step

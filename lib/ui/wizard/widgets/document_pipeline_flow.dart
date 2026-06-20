@@ -568,6 +568,22 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
       _reviewChecked['crisis'] = true;
       _reviewEdited['crisis'] = v.crisisIntervention!;
     }
+    if (v.petCustody != null) {
+      _reviewChecked['pet_custody'] = true;
+      _reviewEdited['pet_custody'] = v.petCustody!;
+    }
+    if (v.childrenCustody != null) {
+      _reviewChecked['children_custody'] = true;
+      _reviewEdited['children_custody'] = v.childrenCustody!;
+    }
+    if (v.familyNotification != null) {
+      _reviewChecked['family_notification'] = true;
+      _reviewEdited['family_notification'] = v.familyNotification!;
+    }
+    if (v.recordsDisclosure != null) {
+      _reviewChecked['records_disclosure'] = true;
+      _reviewEdited['records_disclosure'] = v.recordsDisclosure!;
+    }
     if (v.other != null) {
       _reviewChecked['other'] = true;
       _reviewEdited['other'] = v.other!;
@@ -643,6 +659,10 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
       'religious': instr?.religious ?? '',
       'activities': instr?.activities ?? '',
       'crisis': instr?.crisisIntervention ?? '',
+      'pet_custody': instr?.petCustody ?? '',
+      'children_custody': instr?.childrenCustody ?? '',
+      'family_notification': instr?.familyNotification ?? '',
+      'records_disclosure': instr?.recordsDisclosure ?? '',
       'other': instr?.other ?? '',
       'hh_note': instr?.healthHistory ?? '',
       'person_name': directive?.fullName ?? '',
@@ -841,6 +861,10 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
     addInstr('religious', 'religious');
     addInstr('activities', 'activities');
     addInstr('crisis', 'crisisIntervention');
+    addInstr('pet_custody', 'petCustody');
+    addInstr('children_custody', 'childrenCustody');
+    addInstr('family_notification', 'familyNotification');
+    addInstr('records_disclosure', 'recordsDisclosure');
     addInstr('other', 'other');
 
     // ── Apply Smart Fill results ─────────────────────────────────────
@@ -923,6 +947,20 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
           crisisIntervention: instrMap.containsKey('crisisIntervention')
               ? Value(merge(
                   existing?.crisisIntervention, instrMap['crisisIntervention']))
+              : const Value.absent(),
+          petCustody: instrMap.containsKey('petCustody')
+              ? Value(merge(existing?.petCustody, instrMap['petCustody']))
+              : const Value.absent(),
+          childrenCustody: instrMap.containsKey('childrenCustody')
+              ? Value(merge(existing?.childrenCustody, instrMap['childrenCustody']))
+              : const Value.absent(),
+          familyNotification: instrMap.containsKey('familyNotification')
+              ? Value(merge(
+                  existing?.familyNotification, instrMap['familyNotification']))
+              : const Value.absent(),
+          recordsDisclosure: instrMap.containsKey('recordsDisclosure')
+              ? Value(merge(
+                  existing?.recordsDisclosure, instrMap['recordsDisclosure']))
               : const Value.absent(),
           other: instrMap.containsKey('other')
               ? Value(merge(existing?.other, instrMap['other']))
@@ -1101,6 +1139,10 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
     if (key == 'religious') return 'Religious/Cultural';
     if (key == 'activities') return 'Activities';
     if (key == 'crisis') return 'Crisis Intervention';
+    if (key == 'pet_custody') return 'Pet care';
+    if (key == 'children_custody') return 'Children / dependents';
+    if (key == 'family_notification') return 'Who to notify';
+    if (key == 'records_disclosure') return 'Records disclosure';
     if (key == 'other') return 'Other';
     // Personal info (PII)
     if (key == 'person_name') return 'Your full name';

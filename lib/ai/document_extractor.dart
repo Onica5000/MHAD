@@ -38,10 +38,10 @@ class DocumentExtractor {
         responseMimeType: 'application/json',
         // A strict schema forces a complete, consistent shape every run.
         responseSchema: _extractionSchema,
-        // Deterministic extraction: temperature 0 means the same document
-        // yields the same fields each time. Gemini defaults to ~1.0, which is
-        // why the number of extracted fields varied run to run.
-        temperature: 0.0,
+        // NOTE: temperature/top_p/top_k are intentionally NOT set. Google
+        // advises removing them for Gemini 3.x models (they degrade output and
+        // were a likely cause of the model under-extracting). Determinism now
+        // comes from the strict schema + an exhaustive prompt, not temperature.
         // Headroom so a long document (many meds / long notes) is never cut off.
         maxOutputTokens: appData.ai.maxOutputTokens,
       ),
@@ -156,6 +156,12 @@ class DocumentExtractor {
       'religious': Schema.string(nullable: true),
       'activities': Schema.string(nullable: true),
       'crisis_intervention': Schema.string(nullable: true),
+      // Personal-life / dependent-care instructions (real app fields — the AI
+      // kept dropping these into "other" or missing them entirely).
+      'pet_custody': Schema.string(nullable: true),
+      'children_custody': Schema.string(nullable: true),
+      'family_notification': Schema.string(nullable: true),
+      'records_disclosure': Schema.string(nullable: true),
       'other': Schema.string(nullable: true),
       // Personal information (PII) — extracted ONLY for autofill so the
       // declarant and the people they designate can be filled in. Address is a
@@ -193,15 +199,19 @@ Extract the relevant information and return it as JSON. Only include fields wher
   "medications_preferred": [
     {"name": "medication name", "reason": "why preferred (currently taking, works well, etc.)"}
   ],
-  "preferred_facility": "name of preferred treatment facility",
-  "avoid_facility": "name of facility to avoid",
-  "effective_condition": "mental health conditions or circumstances mentioned",
-  "health_history": "relevant mental health history, diagnoses, hospitalizations",
-  "dietary": "dietary restrictions or needs mentioned",
-  "religious": "religious or cultural preferences mentioned",
-  "activities": "therapeutic activities or coping strategies mentioned",
-  "crisis_intervention": "crisis intervention preferences mentioned",
-  "other": "any other advance directive-relevant information not fitting above categories",
+  "preferred_facility": "name of a hospital/treatment facility the person PREFERS to be treated at",
+  "avoid_facility": "name of a hospital/treatment facility the person wants to AVOID",
+  "effective_condition": "the conditions/circumstances under which this directive takes effect, or the mental-health condition(s) it concerns",
+  "health_history": "relevant mental-health history: diagnoses, past hospitalizations, what has/hasn't worked, current medications listed without an explicit preference",
+  "dietary": "dietary restrictions, allergies-to-food, or nutrition needs/preferences",
+  "religious": "religious, spiritual, or cultural preferences and practices (e.g., clergy to call, observances, prayer)",
+  "activities": "therapeutic activities, coping strategies, comfort items, or things that help (music, walks, grounding techniques, etc.)",
+  "crisis_intervention": "what helps or harms during a crisis: de-escalation preferences, early warning signs, what NOT to do, restraint/seclusion preferences, who to contact",
+  "pet_custody": "instructions for the care of the person's PET(S) while they are hospitalized — who feeds/houses them, vet info, etc. (look for any mention of pets, dogs, cats, animals)",
+  "children_custody": "instructions for the care of the person's CHILDREN or other dependents while they are hospitalized — who looks after them",
+  "family_notification": "who should be notified/contacted (or NOT notified) if the person is hospitalized — names and how to reach them",
+  "records_disclosure": "preferences about releasing or withholding medical records / information, and to whom",
+  "other": "any other directive-relevant instruction that does not fit a field above — financial/work matters to handle, plants/home to care for, anything important. NEVER drop an instruction just because it lacks a category.",
   "personal_info": {
     "full_name": "the declarant's / patient's full name (the person the directive is FOR)",
     "date_of_birth": "the declarant's date of birth, as written",
@@ -217,7 +227,8 @@ Extract the relevant information and return it as JSON. Only include fields wher
 
 Rules:
 - BE EXHAUSTIVE AND PRECISE. Read the ENTIRE document carefully and extract EVERY relevant item that is explicitly stated — every medication, every condition, every preference, every note. If the document lists multiple medications, return ALL of them, not a subset. Do not summarize, group, shorten, or omit anything relevant. Work methodically through the whole document so nothing is missed.
-- USE EVERY APPLICABLE FIELD and place each piece of information where it most logically belongs: medications in the medication lists, conditions/circumstances in "effective_condition", history/diagnoses/hospitalizations in "health_history", dietary needs in "dietary", religious/cultural preferences in "religious", coping strategies/therapeutic activities in "activities", crisis preferences in "crisis_intervention", facilities in the facility fields, and people/identity details in "personal_info". Any directive-relevant information that is important but does NOT clearly fit a specific category MUST go in "other" — never drop it. Do not duplicate the same item across multiple fields; pick the single best-fitting field.
+- BE COMPLETE, NOT BRIEF. This is data extraction, not summarization — favor capturing more over less. Do not shorten, skip, or judge something as unimportant; if it is an instruction or preference in the document, capture it. A missed instruction (for example, who will care for the person's pet or children) is a serious error.
+- USE EVERY APPLICABLE FIELD and place each piece of information where it most logically belongs. The fields map directly to the app's form: medications → the medication lists; conditions/circumstances → "effective_condition"; history/diagnoses/hospitalizations → "health_history"; food needs → "dietary"; religious/spiritual/cultural → "religious"; coping strategies/comfort items → "activities"; crisis/de-escalation preferences → "crisis_intervention"; **pet care → "pet_custody"; child/dependent care → "children_custody"; who to notify → "family_notification"; record-release preferences → "records_disclosure"**; facilities → the facility fields; people/identity → "personal_info". Anything important that does NOT clearly fit a specific field MUST go in "other" — never drop it. Do not duplicate the same item across multiple fields; pick the single best-fitting field.
 - ONLY extract what is explicitly stated in the document. Do NOT diagnose, infer, or add any condition, medication, or preference that is not written in the document. Extract only — never advise, recommend, or suggest.
 - PERSONAL INFO: Extract personal details (names, date of birth, addresses, phone numbers) ONLY into the "personal_info" block, and ONLY when they are clearly present. The "full_name"/"date_of_birth"/"address"/"phone" fields are for the DECLARANT — the person this directive is FOR (often labelled patient, principal, declarant, or "I/me"). Put a designated health-care agent / proxy / representative under "agent", a backup/second one under "alternate_agent", and any nominated guardian under "guardian". Never put a person's name, address, or phone into any medical field. Omit any personal field you are not confident about.
 - For medications: classify as "to_avoid" ONLY if the document explicitly states an allergy, adverse reaction, or that the medication should be avoided or discontinued; classify as "preferred" ONLY if the document explicitly states the user wants, prefers, or chooses it.

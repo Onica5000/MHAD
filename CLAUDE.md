@@ -57,7 +57,7 @@ lib/
 - **State**: flutter_riverpod + riverpod_annotation (code gen with riverpod_generator)
 - **Database**: drift + sqlcipher_flutter_libs (encrypted SQLite; code gen — run build_runner after schema changes)
 - **Navigation**: go_router
-- **AI**: google_generative_ai (Gemini 2.5 Flash free tier)
+- **AI**: google_generative_ai (Gemini 3.5 Flash free tier)
 - **PDF**: pdf + printing (pixel-perfect PDF generation)
 - **Signature**: signature
 - **Secure storage**: flutter_secure_storage (Gemini API key)
@@ -78,7 +78,7 @@ This regenerates `app_database.g.dart`.
 - Dynamic text expansion: measure text, expand box, shift content down
 
 ## AI Assistant
-- Model: `gemini-2.5-flash` via `google_generative_ai` package
+- Model: `gemini-3.5-flash` (single source: `appData.ai.model` ← `assets/data/app_data.json`) via `google_generative_ai` package
 - API key stored in flutter_secure_storage in private mode (never in source)
 - In public mode, API key is ephemeral (in-memory only, 10-min TTL cache for crash recovery)
 - Always inject context: form type, current step, filled fields

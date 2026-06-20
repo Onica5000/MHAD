@@ -19,6 +19,10 @@ class DocumentExtractionResult {
   final String? religious;
   final String? activities;
   final String? crisisIntervention;
+  final String? petCustody;
+  final String? childrenCustody;
+  final String? familyNotification;
+  final String? recordsDisclosure;
   final String? other;
 
   // ── Personal information (PII) ───────────────────────────────────────────
@@ -39,6 +43,10 @@ class DocumentExtractionResult {
     this.religious,
     this.activities,
     this.crisisIntervention,
+    this.petCustody,
+    this.childrenCustody,
+    this.familyNotification,
+    this.recordsDisclosure,
     this.other,
     this.personalInfo = const ExtractedPersonalInfo(),
   });
@@ -54,6 +62,10 @@ class DocumentExtractionResult {
       religious == null &&
       activities == null &&
       crisisIntervention == null &&
+      petCustody == null &&
+      childrenCustody == null &&
+      familyNotification == null &&
+      recordsDisclosure == null &&
       other == null &&
       personalInfo.isEmpty;
 
@@ -71,6 +83,10 @@ class DocumentExtractionResult {
       religious: _mergeText(religious, other.religious),
       activities: _mergeText(activities, other.activities),
       crisisIntervention: _mergeText(crisisIntervention, other.crisisIntervention),
+      petCustody: _mergeText(petCustody, other.petCustody),
+      childrenCustody: _mergeText(childrenCustody, other.childrenCustody),
+      familyNotification: _mergeText(familyNotification, other.familyNotification),
+      recordsDisclosure: _mergeText(recordsDisclosure, other.recordsDisclosure),
       other: _mergeText(this.other, other.other),
       personalInfo: personalInfo.merge(other.personalInfo),
     );
@@ -137,6 +153,10 @@ class DocumentExtractionResult {
       religious: _str(json['religious']),
       activities: _str(json['activities']),
       crisisIntervention: _str(json['crisis_intervention']),
+      petCustody: _str(json['pet_custody']),
+      childrenCustody: _str(json['children_custody']),
+      familyNotification: _str(json['family_notification']),
+      recordsDisclosure: _str(json['records_disclosure']),
       other: _str(json['other']),
       personalInfo: ExtractedPersonalInfo.fromJson(
           json['personal_info'] is Map<String, dynamic>

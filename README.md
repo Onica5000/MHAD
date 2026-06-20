@@ -21,7 +21,7 @@ The app supports all three PA Act 194 form types: **Combined Declaration + Power
 - **Adaptive guided wizard** that ranges from 6 to 11 steps depending on form type — **Combined 11 / Declaration 9 / POA 6**. Steps: `About you`, `When this kicks in`, `People I trust` (POA/Combined), `If a court appoints a guardian` (POA/Combined), `Where I want care`, `Diagnoses`, `Medications`, `Allergies & reactions`, `Procedures & research`, `Anything else`, `Review & sign`. Each step supports embedded clinical autocomplete (ICD-10-CM diagnoses, RxTerms medications) and a backward-nudge model that surfaces cross-step contradictions instead of auto-mutating earlier steps.
 - **Editorial visual design** based on a Claude-Design HTML/CSS handoff — Instrument Serif italic display, DM Sans body, JetBrains Mono labels (all three font families bundled, no runtime fetch).
 - **Navigation tuned to the prototype:** a floating pill **bottom nav** on mobile (Home · Learn · Ask · Settings) and a persistent **WebSidebar** on wide screens (≥1000px). No hamburger drawer.
-- **AI assistant** (Google Gemini 2.5 Flash) for guided help, smart-fill suggestions, document import, and a **cross-step consistency check** at Review — entirely optional, with per-session affirmative consent and PII-stripping at a single named chokepoint (`GeminiApiAssistant.sanitizeForApi`). The consistency check warns but never blocks PDF generation.
+- **AI assistant** (Google Gemini 3.5 Flash) for guided help, smart-fill suggestions, document import, and a **cross-step consistency check** at Review — entirely optional, with per-session affirmative consent and PII-stripping at a single named chokepoint (`GeminiApiAssistant.sanitizeForApi`). The consistency check warns but never blocks PDF generation.
 - **Crisis plan / WRAP toolbox** — optional add-on capturing early warning signs, triggers, what genuinely helps, things to say, and what *not* to do; mirrors the v2 prototype's WRAP layout and is read by agents and ER staff first.
 - **Self-binding (Ulysses) clause** — explicit opt-in confirming the structural effect of PA Act 194 § 5802 (a signed directive binds you when you later refuse care during a crisis).
 - **Revocation flow** with the verbatim statutory revocation statement (20 Pa.C.S. § 5808), per-recipient notification opt-in, and honest copy about what marking a directive revoked locally does and does not communicate to providers.
@@ -114,7 +114,7 @@ These are downloaded from the [sqlite3.dart](https://github.com/simolus3/sqlite3
 - **State management:** Riverpod
 - **Database:** Drift + SQLCipher (encrypted SQLite)
 - **Navigation:** GoRouter (no Scaffold drawer; bottom nav on mobile, sidebar on wide)
-- **AI:** Google Gemini 2.5 Flash (free tier, optional, opt-in)
+- **AI:** Google Gemini 3.5 Flash (free tier, optional, opt-in)
 - **PDF:** `pdf` + `printing` packages (coordinate-based layout)
 - **Fonts (bundled):** Instrument Serif, DM Sans, JetBrains Mono
 - **Medical reference data (free, no key, no PII sent):** NIH/NLM Clinical Tables — RxTerms (medications), ICD-10-CM (conditions), NPI registry (provider lookup); NLM MedlinePlus Connect + RxNav (plain-language condition & medication education); FDA openFDA (drug labels, used to ground the AI side-effects list)

@@ -536,7 +536,7 @@ class _RateLimitBar extends ConsumerWidget {
               ),
             ),
             Tooltip(
-              message: 'Gemini 2.5 Flash free tier:\n'
+              message: '${appData.ai.model} free tier:\n'
                   '${GeminiRateTracker.maxRpm} requests/min\n'
                   '${GeminiRateTracker.maxRpd} requests/day\n'
                   '${(GeminiRateTracker.maxTpm / 1000).round()}K tokens/min\n'

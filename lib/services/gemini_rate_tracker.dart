@@ -5,10 +5,11 @@ import 'package:mhad/data/app_data/app_data.dart';
 
 /// Tracks Gemini API usage against the free tier limits.
 ///
-/// Gemini 2.5 Flash free tier (as of Dec 2025):
-///   - 10 requests per minute (RPM)
-///   - 250 requests per day (RPD)
-///   - 250,000 tokens per minute (TPM)
+/// Gemini 3.5 Flash free tier (as of May 2026; the live numbers come from
+/// `assets/data/app_data.json` — these are just illustrative):
+///   - 15 requests per minute (RPM)
+///   - 1,500 requests per day (RPD)
+///   - 1,000,000 tokens per minute (TPM)
 ///   - 1,048,576 token context window
 ///   - 65,536 max output tokens
 ///
