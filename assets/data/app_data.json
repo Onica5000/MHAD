@@ -7,13 +7,13 @@
   "ai": {
     "model": "gemini-3.5-flash",
     "maxContextTokens": 1048576,
-    "rpm": 10,
-    "rpd": 250,
-    "tpm": 250000,
+    "rpm": 15,
+    "rpd": 1500,
+    "tpm": 1000000,
     "maxOutputTokens": 65536,
-    "rateLimitsAsOf": "Dec 2025",
+    "rateLimitsAsOf": "May 2026",
     "autonomy": "auto",
-    "source": "ai.google.dev/gemini-api/docs/rate-limits"
+    "source": "ai.google.dev/gemini-api/docs/rate-limits (verify exact numbers in AI Studio dashboard)"
   },
   "urls": {
     "privacyPolicy": "https://onica5000.github.io/mhad/privacy",
