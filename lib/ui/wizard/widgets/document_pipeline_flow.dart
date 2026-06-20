@@ -272,7 +272,11 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
       if (mime == null) continue; // skip unsupported types
       final bytes = await f.readAsBytes();
       docs.add(PickedDocument(
-        path: f.path.isNotEmpty ? f.path : f.name,
+        // Use the original file NAME for display. On web, dropped XFiles carry
+        // a blob: URL in `path`, which would show as gibberish in the tray;
+        // `name` is the real filename and the bytes are already loaded, so the
+        // path isn't needed for reading.
+        path: f.name.isNotEmpty ? f.name : 'Dropped file',
         mimeType: mime,
         bytes: bytes,
       ));
