@@ -93,44 +93,17 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
     }
   }
 
-  /// Called once extracted fields are written to the directive. Modal pops
-  /// back to the wizard with `true`; standalone records the file in the
-  /// "In this session" row and returns to the pick step for another pass.
+  /// Called once extracted fields are written to the directive. Both modes
+  /// land the user in the wizard so they can verify the autofill: the modal
+  /// pops back to the wizard it was opened over; the standalone /upload page
+  /// navigates into the wizard (via the "Autofill Information" button).
   void _onApplied(int appliedCount) {
     if (!mounted) return;
-    if (!_standalone) {
+    if (_standalone) {
+      _toWizard();
+    } else {
       Navigator.pop(context, true);
-      return;
     }
-    final doc = _sourceDocs.isNotEmpty ? _sourceDocs.first : null;
-    setState(() {
-      if (doc != null) {
-        final extra = _sourceDocs.length - 1;
-        _sessionFiles.add(_SessionFile(
-          name: extra > 0 ? '${_docName(doc)} +$extra more' : _docName(doc),
-          kind: _docKind(doc),
-          fieldsAdded: appliedCount,
-        ));
-      }
-      _resetExtraction();
-      _step = _PipelineStep.pick;
-    });
-    // Give an explicit way to continue and verify: jump into the wizard where
-    // the autofilled fields are visible. (Staying on this page lets the user
-    // add another document; the snackbar action takes them to the form.)
-    final messenger = ScaffoldMessenger.of(context)..clearSnackBars();
-    messenger.showSnackBar(
-      SnackBar(
-        content: Text(appliedCount > 0
-            ? 'Added $appliedCount field${appliedCount == 1 ? '' : 's'} to your form.'
-            : 'Nothing new to add — those fields may already be filled.'),
-        duration: const Duration(seconds: 6),
-        action: SnackBarAction(
-          label: 'Review in form',
-          onPressed: _toWizard,
-        ),
-      ),
-    );
   }
 
   /// Discard the current extraction without writing anything. Standalone →
@@ -2356,6 +2329,29 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
     );
   }
 
+  // One "how this page works" instruction line: a small icon + wrapped text.
+  Widget _howToLine(MhadPalette p, IconData icon, String text) => Padding(
+        padding: const EdgeInsets.only(bottom: 4),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(icon, size: 15, color: p.primary),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                text,
+                style: TextStyle(
+                  fontFamily: 'DM Sans',
+                  fontSize: 12.5,
+                  height: 1.45,
+                  color: p.textMuted,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+
   Widget _buildReviewStep() {
     final p = Theme.of(context).mhadPalette;
     final dark = Theme.of(context).brightness == Brightness.dark;
@@ -2419,17 +2415,31 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
           color: p.text,
         ),
       ),
-      const SizedBox(height: 4),
+      const SizedBox(height: 6),
       Text(
-        'Tap any field to fix it. Uncheck items you do not want. '
-        'Nothing is added to your directive until you confirm.',
+        'These are the details the AI pulled from your document. Here\'s how '
+        'to use this page:',
         style: TextStyle(
           fontFamily: 'DM Sans',
           fontSize: 13,
-          color: p.textMuted,
+          fontWeight: FontWeight.w600,
+          color: p.text,
           height: 1.5,
         ),
       ),
+      const SizedBox(height: 6),
+      _howToLine(p, Icons.check_box_outlined,
+          'A checked box means it will be added to your form. Uncheck '
+          'anything you don\'t want.'),
+      _howToLine(p, Icons.edit_outlined,
+          'Tap any field to edit its wording before it\'s added.'),
+      _howToLine(p, Icons.rule,
+          'Items under "Needs your decision" would replace something you '
+          'already entered — review those.'),
+      _howToLine(p, Icons.arrow_forward,
+          'When you\'re ready, tap "Autofill Information" at the bottom to '
+          'fill these into your form and continue — you\'ll land in the form '
+          'to review everything.'),
     ];
 
     return LayoutBuilder(
@@ -2802,9 +2812,14 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
     // fields to directive". Results step keeps Back · Apply All.
     final canSmartFill = _validated?.hasValidatedConditions == true ||
         _validated?.hasValidatedMeds == true;
-    final addLabel = checkedCount == 0
-        ? 'Add fields'
-        : 'Add $checkedCount field${checkedCount == 1 ? '' : 's'} to directive';
+    // Standalone (/upload page): the primary button autofills AND continues
+    // into the wizard so the user can verify the result, so it reads "Autofill
+    // Information". Modal (over the wizard) keeps the field-count label.
+    final addLabel = _standalone
+        ? 'Autofill Information'
+        : (checkedCount == 0
+            ? 'Add fields'
+            : 'Add $checkedCount field${checkedCount == 1 ? '' : 's'} to directive');
 
     return SafeArea(
       child: Padding(
@@ -2832,7 +2847,10 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                 const SizedBox(width: 8),
               ],
               FilledButton(
-                onPressed: checkedCount > 0 ? _applyAll : null,
+                // Standalone always allows continuing to the wizard (even with
+                // nothing ticked, so the user is never stranded on this page).
+                onPressed:
+                    (_standalone || checkedCount > 0) ? _applyAll : null,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
