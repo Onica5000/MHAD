@@ -25,19 +25,38 @@ Future<Map<String, String>> buildAiFilledFields(
     if (diagNames.isNotEmpty) map['Diagnoses listed'] = diagNames.join(', ');
     final meds = await repo.watchMedications(directiveId).first;
     final preferred = meds
-        .where((m) => m.entryType == 'preferred' || m.entryType == 'current')
+        .where((m) => m.entryType == 'preferred')
+        .map((m) => m.medicationName.trim())
+        .where((x) => x.isNotEmpty)
+        .toList();
+    final current = meds
+        .where((m) => m.entryType == 'current')
         .map((m) => m.medicationName.trim())
         .where((x) => x.isNotEmpty)
         .toList();
     final avoid = meds
-        .where((m) => m.entryType == 'exception' || m.entryType == 'limitation')
+        .where((m) => m.entryType == 'exception')
         .map((m) => m.medicationName.trim())
         .where((x) => x.isNotEmpty)
         .toList();
+    // limitation = consented under restrictions (NOT "to avoid" — these are
+    // meds the person accepts in specific circumstances).
+    final limited = meds
+        .where((m) => m.entryType == 'limitation')
+        .map((m) => m.medicationName.trim())
+        .where((x) => x.isNotEmpty)
+        .toList();
+    if (current.isNotEmpty) {
+      map['Medications currently taking'] = current.join(', ');
+    }
     if (preferred.isNotEmpty) {
-      map['Medications (current/preferred)'] = preferred.join(', ');
+      map['Medications preferred'] = preferred.join(', ');
     }
     if (avoid.isNotEmpty) map['Medications to avoid'] = avoid.join(', ');
+    if (limited.isNotEmpty) {
+      map['Restricted-use medications (consent with conditions)'] =
+          limited.join(', ');
+    }
     final prefs = await repo.getPreferences(directiveId);
     if (prefs != null &&
         prefs.treatmentFacilityPref.isNotEmpty &&

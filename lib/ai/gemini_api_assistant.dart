@@ -473,9 +473,11 @@ class GeminiApiAssistant implements AiAssistant {
         'not filling in the form for them.\n');
 
     buf.writeln(
-        'The app presents the directive as a 9-step wizard (consolidated '
-        'from the original 15 sections). When you walk the user through, '
-        'use these step names verbatim — they match what the user sees:\n');
+        'The number of steps depends on the form type:\n'
+        '  • Combined (Declaration + POA): 11 steps\n'
+        '  • Declaration only: 9 steps (no People I Trust or Guardian steps)\n'
+        '  • POA only: 5 steps (only About You, When It Kicks In, People I Trust, Guardian, Review)\n'
+        'Use these step names verbatim — they match what the user sees:\n');
 
     buf.writeln('1. ABOUT YOU');
     buf.writeln('   Full legal name, date of birth, address (street/apt/'
@@ -490,51 +492,67 @@ class GeminiApiAssistant implements AiAssistant {
         'by a physician") AND any relevant diagnoses.\n');
 
     buf.writeln('3. PEOPLE I TRUST (Combined and POA forms only)');
-    buf.writeln('   One screen, three sections:');
+    buf.writeln('   One screen, four sections:');
     buf.writeln('   • PRIMARY AGENT — full name, relationship, address, '
         'home/work/cell phone.');
     buf.writeln('   • ALTERNATE AGENT — same fields, backup in case the '
         'primary is unavailable.');
     buf.writeln('   • AGENT AUTHORITY — specific powers granted or '
-        'withheld (consent to admission, consent to medication, access to '
-        'records, etc.). Experimental treatments require separate written '
-        'consent under §5805(c)(4).\n');
+        'withheld: consent to admission, consent to medication, access to '
+        'records. Also sets whether the agent may consent to ECT, '
+        'experimental studies, and drug trials — under §5805(c)(4) these '
+        'three require the declarant to PHYSICALLY INITIAL the printed '
+        'form (a checkbox alone is not sufficient).');
+    buf.writeln('   • ADDITIONAL LIMITATIONS — free-text restrictions on '
+        'what the agent can or cannot do.\n');
 
-    buf.writeln('4. IF A COURT APPOINTS A GUARDIAN');
+    buf.writeln('4. IF A COURT APPOINTS A GUARDIAN (Combined and POA forms only)');
     buf.writeln('   Optional. Nominate a preferred guardian (name, '
         'relationship, reason) in case a court ever appoints one. The '
         'court is not bound by the nomination but generally honors it.\n');
 
-    buf.writeln('5. WHERE I WANT CARE');
+    buf.writeln('5. WHERE I WANT CARE (Combined and Declaration forms only)');
     buf.writeln('   Preferred inpatient facilities AND facilities the user '
-        'wants to avoid. Can be named specifically.\n');
+        'wants to avoid. Room and environment preferences.\n');
 
-    buf.writeln('6. MEDICATIONS');
-    buf.writeln('   Three rows:');
-    buf.writeln('   • Medications to AVOID — name + reason.');
-    buf.writeln('   • Limitations on dose / route — name + condition.');
-    buf.writeln('   • Medications PREFERRED — name + reason.\n');
+    buf.writeln('6. DIAGNOSES (Combined and Declaration forms only)');
+    buf.writeln('   Mental health diagnoses — each gets an ICD-10 code '
+        'for clinical precision. Helps care teams identify the context '
+        'quickly in a crisis.\n');
 
-    buf.writeln('7. PROCEDURES & RESEARCH');
+    buf.writeln('7. ALLERGIES & REACTIONS (Combined and Declaration forms only)');
+    buf.writeln('   Drug allergies, food allergies, sensitivities, and '
+        'past adverse reactions. Severity is captured (mild / moderate / '
+        'severe). This is often the first section ER staff check.\n');
+
+    buf.writeln('8. MEDICATIONS (Combined and Declaration forms only)');
+    buf.writeln('   Four rows:');
+    buf.writeln('   • Currently TAKING — reference list of current meds (informational).');
+    buf.writeln('   • Medications to AVOID — explicitly refused, name + reason.');
+    buf.writeln('   • Restricted-use — accepted only under specific conditions.');
+    buf.writeln('   • Medications PREFERRED — explicitly requested, name + reason.\n');
+
+    buf.writeln('9. PROCEDURES & RESEARCH (Combined and Declaration forms only)');
     buf.writeln('   Three consent tiles on one screen (each is yes / no / '
         'agent-decides / conditional):');
     buf.writeln('   • ECT (electroconvulsive therapy).');
     buf.writeln('   • EXPERIMENTAL STUDIES.');
-    buf.writeln('   • DRUG TRIALS / clinical trials.\n');
+    buf.writeln('   • DRUG TRIALS / clinical trials.');
+    buf.writeln('   Note: "agent-decides" here means the agent authority '
+        'set in step 3 governs — the agent still needs initials from step 3.\n');
 
-    buf.writeln('8. ANYTHING ELSE');
+    buf.writeln('10. ANYTHING ELSE (Combined and Declaration forms only)');
     buf.writeln('   Free-text additional instructions not covered above '
         '(religious/cultural preferences, communication needs, comfort '
         'measures, people to contact or avoid, children/pet custody, '
         'records disclosure, etc.).\n');
 
-    buf.writeln('9. REVIEW & SIGN');
-    buf.writeln('   Two tabs:');
-    buf.writeln('   • REVIEW — summary of everything entered.');
-    buf.writeln('   • SIGN & WITNESS — date, principal signature, two '
-        'witness signatures (name + address + signature each).');
+    buf.writeln('11. REVIEW');
+    buf.writeln('   Summary of everything entered. Tap any section to edit.');
     buf.writeln('   • The directive is not legally valid without two adult '
-        'witnesses signing the printed copy in original ink.\n');
+        'witnesses signing the printed copy in original ink.');
+    buf.writeln('   • Witnesses must not be the agent, alternate agent, '
+        'or any person with a financial interest in the estate.\n');
 
     buf.writeln('--- END WALKTHROUGH GUIDE ---\n');
 

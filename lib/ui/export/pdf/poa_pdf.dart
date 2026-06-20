@@ -573,9 +573,9 @@ List<pw.Page> buildPoaPages({
           'choose to revoke a particular instruction contained in this Power of Attorney '
           'in the manner specified, I understand that the other instructions contained in '
           'this Power of Attorney will remain effective until:\n'
-          '(4) I revoke this Power of Attorney in its entirety;\n'
-          '(5) I make a new combined Mental Health Care Declaration and Power of Attorney; or\n'
-          '(6) Two years from the date this document was executed.',
+          '(1) I revoke this Power of Attorney in its entirety;\n'
+          '(2) I make a new combined Mental Health Care Declaration and Power of Attorney; or\n'
+          '(3) Two years from the date this document was executed.',
           style: bodyStyle(),
         ),
         pw.SizedBox(height: 4),

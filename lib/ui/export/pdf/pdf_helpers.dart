@@ -814,11 +814,15 @@ pw.Widget diagnosisList(List<dynamic> diagnoses) {
   if (diagnoses.isEmpty) return pw.SizedBox.shrink();
 
   final psychiatric = diagnoses
-      .where((d) => d.icdCode.startsWith('F'))
+      .where((d) => d.icdCode.isNotEmpty && d.icdCode.startsWith('F'))
       .toList();
-  final medical = diagnoses.where((d) => !d.icdCode.startsWith('F')).toList();
+  final medical = diagnoses
+      .where((d) => d.icdCode.isNotEmpty && !d.icdCode.startsWith('F'))
+      .toList();
+  final uncoded = diagnoses.where((d) => d.icdCode.isEmpty).toList();
 
-  pw.Widget buildGroup(String title, List<dynamic> items) {
+  pw.Widget buildGroup(String title, List<dynamic> items,
+      {bool showCode = true}) {
     return pw.Column(
       crossAxisAlignment: pw.CrossAxisAlignment.start,
       children: [
@@ -828,7 +832,9 @@ pw.Widget diagnosisList(List<dynamic> diagnoses) {
           (d) => pw.Padding(
             padding: const pw.EdgeInsets.only(left: 8, bottom: 1),
             child: pw.Text(
-              '\u2022 ${d.icdCode} — ${d.name}',
+              showCode
+                  ? '\u2022 ${d.icdCode} — ${d.name}'
+                  : '\u2022 ${d.name}',
               style: bodyStyle(),
             ),
           ),
@@ -844,6 +850,8 @@ pw.Widget diagnosisList(List<dynamic> diagnoses) {
       if (psychiatric.isNotEmpty)
         buildGroup('Psychiatric Diagnoses (ICD-10)', psychiatric),
       if (medical.isNotEmpty) buildGroup('Medical Diagnoses (ICD-10)', medical),
+      if (uncoded.isNotEmpty)
+        buildGroup('Other Diagnoses', uncoded, showCode: false),
       pw.SizedBox(height: 2),
     ],
   );
