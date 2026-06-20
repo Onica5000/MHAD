@@ -10,21 +10,43 @@ import 'package:mhad/data/educational_content.dart';
 /// directly over their REST APIs. This is ONLY reachable inside the gated admin
 /// tool — it is not a user-facing setting.
 enum AdminAiProvider {
-  gemini('Google Gemini', 'gemini-2.5-flash', 'Gemini API key (AIza…)'),
-  anthropic('Anthropic Claude', 'claude-opus-4-8', 'Anthropic key (sk-ant-…)'),
-  openai('OpenAI GPT', 'gpt-4o', 'OpenAI key (sk-…)'),
-  grok('xAI Grok', 'grok-4', 'xAI key (xai-…)');
+  // A short, curated set of the most useful models per provider (not the full
+  // catalog). First entry is the default. Edit these lists as models change.
+  gemini('Google Gemini', 'Gemini API key (AIza…)', [
+    'gemini-2.5-flash',
+    'gemini-2.5-pro',
+    'gemini-2.5-flash-lite',
+  ]),
+  anthropic('Anthropic Claude', 'Anthropic key (sk-ant-…)', [
+    'claude-opus-4-8',
+    'claude-sonnet-4-6',
+    'claude-haiku-4-5',
+  ]),
+  openai('OpenAI GPT', 'OpenAI key (sk-…)', [
+    'gpt-4o',
+    'gpt-4o-mini',
+    'gpt-4.1',
+    'o3',
+  ]),
+  grok('xAI Grok', 'xAI key (xai-…)', [
+    'grok-4',
+    'grok-3',
+    'grok-3-mini',
+  ]);
 
-  const AdminAiProvider(this.label, this.defaultModel, this.keyHint);
+  const AdminAiProvider(this.label, this.keyHint, this.models);
 
   /// Human-facing provider name for the dropdown.
   final String label;
 
-  /// Default model id (the maintainer can override it in the model field).
-  final String defaultModel;
-
   /// Placeholder/help shown on the API-key field for this provider.
   final String keyHint;
+
+  /// The curated list of useful models for this provider (first = default).
+  final List<String> models;
+
+  /// Default model id (the first curated model).
+  String get defaultModel => models.first;
 }
 
 /// Which dynamic-data file the admin flow is editing. Each is a separate

@@ -36,7 +36,7 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
   // AI provider to draft with + its model and API key (admin-only; the key is
   // entered here, ephemeral to this screen, and never persisted).
   AdminAiProvider _provider = AdminAiProvider.gemini;
-  final _modelCtrl = TextEditingController();
+  String _model = AdminAiProvider.gemini.defaultModel;
   final _keyCtrl = TextEditingController();
   AdminDataTarget _target = AdminDataTarget.appData;
   Map<String, dynamic> _base = const {};
@@ -52,7 +52,6 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
     _passCtrl.dispose();
     _requestCtrl.dispose();
     _focusCtrl.dispose();
-    _modelCtrl.dispose();
     _keyCtrl.dispose();
     super.dispose();
   }
@@ -94,7 +93,7 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
       final raw = await AdminUpdateService(
         apiKey: key,
         provider: _provider,
-        model: _modelCtrl.text.trim(),
+        model: _model,
       ).draftRaw(
         _requestCtrl.text.trim(),
         _base,
@@ -294,18 +293,26 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
               for (final p in AdminAiProvider.values)
                 DropdownMenuItem(value: p, child: Text(p.label)),
             ],
-            onChanged: (p) =>
-                setState(() => _provider = p ?? AdminAiProvider.gemini),
+            onChanged: (p) => setState(() {
+              _provider = p ?? AdminAiProvider.gemini;
+              // Reset to the new provider's default model.
+              _model = _provider.defaultModel;
+            }),
           ),
           const SizedBox(height: 12),
-          TextField(
-            controller: _modelCtrl,
-            decoration: InputDecoration(
-              border: const OutlineInputBorder(),
-              labelText: 'Model (optional)',
-              hintText: _provider.defaultModel,
-              helperText: 'Leave blank to use ${_provider.defaultModel}.',
+          // Curated set of useful models for the chosen provider.
+          DropdownButtonFormField<String>(
+            initialValue: _model,
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Model',
             ),
+            items: [
+              for (final m in _provider.models)
+                DropdownMenuItem(value: m, child: Text(m)),
+            ],
+            onChanged: (m) =>
+                setState(() => _model = m ?? _provider.defaultModel),
           ),
           const SizedBox(height: 12),
           TextField(
