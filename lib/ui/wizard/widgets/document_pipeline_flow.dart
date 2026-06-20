@@ -225,10 +225,11 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
         icon: const Icon(Icons.auto_awesome, size: 36),
         title: const Text('Set up AI to read documents'),
         content: const Text(
-          'Snap-to-fill uses AI to read your photo or PDF and pull out '
-          'medications and conditions. It needs a free Gemini key — about 30 '
-          'seconds to set up. You review every field before anything lands in '
-          'your form.',
+          'Snap-to-fill uses AI to read your uploaded document (photo, PDF, or '
+          'text) and pull out details to fill your form — medications, '
+          'conditions, care preferences, and your contact details. It needs a '
+          'free Gemini key — about 30 seconds to set up. You review every field '
+          'before anything lands in your form.',
         ),
         actions: [
           TextButton(
@@ -2062,9 +2063,11 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      'Your file is sent to the AI only to read it, then '
-                      "discarded. Nothing is saved — it's gone when this tab "
-                      'closes.',
+                      'To autofill, your file — including any personal details '
+                      "in it — is sent to Google's AI to read. The app saves "
+                      'nothing (it\'s gone when this tab closes), but Google\'s '
+                      'free tier may retain it. You review everything before it '
+                      'is added to your directive.',
                       style: TextStyle(
                         fontFamily: 'DM Sans',
                         fontSize: 11.5,
@@ -2440,8 +2443,9 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
           const SizedBox(width: 8),
           Expanded(
             child: Text(
-              'Your photo is sent to the AI only to read it, then discarded. '
-              'Nothing is saved.',
+              "Your file (including any personal details) is sent to Google's "
+              'AI to read it. The app saves nothing; Google may retain it on '
+              'the free tier. You review before anything is added.',
               style: TextStyle(
                 fontFamily: 'DM Sans',
                 fontSize: 11,
@@ -2458,6 +2462,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
   // ── Processing ──────────────────────────────────────────────────────
 
   Widget _buildProcessingStep() {
+    final p = Theme.of(context).mhadPalette;
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -2465,25 +2470,62 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
           const CircularProgressIndicator(),
           const SizedBox(height: 16),
           Text(_statusMessage),
-          if (_piiStripped.isNotEmpty) ...[
-            const SizedBox(height: 12),
+          // Keep the document list visible while the AI reads — initiating
+          // autofill shouldn't make the files the user added disappear.
+          if (_sourceDocs.isNotEmpty) ...[
+            const SizedBox(height: 16),
             Container(
-              margin: const EdgeInsets.symmetric(horizontal: 32),
-              padding: const EdgeInsets.all(10),
+              margin: const EdgeInsets.symmetric(horizontal: 24),
+              constraints: const BoxConstraints(maxWidth: 380),
+              padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primaryContainer,
-                borderRadius: BorderRadius.circular(8),
+                color: p.surface,
+                border: Border.all(color: p.border),
+                borderRadius: BorderRadius.circular(10),
               ),
-              child: Row(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Icon(Icons.shield, size: 18),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      'PII removed: ${_piiStripped.toSet().join(", ")}',
-                      style: const TextStyle(fontSize: 12),
+                  Text(
+                    'Reading ${_sourceDocs.length} '
+                    'document${_sourceDocs.length == 1 ? '' : 's'}:',
+                    style: TextStyle(
+                      fontFamily: 'DM Sans',
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      color: p.textMuted,
                     ),
                   ),
+                  for (final d in _sourceDocs)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 6),
+                      child: Row(
+                        children: [
+                          Icon(
+                            d.mimeType == 'application/pdf'
+                                ? Icons.picture_as_pdf_outlined
+                                : d.mimeType.startsWith('image/')
+                                    ? Icons.image_outlined
+                                    : Icons.description_outlined,
+                            size: 15,
+                            color: p.textMuted,
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              _docName(d),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontFamily: 'DM Sans',
+                                fontSize: 12.5,
+                                color: p.text,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                 ],
               ),
             ),
@@ -2553,8 +2595,8 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                 const SizedBox(height: 4),
                 Text(
                   n == 1
-                      ? 'Read by the AI, then discarded.'
-                      : '$n files read by the AI, then discarded.',
+                      ? "Read by Google's AI to autofill."
+                      : "$n files read by Google's AI to autofill.",
                   style: TextStyle(
                     fontFamily: 'DM Sans',
                     fontSize: 11.5,
