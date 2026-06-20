@@ -45,8 +45,10 @@ Mental-health-directive content is "consumer health data" under California CCPA/
 Washington MHMDA (which includes a **private right of action**), Connecticut, Nevada,
 and New York consumer-health-data laws. Under all of them: we collect only what you
 enter, solely to help you create your directive; we do not sell health data; the only
-third-party transfer is the **opt-in** Gemini path described above; we use no
-third-party SDKs, analytics, or advertising; and you can delete all local data at any
+transfers off your device are the **opt-in** Gemini path described above and the free
+government reference lookups described under "Clinical reference data" below (which send
+only a medical term, code, or provider name — never your identity or directive); we use
+no third-party SDKs, analytics, or advertising; and you can delete all local data at any
 time via "Delete All Data" in the app menu.
 
 ## International users (GDPR)
@@ -66,9 +68,20 @@ The app is **not** HIPAA-compliant. It is a consumer tool for documenting your o
 preferences and is not a covered entity or business associate.
 
 ## Clinical reference data
-The app uses the U.S. National Library of Medicine (NLM) Clinical Table Search Service
-for medication and ICD-10 lookups. These queries do not contain user PII. NLM does not
-endorse this product.
+To help you fill in and understand your directive, the app looks things up in free,
+public U.S. government databases. **Each request carries only the single medical term,
+code, or provider name being looked up — never your identity (name, date of birth,
+address, phone), the people you name, or your saved directive.**
+
+- **NIH/NLM Clinical Table Search Service** — medication autocomplete (RxTerms), condition
+  lookup (ICD-10-CM), and an optional provider (doctor) search in the public NPI registry.
+- **NLM MedlinePlus Connect** — plain-language explanations of a condition you added (sends
+  only its ICD-10 code).
+- **FDA openFDA** — a medication's official FDA label, used to ground the side-effects list
+  (sends only the medication name).
+
+NLM, NIH, and the FDA do not endorse this product, and these services provide information
+only, not medical advice.
 
 ## Contact (at least two methods, per FTC HBNR)
 - **In-app**: an in-app banner will be shown on next launch if a breach affects you.

@@ -177,24 +177,37 @@ class PrivacyPolicyScreen extends StatelessWidget {
             ),
 
             _PolicySection(
-              title: 'Clinical Data Services (NIH)',
+              title: 'Medical Reference Lookups (U.S. government data)',
               body:
-                  'This app uses publicly available data from the U.S. National '
-                  'Library of Medicine (NLM), National Institutes of Health, '
-                  'Department of Health and Human Services, to provide '
-                  'medication name autocomplete (via RxTerms/RxNorm) and '
-                  'diagnosis lookup (via ICD-10-CM).\n\n'
-                  'NLM is not responsible for this product and does not endorse '
-                  'or recommend this or any other product.\n\n'
-                  'It is not the intention of NLM to provide specific medical '
-                  'advice, but rather to provide users with information to '
-                  'better understand their health and their medications. NLM '
-                  'urges you to consult with a qualified physician for medical '
-                  'advice.\n\n'
-                  'These services are subject to a rate limit of 20 requests '
-                  'per second. Medication and diagnosis lookups are performed '
-                  'in real time and are not cached or stored by this app.\n\n'
-                  'Source: U.S. National Library of Medicine.',
+                  'To help you fill in and understand your directive, the app '
+                  'looks things up in free, public U.S. government databases. '
+                  'These lookups use ONLY the single term or code needed for '
+                  'that lookup. They never receive your identity (your name, '
+                  'date of birth, address, or phone), the people you name '
+                  '(agents, witnesses, guardian), or your saved directive.\n\n'
+                  'What is sent, and to whom:\n'
+                  '  - Medication name you type → NLM RxTerms (autocomplete).\n'
+                  '  - Condition name you type → NLM ICD-10-CM (diagnosis '
+                  'lookup).\n'
+                  '  - A doctor / provider name you type into the optional '
+                  'doctor search → NLM NPI registry, used only to look that '
+                  'provider up in the public registry of healthcare providers.\n'
+                  '  - The ICD-10 code of a condition you added → NLM '
+                  'MedlinePlus Connect, to fetch a plain-language explanation.\n'
+                  '  - A medication name → openFDA (U.S. Food & Drug '
+                  'Administration), to fetch that drug\'s official FDA label, '
+                  'which is used to ground the side-effects list.\n\n'
+                  'No personal or identifying information is included in any of '
+                  'these requests — only the medical term, code, or provider '
+                  'name being looked up.\n\n'
+                  'NLM, NIH, and the FDA are not responsible for this product '
+                  'and do not endorse or recommend it. These services are for '
+                  'information only and are not medical advice — consult a '
+                  'qualified professional. The NLM Clinical Table services are '
+                  'rate-limited to 20 requests/second.\n\n'
+                  'Sources: U.S. National Library of Medicine (RxTerms, '
+                  'ICD-10-CM, NPI registry, MedlinePlus Connect); U.S. Food & '
+                  'Drug Administration (openFDA).',
               headingStyle: headingStyle,
               bodyStyle: bodyStyle,
             ),
@@ -233,9 +246,15 @@ class PrivacyPolicyScreen extends StatelessWidget {
                   'Firebase, Crashlytics, or Sentry), or tracking pixels.\n\n'
                   'The only external network connections this app makes are:\n'
                   '  - Google Gemini API (only when you use AI features)\n'
-                  '  - NIH/NLM Clinical Table Search Service (only when you '
-                  'search for medications or conditions)\n\n'
-                  'No data is sent to the app developer at any time.',
+                  '  - NIH/NLM Clinical Table Search Service — medication, '
+                  'condition, and provider (doctor) lookups\n'
+                  '  - NLM MedlinePlus Connect — plain-language condition '
+                  'explanations (sends only an ICD-10 code)\n'
+                  '  - openFDA / U.S. FDA — official drug labels used to ground '
+                  'the side-effects list (sends only a medication name)\n\n'
+                  'Each of these receives only the term or code being looked '
+                  'up — never your identity or your directive. No data is sent '
+                  'to the app developer at any time.',
               headingStyle: headingStyle,
               bodyStyle: bodyStyle,
             ),

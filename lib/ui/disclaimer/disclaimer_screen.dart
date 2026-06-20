@@ -780,29 +780,48 @@ List<_SectionData> _buildSections(MhadPalette p) {
         _Para(spans: [
           const TextSpan(text: 'To protect you, the app '),
           _bold('automatically keeps identifying details out of what it sends '
-              'to the AI'),
+              'to the AI assistant and its suggestions'),
           const TextSpan(
               text:
                   ' — your name, date of birth, address, and the names and '
                   'contact details of your agents and guardian are never '
                   'included. Only non-identifying context (such as conditions, '
                   'medications, and care preferences) is shared, and only if '
-                  'you choose to use the assistant.'),
+                  'you choose to use the assistant. (Uploading a document for '
+                  'autofill is the one exception, described next.)'),
         ], palette: p),
         _Para(spans: [
           const TextSpan(
               text:
-                  'Photos and PDFs you upload for autofill are different: they '
-                  'are sent to Google as-is, because the app cannot remove '
-                  'personal details from an image. '),
-          _bold('Black out anything sensitive before uploading'),
+                  'Documents you upload for autofill are different: the whole '
+                  'file is sent to Google\'s AI as-is, and to fill in your '
+                  'directive the AI reads the personal details in it (your '
+                  'name, date of birth, address, and your agent\'s or '
+                  'guardian\'s details). You review everything before it is '
+                  'saved. '),
+          _bold('Uploading is never required'),
           const TextSpan(
               text:
-                  ', and remember you never have to upload personal '
-                  'information at all — any field can be typed in by hand to '
-                  'keep it private. Also avoid typing personal identifiers '
-                  '(full name, SSN, date of birth, address) directly into chat '
-                  'messages.'),
+                  ' — black out anything you don\'t want sent, or simply type '
+                  'any field by hand to keep it private. Also avoid typing '
+                  'personal identifiers (full name, SSN, date of birth, '
+                  'address) directly into chat messages.'),
+        ], palette: p),
+        _Para(spans: [
+          const TextSpan(
+              text:
+                  'Separately, to help you fill in and understand your '
+                  'directive, the app looks up medications, conditions, and '
+                  '(optionally) your doctor in free, public U.S. government '
+                  'databases — the NIH/NLM Clinical Tables, MedlinePlus, and '
+                  'the FDA\'s openFDA. '),
+          _bold('These lookups send only the medical term, code, or provider '
+              'name being searched'),
+          const TextSpan(
+              text:
+                  ' — never your identity, the people you name, or your saved '
+                  'directive. They are reference information, not medical '
+                  'advice.'),
         ], palette: p),
         _Para(spans: const [
           TextSpan(

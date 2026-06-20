@@ -10,6 +10,8 @@ bool isAllowedHost(String host) {
   const allowedHosts = {
     'generativelanguage.googleapis.com',
     'clinicaltables.nlm.nih.gov',
+    'connect.medlineplus.gov',
+    'api.fda.gov',
   };
   return allowedHosts.contains(host);
 }
