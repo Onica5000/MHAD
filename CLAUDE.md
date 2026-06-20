@@ -25,8 +25,10 @@ Source PDF: `PA MHAD.pdf`. Plan: `ACTION_PLAN.md`. Design bundle: `MHAD-handoff/
 ## Flutter / Dart
 - Flutter 3.41.4, Dart 3.11.1
 - Run with: `D:\flutter\bin\flutter.bat run`
-- Build debug APK: `D:\flutter\bin\flutter.bat build apk`
-- Build release APK: `D:\flutter\bin\flutter.bat build apk --release --obfuscate --split-debug-info=build/debug-info`
+- **Ship target (web — what actually deploys):** `D:\flutter\bin\flutter.bat build web --release`
+  (CI uses `--pwa-strategy=none --source-maps --base-href "/MHAD/"`; auto-deploys to GitHub Pages on push to `main`).
+- Build debug APK (native, deferred): `D:\flutter\bin\flutter.bat build apk`
+- Build release APK (native, deferred): `D:\flutter\bin\flutter.bat build apk --release --obfuscate --split-debug-info=build/debug-info`
 - Code gen: `D:\flutter\bin\flutter.bat pub run build_runner build --delete-conflicting-outputs`
 
 ## Architecture
@@ -98,7 +100,8 @@ This regenerates `app_database.g.dart`.
   screen once it is fully covered (partial localization is worse than none).
 
 ## Docs
-- Authoritative gap/improvement status: `docs/GAP_ANALYSIS_V4.md` (V2/V3 are historical).
+- Gap/improvement backlog: `docs/GAP_ANALYSIS_V4.md` (V2/V3 historical; re-scoped 2026-06-20
+  for the web pivot — its old Play/Apple "Critical" items are now `deferred — native`).
 - Security scope/threat model: `docs/THREAT_MODEL.md`. Breach process: `docs/BREACH_PLAN.md`.
 
 ## Multi-Platform

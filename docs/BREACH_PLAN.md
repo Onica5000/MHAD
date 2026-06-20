@@ -95,6 +95,9 @@ users (e.g., people who voluntarily contacted us, or via Google for the Gemini p
 - First-class mail to the individual's last known postal address.
 - If contact info is insufficient for 10 or more individuals: conspicuous posting
   on the privacy-policy URL (`PRIVACY_POLICY.md` hosted page) for 90 days.
+  > ⚠️ **Pre-release TODO:** no hosted privacy-policy URL exists yet (the policy is in-app
+  > + `PRIVACY_POLICY.md` in-repo only). The GitHub Pages web deploy makes hosting it
+  > trivial — publish it and fill the **Contact** section below before any real release.
 
 **Individuals (500 or more affected):**
 - All of the above, PLUS

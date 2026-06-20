@@ -1,5 +1,14 @@
 # MHAD — UI/UX Audit (2026-06-15)
 
+> ⚠️ **Untracked worklist — verify each item against current code before acting
+> (note 2026-06-20).** This is a point-in-time finding list with no done/not-done
+> tracking, so some items are already resolved. Notably **#1 (snap-to-fill PII
+> contradiction) is addressed**: autofill now *intentionally* reads PII to fill the form
+> (reviewed before saving) and the "PII detected and removed" copy is gone, with the
+> privacy policy/disclaimer rewritten to match (commits `7862ab9`, `6514d84`). **#5**
+> (assistant "PII stripped" overclaims) was also partly addressed. Treat the rest as
+> candidate refinements to re-confirm, not a verified backlog.
+
 Read-only audit of the web-focused user surfaces, for making the app more
 **professional, user-friendly, and intuitive**. The design foundation is strong
 (cohesive tokens, editorial voice, bundled fonts, good privacy framing) — these

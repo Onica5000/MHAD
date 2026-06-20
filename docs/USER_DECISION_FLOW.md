@@ -44,16 +44,19 @@ flowchart TD
   %% ---------- WIZARD ----------
   subgraph Wizard[Wizard - steps depend on FormType]
     direction TD
-    W1[Personal info] --> W2[Effective condition\n3 triggers + free text]
-    W2 --> W3[Treatment facility\nprefer/avoid/none + roommate]
-    W3 --> W4[Allergies] --> W5[Medications\npreferred/avoid/agent-decides]
-    W5 --> W6[ECT consent\nyes/no/conditional/agent]
-    W6 --> W7[Experimental] --> W8[Drug trials]
-    W8 --> W9[People I trust / Agent\nprimary + alternate]
-    W9 --> W10[Agent authority\nhospitalization/meds + limits]
-    W10 --> W11[Guardian nomination\n+ 3 condition toggles]
-    W11 --> W12[Additional instructions\n12 fields]
-    W12 --> AddOns{Optional add-ons}
+    %% Canonical order (Combined 11 / Declaration 9 / POA 6). Agent + guardian
+    %% steps are POA/Combined only; ECT/experimental/drug-trials are one merged
+    %% ConsentChoiceStep ("Procedures & research"). See FormType.steps.
+    W1[About you / personal info] --> W2[When this kicks in\neffective condition: 3 triggers + free text]
+    W2 --> W3[People I trust / Agent\nprimary + alternate + agent authority · POA & Combined]
+    W3 --> W4[If a court appoints a guardian\nnomination + 3 condition toggles · POA & Combined]
+    W4 --> W5[Where I want care\nfacility prefer/avoid/none + roommate]
+    W5 --> W6[Diagnoses\nICD-10 search + primary doctor]
+    W6 --> W7[Medications\npreferred/avoid/limitations/current + side-effects add-on]
+    W7 --> W8[Allergies & reactions]
+    W8 --> W9[Procedures & research\nconsent: ECT / experimental / drug-trials -- one ConsentChoiceStep]
+    W9 --> W10[Anything else\nadditional-instruction fields]
+    W10 --> AddOns{Optional add-ons}
     AddOns -- Crisis plan/WRAP --> CrisisPlan
     AddOns -- Ulysses clause --> Ulysses
     AddOns -- Side effects --> SideFx[AI side-effects checklist]

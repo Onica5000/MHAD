@@ -1,5 +1,11 @@
 # Store Listing — PA MHAD App
 
+> 🗄️ **ARCHIVED / DEFERRED (2026-06-20).** Per the 2026-06-16 web-first pivot, native
+> Android (Google Play) and iOS (App Store) submission is **postponed indefinitely**, so
+> none of this listing copy, Data Safety, or privacy-label content is currently in use.
+> Kept verbatim as ready-to-use material **if native is ever revived** (see the
+> `android-app-considerations` memory). Not maintained against the current app meanwhile.
+
 ## Google Play Store
 
 ### App Name

@@ -1,7 +1,17 @@
 # MHAD — Deduplication Plan (post-wizard surfaces) — 2026-06-15
 
+> ✅ **LARGELY EXECUTED (verified in code 2026-06-20) — historical record.** The bulk of
+> this plan shipped: **Group A** → `lib/domain/agent_ext.dart` (`primaryAgent`/
+> `alternateAgent`/`bestPhone`); **Group B** → `FormTypeExt.shortName` (label drift routed
+> through one source); **Group C** → `DirectiveBundle` + `DirectiveRepository.loadBundle`;
+> **Group F** → `lib/ui/widgets/design/dashed_divider.dart`; **Group G** →
+> `consent_choice_step.dart` (the separate `ect_step`/`experimental_studies_step`/
+> `drug_trials_step` files are gone). Remaining/unverified: Groups D (output field-mapping),
+> E (wallet-card helper), H (date formatter) — re-check against source before acting. Kept
+> as the record of why these consolidations exist; not a live to-do.
+
 Read-only audit of duplicated functions/logic, focused on the wizard + export/
-share/sign/past/revocation surfaces. **Awaiting approval before any changes.**
+share/sign/past/revocation surfaces. ~~Awaiting approval before any changes.~~ (Executed.)
 
 ## Findings (confirmed against source)
 1. **Directive-bundle load repeated inline** — the same directive→agents→prefs→additional→guardian→meds→diagnoses→witnesses read is hand-written in `export_screen.dart:85-130`, `review_step.dart:101-127`, `wizard_complete_screen.dart:42-55`, and every consent step.

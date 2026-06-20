@@ -1,5 +1,13 @@
 # Prototype audit — current Claude Design bundle
 
+> ℹ️ **This is the single design-parity tracker** (2026-06-20). It absorbed the one-time
+> `CLAUDE_DESIGN_UPDATE_2026-06-02.md` writeup (now removed — it was ~80% duplicated here).
+> **Post web-first pivot (2026-06-16):** parity now prioritizes the **web/desktop** surfaces;
+> the mobile-artboard parity counts below reflect the earlier mobile-first effort and are
+> retained as history, not as the current priority. Some schema/feature references predate
+> the current code (e.g. Drift is now schema v19); treat this doc as a design-fidelity map,
+> with `CLAUDE.md` + `README.md` authoritative for current architecture/features.
+
 Authoritative source: **`MHAD-handoff/bundle/`** (opened from
 `Mental Health Advance Directive.html`).
 

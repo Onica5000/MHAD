@@ -89,6 +89,11 @@ These are links to external services, not features of the app.
 
 ## App Store Category
 
+> 🔄 **Web-first (2026-06-20):** native app-store listings are deferred (see the web pivot).
+> The language rules in this doc are **evergreen** and apply to the web app's landing page,
+> in-app copy, and any web/social promotion. The store-category guidance below is retained
+> for if native is ever revived.
+
 - **Primary category**: Medical (for discoverability among users searching for
   health-related tools)
 - **Important**: The "not a medical device" disclaimer must appear prominently in
@@ -104,7 +109,9 @@ Every public-facing description of the app MUST include all of the following:
 4. **"Directives must be printed, signed, and witnessed to be legally valid"**
 
 ### Placement:
-- **App store listing**: First paragraph of the full description
+- **Web app & landing page** (primary surface): in the in-app disclaimer/onboarding gate
+  and visible on the public landing/privacy page
+- **App store listing** (native, deferred): First paragraph of the full description
 - **Website**: Footer or dedicated disclaimer section visible on every page
 - **Social media**: Include in bio/about section; link to full disclaimers
 - **Press releases**: Include in boilerplate paragraph at the end

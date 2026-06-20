@@ -1,17 +1,22 @@
-# PA Mental Health Advance Directive App -- Action Plan
+# PA Mental Health Advance Directive App -- Action Plan (HISTORICAL)
 
-> ⚠️ **CURRENT-STATE CORRECTIONS (2026-05-19, see `GAP_ANALYSIS_V4.md` V4-M11).**
-> This historical plan has drifted from the code. Authoritative facts:
+> 🗄️ **HISTORICAL — do not act on the phased plan below.** This is the original build
+> plan; its body has drifted from the code and is superseded by **`CLAUDE.md`**
+> (architecture) and **`README.md`** (current feature set). Kept only as a record of the
+> original phase structure. Authoritative current-state facts:
+> - **Surface: web-first** (Chrome/Edge). Native Android/iOS and macOS are **postponed
+>   indefinitely** (2026-06-16 pivot). The "targeting Android and iOS" / Codemagic
+>   App-Store phases below are **deferred**. Ship command: `flutter build web --release`.
 > - **AI = Google Gemini** (`lib/ai/gemini_api_assistant.dart`, `google_generative_ai`,
 >   model `gemini-2.5-flash`). *Not* Claude — ignore "Claude"/`ClaudeApiAssistant` below.
 > - **`drift_flutter` is NOT used** (removed — caused a DEX conflict). DB stack is
 >   `drift` + `sqlite3` + `sqlcipher_flutter_libs`.
-> - **Wizard is 9 consolidated steps** (was 15); old granular step files are composed
->   as sections inside the merged steps.
+> - **Wizard is adaptive: Combined 11 / Declaration 9 / POA 6 steps** (old granular step
+>   files are composed as sections inside the merged steps).
 > - **Navigation**: floating bottom nav on mobile + `WebSidebar` on wide (≥1000px).
 >   There is **no hamburger drawer** (`app_drawer.dart` was deleted).
 > - Phase 3/7 checkboxes below are stale — most features exist; test coverage is the
->   real gap (see V4-H6).
+>   real gap (see `GAP_ANALYSIS_V4.md` V4-H6).
 
 ## Document Summary
 

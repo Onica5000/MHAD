@@ -13,6 +13,20 @@ were superseded by regulations that changed *after* they were written.
 > third-party-AI guideline all post-date or were under-scoped in V3. This is **not**
 > rework of closed items for its own sake — it is closing genuinely new exposure.
 
+> 🔄 **Re-scoped for the 2026-06-16 web-first pivot (updated 2026-06-20).** The app now
+> ships as the Chrome/Edge **web** app only; native Android/iOS are postponed indefinitely
+> (see CLAUDE.md). That demotes the app-store **submission** items here — **V4-C1**
+> (public privacy-policy URL — Play blocker), **V4-C2** (Play verified-Organization
+> account), and **V4-H5** (Apple third-party-AI / `PrivacyInfo.xcprivacy` / nutrition
+> label) — to **deferred, native-only**; they are no longer release blockers for the
+> shipping surface and are tagged `[deferred — native]` below. Items since closed:
+> **V4-H7** (orphan `AppStrings` deleted) and **V4-M9** (the draw-to-sign pad was dropped
+> for wet-ink-only, mooting the dragging-movement gap). The live engineering priorities
+> are now **V4-H6 (test coverage)** and the regulatory/privacy items that apply to the web
+> app (HBNR, multi-state health-data laws — both substantially addressed in the privacy
+> copy). A public privacy URL (C1) is also now *trivially* hostable via the GitHub Pages
+> web deploy even though it's no longer a Play gate.
+
 ## Status key: [ ] Todo · [~] Partial · [!] Regressed/drifted from prior claim
 
 ---
@@ -30,7 +44,9 @@ were superseded by regulations that changed *after* they were written.
 - **Fix:** Publish the privacy policy at a stable HTTPS page; reference that exact URL in
   the app (e.g., a "View online" link on the privacy screen), Play Console, and website.
   Keep the in-app copy in sync.
-- **Status:** [ ]
+- **Status:** `[deferred — native]` — no longer a Play blocker (web-first pivot). Note: the
+  in-app "View this policy online" link was deliberately **removed** (2026-06; product
+  decision). Hosting `PRIVACY_POLICY.md` via the web deploy would still be a clean win.
 
 ### V4-C2: Google Play health/medical category now requires a verified Organization account
 - **Evidence:** As of **Jan 28 2026**, individual developer accounts are no longer
@@ -40,7 +56,7 @@ were superseded by regulations that changed *after* they were written.
 - **Impact:** App cannot be published/updated in the health category without this.
 - **Fix:** Confirm/convert to a verified Organization account before the next Play
   submission. (Process/admin task — flagged here so it isn't missed.)
-- **Status:** [ ]
+- **Status:** `[deferred — native]` — Play-only; not applicable to the web app.
 
 ---
 
@@ -83,14 +99,16 @@ were superseded by regulations that changed *after* they were written.
   bypassable; (2) ensure the privacy label/manifest declare health data sent to a third
   party for the AI feature; (3) Spring 2026 — set the Medical/Health regulatory-status
   declaration ("not a regulated medical device").
-- **Status:** [~]
+- **Status:** `[deferred — native]` — Apple App Store / iOS-manifest scoped; the in-app
+  Gemini consent gate (the part that also matters on web) is in place.
 
 ### V4-H6: Test coverage is far below what health/legal software warrants
-- **Files:** `test/` — only 8 files: 1 widget, 1 a11y, 6 unit (repository, disclaimer,
-  educational content, form_type, pdf_generator, pii_stripper). **Zero** tests for any of
-  the 38 wizard files, the 9 consolidated steps, routing/redirect logic, the new
-  `MhadBottomNav`/`ResponsiveShell`, AI context injection, or the recently rewritten
-  navigation. ACTION_PLAN Phase 7 explicitly promised wizard-step, provider, and AI tests.
+- **Files:** `test/` — the suite has grown substantially since this was written (the
+  full run is now **223 tests, green**, incl. PII-context lock, encrypted-export,
+  side-effects JSON, extraction/personal-info contracts). It still **under-covers** the
+  wizard *step widgets* (validate/save/restore per step), routing/redirect gating, and the
+  `MhadBottomNav`/`ResponsiveShell` layout — the highest-risk, mostly-untested areas.
+  ACTION_PLAN Phase 7 promised wizard-step, provider, and AI tests; partially delivered.
 - **Impact:** This is a 2-year legal document generator handling mental-health PII; a
   silent regression in step persistence, form-type step omission, or PDF field mapping is
   high-consequence and currently uncaught. The nav rewrite this session was only saved by
@@ -112,7 +130,9 @@ were superseded by regulations that changed *after* they were written.
 - **Fix:** Pick **one** mechanism (the generated `AppLocalizations`/ARB — it's already the
   Flutter-standard and partially wired), delete the orphaned `AppStrings`, and migrate
   strings screen-by-screen. Don't ship `es` until a screen is fully covered.
-- **Status:** [!]
+- **Status:** `[x]` **DONE** — `lib/ui/strings.dart` / `AppStrings` deleted; the generated
+  `AppLocalizations`/ARB is the single mechanism (see CLAUDE.md "Localization"). Per-screen
+  ARB migration + `es` coverage continue as ordinary work, but the dead-code drift is gone.
 
 ---
 
@@ -127,7 +147,11 @@ were superseded by regulations that changed *after* they were written.
 - **Fix:** Either (a) integrate a PDF encryption path (native plugin or a maintained Dart
   lib), or (b) explicitly warn the user at export time that the file is unprotected and
   recommend secure handling.
-- **Status:** [!]
+- **Status:** [~] — An **encrypted export** path now exists (`ExportEncryptionService`,
+  encrypt-then-MAC / HMAC-authenticated; `export_encryption_test.dart`) producing a
+  protected *data file* for re-upload. The **printable PDF** is still plaintext by
+  necessity (it has to be printed and wet-signed); keep the at-export "handle securely"
+  guidance. See the `custom-encryption-todo` note for the two-output spec.
 
 ### V4-M9: WCAG 2.2 deltas not evaluated (signature dragging, focus-not-obscured)
 - **Evidence:** WCAG 2.2 added **2.5.7 Dragging Movements** (AA) and **2.4.11 Focus Not
@@ -139,7 +163,9 @@ were superseded by regulations that changed *after* they were written.
   legally required anyway — lean into that); (2) ensure focused inputs scroll clear of the
   sticky bottom nav/footer (insets/`Scrollable.ensureVisible`); (3) extend
   `accessibility_test.dart` beyond the home screen to the wizard and disclaimer.
-- **Status:** [ ]
+- **Status:** `[x]` **MOOTED** — the draw-to-sign `signature` pad was dropped; signing is
+  wet-ink-only (typed name in-app, then print + sign on paper), so there's no dragging
+  movement to remediate. The focus-not-obscured (2.4.11) point remains worth a check.
 
 ### V4-M10: Crisis-time availability — the "transmitter/receiver problem"
 - **Evidence:** PAD implementation research repeatedly identifies the core failure mode:
@@ -223,7 +249,9 @@ were superseded by regulations that changed *after* they were written.
 - **Fix:** Update ACTION_PLAN + CLAUDE.md to reflect Gemini, the removed deps, the 9-step
   consolidated wizard, and the bottom-nav/sidebar navigation; add a one-line "superseded
   by V4" banner to V2/V3 so their "all closed" summaries aren't taken at face value.
-- **Status:** [!]
+- **Status:** [~] — CLAUDE.md is current (Gemini, web pivot, navigation). `ACTION_PLAN.md`
+  has been retitled **historical** with a corrective banner (2026-06-20) rather than kept
+  as a live plan; its body is superseded by CLAUDE.md + README.
 
 ---
 
@@ -269,18 +297,21 @@ were superseded by regulations that changed *after* they were written.
 
 ## Summary
 
-| Priority | Count | Theme |
-|---|---|---|
-| Critical | 2 | Play health-category release blockers (public privacy URL, org account) |
-| High | 5 | FTC HBNR delta, multi-state health-data laws, Apple AI rule, **test coverage**, l10n |
-| Medium | 4 | PDF protection drift, WCAG 2.2, crisis availability, stale docs |
-| Low | 4 | Facilitation framing, MASVS-R, test noise, AI consent cadence |
+Re-scoped for the web-first pivot (2026-06-20):
 
-**Highest-leverage, lowest-risk first:** V4-M11 (fix stale docs — prevents reintroducing
-the mess), V4-H6 (wizard/router tests — protects the core asset), V4-C1 (privacy URL —
-unblocks release). The Critical items are largely *process/publishing*; the engineering
-priority is **test coverage** and **doc accuracy**, because the V2/V3 "all closed"
-narrative is the root cause of regressions slipping through.
+| Priority (web app) | Count | Theme |
+|---|---|---|
+| Critical | 0 | (Both prior Criticals were Play-submission blockers → `deferred — native`.) |
+| High | 2 live | **V4-H6 test coverage** + HBNR/multi-state health-data alignment (H3/H4, largely addressed in privacy copy). H5 → deferred-native. |
+| Medium | 3 | PDF-protection (encrypted-export now exists, [~]), crisis availability (M10), stale docs (M11, in progress). M9 mooted. |
+| Low | 4 | Facilitation framing, MASVS-R, test noise, AI consent cadence |
+| Deferred — native | 3 | V4-C1 (privacy URL), V4-C2 (Play org account), V4-H5 (Apple AI rule) |
+| Closed since V4 | 2 | V4-H7 (orphan `AppStrings` deleted), V4-M9 (draw-to-sign pad dropped) |
+
+**Highest-leverage now:** **V4-H6** (wizard/router widget tests — protects the core asset
+and remains the biggest real gap), then **V4-M10** (crisis-time findability — the
+evidence-based #1 failure mode). With native submission deferred, the prior "unblock
+release" Criticals no longer drive priority; doc accuracy (this pass) and test coverage do.
 
 ## Sources (May 2026)
 

@@ -8,6 +8,14 @@
 > companioned (`PROTOTYPE_DIFF_AUDIT.md`) and the follow-up coverage docs
 > have been removed. The current state-of-the-world for prototype parity
 > lives in `docs/PROTOTYPE_AUDIT.md`.
+>
+> 🔄 **Two staleness caveats (2026-06-20):** (1) the "**To submit to Claude
+> Design**" queue below is largely **resolved** — the screens it asked about
+> (revoke, facilitator, Ulysses, legal-toggle, crisis-plan, etc.) were
+> subsequently built and now exist in `lib/ui/`; treat that queue as historical,
+> not pending. (2) Decisions framed around **App Store / Play / `.pkpass`**
+> native-store compliance are **deferred** per the 2026-06-16 web-first pivot.
+> The **§ numbering is load-bearing (code cites it) — do not renumber.**
 
 Originally a companion to a deleted `PROTOTYPE_DIFF_AUDIT.md`. Records
 each decision the user makes while walking through the audit, plus the
