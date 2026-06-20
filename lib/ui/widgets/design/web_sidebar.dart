@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/providers/assistant_providers.dart';
+import 'package:mhad/services/web_session_cache.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/crisis_sheet.dart';
@@ -18,6 +19,51 @@ class WebSidebar extends ConsumerWidget {
   const WebSidebar({required this.activeRoute, super.key});
 
   static const double width = 232;
+
+  /// Erase everything in this session and return to a blank start. Confirms
+  /// first (destructive). Uses the root navigator's context because the sidebar
+  /// lives above the router's Navigator/InheritedGoRouter.
+  Future<void> _resetForm(WidgetRef ref) async {
+    final ctx = rootNavigatorKey.currentContext;
+    if (ctx == null) return;
+    final confirmed = await showDialog<bool>(
+      context: ctx,
+      builder: (dctx) {
+        final cs = Theme.of(dctx).colorScheme;
+        return AlertDialog(
+          icon: Icon(Icons.warning_amber_rounded, color: cs.error, size: 36),
+          title: const Text('Reset and start fresh?'),
+          content: const Text(
+            'This permanently erases everything in this session — all '
+            'directives, your AI key, and chat history — and returns you to a '
+            'blank start.\n\nExport or print anything you want to keep first. '
+            'This cannot be undone.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dctx, false),
+              child: const Text('Cancel'),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(dctx, true),
+              style: FilledButton.styleFrom(backgroundColor: cs.error),
+              child: const Text('Reset everything'),
+            ),
+          ],
+        );
+      },
+    );
+    if (confirmed != true) return;
+
+    await endPublicSession(ref);
+    await WebSessionCache.clear();
+    try {
+      await ref.read(directiveRepositoryProvider).deleteAllDirectives();
+    } catch (_) {}
+
+    // Land on a blank Home — the visibly fresh dashboard is the confirmation.
+    appRouter.go(AppRoutes.home);
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -129,6 +175,15 @@ class WebSidebar extends ConsumerWidget {
         label: 'Settings',
         isActive: activeRoute == AppRoutes.settings,
         onTap: () => appRouter.go(AppRoutes.settings),
+      ),
+      // Reset Form — erase everything and start completely fresh. An action,
+      // not a destination (never "active").
+      _SidebarItem(
+        icon: Icons.restart_alt,
+        activeIcon: Icons.restart_alt,
+        label: 'Reset Form',
+        isActive: false,
+        onTap: () => _resetForm(ref),
       ),
     ];
 
@@ -536,6 +591,10 @@ class _CrisisCard extends StatelessWidget {
   }
 }
 
+/// True while the facilitator ("Get help") screen is open, so repeated taps on
+/// the card don't push multiple stacked copies. Mirrors the crisis-sheet guard.
+bool _getHelpOpen = false;
+
 /// Prominent "Get help" card in the sidebar (above the crisis card): peer
 /// specialists, rights advocates, clinician referral. Opens the facilitator
 /// screen. Promoted here from Settings so it's clearly visible.
@@ -547,7 +606,15 @@ class _GetHelpCard extends StatelessWidget {
       color: p.primaryTint,
       borderRadius: BorderRadius.circular(12),
       child: InkWell(
-        onTap: () => appRouter.push(AppRoutes.facilitator),
+        onTap: () async {
+          if (_getHelpOpen) return;
+          _getHelpOpen = true;
+          try {
+            await appRouter.push(AppRoutes.facilitator);
+          } finally {
+            _getHelpOpen = false;
+          }
+        },
         borderRadius: BorderRadius.circular(12),
         child: Container(
           padding: const EdgeInsets.all(12),

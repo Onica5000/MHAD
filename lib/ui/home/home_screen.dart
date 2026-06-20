@@ -314,38 +314,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           padding: const EdgeInsets.fromLTRB(40, 20, 40, 60),
           children: [
             const _DeviceSecurityCheck(),
-            if (isPublic) const _EphemeralBar(),
+            // "Private by design" moved to the very top, replacing the
+            // public-mode/ephemeral bar (its web copy already says the
+            // directive lives only in this session). The Tools section and the
+            // "Web app" public-mode notice were removed from the dashboard.
+            const _PrivacyByDesignCard(),
+            const SizedBox(height: 16),
             SectionLabel(dateLabel),
             _GreetingRow(directives: directives, isPublic: isPublic),
             const SizedBox(height: 28),
-            // Primary action column + Tools/info aside (3 : 2).
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(flex: 3, child: primary),
-                const SizedBox(width: 24),
-                Expanded(
-                  flex: 2,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (isPublic) ...[
-                        _PublicModeNotice(
-                          onEndSession: () =>
-                              _confirmEndSession(context, ref),
-                        ),
-                        const SizedBox(height: 16),
-                      ],
-                      const SectionLabel('Tools'),
-                      const SizedBox(height: 8),
-                      const _ToolsGrid(),
-                      const SizedBox(height: 16),
-                      const _PrivacyByDesignCard(),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+            // Primary action column, now full width.
+            primary,
             // Past directives — 2-column grid filling the full width.
             if (past.isNotEmpty) ...[
               const SizedBox(height: 28),
