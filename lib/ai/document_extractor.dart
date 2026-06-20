@@ -147,6 +147,15 @@ class DocumentExtractor {
           'reason': Schema.string(nullable: true),
         }),
       ),
+      // Reference list — medications currently being taken with no stated
+      // preference. Maps to MedicationEntryType.current in the DB.
+      'medications_current': Schema.array(
+        nullable: true,
+        items: Schema.object(properties: {
+          'name': Schema.string(),
+          'reason': Schema.string(nullable: true),
+        }),
+      ),
       // Medications with restricted-use conditions — the 'limitation' type.
       'medications_limited': Schema.array(
         nullable: true,
@@ -268,6 +277,12 @@ medications_preferred
   → ONLY if the document EXPLICITLY says: prefers, wants, currently taking and working well, or chooses.
   → NOT for medications merely listed with no stated preference.
 
+medications_current
+  → Medications the person is CURRENTLY TAKING with no explicit preference or avoidance signal.
+  → Use for: "currently prescribed", "currently on", "taking daily", reference lists with no stated like/dislike.
+  → NOT for preferred (has positive signal), avoided (has negative signal), or limited (has restriction).
+  → This is a reference list only — it tells the care team what the person takes, not what to give.
+
 medications_limited
   → Medications the person accepts ONLY under specific conditions or restrictions (e.g., "only as last resort", "only in inpatient setting", "only if no alternative").
   → NOT for fully-preferred or fully-avoided meds. Captures the middle ground.
@@ -300,7 +315,8 @@ agent_authority_limitations
   → Goes to the Agent Authority step.
 
 health_history
-  → Relevant mental-health history: past diagnoses (as prose), past hospitalizations, what treatments have/have not worked. Also: current medications mentioned without an explicit avoid/prefer label.
+  → Relevant mental-health history: past diagnoses (as prose), past hospitalizations, what treatments have/have not worked.
+  → NOT current medications — those go to medications_current (no signal) or the appropriate medications_* field.
   → NOT crisis plans. NOT comfort activities. NOT current preferences.
 
 dietary
@@ -339,7 +355,7 @@ other
 
 ═══ NO-DUPLICATION RULE ═══
 Each fact belongs to EXACTLY ONE field. Examples:
-  • Medication listed with no preference → health_history ONLY
+  • Medication listed with no preference → medications_current ONLY
   • Person's name + phone → personal_info ONLY (not family_notification)
   • Pet as in-hospital comfort → activities ONLY (not pet_custody)
   • Crisis de-escalation → crisis_intervention ONLY

@@ -394,10 +394,12 @@ List<pw.Page> buildPoaPages({
         ),
         pw.SizedBox(height: 4),
         if (prefs != null) ...[
-          checkRow(
+          // §5805(c)(4): agent ECT authority is ONLY effective if declarant
+          // physically initials this box — checkbox is legally insufficient.
+          initialRow(
             'My agent is authorized to consent to the administration of '
             'electroconvulsive therapy.',
-            checked: isConsentAgent(prefs.ectConsent),
+            highlighted: isConsentAgent(prefs.ectConsent),
           ),
           pw.Padding(
             padding: const pw.EdgeInsets.only(left: 20),
@@ -425,12 +427,13 @@ List<pw.Page> buildPoaPages({
         ),
         pw.SizedBox(height: 4),
         if (prefs != null) ...[
-          checkRow(
+          // §5805(c)(4): requires initials, not a checkbox.
+          initialRow(
             'My agent is authorized to consent to my participation in experimental '
             'studies if, after consultation with my treating physician and any other '
             'individuals my agent deems appropriate, my agent believes that the '
             'potential benefits to me outweigh the possible risks to me.',
-            checked: isConsentAgent(prefs.experimentalConsent),
+            highlighted: isConsentAgent(prefs.experimentalConsent),
           ),
           pw.Padding(
             padding: const pw.EdgeInsets.only(left: 20),
@@ -455,12 +458,13 @@ List<pw.Page> buildPoaPages({
         pw.Text('5. Preferences regarding drug trials.', style: boldStyle()),
         pw.SizedBox(height: 4),
         if (prefs != null) ...[
-          checkRow(
+          // §5805(c)(4): requires initials, not a checkbox.
+          initialRow(
             'My agent is authorized to consent to my participation in drug trials '
             'if, after consultation with my treating physician and any other '
             'individuals my agent deems appropriate, my agent believes that the '
             'potential benefits to me outweigh the possible risks to me.',
-            checked: isConsentAgent(prefs.drugTrialConsent),
+            highlighted: isConsentAgent(prefs.drugTrialConsent),
           ),
           pw.Padding(
             padding: const pw.EdgeInsets.only(left: 20),

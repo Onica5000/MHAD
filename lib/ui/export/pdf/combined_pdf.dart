@@ -656,16 +656,23 @@ List<pw.Page> buildCombinedPages({
           ),
           pw.SizedBox(height: 4),
 
-          // 2. ECT
+          // 2. ECT — §5805(c)(4): agent authority requires declarant's initials.
           pw.Text(
             '2. Preferences regarding electroconvulsive therapy (ECT).',
             style: boldStyle(),
           ),
           pw.SizedBox(height: 2),
-          checkRow(
+          initialRow(
             'My agent is authorized to consent to the administration of '
             'electroconvulsive therapy.',
-            checked: isConsentAgent(prefs.ectConsent),
+            highlighted: isConsentAgent(prefs.ectConsent),
+          ),
+          pw.Padding(
+            padding: const pw.EdgeInsets.only(left: 20),
+            child: pw.Text(
+              'NOTE: Your agent MAY NOT consent to ECT unless you initial this authorization.',
+              style: pw.TextStyle(fontSize: 9.5, fontWeight: pw.FontWeight.bold, color: kBlack),
+            ),
           ),
           checkRow(
             'My agent is not authorized to consent to the administration of '
@@ -674,18 +681,25 @@ List<pw.Page> buildCombinedPages({
           ),
           pw.SizedBox(height: 4),
 
-          // 3. Experimental studies
+          // 3. Experimental studies — §5805(c)(4): requires initials.
           pw.Text(
             '3. Preferences for experimental studies.',
             style: boldStyle(),
           ),
           pw.SizedBox(height: 2),
-          checkRow(
+          initialRow(
             'My agent is authorized to consent to my participation in experimental '
             'studies if, after consultation with my treating physician and any other '
             'individuals my agent deems appropriate, my agent believes that the '
             'potential benefits to me outweigh the possible risks to me.',
-            checked: isConsentAgent(prefs.experimentalConsent),
+            highlighted: isConsentAgent(prefs.experimentalConsent),
+          ),
+          pw.Padding(
+            padding: const pw.EdgeInsets.only(left: 20),
+            child: pw.Text(
+              'NOTE: Your agent MAY NOT consent to experimental studies unless you initial this authorization.',
+              style: pw.TextStyle(fontSize: 9.5, fontWeight: pw.FontWeight.bold, color: kBlack),
+            ),
           ),
           checkRow(
             'My agent is not authorized to consent to my participation in '
@@ -694,15 +708,22 @@ List<pw.Page> buildCombinedPages({
           ),
           pw.SizedBox(height: 4),
 
-          // 4. Drug trials
+          // 4. Drug trials — §5805(c)(4): requires initials.
           pw.Text('4. Preferences regarding drug trials.', style: boldStyle()),
           pw.SizedBox(height: 2),
-          checkRow(
+          initialRow(
             'My agent is authorized to consent to my participation in drug trials '
             'if, after consultation with my treating physician and any other '
             'individuals my agent deems appropriate, my agent believes that the '
             'potential benefits to me outweigh the possible risks to me.',
-            checked: isConsentAgent(prefs.drugTrialConsent),
+            highlighted: isConsentAgent(prefs.drugTrialConsent),
+          ),
+          pw.Padding(
+            padding: const pw.EdgeInsets.only(left: 20),
+            child: pw.Text(
+              'NOTE: Your agent MAY NOT consent to research including drug trials unless you initial this authorization.',
+              style: pw.TextStyle(fontSize: 9.5, fontWeight: pw.FontWeight.bold, color: kBlack),
+            ),
           ),
           checkRow(
             'My agent is not authorized to consent to my participation in drug trials.',

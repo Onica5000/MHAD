@@ -79,14 +79,16 @@ class ClinicalDataValidator {
     final futures = await Future.wait([
       validateMedications(raw.medicationsPreferred),
       validateMedications(raw.medicationsToAvoid),
+      validateMedications(raw.medicationsCurrent),
       validateConditions(raw.effectiveCondition),
     ]);
 
     return ValidatedExtractionResult(
       preferredMeds: futures[0] as List<ValidatedMedication>,
       avoidMeds: futures[1] as List<ValidatedMedication>,
+      currentMeds: futures[2] as List<ValidatedMedication>,
       limitedMeds: await validateMedications(raw.medicationsLimited),
-      conditions: futures[2] as List<ValidatedCondition>,
+      conditions: futures[3] as List<ValidatedCondition>,
       diagnoses: raw.diagnoses,
       allergies: raw.allergies,
       // Health history is free-form narrative (and, per the extractor, where
@@ -152,6 +154,7 @@ class ValidatedCondition {
 class ValidatedExtractionResult {
   final List<ValidatedMedication> preferredMeds;
   final List<ValidatedMedication> avoidMeds;
+  final List<ValidatedMedication> currentMeds;
   final List<ValidatedMedication> limitedMeds;
   final List<ValidatedCondition> conditions;
   // Pass-through fields (no NIH validation needed)
@@ -176,6 +179,7 @@ class ValidatedExtractionResult {
   const ValidatedExtractionResult({
     this.preferredMeds = const [],
     this.avoidMeds = const [],
+    this.currentMeds = const [],
     this.limitedMeds = const [],
     this.conditions = const [],
     this.diagnoses = const [],

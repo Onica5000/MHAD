@@ -5,6 +5,9 @@ class DocumentExtractionResult {
   // ── Medications ──────────────────────────────────────────────────────────
   final List<ExtractedMedication> medicationsToAvoid;
   final List<ExtractedMedication> medicationsPreferred;
+  // Reference list of medications currently being taken (MedicationEntryType.current).
+  // No preference signal — just "I take this." Distinct from preferred/avoid/limited.
+  final List<ExtractedMedication> medicationsCurrent;
   // Medications the person takes with restricted use conditions (e.g., "only
   // as last resort", "only in inpatient setting"). Maps to the 'limitation'
   // MedicationEntryType — distinct from preferred and avoid.
@@ -54,6 +57,7 @@ class DocumentExtractionResult {
   const DocumentExtractionResult({
     this.medicationsToAvoid = const [],
     this.medicationsPreferred = const [],
+    this.medicationsCurrent = const [],
     this.medicationsLimited = const [],
     this.diagnoses = const [],
     this.allergies = const [],
@@ -77,6 +81,7 @@ class DocumentExtractionResult {
   bool get isEmpty =>
       medicationsToAvoid.isEmpty &&
       medicationsPreferred.isEmpty &&
+      medicationsCurrent.isEmpty &&
       medicationsLimited.isEmpty &&
       diagnoses.isEmpty &&
       allergies.isEmpty &&
@@ -103,6 +108,7 @@ class DocumentExtractionResult {
     return DocumentExtractionResult(
       medicationsToAvoid: _mergeMeds(medicationsToAvoid, other.medicationsToAvoid),
       medicationsPreferred: _mergeMeds(medicationsPreferred, other.medicationsPreferred),
+      medicationsCurrent: _mergeMeds(medicationsCurrent, other.medicationsCurrent),
       medicationsLimited: _mergeMeds(medicationsLimited, other.medicationsLimited),
       diagnoses: _mergeDiagnoses(diagnoses, other.diagnoses),
       allergies: _mergeAllergies(allergies, other.allergies),
@@ -178,6 +184,10 @@ class DocumentExtractionResult {
       map['Preferred Medications'] =
           medicationsPreferred.map((m) => m.display).join('\n');
     }
+    if (medicationsCurrent.isNotEmpty) {
+      map['Currently Taking'] =
+          medicationsCurrent.map((m) => m.display).join('\n');
+    }
     if (medicationsLimited.isNotEmpty) {
       map['Restricted Use Medications'] =
           medicationsLimited.map((m) => m.display).join('\n');
@@ -212,6 +222,7 @@ class DocumentExtractionResult {
     return DocumentExtractionResult(
       medicationsToAvoid: _parseMeds(json['medications_to_avoid']),
       medicationsPreferred: _parseMeds(json['medications_preferred']),
+      medicationsCurrent: _parseMeds(json['medications_current']),
       medicationsLimited: _parseMeds(json['medications_limited']),
       diagnoses: _parseDiagnoses(json['diagnoses']),
       allergies: _parseAllergies(json['allergies']),

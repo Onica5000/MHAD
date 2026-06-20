@@ -394,6 +394,54 @@ pw.Widget checkRow(String text, {bool checked = false}) {
   );
 }
 
+/// An initials row — used for the three authorizations (ECT, experimental
+/// studies, drug trials) that PA law (20 Pa.C.S. §5805(c)(4)) requires the
+/// declarant to initial rather than merely check. The box is always printed
+/// empty; the declarant must physically write their initials at signing.
+/// [highlighted] draws a light background to visually guide the signer when
+/// the user has digitally chosen to grant this authority.
+pw.Widget initialRow(String text, {bool highlighted = false}) {
+  return pw.Padding(
+    padding: const pw.EdgeInsets.symmetric(vertical: 3),
+    child: pw.Row(
+      crossAxisAlignment: pw.CrossAxisAlignment.start,
+      children: [
+        pw.Column(
+          crossAxisAlignment: pw.CrossAxisAlignment.center,
+          children: [
+            pw.SizedBox(
+              width: 36,
+              height: 16,
+              child: pw.CustomPaint(
+                size: const PdfPoint(36, 16),
+                painter: (PdfGraphics canvas, PdfPoint size) {
+                  if (highlighted) {
+                    canvas.setFillColor(PdfColors.yellow100);
+                    canvas.drawRect(0, 0, size.x, size.y);
+                    canvas.fillPath();
+                  } else {
+                    canvas.setFillColor(PdfColors.white);
+                    canvas.drawRect(0, 0, size.x, size.y);
+                    canvas.fillPath();
+                  }
+                  canvas.setStrokeColor(PdfColors.black);
+                  canvas.setLineWidth(0.75);
+                  canvas.drawRect(0, 0, size.x, size.y);
+                  canvas.strokePath();
+                },
+              ),
+            ),
+            pw.SizedBox(height: 1),
+            pw.Text('INITIALS', style: pw.TextStyle(fontSize: 6, color: kDarkGrey)),
+          ],
+        ),
+        pw.SizedBox(width: 6),
+        pw.Expanded(child: pw.Text(text, style: bodyStyle())),
+      ],
+    ),
+  );
+}
+
 /// A signature block: label above the line (uniform with [blankLine] /
 /// [dataLine]), then optional filled-in Name / Address lines.
 pw.Widget signatureBlock(String label, {String? name, String? address}) {

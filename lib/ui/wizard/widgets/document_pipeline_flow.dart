@@ -604,6 +604,14 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
       _reviewEdited[key] = a.display;
     }
 
+    // ── Currently-taking medications (reference list)
+    for (final m in v.currentMeds) {
+      final key = 'med_current_${m.originalName}';
+      _reviewChecked[key] = true;
+      final badge = m.isValidated ? ' [RxNorm verified]' : ' [unverified]';
+      _reviewEdited[key] = '${m.displayName}$badge';
+    }
+
     // ── Medication limitations
     for (final m in v.limitedMeds) {
       final key = 'med_limit_${m.originalName}';
@@ -1088,6 +1096,24 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
       }
     }
 
+    // ── Apply currently-taking medications (reference list) ──────────
+    if (validated != null) {
+      for (final med in validated.currentMeds) {
+        final key = 'med_current_${med.originalName}';
+        if (_reviewChecked[key] != true) continue;
+        if (!medExists(med.displayName, MedicationEntryType.current.name)) {
+          await repo.insertMedication(MedicationEntriesCompanion.insert(
+            directiveId: id,
+            entryType: MedicationEntryType.current.name,
+            medicationName: Value(med.displayName),
+            reason: Value(med.reason),
+            sortOrder: Value(medOrder++),
+          ));
+          applied++;
+        }
+      }
+    }
+
     // ── Apply medication limitations ──────────────────────────────────
     if (validated != null) {
       for (final med in validated.limitedMeds) {
@@ -1330,6 +1356,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
   String _displayLabel(String key) {
     if (key.startsWith('med_prefer_')) return 'Preferred Medication';
     if (key.startsWith('med_avoid_')) return 'Medication to Avoid';
+    if (key.startsWith('med_current_')) return 'Currently Taking';
     if (key.startsWith('med_limit_')) return 'Restricted-Use Medication';
     if (key.startsWith('cond_')) return 'Condition';
     if (key.startsWith('diag_')) return 'Diagnosis';
@@ -1394,6 +1421,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
   String _sectionLabel(String key) {
     if (key.startsWith('med_prefer_')) return 'Preferred Meds';
     if (key.startsWith('med_avoid_')) return 'Meds to Avoid';
+    if (key.startsWith('med_current_')) return 'Currently Taking';
     if (key.startsWith('med_limit_')) return 'Restricted-Use Meds';
     if (key.startsWith('cond_')) return 'Conditions';
     if (key.startsWith('diag_')) return 'Diagnoses';
