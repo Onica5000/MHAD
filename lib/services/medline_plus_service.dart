@@ -18,6 +18,10 @@ class MedlinePlusService {
   /// medications off RxNorm codes, not free-text names).
   static const _rxNavBase = 'https://rxnav.nlm.nih.gov/REST/rxcui.json';
 
+  /// RxNav base for concept-relationship lookups (e.g. a strength/brand → its
+  /// ingredient), used for the ingredient fallback below.
+  static const _rxNavConceptBase = 'https://rxnav.nlm.nih.gov/REST/rxcui';
+
   /// HL7 OIDs for the code systems MedlinePlus Connect accepts (`v.cs`).
   static const _icd10Cs = '2.16.840.1.113883.6.90'; // ICD-10-CM
   static const _rxNormCs = '2.16.840.1.113883.6.88'; // RxNorm
@@ -49,8 +53,21 @@ class MedlinePlusService {
     if (base.length < 2) return null;
     final key = 'med:$base';
     if (_cache.containsKey(key)) return _cache[key];
+    MedlinePlusTopic? topic;
     final rxcui = await _rxcuiForName(base);
-    final topic = rxcui == null ? null : await _forCode(_rxNormCs, rxcui);
+    if (rxcui != null) {
+      // 1) Try the concept the name resolved to directly.
+      topic = await _forCode(_rxNormCs, rxcui);
+      // 2) Fallback: MedlinePlus often carries consumer content only at the
+      //    INGREDIENT (generic) level, not for a specific strength or brand.
+      //    If the exact concept has no topic, retry with its ingredient RxCUI.
+      if (topic == null) {
+        final ingredient = await _ingredientRxcui(rxcui);
+        if (ingredient != null && ingredient != rxcui) {
+          topic = await _forCode(_rxNormCs, ingredient);
+        }
+      }
+    }
     _cache[key] = topic;
     return topic;
   }
@@ -90,6 +107,39 @@ class MedlinePlusService {
       }
     } catch (e) {
       debugPrint('MedlinePlusService rxcui: $e');
+    }
+    return null;
+  }
+
+  /// The ingredient (TTY=IN) RxCUI related to [rxcui], or null. Lets a specific
+  /// strength/brand fall back to its generic, which MedlinePlus is far more
+  /// likely to have plain-language content for. Sends only the code to RxNav.
+  static Future<String?> _ingredientRxcui(String rxcui) async {
+    final uri =
+        Uri.parse('$_rxNavConceptBase/$rxcui/related.json?tty=IN');
+    try {
+      final resp =
+          await _client.get(uri).timeout(appData.config.clinicalApiTimeout);
+      if (resp.statusCode != 200) return null;
+      final json = jsonDecode(resp.body);
+      if (json is Map) {
+        final group = json['relatedGroup'];
+        if (group is Map && group['conceptGroup'] is List) {
+          for (final g in group['conceptGroup'] as List) {
+            if (g is Map && g['tty'] == 'IN') {
+              final props = g['conceptProperties'];
+              if (props is List && props.isNotEmpty && props.first is Map) {
+                final id = (props.first as Map)['rxcui'];
+                if (id != null && id.toString().isNotEmpty) {
+                  return id.toString();
+                }
+              }
+            }
+          }
+        }
+      }
+    } catch (e) {
+      debugPrint('MedlinePlusService ingredient: $e');
     }
     return null;
   }
