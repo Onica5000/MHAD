@@ -85,7 +85,10 @@ class ClinicalDataValidator {
     return ValidatedExtractionResult(
       preferredMeds: futures[0] as List<ValidatedMedication>,
       avoidMeds: futures[1] as List<ValidatedMedication>,
+      limitedMeds: await validateMedications(raw.medicationsLimited),
       conditions: futures[2] as List<ValidatedCondition>,
+      diagnoses: raw.diagnoses,
+      allergies: raw.allergies,
       // Health history is free-form narrative (and, per the extractor, where
       // current-medication mentions land) — keep it as verbatim prose for the
       // user to review. Do NOT run it through the condition/ICD splitter,
@@ -97,6 +100,7 @@ class ClinicalDataValidator {
       religious: raw.religious,
       activities: raw.activities,
       crisisIntervention: raw.crisisIntervention,
+      agentAuthorityLimitations: raw.agentAuthorityLimitations,
       petCustody: raw.petCustody,
       childrenCustody: raw.childrenCustody,
       familyNotification: raw.familyNotification,
@@ -148,8 +152,11 @@ class ValidatedCondition {
 class ValidatedExtractionResult {
   final List<ValidatedMedication> preferredMeds;
   final List<ValidatedMedication> avoidMeds;
+  final List<ValidatedMedication> limitedMeds;
   final List<ValidatedCondition> conditions;
-  // Pass-through fields (no validation needed)
+  // Pass-through fields (no NIH validation needed)
+  final List<ExtractedDiagnosis> diagnoses;
+  final List<ExtractedAllergy> allergies;
   final String? healthHistory;
   final String? preferredFacility;
   final String? avoidFacility;
@@ -157,6 +164,7 @@ class ValidatedExtractionResult {
   final String? religious;
   final String? activities;
   final String? crisisIntervention;
+  final String? agentAuthorityLimitations;
   final String? petCustody;
   final String? childrenCustody;
   final String? familyNotification;
@@ -168,7 +176,10 @@ class ValidatedExtractionResult {
   const ValidatedExtractionResult({
     this.preferredMeds = const [],
     this.avoidMeds = const [],
+    this.limitedMeds = const [],
     this.conditions = const [],
+    this.diagnoses = const [],
+    this.allergies = const [],
     this.healthHistory,
     this.preferredFacility,
     this.avoidFacility,
@@ -176,6 +187,7 @@ class ValidatedExtractionResult {
     this.religious,
     this.activities,
     this.crisisIntervention,
+    this.agentAuthorityLimitations,
     this.petCustody,
     this.childrenCustody,
     this.familyNotification,

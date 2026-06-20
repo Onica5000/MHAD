@@ -590,10 +590,37 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
       _reviewEdited['other'] = v.other!;
     }
 
+    // ── Diagnoses — one review key per diagnosis
+    for (final d in v.diagnoses) {
+      final key = 'diag_${d.name}';
+      _reviewChecked[key] = true;
+      _reviewEdited[key] = d.display;
+    }
+
+    // ── Allergies — one review key per allergy
+    for (final a in v.allergies) {
+      final key = 'allergy_${a.substance}';
+      _reviewChecked[key] = true;
+      _reviewEdited[key] = a.display;
+    }
+
+    // ── Medication limitations
+    for (final m in v.limitedMeds) {
+      final key = 'med_limit_${m.originalName}';
+      _reviewChecked[key] = true;
+      final badge = m.isValidated ? ' [RxNorm verified]' : ' [unverified]';
+      final reason = m.reason.isNotEmpty ? ' — ${m.reason}' : '';
+      _reviewEdited[key] = '${m.displayName}$reason$badge';
+    }
+
+    // ── Agent authority limitations
+    if (v.agentAuthorityLimitations != null) {
+      _reviewChecked['agent_authority_limitations'] = true;
+      _reviewEdited['agent_authority_limitations'] = v.agentAuthorityLimitations!;
+    }
+
     // ── Personal info (PII) — autofill the declarant + the people they
-    // designate. Each is a plain scalar review key, so it flows through
-    // reconciliation, the review rows, editing, and apply just like the
-    // facility/dietary fields above.
+    // designate. Address is split into components matching the app's form.
     final pi = v.personalInfo;
     void put(String key, String? value) {
       if (value != null && value.trim().isNotEmpty) {
@@ -604,29 +631,48 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
 
     put('person_name', pi.fullName);
     put('person_dob', pi.dateOfBirth);
-    put('person_address', pi.address);
+    put('person_address1', pi.addressLine1);
+    put('person_address2', pi.addressLine2);
+    put('person_city', pi.city);
+    put('person_county', pi.county);
+    put('person_state', pi.state);
+    put('person_zip', pi.zip);
     put('person_phone', pi.phone);
     put('person_doctor_name', pi.primaryDoctorName);
     put('person_doctor_phone', pi.primaryDoctorPhone);
+    put('person_eval_doctor_name', pi.preferredEvaluatingDoctorName);
+    put('person_eval_doctor_contact', pi.preferredEvaluatingDoctorContact);
     final ag = pi.agent;
     if (ag != null) {
       put('agent_name', ag.name);
       put('agent_relationship', ag.relationship);
-      put('agent_address', ag.address);
+      put('agent_address1', ag.addressLine1);
+      put('agent_address2', ag.addressLine2);
+      put('agent_city', ag.city);
+      put('agent_state', ag.state);
+      put('agent_zip', ag.zip);
       put('agent_phone', ag.phone);
     }
     final alt = pi.alternateAgent;
     if (alt != null) {
       put('alt_agent_name', alt.name);
       put('alt_agent_relationship', alt.relationship);
-      put('alt_agent_address', alt.address);
+      put('alt_agent_address1', alt.addressLine1);
+      put('alt_agent_address2', alt.addressLine2);
+      put('alt_agent_city', alt.city);
+      put('alt_agent_state', alt.state);
+      put('alt_agent_zip', alt.zip);
       put('alt_agent_phone', alt.phone);
     }
     final gd = pi.guardian;
     if (gd != null) {
       put('guardian_name', gd.name);
       put('guardian_relationship', gd.relationship);
-      put('guardian_address', gd.address);
+      put('guardian_address1', gd.addressLine1);
+      put('guardian_address2', gd.addressLine2);
+      put('guardian_city', gd.city);
+      put('guardian_state', gd.state);
+      put('guardian_zip', gd.zip);
       put('guardian_phone', gd.phone);
     }
   }
@@ -660,29 +706,53 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
       'religious': instr?.religious ?? '',
       'activities': instr?.activities ?? '',
       'crisis': instr?.crisisIntervention ?? '',
+      'agent_authority_limitations': prefs?.agentAuthorityLimitations ?? '',
       'pet_custody': instr?.petCustody ?? '',
       'children_custody': instr?.childrenCustody ?? '',
       'family_notification': instr?.familyNotification ?? '',
       'records_disclosure': instr?.recordsDisclosure ?? '',
       'other': instr?.other ?? '',
       'hh_note': instr?.healthHistory ?? '',
+      // Declarant — split address fields
       'person_name': directive?.fullName ?? '',
       'person_dob': directive?.dateOfBirth ?? '',
-      'person_address': directive?.address ?? '',
+      'person_address1': directive?.address ?? '',
+      'person_address2': directive?.address2 ?? '',
+      'person_city': directive?.city ?? '',
+      'person_county': directive?.county ?? '',
+      'person_state': directive?.state ?? '',
+      'person_zip': directive?.zip ?? '',
       'person_phone': directive?.phone ?? '',
       'person_doctor_name': directive?.primaryDoctorName ?? '',
       'person_doctor_phone': directive?.primaryDoctorPhone ?? '',
+      'person_eval_doctor_name': directive?.preferredDoctorName ?? '',
+      'person_eval_doctor_contact': directive?.preferredDoctorContact ?? '',
+      // Primary agent — split address
       'agent_name': primaryAgent?.fullName ?? '',
       'agent_relationship': primaryAgent?.relationship ?? '',
-      'agent_address': primaryAgent?.address ?? '',
+      'agent_address1': primaryAgent?.address ?? '',
+      'agent_address2': primaryAgent?.address2 ?? '',
+      'agent_city': primaryAgent?.city ?? '',
+      'agent_state': primaryAgent?.state ?? '',
+      'agent_zip': primaryAgent?.zip ?? '',
       'agent_phone': primaryAgent?.homePhone ?? '',
+      // Alternate agent — split address
       'alt_agent_name': altAgent?.fullName ?? '',
       'alt_agent_relationship': altAgent?.relationship ?? '',
-      'alt_agent_address': altAgent?.address ?? '',
+      'alt_agent_address1': altAgent?.address ?? '',
+      'alt_agent_address2': altAgent?.address2 ?? '',
+      'alt_agent_city': altAgent?.city ?? '',
+      'alt_agent_state': altAgent?.state ?? '',
+      'alt_agent_zip': altAgent?.zip ?? '',
       'alt_agent_phone': altAgent?.homePhone ?? '',
+      // Guardian — split address
       'guardian_name': guardian?.nomineeFullName ?? '',
       'guardian_relationship': guardian?.nomineeRelationship ?? '',
-      'guardian_address': guardian?.nomineeAddress ?? '',
+      'guardian_address1': guardian?.nomineeAddress ?? '',
+      'guardian_address2': guardian?.nomineeAddress2 ?? '',
+      'guardian_city': guardian?.nomineeCity ?? '',
+      'guardian_state': guardian?.nomineeState ?? '',
+      'guardian_zip': guardian?.nomineeZip ?? '',
       'guardian_phone': guardian?.nomineePhone ?? '',
     };
     _reconItems = buildReconItems(
@@ -970,6 +1040,72 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
       );
     }
 
+    // ── Apply diagnoses → DiagnosisEntries table ─────────────────────
+    if (validated != null) {
+      final existingDiagnoses = await repo.getDiagnoses(id);
+      final existingDiagNames =
+          existingDiagnoses.map((d) => d.name.toLowerCase()).toSet();
+      int diagOrder = existingDiagnoses.length;
+      for (final d in validated.diagnoses) {
+        final key = 'diag_${d.name}';
+        if (_reviewChecked[key] != true) continue;
+        if (existingDiagNames.contains(d.name.toLowerCase())) continue;
+        await repo.insertDiagnosis(DiagnosisEntriesCompanion.insert(
+          directiveId: id,
+          name: Value(d.name),
+          icdCode: Value(d.icdCode ?? ''),
+          sortOrder: Value(diagOrder++),
+        ));
+        applied++;
+      }
+    }
+
+    // ── Apply allergies → DirectiveAllergies table ────────────────────
+    if (validated != null) {
+      final existingAllergies = await repo.getAllergies(id);
+      final existingSubstances =
+          existingAllergies.map((a) => a.substance.toLowerCase()).toSet();
+      int allergyOrder = existingAllergies.length;
+      for (final a in validated.allergies) {
+        final key = 'allergy_${a.substance}';
+        if (_reviewChecked[key] != true) continue;
+        if (existingSubstances.contains(a.substance.toLowerCase())) continue;
+        // Clamp kind and severity to the values the app understands.
+        const validKinds = {'drug', 'food', 'material', 'other'};
+        const validSeverities = {'mild', 'moderate', 'severe'};
+        final kind = validKinds.contains(a.kind) ? a.kind : 'other';
+        final severity =
+            validSeverities.contains(a.severity) ? a.severity : 'moderate';
+        await repo.addAllergy(DirectiveAllergiesCompanion.insert(
+          directiveId: id,
+          kind: Value(kind),
+          substance: Value(a.substance),
+          severity: Value(severity),
+          reactions: Value(a.reactions ?? ''),
+          sortOrder: Value(allergyOrder++),
+        ));
+        applied++;
+      }
+    }
+
+    // ── Apply medication limitations ──────────────────────────────────
+    if (validated != null) {
+      for (final med in validated.limitedMeds) {
+        final key = 'med_limit_${med.originalName}';
+        if (_reviewChecked[key] != true) continue;
+        if (!medExists(med.displayName, MedicationEntryType.limitation.name)) {
+          await repo.insertMedication(MedicationEntriesCompanion.insert(
+            directiveId: id,
+            entryType: MedicationEntryType.limitation.name,
+            medicationName: Value(med.displayName),
+            reason: Value(med.reason),
+            sortOrder: Value(medOrder++),
+          ));
+          applied++;
+        }
+      }
+    }
+
     // ── Apply personal info (PII) ────────────────────────────────────────
     // Autofill the declarant + the people they designate. Only checked,
     // non-empty values are written; an un-extracted field keeps its current
@@ -982,23 +1118,34 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
 
     final pName = pv('person_name');
     final pDob = pv('person_dob');
-    final pAddr = pv('person_address');
+    final pAddr1 = pv('person_address1');
+    final pAddr2 = pv('person_address2');
+    final pCity = pv('person_city');
+    final pCounty = pv('person_county');
+    final pState = pv('person_state');
+    final pZip = pv('person_zip');
     final pPhone = pv('person_phone');
-    if (pName != null || pDob != null || pAddr != null || pPhone != null) {
+    if (pName != null ||
+        pDob != null ||
+        pAddr1 != null ||
+        pCity != null ||
+        pPhone != null) {
       final d = await repo.getDirectiveById(id);
       await repo.updatePersonalInfo(
         id,
         fullName: pName ?? d?.fullName ?? '',
         dateOfBirth: pDob ?? d?.dateOfBirth ?? '',
-        address: pAddr ?? d?.address ?? '',
-        address2: d?.address2 ?? '',
-        city: d?.city ?? '',
-        county: d?.county ?? '',
-        state: d?.state ?? '',
-        zip: d?.zip ?? '',
+        address: pAddr1 ?? d?.address ?? '',
+        address2: pAddr2 ?? d?.address2 ?? '',
+        city: pCity ?? d?.city ?? '',
+        county: pCounty ?? d?.county ?? '',
+        state: pState ?? d?.state ?? '',
+        zip: pZip ?? d?.zip ?? '',
         phone: pPhone ?? d?.phone ?? '',
       );
-      applied += [pName, pDob, pAddr, pPhone].whereType<String>().length;
+      applied += [pName, pDob, pAddr1, pCity, pPhone]
+          .whereType<String>()
+          .length;
     }
 
     final docName = pv('person_doctor_name');
@@ -1014,12 +1161,34 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
       applied += [docName, docPhone].whereType<String>().length;
     }
 
+    final evalDocName = pv('person_eval_doctor_name');
+    final evalDocContact = pv('person_eval_doctor_contact');
+    if (evalDocName != null || evalDocContact != null) {
+      final d = await repo.getDirectiveById(id);
+      await repo.updatePreferredDoctor(
+        id,
+        name: evalDocName ?? d?.preferredDoctorName ?? '',
+        contact: evalDocContact ?? d?.preferredDoctorContact ?? '',
+      );
+      applied += [evalDocName, evalDocContact].whereType<String>().length;
+    }
+
     Future<void> applyAgent(String type, String prefix) async {
       final name = pv('${prefix}_name');
       final rel = pv('${prefix}_relationship');
-      final addr = pv('${prefix}_address');
+      final addr1 = pv('${prefix}_address1');
+      final addr2 = pv('${prefix}_address2');
+      final city = pv('${prefix}_city');
+      final state = pv('${prefix}_state');
+      final zip = pv('${prefix}_zip');
       final phone = pv('${prefix}_phone');
-      if (name == null && rel == null && addr == null && phone == null) return;
+      if (name == null &&
+          rel == null &&
+          addr1 == null &&
+          city == null &&
+          phone == null) {
+        return;
+      }
       final existing =
           (await repo.getAgents(id)).where((a) => a.agentType == type).toList();
       final cur = existing.isEmpty ? null : existing.first;
@@ -1029,10 +1198,14 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
         agentType: Value(type),
         fullName: Value(name ?? cur?.fullName ?? ''),
         relationship: Value(rel ?? cur?.relationship ?? ''),
-        address: Value(addr ?? cur?.address ?? ''),
+        address: Value(addr1 ?? cur?.address ?? ''),
+        address2: Value(addr2 ?? cur?.address2 ?? ''),
+        city: Value(city ?? cur?.city ?? ''),
+        state: Value(state ?? cur?.state ?? ''),
+        zip: Value(zip ?? cur?.zip ?? ''),
         homePhone: Value(phone ?? cur?.homePhone ?? ''),
       ));
-      applied += [name, rel, addr, phone].whereType<String>().length;
+      applied += [name, rel, addr1, city, phone].whereType<String>().length;
     }
 
     await applyAgent('primary', 'agent');
@@ -1040,19 +1213,44 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
 
     final gName = pv('guardian_name');
     final gRel = pv('guardian_relationship');
-    final gAddr = pv('guardian_address');
+    final gAddr1 = pv('guardian_address1');
+    final gAddr2 = pv('guardian_address2');
+    final gCity = pv('guardian_city');
+    final gState = pv('guardian_state');
+    final gZip = pv('guardian_zip');
     final gPhone = pv('guardian_phone');
-    if (gName != null || gRel != null || gAddr != null || gPhone != null) {
+    if (gName != null ||
+        gRel != null ||
+        gAddr1 != null ||
+        gCity != null ||
+        gPhone != null) {
       final cur = await repo.getGuardianNomination(id);
       await repo.upsertGuardianNomination(GuardianNominationsCompanion(
         id: cur != null ? Value(cur.id) : const Value.absent(),
         directiveId: Value(id),
         nomineeFullName: Value(gName ?? cur?.nomineeFullName ?? ''),
         nomineeRelationship: Value(gRel ?? cur?.nomineeRelationship ?? ''),
-        nomineeAddress: Value(gAddr ?? cur?.nomineeAddress ?? ''),
+        nomineeAddress: Value(gAddr1 ?? cur?.nomineeAddress ?? ''),
+        nomineeAddress2: Value(gAddr2 ?? cur?.nomineeAddress2 ?? ''),
+        nomineeCity: Value(gCity ?? cur?.nomineeCity ?? ''),
+        nomineeState: Value(gState ?? cur?.nomineeState ?? ''),
+        nomineeZip: Value(gZip ?? cur?.nomineeZip ?? ''),
         nomineePhone: Value(gPhone ?? cur?.nomineePhone ?? ''),
       ));
-      applied += [gName, gRel, gAddr, gPhone].whereType<String>().length;
+      applied += [gName, gRel, gAddr1, gCity, gPhone].whereType<String>().length;
+    }
+
+    // ── Apply agent authority limitations ─────────────────────────────
+    final agentLimits = pv('agent_authority_limitations');
+    if (agentLimits != null) {
+      final existingPrefs = await repo.getPreferences(id);
+      final cur = existingPrefs?.agentAuthorityLimitations ?? '';
+      final merged = cur.isEmpty ? agentLimits : '$cur\n$agentLimits';
+      await repo.upsertPreferences(DirectivePrefsCompanion(
+        directiveId: Value(id),
+        agentAuthorityLimitations: Value(merged),
+      ));
+      applied++;
     }
 
     // Each additional-instruction field actually written counts once (review
@@ -1132,7 +1330,10 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
   String _displayLabel(String key) {
     if (key.startsWith('med_prefer_')) return 'Preferred Medication';
     if (key.startsWith('med_avoid_')) return 'Medication to Avoid';
+    if (key.startsWith('med_limit_')) return 'Restricted-Use Medication';
     if (key.startsWith('cond_')) return 'Condition';
+    if (key.startsWith('diag_')) return 'Diagnosis';
+    if (key.startsWith('allergy_')) return 'Allergy';
     if (key.startsWith('hh_')) return 'Health History';
     if (key == 'facility_prefer') return 'Preferred Facility';
     if (key == 'facility_avoid') return 'Facility to Avoid';
@@ -1140,29 +1341,52 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
     if (key == 'religious') return 'Religious/Cultural';
     if (key == 'activities') return 'Activities';
     if (key == 'crisis') return 'Crisis Intervention';
+    if (key == 'agent_authority_limitations') return 'Agent authority limits';
     if (key == 'pet_custody') return 'Pet care';
     if (key == 'children_custody') return 'Children / dependents';
     if (key == 'family_notification') return 'Who to notify';
     if (key == 'records_disclosure') return 'Records disclosure';
     if (key == 'other') return 'Other';
-    // Personal info (PII)
+    // Personal info (PII) — declarant
     if (key == 'person_name') return 'Your full name';
     if (key == 'person_dob') return 'Date of birth';
-    if (key == 'person_address') return 'Your address';
+    if (key == 'person_address1') return 'Street address';
+    if (key == 'person_address2') return 'Apt / suite / unit';
+    if (key == 'person_city') return 'City';
+    if (key == 'person_county') return 'County';
+    if (key == 'person_state') return 'State';
+    if (key == 'person_zip') return 'ZIP code';
     if (key == 'person_phone') return 'Your phone';
     if (key == 'person_doctor_name') return 'Primary doctor';
     if (key == 'person_doctor_phone') return "Doctor's phone";
+    if (key == 'person_eval_doctor_name') return 'Preferred evaluating doctor';
+    if (key == 'person_eval_doctor_contact') return 'Evaluating doctor contact';
+    // Primary agent
     if (key == 'agent_name') return 'Agent name';
     if (key == 'agent_relationship') return 'Agent relationship';
-    if (key == 'agent_address') return 'Agent address';
+    if (key == 'agent_address1') return 'Agent street address';
+    if (key == 'agent_address2') return 'Agent apt / suite';
+    if (key == 'agent_city') return 'Agent city';
+    if (key == 'agent_state') return 'Agent state';
+    if (key == 'agent_zip') return 'Agent ZIP';
     if (key == 'agent_phone') return 'Agent phone';
+    // Alternate agent
     if (key == 'alt_agent_name') return 'Alternate agent name';
     if (key == 'alt_agent_relationship') return 'Alternate agent relationship';
-    if (key == 'alt_agent_address') return 'Alternate agent address';
+    if (key == 'alt_agent_address1') return 'Alt agent street address';
+    if (key == 'alt_agent_address2') return 'Alt agent apt / suite';
+    if (key == 'alt_agent_city') return 'Alt agent city';
+    if (key == 'alt_agent_state') return 'Alt agent state';
+    if (key == 'alt_agent_zip') return 'Alt agent ZIP';
     if (key == 'alt_agent_phone') return 'Alternate agent phone';
+    // Guardian
     if (key == 'guardian_name') return 'Guardian nominee';
     if (key == 'guardian_relationship') return 'Guardian relationship';
-    if (key == 'guardian_address') return 'Guardian address';
+    if (key == 'guardian_address1') return 'Guardian street address';
+    if (key == 'guardian_address2') return 'Guardian apt / suite';
+    if (key == 'guardian_city') return 'Guardian city';
+    if (key == 'guardian_state') return 'Guardian state';
+    if (key == 'guardian_zip') return 'Guardian ZIP';
     if (key == 'guardian_phone') return 'Guardian phone';
     return key;
   }
@@ -1170,10 +1394,16 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
   String _sectionLabel(String key) {
     if (key.startsWith('med_prefer_')) return 'Preferred Meds';
     if (key.startsWith('med_avoid_')) return 'Meds to Avoid';
+    if (key.startsWith('med_limit_')) return 'Restricted-Use Meds';
     if (key.startsWith('cond_')) return 'Conditions';
+    if (key.startsWith('diag_')) return 'Diagnoses';
+    if (key.startsWith('allergy_')) return 'Allergies';
     if (key.startsWith('hh_')) return 'Health History';
     if (key.startsWith('person_')) return 'Your details';
-    if (key.startsWith('agent_')) return 'Your agent';
+    if (key.startsWith('agent_') && !key.startsWith('agent_authority')) {
+      return 'Your agent';
+    }
+    if (key == 'agent_authority_limitations') return 'Agent Authority';
     if (key.startsWith('alt_agent_')) return 'Alternate agent';
     if (key.startsWith('guardian_')) return 'Guardian';
     return 'Other';

@@ -147,31 +147,64 @@ class DocumentExtractor {
           'reason': Schema.string(nullable: true),
         }),
       ),
+      // Medications with restricted-use conditions — the 'limitation' type.
+      'medications_limited': Schema.array(
+        nullable: true,
+        items: Schema.object(properties: {
+          'name': Schema.string(),
+          'reason': Schema.string(nullable: true),
+        }),
+      ),
+      // Distinct from effectiveCondition — these are the person's mental-health
+      // diagnoses, written to the Diagnoses step (DiagnosisEntries table).
+      'diagnoses': Schema.array(
+        nullable: true,
+        items: Schema.object(properties: {
+          'name': Schema.string(),
+          'icd_code': Schema.string(nullable: true),
+        }),
+      ),
+      // Drug, food, material, and other allergies — step 8 (DirectiveAllergies).
+      'allergies': Schema.array(
+        nullable: true,
+        items: Schema.object(properties: {
+          'substance': Schema.string(),
+          'kind': Schema.string(nullable: true),
+          'severity': Schema.string(nullable: true),
+          'reactions': Schema.string(nullable: true),
+          'notes': Schema.string(nullable: true),
+        }),
+      ),
       'preferred_facility': Schema.string(nullable: true),
       'avoid_facility': Schema.string(nullable: true),
       'effective_condition': Schema.string(nullable: true),
+      'agent_authority_limitations': Schema.string(nullable: true),
       'health_history': Schema.string(nullable: true),
       'dietary': Schema.string(nullable: true),
       'religious': Schema.string(nullable: true),
       'activities': Schema.string(nullable: true),
       'crisis_intervention': Schema.string(nullable: true),
-      // Personal-life / dependent-care instructions (real app fields — the AI
-      // kept dropping these into "other" or missing them entirely).
       'pet_custody': Schema.string(nullable: true),
       'children_custody': Schema.string(nullable: true),
       'family_notification': Schema.string(nullable: true),
       'records_disclosure': Schema.string(nullable: true),
       'other': Schema.string(nullable: true),
-      // Personal information (PII) — extracted ONLY for autofill so the
-      // declarant and the people they designate can be filled in. Address is a
-      // single line as written on the document.
+      // Personal information (PII) — extracted ONLY for autofill.
+      // Address is split into components so every form field is populated.
       'personal_info': Schema.object(nullable: true, properties: {
         'full_name': Schema.string(nullable: true),
         'date_of_birth': Schema.string(nullable: true),
-        'address': Schema.string(nullable: true),
+        'address_line1': Schema.string(nullable: true),
+        'address_line2': Schema.string(nullable: true),
+        'city': Schema.string(nullable: true),
+        'county': Schema.string(nullable: true),
+        'state': Schema.string(nullable: true),
+        'zip': Schema.string(nullable: true),
         'phone': Schema.string(nullable: true),
         'primary_doctor_name': Schema.string(nullable: true),
         'primary_doctor_phone': Schema.string(nullable: true),
+        'preferred_evaluating_doctor_name': Schema.string(nullable: true),
+        'preferred_evaluating_doctor_contact': Schema.string(nullable: true),
         'agent': _personSchema,
         'alternate_agent': _personSchema,
         'guardian': _personSchema,
@@ -182,7 +215,11 @@ class DocumentExtractor {
   static final Schema _personSchema = Schema.object(nullable: true, properties: {
     'name': Schema.string(nullable: true),
     'relationship': Schema.string(nullable: true),
-    'address': Schema.string(nullable: true),
+    'address_line1': Schema.string(nullable: true),
+    'address_line2': Schema.string(nullable: true),
+    'city': Schema.string(nullable: true),
+    'state': Schema.string(nullable: true),
+    'zip': Schema.string(nullable: true),
     'phone': Schema.string(nullable: true),
   });
 
@@ -190,98 +227,132 @@ class DocumentExtractor {
 You are analyzing a document uploaded by a user who is filling out a Pennsylvania Mental Health Advance Directive (PA Act 194 of 2004). This is AUTOFILL — the user uploaded this document so its contents can pre-fill their form. You MUST extract personal information (PII); that is the primary purpose of this step.
 
 ═══ STEP 1: EXTRACT PERSONAL INFORMATION FIRST ═══
-Before reading anything else, locate and extract personal details into "personal_info":
+Before reading anything else, locate and extract all personal details into "personal_info":
 
-• full_name — the DECLARANT's full legal name (the person this directive is FOR). Look for labels: patient, principal, declarant, "I" / "me". Format: as written.
-• date_of_birth — the declarant's date of birth. Format: MM/DD/YYYY (e.g., 03/15/1975). Convert from any other format.
-• address — the declarant's full mailing address on ONE line: street, city, state, ZIP. ZIP code: 5 digits only (e.g., 17101 — drop the +4 suffix if present).
-• phone — the declarant's phone number. Format: (xxx) xxx-xxxx (e.g., (215) 555-1234).
-• primary_doctor_name — the declarant's treating physician / primary doctor name only.
+DECLARANT (the person this directive is FOR — look for labels: patient, principal, declarant, "I" / "me"):
+• full_name — full legal name. Format: as written.
+• date_of_birth — Format: MM/DD/YYYY (e.g., 03/15/1975). Convert from any other format.
+• address_line1 — street number and street name only (e.g., "123 Main St" or "123 Main St Apt 4B").
+• address_line2 — apartment, suite, unit, floor — ONLY if it is a SEPARATE line from line 1. Leave null if it is already in line 1.
+• city — city name only.
+• county — county name only (PA form includes county). Leave null if not stated.
+• state — 2-letter state abbreviation (e.g., PA). Default to PA if in a Pennsylvania document and not stated.
+• zip — 5-digit ZIP code only (e.g., 17101 — drop the +4 suffix if present).
+• phone — Format: (xxx) xxx-xxxx (e.g., (215) 555-1234).
+• primary_doctor_name — the declarant's primary care doctor / treating physician name.
 • primary_doctor_phone — that doctor's phone. Same (xxx) xxx-xxxx format.
-• agent — the PRIMARY designated health-care agent / proxy / representative (not the backup). Fields: name, relationship to declarant, address (one line, 5-digit ZIP), phone (xxx) xxx-xxxx.
+• preferred_evaluating_doctor_name — if the document names a SPECIFIC doctor preferred to certify the declarant's incapacity (different from the primary care doctor, e.g., "I prefer Dr. Smith to evaluate my capacity").
+• preferred_evaluating_doctor_contact — that evaluating doctor's phone or address.
+
+DESIGNATED PEOPLE — use these sub-objects:
+• agent — the PRIMARY health-care agent / proxy / representative (the FIRST-named, not the backup).
+  Fields: name, relationship, address_line1, address_line2 (apt/unit if separate), city, state, zip (5-digit), phone (xxx) xxx-xxxx.
 • alternate_agent — the BACKUP / second / alternate agent. Same fields.
 • guardian — any nominated guardian. Same fields.
 
-RULE: NEVER put a person's name, phone number, or address into any care/medical field (health_history, activities, crisis_intervention, family_notification, etc.). Every person goes in personal_info ONLY. family_notification is for notification PREFERENCES (who to call/not call), not for storing contact details as personal_info entries.
+ADDRESS FORMAT FOR ALL PERSONS — always split into components:
+  ✓ address_line1: "456 Oak Ave"  city: "Pittsburgh"  state: "PA"  zip: "15213"
+  ✗ Do NOT put "456 Oak Ave, Pittsburgh, PA 15213" all in address_line1.
 
-═══ STEP 2: EXTRACT CARE INSTRUCTIONS — ONE FIELD PER FACT, NO DUPLICATION ═══
+RULE: NEVER put any person's name, phone, or address into any care/medical field (health_history, activities, crisis_intervention, family_notification, etc.). ALL persons go in personal_info ONLY.
+
+═══ STEP 2: EXTRACT ALL CARE INSTRUCTIONS — ONE FIELD PER FACT, NO DUPLICATION ═══
 Each piece of information goes in EXACTLY ONE field. Once placed, it must NOT appear in any other field.
 
-FIELD DEFINITIONS (each with its exclusive scope):
-
 medications_to_avoid
-  → ONLY if the document EXPLICITLY says: allergy, adverse reaction, avoid, discontinue, do not give, or do not use.
+  → ONLY if the document EXPLICITLY says: allergy, adverse reaction, avoid, discontinue, do not give, do not use, never give.
   → NOT for medications merely listed, currently prescribed, or mentioned with no explicit avoid signal.
+  → Drug allergies go BOTH here AND in "allergies" (kind: drug, severity: severe) when explicitly marked as allergic.
 
 medications_preferred
-  → ONLY if the document EXPLICITLY says: prefers, wants, currently taking and working well, or chooses this medication.
-  → NOT for medications merely listed or mentioned with no preference stated.
+  → ONLY if the document EXPLICITLY says: prefers, wants, currently taking and working well, or chooses.
+  → NOT for medications merely listed with no stated preference.
+
+medications_limited
+  → Medications the person accepts ONLY under specific conditions or restrictions (e.g., "only as last resort", "only in inpatient setting", "only if no alternative").
+  → NOT for fully-preferred or fully-avoided meds. Captures the middle ground.
+
+diagnoses
+  → The person's mental health diagnoses (e.g., bipolar disorder, schizophrenia, PTSD, MDD).
+  → Each as {name: "Diagnosis Name", icd_code: "F31.0"} — include ICD code if stated, otherwise omit.
+  → NOT the effective condition text. NOT symptoms. NOT hospitalization history.
+  → Goes to the Diagnoses step in the app.
+
+allergies
+  → All allergies: drug, food, material/latex, and other.
+  → Each as {substance: "...", kind: "drug"|"food"|"material"|"other", severity: "mild"|"moderate"|"severe", reactions: "comma-separated symptoms", notes: "..."}.
+  → Severity guidance: mild = rash/GI; moderate = hives/swelling; severe = anaphylaxis/ER.
+  → Extract even if the allergy is already in medications_to_avoid — both fields get it.
 
 preferred_facility
   → Name of a hospital or treatment center the person WANTS to be treated at.
-  → NOT a doctor's name, clinic, or office unless explicitly stated as a preferred facility.
+  → NOT a doctor's name or clinic.
 
 avoid_facility
   → Name of a hospital or treatment center the person wants to AVOID.
-  → NOT a general preference to avoid treatment.
 
 effective_condition
-  → The specific mental health condition(s) or circumstances that trigger this directive (e.g., "bipolar episode requiring hospitalization", "loss of capacity to make decisions").
-  → NOT treatment preferences. NOT medications. NOT general history.
+  → The specific circumstances that TRIGGER this directive (e.g., "when two professionals certify I lack capacity", "during involuntary commitment").
+  → This is the "when it kicks in" language — NOT diagnoses, NOT treatment preferences.
+
+agent_authority_limitations
+  → Any limitations or conditions on what the agent is or is NOT authorized to do (e.g., "my agent cannot consent to ECT", "my agent must consult my sister before deciding").
+  → Goes to the Agent Authority step.
 
 health_history
-  → Relevant mental-health history: past diagnoses, past hospitalizations, what has/has not worked historically. Also: current medications listed with NO explicit avoid/prefer label.
-  → NOT crisis management plans. NOT comfort activities. NOT current care preferences.
+  → Relevant mental-health history: past diagnoses (as prose), past hospitalizations, what treatments have/have not worked. Also: current medications mentioned without an explicit avoid/prefer label.
+  → NOT crisis plans. NOT comfort activities. NOT current preferences.
 
 dietary
-  → Dietary restrictions, food allergies, nutrition needs or preferences.
-  → NOT medications. NOT general health conditions. NOT religious observances (unless the restriction is purely dietary, e.g., kosher/halal food — then it goes here, not religious).
+  → Dietary restrictions, food allergies (as prose), nutrition needs or preferences.
+  → NOT medications. NOT religious observances unless purely food-related (kosher/halal food → dietary).
 
 religious
-  → Religious, spiritual, or cultural preferences and practices: clergy to contact, prayer, observances, rituals, sacraments.
-  → NOT general comfort activities. NOT food restrictions that are purely nutritional.
+  → Religious, spiritual, or cultural preferences: clergy to contact, prayer, observances, rituals, sacraments.
+  → NOT comfort activities. NOT food rules unless religiously motivated.
 
 activities
-  → Therapeutic activities, coping strategies, comfort items, and things that HELP during treatment or hospitalization: music, walks, crafts, grounding techniques, having a pet nearby as comfort.
-  → NOT crisis de-escalation plans. NOT dietary restrictions. NOT general health history.
+  → Coping strategies, therapeutic activities, comfort items, things that HELP during hospitalization: music, walks, crafts, grounding techniques, pet as comfort.
+  → NOT crisis de-escalation plans. NOT dietary. NOT health history.
 
 crisis_intervention
-  → Instructions specifically for CRISIS situations: de-escalation preferences, early warning signs, what NOT to do, restraint/seclusion preferences, who to call in an emergency.
-  → NOT general health history. NOT non-crisis comfort activities. NOT general preferences.
+  → Instructions specifically for CRISIS situations: de-escalation preferences, early warning signs, what NOT to do, restraint/seclusion preferences, who to call in a crisis (not as contact storage — as a preference like "call my sister first").
+  → NOT general history. NOT general comfort activities.
 
 pet_custody
-  → Who cares for the person's PET(S) while they are hospitalized: who feeds/houses them, vet contact info. Look for: dog, cat, bird, fish, animal, pet.
-  → NOT pets as comfort items during hospitalization (those go in "activities").
+  → Who cares for PETS while the person is hospitalized: who feeds/houses them, vet info.
+  → Look for: dog, cat, bird, fish, animal, pet. NOT pets as in-hospital comfort items (→ activities).
 
 children_custody
-  → Who cares for the person's CHILDREN or other dependents while they are hospitalized: guardian, school/daycare info.
-  → NOT family notification preferences.
+  → Who cares for CHILDREN or other dependents while the person is hospitalized.
+  → NOT general family info.
 
 family_notification
-  → Who SHOULD or SHOULD NOT be notified/contacted if the person is hospitalized — stated as a preference or instruction (e.g., "call my sister Jane first", "do not contact my father").
-  → NOT storage of contact details for personal_info people. NOT family relationships in general.
+  → Explicit preferences about who SHOULD or SHOULD NOT be contacted if hospitalized (e.g., "call my sister Jane", "do not contact my estranged father").
+  → Stated as a PREFERENCE, NOT as contact-info storage for personal_info people.
 
 records_disclosure
-  → Preferences about sharing, releasing, or withholding medical records and information, and to whom.
-  → NOT general privacy statements.
+  → Preferences about sharing, releasing, or withholding medical records — to whom and under what conditions.
 
 other
-  → ANYTHING directive-relevant that does NOT clearly fit a field above: financial matters, home/plant care, mail, work arrangements, specific instructions to named people. NEVER drop an instruction because it lacks a category — put it here.
+  → ANYTHING important that does NOT fit a field above: financial matters, home/plant care, mail, work coverage, specific named-person instructions. NEVER drop an instruction — put it here rather than omitting it.
 
 ═══ NO-DUPLICATION RULE ═══
-Each fact belongs to EXACTLY ONE field. Do NOT repeat it in another. When a fact could fit two fields, pick the more specific one. Examples:
-  • Medication listed with no preference → health_history ONLY (not also medications_preferred)
-  • Person's name + phone → personal_info ONLY (not also family_notification)
-  • Pet as comfort → activities ONLY (not also pet_custody)
-  • Crisis de-escalation → crisis_intervention ONLY (not also activities or health_history)
-  • Doctor's name → personal_info.primary_doctor_name ONLY (not also health_history)
+Each fact belongs to EXACTLY ONE field. Examples:
+  • Medication listed with no preference → health_history ONLY
+  • Person's name + phone → personal_info ONLY (not family_notification)
+  • Pet as in-hospital comfort → activities ONLY (not pet_custody)
+  • Crisis de-escalation → crisis_intervention ONLY
+  • Doctor's name → personal_info.primary_doctor_name ONLY
+  • Diagnosis name → diagnoses list ONLY (not also effective_condition)
+  • Drug allergy → both medications_to_avoid AND allergies (this is the only allowed exception)
 
 ═══ GENERAL RULES ═══
 1. READ THE ENTIRE DOCUMENT before extracting — do not stop early.
 2. EXTRACT ONLY what is explicitly stated. Do not diagnose, infer, fabricate, advise, or add anything not written.
 3. BE EXHAUSTIVE — if the document lists 10 medications, return all 10. Do not summarize or omit.
 4. OMIT EMPTY FIELDS — if you have nothing confident for a field, leave it null. Do not invent.
-5. PERSONAL INFO FIRST — always complete personal_info before filling any other field.
+5. PERSONAL INFO FIRST — always complete personal_info before processing any other field.
 
 Return ONLY valid JSON matching the schema. No explanation, commentary, or markdown.
 ''';
