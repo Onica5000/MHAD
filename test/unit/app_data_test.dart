@@ -146,7 +146,7 @@ void main() {
       final data = await AppData.load();
       expect(data.dateFact('privacyPolicyVersion'), 'v1.1');
       expect(data.dateFact('privacyPolicyUpdated'), 'May 2026');
-      expect(data.fact('facilitatorCompletionStat'), contains('20×'));
+      expect(data.fact('facilitatorCompletionStat'), contains('Swanson'));
       expect(data.geminiApiKeyUrl, startsWith('https://'));
     });
   });
