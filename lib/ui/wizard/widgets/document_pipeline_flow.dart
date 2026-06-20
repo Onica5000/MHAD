@@ -332,24 +332,27 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
       ref.read(aiConsentGivenProvider.notifier).state = true;
     }
 
-    // Warn about PII in image/PDF documents (text files are stripped locally)
-    final hasImageOrPdf = docs.any((d) =>
-        d.mimeType.startsWith('image/') || d.mimeType == 'application/pdf');
-    if (hasImageOrPdf && mounted) {
+    // Heads-up before any upload: the whole document — including personal
+    // details — is sent to Google's AI so it can READ and autofill your
+    // directive (your name, address, your agent's details, etc.). This applies
+    // to every file type now: images, PDFs, and text are all sent as-is so the
+    // AI can fill those fields. Nothing is saved until you review and apply.
+    if (mounted) {
       final proceed = await showDialog<bool>(
         context: context,
         builder: (ctx) => AlertDialog(
           icon: const Icon(Icons.privacy_tip_outlined),
           title: const Text('Heads up'),
           content: const Text(
-            'We can\'t remove personal details from images or PDFs before '
-            'the AI reads them — they\'re sent to Google as-is.\n\n'
-            'Uploading is only a shortcut. You never have to share personal '
-            'information to use it:\n'
-            '• Black out anything sensitive (ID or card numbers, addresses, '
+            'To autofill your directive, the whole document — including any '
+            'personal details (names, dates of birth, addresses, phone '
+            'numbers) — is sent to Google\'s AI so it can read it. You\'ll '
+            'review everything before anything is saved.\n\n'
+            'Uploading is only a shortcut, never required:\n'
+            '• Black out anything you don\'t want sent (ID or card numbers, '
             'other people\'s details) before uploading.\n'
-            '• Anything you don\'t upload can simply be typed in by hand — '
-            'every field can be filled manually to keep it private.',
+            '• Every field can be typed in by hand instead, to keep it '
+            'private.',
           ),
           actions: [
             TextButton(
@@ -569,6 +572,46 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
       _reviewChecked['other'] = true;
       _reviewEdited['other'] = v.other!;
     }
+
+    // ── Personal info (PII) — autofill the declarant + the people they
+    // designate. Each is a plain scalar review key, so it flows through
+    // reconciliation, the review rows, editing, and apply just like the
+    // facility/dietary fields above.
+    final pi = v.personalInfo;
+    void put(String key, String? value) {
+      if (value != null && value.trim().isNotEmpty) {
+        _reviewChecked[key] = true;
+        _reviewEdited[key] = value.trim();
+      }
+    }
+
+    put('person_name', pi.fullName);
+    put('person_dob', pi.dateOfBirth);
+    put('person_address', pi.address);
+    put('person_phone', pi.phone);
+    put('person_doctor_name', pi.primaryDoctorName);
+    put('person_doctor_phone', pi.primaryDoctorPhone);
+    final ag = pi.agent;
+    if (ag != null) {
+      put('agent_name', ag.name);
+      put('agent_relationship', ag.relationship);
+      put('agent_address', ag.address);
+      put('agent_phone', ag.phone);
+    }
+    final alt = pi.alternateAgent;
+    if (alt != null) {
+      put('alt_agent_name', alt.name);
+      put('alt_agent_relationship', alt.relationship);
+      put('alt_agent_address', alt.address);
+      put('alt_agent_phone', alt.phone);
+    }
+    final gd = pi.guardian;
+    if (gd != null) {
+      put('guardian_name', gd.name);
+      put('guardian_relationship', gd.relationship);
+      put('guardian_address', gd.address);
+      put('guardian_phone', gd.phone);
+    }
   }
 
   /// After extraction, classify each field by priority and detect conflicts
@@ -581,6 +624,18 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
     final id = widget.directiveId;
     final prefs = await repo.getPreferences(id);
     final instr = await repo.getAdditionalInstructions(id);
+    // Personal-info current values, so an autofilled name/address/phone that
+    // would REPLACE something the user already typed starts unchecked (a
+    // deliberate keep/replace choice) instead of silently overwriting.
+    final directive = await repo.getDirectiveById(id);
+    final agents = await repo.getAgents(id);
+    final primaryAgents =
+        agents.where((a) => a.agentType == 'primary').toList();
+    final primaryAgent = primaryAgents.isEmpty ? null : primaryAgents.first;
+    final altAgents =
+        agents.where((a) => a.agentType == 'alternate').toList();
+    final altAgent = altAgents.isEmpty ? null : altAgents.first;
+    final guardian = await repo.getGuardianNomination(id);
     final existing = <String, String>{
       'facility_prefer': prefs?.preferredFacilityName ?? '',
       'facility_avoid': prefs?.avoidFacilityName ?? '',
@@ -590,6 +645,24 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
       'crisis': instr?.crisisIntervention ?? '',
       'other': instr?.other ?? '',
       'hh_note': instr?.healthHistory ?? '',
+      'person_name': directive?.fullName ?? '',
+      'person_dob': directive?.dateOfBirth ?? '',
+      'person_address': directive?.address ?? '',
+      'person_phone': directive?.phone ?? '',
+      'person_doctor_name': directive?.primaryDoctorName ?? '',
+      'person_doctor_phone': directive?.primaryDoctorPhone ?? '',
+      'agent_name': primaryAgent?.fullName ?? '',
+      'agent_relationship': primaryAgent?.relationship ?? '',
+      'agent_address': primaryAgent?.address ?? '',
+      'agent_phone': primaryAgent?.homePhone ?? '',
+      'alt_agent_name': altAgent?.fullName ?? '',
+      'alt_agent_relationship': altAgent?.relationship ?? '',
+      'alt_agent_address': altAgent?.address ?? '',
+      'alt_agent_phone': altAgent?.homePhone ?? '',
+      'guardian_name': guardian?.nomineeFullName ?? '',
+      'guardian_relationship': guardian?.nomineeRelationship ?? '',
+      'guardian_address': guardian?.nomineeAddress ?? '',
+      'guardian_phone': guardian?.nomineePhone ?? '',
     };
     _reconItems = buildReconItems(
       extracted: Map<String, String>.of(_reviewEdited),
@@ -858,6 +931,91 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
       );
     }
 
+    // ── Apply personal info (PII) ────────────────────────────────────────
+    // Autofill the declarant + the people they designate. Only checked,
+    // non-empty values are written; an un-extracted field keeps its current
+    // value (we never blank something the user already had).
+    String? pv(String key) {
+      if (_reviewChecked[key] != true) return null;
+      final t = _reviewEdited[key]?.trim();
+      return (t != null && t.isNotEmpty) ? t : null;
+    }
+
+    final pName = pv('person_name');
+    final pDob = pv('person_dob');
+    final pAddr = pv('person_address');
+    final pPhone = pv('person_phone');
+    if (pName != null || pDob != null || pAddr != null || pPhone != null) {
+      final d = await repo.getDirectiveById(id);
+      await repo.updatePersonalInfo(
+        id,
+        fullName: pName ?? d?.fullName ?? '',
+        dateOfBirth: pDob ?? d?.dateOfBirth ?? '',
+        address: pAddr ?? d?.address ?? '',
+        address2: d?.address2 ?? '',
+        city: d?.city ?? '',
+        county: d?.county ?? '',
+        state: d?.state ?? '',
+        zip: d?.zip ?? '',
+        phone: pPhone ?? d?.phone ?? '',
+      );
+      applied += [pName, pDob, pAddr, pPhone].whereType<String>().length;
+    }
+
+    final docName = pv('person_doctor_name');
+    final docPhone = pv('person_doctor_phone');
+    if (docName != null || docPhone != null) {
+      final d = await repo.getDirectiveById(id);
+      await repo.updatePrimaryDoctor(
+        id,
+        name: docName ?? d?.primaryDoctorName ?? '',
+        specialty: d?.primaryDoctorSpecialty ?? '',
+        phone: docPhone ?? d?.primaryDoctorPhone ?? '',
+      );
+      applied += [docName, docPhone].whereType<String>().length;
+    }
+
+    Future<void> applyAgent(String type, String prefix) async {
+      final name = pv('${prefix}_name');
+      final rel = pv('${prefix}_relationship');
+      final addr = pv('${prefix}_address');
+      final phone = pv('${prefix}_phone');
+      if (name == null && rel == null && addr == null && phone == null) return;
+      final existing =
+          (await repo.getAgents(id)).where((a) => a.agentType == type).toList();
+      final cur = existing.isEmpty ? null : existing.first;
+      await repo.upsertAgent(AgentsCompanion(
+        id: cur != null ? Value(cur.id) : const Value.absent(),
+        directiveId: Value(id),
+        agentType: Value(type),
+        fullName: Value(name ?? cur?.fullName ?? ''),
+        relationship: Value(rel ?? cur?.relationship ?? ''),
+        address: Value(addr ?? cur?.address ?? ''),
+        homePhone: Value(phone ?? cur?.homePhone ?? ''),
+      ));
+      applied += [name, rel, addr, phone].whereType<String>().length;
+    }
+
+    await applyAgent('primary', 'agent');
+    await applyAgent('alternate', 'alt_agent');
+
+    final gName = pv('guardian_name');
+    final gRel = pv('guardian_relationship');
+    final gAddr = pv('guardian_address');
+    final gPhone = pv('guardian_phone');
+    if (gName != null || gRel != null || gAddr != null || gPhone != null) {
+      final cur = await repo.getGuardianNomination(id);
+      await repo.upsertGuardianNomination(GuardianNominationsCompanion(
+        id: cur != null ? Value(cur.id) : const Value.absent(),
+        directiveId: Value(id),
+        nomineeFullName: Value(gName ?? cur?.nomineeFullName ?? ''),
+        nomineeRelationship: Value(gRel ?? cur?.nomineeRelationship ?? ''),
+        nomineeAddress: Value(gAddr ?? cur?.nomineeAddress ?? ''),
+        nomineePhone: Value(gPhone ?? cur?.nomineePhone ?? ''),
+      ));
+      applied += [gName, gRel, gAddr, gPhone].whereType<String>().length;
+    }
+
     // Each additional-instruction field actually written counts once (review
     // pass-throughs + smart-fill both land in instrMap).
     applied += instrMap.length;
@@ -944,6 +1102,25 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
     if (key == 'activities') return 'Activities';
     if (key == 'crisis') return 'Crisis Intervention';
     if (key == 'other') return 'Other';
+    // Personal info (PII)
+    if (key == 'person_name') return 'Your full name';
+    if (key == 'person_dob') return 'Date of birth';
+    if (key == 'person_address') return 'Your address';
+    if (key == 'person_phone') return 'Your phone';
+    if (key == 'person_doctor_name') return 'Primary doctor';
+    if (key == 'person_doctor_phone') return "Doctor's phone";
+    if (key == 'agent_name') return 'Agent name';
+    if (key == 'agent_relationship') return 'Agent relationship';
+    if (key == 'agent_address') return 'Agent address';
+    if (key == 'agent_phone') return 'Agent phone';
+    if (key == 'alt_agent_name') return 'Alternate agent name';
+    if (key == 'alt_agent_relationship') return 'Alternate agent relationship';
+    if (key == 'alt_agent_address') return 'Alternate agent address';
+    if (key == 'alt_agent_phone') return 'Alternate agent phone';
+    if (key == 'guardian_name') return 'Guardian nominee';
+    if (key == 'guardian_relationship') return 'Guardian relationship';
+    if (key == 'guardian_address') return 'Guardian address';
+    if (key == 'guardian_phone') return 'Guardian phone';
     return key;
   }
 
@@ -952,6 +1129,10 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
     if (key.startsWith('med_avoid_')) return 'Meds to Avoid';
     if (key.startsWith('cond_')) return 'Conditions';
     if (key.startsWith('hh_')) return 'Health History';
+    if (key.startsWith('person_')) return 'Your details';
+    if (key.startsWith('agent_')) return 'Your agent';
+    if (key.startsWith('alt_agent_')) return 'Alternate agent';
+    if (key.startsWith('guardian_')) return 'Guardian';
     return 'Other';
   }
 

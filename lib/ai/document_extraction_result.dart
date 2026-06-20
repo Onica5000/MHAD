@@ -21,6 +21,13 @@ class DocumentExtractionResult {
   final String? crisisIntervention;
   final String? other;
 
+  // ── Personal information (PII) ───────────────────────────────────────────
+  // Autofill is the ONE place the AI is allowed to read/return PII, so the
+  // declarant and the people they designate can be filled from an uploaded
+  // document. The hardcoded PII rule still applies everywhere else (AI
+  // suggestions, chat, context — see ai_pii_policy.dart / buildAiFilledFields).
+  final ExtractedPersonalInfo personalInfo;
+
   const DocumentExtractionResult({
     this.medicationsToAvoid = const [],
     this.medicationsPreferred = const [],
@@ -33,6 +40,7 @@ class DocumentExtractionResult {
     this.activities,
     this.crisisIntervention,
     this.other,
+    this.personalInfo = const ExtractedPersonalInfo(),
   });
 
   bool get isEmpty =>
@@ -46,7 +54,8 @@ class DocumentExtractionResult {
       religious == null &&
       activities == null &&
       crisisIntervention == null &&
-      other == null;
+      other == null &&
+      personalInfo.isEmpty;
 
   /// Merge another extraction result into this one (for multi-page documents).
   /// Medications are deduplicated by name. Text fields are concatenated.
@@ -63,6 +72,7 @@ class DocumentExtractionResult {
       activities: _mergeText(activities, other.activities),
       crisisIntervention: _mergeText(crisisIntervention, other.crisisIntervention),
       other: _mergeText(this.other, other.other),
+      personalInfo: personalInfo.merge(other.personalInfo),
     );
   }
 
@@ -128,6 +138,10 @@ class DocumentExtractionResult {
       activities: _str(json['activities']),
       crisisIntervention: _str(json['crisis_intervention']),
       other: _str(json['other']),
+      personalInfo: ExtractedPersonalInfo.fromJson(
+          json['personal_info'] is Map<String, dynamic>
+              ? json['personal_info'] as Map<String, dynamic>
+              : const {}),
     );
   }
 
@@ -157,4 +171,125 @@ class ExtractedMedication {
   const ExtractedMedication({required this.name, this.reason = ''});
 
   String get display => reason.isNotEmpty ? '$name — $reason' : name;
+}
+
+/// A designated person extracted from a document (agent, alternate agent, or
+/// guardian nominee). Address is kept as a single line (street, city, state,
+/// ZIP as written) — it lands in the form's address line 1, which the user can
+/// split if they wish.
+class ExtractedPerson {
+  final String? name;
+  final String? relationship;
+  final String? address;
+  final String? phone;
+
+  const ExtractedPerson({this.name, this.relationship, this.address, this.phone});
+
+  bool get isEmpty =>
+      (name == null || name!.isEmpty) &&
+      (relationship == null || relationship!.isEmpty) &&
+      (address == null || address!.isEmpty) &&
+      (phone == null || phone!.isEmpty);
+
+  ExtractedPerson merge(ExtractedPerson? o) {
+    if (o == null) return this;
+    return ExtractedPerson(
+      name: DocumentExtractionResult._mergeText(name, o.name),
+      relationship:
+          DocumentExtractionResult._mergeText(relationship, o.relationship),
+      address: DocumentExtractionResult._mergeText(address, o.address),
+      phone: DocumentExtractionResult._mergeText(phone, o.phone),
+    );
+  }
+
+  /// Parse a person object, or return null when the object is absent/empty so
+  /// downstream code can skip it cleanly.
+  static ExtractedPerson? maybe(dynamic v) {
+    if (v is! Map<String, dynamic>) return null;
+    final p = ExtractedPerson(
+      name: DocumentExtractionResult._str(v['name']),
+      relationship: DocumentExtractionResult._str(v['relationship']),
+      address: DocumentExtractionResult._str(v['address']),
+      phone: DocumentExtractionResult._str(v['phone']),
+    );
+    return p.isEmpty ? null : p;
+  }
+}
+
+/// PII extracted for autofill: the declarant's own details plus the people
+/// they designate. Witnesses are intentionally absent — they're captured on
+/// paper at signing, not stored/edited in-app.
+class ExtractedPersonalInfo {
+  final String? fullName;
+  final String? dateOfBirth;
+  final String? address;
+  final String? phone;
+  final String? primaryDoctorName;
+  final String? primaryDoctorPhone;
+  final ExtractedPerson? agent;
+  final ExtractedPerson? alternateAgent;
+  final ExtractedPerson? guardian;
+
+  const ExtractedPersonalInfo({
+    this.fullName,
+    this.dateOfBirth,
+    this.address,
+    this.phone,
+    this.primaryDoctorName,
+    this.primaryDoctorPhone,
+    this.agent,
+    this.alternateAgent,
+    this.guardian,
+  });
+
+  bool get isEmpty =>
+      (fullName == null || fullName!.isEmpty) &&
+      (dateOfBirth == null || dateOfBirth!.isEmpty) &&
+      (address == null || address!.isEmpty) &&
+      (phone == null || phone!.isEmpty) &&
+      (primaryDoctorName == null || primaryDoctorName!.isEmpty) &&
+      (primaryDoctorPhone == null || primaryDoctorPhone!.isEmpty) &&
+      (agent == null || agent!.isEmpty) &&
+      (alternateAgent == null || alternateAgent!.isEmpty) &&
+      (guardian == null || guardian!.isEmpty);
+
+  ExtractedPersonalInfo merge(ExtractedPersonalInfo o) {
+    return ExtractedPersonalInfo(
+      fullName: DocumentExtractionResult._mergeText(fullName, o.fullName),
+      dateOfBirth:
+          DocumentExtractionResult._mergeText(dateOfBirth, o.dateOfBirth),
+      address: DocumentExtractionResult._mergeText(address, o.address),
+      phone: DocumentExtractionResult._mergeText(phone, o.phone),
+      primaryDoctorName: DocumentExtractionResult._mergeText(
+          primaryDoctorName, o.primaryDoctorName),
+      primaryDoctorPhone: DocumentExtractionResult._mergeText(
+          primaryDoctorPhone, o.primaryDoctorPhone),
+      agent: (agent ?? const ExtractedPerson()).merge(o.agent).isEmpty
+          ? null
+          : (agent ?? const ExtractedPerson()).merge(o.agent),
+      alternateAgent:
+          (alternateAgent ?? const ExtractedPerson()).merge(o.alternateAgent).isEmpty
+              ? null
+              : (alternateAgent ?? const ExtractedPerson()).merge(o.alternateAgent),
+      guardian: (guardian ?? const ExtractedPerson()).merge(o.guardian).isEmpty
+          ? null
+          : (guardian ?? const ExtractedPerson()).merge(o.guardian),
+    );
+  }
+
+  factory ExtractedPersonalInfo.fromJson(Map<String, dynamic> j) {
+    return ExtractedPersonalInfo(
+      fullName: DocumentExtractionResult._str(j['full_name']),
+      dateOfBirth: DocumentExtractionResult._str(j['date_of_birth']),
+      address: DocumentExtractionResult._str(j['address']),
+      phone: DocumentExtractionResult._str(j['phone']),
+      primaryDoctorName:
+          DocumentExtractionResult._str(j['primary_doctor_name']),
+      primaryDoctorPhone:
+          DocumentExtractionResult._str(j['primary_doctor_phone']),
+      agent: ExtractedPerson.maybe(j['agent']),
+      alternateAgent: ExtractedPerson.maybe(j['alternate_agent']),
+      guardian: ExtractedPerson.maybe(j['guardian']),
+    );
+  }
 }

@@ -5,7 +5,6 @@ import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:http/http.dart' as http;
 import 'package:image/image.dart' as img;
 import 'package:mhad/ai/document_extraction_result.dart';
-import 'package:mhad/ai/pii_stripper.dart';
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/services/certificate_pinning_service.dart';
 
@@ -52,11 +51,13 @@ class DocumentExtractor {
     List<String> piiStripped = [];
 
     if (mimeType.startsWith('text/')) {
-      // Text files — strip PII locally before sending
+      // Text files — sent as-is (no local PII stripping). Autofill is the one
+      // place the AI is allowed to read personal details so it can fill the
+      // declarant + designated people; consistent with images/PDFs, which are
+      // already sent unredacted. (The hardcoded PII rule still applies to every
+      // OTHER AI path — suggestions, chat, context.)
       final rawText = utf8.decode(bytes, allowMalformed: true);
-      final stripResult = PiiStripper.stripWithReport(rawText);
-      piiStripped = stripResult.removedCategories;
-      parts.add(TextPart('--- DOCUMENT CONTENT ---\n${stripResult.sanitizedText}'));
+      parts.add(TextPart('--- DOCUMENT CONTENT ---\n$rawText'));
     } else if (mimeType.startsWith('image/')) {
       // Images — cannot strip PII client-side, rely on prompt instruction
       final optimized = _optimizeImage(bytes);
@@ -156,19 +157,34 @@ class DocumentExtractor {
       'activities': Schema.string(nullable: true),
       'crisis_intervention': Schema.string(nullable: true),
       'other': Schema.string(nullable: true),
+      // Personal information (PII) — extracted ONLY for autofill so the
+      // declarant and the people they designate can be filled in. Address is a
+      // single line as written on the document.
+      'personal_info': Schema.object(nullable: true, properties: {
+        'full_name': Schema.string(nullable: true),
+        'date_of_birth': Schema.string(nullable: true),
+        'address': Schema.string(nullable: true),
+        'phone': Schema.string(nullable: true),
+        'primary_doctor_name': Schema.string(nullable: true),
+        'primary_doctor_phone': Schema.string(nullable: true),
+        'agent': _personSchema,
+        'alternate_agent': _personSchema,
+        'guardian': _personSchema,
+      }),
     },
   );
 
+  static final Schema _personSchema = Schema.object(nullable: true, properties: {
+    'name': Schema.string(nullable: true),
+    'relationship': Schema.string(nullable: true),
+    'address': Schema.string(nullable: true),
+    'phone': Schema.string(nullable: true),
+  });
+
   static const _extractionPrompt = '''
-You are analyzing a document provided by a user who is filling out a Pennsylvania Mental Health Advance Directive (PA Act 194 of 2004).
+You are analyzing a document provided by a user who is filling out a Pennsylvania Mental Health Advance Directive (PA Act 194 of 2004). This is AUTOFILL: the user uploaded this document so its details can pre-fill their form, so you SHOULD extract their personal information when present.
 
-CRITICAL PII RULES — absolute, no exceptions:
-- NEVER include any personally identifiable information in your response
-- REJECT and IGNORE: patient names, dates of birth, addresses, phone numbers, SSNs, email addresses, insurance IDs, medical record numbers, provider names
-- If the document contains PII, extract ONLY the medical data (medications, conditions, preferences) and discard all PII completely
-- Your JSON response must contain ZERO names, ZERO dates of birth, ZERO addresses, ZERO identifying numbers
-
-Extract relevant medical information and return it as JSON. Only include fields where you can confidently identify information.
+Extract the relevant information and return it as JSON. Only include fields where you can confidently identify information.
 
 {
   "medications_to_avoid": [
@@ -185,15 +201,28 @@ Extract relevant medical information and return it as JSON. Only include fields 
   "religious": "religious or cultural preferences mentioned",
   "activities": "therapeutic activities or coping strategies mentioned",
   "crisis_intervention": "crisis intervention preferences mentioned",
-  "other": "any other advance directive-relevant information not fitting above categories"
+  "other": "any other advance directive-relevant information not fitting above categories",
+  "personal_info": {
+    "full_name": "the declarant's / patient's full name (the person the directive is FOR)",
+    "date_of_birth": "the declarant's date of birth, as written",
+    "address": "the declarant's full mailing address on one line (street, city, state, ZIP)",
+    "phone": "the declarant's phone number",
+    "primary_doctor_name": "the declarant's primary doctor / treating physician name",
+    "primary_doctor_phone": "that doctor's phone number",
+    "agent": {"name": "...", "relationship": "relationship to the declarant", "address": "full address on one line", "phone": "..."},
+    "alternate_agent": {"name": "...", "relationship": "...", "address": "...", "phone": "..."},
+    "guardian": {"name": "...", "relationship": "...", "address": "...", "phone": "..."}
+  }
 }
 
 Rules:
 - BE EXHAUSTIVE AND PRECISE. Read the ENTIRE document carefully and extract EVERY relevant item that is explicitly stated — every medication, every condition, every preference, every note. If the document lists multiple medications, return ALL of them, not a subset. Do not summarize, group, shorten, or omit anything relevant. Work methodically through the whole document so nothing is missed.
+- USE EVERY APPLICABLE FIELD and place each piece of information where it most logically belongs: medications in the medication lists, conditions/circumstances in "effective_condition", history/diagnoses/hospitalizations in "health_history", dietary needs in "dietary", religious/cultural preferences in "religious", coping strategies/therapeutic activities in "activities", crisis preferences in "crisis_intervention", facilities in the facility fields, and people/identity details in "personal_info". Any directive-relevant information that is important but does NOT clearly fit a specific category MUST go in "other" — never drop it. Do not duplicate the same item across multiple fields; pick the single best-fitting field.
 - ONLY extract what is explicitly stated in the document. Do NOT diagnose, infer, or add any condition, medication, or preference that is not written in the document. Extract only — never advise, recommend, or suggest.
+- PERSONAL INFO: Extract personal details (names, date of birth, addresses, phone numbers) ONLY into the "personal_info" block, and ONLY when they are clearly present. The "full_name"/"date_of_birth"/"address"/"phone" fields are for the DECLARANT — the person this directive is FOR (often labelled patient, principal, declarant, or "I/me"). Put a designated health-care agent / proxy / representative under "agent", a backup/second one under "alternate_agent", and any nominated guardian under "guardian". Never put a person's name, address, or phone into any medical field. Omit any personal field you are not confident about.
 - For medications: classify as "to_avoid" ONLY if the document explicitly states an allergy, adverse reaction, or that the medication should be avoided or discontinued; classify as "preferred" ONLY if the document explicitly states the user wants, prefers, or chooses it.
 - Do NOT assume intent. If a medication is merely listed or currently prescribed with no explicit avoid-or-prefer statement, do NOT place it in either list — the user will decide. You may mention it neutrally under "health_history" as a current medication, without implying any preference.
-- If the document contains no relevant medical information, return an empty object: {}
+- If the document contains no relevant information, return an empty object: {}
 - Return ONLY valid JSON, no explanation or commentary
 ''';
 }

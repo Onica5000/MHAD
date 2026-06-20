@@ -98,6 +98,8 @@ class ClinicalDataValidator {
       activities: raw.activities,
       crisisIntervention: raw.crisisIntervention,
       other: raw.other,
+      // Personal info (PII) passes straight through — no NIH validation needed.
+      personalInfo: raw.personalInfo,
     );
   }
 }
@@ -152,6 +154,8 @@ class ValidatedExtractionResult {
   final String? activities;
   final String? crisisIntervention;
   final String? other;
+  // Personal info (PII) extracted for autofill — pass-through, no validation.
+  final ExtractedPersonalInfo personalInfo;
 
   const ValidatedExtractionResult({
     this.preferredMeds = const [],
@@ -165,6 +169,7 @@ class ValidatedExtractionResult {
     this.activities,
     this.crisisIntervention,
     this.other,
+    this.personalInfo = const ExtractedPersonalInfo(),
   });
 
   bool get hasValidatedConditions => conditions.any((c) => c.isValidated);
