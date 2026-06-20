@@ -176,10 +176,11 @@ class WebSidebar extends ConsumerWidget {
         onTap: () => appRouter.go(AppRoutes.settings),
       ),
       // Reset Form — erase everything and start completely fresh. An action,
-      // not a destination (never "active").
+      // not a destination (never "active"). delete_sweep reads as "clear it
+      // all" rather than restart_alt's "refresh".
       _SidebarItem(
-        icon: Icons.restart_alt,
-        activeIcon: Icons.restart_alt,
+        icon: Icons.delete_sweep_outlined,
+        activeIcon: Icons.delete_sweep_outlined,
         label: 'Reset Form',
         isActive: false,
         onTap: () => _resetForm(ref),
