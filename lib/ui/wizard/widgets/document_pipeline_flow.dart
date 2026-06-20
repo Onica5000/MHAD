@@ -129,10 +129,13 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
     _smartEdited = {};
     _piiStripped = [];
     _sourceDocs = const [];
-    // The held batch was just consumed (applied) or thrown away (discarded);
-    // an extraction that errored returns to pick WITHOUT calling this, so the
-    // pending docs survive there for a retry.
-    _pendingDocs.clear();
+    // Reset only the EXTRACTION state, not the source documents. The held
+    // batch stays in `_pendingDocs` so the documents survive an AI read (and a
+    // discard/back to the pick step) — they are kept in memory until the user
+    // explicitly clears the tray ("Clear all") or the page is reset (the tab
+    // is closed / the user navigates into the wizard, which disposes this
+    // screen). This lets the user re-read the same documents without
+    // re-selecting them.
     _error = null;
   }
 
