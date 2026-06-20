@@ -1,4 +1,4 @@
-import 'package:drift/drift.dart' show Value;
+﻿import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/constants.dart';
@@ -243,7 +243,7 @@ class _ConsentChoiceStepState extends ConsumerState<ConsentChoiceStep>
           Text(
             c.subtitle,
             style: TextStyle(
-              fontFamily: 'DM Sans',
+              fontFamily: kSansFamily,
               fontSize: 13,
               color: p.textMuted,
               height: 1.45,

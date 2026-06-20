@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:mhad/ui/theme/app_theme.dart';
 
 /// Small uppercase mono "● LABEL" status/notice pill. Previously copy-pasted
 /// (status pill in past-detail, "PERMANENT ACTION" pill in revocation).
@@ -29,7 +30,7 @@ class MonoPill extends StatelessWidget {
       child: Text(
         '${dot ? '● ' : ''}${label.toUpperCase()}',
         style: TextStyle(
-          fontFamily: 'JetBrains Mono',
+          fontFamily: kMonoFamily,
           fontFamilyFallback: const [
             'Consolas',
             'Menlo',

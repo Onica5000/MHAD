@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:mhad/services/pin_auth_service.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 
@@ -280,7 +280,7 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
                       Text(
                         'PA MHAD',
                         style: TextStyle(
-                          fontFamily: 'DM Sans',
+                          fontFamily: kSansFamily,
                           fontSize: 13,
                           fontWeight: FontWeight.w700,
                           letterSpacing: -0.2,
@@ -290,7 +290,7 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
                       Text(
                         'PRIVATE MODE · LOCKED',
                         style: TextStyle(
-                          fontFamily: 'JetBrains Mono',
+                          fontFamily: kMonoFamily,
                           fontFamilyFallback: const [
                             'Consolas',
                             'Menlo',
@@ -383,7 +383,7 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
                 'Enter your passcode to unlock private mode.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontFamily: 'DM Sans',
+                  fontFamily: kSansFamily,
                   fontSize: 13.5,
                   height: 1.5,
                   color: p.textMuted,
@@ -429,7 +429,7 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
                                   ? 'LOCKED · WAIT 30S'
                                   : 'ATTEMPT $_failedAttempts / 5'),
                           style: TextStyle(
-                            fontFamily: 'JetBrains Mono',
+                            fontFamily: kMonoFamily,
                             fontFamilyFallback: const [
                               'Consolas',
                               'Menlo',
@@ -456,7 +456,7 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
                 enabled: !_verifying && !_lockedOut,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontFamily: 'JetBrains Mono',
+                  fontFamily: kMonoFamily,
                   fontSize: 18,
                   letterSpacing: 6,
                   fontWeight: FontWeight.w700,
@@ -465,7 +465,7 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
                 decoration: InputDecoration(
                   hintText: '· · · ·',
                   hintStyle: TextStyle(
-                    fontFamily: 'JetBrains Mono',
+                    fontFamily: kMonoFamily,
                     letterSpacing: 8,
                     color: p.textMuted,
                   ),

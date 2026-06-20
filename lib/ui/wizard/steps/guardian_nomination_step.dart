@@ -1,5 +1,6 @@
-import 'package:drift/drift.dart' show Value;
+﻿import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/providers/app_providers.dart';
@@ -401,7 +402,7 @@ class _GuardianConditionRow extends StatelessWidget {
           child: Text(
             text,
             style: TextStyle(
-              fontFamily: 'DM Sans',
+              fontFamily: kSansFamily,
               fontSize: 13,
               fontWeight: FontWeight.w600,
               color: selected ? cs.onPrimary : cs.onSurfaceVariant,
@@ -514,7 +515,7 @@ class _GuardianRelOptCard extends StatelessWidget {
                   Text(
                     option.label,
                     style: TextStyle(
-                      fontFamily: 'DM Sans',
+                      fontFamily: kSansFamily,
                       fontSize: 14.5,
                       fontWeight: FontWeight.w600,
                       color: cs.onSurface,
@@ -526,7 +527,7 @@ class _GuardianRelOptCard extends StatelessWidget {
                     Text(
                       option.hint,
                       style: TextStyle(
-                        fontFamily: 'DM Sans',
+                        fontFamily: kSansFamily,
                         fontSize: 12.5,
                         color: cs.onSurfaceVariant,
                         height: 1.4,

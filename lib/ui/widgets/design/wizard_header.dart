@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 
 /// Thin in-body header row that replaces the wizard's Material AppBar
@@ -77,7 +77,7 @@ class WizardHeader extends StatelessWidget {
                         Text(
                           backLabel,
                           style: TextStyle(
-                            fontFamily: 'DM Sans',
+                            fontFamily: kSansFamily,
                             fontSize: 13,
                             fontWeight: FontWeight.w600,
                             color: p.primary,
@@ -108,7 +108,7 @@ class WizardHeader extends StatelessWidget {
                         child: Text(
                           actionLabel,
                           style: TextStyle(
-                            fontFamily: 'DM Sans',
+                            fontFamily: kSansFamily,
                             fontSize: 13,
                             fontWeight: FontWeight.w500,
                             color: p.textMuted,

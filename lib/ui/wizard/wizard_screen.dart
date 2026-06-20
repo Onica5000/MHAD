@@ -1,4 +1,4 @@
-import 'dart:async';
+﻿import 'dart:async';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
@@ -704,7 +704,7 @@ class _WizardAiRailState extends ConsumerState<_WizardAiRail> {
               Text(
                 'AI assistant',
                 style: TextStyle(
-                  fontFamily: 'DM Sans',
+                  fontFamily: kSansFamily,
                   fontSize: 15,
                   fontWeight: FontWeight.w700,
                   color: p.text,
@@ -721,7 +721,7 @@ class _WizardAiRailState extends ConsumerState<_WizardAiRail> {
                     child: Text(
                       'Full view',
                       style: TextStyle(
-                        fontFamily: 'DM Sans',
+                        fontFamily: kSansFamily,
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
                         color: p.primary,
@@ -735,7 +735,7 @@ class _WizardAiRailState extends ConsumerState<_WizardAiRail> {
           Text(
             '● GEMINI · PII STRIPPED',
             style: TextStyle(
-              fontFamily: 'JetBrains Mono',
+              fontFamily: kMonoFamily,
               fontFamilyFallback: const [
                 'Consolas',
                 'Menlo',
@@ -779,7 +779,7 @@ class _WizardAiRailState extends ConsumerState<_WizardAiRail> {
             Text(
               'Not legal or medical advice.',
               style: TextStyle(
-                fontFamily: 'DM Sans',
+                fontFamily: kSansFamily,
                 fontSize: 10.5,
                 color: p.textMuted,
               ),
@@ -825,7 +825,7 @@ class _RailNoAiCard extends StatelessWidget {
           'Your API key stays on this device and is only used to answer your '
           'questions. You can fill out the whole wizard without it.',
           style: TextStyle(
-            fontFamily: 'DM Sans',
+            fontFamily: kSansFamily,
             fontSize: 11.5,
             height: 1.4,
             color: p.textMuted,
@@ -881,7 +881,7 @@ class _RailHeadsUp extends ConsumerWidget {
           Text(
             'Reading this step…',
             style: TextStyle(
-              fontFamily: 'DM Sans',
+              fontFamily: kSansFamily,
               fontSize: 12,
               color: p.onPrimaryLight,
             ),
@@ -904,7 +904,7 @@ class _RailHeadsUp extends ConsumerWidget {
                     child: Text(
                       s.headsUp,
                       style: TextStyle(
-                        fontFamily: 'DM Sans',
+                        fontFamily: kSansFamily,
                         fontSize: 12.5,
                         height: 1.4,
                         color: p.onPrimaryLight,
@@ -918,7 +918,7 @@ class _RailHeadsUp extends ConsumerWidget {
               Text(
                 'SUGGESTED FOR THIS STEP',
                 style: TextStyle(
-                  fontFamily: 'JetBrains Mono',
+                  fontFamily: kMonoFamily,
                   fontFamilyFallback: const [
                     'Consolas',
                     'Menlo',
@@ -950,7 +950,7 @@ class _RailHeadsUp extends ConsumerWidget {
                         child: Text(
                           c,
                           style: TextStyle(
-                            fontFamily: 'DM Sans',
+                            fontFamily: kSansFamily,
                             fontSize: 11.5,
                             fontWeight: FontWeight.w600,
                             color: p.text,
@@ -983,7 +983,7 @@ class _RailFacilitySearch extends StatelessWidget {
       child: TextField(
         controller: controller,
         onSubmitted: (_) => onSubmit(),
-        style: const TextStyle(fontFamily: 'DM Sans', fontSize: 13),
+        style: const TextStyle(fontFamily: kSansFamily, fontSize: 13),
         decoration: InputDecoration(
           isDense: true,
           hintText: 'Find a PA facility by name or county…',
@@ -1018,7 +1018,7 @@ class _RailChat extends ConsumerWidget {
             'full assistant.',
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontFamily: 'DM Sans',
+              fontFamily: kSansFamily,
               fontSize: 12,
               height: 1.4,
               color: p.textMuted,
@@ -1073,7 +1073,7 @@ class _RailBubble extends StatelessWidget {
         child: Text(
           text,
           style: TextStyle(
-            fontFamily: 'DM Sans',
+            fontFamily: kSansFamily,
             fontSize: 12.5,
             height: 1.4,
             fontStyle: muted ? FontStyle.italic : FontStyle.normal,
@@ -1110,7 +1110,7 @@ class _RailInput extends ConsumerWidget {
               controller: controller,
               enabled: !isSending,
               onSubmitted: (_) => onSend(),
-              style: const TextStyle(fontFamily: 'DM Sans', fontSize: 13),
+              style: const TextStyle(fontFamily: kSansFamily, fontSize: 13),
               decoration: const InputDecoration(
                 isCollapsed: true,
                 border: InputBorder.none,
@@ -1164,7 +1164,7 @@ class _WizardAiBar extends StatelessWidget {
                 child: Text(
                   'Need help with this step? Ask the AI',
                   style: TextStyle(
-                    fontFamily: 'DM Sans',
+                    fontFamily: kSansFamily,
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
                     color: p.onPrimaryLight,
@@ -1215,7 +1215,7 @@ class _WideStepRail extends StatelessWidget {
             Text(
               'YOUR DIRECTIVE',
               style: TextStyle(
-                fontFamily: 'JetBrains Mono',
+                fontFamily: kMonoFamily,
                 fontFamilyFallback: const [
                   'Consolas',
                   'Menlo',
@@ -1360,7 +1360,7 @@ class _RailStepRow extends StatelessWidget {
                 : Text(
                     '$index',
                     style: TextStyle(
-                      fontFamily: 'JetBrains Mono',
+                      fontFamily: kMonoFamily,
                       fontFamilyFallback: const [
                         'Consolas',
                         'Menlo',
@@ -1378,7 +1378,7 @@ class _RailStepRow extends StatelessWidget {
             child: Text(
               title,
               style: TextStyle(
-                fontFamily: 'DM Sans',
+                fontFamily: kSansFamily,
                 fontSize: 13.5,
                 fontWeight: titleWeight,
                 color: titleColor,

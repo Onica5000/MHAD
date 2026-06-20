@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/design_card.dart';
 
@@ -57,7 +57,7 @@ class ConsentOptionTile extends StatelessWidget {
                   Text(
                     title,
                     style: TextStyle(
-                      fontFamily: 'DM Sans',
+                      fontFamily: kSansFamily,
                       fontWeight: FontWeight.w600,
                       fontSize: 14,
                       color: p.text,
@@ -69,7 +69,7 @@ class ConsentOptionTile extends StatelessWidget {
                     Text(
                       description!,
                       style: TextStyle(
-                        fontFamily: 'DM Sans',
+                        fontFamily: kSansFamily,
                         fontSize: 12,
                         color: p.textMuted,
                         height: 1.4,

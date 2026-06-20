@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -140,7 +140,7 @@ class _Body extends ConsumerWidget {
                   : 'expires ${dateFmt.format(DateTime.fromMillisecondsSinceEpoch(directive.expirationDate!))}',
           ].join(' · '),
           style: TextStyle(
-            fontFamily: 'DM Sans',
+            fontFamily: kSansFamily,
             fontSize: 13.5,
             color: p.textMuted,
           ),
@@ -320,7 +320,7 @@ class _DocPreviewCard extends ConsumerWidget {
                         Text(
                           filename,
                           style: TextStyle(
-                            fontFamily: 'DM Sans',
+                            fontFamily: kSansFamily,
                             fontSize: 13.5,
                             fontWeight: FontWeight.w600,
                             color: p.text,
@@ -331,7 +331,7 @@ class _DocPreviewCard extends ConsumerWidget {
                         Text(
                           'Generated on demand · ~6 pages',
                           style: TextStyle(
-                            fontFamily: 'DM Sans',
+                            fontFamily: kSansFamily,
                             fontSize: 11.5,
                             color: p.textMuted,
                           ),
@@ -391,7 +391,7 @@ class _SigCol extends StatelessWidget {
         Text(
           label,
           style: TextStyle(
-            fontFamily: 'JetBrains Mono',
+            fontFamily: kMonoFamily,
             fontFamilyFallback: const [
               'Consolas',
               'Menlo',
@@ -407,7 +407,7 @@ class _SigCol extends StatelessWidget {
         Text(
           value,
           style: TextStyle(
-            fontFamily: 'DM Sans',
+            fontFamily: kSansFamily,
             fontSize: 12,
             fontWeight: FontWeight.w600,
             color: p.text,

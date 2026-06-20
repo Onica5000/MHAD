@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 
 /// Tone for [ActionRow] — controls the icon tile's background + the
@@ -87,7 +87,7 @@ class ActionRow extends StatelessWidget {
                     Text(
                       title,
                       style: TextStyle(
-                        fontFamily: 'DM Sans',
+                        fontFamily: kSansFamily,
                         fontSize: 13.5,
                         fontWeight: FontWeight.w600,
                         color: titleColor,
@@ -99,7 +99,7 @@ class ActionRow extends StatelessWidget {
                         child: Text(
                           subtitle!,
                           style: TextStyle(
-                            fontFamily: 'DM Sans',
+                            fontFamily: kSansFamily,
                             fontSize: 11.5,
                             color: p.textMuted,
                           ),

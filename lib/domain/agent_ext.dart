@@ -1,15 +1,9 @@
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/utils/address_format.dart';
 
-/// "City, State ZIP" helper — mirrors the private function in address_format.dart
-/// but exposed here for PDF rendering sites that need city/state/zip separately.
-String composeCityStateZip(String city, String state, String zip) {
-  final stateZip = [state.trim(), zip.trim()].where((s) => s.isNotEmpty).join(' ');
-  return [
-    if (city.trim().isNotEmpty) city.trim(),
-    if (stateZip.isNotEmpty) stateZip,
-  ].join(', ');
-}
+/// "City, State ZIP" — delegates to [cityStateZip] in address_format.dart.
+String composeCityStateZip(String city, String state, String zip) =>
+    cityStateZip(city, state, zip);
 
 /// Shared agent lookups — previously reimplemented at ~11 sites as
 /// `agents.where((a) => a.agentType == '…').firstOrNull`.

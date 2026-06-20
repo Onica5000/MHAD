@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
@@ -343,7 +343,7 @@ class _ContactPickerSheetState extends State<_ContactPickerSheet> {
                     "From your phone's contacts. We never upload them — "
                     'search runs locally.',
                     style: TextStyle(
-                      fontFamily: 'DM Sans',
+                      fontFamily: kSansFamily,
                       fontSize: 12.5,
                       height: 1.45,
                       color: p.textMuted,
@@ -374,7 +374,7 @@ class _ContactPickerSheetState extends State<_ContactPickerSheet> {
                                   EdgeInsets.symmetric(vertical: 10),
                             ),
                             style: TextStyle(
-                              fontFamily: 'DM Sans',
+                              fontFamily: kSansFamily,
                               fontSize: 13,
                               color: p.text,
                             ),
@@ -543,7 +543,7 @@ class _PersonTile extends StatelessWidget {
                     child: Text(
                       initials,
                       style: TextStyle(
-                        fontFamily: 'DM Sans',
+                        fontFamily: kSansFamily,
                         fontWeight: FontWeight.w700,
                         fontSize: 14,
                         color: selected ? p.onPrimary : p.onPrimaryLight,
@@ -560,7 +560,7 @@ class _PersonTile extends StatelessWidget {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            fontFamily: 'DM Sans',
+                            fontFamily: kSansFamily,
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
                             color: p.text,
@@ -570,7 +570,7 @@ class _PersonTile extends StatelessWidget {
                           Text(
                             relLabel,
                             style: TextStyle(
-                              fontFamily: 'JetBrains Mono',
+                              fontFamily: kMonoFamily,
                               fontFamilyFallback: const [
                                 'Consolas',
                                 'Menlo',
@@ -590,7 +590,7 @@ class _PersonTile extends StatelessWidget {
                                   ? '⚠ ${cand.eligibilityNote!}'
                                   : '⚠ ${cand.eligibilityNote!} — confirm they\'re not treating you',
                               style: TextStyle(
-                                fontFamily: 'DM Sans',
+                                fontFamily: kSansFamily,
                                 fontSize: 11,
                                 color: blocked ? dangerColor : warnColor,
                               ),
@@ -602,7 +602,7 @@ class _PersonTile extends StatelessWidget {
                             child: Text(
                               '✓ Eligible · 18+',
                               style: TextStyle(
-                                fontFamily: 'DM Sans',
+                                fontFamily: kSansFamily,
                                 fontSize: 11,
                                 color: p.textMuted,
                               ),
@@ -680,7 +680,7 @@ class _ManualEntryTile extends StatelessWidget {
               Text(
                 'Enter someone manually',
                 style: TextStyle(
-                  fontFamily: 'DM Sans',
+                  fontFamily: kSansFamily,
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
                   color: p.primary,
@@ -745,7 +745,7 @@ class _EligibilityRulesCard extends StatelessWidget {
                     child: Text(
                       rule,
                       style: TextStyle(
-                        fontFamily: 'DM Sans',
+                        fontFamily: kSansFamily,
                         fontSize: 12,
                         color: p.text,
                         height: 1.4,
@@ -756,7 +756,7 @@ class _EligibilityRulesCard extends StatelessWidget {
                   Text(
                     label.toUpperCase(),
                     style: TextStyle(
-                      fontFamily: 'JetBrains Mono',
+                      fontFamily: kMonoFamily,
                       fontFamilyFallback: const [
                         'Consolas',
                         'Menlo',
@@ -780,7 +780,7 @@ class _EligibilityRulesCard extends StatelessWidget {
             "that looks like a provider is a soft warning you can "
             'override — confirm only if they truly aren\'t treating you.',
             style: TextStyle(
-              fontFamily: 'DM Sans',
+              fontFamily: kSansFamily,
               fontSize: 10.5,
               color: p.textMuted,
               fontStyle: FontStyle.italic,

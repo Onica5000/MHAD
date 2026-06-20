@@ -1,4 +1,4 @@
-import 'dart:typed_data';
+﻿import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:cross_file/cross_file.dart';
@@ -1302,12 +1302,12 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
     }
 
     // ── Apply ECT / experimental / drug trial consent ──────────────────
-    // Map extracted "yes"/"agent"/"no" → the canonical consent string values.
+    // Map extracted "yes"/"agent"/"no" → the canonical ConsentOption.name values.
     String? toConsentValue(String? extracted) {
       switch (extracted) {
-        case 'yes': return 'consentYes';
-        case 'agent': return 'consentAgentDecides';
-        case 'no': return 'consentNo';
+        case 'yes': return ConsentOption.yes.name;
+        case 'agent': return ConsentOption.agentDecides.name;
+        case 'no': return ConsentOption.no.name;
         default: return null;
       }
     }
@@ -1576,7 +1576,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                 const SizedBox(width: 2),
                 Text(label,
                     style: TextStyle(
-                        fontFamily: 'DM Sans',
+                        fontFamily: kSansFamily,
                         fontSize: 13,
                         color: p.textMuted)),
               ],
@@ -1744,7 +1744,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                 'review every field before it lands in the form. Or skip and '
                 'type it all yourself.',
                 style: TextStyle(
-                  fontFamily: 'DM Sans',
+                  fontFamily: kSansFamily,
                   fontSize: 14,
                   height: 1.5,
                   color: p.textMuted,
@@ -1763,7 +1763,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                       'all — any field can be typed in by hand to keep it '
                       'confidential.',
                       style: TextStyle(
-                        fontFamily: 'DM Sans',
+                        fontFamily: kSansFamily,
                         fontSize: 12.5,
                         height: 1.45,
                         color: p.textMuted,
@@ -1909,7 +1909,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                   '$n FILE${n == 1 ? '' : 'S'} · HELD, NOT SENT YET',
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontFamily: 'JetBrains Mono',
+                    fontFamily: kMonoFamily,
                     fontFamilyFallback: const [
                       'Consolas',
                       'Menlo',
@@ -1950,7 +1950,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                       : 'Held on this device. Reading needs AI set up first '
                           '(free, ~30 seconds) — nothing is sent until then.',
                   style: TextStyle(
-                    fontFamily: 'DM Sans',
+                    fontFamily: kSansFamily,
                     fontSize: 11.5,
                     height: 1.4,
                     color: p.textMuted,
@@ -2002,7 +2002,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontFamily: 'DM Sans',
+                    fontFamily: kSansFamily,
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
                     color: p.text,
@@ -2012,7 +2012,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                   Text(
                     '${_docKind(d)} · $size',
                     style: TextStyle(
-                      fontFamily: 'DM Sans',
+                      fontFamily: kSansFamily,
                       fontSize: 11,
                       color: p.textMuted,
                     ),
@@ -2053,7 +2053,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                   '$n FILE${n == 1 ? '' : 'S'} · CLEARED ON TAB CLOSE',
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontFamily: 'JetBrains Mono',
+                    fontFamily: kMonoFamily,
                     fontFamilyFallback: const [
                       'Consolas',
                       'Menlo',
@@ -2131,7 +2131,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                   child: Text(
                     f.kind.toUpperCase(),
                     style: TextStyle(
-                      fontFamily: 'JetBrains Mono',
+                      fontFamily: kMonoFamily,
                       fontFamilyFallback: const [
                         'Consolas',
                         'Menlo',
@@ -2151,7 +2151,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontFamily: 'DM Sans',
+                    fontFamily: kSansFamily,
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
                     color: p.text,
@@ -2161,7 +2161,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                 Text(
                   '● ${f.fieldsAdded} field${f.fieldsAdded == 1 ? '' : 's'} added',
                   style: TextStyle(
-                    fontFamily: 'DM Sans',
+                    fontFamily: kSansFamily,
                     fontSize: 11,
                     fontWeight: FontWeight.w600,
                     color: okText,
@@ -2196,7 +2196,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
             Text(
               'Add another',
               style: TextStyle(
-                fontFamily: 'DM Sans',
+                fontFamily: kSansFamily,
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
                 color: p.textMuted,
@@ -2231,7 +2231,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                 child: Text(
                   "AI isn't set up yet",
                   style: TextStyle(
-                    fontFamily: 'DM Sans',
+                    fontFamily: kSansFamily,
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
                     color: p.text,
@@ -2246,7 +2246,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
             'or PDF needs a free Gemini key (about 30 seconds). You review '
             'every field before it lands in your form.',
             style: TextStyle(
-              fontFamily: 'DM Sans',
+              fontFamily: kSansFamily,
               fontSize: 12.5,
               height: 1.45,
               color: p.textMuted,
@@ -2325,7 +2325,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                   : 'Drop a photo, PDF, or screenshot',
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontFamily: 'DM Sans',
+                fontFamily: kSansFamily,
                 fontSize: 19,
                 fontWeight: FontWeight.w700,
                 color: p.text,
@@ -2341,7 +2341,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                   : 'JPG · PNG · HEIC · PDF · up to 10 MB',
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontFamily: 'DM Sans',
+                fontFamily: kSansFamily,
                 fontSize: 12.5,
                 color: p.textMuted,
               ),
@@ -2385,7 +2385,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                       'free tier may retain it. You review everything before it '
                       'is added to your directive.',
                       style: TextStyle(
-                        fontFamily: 'DM Sans',
+                        fontFamily: kSansFamily,
                         fontSize: 11.5,
                         height: 1.4,
                         color: p.text,
@@ -2437,7 +2437,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                   Text(
                     t.$2,
                     style: TextStyle(
-                      fontFamily: 'DM Sans',
+                      fontFamily: kSansFamily,
                       fontSize: 13,
                       fontWeight: FontWeight.w700,
                       color: p.text,
@@ -2447,7 +2447,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                   Text(
                     t.$3,
                     style: TextStyle(
-                      fontFamily: 'DM Sans',
+                      fontFamily: kSansFamily,
                       fontSize: 11,
                       height: 1.3,
                       color: p.textMuted,
@@ -2500,7 +2500,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                       Text(
                         'On a phone instead?',
                         style: TextStyle(
-                          fontFamily: 'DM Sans',
+                          fontFamily: kSansFamily,
                           fontSize: 12.5,
                           fontWeight: FontWeight.w700,
                           color: p.text,
@@ -2511,7 +2511,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                         'Open this page on your phone to snap a page directly '
                         'with its camera.',
                         style: TextStyle(
-                          fontFamily: 'DM Sans',
+                          fontFamily: kSansFamily,
                           fontSize: 11.5,
                           height: 1.35,
                           color: p.textMuted,
@@ -2609,7 +2609,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
             Text(
               title,
               style: TextStyle(
-                fontFamily: 'DM Sans',
+                fontFamily: kSansFamily,
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
                 color: fg,
@@ -2619,7 +2619,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
             Text(
               subtitle,
               style: TextStyle(
-                fontFamily: 'DM Sans',
+                fontFamily: kSansFamily,
                 fontSize: 11,
                 height: 1.35,
                 color: subtitleColor,
@@ -2683,7 +2683,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                                 t.$2,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
-                                  fontFamily: 'DM Sans',
+                                  fontFamily: kSansFamily,
                                   fontSize: 13,
                                   fontWeight: FontWeight.w700,
                                   color: p.text,
@@ -2702,7 +2702,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                                 child: Text(
                                   'FASTEST',
                                   style: TextStyle(
-                                    fontFamily: 'JetBrains Mono',
+                                    fontFamily: kMonoFamily,
                                     fontFamilyFallback: const [
                                       'Consolas',
                                       'Menlo',
@@ -2723,7 +2723,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                         Text(
                           t.$3,
                           style: TextStyle(
-                            fontFamily: 'DM Sans',
+                            fontFamily: kSansFamily,
                             fontSize: 11.5,
                             color: p.textMuted,
                           ),
@@ -2763,7 +2763,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
               'AI to read it. The app saves nothing; Google may retain it on '
               'the free tier. You review before anything is added.',
               style: TextStyle(
-                fontFamily: 'DM Sans',
+                fontFamily: kSansFamily,
                 fontSize: 11,
                 height: 1.4,
                 color: p.textMuted,
@@ -2806,7 +2806,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                     'Reading ${_sourceDocs.length} '
                     'document${_sourceDocs.length == 1 ? '' : 's'}:',
                     style: TextStyle(
-                      fontFamily: 'DM Sans',
+                      fontFamily: kSansFamily,
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
                       color: p.textMuted,
@@ -2833,7 +2833,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                fontFamily: 'DM Sans',
+                                fontFamily: kSansFamily,
                                 fontSize: 12.5,
                                 color: p.text,
                               ),
@@ -2902,7 +2902,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontFamily: 'DM Sans',
+                    fontFamily: kSansFamily,
                     fontSize: 13,
                     fontWeight: FontWeight.w700,
                     color: p.text,
@@ -2914,7 +2914,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                       ? "Read by Google's AI to autofill."
                       : "$n files read by Google's AI to autofill.",
                   style: TextStyle(
-                    fontFamily: 'DM Sans',
+                    fontFamily: kSansFamily,
                     fontSize: 11.5,
                     height: 1.4,
                     color: p.textMuted,
@@ -2940,7 +2940,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
               child: Text(
                 text,
                 style: TextStyle(
-                  fontFamily: 'DM Sans',
+                  fontFamily: kSansFamily,
                   fontSize: 12.5,
                   height: 1.45,
                   color: p.textMuted,
@@ -2982,7 +2982,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                 Text(
                   'AI READ THIS PHOTO',
                   style: TextStyle(
-                    fontFamily: 'JetBrains Mono',
+                    fontFamily: kMonoFamily,
                     fontFamilyFallback: const [
                       'Consolas',
                       'Menlo',
@@ -3019,7 +3019,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
         'These are the details the AI pulled from your document. Here\'s how '
         'to use this page:',
         style: TextStyle(
-          fontFamily: 'DM Sans',
+          fontFamily: kSansFamily,
           fontSize: 13,
           fontWeight: FontWeight.w600,
           color: p.text,
@@ -3105,7 +3105,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                     'PII was detected and removed before analysis: '
                     '${_piiStripped.toSet().join(", ")}',
                     style: TextStyle(
-                      fontFamily: 'DM Sans',
+                      fontFamily: kSansFamily,
                       fontSize: 11.5,
                       height: 1.4,
                       color: p.text,
@@ -3120,7 +3120,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
         Text(
           'Add to your directive',
           style: TextStyle(
-            fontFamily: 'JetBrains Mono',
+            fontFamily: kMonoFamily,
             fontFamilyFallback: const [
               'Consolas',
               'Menlo',
@@ -3155,7 +3155,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                   'discarded. Nothing is stored after you confirm or '
                   'discard.',
                   style: TextStyle(
-                    fontFamily: 'DM Sans',
+                    fontFamily: kSansFamily,
                     fontSize: 11.5,
                     color: p.textMuted,
                     height: 1.4,
@@ -3170,7 +3170,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
           '$checkedCount of ${keys.length} fields ready to add',
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontFamily: 'JetBrains Mono',
+            fontFamily: kMonoFamily,
             fontFamilyFallback: const [
               'Consolas',
               'Menlo',
@@ -3269,7 +3269,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
             child: Text(
               'Replaces what you have: "${it.existing}"',
               style: TextStyle(
-                fontFamily: 'DM Sans',
+                fontFamily: kSansFamily,
                 fontSize: 11.5,
                 fontStyle: FontStyle.italic,
                 color: p.textMuted,
@@ -3292,7 +3292,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
   Widget _groupLabel(String text, MhadPalette p) => Text(
         text.toUpperCase(),
         style: TextStyle(
-          fontFamily: 'JetBrains Mono',
+          fontFamily: kMonoFamily,
           fontFamilyFallback: const [
             'Consolas',
             'Menlo',
@@ -3548,7 +3548,7 @@ class _SnapReviewRow extends StatelessWidget {
                       child: Text(
                         fieldLabel.toUpperCase(),
                         style: TextStyle(
-                          fontFamily: 'JetBrains Mono',
+                          fontFamily: kMonoFamily,
                           fontFamilyFallback: const [
                             'Consolas',
                             'Menlo',
@@ -3566,7 +3566,7 @@ class _SnapReviewRow extends StatelessWidget {
                     Text(
                       ok ? '→ $target' : 'Not added',
                       style: TextStyle(
-                        fontFamily: 'JetBrains Mono',
+                        fontFamily: kMonoFamily,
                         fontFamilyFallback: const [
                           'Consolas',
                           'Menlo',
@@ -3585,7 +3585,7 @@ class _SnapReviewRow extends StatelessWidget {
                 Text(
                   value,
                   style: TextStyle(
-                    fontFamily: 'DM Sans',
+                    fontFamily: kSansFamily,
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                     color: ok ? p.text : p.textMuted,

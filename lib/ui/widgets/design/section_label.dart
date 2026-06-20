@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:mhad/ui/theme/app_theme.dart';
 
 /// Uppercased, wide-tracked label used to group sections in the redesign.
 ///
@@ -33,7 +34,7 @@ class SectionLabel extends StatelessWidget {
         // is bundled (pubspec); the fallback chain keeps it monospaced if the
         // asset is ever missing on web.
         style: TextStyle(
-          fontFamily: 'JetBrains Mono',
+          fontFamily: kMonoFamily,
           fontFamilyFallback: const [
             'Consolas',
             'Menlo',

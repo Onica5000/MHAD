@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+﻿import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
@@ -56,7 +56,7 @@ class PermissionsOverviewScreen extends StatelessWidget {
             'section below explains exactly what a permission unlocks, '
             'what the app does with the result, and what it never does.',
             style: TextStyle(
-              fontFamily: 'DM Sans',
+              fontFamily: kSansFamily,
               fontSize: 14,
               color: p.textMuted,
               height: 1.5,
@@ -224,7 +224,7 @@ class _PermissionCard extends StatelessWidget {
                     Text(
                       title,
                       style: TextStyle(
-                        fontFamily: 'DM Sans',
+                        fontFamily: kSansFamily,
                         fontSize: 15,
                         fontWeight: FontWeight.w700,
                         color: p.text,
@@ -246,7 +246,7 @@ class _PermissionCard extends StatelessWidget {
                           child: Text(
                             statusLine,
                             style: TextStyle(
-                              fontFamily: 'JetBrains Mono',
+                              fontFamily: kMonoFamily,
                               fontFamilyFallback: const [
                                 'Consolas',
                                 'Menlo',
@@ -270,7 +270,7 @@ class _PermissionCard extends StatelessWidget {
           Text(
             usedFor,
             style: TextStyle(
-              fontFamily: 'DM Sans',
+              fontFamily: kSansFamily,
               fontSize: 13,
               color: p.text,
               height: 1.5,
@@ -299,7 +299,7 @@ class _PermissionCard extends StatelessWidget {
                           child: Text(
                             line,
                             style: TextStyle(
-                              fontFamily: 'DM Sans',
+                              fontFamily: kSansFamily,
                               fontSize: 12,
                               height: 1.4,
                               color: p.text,

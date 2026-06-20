@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/domain/model/directive.dart';
@@ -65,7 +65,7 @@ class WebDashboardLanding extends ConsumerWidget {
             'trust how to care for you if you can’t speak for yourself. '
             'Free, anonymous, and takes about 20 minutes.',
             style: TextStyle(
-                fontFamily: 'DM Sans',
+                fontFamily: kSansFamily,
                 fontSize: 15,
                 height: 1.5,
                 color: p.textMuted),
@@ -240,7 +240,7 @@ class DirectiveFormChoice extends ConsumerWidget {
           'You can switch form types later if you change your mind — '
           'Combined is the broadest.',
           style: TextStyle(
-            fontFamily: 'DM Sans',
+            fontFamily: kSansFamily,
             fontSize: 12.5,
             height: 1.4,
             color: p.textMuted,
@@ -282,7 +282,7 @@ class _AnonBanner extends StatelessWidget {
                 Text(
                   'You’re working anonymously. Nothing is saved.',
                   style: TextStyle(
-                      fontFamily: 'DM Sans',
+                      fontFamily: kSansFamily,
                       fontSize: 13,
                       fontWeight: FontWeight.w700,
                       color: p.text),
@@ -294,7 +294,7 @@ class _AnonBanner extends StatelessWidget {
                   'you can reopen and recover it — then it’s erased for good. '
                   'Download your PDF to keep it.',
                   style: TextStyle(
-                      fontFamily: 'DM Sans',
+                      fontFamily: kSansFamily,
                       fontSize: 12,
                       height: 1.4,
                       color: p.textMuted),
@@ -314,7 +314,7 @@ class _AnonBanner extends StatelessWidget {
               child: Text(
                 'HOW THIS WORKS →',
                 style: TextStyle(
-                  fontFamily: 'JetBrains Mono',
+                  fontFamily: kMonoFamily,
                   fontFamilyFallback: const [
                     'Consolas',
                     'Menlo',
@@ -380,7 +380,7 @@ class _CombinedCard extends StatelessWidget {
                     child: Text(
                       'RECOMMENDED',
                       style: TextStyle(
-                        fontFamily: 'DM Sans',
+                        fontFamily: kSansFamily,
                         fontSize: 11,
                         fontWeight: FontWeight.w700,
                         letterSpacing: 0.4,
@@ -392,7 +392,7 @@ class _CombinedCard extends StatelessWidget {
                   Text(
                     'Combined directive',
                     style: TextStyle(
-                      fontFamily: 'DM Sans',
+                      fontFamily: kSansFamily,
                       fontSize: 24,
                       fontWeight: FontWeight.w700,
                       letterSpacing: -0.4,
@@ -404,7 +404,7 @@ class _CombinedCard extends StatelessWidget {
                     'Treatment preferences and a trusted decision-maker, in '
                     'one document. 9 short steps · about 20 minutes.',
                     style: TextStyle(
-                      fontFamily: 'DM Sans',
+                      fontFamily: kSansFamily,
                       fontSize: 13.5,
                       height: 1.5,
                       color: p.onPrimary.withValues(alpha: 0.9),
@@ -484,7 +484,7 @@ class _SingleFormCard extends StatelessWidget {
                     Text(
                       title,
                       style: TextStyle(
-                        fontFamily: 'DM Sans',
+                        fontFamily: kSansFamily,
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
                         color: p.text,
@@ -494,7 +494,7 @@ class _SingleFormCard extends StatelessWidget {
                     Text(
                       sub,
                       style: TextStyle(
-                        fontFamily: 'DM Sans',
+                        fontFamily: kSansFamily,
                         fontSize: 12,
                         height: 1.4,
                         color: p.textMuted,
@@ -559,7 +559,7 @@ class _ToolCard extends StatelessWidget {
               Text(
                 title,
                 style: TextStyle(
-                    fontFamily: 'DM Sans',
+                    fontFamily: kSansFamily,
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
                     color: p.text),
@@ -568,7 +568,7 @@ class _ToolCard extends StatelessWidget {
               Text(
                 sub,
                 style: TextStyle(
-                    fontFamily: 'DM Sans',
+                    fontFamily: kSansFamily,
                     fontSize: 12,
                     height: 1.4,
                     color: p.textMuted),
@@ -577,7 +577,7 @@ class _ToolCard extends StatelessWidget {
               Text(
                 '$cta →',
                 style: TextStyle(
-                    fontFamily: 'DM Sans',
+                    fontFamily: kSansFamily,
                     fontSize: 12,
                     fontWeight: FontWeight.w700,
                     color: p.primary),
@@ -622,7 +622,7 @@ class _HelpMeChooseBanner extends StatelessWidget {
                   child: Text(
                     'Not sure which form fits? Take the 4-question quiz.',
                     style: TextStyle(
-                      fontFamily: 'DM Sans',
+                      fontFamily: kSansFamily,
                       fontSize: 13,
                       fontWeight: FontWeight.w500,
                       color: p.onPrimaryLight,
@@ -633,7 +633,7 @@ class _HelpMeChooseBanner extends StatelessWidget {
                 Text(
                   'Help me choose →',
                   style: TextStyle(
-                    fontFamily: 'DM Sans',
+                    fontFamily: kSansFamily,
                     fontSize: 12.5,
                     fontWeight: FontWeight.w700,
                     color: p.primary,
@@ -729,7 +729,7 @@ class _PromiseItem extends StatelessWidget {
               Text(
                 title,
                 style: TextStyle(
-                    fontFamily: 'DM Sans',
+                    fontFamily: kSansFamily,
                     fontSize: 13,
                     fontWeight: FontWeight.w700,
                     color: p.text),
@@ -738,7 +738,7 @@ class _PromiseItem extends StatelessWidget {
               Text(
                 sub,
                 style: TextStyle(
-                    fontFamily: 'DM Sans',
+                    fontFamily: kSansFamily,
                     fontSize: 12,
                     height: 1.4,
                     color: p.textMuted),
@@ -792,7 +792,7 @@ class _BookletQuoteCard extends StatelessWidget {
               Text(
                 '— PA MHAD booklet · Office of Mental Health',
                 style: TextStyle(
-                  fontFamily: 'DM Sans',
+                  fontFamily: kSansFamily,
                   fontSize: 11.5,
                   letterSpacing: 0.3,
                   color: p.textMuted,

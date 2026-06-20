@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:mhad/services/medline_plus_service.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/utils/launch_utils.dart';
@@ -13,7 +13,7 @@ Future<void> showMedlinePlusDialog(
   required String title,
   required Future<MedlinePlusTopic?> future,
 }) {
-  const kSans = 'DM Sans';
+  const kSans = kSansFamily;
   return showDialog<void>(
     context: context,
     builder: (ctx) {

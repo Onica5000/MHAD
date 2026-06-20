@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+﻿import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mhad/services/pin_auth_service.dart';
 import 'package:mhad/services/privacy_mode_service.dart';
@@ -114,7 +114,7 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                       Text(
                         'How should we handle your data?',
                         style: TextStyle(
-                          fontFamily: 'DM Sans',
+                          fontFamily: kSansFamily,
                           fontSize: 28,
                           fontWeight: FontWeight.w700,
                           height: 1.15,
@@ -126,7 +126,7 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                       Text(
                         'You can change this anytime in Settings.',
                         style: TextStyle(
-                          fontFamily: 'DM Sans',
+                          fontFamily: kSansFamily,
                           fontSize: 14,
                           height: 1.5,
                           color: p.textMuted,
@@ -186,7 +186,7 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                                 'is sent to a server for storage.',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontFamily: 'DM Sans',
+                            fontFamily: kSansFamily,
                             fontSize: 11.5,
                             height: 1.45,
                             color: p.textMuted,
@@ -293,7 +293,7 @@ class _Card2 extends StatelessWidget {
                             child: Text(
                               title,
                               style: TextStyle(
-                                fontFamily: 'DM Sans',
+                                fontFamily: kSansFamily,
                                 fontSize: 18,
                                 fontWeight: FontWeight.w700,
                                 letterSpacing: -0.2,
@@ -307,7 +307,7 @@ class _Card2 extends StatelessWidget {
                       Text(
                         subtitle,
                         style: TextStyle(
-                          fontFamily: 'DM Sans',
+                          fontFamily: kSansFamily,
                           fontSize: 13.5,
                           height: 1.45,
                           color: p.textMuted,
@@ -329,7 +329,7 @@ class _Card2 extends StatelessWidget {
                                   child: Text(
                                     b,
                                     style: TextStyle(
-                                      fontFamily: 'DM Sans',
+                                      fontFamily: kSansFamily,
                                       fontSize: 11,
                                       fontWeight: FontWeight.w600,
                                       color: p.textMuted,
@@ -358,7 +358,7 @@ class _Card2 extends StatelessWidget {
                         child: Text(
                           'RECOMMENDED',
                           style: TextStyle(
-                            fontFamily: 'DM Sans',
+                            fontFamily: kSansFamily,
                             fontSize: 11,
                             fontWeight: FontWeight.w700,
                             letterSpacing: 0.4,

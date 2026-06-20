@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/providers/assistant_providers.dart';
@@ -150,7 +150,7 @@ class _NavPill extends StatelessWidget {
             Text(
               item.label,
               style: TextStyle(
-                fontFamily: 'DM Sans',
+                fontFamily: kSansFamily,
                 fontSize: 12.5,
                 fontWeight: FontWeight.w600,
                 color: fg,

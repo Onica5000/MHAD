@@ -1,4 +1,4 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -248,7 +248,7 @@ class _VoiceRecordSheetState extends State<_VoiceRecordSheet>
                             'the audio — you can edit before saving.',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontFamily: 'DM Sans',
+                      fontFamily: kSansFamily,
                       fontSize: 12.5,
                       height: 1.5,
                       color: p.textMuted,
@@ -269,7 +269,7 @@ class _VoiceRecordSheetState extends State<_VoiceRecordSheet>
                   Text(
                     _timer(),
                     style: TextStyle(
-                      fontFamily: 'JetBrains Mono',
+                      fontFamily: kMonoFamily,
                       fontFamilyFallback: const [
                         'Consolas',
                         'Menlo',
@@ -339,7 +339,7 @@ class _VoiceRecordSheetState extends State<_VoiceRecordSheet>
                     : "AUDIO ISN'T SAVED · TRANSCRIPT STAYS IN THIS SESSION",
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontFamily: 'JetBrains Mono',
+                  fontFamily: kMonoFamily,
                   fontFamilyFallback: const [
                     'Consolas',
                     'Menlo',
@@ -514,7 +514,7 @@ class _LiveCaptionState extends State<_LiveCaption>
           ],
         ),
         style: TextStyle(
-          fontFamily: 'DM Sans',
+          fontFamily: kSansFamily,
           fontSize: 13.5,
           height: 1.5,
           color: widget.textColor,
@@ -565,7 +565,7 @@ class _CircleButton extends StatelessWidget {
                   : Text(
                       label!,
                       style: TextStyle(
-                        fontFamily: 'DM Sans',
+                        fontFamily: kSansFamily,
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
                         color: fg,

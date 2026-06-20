@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
@@ -60,7 +60,7 @@ class FacilitatorScreen extends StatelessWidget {
             '${appData.fact('facilitatorCompletionStat')} '
             'Pick the kind of support that fits today.',
             style: TextStyle(
-              fontFamily: 'DM Sans',
+              fontFamily: kSansFamily,
               fontSize: 14,
               color: p.textMuted,
               height: 1.5,
@@ -162,7 +162,7 @@ class _PathwayCard extends StatelessWidget {
           children: [
             Text(tag,
                 style: TextStyle(
-                  fontFamily: 'JetBrains Mono',
+                  fontFamily: kMonoFamily,
                   fontFamilyFallback: const [
                     'Consolas',
                     'Menlo',
@@ -177,7 +177,7 @@ class _PathwayCard extends StatelessWidget {
             const SizedBox(height: 6),
             Text(title,
                 style: TextStyle(
-                  fontFamily: 'DM Sans',
+                  fontFamily: kSansFamily,
                   fontSize: 17,
                   fontWeight: FontWeight.w700,
                   color: primary ? cs.onPrimary : cs.onSurface,
@@ -185,7 +185,7 @@ class _PathwayCard extends StatelessWidget {
             const SizedBox(height: 6),
             Text(body,
                 style: TextStyle(
-                  fontFamily: 'DM Sans',
+                  fontFamily: kSansFamily,
                   fontSize: 13.5,
                   height: 1.45,
                   color: primary ? cs.onPrimary : cs.onSurfaceVariant,
@@ -207,7 +207,7 @@ class _PathwayCard extends StatelessWidget {
                     ),
                     child: Text(m,
                         style: TextStyle(
-                          fontFamily: 'JetBrains Mono',
+                          fontFamily: kMonoFamily,
                           fontFamilyFallback: const [
                             'Consolas',
                             'Menlo',
@@ -258,7 +258,7 @@ class _ReferralRow extends StatelessWidget {
                   children: [
                     Text(label,
                         style: const TextStyle(
-                          fontFamily: 'DM Sans',
+                          fontFamily: kSansFamily,
                           fontSize: 13.5,
                           fontWeight: FontWeight.w600,
                         )),

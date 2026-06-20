@@ -1,4 +1,4 @@
-import 'package:drift/drift.dart' show Value;
+﻿import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -355,7 +355,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
                     const Text(
                       'Side effects you may be experiencing',
                       style: TextStyle(
-                        fontFamily: 'DM Sans',
+                        fontFamily: kSansFamily,
                         fontWeight: FontWeight.w600,
                         fontSize: 15,
                       ),
@@ -367,7 +367,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
                       'activities — so your care team knows. Needs AI set up. '
                       'Not medical advice.',
                       style: TextStyle(
-                        fontFamily: 'DM Sans',
+                        fontFamily: kSansFamily,
                         fontSize: 12,
                         height: 1.4,
                         color: p.textMuted,

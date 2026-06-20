@@ -22,16 +22,8 @@ List<pw.Page> buildDeclarationPages({
       ? 'Mental Health Declaration  ·  DRAFT — UNSIGNED'
       : 'Mental Health Declaration';
 
-  final current = medications.where((m) => m.entryType == 'current').toList();
-  final exceptions = medications
-      .where((m) => m.entryType == 'exception')
-      .toList();
-  final limitations = medications
-      .where((m) => m.entryType == 'limitation')
-      .toList();
-  final preferred = medications
-      .where((m) => m.entryType == 'preferred')
-      .toList();
+  final (:current, :exceptions, :limitations, :preferred) =
+      categorizeMedications(medications);
 
   final parsed = additional != null
       ? parseOtherField(additional.other)

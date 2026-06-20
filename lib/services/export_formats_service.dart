@@ -77,16 +77,9 @@ class ExportFormatsService {
     }
 
     if (additional != null) {
-      row('Instructions', 'Health history', additional.healthHistory);
-      row('Instructions', 'Crisis intervention', additional.crisisIntervention);
-      row('Instructions', 'Activities', additional.activities);
-      row('Instructions', 'Dietary', additional.dietary);
-      row('Instructions', 'Religious', additional.religious);
-      row('Instructions', 'Children / custody', additional.childrenCustody);
-      row('Instructions', 'Family notification', additional.familyNotification);
-      row('Instructions', 'Records disclosure', additional.recordsDisclosure);
-      row('Instructions', 'Pet care', additional.petCustody);
-      row('Instructions', 'Other', additional.other);
+      for (final n in additionalInstructionNotesCsv(additional)) {
+        row('Instructions', n.label, n.value);
+      }
     }
 
     if (witnesses != null) {

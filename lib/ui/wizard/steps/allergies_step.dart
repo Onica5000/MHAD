@@ -14,8 +14,6 @@ import 'package:mhad/ui/widgets/nlm_attribution.dart';
 import 'package:mhad/ui/wizard/widgets/wizard_help_button.dart';
 import 'package:mhad/ui/wizard/wizard_step_mixin.dart';
 
-/// Monospace fallback stack shared across the editorial steps.
-const _kMono = <String>['Consolas', 'Menlo', 'Courier New', 'monospace'];
 
 /// The kind of allergen, and the clinical source its autocomplete hits.
 ///
@@ -350,6 +348,18 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
             onPick: _pickSuggestion,
           ),
         ],
+        if (_suggestions.isEmpty && _query.length >= 2)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            child: Text(
+              _searching ? '' : 'No results found.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontFamily: kSansFamily,
+                color: p.textMuted,
+              ),
+            ),
+          ),
         Padding(
           padding: const EdgeInsets.fromLTRB(2, 6, 2, 0),
           child: Text(
@@ -357,7 +367,7 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
             'search ICD-10 (e.g. Z91.01 food allergy, T78.4 unspecified '
             'allergy).',
             style: TextStyle(
-              fontFamily: 'DM Sans',
+              fontFamily: kSansFamily,
               fontSize: 10.5,
               fontStyle: FontStyle.italic,
               height: 1.4,
@@ -436,7 +446,7 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
           "You're not required to list anything. Anything you do list is shared "
           'only with the people your directive names.',
           style: TextStyle(
-            fontFamily: 'DM Sans',
+            fontFamily: kSansFamily,
             fontSize: 11,
             fontStyle: FontStyle.italic,
             height: 1.45,
@@ -461,8 +471,8 @@ class _MonoLabel extends StatelessWidget {
     return Text(
       text.toUpperCase(),
       style: TextStyle(
-        fontFamily: 'JetBrains Mono',
-        fontFamilyFallback: _kMono,
+        fontFamily: kMonoFamily,
+        fontFamilyFallback: kMonoFallbacks,
         fontSize: 11,
         fontWeight: FontWeight.w700,
         letterSpacing: 0.6,
@@ -521,7 +531,7 @@ class _SevereNudgeBanner extends StatelessWidget {
                     ],
                   ),
                   style: TextStyle(
-                    fontFamily: 'DM Sans',
+                    fontFamily: kSansFamily,
                     fontSize: 13,
                     height: 1.4,
                     color: fg,
@@ -627,7 +637,7 @@ class _KindSegment extends StatelessWidget {
                 kind.label,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontFamily: 'DM Sans',
+                  fontFamily: kSansFamily,
                   fontSize: 12.5,
                   fontWeight: FontWeight.w700,
                   color: active ? p.text : p.textMuted,
@@ -638,8 +648,8 @@ class _KindSegment extends StatelessWidget {
                 kind.source,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontFamily: 'JetBrains Mono',
-                  fontFamilyFallback: _kMono,
+                  fontFamily: kMonoFamily,
+                  fontFamilyFallback: kMonoFallbacks,
                   fontSize: 8,
                   letterSpacing: 0.4,
                   color: active ? p.primary : p.textMuted,
@@ -693,7 +703,7 @@ class _SearchField extends StatelessWidget {
               enableSuggestions: false,
               onChanged: onChanged,
               style: TextStyle(
-                fontFamily: 'DM Sans',
+                fontFamily: kSansFamily,
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
                 color: p.text,
@@ -745,8 +755,8 @@ class _SearchField extends StatelessWidget {
                   Text(
                     badge,
                     style: TextStyle(
-                      fontFamily: 'JetBrains Mono',
-                      fontFamilyFallback: _kMono,
+                      fontFamily: kMonoFamily,
+                      fontFamilyFallback: kMonoFallbacks,
                       fontSize: 9,
                       fontWeight: FontWeight.w700,
                       letterSpacing: 0.5,
@@ -797,8 +807,8 @@ class _AutoComplete extends StatelessWidget {
                   child: Text(
                     source.toUpperCase(),
                     style: TextStyle(
-                      fontFamily: 'JetBrains Mono',
-                      fontFamilyFallback: _kMono,
+                      fontFamily: kMonoFamily,
+                      fontFamilyFallback: kMonoFallbacks,
                       fontSize: 9.5,
                       fontWeight: FontWeight.w700,
                       letterSpacing: 0.6,
@@ -809,8 +819,8 @@ class _AutoComplete extends StatelessWidget {
                 Text(
                   '${items.length} matches',
                   style: TextStyle(
-                    fontFamily: 'JetBrains Mono',
-                    fontFamilyFallback: _kMono,
+                    fontFamily: kMonoFamily,
+                    fontFamilyFallback: kMonoFallbacks,
                     fontSize: 9.5,
                     letterSpacing: 0.4,
                     color: p.textMuted,
@@ -910,8 +920,8 @@ class _AutoCompleteRow extends StatelessWidget {
               child: Text(
                 item.code,
                 style: TextStyle(
-                  fontFamily: 'JetBrains Mono',
-                  fontFamilyFallback: _kMono,
+                  fontFamily: kMonoFamily,
+                  fontFamilyFallback: kMonoFallbacks,
                   fontSize: 10,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 0.4,
@@ -927,7 +937,7 @@ class _AutoCompleteRow extends StatelessWidget {
                   RichText(
                     text: TextSpan(
                       style: const TextStyle(
-                        fontFamily: 'DM Sans',
+                        fontFamily: kSansFamily,
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
                         height: 1.3,
@@ -1063,7 +1073,7 @@ class _SeverityOption extends StatelessWidget {
                 label,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontFamily: 'DM Sans',
+                  fontFamily: kSansFamily,
                   fontSize: 12.5,
                   fontWeight: FontWeight.w700,
                   height: 1.25,
@@ -1075,7 +1085,7 @@ class _SeverityOption extends StatelessWidget {
                 desc,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontFamily: 'DM Sans',
+                  fontFamily: kSansFamily,
                   fontSize: 10,
                   fontWeight: FontWeight.w500,
                   height: 1.2,

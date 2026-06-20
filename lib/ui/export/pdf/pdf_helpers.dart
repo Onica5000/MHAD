@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'package:mhad/constants.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/agent_ext.dart';
+import 'package:mhad/domain/model/directive.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
@@ -983,3 +984,27 @@ String? _roommateMatchLabel(String raw) {
   }
   return v;
 }
+
+/// Splits [meds] into the four Act-194 categories used by all PDF builders.
+({
+  List<MedicationEntry> current,
+  List<MedicationEntry> exceptions,
+  List<MedicationEntry> limitations,
+  List<MedicationEntry> preferred,
+}) categorizeMedications(List<MedicationEntry> meds) => (
+      current: meds
+          .where((m) => m.entryType == MedicationEntryType.current.name)
+          .toList(),
+      exceptions: meds
+          .where((m) => m.entryType == MedicationEntryType.exception.name)
+          .toList(),
+      limitations: meds
+          .where((m) => m.entryType == MedicationEntryType.limitation.name)
+          .toList(),
+      preferred: meds
+          .where((m) => m.entryType == MedicationEntryType.preferred.name)
+          .toList(),
+    );
+
+/// Returns the best available phone number for an agent, or empty string.
+String agentBestPhone(Agent? agent) => agent?.bestPhone ?? '';

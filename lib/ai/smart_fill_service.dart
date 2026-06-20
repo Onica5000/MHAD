@@ -11,6 +11,7 @@ import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/services/certificate_pinning_service.dart';
 import 'package:mhad/services/clinical_data_service.dart';
 import 'package:mhad/services/gemini_rate_tracker.dart';
+import 'package:mhad/utils/json_utils.dart';
 
 /// The structured input collected from the user via NIH APIs (zero tokens),
 /// plus existing wizard data so the AI can supplement rather than duplicate.
@@ -249,32 +250,27 @@ class SmartFillResult {
 
   factory SmartFillResult.fromJson(Map<String, dynamic> json) {
     return SmartFillResult(
-      effectiveCondition: _str(json['effective_condition']),
-      healthHistory: _str(json['health_history']),
-      preferredFacilityNote: _str(json['preferred_facility_note']),
-      avoidFacilityNote: _str(json['avoid_facility_note']),
-      ectPreference: _str(json['ect_preference']),
-      experimentalPreference: _str(json['experimental_preference']),
-      drugTrialPreference: _str(json['drug_trial_preference']),
-      crisisIntervention: _str(json['crisis_intervention']),
-      deescalation: _str(json['deescalation']),
-      triggers: _str(json['triggers']),
-      activities: _str(json['activities']),
-      dietary: _str(json['dietary']),
-      religious: _str(json['religious']),
-      childrenCustody: _str(json['children_custody']),
-      familyNotification: _str(json['family_notification']),
-      recordsDisclosure: _str(json['records_disclosure']),
-      petCustody: _str(json['pet_custody']),
-      agentGuidance: _str(json['agent_guidance']),
+      effectiveCondition: optStr(json['effective_condition']),
+      healthHistory: optStr(json['health_history']),
+      preferredFacilityNote: optStr(json['preferred_facility_note']),
+      avoidFacilityNote: optStr(json['avoid_facility_note']),
+      ectPreference: optStr(json['ect_preference']),
+      experimentalPreference: optStr(json['experimental_preference']),
+      drugTrialPreference: optStr(json['drug_trial_preference']),
+      crisisIntervention: optStr(json['crisis_intervention']),
+      deescalation: optStr(json['deescalation']),
+      triggers: optStr(json['triggers']),
+      activities: optStr(json['activities']),
+      dietary: optStr(json['dietary']),
+      religious: optStr(json['religious']),
+      childrenCustody: optStr(json['children_custody']),
+      familyNotification: optStr(json['family_notification']),
+      recordsDisclosure: optStr(json['records_disclosure']),
+      petCustody: optStr(json['pet_custody']),
+      agentGuidance: optStr(json['agent_guidance']),
     );
   }
 
-  static String? _str(dynamic v) {
-    if (v == null) return null;
-    final s = v.toString().trim();
-    return s.isEmpty ? null : s;
-  }
 }
 
 /// Wrapper returned by [SmartFillService.generate] containing the parsed

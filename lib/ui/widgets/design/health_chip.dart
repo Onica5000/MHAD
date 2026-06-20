@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 
 /// Tone for a [HealthChip] — drives the colour family.
@@ -110,7 +110,7 @@ class HealthChip extends StatelessWidget {
               child: Text(
                 code,
                 style: TextStyle(
-                  fontFamily: 'JetBrains Mono',
+                  fontFamily: kMonoFamily,
                   fontFamilyFallback: const [
                     'Consolas',
                     'Menlo',
@@ -138,7 +138,7 @@ class HealthChip extends StatelessWidget {
                     Text(
                       label,
                       style: TextStyle(
-                        fontFamily: 'DM Sans',
+                        fontFamily: kSansFamily,
                         fontSize: 13.5,
                         fontWeight: FontWeight.w700,
                         color: text,
@@ -148,7 +148,7 @@ class HealthChip extends StatelessWidget {
                       Text(
                         dose!,
                         style: TextStyle(
-                          fontFamily: 'JetBrains Mono',
+                          fontFamily: kMonoFamily,
                           fontFamilyFallback: const [
                             'Consolas',
                             'Menlo',
@@ -173,7 +173,7 @@ class HealthChip extends StatelessWidget {
                         child: Text(
                           sourceTag!,
                           style: TextStyle(
-                            fontFamily: 'JetBrains Mono',
+                            fontFamily: kMonoFamily,
                             fontFamilyFallback: const [
                               'Consolas',
                               'Menlo',
@@ -194,7 +194,7 @@ class HealthChip extends StatelessWidget {
                   Text(
                     sub!,
                     style: TextStyle(
-                      fontFamily: 'DM Sans',
+                      fontFamily: kSansFamily,
                       fontSize: 11.5,
                       height: 1.35,
                       color: text.withValues(alpha: 0.78),

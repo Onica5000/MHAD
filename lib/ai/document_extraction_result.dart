@@ -1,4 +1,6 @@
-﻿/// Structured data extracted from a user-provided document (photo, PDF, text)
+﻿import 'package:mhad/utils/json_utils.dart';
+
+/// Structured data extracted from a user-provided document (photo, PDF, text)
 /// by the AI. Each field is nullable — only fields the AI could confidently
 /// extract are populated.
 class DocumentExtractionResult {
@@ -250,24 +252,24 @@ class DocumentExtractionResult {
       medicationsLimited: _parseMeds(json['medications_limited']),
       diagnoses: _parseDiagnoses(json['diagnoses']),
       allergies: _parseAllergies(json['allergies']),
-      preferredFacility: _str(json['preferred_facility']),
-      avoidFacility: _str(json['avoid_facility']),
-      effectiveCondition: _str(json['effective_condition']),
-      agentAuthorityLimitations: _str(json['agent_authority_limitations']),
-      ectConsent: _str(json['ect_consent']),
-      experimentalConsent: _str(json['experimental_consent']),
-      drugTrialConsent: _str(json['drug_trial_consent']),
-      roomPreferencesNote: _str(json['room_preferences_note']),
-      healthHistory: _str(json['health_history']),
-      dietary: _str(json['dietary']),
-      religious: _str(json['religious']),
-      activities: _str(json['activities']),
-      crisisIntervention: _str(json['crisis_intervention']),
-      petCustody: _str(json['pet_custody']),
-      childrenCustody: _str(json['children_custody']),
-      familyNotification: _str(json['family_notification']),
-      recordsDisclosure: _str(json['records_disclosure']),
-      other: _str(json['other']),
+      preferredFacility: optStr(json['preferred_facility']),
+      avoidFacility: optStr(json['avoid_facility']),
+      effectiveCondition: optStr(json['effective_condition']),
+      agentAuthorityLimitations: optStr(json['agent_authority_limitations']),
+      ectConsent: optStr(json['ect_consent']),
+      experimentalConsent: optStr(json['experimental_consent']),
+      drugTrialConsent: optStr(json['drug_trial_consent']),
+      roomPreferencesNote: optStr(json['room_preferences_note']),
+      healthHistory: optStr(json['health_history']),
+      dietary: optStr(json['dietary']),
+      religious: optStr(json['religious']),
+      activities: optStr(json['activities']),
+      crisisIntervention: optStr(json['crisis_intervention']),
+      petCustody: optStr(json['pet_custody']),
+      childrenCustody: optStr(json['children_custody']),
+      familyNotification: optStr(json['family_notification']),
+      recordsDisclosure: optStr(json['records_disclosure']),
+      other: optStr(json['other']),
       personalInfo: ExtractedPersonalInfo.fromJson(
           json['personal_info'] is Map<String, dynamic>
               ? json['personal_info'] as Map<String, dynamic>
@@ -275,11 +277,6 @@ class DocumentExtractionResult {
     );
   }
 
-  static String? _str(dynamic v) {
-    if (v == null) return null;
-    final s = v.toString().trim();
-    return s.isEmpty ? null : s;
-  }
 
   static List<ExtractedMedication> _parseMeds(dynamic v) {
     if (v is! List) return [];
@@ -299,7 +296,7 @@ class DocumentExtractionResult {
         .whereType<Map<String, dynamic>>()
         .map((d) => ExtractedDiagnosis(
               name: d['name']?.toString() ?? '',
-              icdCode: _str(d['icd_code']),
+              icdCode: optStr(d['icd_code']),
             ))
         .where((d) => d.name.isNotEmpty)
         .toList();
@@ -313,8 +310,8 @@ class DocumentExtractionResult {
               substance: a['substance']?.toString() ?? '',
               kind: a['kind']?.toString() ?? 'drug',
               severity: a['severity']?.toString() ?? 'moderate',
-              reactions: _str(a['reactions']),
-              notes: _str(a['notes']),
+              reactions: optStr(a['reactions']),
+              notes: optStr(a['notes']),
             ))
         .where((a) => a.substance.isNotEmpty)
         .toList();
@@ -416,14 +413,14 @@ class ExtractedPerson {
   static ExtractedPerson? maybe(dynamic v) {
     if (v is! Map<String, dynamic>) return null;
     final p = ExtractedPerson(
-      name: DocumentExtractionResult._str(v['name']),
-      relationship: DocumentExtractionResult._str(v['relationship']),
-      addressLine1: DocumentExtractionResult._str(v['address_line1']),
-      addressLine2: DocumentExtractionResult._str(v['address_line2']),
-      city: DocumentExtractionResult._str(v['city']),
-      state: DocumentExtractionResult._str(v['state']),
-      zip: DocumentExtractionResult._str(v['zip']),
-      phone: DocumentExtractionResult._str(v['phone']),
+      name: optStr(v['name']),
+      relationship: optStr(v['relationship']),
+      addressLine1: optStr(v['address_line1']),
+      addressLine2: optStr(v['address_line2']),
+      city: optStr(v['city']),
+      state: optStr(v['state']),
+      zip: optStr(v['zip']),
+      phone: optStr(v['phone']),
     );
     return p.isEmpty ? null : p;
   }
@@ -531,24 +528,24 @@ class ExtractedPersonalInfo {
 
   factory ExtractedPersonalInfo.fromJson(Map<String, dynamic> j) {
     return ExtractedPersonalInfo(
-      fullName: DocumentExtractionResult._str(j['full_name']),
-      dateOfBirth: DocumentExtractionResult._str(j['date_of_birth']),
-      addressLine1: DocumentExtractionResult._str(j['address_line1']),
-      addressLine2: DocumentExtractionResult._str(j['address_line2']),
-      city: DocumentExtractionResult._str(j['city']),
-      county: DocumentExtractionResult._str(j['county']),
-      state: DocumentExtractionResult._str(j['state']),
-      zip: DocumentExtractionResult._str(j['zip']),
-      phone: DocumentExtractionResult._str(j['phone']),
+      fullName: optStr(j['full_name']),
+      dateOfBirth: optStr(j['date_of_birth']),
+      addressLine1: optStr(j['address_line1']),
+      addressLine2: optStr(j['address_line2']),
+      city: optStr(j['city']),
+      county: optStr(j['county']),
+      state: optStr(j['state']),
+      zip: optStr(j['zip']),
+      phone: optStr(j['phone']),
       primaryDoctorName:
-          DocumentExtractionResult._str(j['primary_doctor_name']),
+          optStr(j['primary_doctor_name']),
       primaryDoctorSpecialty:
-          DocumentExtractionResult._str(j['primary_doctor_specialty']),
+          optStr(j['primary_doctor_specialty']),
       primaryDoctorPhone:
-          DocumentExtractionResult._str(j['primary_doctor_phone']),
+          optStr(j['primary_doctor_phone']),
       preferredEvaluatingDoctorName:
-          DocumentExtractionResult._str(j['preferred_evaluating_doctor_name']),
-      preferredEvaluatingDoctorContact: DocumentExtractionResult._str(
+          optStr(j['preferred_evaluating_doctor_name']),
+      preferredEvaluatingDoctorContact: optStr(
           j['preferred_evaluating_doctor_contact']),
       agent: ExtractedPerson.maybe(j['agent']),
       alternateAgent: ExtractedPerson.maybe(j['alternate_agent']),

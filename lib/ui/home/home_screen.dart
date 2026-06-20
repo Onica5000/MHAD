@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+﻿import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -613,7 +613,7 @@ class _PublicModeNotice extends StatelessWidget {
                   child: Text(
                     isWeb ? 'Web App' : 'Public Mode',
                     style: TextStyle(
-                      fontFamily: 'DM Sans',
+                      fontFamily: kSansFamily,
                       fontWeight: FontWeight.w700,
                       fontSize: 15,
                       color: p.text,
@@ -640,7 +640,7 @@ class _PublicModeNotice extends StatelessWidget {
                       'When you\'re done, tap "End Session" below to '
                       'securely erase all session data.',
               style: TextStyle(
-                fontFamily: 'DM Sans',
+                fontFamily: kSansFamily,
                 fontSize: 13,
                 color: p.textMuted,
                 height: 1.5,
@@ -770,7 +770,7 @@ class _ActiveDirectiveHero extends StatelessWidget {
                           child: Text(
                             '● Draft',
                             style: TextStyle(
-                              fontFamily: 'DM Sans',
+                              fontFamily: kSansFamily,
                               fontSize: 11,
                               fontWeight: FontWeight.w700,
                               color: p.onPrimary,
@@ -781,7 +781,7 @@ class _ActiveDirectiveHero extends StatelessWidget {
                         Text(
                           'Step $currentStep of $totalSteps',
                           style: TextStyle(
-                            fontFamily: 'JetBrains Mono',
+                            fontFamily: kMonoFamily,
                             fontFamilyFallback: const [
                               'Consolas',
                               'monospace'
@@ -796,7 +796,7 @@ class _ActiveDirectiveHero extends StatelessWidget {
                     Text(
                       headline,
                       style: TextStyle(
-                        fontFamily: 'DM Sans',
+                        fontFamily: kSansFamily,
                         fontSize: 22,
                         fontWeight: FontWeight.w700,
                         letterSpacing: -0.3,
@@ -807,7 +807,7 @@ class _ActiveDirectiveHero extends StatelessWidget {
                     Text(
                       '$formLabel · last edited $lastEdited',
                       style: TextStyle(
-                        fontFamily: 'DM Sans',
+                        fontFamily: kSansFamily,
                         fontSize: 13,
                         height: 1.4,
                         color: p.onPrimary.withValues(alpha: 0.85),
@@ -834,7 +834,7 @@ class _ActiveDirectiveHero extends StatelessWidget {
                           child: Text(
                             pctLabel,
                             style: TextStyle(
-                              fontFamily: 'DM Sans',
+                              fontFamily: kSansFamily,
                               fontSize: 12,
                               color:
                                   p.onPrimary.withValues(alpha: 0.85),
@@ -844,7 +844,7 @@ class _ActiveDirectiveHero extends StatelessWidget {
                         Text(
                           remainingLabel,
                           style: TextStyle(
-                            fontFamily: 'DM Sans',
+                            fontFamily: kSansFamily,
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
                             color: p.onPrimary,
@@ -863,7 +863,7 @@ class _ActiveDirectiveHero extends StatelessWidget {
                         label: Text(
                           'Continue where you left off',
                           style: TextStyle(
-                            fontFamily: 'DM Sans',
+                            fontFamily: kSansFamily,
                             fontWeight: FontWeight.w600,
                             color: p.primaryDark,
                           ),
@@ -936,7 +936,7 @@ class _PrivacyByDesignCard extends StatelessWidget {
               Text(
                 'Private by design',
                 style: TextStyle(
-                  fontFamily: 'DM Sans',
+                  fontFamily: kSansFamily,
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
                   color: p.onPrimaryLight,
@@ -958,7 +958,7 @@ class _PrivacyByDesignCard extends StatelessWidget {
                     'no selling your data — only you choose who to share it '
                     'with.',
             style: TextStyle(
-              fontFamily: 'DM Sans',
+              fontFamily: kSansFamily,
               fontSize: 12.5,
               height: 1.45,
               color: p.onPrimaryLight,
@@ -1098,7 +1098,7 @@ class _ToolTileCard extends StatelessWidget {
                 Text(
                   tile.label,
                   style: TextStyle(
-                    fontFamily: 'DM Sans',
+                    fontFamily: kSansFamily,
                     fontSize: 13.5,
                     fontWeight: FontWeight.w600,
                     color: palette.text,
@@ -1107,7 +1107,7 @@ class _ToolTileCard extends StatelessWidget {
                 Text(
                   tile.sub,
                   style: TextStyle(
-                    fontFamily: 'DM Sans',
+                    fontFamily: kSansFamily,
                     fontSize: 11.5,
                     color: palette.textMuted,
                   ),
@@ -1236,7 +1236,7 @@ class _GreetingRow extends StatelessWidget {
             child: Text(
               _initialsFrom(fullName),
               style: TextStyle(
-                fontFamily: 'DM Sans',
+                fontFamily: kSansFamily,
                 fontWeight: FontWeight.w700,
                 fontSize: 14,
                 color: p.onPrimaryLight,
@@ -1276,7 +1276,7 @@ class _EphemeralBar extends StatelessWidget {
               child: Text(
                 'Public mode · nothing is saved',
                 style: TextStyle(
-                  fontFamily: 'DM Sans',
+                  fontFamily: kSansFamily,
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
                   color: p.scaffoldBackground,
@@ -1286,7 +1286,7 @@ class _EphemeralBar extends StatelessWidget {
             Text(
               'EPHEMERAL',
               style: TextStyle(
-                fontFamily: 'JetBrains Mono',
+                fontFamily: kMonoFamily,
                 fontFamilyFallback: const [
                   'Consolas',
                   'Menlo',
@@ -1401,7 +1401,7 @@ class _PastDirectiveRow extends StatelessWidget {
                       Text(
                         _nameLine(),
                         style: TextStyle(
-                          fontFamily: 'DM Sans',
+                          fontFamily: kSansFamily,
                           fontSize: 13.5,
                           fontWeight: FontWeight.w600,
                           color: p.text,
@@ -1410,7 +1410,7 @@ class _PastDirectiveRow extends StatelessWidget {
                       Text(
                         _subLine(),
                         style: TextStyle(
-                          fontFamily: 'DM Sans',
+                          fontFamily: kSansFamily,
                           fontSize: 11.5,
                           color: p.textMuted,
                         ),

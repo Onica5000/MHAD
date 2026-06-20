@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 
@@ -78,7 +78,7 @@ class StepHead extends StatelessWidget {
                             Text(
                               'Exit',
                               style: TextStyle(
-                                fontFamily: 'DM Sans',
+                                fontFamily: kSansFamily,
                                 fontSize: 13,
                                 fontWeight: FontWeight.w600,
                                 color: p.primary,
@@ -99,7 +99,7 @@ class StepHead extends StatelessWidget {
             child: Text(
               title,
               style: TextStyle(
-                fontFamily: 'DM Sans',
+                fontFamily: kSansFamily,
                 fontSize: 26,
                 fontWeight: FontWeight.w700,
                 letterSpacing: -0.4,
@@ -114,7 +114,7 @@ class StepHead extends StatelessWidget {
               child: Text(
                 subtitle!,
                 style: TextStyle(
-                  fontFamily: 'DM Sans',
+                  fontFamily: kSansFamily,
                   fontSize: 14,
                   color: p.textMuted,
                   height: 1.45,

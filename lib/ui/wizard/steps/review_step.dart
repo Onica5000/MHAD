@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/data/database/app_database.dart';
@@ -333,7 +333,7 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
         Text(
           "One last look, then we'll make your signing packet.",
           style: TextStyle(
-            fontFamily: 'DM Sans',
+            fontFamily: kSansFamily,
             fontSize: 14,
             height: 1.5,
             color: p.textMuted,
@@ -410,7 +410,7 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
           'up — adds an optional AI review of gaps to double-check. Optional; '
           'you can sign without it.',
           style: TextStyle(
-            fontFamily: 'DM Sans',
+            fontFamily: kSansFamily,
             fontSize: 12,
             height: 1.4,
             color: p.textMuted,
@@ -531,7 +531,7 @@ class _ReviewRow extends StatelessWidget {
                   Text(
                     data.label,
                     style: TextStyle(
-                      fontFamily: 'DM Sans',
+                      fontFamily: kSansFamily,
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
                       color: p.text,
@@ -543,7 +543,7 @@ class _ReviewRow extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      fontFamily: 'DM Sans',
+                      fontFamily: kSansFamily,
                       fontSize: 12,
                       height: 1.3,
                       fontStyle:
@@ -630,7 +630,7 @@ class _CalloutCard extends StatelessWidget {
       children.add(Text(
         title!,
         style: TextStyle(
-          fontFamily: 'DM Sans',
+          fontFamily: kSansFamily,
           fontSize: 14,
           fontWeight: FontWeight.w700,
           color: fg,
@@ -642,7 +642,7 @@ class _CalloutCard extends StatelessWidget {
       children.add(Text(
         body!,
         style: TextStyle(
-          fontFamily: 'DM Sans',
+          fontFamily: kSansFamily,
           fontSize: 13,
           height: 1.45,
           color: fg,
@@ -653,7 +653,7 @@ class _CalloutCard extends StatelessWidget {
       children.add(Text.rich(
         richBody!,
         style: TextStyle(
-          fontFamily: 'DM Sans',
+          fontFamily: kSansFamily,
           fontSize: 12.5,
           height: 1.45,
           color: fg,

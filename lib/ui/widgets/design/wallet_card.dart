@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -84,7 +84,7 @@ class WalletCard extends StatelessWidget {
                             Text(
                               'PA MHAD · ACT 194',
                               style: TextStyle(
-                                fontFamily: 'JetBrains Mono',
+                                fontFamily: kMonoFamily,
                                 fontFamilyFallback: const [
                                   'Consolas',
                                   'Menlo',
@@ -101,7 +101,7 @@ class WalletCard extends StatelessWidget {
                             Text(
                               principalName,
                               style: TextStyle(
-                                fontFamily: 'DM Sans',
+                                fontFamily: kSansFamily,
                                 fontSize: 18,
                                 fontWeight: FontWeight.w700,
                                 letterSpacing: -0.2,
@@ -114,7 +114,7 @@ class WalletCard extends StatelessWidget {
                             Text(
                               'Has an active directive on file',
                               style: TextStyle(
-                                fontFamily: 'DM Sans',
+                                fontFamily: kSansFamily,
                                 fontSize: 11.5,
                                 color: p.onPrimary.withValues(alpha: 0.85),
                               ),
@@ -197,7 +197,7 @@ class WalletCard extends StatelessWidget {
         Text(
           label,
           style: TextStyle(
-            fontFamily: 'JetBrains Mono',
+            fontFamily: kMonoFamily,
             fontFamilyFallback: const [
               'Consolas',
               'Menlo',
@@ -214,7 +214,7 @@ class WalletCard extends StatelessWidget {
         Text(
           value,
           style: TextStyle(
-            fontFamily: 'DM Sans',
+            fontFamily: kSansFamily,
             fontSize: 11.5,
             fontWeight: FontWeight.w600,
             color: color,

@@ -2,7 +2,7 @@
 // ZIP) into display strings. Shared by the UI, PDF generators, and exports so
 // an address reads identically everywhere. Empty parts are skipped.
 
-String _cityStateZip(String city, String state, String zip) => <String>[
+String cityStateZip(String city, String state, String zip) => <String>[
       if (city.trim().isNotEmpty) city.trim(),
       [
         if (state.trim().isNotEmpty) state.trim(),
@@ -22,7 +22,7 @@ String composeAddressInline({
     if (line1.trim().isNotEmpty) line1.trim(),
     if (line2.trim().isNotEmpty) line2.trim(),
   ];
-  final tail = _cityStateZip(city, state, zip);
+  final tail = cityStateZip(city, state, zip);
   if (tail.isNotEmpty) parts.add(tail);
   return parts.join(', ');
 }
@@ -39,7 +39,7 @@ List<String> composeAddressLines({
     if (line1.trim().isNotEmpty) line1.trim(),
     if (line2.trim().isNotEmpty) line2.trim(),
   ];
-  final tail = _cityStateZip(city, state, zip);
+  final tail = cityStateZip(city, state, zip);
   if (tail.isNotEmpty) lines.add(tail);
   return lines;
 }

@@ -1,4 +1,4 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
@@ -162,7 +162,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
                       'activities) helps your care team. This is common-side-'
                       'effect information, not medical advice.',
                       style: TextStyle(
-                        fontFamily: 'DM Sans',
+                        fontFamily: kSansFamily,
                         fontSize: 14,
                         height: 1.5,
                         color: p.textMuted,
@@ -228,7 +228,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
             Text(
               'Set up AI to check side effects',
               style: TextStyle(
-                fontFamily: 'DM Sans',
+                fontFamily: kSansFamily,
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
                 color: p.text,
@@ -239,7 +239,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
               'This uses your free Gemini key to list common side effects of '
               'your current medications for you to review.',
               style: TextStyle(
-                fontFamily: 'DM Sans',
+                fontFamily: kSansFamily,
                 fontSize: 12.5,
                 height: 1.45,
                 color: p.textMuted,
@@ -268,7 +268,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
               ? 'Checking covers: ${_currentMeds.join(', ')}'
               : 'Re-check for: ${_currentMeds.join(', ')}',
           style: TextStyle(
-            fontFamily: 'DM Sans',
+            fontFamily: kSansFamily,
             fontSize: 12.5,
             color: p.textMuted,
           ),
@@ -301,7 +301,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
         child: Text(
           med,
           style: TextStyle(
-            fontFamily: 'DM Sans',
+            fontFamily: kSansFamily,
             fontSize: 14,
             fontWeight: FontWeight.w700,
             color: p.text,
@@ -358,7 +358,7 @@ class _SideEffectRow extends StatelessWidget {
                   child: Text(
                     item.effect,
                     style: TextStyle(
-                      fontFamily: 'DM Sans',
+                      fontFamily: kSansFamily,
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                       color: p.text,
@@ -371,7 +371,7 @@ class _SideEffectRow extends StatelessWidget {
                     child: Text(
                       'May affect: ${item.adlImpact}',
                       style: TextStyle(
-                        fontFamily: 'DM Sans',
+                        fontFamily: kSansFamily,
                         fontSize: 12,
                         height: 1.35,
                         color: p.textMuted,
@@ -389,7 +389,7 @@ class _SideEffectRow extends StatelessWidget {
                           child: Text(
                             'Worth discussing with your doctor',
                             style: TextStyle(
-                              fontFamily: 'DM Sans',
+                              fontFamily: kSansFamily,
                               fontSize: 11.5,
                               fontWeight: FontWeight.w700,
                               color: seriousColor,

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
@@ -144,7 +144,7 @@ class _NeverAuthorizedCard extends StatelessWidget {
               Text(
                 'Never authorized under PA Act 194',
                 style: TextStyle(
-                  fontFamily: 'DM Sans',
+                  fontFamily: kSansFamily,
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
                   color: fg,
@@ -158,7 +158,7 @@ class _NeverAuthorizedCard extends StatelessWidget {
             'directive does NOT include the following — no clause in this '
             'document and no decision by your agent can authorize them:',
             style: TextStyle(
-              fontFamily: 'DM Sans',
+              fontFamily: kSansFamily,
               fontSize: 12.5,
               color: fg,
               height: 1.45,
@@ -202,7 +202,7 @@ class _NeverItem extends StatelessWidget {
             child: Text(
               text,
               style: TextStyle(
-                fontFamily: 'DM Sans',
+                fontFamily: kSansFamily,
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
                 color: fg,

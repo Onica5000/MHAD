@@ -1,4 +1,4 @@
-import 'dart:async';
+﻿import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:mhad/domain/model/directive.dart';
@@ -176,7 +176,7 @@ class _QuestionBody extends StatelessWidget {
                   child: Text(
                     'Help me choose · question ${step + 1} of $total',
                     style: TextStyle(
-                      fontFamily: 'JetBrains Mono',
+                      fontFamily: kMonoFamily,
                       fontFamilyFallback: const [
                         'Consolas',
                         'Menlo',
@@ -215,7 +215,7 @@ class _QuestionBody extends StatelessWidget {
               Text(
                 question.sub,
                 style: TextStyle(
-                  fontFamily: 'DM Sans',
+                  fontFamily: kSansFamily,
                   fontSize: 13.5,
                   color: p.textMuted,
                   height: 1.45,
@@ -317,7 +317,7 @@ class _OptCard extends StatelessWidget {
                   Text(
                     label,
                     style: TextStyle(
-                      fontFamily: 'DM Sans',
+                      fontFamily: kSansFamily,
                       fontSize: 14.5,
                       fontWeight: FontWeight.w600,
                       color: p.text,
@@ -329,7 +329,7 @@ class _OptCard extends StatelessWidget {
                     Text(
                       hint,
                       style: TextStyle(
-                        fontFamily: 'DM Sans',
+                        fontFamily: kSansFamily,
                         fontSize: 12.5,
                         color: p.textMuted,
                         height: 1.4,
@@ -385,7 +385,7 @@ class _ResultBody extends StatelessWidget {
                   child: Text(
                     'Help me choose · result',
                     style: TextStyle(
-                      fontFamily: 'JetBrains Mono',
+                      fontFamily: kMonoFamily,
                       fontFamilyFallback: const [
                         'Consolas',
                         'Menlo',
@@ -427,7 +427,7 @@ class _ResultBody extends StatelessWidget {
               Text(
                 _explanation(leader),
                 style: TextStyle(
-                  fontFamily: 'DM Sans',
+                  fontFamily: kSansFamily,
                   fontSize: 14,
                   color: p.textMuted,
                   height: 1.5,
@@ -563,7 +563,7 @@ class _LegendRow extends StatelessWidget {
             child: Text(
               label,
               style: TextStyle(
-                fontFamily: 'DM Sans',
+                fontFamily: kSansFamily,
                 fontSize: 13,
                 fontWeight: emphasized ? FontWeight.w700 : FontWeight.w500,
                 color: emphasized ? p.text : p.textMuted,
@@ -573,7 +573,7 @@ class _LegendRow extends StatelessWidget {
           Text(
             '$pct%',
             style: TextStyle(
-              fontFamily: 'JetBrains Mono',
+              fontFamily: kMonoFamily,
               fontFamilyFallback: const [
                 'Consolas',
                 'Menlo',

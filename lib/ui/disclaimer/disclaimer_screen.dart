@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart' show kIsWeb;
+﻿import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/services/disclaimer_service.dart';
@@ -148,7 +148,7 @@ class _GateLayout extends StatelessWidget {
                     'Advance Directive under Act 194. Please read these '
                     'before continuing.',
                     style: TextStyle(
-                      fontFamily: 'DM Sans',
+                      fontFamily: kSansFamily,
                       fontSize: 13.5,
                       color: palette.textMuted,
                       height: 1.5,
@@ -226,7 +226,7 @@ class _GateLayout extends StatelessWidget {
                         style: TextButton.styleFrom(
                           foregroundColor: palette.text,
                           textStyle: const TextStyle(
-                            fontFamily: 'DM Sans',
+                            fontFamily: kSansFamily,
                             fontSize: 13,
                             fontWeight: FontWeight.w600,
                           ),
@@ -260,7 +260,7 @@ class _GateLayout extends StatelessWidget {
                                 DesignTokens.buttonRadius),
                           ),
                           textStyle: const TextStyle(
-                            fontFamily: 'DM Sans',
+                            fontFamily: kSansFamily,
                             fontWeight: FontWeight.w600,
                             fontSize: 15,
                           ),
@@ -290,7 +290,7 @@ class _SectionLabel extends StatelessWidget {
     return Text(
       text.toUpperCase(),
       style: TextStyle(
-        fontFamily: 'JetBrains Mono',
+        fontFamily: kMonoFamily,
         fontFamilyFallback: const [
           'Consolas',
           'Menlo',
@@ -349,7 +349,7 @@ class _DisclaimerCard extends StatelessWidget {
                 Text(
                   title,
                   style: TextStyle(
-                    fontFamily: 'DM Sans',
+                    fontFamily: kSansFamily,
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
                     color: p.text,
@@ -359,7 +359,7 @@ class _DisclaimerCard extends StatelessWidget {
                 Text(
                   body,
                   style: TextStyle(
-                    fontFamily: 'DM Sans',
+                    fontFamily: kSansFamily,
                     fontSize: 13,
                     height: 1.5,
                     color: p.textMuted,
@@ -426,7 +426,7 @@ class _AckRow extends StatelessWidget {
                   child: Text(
                     "I'm 18 or older, and I understand and want to continue.",
                     style: TextStyle(
-                      fontFamily: 'DM Sans',
+                      fontFamily: kSansFamily,
                       fontSize: 13.5,
                       fontWeight: FontWeight.w600,
                       color: palette.text,
@@ -471,7 +471,7 @@ class _ReadOnlyAccordionState extends State<_ReadOnlyAccordion> {
             Text(
               'Full legal disclosure',
               style: TextStyle(
-                fontFamily: 'DM Sans',
+                fontFamily: kSansFamily,
                 fontSize: 22,
                 fontWeight: FontWeight.w700,
                 color: p.text,
@@ -482,7 +482,7 @@ class _ReadOnlyAccordionState extends State<_ReadOnlyAccordion> {
               'The eight sections below were accepted at first launch. '
               'Tap to expand.',
               style: TextStyle(
-                fontFamily: 'DM Sans',
+                fontFamily: kSansFamily,
                 fontSize: 13,
                 color: p.textMuted,
                 height: 1.5,
@@ -544,7 +544,7 @@ class _FullLegalSheetState extends State<_FullLegalSheet> {
                 child: Text(
                   'Full legal sections',
                   style: TextStyle(
-                    fontFamily: 'DM Sans',
+                    fontFamily: kSansFamily,
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
                     color: p.text,
@@ -886,7 +886,7 @@ class _Para extends StatelessWidget {
               .toList(growable: false),
         ),
         style: TextStyle(
-          fontFamily: 'DM Sans',
+          fontFamily: kSansFamily,
           fontSize: 13.5,
           color: palette.textMuted,
           height: 1.55,
@@ -927,7 +927,7 @@ class _Bullet extends StatelessWidget {
                     .toList(growable: false),
               ),
               style: TextStyle(
-                fontFamily: 'DM Sans',
+                fontFamily: kSansFamily,
                 fontSize: 13.5,
                 color: palette.textMuted,
                 height: 1.55,
@@ -987,7 +987,7 @@ class _Resource extends StatelessWidget {
             ],
           ),
           style: const TextStyle(
-            fontFamily: 'DM Sans',
+            fontFamily: kSansFamily,
             fontSize: 13.5,
             height: 1.45,
           ),
@@ -996,7 +996,7 @@ class _Resource extends StatelessWidget {
         Text(
           mono,
           style: TextStyle(
-            fontFamily: 'JetBrains Mono',
+            fontFamily: kMonoFamily,
             fontFamilyFallback: const [
               'Consolas',
               'Menlo',
@@ -1077,7 +1077,7 @@ class _AccordionSection extends StatelessWidget {
                         child: Text(
                           title,
                           style: TextStyle(
-                            fontFamily: 'DM Sans',
+                            fontFamily: kSansFamily,
                             fontSize: 15,
                             fontWeight: FontWeight.w700,
                             letterSpacing: -0.1,

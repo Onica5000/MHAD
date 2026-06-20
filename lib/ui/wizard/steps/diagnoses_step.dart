@@ -15,9 +15,6 @@ import 'package:mhad/ui/widgets/nlm_attribution.dart';
 import 'package:mhad/ui/wizard/widgets/wizard_help_button.dart';
 import 'package:mhad/ui/wizard/wizard_step_mixin.dart';
 
-const _kMono = 'JetBrains Mono';
-const _kMonoFallback = ['Consolas', 'Menlo', 'Courier New', 'monospace'];
-const _kSans = 'DM Sans';
 
 class DiagnosesStep extends ConsumerStatefulWidget {
   const DiagnosesStep({
@@ -206,7 +203,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
               enableSuggestions: false,
               onChanged: _onSearchChanged,
               style: TextStyle(
-                fontFamily: _kSans,
+                fontFamily: kSansFamily,
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
                 color: p.text,
@@ -219,7 +216,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                 focusedBorder: InputBorder.none,
                 hintText: 'Search a condition (e.g. depression, ADHD)…',
                 hintStyle: TextStyle(
-                  fontFamily: _kSans,
+                  fontFamily: kSansFamily,
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                   color: p.textMuted,
@@ -264,8 +261,8 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
               child: Text(
                 'ICD-10',
                 style: TextStyle(
-                  fontFamily: _kMono,
-                  fontFamilyFallback: _kMonoFallback,
+                  fontFamily: kMonoFamily,
+                  fontFamilyFallback: kMonoFallbacks,
                   fontSize: 9,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 0.5,
@@ -301,8 +298,8 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
               child: Text(
                 c.code,
                 style: TextStyle(
-                  fontFamily: _kMono,
-                  fontFamilyFallback: _kMonoFallback,
+                  fontFamily: kMonoFamily,
+                  fontFamilyFallback: kMonoFallbacks,
                   fontSize: 10,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 0.4,
@@ -315,7 +312,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
               child: Text(
                 c.name,
                 style: TextStyle(
-                  fontFamily: _kSans,
+                  fontFamily: kSansFamily,
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
                   height: 1.3,
@@ -342,8 +339,8 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
       child: Text(
         label.toUpperCase(),
         style: TextStyle(
-          fontFamily: _kMono,
-          fontFamilyFallback: _kMonoFallback,
+          fontFamily: kMonoFamily,
+          fontFamilyFallback: kMonoFallbacks,
           fontSize: 9.5,
           fontWeight: FontWeight.w700,
           letterSpacing: 0.6,
@@ -436,7 +433,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
               _searching ? '' : 'No results found.',
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontFamily: _kSans,
+                fontFamily: kSansFamily,
                 color: p.textMuted,
               ),
             ),
@@ -466,7 +463,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                       Text(
                         'No diagnoses added yet',
                         style: TextStyle(
-                          fontFamily: _kSans,
+                          fontFamily: kSansFamily,
                           fontWeight: FontWeight.w600,
                           color: p.text,
                         ),
@@ -475,7 +472,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                       Text(
                         'Use the search above to find and add your diagnoses.',
                         style: TextStyle(
-                          fontFamily: _kSans,
+                          fontFamily: kSansFamily,
                           fontSize: 12,
                           color: p.textMuted,
                         ),
@@ -584,7 +581,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                             Text(
                               r.name,
                               style: TextStyle(
-                                fontFamily: _kSans,
+                                fontFamily: kSansFamily,
                                 fontSize: 13,
                                 fontWeight: FontWeight.w600,
                                 color: p.text,
@@ -600,7 +597,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
-                                    fontFamily: _kSans,
+                                    fontFamily: kSansFamily,
                                     fontSize: 11.5,
                                     color: p.textMuted,
                                   ),
@@ -616,7 +613,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                       'Provider names from the NPI registry (NIH Clinical '
                       'Tables). Verify details before relying on them.',
                       style: TextStyle(
-                        fontFamily: _kSans,
+                        fontFamily: kSansFamily,
                         fontSize: 10,
                         fontStyle: FontStyle.italic,
                         color: p.textMuted,
@@ -675,7 +672,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                 child: Text.rich(
                   TextSpan(
                     style: TextStyle(
-                      fontFamily: _kSans,
+                      fontFamily: kSansFamily,
                       fontSize: 12.5,
                       height: 1.45,
                       color: p.text,
@@ -697,7 +694,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
               Text(
                 'Try →',
                 style: TextStyle(
-                  fontFamily: _kSans,
+                  fontFamily: kSansFamily,
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
                   color: p.primary,
@@ -714,7 +711,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
           "You're not required to list anything. Anything you do list is "
           'shared only with the people your directive names.',
           style: TextStyle(
-            fontFamily: _kSans,
+            fontFamily: kSansFamily,
             fontSize: 11,
             fontStyle: FontStyle.italic,
             height: 1.45,

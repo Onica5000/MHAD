@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart' show kIsWeb;
+﻿import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -113,7 +113,7 @@ class OnboardingScreen extends ConsumerWidget {
                       "health crisis — so your wishes are honored even when "
                       "you can't speak for yourself.",
                       style: TextStyle(
-                        fontFamily: 'DM Sans',
+                        fontFamily: kSansFamily,
                         fontSize: 17,
                         height: 1.45,
                         color: p.textMuted,
@@ -150,7 +150,7 @@ class OnboardingScreen extends ConsumerWidget {
                         ],
                       ),
                       style: TextStyle(
-                        fontFamily: 'DM Sans',
+                        fontFamily: kSansFamily,
                         fontSize: 13.5,
                         height: 1.4,
                         color: p.onPrimaryLight,
@@ -167,7 +167,7 @@ class OnboardingScreen extends ConsumerWidget {
                     'when it would expire, when it stays in effect until your '
                     'capacity returns. (PA Act 194, effective 2005.)',
                     style: TextStyle(
-                      fontFamily: 'DM Sans',
+                      fontFamily: kSansFamily,
                       fontSize: 11.5,
                       height: 1.4,
                       color: p.textMuted,
@@ -207,7 +207,7 @@ class OnboardingScreen extends ConsumerWidget {
                         minimumSize: const Size.fromHeight(
                             DesignTokens.buttonHeightMd),
                         textStyle: const TextStyle(
-                          fontFamily: 'DM Sans',
+                          fontFamily: kSansFamily,
                           fontSize: 15,
                           fontWeight: FontWeight.w600,
                         ),
@@ -227,7 +227,7 @@ class OnboardingScreen extends ConsumerWidget {
                         minimumSize:
                             const Size.fromHeight(DesignTokens.buttonHeightMd),
                         textStyle: const TextStyle(
-                          fontFamily: 'DM Sans',
+                          fontFamily: kSansFamily,
                           fontSize: 15,
                           fontWeight: FontWeight.w600,
                         ),
@@ -242,7 +242,7 @@ class OnboardingScreen extends ConsumerWidget {
                       'Free · no account · no tracking · open source',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontFamily: 'DM Sans',
+                        fontFamily: kSansFamily,
                         fontSize: 11,
                         height: 1.45,
                         color: p.textMuted,
@@ -300,7 +300,7 @@ class _WelcomePills extends StatelessWidget {
                 Text(
                   label,
                   style: TextStyle(
-                    fontFamily: 'DM Sans',
+                    fontFamily: kSansFamily,
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
                     color: p.onPrimaryLight,

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/domain/model/directive.dart';
@@ -102,7 +102,7 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
           "Pennsylvania law requires a real signature on paper. We can't "
           "witness it for you — but here's exactly what to do.",
           style: TextStyle(
-            fontFamily: 'DM Sans',
+            fontFamily: kSansFamily,
             fontSize: 14,
             color: p.textMuted,
             height: 1.5,
@@ -126,7 +126,7 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
                 child: Text.rich(
                   TextSpan(
                     style: TextStyle(
-                      fontFamily: 'DM Sans',
+                      fontFamily: kSansFamily,
                       fontSize: 12,
                       color: p.textMuted,
                       height: 1.45,
@@ -171,7 +171,7 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
           'correctly. If a facility hands you a different form, this one '
           'still counts.',
           style: TextStyle(
-            fontFamily: 'DM Sans',
+            fontFamily: kSansFamily,
             fontSize: 12,
             color: p.textMuted,
             height: 1.45,
@@ -216,7 +216,7 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
                 child: Text.rich(
                   TextSpan(
                     style: TextStyle(
-                      fontFamily: 'DM Sans',
+                      fontFamily: kSansFamily,
                       fontSize: 12.5,
                       color: warnText,
                       height: 1.45,
@@ -298,7 +298,7 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
             'BY YOU + 2 WITNESSES',
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontFamily: 'JetBrains Mono',
+              fontFamily: kMonoFamily,
               fontFamilyFallback: const [
                 'Consolas',
                 'Menlo',
@@ -382,7 +382,7 @@ class _SignStep extends StatelessWidget {
                   Text(
                     title,
                     style: TextStyle(
-                      fontFamily: 'DM Sans',
+                      fontFamily: kSansFamily,
                       fontSize: 14.5,
                       fontWeight: FontWeight.w700,
                       color: p.text,
@@ -392,7 +392,7 @@ class _SignStep extends StatelessWidget {
                   Text(
                     body,
                     style: TextStyle(
-                      fontFamily: 'DM Sans',
+                      fontFamily: kSansFamily,
                       fontSize: 12.5,
                       color: p.textMuted,
                       height: 1.45,
@@ -439,7 +439,7 @@ class _PacketRow extends StatelessWidget {
                 Text(
                   title,
                   style: TextStyle(
-                    fontFamily: 'DM Sans',
+                    fontFamily: kSansFamily,
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
                     color: p.text,
@@ -448,7 +448,7 @@ class _PacketRow extends StatelessWidget {
                 Text(
                   sub,
                   style: TextStyle(
-                    fontFamily: 'DM Sans',
+                    fontFamily: kSansFamily,
                     fontSize: 11.5,
                     color: p.textMuted,
                   ),

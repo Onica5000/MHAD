@@ -28,16 +28,8 @@ List<pw.Page> buildCombinedPages({
   final primaryAgent = agents.primaryAgent;
   final altAgent = agents.alternateAgent;
 
-  final current = medications.where((m) => m.entryType == 'current').toList();
-  final exceptions = medications
-      .where((m) => m.entryType == 'exception')
-      .toList();
-  final limitations = medications
-      .where((m) => m.entryType == 'limitation')
-      .toList();
-  final preferred = medications
-      .where((m) => m.entryType == 'preferred')
-      .toList();
+  final (:current, :exceptions, :limitations, :preferred) =
+      categorizeMedications(medications);
 
   final parsed = additional != null
       ? parseOtherField(additional.other)
@@ -565,7 +557,7 @@ List<pw.Page> buildCombinedPages({
         dataLine('Address', primaryAgent?.streetAddress ?? ''),
         twoCol(
           dataLine('City, State, Zip Code', primaryAgent?.cityStateZip ?? ''),
-          dataLine('Phone Number', _agentPhone(primaryAgent)),
+          dataLine('Phone Number', agentBestPhone(primaryAgent)),
         ),
         pw.SizedBox(height: 4),
         pw.Text("Agent's acceptance:", style: boldStyle()),
@@ -594,7 +586,7 @@ List<pw.Page> buildCombinedPages({
         dataLine('Address', altAgent?.streetAddress ?? ''),
         twoCol(
           dataLine('City, State, Zip Code', altAgent?.cityStateZip ?? ''),
-          dataLine('Phone Number', _agentPhone(altAgent)),
+          dataLine('Phone Number', agentBestPhone(altAgent)),
         ),
         pw.SizedBox(height: 4),
         pw.Text("Alternative Agent's acceptance:", style: boldStyle()),
@@ -878,6 +870,3 @@ List<pw.Page> buildCombinedPages({
     ),
   ];
 }
-
-/// First non-empty phone from an agent (cell → home → work, trimmed).
-String _agentPhone(Agent? agent) => agent?.bestPhone ?? '';

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
@@ -228,7 +228,7 @@ class WebSidebar extends ConsumerWidget {
                       Text(
                         'PA MHAD',
                         style: TextStyle(
-                          fontFamily: 'DM Sans',
+                          fontFamily: kSansFamily,
                           fontSize: 13,
                           fontWeight: FontWeight.w700,
                           letterSpacing: -0.2,
@@ -238,7 +238,7 @@ class WebSidebar extends ConsumerWidget {
                       Text(
                         'ACT 194 · 2004',
                         style: TextStyle(
-                          fontFamily: 'JetBrains Mono',
+                          fontFamily: kMonoFamily,
                           fontFamilyFallback: const [
                             'Consolas',
                             'Menlo',
@@ -353,7 +353,7 @@ class _SidebarItemRow extends StatelessWidget {
                   child: Text(
                     item.label,
                     style: TextStyle(
-                      fontFamily: 'DM Sans',
+                      fontFamily: kSansFamily,
                       fontSize: 13.5,
                       fontWeight: active ? FontWeight.w700 : FontWeight.w500,
                       color: active ? p.onPrimaryLight : p.textMuted,
@@ -393,7 +393,7 @@ class _Badge extends StatelessWidget {
       child: Text(
         label,
         style: TextStyle(
-          fontFamily: 'JetBrains Mono',
+          fontFamily: kMonoFamily,
           fontFamilyFallback: const [
             'Consolas',
             'Menlo',
@@ -443,7 +443,7 @@ class _CrisisCard extends StatelessWidget {
                   Text(
                     '24/7 LIFELINE',
                     style: TextStyle(
-                      fontFamily: 'JetBrains Mono',
+                      fontFamily: kMonoFamily,
                       fontFamilyFallback: ['Consolas', 'Courier New', 'monospace'],
                       fontSize: 9.5,
                       fontWeight: FontWeight.w700,
@@ -457,7 +457,7 @@ class _CrisisCard extends StatelessWidget {
               const Text(
                 '988 · Crisis help',
                 style: TextStyle(
-                  fontFamily: 'DM Sans',
+                  fontFamily: kSansFamily,
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
                   color: SemanticColors.errorTextLight,
@@ -467,7 +467,7 @@ class _CrisisCard extends StatelessWidget {
               Text(
                 'Click for more information',
                 style: TextStyle(
-                  fontFamily: 'DM Sans',
+                  fontFamily: kSansFamily,
                   fontSize: 11,
                   color: SemanticColors.errorTextLight.withValues(alpha: 0.85),
                 ),
@@ -523,7 +523,7 @@ class _GetHelpCard extends StatelessWidget {
                     Text(
                       'Get help',
                       style: TextStyle(
-                        fontFamily: 'DM Sans',
+                        fontFamily: kSansFamily,
                         fontSize: 13,
                         fontWeight: FontWeight.w700,
                         color: p.text,
@@ -533,7 +533,7 @@ class _GetHelpCard extends StatelessWidget {
                     Text(
                       'Peer support · advocates · referrals',
                       style: TextStyle(
-                        fontFamily: 'DM Sans',
+                        fontFamily: kSansFamily,
                         fontSize: 11,
                         color: p.textMuted,
                       ),

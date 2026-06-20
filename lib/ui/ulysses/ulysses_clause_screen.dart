@@ -1,4 +1,4 @@
-import 'package:drift/drift.dart' show Value;
+﻿import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/data/database/app_database.dart';
@@ -119,7 +119,7 @@ class _UlyssesClauseScreenState extends ConsumerState<UlyssesClauseScreen> {
                   "they'd want when well. PA law honors what you wrote today, "
                   'even if you protest in the moment.',
                   style: TextStyle(
-                    fontFamily: 'DM Sans',
+                    fontFamily: kSansFamily,
                     fontSize: 14,
                     color: p.textMuted,
                     height: 1.5,
@@ -136,7 +136,7 @@ class _UlyssesClauseScreenState extends ConsumerState<UlyssesClauseScreen> {
                         Text(
                           'SELF-BINDING ("Ulysses")',
                           style: TextStyle(
-                            fontFamily: 'JetBrains Mono',
+                            fontFamily: kMonoFamily,
                             fontFamilyFallback: const [
                               'Consolas',
                               'Menlo',
@@ -174,7 +174,7 @@ class _UlyssesClauseScreenState extends ConsumerState<UlyssesClauseScreen> {
                           'over my in-the-moment protest — until capacity '
                           'returns.',
                           style: TextStyle(
-                            fontFamily: 'DM Sans',
+                            fontFamily: kSansFamily,
                             fontSize: 13.5,
                             height: 1.45,
                             color: _acknowledged
@@ -258,7 +258,7 @@ class _BoundariesCard extends StatelessWidget {
                     Expanded(
                       child: Text(b,
                           style: const TextStyle(
-                            fontFamily: 'DM Sans',
+                            fontFamily: kSansFamily,
                             fontSize: 13.5,
                             height: 1.4,
                           )),

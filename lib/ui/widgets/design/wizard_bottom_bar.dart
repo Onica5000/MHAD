@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 
 /// Sticky bottom action bar for the wizard. Renders an optional secondary
@@ -61,7 +61,7 @@ class WizardBottomBar extends StatelessWidget {
                   child: Text(
                     secondaryLabel!,
                     style: TextStyle(
-                      fontFamily: 'DM Sans',
+                      fontFamily: kSansFamily,
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                       color: p.primary,

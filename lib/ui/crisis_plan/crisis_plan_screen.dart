@@ -1,4 +1,4 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
@@ -126,7 +126,7 @@ class _CrisisPlanScreenState extends ConsumerState<CrisisPlanScreen> {
             'Adapted from WRAP. Help the people around you spot trouble early — '
             'and know what actually helps you when they do.',
             style: TextStyle(
-              fontFamily: 'DM Sans',
+              fontFamily: kSansFamily,
               fontSize: 14,
               color: p.textMuted,
               height: 1.5,
@@ -282,7 +282,7 @@ class _Section extends StatelessWidget {
                   Expanded(
                     child: Text(title,
                         style: const TextStyle(
-                          fontFamily: 'DM Sans',
+                          fontFamily: kSansFamily,
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
                         )),

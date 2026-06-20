@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
@@ -140,7 +140,7 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
             'provider (20 Pa.C.S. § 5808). This app marks the directive '
             'revoked locally and helps you generate a revocation letter.',
             style: TextStyle(
-              fontFamily: 'DM Sans',
+              fontFamily: kSansFamily,
               fontSize: 14,
               color: p.textMuted,
               height: 1.5,
@@ -257,7 +257,7 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
                   Text(
                     'Type REVOKE to confirm',
                     style: TextStyle(
-                      fontFamily: 'DM Sans',
+                      fontFamily: kSansFamily,
                       fontWeight: FontWeight.w700,
                       fontSize: 13,
                       color: cs.onErrorContainer,
@@ -337,7 +337,7 @@ class _RevokeStep extends StatelessWidget {
             child: Text(
               '$n',
               style: TextStyle(
-                fontFamily: 'JetBrains Mono',
+                fontFamily: kMonoFamily,
                 fontFamilyFallback: const [
                   'Consolas',
                   'Menlo',
@@ -357,7 +357,7 @@ class _RevokeStep extends StatelessWidget {
               child: Text(
                 text,
                 style: TextStyle(
-                  fontFamily: 'DM Sans',
+                  fontFamily: kSansFamily,
                   fontSize: 13.5,
                   height: 1.5,
                   color: p.text,

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 
 /// Editorial display heading rendered in italic serif.
@@ -113,7 +113,7 @@ class MonoCaption extends StatelessWidget {
     return Text(
       text.toUpperCase(),
       style: TextStyle(
-        fontFamily: 'JetBrains Mono',
+        fontFamily: kMonoFamily,
         fontFamilyFallback: const ['Consolas', 'Menlo', 'Courier New', 'monospace'],
         fontSize: size,
         fontWeight: weight,

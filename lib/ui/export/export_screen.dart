@@ -1,4 +1,4 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 
 import 'package:archive/archive.dart';
 import 'package:flutter/foundation.dart';
@@ -369,10 +369,11 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    if (_loading) {
-      return Scaffold(
+  // ---------------------------------------------------------------------------
+  // build() helpers — each returns a widget or widget list; build() composes.
+  // ---------------------------------------------------------------------------
+
+  Widget _loadingState() => Scaffold(
         body: Center(
           child: Semantics(
             label: 'Loading',
@@ -380,638 +381,606 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
           ),
         ),
       );
-    }
 
-    if (_notFound || _directive == null) {
-      final p = Theme.of(context).mhadPalette;
-      return Scaffold(
-        backgroundColor: p.scaffoldBackground,
-        body: Column(
-          children: [
-            WizardHeader(
-              backLabel: 'Back',
-              onBack: () => Navigator.of(context).maybePop(),
-              actionLabel: '',
-            ),
-            Expanded(
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(32),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.description_outlined,
-                          size: 48, color: p.textMuted),
-                      const SizedBox(height: 16),
-                      Text(
-                        'Nothing to download yet',
-                        style: TextStyle(
-                          fontFamily: 'DM Sans',
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                          color: p.text,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Start a directive first — then come back here to '
-                        'preview, download, and print it.',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontFamily: 'DM Sans',
-                          fontSize: 13,
-                          height: 1.4,
-                          color: p.textMuted,
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      FilledButton.icon(
-                        onPressed: () =>
-                            context.go(AppRoutes.home),
-                        icon: const Icon(Icons.add),
-                        label: const Text('Start your directive'),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
+  Widget _notFoundState() {
     final p = Theme.of(context).mhadPalette;
-
-    // --- Shared content lists (ADDITIVE: same widgets feed both the narrow
-    // single-column and the wide >=1000px two-pane layouts; zero behavior or
-    // logic change — only arrangement differs by width). ---
-
-    // Header / chrome shown above both layouts.
-    // --- Reusable chrome pieces shared by both the narrow single-column and
-    // the wide two-pane layouts. ---
-
-    // Legal "before sharing" disclaimer (PA Act 194 — legally substantive).
-    final legalDisclaimerCard = Semantics(
-      label: 'Important: Before sharing, ensure this directive has been '
-          'signed, dated, and witnessed by two adults as required by '
-          'PA Act 194. Give copies to your agent, physician, and '
-          'support people.',
-      container: true,
-      child: Card(
-        color: Theme.of(context).colorScheme.errorContainer,
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Text(
-            'Before sharing: ensure this directive has been signed, dated, '
-            'and witnessed by two adults (18+) as required by PA Act 194. '
-            'Give copies to your agent, physician, and support people.',
-            style: TextStyle(
-              fontSize: 12,
-              color: Theme.of(context).colorScheme.onErrorContainer,
-            ),
-          ),
-        ),
-      ),
-    );
-
-    // Principal info summary.
-    final Widget principalCard = _directive == null
-        ? const SizedBox.shrink()
-        : Card(
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text('Principal',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w600, fontSize: 13)),
-                  const SizedBox(height: 4),
-                  Text(_directive!.fullName,
-                      style: const TextStyle(fontSize: 13)),
-                  if (_directive!.executionDate != null)
-                    Text(
-                      'Executed: ${DateTime.fromMillisecondsSinceEpoch(_directive!.executionDate!).toString().split(' ').first}',
-                      style: const TextStyle(fontSize: 12),
-                    ),
-                  if (_directive!.expirationDate != null)
-                    Text(
-                      'Expires: ${DateTime.fromMillisecondsSinceEpoch(_directive!.expirationDate!).toString().split(' ').first}',
-                      style: const TextStyle(fontSize: 12),
-                    ),
-                ],
-              ),
-            ),
-          );
-
-    // V4-M8 — persistent banner: the PDF is unencrypted by design.
-    final unencryptedBanner = Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.errorContainer,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    return Scaffold(
+      backgroundColor: p.scaffoldBackground,
+      body: Column(
         children: [
-          Icon(Icons.lock_open_outlined,
-              size: 18,
-              color: Theme.of(context).colorScheme.onErrorContainer),
-          const SizedBox(width: 8),
+          WizardHeader(
+            backLabel: 'Back',
+            onBack: () => Navigator.of(context).maybePop(),
+            actionLabel: '',
+          ),
           Expanded(
-            child: Text(
-              'The exported PDF is not encrypted. Share only via '
-              'channels you trust.',
-              style: TextStyle(
-                fontSize: 12.5,
-                color: Theme.of(context).colorScheme.onErrorContainer,
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(32),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.description_outlined,
+                        size: 48, color: p.textMuted),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Nothing to download yet',
+                      style: TextStyle(
+                        fontFamily: kSansFamily,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        color: p.text,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Start a directive first — then come back here to '
+                      'preview, download, and print it.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontFamily: kSansFamily,
+                        fontSize: 13,
+                        height: 1.4,
+                        color: p.textMuted,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    FilledButton.icon(
+                      onPressed: () => context.go(AppRoutes.home),
+                      icon: const Icon(Icons.add),
+                      label: const Text('Start your directive'),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
         ],
       ),
     );
+  }
 
-    final headerChildren = <Widget>[
-      const SectionLabel('Export & share'),
-      EditorialHeading(
-        textSpan: TextSpan(
+  // Legal “before sharing” disclaimer (PA Act 194 — legally substantive).
+  Widget _buildLegalDisclaimerCard() => Semantics(
+        label: 'Important: Before sharing, ensure this directive has been '
+            'signed, dated, and witnessed by two adults as required by '
+            'PA Act 194. Give copies to your agent, physician, and '
+            'support people.',
+        container: true,
+        child: Card(
+          color: Theme.of(context).colorScheme.errorContainer,
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Text(
+              'Before sharing: ensure this directive has been signed, dated, '
+              'and witnessed by two adults (18+) as required by PA Act 194. '
+              'Give copies to your agent, physician, and support people.',
+              style: TextStyle(
+                fontSize: 12,
+                color: Theme.of(context).colorScheme.onErrorContainer,
+              ),
+            ),
+          ),
+        ),
+      );
+
+  Widget _buildPrincipalCard() {
+    if (_directive == null) return const SizedBox.shrink();
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const TextSpan(text: 'Your directive,\n'),
-            TextSpan(
-              text: 'on paper.',
-              style: TextStyle(color: p.primary),
+            const Text('Principal',
+                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
+            const SizedBox(height: 4),
+            Text(_directive!.fullName, style: const TextStyle(fontSize: 13)),
+            if (_directive!.executionDate != null)
+              Text(
+                'Executed: ${DateTime.fromMillisecondsSinceEpoch(_directive!.executionDate!).toString().split(' ').first}',
+                style: const TextStyle(fontSize: 12),
+              ),
+            if (_directive!.expirationDate != null)
+              Text(
+                'Expires: ${DateTime.fromMillisecondsSinceEpoch(_directive!.expirationDate!).toString().split(' ').first}',
+                style: const TextStyle(fontSize: 12),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // V4-M8 — persistent banner: the PDF is unencrypted by design.
+  Widget _buildUnencryptedBanner() => Container(
+        margin: const EdgeInsets.only(bottom: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.errorContainer,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(Icons.lock_open_outlined,
+                size: 18,
+                color: Theme.of(context).colorScheme.onErrorContainer),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                'The exported PDF is not encrypted. Share only via '
+                'channels you trust.',
+                style: TextStyle(
+                  fontSize: 12.5,
+                  color: Theme.of(context).colorScheme.onErrorContainer,
+                ),
+              ),
             ),
           ],
         ),
-        size: 36,
-        height: 1.05,
-        letterSpacing: -0.8,
-      ),
-      const SizedBox(height: 16),
-      if (_isGenerating)
-        Padding(
-          padding: const EdgeInsets.only(bottom: 12),
-          child: LinearProgressIndicator(
-            borderRadius: BorderRadius.circular(4),
-          ),
-        ),
-      legalDisclaimerCard,
-      const SizedBox(height: 16),
-      principalCard,
-      const SizedBox(height: 16),
-    ];
+      );
 
-    // Form/section pickers — the "Include sections" list. Shared by the
-    // narrow Document column and the wide right-hand control rail.
-    final sectionCheckboxChildren = <Widget>[
-          // Form selection
-          Text('Select forms to include:',
-              style: Theme.of(context)
-                  .textTheme
-                  .titleSmall
-                  ?.copyWith(fontWeight: FontWeight.w600)),
-          const SizedBox(height: 8),
-          _FormCheckbox(
-            title: 'Combined Declaration & Power of Attorney',
-            subtitle: 'Declaration + Power of Attorney (most complete)',
-            value: _includeCombined,
-            onChanged: (v) => setState(() => _includeCombined = v ?? false),
-            warning: _includeCombined && _agents.isEmpty
-                ? 'No agent designated — agent sections will be blank'
-                : null,
-          ),
-          _FormCheckbox(
-            title: 'Declaration Only',
-            subtitle: 'Treatment preferences only (no agent)',
-            value: _includeDeclaration,
-            onChanged: (v) => setState(() => _includeDeclaration = v ?? false),
-          ),
-          _FormCheckbox(
-            title: 'Power of Attorney Only',
-            subtitle: 'Agent authority only (no personal preferences)',
-            value: _includePoa,
-            onChanged: (v) => setState(() => _includePoa = v ?? false),
-            warning: _includePoa && _agents.isEmpty
-                ? 'No agent designated — agent sections will be blank'
-                : null,
-          ),
-          const SizedBox(height: 16),
-
-          // Additional pages
-          Text('Additional Pages:',
-              style: Theme.of(context)
-                  .textTheme
-                  .titleSmall
-                  ?.copyWith(fontWeight: FontWeight.w600)),
-          const SizedBox(height: 8),
-          _FormCheckbox(
-            title: 'Supplementary Legal Information',
-            subtitle: 'Additional legal reference information',
-            value: _includeSupplementary,
-            onChanged: (v) =>
-                setState(() => _includeSupplementary = v ?? false),
-          ),
-          _FormCheckbox(
-            title: 'Distribution Checklist & Notes',
-            subtitle: 'Blank pages for handwritten notes',
-            value: _includeNotes,
-            onChanged: (v) => setState(() => _includeNotes = v ?? false),
-          ),
-    ];
-
-    // Narrow single-column "Document" block: section pickers, a Preview
-    // button (full-screen preview), then the unencrypted-file banner.
-    final documentChildren = <Widget>[
-          ...sectionCheckboxChildren,
-          const SizedBox(height: 24),
-
-          // Action buttons
-          Semantics(
-            button: true,
-            label: _isGenerating
-                ? 'Generating PDF preview'
-                : 'Preview PDF before sharing',
-            child: FilledButton.icon(
-              onPressed: _isGenerating ? null : _previewPdf,
-              icon: _isGenerating
-                  ? SizedBox(
-                      width: 16,
-                      height: 16,
-                      child: Semantics(
-                        label: 'Loading',
-                        child: const CircularProgressIndicator(strokeWidth: 2),
-                      ),
-                    )
-                  : const Icon(Icons.preview),
-              label: const Text('Preview PDF'),
-            ),
-          ),
-          const SizedBox(height: 8),
-          unencryptedBanner,
-    ];
-
-    // RIGHT / "Distribution" pane on wide screens: share, QR, NFC, machine-
-    // readable formats, password-protected copy, and draft review.
-    final distributionChildren = <Widget>[
-          Semantics(
-            button: true,
-            label: 'Download or print the PDF directive (unencrypted file)',
-            child: FilledButton.icon(
-              onPressed: _isGenerating ? null : _generateAndShare,
-              icon: const Icon(Icons.download),
-              label: const Text('Download PDF'),
-            ),
-          ),
-          const SizedBox(height: 16),
-          if (_directive != null) ...[
-            // Wallet card (moved here from the removed "One pen away" page): a
-            // credit-card-sized summary the user can print and carry.
-            Text('Wallet card',
-                style: Theme.of(context).textTheme.titleSmall),
-            const SizedBox(height: 6),
-            WalletCard(
-              principalName: _directive!.fullName.trim().isEmpty
-                  ? 'Your name'
-                  : _directive!.fullName,
-              agentName: _walletAgent?.fullName,
-              agentPhone: _walletAgent?.bestPhone,
-              validThrough: _walletValidThrough(),
-              qrPayload: 'MHAD-${widget.directiveId}',
-            ),
-            const SizedBox(height: 8),
-            SizedBox(
-              width: double.infinity,
-              child: OutlinedButton.icon(
-                onPressed: _isGenerating ? null : _generateWalletCard,
-                icon: const Icon(Icons.credit_card),
-                label: const Text('Download wallet card (PDF)'),
-              ),
-            ),
-            const SizedBox(height: 16),
-            Text('Machine-readable formats',
-                style: Theme.of(context).textTheme.titleSmall),
-            const SizedBox(height: 4),
-            Text(
-              'Your PDF above is the document you sign — these are data exports '
-              'for your records, a spreadsheet, or a health system. FHIR is the '
-              'standard format hospitals use to exchange medical records; CSV is '
-              'a spreadsheet file (opens in Excel or Google Sheets).',
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-            ),
-            const SizedBox(height: 8),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: [
-                Semantics(
-                  button: true,
-                  label: 'Export as FHIR JSON for electronic health records',
-                  child: OutlinedButton.icon(
-                    onPressed: _exportFhir,
-                    icon: const Icon(Icons.integration_instructions),
-                    label: const Text('FHIR JSON'),
-                  ),
-                ),
-                Semantics(
-                  button: true,
-                  label: 'Export as FHIR XML for electronic health records',
-                  child: OutlinedButton.icon(
-                    onPressed: _exportFhirXml,
-                    icon: const Icon(Icons.code),
-                    label: const Text('FHIR XML'),
-                  ),
-                ),
-                Semantics(
-                  button: true,
-                  label: 'Export as CSV spreadsheet',
-                  child: OutlinedButton.icon(
-                    onPressed: _exportCsv,
-                    icon: const Icon(Icons.table_chart_outlined),
-                    label: const Text('CSV'),
-                  ),
-                ),
-                Semantics(
-                  button: true,
-                  label:
-                      'Download everything (PDF, JSON, XML, CSV) as a zip bundle',
-                  child: OutlinedButton.icon(
-                    onPressed: _isGenerating ? null : _exportZipBundle,
-                    icon: const Icon(Icons.folder_zip_outlined),
-                    label: const Text('.zip bundle'),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Text('Printed copy type',
-                style: Theme.of(context).textTheme.titleSmall),
-            const SizedBox(height: 4),
-            Text(
-              'A draft prints a light "DRAFT" watermark on every page — for '
-              'sending a copy while you keep the signed paper original. Tick as '
-              'many as you like — Download gives you one PDF of each.',
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-            ),
-            const SizedBox(height: 4),
-            for (final m in _draftModeOrder)
-              CheckboxListTile(
-                value: _draftModes.contains(m),
-                onChanged: (v) => setState(() {
-                  if (v == true) {
-                    _draftModes.add(m);
-                  } else if (_draftModes.length > 1) {
-                    // Keep at least one selected so Download always has a copy.
-                    _draftModes.remove(m);
-                  }
-                }),
-                title: Text(_draftModeLabel(m)),
-                dense: true,
-                contentPadding: EdgeInsets.zero,
-                controlAffinity: ListTileControlAffinity.leading,
-              ),
-            const SizedBox(height: 16),
-            Text('Document language',
-                style: Theme.of(context).textTheme.titleSmall),
-            const SizedBox(height: 4),
-            Text(
-              'The plain-language official form is the one you sign and use — '
-              'it is the legally valid directive. The legal-language version '
-              'restates it in formal statutory wording for reference only and '
-              'is not the document you sign.',
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-            ),
-            const SizedBox(height: 8),
-            SegmentedButton<bool>(
-              segments: const [
-                ButtonSegment(
-                  value: false,
-                  label: Text('Plain (signable)'),
-                  icon: Icon(Icons.verified_outlined),
-                ),
-                ButtonSegment(
-                  value: true,
-                  label: Text('Legal (info only)'),
-                  icon: Icon(Icons.description_outlined),
-                ),
-              ],
-              selected: {_legalLanguage},
-              onSelectionChanged: (s) =>
-                  setState(() => _legalLanguage = s.first),
-            ),
-            if (_legalLanguage) ...[
-              const SizedBox(height: 8),
-              Text(
-                'Heads up: the legal-language version is for reference only. '
-                'Sign and use the plain-language official form.',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(context).colorScheme.error,
-                    ),
+  List<Widget> _buildHeaderChildren(MhadPalette p) => [
+        const SectionLabel('Export & share'),
+        EditorialHeading(
+          textSpan: TextSpan(
+            children: [
+              const TextSpan(text: 'Your directive,\n'),
+              TextSpan(
+                text: 'on paper.',
+                style: TextStyle(color: p.primary),
               ),
             ],
-            const SizedBox(height: 16),
-            Text('Save an editable copy',
-                style: Theme.of(context).textTheme.titleSmall),
-            const SizedBox(height: 4),
-            Text(
-              'Download a file you keep. Re-upload it later (or on another '
-              'device) to continue editing — nothing is stored online. '
-              'Encrypting hinders others from reading it; the app still opens '
-              'it with no passphrase.',
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
+          ),
+          size: 36,
+          height: 1.05,
+          letterSpacing: -0.8,
+        ),
+        const SizedBox(height: 16),
+        if (_isGenerating)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: LinearProgressIndicator(borderRadius: BorderRadius.circular(4)),
+          ),
+        _buildLegalDisclaimerCard(),
+        const SizedBox(height: 16),
+        _buildPrincipalCard(),
+        const SizedBox(height: 16),
+      ];
+
+  // Form/section pickers — shared by the narrow Document column and the wide
+  // right-hand control rail.
+  List<Widget> _buildSectionCheckboxChildren() => [
+        Text('Select forms to include:',
+            style: Theme.of(context)
+                .textTheme
+                .titleSmall
+                ?.copyWith(fontWeight: FontWeight.w600)),
+        const SizedBox(height: 8),
+        _FormCheckbox(
+          title: 'Combined Declaration & Power of Attorney',
+          subtitle: 'Declaration + Power of Attorney (most complete)',
+          value: _includeCombined,
+          onChanged: (v) => setState(() => _includeCombined = v ?? false),
+          warning: _includeCombined && _agents.isEmpty
+              ? 'No agent designated — agent sections will be blank'
+              : null,
+        ),
+        _FormCheckbox(
+          title: 'Declaration Only',
+          subtitle: 'Treatment preferences only (no agent)',
+          value: _includeDeclaration,
+          onChanged: (v) => setState(() => _includeDeclaration = v ?? false),
+        ),
+        _FormCheckbox(
+          title: 'Power of Attorney Only',
+          subtitle: 'Agent authority only (no personal preferences)',
+          value: _includePoa,
+          onChanged: (v) => setState(() => _includePoa = v ?? false),
+          warning: _includePoa && _agents.isEmpty
+              ? 'No agent designated — agent sections will be blank'
+              : null,
+        ),
+        const SizedBox(height: 16),
+        Text('Additional Pages:',
+            style: Theme.of(context)
+                .textTheme
+                .titleSmall
+                ?.copyWith(fontWeight: FontWeight.w600)),
+        const SizedBox(height: 8),
+        _FormCheckbox(
+          title: 'Supplementary Legal Information',
+          subtitle: 'Additional legal reference information',
+          value: _includeSupplementary,
+          onChanged: (v) => setState(() => _includeSupplementary = v ?? false),
+        ),
+        _FormCheckbox(
+          title: 'Distribution Checklist & Notes',
+          subtitle: 'Blank pages for handwritten notes',
+          value: _includeNotes,
+          onChanged: (v) => setState(() => _includeNotes = v ?? false),
+        ),
+      ];
+
+  // Narrow single-column “Document” block: section pickers, Preview button,
+  // unencrypted-file banner.
+  List<Widget> _buildDocumentChildren() => [
+        ..._buildSectionCheckboxChildren(),
+        const SizedBox(height: 24),
+        Semantics(
+          button: true,
+          label: _isGenerating
+              ? 'Generating PDF preview'
+              : 'Preview PDF before sharing',
+          child: FilledButton.icon(
+            onPressed: _isGenerating ? null : _previewPdf,
+            icon: _isGenerating
+                ? SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: Semantics(
+                      label: 'Loading',
+                      child: const CircularProgressIndicator(strokeWidth: 2),
+                    ),
+                  )
+                : const Icon(Icons.preview),
+            label: const Text('Preview PDF'),
+          ),
+        ),
+        const SizedBox(height: 8),
+        _buildUnencryptedBanner(),
+      ];
+
+  // RIGHT / “Distribution” pane: share, machine-readable formats,
+  // password-protected copy, draft review, and wallet card.
+  List<Widget> _buildDistributionChildren() => [
+        Semantics(
+          button: true,
+          label: 'Download or print the PDF directive (unencrypted file)',
+          child: FilledButton.icon(
+            onPressed: _isGenerating ? null : _generateAndShare,
+            icon: const Icon(Icons.download),
+            label: const Text('Download PDF'),
+          ),
+        ),
+        const SizedBox(height: 16),
+        if (_directive != null) ...[
+          // Wallet card: a credit-card-sized summary the user can print and carry.
+          Text('Wallet card', style: Theme.of(context).textTheme.titleSmall),
+          const SizedBox(height: 6),
+          WalletCard(
+            principalName: _directive!.fullName.trim().isEmpty
+                ? 'Your name'
+                : _directive!.fullName,
+            agentName: _walletAgent?.fullName,
+            agentPhone: _walletAgent?.bestPhone,
+            validThrough: _walletValidThrough(),
+            qrPayload: 'MHAD-${widget.directiveId}',
+          ),
+          const SizedBox(height: 8),
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton.icon(
+              onPressed: _isGenerating ? null : _generateWalletCard,
+              icon: const Icon(Icons.credit_card),
+              label: const Text('Download wallet card (PDF)'),
             ),
-            const SizedBox(height: 4),
-            // Checkbox + label on their own row, Download full-width below.
-            // (Previously all three shared one Row; in the narrow control rail
-            // the button squeezed the label to ~zero width, wrapping it one
-            // letter per line — looked vertical.)
-            Row(
-              children: [
-                Checkbox(
-                  value: _encryptEditableCopy,
-                  onChanged: (v) =>
-                      setState(() => _encryptEditableCopy = v ?? true),
+          ),
+          const SizedBox(height: 16),
+          Text('Machine-readable formats',
+              style: Theme.of(context).textTheme.titleSmall),
+          const SizedBox(height: 4),
+          Text(
+            'Your PDF above is the document you sign — these are data exports '
+            'for your records, a spreadsheet, or a health system. FHIR is the '
+            'standard format hospitals use to exchange medical records; CSV is '
+            'a spreadsheet file (opens in Excel or Google Sheets).',
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
-                const Expanded(child: Text('Encrypt the file')),
-              ],
-            ),
-            const SizedBox(height: 4),
-            Semantics(
-              button: true,
-              label: 'Download an editable copy of your directive',
-              child: SizedBox(
-                width: double.infinity,
-                child: FilledButton.tonalIcon(
-                  onPressed: _isGenerating ? null : _downloadEditableCopy,
-                  icon: const Icon(Icons.download_outlined),
-                  label: const Text('Download'),
+          ),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              Semantics(
+                button: true,
+                label: 'Export as FHIR JSON for electronic health records',
+                child: OutlinedButton.icon(
+                  onPressed: _exportFhir,
+                  icon: const Icon(Icons.integration_instructions),
+                  label: const Text('FHIR JSON'),
                 ),
               ),
+              Semantics(
+                button: true,
+                label: 'Export as FHIR XML for electronic health records',
+                child: OutlinedButton.icon(
+                  onPressed: _exportFhirXml,
+                  icon: const Icon(Icons.code),
+                  label: const Text('FHIR XML'),
+                ),
+              ),
+              Semantics(
+                button: true,
+                label: 'Export as CSV spreadsheet',
+                child: OutlinedButton.icon(
+                  onPressed: _exportCsv,
+                  icon: const Icon(Icons.table_chart_outlined),
+                  label: const Text('CSV'),
+                ),
+              ),
+              Semantics(
+                button: true,
+                label:
+                    'Download everything (PDF, JSON, XML, CSV) as a zip bundle',
+                child: OutlinedButton.icon(
+                  onPressed: _isGenerating ? null : _exportZipBundle,
+                  icon: const Icon(Icons.folder_zip_outlined),
+                  label: const Text('.zip bundle'),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Text('Printed copy type',
+              style: Theme.of(context).textTheme.titleSmall),
+          const SizedBox(height: 4),
+          Text(
+            'A draft prints a light “DRAFT” watermark on every page — for '
+            'sending a copy while you keep the signed paper original. Tick as '
+            'many as you like — Download gives you one PDF of each.',
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+          ),
+          const SizedBox(height: 4),
+          for (final m in _draftModeOrder)
+            CheckboxListTile(
+              value: _draftModes.contains(m),
+              onChanged: (v) => setState(() {
+                if (v == true) {
+                  _draftModes.add(m);
+                } else if (_draftModes.length > 1) {
+                  // Keep at least one selected so Download always has a copy.
+                  _draftModes.remove(m);
+                }
+              }),
+              title: Text(_draftModeLabel(m)),
+              dense: true,
+              contentPadding: EdgeInsets.zero,
+              controlAffinity: ListTileControlAffinity.leading,
             ),
-            const SizedBox(height: 16),
-            Text('Password-protect a copy',
-                style: Theme.of(context).textTheme.titleSmall),
-            const SizedBox(height: 4),
-            Text(
-              'Encrypt your data export with a passphrase (AES-256) before you '
-              'share it. Send the passphrase separately — anyone with the file '
-              'and passphrase can open it here under “Unlock”.',
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-            ),
+          const SizedBox(height: 16),
+          Text('Document language',
+              style: Theme.of(context).textTheme.titleSmall),
+          const SizedBox(height: 4),
+          Text(
+            'The plain-language official form is the one you sign and use — '
+            'it is the legally valid directive. The legal-language version '
+            'restates it in formal statutory wording for reference only and '
+            'is not the document you sign.',
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+          ),
+          const SizedBox(height: 8),
+          SegmentedButton<bool>(
+            segments: const [
+              ButtonSegment(
+                value: false,
+                label: Text('Plain (signable)'),
+                icon: Icon(Icons.verified_outlined),
+              ),
+              ButtonSegment(
+                value: true,
+                label: Text('Legal (info only)'),
+                icon: Icon(Icons.description_outlined),
+              ),
+            ],
+            selected: {_legalLanguage},
+            onSelectionChanged: (s) =>
+                setState(() => _legalLanguage = s.first),
+          ),
+          if (_legalLanguage) ...[
             const SizedBox(height: 8),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: [
-                Semantics(
-                  button: true,
-                  label: 'Password-protect an encrypted data export',
-                  child: OutlinedButton.icon(
-                    onPressed: _passwordProtectExport,
-                    icon: const Icon(Icons.lock_outline),
-                    label: const Text('Encrypt export'),
+            Text(
+              'Heads up: the legal-language version is for reference only. '
+              'Sign and use the plain-language official form.',
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Theme.of(context).colorScheme.error,
                   ),
-                ),
-                Semantics(
-                  button: true,
-                  label: 'Unlock an encrypted data export',
-                  child: OutlinedButton.icon(
-                    onPressed: _unlockEncryptedExport,
-                    icon: const Icon(Icons.lock_open_outlined),
-                    label: const Text('Unlock'),
-                  ),
-                ),
-              ],
             ),
           ],
-          // Export is the end of the flow now (the old "One pen away" summary
-          // was removed), so close with a clear way back home.
           const SizedBox(height: 16),
-          const Divider(),
-          const SizedBox(height: 12),
+          Text('Save an editable copy',
+              style: Theme.of(context).textTheme.titleSmall),
+          const SizedBox(height: 4),
+          Text(
+            'Download a file you keep. Re-upload it later (or on another '
+            'device) to continue editing — nothing is stored online. '
+            'Encrypting hinders others from reading it; the app still opens '
+            'it with no passphrase.',
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+          ),
+          const SizedBox(height: 4),
+          // Checkbox + label on their own row, Download full-width below.
+          // (Previously all three shared one Row; in the narrow control rail
+          // the button squeezed the label to ~zero width, wrapping it one
+          // letter per line — looked vertical.)
+          Row(
+            children: [
+              Checkbox(
+                value: _encryptEditableCopy,
+                onChanged: (v) =>
+                    setState(() => _encryptEditableCopy = v ?? true),
+              ),
+              const Expanded(child: Text('Encrypt the file')),
+            ],
+          ),
+          const SizedBox(height: 4),
           Semantics(
             button: true,
-            label: 'Done — back to home',
-            child: FilledButton.icon(
-              onPressed: () => context.go(AppRoutes.home),
-              icon: const Icon(Icons.home_outlined),
-              label: const Text('Done — back to home'),
-              style: FilledButton.styleFrom(
-                minimumSize: const Size.fromHeight(48),
+            label: 'Download an editable copy of your directive',
+            child: SizedBox(
+              width: double.infinity,
+              child: FilledButton.tonalIcon(
+                onPressed: _isGenerating ? null : _downloadEditableCopy,
+                icon: const Icon(Icons.download_outlined),
+                label: const Text('Download'),
               ),
             ),
           ),
-    ];
+          const SizedBox(height: 16),
+          Text('Password-protect a copy',
+              style: Theme.of(context).textTheme.titleSmall),
+          const SizedBox(height: 4),
+          Text(
+            'Encrypt your data export with a passphrase (AES-256) before you '
+            'share it. Send the passphrase separately — anyone with the file '
+            'and passphrase can open it here under “Unlock”.',
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+          ),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              Semantics(
+                button: true,
+                label: 'Password-protect an encrypted data export',
+                child: OutlinedButton.icon(
+                  onPressed: _passwordProtectExport,
+                  icon: const Icon(Icons.lock_outline),
+                  label: const Text('Encrypt export'),
+                ),
+              ),
+              Semantics(
+                button: true,
+                label: 'Unlock an encrypted data export',
+                child: OutlinedButton.icon(
+                  onPressed: _unlockEncryptedExport,
+                  icon: const Icon(Icons.lock_open_outlined),
+                  label: const Text('Unlock'),
+                ),
+              ),
+            ],
+          ),
+        ],
+        // Export is the end of the flow now (the old “One pen away” summary
+        // was removed), so close with a clear way back home.
+        const SizedBox(height: 16),
+        const Divider(),
+        const SizedBox(height: 12),
+        Semantics(
+          button: true,
+          label: 'Done — back to home',
+          child: FilledButton.icon(
+            onPressed: () => context.go(AppRoutes.home),
+            icon: const Icon(Icons.home_outlined),
+            label: const Text('Done — back to home'),
+            style: FilledButton.styleFrom(
+              minimumSize: const Size.fromHeight(48),
+            ),
+          ),
+        ),
+      ];
 
+  // Wide layout: live PDF preview (left+middle) + control rail (right).
+  // Uses the TOTAL window width, not post-sidebar content width — the
+  // persistent WebSidebar eats 232px, so a content-based >=1000 check would
+  // only flip to two-pane above ~1232px, leaving a dead narrow-column band.
+  Widget _wideLayout(MhadPalette p) {
+    final anySelected = _includeCombined ||
+        _includeDeclaration ||
+        _includePoa ||
+        _includeSupplementary ||
+        _includeNotes;
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        // LEFT + MIDDLE — the preview widget renders its own control panel
+        // (heading, page counter, zoom, page-thumbnail selector) on the left
+        // and the page image in the middle.
+        Expanded(
+          child: _ExportPdfPreview(
+            signature: _selectionSignature(),
+            buildBytes: _buildPdfBytes,
+            hasSelection: anySelected,
+            ready: _directive != null,
+            onClose: () => Navigator.of(context).maybePop(),
+          ),
+        ),
+        // RIGHT — control rail.
+        Container(
+          width: 300,
+          decoration: BoxDecoration(
+            color: p.card,
+            border: Border(left: BorderSide(color: p.border)),
+          ),
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(22, 22, 22, 40),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (_isGenerating)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: LinearProgressIndicator(
+                        borderRadius: BorderRadius.circular(4)),
+                  ),
+                _buildLegalDisclaimerCard(),
+                const SizedBox(height: 16),
+                ..._buildSectionCheckboxChildren(),
+                const SizedBox(height: 16),
+                _buildUnencryptedBanner(),
+                const SizedBox(height: 4),
+                ..._buildDistributionChildren(),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _narrowLayout(MhadPalette p) => ListView(
+        padding: const EdgeInsets.fromLTRB(22, 4, 22, 16),
+        children: [
+          ..._buildHeaderChildren(p),
+          ..._buildDocumentChildren(),
+          ..._buildDistributionChildren(),
+          const SizedBox(height: 40),
+        ],
+      );
+
+  @override
+  Widget build(BuildContext context) {
+    if (_loading) return _loadingState();
+    if (_notFound || _directive == null) return _notFoundState();
+
+    final p = Theme.of(context).mhadPalette;
+    // Prototype Export-class screens (ScrPdfPreview L1132+, ScrAppleWallet
+    // mobile-extra2.jsx L5-113) use a thin in-body back chevron, not an AppBar.
+    final isWide =
+        MediaQuery.sizeOf(context).width >= kWideLayoutBreakpoint;
     return Scaffold(
       backgroundColor: p.scaffoldBackground,
-      // Prototype Export-class screens (ScrPdfPreview L1132+, ScrAppleWallet
-      // mobile-extra2.jsx L5-113) sit CrisisBar at the top with a thin
-      // in-body back chevron, not a Material AppBar.
       body: Column(children: [
-        // The wide layout moves Back into the preview's left panel, so the
-        // full-width header is only needed in the narrow single-column layout.
-        if (MediaQuery.sizeOf(context).width < kWideLayoutBreakpoint)
+        // Wide layout moves Back into the preview's left panel.
+        if (!isWide)
           WizardHeader(
             backLabel: 'Back',
             onBack: () => Navigator.of(context).maybePop(),
             actionLabel: '',
           ),
-        Expanded(
-          child: Builder(
-            builder: (context) {
-              // Decide wide vs narrow off the TOTAL window width (the
-              // desktop-shell signal), NOT this screen's post-sidebar content
-              // width. The persistent `WebSidebar` already eats 232px, so a
-              // content-based `>=1000` check only flips to the two-pane
-              // artboard layout above a ~1232px window — leaving a dead band
-              // (1000–1231px) where the sidebar shows but export still rendered
-              // the narrow single column (no inline preview, just a "Preview
-              // PDF" button). Whenever the shell is active we render the
-              // prototype `w-export` grid: the live PDF preview DOMINATES the
-              // left pane (heading + zoom/page-counter/page-rail) and a fixed
-              // control rail sits on the right. Below the shell breakpoint it's
-              // the single stretched column (header + document + distribution).
-              if (MediaQuery.sizeOf(context).width >= kWideLayoutBreakpoint) {
-                final anySelected = _includeCombined ||
-                    _includeDeclaration ||
-                    _includePoa ||
-                    _includeSupplementary ||
-                    _includeNotes;
-                return Row(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    // LEFT + MIDDLE — the preview widget renders its own
-                    // control panel (Export & share, Back, heading, page
-                    // counter, zoom, and the vertical page-thumbnail selector)
-                    // on the left and the page image, fit to width, in the
-                    // middle. The right rail below is the third column.
-                    Expanded(
-                      child: _ExportPdfPreview(
-                        signature: _selectionSignature(),
-                        buildBytes: _buildPdfBytes,
-                        hasSelection: anySelected,
-                        ready: _directive != null,
-                        onClose: () => Navigator.of(context).maybePop(),
-                      ),
-                    ),
-                    // RIGHT — control rail.
-                    Container(
-                      width: 300,
-                      decoration: BoxDecoration(
-                        color: p.card,
-                        border: Border(left: BorderSide(color: p.border)),
-                      ),
-                      child: SingleChildScrollView(
-                        padding: const EdgeInsets.fromLTRB(22, 22, 22, 40),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            if (_isGenerating)
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 12),
-                                child: LinearProgressIndicator(
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                              ),
-                            legalDisclaimerCard,
-                            const SizedBox(height: 16),
-                            ...sectionCheckboxChildren,
-                            const SizedBox(height: 16),
-                            unencryptedBanner,
-                            const SizedBox(height: 4),
-                            ...distributionChildren,
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                );
-              }
-              return ListView(
-                padding: const EdgeInsets.fromLTRB(22, 4, 22, 16),
-                children: [
-                  ...headerChildren,
-                  ...documentChildren,
-                  ...distributionChildren,
-                  const SizedBox(height: 40),
-                ],
-              );
-            },
-          ),
-        ),
+        Expanded(child: isWide ? _wideLayout(p) : _narrowLayout(p)),
       ]),
     );
   }
@@ -1495,7 +1464,7 @@ class _PdfPreviewScreen extends StatelessWidget {
             Text(
               'Preview',
               style: TextStyle(
-                fontFamily: 'DM Sans',
+                fontFamily: kSansFamily,
                 fontSize: 15,
                 fontWeight: FontWeight.w700,
                 color: p.text,
@@ -1504,7 +1473,7 @@ class _PdfPreviewScreen extends StatelessWidget {
             Text(
               'US LETTER · 8.5×11"',
               style: TextStyle(
-                fontFamily: 'JetBrains Mono',
+                fontFamily: kMonoFamily,
                 fontFamilyFallback: const [
                   'Consolas',
                   'Menlo',
@@ -1887,7 +1856,7 @@ class _ExportPdfPreviewState extends State<_ExportPdfPreview> {
                 minimumSize: const Size(0, 32),
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 textStyle: const TextStyle(
-                  fontFamily: 'DM Sans',
+                  fontFamily: kSansFamily,
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
                 ),
@@ -1912,7 +1881,7 @@ class _ExportPdfPreviewState extends State<_ExportPdfPreview> {
           'Sized for US Letter (8.5 × 11″) with 1-inch margins. The preview '
           'fills the width — use − / + to zoom.',
           style: TextStyle(
-            fontFamily: 'DM Sans',
+            fontFamily: kSansFamily,
             fontSize: 12,
             height: 1.4,
             color: p.textMuted,
@@ -1925,7 +1894,7 @@ class _ExportPdfPreviewState extends State<_ExportPdfPreview> {
           Text(
             'Page ${_current + 1} of $pageCount',
             style: TextStyle(
-              fontFamily: 'DM Sans',
+              fontFamily: kSansFamily,
               fontSize: 12.5,
               fontWeight: FontWeight.w600,
               color: p.text,
@@ -1947,7 +1916,7 @@ class _ExportPdfPreviewState extends State<_ExportPdfPreview> {
           Text(
             'PAGES',
             style: TextStyle(
-              fontFamily: 'JetBrains Mono',
+              fontFamily: kMonoFamily,
               fontFamilyFallback: const ['Consolas', 'monospace'],
               fontSize: 10,
               letterSpacing: 1,
@@ -1995,7 +1964,7 @@ class _ExportPdfPreviewState extends State<_ExportPdfPreview> {
                         'Page ${i + 1}',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontFamily: 'DM Sans',
+                          fontFamily: kSansFamily,
                           fontSize: 11.5,
                           fontWeight:
                               selected ? FontWeight.w700 : FontWeight.w500,
@@ -2019,7 +1988,7 @@ class _ExportPdfPreviewState extends State<_ExportPdfPreview> {
         child: Text(
           text,
           style: TextStyle(
-            fontFamily: 'DM Sans',
+            fontFamily: kSansFamily,
             fontSize: 13,
             color: p.textMuted,
           ),
@@ -2069,7 +2038,7 @@ class _ExportPdfPreviewState extends State<_ExportPdfPreview> {
         child: Text(
           isFit ? 'FIT' : '$pct%',
           style: TextStyle(
-            fontFamily: 'JetBrains Mono',
+            fontFamily: kMonoFamily,
             fontFamilyFallback: const ['Consolas', 'monospace'],
             fontSize: 12,
             fontWeight: FontWeight.w700,

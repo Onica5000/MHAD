@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/agent_ext.dart';
@@ -91,7 +91,7 @@ class _PlainLegalToggleScreenState
                 Text(
                   'What you wrote, and what a court or hospital will read.',
                   style: TextStyle(
-                    fontFamily: 'DM Sans',
+                    fontFamily: kSansFamily,
                     fontSize: 14,
                     color: p.textMuted,
                     height: 1.45,
@@ -189,7 +189,7 @@ class _PlainBody extends StatelessWidget {
           Text(
             para,
             style: TextStyle(
-              fontFamily: 'DM Sans',
+              fontFamily: kSansFamily,
               fontSize: 14.5,
               height: 1.55,
               color: p.text,

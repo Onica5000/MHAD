@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart' show kIsWeb;
+﻿import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -249,7 +249,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   'Form content based on the official PA MHAD booklet '
                   'published by the Disabilities Law Project (2005).',
                   style: TextStyle(
-                    fontFamily: 'DM Sans',
+                    fontFamily: kSansFamily,
                     fontSize: 12,
                     color: p.textMuted,
                     height: 1.5,
@@ -310,7 +310,7 @@ class _SettingsRow extends StatelessWidget {
                   Text(
                     title,
                     style: const TextStyle(
-                      fontFamily: 'DM Sans',
+                      fontFamily: kSansFamily,
                       fontWeight: FontWeight.w600,
                       fontSize: 15,
                     ),
@@ -319,7 +319,7 @@ class _SettingsRow extends StatelessWidget {
                   Text(
                     subtitle,
                     style: TextStyle(
-                      fontFamily: 'DM Sans',
+                      fontFamily: kSansFamily,
                       fontSize: 12,
                       color: p.textMuted,
                     ),
@@ -385,7 +385,7 @@ class _ThemeModeSegment extends StatelessWidget {
                     Text(
                       opt.$2,
                       style: TextStyle(
-                        fontFamily: 'DM Sans',
+                        fontFamily: kSansFamily,
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
                         color: selected ? p.text : p.textMuted,
@@ -480,7 +480,7 @@ class _ProfileChip extends ConsumerWidget {
             child: Text(
               initials,
               style: TextStyle(
-                fontFamily: 'DM Sans',
+                fontFamily: kSansFamily,
                 fontWeight: FontWeight.w700,
                 fontSize: 15,
                 color: p.onPrimary,
@@ -495,7 +495,7 @@ class _ProfileChip extends ConsumerWidget {
                 Text(
                   displayName,
                   style: TextStyle(
-                    fontFamily: 'DM Sans',
+                    fontFamily: kSansFamily,
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
                     color: p.onPrimary,
@@ -507,7 +507,7 @@ class _ProfileChip extends ConsumerWidget {
                 Text(
                   _statusFor(context, mode),
                   style: TextStyle(
-                    fontFamily: 'JetBrains Mono',
+                    fontFamily: kMonoFamily,
                     fontFamilyFallback: const [
                       'Consolas',
                       'Menlo',

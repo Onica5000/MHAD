@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/ai/ai_assistant.dart'
@@ -171,7 +171,7 @@ class _EditorialLearnHub extends StatelessWidget {
           'Everything below comes verbatim from the official PA MHAD booklet. '
           'No marketing, no opinions — just the rules and what they mean.',
           style: TextStyle(
-            fontFamily: 'DM Sans',
+            fontFamily: kSansFamily,
             fontSize: 13.5,
             height: 1.5,
             color: p.textMuted,
@@ -214,7 +214,7 @@ class _EditorialLearnHub extends StatelessWidget {
                     Text(
                       'Search articles, glossary, FAQs…',
                       style: TextStyle(
-                        fontFamily: 'DM Sans',
+                        fontFamily: kSansFamily,
                         fontSize: 13.5,
                         color: p.textMuted,
                       ),
@@ -323,7 +323,7 @@ class _EditorialLearnHub extends StatelessWidget {
                 'SERVICES · BOOKLET P.3',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontFamily: 'JetBrains Mono',
+                  fontFamily: kMonoFamily,
                   fontFamilyFallback: const [
                     'Consolas',
                     'Menlo',
@@ -460,7 +460,7 @@ class _BrowseRow extends StatelessWidget {
                     Text(
                       title,
                       style: TextStyle(
-                        fontFamily: 'DM Sans',
+                        fontFamily: kSansFamily,
                         fontSize: 13.5,
                         fontWeight: FontWeight.w600,
                         color: p.text,
@@ -470,7 +470,7 @@ class _BrowseRow extends StatelessWidget {
                     Text(
                       sub,
                       style: TextStyle(
-                        fontFamily: 'DM Sans',
+                        fontFamily: kSansFamily,
                         fontSize: 11.5,
                         color: p.textMuted,
                       ),
@@ -491,7 +491,7 @@ class _BrowseRow extends StatelessWidget {
                 child: Text(
                   '$count',
                   style: TextStyle(
-                    fontFamily: 'JetBrains Mono',
+                    fontFamily: kMonoFamily,
                     fontFamilyFallback: const [
                       'Consolas',
                       'Menlo',
@@ -615,7 +615,7 @@ class _CategoryPill extends StatelessWidget {
           child: Text(
             label,
             style: TextStyle(
-              fontFamily: 'DM Sans',
+              fontFamily: kSansFamily,
               fontSize: 12.5,
               fontWeight: FontWeight.w700,
               color: active ? p.onPrimary : p.textMuted,
@@ -690,7 +690,7 @@ class _GridCard extends StatelessWidget {
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  fontFamily: 'DM Sans',
+                  fontFamily: kSansFamily,
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
                   letterSpacing: -0.2,
@@ -704,7 +704,7 @@ class _GridCard extends StatelessWidget {
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  fontFamily: 'DM Sans',
+                  fontFamily: kSansFamily,
                   fontSize: 11.5,
                   height: 1.4,
                   color: p.textMuted,
@@ -714,7 +714,7 @@ class _GridCard extends StatelessWidget {
               Text(
                 '${_estimatedMinutes(section.content)} MIN',
                 style: TextStyle(
-                  fontFamily: 'JetBrains Mono',
+                  fontFamily: kMonoFamily,
                   fontFamilyFallback: const [
                     'Consolas',
                     'Menlo',
@@ -753,7 +753,7 @@ class _SectionDetailRoute extends StatelessWidget {
           Text(
             '$source · ${_estimatedMinutes(section.content)} MIN READ',
             style: TextStyle(
-              fontFamily: 'JetBrains Mono',
+              fontFamily: kMonoFamily,
               fontFamilyFallback: const [
                 'Consolas',
                 'Menlo',
@@ -783,7 +783,7 @@ class _SectionDetailRoute extends StatelessWidget {
           Text(
             section.content,
             style: const TextStyle(
-              fontFamily: 'DM Sans',
+              fontFamily: kSansFamily,
               fontSize: 14.5,
               height: 1.6,
             ),
@@ -803,7 +803,7 @@ class _SectionDetailRoute extends StatelessWidget {
                 Text(
                   'TRY IT',
                   style: TextStyle(
-                    fontFamily: 'JetBrains Mono',
+                    fontFamily: kMonoFamily,
                     fontFamilyFallback: const [
                       'Consolas',
                       'Menlo',
@@ -820,7 +820,7 @@ class _SectionDetailRoute extends StatelessWidget {
                 Text(
                   'Ready to write yours?',
                   style: TextStyle(
-                    fontFamily: 'DM Sans',
+                    fontFamily: kSansFamily,
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
                     color: p.text,
@@ -831,7 +831,7 @@ class _SectionDetailRoute extends StatelessWidget {
                   'The guided wizard takes about 20 minutes and works '
                   'anonymously.',
                   style: TextStyle(
-                    fontFamily: 'DM Sans',
+                    fontFamily: kSansFamily,
                     fontSize: 13,
                     height: 1.5,
                     color: p.textMuted,
@@ -1185,7 +1185,7 @@ class _LearnAiPanelState extends ConsumerState<_LearnAiPanel> {
                   Text(
                     'Ask the AI',
                     style: TextStyle(
-                      fontFamily: 'DM Sans',
+                      fontFamily: kSansFamily,
                       fontSize: 15,
                       fontWeight: FontWeight.w700,
                       color: p.text,
@@ -1202,7 +1202,7 @@ class _LearnAiPanelState extends ConsumerState<_LearnAiPanel> {
               child: Text(
                 '● GEMINI · PII STRIPPED',
                 style: TextStyle(
-                  fontFamily: 'JetBrains Mono',
+                  fontFamily: kMonoFamily,
                   fontFamilyFallback: const [
                     'Consolas',
                     'Menlo',
@@ -1230,7 +1230,7 @@ class _LearnAiPanelState extends ConsumerState<_LearnAiPanel> {
                                   'while you read.',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontFamily: 'DM Sans',
+                            fontFamily: kSansFamily,
                             fontSize: 12.5,
                             height: 1.5,
                             color: p.textMuted,
@@ -1297,7 +1297,7 @@ class _LearnAiPanelState extends ConsumerState<_LearnAiPanel> {
               child: Text(
                 'Not legal or medical advice.',
                 style: TextStyle(
-                  fontFamily: 'DM Sans',
+                  fontFamily: kSansFamily,
                   fontSize: 10.5,
                   color: p.textMuted,
                 ),
@@ -1333,7 +1333,7 @@ class _LearnChatBubble extends StatelessWidget {
         child: Text(
           message.content,
           style: TextStyle(
-            fontFamily: 'DM Sans',
+            fontFamily: kSansFamily,
             fontSize: 12.5,
             height: 1.4,
             color: isUser ? p.onPrimary : p.text,

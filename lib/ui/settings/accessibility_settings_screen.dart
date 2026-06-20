@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/providers/accessibility_providers.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
@@ -48,7 +48,7 @@ class AccessibilitySettingsScreen extends ConsumerWidget {
             'Adjust how the app feels for you. Changes apply everywhere '
             'instantly.',
             style: TextStyle(
-              fontFamily: 'DM Sans',
+              fontFamily: kSansFamily,
               fontSize: 14,
               color: p.textMuted,
               height: 1.45,
@@ -178,7 +178,7 @@ class _TextSizeCard extends StatelessWidget {
             Text(
               'People who I trust will make my decisions if I can\'t.',
               style: TextStyle(
-                fontFamily: 'DM Sans',
+                fontFamily: kSansFamily,
                 fontSize: 13 + value * 4,
                 color: p.text,
                 height: 1.45,
@@ -261,7 +261,7 @@ class _ToggleRow extends StatelessWidget {
               child: Text(
                 'Phase $phase',
                 style: TextStyle(
-                  fontFamily: 'JetBrains Mono',
+                  fontFamily: kMonoFamily,
                   fontFamilyFallback: const [
                     'Consolas',
                     'Menlo',

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
@@ -80,7 +80,7 @@ class _CrisisSheet extends StatelessWidget {
                   Text(
                     '24/7 FREE, CONFIDENTIAL',
                     style: TextStyle(
-                      fontFamily: 'DM Sans',
+                      fontFamily: kSansFamily,
                       fontSize: 11,
                       fontWeight: FontWeight.w700,
                       letterSpacing: 1.2,
@@ -98,7 +98,7 @@ class _CrisisSheet extends StatelessWidget {
               Text(
                 'Real people are standing by — phone, text, or chat.',
                 style: TextStyle(
-                  fontFamily: 'DM Sans',
+                  fontFamily: kSansFamily,
                   fontSize: 13,
                   color: p.textMuted,
                   height: 1.5,
@@ -164,7 +164,7 @@ class _CrisisSheet extends StatelessWidget {
                 'day. Calling will not result in police being dispatched in '
                 'most cases.',
                 style: TextStyle(
-                  fontFamily: 'DM Sans',
+                  fontFamily: kSansFamily,
                   fontSize: 12,
                   color: p.textMuted,
                   height: 1.5,
@@ -228,7 +228,7 @@ class _Emergency911Callout extends StatelessWidget {
                     ],
                   ),
                   style: TextStyle(
-                    fontFamily: 'DM Sans',
+                    fontFamily: kSansFamily,
                     fontSize: 13,
                     height: 1.4,
                     color: p.onPrimaryLight,
@@ -312,7 +312,7 @@ class _CrisisRow extends StatelessWidget {
                       Text(
                         name,
                         style: TextStyle(
-                          fontFamily: 'DM Sans',
+                          fontFamily: kSansFamily,
                           fontSize: 14.5,
                           fontWeight: FontWeight.w700,
                           color: accent
@@ -326,7 +326,7 @@ class _CrisisRow extends StatelessWidget {
                       Text(
                         detail,
                         style: TextStyle(
-                          fontFamily: 'DM Sans',
+                          fontFamily: kSansFamily,
                           fontSize: 12,
                           color: accent
                               ? (dark

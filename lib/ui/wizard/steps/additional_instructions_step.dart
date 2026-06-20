@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:drift/drift.dart' show Value;
@@ -595,7 +595,7 @@ class _AdditionalInstructionsStepState
                     Text(
                       title,
                       style: const TextStyle(
-                        fontFamily: 'DM Sans',
+                        fontFamily: kSansFamily,
                         fontWeight: FontWeight.w600,
                         fontSize: 15,
                       ),
@@ -604,7 +604,7 @@ class _AdditionalInstructionsStepState
                     Text(
                       subtitle,
                       style: TextStyle(
-                        fontFamily: 'DM Sans',
+                        fontFamily: kSansFamily,
                         fontSize: 12,
                         height: 1.4,
                         color: p.textMuted,

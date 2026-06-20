@@ -1,3 +1,4 @@
+import 'package:mhad/constants.dart';
 import 'package:mhad/data/repository/directive_repository.dart';
 
 /// Builds the "answers so far" context map handed to the AI assistant.
@@ -87,9 +88,9 @@ Future<Map<String, String>> buildAiFilledFields(
 
 String? _consentLabel(String? val) {
   if (val == null || val.isEmpty) return null;
-  if (val == 'consentYes') return 'consented';
-  if (val == 'consentNo') return 'refused';
-  if (val == 'consentAgentDecides') return 'delegated to agent';
+  if (val == consentYes) return 'consented';
+  if (val == consentNo) return 'refused';
+  if (val == consentAgentDecides) return 'delegated to agent';
   if (val.startsWith('conditional:')) return 'conditional (see form)';
   return null;
 }

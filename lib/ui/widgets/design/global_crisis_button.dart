@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/crisis_sheet.dart';
@@ -60,7 +60,7 @@ class GlobalCrisisButton extends StatelessWidget {
                         'Crisis help',
                         style: TextStyle(
                           color: Colors.white,
-                          fontFamily: 'DM Sans',
+                          fontFamily: kSansFamily,
                           fontWeight: FontWeight.w700,
                           fontSize: 13,
                           height: 1.15,
@@ -70,7 +70,7 @@ class GlobalCrisisButton extends StatelessWidget {
                         'Call or text 988',
                         style: TextStyle(
                           color: Colors.white,
-                          fontFamily: 'DM Sans',
+                          fontFamily: kSansFamily,
                           fontSize: 10.5,
                           height: 1.15,
                         ),

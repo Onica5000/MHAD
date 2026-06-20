@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/providers/app_providers.dart';
@@ -85,7 +85,7 @@ class _PeopleITrustStepState extends ConsumerState<PeopleITrustStep>
               child: Text(
                 '20 Pa.C.S. § 5836',
                 style: TextStyle(
-                  fontFamily: 'JetBrains Mono',
+                  fontFamily: kMonoFamily,
                   fontFamilyFallback: const [
                     'Consolas',
                     'Menlo',
@@ -103,7 +103,7 @@ class _PeopleITrustStepState extends ConsumerState<PeopleITrustStep>
         Text(
           'Limit or expand your agent’s authority. Default is broad authority.',
           style: TextStyle(
-            fontFamily: 'DM Sans',
+            fontFamily: kSansFamily,
             fontSize: 13,
             color: p.textMuted,
             height: 1.45,
@@ -132,7 +132,7 @@ class _PeopleITrustStepState extends ConsumerState<PeopleITrustStep>
                 child: Text.rich(
                   TextSpan(
                     style: TextStyle(
-                      fontFamily: 'DM Sans',
+                      fontFamily: kSansFamily,
                       fontSize: 12,
                       color: p.textMuted,
                       height: 1.45,
@@ -281,7 +281,7 @@ class _AgentCardState extends ConsumerState<_AgentCard> {
                           ? Text(
                               initials,
                               style: TextStyle(
-                                fontFamily: 'DM Sans',
+                                fontFamily: kSansFamily,
                                 fontWeight: FontWeight.w700,
                                 fontSize: 13,
                                 color: widget.isPrimary
@@ -302,7 +302,7 @@ class _AgentCardState extends ConsumerState<_AgentCard> {
                               Text(
                                 widget.roleLabel,
                                 style: TextStyle(
-                                  fontFamily: 'JetBrains Mono',
+                                  fontFamily: kMonoFamily,
                                   fontFamilyFallback: const [
                                     'Consolas',
                                     'Menlo',
@@ -328,7 +328,7 @@ class _AgentCardState extends ConsumerState<_AgentCard> {
                                   child: Text(
                                     'Primary',
                                     style: TextStyle(
-                                      fontFamily: 'DM Sans',
+                                      fontFamily: kSansFamily,
                                       fontSize: 9.5,
                                       fontWeight: FontWeight.w700,
                                       letterSpacing: 0.4,
@@ -347,7 +347,7 @@ class _AgentCardState extends ConsumerState<_AgentCard> {
                                     ? 'Add someone'
                                     : 'Optional'),
                             style: TextStyle(
-                              fontFamily: 'DM Sans',
+                              fontFamily: kSansFamily,
                               fontSize: 15,
                               fontWeight: FontWeight.w700,
                               color: p.text,
@@ -369,7 +369,7 @@ class _AgentCardState extends ConsumerState<_AgentCard> {
                                 return Text(
                                   parts.join(' · '),
                                   style: TextStyle(
-                                    fontFamily: 'DM Sans',
+                                    fontFamily: kSansFamily,
                                     fontSize: 12,
                                     color: p.textMuted,
                                   ),
@@ -462,7 +462,7 @@ class _StatusChip extends StatelessWidget {
           Text(
             label,
             style: TextStyle(
-              fontFamily: 'DM Sans',
+              fontFamily: kSansFamily,
               fontSize: 11,
               fontWeight: FontWeight.w600,
               color: fg,

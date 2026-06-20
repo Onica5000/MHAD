@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/model/directive.dart';
@@ -165,7 +165,7 @@ class _RenewSheet extends StatelessWidget {
                         Text.rich(
                           TextSpan(
                             style: TextStyle(
-                              fontFamily: 'DM Sans',
+                              fontFamily: kSansFamily,
                               fontSize: 13,
                               height: 1.5,
                               color: p.textMuted,
@@ -209,7 +209,7 @@ class _RenewSheet extends StatelessWidget {
                         Text(
                           'Quick renew · ~5 min',
                           style: TextStyle(
-                            fontFamily: 'DM Sans',
+                            fontFamily: kSansFamily,
                             fontSize: 13,
                             fontWeight: FontWeight.w700,
                             color: p.primaryDark,
@@ -224,7 +224,7 @@ class _RenewSheet extends StatelessWidget {
                       'to change it, then print and sign the new copy in ink '
                       'with two witnesses.',
                       style: TextStyle(
-                        fontFamily: 'DM Sans',
+                        fontFamily: kSansFamily,
                         fontSize: 12.5,
                         height: 1.5,
                         color: p.text,
@@ -285,7 +285,7 @@ class _RenewSheet extends StatelessWidget {
                 "We'll remind you again 7 days before expiration.",
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontFamily: 'DM Sans',
+                  fontFamily: kSansFamily,
                   fontSize: 10.5,
                   height: 1.5,
                   color: p.textMuted,
@@ -313,7 +313,7 @@ class _RenewMetric extends StatelessWidget {
           TextSpan(
             text: num,
             style: TextStyle(
-              fontFamily: 'DM Sans',
+              fontFamily: kSansFamily,
               fontSize: 11,
               fontWeight: FontWeight.w700,
               color: p.text,
@@ -322,7 +322,7 @@ class _RenewMetric extends StatelessWidget {
           TextSpan(
             text: ' $label',
             style: TextStyle(
-              fontFamily: 'DM Sans',
+              fontFamily: kSansFamily,
               fontSize: 11,
               color: p.textMuted,
             ),
@@ -452,7 +452,7 @@ class _CheckInSheet extends StatelessWidget {
                         Text.rich(
                           TextSpan(
                             style: TextStyle(
-                              fontFamily: 'DM Sans',
+                              fontFamily: kSansFamily,
                               fontSize: 13,
                               height: 1.5,
                               color: p.textMuted,
@@ -519,7 +519,7 @@ class _CheckInSheet extends StatelessWidget {
                 'copy in ink. Small changes can wait for your 2-year renewal.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontFamily: 'DM Sans',
+                  fontFamily: kSansFamily,
                   fontSize: 10.5,
                   height: 1.5,
                   color: p.textMuted,
@@ -577,7 +577,7 @@ class _CheckInRow extends StatelessWidget {
                   Text(
                     title,
                     style: TextStyle(
-                      fontFamily: 'DM Sans',
+                      fontFamily: kSansFamily,
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
                       color: p.text,
@@ -586,7 +586,7 @@ class _CheckInRow extends StatelessWidget {
                   Text(
                     sub,
                     style: TextStyle(
-                      fontFamily: 'DM Sans',
+                      fontFamily: kSansFamily,
                       fontSize: 11.5,
                       color: p.textMuted,
                     ),
@@ -599,7 +599,7 @@ class _CheckInRow extends StatelessWidget {
             Text(
               '$stepLabel ›',
               style: TextStyle(
-                fontFamily: 'DM Sans',
+                fontFamily: kSansFamily,
                 fontSize: 11.5,
                 fontWeight: FontWeight.w700,
                 color: p.primary,

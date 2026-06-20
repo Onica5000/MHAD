@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/ai/ai_clinical_policy.dart';
@@ -284,7 +284,7 @@ Return plain-text suggestions (short bullets are fine). No preamble.''';
             Text(
               'The AI is reviewing your directive…',
               style: TextStyle(
-                fontFamily: 'DM Sans',
+                fontFamily: kSansFamily,
                 fontSize: 13,
                 color: p.textMuted,
               ),
@@ -325,7 +325,7 @@ Return plain-text suggestions (short bullets are fine). No preamble.''';
         Text(
           'AI review skipped — you can re-run it any time.',
           style: TextStyle(
-            fontFamily: 'DM Sans',
+            fontFamily: kSansFamily,
             fontSize: 13,
             color: p.textMuted,
           ),
@@ -362,7 +362,7 @@ Return plain-text suggestions (short bullets are fine). No preamble.''';
                 ? _aiSuggestions!
                 : 'The AI did not return any suggestions.',
             style: TextStyle(
-              fontFamily: 'DM Sans',
+              fontFamily: kSansFamily,
               fontSize: 13.5,
               height: 1.5,
               color: p.text,
@@ -373,7 +373,7 @@ Return plain-text suggestions (short bullets are fine). No preamble.''';
         Text(
           '$aiNotAdvice Optional suggestions based only on what you entered.',
           style: TextStyle(
-            fontFamily: 'DM Sans',
+            fontFamily: kSansFamily,
             fontSize: 11.5,
             fontStyle: FontStyle.italic,
             color: p.textMuted,
@@ -445,7 +445,7 @@ Return plain-text suggestions (short bullets are fine). No preamble.''';
                       : "These won't block you from generating the PDF — "
                           'they are warnings you can fix or ignore.',
                   style: TextStyle(
-                    fontFamily: 'DM Sans',
+                    fontFamily: kSansFamily,
                     fontSize: 14,
                     color: p.textMuted,
                   ),
@@ -594,7 +594,7 @@ class _ConflictCard extends StatelessWidget {
       child: Text(
         text,
         style: TextStyle(
-          fontFamily: 'DM Sans',
+          fontFamily: kSansFamily,
           fontSize: 12.5,
           height: 1.3,
           fontWeight: FontWeight.w600,
@@ -634,7 +634,7 @@ class _ConflictCard extends StatelessWidget {
                 Text(
                   'CONFLICT · ${index + 1} · ${conflict.steps}',
                   style: TextStyle(
-                    fontFamily: 'JetBrains Mono',
+                    fontFamily: kMonoFamily,
                     fontFamilyFallback: const [
                       'Consolas',
                       'Menlo',
@@ -661,7 +661,7 @@ class _ConflictCard extends StatelessWidget {
                   child: Text(
                     'vs',
                     style: TextStyle(
-                      fontFamily: 'JetBrains Mono',
+                      fontFamily: kMonoFamily,
                       fontFamilyFallback: const [
                         'Consolas',
                         'Menlo',
@@ -681,7 +681,7 @@ class _ConflictCard extends StatelessWidget {
             Text(
               conflict.title,
               style: TextStyle(
-                fontFamily: 'DM Sans',
+                fontFamily: kSansFamily,
                 fontSize: 15,
                 fontWeight: FontWeight.w700,
                 color: p.text,
@@ -691,7 +691,7 @@ class _ConflictCard extends StatelessWidget {
             Text(
               conflict.body,
               style: TextStyle(
-                fontFamily: 'DM Sans',
+                fontFamily: kSansFamily,
                 fontSize: 13.5,
                 height: 1.45,
                 color: p.text,

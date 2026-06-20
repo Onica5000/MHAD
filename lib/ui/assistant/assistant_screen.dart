@@ -1,4 +1,4 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -186,7 +186,7 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                   Text(
                     'AI assistant',
                     style: TextStyle(
-                      fontFamily: 'DM Sans',
+                      fontFamily: kSansFamily,
                       fontSize: 14.5,
                       fontWeight: FontWeight.w700,
                       letterSpacing: -0.2,
@@ -198,7 +198,7 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                         ? '● ACTIVE · ${appData.ai.model.toUpperCase().replaceAll('-', ' ')} · TEXT PII STRIPPED BEFORE SEND'
                         : '○ NOT SET UP · ADD A FREE KEY TO USE THE AI',
                     style: TextStyle(
-                      fontFamily: 'JetBrains Mono',
+                      fontFamily: kMonoFamily,
                       fontFamilyFallback: const [
                         'Consolas',
                         'Menlo',
@@ -352,7 +352,7 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                           'contact PA Protection & Advocacy: '
                           '${appData.phoneOf('paProtectionAdvocacy')}',
                           style: TextStyle(
-                            fontFamily: 'DM Sans',
+                            fontFamily: kSansFamily,
                             fontSize: 11,
                             fontWeight: FontWeight.w600,
                             color: fg,
@@ -952,7 +952,7 @@ class _AssistantContextPanel extends StatelessWidget {
                 'Ask about form types, agents, treatment preferences, or '
                 'anything in the PA MHAD booklet. Try one of these:',
                 style: TextStyle(
-                  fontFamily: 'DM Sans',
+                  fontFamily: kSansFamily,
                   fontSize: 12.5,
                   height: 1.45,
                   color: p.textMuted,
@@ -985,7 +985,7 @@ class _AssistantContextPanel extends StatelessWidget {
                     Text(
                       'PII REDACTION ON',
                       style: TextStyle(
-                        fontFamily: 'JetBrains Mono',
+                        fontFamily: kMonoFamily,
                         fontFamilyFallback: const ['Consolas', 'monospace'],
                         fontSize: 10.5,
                         fontWeight: FontWeight.w700,
@@ -1001,7 +1001,7 @@ class _AssistantContextPanel extends StatelessWidget {
                   'with placeholders before sending to Gemini. Suggestions '
                   'come back with placeholders filled in locally.',
                   style: TextStyle(
-                    fontFamily: 'DM Sans',
+                    fontFamily: kSansFamily,
                     fontSize: 12,
                     height: 1.45,
                     color: p.text,
@@ -1037,7 +1037,7 @@ class _ContextKV extends StatelessWidget {
             child: Text(
               label,
               style: TextStyle(
-                fontFamily: 'DM Sans',
+                fontFamily: kSansFamily,
                 fontSize: 12,
                 color: p.textMuted,
               ),
@@ -1049,7 +1049,7 @@ class _ContextKV extends StatelessWidget {
               value,
               textAlign: TextAlign.right,
               style: TextStyle(
-                fontFamily: 'DM Sans',
+                fontFamily: kSansFamily,
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
                 color: p.text,
@@ -1093,7 +1093,7 @@ class _ContextPromptTile extends StatelessWidget {
                   child: Text(
                     text,
                     style: TextStyle(
-                      fontFamily: 'DM Sans',
+                      fontFamily: kSansFamily,
                       fontSize: 12.5,
                       height: 1.3,
                       color: p.text,

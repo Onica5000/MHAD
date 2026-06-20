@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 
+/// App-wide font family constants.
+const kSansFamily = 'DM Sans';
+const kMonoFamily = 'JetBrains Mono';
+const kMonoFallbacks = ['Consolas', 'Menlo', 'Courier New', 'monospace'];
+
 /// Design tokens — single source of truth for radii, spacing, shadows used
 /// throughout the MHAD redesign. Keep in sync with the prototype.
 class DesignTokens {
@@ -353,7 +358,7 @@ ThemeData buildMhadTheme(ThemePalette palette, Brightness brightness) {
     useMaterial3: true,
     colorScheme: colorScheme,
     scaffoldBackgroundColor: p.scaffoldBackground,
-    fontFamily: 'DM Sans', // falls back to platform sans-serif if unavailable
+    fontFamily: kSansFamily, // falls back to platform sans-serif if unavailable
     textTheme: textTheme,
     primaryTextTheme: textTheme,
     extensions: [_MhadPaletteExt(p)],
@@ -405,7 +410,7 @@ ThemeData buildMhadTheme(ThemePalette palette, Brightness brightness) {
           borderRadius: BorderRadius.circular(DesignTokens.buttonRadius),
         ),
         textStyle: const TextStyle(
-          fontFamily: 'DM Sans',
+          fontFamily: kSansFamily,
           fontSize: 15,
           fontWeight: FontWeight.w600,
         ),
@@ -464,7 +469,7 @@ ThemeData buildMhadTheme(ThemePalette palette, Brightness brightness) {
           borderRadius: BorderRadius.circular(DesignTokens.buttonRadius),
         ),
         textStyle: const TextStyle(
-          fontFamily: 'DM Sans',
+          fontFamily: kSansFamily,
           fontSize: 15,
           fontWeight: FontWeight.w600,
         ),
@@ -494,7 +499,7 @@ ThemeData buildMhadTheme(ThemePalette palette, Brightness brightness) {
       style: TextButton.styleFrom(
         foregroundColor: p.primary,
         textStyle: const TextStyle(
-          fontFamily: 'DM Sans',
+          fontFamily: kSansFamily,
           fontSize: 14,
           fontWeight: FontWeight.w600,
         ),
@@ -549,19 +554,19 @@ ThemeData buildMhadTheme(ThemePalette palette, Brightness brightness) {
       ),
       contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
       labelStyle: TextStyle(
-        fontFamily: 'DM Sans',
+        fontFamily: kSansFamily,
         color: p.textMuted,
         fontSize: 14,
       ),
       floatingLabelStyle: TextStyle(
-        fontFamily: 'DM Sans',
+        fontFamily: kSansFamily,
         color: p.textMuted,
         fontSize: 12,
         fontWeight: FontWeight.w600,
         letterSpacing: 0.2,
       ),
       hintStyle: TextStyle(
-        fontFamily: 'DM Sans',
+        fontFamily: kSansFamily,
         color: p.textMuted,
         fontSize: 14,
       ),
@@ -571,7 +576,7 @@ ThemeData buildMhadTheme(ThemePalette palette, Brightness brightness) {
       backgroundColor: p.primaryLight,
       side: BorderSide.none,
       labelStyle: TextStyle(
-        fontFamily: 'DM Sans',
+        fontFamily: kSansFamily,
         color: p.onPrimaryLight,
         fontSize: 12,
         fontWeight: FontWeight.w600,
@@ -600,7 +605,7 @@ ThemeData buildMhadTheme(ThemePalette palette, Brightness brightness) {
     snackBarTheme: SnackBarThemeData(
       backgroundColor: p.text,
       contentTextStyle: TextStyle(
-        fontFamily: 'DM Sans',
+        fontFamily: kSansFamily,
         color: brightness == Brightness.dark ? p.card : Colors.white,
       ),
       behavior: SnackBarBehavior.floating,
@@ -637,7 +642,7 @@ ThemeData buildMhadTheme(ThemePalette palette, Brightness brightness) {
 }
 
 TextTheme _buildTextTheme(Color text, Color muted) {
-  const family = 'DM Sans';
+  const family = kSansFamily;
   return TextTheme(
     displayLarge: TextStyle(
         fontFamily: family, fontSize: 40, fontWeight: FontWeight.w700, color: text, letterSpacing: -0.5),

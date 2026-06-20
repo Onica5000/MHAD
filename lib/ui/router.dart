@@ -118,6 +118,12 @@ PrivacyModeNotifier _defaultPrivacyMode() {
   return n;
 }
 
+Widget _withDirectiveId(GoRouterState state, Widget Function(int) build) {
+  final id = int.tryParse(state.pathParameters['directiveId'] ?? '');
+  if (id == null) return const HomeScreen();
+  return build(id);
+}
+
 GoRouter _buildRouter(DisclaimerNotifier disclaimer,
         OnboardingNotifier onboarding, PrivacyModeNotifier privacy) =>
     GoRouter(
@@ -176,12 +182,8 @@ GoRouter _buildRouter(DisclaimerNotifier disclaimer,
         ),
         GoRoute(
           path: AppRoutes.wizard,
-          builder: (context, state) {
-            final directiveId =
-                int.tryParse(state.pathParameters['directiveId'] ?? '');
-            if (directiveId == null) return const HomeScreen();
-            return WizardScreen(directiveId: directiveId);
-          },
+          builder: (_, state) =>
+              _withDirectiveId(state, (id) => WizardScreen(directiveId: id)),
         ),
         GoRoute(
           path: AppRoutes.education,
@@ -199,34 +201,24 @@ GoRouter _buildRouter(DisclaimerNotifier disclaimer,
         ),
         GoRoute(
           path: AppRoutes.export,
-          builder: (context, state) {
-            final directiveId =
-                int.tryParse(state.pathParameters['directiveId'] ?? '');
-            if (directiveId == null) return const HomeScreen();
-            return ExportScreen(directiveId: directiveId);
-          },
+          builder: (_, state) =>
+              _withDirectiveId(state, (id) => ExportScreen(directiveId: id)),
         ),
         GoRoute(
           path: AppRoutes.upload,
-          builder: (context, state) {
-            final directiveId =
-                int.tryParse(state.pathParameters['directiveId'] ?? '');
-            if (directiveId == null) return const HomeScreen();
-            return PipelineScreen(
-              directiveId: directiveId,
+          builder: (_, state) => _withDirectiveId(
+            state,
+            (id) => PipelineScreen(
+              directiveId: id,
               formType: FormType.combined.name,
               mode: PipelineMode.standalone,
-            );
-          },
+            ),
+          ),
         ),
         GoRoute(
           path: AppRoutes.sign,
-          builder: (context, state) {
-            final directiveId =
-                int.tryParse(state.pathParameters['directiveId'] ?? '');
-            if (directiveId == null) return const HomeScreen();
-            return SignScreen(directiveId: directiveId);
-          },
+          builder: (_, state) =>
+              _withDirectiveId(state, (id) => SignScreen(directiveId: id)),
         ),
         GoRoute(
           path: AppRoutes.aiSetup,
@@ -257,59 +249,38 @@ GoRouter _buildRouter(DisclaimerNotifier disclaimer,
         ),
         GoRoute(
           path: AppRoutes.legalToggle,
-          builder: (_, state) {
-            final id = int.tryParse(state.pathParameters['directiveId'] ?? '');
-            if (id == null) return const HomeScreen();
-            return PlainLegalToggleScreen(directiveId: id);
-          },
+          builder: (_, state) => _withDirectiveId(
+              state, (id) => PlainLegalToggleScreen(directiveId: id)),
         ),
         GoRoute(
           path: AppRoutes.crisisPlan,
-          builder: (_, state) {
-            final id = int.tryParse(state.pathParameters['directiveId'] ?? '');
-            if (id == null) return const HomeScreen();
-            return CrisisPlanScreen(directiveId: id);
-          },
+          builder: (_, state) =>
+              _withDirectiveId(state, (id) => CrisisPlanScreen(directiveId: id)),
         ),
         GoRoute(
           path: AppRoutes.sideEffects,
-          builder: (_, state) {
-            final id = int.tryParse(state.pathParameters['directiveId'] ?? '');
-            if (id == null) return const HomeScreen();
-            return SideEffectsScreen(directiveId: id);
-          },
+          builder: (_, state) =>
+              _withDirectiveId(state, (id) => SideEffectsScreen(directiveId: id)),
         ),
         GoRoute(
           path: AppRoutes.ulysses,
-          builder: (_, state) {
-            final id = int.tryParse(state.pathParameters['directiveId'] ?? '');
-            if (id == null) return const HomeScreen();
-            return UlyssesClauseScreen(directiveId: id);
-          },
+          builder: (_, state) => _withDirectiveId(
+              state, (id) => UlyssesClauseScreen(directiveId: id)),
         ),
         GoRoute(
           path: AppRoutes.revocation,
-          builder: (_, state) {
-            final id = int.tryParse(state.pathParameters['directiveId'] ?? '');
-            if (id == null) return const HomeScreen();
-            return RevocationScreen(directiveId: id);
-          },
+          builder: (_, state) =>
+              _withDirectiveId(state, (id) => RevocationScreen(directiveId: id)),
         ),
         GoRoute(
           path: AppRoutes.aiCheck,
-          builder: (_, state) {
-            final id = int.tryParse(state.pathParameters['directiveId'] ?? '');
-            if (id == null) return const HomeScreen();
-            return AiConsistencyScreen(directiveId: id);
-          },
+          builder: (_, state) => _withDirectiveId(
+              state, (id) => AiConsistencyScreen(directiveId: id)),
         ),
         GoRoute(
           path: AppRoutes.pastDirective,
-          builder: (_, state) {
-            final id = int.tryParse(state.pathParameters['directiveId'] ?? '');
-            if (id == null) return const HomeScreen();
-            return PastDirectiveDetailScreen(directiveId: id);
-          },
+          builder: (_, state) => _withDirectiveId(
+              state, (id) => PastDirectiveDetailScreen(directiveId: id)),
         ),
         GoRoute(
           path: AppRoutes.permissions,
