@@ -627,6 +627,26 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
       _reviewEdited['agent_authority_limitations'] = v.agentAuthorityLimitations!;
     }
 
+    // ── Consent fields (ECT / experimental / drug trial)
+    if (v.ectConsent != null) {
+      _reviewChecked['ect_consent'] = true;
+      _reviewEdited['ect_consent'] = v.ectConsent!;
+    }
+    if (v.experimentalConsent != null) {
+      _reviewChecked['experimental_consent'] = true;
+      _reviewEdited['experimental_consent'] = v.experimentalConsent!;
+    }
+    if (v.drugTrialConsent != null) {
+      _reviewChecked['drug_trial_consent'] = true;
+      _reviewEdited['drug_trial_consent'] = v.drugTrialConsent!;
+    }
+
+    // ── Room preferences note
+    if (v.roomPreferencesNote != null) {
+      _reviewChecked['room_prefs_note'] = true;
+      _reviewEdited['room_prefs_note'] = v.roomPreferencesNote!;
+    }
+
     // ── Personal info (PII) — autofill the declarant + the people they
     // designate. Address is split into components matching the app's form.
     final pi = v.personalInfo;
@@ -647,6 +667,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
     put('person_zip', pi.zip);
     put('person_phone', pi.phone);
     put('person_doctor_name', pi.primaryDoctorName);
+    put('person_doctor_specialty', pi.primaryDoctorSpecialty);
     put('person_doctor_phone', pi.primaryDoctorPhone);
     put('person_eval_doctor_name', pi.preferredEvaluatingDoctorName);
     put('person_eval_doctor_contact', pi.preferredEvaluatingDoctorContact);
@@ -1175,16 +1196,17 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
     }
 
     final docName = pv('person_doctor_name');
+    final docSpecialty = pv('person_doctor_specialty');
     final docPhone = pv('person_doctor_phone');
-    if (docName != null || docPhone != null) {
+    if (docName != null || docSpecialty != null || docPhone != null) {
       final d = await repo.getDirectiveById(id);
       await repo.updatePrimaryDoctor(
         id,
         name: docName ?? d?.primaryDoctorName ?? '',
-        specialty: d?.primaryDoctorSpecialty ?? '',
+        specialty: docSpecialty ?? d?.primaryDoctorSpecialty ?? '',
         phone: docPhone ?? d?.primaryDoctorPhone ?? '',
       );
-      applied += [docName, docPhone].whereType<String>().length;
+      applied += [docName, docSpecialty, docPhone].whereType<String>().length;
     }
 
     final evalDocName = pv('person_eval_doctor_name');
@@ -1229,7 +1251,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
         city: Value(city ?? cur?.city ?? ''),
         state: Value(state ?? cur?.state ?? ''),
         zip: Value(zip ?? cur?.zip ?? ''),
-        homePhone: Value(phone ?? cur?.homePhone ?? ''),
+        cellPhone: Value(phone ?? cur?.cellPhone ?? ''),
       ));
       applied += [name, rel, addr1, city, phone].whereType<String>().length;
     }
@@ -1277,6 +1299,31 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
         agentAuthorityLimitations: Value(merged),
       ));
       applied++;
+    }
+
+    // ── Apply ECT / experimental / drug trial consent ──────────────────
+    // Map extracted "yes"/"agent"/"no" → the canonical consent string values.
+    String? toConsentValue(String? extracted) {
+      switch (extracted) {
+        case 'yes': return 'consentYes';
+        case 'agent': return 'consentAgentDecides';
+        case 'no': return 'consentNo';
+        default: return null;
+      }
+    }
+    final ectVal = toConsentValue(pv('ect_consent'));
+    final expVal = toConsentValue(pv('experimental_consent'));
+    final drugVal = toConsentValue(pv('drug_trial_consent'));
+    final roomNote = pv('room_prefs_note');
+    if (ectVal != null || expVal != null || drugVal != null || roomNote != null) {
+      await repo.upsertPreferences(DirectivePrefsCompanion(
+        directiveId: Value(id),
+        ectConsent: ectVal != null ? Value(ectVal) : const Value.absent(),
+        experimentalConsent: expVal != null ? Value(expVal) : const Value.absent(),
+        drugTrialConsent: drugVal != null ? Value(drugVal) : const Value.absent(),
+        roomPreferencesNote: roomNote != null ? Value(roomNote) : const Value.absent(),
+      ));
+      applied += [ectVal, expVal, drugVal, roomNote].whereType<String>().length;
     }
 
     // Each additional-instruction field actually written counts once (review
@@ -1369,6 +1416,10 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
     if (key == 'activities') return 'Activities';
     if (key == 'crisis') return 'Crisis Intervention';
     if (key == 'agent_authority_limitations') return 'Agent authority limits';
+    if (key == 'ect_consent') return 'ECT consent';
+    if (key == 'experimental_consent') return 'Experimental treatment consent';
+    if (key == 'drug_trial_consent') return 'Drug trial consent';
+    if (key == 'room_prefs_note') return 'Room preferences';
     if (key == 'pet_custody') return 'Pet care';
     if (key == 'children_custody') return 'Children / dependents';
     if (key == 'family_notification') return 'Who to notify';
@@ -1385,6 +1436,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
     if (key == 'person_zip') return 'ZIP code';
     if (key == 'person_phone') return 'Your phone';
     if (key == 'person_doctor_name') return 'Primary doctor';
+    if (key == 'person_doctor_specialty') return 'Doctor specialty';
     if (key == 'person_doctor_phone') return "Doctor's phone";
     if (key == 'person_eval_doctor_name') return 'Preferred evaluating doctor';
     if (key == 'person_eval_doctor_contact') return 'Evaluating doctor contact';
@@ -1432,6 +1484,12 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
       return 'Your agent';
     }
     if (key == 'agent_authority_limitations') return 'Agent Authority';
+    if (key == 'ect_consent' ||
+        key == 'experimental_consent' ||
+        key == 'drug_trial_consent') {
+      return 'Consent';
+    }
+    if (key == 'room_prefs_note') return 'Room Preferences';
     if (key.startsWith('alt_agent_')) return 'Alternate agent';
     if (key.startsWith('guardian_')) return 'Guardian';
     return 'Other';

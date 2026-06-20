@@ -1,4 +1,4 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
@@ -184,6 +184,12 @@ class DocumentExtractor {
           'notes': Schema.string(nullable: true),
         }),
       ),
+      // ECT / experimental / drug trial consent: "yes" | "agent" | "no" | null
+      'ect_consent': Schema.string(nullable: true),
+      'experimental_consent': Schema.string(nullable: true),
+      'drug_trial_consent': Schema.string(nullable: true),
+      // Room preferences as free-text note.
+      'room_preferences_note': Schema.string(nullable: true),
       'preferred_facility': Schema.string(nullable: true),
       'avoid_facility': Schema.string(nullable: true),
       'effective_condition': Schema.string(nullable: true),
@@ -211,6 +217,7 @@ class DocumentExtractor {
         'zip': Schema.string(nullable: true),
         'phone': Schema.string(nullable: true),
         'primary_doctor_name': Schema.string(nullable: true),
+        'primary_doctor_specialty': Schema.string(nullable: true),
         'primary_doctor_phone': Schema.string(nullable: true),
         'preferred_evaluating_doctor_name': Schema.string(nullable: true),
         'preferred_evaluating_doctor_contact': Schema.string(nullable: true),
@@ -249,6 +256,7 @@ DECLARANT (the person this directive is FOR — look for labels: patient, princi
 • zip — 5-digit ZIP code only (e.g., 17101 — drop the +4 suffix if present).
 • phone — Format: (xxx) xxx-xxxx (e.g., (215) 555-1234).
 • primary_doctor_name — the declarant's primary care doctor / treating physician name.
+• primary_doctor_specialty — that doctor's medical specialty (e.g., Psychiatry, Internal Medicine). Leave null if not stated.
 • primary_doctor_phone — that doctor's phone. Same (xxx) xxx-xxxx format.
 • preferred_evaluating_doctor_name — if the document names a SPECIFIC doctor preferred to certify the declarant's incapacity (different from the primary care doctor, e.g., "I prefer Dr. Smith to evaluate my capacity").
 • preferred_evaluating_doctor_contact — that evaluating doctor's phone or address.
@@ -258,6 +266,8 @@ DESIGNATED PEOPLE — use these sub-objects:
   Fields: name, relationship, address_line1, address_line2 (apt/unit if separate), city, state, zip (5-digit), phone (xxx) xxx-xxxx.
 • alternate_agent — the BACKUP / second / alternate agent. Same fields.
 • guardian — any nominated guardian. Same fields.
+
+PHONE TYPE: For designated people (agent, alternate_agent, guardian), the extracted phone maps to cellPhone in the app.
 
 ADDRESS FORMAT FOR ALL PERSONS — always split into components:
   ✓ address_line1: "456 Oak Ave"  city: "Pittsburgh"  state: "PA"  zip: "15213"
@@ -299,9 +309,23 @@ allergies
   → Severity guidance: mild = rash/GI; moderate = hives/swelling; severe = anaphylaxis/ER.
   → Extract even if the allergy is already in medications_to_avoid — both fields get it.
 
+ect_consent
+  → Whether the person consents to electroconvulsive therapy (ECT).
+  → Values: "yes" (I consent), "agent" (my agent decides), "no" (I do not consent). Leave null if not mentioned.
+
+experimental_consent
+  → Whether the person consents to experimental research studies. Same values: "yes" | "agent" | "no" | null.
+
+drug_trial_consent
+  → Whether the person consents to clinical drug trials. Same values: "yes" | "agent" | "no" | null.
+
+room_preferences_note
+  → Free-text room preference notes: private room, smoking policy, same-gender roommate, etc. Leave null if not mentioned.
+
 preferred_facility
   → Name of a hospital or treatment center the person WANTS to be treated at.
   → NOT a doctor's name or clinic.
+  → Format: name only (e.g., "Western Psych") or "Name | Address" if an address is given.
 
 avoid_facility
   → Name of a hospital or treatment center the person wants to AVOID.

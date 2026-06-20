@@ -1,4 +1,4 @@
-/// Structured data extracted from a user-provided document (photo, PDF, text)
+﻿/// Structured data extracted from a user-provided document (photo, PDF, text)
 /// by the AI. Each field is nullable — only fields the AI could confidently
 /// extract are populated.
 class DocumentExtractionResult {
@@ -35,6 +35,14 @@ class DocumentExtractionResult {
   // Maps to DirectivePrefs.agentAuthorityLimitations.
   final String? agentAuthorityLimitations;
 
+  // Consent fields: "yes" | "agent" | "no" | null
+  final String? ectConsent;
+  final String? experimentalConsent;
+  final String? drugTrialConsent;
+
+  // Room preferences free-text note. Maps to DirectivePrefs.roomPreferencesNote.
+  final String? roomPreferencesNote;
+
   // ── Additional instructions ─────────────────────────────────────────────
   final String? healthHistory;
   final String? dietary;
@@ -65,6 +73,10 @@ class DocumentExtractionResult {
     this.avoidFacility,
     this.effectiveCondition,
     this.agentAuthorityLimitations,
+    this.ectConsent,
+    this.experimentalConsent,
+    this.drugTrialConsent,
+    this.roomPreferencesNote,
     this.healthHistory,
     this.dietary,
     this.religious,
@@ -89,6 +101,10 @@ class DocumentExtractionResult {
       avoidFacility == null &&
       effectiveCondition == null &&
       agentAuthorityLimitations == null &&
+      ectConsent == null &&
+      experimentalConsent == null &&
+      drugTrialConsent == null &&
+      roomPreferencesNote == null &&
       healthHistory == null &&
       dietary == null &&
       religious == null &&
@@ -117,6 +133,10 @@ class DocumentExtractionResult {
       effectiveCondition: _mergeText(effectiveCondition, other.effectiveCondition),
       agentAuthorityLimitations:
           _mergeText(agentAuthorityLimitations, other.agentAuthorityLimitations),
+      ectConsent: ectConsent ?? other.ectConsent,
+      experimentalConsent: experimentalConsent ?? other.experimentalConsent,
+      drugTrialConsent: drugTrialConsent ?? other.drugTrialConsent,
+      roomPreferencesNote: _mergeText(roomPreferencesNote, other.roomPreferencesNote),
       healthHistory: _mergeText(healthHistory, other.healthHistory),
       dietary: _mergeText(dietary, other.dietary),
       religious: _mergeText(religious, other.religious),
@@ -214,6 +234,10 @@ class DocumentExtractionResult {
     if (agentAuthorityLimitations != null) {
       map['Agent Authority Limitations'] = agentAuthorityLimitations!;
     }
+    if (ectConsent != null) map['ECT Consent'] = ectConsent!;
+    if (experimentalConsent != null) map['Experimental Treatment Consent'] = experimentalConsent!;
+    if (drugTrialConsent != null) map['Drug Trial Consent'] = drugTrialConsent!;
+    if (roomPreferencesNote != null) map['Room Preferences'] = roomPreferencesNote!;
     if (other != null) map['Other Instructions'] = other!;
     return map;
   }
@@ -230,6 +254,10 @@ class DocumentExtractionResult {
       avoidFacility: _str(json['avoid_facility']),
       effectiveCondition: _str(json['effective_condition']),
       agentAuthorityLimitations: _str(json['agent_authority_limitations']),
+      ectConsent: _str(json['ect_consent']),
+      experimentalConsent: _str(json['experimental_consent']),
+      drugTrialConsent: _str(json['drug_trial_consent']),
+      roomPreferencesNote: _str(json['room_preferences_note']),
       healthHistory: _str(json['health_history']),
       dietary: _str(json['dietary']),
       religious: _str(json['religious']),
@@ -420,6 +448,7 @@ class ExtractedPersonalInfo {
   final String? phone;
   // Primary care doctor (Diagnoses step, step 6).
   final String? primaryDoctorName;
+  final String? primaryDoctorSpecialty;
   final String? primaryDoctorPhone;
   // Preferred evaluating doctor (When it Kicks In step, step 2) — the doctor
   // the person wants to certify their capacity. Distinct from primary doctor.
@@ -440,6 +469,7 @@ class ExtractedPersonalInfo {
     this.zip,
     this.phone,
     this.primaryDoctorName,
+    this.primaryDoctorSpecialty,
     this.primaryDoctorPhone,
     this.preferredEvaluatingDoctorName,
     this.preferredEvaluatingDoctorContact,
@@ -477,6 +507,8 @@ class ExtractedPersonalInfo {
       phone: DocumentExtractionResult._mergeText(phone, o.phone),
       primaryDoctorName: DocumentExtractionResult._mergeText(
           primaryDoctorName, o.primaryDoctorName),
+      primaryDoctorSpecialty: DocumentExtractionResult._mergeText(
+          primaryDoctorSpecialty, o.primaryDoctorSpecialty),
       primaryDoctorPhone: DocumentExtractionResult._mergeText(
           primaryDoctorPhone, o.primaryDoctorPhone),
       preferredEvaluatingDoctorName: DocumentExtractionResult._mergeText(
@@ -510,6 +542,8 @@ class ExtractedPersonalInfo {
       phone: DocumentExtractionResult._str(j['phone']),
       primaryDoctorName:
           DocumentExtractionResult._str(j['primary_doctor_name']),
+      primaryDoctorSpecialty:
+          DocumentExtractionResult._str(j['primary_doctor_specialty']),
       primaryDoctorPhone:
           DocumentExtractionResult._str(j['primary_doctor_phone']),
       preferredEvaluatingDoctorName:
