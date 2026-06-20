@@ -240,6 +240,43 @@ Sure! Here is the proposal:
       expect(restored['contacts']['trevorProject']['phone'], '1-866-488-7386');
     });
 
+    test('parseProposal preserves list-type newValue as JSON string', () {
+      const model =
+          '{"changes":[{"path":"legal.ntiDrugs","newValue":["lithium","carbamazepine"],'
+          '"autonomy":"verify","source":"35 P.S. §960.3","rationale":"trimmed"}]}';
+      final base = {
+        'legal': {
+          'ntiDrugs': ['lithium', 'carbamazepine', 'valproic acid'],
+        },
+      };
+      final changes = AdminUpdateService.parseProposal(model, base);
+      expect(changes.length, 1);
+      // Must be valid JSON, not the Dart toString "[lithium, carbamazepine]".
+      expect(changes.first.newValue, '["lithium","carbamazepine"]');
+    });
+
+    test('applyApproved round-trips a list-type change (e.g. ntiDrugs)', () {
+      final base = {
+        'legal': {
+          'ntiDrugs': ['lithium', 'carbamazepine', 'valproic acid', 'phenytoin'],
+        },
+      };
+      final result = AdminUpdateService.applyApproved(base, [
+        ProposedChange(
+          path: 'legal.ntiDrugs',
+          oldValue: '["lithium","carbamazepine","valproic acid","phenytoin"]',
+          newValue: '["lithium","carbamazepine","valproic acid"]',
+          autonomy: 'verify',
+          source: '35 P.S. §960.3',
+          rationale: 'trimmed to 3',
+          approved: true,
+        ),
+      ]);
+      expect(result['legal']['ntiDrugs'],
+          ['lithium', 'carbamazepine', 'valproic acid']);
+      expect(result['legal']['ntiDrugs'], isA<List>());
+    });
+
     test('applyRestore only rolls back the ticked parts', () {
       final diff = AdminUpdateService.diffForRestore(live(), backup(),
           target: AdminDataTarget.appData);

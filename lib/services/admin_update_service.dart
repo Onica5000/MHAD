@@ -288,7 +288,10 @@ $pretty
       final m = raw.cast<String, dynamic>();
       final path = (m['path'] ?? '').toString();
       if (path.isEmpty) continue;
-      final newValue = (m['newValue'] ?? '').toString();
+      final rawVal = m['newValue'];
+      final newValue = (rawVal is Map || rawVal is List)
+          ? jsonEncode(rawVal)
+          : (rawVal ?? '').toString();
       final autonomy = (m['autonomy'] ?? 'verify').toString();
       changes.add(ProposedChange(
         path: path,
@@ -438,6 +441,13 @@ $pretty
     if (existing is int) return int.tryParse(raw) ?? existing;
     if (existing is double) return double.tryParse(raw) ?? existing;
     if (existing is bool) return raw.toLowerCase() == 'true';
+    if (existing is List || existing is Map) {
+      try {
+        return jsonDecode(raw) as Object;
+      } catch (_) {
+        return existing ?? raw;
+      }
+    }
     return raw;
   }
 
