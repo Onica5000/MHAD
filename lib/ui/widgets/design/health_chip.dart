@@ -29,6 +29,10 @@ class HealthChip extends StatelessWidget {
   /// Remove handler. When null, no remove affordance is shown.
   final VoidCallback? onRemove;
 
+  /// Optional "learn about this" handler. When set, a small info affordance is
+  /// shown before the remove button (used to open plain-language education).
+  final VoidCallback? onInfo;
+
   const HealthChip({
     required this.code,
     required this.label,
@@ -37,6 +41,7 @@ class HealthChip extends StatelessWidget {
     this.sourceTag,
     this.tone = HealthChipTone.primary,
     this.onRemove,
+    this.onInfo,
     super.key,
   });
 
@@ -199,6 +204,19 @@ class HealthChip extends StatelessWidget {
               ],
             ),
           ),
+          if (onInfo != null)
+            Semantics(
+              button: true,
+              label: 'Learn about $label',
+              child: InkWell(
+                onTap: onInfo,
+                borderRadius: BorderRadius.circular(8),
+                child: Padding(
+                  padding: const EdgeInsets.all(6),
+                  child: Icon(Icons.info_outline, size: 16, color: text),
+                ),
+              ),
+            ),
           if (onRemove != null)
             Semantics(
               button: true,

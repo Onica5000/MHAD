@@ -6,7 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/services/clinical_data_service.dart';
+import 'package:mhad/services/medline_plus_service.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/utils/launch_utils.dart';
 import 'package:mhad/ui/widgets/design/health_chip.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/nlm_attribution.dart';
@@ -46,6 +48,11 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
   final _docSpecialtyCtrl = TextEditingController();
   final _docPhoneCtrl = TextEditingController();
 
+  // NPI provider lookup for the doctor-name field.
+  Timer? _docDebounce;
+  List<ProviderResult> _docResults = [];
+  bool _docSearching = false;
+
   @override
   void initState() {
     super.initState();
@@ -66,11 +73,130 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
   @override
   void dispose() {
     _debounce?.cancel();
+    _docDebounce?.cancel();
     _searchCtrl.dispose();
     _docNameCtrl.dispose();
     _docSpecialtyCtrl.dispose();
     _docPhoneCtrl.dispose();
     super.dispose();
+  }
+
+  // ── NPI provider lookup ──────────────────────────────────────────────
+  void _onDocNameChanged(String query) {
+    _docDebounce?.cancel();
+    if (query.trim().length < 3) {
+      setState(() => _docResults = []);
+      return;
+    }
+    _docDebounce = Timer(const Duration(milliseconds: 400), () {
+      _searchProviders(query.trim());
+    });
+  }
+
+  Future<void> _searchProviders(String query) async {
+    setState(() => _docSearching = true);
+    try {
+      final results = await ClinicalDataService.searchProviders(query);
+      if (mounted) setState(() => _docResults = results);
+    } finally {
+      if (mounted) setState(() => _docSearching = false);
+    }
+  }
+
+  void _pickProvider(ProviderResult r) {
+    setState(() {
+      _docNameCtrl.text = r.name;
+      if (r.specialty.isNotEmpty) _docSpecialtyCtrl.text = r.specialty;
+      if (r.phone.isNotEmpty) _docPhoneCtrl.text = r.phone;
+      _docResults = [];
+    });
+  }
+
+  // ── MedlinePlus plain-language condition info ────────────────────────
+  Future<void> _showConditionInfo(String icdCode, String name) async {
+    // Kick off the fetch, show a dialog that resolves it. Cached per session.
+    final future = MedlinePlusService.forIcd10(icdCode);
+    if (!mounted) return;
+    await showDialog<void>(
+      context: context,
+      builder: (ctx) {
+        final p = Theme.of(ctx).mhadPalette;
+        return AlertDialog(
+          title: Text(name, style: const TextStyle(fontFamily: _kSans)),
+          content: SizedBox(
+            width: 420,
+            child: FutureBuilder<MedlinePlusTopic?>(
+              future: future,
+              builder: (context, snap) {
+                if (snap.connectionState != ConnectionState.done) {
+                  return const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 24),
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                }
+                final topic = snap.data;
+                if (topic == null) {
+                  return Text(
+                    'No plain-language summary is available for this condition '
+                    'right now. You can search it on MedlinePlus.',
+                    style: TextStyle(
+                        fontFamily: _kSans, fontSize: 13, color: p.textMuted),
+                  );
+                }
+                return SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        topic.summary.isNotEmpty
+                            ? topic.summary
+                            : topic.title,
+                        style: TextStyle(
+                          fontFamily: _kSans,
+                          fontSize: 13,
+                          height: 1.5,
+                          color: p.text,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        'Plain-language information from the U.S. National '
+                        'Library of Medicine (MedlinePlus). Educational only — '
+                        'not medical advice.',
+                        style: TextStyle(
+                          fontFamily: _kSans,
+                          fontSize: 10.5,
+                          fontStyle: FontStyle.italic,
+                          color: p.textMuted,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+          actions: [
+            FutureBuilder<MedlinePlusTopic?>(
+              future: future,
+              builder: (context, snap) {
+                final url = snap.data?.url ?? '';
+                if (url.isEmpty) return const SizedBox.shrink();
+                return TextButton(
+                  onPressed: () => launchOrCopy(context, url),
+                  child: const Text('Read more on MedlinePlus'),
+                );
+              },
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: const Text('Close'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -449,6 +575,9 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                   label: d.name,
                   sourceTag: 'ICD-10',
                   tone: HealthChipTone.primary,
+                  onInfo: d.icdCode.isNotEmpty
+                      ? () => _showConditionInfo(d.icdCode, d.name)
+                      : null,
                   onRemove: () => _removeDiagnosis(d.id),
                 );
 
@@ -492,11 +621,90 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
         TextField(
           controller: _docNameCtrl,
           textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
+          onChanged: _onDocNameChanged,
+          decoration: InputDecoration(
             labelText: 'Doctor name',
-            border: OutlineInputBorder(),
+            hintText: 'Type a name to search the provider registry',
+            border: const OutlineInputBorder(),
+            suffixIcon: _docSearching
+                ? const Padding(
+                    padding: EdgeInsets.all(12),
+                    child: SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    ),
+                  )
+                : const Icon(Icons.badge_outlined, size: 18),
           ),
         ),
+        // NPI provider matches — tap to autofill name / specialty / phone.
+        if (_docResults.isNotEmpty)
+          Container(
+            margin: const EdgeInsets.only(top: 4),
+            decoration: p.dropdownDecoration,
+            padding: const EdgeInsets.all(6),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxHeight: 240),
+              child: ListView(
+                shrinkWrap: true,
+                padding: EdgeInsets.zero,
+                children: [
+                  for (final r in _docResults)
+                    InkWell(
+                      onTap: () => _pickProvider(r),
+                      borderRadius: BorderRadius.circular(7),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              r.name,
+                              style: TextStyle(
+                                fontFamily: _kSans,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                                color: p.text,
+                              ),
+                            ),
+                            if (r.specialty.isNotEmpty || r.address.isNotEmpty)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 2),
+                                child: Text(
+                                  [r.specialty, r.address]
+                                      .where((s) => s.isNotEmpty)
+                                      .join(' · '),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontFamily: _kSans,
+                                    fontSize: 11.5,
+                                    color: p.textMuted,
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(8, 4, 8, 2),
+                    child: Text(
+                      'Provider names from the NPI registry (NIH Clinical '
+                      'Tables). Verify details before relying on them.',
+                      style: TextStyle(
+                        fontFamily: _kSans,
+                        fontSize: 10,
+                        fontStyle: FontStyle.italic,
+                        color: p.textMuted,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         const SizedBox(height: 8),
         Row(
           children: [

@@ -12,6 +12,7 @@ import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/data/educational_content.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/services/certificate_pinning_service.dart';
+import 'package:mhad/services/openfda_service.dart';
 
 /// Calls the Google Gemini API (free tier).
 ///
@@ -309,6 +310,19 @@ class GeminiApiAssistant implements AiAssistant {
       generationConfig: GenerationConfig(responseMimeType: 'application/json'),
     );
 
+    // Ground the list in authoritative sources: pull each medication's FDA
+    // label "Adverse Reactions" text from openFDA (free, no key) so the AI
+    // SUMMARIZES a real label instead of relying on its own memory. Meds with
+    // no label match fall back to "well-established" knowledge. Fetched in
+    // parallel; failures degrade silently to the ungrounded path.
+    final labels = await Future.wait(
+      cleaned.map((m) async => MapEntry(m, await OpenFdaService.adverseReactions(m))),
+    );
+    final grounded = <String, String>{
+      for (final e in labels)
+        if (e.value != null && e.value!.isNotEmpty) e.key: e.value!,
+    };
+
     final prompt = StringBuffer()
       ..writeln(
           'A user is documenting a PA Mental Health Advance Directive. For '
@@ -323,9 +337,13 @@ class GeminiApiAssistant implements AiAssistant {
           'promptly>}]}')
       ..writeln()
       ..writeln('Rules:')
-      ..writeln('- Only list side effects that are well-established for that '
-          'specific medication. If you are not sure, OMIT it — NEVER invent or '
-          'guess a side effect.')
+      ..writeln('- For any medication that has an "FDA LABEL" block below, base '
+          'its side effects ONLY on that official label text — translate the '
+          'clinical wording into short plain-language phrases. Do NOT add '
+          'effects that are not in the provided label for that medication.')
+      ..writeln('- For a medication with NO label block, only list side effects '
+          'that are well-established for it. If you are not sure, OMIT it — '
+          'NEVER invent or guess a side effect.')
       ..writeln('- One row per effect; short plain-language phrase. At most ~6 '
           'effects per medication, most common first.')
       ..writeln('- Do NOT recommend, change, rank, or comment on the '
@@ -339,6 +357,16 @@ class GeminiApiAssistant implements AiAssistant {
       ..writeln('Current medications:');
     for (final m in cleaned) {
       prompt.writeln('  • $m');
+    }
+    if (grounded.isNotEmpty) {
+      prompt.writeln();
+      prompt.writeln('Official FDA label text to summarize from:');
+      grounded.forEach((med, text) {
+        prompt
+          ..writeln('--- FDA LABEL · $med (Adverse Reactions) ---')
+          ..writeln(text)
+          ..writeln('--- END FDA LABEL · $med ---');
+      });
     }
 
     try {

@@ -16,6 +16,9 @@ class ClinicalDataService {
       'https://clinicaltables.nlm.nih.gov/api/rxterms/v3/search';
   static const _icdBase =
       'https://clinicaltables.nlm.nih.gov/api/icd10cm/v3/search';
+  // NPI registry — individual providers (same Clinical Tables engine).
+  static const _npiBase =
+      'https://clinicaltables.nlm.nih.gov/api/npi_idv/v3/search';
 
   static final _client = CertificatePinningService.createPinnedClient();
 
@@ -151,6 +154,41 @@ class ClinicalDataService {
     }
     return [];
   }
+
+  /// Search the NPI registry (individual healthcare providers) by name so the
+  /// user can pick their doctor and autofill the name / specialty / phone.
+  /// Free, no key — same Clinical Tables engine as the lookups above. Parses
+  /// defensively and degrades to whatever fields the registry returns (at
+  /// minimum the provider name).
+  static Future<List<ProviderResult>> searchProviders(String query,
+      {int count = 8}) async {
+    if (query.trim().length < 3) return [];
+    final uri = Uri.parse('$_npiBase?terms=${Uri.encodeComponent(query)}'
+        '&maxList=$count'
+        '&df=name.full,provider_type'
+        '&ef=addr_practice.phone,addr_practice.full');
+    final body = await _fetch(uri);
+    if (body == null) return [];
+    final data = jsonDecode(body) as List;
+    if (data.length < 4 || data[3] is! List) return [];
+    final rows = data[3] as List;
+    final extra = data.length >= 3 && data[2] is Map
+        ? data[2] as Map<String, dynamic>
+        : const <String, dynamic>{};
+    List asList(String key) =>
+        extra[key] is List ? extra[key] as List : const [];
+    final phones = asList('addr_practice.phone');
+    final addrs = asList('addr_practice.full');
+    return List.generate(rows.length, (i) {
+      final row = rows[i] is List ? rows[i] as List : const [];
+      return ProviderResult(
+        name: row.isNotEmpty ? row[0].toString() : '',
+        specialty: row.length > 1 ? row[1].toString() : '',
+        phone: i < phones.length ? phones[i].toString() : '',
+        address: i < addrs.length ? addrs[i].toString() : '',
+      );
+    }).where((r) => r.name.trim().isNotEmpty).toList();
+  }
 }
 
 class _CacheEntry {
@@ -172,6 +210,20 @@ class MedicationResult {
   final String name;
   final List<String> strengths;
   const MedicationResult({required this.name, this.strengths = const []});
+}
+
+/// One NPI-registry provider match, used to autofill the doctor card.
+class ProviderResult {
+  final String name;
+  final String specialty;
+  final String phone;
+  final String address;
+  const ProviderResult({
+    required this.name,
+    this.specialty = '',
+    this.phone = '',
+    this.address = '',
+  });
 }
 
 /// Pennsylvania Narrow Therapeutic Index (NTI) psychiatric medications.
