@@ -255,21 +255,25 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
         ),
       );
     }
-    return Row(
+    // Stacked (Column) rather than Row + Expanded. On the deployed --release
+    // web build the Row's Expanded was collapsing to ~0 width, wrapping the
+    // "Checking covers:" text one character per line (vertical). A Column with
+    // a plain Text has no flex child to collapse, so it lays out horizontally
+    // regardless of the renderer's flex quirks.
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
-          child: Text(
-            _items.isEmpty
-                ? 'Checking covers: ${_currentMeds.join(', ')}'
-                : 'Re-check for: ${_currentMeds.join(', ')}',
-            style: TextStyle(
-              fontFamily: 'DM Sans',
-              fontSize: 12.5,
-              color: p.textMuted,
-            ),
+        Text(
+          _items.isEmpty
+              ? 'Checking covers: ${_currentMeds.join(', ')}'
+              : 'Re-check for: ${_currentMeds.join(', ')}',
+          style: TextStyle(
+            fontFamily: 'DM Sans',
+            fontSize: 12.5,
+            color: p.textMuted,
           ),
         ),
-        const SizedBox(width: 12),
+        const SizedBox(height: 10),
         FilledButton.icon(
           onPressed: _generating ? null : _generate,
           icon: _generating
