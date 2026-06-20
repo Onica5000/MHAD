@@ -64,7 +64,11 @@ jobs:
         # app is always fetched from the network (only the 10-min GitHub Pages
         # HTTP cache applies), so deploys appear on the next load. The cleanup
         # snippet in web/index.html unregisters any SW left from earlier visits.
-        run: flutter build web --release --base-href "/MHAD/" --pwa-strategy=none
+        # --source-maps: emit main.dart.js.map so runtime errors in the browser
+        # console resolve to real Dart file:line (the repo is public, so the
+        # source is already visible). Helps debug production-only runtime crashes
+        # that build/analyze/unit-tests can't catch.
+        run: flutter build web --release --base-href "/MHAD/" --pwa-strategy=none --source-maps
 
       - name: Setup Pages
         uses: actions/configure-pages@v6
