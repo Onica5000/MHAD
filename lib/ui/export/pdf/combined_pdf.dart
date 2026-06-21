@@ -384,10 +384,12 @@ List<pw.Page> buildCombinedPages({
             ),
             dataBlock('Conditions:', consentConditionText(prefs.ectConsent)),
           ],
-          checkRow(
+          // §5805(c)(4): delegating ECT decisions to the agent requires the
+          // declarant's physical INITIALS, not a checkbox.
+          initialRow(
             'I have designated an agent under the Power of Attorney portion of this '
             'document to make decisions related to electroconvulsive therapy.',
-            checked: isConsentAgent(prefs.ectConsent),
+            highlighted: isConsentAgent(prefs.ectConsent),
           ),
           checkRow(
             'I do not consent to the administration of electroconvulsive therapy.',
@@ -415,10 +417,12 @@ List<pw.Page> buildCombinedPages({
               consentConditionText(prefs.experimentalConsent),
             ),
           ],
-          checkRow(
+          // §5805(c)(4): delegating experimental-study decisions to the agent
+          // requires the declarant's physical INITIALS, not a checkbox.
+          initialRow(
             'I have designated an agent under the Power of Attorney portion of this '
             'document to make decisions related to experimental studies.',
-            checked: isConsentAgent(prefs.experimentalConsent),
+            highlighted: isConsentAgent(prefs.experimentalConsent),
           ),
           checkRow(
             'I do not consent to participation in experimental studies.',
@@ -446,10 +450,12 @@ List<pw.Page> buildCombinedPages({
               consentConditionText(prefs.drugTrialConsent),
             ),
           ],
-          checkRow(
+          // §5805(c)(4): delegating drug-trial decisions to the agent requires
+          // the declarant's physical INITIALS, not a checkbox.
+          initialRow(
             'I have designated an agent under the Power of Attorney portion of this '
             'document to make decisions related to drug trials.',
-            checked: isConsentAgent(prefs.drugTrialConsent),
+            highlighted: isConsentAgent(prefs.drugTrialConsent),
           ),
           checkRow(
             'I do not consent to participation in any drug trials.',
