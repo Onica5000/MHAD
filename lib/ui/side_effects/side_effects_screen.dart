@@ -51,11 +51,12 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
     final pref = await repo.getPreferences(widget.directiveId);
     final meds = await repo.watchMedications(widget.directiveId).first;
     if (!mounted) return;
-    // "Currently taking" = informational current meds + the user's preferred
-    // (named) meds. Avoid/limitation entries are not things they take.
+    // "Currently taking" = the medications the user is currently on
+    // (entryType 'current'). Preferred meds are ones they'd want IF treated,
+    // not ones they take now; avoid/limitation entries aren't taken either —
+    // none of those belong in a side-effect check of current medications.
     final names = meds
-        .where((m) =>
-            m.entryType == 'current' || m.entryType == 'preferred')
+        .where((m) => m.entryType == 'current')
         .map((m) => m.medicationName.trim())
         .where((n) => n.isNotEmpty)
         .toSet()
