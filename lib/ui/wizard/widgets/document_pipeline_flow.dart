@@ -1,4 +1,4 @@
-﻿import 'dart:typed_data';
+import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:cross_file/cross_file.dart';
@@ -14,6 +14,7 @@ import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/providers/assistant_providers.dart';
+import 'package:mhad/providers/kept_documents_provider.dart';
 import 'package:mhad/services/clinical_data_validator.dart';
 import 'package:mhad/services/gemini_rate_tracker.dart';
 import 'package:mhad/ui/router.dart';
@@ -133,11 +134,11 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
     _piiStripped = [];
     _sourceDocs = const [];
     // Reset only the EXTRACTION state, not the source documents. The held
-    // batch stays in `_pendingDocs` so the documents survive an AI read (and a
-    // discard/back to the pick step) — they are kept in memory until the user
-    // explicitly clears the tray ("Clear all") or the page is reset (the tab
-    // is closed / the user navigates into the wizard, which disposes this
-    // screen). This lets the user re-read the same documents without
+    // batch lives in the session-scoped [keptDocumentsProvider], so the
+    // documents survive an AI read, a discard/back to the pick step, AND
+    // navigating into the wizard and back — they stay in memory until the user
+    // explicitly clears the tray ("Clear all") or the web session ends (tab
+    // closed / refresh). This lets the user re-read the same documents without
     // re-selecting them.
     _error = null;
   }
@@ -165,20 +166,13 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
   // source thumbnail of what the AI read.
   List<PickedDocument> _sourceDocs = const [];
 
-  // Standalone only: files brought in across this session, accumulated so the
-  // pick step can show the artboard "In this session · N FILES" row. A file is
-  // recorded once its extracted fields are applied (see _returnToPickWithFile);
-  // cleared when the tab closes (web in-memory). Modal mode pops after a single
-  // apply, so this stays empty there.
-  final List<_SessionFile> _sessionFiles = [];
-
-  // Documents the user has selected/dropped/pasted/snapped but NOT yet sent to
-  // the AI. They're held here (in-memory, this session only) and shown as a
-  // pending tray on the pick step; the extractor/AI is only called when the
-  // user explicitly taps "Read with AI" (see _readPendingDocs). This is the
-  // select → store → hold → send pipeline — selecting a file no longer fires
-  // the AI automatically.
-  final List<PickedDocument> _pendingDocs = [];
+  // Documents the user has selected/dropped/pasted/snapped. They live in the
+  // session-scoped [keptDocumentsProvider] (not this widget's State) so the
+  // held files SURVIVE navigating into the wizard and back — the pick step
+  // shows an always-visible list of every kept document. The extractor/AI is
+  // only called when the user explicitly taps "Read with AI" (see
+  // _readPendingDocs): selecting a file never fires the AI automatically.
+  List<PickedDocument> get _pendingDocs => ref.read(keptDocumentsProvider);
 
   // Clipboard-paste listener disposer (web only).
   void Function()? _pasteDisposer;
@@ -695,29 +689,21 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
 
   // ── Pending tray (held documents, not yet sent to the AI) ────────────
 
-  /// Append newly picked/dropped/pasted/snapped documents to the held tray,
-  /// de-duplicating by name + byte length so re-picking the same file doesn't
-  /// create a duplicate. Nothing is sent to the AI here — the user reads the
-  /// batch explicitly via [_readPendingDocs].
+  /// Append newly picked/dropped/pasted/snapped documents to the kept list
+  /// (de-duplication lives in [KeptDocumentsNotifier.addAll]). Nothing is sent
+  /// to the AI here — the user reads the batch explicitly via [_readPendingDocs].
   void _addPending(List<PickedDocument> docs) {
     if (docs.isEmpty) return;
-    setState(() {
-      _error = null;
-      for (final d in docs) {
-        final dup = _pendingDocs.any((e) =>
-            _docName(e) == _docName(d) &&
-            (e.bytes?.length ?? -1) == (d.bytes?.length ?? -2));
-        if (!dup) _pendingDocs.add(d);
-      }
-    });
+    setState(() => _error = null);
+    ref.read(keptDocumentsProvider.notifier).addAll(docs);
   }
 
   void _removePending(PickedDocument doc) {
-    setState(() => _pendingDocs.remove(doc));
+    ref.read(keptDocumentsProvider.notifier).remove(doc);
   }
 
   void _clearPending() {
-    setState(() => _pendingDocs.clear());
+    ref.read(keptDocumentsProvider.notifier).clear();
   }
 
   /// The explicit "send to AI" action. Snapshots the held tray (so removing a
@@ -731,6 +717,9 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
   Widget _buildPickStep() {
     final p = Theme.of(context).mhadPalette;
     final hasKey = ref.watch(apiKeyProvider).valueOrNull?.isNotEmpty == true;
+    // Watch (not read) so the kept-documents tray rebuilds as docs are added/
+    // removed and stays in sync across navigation back to this page.
+    final kept = ref.watch(keptDocumentsProvider);
     return LayoutBuilder(
       builder: (context, c) {
         final wide = c.maxWidth >= 720;
@@ -847,17 +836,12 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                             ),
                 ),
               ),
-              // Held documents the user picked but hasn't sent yet. The AI is
-              // only called when they tap "Read … with AI" inside this tray.
-              if (_pendingDocs.isNotEmpty) ...[
+              // Every document kept this session (session-scoped provider, so
+              // it persists across navigation into the wizard and back). The AI
+              // is only called when the user taps "Read … with AI" in the tray.
+              if (kept.isNotEmpty) ...[
                 const SizedBox(height: 22),
-                _pendingDocsTray(p, hasKey),
-              ],
-              // "In this session" — files whose fields were applied this
-              // session (standalone accumulation). WebSnapFill jsx L174-251.
-              if (_sessionFiles.isNotEmpty) ...[
-                const SizedBox(height: 22),
-                _sessionFilesRow(p),
+                _pendingDocsTray(p, hasKey, kept),
               ],
               // Skip / Continue footer (standalone only; the modal uses its
               // AppBar close). WebSnapFill jsx L253-258.
@@ -907,11 +891,12 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
     return Icons.description_outlined;
   }
 
-  // The held-documents tray: files the user selected/dropped/pasted/snapped
-  // but has NOT sent to the AI yet. Each row can be removed; the primary
-  // button is the only thing that actually calls the extractor (_readPendingDocs).
-  Widget _pendingDocsTray(MhadPalette p, bool hasKey) {
-    final n = _pendingDocs.length;
+  // The kept-documents tray: every file the user selected/dropped/pasted/
+  // snapped this session, held in memory and listed here whether or not it has
+  // been read yet. Each row can be removed; the primary button is the only
+  // thing that actually calls the extractor (_readPendingDocs).
+  Widget _pendingDocsTray(MhadPalette p, bool hasKey, List<PickedDocument> kept) {
+    final n = kept.length;
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
@@ -924,11 +909,11 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
         children: [
           Row(
             children: [
-              const SectionLabel('Ready to read'),
+              const SectionLabel('Your documents'),
               const SizedBox(width: 8),
               Flexible(
                 child: Text(
-                  '$n FILE${n == 1 ? '' : 'S'} · HELD, NOT SENT YET',
+                  '$n FILE${n == 1 ? '' : 'S'} · KEPT IN MEMORY',
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontFamily: kMonoFamily,
@@ -957,7 +942,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
             ],
           ),
           const SizedBox(height: 6),
-          for (final d in _pendingDocs) _pendingDocRow(p, d),
+          for (final d in kept) _pendingDocRow(p, d),
           const SizedBox(height: 10),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1050,182 +1035,6 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
             onPressed: () => _removePending(d),
           ),
         ],
-      ),
-    );
-  }
-
-  // The "In this session · N FILES · CLEARED ON TAB CLOSE" grid: one card per
-  // applied file + a dashed "Add another" tile. Uses a Wrap so cards reflow at
-  // any width (the artboard's fixed 3-column grid).
-  Widget _sessionFilesRow(MhadPalette p) {
-    final n = _sessionFiles.length;
-    return LayoutBuilder(builder: (context, c) {
-      // Aim for 3 columns on wide, fewer when narrow.
-      final cols = c.maxWidth >= 720 ? 3 : (c.maxWidth >= 460 ? 2 : 1);
-      final cardW = (c.maxWidth - (cols - 1) * 10) / cols;
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              const SectionLabel('In this session'),
-              const SizedBox(width: 8),
-              Flexible(
-                child: Text(
-                  '$n FILE${n == 1 ? '' : 'S'} · CLEARED ON TAB CLOSE',
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontFamily: kMonoFamily,
-                    fontFamilyFallback: const [
-                      'Consolas',
-                      'Menlo',
-                      'Courier New',
-                      'monospace',
-                    ],
-                    fontSize: 10,
-                    letterSpacing: 0.4,
-                    color: p.textMuted,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Wrap(
-            spacing: 10,
-            runSpacing: 10,
-            children: [
-              for (final f in _sessionFiles)
-                SizedBox(width: cardW, child: _sessionFileCard(p, f)),
-              SizedBox(width: cardW, child: _addAnotherTile(p)),
-            ],
-          ),
-        ],
-      );
-    });
-  }
-
-  Widget _sessionFileCard(MhadPalette p, _SessionFile f) {
-    final okText = Theme.of(context).brightness == Brightness.dark
-        ? SemanticColors.successTextDark
-        : SemanticColors.successTextLight;
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: p.card,
-        border: Border.all(color: p.border),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 40,
-            height: 48,
-            decoration: BoxDecoration(
-              color: p.surface,
-              border: Border.all(color: p.border),
-              borderRadius: BorderRadius.circular(6),
-            ),
-            alignment: Alignment.center,
-            child: Icon(
-              f.kind == 'PDF'
-                  ? Icons.picture_as_pdf_outlined
-                  : f.kind == 'Photo'
-                      ? Icons.image_outlined
-                      : Icons.description_outlined,
-              size: 18,
-              color: p.textMuted,
-            ),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-                  decoration: BoxDecoration(
-                    color: p.primaryTint,
-                    borderRadius: BorderRadius.circular(3),
-                  ),
-                  child: Text(
-                    f.kind.toUpperCase(),
-                    style: TextStyle(
-                      fontFamily: kMonoFamily,
-                      fontFamilyFallback: const [
-                        'Consolas',
-                        'Menlo',
-                        'Courier New',
-                        'monospace',
-                      ],
-                      fontSize: 9,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 0.5,
-                      color: p.primary,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  f.name,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontFamily: kSansFamily,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    color: p.text,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  '● ${f.fieldsAdded} field${f.fieldsAdded == 1 ? '' : 's'} added',
-                  style: TextStyle(
-                    fontFamily: kSansFamily,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600,
-                    color: okText,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _addAnotherTile(MhadPalette p) {
-    return InkWell(
-      onTap: _browseFiles,
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        padding: const EdgeInsets.all(14),
-        constraints: const BoxConstraints(minHeight: 72),
-        decoration: BoxDecoration(
-          color: p.surface,
-          border: Border.all(color: p.border, width: 1.5, style: BorderStyle.solid),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        alignment: Alignment.center,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.add, size: 16, color: p.textMuted),
-            const SizedBox(width: 8),
-            Text(
-              'Add another',
-              style: TextStyle(
-                fontFamily: kSansFamily,
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-                color: p.textMuted,
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -1973,19 +1782,4 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
         ),
       );
 
-}
-
-
-/// One file brought into the standalone snap-to-fill page this session,
-/// recorded after its extracted fields are applied. Powers the artboard
-/// "In this session · N FILES" row (WebSnapFill jsx L174-251).
-class _SessionFile {
-  final String name;
-  final String kind; // 'Photo' · 'PDF' · 'Text' · 'File'
-  final int fieldsAdded;
-  const _SessionFile({
-    required this.name,
-    required this.kind,
-    required this.fieldsAdded,
-  });
 }
