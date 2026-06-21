@@ -1,15 +1,9 @@
-﻿import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import 'package:mhad/ai/ai_assistant.dart'
-    show AssistantContext, ChatMessage, MessageRole;
-import 'package:mhad/data/app_data/app_data.dart';
+import 'package:flutter/material.dart';
 import 'package:mhad/data/educational_content.dart';
-import 'package:mhad/providers/assistant_providers.dart';
-import 'package:mhad/ui/assistant/assistant_send.dart';
+import 'package:mhad/ui/education/education_category_browser.dart';
+import 'package:mhad/ui/education/learn_ai_panel.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
-import 'package:mhad/ui/widgets/ai_consent_dialog.dart';
 import 'package:mhad/ui/widgets/design/bottom_nav.dart';
 import 'package:mhad/ui/widgets/design/responsive_shell.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
@@ -25,9 +19,9 @@ class EducationScreen extends StatefulWidget {
 }
 
 class _EducationScreenState extends State<EducationScreen> {
-  // Selected tab (top-level enum, see [_TabKind]). Defaults to .all so
+  // Selected tab (top-level enum, see [EducationTabKind]). Defaults to .all so
   // the user sees every available section on first arrival.
-  _TabKind _activeTab = _TabKind.all;
+  EducationTabKind _activeTab = EducationTabKind.all;
 
   List<EducationSection> get _filteredSections {
     // When opened from a wizard Help button, show only the linked sections
@@ -63,7 +57,7 @@ class _EducationScreenState extends State<EducationScreen> {
                 padding: const EdgeInsets.all(12),
                 itemCount: _filteredSections.length,
                 itemBuilder: (context, i) =>
-                    _SectionTile(section: _filteredSections[i]),
+                    SectionTile(section: _filteredSections[i]),
               ),
       );
     }
@@ -93,7 +87,7 @@ class _EducationScreenState extends State<EducationScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Expanded(child: hub),
-              const _LearnAiPanel(),
+              const LearnAiPanel(),
             ],
           );
         },
@@ -114,8 +108,8 @@ class _EducationScreenState extends State<EducationScreen> {
 /// available via the AppBar search button.
 class _EditorialLearnHub extends StatelessWidget {
   final List<EducationSection> sections;
-  final _TabKind activeTab;
-  final ValueChanged<_TabKind> onTabChange;
+  final EducationTabKind activeTab;
+  final ValueChanged<EducationTabKind> onTabChange;
 
   const _EditorialLearnHub({
     required this.sections,
@@ -125,14 +119,14 @@ class _EditorialLearnHub extends StatelessWidget {
 
   // Five category pills shown above the grid. Articles is a multi-cat
   // bucket (intro + combined + declaration + poa + supplementary) — the
-  // mapping lives on _TabKind itself so the screen-level filter and the
-  // hub agree on what each tab means.
-  static const _tabs = <(_TabKind, String)>[
-    (_TabKind.all, 'All'),
-    (_TabKind.articles, 'Articles'),
-    (_TabKind.glossary, 'Glossary'),
-    (_TabKind.faq, 'FAQ'),
-    (_TabKind.checklists, 'Checklists'),
+  // mapping lives on EducationTabKind itself so the screen-level filter and
+  // the hub agree on what each tab means.
+  static const _tabs = <(EducationTabKind, String)>[
+    (EducationTabKind.all, 'All'),
+    (EducationTabKind.articles, 'Articles'),
+    (EducationTabKind.glossary, 'Glossary'),
+    (EducationTabKind.faq, 'FAQ'),
+    (EducationTabKind.checklists, 'Checklists'),
   ];
 
   /// All sections in the active filter, as grid tiles (the former "featured"
@@ -231,7 +225,7 @@ class _EditorialLearnHub extends StatelessWidget {
         // browsable, before the editorial tabs/grid.
         const SectionLabel('Browse all topics'),
         const SizedBox(height: 8),
-        _BrowseByTopic(onTabChange: onTabChange),
+        BrowseByTopic(onTabChange: onTabChange),
         const SizedBox(height: 18),
         // Category filter pills, centered in a blue box (replaces the old
         // featured "What is the PA MHAD" card — that section is now a normal
@@ -342,246 +336,6 @@ class _EditorialLearnHub extends StatelessWidget {
     );
   }
 
-}
-
-/// 8-row index listing every [EducationCategory] with its section count
-/// and a chevron. Tapping a row that maps onto a top-level tab switches
-/// the hub to that tab; rows for sub-buckets inside Articles (Combined /
-/// Declaration / POA / Supplementary) push a filtered list so the user
-/// can browse that sub-bucket in isolation.
-class _BrowseByTopic extends StatelessWidget {
-  final ValueChanged<_TabKind> onTabChange;
-  const _BrowseByTopic({required this.onTabChange});
-
-  static const _rows = <(EducationCategory, String, String)>[
-    (EducationCategory.intro, 'Introduction',
-        'What an MHAD is and who should sign one'),
-    (EducationCategory.combined, 'Combined Form',
-        'Both an agent and treatment preferences'),
-    (EducationCategory.declaration, 'Declaration Only',
-        'Treatment preferences without an agent'),
-    (EducationCategory.poa, 'Power of Attorney',
-        'Agent designation without preferences'),
-    (EducationCategory.faq, 'Frequently Asked',
-        'Common questions about MHADs'),
-    (EducationCategory.glossary, 'Glossary',
-        'Every legal term, defined'),
-    (EducationCategory.supplementary, 'Beyond the Booklet',
-        'Topics not covered in the official PA booklet'),
-    (EducationCategory.checklist, 'Your Checklist',
-        'Step-by-step distribution + revocation guides'),
-  ];
-
-  /// Maps an [EducationCategory] onto the top-level [_TabKind] whose
-  /// filter includes it. For sub-buckets of Articles we still need a way
-  /// to surface JUST that sub-bucket — we push a `_CategoryListScreen`
-  /// instead of switching tabs (the Articles tab itself is a 5-cat blend).
-  void _open(BuildContext context, EducationCategory cat) {
-    switch (cat) {
-      case EducationCategory.intro:
-      case EducationCategory.combined:
-      case EducationCategory.declaration:
-      case EducationCategory.poa:
-      case EducationCategory.supplementary:
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (_) => _CategoryListScreen(category: cat),
-        ));
-      case EducationCategory.glossary:
-        onTabChange(_TabKind.glossary);
-      case EducationCategory.faq:
-        onTabChange(_TabKind.faq);
-      case EducationCategory.checklist:
-        onTabChange(_TabKind.checklists);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final p = Theme.of(context).mhadPalette;
-    return Container(
-      decoration: BoxDecoration(
-        color: p.card,
-        border: Border.all(color: p.border),
-        borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: Column(
-        children: [
-          for (var i = 0; i < _rows.length; i++) ...[
-            _BrowseRow(
-              category: _rows[i].$1,
-              title: _rows[i].$2,
-              sub: _rows[i].$3,
-              count: allEducationSections
-                  .where((s) => s.category == _rows[i].$1)
-                  .length,
-              onTap: () => _open(context, _rows[i].$1),
-            ),
-            if (i < _rows.length - 1)
-              Divider(height: 1, color: p.border),
-          ],
-        ],
-      ),
-    );
-  }
-}
-
-class _BrowseRow extends StatelessWidget {
-  final EducationCategory category;
-  final String title;
-  final String sub;
-  final int count;
-  final VoidCallback onTap;
-
-  const _BrowseRow({
-    required this.category,
-    required this.title,
-    required this.sub,
-    required this.count,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final p = Theme.of(context).mhadPalette;
-    return Semantics(
-      button: true,
-      label: '$title, $count sections. $sub',
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: TextStyle(
-                        fontFamily: kSansFamily,
-                        fontSize: 13.5,
-                        fontWeight: FontWeight.w600,
-                        color: p.text,
-                      ),
-                    ),
-                    const SizedBox(height: 1),
-                    Text(
-                      sub,
-                      style: TextStyle(
-                        fontFamily: kSansFamily,
-                        fontSize: 11.5,
-                        color: p.textMuted,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 8),
-              // Section count chip on the right — prototype mono caption
-              // style so it reads as a count, not a button.
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                decoration: BoxDecoration(
-                  color: p.primaryTint,
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: Text(
-                  '$count',
-                  style: TextStyle(
-                    fontFamily: kMonoFamily,
-                    fontFamilyFallback: const [
-                      'Consolas',
-                      'Menlo',
-                      'Courier New',
-                      'monospace',
-                    ],
-                    fontSize: 10.5,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 0.4,
-                    color: p.primary,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 6),
-              Icon(Icons.chevron_right, size: 18, color: p.textMuted),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-/// Standalone list of every [EducationSection] in a single
-/// [EducationCategory] sub-bucket. Used when the user taps a row inside
-/// the Articles bucket (intro / combined / declaration / poa /
-/// supplementary) — those don't have their own top-level tab so we
-/// route through a dedicated screen instead of switching the hub.
-class _CategoryListScreen extends StatelessWidget {
-  final EducationCategory category;
-  const _CategoryListScreen({required this.category});
-
-  @override
-  Widget build(BuildContext context) {
-    final sections = allEducationSections
-        .where((s) => s.category == category)
-        .toList();
-    return Scaffold(
-      appBar: AppBar(title: Text(category.displayName)),
-      body: sections.isEmpty
-          ? const Center(
-              child: Text(
-                'No sections in this category yet.',
-                style: TextStyle(fontStyle: FontStyle.italic),
-              ),
-            )
-          : ListView.builder(
-              padding: const EdgeInsets.all(12),
-              itemCount: sections.length,
-              itemBuilder: (context, i) =>
-                  _SectionTile(section: sections[i]),
-            ),
-    );
-  }
-}
-
-/// Top-level tab kinds shown above the editorial grid. Each owns its own
-/// [filter] over [allEducationSections] so the hub and the screen-level
-/// state agree on what "Articles" means (it's a five-category bucket,
-/// not a single EducationCategory.intro mapping — that was the 2026-06-04
-/// bug that buried 58 article sections behind a Search tap).
-enum _TabKind {
-  all,
-  articles,
-  glossary,
-  faq,
-  checklists;
-
-  /// Categories included in this tab's bucket. Empty = no filter (the
-  /// "All" tab returns every section).
-  Set<EducationCategory> get _includes => switch (this) {
-        _TabKind.all => const {},
-        _TabKind.articles => const {
-            EducationCategory.intro,
-            EducationCategory.combined,
-            EducationCategory.declaration,
-            EducationCategory.poa,
-            EducationCategory.supplementary,
-          },
-        _TabKind.glossary => const {EducationCategory.glossary},
-        _TabKind.faq => const {EducationCategory.faq},
-        _TabKind.checklists => const {EducationCategory.checklist},
-      };
-
-  /// Apply this tab's filter to [source] and return matching sections.
-  List<EducationSection> filter(List<EducationSection> source) {
-    final inc = _includes;
-    if (inc.isEmpty) return List.of(source);
-    return source.where((s) => inc.contains(s.category)).toList();
-  }
 }
 
 class _CategoryPill extends StatelessWidget {
@@ -882,161 +636,6 @@ String _previewOf(String content) {
   return firstSentence;
 }
 
-class _SectionTile extends StatelessWidget {
-  final EducationSection section;
-  const _SectionTile({required this.section});
-
-  @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      button: true,
-      label: '${section.category.displayName}: ${section.title}',
-      child: Card(
-      margin: const EdgeInsets.only(bottom: 8),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(12),
-        onTap: () => Navigator.of(context).push(
-          MaterialPageRoute(
-            fullscreenDialog: true,
-            builder: (_) => _SectionDetailScreen(section: section),
-          ),
-        ),
-        // ≥48px tap target for the whole card per a11y guideline; the
-        // visible content (badge + title + preview) sizes naturally inside.
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(minHeight: 48),
-          child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  _CategoryBadge(category: section.category),
-                  const Spacer(),
-                  ExcludeSemantics(
-                    child: Icon(Icons.chevron_right, size: 18),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 6),
-              Text(
-                section.title,
-                style: const TextStyle(
-                    fontWeight: FontWeight.w600, fontSize: 14),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                section.content,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-              ),
-            ],
-          ),
-        ),
-        ),
-      ),
-    ),
-    );
-  }
-}
-
-class _CategoryBadge extends StatelessWidget {
-  final EducationCategory category;
-  const _CategoryBadge({required this.category});
-
-  Color _color(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
-    switch (category) {
-      case EducationCategory.intro:
-        return cs.primary;
-      case EducationCategory.faq:
-        return cs.secondary;
-      case EducationCategory.combined:
-        return cs.tertiary;
-      case EducationCategory.declaration:
-        return cs.primary;
-      case EducationCategory.poa:
-        return cs.secondary;
-      case EducationCategory.glossary:
-        return cs.onSurfaceVariant;
-      case EducationCategory.supplementary:
-        return cs.tertiary;
-      case EducationCategory.checklist:
-        return cs.primary;
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final color = _color(context);
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withValues(alpha: 0.4)),
-      ),
-      child: Text(
-        category.displayName,
-        style: TextStyle(fontSize: 10, color: color, fontWeight: FontWeight.w600),
-      ),
-    );
-  }
-}
-
-class _SectionDetailScreen extends StatelessWidget {
-  final EducationSection section;
-  const _SectionDetailScreen({required this.section});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(section.category.displayName)),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _CategoryBadge(category: section.category),
-            const SizedBox(height: 12),
-            Text(
-              section.title,
-              style: Theme.of(context)
-                  .textTheme
-                  .titleLarge
-                  ?.copyWith(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              section.content,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium
-                  ?.copyWith(height: 1.6),
-            ),
-            const SizedBox(height: 32),
-            const Divider(),
-            const SizedBox(height: 8),
-            Text(
-              'Questions? Contact PA Protection & Advocacy: ${appData.phoneOf('paProtectionAdvocacy')}',
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    fontStyle: FontStyle.italic,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-            ),
-            const SizedBox(height: 24),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 class _EducationSearchDelegate extends SearchDelegate<EducationSection?> {
   @override
   List<Widget> buildActions(BuildContext context) => [
@@ -1083,262 +682,7 @@ class _EducationSearchDelegate extends SearchDelegate<EducationSection?> {
       itemCount: results.length,
       itemBuilder: (context, i) => InkWell(
         onTap: () => close(context, results[i]),
-        child: _SectionTile(section: results[i]),
-      ),
-    );
-  }
-}
-
-/// Right-side AI assistant rail on the wide Learn page, so users can ask
-/// questions while reading. Shares the global conversation state with the
-/// full AI Assistant screen.
-class _LearnAiPanel extends ConsumerStatefulWidget {
-  const _LearnAiPanel();
-
-  @override
-  ConsumerState<_LearnAiPanel> createState() => _LearnAiPanelState();
-}
-
-class _LearnAiPanelState extends ConsumerState<_LearnAiPanel> {
-  final _inputCtrl = TextEditingController();
-  final _scrollCtrl = ScrollController();
-
-  @override
-  void dispose() {
-    _inputCtrl.dispose();
-    _scrollCtrl.dispose();
-    super.dispose();
-  }
-
-  void _scrollToBottom() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_scrollCtrl.hasClients) {
-        _scrollCtrl.animateTo(
-          _scrollCtrl.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 250),
-          curve: Curves.easeOut,
-        );
-      }
-    });
-  }
-
-  Future<void> _send(String raw) async {
-    final text = raw.trim();
-    if (text.isEmpty) return;
-    _inputCtrl.clear();
-    final result = await sendAssistantMessage(
-      ref,
-      text: text,
-      // No directive context on the Learn page — just a general "learning"
-      // session. PII is stripped downstream regardless.
-      assistantContext: const AssistantContext(stepName: 'Learning'),
-      requestConsent: () => showAiConsentDialog(context),
-      onSent: _scrollToBottom,
-    );
-    if (!mounted) return;
-    if (result.needsKey) {
-      _inputCtrl.text = text;
-      context.push(AppRoutes.aiSetup);
-      return;
-    }
-    if (result.consentDeclined || result.alreadySending) {
-      _inputCtrl.text = text;
-      return;
-    }
-    if (result.blockReason != null) {
-      _inputCtrl.text = text;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(result.blockReason!),
-          duration: const Duration(seconds: 5),
-        ),
-      );
-      return;
-    }
-    _scrollToBottom();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final p = Theme.of(context).mhadPalette;
-    final messages = ref.watch(conversationProvider);
-    final isSending = ref.watch(isSendingProvider);
-    final hasKey = ref.watch(apiKeyProvider).valueOrNull?.isNotEmpty ?? false;
-
-    return Container(
-      width: 340,
-      decoration: BoxDecoration(
-        color: p.card,
-        border: Border(left: BorderSide(color: p.border)),
-      ),
-      child: SafeArea(
-        left: false,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(18, 18, 18, 4),
-              child: Row(
-                children: [
-                  Icon(Icons.auto_awesome, size: 18, color: p.primary),
-                  const SizedBox(width: 8),
-                  Text(
-                    'Ask the AI',
-                    style: TextStyle(
-                      fontFamily: kSansFamily,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
-                      color: p.text,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            // Mirror the wizard step rail's AI-panel header — the
-            // "GEMINI · PII STRIPPED" badge — for a consistent AI panel
-            // across the app. (The "not advice" line moves down by the input.)
-            Padding(
-              padding: const EdgeInsets.fromLTRB(18, 0, 18, 12),
-              child: Text(
-                '● GEMINI · PII STRIPPED',
-                style: TextStyle(
-                  fontFamily: kMonoFamily,
-                  fontFamilyFallback: const [
-                    'Consolas',
-                    'Menlo',
-                    'Courier New',
-                    'monospace',
-                  ],
-                  fontSize: 9.5,
-                  letterSpacing: 0.5,
-                  color: hasKey ? p.primary : p.textMuted,
-                ),
-              ),
-            ),
-            const Divider(height: 1),
-            Expanded(
-              child: messages.isEmpty
-                  ? Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Text(
-                          hasKey
-                              ? 'Ask a question to get started — e.g. "What\'s '
-                                  'the difference between a declaration and a '
-                                  'power of attorney?"'
-                              : 'Set up the free AI assistant to ask questions '
-                                  'while you read.',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontFamily: kSansFamily,
-                            fontSize: 12.5,
-                            height: 1.5,
-                            color: p.textMuted,
-                          ),
-                        ),
-                      ),
-                    )
-                  : ListView.builder(
-                      controller: _scrollCtrl,
-                      padding: const EdgeInsets.all(12),
-                      itemCount: messages.length + (isSending ? 1 : 0),
-                      itemBuilder: (context, i) {
-                        if (i == messages.length) {
-                          return Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: Text('…',
-                                style: TextStyle(color: p.textMuted)),
-                          );
-                        }
-                        return _LearnChatBubble(message: messages[i]);
-                      },
-                    ),
-            ),
-            const Divider(height: 1),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
-              child: hasKey
-                  ? Row(
-                      children: [
-                        Expanded(
-                          child: TextField(
-                            controller: _inputCtrl,
-                            minLines: 1,
-                            maxLines: 4,
-                            textInputAction: TextInputAction.send,
-                            onSubmitted: isSending ? null : _send,
-                            decoration: const InputDecoration(
-                              hintText: 'Ask a question…',
-                              border: OutlineInputBorder(),
-                              isDense: true,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        IconButton.filled(
-                          onPressed:
-                              isSending ? null : () => _send(_inputCtrl.text),
-                          icon: const Icon(Icons.send, size: 18),
-                        ),
-                      ],
-                    )
-                  : SizedBox(
-                      width: double.infinity,
-                      child: FilledButton.icon(
-                        onPressed: () => context.push(AppRoutes.aiSetup),
-                        icon: const Icon(Icons.auto_awesome, size: 18),
-                        label: const Text('Set up AI assistant'),
-                      ),
-                    ),
-            ),
-            // Disclaimer by the input, mirroring the wizard step rail.
-            Padding(
-              padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
-              child: Text(
-                'Not legal or medical advice.',
-                style: TextStyle(
-                  fontFamily: kSansFamily,
-                  fontSize: 10.5,
-                  color: p.textMuted,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-/// Compact chat bubble for the Learn-page AI rail.
-class _LearnChatBubble extends StatelessWidget {
-  final ChatMessage message;
-  const _LearnChatBubble({required this.message});
-
-  @override
-  Widget build(BuildContext context) {
-    final p = Theme.of(context).mhadPalette;
-    final isUser = message.role == MessageRole.user;
-    return Align(
-      alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 8),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
-        constraints: const BoxConstraints(maxWidth: 280),
-        decoration: BoxDecoration(
-          color: isUser ? p.primary : p.surface,
-          border: isUser ? null : Border.all(color: p.border),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Text(
-          message.content,
-          style: TextStyle(
-            fontFamily: kSansFamily,
-            fontSize: 12.5,
-            height: 1.4,
-            color: isUser ? p.onPrimary : p.text,
-          ),
-        ),
+        child: SectionTile(section: results[i]),
       ),
     );
   }
