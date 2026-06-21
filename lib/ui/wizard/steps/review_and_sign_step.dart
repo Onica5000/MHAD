@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/ui/wizard/steps/review_step.dart';
-import 'package:mhad/ui/wizard/wizard_step_mixin.dart';
+import 'package:mhad/ui/wizard/wizard_mixins.dart';
 
 /// Wizard's last step — pure Review.
 ///

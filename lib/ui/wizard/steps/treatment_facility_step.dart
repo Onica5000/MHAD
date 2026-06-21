@@ -4,7 +4,7 @@ import 'package:drift/drift.dart' show Value;
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/wizard/widgets/wizard_help_button.dart';
-import 'package:mhad/ui/wizard/wizard_step_mixin.dart';
+import 'package:mhad/ui/wizard/wizard_mixins.dart';
 
 class TreatmentFacilityStep extends ConsumerStatefulWidget {
   const TreatmentFacilityStep({required this.directiveId, super.key});

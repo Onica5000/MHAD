@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:drift/drift.dart' show Value;
-import 'package:mhad/ai/field_suggestion_guidance.dart';
+import 'package:mhad/ai/ai_clinical_policy.dart';
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/providers/app_providers.dart';
@@ -9,7 +9,7 @@ import 'package:mhad/ui/wizard/widgets/ai_suggest_button.dart';
 import 'package:mhad/ui/wizard/widgets/example_text_button.dart';
 import 'package:mhad/ui/wizard/widgets/voice_input_button.dart';
 import 'package:mhad/ui/wizard/widgets/wizard_help_button.dart';
-import 'package:mhad/ui/wizard/wizard_step_mixin.dart';
+import 'package:mhad/ui/wizard/wizard_mixins.dart';
 
 class AgentAuthorityStep extends ConsumerStatefulWidget {
   const AgentAuthorityStep({

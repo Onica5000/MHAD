@@ -8,12 +8,11 @@ import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
-import 'package:mhad/ui/wizard/auto_save_mixin.dart';
 import 'package:mhad/ui/wizard/widgets/ai_suggest_button.dart';
 import 'package:mhad/ui/wizard/widgets/example_text_button.dart';
 import 'package:mhad/ui/wizard/widgets/voice_input_button.dart';
 import 'package:mhad/ui/wizard/widgets/wizard_help_button.dart';
-import 'package:mhad/ui/wizard/wizard_step_mixin.dart';
+import 'package:mhad/ui/wizard/wizard_mixins.dart';
 
 class AdditionalInstructionsStep extends ConsumerStatefulWidget {
   const AdditionalInstructionsStep({required this.directiveId, super.key});

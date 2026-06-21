@@ -7,7 +7,7 @@ import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/wizard/steps/agent_authority_step.dart';
 import 'package:mhad/ui/wizard/steps/agent_designation_step.dart';
 import 'package:mhad/ui/wizard/steps/alternate_agent_step.dart';
-import 'package:mhad/ui/wizard/wizard_step_mixin.dart';
+import 'package:mhad/ui/wizard/wizard_mixins.dart';
 
 /// Merged wizard step that combines [AgentDesignationStep],
 /// [AlternateAgentStep], and [AgentAuthorityStep]. Matches the prototype's

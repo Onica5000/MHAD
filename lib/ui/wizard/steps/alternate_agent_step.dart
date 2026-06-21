@@ -7,7 +7,7 @@ import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/widgets/forms/address_fields.dart';
 import 'package:mhad/ui/wizard/widgets/contact_picker_button.dart';
 import 'package:mhad/ui/wizard/widgets/wizard_help_button.dart';
-import 'package:mhad/ui/wizard/wizard_step_mixin.dart';
+import 'package:mhad/ui/wizard/wizard_mixins.dart';
 import 'package:mhad/utils/input_formatters.dart';
 
 class AlternateAgentStep extends ConsumerStatefulWidget {

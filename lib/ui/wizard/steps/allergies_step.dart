@@ -12,7 +12,7 @@ import 'package:mhad/ui/widgets/design/health_chip.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/nlm_attribution.dart';
 import 'package:mhad/ui/wizard/widgets/wizard_help_button.dart';
-import 'package:mhad/ui/wizard/wizard_step_mixin.dart';
+import 'package:mhad/ui/wizard/wizard_mixins.dart';
 
 
 /// The kind of allergen, and the clinical source its autocomplete hits.

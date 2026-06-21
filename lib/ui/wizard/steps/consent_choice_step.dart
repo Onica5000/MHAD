@@ -10,7 +10,7 @@ import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/wizard/widgets/consent_option_tile.dart';
 import 'package:mhad/ui/wizard/widgets/wizard_help_button.dart';
-import 'package:mhad/ui/wizard/wizard_step_mixin.dart';
+import 'package:mhad/ui/wizard/wizard_mixins.dart';
 
 /// Per-treatment configuration for [ConsentChoiceStep]. Collapses the formerly
 /// near-identical EctStep / ExperimentalStudiesStep / DrugTrialsStep (~195 lines

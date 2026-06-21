@@ -16,7 +16,7 @@ import 'package:mhad/ui/widgets/design/step_dots.dart';
 import 'package:mhad/ui/widgets/design/step_head.dart';
 import 'package:mhad/ui/widgets/design/wizard_bottom_bar.dart';
 import 'package:mhad/ui/wizard/wizard_ai_rail.dart';
-import 'package:mhad/ui/wizard/wizard_step_mixin.dart';
+import 'package:mhad/ui/wizard/wizard_mixins.dart';
 import 'package:mhad/ui/wizard/steps/additional_instructions_step.dart';
 import 'package:mhad/ui/wizard/steps/allergies_step.dart';
 import 'package:mhad/ui/wizard/steps/diagnoses_step.dart';

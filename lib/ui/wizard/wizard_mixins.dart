@@ -3,6 +3,14 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:mhad/services/draft_recovery_service.dart';
 
+/// Mix into every wizard step State to give the WizardScreen a uniform
+/// interface for validation + saving before navigating forward.
+mixin WizardStepMixin {
+  /// Validate the current step's form and persist data to the database.
+  /// Returns [true] if valid and saved successfully, [false] otherwise.
+  Future<bool> validateAndSave();
+}
+
 /// Mixin for wizard steps that auto-saves non-PII field data on change.
 /// Uses a 3-second debounce to avoid excessive writes.
 ///

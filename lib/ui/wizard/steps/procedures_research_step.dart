@@ -4,7 +4,7 @@ import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/wizard/steps/consent_choice_step.dart';
-import 'package:mhad/ui/wizard/wizard_step_mixin.dart';
+import 'package:mhad/ui/wizard/wizard_mixins.dart';
 
 /// Merged wizard step that combines the three [ConsentChoiceStep] decisions
 /// (ECT, experimental studies, drug trials). Matches the prototype's step 07
