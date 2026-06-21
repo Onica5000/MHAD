@@ -1,9 +1,12 @@
-﻿import 'package:flutter/material.dart';
+﻿import 'dart:convert';
+
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/ai/ai_clinical_policy.dart';
 import 'package:mhad/constants.dart';
 import 'package:mhad/domain/agent_ext.dart';
+import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/services/gemini_rate_tracker.dart';
@@ -148,23 +151,79 @@ class _AiConsistencyScreenState extends ConsumerState<AiConsistencyScreen> {
     }
   }
 
-  /// A PII-light summary of the directive for the AI pass. Identity columns
-  /// (names, address, DOB, phone, doctor/agent names) are deliberately omitted;
-  /// the assistant's sanitizer strips any residual PII from free-text before it
-  /// leaves the device. Best-effort.
+  /// A PII-light, COMPLETE summary of the directive for the AI pass — every
+  /// user-fillable section is reported so the AI never flags a filled field as
+  /// a gap. Identity values (names, addresses, DOB, phone numbers, doctor/agent
+  /// names, free-text content) are deliberately reduced to presence flags
+  /// ("provided"/"empty"/"yes"/"no") or non-identifying choices (consent
+  /// decisions, facility-preference type); the assistant's sanitizer strips any
+  /// residual PII before it leaves the device. Best-effort.
   Future<String> _buildSummary() async {
     final repo = ref.read(directiveRepositoryProvider);
     final b = StringBuffer();
+
+    String present(String? v) =>
+        (v != null && v.trim().isNotEmpty) ? 'provided' : 'empty';
+
+    // Map a stored consent value ('yes'|'no'|'agentDecides'|'conditional:…') to
+    // a readable decision so the AI sees a CHOICE, not a missing field.
+    String consentLabel(String? v) {
+      if (v == null || v.trim().isEmpty) return 'not set';
+      if (v == consentYes) return 'consented';
+      if (v == consentNo) return 'refused';
+      if (v == consentAgentDecides) return 'agent decides';
+      if (v.startsWith('conditional:')) return 'conditional';
+      return v;
+    }
+
+    // A JSON add-on (crisis plan / side-effects checklist) counts as filled
+    // only when it actually carries content — an opened-but-empty structure
+    // (all-empty lists) must read as empty, not "provided".
+    bool jsonHasContent(String raw, {String? itemsKey}) {
+      if (raw.trim().isEmpty) return false;
+      try {
+        final decoded = jsonDecode(raw);
+        if (decoded is Map) {
+          if (itemsKey != null) {
+            final v = decoded[itemsKey];
+            return v is List && v.isNotEmpty;
+          }
+          return decoded.values.any((v) => v is List && v.isNotEmpty);
+        }
+        return false;
+      } catch (_) {
+        return raw.trim().isNotEmpty;
+      }
+    }
+
     try {
+      var formType = FormType.combined;
       final d = await repo.getDirectiveById(widget.directiveId);
       if (d != null) {
+        try {
+          formType = FormType.values.byName(d.formType);
+        } catch (_) {/* unknown stored value → assume combined */}
         b.writeln('Form type: ${d.formType}');
         b.writeln('When it takes effect: '
             '${d.effectiveCondition.trim().isEmpty ? "(not specified)" : d.effectiveCondition.trim()}');
+        b.writeln('Primary doctor on file: '
+            '${d.primaryDoctorName.trim().isNotEmpty ? "yes" : "no"}');
+        b.writeln('Preferred treating doctor on file: '
+            '${d.preferredDoctorName.trim().isNotEmpty ? "yes" : "no"}');
       }
-      final agents = await repo.getAgents(widget.directiveId);
-      b.writeln('Primary agent named: ${agents.primaryAgent != null ? "yes" : "no"}');
-      b.writeln('Alternate agent named: ${agents.alternateAgent != null ? "yes" : "no"}');
+      final hasAgent = formType.hasAgentSections;
+
+      // Agents + guardian — only relevant on agent-bearing forms.
+      if (hasAgent) {
+        final agents = await repo.getAgents(widget.directiveId);
+        b.writeln(
+            'Primary agent named: ${agents.primaryAgent != null ? "yes" : "no"}');
+        b.writeln(
+            'Alternate agent named: ${agents.alternateAgent != null ? "yes" : "no"}');
+        final guardian = await repo.getGuardianNomination(widget.directiveId);
+        b.writeln('Guardian nominated: '
+            '${(guardian?.nomineeFullName.trim().isNotEmpty ?? false) ? "yes" : "no"}');
+      }
 
       final diags = await repo.getDiagnoses(widget.directiveId);
       final diagNames =
@@ -195,19 +254,53 @@ class _AiConsistencyScreenState extends ConsumerState<AiConsistencyScreen> {
       b.writeln('Allergies: '
           '${allergyText.isEmpty ? "(none)" : allergyText.join(", ")}');
 
+      // Preferences: consent decisions, facility + room preferences, agent
+      // authority, and the optional JSON add-ons. None of these were read
+      // before — they all showed up to the AI as missing.
+      final prefs = await repo.getPreferences(widget.directiveId);
+      if (prefs != null) {
+        b.writeln('Medication consent: ${consentLabel(prefs.medicationConsent)}');
+        b.writeln('ECT consent: ${consentLabel(prefs.ectConsent)}');
+        b.writeln('Experimental treatment consent: '
+            '${consentLabel(prefs.experimentalConsent)}');
+        b.writeln('Drug trial consent: ${consentLabel(prefs.drugTrialConsent)}');
+        b.writeln('Treatment facility preference: '
+            '${prefs.treatmentFacilityPref == 'noPreference' ? "no preference" : prefs.treatmentFacilityPref}');
+        b.writeln('Preferred facility named: ${present(prefs.preferredFacilityName)}');
+        b.writeln('Facility to avoid named: ${present(prefs.avoidFacilityName)}');
+        final hasRoom = prefs.roomPreferences.trim().isNotEmpty ||
+            prefs.roomPreferencesNote.trim().isNotEmpty ||
+            prefs.roommateGenderMatch.trim().isNotEmpty;
+        b.writeln('Room preferences: ${hasRoom ? "provided" : "empty"}');
+        if (hasAgent) {
+          b.writeln('Agent may consent to hospitalization: '
+              '${prefs.agentCanConsentHospitalization ? "yes" : "no"}');
+          b.writeln('Agent may consent to medication: '
+              '${prefs.agentCanConsentMedication ? "yes" : "no"}');
+          b.writeln('Limits on agent authority: '
+              '${present(prefs.agentAuthorityLimitations)}');
+        }
+        b.writeln('Self-binding (Ulysses) clause: '
+            '${prefs.selfBindingEnabled ? "enabled" : "not enabled"}');
+        b.writeln('Crisis plan: '
+            '${jsonHasContent(prefs.crisisPlanJson) ? "provided" : "empty"}');
+        b.writeln('Side-effects checklist: '
+            '${jsonHasContent(prefs.sideEffectsJson, itemsKey: "items") ? "completed" : "empty"}');
+      }
+
+      // Additional instructions — ALL ten fields (four were previously omitted).
       final instr = await repo.getAdditionalInstructions(widget.directiveId);
-      String present(String? v) =>
-          (v != null && v.trim().isNotEmpty) ? 'provided' : 'empty';
       if (instr != null) {
         b.writeln('Crisis intervention notes: ${present(instr.crisisIntervention)}');
         b.writeln('Health history: ${present(instr.healthHistory)}');
         b.writeln('Helpful activities: ${present(instr.activities)}');
         b.writeln('Dietary notes: ${present(instr.dietary)}');
         b.writeln('Religious/cultural notes: ${present(instr.religious)}');
+        b.writeln('Children/custody notes: ${present(instr.childrenCustody)}');
+        b.writeln('Family notification notes: ${present(instr.familyNotification)}');
+        b.writeln('Records disclosure notes: ${present(instr.recordsDisclosure)}');
+        b.writeln('Pet care notes: ${present(instr.petCustody)}');
         b.writeln('Other instructions: ${present(instr.other)}');
-        if (instr.crisisIntervention.trim().isNotEmpty) {
-          b.writeln('Crisis plan text: "${instr.crisisIntervention.trim()}"');
-        }
       }
     } catch (_) {
       // Best-effort: a partial summary is still reviewable.
