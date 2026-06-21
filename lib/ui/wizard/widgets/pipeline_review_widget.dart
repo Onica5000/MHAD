@@ -1,0 +1,1047 @@
+part of 'document_pipeline_flow.dart';
+
+// Review-step data construction, display-label helpers, and the
+// review/results-step UI for the document pipeline, plus the _SnapReviewRow
+// row widget. Split out of document_pipeline_flow.dart; these extension
+// methods share the pipeline State's private fields, so behavior is unchanged.
+//
+// ignore_for_file: invalid_use_of_protected_member
+// (extension methods on the State legitimately call its protected setState)
+
+extension _PipelineReviewUi on _PipelineScreenState {
+  void _buildReviewData(ValidatedExtractionResult v) {
+    _reviewChecked = {};
+    _reviewEdited = {};
+
+    for (final m in v.preferredMeds) {
+      final key = 'med_prefer_${m.originalName}';
+      _reviewChecked[key] = true;
+      final badge = m.isValidated ? ' [RxNorm verified]' : ' [unverified]';
+      final reason = m.reason.isNotEmpty ? ' — ${m.reason}' : '';
+      _reviewEdited[key] = '${m.displayName}$reason$badge';
+    }
+    for (final m in v.avoidMeds) {
+      final key = 'med_avoid_${m.originalName}';
+      _reviewChecked[key] = true;
+      final badge = m.isValidated ? ' [RxNorm verified]' : ' [unverified]';
+      final reason = m.reason.isNotEmpty ? ' — ${m.reason}' : '';
+      _reviewEdited[key] = '${m.displayName}$reason$badge';
+    }
+    for (final c in v.conditions) {
+      final key = 'cond_${c.originalText}';
+      _reviewChecked[key] = true;
+      final badge =
+          c.isValidated ? ' [${c.code}]' : ' [no ICD match]';
+      _reviewEdited[key] = '${c.displayName}$badge';
+    }
+    // Health history is verbatim prose (one reviewable note), not split into
+    // ICD-matched fragments — preserves everything the document said.
+    if (v.healthHistory != null) {
+      _reviewChecked['hh_note'] = true;
+      _reviewEdited['hh_note'] = v.healthHistory!;
+    }
+    // Pass-through text fields
+    if (v.preferredFacility != null) {
+      _reviewChecked['facility_prefer'] = true;
+      _reviewEdited['facility_prefer'] = v.preferredFacility!;
+    }
+    if (v.avoidFacility != null) {
+      _reviewChecked['facility_avoid'] = true;
+      _reviewEdited['facility_avoid'] = v.avoidFacility!;
+    }
+    if (v.dietary != null) {
+      _reviewChecked['dietary'] = true;
+      _reviewEdited['dietary'] = v.dietary!;
+    }
+    if (v.religious != null) {
+      _reviewChecked['religious'] = true;
+      _reviewEdited['religious'] = v.religious!;
+    }
+    if (v.activities != null) {
+      _reviewChecked['activities'] = true;
+      _reviewEdited['activities'] = v.activities!;
+    }
+    if (v.crisisIntervention != null) {
+      _reviewChecked['crisis'] = true;
+      _reviewEdited['crisis'] = v.crisisIntervention!;
+    }
+    if (v.petCustody != null) {
+      _reviewChecked['pet_custody'] = true;
+      _reviewEdited['pet_custody'] = v.petCustody!;
+    }
+    if (v.childrenCustody != null) {
+      _reviewChecked['children_custody'] = true;
+      _reviewEdited['children_custody'] = v.childrenCustody!;
+    }
+    if (v.familyNotification != null) {
+      _reviewChecked['family_notification'] = true;
+      _reviewEdited['family_notification'] = v.familyNotification!;
+    }
+    if (v.recordsDisclosure != null) {
+      _reviewChecked['records_disclosure'] = true;
+      _reviewEdited['records_disclosure'] = v.recordsDisclosure!;
+    }
+    if (v.other != null) {
+      _reviewChecked['other'] = true;
+      _reviewEdited['other'] = v.other!;
+    }
+
+    // ── Diagnoses — one review key per diagnosis
+    for (final d in v.diagnoses) {
+      final key = 'diag_${d.name}';
+      _reviewChecked[key] = true;
+      _reviewEdited[key] = d.display;
+    }
+
+    // ── Allergies — one review key per allergy
+    for (final a in v.allergies) {
+      final key = 'allergy_${a.substance}';
+      _reviewChecked[key] = true;
+      _reviewEdited[key] = a.display;
+    }
+
+    // ── Currently-taking medications (reference list)
+    for (final m in v.currentMeds) {
+      final key = 'med_current_${m.originalName}';
+      _reviewChecked[key] = true;
+      final badge = m.isValidated ? ' [RxNorm verified]' : ' [unverified]';
+      _reviewEdited[key] = '${m.displayName}$badge';
+    }
+
+    // ── Medication limitations
+    for (final m in v.limitedMeds) {
+      final key = 'med_limit_${m.originalName}';
+      _reviewChecked[key] = true;
+      final badge = m.isValidated ? ' [RxNorm verified]' : ' [unverified]';
+      final reason = m.reason.isNotEmpty ? ' — ${m.reason}' : '';
+      _reviewEdited[key] = '${m.displayName}$reason$badge';
+    }
+
+    // ── Agent authority limitations
+    if (v.agentAuthorityLimitations != null) {
+      _reviewChecked['agent_authority_limitations'] = true;
+      _reviewEdited['agent_authority_limitations'] = v.agentAuthorityLimitations!;
+    }
+
+    // ── Consent fields (ECT / experimental / drug trial)
+    if (v.ectConsent != null) {
+      _reviewChecked['ect_consent'] = true;
+      _reviewEdited['ect_consent'] = v.ectConsent!;
+    }
+    if (v.experimentalConsent != null) {
+      _reviewChecked['experimental_consent'] = true;
+      _reviewEdited['experimental_consent'] = v.experimentalConsent!;
+    }
+    if (v.drugTrialConsent != null) {
+      _reviewChecked['drug_trial_consent'] = true;
+      _reviewEdited['drug_trial_consent'] = v.drugTrialConsent!;
+    }
+
+    // ── Room preferences note
+    if (v.roomPreferencesNote != null) {
+      _reviewChecked['room_prefs_note'] = true;
+      _reviewEdited['room_prefs_note'] = v.roomPreferencesNote!;
+    }
+
+    // ── Personal info (PII) — autofill the declarant + the people they
+    // designate. Address is split into components matching the app's form.
+    final pi = v.personalInfo;
+    void put(String key, String? value) {
+      if (value != null && value.trim().isNotEmpty) {
+        _reviewChecked[key] = true;
+        _reviewEdited[key] = value.trim();
+      }
+    }
+
+    put('person_name', pi.fullName);
+    put('person_dob', pi.dateOfBirth);
+    put('person_address1', pi.addressLine1);
+    put('person_address2', pi.addressLine2);
+    put('person_city', pi.city);
+    put('person_county', pi.county);
+    put('person_state', pi.state);
+    put('person_zip', pi.zip);
+    put('person_phone', pi.phone);
+    put('person_doctor_name', pi.primaryDoctorName);
+    put('person_doctor_specialty', pi.primaryDoctorSpecialty);
+    put('person_doctor_phone', pi.primaryDoctorPhone);
+    put('person_eval_doctor_name', pi.preferredEvaluatingDoctorName);
+    put('person_eval_doctor_contact', pi.preferredEvaluatingDoctorContact);
+    final ag = pi.agent;
+    if (ag != null) {
+      put('agent_name', ag.name);
+      put('agent_relationship', ag.relationship);
+      put('agent_address1', ag.addressLine1);
+      put('agent_address2', ag.addressLine2);
+      put('agent_city', ag.city);
+      put('agent_state', ag.state);
+      put('agent_zip', ag.zip);
+      put('agent_phone', ag.phone);
+    }
+    final alt = pi.alternateAgent;
+    if (alt != null) {
+      put('alt_agent_name', alt.name);
+      put('alt_agent_relationship', alt.relationship);
+      put('alt_agent_address1', alt.addressLine1);
+      put('alt_agent_address2', alt.addressLine2);
+      put('alt_agent_city', alt.city);
+      put('alt_agent_state', alt.state);
+      put('alt_agent_zip', alt.zip);
+      put('alt_agent_phone', alt.phone);
+    }
+    final gd = pi.guardian;
+    if (gd != null) {
+      put('guardian_name', gd.name);
+      put('guardian_relationship', gd.relationship);
+      put('guardian_address1', gd.addressLine1);
+      put('guardian_address2', gd.addressLine2);
+      put('guardian_city', gd.city);
+      put('guardian_state', gd.state);
+      put('guardian_zip', gd.zip);
+      put('guardian_phone', gd.phone);
+    }
+  }
+
+  /// After extraction, classify each field by priority and detect conflicts
+  /// against the directive's CURRENT scalar values. Low-priority items stay
+  /// pre-selected (autofilled silently); conflicting scalars start UNSELECTED
+  /// so the user makes a deliberate keep/replace choice, with the more-complete
+  /// value pre-filled as the suggested default.
+  Future<void> _buildReconciliation() async {
+    final repo = ref.read(directiveRepositoryProvider);
+    final id = widget.directiveId;
+    final prefs = await repo.getPreferences(id);
+    final instr = await repo.getAdditionalInstructions(id);
+    // Personal-info current values, so an autofilled name/address/phone that
+    // would REPLACE something the user already typed starts unchecked (a
+    // deliberate keep/replace choice) instead of silently overwriting.
+    final directive = await repo.getDirectiveById(id);
+    final agents = await repo.getAgents(id);
+    final primaryAgents =
+        agents.where((a) => a.agentType == 'primary').toList();
+    final primaryAgent = primaryAgents.isEmpty ? null : primaryAgents.first;
+    final altAgents =
+        agents.where((a) => a.agentType == 'alternate').toList();
+    final altAgent = altAgents.isEmpty ? null : altAgents.first;
+    final guardian = await repo.getGuardianNomination(id);
+    final existing = <String, String>{
+      'facility_prefer': prefs?.preferredFacilityName ?? '',
+      'facility_avoid': prefs?.avoidFacilityName ?? '',
+      'dietary': instr?.dietary ?? '',
+      'religious': instr?.religious ?? '',
+      'activities': instr?.activities ?? '',
+      'crisis': instr?.crisisIntervention ?? '',
+      'agent_authority_limitations': prefs?.agentAuthorityLimitations ?? '',
+      'pet_custody': instr?.petCustody ?? '',
+      'children_custody': instr?.childrenCustody ?? '',
+      'family_notification': instr?.familyNotification ?? '',
+      'records_disclosure': instr?.recordsDisclosure ?? '',
+      'other': instr?.other ?? '',
+      'hh_note': instr?.healthHistory ?? '',
+      // Declarant — split address fields
+      'person_name': directive?.fullName ?? '',
+      'person_dob': directive?.dateOfBirth ?? '',
+      'person_address1': directive?.address ?? '',
+      'person_address2': directive?.address2 ?? '',
+      'person_city': directive?.city ?? '',
+      'person_county': directive?.county ?? '',
+      'person_state': directive?.state ?? '',
+      'person_zip': directive?.zip ?? '',
+      'person_phone': directive?.phone ?? '',
+      'person_doctor_name': directive?.primaryDoctorName ?? '',
+      'person_doctor_phone': directive?.primaryDoctorPhone ?? '',
+      'person_eval_doctor_name': directive?.preferredDoctorName ?? '',
+      'person_eval_doctor_contact': directive?.preferredDoctorContact ?? '',
+      // Primary agent — split address
+      'agent_name': primaryAgent?.fullName ?? '',
+      'agent_relationship': primaryAgent?.relationship ?? '',
+      'agent_address1': primaryAgent?.address ?? '',
+      'agent_address2': primaryAgent?.address2 ?? '',
+      'agent_city': primaryAgent?.city ?? '',
+      'agent_state': primaryAgent?.state ?? '',
+      'agent_zip': primaryAgent?.zip ?? '',
+      'agent_phone': primaryAgent?.homePhone ?? '',
+      // Alternate agent — split address
+      'alt_agent_name': altAgent?.fullName ?? '',
+      'alt_agent_relationship': altAgent?.relationship ?? '',
+      'alt_agent_address1': altAgent?.address ?? '',
+      'alt_agent_address2': altAgent?.address2 ?? '',
+      'alt_agent_city': altAgent?.city ?? '',
+      'alt_agent_state': altAgent?.state ?? '',
+      'alt_agent_zip': altAgent?.zip ?? '',
+      'alt_agent_phone': altAgent?.homePhone ?? '',
+      // Guardian — split address
+      'guardian_name': guardian?.nomineeFullName ?? '',
+      'guardian_relationship': guardian?.nomineeRelationship ?? '',
+      'guardian_address1': guardian?.nomineeAddress ?? '',
+      'guardian_address2': guardian?.nomineeAddress2 ?? '',
+      'guardian_city': guardian?.nomineeCity ?? '',
+      'guardian_state': guardian?.nomineeState ?? '',
+      'guardian_zip': guardian?.nomineeZip ?? '',
+      'guardian_phone': guardian?.nomineePhone ?? '',
+    };
+    _reconItems = buildReconItems(
+      extracted: Map<String, String>.of(_reviewEdited),
+      existing: existing,
+    );
+    for (final it in _reconItems) {
+      _reviewChecked[it.key] = it.selected;
+      // Pre-fill the conflict default (the more-complete value); editable.
+      if (it.isConflict) _reviewEdited[it.key] = it.suggestedValue;
+    }
+  }
+
+  String _displayLabel(String key) {
+    if (key.startsWith('med_prefer_')) return 'Preferred Medication';
+    if (key.startsWith('med_avoid_')) return 'Medication to Avoid';
+    if (key.startsWith('med_current_')) return 'Currently Taking';
+    if (key.startsWith('med_limit_')) return 'Restricted-Use Medication';
+    if (key.startsWith('cond_')) return 'Condition';
+    if (key.startsWith('diag_')) return 'Diagnosis';
+    if (key.startsWith('allergy_')) return 'Allergy';
+    if (key.startsWith('hh_')) return 'Health History';
+    if (key == 'facility_prefer') return 'Preferred Facility';
+    if (key == 'facility_avoid') return 'Facility to Avoid';
+    if (key == 'dietary') return 'Dietary';
+    if (key == 'religious') return 'Religious/Cultural';
+    if (key == 'activities') return 'Activities';
+    if (key == 'crisis') return 'Crisis Intervention';
+    if (key == 'agent_authority_limitations') return 'Agent authority limits';
+    if (key == 'ect_consent') return 'ECT consent';
+    if (key == 'experimental_consent') return 'Experimental treatment consent';
+    if (key == 'drug_trial_consent') return 'Drug trial consent';
+    if (key == 'room_prefs_note') return 'Room preferences';
+    if (key == 'pet_custody') return 'Pet care';
+    if (key == 'children_custody') return 'Children / dependents';
+    if (key == 'family_notification') return 'Who to notify';
+    if (key == 'records_disclosure') return 'Records disclosure';
+    if (key == 'other') return 'Other';
+    // Personal info (PII) — declarant
+    if (key == 'person_name') return 'Your full name';
+    if (key == 'person_dob') return 'Date of birth';
+    if (key == 'person_address1') return 'Street address';
+    if (key == 'person_address2') return 'Apt / suite / unit';
+    if (key == 'person_city') return 'City';
+    if (key == 'person_county') return 'County';
+    if (key == 'person_state') return 'State';
+    if (key == 'person_zip') return 'ZIP code';
+    if (key == 'person_phone') return 'Your phone';
+    if (key == 'person_doctor_name') return 'Primary doctor';
+    if (key == 'person_doctor_specialty') return 'Doctor specialty';
+    if (key == 'person_doctor_phone') return "Doctor's phone";
+    if (key == 'person_eval_doctor_name') return 'Preferred evaluating doctor';
+    if (key == 'person_eval_doctor_contact') return 'Evaluating doctor contact';
+    // Primary agent
+    if (key == 'agent_name') return 'Agent name';
+    if (key == 'agent_relationship') return 'Agent relationship';
+    if (key == 'agent_address1') return 'Agent street address';
+    if (key == 'agent_address2') return 'Agent apt / suite';
+    if (key == 'agent_city') return 'Agent city';
+    if (key == 'agent_state') return 'Agent state';
+    if (key == 'agent_zip') return 'Agent ZIP';
+    if (key == 'agent_phone') return 'Agent phone';
+    // Alternate agent
+    if (key == 'alt_agent_name') return 'Alternate agent name';
+    if (key == 'alt_agent_relationship') return 'Alternate agent relationship';
+    if (key == 'alt_agent_address1') return 'Alt agent street address';
+    if (key == 'alt_agent_address2') return 'Alt agent apt / suite';
+    if (key == 'alt_agent_city') return 'Alt agent city';
+    if (key == 'alt_agent_state') return 'Alt agent state';
+    if (key == 'alt_agent_zip') return 'Alt agent ZIP';
+    if (key == 'alt_agent_phone') return 'Alternate agent phone';
+    // Guardian
+    if (key == 'guardian_name') return 'Guardian nominee';
+    if (key == 'guardian_relationship') return 'Guardian relationship';
+    if (key == 'guardian_address1') return 'Guardian street address';
+    if (key == 'guardian_address2') return 'Guardian apt / suite';
+    if (key == 'guardian_city') return 'Guardian city';
+    if (key == 'guardian_state') return 'Guardian state';
+    if (key == 'guardian_zip') return 'Guardian ZIP';
+    if (key == 'guardian_phone') return 'Guardian phone';
+    return key;
+  }
+
+  String _sectionLabel(String key) {
+    if (key.startsWith('med_prefer_')) return 'Preferred Meds';
+    if (key.startsWith('med_avoid_')) return 'Meds to Avoid';
+    if (key.startsWith('med_current_')) return 'Currently Taking';
+    if (key.startsWith('med_limit_')) return 'Restricted-Use Meds';
+    if (key.startsWith('cond_')) return 'Conditions';
+    if (key.startsWith('diag_')) return 'Diagnoses';
+    if (key.startsWith('allergy_')) return 'Allergies';
+    if (key.startsWith('hh_')) return 'Health History';
+    if (key.startsWith('person_')) return 'Your details';
+    if (key.startsWith('agent_') && !key.startsWith('agent_authority')) {
+      return 'Your agent';
+    }
+    if (key == 'agent_authority_limitations') return 'Agent Authority';
+    if (key == 'ect_consent' ||
+        key == 'experimental_consent' ||
+        key == 'drug_trial_consent') {
+      return 'Consent';
+    }
+    if (key == 'room_prefs_note') return 'Room Preferences';
+    if (key.startsWith('alt_agent_')) return 'Alternate agent';
+    if (key.startsWith('guardian_')) return 'Guardian';
+    return 'Other';
+  }
+
+  Widget _buildReviewStep() {
+    final p = Theme.of(context).mhadPalette;
+    final dark = Theme.of(context).brightness == Brightness.dark;
+    final keys = _reviewEdited.keys.toList();
+    final checkedCount =
+        _reviewChecked.values.where((v) => v).length;
+
+    final okText = dark
+        ? SemanticColors.successTextDark
+        : SemanticColors.successTextLight;
+
+    // Editorial header (full width) — mono AI pill, italic serif headline,
+    // muted body. Below it the artboard forks into a 1fr / 1.4fr two-pane on
+    // wide (photo left, fields right); narrow stacks them.
+    final header = <Widget>[
+      Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+            decoration: BoxDecoration(
+              color: p.primaryTint,
+              borderRadius: BorderRadius.circular(100),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.auto_awesome, size: 11, color: p.primary),
+                const SizedBox(width: 5),
+                Text(
+                  'AI READ THIS PHOTO',
+                  style: TextStyle(
+                    fontFamily: kMonoFamily,
+                    fontFamilyFallback: const [
+                      'Consolas',
+                      'Menlo',
+                      'Courier New',
+                      'monospace',
+                    ],
+                    fontSize: 10.5,
+                    letterSpacing: 0.6,
+                    fontWeight: FontWeight.w700,
+                    color: p.primary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+      const SizedBox(height: 12),
+      Text(
+        "Here's what we read.",
+        style: TextStyle(
+          fontFamily: 'Instrument Serif',
+          fontFamilyFallback: const ['Georgia', 'serif'],
+          fontStyle: FontStyle.italic,
+          fontSize: 32,
+          fontWeight: FontWeight.w400,
+          height: 1.05,
+          letterSpacing: -0.4,
+          color: p.text,
+        ),
+      ),
+      const SizedBox(height: 6),
+      Text(
+        'These are the details the AI pulled from your document. Here\'s how '
+        'to use this page:',
+        style: TextStyle(
+          fontFamily: kSansFamily,
+          fontSize: 13,
+          fontWeight: FontWeight.w600,
+          color: p.text,
+          height: 1.5,
+        ),
+      ),
+      const SizedBox(height: 6),
+      _howToLine(p, Icons.check_box_outlined,
+          'A checked box means it will be added to your form. Uncheck '
+          'anything you don\'t want.'),
+      _howToLine(p, Icons.edit_outlined,
+          'Tap any field to edit its wording before it\'s added.'),
+      _howToLine(p, Icons.rule,
+          'Items under "Needs your decision" would replace something you '
+          'already entered — review those.'),
+      _howToLine(p, Icons.arrow_forward,
+          'When you\'re ready, tap "Autofill Information" at the bottom to '
+          'fill these into your form and continue — you\'ll land in the form '
+          'to review everything.'),
+    ];
+
+    return LayoutBuilder(
+      builder: (context, c) {
+        final twoPane = c.maxWidth >= 720 && _sourceDocs.isNotEmpty;
+        return ListView(
+          padding: const EdgeInsets.fromLTRB(20, 14, 20, 28),
+          children: [
+            ...header,
+            const SizedBox(height: 18),
+            if (twoPane)
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(flex: 10, child: _sourceThumb(p)),
+                  const SizedBox(width: 18),
+                  Expanded(
+                    flex: 14,
+                    child: _reviewFieldsPane(p, keys, checkedCount, okText),
+                  ),
+                ],
+              )
+            else ...[
+              if (_sourceDocs.isNotEmpty) ...[
+                _sourceThumb(p),
+                const SizedBox(height: 16),
+              ],
+              _reviewFieldsPane(p, keys, checkedCount, okText),
+            ],
+          ],
+        );
+      },
+    );
+  }
+
+  // The extracted-fields column of the review screen (right pane on wide):
+  // PII notice → "Add to your directive" label → field rows → privacy lock
+  // line → ready-count → NLM attribution.
+  Widget _reviewFieldsPane(
+    MhadPalette p,
+    List<String> keys,
+    int checkedCount,
+    Color okText,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (_piiStripped.isNotEmpty) ...[
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: p.primaryTint,
+              border: Border.all(color: p.primary.withValues(alpha: 0.2)),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(Icons.shield_outlined, size: 14, color: p.primary),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    'PII was detected and removed before analysis: '
+                    '${_piiStripped.toSet().join(", ")}',
+                    style: TextStyle(
+                      fontFamily: kSansFamily,
+                      fontSize: 11.5,
+                      height: 1.4,
+                      color: p.text,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+        ],
+        Text(
+          'Add to your directive',
+          style: TextStyle(
+            fontFamily: kMonoFamily,
+            fontFamilyFallback: const [
+              'Consolas',
+              'Menlo',
+              'Courier New',
+              'monospace',
+            ],
+            fontSize: 10.5,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 1.2,
+            color: p.textMuted,
+          ),
+        ),
+        const SizedBox(height: 8),
+        _buildReconGroups(p, keys),
+        const SizedBox(height: 14),
+        // Privacy reassurance lock-line — matches prototype L2082-2087.
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          decoration: BoxDecoration(
+            color: p.surface,
+            border: Border.all(color: p.border),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(Icons.lock_outline, size: 14, color: p.textMuted),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  'Your photo was sent to the AI to read, then '
+                  'discarded. Nothing is stored after you confirm or '
+                  'discard.',
+                  style: TextStyle(
+                    fontFamily: kSansFamily,
+                    fontSize: 11.5,
+                    color: p.textMuted,
+                    height: 1.4,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          '$checkedCount of ${keys.length} fields ready to add',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontFamily: kMonoFamily,
+            fontFamilyFallback: const [
+              'Consolas',
+              'Menlo',
+              'Courier New',
+              'monospace',
+            ],
+            fontSize: 10.5,
+            letterSpacing: 0.6,
+            color: checkedCount > 0 ? okText : p.textMuted,
+          ),
+        ),
+        const SizedBox(height: 12),
+        const NlmAttribution(),
+      ],
+    );
+  }
+
+  /// The extracted fields, grouped into "needs your decision" (high-priority or
+  /// conflicting — start unchecked when they'd replace an existing value) and
+  /// "autofilled for you" (low-priority, pre-checked). Falls back to a flat
+  /// list if reconciliation wasn't built.
+  Widget _buildReconGroups(MhadPalette p, List<String> keys) {
+    Widget groupCard(List<ReconItem> group) => Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14),
+          decoration: BoxDecoration(
+            color: p.card,
+            border: Border.all(color: p.border),
+            borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
+          ),
+          child: Column(
+            children: [
+              for (var i = 0; i < group.length; i++) ...[
+                _reconRow(group[i], p),
+                if (i < group.length - 1)
+                  Divider(height: 1, color: p.border),
+              ],
+            ],
+          ),
+        );
+
+    if (_reconItems.isEmpty) {
+      // Safety fallback: original flat list.
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14),
+        decoration: BoxDecoration(
+          color: p.card,
+          border: Border.all(color: p.border),
+          borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
+        ),
+        child: Column(
+          children: [
+            for (var i = 0; i < keys.length; i++) ...[
+              _SnapReviewRow(
+                ok: _reviewChecked[keys[i]] ?? false,
+                fieldLabel: _displayLabel(keys[i]),
+                value: _reviewEdited[keys[i]] ?? '',
+                target: _sectionLabel(keys[i]),
+                onToggle: () => setState(() => _reviewChecked[keys[i]] =
+                    !(_reviewChecked[keys[i]] ?? false)),
+                onEdit: () => _editField(keys[i]),
+              ),
+              if (i < keys.length - 1) Divider(height: 1, color: p.border),
+            ],
+          ],
+        ),
+      );
+    }
+
+    final groups = ReconGroups.from(_reconItems);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (groups.needsDecision.isNotEmpty) ...[
+          _groupLabel('Needs your decision', p),
+          const SizedBox(height: 6),
+          groupCard(groups.needsDecision),
+          const SizedBox(height: 14),
+        ],
+        if (groups.autoApplied.isNotEmpty) ...[
+          _groupLabel('Autofilled for you — review optional', p),
+          const SizedBox(height: 6),
+          groupCard(groups.autoApplied),
+        ],
+      ],
+    );
+  }
+
+  Widget _reconRow(ReconItem it, MhadPalette p) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // A conflict replaces something you already entered — show what.
+        if (it.isConflict)
+          Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Text(
+              'Replaces what you have: "${it.existing}"',
+              style: TextStyle(
+                fontFamily: kSansFamily,
+                fontSize: 11.5,
+                fontStyle: FontStyle.italic,
+                color: p.textMuted,
+              ),
+            ),
+          ),
+        _SnapReviewRow(
+          ok: _reviewChecked[it.key] ?? false,
+          fieldLabel: _displayLabel(it.key),
+          value: _reviewEdited[it.key] ?? '',
+          target: _sectionLabel(it.key),
+          onToggle: () => setState(() =>
+              _reviewChecked[it.key] = !(_reviewChecked[it.key] ?? false)),
+          onEdit: () => _editField(it.key),
+        ),
+      ],
+    );
+  }
+
+  Widget _groupLabel(String text, MhadPalette p) => Text(
+        text.toUpperCase(),
+        style: TextStyle(
+          fontFamily: kMonoFamily,
+          fontFamilyFallback: const [
+            'Consolas',
+            'Menlo',
+            'Courier New',
+            'monospace',
+          ],
+          fontSize: 10.5,
+          fontWeight: FontWeight.w700,
+          letterSpacing: 1.2,
+          color: p.textMuted,
+        ),
+      );
+
+  // ── Smart Fill results ──────────────────────────────────────────────
+
+  Widget _buildResultsStep() {
+    final cs = Theme.of(context).colorScheme;
+    final keys = _smartEdited.keys.toList();
+
+    return ListView(
+      padding: const EdgeInsets.all(16),
+      children: [
+        Container(
+          padding: const EdgeInsets.all(8),
+          margin: const EdgeInsets.only(bottom: 12),
+          decoration: BoxDecoration(
+            color: cs.tertiaryContainer,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Text(
+            'The AI generated these additional suggestions based on your '
+            'validated conditions and medications. Tap to edit, uncheck '
+            'to skip. This is not medical or legal advice.',
+            style: TextStyle(
+                fontSize: 12,
+                color: cs.onTertiaryContainer,
+                fontStyle: FontStyle.italic),
+          ),
+        ),
+        ...keys.map((key) {
+          final checked = _smartChecked[key] ?? false;
+          return Card(
+            margin: const EdgeInsets.only(bottom: 6),
+            color: checked
+                ? cs.surfaceContainerLow
+                : cs.surfaceContainerHighest.withValues(alpha: 0.5),
+            child: InkWell(
+              borderRadius: BorderRadius.circular(12),
+              onTap: () => _editSmartField(key),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(4, 4, 12, 4),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Checkbox(
+                      value: checked,
+                      onChanged: (v) =>
+                          setState(() => _smartChecked[key] = v ?? false),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(key,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelLarge
+                                    ?.copyWith(
+                                      color: checked
+                                          ? cs.onSurface
+                                          : cs.onSurfaceVariant)),
+                            const SizedBox(height: 4),
+                            Text(
+                              _smartEdited[key] ?? '',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall
+                                  ?.copyWith(
+                                    color: checked
+                                        ? cs.onSurface
+                                        : cs.onSurfaceVariant),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Icon(Icons.edit, size: 14, color: cs.onSurfaceVariant),
+                  ],
+                ),
+              ),
+            ),
+          );
+        }),
+      ],
+    );
+  }
+
+  // ── Bottom bar ──────────────────────────────────────────────────────
+
+  Widget? _buildBottom() {
+    if (_step == _PipelineStep.pick ||
+        _step == _PipelineStep.extracting ||
+        _step == _PipelineStep.validating ||
+        _step == _PipelineStep.generating) {
+      return null;
+    }
+
+    // Artboard WebSnapReview footer: "Discard all" (left) · "Generate more"
+    // (Smart Fill, when conditions/meds were validated) · primary button.
+    // Results step keeps Back · Apply All.
+    final canSmartFill = _validated?.hasValidatedConditions == true ||
+        _validated?.hasValidatedMeds == true;
+    // The primary review button is "Autofill Information" in BOTH modes — it
+    // applies the checked fields and continues into the wizard (standalone
+    // navigates there; the modal pops back to the wizard it was opened over),
+    // so the user can verify the autofill. The "N of M fields ready to add"
+    // line in the fields pane already communicates the count.
+    const addLabel = 'Autofill Information';
+
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+        // The primary action is a FULL-WIDTH button on its own line so it can
+        // never be clipped off the right edge by a too-narrow footer (the old
+        // single-Row layout with a Spacer overflowed and hid this button when
+        // "Generate more" was also present or the window was narrow).
+        child: _step == _PipelineStep.results
+            ? Row(
+                children: [
+                  OutlinedButton(
+                    onPressed: () =>
+                        setState(() => _step = _PipelineStep.review),
+                    child: const Text('Back'),
+                  ),
+                  const Spacer(),
+                  FilledButton.icon(
+                    onPressed: _applyAll,
+                    icon: const Icon(Icons.check),
+                    label: const Text('Apply All'),
+                  ),
+                ],
+              )
+            : Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Secondary actions row.
+                  Row(
+                    children: [
+                      OutlinedButton(
+                        onPressed: _discardExtraction,
+                        child: const Text('Discard all'),
+                      ),
+                      const Spacer(),
+                      if (canSmartFill)
+                        TextButton.icon(
+                          onPressed: _runSmartFill,
+                          icon: const Icon(Icons.auto_awesome, size: 16),
+                          label: const Text('Generate more'),
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  // Primary: always enabled, full width — applies the checked
+                  // fields and continues into the wizard to verify.
+                  SizedBox(
+                    width: double.infinity,
+                    child: FilledButton(
+                      onPressed: _applyAll,
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Flexible(
+                            child: Text(addLabel,
+                                overflow: TextOverflow.ellipsis),
+                          ),
+                          SizedBox(width: 8),
+                          Icon(Icons.arrow_forward, size: 18),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+      ),
+    );
+  }
+}
+
+/// Editorial extraction-review row matching prototype `ScrSnapReview`
+/// L2030-2067. Replaces the prior Material Card + Checkbox row.
+///
+/// Layout: 22pt rounded checkbox (filled primary when ok, surface with
+/// border + X when unchecked) → flex column with monospace UPPERCASE
+/// field name + right-aligned "→ Step N · Section" target chip → value
+/// in 14pt bold (line-through when unchecked) → 11.5pt muted subtitle
+/// → trailing edit pencil icon.
+class _SnapReviewRow extends StatelessWidget {
+  final bool ok;
+  final String fieldLabel;
+  final String value;
+  final String target;
+  final VoidCallback onToggle;
+  final VoidCallback onEdit;
+
+  const _SnapReviewRow({
+    required this.ok,
+    required this.fieldLabel,
+    required this.value,
+    required this.target,
+    required this.onToggle,
+    required this.onEdit,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          GestureDetector(
+            onTap: onToggle,
+            child: Container(
+              width: 22,
+              height: 22,
+              margin: const EdgeInsets.only(top: 1),
+              decoration: BoxDecoration(
+                color: ok ? p.primary : p.surface,
+                border: ok
+                    ? null
+                    : Border.all(color: p.border, width: 1.5),
+                borderRadius: BorderRadius.circular(6),
+              ),
+              alignment: Alignment.center,
+              child: ok
+                  ? Icon(Icons.check, size: 13, color: p.onPrimary)
+                  : Icon(Icons.close, size: 11, color: p.textMuted),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        fieldLabel.toUpperCase(),
+                        style: TextStyle(
+                          fontFamily: kMonoFamily,
+                          fontFamilyFallback: const [
+                            'Consolas',
+                            'Menlo',
+                            'Courier New',
+                            'monospace',
+                          ],
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 0.5,
+                          color: p.textMuted,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      ok ? '→ $target' : 'Not added',
+                      style: TextStyle(
+                        fontFamily: kMonoFamily,
+                        fontFamilyFallback: const [
+                          'Consolas',
+                          'Menlo',
+                          'Courier New',
+                          'monospace',
+                        ],
+                        fontSize: 10,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 0.4,
+                        color: ok ? p.primary : p.textMuted,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  value,
+                  style: TextStyle(
+                    fontFamily: kSansFamily,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: ok ? p.text : p.textMuted,
+                    decoration:
+                        ok ? null : TextDecoration.lineThrough,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 6),
+          GestureDetector(
+            onTap: onEdit,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 2),
+              child: Icon(Icons.edit_outlined,
+                  size: 14, color: p.textMuted),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
