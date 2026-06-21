@@ -59,19 +59,91 @@ class _AiConsistencyScreenState extends ConsumerState<AiConsistencyScreen> {
 
     final found = <_Conflict>[];
 
-    // Rule 1: ECT consent vs medication consent ambiguity.
-    if (prefs?.ectConsent == consentNo && prefs?.medicationConsent == consentAgentDecides) {
-      found.add(const _Conflict(
-        steps: 'Step 7 + Step 9',
-        title: 'You said the agent decides medications, but refused ECT.',
-        body: "Doctors might not know which applies first if the agent "
-            "wants ECT as a medication-adjacent measure. Most people pick "
-            "one and remove the other.",
-        aStatement: 'Agent decides medications',
-        bStatement: 'ECT refused',
-        actionEditA: 'Edit step 9 (Procedures)',
-        actionEditB: 'Edit step 7 (Medications)',
-      ));
+    // Agent-authorization review. PA Act 194 lets a principal BOTH record their
+    // own consent AND, separately, authorize their agent to consent on their
+    // behalf (for ECT, experimental studies, and drug trials that agent
+    // authorization needs the principal's physical initials, §5805(c)(4)).
+    // Because the app stores a single choice per procedure, some valid
+    // combinations print statements that read as contradictory — so surface
+    // them as "confirm this is intended" notes (the official form allows both;
+    // they just need consideration) rather than hard errors. Only agent-bearing
+    // forms (Combined / POA) have an agent at all.
+    final directive = await repo.getDirectiveById(widget.directiveId);
+    var hasAgent = false;
+    if (directive != null) {
+      try {
+        hasAgent = FormType.values.byName(directive.formType).hasAgentSections;
+      } catch (_) {/* unknown form type → treat as no agent */}
+    }
+    if (hasAgent && prefs != null) {
+      bool gaveOwnConsent(String? c) =>
+          c == consentYes || (c?.startsWith('conditional:') ?? false);
+
+      // ECT / experimental / drug trials: a single field. When the principal
+      // consents themselves, the form ALSO states the agent is not authorized —
+      // valid, but easy to misread as a contradiction.
+      void procedureNote(String name, String? consent) {
+        if (!gaveOwnConsent(consent)) return;
+        found.add(_Conflict(
+          steps: 'Procedures + Agent authority',
+          title: 'You consented to $name yourself — the printed form will also '
+              'state your agent is NOT authorized to consent to $name.',
+          body: 'Pennsylvania’s form lets you do both: give your own '
+              'consent AND authorize your agent to consent on your behalf (that '
+              'agent authorization needs your physical initials, '
+              '§5805(c)(4)). As entered, only your own consent is recorded, '
+              'so the document says your agent may not consent to $name. That '
+              'is allowed and may be exactly what you intend — keep both if so. '
+              'If you also want your agent able to consent (e.g. if you later '
+              'can’t decide), choose “My agent will decide” for '
+              '$name.',
+          aStatement: 'You consent to $name',
+          bStatement: 'Agent not authorized: $name',
+          actionEditA: 'Review $name choice',
+        ));
+      }
+
+      procedureNote('ECT', prefs.ectConsent);
+      procedureNote('experimental studies', prefs.experimentalConsent);
+      procedureNote('drug trials', prefs.drugTrialConsent);
+
+      // Medications carry TWO independent fields — your consent (Medications
+      // step) and the agent's authority (Agent-authority step) — so they can
+      // directly oppose each other on the printed form.
+      if (prefs.medicationConsent == consentAgentDecides &&
+          !prefs.agentCanConsentMedication) {
+        found.add(const _Conflict(
+          steps: 'Medications + Agent authority',
+          title: 'You said your agent decides your medications, but the form '
+              'says your agent is NOT authorized to consent to medications.',
+          body: 'These cancel each other out. The official form lets you set '
+              'your own medication preferences and your agent’s authority '
+              'separately — both are allowed — but as entered they oppose each '
+              'other. Authorize your agent to consent to medications, or change '
+              'the medication choice so they agree.',
+          aStatement: 'Agent decides medications',
+          bStatement: 'Agent not authorized: medications',
+          actionEditA: 'Edit Medications',
+          actionEditB: 'Edit Agent authority',
+        ));
+      }
+      if (prefs.medicationConsent == consentNo &&
+          prefs.agentCanConsentMedication) {
+        found.add(const _Conflict(
+          steps: 'Medications + Agent authority',
+          title: 'You don’t consent to any medications, but your agent is '
+              'authorized to consent to them.',
+          body: 'The official form lets you set your own preference and your '
+              'agent’s authority separately — both are valid — but as '
+              'entered they oppose each other: your refusal of all medications '
+              'versus your agent’s power to consent to any. Decide which '
+              'should control and adjust the other.',
+          aStatement: 'No medications (you)',
+          bStatement: 'Agent may consent: medications',
+          actionEditA: 'Edit Medications',
+          actionEditB: 'Edit Agent authority',
+        ));
+      }
     }
 
     // Rule 2: Severe allergy not also on Medications-avoid list.
@@ -172,8 +244,10 @@ class _AiConsistencyScreenState extends ConsumerState<AiConsistencyScreen> {
       if (v == consentYes) return 'consented';
       if (v == consentNo) return 'refused';
       if (v == consentAgentDecides) return 'agent decides';
-      if (v.startsWith('conditional:')) return 'conditional';
-      return v;
+      if (v.startsWith('conditional:')) return 'conditional (see form)';
+      // Never echo an unexpected raw value — a conditional's free text (or any
+      // stray value) could carry PII like a name and reach the AI verbatim.
+      return 'set (see form)';
     }
 
     // A JSON add-on (crisis plan / side-effects checklist) counts as filled
@@ -650,7 +724,9 @@ class _Conflict {
   final String aStatement;
   final String bStatement;
   final String actionEditA;
-  final String actionEditB;
+  // Optional second edit target. Null for single-source "confirm intent" notes
+  // (e.g. an ECT agent-authorization note) that only point at one step.
+  final String? actionEditB;
   const _Conflict({
     required this.steps,
     required this.title,
@@ -658,7 +734,7 @@ class _Conflict {
     required this.aStatement,
     required this.bStatement,
     required this.actionEditA,
-    required this.actionEditB,
+    this.actionEditB,
   });
   // NOTE: deep-link-by-step would let "Edit step 7" land directly on step
   // 7 rather than the user's last-saved step. That needs a `startStep`
@@ -805,11 +881,12 @@ class _ConflictCard extends StatelessWidget {
                       context.push(AppRoutes.wizardRoute(directiveId)),
                   child: Text(conflict.actionEditA),
                 ),
-                OutlinedButton(
-                  onPressed: () =>
-                      context.push(AppRoutes.wizardRoute(directiveId)),
-                  child: Text(conflict.actionEditB),
-                ),
+                if (conflict.actionEditB != null)
+                  OutlinedButton(
+                    onPressed: () =>
+                        context.push(AppRoutes.wizardRoute(directiveId)),
+                    child: Text(conflict.actionEditB!),
+                  ),
                 TextButton(
                   onPressed: () => Navigator.pop(context, false),
                   child: const Text('Keep both'),
