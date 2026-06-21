@@ -667,6 +667,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
                     !(_reviewChecked[keys[i]] ?? false)),
                 onEdit: () => _editField(keys[i]),
               ),
+              _agentInitialsNote(keys[i], p),
               if (i < keys.length - 1) Divider(height: 1, color: p.border),
             ],
           ],
@@ -720,7 +721,45 @@ extension _PipelineReviewUi on _PipelineScreenState {
               _reviewChecked[it.key] = !(_reviewChecked[it.key] ?? false)),
           onEdit: () => _editField(it.key),
         ),
+        _agentInitialsNote(it.key, p),
       ],
+    );
+  }
+
+  /// §5805(c)(4) reminder: when an autofilled consent would delegate ECT,
+  /// experimental studies, or drug trials to the agent, that delegation only
+  /// takes legal effect if the declarant physically initials it on the printed
+  /// form. Surfaced here so the user confirms the AI's assumption deliberately.
+  Widget _agentInitialsNote(String key, MhadPalette p) {
+    const procedureKeys = {
+      'ect_consent',
+      'experimental_consent',
+      'drug_trial_consent',
+    };
+    if (!procedureKeys.contains(key)) return const SizedBox.shrink();
+    if ((_reviewEdited[key] ?? '') != 'agent') return const SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.only(top: 6, bottom: 4),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(Icons.draw_outlined, size: 14, color: p.textMuted),
+          const SizedBox(width: 6),
+          Expanded(
+            child: Text(
+              'This lets your agent decide. Under PA law (§5805(c)(4)) it only '
+              'takes effect if you physically initial this authorization on the '
+              'printed form — confirm this is what you want.',
+              style: TextStyle(
+                fontFamily: kSansFamily,
+                fontSize: 11.5,
+                height: 1.4,
+                color: p.textMuted,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
