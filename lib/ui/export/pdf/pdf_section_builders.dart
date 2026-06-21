@@ -451,3 +451,11 @@ String? _roommateMatchLabel(String raw) {
 
 /// Returns the best available phone number for an agent, or empty string.
 String agentBestPhone(Agent? agent) => agent?.bestPhone ?? '';
+
+/// Appends a dosage to a medication name for display — `"Lisinopril (10 mg
+/// daily)"` — or just the name when no dosage was given. Used for the
+/// currently-taking section, the only one that captures a dosage.
+String medicationWithDosage(String name, String dosage) {
+  final d = dosage.trim();
+  return d.isEmpty ? name : '$name ($d)';
+}

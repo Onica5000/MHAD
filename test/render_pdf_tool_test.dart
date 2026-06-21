@@ -139,6 +139,7 @@ void main() {
         entryType: 'exception',
         medicationName: 'Haloperidol',
         reason: 'Severe dystonic reaction',
+        dosage: '',
         sortOrder: 0,
       ),
       MedicationEntry(
@@ -147,6 +148,7 @@ void main() {
         entryType: 'preferred',
         medicationName: 'Lithium',
         reason: 'Works well, stable for years',
+        dosage: '',
         sortOrder: 1,
       ),
     ];

@@ -71,7 +71,8 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
       for (final m in meds) {
         final row = _MedRow(id: m.id)
           ..nameCtrl.text = m.medicationName
-          ..reasonCtrl.text = m.reason;
+          ..reasonCtrl.text = m.reason
+          ..dosageCtrl.text = m.dosage;
         switch (MedicationEntryType.values
             .firstWhere((e) => e.name == m.entryType,
                 orElse: () => MedicationEntryType.exception)) {
@@ -134,6 +135,9 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
           entryType: type.name,
           medicationName: Value(row.nameCtrl.text.trim()),
           reason: Value(row.reasonCtrl.text.trim()),
+          // Dosage is captured only in the "currently taking" section; the
+          // other sections never show the field, so it stays empty there.
+          dosage: Value(row.dosageCtrl.text.trim()),
           sortOrder: Value(order++),
         ));
       }
@@ -267,6 +271,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
             subtitle: 'For your care team’s reference — not a preference',
             rows: _current,
             accentColor: Theme.of(context).colorScheme.secondary,
+            showDosage: true,
             onAdd: () => _addMedRow(_current),
             onInfo: _showMedInfo,
             onRemove: (i) => setState(() {
@@ -390,10 +395,13 @@ class _MedRow {
   final int? id;
   final TextEditingController nameCtrl = TextEditingController();
   final TextEditingController reasonCtrl = TextEditingController();
+  // Only used (and shown) for the "currently taking" section.
+  final TextEditingController dosageCtrl = TextEditingController();
   _MedRow({this.id});
   void dispose() {
     nameCtrl.dispose();
     reasonCtrl.dispose();
+    dosageCtrl.dispose();
   }
 }
 
@@ -405,6 +413,9 @@ class _MedTable extends StatelessWidget {
   final void Function(int index) onRemove;
   final void Function(String medName)? onInfo;
   final Color? accentColor;
+  // Show a dosage field per row. Only the "currently taking" section sets this;
+  // the preference sections (never/limitations/preferred) don't capture dosage.
+  final bool showDosage;
 
   const _MedTable({
     required this.title,
@@ -414,6 +425,7 @@ class _MedTable extends StatelessWidget {
     required this.onRemove,
     this.onInfo,
     this.accentColor,
+    this.showDosage = false,
   });
 
   @override
@@ -487,6 +499,17 @@ class _MedTable extends StatelessWidget {
                               );
                             },
                           ),
+                          if (showDosage) ...[
+                            const SizedBox(height: 8),
+                            TextFormField(
+                              controller: rows[i].dosageCtrl,
+                              decoration: const InputDecoration(
+                                labelText: 'Dosage (e.g. 20 mg twice daily)',
+                                border: OutlineInputBorder(),
+                                isDense: true,
+                              ),
+                            ),
+                          ],
                           const SizedBox(height: 8),
                           TextFormField(
                             controller: rows[i].reasonCtrl,

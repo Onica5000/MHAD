@@ -124,6 +124,7 @@ MedicationEntry _makeMedication() => const MedicationEntry(
       entryType: 'exception',
       medicationName: 'Medication A',
       reason: 'Adverse reaction',
+      dosage: '',
       sortOrder: 0,
     );
 

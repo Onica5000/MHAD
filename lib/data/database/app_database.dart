@@ -92,9 +92,12 @@ class MedicationEntries extends Table {
   IntColumn get directiveId =>
       integer().references(Directives, #id, onDelete: KeyAction.cascade)();
   TextColumn get entryType =>
-      text()(); // 'exception' | 'limitation' | 'preferred'
+      text()(); // 'current' | 'exception' | 'limitation' | 'preferred'
   TextColumn get medicationName => text().withDefault(const Constant(''))();
   TextColumn get reason => text().withDefault(const Constant(''))();
+  // Dosage captured only for 'current' (currently-taking) entries — the other
+  // categories are preferences, not a record of what the person takes now.
+  TextColumn get dosage => text().withDefault(const Constant(''))();
   IntColumn get sortOrder => integer().withDefault(const Constant(0))();
 }
 
@@ -288,7 +291,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase(super.executor);
 
   @override
-  int get schemaVersion => 19;
+  int get schemaVersion => 20;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -482,6 +485,13 @@ class AppDatabase extends _$AppDatabase {
                   "ALTER TABLE guardian_nominations ADD COLUMN $col "
                   "TEXT NOT NULL DEFAULT ''");
             }
+          }
+          if (from < 20) {
+            // Dosage for currently-taking medications (informational, for the
+            // care team — not binding under 20 Pa.C.S. § 5808).
+            await customStatement(
+                "ALTER TABLE medication_entries ADD COLUMN dosage "
+                "TEXT NOT NULL DEFAULT ''");
           }
         },
       );

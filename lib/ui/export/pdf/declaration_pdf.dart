@@ -205,7 +205,10 @@ List<pw.Page> buildDeclarationPages({
             'Medications I am currently taking (for reference):',
             current
                 .map(
-                  (m) => {'medication': m.medicationName, 'reason': m.reason},
+                  (m) => {
+                    'medication': medicationWithDosage(m.medicationName, m.dosage),
+                    'reason': m.reason,
+                  },
                 )
                 .toList(),
             false,

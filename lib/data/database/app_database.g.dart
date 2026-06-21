@@ -2347,6 +2347,16 @@ class $MedicationEntriesTable extends MedicationEntries
     requiredDuringInsert: false,
     defaultValue: const Constant(''),
   );
+  static const VerificationMeta _dosageMeta = const VerificationMeta('dosage');
+  @override
+  late final GeneratedColumn<String> dosage = GeneratedColumn<String>(
+    'dosage',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
   static const VerificationMeta _sortOrderMeta = const VerificationMeta(
     'sortOrder',
   );
@@ -2366,6 +2376,7 @@ class $MedicationEntriesTable extends MedicationEntries
     entryType,
     medicationName,
     reason,
+    dosage,
     sortOrder,
   ];
   @override
@@ -2417,6 +2428,12 @@ class $MedicationEntriesTable extends MedicationEntries
         reason.isAcceptableOrUnknown(data['reason']!, _reasonMeta),
       );
     }
+    if (data.containsKey('dosage')) {
+      context.handle(
+        _dosageMeta,
+        dosage.isAcceptableOrUnknown(data['dosage']!, _dosageMeta),
+      );
+    }
     if (data.containsKey('sort_order')) {
       context.handle(
         _sortOrderMeta,
@@ -2452,6 +2469,10 @@ class $MedicationEntriesTable extends MedicationEntries
         DriftSqlType.string,
         data['${effectivePrefix}reason'],
       )!,
+      dosage: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}dosage'],
+      )!,
       sortOrder: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}sort_order'],
@@ -2471,6 +2492,7 @@ class MedicationEntry extends DataClass implements Insertable<MedicationEntry> {
   final String entryType;
   final String medicationName;
   final String reason;
+  final String dosage;
   final int sortOrder;
   const MedicationEntry({
     required this.id,
@@ -2478,6 +2500,7 @@ class MedicationEntry extends DataClass implements Insertable<MedicationEntry> {
     required this.entryType,
     required this.medicationName,
     required this.reason,
+    required this.dosage,
     required this.sortOrder,
   });
   @override
@@ -2488,6 +2511,7 @@ class MedicationEntry extends DataClass implements Insertable<MedicationEntry> {
     map['entry_type'] = Variable<String>(entryType);
     map['medication_name'] = Variable<String>(medicationName);
     map['reason'] = Variable<String>(reason);
+    map['dosage'] = Variable<String>(dosage);
     map['sort_order'] = Variable<int>(sortOrder);
     return map;
   }
@@ -2499,6 +2523,7 @@ class MedicationEntry extends DataClass implements Insertable<MedicationEntry> {
       entryType: Value(entryType),
       medicationName: Value(medicationName),
       reason: Value(reason),
+      dosage: Value(dosage),
       sortOrder: Value(sortOrder),
     );
   }
@@ -2514,6 +2539,7 @@ class MedicationEntry extends DataClass implements Insertable<MedicationEntry> {
       entryType: serializer.fromJson<String>(json['entryType']),
       medicationName: serializer.fromJson<String>(json['medicationName']),
       reason: serializer.fromJson<String>(json['reason']),
+      dosage: serializer.fromJson<String>(json['dosage']),
       sortOrder: serializer.fromJson<int>(json['sortOrder']),
     );
   }
@@ -2526,6 +2552,7 @@ class MedicationEntry extends DataClass implements Insertable<MedicationEntry> {
       'entryType': serializer.toJson<String>(entryType),
       'medicationName': serializer.toJson<String>(medicationName),
       'reason': serializer.toJson<String>(reason),
+      'dosage': serializer.toJson<String>(dosage),
       'sortOrder': serializer.toJson<int>(sortOrder),
     };
   }
@@ -2536,6 +2563,7 @@ class MedicationEntry extends DataClass implements Insertable<MedicationEntry> {
     String? entryType,
     String? medicationName,
     String? reason,
+    String? dosage,
     int? sortOrder,
   }) => MedicationEntry(
     id: id ?? this.id,
@@ -2543,6 +2571,7 @@ class MedicationEntry extends DataClass implements Insertable<MedicationEntry> {
     entryType: entryType ?? this.entryType,
     medicationName: medicationName ?? this.medicationName,
     reason: reason ?? this.reason,
+    dosage: dosage ?? this.dosage,
     sortOrder: sortOrder ?? this.sortOrder,
   );
   MedicationEntry copyWithCompanion(MedicationEntriesCompanion data) {
@@ -2556,6 +2585,7 @@ class MedicationEntry extends DataClass implements Insertable<MedicationEntry> {
           ? data.medicationName.value
           : this.medicationName,
       reason: data.reason.present ? data.reason.value : this.reason,
+      dosage: data.dosage.present ? data.dosage.value : this.dosage,
       sortOrder: data.sortOrder.present ? data.sortOrder.value : this.sortOrder,
     );
   }
@@ -2568,6 +2598,7 @@ class MedicationEntry extends DataClass implements Insertable<MedicationEntry> {
           ..write('entryType: $entryType, ')
           ..write('medicationName: $medicationName, ')
           ..write('reason: $reason, ')
+          ..write('dosage: $dosage, ')
           ..write('sortOrder: $sortOrder')
           ..write(')'))
         .toString();
@@ -2580,6 +2611,7 @@ class MedicationEntry extends DataClass implements Insertable<MedicationEntry> {
     entryType,
     medicationName,
     reason,
+    dosage,
     sortOrder,
   );
   @override
@@ -2591,6 +2623,7 @@ class MedicationEntry extends DataClass implements Insertable<MedicationEntry> {
           other.entryType == this.entryType &&
           other.medicationName == this.medicationName &&
           other.reason == this.reason &&
+          other.dosage == this.dosage &&
           other.sortOrder == this.sortOrder);
 }
 
@@ -2600,6 +2633,7 @@ class MedicationEntriesCompanion extends UpdateCompanion<MedicationEntry> {
   final Value<String> entryType;
   final Value<String> medicationName;
   final Value<String> reason;
+  final Value<String> dosage;
   final Value<int> sortOrder;
   const MedicationEntriesCompanion({
     this.id = const Value.absent(),
@@ -2607,6 +2641,7 @@ class MedicationEntriesCompanion extends UpdateCompanion<MedicationEntry> {
     this.entryType = const Value.absent(),
     this.medicationName = const Value.absent(),
     this.reason = const Value.absent(),
+    this.dosage = const Value.absent(),
     this.sortOrder = const Value.absent(),
   });
   MedicationEntriesCompanion.insert({
@@ -2615,6 +2650,7 @@ class MedicationEntriesCompanion extends UpdateCompanion<MedicationEntry> {
     required String entryType,
     this.medicationName = const Value.absent(),
     this.reason = const Value.absent(),
+    this.dosage = const Value.absent(),
     this.sortOrder = const Value.absent(),
   }) : directiveId = Value(directiveId),
        entryType = Value(entryType);
@@ -2624,6 +2660,7 @@ class MedicationEntriesCompanion extends UpdateCompanion<MedicationEntry> {
     Expression<String>? entryType,
     Expression<String>? medicationName,
     Expression<String>? reason,
+    Expression<String>? dosage,
     Expression<int>? sortOrder,
   }) {
     return RawValuesInsertable({
@@ -2632,6 +2669,7 @@ class MedicationEntriesCompanion extends UpdateCompanion<MedicationEntry> {
       if (entryType != null) 'entry_type': entryType,
       if (medicationName != null) 'medication_name': medicationName,
       if (reason != null) 'reason': reason,
+      if (dosage != null) 'dosage': dosage,
       if (sortOrder != null) 'sort_order': sortOrder,
     });
   }
@@ -2642,6 +2680,7 @@ class MedicationEntriesCompanion extends UpdateCompanion<MedicationEntry> {
     Value<String>? entryType,
     Value<String>? medicationName,
     Value<String>? reason,
+    Value<String>? dosage,
     Value<int>? sortOrder,
   }) {
     return MedicationEntriesCompanion(
@@ -2650,6 +2689,7 @@ class MedicationEntriesCompanion extends UpdateCompanion<MedicationEntry> {
       entryType: entryType ?? this.entryType,
       medicationName: medicationName ?? this.medicationName,
       reason: reason ?? this.reason,
+      dosage: dosage ?? this.dosage,
       sortOrder: sortOrder ?? this.sortOrder,
     );
   }
@@ -2672,6 +2712,9 @@ class MedicationEntriesCompanion extends UpdateCompanion<MedicationEntry> {
     if (reason.present) {
       map['reason'] = Variable<String>(reason.value);
     }
+    if (dosage.present) {
+      map['dosage'] = Variable<String>(dosage.value);
+    }
     if (sortOrder.present) {
       map['sort_order'] = Variable<int>(sortOrder.value);
     }
@@ -2686,6 +2729,7 @@ class MedicationEntriesCompanion extends UpdateCompanion<MedicationEntry> {
           ..write('entryType: $entryType, ')
           ..write('medicationName: $medicationName, ')
           ..write('reason: $reason, ')
+          ..write('dosage: $dosage, ')
           ..write('sortOrder: $sortOrder')
           ..write(')'))
         .toString();
@@ -9257,6 +9301,7 @@ typedef $$MedicationEntriesTableCreateCompanionBuilder =
       required String entryType,
       Value<String> medicationName,
       Value<String> reason,
+      Value<String> dosage,
       Value<int> sortOrder,
     });
 typedef $$MedicationEntriesTableUpdateCompanionBuilder =
@@ -9266,6 +9311,7 @@ typedef $$MedicationEntriesTableUpdateCompanionBuilder =
       Value<String> entryType,
       Value<String> medicationName,
       Value<String> reason,
+      Value<String> dosage,
       Value<int> sortOrder,
     });
 
@@ -9334,6 +9380,11 @@ class $$MedicationEntriesTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
+  ColumnFilters<String> get dosage => $composableBuilder(
+    column: $table.dosage,
+    builder: (column) => ColumnFilters(column),
+  );
+
   ColumnFilters<int> get sortOrder => $composableBuilder(
     column: $table.sortOrder,
     builder: (column) => ColumnFilters(column),
@@ -9392,6 +9443,11 @@ class $$MedicationEntriesTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get dosage => $composableBuilder(
+    column: $table.dosage,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<int> get sortOrder => $composableBuilder(
     column: $table.sortOrder,
     builder: (column) => ColumnOrderings(column),
@@ -9443,6 +9499,9 @@ class $$MedicationEntriesTableAnnotationComposer
 
   GeneratedColumn<String> get reason =>
       $composableBuilder(column: $table.reason, builder: (column) => column);
+
+  GeneratedColumn<String> get dosage =>
+      $composableBuilder(column: $table.dosage, builder: (column) => column);
 
   GeneratedColumn<int> get sortOrder =>
       $composableBuilder(column: $table.sortOrder, builder: (column) => column);
@@ -9509,6 +9568,7 @@ class $$MedicationEntriesTableTableManager
                 Value<String> entryType = const Value.absent(),
                 Value<String> medicationName = const Value.absent(),
                 Value<String> reason = const Value.absent(),
+                Value<String> dosage = const Value.absent(),
                 Value<int> sortOrder = const Value.absent(),
               }) => MedicationEntriesCompanion(
                 id: id,
@@ -9516,6 +9576,7 @@ class $$MedicationEntriesTableTableManager
                 entryType: entryType,
                 medicationName: medicationName,
                 reason: reason,
+                dosage: dosage,
                 sortOrder: sortOrder,
               ),
           createCompanionCallback:
@@ -9525,6 +9586,7 @@ class $$MedicationEntriesTableTableManager
                 required String entryType,
                 Value<String> medicationName = const Value.absent(),
                 Value<String> reason = const Value.absent(),
+                Value<String> dosage = const Value.absent(),
                 Value<int> sortOrder = const Value.absent(),
               }) => MedicationEntriesCompanion.insert(
                 id: id,
@@ -9532,6 +9594,7 @@ class $$MedicationEntriesTableTableManager
                 entryType: entryType,
                 medicationName: medicationName,
                 reason: reason,
+                dosage: dosage,
                 sortOrder: sortOrder,
               ),
           withReferenceMapper: (p0) => p0
