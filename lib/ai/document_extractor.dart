@@ -63,7 +63,9 @@ class DocumentExtractor {
       final optimized = _optimizeImage(bytes);
       parts.add(DataPart('image/jpeg', optimized));
     } else {
-      // PDFs — cannot strip PII client-side, rely on prompt instruction
+      // PDFs and audio — sent as-is (DataPart). Cannot strip PII client-side;
+      // rely on the prompt instruction. Gemini reads PDFs and transcribes audio
+      // natively, so the same multimodal request handles both.
       parts.add(DataPart(mimeType, bytes));
     }
 
@@ -241,6 +243,8 @@ class DocumentExtractor {
 
   static const _extractionPrompt = '''
 You are analyzing a document uploaded by a user who is filling out a Pennsylvania Mental Health Advance Directive (PA Act 194 of 2004). This is AUTOFILL — the user uploaded this document so its contents can pre-fill their form. You MUST extract personal information (PII); that is the primary purpose of this step.
+
+AUDIO INPUT: The input may be an AUDIO recording of the person speaking their wishes instead of a written document. If so, transcribe it carefully and extract from the transcript exactly as you would from a document. Pay special attention to MEDICATION NAMES and medical CONDITIONS/DIAGNOSES — spell drug names correctly (e.g., lamotrigine, clozapine, quetiapine), use clinical context to resolve unclear pronunciations, and do NOT guess a medication or diagnosis you did not clearly hear (leave it out rather than invent one).
 
 ═══ STEP 1: EXTRACT PERSONAL INFORMATION FIRST ═══
 Before reading anything else, locate and extract all personal details into "personal_info":

@@ -24,7 +24,8 @@ Future<List<PickedDocument>?> pickDocumentFiles() async {
   // web interop was throwing here ("couldn't open the file picker") even
   // though drag-and-drop worked. Native platforms keep using file_picker.
   if (kIsWeb) {
-    const accept = '.pdf,.txt,.csv,.jpg,.jpeg,.png,.webp,.heic,.heif';
+    const accept = '.pdf,.txt,.csv,.jpg,.jpeg,.png,.webp,.heic,.heif,'
+        '.mp3,.m4a,.wav,.aac,.ogg,.oga,.flac';
     final picked = await browseWebFiles(accept: accept, multiple: true);
     if (picked == null) return null; // cancelled
     final docs = <PickedDocument>[];
@@ -105,5 +106,23 @@ String _fileMimeType(String path) {
       lower.endsWith('.jpeg')) {
     return _imageMimeType(lower);
   }
+  final audio = _audioMimeType(lower);
+  if (audio != null) return audio;
   return 'application/octet-stream';
+}
+
+/// Audio MIME type for a filename, or null if it isn't a supported audio file.
+/// Limited to the formats Gemini accepts as inline audio so a spoken
+/// description (conditions, medications, wishes) can be transcribed + extracted.
+String? _audioMimeType(String lowerPath) {
+  if (lowerPath.endsWith('.mp3')) return 'audio/mp3';
+  if (lowerPath.endsWith('.wav')) return 'audio/wav';
+  if (lowerPath.endsWith('.aac')) return 'audio/aac';
+  if (lowerPath.endsWith('.flac')) return 'audio/flac';
+  if (lowerPath.endsWith('.ogg') || lowerPath.endsWith('.oga')) {
+    return 'audio/ogg';
+  }
+  // .m4a is AAC in an MP4 container (iOS/Android voice memos).
+  if (lowerPath.endsWith('.m4a')) return 'audio/mp4';
+  return null;
 }

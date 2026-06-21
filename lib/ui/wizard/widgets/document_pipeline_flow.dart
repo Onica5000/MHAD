@@ -153,6 +153,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
     if (d.mimeType == 'application/pdf') return 'PDF';
     if (d.mimeType.startsWith('image/')) return 'Photo';
     if (d.mimeType.startsWith('text/')) return 'Text';
+    if (d.mimeType.startsWith('audio/')) return 'Audio';
     return 'File';
   }
   _PipelineStep _step = _PipelineStep.pick;
@@ -253,6 +254,14 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
     'jpg': 'image/jpeg',
     'jpeg': 'image/jpeg',
     'heic': 'image/heic',
+    // Audio (spoken description) — Gemini transcribes + extracts.
+    'mp3': 'audio/mp3',
+    'm4a': 'audio/mp4',
+    'wav': 'audio/wav',
+    'aac': 'audio/aac',
+    'ogg': 'audio/ogg',
+    'oga': 'audio/ogg',
+    'flac': 'audio/flac',
   };
 
   String? _mimeForName(String name) {
@@ -421,12 +430,17 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
         // Record this extraction in the rate tracker
         // Images: ~258 tokens per 768x768 tile; 1024px image ≈ 2 tiles ≈ 516 tokens
         // PDFs: ~500 tokens per page estimate
+        // Audio: ~32 tokens/sec; byte length is a poor proxy (high-bitrate files
+        //   are huge but Gemini downsamples to 16kHz mono), so use a flat
+        //   estimate for a few minutes of speech.
         // Text: chars / 4
         final estimatedTokens = docs[i].mimeType.startsWith('image/')
             ? 800 // prompt + ~2 image tiles
             : docs[i].mimeType == 'application/pdf'
                 ? 1500 // prompt + PDF page
-                : GeminiRateTracker.estimateTokens(docBytes.length) + 500;
+                : docs[i].mimeType.startsWith('audio/')
+                    ? 4000 // prompt + a few minutes of transcribed speech
+                    : GeminiRateTracker.estimateTokens(docBytes.length) + 500;
         tracker.recordRequest(estimatedTokens: estimatedTokens);
 
         allPii.addAll(extraction.strippedPiiCategories);
@@ -716,8 +730,9 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
               ),
               const SizedBox(height: 8),
               Text(
-                'Drop a photo or PDF — ID, medication list, prescription label, '
-                'an old directive — and the AI will extract what it can. You '
+                'Drop a photo, PDF, or audio recording — ID, medication list, '
+                'prescription label, an old directive, or just describe your '
+                'wishes out loud — and the AI will extract what it can. You '
                 'review every field before it lands in the form. Or skip and '
                 'type it all yourself.',
                 style: TextStyle(
@@ -854,6 +869,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
   IconData _docIcon(PickedDocument d) {
     if (d.mimeType == 'application/pdf') return Icons.picture_as_pdf_outlined;
     if (d.mimeType.startsWith('image/')) return Icons.image_outlined;
+    if (d.mimeType.startsWith('audio/')) return Icons.audiotrack_outlined;
     return Icons.description_outlined;
   }
 
@@ -1684,7 +1700,9 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                     child: Icon(
                       doc.mimeType == 'application/pdf'
                           ? Icons.picture_as_pdf_outlined
-                          : Icons.description_outlined,
+                          : doc.mimeType.startsWith('audio/')
+                              ? Icons.audiotrack_outlined
+                              : Icons.description_outlined,
                       color: p.primary,
                     ),
                   ),
