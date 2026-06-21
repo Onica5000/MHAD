@@ -323,49 +323,15 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
       return;
     }
 
-    // AI consent
-    if (!ref.read(aiConsentGivenProvider)) {
-      final ok = await showAiConsentDialog(context);
-      if (!ok || !mounted) return;
-      ref.read(aiConsentGivenProvider.notifier).state = true;
-    }
-
-    // Heads-up before any upload: the whole document — including personal
-    // details — is sent to Google's AI so it can READ and autofill your
-    // directive (your name, address, your agent's details, etc.). This applies
-    // to every file type now: images, PDFs, and text are all sent as-is so the
-    // AI can fill those fields. Nothing is saved until you review and apply.
-    if (mounted) {
-      final proceed = await showDialog<bool>(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          icon: const Icon(Icons.privacy_tip_outlined),
-          title: const Text('Heads up'),
-          content: const Text(
-            'To autofill your directive, the whole document — including any '
-            'personal details (names, dates of birth, addresses, phone '
-            'numbers) — is sent to Google\'s AI so it can read it. You\'ll '
-            'review everything before anything is saved.\n\n'
-            'Uploading is only a shortcut, never required:\n'
-            '• Black out anything you don\'t want sent (ID or card numbers, '
-            'other people\'s details) before uploading.\n'
-            '• Every field can be typed in by hand instead, to keep it '
-            'private.',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(ctx, false),
-              child: const Text('Cancel'),
-            ),
-            FilledButton(
-              onPressed: () => Navigator.pop(ctx, true),
-              child: const Text('Upload anyway'),
-            ),
-          ],
-        ),
-      );
-      if (proceed != true || !mounted) return;
-    }
+    // Single, accurate consent + data notice for the autofill upload. This is
+    // the ONE AI path that sends the document's personal details to Google
+    // (every other path strips PII), so it has its own notice rather than the
+    // generic showAiConsentDialog, whose "never send personal info" wording
+    // would contradict how autofill works. Shown before each read; on accept we
+    // also record the session AI-consent flag so chat/suggest don't re-prompt.
+    final authorized = await showAutofillConsentDialog(context);
+    if (!authorized || !mounted) return;
+    ref.read(aiConsentGivenProvider.notifier).state = true;
 
     // ── Pre-flight: check rate limits and file sizes ────
     final tracker = ref.read(geminiRateTrackerProvider);
@@ -953,7 +919,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                 child: Text(
                   hasKey
                       ? 'Held on this device. Nothing is sent until you tap '
-                          'Read — then it goes to the AI to read and is discarded.'
+                          'Read — then it goes to Google\'s AI to read.'
                       : 'Held on this device. Reading needs AI set up first '
                           '(free, ~30 seconds) — nothing is sent until then.',
                   style: TextStyle(
