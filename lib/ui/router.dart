@@ -8,6 +8,7 @@ import 'package:mhad/services/privacy_mode_service.dart';
 import 'package:mhad/ui/admin/admin_update_screen.dart';
 import 'package:mhad/ui/ai_check/ai_consistency_screen.dart';
 import 'package:mhad/ui/assistant/assistant_screen.dart';
+import 'package:mhad/ui/audio_guide/audio_guide_screen.dart';
 import 'package:mhad/ui/crisis_plan/crisis_plan_screen.dart';
 import 'package:mhad/ui/side_effects/side_effects_screen.dart';
 import 'package:mhad/ui/disclaimer/disclaimer_screen.dart';
@@ -41,6 +42,7 @@ abstract class AppRoutes {
   static const assistant = '/assistant';
   static const export = '/export/:directiveId';
   static const aiSetup = '/ai-setup';
+  static const audioGuide = '/audio-guide';
   // Post-wizard sign-on-paper screen — prototype ScrSign (mobile.jsx
   // L884-981). Sits between the wizard's Review step and the Done
   // celebration. Lands stamp executionDate so the directive flips from
@@ -224,6 +226,10 @@ GoRouter _buildRouter(DisclaimerNotifier disclaimer,
           path: AppRoutes.aiSetup,
           builder: (_, state) =>
               AiSetupScreen(returnRoute: state.uri.queryParameters['return']),
+        ),
+        GoRoute(
+          path: AppRoutes.audioGuide,
+          builder: (_, _) => const AudioGuideScreen(),
         ),
         GoRoute(
           path: AppRoutes.privacyPolicy,

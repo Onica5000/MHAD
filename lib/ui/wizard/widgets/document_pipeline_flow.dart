@@ -764,6 +764,23 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                   ),
                 ],
               ),
+              const SizedBox(height: 10),
+              // Voice path: the read-aloud questionnaire + how-to (printable).
+              Align(
+                alignment: Alignment.centerLeft,
+                child: TextButton.icon(
+                  onPressed: () => appRouter.push(AppRoutes.audioGuide),
+                  icon: const Icon(Icons.mic_none, size: 16),
+                  label: const Text(
+                    'Recording a voice file? See the questionnaire & how-to',
+                  ),
+                  style: TextButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    minimumSize: const Size(0, 36),
+                    alignment: Alignment.centerLeft,
+                  ),
+                ),
+              ),
               const SizedBox(height: 20),
               if (!hasKey) ...[
                 _noKeyBanner(p),
