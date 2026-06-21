@@ -12,10 +12,12 @@ import 'package:mhad/services/web_session_cache.dart';
 import 'package:mhad/services/notification_service.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/ui/router.dart';
+import 'package:mhad/ui/home/directive_form_choice.dart';
+import 'package:mhad/ui/home/home_directive_hero.dart';
+import 'package:mhad/ui/home/home_tools_grid.dart';
 import 'package:mhad/ui/home/web_landing.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/bottom_nav.dart';
-import 'package:mhad/ui/widgets/design/crisis_sheet.dart';
 import 'package:mhad/ui/widgets/design/responsive_shell.dart';
 import 'package:mhad/ui/widgets/design/design_card.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
@@ -153,7 +155,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     const SizedBox(height: 28),
                     // "Continue where you left off" sits BELOW the form picker
                     // (under "You can switch form types later").
-                    _ActiveDirectiveHero(directive: drafts.first),
+                    ActiveDirectiveHero(directive: drafts.first),
                   ],
                 );
               },
@@ -164,7 +166,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               const SizedBox(height: 22),
               const SectionLabel('Tools'),
               const SizedBox(height: 8),
-              const _ToolsGrid(),
+              const ToolsGrid(),
             ],
             const SizedBox(height: 18),
             // Past directives — completed / expired / revoked rendered as
@@ -301,7 +303,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           primary = Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _ActiveDirectiveHero(directive: drafts.first),
+              ActiveDirectiveHero(directive: drafts.first),
               const SizedBox(height: 28),
               newDirective,
             ],
@@ -687,229 +689,6 @@ class _DeviceSecurityCheckState extends State<_DeviceSecurityCheck> {
   Widget build(BuildContext context) => const SizedBox.shrink();
 }
 
-/// Prototype `ScrHome` active-directive hero card. Shows the most-recent
-/// draft directive with form type, last-edited stamp, progress bar, and a
-/// "Continue where you left off" CTA pointing at the wizard route.
-///
-/// Pure visual addition — does not replace the per-directive cards below.
-class _ActiveDirectiveHero extends StatelessWidget {
-  final Directive directive;
-  const _ActiveDirectiveHero({required this.directive});
-
-  @override
-  Widget build(BuildContext context) {
-    final p = Theme.of(context).mhadPalette;
-    final formType = FormType.values.firstWhere(
-      (e) => e.name == directive.formType,
-      orElse: () => FormType.combined,
-    );
-    final totalSteps = formType.steps.length;
-    final currentStep =
-        (directive.lastStepIndex + 1).clamp(1, totalSteps);
-    final pct = (currentStep / totalSteps).clamp(0.0, 1.0);
-    final pctLabel = '${(pct * 100).round()}% complete';
-    final remaining = totalSteps - currentStep;
-    final remainingLabel = remaining <= 0
-        ? 'Ready to review & sign'
-        : '~ $remaining more step${remaining == 1 ? '' : 's'}';
-    final updated = DateTime.fromMillisecondsSinceEpoch(directive.updatedAt);
-    final lastEdited = _humanRelative(updated);
-    final formLabel = switch (formType) {
-      FormType.combined => 'Combined form',
-      FormType.declaration => 'Declaration only',
-      FormType.poa => 'Power of Attorney',
-    };
-    final headline = directive.fullName.trim().isNotEmpty
-        ? '${directive.fullName.split(' ').first}’s MHAD'
-        : 'Your MHAD';
-
-    return Semantics(
-      button: true,
-      label:
-          'Continue your $formLabel — $pctLabel, last edited $lastEdited',
-      child: Material(
-        color: p.primary,
-        borderRadius: BorderRadius.circular(16),
-        clipBehavior: Clip.antiAlias,
-        child: InkWell(
-          onTap: () =>
-              context.go(AppRoutes.wizardRoute(directive.id)),
-          child: Stack(
-            children: [
-              // Decorative oversized italic numeral matching the prototype.
-              Positioned(
-                right: -10,
-                top: -28,
-                child: Text(
-                  '$currentStep',
-                  style: TextStyle(
-                    fontFamily: 'Instrument Serif',
-                    fontFamilyFallback: const ['Georgia', 'serif'],
-                    fontStyle: FontStyle.italic,
-                    fontSize: 180,
-                    height: 1,
-                    fontWeight: FontWeight.w400,
-                    color: p.onPrimary.withValues(alpha: 0.10),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(18),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 3),
-                          decoration: BoxDecoration(
-                            color: p.onPrimary.withValues(alpha: 0.18),
-                            borderRadius: BorderRadius.circular(100),
-                          ),
-                          child: Text(
-                            '● Draft',
-                            style: TextStyle(
-                              fontFamily: kSansFamily,
-                              fontSize: 11,
-                              fontWeight: FontWeight.w700,
-                              color: p.onPrimary,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          'Step $currentStep of $totalSteps',
-                          style: TextStyle(
-                            fontFamily: kMonoFamily,
-                            fontFamilyFallback: const [
-                              'Consolas',
-                              'monospace'
-                            ],
-                            fontSize: 11.5,
-                            color: p.onPrimary.withValues(alpha: 0.85),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      headline,
-                      style: TextStyle(
-                        fontFamily: kSansFamily,
-                        fontSize: 22,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: -0.3,
-                        color: p.onPrimary,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      '$formLabel · last edited $lastEdited',
-                      style: TextStyle(
-                        fontFamily: kSansFamily,
-                        fontSize: 13,
-                        height: 1.4,
-                        color: p.onPrimary.withValues(alpha: 0.85),
-                      ),
-                    ),
-                    const SizedBox(height: 14),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(100),
-                      child: SizedBox(
-                        height: 4,
-                        child: LinearProgressIndicator(
-                          value: pct,
-                          backgroundColor:
-                              p.onPrimary.withValues(alpha: 0.20),
-                          valueColor:
-                              AlwaysStoppedAnimation(p.onPrimary),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            pctLabel,
-                            style: TextStyle(
-                              fontFamily: kSansFamily,
-                              fontSize: 12,
-                              color:
-                                  p.onPrimary.withValues(alpha: 0.85),
-                            ),
-                          ),
-                        ),
-                        Text(
-                          remainingLabel,
-                          style: TextStyle(
-                            fontFamily: kSansFamily,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            color: p.onPrimary,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 14),
-                    SizedBox(
-                      height: 40,
-                      child: FilledButton.icon(
-                        onPressed: () => context
-                            .go(AppRoutes.wizardRoute(directive.id)),
-                        icon: Icon(Icons.arrow_forward,
-                            size: 16, color: p.primaryDark),
-                        label: Text(
-                          'Continue where you left off',
-                          style: TextStyle(
-                            fontFamily: kSansFamily,
-                            fontWeight: FontWeight.w600,
-                            color: p.primaryDark,
-                          ),
-                        ),
-                        style: FilledButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          iconAlignment: IconAlignment.end,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 14),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  static String _humanRelative(DateTime t) {
-    final diff = DateTime.now().difference(t);
-    if (diff.inSeconds < 60) return 'just now';
-    if (diff.inMinutes < 60) {
-      return '${diff.inMinutes} min${diff.inMinutes == 1 ? '' : 's'} ago';
-    }
-    if (diff.inHours < 24) {
-      return '${diff.inHours} hour${diff.inHours == 1 ? '' : 's'} ago';
-    }
-    if (diff.inDays < 7) {
-      return '${diff.inDays} day${diff.inDays == 1 ? '' : 's'} ago';
-    }
-    return DateFormat('MMM d').format(t);
-  }
-}
-
-/// Prototype `ScrHome` tools grid — a 2×2 of icon tiles linking to the
-/// non-directive destinations users hit most often (AI assistant, Learn,
-/// the most-recent directive's wallet card / export, and the crisis sheet).
-/// Right sidebar shown on the wide (`w-home`) dashboard layout: the Tools grid
-/// plus a privacy reassurance card, in a fixed-width column.
 /// "Private by design" reassurance card — used in the wide dashboard's
 /// Tools/info aside. (Extracted from the former fixed-width tools sidebar,
 /// which the multi-column wide layout replaced.)
@@ -965,157 +744,6 @@ class _PrivacyByDesignCard extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _ToolsGrid extends ConsumerWidget {
-  const _ToolsGrid();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final p = Theme.of(context).mhadPalette;
-    final aiReady =
-        ref.watch(apiKeyProvider).valueOrNull?.isNotEmpty ?? false;
-    final directivesAsync = ref.watch(allDirectivesProvider);
-    final mostRecentDirective = directivesAsync.maybeWhen(
-      data: (ds) {
-        if (ds.isEmpty) return null;
-        final sorted = [...ds]
-          ..sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
-        return sorted.first;
-      },
-      orElse: () => null,
-    );
-
-    final tiles = <_ToolTile>[
-      _ToolTile(
-        icon: Icons.auto_awesome,
-        label: 'AI assistant',
-        sub: aiReady ? 'Suggests + checks' : 'Set up Gemini',
-        onTap: () => context.go(
-          aiReady ? AppRoutes.assistant : AppRoutes.aiSetup,
-        ),
-      ),
-      _ToolTile(
-        icon: Icons.menu_book_outlined,
-        label: 'Learn',
-        sub: 'FAQ, glossary',
-        onTap: () => context.go(AppRoutes.education),
-      ),
-      _ToolTile(
-        icon: Icons.account_balance_wallet_outlined,
-        label: 'Wallet card',
-        sub: mostRecentDirective != null ? 'Carry a copy' : 'No directive yet',
-        onTap: mostRecentDirective != null
-            ? () => context.push(
-                AppRoutes.exportRoute(mostRecentDirective.id))
-            : null,
-      ),
-      _ToolTile(
-        icon: Icons.favorite_outline,
-        label: 'Crisis help',
-        sub: '988 + more',
-        onTap: () => showCrisisSheet(context),
-      ),
-    ];
-
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final colWidth = (constraints.maxWidth - 10) / 2;
-        return Wrap(
-          spacing: 10,
-          runSpacing: 10,
-          children: tiles
-              .map((t) => SizedBox(
-                    width: colWidth,
-                    child: _ToolTileCard(tile: t, palette: p),
-                  ))
-              .toList(growable: false),
-        );
-      },
-    );
-  }
-}
-
-class _ToolTile {
-  final IconData icon;
-  final String label;
-  final String sub;
-  final VoidCallback? onTap;
-  const _ToolTile({
-    required this.icon,
-    required this.label,
-    required this.sub,
-    required this.onTap,
-  });
-}
-
-class _ToolTileCard extends StatelessWidget {
-  final _ToolTile tile;
-  final MhadPalette palette;
-  const _ToolTileCard({required this.tile, required this.palette});
-
-  @override
-  Widget build(BuildContext context) {
-    final disabled = tile.onTap == null;
-    return Semantics(
-      button: true,
-      enabled: !disabled,
-      label: '${tile.label} — ${tile.sub}',
-      child: Material(
-        color: palette.card,
-        borderRadius: BorderRadius.circular(12),
-        child: InkWell(
-          onTap: tile.onTap,
-          borderRadius: BorderRadius.circular(12),
-          child: Container(
-            constraints: const BoxConstraints(minHeight: 96),
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: palette.border),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: 32,
-                  height: 32,
-                  decoration: BoxDecoration(
-                    color: palette.primaryTint,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  alignment: Alignment.center,
-                  child: Icon(tile.icon,
-                      size: 18,
-                      color: disabled
-                          ? palette.textMuted
-                          : palette.primary),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  tile.label,
-                  style: TextStyle(
-                    fontFamily: kSansFamily,
-                    fontSize: 13.5,
-                    fontWeight: FontWeight.w600,
-                    color: palette.text,
-                  ),
-                ),
-                Text(
-                  tile.sub,
-                  style: TextStyle(
-                    fontFamily: kSansFamily,
-                    fontSize: 11.5,
-                    color: palette.textMuted,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
       ),
     );
   }
