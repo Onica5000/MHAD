@@ -1,10 +1,17 @@
-﻿import 'dart:async';
+import 'dart:async';
 import 'dart:math' as math;
+import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mhad/providers/assistant_providers.dart';
+import 'package:mhad/services/audio_transcription_service.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/ai_consent_dialog.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
+import 'package:mhad/utils/wav.dart';
+import 'package:record/record.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 /// Editorial voice-record bottom sheet — matches prototype `ScrVoice`
@@ -14,24 +21,13 @@ import 'package:speech_to_text/speech_to_text.dart' as stt;
 /// (typically `VoiceInputButton`) appends the returned text to its
 /// `TextEditingController`.
 ///
-/// Layout (top → bottom):
-///   - Drag handle
-///   - "● Recording" primary SectionLabel
-///   - Italic 28pt "Say it your way."
-///   - Muted body: honest transcription note. The recognizer is the
-///     browser/OS speech service, NOT on-device-only — on web (Chrome/Edge)
-///     and Android the audio is sent to a cloud service (often Google) to
-///     transcribe. The copy says so rather than claiming "locally".
-///   - 19-bar animated waveform (4px bars with random heights pulsing
-///     while listening — speech_to_text doesn't expose raw audio levels
-///     so this is decorative pulsation)
-///   - Monospace 22pt timer (m:ss)
-///   - Live caption card: confirmed text in normal weight, in-flight
-///     partial transcript in italic muted, blinking cursor at end
-///   - Three circular controls: Cancel (52pt surface) · Record/Stop
-///     (76pt crisis-accent toggle) · Confirm (52pt primary check)
-///   - Monospace footer making the honest privacy claim: the app stores
-///     nothing, but the browser/OS speech service does the transcribing.
+/// Two transcription modes:
+///   - **AI mode** (when a Gemini key is set + the user consents): records the
+///     audio and sends it to Gemini, which is far more accurate on clinical
+///     terms (medication names, conditions) than the browser/OS speech service.
+///   - **Live dictation fallback** (no AI, consent declined, or recording
+///     unavailable): the browser/OS speech service with real-time captions —
+///     the original behavior.
 Future<String?> showVoiceRecordOverlay(BuildContext context) {
   return showModalBottomSheet<String>(
     context: context,
@@ -44,27 +40,34 @@ Future<String?> showVoiceRecordOverlay(BuildContext context) {
   );
 }
 
-class _VoiceRecordSheet extends StatefulWidget {
+class _VoiceRecordSheet extends ConsumerStatefulWidget {
   const _VoiceRecordSheet();
 
   @override
-  State<_VoiceRecordSheet> createState() => _VoiceRecordSheetState();
+  ConsumerState<_VoiceRecordSheet> createState() => _VoiceRecordSheetState();
 }
 
-class _VoiceRecordSheetState extends State<_VoiceRecordSheet>
+class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
     with SingleTickerProviderStateMixin {
   final _speech = stt.SpeechToText();
+  final _recorder = AudioRecorder();
   late final AnimationController _pulse;
   Timer? _ticker;
 
-  bool _initialized = false;
-  bool _available = false;
+  // AI transcription state.
+  String? _apiKey;
+  bool _aiMode = false; // resolved on the first record start
+  bool _transcribing = false;
+  StreamSubscription<Uint8List>? _audioSub;
+  final _pcm = BytesBuilder(copy: false);
+
+  bool _speechInitialized = false;
   bool _listening = false;
   Duration _elapsed = Duration.zero;
   DateTime? _startedAt;
 
-  // Confirmed (final) transcript pieces joined with spaces; partial holds
-  // the in-flight provisional result that re-renders on every callback.
+  // Confirmed (final) transcript pieces joined with spaces; partial holds the
+  // in-flight provisional result (live-dictation mode only).
   final List<String> _confirmed = [];
   String _partial = '';
   String? _error;
@@ -72,6 +75,8 @@ class _VoiceRecordSheetState extends State<_VoiceRecordSheet>
   @override
   void initState() {
     super.initState();
+    _apiKey = ref.read(apiKeyProvider).valueOrNull;
+    _aiMode = _apiKey != null && _apiKey!.isNotEmpty;
     _pulse = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 700),
@@ -83,13 +88,121 @@ class _VoiceRecordSheetState extends State<_VoiceRecordSheet>
   void dispose() {
     _ticker?.cancel();
     _pulse.dispose();
+    _audioSub?.cancel();
+    _recorder.dispose();
     _speech.stop();
     super.dispose();
   }
 
+  // ── Start / stop dispatch ───────────────────────────────────────────
+
   Future<void> _start() async {
-    if (!_initialized) {
-      _available = await _speech.initialize(
+    setState(() => _error = null);
+    // AI mode requires consent (audio with personal details goes to Google).
+    if (_aiMode && !ref.read(aiConsentGivenProvider)) {
+      final ok = await showAudioConsentDialog(context);
+      if (!mounted) return;
+      if (ok) {
+        ref.read(aiConsentGivenProvider.notifier).state = true;
+      } else {
+        _aiMode = false; // declined → fall back to live dictation
+      }
+    }
+    if (_aiMode) {
+      final started = await _startAiRecording();
+      if (!started) _aiMode = false; // recording unavailable → fall back
+    }
+    if (!_aiMode) {
+      await _startSpeech();
+    }
+  }
+
+  Future<void> _stop() async {
+    if (_aiMode) {
+      await _stopAiRecording();
+    } else {
+      await _stopSpeech();
+    }
+  }
+
+  void _beginTimer() {
+    setState(() {
+      _listening = true;
+      _startedAt = DateTime.now();
+      _error = null;
+    });
+    _ticker?.cancel();
+    _ticker = Timer.periodic(const Duration(milliseconds: 250), (_) {
+      if (!mounted || _startedAt == null) return;
+      setState(() => _elapsed = DateTime.now().difference(_startedAt!));
+    });
+  }
+
+  // ── AI mode: record PCM → WAV → Gemini ──────────────────────────────
+
+  Future<bool> _startAiRecording() async {
+    try {
+      if (!await _recorder.hasPermission()) {
+        if (mounted) {
+          setState(() => _error = 'Microphone permission is needed.');
+        }
+        return false;
+      }
+      _pcm.clear();
+      final stream = await _recorder.startStream(
+        const RecordConfig(
+          encoder: AudioEncoder.pcm16bits,
+          sampleRate: 16000,
+          numChannels: 1,
+        ),
+      );
+      _audioSub = stream.listen((data) => _pcm.add(data));
+      _beginTimer();
+      return true;
+    } catch (_) {
+      return false; // caller falls back to live dictation
+    }
+  }
+
+  Future<void> _stopAiRecording() async {
+    try {
+      await _recorder.stop();
+    } catch (_) {/* ignore */}
+    await _audioSub?.cancel();
+    _audioSub = null;
+    _ticker?.cancel();
+    final pcm = _pcm.toBytes();
+    if (!mounted) return;
+    if (pcm.isEmpty) {
+      setState(() => _listening = false);
+      return;
+    }
+    setState(() {
+      _listening = false;
+      _transcribing = true;
+    });
+    try {
+      final wav = pcm16ToWav(pcm);
+      final text = await AudioTranscriptionService(_apiKey!).transcribe(wav);
+      if (!mounted) return;
+      setState(() {
+        if (text.isNotEmpty) _confirmed.add(text);
+        _transcribing = false;
+      });
+    } catch (_) {
+      if (!mounted) return;
+      setState(() {
+        _transcribing = false;
+        _error = "Couldn't transcribe. Try again, or type it instead.";
+      });
+    }
+  }
+
+  // ── Fallback: browser/OS live dictation ─────────────────────────────
+
+  Future<void> _startSpeech() async {
+    if (!_speechInitialized) {
+      final available = await _speech.initialize(
         onError: (e) {
           if (!mounted) return;
           setState(() {
@@ -104,8 +217,8 @@ class _VoiceRecordSheetState extends State<_VoiceRecordSheet>
           }
         },
       );
-      _initialized = true;
-      if (!_available) {
+      _speechInitialized = true;
+      if (!available) {
         if (mounted) {
           setState(() => _error = kIsWeb
               ? 'Voice needs Chrome, Edge, or Safari.'
@@ -114,16 +227,7 @@ class _VoiceRecordSheetState extends State<_VoiceRecordSheet>
         return;
       }
     }
-    setState(() {
-      _listening = true;
-      _startedAt = DateTime.now();
-      _error = null;
-    });
-    _ticker?.cancel();
-    _ticker = Timer.periodic(const Duration(milliseconds: 250), (_) {
-      if (!mounted || _startedAt == null) return;
-      setState(() => _elapsed = DateTime.now().difference(_startedAt!));
-    });
+    _beginTimer();
     await _speech.listen(
       onResult: (result) {
         if (!mounted) return;
@@ -145,15 +249,15 @@ class _VoiceRecordSheetState extends State<_VoiceRecordSheet>
     );
   }
 
-  Future<void> _stop() async {
+  Future<void> _stopSpeech() async {
     if (_listening) {
       await _speech.stop();
     }
     _ticker?.cancel();
-    if (mounted) {
-      setState(() => _listening = false);
-    }
+    if (mounted) setState(() => _listening = false);
   }
+
+  // ── Controls ────────────────────────────────────────────────────────
 
   void _onCancel() {
     _stop();
@@ -162,8 +266,7 @@ class _VoiceRecordSheetState extends State<_VoiceRecordSheet>
 
   Future<void> _onConfirm() async {
     await _stop();
-    // Promote any in-flight partial into the confirmed list before exit
-    // (the user clearly wanted everything they spoke).
+    // Promote any in-flight partial (live mode) into the confirmed list.
     final pieces = [..._confirmed];
     if (_partial.trim().isNotEmpty) pieces.add(_partial.trim());
     final joined = pieces.where((p) => p.isNotEmpty).join(' ').trim();
@@ -171,6 +274,7 @@ class _VoiceRecordSheetState extends State<_VoiceRecordSheet>
   }
 
   Future<void> _toggleListening() async {
+    if (_transcribing) return; // busy
     if (_listening) {
       await _stop();
     } else {
@@ -182,6 +286,13 @@ class _VoiceRecordSheetState extends State<_VoiceRecordSheet>
     final m = _elapsed.inMinutes;
     final s = _elapsed.inSeconds % 60;
     return '$m:${s.toString().padLeft(2, '0')}';
+  }
+
+  String _statusLabel() {
+    if (_error != null) return '● ${_error!.toUpperCase()}';
+    if (_transcribing) return '● Transcribing';
+    if (_listening) return '● Recording';
+    return '● Paused';
   }
 
   @override
@@ -214,13 +325,13 @@ class _VoiceRecordSheetState extends State<_VoiceRecordSheet>
               child: Column(
                 children: [
                   SectionLabel(
-                    _error != null
-                        ? '● ${_error!.toUpperCase()}'
-                        : (_listening ? '● Recording' : '● Paused'),
+                    _statusLabel(),
                     style: TextStyle(
                       color: _error != null
                           ? Theme.of(context).colorScheme.error
-                          : (_listening ? p.primary : p.textMuted),
+                          : (_listening || _transcribing
+                              ? p.primary
+                              : p.textMuted),
                     ),
                   ),
                   Text(
@@ -237,15 +348,19 @@ class _VoiceRecordSheetState extends State<_VoiceRecordSheet>
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    // Honest about where transcription happens. On web the
-                    // browser streams audio to its speech service (often
-                    // Google); we never claim it's local.
-                    kIsWeb
-                        ? 'To transcribe, your browser sends the audio to its '
-                            "speech service (often Google). We don't keep the "
-                            'audio or text — edit it before saving.'
-                        : 'Your device turns speech into text. We never store '
-                            'the audio — you can edit before saving.',
+                    // Honest about where transcription happens. AI mode sends
+                    // the recording to Google's Gemini; the fallback uses the
+                    // browser/OS speech service (often Google on web too).
+                    _aiMode
+                        ? 'For better accuracy on medication names and '
+                            "conditions, your recording goes to Google's AI to "
+                            'transcribe. Review the text before saving.'
+                        : (kIsWeb
+                            ? 'To transcribe, your browser sends the audio to '
+                                "its speech service (often Google). We don't "
+                                'keep the audio or text — edit it before saving.'
+                            : 'Your device turns speech into text. We never '
+                                'store the audio — you can edit before saving.'),
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontFamily: kSansFamily,
@@ -255,7 +370,6 @@ class _VoiceRecordSheetState extends State<_VoiceRecordSheet>
                     ),
                   ),
                   const SizedBox(height: 20),
-                  // 19-bar waveform — animated only while listening.
                   AnimatedBuilder(
                     animation: _pulse,
                     builder: (_, _) => _Waveform(
@@ -283,15 +397,27 @@ class _VoiceRecordSheetState extends State<_VoiceRecordSheet>
                     ),
                   ),
                   const SizedBox(height: 12),
-                  _LiveCaption(
-                    confirmed: _confirmed.join(' '),
-                    partial: _partial,
-                    cursorColor: p.primary,
-                    textColor: p.text,
-                    mutedColor: p.textMuted,
-                    borderColor: p.border,
-                    surface: p.surface,
-                  ),
+                  _transcribing
+                      ? _TranscribingCard(
+                          textColor: p.textMuted,
+                          borderColor: p.border,
+                          surface: p.surface,
+                          spinnerColor: p.primary,
+                        )
+                      : _LiveCaption(
+                          confirmed: _confirmed.join(' '),
+                          partial: _partial,
+                          cursorColor: p.primary,
+                          textColor: p.text,
+                          mutedColor: p.textMuted,
+                          borderColor: p.border,
+                          surface: p.surface,
+                          // AI mode has no live partials; prompt accordingly.
+                          emptyHint: _aiMode
+                              ? 'Tap the red button, speak, then tap stop to '
+                                  'transcribe…'
+                              : 'Tap the red record button and start speaking…',
+                        ),
                 ],
               ),
             ),
@@ -334,9 +460,11 @@ class _VoiceRecordSheetState extends State<_VoiceRecordSheet>
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Text(
-                kIsWeb
-                    ? "WE STORE NOTHING · YOUR BROWSER'S SPEECH SERVICE TRANSCRIBES THE AUDIO"
-                    : "AUDIO ISN'T SAVED · TRANSCRIPT STAYS IN THIS SESSION",
+                _aiMode
+                    ? "WE STORE NOTHING · GOOGLE'S AI TRANSCRIBES THE RECORDING"
+                    : (kIsWeb
+                        ? "WE STORE NOTHING · YOUR BROWSER'S SPEECH SERVICE TRANSCRIBES THE AUDIO"
+                        : "AUDIO ISN'T SAVED · TRANSCRIPT STAYS IN THIS SESSION"),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: kMonoFamily,
@@ -354,6 +482,54 @@ class _VoiceRecordSheetState extends State<_VoiceRecordSheet>
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// Shown in the caption slot while the AI transcribes the recorded clip.
+class _TranscribingCard extends StatelessWidget {
+  final Color textColor;
+  final Color borderColor;
+  final Color surface;
+  final Color spinnerColor;
+
+  const _TranscribingCard({
+    required this.textColor,
+    required this.borderColor,
+    required this.surface,
+    required this.spinnerColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      constraints: const BoxConstraints(minHeight: 70),
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      decoration: BoxDecoration(
+        color: surface,
+        border: Border.all(color: borderColor),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(
+            width: 16,
+            height: 16,
+            child: CircularProgressIndicator(strokeWidth: 2, color: spinnerColor),
+          ),
+          const SizedBox(width: 12),
+          Text(
+            'Transcribing your recording…',
+            style: TextStyle(
+              fontFamily: kSansFamily,
+              fontSize: 13.5,
+              color: textColor,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -420,6 +596,7 @@ class _LiveCaption extends StatefulWidget {
   final Color mutedColor;
   final Color borderColor;
   final Color surface;
+  final String emptyHint;
 
   const _LiveCaption({
     required this.confirmed,
@@ -429,6 +606,7 @@ class _LiveCaption extends StatefulWidget {
     required this.mutedColor,
     required this.borderColor,
     required this.surface,
+    required this.emptyHint,
   });
 
   @override
@@ -477,7 +655,7 @@ class _LiveCaptionState extends State<_LiveCaption>
               )
             else if (!hasContent)
               TextSpan(
-                text: 'Tap the red record button and start speaking…',
+                text: widget.emptyHint,
                 style: TextStyle(
                   color: widget.mutedColor,
                   fontStyle: FontStyle.italic,

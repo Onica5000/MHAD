@@ -94,6 +94,9 @@ dependencies:
   # Screenshot protection (FLAG_SECURE) is now via MethodChannel in screenshot_protection_service.dart
   flutter_contacts: ^2.0.1
   speech_to_text: ^7.3.0
+  # Audio capture for AI dictation (record PCM -> WAV -> Gemini transcribes).
+  # speech_to_text stays the no-AI fallback. Web + native via one API.
+  record: ^5.2.0
   nfc_manager: ^4.1.1
   ndef_record: ^1.4.2
   archive: ^4.0.9

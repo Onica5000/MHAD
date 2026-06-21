@@ -89,6 +89,81 @@ Future<bool> showAutofillConsentDialog(BuildContext context) async {
       false;
 }
 
+/// Consent + data notice for AI voice transcription. Like autofill, this is a
+/// path where personal details (whatever the user speaks) are sent to Google —
+/// so it states that accurately rather than using the generic
+/// [showAiConsentDialog], whose "never send personal information" wording would
+/// contradict how AI dictation works. Returns true if the user authorizes it.
+Future<bool> showAudioConsentDialog(BuildContext context) async {
+  final cs = Theme.of(context).colorScheme;
+  return await showDialog<bool>(
+        context: context,
+        barrierDismissible: false,
+        builder: (ctx) => AlertDialog(
+          icon: const Icon(Icons.mic_none),
+          title: const Text('Transcribe with AI'),
+          content: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  'For more accurate transcription (especially medication names '
+                  'and conditions), your voice recording — including any '
+                  'personal details you say — is sent to Google\'s AI to turn '
+                  'into text.',
+                ),
+                const SizedBox(height: 10),
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: cs.errorContainer,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Icon(Icons.privacy_tip, size: 18, color: cs.onErrorContainer),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          'On Google\'s Gemini free tier, your data may be '
+                          'retained and used to improve their AI, human '
+                          'reviewers may see it, and what is sent cannot be '
+                          'recalled or deleted afterward.',
+                          style: TextStyle(
+                            color: cs.onErrorContainer,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  'You review the text before it goes into your form. Prefer not '
+                  'to? Tap Cancel to use your device\'s built-in dictation '
+                  'instead, or just type — neither sends audio to Google.',
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx, false),
+              child: const Text('Cancel'),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(ctx, true),
+              child: const Text('Use AI'),
+            ),
+          ],
+        ),
+      ) ??
+      false;
+}
+
 /// Shows AI data usage consent dialog. Returns true if user accepts.
 Future<bool> showAiConsentDialog(BuildContext context) async {
   final cs = Theme.of(context).colorScheme;
