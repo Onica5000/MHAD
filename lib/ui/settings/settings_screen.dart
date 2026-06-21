@@ -8,7 +8,6 @@ import 'package:mhad/services/screenshot_protection_service.dart';
 import 'package:mhad/ui/disclaimer/disclaimer_screen.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
-import 'package:mhad/ui/theme/theme_controller.dart';
 import 'package:mhad/ui/widgets/design/bottom_nav.dart';
 import 'package:mhad/ui/widgets/design/design_card.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
