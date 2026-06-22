@@ -8,7 +8,6 @@ import 'package:mhad/services/screenshot_protection_service.dart';
 import 'package:mhad/ui/disclaimer/disclaimer_screen.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
-import 'package:mhad/ui/widgets/design/bottom_nav.dart';
 import 'package:mhad/ui/widgets/design/design_card.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
@@ -32,7 +31,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
     return Scaffold(
       backgroundColor: p.scaffoldBackground,
-      bottomNavigationBar: const MhadBottomNav(),
       // Material AppBar dropped 2026-06-04 — prototype ScrSettings
       // (mobile-extra.jsx L1066-1129) sits the CrisisTopBar at the top of
       // the screen body, not a Material chrome. The 38pt 'Settings'

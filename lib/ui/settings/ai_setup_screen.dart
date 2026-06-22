@@ -7,7 +7,6 @@ import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/utils/platform_utils.dart';
-import 'package:mhad/ui/widgets/design/bottom_nav.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// Full-screen setup for the Gemini API key with step-by-step instructions.
@@ -156,7 +155,6 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
         false;
 
     return Scaffold(
-      bottomNavigationBar: const MhadBottomNav(),
       appBar: AppBar(
         title: const Text('AI Assistant Setup'),
         actions: [

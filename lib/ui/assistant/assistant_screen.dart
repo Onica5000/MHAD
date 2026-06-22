@@ -13,7 +13,6 @@ import 'package:mhad/ui/assistant/assistant_context_panel.dart';
 import 'package:mhad/ui/assistant/assistant_message_widgets.dart';
 import 'package:mhad/ui/assistant/assistant_send.dart';
 import 'package:mhad/ui/router.dart';
-import 'package:mhad/ui/widgets/design/bottom_nav.dart';
 import 'package:mhad/ui/widgets/design/responsive_shell.dart';
 import 'package:mhad/ui/widgets/ai_consent_dialog.dart';
 
@@ -152,7 +151,6 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
         false;
 
     return Scaffold(
-      bottomNavigationBar: const MhadBottomNav(),
       appBar: AppBar(
         // Editorial header chrome — matches prototype `ScrAI`
         // (mobile-extra.jsx::ScrAI L753-767): 36pt rounded sparkle chip

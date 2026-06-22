@@ -16,7 +16,6 @@ import 'package:mhad/ui/home/home_directive_hero.dart';
 import 'package:mhad/ui/home/home_tools_grid.dart';
 import 'package:mhad/ui/home/web_landing.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
-import 'package:mhad/ui/widgets/design/bottom_nav.dart';
 import 'package:mhad/ui/widgets/design/responsive_shell.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
@@ -88,7 +87,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     //     </div>
     return Scaffold(
       backgroundColor: p.scaffoldBackground,
-      bottomNavigationBar: const MhadBottomNav(),
       body: SafeArea(
         bottom: false,
         // Prototype `w-home`: at >=1000px the dashboard splits into the main
@@ -104,9 +102,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             final isWide =
                 MediaQuery.sizeOf(context).width >= kWideLayoutBreakpoint;
             final list = ListView(
-          // Prototype: 20 top, 22 horizontal, 100 bottom (the 100 leaves
-          // room for the absolute-positioned floating pill nav).
-          padding: const EdgeInsets.fromLTRB(22, 20, 22, 100),
+          // The persistent bottom nav now reserves its own space (rendered by
+          // ResponsiveShell below this screen), so no extra bottom gap is needed.
+          padding: const EdgeInsets.fromLTRB(22, 20, 22, 24),
           children: [
             const _DeviceSecurityCheck(),
             SectionLabel(dateLabel),

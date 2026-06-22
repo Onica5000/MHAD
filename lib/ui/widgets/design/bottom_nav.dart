@@ -1,11 +1,9 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/more_sheet.dart';
-import 'package:mhad/ui/widgets/design/responsive_shell.dart';
 
 /// Floating pill bottom navigation for the top-level destinations.
 ///
@@ -15,24 +13,21 @@ import 'package:mhad/ui/widgets/design/responsive_shell.dart';
 /// shows its text label — inactive items are icon-only, exactly as the
 /// prototype renders `{n.icon}{n.active && n.label}`.
 ///
-/// Used as a `bottomNavigationBar` on the four top-level screens (Home,
-/// Education, Assistant, Settings). Secondary destinations (New directive,
-/// Export, AI setup, Privacy policy) are reached contextually and never
-/// appear here — also per the prototype.
+/// Rendered ONCE in [ResponsiveShell] as a persistent bottom strip on narrow
+/// (mobile) layouts — present on every in-app screen, with each screen's own
+/// content (including its own bottom action bar) sitting above it. Because the
+/// shell lives above the router, this reads the active route from [activeRoute]
+/// (supplied by the shell) and navigates via the global [appRouter] rather than
+/// `context.go`/`GoRouterState.of` (which need an InheritedGoRouter ancestor).
 class MhadBottomNav extends ConsumerWidget {
-  const MhadBottomNav({super.key});
+  /// The current top-level location, supplied by the shell.
+  final String activeRoute;
+  const MhadBottomNav({required this.activeRoute, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // On wide (desktop / web) screens the persistent WebSidebar provides
-    // navigation, so the floating pill must NOT also render — otherwise both
-    // nav systems show at once. Mirror ResponsiveShell's breakpoint.
-    if (MediaQuery.sizeOf(context).width >= kWideLayoutBreakpoint) {
-      return const SizedBox.shrink();
-    }
-
     final p = Theme.of(context).mhadPalette;
-    final loc = GoRouterState.of(context).matchedLocation;
+    final loc = activeRoute;
     final aiReady =
         ref.watch(apiKeyProvider).valueOrNull?.isNotEmpty ?? false;
 
@@ -42,21 +37,21 @@ class MhadBottomNav extends ConsumerWidget {
         activeIcon: Icons.home,
         label: 'Home',
         active: loc == AppRoutes.home,
-        onTap: () => context.go(AppRoutes.home),
+        onTap: () => appRouter.go(AppRoutes.home),
       ),
       _NavItem(
         icon: Icons.menu_book_outlined,
         activeIcon: Icons.menu_book,
         label: 'Learn',
         active: loc == AppRoutes.education,
-        onTap: () => context.go(AppRoutes.education),
+        onTap: () => appRouter.go(AppRoutes.education),
       ),
       _NavItem(
         icon: Icons.auto_awesome_outlined,
         activeIcon: Icons.auto_awesome,
         label: 'Ask',
         active: loc == AppRoutes.assistant || loc == AppRoutes.aiSetup,
-        onTap: () => context.go(
+        onTap: () => appRouter.go(
           aiReady ? AppRoutes.assistant : AppRoutes.aiSetup,
         ),
       ),
@@ -65,18 +60,21 @@ class MhadBottomNav extends ConsumerWidget {
         activeIcon: Icons.settings,
         label: 'Settings',
         active: loc == AppRoutes.settings,
-        onTap: () => context.go(AppRoutes.settings),
+        onTap: () => appRouter.go(AppRoutes.settings),
       ),
       // "More" — opens a bottom sheet with the secondary destinations the
-      // four primary tabs can't hold (Autofill, Download & print, AI setup,
-      // Get help, Reset). Brings narrow-screen nav to parity with the desktop
-      // sidebar. An action, never an "active" destination.
+      // four primary tabs can't hold (Autofill, Download & print, Get help,
+      // Reset). Opened via the root navigator since the shell is above the
+      // router. An action, never an "active" destination.
       _NavItem(
         icon: Icons.more_horiz,
         activeIcon: Icons.more_horiz,
         label: 'More',
         active: false,
-        onTap: () => showMoreSheet(context, ref),
+        onTap: () {
+          final ctx = rootNavigatorKey.currentContext;
+          if (ctx != null) showMoreSheet(ctx, ref);
+        },
       ),
     ];
 

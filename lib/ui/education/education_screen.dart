@@ -4,7 +4,6 @@ import 'package:mhad/ui/education/education_category_browser.dart';
 import 'package:mhad/ui/education/learn_ai_panel.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
-import 'package:mhad/ui/widgets/design/bottom_nav.dart';
 import 'package:mhad/ui/widgets/design/responsive_shell.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 
@@ -75,7 +74,6 @@ class _EducationScreenState extends State<EducationScreen> {
           );
 
     return Scaffold(
-      bottomNavigationBar: const MhadBottomNav(),
       body: LayoutBuilder(
         builder: (context, c) {
           // On wide (PC web) put the AI assistant in a right rail so users can

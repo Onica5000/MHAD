@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mhad/ui/router.dart';
+import 'package:mhad/ui/widgets/design/bottom_nav.dart';
 import 'package:mhad/ui/widgets/design/web_sidebar.dart';
 
 /// Width threshold at which we switch from the mobile layout to the desktop
@@ -81,9 +82,31 @@ class ResponsiveShell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.sizeOf(context).width;
-    if (width < kWideLayoutBreakpoint) {
-      return child;
+    final wide = width >= kWideLayoutBreakpoint;
+    // Narrow (mobile): a persistent bottom nav across the whole app, with each
+    // screen's content (and its own bottom action bar) above it. The routed
+    // Navigator (`child`) stays OUTSIDE the route listener so navigation never
+    // rebuilds it mid-notification ("markNeedsBuild during build"); only the
+    // nav strip listens and rebuilds. Hidden on pre-app gate screens.
+    if (!wide) {
+      return Column(
+        children: [
+          Expanded(child: child),
+          ListenableBuilder(
+            listenable: appRouter.routerDelegate,
+            builder: (context, _) {
+              final route = appRouter
+                      .routerDelegate.currentConfiguration.lastOrNull
+                      ?.matchedLocation ??
+                  appRouter.routerDelegate.currentConfiguration.uri.path;
+              if (_routeHidesSidebar(route)) return const SizedBox.shrink();
+              return MhadBottomNav(activeRoute: route);
+            },
+          ),
+        ],
+      );
     }
+
     // ResponsiveShell lives in MaterialApp.router's builder callback, which
     // is *above* InheritedGoRouter in the widget tree. GoRouterState.of only
     // searches ancestors, so it cannot find the router here. Instead we read
