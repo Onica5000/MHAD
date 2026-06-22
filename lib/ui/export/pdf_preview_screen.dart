@@ -3,7 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
+import 'package:mhad/utils/open_pdf.dart';
 import 'package:printing/printing.dart';
+
+/// Open the PDF in the user's viewer (a new browser tab on web) so they can
+/// print or save it — never an automatic download. Falls back to the print/save
+/// dialog on native or if the browser blocks the tab.
+Future<void> _openOrPrintPdf(Uint8List bytes) async {
+  final opened = await openPdfInViewer(bytes, filename: 'PA_MHAD.pdf');
+  if (!opened) {
+    await Printing.layoutPdf(onLayout: (_) => bytes, name: 'PA_MHAD');
+  }
+}
 
 class PdfPreviewScreen extends StatelessWidget {
   final Uint8List pdfBytes;
@@ -60,10 +71,7 @@ class PdfPreviewScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.ios_share),
             tooltip: 'Share',
-            onPressed: () => Printing.sharePdf(
-              bytes: pdfBytes,
-              filename: 'PA_MHAD.pdf',
-            ),
+            onPressed: () => _openOrPrintPdf(pdfBytes),
           ),
         ],
       ),
@@ -107,10 +115,7 @@ class PdfPreviewScreen extends StatelessWidget {
             children: [
               Expanded(
                 child: OutlinedButton.icon(
-                  onPressed: () => Printing.sharePdf(
-                    bytes: pdfBytes,
-                    filename: 'PA_MHAD.pdf',
-                  ),
+                  onPressed: () => _openOrPrintPdf(pdfBytes),
                   icon: const Icon(Icons.download_outlined, size: 17),
                   label: const Text('Save'),
                 ),
@@ -130,10 +135,7 @@ class PdfPreviewScreen extends StatelessWidget {
               Expanded(
                 flex: 2,
                 child: FilledButton.icon(
-                  onPressed: () => Printing.sharePdf(
-                    bytes: pdfBytes,
-                    filename: 'PA_MHAD.pdf',
-                  ),
+                  onPressed: () => _openOrPrintPdf(pdfBytes),
                   icon: const Icon(Icons.ios_share, size: 17),
                   label: const Text('Share'),
                 ),

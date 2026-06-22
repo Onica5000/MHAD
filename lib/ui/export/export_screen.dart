@@ -26,6 +26,7 @@ import 'package:mhad/services/directive_export_service.dart';
 import 'package:mhad/services/export_formats_service.dart';
 import 'package:mhad/services/fhir_export_service.dart';
 import 'package:mhad/utils/background_runner.dart';
+import 'package:mhad/utils/open_pdf.dart';
 import 'package:printing/printing.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -278,17 +279,23 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         ));
         if (!mounted) return;
         final suffix = modes.length > 1 ? '_${_draftModeFileSuffix(mode)}' : '';
-        await Printing.sharePdf(
-          bytes: bytes,
-          filename: 'PA_MHAD_$safeName$suffix.pdf',
-        );
+        final fname = 'PA_MHAD_$safeName$suffix.pdf';
+        // Open in the user's PDF viewer (a new browser tab on web) instead of
+        // force-downloading — they choose Print or Download there. Fall back to
+        // the print/save dialog on native or if the browser blocks the tab.
+        final opened = await openPdfInViewer(bytes, filename: fname);
+        if (!opened && mounted) {
+          await Printing.layoutPdf(onLayout: (_) => bytes, name: fname);
+        }
       }
       if (kIsWeb && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(modes.length > 1
-                ? '${modes.length} PDFs downloaded to your Downloads folder.'
-                : 'PDF downloaded to your Downloads folder.'),
+                ? 'Opened ${modes.length} PDFs in new tabs — print or save each '
+                    'from your PDF viewer.'
+                : 'Opened in a new tab — use Print or Download in your PDF '
+                    'viewer.'),
           ),
         );
       }
@@ -717,16 +724,23 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
           ),
         ],
         const SizedBox(height: 16),
-        // Primary action — placed after the settings that control it.
+        _railBody(
+          'This opens your directive in your PDF viewer (a new browser tab), '
+          'where you can Print it or save/Download it — it will NOT download '
+          'automatically.',
+        ),
+        const SizedBox(height: 8),
+        // Primary action — placed after the settings that control it. Opens the
+        // PDF in a viewer rather than force-downloading (see _generateAndShare).
         Semantics(
           button: true,
-          label: 'Download or print the PDF directive (unencrypted file)',
+          label: 'Open the PDF directive in your viewer to print or save it',
           child: SizedBox(
             width: double.infinity,
             child: FilledButton.icon(
               onPressed: _isGenerating ? null : _generateAndShare,
-              icon: const Icon(Icons.download),
-              label: const Text('Download PDF'),
+              icon: const Icon(Icons.open_in_new),
+              label: const Text('Open PDF'),
             ),
           ),
         ),
