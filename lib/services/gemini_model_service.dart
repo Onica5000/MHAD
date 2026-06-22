@@ -40,6 +40,13 @@ class GeminiModel {
   bool get isLite => id.contains('lite');
   bool get isPro => id.contains('pro');
 
+  /// Heuristic for free-tier eligibility. The app uses Gemini specifically so
+  /// users pay nothing, and the ListModels API does NOT expose pricing — so we
+  /// approximate: the Flash family (incl. Flash-Lite) is Google's free-tier
+  /// workhorse; Pro generally requires a paid plan (or has negligible free
+  /// quota). Treat Flash as free; verify exact quotas on the pricing page.
+  bool get isLikelyFree => isFlash && !isPro;
+
   /// Aliases (`gemini-flash-latest`) and experimental/preview builds are not
   /// pinnable stable versions — we pin a concrete release, never a moving alias.
   bool get isAliasOrPreview =>
@@ -202,7 +209,31 @@ class GeminiModelService {
     );
   }
 
+  /// The applicable free-tier text models, newest-first, deduped — the curated
+  /// set to offer for selection (NOT the whole catalog). Excludes Pro (paid),
+  /// embeddings/vision/tts, aliases and previews; full Flash sorts above Lite.
+  /// Used to refresh the admin drafting dropdown from the live catalog.
+  static List<String> curatedFreeModelIds(List<GeminiModel> models) {
+    final free = models.where((m) => m.isCandidate && m.isLikelyFree).toList()
+      ..sort((a, b) {
+        if (a.versionScore != b.versionScore) {
+          return b.versionScore - a.versionScore; // newest first
+        }
+        if (a.isLite != b.isLite) return a.isLite ? 1 : -1; // full Flash first
+        return a.id.length - b.id.length; // canonical id first
+      });
+    final ids = <String>[];
+    for (final m in free) {
+      if (!ids.contains(m.id)) ids.add(m.id);
+    }
+    return ids;
+  }
+
   /// Research + rank in one call (network).
   Future<ModelRecommendation> recommend(String currentModel) async =>
       rank(await listModels(), currentModel);
+
+  /// Live, curated free-tier model ids (network).
+  Future<List<String>> freeModelIds() async =>
+      curatedFreeModelIds(await listModels());
 }

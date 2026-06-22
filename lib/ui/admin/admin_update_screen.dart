@@ -38,6 +38,9 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
   // entered here, ephemeral to this screen, and never persisted).
   AdminAiProvider _provider = AdminAiProvider.gemini;
   String _model = AdminAiProvider.gemini.defaultModel;
+  // Live free-tier Gemini model ids, fetched on demand to refresh the dropdown
+  // from the real catalog (null = not fetched; falls back to the curated enum).
+  List<String>? _geminiLiveModels;
   final _keyCtrl = TextEditingController();
   AdminDataTarget _target = AdminDataTarget.appData;
   Map<String, dynamic> _base = const {};
@@ -115,6 +118,43 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
         _loading = false;
         _error = 'Draft failed: $e';
       });
+    }
+  }
+
+  /// Refresh the Gemini model dropdown from the live catalog, filtered to the
+  /// applicable FREE-tier text models (the app uses Gemini so users pay
+  /// nothing). Falls back to the curated enum list if never run.
+  Future<void> _refreshGeminiModels() async {
+    final savedKey = (ref.read(apiKeyProvider).valueOrNull ?? '').trim();
+    final key = savedKey.isNotEmpty ? savedKey : _keyCtrl.text.trim();
+    if (key.isEmpty) {
+      setState(() => _error =
+          'Need a Gemini API key (AIza…) to refresh the model list.');
+      return;
+    }
+    setState(() {
+      _loading = true;
+      _error = null;
+    });
+    try {
+      final ids = await GeminiModelService(key).freeModelIds();
+      if (!mounted) return;
+      setState(() {
+        _loading = false;
+        _geminiLiveModels = ids;
+        if (ids.isEmpty) {
+          _error = 'No free-tier text models returned by the API.';
+        } else if (!ids.contains(_model)) {
+          _model = ids.first;
+        }
+      });
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _loading = false;
+          _error = 'Refresh failed: $e';
+        });
+      }
     }
   }
 
@@ -197,9 +237,11 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
     final tokens =
         'context ${chosen.inputTokenLimit} in / ${chosen.outputTokenLimit} out tokens';
     final alt = chosen.isFlash && rec.bestPro != null
-        ? ' Pro alternative if higher accuracy is needed: ${rec.bestPro!.id}.'
+        ? ' Pro alternative if Flash accuracy is insufficient (likely a PAID '
+            'plan — not free tier): ${rec.bestPro!.id}.'
         : (chosen.isPro && rec.bestFlash != null
-            ? ' Cheaper Flash option: ${rec.bestFlash!.id}.'
+            ? ' WARNING: Pro usually needs a paid plan — this breaks the '
+                'free-for-users model. Free Flash option: ${rec.bestFlash!.id}.'
             : '');
     return 'Best available $tier model per the live catalog (was ${rec.currentModel}). '
         '$tokens.$alt';
@@ -232,7 +274,8 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
                 'Fast, free-tier tier the app is tuned for.'),
           if (rec.bestPro != null)
             option('Alternative · Pro', rec.bestPro!,
-                'Most capable — pick if Flash accuracy is insufficient.'),
+                'Most capable — but Pro usually needs a PAID plan (not free '
+                'tier). Pick only if Flash accuracy is insufficient.'),
           SimpleDialogOption(
             onPressed: () => Navigator.pop(ctx, null),
             child: const Text('Cancel'),
@@ -425,20 +468,47 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
             }),
           ),
           const SizedBox(height: 12),
-          // Curated set of useful models for the chosen provider.
-          DropdownButtonFormField<String>(
-            initialValue: _model,
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Model',
-            ),
-            items: [
-              for (final m in _provider.models)
-                DropdownMenuItem(value: m, child: Text(m)),
-            ],
-            onChanged: (m) =>
-                setState(() => _model = m ?? _provider.defaultModel),
-          ),
+          // Model for the chosen provider. For Gemini the list can be refreshed
+          // from the live catalog (free-tier text models only); otherwise it's
+          // the curated enum defaults.
+          Builder(builder: (_) {
+            final isGemini = _provider == AdminAiProvider.gemini;
+            final live = _geminiLiveModels ?? const [];
+            final opts = [
+              ...(isGemini && live.isNotEmpty ? live : _provider.models),
+            ];
+            if (!opts.contains(_model)) opts.insert(0, _model);
+            return Row(
+              children: [
+                Expanded(
+                  child: DropdownButtonFormField<String>(
+                    initialValue: _model,
+                    decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
+                      labelText: 'Model',
+                      helperText: isGemini && live.isNotEmpty
+                          ? 'Live free-tier models (refreshed from the catalog)'
+                          : null,
+                    ),
+                    items: [
+                      for (final m in opts)
+                        DropdownMenuItem(value: m, child: Text(m)),
+                    ],
+                    onChanged: (m) =>
+                        setState(() => _model = m ?? _provider.defaultModel),
+                  ),
+                ),
+                if (isGemini) ...[
+                  const SizedBox(width: 8),
+                  IconButton(
+                    tooltip: 'Refresh free-tier models from the live catalog',
+                    onPressed: _loading ? null : _refreshGeminiModels,
+                    icon: const Icon(Icons.refresh),
+                  ),
+                ],
+              ],
+            );
+          }),
           const SizedBox(height: 12),
           TextField(
             controller: _keyCtrl,

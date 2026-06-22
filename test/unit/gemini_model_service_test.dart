@@ -62,6 +62,21 @@ void main() {
       expect(rec.bestFlash!.id, 'gemini-3.5-flash-lite');
     });
 
+    test('curatedFreeModelIds keeps only free Flash text models, newest-first',
+        () {
+      final models = [
+        _m('gemini-2.5-pro'), // paid → excluded
+        _m('gemini-2.5-flash'),
+        _m('gemini-3.5-flash'),
+        _m('gemini-3.5-flash-lite'),
+        _m('gemini-flash-latest'), // alias → excluded
+        _m('text-embedding-004', methods: ['embedContent']), // excluded
+      ];
+      final ids = GeminiModelService.curatedFreeModelIds(models);
+      expect(ids, ['gemini-3.5-flash', 'gemini-3.5-flash-lite', 'gemini-2.5-flash']);
+      expect(ids.contains('gemini-2.5-pro'), isFalse);
+    });
+
     test('isNewerThanCurrent is false for same id, true for higher version', () {
       final models = [_m('gemini-3.5-flash')];
       final rec = GeminiModelService.rank(models, 'gemini-2.5-flash');
