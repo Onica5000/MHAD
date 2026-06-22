@@ -11,6 +11,7 @@ import 'package:mhad/domain/agent_ext.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/router.dart';
+import 'package:mhad/utils/nav_utils.dart';
 import 'package:mhad/ui/export/pdf_preview_screen.dart';
 import 'package:mhad/ui/export/pdf/pdf_generator.dart';
 import 'package:mhad/ui/export/pdf/pdf_helpers.dart';
@@ -391,7 +392,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         children: [
           WizardHeader(
             backLabel: 'Back',
-            onBack: () => Navigator.of(context).maybePop(),
+            onBack: () => safeBack(context),
             actionLabel: '',
           ),
           Expanded(
@@ -978,7 +979,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         if (!isWide)
           WizardHeader(
             backLabel: 'Back',
-            onBack: () => Navigator.of(context).maybePop(),
+            onBack: () => safeBack(context),
             actionLabel: '',
           ),
         Expanded(child: isWide ? _wideLayout(p) : _narrowLayout(p)),

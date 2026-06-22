@@ -6,6 +6,7 @@ import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/design/wizard_header.dart';
 import 'package:mhad/utils/launch_utils.dart';
+import 'package:mhad/utils/nav_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// "Get help" / Facilitator mode (v2 prototype `m-facilitator`, v3 re-spec).
@@ -43,7 +44,7 @@ class FacilitatorScreen extends StatelessWidget {
       body: Column(children: [
         WizardHeader(
           backLabel: 'Back',
-          onBack: () => Navigator.of(context).maybePop(),
+          onBack: () => safeBack(context),
           actionLabel: '',
         ),
         Expanded(child: ListView(
