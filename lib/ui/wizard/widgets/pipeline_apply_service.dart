@@ -342,6 +342,8 @@ extension _PipelineApplyLogic on _PipelineScreenState {
             entryType: MedicationEntryType.current.name,
             medicationName: Value(med.displayName),
             reason: Value(med.reason),
+            // Dosage is captured only for currently-taking meds.
+            dosage: Value(med.dosage),
             sortOrder: Value(medOrder++),
           ));
           applied++;

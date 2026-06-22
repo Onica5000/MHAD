@@ -100,12 +100,14 @@ extension _PipelineReviewUi on _PipelineScreenState {
       _reviewEdited[key] = a.display;
     }
 
-    // ── Currently-taking medications (reference list)
+    // ── Currently-taking medications (reference list) — the one category that
+    // also carries a dosage.
     for (final m in v.currentMeds) {
       final key = 'med_current_${m.originalName}';
       _reviewChecked[key] = true;
       final badge = m.isValidated ? ' [RxNorm verified]' : ' [unverified]';
-      _reviewEdited[key] = '${m.displayName}$badge';
+      final dose = m.dosage.isNotEmpty ? ' (${m.dosage})' : '';
+      _reviewEdited[key] = '${m.displayName}$dose$badge';
     }
 
     // ── Medication limitations

@@ -285,6 +285,7 @@ class DocumentExtractionResult {
         .map((m) => ExtractedMedication(
               name: m['name']?.toString() ?? '',
               reason: m['reason']?.toString() ?? '',
+              dosage: m['dosage']?.toString() ?? '',
             ))
         .where((m) => m.name.isNotEmpty)
         .toList();
@@ -321,10 +322,21 @@ class DocumentExtractionResult {
 class ExtractedMedication {
   final String name;
   final String reason;
+  // Dosage (e.g. "20 mg twice daily") — captured only for currently-taking
+  // medications; empty for the preference categories.
+  final String dosage;
 
-  const ExtractedMedication({required this.name, this.reason = ''});
+  const ExtractedMedication({
+    required this.name,
+    this.reason = '',
+    this.dosage = '',
+  });
 
-  String get display => reason.isNotEmpty ? '$name — $reason' : name;
+  String get display {
+    final d = dosage.isNotEmpty ? ' ($dosage)' : '';
+    final r = reason.isNotEmpty ? ' — $reason' : '';
+    return '$name$d$r';
+  }
 }
 
 class ExtractedDiagnosis {

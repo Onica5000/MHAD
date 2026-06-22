@@ -150,12 +150,14 @@ class DocumentExtractor {
         }),
       ),
       // Reference list — medications currently being taken with no stated
-      // preference. Maps to MedicationEntryType.current in the DB.
+      // preference. Maps to MedicationEntryType.current in the DB. Current meds
+      // (and ONLY current meds) also capture a dosage.
       'medications_current': Schema.array(
         nullable: true,
         items: Schema.object(properties: {
           'name': Schema.string(),
           'reason': Schema.string(nullable: true),
+          'dosage': Schema.string(nullable: true),
         }),
       ),
       // Medications with restricted-use conditions — the 'limitation' type.
@@ -296,6 +298,7 @@ medications_current
   → Use for: "currently prescribed", "currently on", "taking daily", reference lists with no stated like/dislike.
   → NOT for preferred (has positive signal), avoided (has negative signal), or limited (has restriction).
   → This is a reference list only — it tells the care team what the person takes, not what to give.
+  → DOSAGE: for each current med, also capture the dosage if stated, in the "dosage" field — strength + how often, e.g. "20 mg twice daily", "300 mg at night", "10 units before meals". Leave dosage null if not stated. (Only current meds have a dosage field; preferred/avoid/limited do not.)
 
 medications_limited
   → Medications the person accepts ONLY under specific conditions or restrictions (e.g., "only as last resort", "only in inpatient setting", "only if no alternative").

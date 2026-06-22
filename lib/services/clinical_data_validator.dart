@@ -27,6 +27,7 @@ class ClinicalDataValidator {
         originalName: med.name,
         rxNormMatch: bestMatch,
         reason: med.reason,
+        dosage: med.dosage,
         isValidated: bestMatch != null,
       ));
     }
@@ -122,12 +123,15 @@ class ValidatedMedication {
   final String originalName;
   final String? rxNormMatch;
   final String reason;
+  // Dosage — only populated for currently-taking meds (empty otherwise).
+  final String dosage;
   final bool isValidated;
 
   const ValidatedMedication({
     required this.originalName,
     this.rxNormMatch,
     this.reason = '',
+    this.dosage = '',
     required this.isValidated,
   });
 
