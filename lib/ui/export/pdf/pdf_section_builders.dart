@@ -277,9 +277,9 @@ pw.Widget witnessDetailBlock(
   String? phone,
   int? signatureDate,
 }) {
-  final dateStr = signatureDate != null
-      ? formatExecDate(signatureDate)
-      : '____________________';
+  // Empty (not an underscore placeholder) when unsigned: dataLine already
+  // draws the blank line, so underscores produced a doubled "dotted" line.
+  final dateStr = signatureDate != null ? formatExecDate(signatureDate) : '';
   return pw.Column(
     crossAxisAlignment: pw.CrossAxisAlignment.start,
     children: [
