@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/providers/app_providers.dart';
-import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/services/device_security_service.dart';
 import 'package:mhad/services/reminder_scheduler.dart';
 import 'package:mhad/services/web_session_cache.dart';
@@ -19,7 +18,6 @@ import 'package:mhad/ui/home/web_landing.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/bottom_nav.dart';
 import 'package:mhad/ui/widgets/design/responsive_shell.dart';
-import 'package:mhad/ui/widgets/design/design_card.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/draft_recovery_dialog.dart';
@@ -111,9 +109,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           padding: const EdgeInsets.fromLTRB(22, 20, 22, 100),
           children: [
             const _DeviceSecurityCheck(),
-            // Public-mode ephemeral status strip stays at the very top
-            // for Public sessions (prototype `ScrPublic` L1568-1577).
-            if (privacyMode.isPublic) const _EphemeralBar(),
             SectionLabel(dateLabel),
             // Greeting row — h1 italic serif + 40pt avatar circle on the
             // right (prototype L243-253).
@@ -127,12 +122,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 isPublic: privacyMode.isPublic,
               ),
             ),
-            if (privacyMode.isPublic) ...[
-              const SizedBox(height: 22),
-              _PublicModeNotice(
-                onEndSession: () => _confirmEndSession(context, ref),
-              ),
-            ],
             // Active draft hero + outline "Start a new directive" button.
             // Spacing matches prototype L255 (22 above hero) and L296
             // (18 above outline button).
@@ -397,53 +386,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     }
   }
 
-  Future<void> _confirmEndSession(
-      BuildContext context, WidgetRef ref) async {
-    final cs = Theme.of(context).colorScheme;
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (_) => AlertDialog(
-        icon: Icon(Icons.warning_amber_rounded, color: cs.error, size: 40),
-        title: const Text('End Public Session?'),
-        content: const Text(
-          'This will immediately and permanently erase:\n\n'
-          '  \u2022  All directives created this session\n'
-          '  \u2022  Your API key\n'
-          '  \u2022  AI conversation history\n'
-          '  \u2022  All cached session data\n\n'
-          'Make sure you have exported or printed any '
-          'documents you need before continuing.\n\n'
-          'This cannot be undone.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.pop(context, true),
-            style: FilledButton.styleFrom(backgroundColor: cs.error),
-            child: const Text('End Session & Erase'),
-          ),
-        ],
-      ),
-    );
-    if (confirmed != true || !context.mounted) return;
-
-    await endPublicSession(ref);
-    await WebSessionCache.clear();
-    try {
-      await ref.read(directiveRepositoryProvider).deleteAllDirectives();
-    } catch (_) {}
-
-    if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Session ended. All data has been erased.'),
-        ),
-      );
-    }
-  }
 
   // _exportData / _confirmSwitchToPublic / _deleteAllData moved to
   // `lib/ui/settings/settings_screen.dart` per user direction
@@ -573,99 +515,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 // _LearnMoreCard removed 2026-06-03 — duplicated the Tools-grid "Learn"
 // tile that already routes to AppRoutes.education.
 
-class _PublicModeNotice extends StatelessWidget {
-  final VoidCallback onEndSession;
-  const _PublicModeNotice({required this.onEndSession});
-
-  @override
-  Widget build(BuildContext context) {
-    final p = Theme.of(context).mhadPalette;
-    final isWeb = kIsWeb;
-
-    return Semantics(
-      container: true,
-      label: isWeb
-          ? 'Web app — data is in memory only, not saved to disk. '
-              'Export before closing browser.'
-          : 'Public mode. Tap End Session when done.',
-      child: DesignCard(
-        variant: DesignCardVariant.warning,
-        padding: const EdgeInsets.all(18),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Container(
-                  width: 38,
-                  height: 38,
-                  decoration: BoxDecoration(
-                    color:
-                        SemanticColors.warningTextLight.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Icon(
-                    isWeb ? Icons.language : Icons.visibility_off_outlined,
-                    size: 20,
-                    color: SemanticColors.warningTextLight,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    isWeb ? 'Web App' : 'Public Mode',
-                    style: TextStyle(
-                      fontFamily: kSansFamily,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 15,
-                      color: p.text,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Text(
-              isWeb
-                  ? 'Your data is stored in memory only and is NOT '
-                      'encrypted or saved to disk.\n\n'
-                      'If you close or refresh the tab — or the app crashes — '
-                      'your work (form data and AI key) is kept on this device '
-                      'for 10 minutes so you can reopen and recover it, then '
-                      'permanently erased.\n\n'
-                      'Export or print your directive to keep a copy.'
-                  : 'This is a temporary session. Your data is not '
-                      'permanently stored.\n\n'
-                      'If the app closes unexpectedly, you have 10 minutes '
-                      'to reopen and recover your work (API key and form '
-                      'data).\n\n'
-                      'When you\'re done, tap "End Session" below to '
-                      'securely erase all session data.',
-              style: TextStyle(
-                fontFamily: kSansFamily,
-                fontSize: 13,
-                color: p.textMuted,
-                height: 1.5,
-              ),
-            ),
-            const SizedBox(height: 14),
-            SizedBox(
-              width: double.infinity,
-              child: OutlinedButton.icon(
-                onPressed: onEndSession,
-                icon: Icon(
-                    isWeb ? Icons.delete_forever : Icons.logout,
-                    size: 18),
-                label: Text(
-                    isWeb ? 'Clear All Data & Start Over' : 'End Session'),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
 
 class _DeviceSecurityCheck extends StatefulWidget {
   const _DeviceSecurityCheck();
@@ -877,61 +726,6 @@ class _GreetingRow extends StatelessWidget {
   }
 }
 
-/// Dark ephemeral status strip shown above home content while the user is
-/// in Public mode. Matches prototype `ScrPublic` (mobile-extra.jsx L1568-
-/// 1577): inverted color block, EyeOff icon left, "Public mode · nothing
-/// is saved" text center, monospace "EPHEMERAL" pill right.
-class _EphemeralBar extends StatelessWidget {
-  const _EphemeralBar();
-
-  @override
-  Widget build(BuildContext context) {
-    final p = Theme.of(context).mhadPalette;
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color: p.text,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Row(
-          children: [
-            Icon(Icons.visibility_off_outlined,
-                size: 13, color: p.scaffoldBackground),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                'Public mode · nothing is saved',
-                style: TextStyle(
-                  fontFamily: kSansFamily,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: p.scaffoldBackground,
-                ),
-              ),
-            ),
-            Text(
-              'EPHEMERAL',
-              style: TextStyle(
-                fontFamily: kMonoFamily,
-                fontFamilyFallback: const [
-                  'Consolas',
-                  'Menlo',
-                  'Courier New',
-                  'monospace',
-                ],
-                fontSize: 10.5,
-                letterSpacing: 0.5,
-                color: p.scaffoldBackground.withValues(alpha: 0.7),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
 
 /// Editorial greeting for Public-mode home.
 class _PublicGuestGreeting extends StatelessWidget {
