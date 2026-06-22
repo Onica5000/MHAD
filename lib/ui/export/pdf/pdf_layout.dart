@@ -21,6 +21,16 @@ enum DraftMode {
   draftSignedAvailable,
 }
 
+/// Short marker label for the chosen [DraftMode], matching the watermark so the
+/// header/metadata agree with what the user ticked. Empty for a final copy, so
+/// a "Final copy" prints with NO "DRAFT — UNSIGNED" marker. The print-type
+/// checkboxes — not the saved directive status — decide this.
+String draftLabel(DraftMode mode) => switch (mode) {
+      DraftMode.finalCopy => '',
+      DraftMode.draftGeneral => 'DRAFT — UNSIGNED',
+      DraftMode.draftSignedAvailable => 'DRAFT — signed copy on file',
+    };
+
 /// A very light, rotated full-page watermark for draft exports. Returns an
 /// empty widget for [DraftMode.finalCopy]. Used as a MultiPage background, so
 /// it repeats on every page behind the form content.

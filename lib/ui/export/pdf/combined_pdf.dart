@@ -21,9 +21,12 @@ List<pw.Page> buildCombinedPages({
 }) {
   // Draft indicator: appended to the header-bar form title (not the big
   // page-1 form title) so an unsigned export is unmistakable when printed.
-  final formTitle = directive.status == 'draft'
-      ? 'Combined Declaration & Power of Attorney  ·  DRAFT — UNSIGNED'
-      : 'Combined Declaration & Power of Attorney';
+  // Driven by the chosen print type (draftMode), NOT the saved status, so a
+  // "Final copy" prints clean even while the directive is still a draft.
+  final label = draftLabel(draftMode);
+  final formTitle = label.isEmpty
+      ? 'Combined Declaration & Power of Attorney'
+      : 'Combined Declaration & Power of Attorney  ·  $label';
 
   final primaryAgent = agents.primaryAgent;
   final altAgent = agents.alternateAgent;

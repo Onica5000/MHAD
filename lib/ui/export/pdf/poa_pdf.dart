@@ -19,9 +19,11 @@ List<pw.Page> buildPoaPages({
   List<DiagnosisEntry> diagnoses = const [],
   DraftMode draftMode = DraftMode.finalCopy,
 }) {
-  final formTitle = directive.status == 'draft'
-      ? 'Mental Health Power of Attorney  ·  DRAFT — UNSIGNED'
-      : 'Mental Health Power of Attorney';
+  // Marker follows the chosen print type (draftMode), not the saved status.
+  final label = draftLabel(draftMode);
+  final formTitle = label.isEmpty
+      ? 'Mental Health Power of Attorney'
+      : 'Mental Health Power of Attorney  ·  $label';
 
   final primaryAgent = agents.primaryAgent;
   final altAgent = agents.alternateAgent;

@@ -18,9 +18,11 @@ List<pw.Page> buildDeclarationPages({
   List<DiagnosisEntry> diagnoses = const [],
   DraftMode draftMode = DraftMode.finalCopy,
 }) {
-  final formTitle = directive.status == 'draft'
-      ? 'Mental Health Declaration  ·  DRAFT — UNSIGNED'
-      : 'Mental Health Declaration';
+  // Marker follows the chosen print type (draftMode), not the saved status.
+  final label = draftLabel(draftMode);
+  final formTitle = label.isEmpty
+      ? 'Mental Health Declaration'
+      : 'Mental Health Declaration  ·  $label';
 
   final (:current, :exceptions, :limitations, :preferred) =
       categorizeMedications(medications);

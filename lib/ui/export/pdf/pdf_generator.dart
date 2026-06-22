@@ -80,8 +80,10 @@ class PdfGenerator {
   }) async {
     final theme = await _loadEditorialTheme();
 
-    final isDraft = directive.status == 'draft';
-    final subjectSuffix = isDraft ? ' (DRAFT — UNSIGNED)' : '';
+    // Metadata marker follows the chosen print type (draftMode), so a "Final
+    // copy" export has clean metadata even while the directive is a draft.
+    final label = draftLabel(draftMode);
+    final subjectSuffix = label.isEmpty ? '' : ' ($label)';
 
     final pdf = pw.Document(
       title: 'PA Mental Health Advance Directive$subjectSuffix',
