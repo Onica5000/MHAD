@@ -56,6 +56,9 @@ class WizardBottomBar extends StatelessWidget {
                 TextButton(
                   onPressed: onSecondary,
                   style: TextButton.styleFrom(
+                    // Guarantee a 48px tap target (accessibility) for the
+                    // mobile Back action.
+                    minimumSize: const Size(0, 48),
                     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
                   ),
                   child: Text(

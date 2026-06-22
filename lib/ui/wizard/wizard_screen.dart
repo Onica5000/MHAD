@@ -254,6 +254,12 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                     MediaQuery.sizeOf(context).width >= kWideLayoutBreakpoint;
                 final showAiRail =
                     shellActive && constraints.maxWidth >= 1080;
+                // When the on-screen keyboard is up on a narrow layout, the
+                // peeking "Need help?" bar just steals vertical space from the
+                // field being edited — hide it while typing. Wide layouts (which
+                // show the full rail, or the peeking bar in the 1000–1080 band)
+                // are unaffected.
+                final keyboardOpen = MediaQuery.viewInsetsOf(context).bottom > 0;
                 final mainColumn = Column(
                   children: [
                     if (!shellActive)
@@ -287,7 +293,7 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                     // peeking "Need help?" bar whenever the full 320px rail
                     // isn't shown — i.e. on mobile AND in the desktop band
                     // that's too narrow for the rail.
-                    if (!showAiRail)
+                    if (!showAiRail && !(keyboardOpen && !shellActive))
                       WizardAiBar(
                         onAsk: () => _openStepAi(
                           context,
