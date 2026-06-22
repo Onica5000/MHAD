@@ -234,6 +234,23 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
             // standard Material chrome. Snap-to-fill / upload-to-fill was
             // moved out of step 1 to the standalone `/upload/:id` page
             // (2026-06-13); the wizard now starts straight on the form.
+            //
+            // Narrow (mobile) Back/Continue navigation lives here in the
+            // bottomNavigationBar slot — the Scaffold always lays it out at a
+            // bounded screen width and pins it above the keyboard. On wide
+            // screens navigation is under the step rail, so this is null.
+            bottomNavigationBar:
+                MediaQuery.sizeOf(context).width >= kWideLayoutBreakpoint
+                    ? null
+                    : WizardBottomBar(
+                        primaryLabel: isLastStep ? 'Preview' : 'Continue',
+                        primaryIcon: Icons.arrow_forward,
+                        primaryLoading: _isSaving,
+                        onPrimary: () => _goNext(context, isLastStep),
+                        secondaryLabel: _stepIndex > 0 ? 'Back' : null,
+                        onSecondary: _stepIndex > 0 ? _goBack : null,
+                        showGradient: false,
+                      ),
             body: LayoutBuilder(
               builder: (context, constraints) {
                 // Desktop / wide layout — step rail on the left, content
@@ -304,16 +321,13 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                     // Narrow (mobile) keeps a bottom Back/Continue bar. With the
                     // desktop shell active the navigation lives under the step
                     // rail instead, so the Scaffold has no bottomNavigationBar.
-                    if (!shellActive)
-                      WizardBottomBar(
-                        primaryLabel: isLastStep ? 'Preview' :'Continue',
-                        primaryIcon: Icons.arrow_forward,
-                        primaryLoading: _isSaving,
-                        onPrimary: () => _goNext(context, isLastStep),
-                        secondaryLabel: _stepIndex > 0 ? 'Back' : null,
-                        onSecondary: _stepIndex > 0 ? _goBack : null,
-                        showGradient: false,
-                      ),
+                    // Narrow (mobile) Back/Continue navigation is the
+                    // Scaffold.bottomNavigationBar (see below), not a child of
+                    // this Column — a bar with a Spacer-driven Row can hit an
+                    // infinite-width measurement inside a Column that also holds
+                    // an Expanded, which made it fail to paint (the "no nav
+                    // buttons on mobile" bug). The bottomNavigationBar slot is
+                    // always laid out at a bounded screen width.
                   ],
                 );
                 if (!shellActive) return mainColumn;

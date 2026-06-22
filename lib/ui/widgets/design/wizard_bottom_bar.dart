@@ -50,7 +50,15 @@ class WizardBottomBar extends StatelessWidget {
         top: false,
         child: Padding(
           padding: const EdgeInsets.fromLTRB(18, 16, 18, 12),
+          // spaceBetween (NOT a Spacer): a Spacer is a flex child, which makes
+          // the Row measure its non-flex children (the FilledButton) at an
+          // unbounded width first — and the button can't lay out under infinite
+          // width, so the whole bar failed to paint (the "no nav buttons on
+          // mobile" bug). With no flex child the children are measured at the
+          // real bounded width. An empty leading box keeps Continue right-
+          // aligned when there's no Back.
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               if (secondaryLabel != null)
                 TextButton(
@@ -70,27 +78,30 @@ class WizardBottomBar extends StatelessWidget {
                       color: p.primary,
                     ),
                   ),
-                ),
-              const Spacer(),
-              SizedBox(
-                height: DesignTokens.buttonHeightMd,
-                child: FilledButton.icon(
-                  onPressed: primaryLoading ? null : onPrimary,
-                  icon: primaryLoading
-                      ? const SizedBox(
-                          width: 18,
-                          height: 18,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: Colors.white,
-                          ),
-                        )
-                      : Icon(primaryIcon, size: 18),
-                  label: Text(primaryLabel),
-                  style: FilledButton.styleFrom(
-                    iconAlignment: IconAlignment.end,
-                    padding: const EdgeInsets.symmetric(horizontal: 22),
-                  ),
+                )
+              else
+                const SizedBox.shrink(),
+              // Height comes from the button's own style, NOT a SizedBox
+              // wrapper. A tight-height SizedBox while the Row measures this
+              // child at unbounded width made the button's tap-target padder
+              // throw "infinite width", so the bar failed to paint.
+              FilledButton.icon(
+                onPressed: primaryLoading ? null : onPrimary,
+                icon: primaryLoading
+                    ? const SizedBox(
+                        width: 18,
+                        height: 18,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      )
+                    : Icon(primaryIcon, size: 18),
+                label: Text(primaryLabel),
+                style: FilledButton.styleFrom(
+                  iconAlignment: IconAlignment.end,
+                  minimumSize: Size(0, DesignTokens.buttonHeightMd),
+                  padding: const EdgeInsets.symmetric(horizontal: 22),
                 ),
               ),
             ],
