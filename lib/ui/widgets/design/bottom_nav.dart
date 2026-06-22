@@ -182,9 +182,16 @@ class _NavPill extends StatelessWidget {
         borderRadius: BorderRadius.circular(100),
         // 48px tall hit target (meets the accessibility guideline) with the
         // ~36px visible pill centred inside it — matches the prototype look.
+        // FittedBox(scaleDown) lets the active item's icon+label shrink to fit
+        // its share of the bar instead of overflowing: with five pills the
+        // longest active label ("Settings") would otherwise exceed its ~1/5
+        // slot on narrow widths. It never scales UP, so wide layouts are
+        // unchanged; the InkWell above keeps the full 48px tap target.
         child: SizedBox(
           height: 48,
-          child: Center(child: pill),
+          child: Center(
+            child: FittedBox(fit: BoxFit.scaleDown, child: pill),
+          ),
         ),
       ),
     );
