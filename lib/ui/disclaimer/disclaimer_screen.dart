@@ -179,7 +179,7 @@ class _GateLayout extends StatelessWidget {
                               'It becomes valid only when signed on paper',
                           body:
                               'PA law requires your signature plus two '
-                              'qualified adult witnesses, in ink, in person. '
+                              'adult witnesses, in ink, in person. '
                               'The app cannot sign for you.',
                         ),
                         const SizedBox(height: 10),
@@ -190,8 +190,8 @@ class _GateLayout extends StatelessWidget {
                           // native Private Mode stores encrypted on-device.
                           body: kIsWeb
                               ? 'You work anonymously in this browser tab — no '
-                                  'account, no cloud, no tracking. Download '
-                                  'your PDF before you close it, or your '
+                                  'account, no cloud, no tracking. Open and '
+                                  'save your PDF before you close it, or your '
                                   'answers are gone.'
                               : 'No account, no cloud, no tracking — nothing '
                                   'goes to our servers. Anything you save '

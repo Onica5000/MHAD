@@ -180,8 +180,10 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                       Center(
                         child: Text(
                           kIsWeb
-                              ? 'Private mode with encrypted storage is '
-                                'available in the mobile and desktop apps.'
+                              ? 'On the web your data is kept in memory only '
+                                'and is never sent to a server, so encrypted '
+                                'on-device (Private mode) storage is not '
+                                'available here.'
                               : 'This app is not HIPAA-compliant. Nothing '
                                 'is sent to a server for storage.',
                           textAlign: TextAlign.center,

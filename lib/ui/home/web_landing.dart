@@ -160,7 +160,7 @@ class _AnonBanner extends StatelessWidget {
                   'No account, no cloud. If you close the tab or the app '
                   'crashes, your work is kept on this device for 10 minutes so '
                   'you can reopen and recover it — then it’s erased for good. '
-                  'Download your PDF to keep it.',
+                  'Open your PDF and save it to keep a copy.',
                   style: TextStyle(
                       fontFamily: kSansFamily,
                       fontSize: 12,
@@ -293,7 +293,7 @@ class _PrivacyPromiseCard extends StatelessWidget {
       (Icons.block, 'No cookies, no tracking',
           'No analytics, no third-party scripts.'),
       (Icons.download_outlined, 'You keep the file',
-          'Download the PDF — that’s the only copy.'),
+          'Save the PDF from your viewer — that’s the only copy.'),
     ];
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 18, 20, 18),

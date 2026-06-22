@@ -86,7 +86,7 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
         const WizardHelpButton(
           helpText:
               'Per 20 Pa.C.S. § 5821 / § 5832, a Mental Health Advance '
-              'Directive must be signed on paper by you and two qualified '
+              'Directive must be signed on paper by you and two adult '
               'witnesses, all present at the same time. The app cannot '
               "witness it for you — this step walks you through what to do.",
           stepId: 'execution',
@@ -142,7 +142,7 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
                       const TextSpan(
                           text:
                               'Under Act 194 the directive is only valid '
-                              'when you and two qualified witnesses sign '
+                              'when you and two adult witnesses sign '
                               'the '),
                       TextSpan(
                         text: 'same paper document',
@@ -186,7 +186,7 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
         ),
         const _SignStep(
           n: 2,
-          title: 'Gather two qualified witnesses',
+          title: 'Gather two adult witnesses',
           body: 'Both must be 18 or older and in the room with you when '
               'you sign. (Who can’t witness is below.)',
         ),
@@ -274,7 +274,7 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
             onPressed: () =>
                 context.push(AppRoutes.exportRoute(widget.directiveId)),
             icon: const Icon(Icons.visibility_outlined, size: 18),
-            label: const Text('Preview & download packet'),
+            label: const Text('Preview & open packet'),
             style: FilledButton.styleFrom(
               minimumSize:
                   const Size.fromHeight(DesignTokens.buttonHeightLg),

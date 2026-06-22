@@ -71,7 +71,7 @@ class _PlainLegalToggleScreenState
             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
               content: Text(
                   'Sharing routes through the Export screen — use that to '
-                  'download the PDF.'),
+                  'open, print, or save the PDF.'),
             ));
           },
         ),

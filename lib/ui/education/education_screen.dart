@@ -160,8 +160,9 @@ class _EditorialLearnHub extends StatelessWidget {
         ),
         const SizedBox(height: 6),
         Text(
-          'Everything below comes verbatim from the official PA MHAD booklet. '
-          'No marketing, no opinions — just the rules and what they mean.',
+          'Most of this comes straight from the official PA MHAD booklet, plus '
+          'a few plain-language explainers. No marketing, no opinions — just '
+          'the rules and what they mean.',
           style: TextStyle(
             fontFamily: kSansFamily,
             fontSize: 13.5,

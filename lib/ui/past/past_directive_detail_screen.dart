@@ -207,9 +207,9 @@ class _Body extends ConsumerWidget {
         ),
         const SizedBox(height: 8),
         ActionRow(
-          icon: Icons.download_outlined,
-          title: 'Download the PDF',
-          subtitle: 'Keep for your records',
+          icon: Icons.open_in_new,
+          title: 'Open the PDF',
+          subtitle: 'Print or save for your records',
           onTap: () =>
               context.push(AppRoutes.exportRoute(directive.id)),
         ),

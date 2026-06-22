@@ -83,10 +83,9 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
             ],
             const SizedBox(height: 12),
             const Text(
-              'A revocation-letter PDF is not yet generated automatically. '
-              'Until that is wired up, call or email each recipient yourself, '
-              'and ask the receiving provider to record the revocation in '
-              'your chart.',
+              'Contact each recipient yourself — call or email them — and ask '
+              'the receiving provider to record the revocation in your chart. '
+              'Revocation takes effect once your provider has been told.',
               style: TextStyle(fontStyle: FontStyle.italic),
             ),
           ],

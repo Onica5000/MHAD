@@ -243,7 +243,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
                           ),
                           const TextSpan(
                             text:
-                                ' on the physician \u2014 they choose the dose. (20 Pa.C.S. \u00a7 5808.)',
+                                ' on the physician \u2014 they choose the dose.',
                           ),
                         ],
                       ),

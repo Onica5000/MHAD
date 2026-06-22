@@ -204,7 +204,7 @@ class _CombinedCard extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     'Treatment preferences and a trusted decision-maker, in '
-                    'one document. 9 short steps · about 20 minutes.',
+                    'one document. 11 short steps · about 20 minutes.',
                     style: TextStyle(
                       fontFamily: kSansFamily,
                       fontSize: 13.5,

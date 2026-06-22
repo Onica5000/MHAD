@@ -56,11 +56,12 @@ class PrivacyPolicyScreen extends StatelessWidget {
             _PolicySection(
               title: 'How Data Is Stored & Protected',
               body:
-                  'All directive data is stored locally on your device in a '
-                  'SQLite database. Data is NOT transmitted to the app '
-                  'developer or any third party for storage.\n\n'
-                  'In Public Mode, data is stored in an in-memory database '
-                  'that is erased when you close the app.\n\n'
+                  'Your directive data stays on your device and is NOT '
+                  'transmitted to the app developer or any third party for '
+                  'storage.\n\n'
+                  'On the web (Public Mode), data is held in an in-memory '
+                  'database and is erased when you close the tab — nothing is '
+                  'written to disk.\n\n'
                   'In Private Mode, data is encrypted using SQLCipher '
                   '(AES-256 encryption) and stored in a file on your device. '
                   'Access requires biometric authentication or a passcode. '

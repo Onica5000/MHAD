@@ -83,9 +83,9 @@ extension FormTypeExt on FormType {
       // these five so the agent decides what's not written.
       if (!isPoa) WizardStep.whereIWantCare,
       if (!isPoa) WizardStep.diagnoses,
-      // Allergies BEFORE medications (artboard order): a severe allergy the
-      // user records here can be auto-added to the medications "never give"
-      // list on the next step, which only works if allergies come first.
+      // Allergies BEFORE medications (artboard order). Allergies and the
+      // medications "never want" list are independent sections — neither
+      // cross-fills the other.
       if (!isPoa) WizardStep.allergies,
       if (!isPoa) WizardStep.medications,
       if (!isPoa) WizardStep.proceduresResearch,
@@ -139,9 +139,9 @@ extension WizardStepExt on WizardStep {
           'Help your care team see the whole picture in a crisis. Search by '
               'name — we attach the ICD-10 code your doctors use.',
         WizardStep.medications =>
-          'What you take, and what to avoid. Two sections: meds you take now '
-              '(informational) and meds to refuse during a crisis (binding '
-              'under Act 194).',
+          'What you take now (for your care team) plus the medications you '
+              'refuse, limit, or prefer. Your refusals and limits are binding '
+              'under Act 194.',
         WizardStep.allergies =>
           'Drug allergies, sensitivities, past adverse reactions. This is the '
               'most-checked section by ER staff.',

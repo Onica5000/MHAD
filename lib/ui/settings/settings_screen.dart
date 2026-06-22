@@ -187,7 +187,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             child: _SettingsRow(
               icon: Icons.accessibility_new,
               title: 'Accessibility',
-              subtitle: 'Text size, dyslexia font, language, screen reader',
+              subtitle: 'Text size, dyslexia font, bold text, contrast, language',
               onTap: () => context.push(AppRoutes.accessibility),
             ),
           ),

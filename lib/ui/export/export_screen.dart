@@ -767,7 +767,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
             child: OutlinedButton.icon(
               onPressed: _isGenerating ? null : _generateWalletCard,
               icon: const Icon(Icons.credit_card),
-              label: const Text('Download wallet card (PDF)'),
+              label: const Text('Open wallet card (PDF)'),
             ),
           ),
           const SizedBox(height: 16),
