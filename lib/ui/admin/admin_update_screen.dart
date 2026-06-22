@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/services/admin_backup_store.dart';
 import 'package:mhad/services/admin_update_service.dart';
+import 'package:mhad/services/gemini_model_service.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 
 /// Hidden, non-user-facing admin tool: the AI drafts updates to the app's
@@ -115,6 +116,130 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
         _error = 'Draft failed: $e';
       });
     }
+  }
+
+  /// Research the live Gemini catalog and propose switching `ai.model` to the
+  /// best available model. Grounds the choice in the ListModels API + a real
+  /// test call — so an older model never stays pinned when a better one exists.
+  /// Flash is recommended (the app's tier); Pro is offered for accuracy.
+  Future<void> _checkGeminiModel() async {
+    // Prefer the app's saved Gemini key (correct provider); fall back to a key
+    // typed here. Avoids accidentally using an Anthropic/OpenAI key.
+    final savedKey = (ref.read(apiKeyProvider).valueOrNull ?? '').trim();
+    final key = savedKey.isNotEmpty ? savedKey : _keyCtrl.text.trim();
+    if (key.isEmpty) {
+      setState(() => _error =
+          'Need a Gemini API key (AIza…) — save one in the app or type it above.');
+      return;
+    }
+    setState(() {
+      _loading = true;
+      _error = null;
+      _isRevert = false;
+    });
+    try {
+      final base = await AdminUpdateService.currentData(AdminDataTarget.appData);
+      final current = ((base['ai'] as Map?)?['model'] ?? '').toString();
+      final svc = GeminiModelService(key);
+      final rec = await svc.recommend(current);
+      if (!mounted) return;
+      setState(() => _loading = false);
+      if (rec.bestFlash == null && rec.bestPro == null) {
+        setState(() => _error = 'No usable text models returned by the API.');
+        return;
+      }
+      final chosen = await _pickModel(rec);
+      if (chosen == null || !mounted) return;
+      if (chosen.id == current) {
+        setState(() => _error = 'Already on $current — nothing to switch.');
+        return;
+      }
+      // Validate the pick with a real call before proposing it.
+      setState(() => _loading = true);
+      final ok = await svc.validate(chosen.id);
+      if (!mounted) return;
+      setState(() => _loading = false);
+      if (!ok) {
+        setState(() =>
+            _error = '${chosen.id} failed a test call — not proposing it.');
+        return;
+      }
+      setState(() {
+        _target = AdminDataTarget.appData;
+        _base = base;
+        _changes = [
+          ProposedChange(
+            path: 'ai.model',
+            oldValue: current.isEmpty ? null : current,
+            newValue: chosen.id,
+            autonomy: 'auto',
+            source:
+                'Gemini ListModels API (generativelanguage.googleapis.com/v1beta/models) + live generateContent test',
+            rationale: _modelReason(rec, chosen),
+            approved: true,
+          ),
+        ];
+        _stage = _Stage.review;
+      });
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _loading = false;
+          _error = 'Model check failed: $e';
+        });
+      }
+    }
+  }
+
+  /// Human-readable reasons for the proposed switch (shown for approval).
+  String _modelReason(ModelRecommendation rec, GeminiModel chosen) {
+    final tier = chosen.isFlash ? 'Flash' : (chosen.isPro ? 'Pro' : 'model');
+    final tokens =
+        'context ${chosen.inputTokenLimit} in / ${chosen.outputTokenLimit} out tokens';
+    final alt = chosen.isFlash && rec.bestPro != null
+        ? ' Pro alternative if higher accuracy is needed: ${rec.bestPro!.id}.'
+        : (chosen.isPro && rec.bestFlash != null
+            ? ' Cheaper Flash option: ${rec.bestFlash!.id}.'
+            : '');
+    return 'Best available $tier model per the live catalog (was ${rec.currentModel}). '
+        '$tokens.$alt';
+  }
+
+  /// Present the recommended Flash model and the Pro alternative with their
+  /// details, returning the maintainer's pick (or null if cancelled).
+  Future<GeminiModel?> _pickModel(ModelRecommendation rec) {
+    Widget option(String tag, GeminiModel m, String note) => SimpleDialogOption(
+          onPressed: () => Navigator.pop(context, m),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('$tag — ${m.id}',
+                  style: const TextStyle(fontWeight: FontWeight.w700)),
+              Text(
+                '${m.displayName}\n$note\ncontext ${m.inputTokenLimit} in / ${m.outputTokenLimit} out',
+                style: const TextStyle(fontSize: 12),
+              ),
+            ],
+          ),
+        );
+    return showDialog<GeminiModel>(
+      context: context,
+      builder: (ctx) => SimpleDialog(
+        title: Text('Best Gemini model (now: ${rec.currentModel})'),
+        children: [
+          if (rec.bestFlash != null)
+            option('RECOMMENDED · Flash', rec.bestFlash!,
+                'Fast, free-tier tier the app is tuned for.'),
+          if (rec.bestPro != null)
+            option('Alternative · Pro', rec.bestPro!,
+                'Most capable — pick if Flash accuracy is insufficient.'),
+          SimpleDialogOption(
+            onPressed: () => Navigator.pop(ctx, null),
+            child: const Text('Cancel'),
+          ),
+        ],
+      ),
+    );
   }
 
   Future<void> _build() async {
@@ -370,6 +495,15 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
                 label: const Text('Revert'),
               ),
             ],
+          ),
+          const SizedBox(height: 8),
+          // Grounded model upgrade: research the live Gemini catalog and propose
+          // switching ai.model to the best available (Flash first, Pro offered
+          // for accuracy) — so an older model never stays pinned by default.
+          OutlinedButton.icon(
+            onPressed: _loading ? null : _checkGeminiModel,
+            icon: const Icon(Icons.model_training),
+            label: const Text('Check best Gemini model'),
           ),
           _error_(_error),
         ],
