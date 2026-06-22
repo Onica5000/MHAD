@@ -60,6 +60,13 @@ abstract class AppRoutes {
   static const settings = '/settings';
 
   static String wizardRoute(int directiveId) => '/wizard/$directiveId';
+
+  /// A specific wizard step, encoded as a query param so the step is part of
+  /// the URL/history: browser & system Back/Forward move between steps, and a
+  /// refresh resumes the same step. The path stays `/wizard/:id`, so the
+  /// WizardScreen state is preserved across step changes.
+  static String wizardStepRoute(int directiveId, int step) =>
+      '/wizard/$directiveId?step=$step';
   static String exportRoute(int directiveId) => '/export/$directiveId';
 
   // Phase 4 — net-new screens per v2 prototype artboards. All reachable via

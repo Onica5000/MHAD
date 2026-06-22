@@ -45,10 +45,15 @@ class WizardScreen extends ConsumerStatefulWidget {
 // (2026-06-03). See the `_handleMenuAction` removal note above.
 
 class _WizardScreenState extends ConsumerState<WizardScreen> {
+  // Mirror of the current step, kept in sync from the URL (`?step=N`) on every
+  // build. The URL is the source of truth (see build); this field just lets the
+  // async navigation handlers read the current index without a context.
   int _stepIndex = 0;
   List<WizardStep>? _steps;
   bool _isSaving = false;
-  bool _restoredStep = false;
+  // Set once we've canonicalised the URL with a step param (or arrived with
+  // one), so the resume-redirect only fires a single time.
+  bool _resumed = false;
 
   /// Re-keyed after Smart Fill to force the step widget to rebuild with the
   /// freshly persisted values.
@@ -81,11 +86,19 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
     super.dispose();
   }
 
-  Future<void> _persistStep() async {
+  Future<void> _persistStep(int index) async {
     await ref
         .read(directiveRepositoryProvider)
-        .updateLastStepIndex(widget.directiveId, _stepIndex);
+        .updateLastStepIndex(widget.directiveId, index);
     await _cacheForWebReload();
+  }
+
+  /// Navigate to [index] by changing the URL, so the move is a real history
+  /// entry (browser/system Back returns here). Persistence runs in the
+  /// background and never gates navigation.
+  void _goToStep(int index) {
+    context.go(AppRoutes.wizardStepRoute(widget.directiveId, index));
+    unawaited(_persistStep(index));
   }
 
   /// On web, snapshot the full directive to SharedPreferences so the user
@@ -168,15 +181,30 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
         _steps ??= formType.steps;
         final steps = _steps!;
 
-        // Restore last step on first load (clamp to valid range — the enum
-        // shrunk from 15 to 9 in the redesign, so saved indices from older
-        // sessions may overshoot).
-        if (!_restoredStep) {
-          _restoredStep = true;
-          final saved = directive.lastStepIndex;
-          if (saved > 0) {
-            _stepIndex = saved.clamp(0, steps.length - 1);
+        // The current step is driven by the URL (`?step=N`) so browser/system
+        // Back & Forward move between steps and a refresh resumes the same one.
+        // When the param is absent (arriving via `/wizard/:id`), fall back to
+        // the persisted resume index and canonicalise the URL once with a
+        // history-neutral `replace` (so Back doesn't bounce on the bare URL).
+        // Indices are clamped — the enum shrank from 15 to 9 in the redesign,
+        // so saved/linked indices from older sessions may overshoot.
+        final stepParam = int.tryParse(
+            GoRouterState.of(context).uri.queryParameters['step'] ?? '');
+        if (stepParam == null) {
+          final resume = directive.lastStepIndex.clamp(0, steps.length - 1);
+          _stepIndex = resume;
+          if (!_resumed) {
+            _resumed = true;
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (mounted) {
+                context.replace(
+                    AppRoutes.wizardStepRoute(widget.directiveId, resume));
+              }
+            });
           }
+        } else {
+          _resumed = true;
+          _stepIndex = stepParam.clamp(0, steps.length - 1);
         }
 
         final currentStep = steps[_stepIndex];
@@ -184,10 +212,19 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
         final p = Theme.of(context).mhadPalette;
 
         return PopScope(
+          // Intercept native hardware/gesture back: step backwards through the
+          // wizard rather than exiting. Only when already on the first step
+          // does back fall through to the confirm-and-exit flow. (On web the
+          // browser Back button traverses the per-step URL history directly,
+          // so it lands on the previous step without going through here.)
           canPop: false,
           onPopInvokedWithResult: (didPop, _) async {
             if (didPop || _isSaving) return;
-            await _saveAndExit(context);
+            if (_stepIndex > 0) {
+              await _goBack();
+            } else {
+              await _saveAndExit(context);
+            }
           },
           child: Scaffold(
             backgroundColor: p.scaffoldBackground,
@@ -375,9 +412,8 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
       WizardStep.allergies => AllergiesStep(
           key: _stepKey,
           directiveId: directiveId,
-          onGoToPrevStep: _stepIndex > 0
-              ? () => setState(() => _stepIndex--)
-              : null,
+          onGoToPrevStep:
+              _stepIndex > 0 ? () => _goToStep(_stepIndex - 1) : null,
         ),
       WizardStep.proceduresResearch =>
         ProceduresResearchStep(key: _stepKey, directiveId: directiveId),
@@ -392,7 +428,7 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
           // forward validation is skipped).
           onEditStep: (target) {
             final idx = formType.steps.indexOf(target);
-            if (idx >= 0) setState(() => _stepIndex = idx);
+            if (idx >= 0) _goToStep(idx);
           },
         ),
     };
@@ -435,12 +471,11 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
             context.go(AppRoutes.signRoute(widget.directiveId));
           }
         } else {
-          // Advance FIRST, then persist + web-cache in the background. The
-          // resume-index write and crash-recovery snapshot are best-effort —
-          // they must never gate "Continue" (a hung await here was freezing
-          // navigation on web).
-          setState(() => _stepIndex++);
-          unawaited(_persistStep());
+          // Advance FIRST (URL change), then persist + web-cache in the
+          // background. The resume-index write and crash-recovery snapshot are
+          // best-effort — they must never gate "Continue" (a hung await here
+          // was freezing navigation on web). _goToStep handles both.
+          _goToStep(_stepIndex + 1);
         }
       }
     } finally {
@@ -462,8 +497,7 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
       }
     }
     if (mounted) {
-      setState(() => _stepIndex--);
-      unawaited(_persistStep());
+      _goToStep(_stepIndex - 1);
     }
   }
 
@@ -482,8 +516,7 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
       }
     }
     if (mounted) {
-      setState(() => _stepIndex = target);
-      unawaited(_persistStep());
+      _goToStep(target);
     }
   }
 
