@@ -4,6 +4,14 @@
 /// by the AI. Each field is nullable — only fields the AI could confidently
 /// extract are populated.
 class DocumentExtractionResult {
+  // ── Document relevance ─────────────────────────────────────────────────────
+  // Whether the upload is a health / care / advance-directive document worth
+  // extracting from. The AI sets this false for unrelated documents (a lease,
+  // bill, contract, …) and then extracts nothing; the pipeline rejects those so
+  // a non-medical file never pre-fills the directive.
+  final bool documentRelevant;
+  final String? documentKind; // short description, e.g. "residential lease"
+
   // ── Medications ──────────────────────────────────────────────────────────
   final List<ExtractedMedication> medicationsToAvoid;
   final List<ExtractedMedication> medicationsPreferred;
@@ -65,6 +73,8 @@ class DocumentExtractionResult {
   final ExtractedPersonalInfo personalInfo;
 
   const DocumentExtractionResult({
+    this.documentRelevant = true,
+    this.documentKind,
     this.medicationsToAvoid = const [],
     this.medicationsPreferred = const [],
     this.medicationsCurrent = const [],
@@ -246,6 +256,10 @@ class DocumentExtractionResult {
 
   factory DocumentExtractionResult.fromJson(Map<String, dynamic> json) {
     return DocumentExtractionResult(
+      // Only an explicit false rejects; a missing flag is treated as relevant
+      // so older/edge responses still extract.
+      documentRelevant: json['document_relevant'] != false,
+      documentKind: optStr(json['document_kind']),
       medicationsToAvoid: _parseMeds(json['medications_to_avoid']),
       medicationsPreferred: _parseMeds(json['medications_preferred']),
       medicationsCurrent: _parseMeds(json['medications_current']),

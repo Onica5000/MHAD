@@ -409,6 +409,11 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
       final extractor = DocumentExtractor(apiKey: apiKey);
       DocumentExtractionResult? merged;
       final allPii = <String>[];
+      // Relevance gate: an unrelated upload (lease, bill, contract, …) comes
+      // back documentRelevant=false with nothing extracted. Track whether any
+      // uploaded file was actually a health/care document.
+      var anyRelevant = false;
+      String? irrelevantKind;
 
       for (var i = 0; i < docs.length; i++) {
         if (!mounted) return;
@@ -445,15 +450,39 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
 
         allPii.addAll(extraction.strippedPiiCategories);
 
-        if (merged == null) {
-          merged = extraction.result;
+        final res = extraction.result;
+        if (res.documentRelevant) {
+          anyRelevant = true;
         } else {
-          merged = merged.merge(extraction.result);
+          irrelevantKind ??= res.documentKind;
+        }
+
+        if (merged == null) {
+          merged = res;
+        } else {
+          merged = merged.merge(res);
         }
       }
 
       if (!mounted) return;
       _piiStripped = allPii;
+
+      // No uploaded file was a health/care document — refuse to use any of it.
+      if (!anyRelevant) {
+        setState(() {
+          final kind = (irrelevantKind != null && irrelevantKind.isNotEmpty)
+              ? ' (it looks like a $irrelevantKind)'
+              : '';
+          _error = docs.length == 1
+              ? "This doesn't look like a health or medical document$kind, so "
+                  'nothing was used. Upload a medical record, medication or '
+                  'allergy list, or an existing advance directive.'
+              : "These don't look like health or medical documents$kind, so "
+                  'nothing was used.';
+          _step = _PipelineStep.pick;
+        });
+        return;
+      }
 
       if (merged == null || merged.isEmpty) {
         setState(() {
