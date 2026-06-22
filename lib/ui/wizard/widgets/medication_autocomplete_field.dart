@@ -9,9 +9,15 @@ class MedicationAutocompleteField extends StatefulWidget {
   final TextEditingController controller;
   final String? labelText;
 
+  /// Whether to offer strength chips in the suggestions. Only the "medications
+  /// I currently take" section captures a strength; the preference sections
+  /// (never / limitations / preferred) search by NAME only, to avoid confusion.
+  final bool showStrengths;
+
   const MedicationAutocompleteField({
     required this.controller,
     this.labelText,
+    this.showStrengths = true,
     super.key,
   });
 
@@ -172,8 +178,8 @@ class _MedicationAutocompleteFieldState
                             ),
                           ),
                         ),
-                        // Strength chips
-                        if (med.strengths.isNotEmpty)
+                        // Strength chips — only where a strength is captured.
+                        if (widget.showStrengths && med.strengths.isNotEmpty)
                           Padding(
                             padding:
                                 const EdgeInsets.fromLTRB(36, 0, 12, 8),

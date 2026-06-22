@@ -461,6 +461,10 @@ class _MedTable extends StatelessWidget {
                         children: [
                           MedicationAutocompleteField(
                             controller: rows[i].nameCtrl,
+                            // Strength suggestions only in the "currently
+                            // taking" section (the only one that captures a
+                            // strength); other sections search by name only.
+                            showStrengths: showDosage,
                           ),
                           // NTI monitoring note — shows only when the entered
                           // medication is a narrow-therapeutic-index drug.
