@@ -16,8 +16,7 @@ import 'package:mhad/ui/widgets/design/wizard_header.dart';
 /// - High contrast toggle
 /// - Language picker (English shipped; Spanish partial; Chinese/Arabic
 ///   marked Phase 2)
-/// - Read aloud, Switch Control, Hearing aid pairing — labeled as OS
-///   handoffs (↗) per v3 spec
+/// - Read aloud — labeled as an OS handoff (↗) per v3 spec
 class AccessibilitySettingsScreen extends ConsumerWidget {
   const AccessibilitySettingsScreen({super.key});
 
@@ -124,20 +123,6 @@ class AccessibilitySettingsScreen extends ConsumerWidget {
             onChanged: (v) => ref
                 .read(accessibilitySettingsProvider.notifier)
                 .setVoiceOverHints(v),
-          ),
-          _ToggleRow(
-            title: 'Switch Control',
-            sub: 'OS-level — enable in iOS Settings → Accessibility',
-            handoff: true,
-            value: false,
-            onChanged: null,
-          ),
-          _ToggleRow(
-            title: 'Hearing aid pairing',
-            sub: 'OS-level — pair in your device Settings',
-            handoff: true,
-            value: false,
-            onChanged: null,
           ),
         ],
       )),
