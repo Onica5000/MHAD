@@ -40,13 +40,10 @@ enum EducationTabKind {
 }
 
 /// 8-row index listing every [EducationCategory] with its section count
-/// and a chevron. Tapping a row that maps onto a top-level tab switches
-/// the hub to that tab; rows for sub-buckets inside Articles (Combined /
-/// Declaration / POA / Supplementary) push a filtered list so the user
-/// can browse that sub-bucket in isolation.
+/// and a chevron. Tapping any row opens a page listing that category's
+/// sections so the user can browse each topic bucket in isolation.
 class BrowseByTopic extends StatelessWidget {
-  final ValueChanged<EducationTabKind> onTabChange;
-  const BrowseByTopic({required this.onTabChange, super.key});
+  const BrowseByTopic({super.key});
 
   static const _rows = <(EducationCategory, String, String)>[
     (EducationCategory.intro, 'Introduction',
@@ -67,27 +64,12 @@ class BrowseByTopic extends StatelessWidget {
         'Step-by-step distribution + revocation guides'),
   ];
 
-  /// Maps an [EducationCategory] onto the top-level [EducationTabKind] whose
-  /// filter includes it. For sub-buckets of Articles we still need a way
-  /// to surface JUST that sub-bucket — we push a `_CategoryListScreen`
-  /// instead of switching tabs (the Articles tab itself is a 5-cat blend).
+  /// Every row opens its own page listing that category's sections (the
+  /// "Introduction" behavior), so each topic bucket browses in isolation.
   void _open(BuildContext context, EducationCategory cat) {
-    switch (cat) {
-      case EducationCategory.intro:
-      case EducationCategory.combined:
-      case EducationCategory.declaration:
-      case EducationCategory.poa:
-      case EducationCategory.supplementary:
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (_) => _CategoryListScreen(category: cat),
-        ));
-      case EducationCategory.glossary:
-        onTabChange(EducationTabKind.glossary);
-      case EducationCategory.faq:
-        onTabChange(EducationTabKind.faq);
-      case EducationCategory.checklist:
-        onTabChange(EducationTabKind.checklists);
-    }
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (_) => _CategoryListScreen(category: cat),
+    ));
   }
 
   @override

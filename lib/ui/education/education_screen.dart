@@ -223,7 +223,7 @@ class _EditorialLearnHub extends StatelessWidget {
         // browsable, before the editorial tabs/grid.
         const SectionLabel('Browse all topics'),
         const SizedBox(height: 8),
-        BrowseByTopic(onTabChange: onTabChange),
+        const BrowseByTopic(),
         const SizedBox(height: 18),
         // Category filter pills, centered in a blue box (replaces the old
         // featured "What is the PA MHAD" card — that section is now a normal
