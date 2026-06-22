@@ -287,10 +287,12 @@ RULE: NEVER put any person's name, phone, or address into any care/medical field
 ═══ STEP 2: EXTRACT ALL CARE INSTRUCTIONS — ONE FIELD PER FACT, NO DUPLICATION ═══
 Each piece of information goes in EXACTLY ONE field. Once placed, it must NOT appear in any other field.
 
-medications_to_avoid
-  → ONLY if the document EXPLICITLY says: allergy, adverse reaction, avoid, discontinue, do not give, do not use, never give.
-  → NOT for medications merely listed, currently prescribed, or mentioned with no explicit avoid signal.
-  → Drug allergies go BOTH here AND in "allergies" (kind: drug, severity: severe) when explicitly marked as allergic.
+medications_to_avoid  (the person's "medications I never want" list — a TREATMENT REFUSAL, NOT an allergy)
+  → ONLY medications the document explicitly says the person does not want / refuses, e.g.: "avoid", "do not give", "do not use", "never give", "do not want", "won't take", "discontinue".
+  → This section and "allergies" are SEPARATE. An allergy is NOT a "medication I never want" — do NOT copy allergies into this list, and do NOT infer this list from allergies. (Allergies go ONLY in "allergies".)
+  → NOT for medications merely listed, currently prescribed, or mentioned with no explicit refusal signal.
+  → BE EXHAUSTIVE: include EVERY medication the document says to avoid — never a subset, never a selection.
+  → reason: the EXACT reason the document gives, copied verbatim (e.g. "made me manic", "caused severe sedation"). Do NOT paraphrase, summarize, generalize, or invent a reason. Leave reason null if the document states none.
 
 medications_preferred
   → ONLY if the document EXPLICITLY says: prefers, wants, currently taking and working well, or chooses.
@@ -315,11 +317,12 @@ diagnoses
   → NOT the effective condition text. NOT symptoms. NOT hospitalization history.
   → Goes to the Diagnoses step in the app.
 
-allergies
-  → All allergies: drug, food, material/latex, and other.
+allergies  (the ONLY place allergies go — separate from medications_to_avoid)
+  → ALL allergies the document states: drug, food, material/latex, and other.
+  → BE EXHAUSTIVE: include EVERY stated allergy — never a subset, never a selection.
   → Each as {substance: "...", kind: "drug"|"food"|"material"|"other", severity: "mild"|"moderate"|"severe", reactions: "comma-separated symptoms", notes: "..."}.
-  → Severity guidance: mild = rash/GI; moderate = hives/swelling; severe = anaphylaxis/ER.
-  → Extract even if the allergy is already in medications_to_avoid — both fields get it.
+  → reactions/notes: copy what the document states; do NOT invent symptoms. Severity: use what the document states; only when none is stated may you map from stated symptoms (mild = rash/GI; moderate = hives/swelling; severe = anaphylaxis/ER).
+  → Do NOT also place allergies in medications_to_avoid — the two sections are separate and must not be conflated.
 
 ect_consent
   → Whether the person consents to electroconvulsive therapy (ECT).
@@ -413,7 +416,8 @@ Each fact belongs to EXACTLY ONE field. Examples:
   • Crisis de-escalation → crisis_intervention ONLY
   • Doctor's name → personal_info.primary_doctor_name ONLY
   • Diagnosis name → diagnoses list ONLY (not also effective_condition)
-  • Drug allergy → both medications_to_avoid AND allergies (this is the only allowed exception)
+  • Allergy → allergies ONLY (NEVER also medications_to_avoid; they are separate sections)
+  • Medication the person refuses/never wants → medications_to_avoid ONLY (NEVER also allergies)
 
 ═══ GENERAL RULES ═══
 1. READ THE ENTIRE DOCUMENT before extracting — do not stop early.
