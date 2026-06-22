@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/design/more_sheet.dart';
 import 'package:mhad/ui/widgets/design/responsive_shell.dart';
 
 /// Floating pill bottom navigation for the top-level destinations.
@@ -65,6 +66,17 @@ class MhadBottomNav extends ConsumerWidget {
         label: 'Settings',
         active: loc == AppRoutes.settings,
         onTap: () => context.go(AppRoutes.settings),
+      ),
+      // "More" — opens a bottom sheet with the secondary destinations the
+      // four primary tabs can't hold (Autofill, Download & print, AI setup,
+      // Get help, Reset). Brings narrow-screen nav to parity with the desktop
+      // sidebar. An action, never an "active" destination.
+      _NavItem(
+        icon: Icons.more_horiz,
+        activeIcon: Icons.more_horiz,
+        label: 'More',
+        active: false,
+        onTap: () => showMoreSheet(context, ref),
       ),
     ];
 
