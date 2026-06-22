@@ -633,23 +633,111 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         _buildUnencryptedBanner(),
       ];
 
-  // RIGHT / “Distribution” pane: share, machine-readable formats,
-  // password-protected copy, draft review, and wallet card.
+  // Consistent section header + explanation styling for the distribution rail.
+  Widget _railTitle(String text) => Padding(
+        padding: const EdgeInsets.only(bottom: 4),
+        child: Text(
+          text,
+          style: Theme.of(context)
+              .textTheme
+              .titleSmall
+              ?.copyWith(fontWeight: FontWeight.w600),
+        ),
+      );
+
+  Widget _railBody(String text) => Text(
+        text,
+        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+      );
+
+  // RIGHT / “Distribution” pane, organized into three groups:
+  //   1. Your official directive — configure (copy type, language) then Download.
+  //   2. Keep a copy — wallet card + an editable progress file.
+  //   3. Advanced — machine-readable data exports.
   List<Widget> _buildDistributionChildren() => [
+        // ── 1. Your official directive ───────────────────────────────────
+        _railTitle('Printed copy type'),
+        _railBody(
+          'A draft prints a light “DRAFT” watermark on every page — for '
+          'sending a copy while you keep the signed paper original. Tick as '
+          'many as you like — Download gives you one PDF of each.',
+        ),
+        const SizedBox(height: 4),
+        for (final m in _draftModeOrder)
+          CheckboxListTile(
+            value: _draftModes.contains(m),
+            onChanged: (v) => setState(() {
+              if (v == true) {
+                _draftModes.add(m);
+              } else if (_draftModes.length > 1) {
+                // Keep at least one selected so Download always has a copy.
+                _draftModes.remove(m);
+              }
+            }),
+            title: Text(_draftModeLabel(m)),
+            dense: true,
+            contentPadding: EdgeInsets.zero,
+            controlAffinity: ListTileControlAffinity.leading,
+          ),
+        const SizedBox(height: 16),
+        _railTitle('Document language'),
+        _railBody(
+          'The plain-language official form is the one you sign and use — '
+          'it is the legally valid directive. The legal-language version '
+          'restates it in formal statutory wording for reference only and '
+          'is not the document you sign.',
+        ),
+        const SizedBox(height: 8),
+        SegmentedButton<bool>(
+          segments: const [
+            ButtonSegment(
+              value: false,
+              label: Text('Plain (signable)'),
+              icon: Icon(Icons.verified_outlined),
+            ),
+            ButtonSegment(
+              value: true,
+              label: Text('Legal (info only)'),
+              icon: Icon(Icons.description_outlined),
+            ),
+          ],
+          selected: {_legalLanguage},
+          onSelectionChanged: (s) => setState(() => _legalLanguage = s.first),
+        ),
+        if (_legalLanguage) ...[
+          const SizedBox(height: 8),
+          Text(
+            'Heads up: the legal-language version is for reference only. '
+            'Sign and use the plain-language official form.',
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Theme.of(context).colorScheme.error,
+                ),
+          ),
+        ],
+        const SizedBox(height: 16),
+        // Primary action — placed after the settings that control it.
         Semantics(
           button: true,
           label: 'Download or print the PDF directive (unencrypted file)',
-          child: FilledButton.icon(
-            onPressed: _isGenerating ? null : _generateAndShare,
-            icon: const Icon(Icons.download),
-            label: const Text('Download PDF'),
+          child: SizedBox(
+            width: double.infinity,
+            child: FilledButton.icon(
+              onPressed: _isGenerating ? null : _generateAndShare,
+              icon: const Icon(Icons.download),
+              label: const Text('Download PDF'),
+            ),
           ),
         ),
-        const SizedBox(height: 16),
         if (_directive != null) ...[
-          // Wallet card: a credit-card-sized summary the user can print and carry.
-          Text('Wallet card', style: Theme.of(context).textTheme.titleSmall),
-          const SizedBox(height: 6),
+          const SizedBox(height: 20),
+          const Divider(),
+          const SizedBox(height: 16),
+          // ── 2. Keep a copy ─────────────────────────────────────────────
+          _railTitle('Wallet card'),
+          _railBody('A credit-card-sized summary you can print and carry.'),
+          const SizedBox(height: 8),
           WalletCard(
             principalName: _directive!.fullName.trim().isEmpty
                 ? 'Your name'
@@ -669,17 +757,51 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
             ),
           ),
           const SizedBox(height: 16),
-          Text('Machine-readable formats',
-              style: Theme.of(context).textTheme.titleSmall),
+          _railTitle('Save an editable copy'),
+          _railBody(
+            'Not a finished document — this is how you save your progress. The '
+            'web app can’t store your work on this device, so download this '
+            'file to keep it, then re-upload it later (here or on another '
+            'device) to keep editing. Nothing is stored online.',
+          ),
           const SizedBox(height: 4),
-          Text(
+          Row(
+            children: [
+              Checkbox(
+                value: _encryptEditableCopy,
+                onChanged: (v) =>
+                    setState(() => _encryptEditableCopy = v ?? true),
+              ),
+              const Expanded(child: Text('Encrypt the file')),
+            ],
+          ),
+          _railBody(
+            'Encrypting hinders others from reading it; the app still opens it '
+            'with no passphrase.',
+          ),
+          const SizedBox(height: 8),
+          Semantics(
+            button: true,
+            label: 'Download an editable copy of your directive',
+            child: SizedBox(
+              width: double.infinity,
+              child: FilledButton.tonalIcon(
+                onPressed: _isGenerating ? null : _downloadEditableCopy,
+                icon: const Icon(Icons.download_outlined),
+                label: const Text('Download'),
+              ),
+            ),
+          ),
+          const SizedBox(height: 20),
+          const Divider(),
+          const SizedBox(height: 16),
+          // ── 3. Advanced: machine-readable data ─────────────────────────
+          _railTitle('Machine-readable formats'),
+          _railBody(
             'Your PDF above is the document you sign — these are data exports '
             'for your records, a spreadsheet, or a health system. FHIR is the '
             'standard format hospitals use to exchange medical records; CSV is '
             'a spreadsheet file (opens in Excel or Google Sheets).',
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
           ),
           const SizedBox(height: 8),
           Wrap(
@@ -725,120 +847,8 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 16),
-          Text('Printed copy type',
-              style: Theme.of(context).textTheme.titleSmall),
-          const SizedBox(height: 4),
-          Text(
-            'A draft prints a light “DRAFT” watermark on every page — for '
-            'sending a copy while you keep the signed paper original. Tick as '
-            'many as you like — Download gives you one PDF of each.',
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-          ),
-          const SizedBox(height: 4),
-          for (final m in _draftModeOrder)
-            CheckboxListTile(
-              value: _draftModes.contains(m),
-              onChanged: (v) => setState(() {
-                if (v == true) {
-                  _draftModes.add(m);
-                } else if (_draftModes.length > 1) {
-                  // Keep at least one selected so Download always has a copy.
-                  _draftModes.remove(m);
-                }
-              }),
-              title: Text(_draftModeLabel(m)),
-              dense: true,
-              contentPadding: EdgeInsets.zero,
-              controlAffinity: ListTileControlAffinity.leading,
-            ),
-          const SizedBox(height: 16),
-          Text('Document language',
-              style: Theme.of(context).textTheme.titleSmall),
-          const SizedBox(height: 4),
-          Text(
-            'The plain-language official form is the one you sign and use — '
-            'it is the legally valid directive. The legal-language version '
-            'restates it in formal statutory wording for reference only and '
-            'is not the document you sign.',
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-          ),
-          const SizedBox(height: 8),
-          SegmentedButton<bool>(
-            segments: const [
-              ButtonSegment(
-                value: false,
-                label: Text('Plain (signable)'),
-                icon: Icon(Icons.verified_outlined),
-              ),
-              ButtonSegment(
-                value: true,
-                label: Text('Legal (info only)'),
-                icon: Icon(Icons.description_outlined),
-              ),
-            ],
-            selected: {_legalLanguage},
-            onSelectionChanged: (s) =>
-                setState(() => _legalLanguage = s.first),
-          ),
-          if (_legalLanguage) ...[
-            const SizedBox(height: 8),
-            Text(
-              'Heads up: the legal-language version is for reference only. '
-              'Sign and use the plain-language official form.',
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.error,
-                  ),
-            ),
-          ],
-          const SizedBox(height: 16),
-          Text('Save an editable copy',
-              style: Theme.of(context).textTheme.titleSmall),
-          const SizedBox(height: 4),
-          Text(
-            'Download a file you keep. Re-upload it later (or on another '
-            'device) to continue editing — nothing is stored online. '
-            'Encrypting hinders others from reading it; the app still opens '
-            'it with no passphrase.',
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-          ),
-          const SizedBox(height: 4),
-          // Checkbox + label on their own row, Download full-width below.
-          // (Previously all three shared one Row; in the narrow control rail
-          // the button squeezed the label to ~zero width, wrapping it one
-          // letter per line — looked vertical.)
-          Row(
-            children: [
-              Checkbox(
-                value: _encryptEditableCopy,
-                onChanged: (v) =>
-                    setState(() => _encryptEditableCopy = v ?? true),
-              ),
-              const Expanded(child: Text('Encrypt the file')),
-            ],
-          ),
-          const SizedBox(height: 4),
-          Semantics(
-            button: true,
-            label: 'Download an editable copy of your directive',
-            child: SizedBox(
-              width: double.infinity,
-              child: FilledButton.tonalIcon(
-                onPressed: _isGenerating ? null : _downloadEditableCopy,
-                icon: const Icon(Icons.download_outlined),
-                label: const Text('Download'),
-              ),
-            ),
-          ),
         ],
-        // Export is the end of the flow now (the old “One pen away” summary
-        // was removed), so close with a clear way back home.
+        // Export is the end of the flow, so close with a clear way back home.
         const SizedBox(height: 16),
         const Divider(),
         const SizedBox(height: 12),
