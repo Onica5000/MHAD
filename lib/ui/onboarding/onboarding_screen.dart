@@ -63,8 +63,9 @@ class OnboardingScreen extends ConsumerWidget {
       body: SafeArea(
         child: Stack(
           children: [
-            // Crisis access is the global floating button (GlobalCrisisButton),
-            // shown on every screen including this intro — no per-screen chip.
+            // No crisis chip on this first-run intro by design; crisis access
+            // begins on the dashboard (Home tools / the mobile "More" sheet).
+            // (The global floating 988 button was removed 2026-06-22.)
             // Main editorial column. Padding matches prototype L54
             // `padding: '64px 28px 0'` — but we let SafeArea push the
             // top so the 988 chip and content don't collide on devices

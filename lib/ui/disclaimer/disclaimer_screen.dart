@@ -270,8 +270,9 @@ class _GateLayout extends StatelessWidget {
                 ],
               ),
             ),
-            // Crisis access is the global floating button (GlobalCrisisButton),
-            // shown on every screen including this gate — no per-screen chip.
+            // No crisis chip on this first-run gate by design; crisis access
+            // begins on the dashboard (Home tools / the mobile "More" sheet).
+            // (The global floating 988 button was removed 2026-06-22.)
           ],
         ),
       ),

@@ -6,6 +6,7 @@ import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/services/web_session_cache.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/design/crisis_sheet.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 
 /// True while the "More" sheet is on screen — guards against stacking multiple
@@ -155,6 +156,20 @@ class _MoreSheet extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 18),
+              // Crisis help, pinned first — the mobile crisis affordance now
+              // that the floating 988 button is gone. Opens the full
+              // crisis-resources sheet (via the root navigator, since this
+              // sheet is dismissed first).
+              _MoreRow(
+                icon: Icons.health_and_safety_outlined,
+                title: 'Crisis help',
+                detail: 'Call or text 988 · 24/7 support',
+                onTap: () {
+                  Navigator.of(context).pop();
+                  final ctx = rootNavigatorKey.currentContext;
+                  if (ctx != null) showCrisisSheet(ctx);
+                },
+              ),
               _MoreRow(
                 icon: Icons.document_scanner_outlined,
                 title: 'Autofill',
