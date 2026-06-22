@@ -829,8 +829,9 @@ List<pw.Page> buildCombinedPages({
         if (directive.expirationDate != null)
           dataLine('Expiration Date', formatExecDate(directive.expirationDate)),
         pw.SizedBox(height: 8),
+        // signatureBlock already prints a "Name" line, so a separate name
+        // field here was a duplicate (removed).
         signatureBlock('My Signature', name: directive.fullName),
-        dataLine('My Name', directive.fullName),
         dataLine(
           'Address',
           [directive.address, directive.address2]

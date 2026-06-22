@@ -678,8 +678,8 @@ List<pw.Page> buildPoaPages({
         if (directive.expirationDate != null)
           dataLine('Expiration Date', formatExecDate(directive.expirationDate)),
         pw.SizedBox(height: 8),
+        // signatureBlock already prints a "Name" line — drop the duplicate.
         signatureBlock('Principal Signature', name: directive.fullName),
-        dataLine('Name of Principal', directive.fullName),
         dataLine(
           'Address',
           [directive.address, directive.address2]
