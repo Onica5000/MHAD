@@ -254,8 +254,8 @@ Before reading anything else, locate and extract all personal details into "pers
 DECLARANT (the person this directive is FOR — look for labels: patient, principal, declarant, "I" / "me"):
 • full_name — full legal name. Format: as written.
 • date_of_birth — Format: MM/DD/YYYY (e.g., 03/15/1975). Convert from any other format.
-• address_line1 — street number and street name only (e.g., "123 Main St" or "123 Main St Apt 4B").
-• address_line2 — apartment, suite, unit, floor — ONLY if it is a SEPARATE line from line 1. Leave null if it is already in line 1.
+• address_line1 — street number and street name ONLY (e.g., "123 Main St"). NEVER include a secondary unit designator here.
+• address_line2 — the secondary address part: apartment, apt, suite, ste, unit, #, floor, fl, room, building, bldg, "c/o", attn, or PO box. Put it here WHENEVER one is present — even if the source wrote it on the same line as the street (split "123 Main St Apt 4B" → line1 "123 Main St", line2 "Apt 4B"). Leave null only when there genuinely is no secondary part.
 • city — city name only.
 • county — county name only (PA form includes county). Leave null if not stated.
 • state — 2-letter state abbreviation (e.g., PA). Default to PA if in a Pennsylvania document and not stated.
@@ -269,7 +269,7 @@ DECLARANT (the person this directive is FOR — look for labels: patient, princi
 
 DESIGNATED PEOPLE — use these sub-objects:
 • agent — the PRIMARY health-care agent / proxy / representative (the FIRST-named, not the backup).
-  Fields: name, relationship, address_line1, address_line2 (apt/unit if separate), city, state, zip (5-digit), phone (xxx) xxx-xxxx.
+  Fields: name, relationship, address_line1 (street only), address_line2 (apt/suite/unit/#/floor/c/o — split it out even if on the same line), city, state, zip (5-digit), phone (xxx) xxx-xxxx.
 • alternate_agent — the BACKUP / second / alternate agent. Same fields.
 • guardian — any nominated guardian. Same fields.
 
@@ -278,6 +278,9 @@ PHONE TYPE: For designated people (agent, alternate_agent, guardian), the extrac
 ADDRESS FORMAT FOR ALL PERSONS — always split into components:
   ✓ address_line1: "456 Oak Ave"  city: "Pittsburgh"  state: "PA"  zip: "15213"
   ✗ Do NOT put "456 Oak Ave, Pittsburgh, PA 15213" all in address_line1.
+  ✓ "456 Oak Ave Apt 2, c/o Jane Doe, Pittsburgh PA 15213" →
+     address_line1: "456 Oak Ave"  address_line2: "Apt 2, c/o Jane Doe"  city: "Pittsburgh" …
+  ✗ Do NOT leave the apartment/suite/unit/#/floor/c/o on address_line1.
 
 RULE: NEVER put any person's name, phone, or address into any care/medical field (health_history, activities, crisis_intervention, family_notification, etc.). ALL persons go in personal_info ONLY.
 
