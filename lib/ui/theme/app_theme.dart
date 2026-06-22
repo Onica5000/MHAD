@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 /// App-wide font family constants.
 const kSansFamily = 'DM Sans';
 const kMonoFamily = 'JetBrains Mono';
+// Dyslexia-friendly font, applied app-wide when the accessibility toggle is on.
+const kDyslexiaFamily = 'Atkinson Hyperlegible';
 const kMonoFallbacks = ['Consolas', 'Menlo', 'Courier New', 'monospace'];
 
 /// Design tokens — single source of truth for radii, spacing, shadows used
@@ -305,9 +307,41 @@ class _MhadPaletteExt extends ThemeExtension<_MhadPaletteExt> {
   }
 }
 
+/// Disables route transition animations (used when "reduce motion" is on).
+class _NoPageTransitionsBuilder extends PageTransitionsBuilder {
+  const _NoPageTransitionsBuilder();
+  @override
+  Widget buildTransitions<T>(PageRoute<T> route, BuildContext context,
+          Animation<double> animation, Animation<double> secondaryAnimation,
+          Widget child) =>
+      child;
+}
+
 /// Builds a Material 3 ThemeData from a [MhadPalette] and [Brightness].
-ThemeData buildMhadTheme(ThemePalette palette, Brightness brightness) {
+///
+/// Accessibility flags adjust the result app-wide:
+/// - [highContrast] forces pure black/white text and stronger outlines;
+/// - [boldText] raises body font weights;
+/// - [dyslexiaFont] swaps the sans family to Atkinson Hyperlegible;
+/// - [reduceMotion] removes route transition animations.
+ThemeData buildMhadTheme(
+  ThemePalette palette,
+  Brightness brightness, {
+  bool highContrast = false,
+  bool boldText = false,
+  bool dyslexiaFont = false,
+  bool reduceMotion = false,
+}) {
   final p = palette.forBrightness(brightness);
+  final dark = brightness == Brightness.dark;
+  final family = dyslexiaFont ? kDyslexiaFamily : kSansFamily;
+  // High contrast: max-separation text + outlines over the palette's softer tones.
+  final textColor = highContrast ? (dark ? Colors.white : Colors.black) : p.text;
+  final mutedColor = highContrast
+      ? (dark ? Colors.white70 : Colors.black87)
+      : p.textMuted;
+  final outlineColor =
+      highContrast ? (dark ? Colors.white : Colors.black) : p.border;
 
   final colorScheme = ColorScheme(
     brightness: brightness,
@@ -338,11 +372,11 @@ ThemeData buildMhadTheme(ThemePalette palette, Brightness brightness) {
         ? SemanticColors.errorTextDark
         : SemanticColors.errorTextLight,
     surface: p.card,
-    onSurface: p.text,
+    onSurface: textColor,
     surfaceContainerHighest: p.primaryTint,
-    onSurfaceVariant: p.textMuted,
-    outline: p.border,
-    outlineVariant: p.border,
+    onSurfaceVariant: mutedColor,
+    outline: outlineColor,
+    outlineVariant: outlineColor,
     shadow: Colors.black,
     scrim: Colors.black,
     inverseSurface: brightness == Brightness.dark ? p.card : p.text,
@@ -352,16 +386,26 @@ ThemeData buildMhadTheme(ThemePalette palette, Brightness brightness) {
         : palette.dark.primary,
   );
 
-  final textTheme = _buildTextTheme(p.text, p.textMuted);
+  final textTheme =
+      _buildTextTheme(textColor, mutedColor, family: family, bold: boldText);
 
   return ThemeData(
     useMaterial3: true,
     colorScheme: colorScheme,
     scaffoldBackgroundColor: p.scaffoldBackground,
-    fontFamily: kSansFamily, // falls back to platform sans-serif if unavailable
+    fontFamily: family, // falls back to platform sans-serif if unavailable
     textTheme: textTheme,
     primaryTextTheme: textTheme,
     extensions: [_MhadPaletteExt(p)],
+    pageTransitionsTheme: reduceMotion
+        ? const PageTransitionsTheme(builders: {
+            TargetPlatform.android: _NoPageTransitionsBuilder(),
+            TargetPlatform.iOS: _NoPageTransitionsBuilder(),
+            TargetPlatform.macOS: _NoPageTransitionsBuilder(),
+            TargetPlatform.windows: _NoPageTransitionsBuilder(),
+            TargetPlatform.linux: _NoPageTransitionsBuilder(),
+          })
+        : null,
 
     appBarTheme: AppBarTheme(
       backgroundColor: p.card,
@@ -641,9 +685,9 @@ ThemeData buildMhadTheme(ThemePalette palette, Brightness brightness) {
   );
 }
 
-TextTheme _buildTextTheme(Color text, Color muted) {
-  const family = kSansFamily;
-  return TextTheme(
+TextTheme _buildTextTheme(Color text, Color muted,
+    {String family = kSansFamily, bool bold = false}) {
+  final t = TextTheme(
     displayLarge: TextStyle(
         fontFamily: family, fontSize: 40, fontWeight: FontWeight.w700, color: text, letterSpacing: -0.5),
     displayMedium: TextStyle(
@@ -674,5 +718,26 @@ TextTheme _buildTextTheme(Color text, Color muted) {
         fontFamily: family, fontSize: 12, fontWeight: FontWeight.w600, color: text),
     labelSmall: TextStyle(
         fontFamily: family, fontSize: 11, fontWeight: FontWeight.w700, color: muted, letterSpacing: 1.0),
+  );
+  // Bold-text accessibility: shift every weight up two steps (w400 → w600).
+  // TextStyle.apply supports fontWeightDelta; TextTheme.apply does not, so map.
+  if (!bold) return t;
+  TextStyle? b(TextStyle? s) => s?.apply(fontWeightDelta: 2);
+  return TextTheme(
+    displayLarge: b(t.displayLarge),
+    displayMedium: b(t.displayMedium),
+    displaySmall: b(t.displaySmall),
+    headlineLarge: b(t.headlineLarge),
+    headlineMedium: b(t.headlineMedium),
+    headlineSmall: b(t.headlineSmall),
+    titleLarge: b(t.titleLarge),
+    titleMedium: b(t.titleMedium),
+    titleSmall: b(t.titleSmall),
+    bodyLarge: b(t.bodyLarge),
+    bodyMedium: b(t.bodyMedium),
+    bodySmall: b(t.bodySmall),
+    labelLarge: b(t.labelLarge),
+    labelMedium: b(t.labelMedium),
+    labelSmall: b(t.labelSmall),
   );
 }

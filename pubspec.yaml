@@ -144,3 +144,11 @@ flutter:
           weight: 500
         - asset: assets/fonts/JetBrainsMono-SemiBold.ttf
           weight: 600
+    # Dyslexia-friendly font (Atkinson Hyperlegible, SIL OFL) — applied when the
+    # accessibility "Dyslexia-friendly font" toggle is on.
+    - family: Atkinson Hyperlegible
+      fonts:
+        - asset: assets/fonts/AtkinsonHyperlegible-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/AtkinsonHyperlegible-Bold.ttf
+          weight: 700

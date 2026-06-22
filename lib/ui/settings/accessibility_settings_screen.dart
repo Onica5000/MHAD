@@ -7,16 +7,17 @@ import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/design/wizard_header.dart';
 
-/// Accessibility settings (v2 prototype `m-a11y`, v3 phased rollout).
-///
-/// Implemented now (Phase 4):
-/// - Text size slider — wires through `textScaleProvider` to the app shell
-/// - Dyslexia-friendly font toggle (Atkinson Hyperlegible noted as Phase 2)
-/// - Reduce motion toggle
-/// - High contrast toggle
-/// - Language picker (English shipped; Spanish partial; Chinese/Arabic
-///   marked Phase 2)
-/// - Read aloud — labeled as an OS handoff (↗) per v3 spec
+/// Accessibility settings. All preferences persist via SharedPreferences
+/// (see [AccessibilitySettingsNotifier]) and apply app-wide:
+/// - Text size slider → MediaQuery.textScaler
+/// - Dyslexia-friendly font (Atkinson Hyperlegible) → theme fontFamily
+/// - Bold text → theme font weights
+/// - Reduce motion → no route transitions + MediaQuery.disableAnimations
+/// - High contrast → pure black/white text + stronger outlines
+/// - Language picker (English full; Spanish partial; 中文/العربية not yet
+///   translated — see [[language-picker-untranslated]] follow-up)
+/// - Read aloud → an in-app guide to the browser/OS built-in reader
+/// - Reset accessibility settings → restores defaults
 class AccessibilitySettingsScreen extends ConsumerWidget {
   const AccessibilitySettingsScreen({super.key});
 
@@ -66,23 +67,23 @@ class AccessibilitySettingsScreen extends ConsumerWidget {
           _SectionHeader('Reading'),
           _ToggleRow(
             title: 'Dyslexia-friendly font',
-            sub: 'Atkinson Hyperlegible — bundling in Phase 2',
-            phase: '2',
+            sub: 'Atkinson Hyperlegible — clearer, easier letter shapes',
             value: settings.dyslexiaFont,
             onChanged: (v) => ref
                 .read(accessibilitySettingsProvider.notifier)
                 .setDyslexiaFont(v),
           ),
           _ToggleRow(
-            title: 'Read aloud',
-            sub: 'Article body and headers · uses your device voice',
-            handoff: true,
-            value: false,
-            onChanged: null,
+            title: 'Bold text',
+            sub: 'Heavier text weight everywhere',
+            value: settings.boldText,
+            onChanged: (v) => ref
+                .read(accessibilitySettingsProvider.notifier)
+                .setBoldText(v),
           ),
           _ToggleRow(
             title: 'Reduce motion',
-            sub: 'No transitions, no parallax',
+            sub: 'Removes screen transitions and animations',
             value: settings.reduceMotion,
             onChanged: (v) => ref
                 .read(accessibilitySettingsProvider.notifier)
@@ -90,7 +91,7 @@ class AccessibilitySettingsScreen extends ConsumerWidget {
           ),
           _ToggleRow(
             title: 'High contrast',
-            sub: 'Boosts separation between text and background',
+            sub: 'Maximizes separation between text and background',
             value: settings.highContrast,
             onChanged: (v) => ref
                 .read(accessibilitySettingsProvider.notifier)
@@ -114,19 +115,111 @@ class AccessibilitySettingsScreen extends ConsumerWidget {
                 '194 wording.',
           ),
 
-          const SizedBox(height: 14),
-          _SectionHeader('Hardware'),
+          const SizedBox(height: 18),
+          // Read it aloud with your browser or device — see the in-app guide.
           _ToggleRow(
-            title: 'VoiceOver / TalkBack hints',
-            sub: 'Extra context for every control',
-            value: settings.voiceOverHints,
-            onChanged: (v) => ref
+            title: 'Read aloud',
+            sub: 'Use your browser or device read-aloud — see the guide below',
+            handoff: true,
+            value: false,
+            onChanged: null,
+          ),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: TextButton.icon(
+              onPressed: () => _showReadAloudGuide(context),
+              icon: const Icon(Icons.volume_up_outlined, size: 18),
+              label: const Text('How to use read-aloud'),
+            ),
+          ),
+
+          const SizedBox(height: 18),
+          OutlinedButton.icon(
+            onPressed: () => ref
                 .read(accessibilitySettingsProvider.notifier)
-                .setVoiceOverHints(v),
+                .resetToDefaults(),
+            icon: const Icon(Icons.restart_alt),
+            label: const Text('Reset accessibility settings'),
           ),
         ],
       )),
       ]),
+    );
+  }
+
+  /// In-app guide for using the browser / OS built-in read-aloud (the app does
+  /// not ship its own TTS — the platform tools are better and already present).
+  void _showReadAloudGuide(BuildContext context) {
+    showDialog<void>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        icon: const Icon(Icons.volume_up_outlined),
+        title: const Text('Read this page aloud'),
+        content: const SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Your browser and device already have read-aloud built in — '
+                'they work better than an in-app reader, so use one of these:',
+              ),
+              SizedBox(height: 12),
+              _GuideItem(
+                head: 'Chrome / Edge (desktop)',
+                body: 'Right-click the page → “Read aloud” (Edge), or use the '
+                    'Reading mode / an extension in Chrome. Edge: Ctrl+Shift+U.',
+              ),
+              _GuideItem(
+                head: 'Android (Chrome)',
+                body: 'Select text → tap “Listen”, or turn on '
+                    'Settings → Accessibility → Select to Speak / TalkBack.',
+              ),
+              _GuideItem(
+                head: 'iPhone / iPad (Safari)',
+                body: 'Settings → Accessibility → Spoken Content → turn on '
+                    '“Speak Screen”, then swipe down with two fingers.',
+              ),
+              _GuideItem(
+                head: 'Windows',
+                body: 'Narrator: Ctrl+Win+Enter. Or use Edge’s Read aloud above.',
+              ),
+              _GuideItem(
+                head: 'macOS',
+                body: 'System Settings → Accessibility → Spoken Content → '
+                    '“Speak selection”, then press Option+Esc.',
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Got it'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _GuideItem extends StatelessWidget {
+  final String head;
+  final String body;
+  const _GuideItem({required this.head, required this.body});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(head, style: const TextStyle(fontWeight: FontWeight.w700)),
+          const SizedBox(height: 2),
+          Text(body, style: const TextStyle(fontSize: 13, height: 1.4)),
+        ],
+      ),
     );
   }
 }
@@ -206,20 +299,17 @@ class _ToggleRow extends StatelessWidget {
   final bool value;
   final ValueChanged<bool>? onChanged;
   final bool handoff;
-  final String? phase;
   const _ToggleRow({
     required this.title,
     required this.sub,
     required this.value,
     required this.onChanged,
     this.handoff = false,
-    this.phase,
   });
 
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
-    final dark = Theme.of(context).brightness == Brightness.dark;
     return SwitchListTile(
       title: Row(
         children: [
@@ -229,38 +319,6 @@ class _ToggleRow extends StatelessWidget {
               padding: const EdgeInsets.only(left: 6),
               child: Icon(Icons.arrow_outward,
                   size: 16, color: p.textMuted),
-            ),
-          if (phase != null)
-            Container(
-              margin: const EdgeInsets.only(left: 6),
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-              decoration: BoxDecoration(
-                color: dark ? SemanticColors.warningBgDark : SemanticColors.warningBgLight,
-                border: Border.all(
-                    color: dark
-                        ? SemanticColors.warningBorderDark
-                        : SemanticColors.warningBorderLight),
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Text(
-                'Phase $phase',
-                style: TextStyle(
-                  fontFamily: kMonoFamily,
-                  fontFamilyFallback: const [
-                    'Consolas',
-                    'Menlo',
-                    'Courier New',
-                    'monospace'
-                  ],
-                  fontSize: 9.5,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 0.4,
-                  color: dark
-                      ? SemanticColors.warningTextDark
-                      : SemanticColors.warningTextLight,
-                ),
-              ),
             ),
         ],
       ),

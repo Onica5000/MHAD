@@ -99,18 +99,29 @@ class MhadApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeSettings = ref.watch(appThemeControllerProvider);
-    // Phase 4 — Accessibility wiring. The provider previously existed but
-    // nothing consumed it at the MaterialApp level, so adjusting "Text size"
-    // in Accessibility settings had no visible effect. The textScaler below
-    // is the minimum wiring; the dyslexia font / high-contrast / reduce-motion
-    // toggles still need theme-level plumbing but at least no longer silently
-    // discard input.
+    // Accessibility wiring: text size + dyslexia font + high contrast + bold
+    // text flow into the theme; reduce-motion drives both no-transition routes
+    // (in the theme) and MediaQuery.disableAnimations (for implicit animations).
     final a11y = ref.watch(accessibilitySettingsProvider);
     final locale = Locale(a11y.languageCode);
     return MaterialApp.router(
       title: 'PA Mental Health Advance Directive',
-      theme: buildMhadTheme(themeSettings.palette, Brightness.light),
-      darkTheme: buildMhadTheme(themeSettings.palette, Brightness.dark),
+      theme: buildMhadTheme(
+        themeSettings.palette,
+        Brightness.light,
+        highContrast: a11y.highContrast,
+        boldText: a11y.boldText,
+        dyslexiaFont: a11y.dyslexiaFont,
+        reduceMotion: a11y.reduceMotion,
+      ),
+      darkTheme: buildMhadTheme(
+        themeSettings.palette,
+        Brightness.dark,
+        highContrast: a11y.highContrast,
+        boldText: a11y.boldText,
+        dyslexiaFont: a11y.dyslexiaFont,
+        reduceMotion: a11y.reduceMotion,
+      ),
       themeMode: themeSettings.mode,
       routerConfig: appRouter,
       debugShowCheckedModeBanner: false,
@@ -135,6 +146,8 @@ class MhadApp extends ConsumerWidget {
           // accessibility scale (so platform AX settings still compose).
           data: mq.copyWith(
             textScaler: TextScaler.linear(a11y.textScaleFactor),
+            // Reduce motion: ask the framework to skip implicit animations too.
+            disableAnimations: a11y.reduceMotion || mq.disableAnimations,
           ),
           // Desktop keyboard shortcuts (Windows + Chrome/Edge web). Mobile
           // ignores these — Android's back gesture / system back button

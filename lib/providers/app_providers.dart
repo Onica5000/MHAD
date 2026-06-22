@@ -75,7 +75,7 @@ class AccessibilitySettings {
   final bool dyslexiaFont;
   final bool reduceMotion;
   final bool highContrast;
-  final bool voiceOverHints;
+  final bool boldText;
   final String languageCode; // 'en' / 'es' / 'zh' / 'ar'
 
   const AccessibilitySettings({
@@ -83,7 +83,7 @@ class AccessibilitySettings {
     this.dyslexiaFont = false,
     this.reduceMotion = false,
     this.highContrast = false,
-    this.voiceOverHints = true,
+    this.boldText = false,
     this.languageCode = 'en',
   });
 
@@ -92,7 +92,7 @@ class AccessibilitySettings {
     bool? dyslexiaFont,
     bool? reduceMotion,
     bool? highContrast,
-    bool? voiceOverHints,
+    bool? boldText,
     String? languageCode,
   }) =>
       AccessibilitySettings(
@@ -100,7 +100,7 @@ class AccessibilitySettings {
         dyslexiaFont: dyslexiaFont ?? this.dyslexiaFont,
         reduceMotion: reduceMotion ?? this.reduceMotion,
         highContrast: highContrast ?? this.highContrast,
-        voiceOverHints: voiceOverHints ?? this.voiceOverHints,
+        boldText: boldText ?? this.boldText,
         languageCode: languageCode ?? this.languageCode,
       );
 
@@ -113,21 +113,86 @@ class AccessibilitySettings {
       };
 }
 
-class AccessibilitySettingsNotifier
-    extends StateNotifier<AccessibilitySettings> {
-  AccessibilitySettingsNotifier() : super(const AccessibilitySettings());
+const _a11yTextScaleKey = 'mhad_a11y_text_scale';
+const _a11yDyslexiaKey = 'mhad_a11y_dyslexia_font';
+const _a11yReduceMotionKey = 'mhad_a11y_reduce_motion';
+const _a11yHighContrastKey = 'mhad_a11y_high_contrast';
+const _a11yBoldTextKey = 'mhad_a11y_bold_text';
+const _a11yLanguageKey = 'mhad_a11y_language';
 
-  void setTextScale(double v) => state = state.copyWith(textScale: v);
-  void setDyslexiaFont(bool v) => state = state.copyWith(dyslexiaFont: v);
-  void setReduceMotion(bool v) => state = state.copyWith(reduceMotion: v);
-  void setHighContrast(bool v) => state = state.copyWith(highContrast: v);
-  void setVoiceOverHints(bool v) => state = state.copyWith(voiceOverHints: v);
-  void setLanguage(String code) => state = state.copyWith(languageCode: code);
+/// Holds the user's accessibility preferences and persists each one to
+/// SharedPreferences so they survive a reload (mirrors [AppThemeController]).
+class AccessibilitySettingsNotifier extends Notifier<AccessibilitySettings> {
+  SharedPreferences? _prefs;
+
+  @override
+  AccessibilitySettings build() {
+    _hydrate();
+    return const AccessibilitySettings();
+  }
+
+  Future<void> _hydrate() async {
+    final prefs = await SharedPreferences.getInstance();
+    _prefs = prefs;
+    state = AccessibilitySettings(
+      textScale: prefs.getDouble(_a11yTextScaleKey) ?? state.textScale,
+      dyslexiaFont: prefs.getBool(_a11yDyslexiaKey) ?? state.dyslexiaFont,
+      reduceMotion: prefs.getBool(_a11yReduceMotionKey) ?? state.reduceMotion,
+      highContrast: prefs.getBool(_a11yHighContrastKey) ?? state.highContrast,
+      boldText: prefs.getBool(_a11yBoldTextKey) ?? state.boldText,
+      languageCode: prefs.getString(_a11yLanguageKey) ?? state.languageCode,
+    );
+  }
+
+  void setTextScale(double v) {
+    state = state.copyWith(textScale: v);
+    _prefs?.setDouble(_a11yTextScaleKey, v);
+  }
+
+  void setDyslexiaFont(bool v) {
+    state = state.copyWith(dyslexiaFont: v);
+    _prefs?.setBool(_a11yDyslexiaKey, v);
+  }
+
+  void setReduceMotion(bool v) {
+    state = state.copyWith(reduceMotion: v);
+    _prefs?.setBool(_a11yReduceMotionKey, v);
+  }
+
+  void setHighContrast(bool v) {
+    state = state.copyWith(highContrast: v);
+    _prefs?.setBool(_a11yHighContrastKey, v);
+  }
+
+  void setBoldText(bool v) {
+    state = state.copyWith(boldText: v);
+    _prefs?.setBool(_a11yBoldTextKey, v);
+  }
+
+  void setLanguage(String code) {
+    state = state.copyWith(languageCode: code);
+    _prefs?.setString(_a11yLanguageKey, code);
+  }
+
+  /// Restore every accessibility setting to its default and clear storage.
+  void resetToDefaults() {
+    state = const AccessibilitySettings();
+    for (final k in const [
+      _a11yTextScaleKey,
+      _a11yDyslexiaKey,
+      _a11yReduceMotionKey,
+      _a11yHighContrastKey,
+      _a11yBoldTextKey,
+      _a11yLanguageKey,
+    ]) {
+      _prefs?.remove(k);
+    }
+  }
 }
 
 final accessibilitySettingsProvider =
-    StateNotifierProvider<AccessibilitySettingsNotifier, AccessibilitySettings>(
-        (ref) => AccessibilitySettingsNotifier());
+    NotifierProvider<AccessibilitySettingsNotifier, AccessibilitySettings>(
+        AccessibilitySettingsNotifier.new);
 
 // ---------------------------------------------------------------------------
 // Theme settings (palette + brightness mode, persisted via SharedPreferences)
