@@ -299,6 +299,8 @@ medications_current
   → NOT for preferred (has positive signal), avoided (has negative signal), or limited (has restriction).
   → This is a reference list only — it tells the care team what the person takes, not what to give.
   → DOSAGE: for each current med, also capture the dosage if stated, in the "dosage" field — strength + how often, e.g. "20 mg twice daily", "300 mg at night", "10 units before meals". Leave dosage null if not stated. (Only current meds have a dosage field; preferred/avoid/limited do not.)
+  → REASON: the "reason" field is ONLY for WHY the person takes the med — the condition it treats, e.g. "for bipolar disorder", "for anxiety". Leave it null if no reason is stated.
+  → CRITICAL: strength, amount, and frequency (e.g. "200 mg", "twice a day", "at night") ALWAYS go in "dosage" and must NEVER be placed in "reason". Do not combine the dose and the reason into one field. Example — "lamotrigine 200 mg twice a day for bipolar" → {name: "lamotrigine", dosage: "200 mg twice a day", reason: "for bipolar disorder"}.
 
 medications_limited
   → Medications the person accepts ONLY under specific conditions or restrictions (e.g., "only as last resort", "only in inpatient setting", "only if no alternative").
