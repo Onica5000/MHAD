@@ -20,6 +20,7 @@ import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/design/brand_motif.dart';
 import 'package:mhad/ui/widgets/design/design_card.dart';
+import 'package:mhad/ui/widgets/design/reveal.dart';
 import 'package:mhad/ui/widgets/draft_recovery_dialog.dart';
 import 'package:mhad/utils/date_format.dart';
 
@@ -733,9 +734,11 @@ class _GreetingRow extends StatelessWidget {
       }
     }
 
-    return BrandMotif(
-      padding: const EdgeInsets.fromLTRB(22, 22, 22, 24),
-      child: Align(alignment: Alignment.centerLeft, child: inner),
+    return RevealOnMount(
+      child: BrandMotif(
+        padding: const EdgeInsets.fromLTRB(22, 22, 22, 24),
+        child: Align(alignment: Alignment.centerLeft, child: inner),
+      ),
     );
   }
 }
