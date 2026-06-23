@@ -51,11 +51,14 @@ class BrandMotif extends StatelessWidget {
 /// purely behind the existing content with no layout or interaction impact.
 class BrandBackdrop extends StatelessWidget {
   final double intensity;
-  const BrandBackdrop({this.intensity = 0.7, super.key});
+  /// Optional palette override for surfaces (e.g. the disclaimer gate) that
+  /// thread their own palette instead of relying on the ambient theme.
+  final MhadPalette? palette;
+  const BrandBackdrop({this.intensity = 0.7, this.palette, super.key});
 
   @override
   Widget build(BuildContext context) {
-    final p = Theme.of(context).mhadPalette;
+    final p = palette ?? Theme.of(context).mhadPalette;
     return Positioned.fill(
       child: IgnorePointer(
         child: DecoratedBox(

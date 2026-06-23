@@ -4,6 +4,7 @@ import 'package:mhad/services/disclaimer_service.dart';
 import 'package:mhad/services/notification_service.dart';
 import 'package:mhad/ui/disclaimer/legal_sheet.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/design/brand_motif.dart';
 
 /// First-launch legal disclaimer + read-only Settings variant.
 ///
@@ -121,6 +122,9 @@ class _GateLayout extends StatelessWidget {
       body: SafeArea(
         child: Stack(
           children: [
+            // Decorative brand backdrop behind the gate content (no input/
+            // layout impact); uses the gate's threaded palette.
+            BrandBackdrop(intensity: 0.6, palette: palette),
             Padding(
               padding: const EdgeInsets.fromLTRB(22, 18, 22, 16),
               child: Column(
