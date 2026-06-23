@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/data/educational_content.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/design/design_card.dart';
 
 /// Top-level tab kinds shown above the editorial grid. Each owns its own
 /// [filter] over [allEducationSections] so the hub and the screen-level
@@ -238,7 +239,9 @@ class SectionTile extends StatelessWidget {
     return Semantics(
       button: true,
       label: '${section.category.displayName}: ${section.title}',
-      child: Card(
+      child: HoverLift(
+        radius: 12,
+        child: Card(
       margin: const EdgeInsets.only(bottom: 8),
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
@@ -287,6 +290,7 @@ class SectionTile extends StatelessWidget {
         ),
         ),
       ),
+    ),
     ),
     );
   }
