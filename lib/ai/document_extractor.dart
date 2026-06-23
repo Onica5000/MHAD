@@ -29,6 +29,10 @@ class DocumentExtractor {
   Future<ExtractionWithPiiReport> extractFromBytes(
     Uint8List bytes, {
     required String mimeType,
+    // The form the user chose to fill. Scopes the extraction so the AI returns
+    // ONLY the fields that form uses (POA = agent-only; Declaration =
+    // preferences-only; Combined = everything). 'combined' if unspecified.
+    String formType = 'combined',
   }) async {
     final model = GenerativeModel(
       model: _model,
@@ -47,7 +51,7 @@ class DocumentExtractor {
       ),
     );
 
-    final parts = <Part>[TextPart(_extractionPrompt)];
+    final parts = <Part>[TextPart(_extractionPrompt + _formScope(formType))];
     List<String> piiStripped = [];
 
     if (mimeType.startsWith('text/')) {
@@ -257,6 +261,29 @@ class DocumentExtractor {
     'zip': Schema.string(nullable: true),
     'phone': Schema.string(nullable: true),
   });
+
+  /// Appended to the prompt to scope extraction to the form the user chose, so
+  /// the AI returns ONLY the fields that form uses. Empty for Combined.
+  static String _formScope(String formType) {
+    switch (formType) {
+      case 'poa':
+        return '''
+
+═══ FORM SCOPE: POWER OF ATTORNEY (agent only) ═══
+The user is filling a POWER OF ATTORNEY form. It names a decision-maker but does NOT record treatment preferences.
+EXTRACT ONLY: personal_info for the DECLARANT and for the agent / alternate_agent / guardian; agent_can_consent_hospitalization; agent_can_consent_medication; agent_authority_limitations; effective_condition.
+LEAVE NULL / DO NOT EXTRACT everything else — medications_*, diagnoses, allergies, preferred_facility, avoid_facility, room_preferences_note, same_gender_roommate, ect_consent, experimental_consent, drug_trial_consent, self_binding_ulysses, health_history, dietary, religious, activities, crisis_intervention, records_disclosure, family_notification, pet_custody, children_custody, other. Ignore that content even if it appears in the document.''';
+      case 'declaration':
+        return '''
+
+═══ FORM SCOPE: DECLARATION (treatment preferences only — NO agent) ═══
+The user is filling a DECLARATION form. It records treatment preferences but does NOT name an agent.
+EXTRACT the DECLARANT's personal_info, effective_condition, and all treatment-preference fields (medications_*, diagnoses, allergies, preferred_facility, avoid_facility, room_preferences_note, same_gender_roommate, ect/experimental/drug_trial consent, self_binding_ulysses, health_history, dietary, religious, activities, crisis_intervention, records_disclosure, family_notification, pet_custody, children_custody, other).
+LEAVE NULL / DO NOT EXTRACT: personal_info.agent, personal_info.alternate_agent, personal_info.guardian, agent_can_consent_hospitalization, agent_can_consent_medication, agent_authority_limitations. Ignore any agent designation even if it appears in the document.''';
+      default:
+        return ''; // Combined — extract everything as described above.
+    }
+  }
 
   static const _extractionPrompt = '''
 You are analyzing a document uploaded by a user who is filling out a Pennsylvania Mental Health Advance Directive (PA Act 194 of 2004). This is AUTOFILL — the user uploaded this document so its contents can pre-fill their form. You MUST extract personal information (PII); that is the primary purpose of this step.

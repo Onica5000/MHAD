@@ -87,54 +87,6 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
     appRouter.go(AppRoutes.wizardRoute(widget.directiveId));
   }
 
-  /// Recommend a form type from what the AI actually extracted, so the chooser
-  /// can pre-select it (the user confirms or changes). Agent + preferences →
-  /// Combined; an agent only → Power of Attorney; preferences only →
-  /// Declaration; nothing decisive → Combined (the broadest).
-  FormType _recommendedFormType() {
-    final v = _validated;
-    if (v == null) return FormType.combined;
-    bool has(String? s) => s != null && s.trim().isNotEmpty;
-    final pi = v.personalInfo;
-    final hasAgent = has(pi.agent?.name) || has(pi.alternateAgent?.name);
-    final hasPrefs = v.preferredMeds.isNotEmpty ||
-        v.avoidMeds.isNotEmpty ||
-        v.currentMeds.isNotEmpty ||
-        v.limitedMeds.isNotEmpty ||
-        v.conditions.isNotEmpty ||
-        v.diagnoses.isNotEmpty ||
-        v.allergies.isNotEmpty ||
-        has(v.preferredFacility) ||
-        has(v.avoidFacility) ||
-        has(v.roomPreferencesNote) ||
-        has(v.ectConsent) ||
-        has(v.experimentalConsent) ||
-        has(v.drugTrialConsent) ||
-        has(v.healthHistory) ||
-        has(v.dietary) ||
-        has(v.religious) ||
-        has(v.activities) ||
-        has(v.crisisIntervention);
-    if (hasAgent && hasPrefs) return FormType.combined;
-    if (hasAgent) return FormType.poa;
-    if (hasPrefs) return FormType.declaration;
-    return FormType.combined;
-  }
-
-  /// Standalone "Continue": ask which form to fill (AI-recommended pre-selected),
-  /// persist the choice on the directive, then enter the wizard.
-  Future<void> _continueToWizard() async {
-    final chosen = await showDialog<FormType>(
-      context: context,
-      builder: (_) => _FormTypeChooser(recommended: _recommendedFormType()),
-    );
-    if (chosen == null || !mounted) return; // dismissed → stay on review
-    await ref
-        .read(directiveRepositoryProvider)
-        .updateFormType(widget.directiveId, chosen);
-    if (!mounted) return;
-    _toWizard();
-  }
 
   /// Skip / close / back. Standalone → into the wizard; modal → pop(false).
   void _exit() {
@@ -208,6 +160,11 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
   _PipelineStep _step = _PipelineStep.pick;
   String _statusMessage = '';
   String? _error;
+
+  // The form the user is filling. In modal mode it's fixed (the wizard's type);
+  // in standalone the user picks it BEFORE extraction so the AI only reads/
+  // returns the fields that form uses. Defaults to the constructor value.
+  late String _activeFormType = widget.formType;
 
   // True while a file is being dragged over the Snap-to-fill drop zone.
   bool _dragOver = false;
@@ -381,12 +338,28 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
       return;
     }
 
+    // Standalone: pick which form to fill BEFORE anything is sent to the AI, so
+    // it only reads / returns the fields that form uses (POA = agent-only,
+    // Declaration = preferences-only). Modal mode already has a fixed form.
+    if (_standalone) {
+      final chosen = await showDialog<FormType>(
+        context: context,
+        builder: (_) => const _FormTypeChooser(),
+      );
+      if (chosen == null || !mounted) return; // cancelled → stay on pick
+      _activeFormType = chosen.name;
+      await ref
+          .read(directiveRepositoryProvider)
+          .updateFormType(widget.directiveId, chosen);
+    }
+
     // Single, accurate consent + data notice for the autofill upload. This is
     // the ONE AI path that sends the document's personal details to Google
     // (every other path strips PII), so it has its own notice rather than the
     // generic showAiConsentDialog, whose "never send personal info" wording
     // would contradict how autofill works. Shown before each read; on accept we
     // also record the session AI-consent flag so chat/suggest don't re-prompt.
+    if (!mounted) return;
     final authorized = await showAutofillConsentDialog(context);
     if (!authorized || !mounted) return;
     ref.read(aiConsentGivenProvider.notifier).state = true;
@@ -479,6 +452,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
         final extraction = await extractor.extractFromBytes(
           docBytes,
           mimeType: docs[i].mimeType,
+          formType: _activeFormType,
         );
 
         // Record this extraction in the rate tracker
@@ -931,7 +905,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                     ),
                     const Spacer(),
                     FilledButton(
-                      onPressed: _continueToWizard,
+                      onPressed: _toWizard,
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: const [
@@ -1863,18 +1837,18 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
 
 }
 
-/// Post-autofill form-type chooser. Pre-selects the AI's recommendation
-/// (badged "Recommended"); the user confirms or changes it before the wizard.
+/// Form-type chooser shown BEFORE autofill, so the AI only reads/returns the
+/// fields that form uses. No AI suggestion is available yet (the document
+/// hasn't been read), so it opens on the broadest option, Combined.
 class _FormTypeChooser extends StatefulWidget {
-  final FormType recommended;
-  const _FormTypeChooser({required this.recommended});
+  const _FormTypeChooser();
 
   @override
   State<_FormTypeChooser> createState() => _FormTypeChooserState();
 }
 
 class _FormTypeChooserState extends State<_FormTypeChooser> {
-  late FormType _selected = widget.recommended;
+  FormType _selected = FormType.combined;
 
   String _title(FormType ft) => switch (ft) {
         FormType.combined => 'Combined',
@@ -1900,8 +1874,8 @@ class _FormTypeChooserState extends State<_FormTypeChooser> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'Based on what the AI found, we suggest the option marked '
-            'Recommended — but it\'s your choice. Combined is the broadest.',
+            'Choose your form first — the AI will then read only the parts that '
+            'form needs. Combined is the broadest; you can change this later.',
           ),
           const SizedBox(height: 8),
           for (final ft in FormType.values)
@@ -1924,30 +1898,9 @@ class _FormTypeChooserState extends State<_FormTypeChooser> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            children: [
-                              Flexible(
-                                child: Text(_title(ft),
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w600)),
-                              ),
-                              if (ft == widget.recommended) ...[
-                                const SizedBox(width: 8),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 6, vertical: 1),
-                                  decoration: BoxDecoration(
-                                    color: cs.primaryContainer,
-                                    borderRadius: BorderRadius.circular(4),
-                                  ),
-                                  child: Text('Recommended',
-                                      style: TextStyle(
-                                          fontSize: 10,
-                                          color: cs.onPrimaryContainer)),
-                                ),
-                              ],
-                            ],
-                          ),
+                          Text(_title(ft),
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w600)),
                           Text(_subtitle(ft),
                               style: TextStyle(
                                   fontSize: 12, color: cs.onSurfaceVariant)),
