@@ -5,6 +5,7 @@ import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/design/design_card.dart';
 import 'package:mhad/ui/widgets/design/crisis_sheet.dart';
 
 /// Prototype `ScrHome` tools grid — a 2×2 of icon tiles linking to the
@@ -104,7 +105,10 @@ class _ToolTileCard extends StatelessWidget {
       button: true,
       enabled: !disabled,
       label: '${tile.label} — ${tile.sub}',
-      child: Material(
+      child: HoverLift(
+        enabled: !disabled,
+        radius: 12,
+        child: Material(
         color: palette.card,
         borderRadius: BorderRadius.circular(12),
         child: InkWell(
@@ -156,6 +160,7 @@ class _ToolTileCard extends StatelessWidget {
             ),
           ),
         ),
+      ),
       ),
     );
   }

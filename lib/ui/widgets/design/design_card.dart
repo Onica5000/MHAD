@@ -102,6 +102,58 @@ class DesignCard extends StatelessWidget {
   }
 }
 
+/// Wraps ANY card-like child so it raises on pointer hover (web/desktop):
+/// adds a deeper shadow + a few-px rise. Transparent to layout and hit-testing
+/// (taps pass through), and skips animation under reduce-motion. Use for custom
+/// cards that aren't built with [DesignCard].
+class HoverLift extends StatefulWidget {
+  final Widget child;
+  final double radius;
+  final double lift;
+  /// When false, the child is returned unchanged (no hover effect) — e.g. for
+  /// disabled cards that aren't tappable.
+  final bool enabled;
+  const HoverLift({
+    required this.child,
+    this.radius = DesignTokens.cardRadius,
+    this.lift = 3,
+    this.enabled = true,
+    super.key,
+  });
+
+  @override
+  State<HoverLift> createState() => _HoverLiftState();
+}
+
+class _HoverLiftState extends State<HoverLift> {
+  bool _hover = false;
+
+  @override
+  Widget build(BuildContext context) {
+    if (!widget.enabled) return widget.child;
+    final b = Theme.of(context).brightness;
+    final reduce = MediaQuery.maybeOf(context)?.disableAnimations ?? false;
+    final lifted = _hover && !reduce;
+    return MouseRegion(
+      onEnter: (_) => setState(() => _hover = true),
+      onExit: (_) => setState(() => _hover = false),
+      child: AnimatedContainer(
+        duration: reduce ? Duration.zero : const Duration(milliseconds: 160),
+        curve: Curves.easeOut,
+        transform: lifted
+            ? Matrix4.translationValues(0.0, -widget.lift, 0.0)
+            : Matrix4.identity(),
+        transformAlignment: Alignment.center,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(widget.radius),
+          boxShadow: _hover ? DesignTokens.raisedShadow(b) : null,
+        ),
+        child: widget.child,
+      ),
+    );
+  }
+}
+
 /// Hover-aware tappable card: deeper shadow + a small rise on pointer hover
 /// (web/desktop). Animation is skipped under reduce-motion.
 class _HoverLiftCard extends StatefulWidget {
