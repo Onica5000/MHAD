@@ -30,7 +30,7 @@ void main() {
             '/upload/:id',
             '/export/:id',
           ])
-            GoRoute(path: p, builder: (_, __) => Scaffold(body: Text(p))),
+            GoRoute(path: p, builder: (_, _) => Scaffold(body: Text(p))),
         ],
       );
 
