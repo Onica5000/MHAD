@@ -338,15 +338,26 @@ class _SidebarItemRow extends StatelessWidget {
           borderRadius: BorderRadius.circular(8),
           child: Padding(
             padding:
-                const EdgeInsets.symmetric(horizontal: 10, vertical: 9),
+                const EdgeInsets.symmetric(horizontal: 8, vertical: 9),
             child: Row(
               children: [
+                // "You are here" accent bar — transparent when inactive so the
+                // row layout never shifts between states.
+                Container(
+                  width: 3,
+                  height: 18,
+                  decoration: BoxDecoration(
+                    color: active ? p.primary : Colors.transparent,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                const SizedBox(width: 8),
                 Icon(
                   active && item.activeIcon != null
                       ? item.activeIcon!
                       : item.icon,
                   size: 18,
-                  color: active ? p.onPrimaryLight : p.textMuted,
+                  color: active ? p.primary : p.textMuted,
                 ),
                 const SizedBox(width: 10),
                 Expanded(
