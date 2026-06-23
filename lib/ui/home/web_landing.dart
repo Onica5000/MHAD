@@ -439,7 +439,7 @@ class _BookletQuoteCard extends StatelessWidget {
                   minimumSize: const Size(0, 36),
                   alignment: Alignment.centerLeft,
                 ),
-                child: const Text('Read 4-min summary →'),
+                child: const Text('Read summary →'),
               ),
             ],
           ),

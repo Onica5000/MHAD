@@ -466,22 +466,6 @@ class _GridCard extends StatelessWidget {
                   color: p.textMuted,
                 ),
               ),
-              const SizedBox(height: 8),
-              Text(
-                '${_estimatedMinutes(section.content)} MIN',
-                style: TextStyle(
-                  fontFamily: kMonoFamily,
-                  fontFamilyFallback: const [
-                    'Consolas',
-                    'Menlo',
-                    'Courier New',
-                    'monospace',
-                  ],
-                  fontSize: 10,
-                  letterSpacing: 0.6,
-                  color: p.textMuted,
-                ),
-              ),
             ],
           ),
         ),
@@ -505,9 +489,9 @@ class _SectionDetailRoute extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
-          // Source + read-time line (artboard WebArticle).
+          // Source line (artboard WebArticle).
           Text(
-            '$source · ${_estimatedMinutes(section.content)} MIN READ',
+            source,
             style: TextStyle(
               fontFamily: kMonoFamily,
               fontFamilyFallback: const [
@@ -615,15 +599,6 @@ class _SectionDetailRoute extends StatelessWidget {
       ),
     );
   }
-}
-
-/// Estimate reading time in minutes based on a 200 wpm cadence —
-/// matches the prototype's "N MIN" mono caption convention.
-int _estimatedMinutes(String content) {
-  final words =
-      content.split(RegExp(r'\s+')).where((w) => w.isNotEmpty).length;
-  final mins = (words / 200).ceil();
-  return mins < 1 ? 1 : mins;
 }
 
 /// Short preview taken from the first sentence of the first paragraph,
