@@ -552,35 +552,45 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
                   '"config.timeoutsSeconds" or "sections.faq_valid".',
             ),
           ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              FilledButton.icon(
-                onPressed: _loading ? null : _draft,
-                icon: _loading
-                    ? const SizedBox(
-                        width: 16,
-                        height: 16,
-                        child: CircularProgressIndicator(strokeWidth: 2))
-                    : const Icon(Icons.auto_awesome),
-                label: Text(_loading ? 'Drafting…' : 'Draft with AI'),
+          const SizedBox(height: 16),
+          // PRIMARY action — initiate the AI-drafted update. Full-width so it is
+          // unmistakable and can never be clipped by a Row overflow on web.
+          SizedBox(
+            width: double.infinity,
+            child: FilledButton.icon(
+              onPressed: _loading ? null : _draft,
+              icon: _loading
+                  ? const SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(strokeWidth: 2))
+                  : const Icon(Icons.auto_awesome),
+              label: Text(_loading ? 'Drafting…' : 'Start update with AI'),
+              style: FilledButton.styleFrom(
+                minimumSize: const Size.fromHeight(48),
               ),
-              const SizedBox(width: 8),
+            ),
+          ),
+          const SizedBox(height: 10),
+          // Secondary actions — wrap (never overflow) on a narrow window.
+          // "Check best Gemini model" is a separate maintenance action: it
+          // researches the live catalog and proposes switching ai.model to the
+          // best free-tier model. It does NOT start a data update.
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
               OutlinedButton.icon(
                 onPressed: _loading ? null : _revert,
                 icon: const Icon(Icons.history),
                 label: const Text('Revert'),
               ),
+              OutlinedButton.icon(
+                onPressed: _loading ? null : _checkGeminiModel,
+                icon: const Icon(Icons.model_training),
+                label: const Text('Check best Gemini model'),
+              ),
             ],
-          ),
-          const SizedBox(height: 8),
-          // Grounded model upgrade: research the live Gemini catalog and propose
-          // switching ai.model to the best available (Flash first, Pro offered
-          // for accuracy) — so an older model never stays pinned by default.
-          OutlinedButton.icon(
-            onPressed: _loading ? null : _checkGeminiModel,
-            icon: const Icon(Icons.model_training),
-            label: const Text('Check best Gemini model'),
           ),
           _error_(_error),
         ],
