@@ -6,6 +6,7 @@ import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/responsive_shell.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
+import 'package:mhad/ui/widgets/design/spot_illustration.dart';
 
 class EducationScreen extends StatefulWidget {
   /// If set, only show sections matching these IDs (deep-link from wizard Help).
@@ -46,12 +47,7 @@ class _EducationScreenState extends State<EducationScreen> {
       return Scaffold(
         appBar: AppBar(title: const Text('Help')),
         body: _filteredSections.isEmpty
-            ? const Center(
-                child: Text(
-                  'No results found.',
-                  style: TextStyle(fontStyle: FontStyle.italic),
-                ),
-              )
+            ? _emptyArt(SpotArt.search, 'No results found.')
             : ListView.builder(
                 padding: const EdgeInsets.all(12),
                 itemCount: _filteredSections.length,
@@ -61,12 +57,7 @@ class _EducationScreenState extends State<EducationScreen> {
       );
     }
     final hub = _filteredSections.isEmpty
-        ? const Center(
-            child: Text(
-              'No results found.',
-              style: TextStyle(fontStyle: FontStyle.italic),
-            ),
-          )
+        ? _emptyArt(SpotArt.search, 'No results found.')
         : _EditorialLearnHub(
             sections: _filteredSections,
             activeTab: _activeTab,
@@ -672,9 +663,7 @@ class _EducationSearchDelegate extends SearchDelegate<EducationSection?> {
         .toList();
 
     if (results.isEmpty) {
-      return Center(
-        child: Text('No results for "$query"'),
-      );
+      return _emptyArt(SpotArt.search, 'No results for "$query"');
     }
     return ListView.builder(
       padding: const EdgeInsets.all(12),
@@ -686,3 +675,23 @@ class _EducationSearchDelegate extends SearchDelegate<EducationSection?> {
     );
   }
 }
+
+/// Centered empty/no-results state with a themeable spot illustration above the
+/// message. Visual only — replaces the previous bare centered text.
+Widget _emptyArt(SpotArt art, String message) => Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SpotIllustration(art: art, size: 88),
+          const SizedBox(height: 14),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 32),
+            child: Text(
+              message,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontStyle: FontStyle.italic),
+            ),
+          ),
+        ],
+      ),
+    );
