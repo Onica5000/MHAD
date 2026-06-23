@@ -50,6 +50,16 @@ class DirectiveRepository {
         ));
   }
 
+  /// Change an existing directive's form type (e.g. after autofill, when the
+  /// user confirms the AI-recommended Combined / Declaration / POA form).
+  Future<void> updateFormType(int id, FormType formType) =>
+      (_db.update(_db.directives)..where((t) => t.id.equals(id))).write(
+        DirectivesCompanion(
+          formType: Value(formType.name),
+          updatedAt: Value(DateTime.now().millisecondsSinceEpoch),
+        ),
+      );
+
   Future<void> updatePersonalInfo(int id, {
     required String fullName,
     required String dateOfBirth,

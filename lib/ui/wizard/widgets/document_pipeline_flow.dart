@@ -87,6 +87,55 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
     appRouter.go(AppRoutes.wizardRoute(widget.directiveId));
   }
 
+  /// Recommend a form type from what the AI actually extracted, so the chooser
+  /// can pre-select it (the user confirms or changes). Agent + preferences →
+  /// Combined; an agent only → Power of Attorney; preferences only →
+  /// Declaration; nothing decisive → Combined (the broadest).
+  FormType _recommendedFormType() {
+    final v = _validated;
+    if (v == null) return FormType.combined;
+    bool has(String? s) => s != null && s.trim().isNotEmpty;
+    final pi = v.personalInfo;
+    final hasAgent = has(pi.agent?.name) || has(pi.alternateAgent?.name);
+    final hasPrefs = v.preferredMeds.isNotEmpty ||
+        v.avoidMeds.isNotEmpty ||
+        v.currentMeds.isNotEmpty ||
+        v.limitedMeds.isNotEmpty ||
+        v.conditions.isNotEmpty ||
+        v.diagnoses.isNotEmpty ||
+        v.allergies.isNotEmpty ||
+        has(v.preferredFacility) ||
+        has(v.avoidFacility) ||
+        has(v.roomPreferencesNote) ||
+        has(v.ectConsent) ||
+        has(v.experimentalConsent) ||
+        has(v.drugTrialConsent) ||
+        has(v.healthHistory) ||
+        has(v.dietary) ||
+        has(v.religious) ||
+        has(v.activities) ||
+        has(v.crisisIntervention);
+    if (hasAgent && hasPrefs) return FormType.combined;
+    if (hasAgent) return FormType.poa;
+    if (hasPrefs) return FormType.declaration;
+    return FormType.combined;
+  }
+
+  /// Standalone "Continue": ask which form to fill (AI-recommended pre-selected),
+  /// persist the choice on the directive, then enter the wizard.
+  Future<void> _continueToWizard() async {
+    final chosen = await showDialog<FormType>(
+      context: context,
+      builder: (_) => _FormTypeChooser(recommended: _recommendedFormType()),
+    );
+    if (chosen == null || !mounted) return; // dismissed → stay on review
+    await ref
+        .read(directiveRepositoryProvider)
+        .updateFormType(widget.directiveId, chosen);
+    if (!mounted) return;
+    _toWizard();
+  }
+
   /// Skip / close / back. Standalone → into the wizard; modal → pop(false).
   void _exit() {
     if (!mounted) return;
@@ -882,7 +931,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                     ),
                     const Spacer(),
                     FilledButton(
-                      onPressed: _toWizard,
+                      onPressed: _continueToWizard,
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: const [
@@ -1812,4 +1861,115 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
         ),
       );
 
+}
+
+/// Post-autofill form-type chooser. Pre-selects the AI's recommendation
+/// (badged "Recommended"); the user confirms or changes it before the wizard.
+class _FormTypeChooser extends StatefulWidget {
+  final FormType recommended;
+  const _FormTypeChooser({required this.recommended});
+
+  @override
+  State<_FormTypeChooser> createState() => _FormTypeChooserState();
+}
+
+class _FormTypeChooserState extends State<_FormTypeChooser> {
+  late FormType _selected = widget.recommended;
+
+  String _title(FormType ft) => switch (ft) {
+        FormType.combined => 'Combined',
+        FormType.declaration => 'Declaration only',
+        FormType.poa => 'Power of Attorney only',
+      };
+
+  String _subtitle(FormType ft) => switch (ft) {
+        FormType.combined =>
+          'Treatment preferences AND a decision-maker (broadest).',
+        FormType.declaration =>
+          'Treatment preferences, without naming an agent.',
+        FormType.poa => 'Name a decision-maker, without listing preferences.',
+      };
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    return AlertDialog(
+      title: const Text('Which form do you want to fill?'),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Based on what the AI found, we suggest the option marked '
+            'Recommended — but it\'s your choice. Combined is the broadest.',
+          ),
+          const SizedBox(height: 8),
+          for (final ft in FormType.values)
+            InkWell(
+              onTap: () => setState(() => _selected = ft),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 6),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Icon(
+                      _selected == ft
+                          ? Icons.radio_button_checked
+                          : Icons.radio_button_off,
+                      size: 20,
+                      color: _selected == ft ? cs.primary : cs.onSurfaceVariant,
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Flexible(
+                                child: Text(_title(ft),
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w600)),
+                              ),
+                              if (ft == widget.recommended) ...[
+                                const SizedBox(width: 8),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 6, vertical: 1),
+                                  decoration: BoxDecoration(
+                                    color: cs.primaryContainer,
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  child: Text('Recommended',
+                                      style: TextStyle(
+                                          fontSize: 10,
+                                          color: cs.onPrimaryContainer)),
+                                ),
+                              ],
+                            ],
+                          ),
+                          Text(_subtitle(ft),
+                              style: TextStyle(
+                                  fontSize: 12, color: cs.onSurfaceVariant)),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Cancel'),
+        ),
+        FilledButton(
+          onPressed: () => Navigator.pop(context, _selected),
+          child: const Text('Continue'),
+        ),
+      ],
+    );
+  }
 }

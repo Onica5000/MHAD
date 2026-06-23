@@ -130,8 +130,9 @@ const List<AudioQSection> audioQSections = [
         'I currently take lithium and lamotrigine, L-A-M-O-T-R-I-G-I-N-E. I '
         'prefer quetiapine, it has worked well. I never want haloperidol, it '
         'caused a severe reaction. Clozapine only with weekly blood monitoring.',
-    note: 'Exact dosages aren\'t captured from audio — add those in the app '
-        'after autofill.',
+    note: 'Say the dose if you know it (e.g. "lithium 300 mg twice a day") — '
+        'autofill captures the dose for medications you currently take. Always '
+        'double-check it in the app afterward.',
   ),
   AudioQSection(
     number: '8',
@@ -214,16 +215,19 @@ const List<String> audioQCantDo = [
   'Your signature and your witnesses\' signatures.',
   'Physical INITIALS for letting your agent decide ECT, experimental studies, '
       'or drug trials (a legal requirement — see section 11).',
-  'Exact medication dosages for the medications you currently take.',
   'On/off authority toggles — whether your agent may consent to your '
       'hospitalization, and whether your agent decides your medications.',
   'The treatment-facility "no preference" vs. specific selection, the '
       'room-preference checkboxes, and the same-gender-roommate sub-choice '
       '(your spoken facility names and room notes ARE captured).',
-  'The structured crisis plan and the side-effects checklist — built in the '
-      'app. (Your general crisis and activity notes ARE captured.)',
+  'The structured crisis plan and the side-effects checklist are built in the '
+      'app — autofill does NOT complete them. Please open and fill in (or '
+      'review) those two sections yourself. (Your general crisis and activity '
+      'notes ARE captured.)',
   'The self-binding (Ulysses) clause opt-in.',
-  'Choosing your form type (Combined, Declaration, or Power of Attorney).',
+  'Choosing your form type — after autofill, the app recommends a form '
+      '(Combined, Declaration, or Power of Attorney) based on what it found, '
+      'and you confirm or change it.',
 ];
 
 /// Closing reminder shown after the questionnaire.
