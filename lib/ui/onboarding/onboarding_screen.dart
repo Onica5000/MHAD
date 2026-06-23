@@ -80,7 +80,16 @@ class OnboardingScreen extends ConsumerWidget {
             Center(
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 640),
-                child: Padding(
+                // Scroll on short viewports (mobile) so the bottom CTAs are
+                // never clipped; on tall screens the minHeight + IntrinsicHeight
+                // let the Column's Spacer still bottom-anchor them.
+                child: LayoutBuilder(
+                  builder: (context, constraints) => SingleChildScrollView(
+                    child: ConstrainedBox(
+                      constraints:
+                          BoxConstraints(minHeight: constraints.maxHeight),
+                      child: IntrinsicHeight(
+                        child: Padding(
               padding: const EdgeInsets.fromLTRB(28, 64, 28, 24),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -257,6 +266,10 @@ class OnboardingScreen extends ConsumerWidget {
                 ],
               ),
             ),
+                      ),
+                    ),
+                  ),
+                ),
               ),
             ),
           ],
