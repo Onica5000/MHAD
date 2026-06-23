@@ -19,6 +19,7 @@ import 'package:mhad/ui/widgets/design/responsive_shell.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/design/brand_motif.dart';
+import 'package:mhad/ui/widgets/design/design_card.dart';
 import 'package:mhad/ui/widgets/draft_recovery_dialog.dart';
 import 'package:mhad/utils/date_format.dart';
 
@@ -811,7 +812,9 @@ class _PastDirectiveRow extends StatelessWidget {
     return Semantics(
       button: true,
       label: '${_nameLine()}. ${_subLine()}. Tap to open.',
-      child: Material(
+      child: HoverLift(
+        radius: 12,
+        child: Material(
         color: p.card,
         borderRadius: BorderRadius.circular(12),
         child: InkWell(
@@ -868,6 +871,7 @@ class _PastDirectiveRow extends StatelessWidget {
             ),
           ),
         ),
+      ),
       ),
     );
   }
