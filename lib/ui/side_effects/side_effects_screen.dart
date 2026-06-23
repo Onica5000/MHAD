@@ -12,6 +12,7 @@ import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
+import 'package:mhad/ui/widgets/design/brand_motif.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/design/wizard_header.dart';
@@ -150,23 +151,32 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
               : ListView(
                   padding: const EdgeInsets.fromLTRB(20, 14, 20, 32),
                   children: [
-                    const SectionLabel('Optional add-on'),
-                    const SizedBox(height: 6),
-                    const EditorialHeading(
-                        text: 'Side effects you may be experiencing',
-                        size: 30),
-                    const SizedBox(height: 6),
-                    Text(
-                      'For the medications you\'re currently taking, here are '
-                      'common side effects — check the ones you actually have. '
-                      'Noting them (especially any that affect your daily '
-                      'activities) helps your care team. This is common-side-'
-                      'effect information, not medical advice.',
-                      style: TextStyle(
-                        fontFamily: kSansFamily,
-                        fontSize: 14,
-                        height: 1.5,
-                        color: p.textMuted,
+                    BrandMotif(
+                      padding: const EdgeInsets.fromLTRB(20, 16, 20, 18),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SectionLabel('Optional add-on'),
+                          const SizedBox(height: 6),
+                          const EditorialHeading(
+                              text: 'Side effects you may be experiencing',
+                              size: 30),
+                          const SizedBox(height: 6),
+                          Text(
+                            'For the medications you\'re currently taking, here '
+                            'are common side effects — check the ones you '
+                            'actually have. Noting them (especially any that '
+                            'affect your daily activities) helps your care '
+                            'team. This is common-side-effect information, not '
+                            'medical advice.',
+                            style: TextStyle(
+                              fontFamily: kSansFamily,
+                              fontSize: 14,
+                              height: 1.5,
+                              color: p.textMuted,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     const SizedBox(height: 16),
