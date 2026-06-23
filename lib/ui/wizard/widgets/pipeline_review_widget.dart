@@ -767,23 +767,12 @@ extension _PipelineReviewUi on _PipelineScreenState {
   }
 
   Widget _reconRow(ReconItem it, MhadPalette p) {
+    // A field that already holds a value → let the user decide what to do with
+    // the existing vs. the autofilled value, instead of a silent overwrite.
+    if (it.isConflict) return _conflictResolver(it, p);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // A conflict replaces something you already entered — show what.
-        if (it.isConflict)
-          Padding(
-            padding: const EdgeInsets.only(top: 8),
-            child: Text(
-              'Replaces what you have: "${it.existing}"',
-              style: TextStyle(
-                fontFamily: kSansFamily,
-                fontSize: 11.5,
-                fontStyle: FontStyle.italic,
-                color: p.textMuted,
-              ),
-            ),
-          ),
         _SnapReviewRow(
           ok: _reviewChecked[it.key] ?? false,
           fieldLabel: _displayLabel(it.key),
@@ -797,6 +786,123 @@ extension _PipelineReviewUi on _PipelineScreenState {
       ],
     );
   }
+
+  /// Conflict resolver for a field that's already filled: shows the existing
+  /// value vs. the autofilled one and lets the user Keep mine / Use new / Add
+  /// both. (Consolidate — an AI merge — is the planned next step.) The choice
+  /// just sets the apply maps the rest of the pipeline already consumes.
+  Widget _conflictResolver(ReconItem it, MhadPalette p) {
+    final existing = it.existing!.trim();
+    final extracted = it.extracted.trim();
+    final addValue = '$existing\n$extracted';
+    final checked = _reviewChecked[it.key] ?? false;
+    final edited = (_reviewEdited[it.key] ?? '').trim();
+    final action = !checked
+        ? 'keep'
+        : edited == extracted
+            ? 'replace'
+            : edited == addValue
+                ? 'add'
+                : 'other';
+
+    Widget valLine(String tag, String value) => Padding(
+          padding: const EdgeInsets.only(top: 2),
+          child: Text.rich(
+            TextSpan(children: [
+              TextSpan(
+                text: '$tag: ',
+                style: TextStyle(
+                  fontFamily: kSansFamily,
+                  fontSize: 11.5,
+                  fontWeight: FontWeight.w700,
+                  color: p.textMuted,
+                ),
+              ),
+              TextSpan(
+                text: value,
+                style: TextStyle(
+                  fontFamily: kSansFamily,
+                  fontSize: 12.5,
+                  color: p.text,
+                ),
+              ),
+            ]),
+          ),
+        );
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            _displayLabel(it.key),
+            style: TextStyle(
+              fontFamily: kSansFamily,
+              fontSize: 13,
+              fontWeight: FontWeight.w700,
+              color: p.text,
+            ),
+          ),
+          valLine('You entered', existing),
+          valLine('Autofill found', extracted),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            runSpacing: 6,
+            children: [
+              _conflictChip(p, 'Keep mine', action == 'keep',
+                  () => setState(() => _reviewChecked[it.key] = false)),
+              _conflictChip(p, 'Use new', action == 'replace', () {
+                setState(() {
+                  _reviewChecked[it.key] = true;
+                  _reviewEdited[it.key] = extracted;
+                });
+              }),
+              _conflictChip(p, 'Add both', action == 'add', () {
+                setState(() {
+                  _reviewChecked[it.key] = true;
+                  _reviewEdited[it.key] = addValue;
+                });
+              }),
+            ],
+          ),
+          if (checked && action != 'keep') ...[
+            const SizedBox(height: 8),
+            Text(
+              'Will save:',
+              style: TextStyle(
+                fontFamily: kSansFamily,
+                fontSize: 11,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 0.3,
+                color: p.textMuted,
+              ),
+            ),
+            Text(
+              _reviewEdited[it.key] ?? '',
+              style: TextStyle(
+                fontFamily: kSansFamily,
+                fontSize: 12.5,
+                color: p.text,
+                height: 1.4,
+              ),
+            ),
+          ],
+          _agentInitialsNote(it.key, p),
+        ],
+      ),
+    );
+  }
+
+  Widget _conflictChip(
+          MhadPalette p, String label, bool selected, VoidCallback onTap) =>
+      ChoiceChip(
+        label: Text(label),
+        selected: selected,
+        onSelected: (_) => onTap(),
+        showCheckmark: false,
+      );
 
   /// §5805(c)(4) reminder: when an autofilled consent would delegate ECT,
   /// experimental studies, or drug trials to the agent, that delegation only
