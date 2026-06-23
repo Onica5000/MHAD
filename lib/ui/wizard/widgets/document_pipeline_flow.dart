@@ -166,6 +166,10 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
   // returns the fields that form uses. Defaults to the constructor value.
   late String _activeFormType = widget.formType;
 
+  // Per-field "Consolidate" (AI merge) in-flight flags — keyed by review key.
+  // Held here (not in the review extension, which can't own state).
+  final Map<String, bool> _consolidating = {};
+
   // True while a file is being dragged over the Snap-to-fill drop zone.
   bool _dragOver = false;
 

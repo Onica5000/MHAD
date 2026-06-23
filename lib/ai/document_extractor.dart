@@ -25,6 +25,42 @@ class DocumentExtractor {
   static int get _maxImageDimension => appData.config.maxImageDimension;
   static int get _jpegQuality => appData.config.jpegQuality;
 
+  /// Merge two free-text values the user has for the SAME directive field into
+  /// one clean, non-redundant first-person statement (the autofill review's
+  /// "Consolidate" option). ONLY called for NON-PII free-text fields — identity
+  /// fields are never AI-merged — so the app's PII rules stay intact. Returns
+  /// [extracted] unchanged on any failure (fail-safe).
+  Future<String> consolidate({
+    required String fieldLabel,
+    required String existing,
+    required String extracted,
+  }) async {
+    final model = GenerativeModel(
+      model: _model,
+      apiKey: apiKey,
+      httpClient: _httpClient,
+      generationConfig:
+          GenerationConfig(maxOutputTokens: appData.ai.maxOutputTokens),
+    );
+    final prompt = '''
+You are merging two notes the same person wrote for the "$fieldLabel" field of their Pennsylvania Mental Health Advance Directive. Combine them into ONE clear, non-redundant, first-person statement that preserves EVERY distinct piece of information from BOTH notes. Do not add anything new, do not give advice, do not include any preamble or labels. Return ONLY the merged text.
+
+EXISTING:
+$existing
+
+NEW:
+$extracted''';
+    try {
+      final resp = await model
+          .generateContent([Content.text(prompt)]).timeout(
+              appData.config.documentExtractionTimeout);
+      final text = resp.text?.trim();
+      return (text == null || text.isEmpty) ? extracted : text;
+    } catch (_) {
+      return extracted; // fail-safe: caller keeps the extracted value
+    }
+  }
+
   /// Extract structured data from raw bytes.
   Future<ExtractionWithPiiReport> extractFromBytes(
     Uint8List bytes, {

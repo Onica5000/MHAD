@@ -803,7 +803,11 @@ extension _PipelineReviewUi on _PipelineScreenState {
             ? 'replace'
             : edited == addValue
                 ? 'add'
-                : 'other';
+                : 'consolidate';
+    // Identity/PII fields are NEVER AI-merged — they keep the deterministic
+    // options + a manual-check nudge, so the app's PII rules stay intact.
+    final isIdentity = _isIdentityKey(it.key);
+    final busy = _consolidating[it.key] == true;
 
     Widget valLine(String tag, String value) => Padding(
           padding: const EdgeInsets.only(top: 2),
@@ -865,8 +869,35 @@ extension _PipelineReviewUi on _PipelineScreenState {
                   _reviewEdited[it.key] = addValue;
                 });
               }),
+              if (!isIdentity)
+                busy
+                    ? const Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        child: SizedBox(
+                          width: 16,
+                          height: 16,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        ),
+                      )
+                    : _conflictChip(p, 'Consolidate (AI)',
+                        action == 'consolidate', () => _consolidateField(it)),
             ],
           ),
+          if (isIdentity)
+            Padding(
+              padding: const EdgeInsets.only(top: 6),
+              child: Text(
+                'Identity fields aren\'t merged by the AI — double-check this '
+                'one yourself.',
+                style: TextStyle(
+                  fontFamily: kSansFamily,
+                  fontSize: 11.5,
+                  fontStyle: FontStyle.italic,
+                  color: p.textMuted,
+                ),
+              ),
+            ),
           if (checked && action != 'keep') ...[
             const SizedBox(height: 8),
             Text(
@@ -903,6 +934,40 @@ extension _PipelineReviewUi on _PipelineScreenState {
         onSelected: (_) => onTap(),
         showCheckmark: false,
       );
+
+  /// Identity / PII review keys (declarant + agent / alternate / guardian
+  /// name·DOB·address·phone·doctor). These are never sent to the AI to merge —
+  /// only free-text fields get the Consolidate option.
+  bool _isIdentityKey(String key) =>
+      key.startsWith('person_') ||
+      key.startsWith('alt_agent_') ||
+      key.startsWith('guardian_') ||
+      (key.startsWith('agent_') && key != 'agent_authority_limitations');
+
+  /// "Consolidate" — ask the AI to merge the existing + extracted value of a
+  /// (non-identity) free-text field into one value. Sets the apply maps on
+  /// success; fail-safe keeps the extracted value.
+  Future<void> _consolidateField(ReconItem it) async {
+    final apiKey = ref.read(apiKeyProvider).valueOrNull;
+    if (apiKey == null || apiKey.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Set up the AI assistant first to consolidate.'),
+      ));
+      return;
+    }
+    setState(() => _consolidating[it.key] = true);
+    final merged = await DocumentExtractor(apiKey: apiKey).consolidate(
+      fieldLabel: _displayLabel(it.key),
+      existing: it.existing!.trim(),
+      extracted: it.extracted.trim(),
+    );
+    if (!mounted) return;
+    setState(() {
+      _consolidating[it.key] = false;
+      _reviewChecked[it.key] = true;
+      _reviewEdited[it.key] = merged;
+    });
+  }
 
   /// §5805(c)(4) reminder: when an autofilled consent would delegate ECT,
   /// experimental studies, or drug trials to the agent, that delegation only
