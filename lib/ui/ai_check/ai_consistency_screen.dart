@@ -16,6 +16,7 @@ import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/ai_consent_dialog.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
+import 'package:mhad/ui/widgets/design/spot_illustration.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/design/wizard_header.dart';
 import 'package:mhad/ui/widgets/friendly_error.dart';
@@ -635,12 +636,21 @@ Return plain-text suggestions (short bullets are fine). No preamble.''';
                   ),
                 ),
                 const SizedBox(height: 16),
-                if (_conflicts.isEmpty)
+                if (_conflicts.isEmpty) ...[
+                  const Center(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 6),
+                      child:
+                          SpotIllustration(art: SpotArt.success, size: 84),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
                   const InfoBanner(
                     icon: Icons.check_circle_outline,
                     variant: InfoBannerVariant.success,
                     text: 'No cross-step contradictions detected.',
-                  )
+                  ),
+                ]
                 else
                   for (var i = 0; i < _conflicts.length; i++)
                     _ConflictCard(
