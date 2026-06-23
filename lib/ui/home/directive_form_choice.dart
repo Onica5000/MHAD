@@ -148,7 +148,9 @@ class _CombinedCard extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(20),
       child: Container(
-        decoration: BoxDecoration(color: p.primary),
+        // Brand CTA gradient (primary → primaryMid) for a richer feature hero
+        // than the flat primary fill. Foreground stays onPrimary, fully legible.
+        decoration: BoxDecoration(gradient: p.ctaGradient),
         child: Stack(
           children: [
             // Oversized decorative serif star, low opacity (artboard position).
