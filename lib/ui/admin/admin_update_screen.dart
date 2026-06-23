@@ -85,7 +85,12 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
           'Enter the ${_provider.label} API key first (${_provider.keyHint}).');
       return;
     }
-    if (_requestCtrl.text.trim().isEmpty) return;
+    if (_requestCtrl.text.trim().isEmpty) {
+      setState(() => _error =
+          'Describe the update you want first — type it in the “Describe the '
+          'update” box, then tap Draft with AI.');
+      return;
+    }
     setState(() {
       _loading = true;
       _error = null;
@@ -529,8 +534,10 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
             maxLines: 4,
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
-              labelText: 'e.g. "The Trevor Project number changed to ..." or '
+              labelText: 'Describe the update *',
+              hintText: 'e.g. "The Trevor Project number changed to ..." or '
                   '"Check Gemini\'s current free-tier rate limits"',
+              helperText: 'Required — what should the AI draft a change to?',
             ),
           ),
           const SizedBox(height: 12),

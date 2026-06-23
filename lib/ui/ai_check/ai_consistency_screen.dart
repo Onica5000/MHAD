@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mhad/ai/ai_clinical_policy.dart';
 import 'package:mhad/constants.dart';
 import 'package:mhad/domain/agent_ext.dart';
+import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/providers/assistant_providers.dart';
@@ -38,6 +39,7 @@ class AiConsistencyScreen extends ConsumerStatefulWidget {
 class _AiConsistencyScreenState extends ConsumerState<AiConsistencyScreen> {
   List<_Conflict> _conflicts = [];
   bool _loading = true;
+  String? _error; // rules-pass failure (repo read threw) — shown with a retry
 
   // AI pass (layered on top of the rule-based check when AI is available).
   bool _aiLoading = false;
@@ -52,11 +54,36 @@ class _AiConsistencyScreenState extends ConsumerState<AiConsistencyScreen> {
   }
 
   Future<void> _check() async {
-    final repo = ref.read(directiveRepositoryProvider);
-    final prefs = await repo.getPreferences(widget.directiveId);
-    final meds = await repo.watchMedications(widget.directiveId).first;
-    final allergies = await repo.getAllergies(widget.directiveId);
+    if (mounted) {
+      setState(() {
+        _loading = true;
+        _error = null;
+      });
+    }
+    try {
+      final repo = ref.read(directiveRepositoryProvider);
+      final prefs = await repo.getPreferences(widget.directiveId);
+      final directive = await repo.getDirectiveById(widget.directiveId);
+      final found = _findConflicts(prefs, directive);
+      if (!mounted) return;
+      setState(() {
+        _conflicts = found;
+        _loading = false;
+      });
+      // Layer an AI review on top of the rule-based result when available.
+      await _runAiPass();
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _error = FriendlyError.from(e);
+        _loading = false;
+      });
+    }
+  }
 
+  /// Pure, deterministic rule pass — no I/O, so it can't throw on a slow or
+  /// failed repo read (those are handled in [_check]).
+  List<_Conflict> _findConflicts(DirectivePref? prefs, Directive? directive) {
     final found = <_Conflict>[];
 
     // Agent-authorization review. PA Act 194 lets a principal BOTH record their
@@ -68,7 +95,6 @@ class _AiConsistencyScreenState extends ConsumerState<AiConsistencyScreen> {
     // them as "confirm this is intended" notes (the official form allows both;
     // they just need consideration) rather than hard errors. Only agent-bearing
     // forms (Combined / POA) have an agent at all.
-    final directive = await repo.getDirectiveById(widget.directiveId);
     var hasAgent = false;
     if (directive != null) {
       try {
@@ -146,37 +172,12 @@ class _AiConsistencyScreenState extends ConsumerState<AiConsistencyScreen> {
       }
     }
 
-    // Rule 2: Severe allergy not also on Medications-avoid list.
-    final avoidNames =
-        meds.where((m) => m.entryType == 'exception').map((m) => m.medicationName.toLowerCase()).toSet();
-    final severe = allergies.where((a) => a.severity == 'severe');
-    for (final a in severe) {
-      if (a.substance.isEmpty) continue;
-      final inAvoid = avoidNames.any(
-          (n) => n.contains(a.substance.toLowerCase()));
-      if (!inAvoid) {
-        found.add(_Conflict(
-          steps: 'Step 7 + Step 8',
-          title: '${a.substance} is Severe in allergies but not on the '
-              '"Never give" medications list.',
-          body: 'Add it to step 7 → Never give so prescribers see it as a '
-              'refusal, not just an allergy.',
-          aStatement: '${a.substance} — severe allergy',
-          bStatement: 'Not on "Never give" list',
-          actionEditA: 'Edit step 7 (Medications)',
-          actionEditB: 'Edit step 8 (Allergies)',
-        ));
-      }
-    }
+    // NOTE: a severe allergy is intentionally NOT flagged for the medications
+    // "Never give" list. Allergies and "medications I never want" are separate
+    // sections by design — the allergy section is where ER staff look first —
+    // so cross-referencing them here would contradict that separation.
 
-    if (!mounted) return;
-    setState(() {
-      _conflicts = found;
-      _loading = false;
-    });
-
-    // Layer an AI review on top of the rule-based result when AI is available.
-    await _runAiPass();
+    return found;
   }
 
   /// When a Gemini key is set, ask the AI for a broader "second pair of eyes"
@@ -206,7 +207,9 @@ class _AiConsistencyScreenState extends ConsumerState<AiConsistencyScreen> {
     try {
       final summary = await _buildSummary();
       final prompt = _reviewPrompt(summary);
-      final reply = await assistant.sendMessage(prompt, history: []);
+      final reply = await assistant
+          .sendMessage(prompt, history: [])
+          .timeout(const Duration(seconds: 45));
       tracker.recordRequest(
           estimatedTokens: GeminiRateTracker.estimateTokens(prompt.length));
       if (!mounted) return;
@@ -576,6 +579,29 @@ Return plain-text suggestions (short bullets are fine). No preamble.''';
         Expanded(
           child: _loading
               ? const Center(child: CircularProgressIndicator())
+              : _error != null
+              ? Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.error_outline, color: p.primary, size: 40),
+                        const SizedBox(height: 12),
+                        Text(
+                          "Couldn't run the consistency check.\n$_error",
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 16),
+                        FilledButton.icon(
+                          onPressed: _check,
+                          icon: const Icon(Icons.refresh),
+                          label: const Text('Try again'),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
               : ListView(
                   padding: const EdgeInsets.fromLTRB(20, 14, 20, 32),
               children: [
