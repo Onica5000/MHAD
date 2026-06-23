@@ -199,10 +199,20 @@ class DocumentExtractor {
       'drug_trial_consent': Schema.string(nullable: true),
       // Room preferences as free-text note.
       'room_preferences_note': Schema.string(nullable: true),
+      // True ONLY if the person explicitly asks for a same-gender / same-as-
+      // their-identity roommate. Otherwise null.
+      'same_gender_roommate': Schema.boolean(nullable: true),
       'preferred_facility': Schema.string(nullable: true),
       'avoid_facility': Schema.string(nullable: true),
       'effective_condition': Schema.string(nullable: true),
       'agent_authority_limitations': Schema.string(nullable: true),
+      // Agent authority on/off toggles — set ONLY on an explicit statement.
+      'agent_can_consent_hospitalization': Schema.boolean(nullable: true),
+      'agent_can_consent_medication': Schema.boolean(nullable: true),
+      // Self-binding ("Ulysses") clause opt-in — true ONLY if the person
+      // explicitly says their directive should be honored even if they object
+      // / refuse in the moment.
+      'self_binding_ulysses': Schema.boolean(nullable: true),
       'health_history': Schema.string(nullable: true),
       'dietary': Schema.string(nullable: true),
       'religious': Schema.string(nullable: true),
@@ -365,6 +375,18 @@ drug_trial_consent
 
 room_preferences_note
   → Free-text room preference notes: private room, smoking policy, same-gender roommate, etc. Leave null if not mentioned.
+
+same_gender_roommate
+  → true ONLY if the person explicitly asks to share a room only with someone of the same gender / their own gender identity (e.g. "I want a female roommate", "same-gender roommate only"). Otherwise leave null. Do NOT infer from anything else.
+
+agent_can_consent_hospitalization
+  → true if the person explicitly says their agent MAY admit them to / consent to hospitalization (voluntary inpatient admission); false if they explicitly say their agent may NOT. Leave null if not addressed. Do NOT infer from naming an agent.
+
+agent_can_consent_medication
+  → true if the person explicitly says their agent MAY decide / consent to their (general psychiatric) medications; false if they explicitly say the agent may NOT. Leave null if not addressed. Do NOT infer from naming an agent. (This is the agent's authority — distinct from the person's own medication preferences.)
+
+self_binding_ulysses
+  → true ONLY if the person explicitly states their directive should be followed EVEN IF they object, refuse, or change their mind during a future crisis (a self-binding / "Ulysses" instruction). Leave null otherwise — this is a serious, deliberate choice; never infer it.
 
 preferred_facility
   → Name of a hospital or treatment center the person WANTS to be treated at.

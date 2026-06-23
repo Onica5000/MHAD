@@ -53,6 +53,15 @@ class DocumentExtractionResult {
   // Room preferences free-text note. Maps to DirectivePrefs.roomPreferencesNote.
   final String? roomPreferencesNote;
 
+  // ── Structured toggles (set only on an explicit statement) ────────────────
+  // Same-gender roommate request → DirectivePrefs.roomPreferences chip.
+  final bool? sameGenderRoommate;
+  // Agent authority → DirectivePrefs.agentCanConsentHospitalization / Medication.
+  final bool? agentCanConsentHospitalization;
+  final bool? agentCanConsentMedication;
+  // Self-binding ("Ulysses") opt-in → DirectivePrefs.selfBindingEnabled.
+  final bool? selfBindingUlysses;
+
   // ── Additional instructions ─────────────────────────────────────────────
   final String? healthHistory;
   final String? dietary;
@@ -89,6 +98,10 @@ class DocumentExtractionResult {
     this.experimentalConsent,
     this.drugTrialConsent,
     this.roomPreferencesNote,
+    this.sameGenderRoommate,
+    this.agentCanConsentHospitalization,
+    this.agentCanConsentMedication,
+    this.selfBindingUlysses,
     this.healthHistory,
     this.dietary,
     this.religious,
@@ -117,6 +130,10 @@ class DocumentExtractionResult {
       experimentalConsent == null &&
       drugTrialConsent == null &&
       roomPreferencesNote == null &&
+      sameGenderRoommate == null &&
+      agentCanConsentHospitalization == null &&
+      agentCanConsentMedication == null &&
+      selfBindingUlysses == null &&
       healthHistory == null &&
       dietary == null &&
       religious == null &&
@@ -149,6 +166,12 @@ class DocumentExtractionResult {
       experimentalConsent: experimentalConsent ?? other.experimentalConsent,
       drugTrialConsent: drugTrialConsent ?? other.drugTrialConsent,
       roomPreferencesNote: _mergeText(roomPreferencesNote, other.roomPreferencesNote),
+      sameGenderRoommate: sameGenderRoommate ?? other.sameGenderRoommate,
+      agentCanConsentHospitalization:
+          agentCanConsentHospitalization ?? other.agentCanConsentHospitalization,
+      agentCanConsentMedication:
+          agentCanConsentMedication ?? other.agentCanConsentMedication,
+      selfBindingUlysses: selfBindingUlysses ?? other.selfBindingUlysses,
       healthHistory: _mergeText(healthHistory, other.healthHistory),
       dietary: _mergeText(dietary, other.dietary),
       religious: _mergeText(religious, other.religious),
@@ -274,6 +297,11 @@ class DocumentExtractionResult {
       experimentalConsent: optStr(json['experimental_consent']),
       drugTrialConsent: optStr(json['drug_trial_consent']),
       roomPreferencesNote: optStr(json['room_preferences_note']),
+      sameGenderRoommate: json['same_gender_roommate'] as bool?,
+      agentCanConsentHospitalization:
+          json['agent_can_consent_hospitalization'] as bool?,
+      agentCanConsentMedication: json['agent_can_consent_medication'] as bool?,
+      selfBindingUlysses: json['self_binding_ulysses'] as bool?,
       healthHistory: optStr(json['health_history']),
       dietary: optStr(json['dietary']),
       religious: optStr(json['religious']),

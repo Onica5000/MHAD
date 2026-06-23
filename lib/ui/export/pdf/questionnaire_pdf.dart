@@ -102,7 +102,16 @@ Future<Uint8List> buildAudioQuestionnairePdf() async {
           style: boldStyle(fontSize: 12.5),
         ),
         pw.SizedBox(height: 4),
-        for (final item in audioQCantDo) bullet(item, fontSize: 10),
+        for (final item in audioQCantDo) bullet(_safe(item), fontSize: 10),
+        pw.SizedBox(height: 10),
+        pw.Text(
+          'Worth saying out loud - autofill now captures these',
+          style: boldStyle(fontSize: 12.5),
+        ),
+        pw.SizedBox(height: 4),
+        for (final item in audioQNowCaptured) bullet(_safe(item), fontSize: 10),
+        pw.SizedBox(height: 4),
+        bullet(_safe(audioQFormTypeNote), fontSize: 10),
         pw.SizedBox(height: 10),
         pw.Text(
           _safe(audioQClosing),

@@ -145,6 +145,32 @@ extension _PipelineReviewUi on _PipelineScreenState {
       _reviewEdited['room_prefs_note'] = v.roomPreferencesNote!;
     }
 
+    // ── Structured toggles (agent authority / Ulysses / same-gender roommate).
+    // Extracted only on an explicit statement; shown here so the user confirms
+    // (or unchecks) before they're applied.
+    if (v.agentCanConsentHospitalization != null) {
+      _reviewChecked['authority_hospitalization'] = true;
+      _reviewEdited['authority_hospitalization'] =
+          v.agentCanConsentHospitalization!
+              ? 'Agent MAY consent to hospitalization'
+              : 'Agent may NOT consent to hospitalization';
+    }
+    if (v.agentCanConsentMedication != null) {
+      _reviewChecked['authority_medication'] = true;
+      _reviewEdited['authority_medication'] = v.agentCanConsentMedication!
+          ? 'Agent MAY decide medications'
+          : 'Agent may NOT decide medications';
+    }
+    if (v.selfBindingUlysses == true) {
+      _reviewChecked['ulysses_optin'] = true;
+      _reviewEdited['ulysses_optin'] =
+          'Self-binding (Ulysses): follow my directive even if I object';
+    }
+    if (v.sameGenderRoommate == true) {
+      _reviewChecked['roommate_same_gender'] = true;
+      _reviewEdited['roommate_same_gender'] = 'Same-gender roommate requested';
+    }
+
     // ── Personal info (PII) — autofill the declarant + the people they
     // designate. Address is split into components matching the app's form.
     final pi = v.personalInfo;
@@ -313,6 +339,10 @@ extension _PipelineReviewUi on _PipelineScreenState {
     if (key == 'experimental_consent') return 'Experimental treatment consent';
     if (key == 'drug_trial_consent') return 'Drug trial consent';
     if (key == 'room_prefs_note') return 'Room preferences';
+    if (key == 'roommate_same_gender') return 'Same-gender roommate';
+    if (key == 'authority_hospitalization') return 'Agent: hospitalization';
+    if (key == 'authority_medication') return 'Agent: medications';
+    if (key == 'ulysses_optin') return 'Self-binding (Ulysses)';
     if (key == 'pet_custody') return 'Pet care';
     if (key == 'children_custody') return 'Children / dependents';
     if (key == 'family_notification') return 'Who to notify';
@@ -376,13 +406,20 @@ extension _PipelineReviewUi on _PipelineScreenState {
     if (key.startsWith('agent_') && !key.startsWith('agent_authority')) {
       return 'Your agent';
     }
-    if (key == 'agent_authority_limitations') return 'Agent Authority';
+    if (key == 'agent_authority_limitations' ||
+        key == 'authority_hospitalization' ||
+        key == 'authority_medication') {
+      return 'Agent Authority';
+    }
+    if (key == 'ulysses_optin') return 'Self-binding';
     if (key == 'ect_consent' ||
         key == 'experimental_consent' ||
         key == 'drug_trial_consent') {
       return 'Consent';
     }
-    if (key == 'room_prefs_note') return 'Room Preferences';
+    if (key == 'room_prefs_note' || key == 'roommate_same_gender') {
+      return 'Room Preferences';
+    }
     if (key.startsWith('alt_agent_')) return 'Alternate agent';
     if (key.startsWith('guardian_')) return 'Guardian';
     return 'Other';

@@ -531,15 +531,48 @@ extension _PipelineApplyLogic on _PipelineScreenState {
     final expVal = toConsentValue(pv('experimental_consent'));
     final drugVal = toConsentValue(pv('drug_trial_consent'));
     final roomNote = pv('room_prefs_note');
-    if (ectVal != null || expVal != null || drugVal != null || roomNote != null) {
+    // Structured toggles — apply only if still checked in review AND the AI
+    // actually set a value (the boolean lives on the validated result, not the
+    // display string). Same-gender roommate maps to the room-preference chip
+    // plus the default same-as-identity match.
+    final applyHosp = _reviewChecked['authority_hospitalization'] == true &&
+        validated?.agentCanConsentHospitalization != null;
+    final applyMeds = _reviewChecked['authority_medication'] == true &&
+        validated?.agentCanConsentMedication != null;
+    final applyUlysses = _reviewChecked['ulysses_optin'] == true &&
+        validated?.selfBindingUlysses == true;
+    final applyRoommate = _reviewChecked['roommate_same_gender'] == true &&
+        validated?.sameGenderRoommate == true;
+    if (ectVal != null ||
+        expVal != null ||
+        drugVal != null ||
+        roomNote != null ||
+        applyHosp ||
+        applyMeds ||
+        applyUlysses ||
+        applyRoommate) {
       await repo.upsertPreferences(DirectivePrefsCompanion(
         directiveId: Value(id),
         ectConsent: ectVal != null ? Value(ectVal) : const Value.absent(),
         experimentalConsent: expVal != null ? Value(expVal) : const Value.absent(),
         drugTrialConsent: drugVal != null ? Value(drugVal) : const Value.absent(),
         roomPreferencesNote: roomNote != null ? Value(roomNote) : const Value.absent(),
+        agentCanConsentHospitalization: applyHosp
+            ? Value(validated!.agentCanConsentHospitalization!)
+            : const Value.absent(),
+        agentCanConsentMedication: applyMeds
+            ? Value(validated!.agentCanConsentMedication!)
+            : const Value.absent(),
+        selfBindingEnabled:
+            applyUlysses ? const Value(true) : const Value.absent(),
+        roomPreferences:
+            applyRoommate ? const Value('sameGenderRoommate') : const Value.absent(),
+        roommateGenderMatch:
+            applyRoommate ? const Value('sameAsIdentity') : const Value.absent(),
       ));
       applied += [ectVal, expVal, drugVal, roomNote].whereType<String>().length;
+      applied +=
+          [applyHosp, applyMeds, applyUlysses, applyRoommate].where((b) => b).length;
     }
 
     // Each additional-instruction field actually written counts once (review

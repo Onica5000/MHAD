@@ -108,6 +108,10 @@ class ClinicalDataValidator {
       experimentalConsent: raw.experimentalConsent,
       drugTrialConsent: raw.drugTrialConsent,
       roomPreferencesNote: raw.roomPreferencesNote,
+      sameGenderRoommate: raw.sameGenderRoommate,
+      agentCanConsentHospitalization: raw.agentCanConsentHospitalization,
+      agentCanConsentMedication: raw.agentCanConsentMedication,
+      selfBindingUlysses: raw.selfBindingUlysses,
       petCustody: raw.petCustody,
       childrenCustody: raw.childrenCustody,
       familyNotification: raw.familyNotification,
@@ -180,6 +184,10 @@ class ValidatedExtractionResult {
   final String? experimentalConsent;
   final String? drugTrialConsent;
   final String? roomPreferencesNote;
+  final bool? sameGenderRoommate;
+  final bool? agentCanConsentHospitalization;
+  final bool? agentCanConsentMedication;
+  final bool? selfBindingUlysses;
   final String? petCustody;
   final String? childrenCustody;
   final String? familyNotification;
@@ -208,6 +216,10 @@ class ValidatedExtractionResult {
     this.experimentalConsent,
     this.drugTrialConsent,
     this.roomPreferencesNote,
+    this.sameGenderRoommate,
+    this.agentCanConsentHospitalization,
+    this.agentCanConsentMedication,
+    this.selfBindingUlysses,
     this.petCustody,
     this.childrenCustody,
     this.familyNotification,

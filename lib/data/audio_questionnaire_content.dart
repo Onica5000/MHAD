@@ -215,20 +215,31 @@ const List<String> audioQCantDo = [
   'Your signature and your witnesses\' signatures.',
   'Physical INITIALS for letting your agent decide ECT, experimental studies, '
       'or drug trials (a legal requirement — see section 11).',
-  'On/off authority toggles — whether your agent may consent to your '
-      'hospitalization, and whether your agent decides your medications.',
-  'The treatment-facility "no preference" vs. specific selection, the '
-      'room-preference checkboxes, and the same-gender-roommate sub-choice '
-      '(your spoken facility names and room notes ARE captured).',
+  'The specific room-preference checkboxes (e.g. private room) — though your '
+      'spoken room notes ARE captured, and a same-gender-roommate request is '
+      'now auto-filled.',
   'The structured crisis plan and the side-effects checklist are built in the '
       'app — autofill does NOT complete them. Please open and fill in (or '
       'review) those two sections yourself. (Your general crisis and activity '
       'notes ARE captured.)',
-  'The self-binding (Ulysses) clause opt-in.',
-  'Choosing your form type — after autofill, the app recommends a form '
-      '(Combined, Declaration, or Power of Attorney) based on what it found, '
-      'and you confirm or change it.',
 ];
+
+/// Things the recording now CAN fill if you say them clearly — called out so
+/// users know they're worth speaking aloud.
+const List<String> audioQNowCaptured = [
+  'Whether your agent may consent to your hospitalization, and whether your '
+      'agent may decide your medications (say it explicitly).',
+  'A self-binding ("Ulysses") instruction — that your directive should be '
+      'followed even if you object during a future crisis.',
+  'Dosages for the medications you currently take.',
+];
+
+/// After autofill the app recommends a form type (Combined / Declaration /
+/// Power of Attorney) from what it found; you confirm or change it.
+const String audioQFormTypeNote =
+    'You don\'t pick your form type while recording — after autofill the app '
+    'recommends one (Combined, Declaration, or Power of Attorney) based on what '
+    'it heard, and you confirm or change it.';
 
 /// Closing reminder shown after the questionnaire.
 const String audioQClosing =

@@ -137,6 +137,19 @@ class AudioGuideScreen extends StatelessWidget {
           for (final item in audioQCantDo) _bullet(p, item, muted: true),
           const SizedBox(height: 14),
           Text(
+            'Worth saying out loud — autofill now captures these:',
+            style: TextStyle(
+              fontFamily: kSansFamily,
+              fontSize: 12.5,
+              color: p.textMuted,
+            ),
+          ),
+          const SizedBox(height: 6),
+          for (final item in audioQNowCaptured) _bullet(p, item, muted: true),
+          const SizedBox(height: 6),
+          _bullet(p, audioQFormTypeNote, muted: true),
+          const SizedBox(height: 14),
+          Text(
             audioQClosing,
             style: TextStyle(
               fontFamily: kSansFamily,
