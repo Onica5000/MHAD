@@ -268,13 +268,12 @@ pw.Widget signOnBehalfBlock(String formTypeDescription) {
 // Witness block — full details per official form
 // ---------------------------------------------------------------------------
 
-/// Full witness detail block: Name, Address, City/State/Zip, Phone.
+/// Witness detail block: Name and Date Signed only. PA Act 194 (20 Pa.C.S.
+/// §§ 5822, 5832) requires two adult witnesses but does NOT require a witness
+/// to record an address or phone number, so those lines are omitted.
 pw.Widget witnessDetailBlock(
   String label,
-  String? name,
-  String? address, {
-  String? cityStateZip,
-  String? phone,
+  String? name, {
   int? signatureDate,
 }) {
   // Empty (not an underscore placeholder) when unsigned: dataLine already
@@ -284,9 +283,6 @@ pw.Widget witnessDetailBlock(
     crossAxisAlignment: pw.CrossAxisAlignment.start,
     children: [
       dataLine('Name of Witness', name ?? ''),
-      dataLine('Address', address ?? ''),
-      dataLine('City, State, Zip Code', cityStateZip ?? ''),
-      dataLine('Phone Number', phone ?? ''),
       dataLine('Date Signed', dateStr),
       pw.SizedBox(height: 6),
     ],

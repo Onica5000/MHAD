@@ -860,18 +860,12 @@ List<pw.Page> buildCombinedPages({
         witnessDetailBlock(
           'Witness 1',
           w1?.fullName,
-          w1?.streetAddress,
-          cityStateZip: w1?.cityStateZip,
-          phone: w1?.phone,
           signatureDate: w1?.signatureDate,
         ),
         // Witness 2 details
         witnessDetailBlock(
           'Witness 2',
           w2?.fullName,
-          w2?.streetAddress,
-          cityStateZip: w2?.cityStateZip,
-          phone: w2?.phone,
           signatureDate: w2?.signatureDate,
         ),
 
