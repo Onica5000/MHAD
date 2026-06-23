@@ -7,6 +7,7 @@ import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/responsive_shell.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/design/spot_illustration.dart';
+import 'package:mhad/ui/widgets/design/brand_motif.dart';
 
 class EducationScreen extends StatefulWidget {
   /// If set, only show sections matching these IDs (deep-link from wizard Help).
@@ -130,35 +131,46 @@ class _EditorialLearnHub extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.fromLTRB(22, 8, 22, 28),
       children: [
-        const SectionLabel('Learn'),
-        Text.rich(
-          TextSpan(
+        // Brand-motif hero header — decorative backdrop behind the Learn
+        // headline + intro (content unchanged).
+        BrandMotif(
+          padding: const EdgeInsets.fromLTRB(20, 18, 20, 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const TextSpan(text: 'Understand '),
-              TextSpan(text: 'before', style: TextStyle(color: p.primary)),
-              const TextSpan(text: ' you sign.'),
+              const SectionLabel('Learn'),
+              Text.rich(
+                TextSpan(
+                  children: [
+                    const TextSpan(text: 'Understand '),
+                    TextSpan(
+                        text: 'before', style: TextStyle(color: p.primary)),
+                    const TextSpan(text: ' you sign.'),
+                  ],
+                ),
+                style: const TextStyle(
+                  fontFamily: 'Instrument Serif',
+                  fontFamilyFallback: ['Georgia', 'serif'],
+                  fontStyle: FontStyle.italic,
+                  fontSize: 42,
+                  height: 1,
+                  letterSpacing: -0.8,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                'Most of this comes straight from the official PA MHAD booklet, '
+                'plus a few plain-language explainers. No marketing, no '
+                'opinions — just the rules and what they mean.',
+                style: TextStyle(
+                  fontFamily: kSansFamily,
+                  fontSize: 13.5,
+                  height: 1.5,
+                  color: p.textMuted,
+                ),
+              ),
             ],
-          ),
-          style: const TextStyle(
-            fontFamily: 'Instrument Serif',
-            fontFamilyFallback: ['Georgia', 'serif'],
-            fontStyle: FontStyle.italic,
-            fontSize: 42,
-            height: 1,
-            letterSpacing: -0.8,
-            fontWeight: FontWeight.w400,
-          ),
-        ),
-        const SizedBox(height: 6),
-        Text(
-          'Most of this comes straight from the official PA MHAD booklet, plus '
-          'a few plain-language explainers. No marketing, no opinions — just '
-          'the rules and what they mean.',
-          style: TextStyle(
-            fontFamily: kSansFamily,
-            fontSize: 13.5,
-            height: 1.5,
-            color: p.textMuted,
           ),
         ),
         const SizedBox(height: 16),
