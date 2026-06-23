@@ -4,6 +4,8 @@ import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
+import 'package:mhad/ui/widgets/design/brand_motif.dart';
+import 'package:mhad/ui/widgets/design/spot_illustration.dart';
 import 'package:mhad/ui/widgets/design/wizard_header.dart';
 import 'package:mhad/utils/launch_utils.dart';
 import 'package:mhad/utils/nav_utils.dart';
@@ -50,21 +52,38 @@ class FacilitatorScreen extends StatelessWidget {
         Expanded(child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 14, 20, 32),
         children: [
-          const SectionLabel('Get help · evidence-based'),
-          const SizedBox(height: 6),
-          const EditorialHeading(
-            text: "You don't have to do this alone.",
-            size: 32,
-          ),
-          const SizedBox(height: 6),
-          Text(
-            '${appData.fact('facilitatorCompletionStat')} '
-            'Pick the kind of support that fits today.',
-            style: TextStyle(
-              fontFamily: kSansFamily,
-              fontSize: 14,
-              color: p.textMuted,
-              height: 1.5,
+          BrandMotif(
+            padding: const EdgeInsets.fromLTRB(20, 16, 14, 18),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SectionLabel('Get help · evidence-based'),
+                      const SizedBox(height: 6),
+                      const EditorialHeading(
+                        text: "You don't have to do this alone.",
+                        size: 32,
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        '${appData.fact('facilitatorCompletionStat')} '
+                        'Pick the kind of support that fits today.',
+                        style: TextStyle(
+                          fontFamily: kSansFamily,
+                          fontSize: 14,
+                          color: p.textMuted,
+                          height: 1.5,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8),
+                const SpotIllustration(art: SpotArt.shield, size: 72),
+              ],
             ),
           ),
           const SizedBox(height: 18),
