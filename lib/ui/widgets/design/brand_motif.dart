@@ -46,6 +46,27 @@ class BrandMotif extends StatelessWidget {
   }
 }
 
+/// Full-bleed gradient + motif backdrop for a screen hero. Drop it as the FIRST
+/// child of a [Stack] — it expands to fill and ignores pointer input, so it sits
+/// purely behind the existing content with no layout or interaction impact.
+class BrandBackdrop extends StatelessWidget {
+  final double intensity;
+  const BrandBackdrop({this.intensity = 0.7, super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
+    return Positioned.fill(
+      child: IgnorePointer(
+        child: DecoratedBox(
+          decoration: BoxDecoration(gradient: p.heroWash),
+          child: CustomPaint(painter: _MotifPainter(p, intensity)),
+        ),
+      ),
+    );
+  }
+}
+
 class _MotifPainter extends CustomPainter {
   final MhadPalette p;
   final double intensity;

@@ -8,6 +8,7 @@ import 'package:mhad/services/onboarding_service.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
+import 'package:mhad/ui/widgets/design/brand_motif.dart';
 import 'package:mhad/ui/wizard/widgets/saved_file_import.dart';
 
 /// First-touch welcome — prototype-exact rebuild of mobile.jsx::ScrWelcome
@@ -63,6 +64,9 @@ class OnboardingScreen extends ConsumerWidget {
       body: SafeArea(
         child: Stack(
           children: [
+            // Full-bleed brand backdrop (gradient wash + soft ripple motif),
+            // purely decorative and behind all content — no layout/input impact.
+            const BrandBackdrop(intensity: 0.85),
             // No crisis chip on this first-run intro by design; crisis access
             // begins on the dashboard (Home tools / the mobile "More" sheet).
             // (The global floating 988 button was removed 2026-06-22.)
