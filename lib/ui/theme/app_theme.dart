@@ -24,13 +24,55 @@ class DesignTokens {
   static const cardElevation = 1.0;
   static const sectionLabelLetterSpacing = 1.2;
 
-  static List<BoxShadow> cardShadow(Brightness b) => [
-        BoxShadow(
-          color: Colors.black.withValues(alpha: b == Brightness.dark ? 0.3 : 0.04),
-          blurRadius: 3,
-          offset: const Offset(0, 1),
-        ),
-      ];
+  // ── Spacing scale (8-pt rhythm) ───────────────────────────────────────────
+  // Additive: a single vertical/space scale so screens share one rhythm.
+  static const space2 = 2.0;
+  static const space4 = 4.0;
+  static const space6 = 6.0;
+  static const space8 = 8.0;
+  static const space12 = 12.0;
+  static const space16 = 16.0;
+  static const space20 = 20.0;
+  static const space24 = 24.0;
+  static const space32 = 32.0;
+  static const space40 = 40.0;
+  static const space48 = 48.0;
+  static const space64 = 64.0;
+
+  /// Resting card depth — a soft two-layer shadow so cards read as objects, not
+  /// just outlined rectangles. Subtle in light, lifted in dark.
+  static List<BoxShadow> cardShadow(Brightness b) {
+    final dark = b == Brightness.dark;
+    return [
+      BoxShadow(
+        color: Colors.black.withValues(alpha: dark ? 0.26 : 0.05),
+        blurRadius: 2,
+        offset: const Offset(0, 1),
+      ),
+      BoxShadow(
+        color: Colors.black.withValues(alpha: dark ? 0.20 : 0.04),
+        blurRadius: 12,
+        offset: const Offset(0, 6),
+      ),
+    ];
+  }
+
+  /// Raised depth — for hover-lift on web and for hero/feature cards.
+  static List<BoxShadow> raisedShadow(Brightness b) {
+    final dark = b == Brightness.dark;
+    return [
+      BoxShadow(
+        color: Colors.black.withValues(alpha: dark ? 0.34 : 0.08),
+        blurRadius: 24,
+        offset: const Offset(0, 12),
+      ),
+      BoxShadow(
+        color: Colors.black.withValues(alpha: dark ? 0.24 : 0.05),
+        blurRadius: 4,
+        offset: const Offset(0, 2),
+      ),
+    ];
+  }
 }
 
 /// Status/semantic colors shared across palettes (light & dark variants tuned
@@ -126,6 +168,29 @@ class MhadPalette {
     required this.onPrimary,
     required this.onPrimaryLight,
   });
+
+  /// Soft brand wash for hero / landing backgrounds — a barely-there tint→
+  /// surface diagonal. Calm enough to sit behind text without hurting contrast.
+  LinearGradient get heroWash => LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [primaryTint, surface],
+      );
+
+  /// Tonal brand gradient for feature/hero CARDS and decorative motifs (the
+  /// "bold" accent moments). Pairs the light tint with the mid tone.
+  LinearGradient get brandGradient => LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [primaryLight, primaryTint],
+      );
+
+  /// Saturated gradient for primary CTAs / emphasis chips (use sparingly).
+  LinearGradient get ctaGradient => LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [primary, primaryMid],
+      );
 
   /// Floating-overlay decoration shared by the autocomplete dropdowns
   /// (diagnoses / allergies search). A bordered card with a soft drop shadow.
