@@ -7,6 +7,7 @@ import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
+import 'package:mhad/ui/widgets/design/brand_motif.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/design/wizard_header.dart';
@@ -117,19 +118,28 @@ class _CrisisPlanScreenState extends ConsumerState<CrisisPlanScreen> {
         Expanded(child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 14, 20, 32),
         children: [
-          const SectionLabel('Optional add-on · WRAP'),
-          const SizedBox(height: 6),
-          // Headline bumped 30 -> 38pt to match prototype L446.
-          const EditorialHeading(text: "How I know I'm not okay", size: 38),
-          const SizedBox(height: 6),
-          Text(
-            'Adapted from WRAP. Help the people around you spot trouble early — '
-            'and know what actually helps you when they do.',
-            style: TextStyle(
-              fontFamily: kSansFamily,
-              fontSize: 14,
-              color: p.textMuted,
-              height: 1.5,
+          BrandMotif(
+            padding: const EdgeInsets.fromLTRB(20, 16, 20, 18),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SectionLabel('Optional add-on · WRAP'),
+                const SizedBox(height: 6),
+                // Headline bumped 30 -> 38pt to match prototype L446.
+                const EditorialHeading(
+                    text: "How I know I'm not okay", size: 38),
+                const SizedBox(height: 6),
+                Text(
+                  'Adapted from WRAP. Help the people around you spot trouble '
+                  'early — and know what actually helps you when they do.',
+                  style: TextStyle(
+                    fontFamily: kSansFamily,
+                    fontSize: 14,
+                    color: p.textMuted,
+                    height: 1.5,
+                  ),
+                ),
+              ],
             ),
           ),
           const SizedBox(height: 18),
