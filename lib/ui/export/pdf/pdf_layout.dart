@@ -176,11 +176,17 @@ pw.Widget dataLine(
       pw.SizedBox(height: _kLineLabelGap),
       pw.Container(
         width: width,
+        // Same writing-line height as [blankLine] / [signatureBlock] so a blank
+        // OR short filled line always occupies a uniform _kLineHeight; longer
+        // values still grow (minHeight, not a fixed height). The value sits on
+        // the line (bottom-aligned) regardless of its height.
+        constraints: const pw.BoxConstraints(minHeight: _kLineHeight),
+        alignment: pw.Alignment.bottomLeft,
         decoration: const pw.BoxDecoration(
           border: pw.Border(bottom: pw.BorderSide(color: kBlack, width: 0.5)),
         ),
         padding: const pw.EdgeInsets.only(bottom: 2),
-        child: pw.Text(value.isEmpty ? ' ' : value, style: bodyStyle()),
+        child: value.isEmpty ? null : pw.Text(value, style: bodyStyle()),
       ),
       pw.SizedBox(height: _kLineTrailing),
     ],
