@@ -240,18 +240,9 @@ class _AiConsistencyScreenState extends ConsumerState<AiConsistencyScreen> {
     String present(String? v) =>
         (v != null && v.trim().isNotEmpty) ? 'provided' : 'empty';
 
-    // Map a stored consent value ('yes'|'no'|'agentDecides'|'conditional:…') to
-    // a readable decision so the AI sees a CHOICE, not a missing field.
-    String consentLabel(String? v) {
-      if (v == null || v.trim().isEmpty) return 'not set';
-      if (v == consentYes) return 'consented';
-      if (v == consentNo) return 'refused';
-      if (v == consentAgentDecides) return 'agent decides';
-      if (v.startsWith('conditional:')) return 'conditional (see form)';
-      // Never echo an unexpected raw value — a conditional's free text (or any
-      // stray value) could carry PII like a name and reach the AI verbatim.
-      return 'set (see form)';
-    }
+    // consentLabel() is the shared global (lib/constants.dart): maps a stored
+    // consent value to a readable decision so the AI sees a CHOICE, not a
+    // missing field, and never echoes an unexpected raw value (PII safety).
 
     // A JSON add-on (crisis plan / side-effects checklist) counts as filled
     // only when it actually carries content — an opened-but-empty structure

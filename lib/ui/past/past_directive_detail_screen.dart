@@ -1,8 +1,8 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 import 'package:mhad/data/database/app_database.dart';
+import 'package:mhad/utils/date_format.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/router.dart';
@@ -106,7 +106,6 @@ class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final p = Theme.of(context).mhadPalette;
-    final dateFmt = DateFormat('MMM d, y');
     final status = directiveStatusLabel(directive.status);
     final dark = Theme.of(context).brightness == Brightness.dark;
     final statusColor = directiveStatusColor(directive.status, dark: dark);
@@ -133,11 +132,11 @@ class _Body extends ConsumerWidget {
                     orElse: () => FormType.combined)
                 .displayName,
             if (directive.executionDate != null)
-              'signed ${dateFmt.format(DateTime.fromMillisecondsSinceEpoch(directive.executionDate!))}',
+              'signed ${formatShortDate(DateTime.fromMillisecondsSinceEpoch(directive.executionDate!))}',
             if (directive.expirationDate != null)
               status == 'Expired'
-                  ? 'expired ${dateFmt.format(DateTime.fromMillisecondsSinceEpoch(directive.expirationDate!))}'
-                  : 'expires ${dateFmt.format(DateTime.fromMillisecondsSinceEpoch(directive.expirationDate!))}',
+                  ? 'expired ${formatShortDate(DateTime.fromMillisecondsSinceEpoch(directive.expirationDate!))}'
+                  : 'expires ${formatShortDate(DateTime.fromMillisecondsSinceEpoch(directive.expirationDate!))}',
           ].join(' · '),
           style: TextStyle(
             fontFamily: kSansFamily,

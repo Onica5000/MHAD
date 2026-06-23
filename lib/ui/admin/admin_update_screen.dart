@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mhad/constants.dart';
 import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/services/admin_backup_store.dart';
 import 'package:mhad/services/admin_update_service.dart';
@@ -83,6 +84,11 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
     if (key.isEmpty) {
       setState(() => _error =
           'Enter the ${_provider.label} API key first (${_provider.keyHint}).');
+      return;
+    }
+    if (_provider == AdminAiProvider.gemini && !isLikelyGeminiKey(key)) {
+      setState(() => _error =
+          'That doesn\'t look like a Gemini key — it should start with "AIza".');
       return;
     }
     if (_requestCtrl.text.trim().isEmpty) {

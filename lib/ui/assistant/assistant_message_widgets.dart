@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:mhad/ai/ai_assistant.dart';
 import 'package:mhad/constants.dart';
+import 'package:mhad/utils/date_format.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// A single chat message bubble (user or AI), with optional sources, the
@@ -17,7 +17,7 @@ class MessageBubble extends StatelessWidget {
   Widget build(BuildContext context) {
     final isUser = message.role == MessageRole.user;
     final cs = Theme.of(context).colorScheme;
-    final timeStr = DateFormat('h:mm a').format(message.timestamp);
+    final timeStr = formatTimeOfDay(message.timestamp);
     final isError = !isUser && message.content.startsWith('Sorry, I encountered an error');
 
     return Semantics(

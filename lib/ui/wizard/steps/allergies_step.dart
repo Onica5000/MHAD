@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,6 +6,7 @@ import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/services/clinical_data_service.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/utils/debouncer.dart';
 import 'package:mhad/ui/widgets/design/health_chip.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/nlm_attribution.dart';
@@ -79,7 +78,7 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
   AllergySeverity _severity = AllergySeverity.moderate;
 
   // Autocomplete state (mirrors the diagnoses step's debounce model).
-  Timer? _debounce;
+  final _debouncer = Debouncer();
   List<_Suggestion> _suggestions = [];
   bool _searching = false;
   String _query = '';
@@ -94,7 +93,7 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
 
   @override
   void dispose() {
-    _debounce?.cancel();
+    _debouncer.dispose();
     _substanceCtrl.dispose();
     _reactionsCtrl.dispose();
     super.dispose();
@@ -111,13 +110,13 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
   // ── Autocomplete ───────────────────────────────────────────────────────
 
   void _onSearchChanged(String query) {
-    _debounce?.cancel();
     _query = query.trim();
     if (_query.length < 2) {
+      _debouncer.cancel();
       setState(() => _suggestions = []);
       return;
     }
-    _debounce = Timer(const Duration(milliseconds: 350), _runSearch);
+    _debouncer.run(_runSearch);
   }
 
   Future<void> _runSearch() async {

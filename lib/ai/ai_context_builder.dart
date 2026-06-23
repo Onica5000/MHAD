@@ -65,11 +65,11 @@ Future<Map<String, String>> buildAiFilledFields(
       map['Treatment-facility preference'] = prefs.treatmentFacilityPref;
     }
     if (prefs != null) {
-      final ectLabel = _consentLabel(prefs.ectConsent);
+      final ectLabel = consentLabelOrNull(prefs.ectConsent);
       if (ectLabel != null) map['ECT (electroconvulsive therapy) consent'] = ectLabel;
-      final expLabel = _consentLabel(prefs.experimentalConsent);
+      final expLabel = consentLabelOrNull(prefs.experimentalConsent);
       if (expLabel != null) map['Experimental treatment consent'] = expLabel;
-      final drugLabel = _consentLabel(prefs.drugTrialConsent);
+      final drugLabel = consentLabelOrNull(prefs.drugTrialConsent);
       if (drugLabel != null) map['Drug trial consent'] = drugLabel;
     }
     final allergies = await repo.getAllergies(directiveId);
@@ -84,13 +84,4 @@ Future<Map<String, String>> buildAiFilledFields(
     // Best-effort context only — never block the chat on a read failure.
   }
   return map;
-}
-
-String? _consentLabel(String? val) {
-  if (val == null || val.isEmpty) return null;
-  if (val == consentYes) return 'consented';
-  if (val == consentNo) return 'refused';
-  if (val == consentAgentDecides) return 'delegated to agent';
-  if (val.startsWith('conditional:')) return 'conditional (see form)';
-  return null;
 }

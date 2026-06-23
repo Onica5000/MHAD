@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,6 +5,7 @@ import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/services/clinical_data_service.dart';
 import 'package:mhad/services/medline_plus_service.dart';
+import 'package:mhad/utils/debouncer.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/medline_plus_dialog.dart';
 import 'package:mhad/ui/widgets/design/health_chip.dart';
@@ -36,7 +35,7 @@ class DiagnosesStep extends ConsumerStatefulWidget {
 class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
     with WizardStepMixin {
   final _searchCtrl = TextEditingController();
-  Timer? _debounce;
+  final _searchDebouncer = Debouncer();
   List<IcdCondition> _searchResults = [];
   bool _searching = false;
 
@@ -46,7 +45,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
   final _docPhoneCtrl = TextEditingController();
 
   // NPI provider lookup for the doctor-name field.
-  Timer? _docDebounce;
+  final _docDebouncer = Debouncer(delay: const Duration(milliseconds: 400));
   List<ProviderResult> _docResults = [];
   bool _docSearching = false;
 
@@ -69,8 +68,8 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
 
   @override
   void dispose() {
-    _debounce?.cancel();
-    _docDebounce?.cancel();
+    _searchDebouncer.dispose();
+    _docDebouncer.dispose();
     _searchCtrl.dispose();
     _docNameCtrl.dispose();
     _docSpecialtyCtrl.dispose();
@@ -80,14 +79,12 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
 
   // ── NPI provider lookup ──────────────────────────────────────────────
   void _onDocNameChanged(String query) {
-    _docDebounce?.cancel();
     if (query.trim().length < 3) {
+      _docDebouncer.cancel();
       setState(() => _docResults = []);
       return;
     }
-    _docDebounce = Timer(const Duration(milliseconds: 400), () {
-      _searchProviders(query.trim());
-    });
+    _docDebouncer.run(() => _searchProviders(query.trim()));
   }
 
   Future<void> _searchProviders(String query) async {
@@ -132,14 +129,12 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
   }
 
   void _onSearchChanged(String query) {
-    _debounce?.cancel();
     if (query.trim().length < 2) {
+      _searchDebouncer.cancel();
       setState(() => _searchResults = []);
       return;
     }
-    _debounce = Timer(const Duration(milliseconds: 350), () {
-      _search(query.trim());
-    });
+    _searchDebouncer.run(() => _search(query.trim()));
   }
 
   Future<void> _search(String query) async {

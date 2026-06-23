@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/utils/date_format.dart';
 
 /// Prototype `ScrHome` active-directive hero card. Shows the most-recent
 /// draft directive with form type, last-edited stamp, progress bar, and a
@@ -32,7 +32,7 @@ class ActiveDirectiveHero extends StatelessWidget {
         ? 'Ready to review & sign'
         : '~ $remaining more step${remaining == 1 ? '' : 's'}';
     final updated = DateTime.fromMillisecondsSinceEpoch(directive.updatedAt);
-    final lastEdited = _humanRelative(updated);
+    final lastEdited = relativeTime(updated);
     final formLabel = switch (formType) {
       FormType.combined => 'Combined form',
       FormType.declaration => 'Declaration only',
@@ -208,18 +208,4 @@ class ActiveDirectiveHero extends StatelessWidget {
     );
   }
 
-  static String _humanRelative(DateTime t) {
-    final diff = DateTime.now().difference(t);
-    if (diff.inSeconds < 60) return 'just now';
-    if (diff.inMinutes < 60) {
-      return '${diff.inMinutes} min${diff.inMinutes == 1 ? '' : 's'} ago';
-    }
-    if (diff.inHours < 24) {
-      return '${diff.inHours} hour${diff.inHours == 1 ? '' : 's'} ago';
-    }
-    if (diff.inDays < 7) {
-      return '${diff.inDays} day${diff.inDays == 1 ? '' : 's'} ago';
-    }
-    return DateFormat('MMM d').format(t);
-  }
 }

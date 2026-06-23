@@ -12,6 +12,36 @@ const consentNo = 'no';
 const consentAgentDecides = 'agentDecides';
 const consentConditionalPrefix = 'conditional:';
 
+/// Canonical human label for a stored consent value, or null when the value is
+/// unset or unrecognized. Use where an unset field should be omitted entirely
+/// (e.g. the AI chat context). For an always-present label, use [consentLabel].
+String? consentLabelOrNull(String? value) {
+  if (value == null || value.trim().isEmpty) return null;
+  if (value == consentYes) return 'consented';
+  if (value == consentNo) return 'refused';
+  if (value == consentAgentDecides) return 'agent decides';
+  if (value.startsWith(consentConditionalPrefix)) {
+    return 'conditional (see form)';
+  }
+  return null;
+}
+
+/// Like [consentLabelOrNull] but never null — for inline summaries that must
+/// render something for every field. Unset → 'not set'; an unrecognized value →
+/// 'set (see form)' (never echoes the raw value, which could carry PII).
+String consentLabel(String? value) {
+  if (value == null || value.trim().isEmpty) return 'not set';
+  return consentLabelOrNull(value) ?? 'set (see form)';
+}
+
+/// Heuristic: does [key] look like a Google Gemini API key? Real Gemini keys
+/// start with "AIza", are ~39 characters, and contain no whitespace. Used to
+/// warn before a request (a genuine key always passes); not a hard gate.
+bool isLikelyGeminiKey(String key) {
+  final k = key.trim();
+  return k.startsWith('AIza') && k.length >= 35 && !k.contains(RegExp(r'\s'));
+}
+
 // Gemini model id + context window + rate limits moved to
 // assets/data/app_data.json (read via `appData.ai.*`) so they track Google's
 // changes via the admin update flow. See lib/data/app_data/app_data.dart.

@@ -1,7 +1,6 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:mhad/services/clinical_data_service.dart';
+import 'package:mhad/utils/debouncer.dart';
 
 /// A text field that provides medication name autocomplete suggestions
 /// with dosage strengths from the NIH RxTerms API (free, no license needed).
@@ -28,7 +27,7 @@ class MedicationAutocompleteField extends StatefulWidget {
 
 class _MedicationAutocompleteFieldState
     extends State<MedicationAutocompleteField> {
-  Timer? _debounce;
+  final _debouncer = Debouncer();
   List<MedicationResult> _suggestions = [];
   bool _loading = false;
   final _focusNode = FocusNode();
@@ -44,7 +43,7 @@ class _MedicationAutocompleteFieldState
 
   @override
   void dispose() {
-    _debounce?.cancel();
+    _debouncer.dispose();
     widget.controller.removeListener(_onTextChanged);
     _focusNode.removeListener(_onFocusChanged);
     _focusNode.dispose();
@@ -66,15 +65,13 @@ class _MedicationAutocompleteFieldState
   }
 
   void _onTextChanged() {
-    _debounce?.cancel();
     final text = widget.controller.text.trim();
     if (text.length < 2) {
+      _debouncer.cancel();
       _removeOverlay();
       return;
     }
-    _debounce = Timer(const Duration(milliseconds: 350), () {
-      _fetchSuggestions(text);
-    });
+    _debouncer.run(() => _fetchSuggestions(text));
   }
 
   Future<void> _fetchSuggestions(String query) async {

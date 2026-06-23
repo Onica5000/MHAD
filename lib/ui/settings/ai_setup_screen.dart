@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mhad/constants.dart';
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/ui/router.dart';
@@ -58,8 +59,8 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
     final key = _keyCtrl.text.trim();
     if (key.isEmpty) return;
 
-    // Basic format validation
-    if (key.length < 20 || key.contains(' ') || key.contains('\n')) {
+    // Basic format validation (shared heuristic — real Gemini keys pass).
+    if (!isLikelyGeminiKey(key)) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(

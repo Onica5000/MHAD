@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/providers/app_providers.dart';
+import 'package:mhad/utils/date_format.dart';
 import 'package:mhad/ui/wizard/widgets/wizard_help_button.dart';
 import 'package:mhad/ui/wizard/wizard_mixins.dart';
 
@@ -150,13 +151,9 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
     final dob = DateTime.tryParse(
         '${parts[2]}-${parts[0].padLeft(2, '0')}-${parts[1].padLeft(2, '0')}');
     if (dob == null) return 'Invalid date';
-    final now = DateTime.now();
-    int age = now.year - dob.year;
-    if (now.month < dob.month ||
-        (now.month == dob.month && now.day < dob.day)) {
-      age--;
+    if (!isAdult(dob)) {
+      return 'Must be 18 or older (or an emancipated minor) to create a directive';
     }
-    if (age < 18) return 'Must be 18 or older (or an emancipated minor) to create a directive';
     return null;
   }
 

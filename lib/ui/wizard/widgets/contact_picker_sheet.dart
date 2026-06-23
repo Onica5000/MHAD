@@ -2,6 +2,7 @@
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
+import 'package:mhad/utils/date_format.dart';
 import 'package:mhad/ui/wizard/widgets/contact_picker_button.dart'
     show PickedContactData;
 
@@ -136,17 +137,11 @@ class _ContactPickerSheetState extends State<_ContactPickerSheet> {
   static _Eligibility _eligibilityFor(Contact c) {
     // Under-18 check: any of the contact's stored birthdays whose age is
     // under 18 hard-blocks. Empty/null birthdays don't block.
-    final now = DateTime.now();
     for (final ev in c.events) {
       if (ev.label.label != EventLabel.birthday) continue;
       if (ev.year == null) continue; // year-less birthdays are useless here
       final dob = DateTime(ev.year!, ev.month, ev.day);
-      final age = now.year - dob.year -
-          ((now.month < dob.month ||
-                  (now.month == dob.month && now.day < dob.day))
-              ? 1
-              : 0);
-      if (age < 18) return _Eligibility.blocked;
+      if (!isAdult(dob)) return _Eligibility.blocked;
     }
     // Provider heuristic — name starts with "Dr." or contains a
     // common credential suffix delimited by whitespace.
@@ -179,17 +174,11 @@ class _ContactPickerSheetState extends State<_ContactPickerSheet> {
         .hasMatch(n)) {
       return 'Looks like a provider';
     }
-    final now = DateTime.now();
     for (final ev in c.events) {
       if (ev.label.label != EventLabel.birthday) continue;
       if (ev.year == null) continue;
       final dob = DateTime(ev.year!, ev.month, ev.day);
-      final age = now.year - dob.year -
-          ((now.month < dob.month ||
-                  (now.month == dob.month && now.day < dob.day))
-              ? 1
-              : 0);
-      if (age < 18) return 'Under 18';
+      if (!isAdult(dob)) return 'Under 18';
     }
     return null;
   }

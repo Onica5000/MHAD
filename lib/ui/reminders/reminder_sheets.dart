@@ -1,8 +1,8 @@
 ﻿import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/utils/date_format.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 
 /// Quarterly check-in and 2-year renewal nudge sheets.
@@ -92,7 +92,7 @@ class _RenewSheet extends StatelessWidget {
         : (daysLeft <= 0
             ? 'today'
             : 'in $daysLeft ${daysLeft == 1 ? 'day' : 'days'}');
-    final expDateLabel = exp == null ? '—' : DateFormat('MMMM d, y').format(exp);
+    final expDateLabel = exp == null ? '—' : formatLongDate(exp);
 
     return DraggableScrollableSheet(
       initialChildSize: 0.62,
@@ -350,7 +350,7 @@ class _CheckInSheet extends StatelessWidget {
     final exp = directive.expirationDate == null
         ? null
         : DateTime.fromMillisecondsSinceEpoch(directive.expirationDate!);
-    final expLabel = exp == null ? 'your renewal date' : DateFormat('MMMM y').format(exp);
+    final expLabel = exp == null ? 'your renewal date' : formatMonthYear(exp);
 
     // Form-aware "common changes" prompts — agents only for forms that have
     // them; medications + facility for any clinical-preference form.
