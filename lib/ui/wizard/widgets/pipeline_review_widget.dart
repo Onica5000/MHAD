@@ -425,6 +425,41 @@ extension _PipelineReviewUi on _PipelineScreenState {
     return 'Other';
   }
 
+  /// Maps a review key to the wizard STEP it belongs to, as (order, title), so
+  /// the review can group results into the same sections the user will see in
+  /// the wizard instead of one long list. Order mirrors the wizard step order.
+  (int, String) _wizardSection(String key) {
+    if (key.startsWith('person_eval_doctor')) return (2, 'When this kicks in');
+    if (key.startsWith('person_doctor')) return (6, 'Diagnoses');
+    if (key.startsWith('person_')) return (1, 'About you');
+    if (key == 'authority_hospitalization' ||
+        key == 'authority_medication' ||
+        key == 'agent_authority_limitations' ||
+        key.startsWith('alt_agent_') ||
+        (key.startsWith('agent_') && !key.startsWith('agent_authority'))) {
+      return (3, 'People I trust');
+    }
+    if (key.startsWith('guardian_')) return (4, 'If a court appoints a guardian');
+    if (key == 'facility_prefer' ||
+        key == 'facility_avoid' ||
+        key == 'room_prefs_note' ||
+        key == 'roommate_same_gender') {
+      return (5, 'Where I want care');
+    }
+    if (key.startsWith('diag_') || key.startsWith('cond_')) {
+      return (6, 'Diagnoses');
+    }
+    if (key.startsWith('med_')) return (7, 'Medications');
+    if (key.startsWith('allergy_')) return (8, 'Allergies & reactions');
+    if (key == 'ect_consent' ||
+        key == 'experimental_consent' ||
+        key == 'drug_trial_consent' ||
+        key == 'ulysses_optin') {
+      return (9, 'Procedures & research');
+    }
+    return (10, 'Anything else');
+  }
+
   Widget _buildReviewStep() {
     final p = Theme.of(context).mhadPalette;
     final dark = Theme.of(context).brightness == Brightness.dark;
@@ -507,8 +542,9 @@ extension _PipelineReviewUi on _PipelineScreenState {
       _howToLine(p, Icons.edit_outlined,
           'Tap any field to edit its wording before it\'s added.'),
       _howToLine(p, Icons.rule,
-          'Items under "Needs your decision" would replace something you '
-          'already entered — review those.'),
+          'Results are grouped by form section (the same steps you\'ll see '
+          'next). A "Replaces what you have" note means it would overwrite '
+          'something you already entered — those start unchecked.'),
       _howToLine(p, Icons.arrow_forward,
           'When you\'re ready, tap "Autofill Information" at the bottom to '
           'fill these into your form and continue — you\'ll land in the form '
@@ -662,72 +698,69 @@ extension _PipelineReviewUi on _PipelineScreenState {
     );
   }
 
-  /// The extracted fields, grouped into "needs your decision" (high-priority or
-  /// conflicting — start unchecked when they'd replace an existing value) and
-  /// "autofilled for you" (low-priority, pre-checked). Falls back to a flat
-  /// list if reconciliation wasn't built.
+  /// The extracted fields, grouped into the SAME sections the user will see in
+  /// the wizard (About you, People I trust, Medications, …) and shown in wizard
+  /// order — instead of one long list. A field that would replace an existing
+  /// value still shows a "Replaces what you have" note and starts unchecked.
   Widget _buildReconGroups(MhadPalette p, List<String> keys) {
-    Widget groupCard(List<ReconItem> group) => Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14),
-          decoration: BoxDecoration(
-            color: p.card,
-            border: Border.all(color: p.border),
-            borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
-          ),
-          child: Column(
-            children: [
-              for (var i = 0; i < group.length; i++) ...[
-                _reconRow(group[i], p),
-                if (i < group.length - 1)
-                  Divider(height: 1, color: p.border),
-              ],
-            ],
-          ),
-        );
+    // Conflict / reconciliation detail per key (for the "replaces" note).
+    final reconByKey = {for (final r in _reconItems) r.key: r};
 
-    if (_reconItems.isEmpty) {
-      // Safety fallback: original flat list.
-      return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14),
-        decoration: BoxDecoration(
-          color: p.card,
-          border: Border.all(color: p.border),
-          borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
-        ),
-        child: Column(
-          children: [
-            for (var i = 0; i < keys.length; i++) ...[
-              _SnapReviewRow(
-                ok: _reviewChecked[keys[i]] ?? false,
-                fieldLabel: _displayLabel(keys[i]),
-                value: _reviewEdited[keys[i]] ?? '',
-                target: _sectionLabel(keys[i]),
-                onToggle: () => setState(() => _reviewChecked[keys[i]] =
-                    !(_reviewChecked[keys[i]] ?? false)),
-                onEdit: () => _editField(keys[i]),
-              ),
-              _agentInitialsNote(keys[i], p),
-              if (i < keys.length - 1) Divider(height: 1, color: p.border),
-            ],
-          ],
-        ),
+    // Bucket keys by wizard step, preserving each step's title and order.
+    final bySection = <int, List<String>>{};
+    final titles = <int, String>{};
+    for (final k in keys) {
+      final (order, title) = _wizardSection(k);
+      bySection.putIfAbsent(order, () => <String>[]).add(k);
+      titles[order] = title;
+    }
+    final orders = bySection.keys.toList()..sort();
+
+    Widget rowFor(String key) {
+      final recon = reconByKey[key];
+      if (recon != null) return _reconRow(recon, p);
+      // No reconciliation entry (e.g. a non-scalar list item) — plain row.
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _SnapReviewRow(
+            ok: _reviewChecked[key] ?? false,
+            fieldLabel: _displayLabel(key),
+            value: _reviewEdited[key] ?? '',
+            target: _sectionLabel(key),
+            onToggle: () => setState(
+                () => _reviewChecked[key] = !(_reviewChecked[key] ?? false)),
+            onEdit: () => _editField(key),
+          ),
+          _agentInitialsNote(key, p),
+        ],
       );
     }
 
-    final groups = ReconGroups.from(_reconItems);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (groups.needsDecision.isNotEmpty) ...[
-          _groupLabel('Needs your decision', p),
+        for (final o in orders) ...[
+          _groupLabel(titles[o]!, p),
           const SizedBox(height: 6),
-          groupCard(groups.needsDecision),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14),
+            decoration: BoxDecoration(
+              color: p.card,
+              border: Border.all(color: p.border),
+              borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
+            ),
+            child: Column(
+              children: [
+                for (var i = 0; i < bySection[o]!.length; i++) ...[
+                  rowFor(bySection[o]![i]),
+                  if (i < bySection[o]!.length - 1)
+                    Divider(height: 1, color: p.border),
+                ],
+              ],
+            ),
+          ),
           const SizedBox(height: 14),
-        ],
-        if (groups.autoApplied.isNotEmpty) ...[
-          _groupLabel('Autofilled for you — review optional', p),
-          const SizedBox(height: 6),
-          groupCard(groups.autoApplied),
         ],
       ],
     );
