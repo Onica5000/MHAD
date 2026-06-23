@@ -18,6 +18,7 @@ import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/responsive_shell.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
+import 'package:mhad/ui/widgets/design/brand_motif.dart';
 import 'package:mhad/ui/widgets/draft_recovery_dialog.dart';
 import 'package:mhad/utils/date_format.dart';
 
@@ -646,80 +647,94 @@ class _GreetingRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
+    // The greeting variant (content/behavior unchanged) — wrapped below in a
+    // brand-motif hero panel so the dashboard opens on a premium, on-brand
+    // surface instead of a bare headline. Visual only.
+    final Widget inner;
     // Public mode: always show the guest greeting regardless of whether
     // session directives happen to carry a name. The "guest" framing is
     // the point — Public mode is anonymous by design.
-    if (isPublic) return const _PublicGuestGreeting();
-    final fullName = _pickName();
-    if (fullName.isEmpty) {
-      // No usable name → keep the anonymous editorial. The caller's fallback
-      // already covers the empty-directives case; this guards the case where
-      // a directive exists but the name field is still blank.
-      return EditorialHeading(
-        textSpan: TextSpan(
-          children: [
-            const TextSpan(text: 'Your voice,\n'),
-            TextSpan(
-              text: 'in your words.',
-              style: TextStyle(color: p.primary),
-            ),
-          ],
-        ),
-        size: 38,
-        height: 1.05,
-        letterSpacing: -0.6,
-      );
-    }
-    final firstName = fullName.split(RegExp(r'\s+')).first;
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          child: Text.rich(
-            TextSpan(
-              children: [
-                TextSpan(text: 'Hi, $firstName.\n'),
-                TextSpan(
-                  text: "Let's keep your voice clear.",
-                  style: TextStyle(color: p.textMuted, fontSize: 22),
-                ),
-              ],
-            ),
-            style: const TextStyle(
-              fontFamily: 'Instrument Serif',
-              fontFamilyFallback: ['Georgia', 'serif'],
-              fontStyle: FontStyle.italic,
-              fontSize: 38,
-              height: 1.05,
-              letterSpacing: -0.5,
-              fontWeight: FontWeight.w400,
-            ),
+    if (isPublic) {
+      inner = const _PublicGuestGreeting();
+    } else {
+      final fullName = _pickName();
+      if (fullName.isEmpty) {
+        // No usable name → keep the anonymous editorial. The caller's fallback
+        // already covers the empty-directives case; this guards the case where
+        // a directive exists but the name field is still blank.
+        inner = EditorialHeading(
+          textSpan: TextSpan(
+            children: [
+              const TextSpan(text: 'Your voice,\n'),
+              TextSpan(
+                text: 'in your words.',
+                style: TextStyle(color: p.primary),
+              ),
+            ],
           ),
-        ),
-        const SizedBox(width: 12),
-        // Avatar pill — initials in primaryLight chip, matches prototype L248-253.
-        Semantics(
-          label: 'Profile $firstName',
-          child: Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: p.primaryLight,
-              borderRadius: BorderRadius.circular(100),
-            ),
-            alignment: Alignment.center,
-            child: Text(
-              _initialsFrom(fullName),
-              style: TextStyle(
-                fontFamily: kSansFamily,
-                fontWeight: FontWeight.w700,
-                fontSize: 14,
-                color: p.onPrimaryLight,
+          size: 38,
+          height: 1.05,
+          letterSpacing: -0.6,
+        );
+      } else {
+        final firstName = fullName.split(RegExp(r'\s+')).first;
+        inner = Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(text: 'Hi, $firstName.\n'),
+                    TextSpan(
+                      text: "Let's keep your voice clear.",
+                      style: TextStyle(color: p.textMuted, fontSize: 22),
+                    ),
+                  ],
+                ),
+                style: const TextStyle(
+                  fontFamily: 'Instrument Serif',
+                  fontFamilyFallback: ['Georgia', 'serif'],
+                  fontStyle: FontStyle.italic,
+                  fontSize: 38,
+                  height: 1.05,
+                  letterSpacing: -0.5,
+                  fontWeight: FontWeight.w400,
+                ),
               ),
             ),
-          ),
-        ),
-      ],
+            const SizedBox(width: 12),
+            // Avatar pill — initials in primaryLight chip, matches prototype.
+            Semantics(
+              label: 'Profile $firstName',
+              child: Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: p.card,
+                  shape: BoxShape.circle,
+                  border: Border.all(color: p.primary.withValues(alpha: 0.4)),
+                ),
+                alignment: Alignment.center,
+                child: Text(
+                  _initialsFrom(fullName),
+                  style: TextStyle(
+                    fontFamily: kSansFamily,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 14,
+                    color: p.primary,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      }
+    }
+
+    return BrandMotif(
+      padding: const EdgeInsets.fromLTRB(22, 22, 22, 24),
+      child: Align(alignment: Alignment.centerLeft, child: inner),
     );
   }
 }
