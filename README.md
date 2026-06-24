@@ -22,7 +22,7 @@ The app supports all three PA Act 194 form types: **Combined Declaration + Power
 - **Editorial visual design** based on a Claude-Design HTML/CSS handoff — Instrument Serif italic display, DM Sans body, JetBrains Mono labels (all three font families bundled, no runtime fetch).
 - **Navigation tuned to the prototype:** a floating pill **bottom nav** on mobile (Home · Learn · Ask · Settings) and a persistent **WebSidebar** on wide screens (≥1000px). No hamburger drawer.
 - **AI assistant** (Google Gemini 3.5 Flash) for guided help, smart-fill suggestions, document import, and a **cross-step consistency check** at Review — entirely optional, with per-session affirmative consent and PII-stripping at a single named chokepoint (`GeminiApiAssistant.sanitizeForApi`). The consistency check warns but never blocks PDF generation.
-- **Crisis plan / WRAP toolbox** — optional add-on capturing early warning signs, triggers, what genuinely helps, things to say, and what *not* to do; mirrors the v2 prototype's WRAP layout and is read by agents and ER staff first.
+- **Crisis plan / wellness toolbox** — optional add-on capturing early warning signs, triggers, what genuinely helps, things to say, and what *not* to do; read by agents and ER staff first.
 - **Self-binding (Ulysses) clause** — explicit opt-in confirming the structural effect of PA Act 194 § 5802 (a signed directive binds you when you later refuse care during a crisis).
 - **Revocation flow** with the verbatim statutory revocation statement (20 Pa.C.S. § 5808), per-recipient notification opt-in, and honest copy about what marking a directive revoked locally does and does not communicate to providers.
 - **Local share sheet** (email · SMS · QR · system share · print) routed through your device's native OS share sheet (`share_plus` / `Printing.sharePdf`) — no verified links, one-time codes, expiry, or read receipts. (The only RFC-style URIs in the app are the crisis contacts' `tel:` / `sms:` links, not the directive share.)
@@ -132,7 +132,7 @@ lib/
   ui/
     ai_check/                          -- AI consistency check (cross-step contradictions)
     assistant/                         -- AI chat UI (Gemini)
-    crisis_plan/                       -- WRAP toolbox (5 sections, JSON-stored)
+    crisis_plan/                       -- Crisis/wellness toolbox (5 sections, JSON-stored)
     disclaimer/                        -- First-launch gate + Settings read-only variant
     education/                         -- FAQ, glossary, articles, Ch. 54 ↔ Ch. 58 bridge
     export/                            -- PDF, wallet card, QR, FHIR

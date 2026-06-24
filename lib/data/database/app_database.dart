@@ -139,7 +139,7 @@ class DirectivePrefs extends Table {
   // set. Schema 16.
   TextColumn get roommateGenderMatch =>
       text().withDefault(const Constant(''))();
-  // Phase 4 — Crisis plan / WRAP toolbox (optional add-on per v2 prototype).
+  // Phase 4 — Crisis plan / wellness toolbox (optional add-on per v2 prototype).
   // JSON-encoded structure: {earlyWarning: [], triggers: [], helps: [],
   // sayToMe: [], dontDo: []}. Empty string = not yet filled.
   // Schema 10.

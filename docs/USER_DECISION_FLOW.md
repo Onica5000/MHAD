@@ -57,7 +57,7 @@ flowchart TD
     W8 --> W9[Procedures & research\nconsent: ECT / experimental / drug-trials -- one ConsentChoiceStep]
     W9 --> W10[Anything else\nadditional-instruction fields]
     W10 --> AddOns{Optional add-ons}
-    AddOns -- Crisis plan/WRAP --> CrisisPlan
+    AddOns -- Crisis plan --> CrisisPlan
     AddOns -- Ulysses clause --> Ulysses
     AddOns -- Side effects --> SideFx[AI side-effects checklist]
     W12 --> Wreview[Review & sign\ntap any section to edit]

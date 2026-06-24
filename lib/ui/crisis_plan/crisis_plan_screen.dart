@@ -12,10 +12,11 @@ import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/design/wizard_header.dart';
 
-/// Crisis plan / WRAP toolbox optional add-on (v2 prototype `m-crisisplan`).
+/// Crisis plan / wellness toolbox optional add-on (v2 prototype `m-crisisplan`).
 ///
 /// Reachable from the wizard's "Anything else" step (Optional add-ons).
-/// Five sections per WRAP:
+/// Five generic crisis-planning sections (the app's own wording — not the
+/// trademarked WRAP® program or its copyrighted materials):
 /// 1. Early warning signs
 /// 2. Triggers (red tone)
 /// 3. Things that genuinely help
@@ -123,15 +124,15 @@ class _CrisisPlanScreenState extends ConsumerState<CrisisPlanScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SectionLabel('Optional add-on · WRAP'),
+                const SectionLabel('Optional add-on · Crisis plan'),
                 const SizedBox(height: 6),
                 // Headline bumped 30 -> 38pt to match prototype L446.
                 const EditorialHeading(
                     text: "How I know I'm not okay", size: 38),
                 const SizedBox(height: 6),
                 Text(
-                  'Adapted from WRAP. Help the people around you spot trouble '
-                  'early — and know what actually helps you when they do.',
+                  'Help the people around you spot trouble early — and know '
+                  'what actually helps you when they do.',
                   style: TextStyle(
                     fontFamily: kSansFamily,
                     fontSize: 14,

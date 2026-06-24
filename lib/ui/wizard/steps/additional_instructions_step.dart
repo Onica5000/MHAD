@@ -534,7 +534,7 @@ class _AdditionalInstructionsStepState
           const SizedBox(height: 8),
           _addOnCard(
             icon: Icons.favorite_outline,
-            title: 'Crisis plan / WRAP',
+            title: 'Crisis plan',
             subtitle:
                 'Your early-warning signs, triggers, what genuinely helps, and '
                 "what not to do. Not required by Act 194 — but it's the part "
