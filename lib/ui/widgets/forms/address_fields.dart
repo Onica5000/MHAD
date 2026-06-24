@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/services/geo_service.dart';
 import 'package:mhad/utils/input_formatters.dart';
 
 /// Standard address input: Address 1 · Address 2 · City · State · ZIP.
 /// Used everywhere an address is collected (personal info, agents, guardian,
 /// witnesses) so the layout, ZIP formatting (5 or 9 digits), and optionality
 /// are identical. All fields are optional; only ZIP is validated when present.
-class AddressFields extends StatelessWidget {
+///
+/// The ZIP field offers a one-tap lookup that fills City + State from free,
+/// keyless, CORS-safe public APIs (Zippopotam) — only the ZIP leaves the
+/// browser. Fail-safe: any error just lets the user keep typing.
+class AddressFields extends StatefulWidget {
   final TextEditingController line1;
   final TextEditingController line2;
   final TextEditingController city;
@@ -30,22 +35,60 @@ class AddressFields extends StatelessWidget {
   });
 
   @override
+  State<AddressFields> createState() => _AddressFieldsState();
+}
+
+class _AddressFieldsState extends State<AddressFields> {
+  bool _lookingUp = false;
+
+  Future<void> _lookupFromZip() async {
+    final zip = widget.zip.text.replaceAll(RegExp(r'\D'), '');
+    if (zip.length < 5) {
+      _toast('Enter a 5-digit ZIP first.');
+      return;
+    }
+    setState(() => _lookingUp = true);
+    final geo = GeoService();
+    final z = await geo.lookupZip(zip.substring(0, 5));
+    geo.dispose();
+    if (!mounted) return;
+    setState(() {
+      _lookingUp = false;
+      if (z != null) {
+        widget.city.text = z.city;
+        if (z.stateAbbr.isNotEmpty) widget.state.text = z.stateAbbr;
+      }
+    });
+    if (z == null) {
+      _toast('Couldn\'t look up that ZIP — you can type it in.');
+    } else {
+      _toast(
+          'Filled: ${[z.city, z.stateAbbr].where((s) => s.isNotEmpty).join(', ')}');
+    }
+  }
+
+  void _toast(String msg) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TextFormField(
-          controller: line1,
+          controller: widget.line1,
           decoration: InputDecoration(
-            labelText: line1Label,
+            labelText: widget.line1Label,
             border: const OutlineInputBorder(),
           ),
           textCapitalization: TextCapitalization.words,
           textInputAction: TextInputAction.next,
         ),
-        SizedBox(height: gap),
+        SizedBox(height: widget.gap),
         TextFormField(
-          controller: line2,
+          controller: widget.line2,
           decoration: const InputDecoration(
             labelText: 'Apt, suite, unit, etc.',
             border: OutlineInputBorder(),
@@ -53,9 +96,9 @@ class AddressFields extends StatelessWidget {
           textCapitalization: TextCapitalization.words,
           textInputAction: TextInputAction.next,
         ),
-        SizedBox(height: gap),
+        SizedBox(height: widget.gap),
         TextFormField(
-          controller: city,
+          controller: widget.city,
           decoration: const InputDecoration(
             labelText: 'City',
             border: OutlineInputBorder(),
@@ -63,13 +106,13 @@ class AddressFields extends StatelessWidget {
           textCapitalization: TextCapitalization.words,
           textInputAction: TextInputAction.next,
         ),
-        SizedBox(height: gap),
+        SizedBox(height: widget.gap),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
               child: TextFormField(
-                controller: state,
+                controller: widget.state,
                 decoration: const InputDecoration(
                   labelText: 'State',
                   border: OutlineInputBorder(),
@@ -88,11 +131,26 @@ class AddressFields extends StatelessWidget {
             Expanded(
               flex: 2,
               child: TextFormField(
-                controller: zip,
-                decoration: const InputDecoration(
+                controller: widget.zip,
+                decoration: InputDecoration(
                   labelText: 'ZIP',
                   hintText: '12345 or 12345-6789',
-                  border: OutlineInputBorder(),
+                  helperText: 'Tap the icon to fill city & state',
+                  border: const OutlineInputBorder(),
+                  suffixIcon: _lookingUp
+                      ? const Padding(
+                          padding: EdgeInsets.all(12),
+                          child: SizedBox(
+                            width: 18,
+                            height: 18,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          ),
+                        )
+                      : IconButton(
+                          icon: const Icon(Icons.travel_explore),
+                          tooltip: 'Fill city & state from ZIP',
+                          onPressed: _lookupFromZip,
+                        ),
                 ),
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,

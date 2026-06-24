@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/providers/app_providers.dart';
+import 'package:mhad/services/geo_service.dart';
 import 'package:mhad/utils/date_format.dart';
 import 'package:mhad/ui/wizard/widgets/wizard_help_button.dart';
 import 'package:mhad/ui/wizard/wizard_mixins.dart';
@@ -17,6 +18,7 @@ class PersonalInfoStep extends ConsumerStatefulWidget {
 class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
     with WizardStepMixin {
   final _formKey = GlobalKey<FormState>();
+  bool _zipLookingUp = false;
 
   late final TextEditingController _fullNameCtrl;
   late final TextEditingController _dobCtrl;
@@ -124,6 +126,49 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
         _phoneCtrl.text = source.phone;
       });
     }
+  }
+
+  /// Fill city, county and state from the entered ZIP using free, keyless,
+  /// CORS-safe public APIs (Zippopotam + FCC). Only the ZIP leaves the browser.
+  Future<void> _lookupFromZip() async {
+    final zip = _zipCtrl.text.replaceAll(RegExp(r'\D'), '');
+    if (zip.length < 5) {
+      _toast('Enter a 5-digit ZIP first.');
+      return;
+    }
+    setState(() => _zipLookingUp = true);
+    final geo = GeoService();
+    final z = await geo.lookupZip(zip.substring(0, 5));
+    String? county;
+    final lat = z?.lat, lng = z?.lng;
+    if (lat != null && lng != null) {
+      county = await geo.countyForLatLng(lat, lng);
+    }
+    geo.dispose();
+    if (!mounted) return;
+    setState(() {
+      _zipLookingUp = false;
+      if (z != null) {
+        _cityCtrl.text = z.city;
+        if (z.stateAbbr.isNotEmpty) _stateCtrl.text = z.stateAbbr;
+        if (county != null) _countyCtrl.text = county;
+      }
+    });
+    if (z == null) {
+      _toast('Couldn\'t look up that ZIP — you can type it in.');
+    } else {
+      final filled = [
+        z.city,
+        if (county != null) '$county County',
+        z.stateAbbr,
+      ].where((s) => s.isNotEmpty).join(', ');
+      _toast('Filled: $filled');
+    }
+  }
+
+  void _toast(String msg) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
   }
 
   @override
@@ -300,10 +345,26 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
                   flex: 2,
                   child: TextFormField(
                     controller: _zipCtrl,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'ZIP',
                       hintText: '12345 or 12345-6789',
-                      border: OutlineInputBorder(),
+                      helperText: 'Tap the icon to fill city, county & state',
+                      border: const OutlineInputBorder(),
+                      suffixIcon: _zipLookingUp
+                          ? const Padding(
+                              padding: EdgeInsets.all(12),
+                              child: SizedBox(
+                                width: 18,
+                                height: 18,
+                                child:
+                                    CircularProgressIndicator(strokeWidth: 2),
+                              ),
+                            )
+                          : IconButton(
+                              icon: const Icon(Icons.travel_explore),
+                              tooltip: 'Fill city, county & state from ZIP',
+                              onPressed: _lookupFromZip,
+                            ),
                     ),
                     autofillHints: const [],
                     keyboardType: TextInputType.number,
