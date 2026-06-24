@@ -30,8 +30,7 @@ void main() {
     expect(find.byType(Scrollable), findsWidgets);
 
     // Scroll down to the bottom CTAs and confirm they're reachable.
-    await tester.drag(
-        find.byType(SingleChildScrollView).first, const Offset(0, -300));
+    await tester.drag(find.byType(Scrollable).first, const Offset(0, -300));
     await tester.pump();
     expect(tester.takeException(), isNull);
     expect(find.text('Get started'), findsOneWidget);
