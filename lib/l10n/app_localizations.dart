@@ -389,7 +389,7 @@ abstract class AppLocalizations {
   /// No description provided for @saveAndExitMessage.
   ///
   /// In en, this message translates to:
-  /// **'Your progress on this step will be saved. You can return to continue later (Private Mode only).'**
+  /// **'Your work isn\'t saved permanently — it stays in this browser only and is wiped when you close the tab (kept about 10 minutes for crash recovery). Export or print to keep a copy.'**
   String get saveAndExitMessage;
 
   /// No description provided for @previewPdf.

@@ -48,7 +48,7 @@
   "expired": "Expired",
   "revoked": "Revoked",
   "saveAndExit": "Save & Exit",
-  "saveAndExitMessage": "Your progress on this step will be saved. You can return to continue later (Private Mode only).",
+  "saveAndExitMessage": "Your work isn't saved permanently — it stays in this browser only and is wiped when you close the tab (kept about 10 minutes for crash recovery). Export or print to keep a copy.",
   "previewPdf": "Preview PDF",
   "sharePrint": "Share / Print",
   "generateWalletCard": "Generate Wallet Card",

@@ -422,16 +422,16 @@ class _ProfileChip extends ConsumerWidget {
   }
 
   String _statusFor(BuildContext context, PrivacyModeNotifier mode) {
+    // The web app is the only shipping surface — always in-memory, no
+    // public/private mode choice exists.
+    if (kIsWeb) return '● WEB APP · IN-MEMORY ONLY';
+    // Native (deferred): public/private mode + auth method.
     final modeWord = mode.isPrivate
         ? 'PRIVATE'
         : (mode.isPublic ? 'PUBLIC' : 'NO SESSION');
-    // Auth method: web has no biometrics; mobile uses biometrics for
-    // private mode. Public mode shows the ephemeral storage caveat.
-    final authPart = kIsWeb
-        ? 'IN-MEMORY ONLY'
-        : (mode.isPrivate
-            ? 'BIOMETRICS'
-            : (mode.isPublic ? 'EPHEMERAL' : '—'));
+    final authPart = mode.isPrivate
+        ? 'BIOMETRICS'
+        : (mode.isPublic ? 'EPHEMERAL' : '—');
     return '● $modeWord MODE · $authPart';
   }
 

@@ -481,8 +481,9 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    '- In Private Mode, data is encrypted on your device; '
-                    'in Public Mode/web, data is in memory only\n'
+                    '- Your directive data is held in memory only; on close or '
+                    'crash it is kept ~10 minutes for recovery, then wiped — '
+                    'never written to disk or a server\n'
                     '- AI features are optional and the app works without them\n'
                     '- Only text you explicitly send via AI chat or AI Suggest '
                     'leaves your device\n'

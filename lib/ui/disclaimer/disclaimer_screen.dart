@@ -194,9 +194,10 @@ class _GateLayout extends StatelessWidget {
                           // native Private Mode stores encrypted on-device.
                           body: kIsWeb
                               ? 'You work anonymously in this browser tab — no '
-                                  'account, no cloud, no tracking. Open and '
-                                  'save your PDF before you close it, or your '
-                                  'answers are gone.'
+                                  'account, no cloud, no tracking. If you close '
+                                  'the tab your work is kept on this device for '
+                                  'about 10 minutes for recovery, then wiped — '
+                                  'open and save your PDF to keep it.'
                               : 'No account, no cloud, no tracking — nothing '
                                   'goes to our servers. Anything you save '
                                   'stays encrypted on this device, where only '

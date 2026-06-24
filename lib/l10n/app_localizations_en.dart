@@ -154,7 +154,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get saveAndExitMessage =>
-      'Your progress on this step will be saved. You can return to continue later (Private Mode only).';
+      'Your work isn\'t saved permanently — it stays in this browser only and is wiped when you close the tab (kept about 10 minutes for crash recovery). Export or print to keep a copy.';
 
   @override
   String get previewPdf => 'Preview PDF';

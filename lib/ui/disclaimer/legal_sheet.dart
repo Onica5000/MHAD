@@ -325,15 +325,17 @@ List<_SectionData> _buildSections(MhadPalette p) {
       title: 'Privacy & AI features',
       body: [
         _Para(spans: [
-          const TextSpan(text: 'In '),
-          _bold('Private Mode'),
           const TextSpan(
               text:
-                  ', your directive is encrypted and stored on this device. In '),
-          _bold('Public Mode'),
+                  'This is a web app: your directive is held in memory in your '
+                  'browser only and is '),
+          _bold('not saved permanently'),
           const TextSpan(
               text:
-                  ' (or on the web), data is held in memory only and is not saved permanently. This app is '),
+                  ' — if you close the tab or it crashes, your work is kept on '
+                  'this device for about 10 minutes for recovery, then wiped; '
+                  'it is never sent to a server. Export or print to keep a '
+                  'copy. This app is '),
           _bold('not'),
           const TextSpan(text: ' HIPAA-compliant.'),
         ], palette: p),

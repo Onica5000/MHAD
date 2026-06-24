@@ -163,8 +163,8 @@ class _Body extends ConsumerWidget {
             icon: Icons.privacy_tip_outlined,
             variant: InfoBannerVariant.info,
             text:
-                'Public mode keeps no share history. This list is empty by '
-                'design. Switch to private mode to record where copies went.',
+                'No share history is kept — nothing is saved after you close '
+                'the app, so this list is empty by design.',
           )
         else
           Card(

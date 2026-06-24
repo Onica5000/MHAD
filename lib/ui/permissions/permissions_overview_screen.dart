@@ -66,7 +66,8 @@ class PermissionsOverviewScreen extends StatelessWidget {
           _PermissionCard(
             icon: Icons.fingerprint,
             title: 'Biometrics / passcode',
-            usedFor: 'Unlocking Private mode on this device.',
+            usedFor: 'Unlocking encrypted on-device storage (native app only; '
+                'not used by the web app).',
             promises: const [
               'Used only to verify your identity on unlock',
               'Biometric data never leaves the OS keystore',
