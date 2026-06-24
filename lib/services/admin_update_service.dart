@@ -154,6 +154,9 @@ class AdminUpdateService {
     final prompt =
         buildPrompt(request, current, target: target, focusArea: focusArea);
     return switch (provider) {
+      // Gemini drafts WITH Google-Search grounding so the model checks current
+      // facts and the required "source" URLs are real, not recalled from
+      // memory. Falls back to the ungrounded call if grounding is unavailable.
       AdminAiProvider.gemini => _draftGemini(prompt),
       AdminAiProvider.anthropic => _draftAnthropic(prompt),
       // xAI's API is OpenAI-compatible — same request/response, different host.
@@ -165,9 +168,61 @@ class AdminUpdateService {
   }
 
   Future<String> _draftGemini(String prompt) async {
+    // Prefer a search-grounded draft: the maintainer is updating live facts
+    // (phone numbers, statute references, version dates), so letting the model
+    // look them up makes both the VALUE and the cited "source" trustworthy
+    // instead of recalled. If grounding fails for any reason (model without the
+    // tool, network, API shape change) fall back to a plain generation so the
+    // admin flow still works.
+    try {
+      final grounded = await _draftGeminiGrounded(prompt);
+      if (grounded.trim().isNotEmpty) return grounded;
+    } catch (_) {
+      // fall through to the ungrounded path
+    }
     final m = GenerativeModel(model: model, apiKey: apiKey);
     final resp = await m.generateContent([Content.text(prompt)]);
     return resp.text ?? '';
+  }
+
+  /// Gemini generation with the `google_search` grounding tool enabled, called
+  /// over the REST endpoint (the bundled package can't toggle the tool). Returns
+  /// the concatenated text of the first candidate. The proposal JSON is parsed
+  /// out of this text downstream by [parseProposal], which tolerates the extra
+  /// grounding chatter/citations the model may add around it.
+  Future<String> _draftGeminiGrounded(String prompt) async {
+    final uri = Uri.parse('https://generativelanguage.googleapis.com/v1beta/'
+        'models/$model:generateContent?key=$apiKey');
+    final resp = await http.post(
+      uri,
+      headers: {'content-type': 'application/json'},
+      body: jsonEncode({
+        'contents': [
+          {
+            'role': 'user',
+            'parts': [
+              {'text': prompt}
+            ],
+          }
+        ],
+        'tools': [
+          {'google_search': <String, dynamic>{}}
+        ],
+      }),
+    );
+    if (resp.statusCode != 200) {
+      throw Exception('Gemini grounding ${resp.statusCode}: ${resp.body}');
+    }
+    final data = jsonDecode(resp.body) as Map<String, dynamic>;
+    final candidates = (data['candidates'] as List?) ?? const [];
+    if (candidates.isEmpty) return '';
+    final cand = candidates.first as Map<String, dynamic>;
+    final parts = ((cand['content'] as Map?)?['parts'] as List?) ?? const [];
+    return parts
+        .whereType<Map<String, dynamic>>()
+        .map((p) => (p['text'] ?? '').toString())
+        .join()
+        .trim();
   }
 
   /// Anthropic Messages API (REST). content is an array of blocks; we

@@ -5,9 +5,11 @@ import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/services/certificate_pinning_service.dart';
 
 /// FDA drug-labeling lookups via **openFDA** (`api.fda.gov`). Free, no key for
-/// low volume. Used to GROUND the AI side-effects list in the official FDA
-/// label's "Adverse Reactions" text instead of relying on the model's own
-/// knowledge — turning an AI guess into an AI paraphrase of a real source.
+/// low volume. Used to GROUND AI medication output in the official FDA label
+/// text instead of relying on the model's own knowledge — turning an AI guess
+/// into an AI paraphrase of a real source. Two sections are surfaced:
+///   * [adverseReactions] — the "Adverse Reactions" (side-effects) text;
+///   * [drugInteractions]  — the "Drug Interactions" text.
 ///
 /// Returns null on any failure so the caller falls back to the previous
 /// (ungrounded) behavior — it never blocks the feature.
@@ -15,15 +17,32 @@ class OpenFdaService {
   static const _labelBase = 'https://api.fda.gov/drug/label.json';
 
   static final _client = CertificatePinningService.createPinnedClient();
+  // Cache is keyed by "<fields>|<base name>" so the adverse-reactions and
+  // drug-interactions lookups for the same drug don't collide.
   static final _cache = <String, String?>{};
 
   /// The FDA label's adverse-reactions text for [medName] (brand or generic),
   /// capped to a prompt-friendly length. Falls back to the label "warnings"
   /// section when adverse_reactions is absent. Returns null if nothing matches.
-  static Future<String?> adverseReactions(String medName) async {
+  static Future<String?> adverseReactions(String medName) =>
+      _labelSection(medName, const ['adverse_reactions', 'warnings']);
+
+  /// The FDA label's drug-interactions text for [medName] (brand or generic),
+  /// capped to a prompt-friendly length. Returns null if the label has no
+  /// drug-interactions section or nothing matches. Used to ground a "what to
+  /// ask your doctor/pharmacist about" interaction note — never a directive to
+  /// start, stop, or change a medication.
+  static Future<String?> drugInteractions(String medName) =>
+      _labelSection(medName, const ['drug_interactions']);
+
+  /// Fetch the first non-empty section among [fields] from the FDA label for
+  /// [medName]. Shared by [adverseReactions] and [drugInteractions].
+  static Future<String?> _labelSection(
+      String medName, List<String> fields) async {
     final base = _baseName(medName);
     if (base.length < 2) return null;
-    if (_cache.containsKey(base)) return _cache[base];
+    final cacheKey = '${fields.join(',')}|$base';
+    if (_cache.containsKey(cacheKey)) return _cache[cacheKey];
 
     // Match either the generic or brand name exactly (quoted phrase).
     final search =
@@ -34,29 +53,32 @@ class OpenFdaService {
           await _client.get(uri).timeout(appData.config.clinicalApiTimeout);
       if (resp.statusCode != 200) {
         // 404 = no match for this drug; cache the miss.
-        _cache[base] = null;
+        _cache[cacheKey] = null;
         return null;
       }
       final json = jsonDecode(resp.body);
       if (json is! Map) {
-        _cache[base] = null;
+        _cache[cacheKey] = null;
         return null;
       }
       final results = json['results'];
       if (results is! List || results.isEmpty || results.first is! Map) {
-        _cache[base] = null;
+        _cache[cacheKey] = null;
         return null;
       }
       final r0 = results.first as Map;
-      var text = _section(r0['adverse_reactions']);
-      if (text.isEmpty) text = _section(r0['warnings']);
+      var text = '';
+      for (final f in fields) {
+        text = _section(r0[f]);
+        if (text.isNotEmpty) break;
+      }
       text = text.trim();
       if (text.length > 4000) text = '${text.substring(0, 4000)}…';
-      _cache[base] = text.isEmpty ? null : text;
-      return _cache[base];
+      _cache[cacheKey] = text.isEmpty ? null : text;
+      return _cache[cacheKey];
     } catch (e) {
       debugPrint('OpenFdaService: $e');
-      _cache[base] = null;
+      _cache[cacheKey] = null;
       return null;
     }
   }

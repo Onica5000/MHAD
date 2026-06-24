@@ -6,6 +6,7 @@ import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:http/http.dart' as http;
 import 'package:mhad/ai/ai_assistant.dart';
 import 'package:mhad/ai/ai_clinical_policy.dart';
+import 'package:mhad/ai/interaction_note.dart';
 import 'package:mhad/ai/pii_stripper.dart';
 import 'package:mhad/ai/side_effect_item.dart';
 import 'package:mhad/data/app_data/app_data.dart';
@@ -390,6 +391,104 @@ class GeminiApiAssistant implements AiAssistant {
           .toList();
     } catch (e) {
       debugPrint('generateSideEffects error: $e');
+      return const [];
+    }
+  }
+
+  /// Flags POSSIBLE interactions between the user's CURRENT medications so they
+  /// can ask their doctor or pharmacist. Grounded in each drug's official FDA
+  /// label "Drug Interactions" text (via openFDA) so notes paraphrase a real
+  /// source instead of the model's memory. Strictly informational — per the
+  /// clinical policy it NEVER tells the user to start, stop, change, or combine
+  /// a medication, and never invents an interaction. Returns [] on any failure
+  /// or when fewer than two medications are supplied.
+  Future<List<InteractionNote>> generateInteractionNotes(
+      List<String> meds) async {
+    final cleaned =
+        meds.map((m) => m.trim()).where((m) => m.isNotEmpty).toSet().toList();
+    // An interaction needs at least two medications to compare.
+    if (cleaned.length < 2) return const [];
+
+    // Ground in the FDA labels' "Drug Interactions" sections. A note may only
+    // be raised when it is supported by at least one provided label, so we need
+    // labels for at least one of the meds to proceed.
+    final labels = await Future.wait(
+      cleaned.map((m) async => MapEntry(m, await OpenFdaService.drugInteractions(m))),
+    );
+    final grounded = <String, String>{
+      for (final e in labels)
+        if (e.value != null && e.value!.isNotEmpty) e.key: e.value!,
+    };
+    if (grounded.isEmpty) return const [];
+
+    final model = GenerativeModel(
+      model: _model,
+      apiKey: apiKey,
+      httpClient: _httpClient,
+      generationConfig: GenerationConfig(responseMimeType: 'application/json'),
+    );
+
+    final prompt = StringBuffer()
+      ..writeln(
+          'A user is documenting a PA Mental Health Advance Directive. Below '
+          'are the medications they are CURRENTLY taking and, for some, the '
+          'official FDA label "Drug Interactions" text. Identify possible '
+          'interactions BETWEEN the listed medications that are worth raising '
+          'with their doctor or pharmacist. Return ONLY a JSON object:')
+      ..writeln('{"items": [{"meds": ["<med A>", "<med B>"], "note": "<one '
+          'plain-language sentence describing the possible interaction, phrased '
+          'as something to ASK a doctor or pharmacist about>"}]}')
+      ..writeln()
+      ..writeln('Rules:')
+      ..writeln('- Base every note ONLY on the provided FDA label text. A note '
+          'is allowed ONLY if at least one involved medication\'s label below '
+          'names the other (by name or drug class). NEVER invent an interaction '
+          'or use outside knowledge.')
+      ..writeln('- Only report interactions BETWEEN two or more of the listed '
+          'medications — ignore interactions with drugs the user is not taking.')
+      ..writeln('- Phrase each note as something to ASK about (e.g. "Ask your '
+          'doctor whether taking X with Y can…"). Do NOT tell the user to '
+          'start, stop, change, separate, or combine any medication, and do '
+          'NOT say how serious it is or how to manage it.')
+      ..writeln('- If no interaction between the listed medications is '
+          'supported by the labels, return {"items": []}.')
+      ..writeln()
+      ..writeln(aiClinicalPolicy)
+      ..writeln()
+      ..writeln('Current medications:');
+    for (final m in cleaned) {
+      prompt.writeln('  • $m');
+    }
+    prompt.writeln();
+    prompt.writeln('Official FDA "Drug Interactions" label text:');
+    grounded.forEach((med, text) {
+      prompt
+        ..writeln('--- FDA LABEL · $med (Drug Interactions) ---')
+        ..writeln(text)
+        ..writeln('--- END FDA LABEL · $med ---');
+    });
+
+    try {
+      final response = await model
+          .generateContent([Content.text(sanitizeForApi(prompt.toString()))])
+          .timeout(appData.config.sideEffectsTimeout);
+      var text = response.text?.trim();
+      if (text == null || text.isEmpty) return const [];
+      if (text.startsWith('```')) {
+        text = text.replaceFirst(RegExp(r'^```(?:json)?'), '').trim();
+        if (text.endsWith('```')) {
+          text = text.substring(0, text.length - 3).trim();
+        }
+      }
+      final data = jsonDecode(text) as Map<String, dynamic>;
+      return ((data['items'] as List?) ?? const [])
+          .whereType<Map<String, dynamic>>()
+          .map(InteractionNote.fromJson)
+          .where((i) => i.meds.length >= 2 && i.note.isNotEmpty)
+          .take(20)
+          .toList();
+    } catch (e) {
+      debugPrint('generateInteractionNotes error: $e');
       return const [];
     }
   }

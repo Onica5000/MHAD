@@ -73,6 +73,32 @@ class ClinicalDataValidator {
     return results;
   }
 
+  /// Validate DRUG allergies against RxTerms (RxNorm). A recognized drug name
+  /// is flagged verified; an unrecognized one is left unverified so the user
+  /// double-checks it (usually a spelling slip). The substance text is NEVER
+  /// rewritten — for an allergy the ingredient the user named is what matters,
+  /// not a specific product/strength RxNorm would return. Non-drug allergies
+  /// (food / material / other) pass straight through. Degrades gracefully: on a
+  /// network/API failure an item is kept as-is (unverified), never dropped.
+  static Future<List<ExtractedAllergy>> validateAllergies(
+      List<ExtractedAllergy> rawAllergies) async {
+    final results = <ExtractedAllergy>[];
+    for (final a in rawAllergies) {
+      if (a.kind != 'drug' || a.substance.trim().length < 2) {
+        results.add(a);
+        continue;
+      }
+      List<String> matches;
+      try {
+        matches = await ClinicalDataService.searchMedications(a.substance, count: 1);
+      } catch (_) {
+        matches = const [];
+      }
+      results.add(a.withVerified(matches.isNotEmpty));
+    }
+    return results;
+  }
+
   /// Run full validation on a document extraction result.
   /// Validates medications and conditions in parallel.
   static Future<ValidatedExtractionResult> validate(
@@ -84,6 +110,13 @@ class ClinicalDataValidator {
       validateConditions(raw.effectiveCondition),
     ]);
 
+    // Confirm extracted facilities against the NPI organization registry. The
+    // extractor may return "Name | Address" — match on the name part only.
+    String facilityName(String? s) =>
+        (s ?? '').split('|').first.trim();
+    final prefFacilityName = facilityName(raw.preferredFacility);
+    final avoidFacilityName = facilityName(raw.avoidFacility);
+
     return ValidatedExtractionResult(
       preferredMeds: futures[0] as List<ValidatedMedication>,
       avoidMeds: futures[1] as List<ValidatedMedication>,
@@ -91,7 +124,11 @@ class ClinicalDataValidator {
       limitedMeds: await validateMedications(raw.medicationsLimited),
       conditions: futures[3] as List<ValidatedCondition>,
       diagnoses: raw.diagnoses,
-      allergies: raw.allergies,
+      allergies: await validateAllergies(raw.allergies),
+      preferredFacilityVerified: prefFacilityName.isNotEmpty &&
+          await ClinicalDataService.isKnownFacility(prefFacilityName),
+      avoidFacilityVerified: avoidFacilityName.isNotEmpty &&
+          await ClinicalDataService.isKnownFacility(avoidFacilityName),
       // Health history is free-form narrative (and, per the extractor, where
       // current-medication mentions land) — keep it as verbatim prose for the
       // user to review. Do NOT run it through the condition/ICD splitter,
@@ -175,6 +212,10 @@ class ValidatedExtractionResult {
   final String? healthHistory;
   final String? preferredFacility;
   final String? avoidFacility;
+  // True when the facility name was matched in the NPI organization registry
+  // (an authoritative confirmation, not a rewrite of the user's text).
+  final bool preferredFacilityVerified;
+  final bool avoidFacilityVerified;
   final String? dietary;
   final String? religious;
   final String? activities;
@@ -207,6 +248,8 @@ class ValidatedExtractionResult {
     this.healthHistory,
     this.preferredFacility,
     this.avoidFacility,
+    this.preferredFacilityVerified = false,
+    this.avoidFacilityVerified = false,
     this.dietary,
     this.religious,
     this.activities,

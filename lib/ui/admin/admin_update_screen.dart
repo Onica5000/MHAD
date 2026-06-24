@@ -7,8 +7,10 @@ import 'package:mhad/constants.dart';
 import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/services/admin_backup_store.dart';
 import 'package:mhad/services/admin_update_service.dart';
+import 'package:mhad/services/federal_register_service.dart';
 import 'package:mhad/services/gemini_model_service.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/utils/launch_utils.dart';
 
 /// Hidden, non-user-facing admin tool: the AI drafts updates to the app's
 /// dynamic data (app_data.json) WITH sources, a human approves a per-field diff,
@@ -290,6 +292,132 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
           SimpleDialogOption(
             onPressed: () => Navigator.pop(ctx, null),
             child: const Text('Cancel'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Deterministic, keyless watch over the Federal Register for the FEDERAL
+  /// rules the app references (HIPAA, 42 CFR Part 2, advance directives, 988).
+  /// Surfaces recent hits with citable URLs so the maintainer can update the
+  /// verify-tier `legal`/`dated` facts from an authoritative source. (PA Act
+  /// 194 is STATE law and won't appear here.)
+  Future<void> _checkFederalRegister() async {
+    setState(() {
+      _loading = true;
+      _error = null;
+    });
+    final svc = FederalRegisterService();
+    try {
+      final docs = await svc.recentRelevant();
+      if (!mounted) return;
+      setState(() => _loading = false);
+      if (docs.isEmpty) {
+        setState(() => _error =
+            'No recent Federal Register documents found (or the lookup was '
+            'unreachable). This watch covers FEDERAL rules only — PA Act 194 '
+            'is state law and is not in the Federal Register.');
+        return;
+      }
+      await _showFederalRegister(docs);
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _loading = false;
+          _error = 'Federal Register check failed: $e';
+        });
+      }
+    } finally {
+      svc.dispose();
+    }
+  }
+
+  /// List the Federal Register hits; each row opens or copies its citable URL
+  /// for use as a verify-tier `source`.
+  Future<void> _showFederalRegister(List<FederalRegisterDoc> docs) {
+    return showDialog<void>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Federal Register — relevant federal rules'),
+        content: SizedBox(
+          width: 520,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Federal rules the app references. Use a link as the SOURCE for a '
+                'verify-tier legal/dated change. State law (PA Act 194) is not '
+                'covered here.',
+                style: TextStyle(fontSize: 12),
+              ),
+              const SizedBox(height: 8),
+              Flexible(
+                child: ListView.separated(
+                  shrinkWrap: true,
+                  itemCount: docs.length,
+                  separatorBuilder: (_, _) => const Divider(),
+                  itemBuilder: (_, i) {
+                    final d = docs[i];
+                    final meta = [d.type, d.agencies, d.publicationDate]
+                        .where((s) => s.isNotEmpty)
+                        .join(' · ');
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(d.title,
+                            style:
+                                const TextStyle(fontWeight: FontWeight.w700)),
+                        if (meta.isNotEmpty)
+                          Text(meta,
+                              style: const TextStyle(
+                                  fontSize: 11, color: Colors.grey)),
+                        if (d.abstract.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 2),
+                            child: Text(
+                              d.abstract,
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(fontSize: 12),
+                            ),
+                          ),
+                        Row(
+                          children: [
+                            TextButton.icon(
+                              onPressed: () => launchOrCopy(ctx, d.url),
+                              icon: const Icon(Icons.open_in_new, size: 14),
+                              label: const Text('Open'),
+                            ),
+                            TextButton.icon(
+                              onPressed: () async {
+                                await Clipboard.setData(
+                                    ClipboardData(text: d.url));
+                                if (ctx.mounted) {
+                                  ScaffoldMessenger.of(ctx).showSnackBar(
+                                    const SnackBar(
+                                        content: Text('Source link copied')),
+                                  );
+                                }
+                              },
+                              icon: const Icon(Icons.copy, size: 14),
+                              label: const Text('Copy link'),
+                            ),
+                          ],
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Close'),
           ),
         ],
       ),
@@ -595,6 +723,11 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
                 onPressed: _loading ? null : _checkGeminiModel,
                 icon: const Icon(Icons.model_training),
                 label: const Text('Check best Gemini model'),
+              ),
+              OutlinedButton.icon(
+                onPressed: _loading ? null : _checkFederalRegister,
+                icon: const Icon(Icons.gavel),
+                label: const Text('Check Federal Register'),
               ),
             ],
           ),

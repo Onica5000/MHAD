@@ -63,6 +63,19 @@ extension _PipelineApplyLogic on _PipelineScreenState {
 
   // ── Apply everything ────────────────────────────────────────────────
 
+  /// A facility's review value with the display-only NPI badge removed, so the
+  /// badge text never gets saved into the facility name.
+  String _facilityValue(String key) {
+    var v = (_reviewEdited[key] ?? '').trim();
+    for (final badge in const [facilityVerifiedBadge, facilityUnverifiedBadge]) {
+      if (v.endsWith(badge)) {
+        v = v.substring(0, v.length - badge.length).trim();
+        break;
+      }
+    }
+    return v;
+  }
+
   Future<void> _applyAll() async {
     final repo = ref.read(directiveRepositoryProvider);
     final id = widget.directiveId;
@@ -126,14 +139,14 @@ extension _PipelineApplyLogic on _PipelineScreenState {
         await repo.upsertPreferences(DirectivePrefsCompanion(
           directiveId: Value(id),
           treatmentFacilityPref: Value(TreatmentFacilityPreference.prefer.name),
-          preferredFacilityName: Value(_reviewEdited[key] ?? ''),
+          preferredFacilityName: Value(_facilityValue(key)),
         ));
         applied++;
       } else if (key == 'facility_avoid') {
         await repo.upsertPreferences(DirectivePrefsCompanion(
           directiveId: Value(id),
           treatmentFacilityPref: Value(TreatmentFacilityPreference.avoid.name),
-          avoidFacilityName: Value(_reviewEdited[key] ?? ''),
+          avoidFacilityName: Value(_facilityValue(key)),
         ));
         applied++;
       }

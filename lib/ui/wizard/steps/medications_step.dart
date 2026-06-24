@@ -11,6 +11,7 @@ import 'package:mhad/services/clinical_data_service.dart';
 import 'package:mhad/services/medline_plus_service.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/fda_label_dialog.dart';
 import 'package:mhad/ui/widgets/medline_plus_dialog.dart';
 import 'package:mhad/ui/wizard/widgets/medication_autocomplete_field.dart';
 import 'package:mhad/ui/wizard/widgets/wizard_help_button.dart';
@@ -117,6 +118,14 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
       title: name,
       future: MedlinePlusService.forMedication(name),
     );
+  }
+
+  // Official FDA label text (side effects + interactions) for a medication.
+  // Reference only, and AI-free — works without a Gemini key.
+  void _showFdaInfo(String medName) {
+    final name = medName.trim();
+    if (name.isEmpty) return;
+    showFdaLabelDialog(context, medName: name);
   }
 
   @override
@@ -273,7 +282,8 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
             accentColor: Theme.of(context).colorScheme.secondary,
             showDosage: true,
             onAdd: () => _addMedRow(_current),
-            onInfo: _showMedInfo,
+            onMedlineInfo: _showMedInfo,
+            onFdaInfo: _showFdaInfo,
             onRemove: (i) => setState(() {
               _current[i].dispose();
               _current.removeAt(i);
@@ -286,7 +296,8 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
             rows: _exceptions,
             accentColor: neverColor,
             onAdd: () => _addMedRow(_exceptions),
-            onInfo: _showMedInfo,
+            onMedlineInfo: _showMedInfo,
+            onFdaInfo: _showFdaInfo,
             onRemove: (i) => setState(() {
               _exceptions[i].dispose();
               _exceptions.removeAt(i);
@@ -299,7 +310,8 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
             rows: _limitations,
             accentColor: limitColor,
             onAdd: () => _addMedRow(_limitations),
-            onInfo: _showMedInfo,
+            onMedlineInfo: _showMedInfo,
+            onFdaInfo: _showFdaInfo,
             onRemove: (i) => setState(() {
               _limitations[i].dispose();
               _limitations.removeAt(i);
@@ -312,7 +324,8 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
             rows: _preferred,
             accentColor: preferColor,
             onAdd: () => _addMedRow(_preferred),
-            onInfo: _showMedInfo,
+            onMedlineInfo: _showMedInfo,
+            onFdaInfo: _showFdaInfo,
             onRemove: (i) => setState(() {
               _preferred[i].dispose();
               _preferred.removeAt(i);
@@ -411,7 +424,10 @@ class _MedTable extends StatelessWidget {
   final List<_MedRow> rows;
   final VoidCallback onAdd;
   final void Function(int index) onRemove;
-  final void Function(String medName)? onInfo;
+  // Plain-language education (MedlinePlus) and official FDA label text. Both are
+  // AI-free lookups, so they work without a Gemini key.
+  final void Function(String medName)? onMedlineInfo;
+  final void Function(String medName)? onFdaInfo;
   final Color? accentColor;
   // Show a dosage field per row. Only the "currently taking" section sets this;
   // the preference sections (never/limitations/preferred) don't capture dosage.
@@ -423,7 +439,8 @@ class _MedTable extends StatelessWidget {
     required this.rows,
     required this.onAdd,
     required this.onRemove,
-    this.onInfo,
+    this.onMedlineInfo,
+    this.onFdaInfo,
     this.accentColor,
     this.showDosage = false,
   });
@@ -527,17 +544,32 @@ class _MedTable extends StatelessWidget {
                         ],
                       ),
                     ),
-                    if (onInfo != null)
+                    if (onMedlineInfo != null || onFdaInfo != null)
                       ListenableBuilder(
                         listenable: rows[i].nameCtrl,
                         builder: (context, _) {
                           final name = rows[i].nameCtrl.text.trim();
                           if (name.isEmpty) return const SizedBox.shrink();
-                          return IconButton(
-                            icon: const Icon(Icons.info_outline),
-                            color: cs.primary,
+                          return PopupMenuButton<String>(
+                            icon: Icon(Icons.info_outline, color: cs.primary),
                             tooltip: 'Learn about $name',
-                            onPressed: () => onInfo!(name),
+                            onSelected: (v) {
+                              if (v == 'medline') onMedlineInfo?.call(name);
+                              if (v == 'fda') onFdaInfo?.call(name);
+                            },
+                            itemBuilder: (_) => [
+                              if (onMedlineInfo != null)
+                                const PopupMenuItem(
+                                  value: 'medline',
+                                  child: Text('Plain-language info (MedlinePlus)'),
+                                ),
+                              if (onFdaInfo != null)
+                                const PopupMenuItem(
+                                  value: 'fda',
+                                  child: Text('Official FDA label (side effects & '
+                                      'interactions)'),
+                                ),
+                            ],
                           );
                         },
                       ),

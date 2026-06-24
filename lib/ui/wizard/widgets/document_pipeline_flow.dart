@@ -17,6 +17,7 @@ import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/providers/kept_documents_provider.dart';
 import 'package:mhad/services/clinical_data_validator.dart';
 import 'package:mhad/services/gemini_rate_tracker.dart';
+import 'package:mhad/services/geo_service.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/ai_consent_dialog.dart';
@@ -532,6 +533,11 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
       // Build review data + reconcile against the directive's current values
       _validated = validated;
       _buildReviewData(validated);
+      // Keyless geo backfill: when the AI read a ZIP but missed the city /
+      // state / county, fill them from the ZIP (Zippopotam + FCC) so the
+      // declarant + designated people land more complete. Best-effort.
+      await _geoBackfillReview();
+      if (!mounted) return;
       await _buildReconciliation();
       if (!mounted) return;
 

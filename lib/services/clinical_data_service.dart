@@ -19,6 +19,9 @@ class ClinicalDataService {
   // NPI registry — individual providers (same Clinical Tables engine).
   static const _npiBase =
       'https://clinicaltables.nlm.nih.gov/api/npi_idv/v3/search';
+  // NPI registry — organizations (hospitals / treatment facilities).
+  static const _npiOrgBase =
+      'https://clinicaltables.nlm.nih.gov/api/npi_org/v3/search';
 
   static final _client = CertificatePinningService.createPinnedClient();
 
@@ -189,6 +192,44 @@ class ClinicalDataService {
       );
     }).where((r) => r.name.trim().isNotEmpty).toList();
   }
+
+  /// Search the NPI registry's ORGANIZATIONS (hospitals, clinics, treatment
+  /// centers) by name so the user can pick a real facility and autofill its
+  /// name + practice address. Free, no key — same Clinical Tables engine as the
+  /// lookups above. Used both for the facility-step autocomplete and to confirm
+  /// AI-extracted facility names against an authoritative source.
+  static Future<List<FacilityResult>> searchFacilities(String query,
+      {int count = 8}) async {
+    if (query.trim().length < 3) return [];
+    final uri = Uri.parse('$_npiOrgBase?terms=${Uri.encodeComponent(query)}'
+        '&maxList=$count'
+        '&df=name.full,addr_practice.full');
+    final body = await _fetch(uri);
+    if (body == null) return [];
+    final data = jsonDecode(body) as List;
+    if (data.length < 4 || data[3] is! List) return [];
+    final rows = data[3] as List;
+    return rows.map((r) {
+      final row = r is List ? r : const [];
+      return FacilityResult(
+        name: row.isNotEmpty ? row[0].toString() : '',
+        address: row.length > 1 ? row[1].toString() : '',
+      );
+    }).where((f) => f.name.trim().isNotEmpty).toList();
+  }
+
+  /// True when the NPI organization registry has at least one match for
+  /// [facilityName] — i.e. it's a recognized facility. Used to confirm an
+  /// AI-extracted facility name. Degrades to false on any failure (so the field
+  /// is shown as unverified rather than blocking the pipeline).
+  static Future<bool> isKnownFacility(String facilityName) async {
+    try {
+      final matches = await searchFacilities(facilityName, count: 1);
+      return matches.isNotEmpty;
+    } catch (_) {
+      return false;
+    }
+  }
 }
 
 class _CacheEntry {
@@ -224,6 +265,13 @@ class ProviderResult {
     this.phone = '',
     this.address = '',
   });
+}
+
+/// One NPI-registry ORGANIZATION (facility) match — name + practice address.
+class FacilityResult {
+  final String name;
+  final String address;
+  const FacilityResult({required this.name, this.address = ''});
 }
 
 /// Pennsylvania Narrow Therapeutic Index (NTI) psychiatric medications.

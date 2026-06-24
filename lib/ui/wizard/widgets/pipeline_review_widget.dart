@@ -8,6 +8,12 @@ part of 'document_pipeline_flow.dart';
 // ignore_for_file: invalid_use_of_protected_member
 // (extension methods on the State legitimately call its protected setState)
 
+// Display-only badges appended to a facility's review value to show whether the
+// name matched the NPI organization registry. Stripped before saving (see
+// `_facilityValue` in pipeline_apply_service.dart).
+const String facilityVerifiedBadge = ' [NPI verified]';
+const String facilityUnverifiedBadge = ' [unverified]';
+
 extension _PipelineReviewUi on _PipelineScreenState {
   void _buildReviewData(ValidatedExtractionResult v) {
     _reviewChecked = {};
@@ -41,13 +47,18 @@ extension _PipelineReviewUi on _PipelineScreenState {
       _reviewEdited['hh_note'] = v.healthHistory!;
     }
     // Pass-through text fields
+    // Facility names carry an NPI-registry check (verified = recognized
+    // facility). The badge is display-only — _applyAll strips it before saving,
+    // since facilities (unlike meds) are applied straight from this value.
     if (v.preferredFacility != null) {
       _reviewChecked['facility_prefer'] = true;
-      _reviewEdited['facility_prefer'] = v.preferredFacility!;
+      _reviewEdited['facility_prefer'] =
+          '${v.preferredFacility!}${v.preferredFacilityVerified ? facilityVerifiedBadge : facilityUnverifiedBadge}';
     }
     if (v.avoidFacility != null) {
       _reviewChecked['facility_avoid'] = true;
-      _reviewEdited['facility_avoid'] = v.avoidFacility!;
+      _reviewEdited['facility_avoid'] =
+          '${v.avoidFacility!}${v.avoidFacilityVerified ? facilityVerifiedBadge : facilityUnverifiedBadge}';
     }
     if (v.dietary != null) {
       _reviewChecked['dietary'] = true;
@@ -93,11 +104,16 @@ extension _PipelineReviewUi on _PipelineScreenState {
       _reviewEdited[key] = d.display;
     }
 
-    // ── Allergies — one review key per allergy
+    // ── Allergies — one review key per allergy. Drug allergies carry an
+    // RxNorm check: verified = recognized medication name; unverified = worth a
+    // second look (often a spelling slip). Non-drug allergies show no badge.
     for (final a in v.allergies) {
       final key = 'allergy_${a.substance}';
       _reviewChecked[key] = true;
-      _reviewEdited[key] = a.display;
+      final badge = a.kind == 'drug'
+          ? (a.rxNormVerified ? ' [RxNorm verified]' : ' [unverified]')
+          : '';
+      _reviewEdited[key] = '${a.display}$badge';
     }
 
     // ── Currently-taking medications (reference list) — the one category that
@@ -228,6 +244,60 @@ extension _PipelineReviewUi on _PipelineScreenState {
       put('guardian_zip', gd.zip);
       put('guardian_phone', gd.phone);
     }
+  }
+
+  /// Fill in any city / state / county that the AI didn't read off the document
+  /// but which can be derived from an extracted ZIP — for the declarant AND the
+  /// designated people (agent, alternate, guardian). Uses the keyless geo APIs
+  /// (Zippopotam + FCC) already used by the form's address fields; only the ZIP
+  /// (never a street address) leaves the browser, so it stays within the PII
+  /// posture. Best-effort: any miss/timeout simply leaves the field as-is. The
+  /// values are written into the review map so the user still confirms them.
+  Future<void> _geoBackfillReview() async {
+    // (prefix, hasCounty). Only the declarant card has a county field.
+    const targets = [
+      ('person', true),
+      ('agent', false),
+      ('alt_agent', false),
+      ('guardian', false),
+    ];
+    final zip5 = RegExp(r'^\d{5}$');
+    final geo = GeoService();
+    final filled = <String, String>{};
+    try {
+      for (final (prefix, hasCounty) in targets) {
+        final zip = (_reviewEdited['${prefix}_zip'] ?? '').trim();
+        if (!zip5.hasMatch(zip)) continue;
+        final cityKey = '${prefix}_city';
+        final stateKey = '${prefix}_state';
+        final countyKey = '${prefix}_county';
+        final needCity = (_reviewEdited[cityKey] ?? '').trim().isEmpty;
+        final needState = (_reviewEdited[stateKey] ?? '').trim().isEmpty;
+        final needCounty =
+            hasCounty && (_reviewEdited[countyKey] ?? '').trim().isEmpty;
+        if (!needCity && !needState && !needCounty) continue;
+
+        final lookup = await geo.lookupZip(zip);
+        if (lookup == null) continue;
+        if (needCity && lookup.city.isNotEmpty) filled[cityKey] = lookup.city;
+        if (needState && lookup.stateAbbr.isNotEmpty) {
+          filled[stateKey] = lookup.stateAbbr;
+        }
+        if (needCounty && lookup.lat != null && lookup.lng != null) {
+          final county = await geo.countyForLatLng(lookup.lat!, lookup.lng!);
+          if (county != null && county.isNotEmpty) filled[countyKey] = county;
+        }
+      }
+    } finally {
+      geo.dispose();
+    }
+    if (filled.isEmpty || !mounted) return;
+    setState(() {
+      filled.forEach((key, value) {
+        _reviewEdited[key] = value;
+        _reviewChecked[key] = true;
+      });
+    });
   }
 
   /// After extraction, classify each field by priority and detect conflicts

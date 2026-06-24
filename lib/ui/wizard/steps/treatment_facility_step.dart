@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:drift/drift.dart' show Value;
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/providers/app_providers.dart';
+import 'package:mhad/services/clinical_data_service.dart';
+import 'package:mhad/utils/debouncer.dart';
 import 'package:mhad/ui/wizard/widgets/wizard_help_button.dart';
 import 'package:mhad/ui/wizard/wizard_mixins.dart';
 
@@ -414,7 +416,7 @@ class _FacilityRow {
   }
 }
 
-class _FacilitySection extends StatelessWidget {
+class _FacilitySection extends StatefulWidget {
   final String title;
   final String subtitle;
   final List<_FacilityRow> rows;
@@ -430,6 +432,57 @@ class _FacilitySection extends StatelessWidget {
   });
 
   @override
+  State<_FacilitySection> createState() => _FacilitySectionState();
+}
+
+class _FacilitySectionState extends State<_FacilitySection> {
+  // NPI organization (facility) autocomplete. One debouncer for the section;
+  // [_activeRow] tracks which row's dropdown is currently open.
+  final _debouncer = Debouncer(delay: const Duration(milliseconds: 400));
+  int? _activeRow;
+  List<FacilityResult> _results = const [];
+  bool _searching = false;
+
+  @override
+  void dispose() {
+    _debouncer.dispose();
+    super.dispose();
+  }
+
+  void _onNameChanged(int i, String query) {
+    final q = query.trim();
+    if (q.length < 3) {
+      _debouncer.cancel();
+      setState(() {
+        _activeRow = i;
+        _results = const [];
+      });
+      return;
+    }
+    setState(() => _activeRow = i);
+    _debouncer.run(() => _search(q));
+  }
+
+  Future<void> _search(String query) async {
+    setState(() => _searching = true);
+    try {
+      final r = await ClinicalDataService.searchFacilities(query);
+      if (mounted) setState(() => _results = r);
+    } finally {
+      if (mounted) setState(() => _searching = false);
+    }
+  }
+
+  void _pick(int i, FacilityResult f) {
+    setState(() {
+      widget.rows[i].nameCtrl.text = f.name;
+      if (f.address.isNotEmpty) widget.rows[i].locationCtrl.text = f.address;
+      _results = const [];
+      _activeRow = null;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
     return Card(
@@ -439,18 +492,18 @@ class _FacilitySection extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(title,
+            Text(widget.title,
                 style: Theme.of(context)
                     .textTheme
                     .titleSmall
                     ?.copyWith(fontWeight: FontWeight.w600)),
-            Text(subtitle,
+            Text(widget.subtitle,
                 style: Theme.of(context)
                     .textTheme
                     .bodySmall
                     ?.copyWith(color: cs.onSurfaceVariant)),
             const SizedBox(height: 12),
-            ...List.generate(rows.length, (i) {
+            ...List.generate(widget.rows.length, (i) {
               return Padding(
                 padding: const EdgeInsets.only(bottom: 12),
                 child: Row(
@@ -460,20 +513,35 @@ class _FacilitySection extends StatelessWidget {
                       child: Column(
                         children: [
                           TextFormField(
-                            controller: rows[i].nameCtrl,
+                            controller: widget.rows[i].nameCtrl,
+                            onChanged: (q) => _onNameChanged(i, q),
                             decoration: InputDecoration(
                               labelText: 'Facility name',
-                              hintText: 'e.g., Community Hospital',
+                              hintText: 'Type to search facilities',
                               border: const OutlineInputBorder(),
                               isDense: true,
                               prefixIcon: Icon(Icons.local_hospital,
                                   size: 18, color: cs.primary),
+                              suffixIcon: (_searching && _activeRow == i)
+                                  ? const Padding(
+                                      padding: EdgeInsets.all(12),
+                                      child: SizedBox(
+                                        width: 16,
+                                        height: 16,
+                                        child: CircularProgressIndicator(
+                                            strokeWidth: 2),
+                                      ),
+                                    )
+                                  : null,
                             ),
                             textInputAction: TextInputAction.next,
                           ),
+                          // NPI facility matches — tap to autofill name + address.
+                          if (_activeRow == i && _results.isNotEmpty)
+                            _facilityDropdown(i, cs),
                           const SizedBox(height: 8),
                           TextFormField(
-                            controller: rows[i].locationCtrl,
+                            controller: widget.rows[i].locationCtrl,
                             decoration: const InputDecoration(
                               labelText: 'Location (optional)',
                               hintText: 'e.g., 123 Main St, Philadelphia, PA',
@@ -489,7 +557,7 @@ class _FacilitySection extends StatelessWidget {
                       icon: const Icon(Icons.remove_circle_outline),
                       color: cs.error,
                       tooltip: 'Remove facility',
-                      onPressed: () => onRemove(i),
+                      onPressed: () => widget.onRemove(i),
                     ),
                   ],
                 ),
@@ -497,13 +565,71 @@ class _FacilitySection extends StatelessWidget {
             }),
             Semantics(
               button: true,
-              label: 'Add facility to $title',
+              label: 'Add facility to ${widget.title}',
               child: TextButton.icon(
-                onPressed: onAdd,
+                onPressed: widget.onAdd,
                 icon: const Icon(Icons.add, size: 16),
                 label: const Text('Add facility'),
                 style: TextButton.styleFrom(
                     visualDensity: VisualDensity.compact),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _facilityDropdown(int i, ColorScheme cs) {
+    return Container(
+      margin: const EdgeInsets.only(top: 4),
+      decoration: BoxDecoration(
+        color: cs.surface,
+        border: Border.all(color: cs.outlineVariant),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxHeight: 240),
+        child: ListView(
+          shrinkWrap: true,
+          padding: const EdgeInsets.all(6),
+          children: [
+            for (final f in _results)
+              InkWell(
+                onTap: () => _pick(i, f),
+                borderRadius: BorderRadius.circular(7),
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(f.name,
+                          style: const TextStyle(
+                              fontSize: 13, fontWeight: FontWeight.w600)),
+                      if (f.address.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 2),
+                          child: Text(
+                            f.address,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                                fontSize: 11.5, color: cs.onSurfaceVariant),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8, 4, 8, 2),
+              child: Text(
+                'Facility names from the NPI registry (NIH Clinical Tables). '
+                'Verify details before relying on them.',
+                style: TextStyle(
+                    fontSize: 10,
+                    fontStyle: FontStyle.italic,
+                    color: cs.onSurfaceVariant),
               ),
             ),
           ],

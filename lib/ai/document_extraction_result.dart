@@ -399,13 +399,32 @@ class ExtractedAllergy {
   final String? reactions;
   final String? notes;
 
+  /// True when this is a `drug` allergy whose substance was matched against
+  /// RxNorm (NIH RxTerms) — i.e. a recognized medication name. Stays false for
+  /// non-drug allergies and for drug names with no RxNorm match (which are
+  /// flagged for the user to double-check, often a spelling slip). The
+  /// substance text itself is never replaced — for an allergy the ingredient
+  /// name the user wrote is what matters, not a specific product/strength.
+  final bool rxNormVerified;
+
   const ExtractedAllergy({
     required this.substance,
     this.kind = 'drug',
     this.severity = 'moderate',
     this.reactions,
     this.notes,
+    this.rxNormVerified = false,
   });
+
+  /// Copy with an updated [rxNormVerified] flag (other fields unchanged).
+  ExtractedAllergy withVerified(bool verified) => ExtractedAllergy(
+        substance: substance,
+        kind: kind,
+        severity: severity,
+        reactions: reactions,
+        notes: notes,
+        rxNormVerified: verified,
+      );
 
   String get display {
     final sev = severity[0].toUpperCase() + severity.substring(1);

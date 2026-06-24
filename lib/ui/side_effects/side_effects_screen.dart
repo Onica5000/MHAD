@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/ai/gemini_api_assistant.dart';
+import 'package:mhad/ai/interaction_note.dart';
 import 'package:mhad/ai/side_effect_item.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/providers/app_providers.dart';
@@ -36,6 +37,7 @@ class SideEffectsScreen extends ConsumerStatefulWidget {
 
 class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
   List<SideEffectItem> _items = [];
+  List<InteractionNote> _interactions = [];
   List<String> _currentMeds = [];
   bool _loading = true;
   bool _generating = false;
@@ -64,6 +66,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
         .toList();
     final raw = pref?.sideEffectsJson ?? '';
     var items = <SideEffectItem>[];
+    var interactions = <InteractionNote>[];
     if (raw.isNotEmpty) {
       try {
         final m = jsonDecode(raw) as Map<String, dynamic>;
@@ -71,11 +74,16 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
             .whereType<Map<String, dynamic>>()
             .map(SideEffectItem.fromJson)
             .toList();
+        interactions = ((m['interactions'] as List?) ?? const [])
+            .whereType<Map<String, dynamic>>()
+            .map(InteractionNote.fromJson)
+            .toList();
       } catch (_) {/* ignore malformed */}
     }
     setState(() {
       _currentMeds = names;
       _items = items;
+      _interactions = interactions;
       _loading = false;
     });
   }
@@ -83,6 +91,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
   Future<void> _persist() async {
     final json = jsonEncode({
       'items': _items.map((i) => i.toJson()).toList(),
+      'interactions': _interactions.map((i) => i.toJson()).toList(),
       'generatedForMeds': _currentMeds,
     });
     await ref.read(directiveRepositoryProvider).upsertPreferences(
@@ -101,7 +110,15 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
       _error = null;
     });
     try {
-      final found = await assistant.generateSideEffects(_currentMeds);
+      // Run the two grounded lookups together: common side effects (per med)
+      // and possible interactions BETWEEN the current meds. Interactions need
+      // 2+ meds and degrade silently to [] otherwise.
+      final results = await Future.wait([
+        assistant.generateSideEffects(_currentMeds),
+        assistant.generateInteractionNotes(_currentMeds),
+      ]);
+      final found = results[0] as List<SideEffectItem>;
+      final interactions = results[1] as List<InteractionNote>;
       if (!mounted) return;
       if (found.isEmpty) {
         setState(() => _error =
@@ -121,6 +138,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
         }
         setState(() => _items = found);
       }
+      setState(() => _interactions = interactions);
       await _persist();
     } catch (e) {
       if (mounted) {
@@ -204,6 +222,23 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
                               'anything marked "discuss with your doctor" — to '
                               'your doctor or pharmacist. This list never tells '
                               'you to start, stop, or change a medication.',
+                        ),
+                      ],
+                      if (_interactions.isNotEmpty) ...[
+                        const SizedBox(height: 22),
+                        const SectionLabel('Ask your doctor or pharmacist'),
+                        const SizedBox(height: 8),
+                        ..._interactions.map((n) => _interactionCard(p, n)),
+                        const SizedBox(height: 6),
+                        const InfoBanner(
+                          icon: Icons.info_outline,
+                          variant: InfoBannerVariant.info,
+                          text:
+                              'These are possible interactions drawn from the '
+                              'medications’ FDA labels, written as questions '
+                              'to ask. They are not a warning to stop or change '
+                              'anything yourself — only your doctor or '
+                              'pharmacist can advise on your specific case.',
                         ),
                       ],
                     ],
@@ -330,6 +365,44 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
       }
     });
     return widgets;
+  }
+
+  /// A single possible-interaction note: the meds involved + a plain-language
+  /// question to ask a doctor or pharmacist. Informational only.
+  Widget _interactionCard(MhadPalette p, InteractionNote note) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(
+        color: p.card,
+        border: Border.all(color: p.border),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            note.meds.join(' + '),
+            style: TextStyle(
+              fontFamily: kSansFamily,
+              fontSize: 13,
+              fontWeight: FontWeight.w700,
+              color: p.text,
+            ),
+          ),
+          const SizedBox(height: 3),
+          Text(
+            note.note,
+            style: TextStyle(
+              fontFamily: kSansFamily,
+              fontSize: 13,
+              height: 1.4,
+              color: p.textMuted,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
