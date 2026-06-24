@@ -109,7 +109,16 @@ class WebDashboardLanding extends ConsumerWidget {
             Expanded(
               flex: 10,
               child: _BookletQuoteCard(
-                onRead: () => context.go(AppRoutes.education),
+                // Deep-link to the plain-language overview ("the basics") rather
+                // than the full Learn hub, so the button delivers the summary it
+                // promises. Back returns here.
+                onRead: () => context.push(
+                  AppRoutes.education,
+                  extra: (
+                    ids: const ['intro_overview', 'intro_why_take_your_time'],
+                    title: 'The basics',
+                  ),
+                ),
               ),
             ),
           ],

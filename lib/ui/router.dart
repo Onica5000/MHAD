@@ -197,8 +197,14 @@ GoRouter _buildRouter(DisclaimerNotifier disclaimer,
         GoRoute(
           path: AppRoutes.education,
           builder: (context, state) {
-            final filterIds = state.extra as List<String>?;
-            return EducationScreen(filterIds: filterIds);
+            // extra is either a bare List<String> of section ids (wizard Help,
+            // default title) or a (ids, title) record for a labelled deep-link.
+            final extra = state.extra;
+            if (extra is ({List<String> ids, String title})) {
+              return EducationScreen(
+                  filterIds: extra.ids, filterTitle: extra.title);
+            }
+            return EducationScreen(filterIds: extra as List<String>?);
           },
         ),
         GoRoute(

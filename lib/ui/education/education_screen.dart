@@ -10,10 +10,15 @@ import 'package:mhad/ui/widgets/design/spot_illustration.dart';
 import 'package:mhad/ui/widgets/design/brand_motif.dart';
 
 class EducationScreen extends StatefulWidget {
-  /// If set, only show sections matching these IDs (deep-link from wizard Help).
+  /// If set, only show sections matching these IDs (deep-link from wizard Help,
+  /// or the start page's "Read the basics").
   final List<String>? filterIds;
 
-  const EducationScreen({this.filterIds, super.key});
+  /// AppBar title for the filtered view. Defaults to 'Help' (wizard Help), but
+  /// a deep-link can label it for its context (e.g. 'The basics').
+  final String filterTitle;
+
+  const EducationScreen({this.filterIds, this.filterTitle = 'Help', super.key});
 
   @override
   State<EducationScreen> createState() => _EducationScreenState();
@@ -46,7 +51,7 @@ class _EducationScreenState extends State<EducationScreen> {
     // already lives inside the body widget.
     if (isFiltered) {
       return Scaffold(
-        appBar: AppBar(title: const Text('Help')),
+        appBar: AppBar(title: Text(widget.filterTitle)),
         body: _filteredSections.isEmpty
             ? _emptyArt(SpotArt.search, 'No results found.')
             : ListView.builder(
