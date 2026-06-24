@@ -493,6 +493,69 @@ class GeminiApiAssistant implements AiAssistant {
     }
   }
 
+  /// Maps a user's PLAIN-LANGUAGE description of what they experience to a few
+  /// candidate condition NAMES they can look up and confirm — powers the
+  /// diagnoses step's "Don't know the official name?" helper. This is NOT a
+  /// diagnosis: it only proposes recognized condition names to search the
+  /// authoritative ICD-10 registry with; the user confirms the actual code.
+  /// Returns [] on any failure or too-vague input.
+  Future<List<String>> suggestConditionTerms(String description) async {
+    final desc = description.trim();
+    if (desc.length < 3) return const [];
+
+    final model = GenerativeModel(
+      model: _model,
+      apiKey: apiKey,
+      httpClient: _httpClient,
+      generationConfig: GenerationConfig(responseMimeType: 'application/json'),
+    );
+
+    final prompt = StringBuffer()
+      ..writeln(
+          'A person is completing a PA Mental Health Advance Directive and does '
+          'NOT know the official name of a condition they experience. From their '
+          'plain-language description below, suggest up to 5 RECOGNIZED '
+          'mental-health or medical condition NAMES that best match, so they can '
+          'look up the official ICD-10 code and confirm. Return ONLY JSON:')
+      ..writeln('{"conditions": ["<condition name>", ...]}')
+      ..writeln()
+      ..writeln('Rules:')
+      ..writeln('- Suggest only well-recognized condition names (ones that have '
+          'an ICD-10 code). Best match first.')
+      ..writeln('- These are POSSIBILITIES for the user to confirm — do NOT '
+          'state or imply the person HAS any condition, and do NOT diagnose.')
+      ..writeln('- If the description is too vague or not health-related, return '
+          'fewer names or {"conditions": []}. NEVER invent a condition.')
+      ..writeln()
+      ..writeln(aiClinicalPolicy)
+      ..writeln()
+      ..writeln('Their description:')
+      ..writeln(desc);
+
+    try {
+      final response = await model
+          .generateContent([Content.text(sanitizeForApi(prompt.toString()))])
+          .timeout(appData.config.stepSuggestionTimeout);
+      var text = response.text?.trim();
+      if (text == null || text.isEmpty) return const [];
+      if (text.startsWith('```')) {
+        text = text.replaceFirst(RegExp(r'^```(?:json)?'), '').trim();
+        if (text.endsWith('```')) {
+          text = text.substring(0, text.length - 3).trim();
+        }
+      }
+      final data = jsonDecode(text) as Map<String, dynamic>;
+      return ((data['conditions'] as List?) ?? const [])
+          .map((e) => e.toString().trim())
+          .where((s) => s.isNotEmpty)
+          .take(5)
+          .toList();
+    } catch (e) {
+      debugPrint('suggestConditionTerms error: $e');
+      return const [];
+    }
+  }
+
   String _buildSystemPrompt(AssistantContext? context) {
     return _buildRoleSection(context) +
         _buildWalkthroughSection() +

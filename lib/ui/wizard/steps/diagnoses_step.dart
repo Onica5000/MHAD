@@ -1,12 +1,18 @@
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:mhad/ai/gemini_api_assistant.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/providers/app_providers.dart';
+import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/services/clinical_data_service.dart';
+import 'package:mhad/services/gemini_rate_tracker.dart';
 import 'package:mhad/services/medline_plus_service.dart';
 import 'package:mhad/utils/debouncer.dart';
+import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/ai_consent_dialog.dart';
 import 'package:mhad/ui/widgets/medline_plus_dialog.dart';
 import 'package:mhad/ui/widgets/design/health_chip.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
@@ -113,6 +119,80 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
       title: name,
       future: MedlinePlusService.forIcd10(icdCode),
     );
+  }
+
+  // ── "Don't know the official name?" — describe symptoms; the AI suggests
+  //    candidate conditions and each is confirmed against the ICD-10 registry
+  //    before the user adds it. ─────────────────────────────────────────────
+  Future<void> _openDescribeDialog() async {
+    final assistant = ref.read(aiAssistantProvider);
+    if (assistant is! GeminiApiAssistant) {
+      // No AI yet — send them to set it up (same as the AI Suggest button).
+      context.push(AppRoutes.aiSetup);
+      return;
+    }
+    // Per-session AI consent gate.
+    if (!ref.read(aiConsentGivenProvider)) {
+      final ok = await showAiConsentDialog(context);
+      if (!ok || !mounted) return;
+      ref.read(aiConsentGivenProvider.notifier).state = true;
+    }
+    // Respect the rate limiter.
+    final tracker = ref.read(geminiRateTrackerProvider);
+    final block = tracker.blockReason;
+    if (block != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(block), duration: const Duration(seconds: 5)),
+      );
+      return;
+    }
+    await showDialog<void>(
+      context: context,
+      builder: (_) => _DescribeConditionDialog(
+        onSuggest: _suggestFromDescription,
+        onAdd: _addSuggestedDiagnosis,
+      ),
+    );
+  }
+
+  /// Plain-language description → AI candidate condition names → confirmed
+  /// ICD-10 matches (the codes come from the authoritative registry, not the
+  /// model). Deduped by code.
+  Future<List<IcdCondition>> _suggestFromDescription(String description) async {
+    final assistant = ref.read(aiAssistantProvider);
+    if (assistant is! GeminiApiAssistant) return const [];
+    final names = await assistant.suggestConditionTerms(description);
+    ref.read(geminiRateTrackerProvider).recordRequest(
+        estimatedTokens: GeminiRateTracker.estimateTokens(description.length));
+    if (names.isEmpty) return const [];
+    final out = <IcdCondition>[];
+    final seen = <String>{};
+    for (final name in names) {
+      List<IcdCondition> matches;
+      try {
+        matches = await ClinicalDataService.searchConditions(name, count: 2);
+      } catch (_) {
+        matches = const [];
+      }
+      for (final m in matches) {
+        if (m.code.isNotEmpty && seen.add(m.code)) out.add(m);
+      }
+    }
+    return out;
+  }
+
+  /// Add a suggested condition; returns false if it was already on the list.
+  Future<bool> _addSuggestedDiagnosis(IcdCondition c) async {
+    final repo = ref.read(directiveRepositoryProvider);
+    final current = await repo.getDiagnoses(widget.directiveId);
+    if (current.any((d) => d.icdCode == c.code)) return false;
+    await repo.insertDiagnosis(DiagnosisEntriesCompanion.insert(
+      directiveId: widget.directiveId,
+      icdCode: Value(c.code),
+      name: Value(c.name),
+      sortOrder: Value(current.length),
+    ));
+    return true;
   }
 
   @override
@@ -650,52 +730,62 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
 
         const SizedBox(height: 16),
 
-        // AI-assist hint (static, mirrors the prototype)
-        Container(
-          decoration: BoxDecoration(
-            color: p.primaryTint,
-            border: Border.all(color: p.primaryLight),
+        // "Don't know the official name?" — tap to describe what you experience;
+        // the AI suggests conditions and each is confirmed against the ICD-10
+        // registry before you add it. Routes to AI setup if AI isn't on yet.
+        Semantics(
+          button: true,
+          label: 'Describe a condition to find its official name',
+          child: InkWell(
+            onTap: _openDescribeDialog,
             borderRadius: BorderRadius.circular(12),
-          ),
-          padding: const EdgeInsets.all(12),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Icon(Icons.auto_awesome, size: 16, color: p.primary),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Text.rich(
-                  TextSpan(
+            child: Container(
+              decoration: BoxDecoration(
+                color: p.primaryTint,
+                border: Border.all(color: p.primaryLight),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              padding: const EdgeInsets.all(12),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(Icons.auto_awesome, size: 16, color: p.primary),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text.rich(
+                      TextSpan(
+                        style: TextStyle(
+                          fontFamily: kSansFamily,
+                          fontSize: 12.5,
+                          height: 1.45,
+                          color: p.text,
+                        ),
+                        children: const [
+                          TextSpan(text: "Don't know the official name? "),
+                          TextSpan(
+                            text: 'Describe how it shows up for you',
+                            style: TextStyle(fontWeight: FontWeight.w700),
+                          ),
+                          TextSpan(
+                              text: " and I'll suggest the closest ICD-10 code "
+                                  'for you to confirm.'),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Try →',
                     style: TextStyle(
                       fontFamily: kSansFamily,
-                      fontSize: 12.5,
-                      height: 1.45,
-                      color: p.text,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      color: p.primary,
                     ),
-                    children: const [
-                      TextSpan(text: "Don't know the official name? "),
-                      TextSpan(
-                        text: 'Describe how it shows up for you',
-                        style: TextStyle(fontWeight: FontWeight.w700),
-                      ),
-                      TextSpan(
-                          text: " and I'll suggest the closest ICD-10 code "
-                              'for you to confirm.'),
-                    ],
                   ),
-                ),
+                ],
               ),
-              const SizedBox(width: 8),
-              Text(
-                'Try →',
-                style: TextStyle(
-                  fontFamily: kSansFamily,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                  color: p.primary,
-                ),
-              ),
-            ],
+            ),
           ),
         ),
 
@@ -720,5 +810,183 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
     );
     if (widget.embedded) return list;
     return Column(children: [Expanded(child: list)]);
+  }
+}
+
+/// "Describe what you experience" helper dialog. The user types a plain-language
+/// description; [onSuggest] returns AI-suggested conditions already confirmed
+/// against the ICD-10 registry; tapping one calls [onAdd]. Suggestion-only — it
+/// never asserts a diagnosis.
+class _DescribeConditionDialog extends StatefulWidget {
+  final Future<List<IcdCondition>> Function(String description) onSuggest;
+  final Future<bool> Function(IcdCondition condition) onAdd;
+  const _DescribeConditionDialog({required this.onSuggest, required this.onAdd});
+
+  @override
+  State<_DescribeConditionDialog> createState() =>
+      _DescribeConditionDialogState();
+}
+
+class _DescribeConditionDialogState extends State<_DescribeConditionDialog> {
+  final _ctrl = TextEditingController();
+  bool _loading = false;
+  bool _searched = false;
+  List<IcdCondition> _results = const [];
+  final Set<String> _added = {};
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  Future<void> _find() async {
+    final text = _ctrl.text.trim();
+    if (text.length < 3) return;
+    FocusScope.of(context).unfocus();
+    setState(() {
+      _loading = true;
+      _searched = true;
+    });
+    final r = await widget.onSuggest(text);
+    if (!mounted) return;
+    setState(() {
+      _results = r;
+      _loading = false;
+    });
+  }
+
+  Future<void> _add(IcdCondition c) async {
+    final added = await widget.onAdd(c);
+    if (!mounted) return;
+    setState(() => _added.add(c.code));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content:
+          Text(added ? 'Added “${c.name}”' : '“${c.name}” is already added'),
+      duration: const Duration(seconds: 2),
+    ));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    return AlertDialog(
+      title: const Text('Describe what you experience'),
+      content: SizedBox(
+        width: 440,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'In your own words — symptoms, how it affects you, when it '
+              'happens. We\'ll suggest possible conditions and confirm each '
+              'against the ICD-10 registry. These are suggestions to review, '
+              'not a diagnosis.',
+              style: TextStyle(
+                  fontSize: 12.5, height: 1.4, color: cs.onSurfaceVariant),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _ctrl,
+              minLines: 2,
+              maxLines: 4,
+              autofocus: true,
+              textInputAction: TextInputAction.search,
+              onSubmitted: (_) => _find(),
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'e.g. long stretches where I feel hopeless and '
+                    'can\'t get out of bed',
+              ),
+            ),
+            const SizedBox(height: 10),
+            Align(
+              alignment: Alignment.centerRight,
+              child: FilledButton.icon(
+                onPressed: _loading ? null : _find,
+                icon: _loading
+                    ? const SizedBox(
+                        width: 16,
+                        height: 16,
+                        child: CircularProgressIndicator(strokeWidth: 2))
+                    : const Icon(Icons.auto_awesome, size: 16),
+                label: Text(_loading ? 'Finding…' : 'Find matches'),
+              ),
+            ),
+            if (_searched && !_loading) ...[
+              const SizedBox(height: 8),
+              if (_results.isEmpty)
+                Text(
+                  'No close matches. Try adding more detail, or use the search '
+                  'box on the page if you know part of the name.',
+                  style: TextStyle(fontSize: 12.5, color: cs.onSurfaceVariant),
+                )
+              else
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxHeight: 240),
+                  child: ListView(
+                    shrinkWrap: true,
+                    children: [for (final c in _results) _resultRow(c, cs)],
+                  ),
+                ),
+              const SizedBox(height: 8),
+              Text(
+                'Suggestions only — confirm with your records or your doctor. '
+                'Codes from NIH Clinical Tables (ICD-10-CM).',
+                style: TextStyle(
+                    fontSize: 10.5,
+                    fontStyle: FontStyle.italic,
+                    color: cs.onSurfaceVariant),
+              ),
+            ],
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Done'),
+        ),
+      ],
+    );
+  }
+
+  Widget _resultRow(IcdCondition c, ColorScheme cs) {
+    final added = _added.contains(c.code);
+    return InkWell(
+      onTap: added ? null : () => _add(c),
+      borderRadius: BorderRadius.circular(7),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 6),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              margin: const EdgeInsets.only(top: 1),
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+              decoration: BoxDecoration(
+                color: cs.surfaceContainerHighest,
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Text(c.code,
+                  style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.w700,
+                      color: cs.primary)),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(c.name,
+                  style: const TextStyle(
+                      fontSize: 13, fontWeight: FontWeight.w600)),
+            ),
+            const SizedBox(width: 8),
+            Icon(added ? Icons.check_circle : Icons.add_circle_outline,
+                color: cs.primary, size: 20),
+          ],
+        ),
+      ),
+    );
   }
 }
