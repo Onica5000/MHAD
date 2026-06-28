@@ -317,6 +317,10 @@ extension _PipelineApplyLogic on _PipelineScreenState {
     }
 
     // ── Apply allergies → DirectiveAllergies table ────────────────────
+    // Drug allergens applied here are also candidates for the "Medications I
+    // never want" list — offered (never auto) via a prompt after everything
+    // else is applied (see the end of this method).
+    final appliedDrugAllergens = <String>[];
     if (validated != null) {
       final existingAllergies = await repo.getAllergies(id);
       final existingSubstances =
@@ -340,6 +344,7 @@ extension _PipelineApplyLogic on _PipelineScreenState {
           reactions: Value(a.reactions ?? ''),
           sortOrder: Value(allergyOrder++),
         ));
+        if (kind == 'drug') appliedDrugAllergens.add(a.substance);
         applied++;
       }
     }
@@ -591,6 +596,18 @@ extension _PipelineApplyLogic on _PipelineScreenState {
     // Each additional-instruction field actually written counts once (review
     // pass-throughs + smart-fill both land in instrMap).
     applied += instrMap.length;
+
+    // Offer to also add applied drug allergies to "Medications I never want"
+    // (opt-in prompt, never automatic — mirrors the manual allergies step).
+    if (mounted && appliedDrugAllergens.isNotEmpty) {
+      applied += await promptAddDrugAllergiesToNeverWant(
+        context: context,
+        repo: repo,
+        directiveId: id,
+        drugSubstances: appliedDrugAllergens,
+      );
+    }
+
     _onApplied(applied);
   }
 

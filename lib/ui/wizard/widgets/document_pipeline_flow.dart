@@ -25,6 +25,7 @@ import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/friendly_error.dart';
 import 'package:mhad/ui/widgets/nlm_attribution.dart';
 import 'package:mhad/ui/wizard/widgets/document_import_sheet.dart';
+import 'package:mhad/ui/wizard/widgets/never_want_crossadd.dart';
 import 'package:mhad/ui/wizard/widgets/pipeline_reconciliation.dart';
 import 'package:mhad/utils/clipboard_paste.dart';
 import 'package:mhad/utils/platform_utils.dart';

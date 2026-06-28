@@ -10,6 +10,7 @@ import 'package:mhad/utils/debouncer.dart';
 import 'package:mhad/ui/widgets/design/health_chip.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/nlm_attribution.dart';
+import 'package:mhad/ui/wizard/widgets/never_want_crossadd.dart';
 import 'package:mhad/ui/wizard/widgets/wizard_help_button.dart';
 import 'package:mhad/ui/wizard/wizard_mixins.dart';
 
@@ -159,6 +160,7 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
   Future<void> _addAllergy() async {
     final name = _substanceCtrl.text.trim();
     if (name.isEmpty) return;
+    final wasDrug = _kind == _AllergyKind.drug;
     await ref.read(directiveRepositoryProvider).addAllergy(
           DirectiveAllergiesCompanion.insert(
             directiveId: widget.directiveId,
@@ -176,6 +178,23 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
       _suggestions = [];
     });
     await _loadData();
+
+    // A drug allergy is often also a medication to refuse. Offer (never auto)
+    // to add it to the "Medications I never want" list. See
+    // never_want_crossadd.dart.
+    if (wasDrug && mounted) {
+      final added = await promptAddDrugAllergiesToNeverWant(
+        context: context,
+        repo: ref.read(directiveRepositoryProvider),
+        directiveId: widget.directiveId,
+        drugSubstances: [name],
+      );
+      if (added > 0 && mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Added $name to “Medications I never want”.')),
+        );
+      }
+    }
   }
 
   Future<void> _removeAllergy(int id) async {
