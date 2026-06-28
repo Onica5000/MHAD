@@ -15,12 +15,15 @@ folders, their plugins, and `codemagic.yaml`'s native jobs **stay in the tree** 
 remove without confirmation) — they're just not a development priority. Windows desktop
 remains buildable but is secondary to web.
 
-When implementing screens from the design bundle (`MHAD-handoff/bundle/`), assume Material
-3 + a responsive web layout. Lean toward Material affordances (`Scaffold`, `FilledButton`,
-`MaterialPageRoute`) and avoid `Cupertino*` widgets — keep the codebase Cupertino-free.
+When implementing screens, assume Material 3 + a responsive web layout. Lean toward
+Material affordances (`Scaffold`, `FilledButton`, `MaterialPageRoute`) and avoid
+`Cupertino*` widgets — keep the codebase Cupertino-free.
 
-Source PDF: `PA MHAD.pdf`. Plan: `ACTION_PLAN.md`. Design bundle: `MHAD-handoff/bundle/`
-(refreshed 2026-06-04 with Android/Chrome platform-tag chrome).
+The shipped UI/UX (fonts, layout, look) is the source of truth — preserve it. The old
+Claude Design artboard/handoff bundle was removed 2026-06-28 (it had served its purpose
+and was stale); do not reintroduce it or design against it.
+
+Source PDF: `PA MHAD.pdf`. Plan: `ACTION_PLAN.md`.
 
 ## Flutter / Dart
 - Flutter 3.41.4, Dart 3.11.1
@@ -90,7 +93,7 @@ This regenerates `app_database.g.dart`.
   top-level screens. **Wide ≥1000px**: persistent `WebSidebar` via `ResponsiveShell`.
 - `app_drawer.dart` was deleted — do not reintroduce a Scaffold `drawer:`.
 - Secondary destinations (New directive, Export, AI setup, Privacy policy) are reached
-  contextually, not via global nav (mirrors the prototype).
+  contextually, not via global nav.
 
 ## Localization (single mechanism)
 - Use **only** the generated `AppLocalizations` (ARB files in `lib/l10n/app_*.arb`,

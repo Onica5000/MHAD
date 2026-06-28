@@ -19,8 +19,8 @@ The app supports all three PA Act 194 form types: **Combined Declaration + Power
 ## Features
 
 - **Adaptive guided wizard** that ranges from 6 to 11 steps depending on form type — **Combined 11 / Declaration 9 / POA 6**. Steps: `About you`, `When this kicks in`, `People I trust` (POA/Combined), `If a court appoints a guardian` (POA/Combined), `Where I want care`, `Diagnoses`, `Medications`, `Allergies & reactions`, `Procedures & research`, `Anything else`, `Review & sign`. Each step supports embedded clinical autocomplete (ICD-10-CM diagnoses, RxTerms medications) and a backward-nudge model that surfaces cross-step contradictions instead of auto-mutating earlier steps.
-- **Editorial visual design** based on a Claude-Design HTML/CSS handoff — Instrument Serif italic display, DM Sans body, JetBrains Mono labels (all three font families bundled, no runtime fetch).
-- **Navigation tuned to the prototype:** a floating pill **bottom nav** on mobile (Home · Learn · Ask · Settings) and a persistent **WebSidebar** on wide screens (≥1000px). No hamburger drawer.
+- **Editorial visual design** — Instrument Serif italic display, DM Sans body, JetBrains Mono labels (all three font families bundled, no runtime fetch).
+- **Navigation:** a floating pill **bottom nav** on mobile (Home · Learn · Ask · Settings) and a persistent **WebSidebar** on wide screens (≥1000px). No hamburger drawer.
 - **AI assistant** (Google Gemini 3.5 Flash) for guided help, smart-fill suggestions, document import, and a **cross-step consistency check** at Review — entirely optional, with per-session affirmative consent and PII-stripping at a single named chokepoint (`GeminiApiAssistant.sanitizeForApi`). The consistency check warns but never blocks PDF generation.
 - **Crisis plan / wellness toolbox** — optional add-on capturing early warning signs, triggers, what genuinely helps, things to say, and what *not* to do; read by agents and ER staff first.
 - **Self-binding (Ulysses) clause** — explicit opt-in confirming the structural effect of PA Act 194 § 5802 (a signed directive binds you when you later refuse care during a crisis).
@@ -148,7 +148,6 @@ lib/
     widgets/design/                    -- bottom_nav, web_sidebar, responsive_shell, …
 docs/                                  -- ACTION_PLAN, BREACH_PLAN, THREAT_MODEL, GAP_ANALYSIS_V4
 PRIVACY_POLICY.md                      -- Public privacy policy source (mirrors in-app)
-MHAD-handoff/                          -- Claude-Design HTML/CSS prototype source (reference)
 ```
 
 For deeper architecture and conventions, see [`CLAUDE.md`](./CLAUDE.md).

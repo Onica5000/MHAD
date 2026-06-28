@@ -6,8 +6,10 @@
 > still cite specific § numbers from this document (e.g. `§ D.5`,
 > `§ B.4`), so the file stays in place even though the broader audit it
 > companioned (`PROTOTYPE_DIFF_AUDIT.md`) and the follow-up coverage docs
-> have been removed. The current state-of-the-world for prototype parity
-> lives in `docs/PROTOTYPE_AUDIT.md`.
+> have been removed. The old Claude Design artboard/handoff bundle and its
+> parity tracker (`docs/PROTOTYPE_AUDIT.md`) were also removed on 2026-06-28 —
+> the artboard is stale and the shipped UI/UX in `lib/ui/` is now the source
+> of truth. This log is kept only because the § numbering is load-bearing.
 >
 > 🔄 **Two staleness caveats (2026-06-20):** (1) the "**To submit to Claude
 > Design**" queue below is largely **resolved** — the screens it asked about
