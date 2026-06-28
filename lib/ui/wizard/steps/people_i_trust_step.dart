@@ -416,10 +416,16 @@ class _AgentCardState extends ConsumerState<_AgentCard> {
                     ],
                   ),
                 if (hasName) const SizedBox(height: 12),
-                // Embedded data-entry form. Function preserved — every
-                // text field the user could touch before is here.
-                widget.form,
               ],
+              // Embedded data-entry form. Kept MOUNTED even when the card is
+              // collapsed (via Offstage) so in-progress edits aren't disposed
+              // and the wizard's `validateAndSave` can always reach this form
+              // through its GlobalKey — collapsing a card (or leaving the step
+              // with it collapsed) previously discarded everything typed here.
+              Offstage(
+                offstage: !isExpanded,
+                child: widget.form,
+              ),
             ],
           ),
         );
