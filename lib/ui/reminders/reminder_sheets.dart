@@ -18,8 +18,7 @@ import 'package:mhad/ui/widgets/design/section_label.dart';
 /// `expirationDate` (7-day cooldown), and `showQuarterlyCheckIn` when ≥90 days
 /// since `updatedAt` (90-day cooldown); renewal takes priority and at most one
 /// fires per launch. They are also reachable from the directive card overflow
-/// menu. (In-app on launch only — no OS notification scheduling, per the
-/// 2026-06-02 decision in PROTOTYPE_AUDIT.)
+/// menu. (In-app on launch only — no OS notification scheduling.)
 
 /// Renewal nudge — "Time to renew, [Name]. / Expires in N days."
 /// Mirrors prototype `ScrRenew`.
