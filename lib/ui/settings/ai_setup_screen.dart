@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mhad/constants.dart';
+import 'package:mhad/ai/ai_provider.dart';
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/ui/router.dart';
@@ -33,19 +33,34 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
   final _keyCtrl = TextEditingController();
   bool _saving = false;
   bool _obscure = true;
+  late AiProvider _provider;
+  late String _model;
 
   bool get _isEphemeral => isEphemeralApiKeyMode(ref);
 
   @override
   void initState() {
     super.initState();
-    // Pre-fill only in private mode (persisted key)
-    if (!_isEphemeral) {
-      final existing = ref.read(apiKeyProvider).whenOrNull(data: (k) => k);
-      if (existing != null && existing.isNotEmpty) {
-        _keyCtrl.text = existing;
-      }
-    }
+    _provider = ref.read(activeProviderProvider);
+    _model = ref.read(activeModelProvider);
+    _prefillKeyFor(_provider);
+  }
+
+  /// Pre-fill the key field with the stored key for [p] (private mode only; in
+  /// ephemeral mode the key isn't surfaced back into the field).
+  void _prefillKeyFor(AiProvider p) {
+    final existing = ref.read(aiPrefsProvider).valueOrNull?.keys[p];
+    _keyCtrl.text = (!_isEphemeral && existing != null) ? existing : '';
+  }
+
+  void _onProviderChanged(AiProvider p) {
+    setState(() {
+      _provider = p;
+      _model = ref.read(aiPrefsProvider).valueOrNull?.modelFor(p) ??
+          p.defaultModel;
+      _prefillKeyFor(p);
+      _obscure = true;
+    });
   }
 
   @override
@@ -59,20 +74,22 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
     final key = _keyCtrl.text.trim();
     if (key.isEmpty) return;
 
-    // Basic format validation (shared heuristic — real Gemini keys pass).
-    if (!isLikelyGeminiKey(key)) {
+    // Basic per-provider format validation (a real key always passes).
+    if (!_provider.looksLikeKey(key)) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text(
-              'That doesn\'t look like a valid API key. '
-              'Gemini keys are typically 39 characters starting with "AIza".'),
+              "That doesn't look like a valid ${_provider.label} key "
+              '(${_provider.keyHint}).'),
         ),
       );
       return;
     }
 
     setState(() => _saving = true);
-    await saveApiKey(ref, key);
+    await setActiveProvider(ref, _provider);
+    await setActiveModel(ref, _model);
+    await saveApiKey(ref, key, provider: _provider);
     if (mounted) {
       setState(() => _saving = false);
       ScaffoldMessenger.of(context).showSnackBar(
@@ -117,7 +134,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
       ),
     );
     if (confirmed == true) {
-      await deleteApiKey(ref);
+      await deleteApiKey(ref, provider: _provider);
       _keyCtrl.clear();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -145,15 +162,48 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
     }
   }
 
-  static Uri get _aiStudioUri => Uri.parse(appData.geminiApiKeyUrl);
+  /// Where to create a key for the selected provider. Gemini uses the
+  /// admin-updatable app_data URL; others use the provider's console URL.
+  Uri get _getKeyUri => Uri.parse(_provider == AiProvider.gemini
+      ? appData.geminiApiKeyUrl
+      : _provider.getKeyUrl);
+
+  /// Short example of the selected provider's key shape (field hint).
+  String get _keyExample => switch (_provider) {
+        AiProvider.gemini => 'AIza...',
+        AiProvider.anthropic => 'sk-ant-...',
+        AiProvider.openai => 'sk-...',
+        AiProvider.grok => 'xai-...',
+      };
+
+  /// Provider-aware privacy-notice body.
+  String get _privacyNotice {
+    final lead = _provider == AiProvider.gemini
+        ? 'On the Gemini free tier, Google may use data you send to improve '
+            'their AI products, and human reviewers may read your inputs.'
+        : 'Your ${_provider.label} key sends data to ${_provider.label}; '
+            'their data-use and retention policy applies.';
+    final keyLine = _isEphemeral
+        ? 'Your API key is kept in memory for this session, with a temporary '
+            'copy for up to 10 minutes (for crash recovery); it is discarded '
+            'when the session ends.'
+        : 'Your API key is stored securely on this device only and is never '
+            'shared with anyone other than your AI provider.';
+    return '$lead\n\n'
+        'The AI features in this app send text you enter in form fields and '
+        "chat messages to your AI provider's servers. Do not include "
+        'personally identifying details (full legal name, Social Security '
+        'number, date of birth, etc.) in AI chat or when using AI Suggest.'
+        '\n\n$keyLine';
+  }
 
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
-    final hasKey = ref.watch(apiKeyProvider).whenOrNull(
-              data: (k) => k != null && k.isNotEmpty,
-            ) ??
-        false;
+    // Whether the SELECTED provider (not necessarily the active one) has a key.
+    final hasKey =
+        ref.watch(aiPrefsProvider).valueOrNull?.keys[_provider]?.isNotEmpty ??
+            false;
 
     return Scaffold(
       appBar: AppBar(
@@ -205,16 +255,33 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
             const SizedBox(height: 16),
           ],
 
+          // ---- Provider + model ----
+          _ProviderModelPicker(
+            provider: _provider,
+            model: _model,
+            onProviderChanged: _onProviderChanged,
+            onModelChanged: (m) => setState(() => _model = m),
+          ),
+          const SizedBox(height: 16),
+
           // ---- Instructions ----
-          Text('Get Your Free Gemini API Key',
+          Text(
+              _provider == AiProvider.gemini
+                  ? 'Get Your Free Gemini API Key'
+                  : 'Add Your ${_provider.label} API Key',
               style: Theme.of(context)
                   .textTheme
                   .titleMedium
                   ?.copyWith(fontWeight: FontWeight.bold)),
           const SizedBox(height: 6),
           Text(
-            'The AI assistant uses Google\'s Gemini model. You need a '
-            'free API key from Google AI Studio — it takes about 30 seconds.',
+            _provider == AiProvider.gemini
+                ? 'The assistant uses Google\'s Gemini model. You need a free '
+                    'API key from Google AI Studio — it takes about 30 seconds.'
+                : 'You bring your own ${_provider.label} API key. Your '
+                    'provider\'s usage limits and billing apply — this app '
+                    'never sees or charges for your usage. Gemini stays the '
+                    'free default if you\'d rather not pay.',
             style: TextStyle(
                 fontSize: 13, color: cs.onSurfaceVariant, height: 1.4),
           ),
@@ -314,38 +381,46 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
           ),
           const SizedBox(height: 16),
 
-          // ---- Step 2: Open AI Studio ----
+          // ---- Step 2: Open the provider's key page ----
           _StepTile(
             number: '2',
-            title: 'Open Google AI Studio (in your private window)',
-            subtitle: 'Use any Google account (personal Gmail works fine)',
+            title: _provider == AiProvider.gemini
+                ? 'Open Google AI Studio (in your private window)'
+                : 'Open ${_provider.label} (in your private window)',
+            subtitle: _provider == AiProvider.gemini
+                ? 'Use any Google account (personal Gmail works fine)'
+                : 'Sign in, then open the API keys page',
             trailing: OutlinedButton.icon(
-              onPressed: () => launchUrl(_aiStudioUri,
+              onPressed: () => launchUrl(_getKeyUri,
                   mode: LaunchMode.externalApplication),
               icon: const Icon(Icons.open_in_new, size: 16),
-              label: const Text('Open AI Studio'),
+              label: Text(_provider == AiProvider.gemini
+                  ? 'Open AI Studio'
+                  : 'Open ${_provider.label}'),
             ),
           ),
-          const _StepTile(
+          _StepTile(
             number: '3',
-            title: 'Sign in with Google',
-            subtitle:
-                'No credit card or payment is needed. '
-                'The free tier is generous and sufficient for this app.',
+            title: _provider == AiProvider.gemini
+                ? 'Sign in with Google'
+                : 'Sign in to ${_provider.label}',
+            subtitle: _provider == AiProvider.gemini
+                ? 'No credit card or payment is needed. The free tier is '
+                    'generous and sufficient for this app.'
+                : 'Most providers require a paid account with credits to use '
+                    'the API. Your provider bills you directly.',
           ),
           const _StepTile(
             number: '4',
             title: 'Create an API key',
-            subtitle:
-                'Click "Create API key" on the API keys page. '
-                'If prompted, select "Create API key in new project" — '
-                'the defaults are fine.',
+            subtitle: 'Create a new API key on the API keys page; the '
+                'defaults are fine.',
           ),
           _StepTile(
             number: '5',
             title: 'Copy and paste below',
             subtitle:
-                'The key starts with "AIza..." — copy it, then '
+                'The key looks like "${_provider.keyHint}" — copy it, then '
                 'use the paste button or paste it manually.',
             trailing: hasKey
                 ? Builder(builder: (context) {
@@ -376,8 +451,8 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
             controller: _keyCtrl,
             obscureText: _obscure,
             decoration: InputDecoration(
-              labelText: 'Gemini API Key',
-              hintText: 'AIza...',
+              labelText: '${_provider.label} API Key',
+              hintText: _keyExample,
               border: const OutlineInputBorder(),
               suffixIcon: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -440,18 +515,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'On the Gemini free tier, Google may use data you send '
-                    'to improve their AI products, and human reviewers may '
-                    'read your inputs.\n\n'
-                    'The AI features in this app send text you enter in form '
-                    'fields and chat messages to Google\'s servers. '
-                    'Do not include personally identifying details (full '
-                    'legal name, Social Security number, date of birth, etc.) '
-                    'in AI chat or when using AI Suggest.\n\n'
-                    '${_isEphemeral ? 'Your API key is kept in memory for this session, with a '
-                        'temporary copy for up to 10 minutes (for crash '
-                        'recovery); it is discarded when the session ends.' : 'Your API key is stored securely on this device only and '
-                        'is never shared with anyone other than Google.'}',
+                    _privacyNotice,
                     style: TextStyle(fontSize: 12, color: cs.onErrorContainer),
                   ),
                 ],
@@ -496,7 +560,8 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
             ),
           ),
 
-          // ---- FAQ section ----
+          // ---- FAQ section (Gemini-specific) ----
+          if (_provider == AiProvider.gemini) ...[
           const SizedBox(height: 24),
           Text('Common Questions',
               style: Theme.of(context)
@@ -531,11 +596,86 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                 'generation, educational content, and all other features '
                 'do not require an API key. AI is purely optional.',
           ),
+          ],
           const SizedBox(height: 40),
         ],
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// Provider + model selector at the top of the setup screen. Switching the
+/// provider swaps the key field, validation, instructions, and model list.
+class _ProviderModelPicker extends StatelessWidget {
+  final AiProvider provider;
+  final String model;
+  final ValueChanged<AiProvider> onProviderChanged;
+  final ValueChanged<String> onModelChanged;
+
+  const _ProviderModelPicker({
+    required this.provider,
+    required this.model,
+    required this.onProviderChanged,
+    required this.onModelChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    // The active model may not be in the curated list (e.g. a Gemini id set via
+    // app_data) — include it so the dropdown can render the current selection.
+    final models = <String>[
+      ...provider.models,
+      if (!provider.models.contains(model)) model,
+    ];
+    return Card(
+      color: cs.surfaceContainerHighest,
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            DropdownButtonFormField<AiProvider>(
+              initialValue: provider,
+              isExpanded: true,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'AI provider',
+              ),
+              items: [
+                for (final p in AiProvider.values)
+                  DropdownMenuItem(
+                    value: p,
+                    child: Text(p == AiProvider.gemini
+                        ? '${p.label} (free)'
+                        : p.label),
+                  ),
+              ],
+              onChanged: (p) {
+                if (p != null) onProviderChanged(p);
+              },
+            ),
+            const SizedBox(height: 12),
+            DropdownButtonFormField<String>(
+              initialValue: models.contains(model) ? model : models.first,
+              isExpanded: true,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Model',
+              ),
+              items: [
+                for (final m in models)
+                  DropdownMenuItem(value: m, child: Text(m)),
+              ],
+              onChanged: (m) {
+                if (m != null) onModelChanged(m);
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

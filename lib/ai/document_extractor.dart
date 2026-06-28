@@ -1,23 +1,43 @@
 ﻿import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:google_generative_ai/google_generative_ai.dart';
+import 'package:google_generative_ai/google_generative_ai.dart' show Schema;
 import 'package:http/http.dart' as http;
 import 'package:image/image.dart' as img;
+import 'package:mhad/ai/ai_provider.dart';
 import 'package:mhad/ai/document_extraction_result.dart';
+import 'package:mhad/ai/llm_client.dart';
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/services/certificate_pinning_service.dart';
 
-/// Sends a document (image, PDF, or text) to Gemini and extracts structured
-/// MHAD-relevant fields (medications, conditions, facilities, etc.).
+/// Sends a document (image, PDF, text, or audio) to the active AI provider and
+/// extracts structured MHAD-relevant fields (medications, conditions,
+/// facilities, etc.). Multimodal: images work on every provider; PDFs on
+/// Gemini + Claude; other kinds (audio) on Gemini only — see [LlmClient].
 class DocumentExtractor {
+  final AiProvider provider;
+  final String model;
   final String apiKey;
   final http.Client _httpClient;
+  late final LlmClient _llm;
 
-  DocumentExtractor({required this.apiKey})
-      : _httpClient = CertificatePinningService.createPinnedClient();
-
-  static String get _model => appData.ai.model;
+  DocumentExtractor({
+    required this.apiKey,
+    this.provider = AiProvider.gemini,
+    String? model,
+  })  : model = (model != null && model.trim().isNotEmpty)
+            ? model.trim()
+            : (provider == AiProvider.gemini
+                ? appData.ai.model
+                : provider.defaultModel),
+        _httpClient = CertificatePinningService.createPinnedClient() {
+    _llm = LlmClient(
+      provider: provider,
+      model: this.model,
+      apiKey: apiKey,
+      httpClient: _httpClient,
+    );
+  }
 
   // Gemini tiles images into 768x768 chunks at ~258 tokens each.
   // 1024px max keeps a portrait document to ~2 tiles (~516 tokens).
@@ -35,13 +55,6 @@ class DocumentExtractor {
     required String existing,
     required String extracted,
   }) async {
-    final model = GenerativeModel(
-      model: _model,
-      apiKey: apiKey,
-      httpClient: _httpClient,
-      generationConfig:
-          GenerationConfig(maxOutputTokens: appData.ai.maxOutputTokens),
-    );
     final prompt = '''
 You are merging two notes the same person wrote for the "$fieldLabel" field of their Pennsylvania Mental Health Advance Directive. Combine them into ONE clear, non-redundant, first-person statement that preserves EVERY distinct piece of information from BOTH notes. Do not add anything new, do not give advice, do not include any preamble or labels. Return ONLY the merged text.
 
@@ -51,11 +64,13 @@ $existing
 NEW:
 $extracted''';
     try {
-      final resp = await model
-          .generateContent([Content.text(prompt)]).timeout(
-              appData.config.documentExtractionTimeout);
-      final text = resp.text?.trim();
-      return (text == null || text.isEmpty) ? extracted : text;
+      final raw = await _llm.generateText(
+        prompt,
+        timeout: appData.config.documentExtractionTimeout,
+        maxOutputTokens: appData.ai.maxOutputTokens,
+      );
+      final text = raw.trim();
+      return text.isEmpty ? extracted : text;
     } catch (_) {
       return extracted; // fail-safe: caller keeps the extracted value
     }
@@ -70,25 +85,8 @@ $extracted''';
     // preferences-only; Combined = everything). 'combined' if unspecified.
     String formType = 'combined',
   }) async {
-    final model = GenerativeModel(
-      model: _model,
-      apiKey: apiKey,
-      httpClient: _httpClient,
-      generationConfig: GenerationConfig(
-        responseMimeType: 'application/json',
-        // A strict schema forces a complete, consistent shape every run.
-        responseSchema: _extractionSchema,
-        // NOTE: temperature/top_p/top_k are intentionally NOT set. Google
-        // advises removing them for Gemini 3.x models (they degrade output and
-        // were a likely cause of the model under-extracting). Determinism now
-        // comes from the strict schema + an exhaustive prompt, not temperature.
-        // Headroom so a long document (many meds / long notes) is never cut off.
-        maxOutputTokens: appData.ai.maxOutputTokens,
-      ),
-    );
-
-    final parts = <Part>[TextPart(_extractionPrompt + _formScope(formType))];
-    List<String> piiStripped = [];
+    final parts = <LlmPart>[LlmText(_extractionPrompt + _formScope(formType))];
+    final List<String> piiStripped = [];
 
     if (mimeType.startsWith('text/')) {
       // Text files — sent as-is (no local PII stripping). Autofill is the one
@@ -97,26 +95,31 @@ $extracted''';
       // already sent unredacted. (The hardcoded PII rule still applies to every
       // OTHER AI path — suggestions, chat, context.)
       final rawText = utf8.decode(bytes, allowMalformed: true);
-      parts.add(TextPart('--- DOCUMENT CONTENT ---\n$rawText'));
+      parts.add(LlmText('--- DOCUMENT CONTENT ---\n$rawText'));
     } else if (mimeType.startsWith('image/')) {
-      // Images — cannot strip PII client-side, rely on prompt instruction
-      final optimized = _optimizeImage(bytes);
-      parts.add(DataPart('image/jpeg', optimized));
+      // Images — cannot strip PII client-side, rely on prompt instruction.
+      parts.add(LlmData('image/jpeg', _optimizeImage(bytes)));
     } else {
-      // PDFs and audio — sent as-is (DataPart). Cannot strip PII client-side;
-      // rely on the prompt instruction. Gemini reads PDFs and transcribes audio
-      // natively, so the same multimodal request handles both.
-      parts.add(DataPart(mimeType, bytes));
+      // PDFs (Gemini/Claude) and audio (Gemini only) — sent as-is. A provider
+      // that can't read the kind throws an [UnsupportedInputError] the caller
+      // surfaces with a "switch provider / paste text" message.
+      parts.add(LlmData(mimeType, bytes));
     }
 
-    final response = await model
-        .generateContent([Content.multi(parts)]).timeout(
-      appData.config.documentExtractionTimeout,
+    // The strict schema (Gemini-only) forces a complete, consistent JSON shape;
+    // other providers rely on the prompt. temperature/top_p/top_k are
+    // intentionally unset (Google advises removing them for Gemini 3.x).
+    final text = await _llm.generateMultimodal(
+      parts: parts,
+      json: true,
+      geminiSchema: _extractionSchema,
+      timeout: appData.config.documentExtractionTimeout,
+      // Headroom so a long document (many meds / long notes) is never cut off.
+      maxOutputTokens: appData.ai.maxOutputTokens,
     );
 
-    final text = response.text;
-    if (text == null || text.isEmpty) {
-      throw Exception('Empty response from Gemini');
+    if (text.isEmpty) {
+      throw Exception('Empty response from the AI');
     }
 
     return ExtractionWithPiiReport(

@@ -2,53 +2,14 @@ import 'dart:convert';
 
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:http/http.dart' as http;
+import 'package:mhad/ai/ai_provider.dart';
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/data/educational_content.dart';
 
-/// Which major AI provider the admin tool drafts updates with. Gemini uses the
-/// bundled `google_generative_ai` package; Anthropic and OpenAI are called
-/// directly over their REST APIs. This is ONLY reachable inside the gated admin
-/// tool — it is not a user-facing setting.
-enum AdminAiProvider {
-  // A short, curated set of the most useful models per provider (not the full
-  // catalog). First entry is the default. Edit these lists as models change.
-  gemini('Google Gemini', 'Gemini API key (AIza…)', [
-    'gemini-3.5-flash',
-    'gemini-2.5-flash',
-    'gemini-2.5-pro',
-    'gemini-2.5-flash-lite',
-  ]),
-  anthropic('Anthropic Claude', 'Anthropic key (sk-ant-…)', [
-    'claude-opus-4-8',
-    'claude-sonnet-4-6',
-    'claude-haiku-4-5',
-  ]),
-  openai('OpenAI GPT', 'OpenAI key (sk-…)', [
-    'gpt-4o',
-    'gpt-4o-mini',
-    'gpt-4.1',
-    'o3',
-  ]),
-  grok('xAI Grok', 'xAI key (xai-…)', [
-    'grok-4',
-    'grok-3',
-    'grok-3-mini',
-  ]);
-
-  const AdminAiProvider(this.label, this.keyHint, this.models);
-
-  /// Human-facing provider name for the dropdown.
-  final String label;
-
-  /// Placeholder/help shown on the API-key field for this provider.
-  final String keyHint;
-
-  /// The curated list of useful models for this provider (first = default).
-  final List<String> models;
-
-  /// Default model id (the first curated model).
-  String get defaultModel => models.first;
-}
+/// The admin tool drafts updates with the same provider set the user-facing AI
+/// uses — see [AiProvider] (lib/ai/ai_provider.dart), the single source of
+/// truth. Kept as an alias so existing admin call sites read unchanged.
+typedef AdminAiProvider = AiProvider;
 
 /// Which dynamic-data file the admin flow is editing. Each is a separate
 /// bundled JSON asset committed to the repo; the AI drafts changes against the

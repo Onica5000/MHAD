@@ -12,8 +12,8 @@ extension _PipelineApplyLogic on _PipelineScreenState {
   // ── Smart Fill generation ───────────────────────────────────────────
 
   Future<void> _runSmartFill() async {
-    final apiKey = ref.read(apiKeyProvider).valueOrNull;
-    if (apiKey == null || _validated == null) return;
+    final aiCfg = ref.read(aiConfigProvider);
+    if (aiCfg == null || _validated == null) return;
 
     setState(() {
       _step = _PipelineStep.generating;
@@ -21,7 +21,11 @@ extension _PipelineApplyLogic on _PipelineScreenState {
     });
 
     try {
-      final service = SmartFillService(apiKey: apiKey);
+      final service = SmartFillService(
+        apiKey: aiCfg.key,
+        provider: aiCfg.provider,
+        model: aiCfg.model,
+      );
       final response = await service.generate(SmartFillInput(
         conditions: _validated!.icdConditions,
         currentMedications: _validated!.validatedPreferredMedNames,

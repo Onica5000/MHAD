@@ -61,9 +61,10 @@ void main() {
     final dbEncryptionKey =
         await DatabaseEncryptionService.getOrCreateKey();
 
-    // Pre-load cached API key from SharedPreferences so it's available
-    // synchronously on the first frame (avoids async race on web reload).
-    final cachedApiKey = await PublicSessionCache.getCachedApiKey();
+    // Pre-load cached AI prefs (per-provider keys / active provider / models)
+    // from SharedPreferences so they're available synchronously on the first
+    // frame (avoids async race on web reload).
+    final cachedAiPrefs = await PublicSessionCache.getCachedPrefs();
 
     // Privacy mode starts fresh every launch (not persisted)
     final privacyModeNotifier = PrivacyModeNotifier();
@@ -82,9 +83,10 @@ void main() {
         // Inject the database encryption key so appDatabaseProvider can use it
         // to open the SQLCipher-encrypted database in private mode.
         dbEncryptionKeyProvider.overrideWithValue(dbEncryptionKey),
-        // Pre-loaded API key from SharedPreferences cache (avoids async race
+        // Pre-loaded AI prefs from SharedPreferences cache (avoids async race
         // on web page reload).
-        preloadedApiKeyProvider.overrideWith((_) => cachedApiKey),
+        if (cachedAiPrefs != null)
+          preloadedAiPrefsProvider.overrideWith((_) => cachedAiPrefs),
       ],
       child: const MhadApp(),
     ));

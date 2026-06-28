@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
+import 'package:mhad/ai/ai_prefs.dart';
+import 'package:mhad/ai/ai_provider.dart';
 import 'package:mhad/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -9,7 +13,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// session. After the TTL expires, cached data is automatically discarded.
 ///
 /// Cached items:
-/// - Gemini API key (so the user doesn't have to re-enter it)
+/// - AI config ([AiPrefs]): the per-provider API keys, active provider, and
+///   chosen models (so the user doesn't have to re-enter them).
 ///
 /// This cache is separate from [DraftRecoveryService] which handles form
 /// data. Together they allow a near-complete session recovery after a crash.
@@ -21,44 +26,52 @@ class PublicSessionCache {
 
   static Duration get ttl => sessionCacheTtl;
 
-  static const _apiKeyKey = 'public_session_api_key';
+  static const _prefsKey = 'public_session_ai_prefs'; // JSON AiPrefs
+  static const _legacyKeyKey = 'public_session_api_key'; // old single Gemini key
   static const _timestampKey = 'public_session_timestamp';
 
-  // ── API key cache ────────────────────────────────────────────────────
+  // ── AI config cache ──────────────────────────────────────────────────
 
-  /// Cache the API key with a timestamp.
-  static Future<void> cacheApiKey(String key) async {
+  /// Cache the full AI config with a timestamp.
+  static Future<void> cachePrefs(AiPrefs prefs) async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString(_apiKeyKey, key);
-      await prefs.setString(
-          _timestampKey, DateTime.now().toIso8601String());
+      final p = await SharedPreferences.getInstance();
+      await p.setString(_prefsKey, jsonEncode(prefs.toJson()));
+      await p.setString(_timestampKey, DateTime.now().toIso8601String());
     } catch (e) {
-      debugPrint('PublicSessionCache: failed to cache API key: $e');
+      debugPrint('PublicSessionCache: failed to cache prefs: $e');
     }
   }
 
-  /// Retrieve the cached API key if it's still within TTL.
-  /// Returns null if expired or not found.
-  static Future<String?> getCachedApiKey() async {
+  /// Retrieve the cached AI config if still within TTL (null if expired/absent).
+  /// Migrates an older single-key cache to the new per-provider shape.
+  static Future<AiPrefs?> getCachedPrefs() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final ts = prefs.getString(_timestampKey);
+      final p = await SharedPreferences.getInstance();
+      final ts = p.getString(_timestampKey);
       if (ts == null) return null;
-
       final savedAt = DateTime.tryParse(ts);
       if (savedAt == null) return null;
-
-      final age = DateTime.now().difference(savedAt);
-      if (age > ttl) {
-        // Expired — clean up
-        await _clearApiKey(prefs);
+      if (DateTime.now().difference(savedAt) > ttl) {
+        await clearAll();
         return null;
       }
 
-      return prefs.getString(_apiKeyKey);
+      final raw = p.getString(_prefsKey);
+      if (raw != null) {
+        return AiPrefs.fromJson(jsonDecode(raw) as Map<String, dynamic>);
+      }
+      // Legacy: a single cached Gemini key from before multi-provider.
+      final legacy = p.getString(_legacyKeyKey);
+      if (legacy != null && legacy.isNotEmpty) {
+        return AiPrefs(
+          provider: AiProvider.gemini,
+          keys: {AiProvider.gemini: legacy},
+        );
+      }
+      return null;
     } catch (e) {
-      debugPrint('PublicSessionCache: failed to read cached API key: $e');
+      debugPrint('PublicSessionCache: failed to read cached prefs: $e');
       return null;
     }
   }
@@ -68,15 +81,12 @@ class PublicSessionCache {
   /// Clear all cached public session data. Call on explicit session end.
   static Future<void> clearAll() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      await _clearApiKey(prefs);
+      final p = await SharedPreferences.getInstance();
+      await p.remove(_prefsKey);
+      await p.remove(_legacyKeyKey);
+      await p.remove(_timestampKey);
     } catch (e) {
       debugPrint('PublicSessionCache: failed to clear: $e');
     }
-  }
-
-  static Future<void> _clearApiKey(SharedPreferences prefs) async {
-    await prefs.remove(_apiKeyKey);
-    await prefs.remove(_timestampKey);
   }
 }

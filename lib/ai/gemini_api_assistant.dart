@@ -2,11 +2,12 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:http/http.dart' as http;
 import 'package:mhad/ai/ai_assistant.dart';
 import 'package:mhad/ai/ai_clinical_policy.dart';
+import 'package:mhad/ai/ai_provider.dart';
 import 'package:mhad/ai/interaction_note.dart';
+import 'package:mhad/ai/llm_client.dart';
 import 'package:mhad/ai/pii_stripper.dart';
 import 'package:mhad/ai/side_effect_item.dart';
 import 'package:mhad/data/app_data/app_data.dart';
@@ -15,18 +16,61 @@ import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/services/certificate_pinning_service.dart';
 import 'package:mhad/services/openfda_service.dart';
 
-/// Calls the Google Gemini API (free tier).
+/// Backward-compatible name: the assistant is now provider-agnostic (Gemini is
+/// just the default). Still imported as `GeminiApiAssistant` across the app.
+typedef GeminiApiAssistant = LlmAssistant;
+
+/// The chat + structured-helper assistant, talking to any [AiProvider] through
+/// [LlmClient]. Gemini is the default (free tier; web-search grounding); other
+/// providers are bring-your-own-key.
 ///
 /// Uses a hardened HTTP client with certificate pinning and hostname
 /// restriction to prevent MITM attacks on sensitive directive context.
-class GeminiApiAssistant implements AiAssistant {
+class LlmAssistant implements AiAssistant {
+  final AiProvider provider;
+  final String model;
   final String apiKey;
   final http.Client _httpClient;
+  late final LlmClient _llm;
 
-  GeminiApiAssistant({required this.apiKey})
-      : _httpClient = CertificatePinningService.createPinnedClient();
+  LlmAssistant({
+    required this.apiKey,
+    this.provider = AiProvider.gemini,
+    String? model,
+  })  : model = (model != null && model.trim().isNotEmpty)
+            ? model.trim()
+            : (provider == AiProvider.gemini
+                ? appData.ai.model
+                : provider.defaultModel),
+        _httpClient = CertificatePinningService.createPinnedClient() {
+    _llm = LlmClient(
+      provider: provider,
+      model: this.model,
+      apiKey: apiKey,
+      httpClient: _httpClient,
+    );
+  }
 
-  static String get _model => appData.ai.model;
+  /// Shared JSON-mode generation for the structured helpers below: strips PII,
+  /// asks the active provider for a raw JSON object, and removes any markdown
+  /// code fences. Returns null on empty output.
+  Future<String?> _generateJson(String prompt,
+      {required Duration timeout}) async {
+    final raw = await _llm.generateText(
+      sanitizeForApi(prompt),
+      json: true,
+      timeout: timeout,
+    );
+    var text = raw.trim();
+    if (text.isEmpty) return null;
+    if (text.startsWith('```')) {
+      text = text.replaceFirst(RegExp(r'^```(?:json)?'), '').trim();
+      if (text.endsWith('```')) {
+        text = text.substring(0, text.length - 3).trim();
+      }
+    }
+    return text;
+  }
 
   /// Maximum input tokens for the model (from app_data.json).
   static int get maxContextTokens => appData.ai.maxContextTokens;
@@ -66,20 +110,6 @@ class GeminiApiAssistant implements AiAssistant {
   }) async {
     final systemPrompt = _buildSystemPrompt(context);
 
-    final model = GenerativeModel(
-      model: _model,
-      apiKey: apiKey,
-      systemInstruction: Content.system(systemPrompt),
-      httpClient: _httpClient,
-    );
-
-    final chatHistory = history.map((m) => Content(
-          m.role == MessageRole.user ? 'user' : 'model',
-          [TextPart(m.content)],
-        )).toList();
-
-    final chat = model.startChat(history: chatHistory);
-
     // Strip PII before sending to external API (V4-L15 chokepoint).
     final sanitizedMessage = sanitizeForApi(userMessage);
 
@@ -92,47 +122,46 @@ class GeminiApiAssistant implements AiAssistant {
         ? Duration.zero
         : backoffList[i < backoffList.length ? i : backoffList.length - 1];
 
+    Object? lastError;
     for (var attempt = 0; attempt < maxAttempts; attempt++) {
       try {
-        final response = await chat
-            .sendMessage(Content.text(sanitizedMessage))
-            .timeout(appData.config.chatTimeout);
-        final text = response.text;
-        if (text == null || text.isEmpty) {
-          throw Exception(
-              'The AI could not generate a response. This may be due to '
-              'content restrictions. Please try rephrasing your question.');
-        }
-        return text;
+        final text = await _llm.chat(
+          system: systemPrompt,
+          history: history,
+          userMessage: sanitizedMessage,
+          timeout: appData.config.chatTimeout,
+        );
+        if (text.isNotEmpty) return text;
+        lastError = Exception(
+            'The AI could not generate a response. This may be due to '
+            'content restrictions. Please try rephrasing your question.');
       } on TimeoutException catch (e) {
-        debugPrint('Gemini API timeout (attempt ${attempt + 1}): $e');
-        if (attempt < maxAttempts - 1) {
-          await Future.delayed(backoffs(attempt));
-          continue;
-        }
-        throw Exception(
-            'The request timed out. Please check your internet connection and try again.');
-      } on GenerativeAIException catch (e) {
-        debugPrint('Gemini API error (attempt ${attempt + 1}): ${e.message}');
-        if (e.message.contains('429') ||
-            e.message.toLowerCase().contains('rate limit') ||
-            e.message.toLowerCase().contains('quota')) {
+        debugPrint('AI timeout (attempt ${attempt + 1}): $e');
+        lastError = Exception(
+            'The request timed out. Please check your internet connection and '
+            'try again.');
+      } catch (e) {
+        final msg = e.toString().toLowerCase();
+        if (msg.contains('429') ||
+            msg.contains('rate limit') ||
+            msg.contains('quota')) {
+          final tier = provider == AiProvider.gemini
+              ? 'The free tier allows about ${appData.ai.rpm} requests per '
+                  'minute (${appData.ai.rpd} per day). '
+              : '';
           throw Exception(
-              'Too many requests. The free tier allows about ${appData.ai.rpm} '
-              'requests per minute (${appData.ai.rpd} per day). Please wait '
-              '1\u20132 minutes and try again.');
+              'Too many requests. ${tier}Please wait 1\u20132 minutes and try '
+              'again.');
         }
-        // Retry on server errors (5xx)
-        if (e.message.contains('500') || e.message.contains('503')) {
-          if (attempt < maxAttempts - 1) {
-            await Future.delayed(backoffs(attempt));
-            continue;
-          }
-        }
-        throw Exception('AI service error: ${e.message}');
+        debugPrint('AI error (attempt ${attempt + 1}): $e');
+        lastError = Exception('AI service error: $e');
+      }
+      if (attempt < maxAttempts - 1) {
+        await Future.delayed(backoffs(attempt));
       }
     }
-    throw Exception('Failed after $maxAttempts attempts. Please try again later.');
+    throw lastError ??
+        Exception('Failed after $maxAttempts attempts. Please try again later.');
   }
 
   /// "Verify on the web": re-answers [question] with Gemini's Google-Search
@@ -147,8 +176,22 @@ class GeminiApiAssistant implements AiAssistant {
     AssistantContext? context,
   }) async {
     final systemPrompt = _buildSystemPrompt(context);
+
+    // Only Gemini supports Google-Search grounding. Other providers answer
+    // normally with no web sources (the UI keys the "verified" badge off the
+    // empty sources list).
+    if (provider != AiProvider.gemini) {
+      final text = await _llm.chat(
+        system: systemPrompt,
+        history: history,
+        userMessage: sanitizeForApi(question),
+        timeout: appData.config.groundingTimeout,
+      );
+      return (text: text, sources: const <GroundingSource>[]);
+    }
+
     final uri = Uri.parse('https://generativelanguage.googleapis.com/v1beta/'
-        'models/$_model:generateContent?key=$apiKey');
+        'models/$model:generateContent?key=$apiKey');
 
     final contents = <Map<String, dynamic>>[
       for (final m in history)
@@ -230,13 +273,6 @@ class GeminiApiAssistant implements AiAssistant {
   Future<({String headsUp, List<String> chips})?> generateStepSuggestions(
     AssistantContext context,
   ) async {
-    final model = GenerativeModel(
-      model: _model,
-      apiKey: apiKey,
-      httpClient: _httpClient,
-      generationConfig: GenerationConfig(responseMimeType: 'application/json'),
-    );
-
     final prompt = StringBuffer()
       ..writeln(
           'You help users fill out the Pennsylvania Mental Health Advance '
@@ -267,18 +303,9 @@ class GeminiApiAssistant implements AiAssistant {
     }
 
     try {
-      final response = await model
-          .generateContent([Content.text(sanitizeForApi(prompt.toString()))])
-          .timeout(appData.config.stepSuggestionTimeout);
-      var text = response.text?.trim();
-      if (text == null || text.isEmpty) return null;
-      // Strip markdown code fences if the model wrapped the JSON.
-      if (text.startsWith('```')) {
-        text = text.replaceFirst(RegExp(r'^```(?:json)?'), '').trim();
-        if (text.endsWith('```')) {
-          text = text.substring(0, text.length - 3).trim();
-        }
-      }
+      final text = await _generateJson(prompt.toString(),
+          timeout: appData.config.stepSuggestionTimeout);
+      if (text == null) return null;
       final data = jsonDecode(text) as Map<String, dynamic>;
       final headsUp = (data['headsUp'] as String?)?.trim() ?? '';
       final chips = ((data['chips'] as List?) ?? const [])
@@ -303,13 +330,6 @@ class GeminiApiAssistant implements AiAssistant {
     final cleaned =
         meds.map((m) => m.trim()).where((m) => m.isNotEmpty).toSet().toList();
     if (cleaned.isEmpty) return const [];
-
-    final model = GenerativeModel(
-      model: _model,
-      apiKey: apiKey,
-      httpClient: _httpClient,
-      generationConfig: GenerationConfig(responseMimeType: 'application/json'),
-    );
 
     // Ground the list in authoritative sources: pull each medication's FDA
     // label "Adverse Reactions" text from openFDA (free, no key) so the AI
@@ -371,17 +391,9 @@ class GeminiApiAssistant implements AiAssistant {
     }
 
     try {
-      final response = await model
-          .generateContent([Content.text(sanitizeForApi(prompt.toString()))])
-          .timeout(appData.config.sideEffectsTimeout);
-      var text = response.text?.trim();
-      if (text == null || text.isEmpty) return const [];
-      if (text.startsWith('```')) {
-        text = text.replaceFirst(RegExp(r'^```(?:json)?'), '').trim();
-        if (text.endsWith('```')) {
-          text = text.substring(0, text.length - 3).trim();
-        }
-      }
+      final text = await _generateJson(prompt.toString(),
+          timeout: appData.config.sideEffectsTimeout);
+      if (text == null) return const [];
       final data = jsonDecode(text) as Map<String, dynamic>;
       return ((data['items'] as List?) ?? const [])
           .whereType<Map<String, dynamic>>()
@@ -420,13 +432,6 @@ class GeminiApiAssistant implements AiAssistant {
         if (e.value != null && e.value!.isNotEmpty) e.key: e.value!,
     };
     if (grounded.isEmpty) return const [];
-
-    final model = GenerativeModel(
-      model: _model,
-      apiKey: apiKey,
-      httpClient: _httpClient,
-      generationConfig: GenerationConfig(responseMimeType: 'application/json'),
-    );
 
     final prompt = StringBuffer()
       ..writeln(
@@ -469,17 +474,9 @@ class GeminiApiAssistant implements AiAssistant {
     });
 
     try {
-      final response = await model
-          .generateContent([Content.text(sanitizeForApi(prompt.toString()))])
-          .timeout(appData.config.sideEffectsTimeout);
-      var text = response.text?.trim();
-      if (text == null || text.isEmpty) return const [];
-      if (text.startsWith('```')) {
-        text = text.replaceFirst(RegExp(r'^```(?:json)?'), '').trim();
-        if (text.endsWith('```')) {
-          text = text.substring(0, text.length - 3).trim();
-        }
-      }
+      final text = await _generateJson(prompt.toString(),
+          timeout: appData.config.sideEffectsTimeout);
+      if (text == null) return const [];
       final data = jsonDecode(text) as Map<String, dynamic>;
       return ((data['items'] as List?) ?? const [])
           .whereType<Map<String, dynamic>>()
@@ -502,13 +499,6 @@ class GeminiApiAssistant implements AiAssistant {
   Future<List<String>> suggestConditionTerms(String description) async {
     final desc = description.trim();
     if (desc.length < 3) return const [];
-
-    final model = GenerativeModel(
-      model: _model,
-      apiKey: apiKey,
-      httpClient: _httpClient,
-      generationConfig: GenerationConfig(responseMimeType: 'application/json'),
-    );
 
     final prompt = StringBuffer()
       ..writeln(
@@ -533,17 +523,9 @@ class GeminiApiAssistant implements AiAssistant {
       ..writeln(desc);
 
     try {
-      final response = await model
-          .generateContent([Content.text(sanitizeForApi(prompt.toString()))])
-          .timeout(appData.config.stepSuggestionTimeout);
-      var text = response.text?.trim();
-      if (text == null || text.isEmpty) return const [];
-      if (text.startsWith('```')) {
-        text = text.replaceFirst(RegExp(r'^```(?:json)?'), '').trim();
-        if (text.endsWith('```')) {
-          text = text.substring(0, text.length - 3).trim();
-        }
-      }
+      final text = await _generateJson(prompt.toString(),
+          timeout: appData.config.stepSuggestionTimeout);
+      if (text == null) return const [];
       final data = jsonDecode(text) as Map<String, dynamic>;
       return ((data['conditions'] as List?) ?? const [])
           .map((e) => e.toString().trim())

@@ -4,7 +4,12 @@ import 'package:http/io_client.dart';
 
 /// Allowed hostnames for API connections.
 const _allowedHosts = {
-  'generativelanguage.googleapis.com',
+  // AI providers (user brings their own key per provider). Keep in sync with
+  // AiProvider.host in lib/ai/ai_provider.dart.
+  'generativelanguage.googleapis.com', // Google Gemini
+  'api.anthropic.com', // Anthropic Claude
+  'api.openai.com', // OpenAI
+  'api.x.ai', // xAI Grok
   'clinicaltables.nlm.nih.gov',
   // Free public reference lookups (no user PII sent — only a term/code).
   'connect.medlineplus.gov', // NLM MedlinePlus Connect — condition/med education
@@ -39,7 +44,7 @@ class _HostRestrictedClient extends http.BaseClient {
     if (!isAllowedHost(host)) {
       throw SocketException(
         'Connection to $host blocked by certificate pinning policy. '
-        'Only Google API endpoints are allowed.',
+        'Only allowlisted AI provider / NLM endpoints are permitted.',
       );
     }
     return _inner.send(request);

@@ -2,9 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:http/http.dart' as http;
 import 'package:mhad/ai/ai_clinical_policy.dart';
+import 'package:mhad/ai/ai_provider.dart';
+import 'package:mhad/ai/llm_client.dart';
 import 'package:mhad/ai/pii_stripper.dart';
 import 'package:mhad/constants.dart';
 import 'package:mhad/data/app_data/app_data.dart';
@@ -290,29 +291,35 @@ class SmartFillResponse {
 /// 4. No system prompt, no educational content, no chat history — single-shot
 /// 5. Only sending the structured selections, not the entire form
 class SmartFillService {
+  final AiProvider provider;
+  final String model;
   final String apiKey;
   final http.Client _httpClient;
+  late final LlmClient _llm;
 
-  SmartFillService({required this.apiKey})
-      : _httpClient = CertificatePinningService.createPinnedClient();
-
-  static String get _model => appData.ai.model;
-
-  /// Given structured clinical data, ask Gemini to generate directive content.
-  /// Returns [SmartFillResponse] containing the parsed result and actual token
-  /// usage from the API (for rate tracking).
-  Future<SmartFillResponse> generate(SmartFillInput rawInput) async {
-    final input = rawInput.sanitized();
-    final model = GenerativeModel(
-      model: _model,
+  SmartFillService({
+    required this.apiKey,
+    this.provider = AiProvider.gemini,
+    String? model,
+  })  : model = (model != null && model.trim().isNotEmpty)
+            ? model.trim()
+            : (provider == AiProvider.gemini
+                ? appData.ai.model
+                : provider.defaultModel),
+        _httpClient = CertificatePinningService.createPinnedClient() {
+    _llm = LlmClient(
+      provider: provider,
+      model: this.model,
       apiKey: apiKey,
       httpClient: _httpClient,
-      generationConfig: GenerationConfig(
-        responseMimeType: 'application/json',
-        temperature: 0.0,
-      ),
     );
+  }
 
+  /// Given structured clinical data, ask the AI to generate directive content.
+  /// Returns [SmartFillResponse] containing the parsed result and an estimate of
+  /// token usage (for rate tracking).
+  Future<SmartFillResponse> generate(SmartFillInput rawInput) async {
+    final input = rawInput.sanitized();
     final prompt = _buildPrompt(input);
     debugPrint('SmartFill prompt: ${prompt.length} chars '
         '(~${(prompt.length / 4).round()} tokens), '
@@ -320,20 +327,20 @@ class SmartFillService {
         '${input.currentMedications.length} meds');
 
     try {
-      // Retry once on rate limit (429) with backoff
-      GenerateContentResponse? response;
+      // Retry once on rate limit (429) with backoff.
+      String text = '';
       for (var attempt = 0; attempt < 2; attempt++) {
         try {
-          response = await model
-              .generateContent([Content.text(prompt)]).timeout(
-            appData.config.smartFillTimeout,
+          text = await _llm.generateText(
+            prompt,
+            json: true,
+            timeout: appData.config.smartFillTimeout,
           );
           break; // success
-        } on GenerativeAIException catch (e) {
-          if ((e.message.contains('429') ||
-                  e.message.toLowerCase().contains('rate limit')) &&
+        } catch (e) {
+          final msg = e.toString().toLowerCase();
+          if ((msg.contains('429') || msg.contains('rate limit')) &&
               attempt == 0) {
-            // Wait and retry once
             await Future<void>.delayed(appData.config.rateLimitBackoff);
             continue;
           }
@@ -341,17 +348,11 @@ class SmartFillService {
         }
       }
 
-      final text = response?.text;
-      if (text == null || text.isEmpty) {
-        throw Exception('Empty response from Gemini');
+      if (text.isEmpty) {
+        throw Exception('Empty response from the AI');
       }
 
       debugPrint('SmartFill response: ${text.length} chars');
-
-      final promptTokens = response!.usageMetadata?.promptTokenCount ?? 0;
-      final responseTokens =
-          response.usageMetadata?.candidatesTokenCount ?? 0;
-      final totalTokens = promptTokens + responseTokens;
 
       final result = _parse(text);
       final display = result.toDisplayMap();
@@ -360,18 +361,16 @@ class SmartFillService {
 
       return SmartFillResponse(
         result: result,
-        totalTokens: totalTokens > 0
-            ? totalTokens
-            : GeminiRateTracker.estimateTokens(prompt.length + text.length),
+        totalTokens: GeminiRateTracker.estimateTokens(prompt.length + text.length),
       );
     } on TimeoutException {
       throw Exception('Request timed out. Please try again.');
-    } on GenerativeAIException catch (e) {
-      if (e.message.contains('429') ||
-          e.message.toLowerCase().contains('rate limit')) {
+    } catch (e) {
+      final msg = e.toString().toLowerCase();
+      if (msg.contains('429') || msg.contains('rate limit')) {
         throw Exception('Rate limited. Please wait a moment and try again.');
       }
-      throw Exception('AI error: ${e.message}');
+      rethrow;
     }
   }
 

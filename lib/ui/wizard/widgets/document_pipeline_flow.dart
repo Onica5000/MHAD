@@ -335,11 +335,11 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
   Future<void> _startPipeline(List<PickedDocument> docs) async {
     _sourceDocs = docs;
 
-    // Extraction needs a Gemini key. On web (public mode) the user often has
+    // Extraction needs an AI key. On web (public mode) the user often has
     // none — prompt to set it up rather than silently doing nothing, so the
     // snap-to-fill page never feels like a dead end.
-    final apiKey = ref.read(apiKeyProvider).valueOrNull;
-    if (apiKey == null || apiKey.isEmpty) {
+    final aiCfg = ref.read(aiConfigProvider);
+    if (aiCfg == null) {
       await _promptAiSetup();
       return;
     }
@@ -434,7 +434,11 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
     });
 
     try {
-      final extractor = DocumentExtractor(apiKey: apiKey);
+      final extractor = DocumentExtractor(
+        apiKey: aiCfg.key,
+        provider: aiCfg.provider,
+        model: aiCfg.model,
+      );
       DocumentExtractionResult? merged;
       final allPii = <String>[];
       // Relevance gate: an unrelated upload (lease, bill, contract, …) comes

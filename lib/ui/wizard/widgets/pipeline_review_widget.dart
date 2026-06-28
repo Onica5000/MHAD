@@ -1018,15 +1018,19 @@ extension _PipelineReviewUi on _PipelineScreenState {
   /// (non-identity) free-text field into one value. Sets the apply maps on
   /// success; fail-safe keeps the extracted value.
   Future<void> _consolidateField(ReconItem it) async {
-    final apiKey = ref.read(apiKeyProvider).valueOrNull;
-    if (apiKey == null || apiKey.isEmpty) {
+    final aiCfg = ref.read(aiConfigProvider);
+    if (aiCfg == null) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Set up the AI assistant first to consolidate.'),
       ));
       return;
     }
     setState(() => _consolidating[it.key] = true);
-    final merged = await DocumentExtractor(apiKey: apiKey).consolidate(
+    final merged = await DocumentExtractor(
+      apiKey: aiCfg.key,
+      provider: aiCfg.provider,
+      model: aiCfg.model,
+    ).consolidate(
       fieldLabel: _displayLabel(it.key),
       existing: it.existing!.trim(),
       extracted: it.extracted.trim(),
