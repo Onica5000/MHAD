@@ -408,6 +408,17 @@ ThemeData buildMhadTheme(
   final outlineColor =
       highContrast ? (dark ? Colors.white : Colors.black) : p.border;
 
+  // Input fields read as "type here": a faint tinted fill distinct from the
+  // card, plus a clearly visible resting border. Older-adult usability fix —
+  // the default subtle 1.5px border on a card-colored fill was easy to miss.
+  // See [[visual-accessibility-older-users]].
+  final fieldFill = highContrast
+      ? p.card
+      : Color.alphaBlend(p.primary.withValues(alpha: 0.05), p.card);
+  final fieldBorderColor = highContrast
+      ? outlineColor
+      : Color.alphaBlend(p.textMuted.withValues(alpha: 0.40), p.border);
+
   final colorScheme = ColorScheme(
     brightness: brightness,
     primary: p.primary,
@@ -634,50 +645,49 @@ ThemeData buildMhadTheme(
       ),
     ),
 
-    // InputDecoration matches prototype `Field` atom (ds.jsx L296-320):
-    // 1.5px border, 12px radius, p.card fill, 14px horizontal padding.
-    // Prototype labels are 12/600 DM Sans textMuted sitting ABOVE the
-    // field, not Material's floating-label-when-focused — so we pin
-    // floatingLabelBehavior to `always` and tune floatingLabelStyle to
-    // the prototype's label spec. This applies project-wide without
-    // touching individual TextFormFields.
+    // InputDecoration: labels are 13/600 DM Sans textMuted sitting ABOVE the
+    // field (not Material's floating-label-when-focused) — so we pin
+    // floatingLabelBehavior to `always`. Fields use a faint tinted fill +
+    // visible resting border so it's unmistakable where to type (older-adult
+    // usability fix), a 2px focus ring, and roomier 16px vertical padding.
+    // This applies project-wide without touching individual TextFormFields.
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: p.card,
+      fillColor: fieldFill,
       floatingLabelBehavior: FloatingLabelBehavior.always,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
-        borderSide: BorderSide(color: p.border, width: 1.5),
+        borderSide: BorderSide(color: fieldBorderColor, width: 1.5),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
-        borderSide: BorderSide(color: p.border, width: 1.5),
+        borderSide: BorderSide(color: fieldBorderColor, width: 1.5),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
-        borderSide: BorderSide(color: p.primary, width: 1.5),
+        borderSide: BorderSide(color: p.primary, width: 2),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
         borderSide: BorderSide(color: colorScheme.error, width: 1.5),
       ),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
       labelStyle: TextStyle(
         fontFamily: kSansFamily,
         color: p.textMuted,
-        fontSize: 14,
+        fontSize: 15,
       ),
       floatingLabelStyle: TextStyle(
         fontFamily: kSansFamily,
         color: p.textMuted,
-        fontSize: 12,
+        fontSize: 13,
         fontWeight: FontWeight.w600,
         letterSpacing: 0.2,
       ),
       hintStyle: TextStyle(
         fontFamily: kSansFamily,
         color: p.textMuted,
-        fontSize: 14,
+        fontSize: 15,
       ),
     ),
 
@@ -776,13 +786,13 @@ TextTheme _buildTextTheme(Color text, Color muted,
     bodyMedium: TextStyle(
         fontFamily: family, fontSize: 14, fontWeight: FontWeight.w400, color: text, height: 1.5),
     bodySmall: TextStyle(
-        fontFamily: family, fontSize: 12, fontWeight: FontWeight.w400, color: muted, height: 1.45),
+        fontFamily: family, fontSize: 13, fontWeight: FontWeight.w400, color: muted, height: 1.45),
     labelLarge: TextStyle(
         fontFamily: family, fontSize: 14, fontWeight: FontWeight.w600, color: text),
     labelMedium: TextStyle(
         fontFamily: family, fontSize: 12, fontWeight: FontWeight.w600, color: text),
     labelSmall: TextStyle(
-        fontFamily: family, fontSize: 11, fontWeight: FontWeight.w700, color: muted, letterSpacing: 1.0),
+        fontFamily: family, fontSize: 12, fontWeight: FontWeight.w700, color: muted, letterSpacing: 1.0),
   );
   // Bold-text accessibility: shift every weight up two steps (w400 → w600).
   // TextStyle.apply supports fontWeightDelta; TextTheme.apply does not, so map.
