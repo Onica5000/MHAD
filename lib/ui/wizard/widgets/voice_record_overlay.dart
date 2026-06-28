@@ -54,8 +54,11 @@ class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
   late final AnimationController _pulse;
   Timer? _ticker;
 
-  // AI transcription state.
-  String? _apiKey;
+  // AI transcription state. Audio transcription is Gemini-only, so we capture
+  // the full active config and only enable AI mode when the active provider
+  // actually supports audio — otherwise a non-Gemini key could be sent to
+  // Google. Other providers fall back to the browser/OS speech service.
+  AiConfig? _aiConfig;
   bool _aiMode = false; // resolved on the first record start
   bool _transcribing = false;
   StreamSubscription<Uint8List>? _audioSub;
@@ -75,8 +78,8 @@ class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
   @override
   void initState() {
     super.initState();
-    _apiKey = ref.read(apiKeyProvider).valueOrNull;
-    _aiMode = _apiKey != null && _apiKey!.isNotEmpty;
+    _aiConfig = ref.read(aiConfigProvider);
+    _aiMode = _aiConfig != null && _aiConfig!.provider.supportsAudio;
     _pulse = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 700),
@@ -183,7 +186,11 @@ class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
     });
     try {
       final wav = pcm16ToWav(pcm);
-      final text = await AudioTranscriptionService(_apiKey!).transcribe(wav);
+      final text = await AudioTranscriptionService(
+        apiKey: _aiConfig!.key,
+        provider: _aiConfig!.provider,
+        model: _aiConfig!.model,
+      ).transcribe(wav);
       if (!mounted) return;
       setState(() {
         if (text.isNotEmpty) _confirmed.add(text);

@@ -5,16 +5,23 @@
 ## Assets
 - User-entered mental-health directive PII (names, agents, diagnoses, meds, signatures).
 - Private-mode SQLCipher DB encryption key (device secure storage).
-- Optional Gemini API key.
+- Optional **per-provider** AI API keys (Gemini default; Anthropic/OpenAI/xAI optional).
+  Each is the user's own key, stored per provider (private: secure storage; public:
+  in-memory + 10-min crash-recovery cache), and is only ever sent to that provider's
+  own endpoint.
 
 ## Trust model
 - **Local-first.** No app server, no analytics/ads/tracking SDKs, no data sale.
 - Outbound flows:
-  1. **opt-in** Gemini AI (per-session affirmative consent). PII-stripped for chat
-     and suggestions. **Document autofill is the one deliberate exception:** the
-     uploaded file is sent as-is so the AI can read its personal details and fill
-     the form (declarant + agents/guardian); the user reviews everything before it
-     is saved, and uploading is never required.
+  1. **opt-in** AI (per-session affirmative consent). The user chooses the provider —
+     **Gemini (default), Anthropic Claude, OpenAI, or xAI Grok** — and brings their own
+     key. PII is stripped for chat (incl. prior turns), suggestions, and smart-fill at a
+     single chokepoint (`sanitizeForApi`/`PiiStripper`) regardless of provider.
+     **Document autofill is the one deliberate exception:** the uploaded file is sent
+     as-is so the AI can read its personal details and fill the form (declarant +
+     agents/guardian); the user reviews everything before it is saved, and uploading is
+     never required. Audio dictation is Gemini-only; a non-Gemini key is rejected
+     locally before any request, so it is never sent to the wrong provider.
   2. Free public U.S. government reference lookups — NIH/NLM Clinical Tables
      (medication / condition / provider-NPI), NLM MedlinePlus Connect + RxNav
      (plain-language condition & medication education), and FDA openFDA (drug labels,
@@ -28,7 +35,7 @@
 | Storage (MASVS-STORAGE) | ✅ L1/L2 | SQLCipher AES-256 (private), in-memory (public), secure keystore for keys |
 | Crypto (MASVS-CRYPTO) | ✅ | Platform keystore; random 32-byte key |
 | Auth (MASVS-AUTH) | ✅ | Biometric/passcode gate for private mode |
-| Network (MASVS-NETWORK) | ✅ | Strict TLS + cert pinning + host allowlist (Gemini + NIH/NLM Clinical Tables, MedlinePlus, RxNav, FDA openFDA) |
+| Network (MASVS-NETWORK) | ✅ | Strict TLS + cert pinning + host allowlist (AI providers: Gemini / Anthropic / OpenAI / xAI; plus NIH/NLM Clinical Tables, MedlinePlus, RxNav, FDA openFDA) |
 | Platform (MASVS-PLATFORM) | ✅ | FLAG_SECURE screenshot protection; least-permission |
 | Code (MASVS-CODE) | ✅ | Release obfuscation + split-debug-info |
 | Resilience (MASVS-RESILIENCE) | ⚠️ **Partial — deliberate** | Root/jailbreak warn (non-blocking). **No** anti-Frida/anti-hooking/anti-debug/tamper RASP. |

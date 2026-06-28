@@ -110,8 +110,19 @@ class LlmAssistant implements AiAssistant {
   }) async {
     final systemPrompt = _buildSystemPrompt(context);
 
-    // Strip PII before sending to external API (V4-L15 chokepoint).
+    // Strip PII before sending to external API (V4-L15 chokepoint) — the new
+    // message AND the prior turns. Earlier user messages can carry PII too, so
+    // sanitizing only the latest message would still leak it on every later
+    // turn (the grounded path already strips history; keep them consistent).
     final sanitizedMessage = sanitizeForApi(userMessage);
+    final sanitizedHistory = [
+      for (final m in history)
+        ChatMessage(
+          role: m.role,
+          content: sanitizeForApi(m.content),
+          timestamp: m.timestamp,
+        ),
+    ];
 
     // Retry transient failures with increasing backoff (tunable via config).
     final maxAttempts = appData.config.retryMaxAttempts;
@@ -127,7 +138,7 @@ class LlmAssistant implements AiAssistant {
       try {
         final text = await _llm.chat(
           system: systemPrompt,
-          history: history,
+          history: sanitizedHistory,
           userMessage: sanitizedMessage,
           timeout: appData.config.chatTimeout,
         );

@@ -79,6 +79,10 @@ enum AiProvider {
   bool get supportsPdf =>
       this == AiProvider.gemini || this == AiProvider.anthropic;
 
+  /// Audio transcription (voice dictation) is Gemini-only here. Other providers
+  /// fall back to the browser/OS speech service.
+  bool get supportsAudio => this == AiProvider.gemini;
+
   /// OpenAI-compatible Chat Completions endpoint (OpenAI and xAI share the wire
   /// format). Throws for non-compatible providers.
   String get chatCompletionsUrl => switch (this) {

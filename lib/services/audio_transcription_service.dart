@@ -1,38 +1,48 @@
 import 'dart:typed_data';
 
-import 'package:google_generative_ai/google_generative_ai.dart';
+import 'package:mhad/ai/ai_provider.dart';
+import 'package:mhad/ai/llm_client.dart';
 import 'package:mhad/data/app_data/app_data.dart';
-import 'package:mhad/services/certificate_pinning_service.dart';
 
-/// Transcribes spoken audio to text with Gemini — used by the voice-dictation
-/// overlay when AI is available. More accurate on clinical terms (medication
-/// names, conditions) than the browser/OS speech service, which routinely
-/// mis-hears drug names.
+/// Transcribes spoken audio to text — used by the voice-dictation overlay when
+/// AI is available. More accurate on clinical terms (medication names,
+/// conditions) than the browser/OS speech service, which routinely mis-hears
+/// drug names.
 ///
-/// The audio (including any personal details the user speaks) is sent to
-/// Google, like the autofill upload — the caller gates this behind consent.
+/// Audio transcription is **Gemini-only** ([AiProvider.supportsAudio]); for any
+/// other provider [LlmClient] throws [UnsupportedInputError] *before* sending,
+/// so a non-Gemini key is never transmitted to Google. The caller gates this
+/// behind consent and falls back to the browser speech service otherwise.
+///
+/// The audio (including any personal details the user speaks) is sent to the
+/// provider, like the autofill upload.
 class AudioTranscriptionService {
+  final AiProvider provider;
+  final String model;
   final String apiKey;
-  AudioTranscriptionService(this.apiKey);
+
+  AudioTranscriptionService({
+    required this.apiKey,
+    this.provider = AiProvider.gemini,
+    String? model,
+  }) : model = (model != null && model.trim().isNotEmpty)
+            ? model.trim()
+            : (provider == AiProvider.gemini
+                ? appData.ai.model
+                : provider.defaultModel);
 
   Future<String> transcribe(
     Uint8List audioBytes, {
     String mimeType = 'audio/wav',
   }) async {
-    final model = GenerativeModel(
-      model: appData.ai.model,
-      apiKey: apiKey,
-      httpClient: CertificatePinningService.createPinnedClient(),
-      generationConfig: GenerationConfig(
-        maxOutputTokens: appData.ai.maxOutputTokens,
-      ),
+    final client =
+        LlmClient(provider: provider, model: model, apiKey: apiKey);
+    final text = await client.generateMultimodal(
+      parts: [LlmText(_prompt), LlmData(mimeType, audioBytes)],
+      maxOutputTokens: appData.ai.maxOutputTokens,
+      timeout: appData.config.documentExtractionTimeout,
     );
-    final response = await model.generateContent(
-      [
-        Content.multi([TextPart(_prompt), DataPart(mimeType, audioBytes)]),
-      ],
-    ).timeout(appData.config.documentExtractionTimeout);
-    return (response.text ?? '').trim();
+    return text.trim();
   }
 
   static const _prompt = '''
