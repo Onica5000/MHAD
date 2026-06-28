@@ -112,10 +112,10 @@ class AccessibilitySettings {
   /// anyone needing to open Settings. "Small" still lands below 1.0 for users
   /// who want the tighter editorial look. See [[visual-accessibility-older-users]].
   double get textScaleFactor => switch (textScale.round()) {
-        0 => 0.95,
-        1 => 1.1,
-        2 => 1.3,
-        _ => 1.55,
+        0 => 1.0,
+        1 => 1.2,
+        2 => 1.4,
+        _ => 1.65,
       };
 }
 

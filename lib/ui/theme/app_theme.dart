@@ -417,7 +417,7 @@ ThemeData buildMhadTheme(
       : Color.alphaBlend(p.primary.withValues(alpha: 0.05), p.card);
   final fieldBorderColor = highContrast
       ? outlineColor
-      : Color.alphaBlend(p.textMuted.withValues(alpha: 0.40), p.border);
+      : Color.alphaBlend(p.textMuted.withValues(alpha: 0.60), p.border);
 
   final colorScheme = ColorScheme(
     brightness: brightness,
@@ -786,13 +786,13 @@ TextTheme _buildTextTheme(Color text, Color muted,
     bodyMedium: TextStyle(
         fontFamily: family, fontSize: 14, fontWeight: FontWeight.w400, color: text, height: 1.5),
     bodySmall: TextStyle(
-        fontFamily: family, fontSize: 13, fontWeight: FontWeight.w400, color: muted, height: 1.45),
+        fontFamily: family, fontSize: 14, fontWeight: FontWeight.w400, color: muted, height: 1.45),
     labelLarge: TextStyle(
         fontFamily: family, fontSize: 14, fontWeight: FontWeight.w600, color: text),
     labelMedium: TextStyle(
         fontFamily: family, fontSize: 12, fontWeight: FontWeight.w600, color: text),
     labelSmall: TextStyle(
-        fontFamily: family, fontSize: 12, fontWeight: FontWeight.w700, color: muted, letterSpacing: 1.0),
+        fontFamily: family, fontSize: 13, fontWeight: FontWeight.w700, color: muted, letterSpacing: 1.0),
   );
   // Bold-text accessibility: shift every weight up two steps (w400 → w600).
   // TextStyle.apply supports fontWeightDelta; TextTheme.apply does not, so map.
