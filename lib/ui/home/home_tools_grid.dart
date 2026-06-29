@@ -8,9 +8,9 @@ import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/design_card.dart';
 import 'package:mhad/ui/widgets/design/crisis_sheet.dart';
 
-/// Prototype `ScrHome` tools grid — a 2×2 of icon tiles linking to the
-/// non-directive destinations users hit most often (AI assistant, Learn,
-/// the most-recent directive's wallet card / export, and the crisis sheet).
+/// Home tools grid — a 2×2 of icon tiles linking to the destinations users hit
+/// most often (AI assistant, Learn, "Make it findable" crisis-readiness for the
+/// most-recent directive, and the crisis sheet).
 class ToolsGrid extends ConsumerWidget {
   const ToolsGrid({super.key});
 
@@ -46,12 +46,14 @@ class ToolsGrid extends ConsumerWidget {
         onTap: () => context.go(AppRoutes.education),
       ),
       _ToolTile(
-        icon: Icons.account_balance_wallet_outlined,
-        label: 'Wallet card',
-        sub: mostRecentDirective != null ? 'Carry a copy' : 'No directive yet',
+        icon: Icons.health_and_safety_outlined,
+        label: 'Make it findable',
+        sub: mostRecentDirective != null
+            ? 'Share + carry'
+            : 'No directive yet',
         onTap: mostRecentDirective != null
             ? () => context.push(
-                AppRoutes.exportRoute(mostRecentDirective.id))
+                AppRoutes.findableRoute(mostRecentDirective.id))
             : null,
       ),
       _ToolTile(

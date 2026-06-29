@@ -9,6 +9,7 @@ import 'package:mhad/ui/admin/admin_update_screen.dart';
 import 'package:mhad/ui/ai_check/ai_consistency_screen.dart';
 import 'package:mhad/ui/assistant/assistant_screen.dart';
 import 'package:mhad/ui/audio_guide/audio_guide_screen.dart';
+import 'package:mhad/ui/crisis_findability/make_it_findable_screen.dart';
 import 'package:mhad/ui/crisis_plan/crisis_plan_screen.dart';
 import 'package:mhad/ui/side_effects/side_effects_screen.dart';
 import 'package:mhad/ui/disclaimer/disclaimer_screen.dart';
@@ -78,6 +79,8 @@ abstract class AppRoutes {
   static const ulysses = '/ulysses/:directiveId';
   static const sideEffects = '/side-effects/:directiveId';
   static const revocation = '/revoke/:directiveId';
+  // "Make it findable in a crisis" checklist (crisis-readiness).
+  static const findable = '/findable/:directiveId';
   static const aiCheck = '/ai-check/:directiveId';
   static const pastDirective = '/past/:directiveId';
   // Batch 6 — in-app privacy & permissions overview.
@@ -94,6 +97,7 @@ abstract class AppRoutes {
   static String sideEffectsRoute(int directiveId) =>
       '/side-effects/$directiveId';
   static String revocationRoute(int directiveId) => '/revoke/$directiveId';
+  static String findableRoute(int directiveId) => '/findable/$directiveId';
   static String aiCheckRoute(int directiveId) => '/ai-check/$directiveId';
   static String pastDirectiveRoute(int directiveId) => '/past/$directiveId';
 }
@@ -290,6 +294,11 @@ GoRouter _buildRouter(DisclaimerNotifier disclaimer,
           path: AppRoutes.revocation,
           builder: (_, state) =>
               _withDirectiveId(state, (id) => RevocationScreen(directiveId: id)),
+        ),
+        GoRoute(
+          path: AppRoutes.findable,
+          builder: (_, state) => _withDirectiveId(
+              state, (id) => MakeItFindableScreen(directiveId: id)),
         ),
         GoRoute(
           path: AppRoutes.aiCheck,
