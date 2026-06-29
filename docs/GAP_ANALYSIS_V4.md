@@ -183,7 +183,11 @@ were superseded by regulations that changed *after* they were written.
   share-to-agent, give-to-provider, carry wallet card, and (PA-specific) note any state
   registry or facility-record options. This directly targets the #1 evidence-based
   failure mode and is a strong product differentiator.
-- **Status:** [ ]
+- **Status:** [x] **DONE 2026-06-29** — `MakeItFindableScreen` (`/findable/:id`,
+  `lib/ui/crisis_findability/`): a crisis-readiness checklist (share with agent +
+  trusted person, give a copy to the care team, print/carry the wallet card) that
+  routes to the existing export hub, plus PA-specific guidance (no statewide registry;
+  Act-194 "meant to be followed"). Reached from Home's tools grid. Widget test added.
 
 ### V4-M10c: Prototype visual fidelity sweep beyond the disclaimer (resolved 2026-05-20)
 - **Evidence:** The disclaimer screen and navigation chrome (bottom-nav /
