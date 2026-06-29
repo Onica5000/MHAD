@@ -14,8 +14,8 @@ import 'package:mhad/ui/widgets/design/wizard_header.dart';
 /// - Bold text → theme font weights
 /// - Reduce motion → no route transitions + MediaQuery.disableAnimations
 /// - High contrast → pure black/white text + stronger outlines
-/// - Language picker (English full; Spanish partial; 中文/العربية not yet
-///   translated — see [[language-picker-untranslated]] follow-up)
+/// - Language picker (English + Spanish — the locales with ARB translations;
+///   中文/العربية were removed until translated, since they fell back to English)
 /// - Read aloud → an in-app guide to the browser/OS built-in reader
 /// - Reset accessibility settings → restores defaults
 class AccessibilitySettingsScreen extends ConsumerWidget {
@@ -336,16 +336,23 @@ class _LanguagePicker extends StatelessWidget {
   final ValueChanged<String> onChanged;
   const _LanguagePicker({required this.selected, required this.onChanged});
 
+  // Only offer locales that are actually translated (have an ARB and are in
+  // AppLocalizations.supportedLocales). 中文 / العربية were offered before but
+  // had no translation and silently fell back to English — worse than omitting
+  // them. Re-add each once its ARB lands (Arabic also needs RTL).
+  static const _values = {'en', 'es'};
+
   @override
   Widget build(BuildContext context) {
+    // Guard against a previously-stored unsupported code (e.g. 'zh'/'ar'):
+    // SegmentedButton asserts the selection is among its segments.
+    final sel = _values.contains(selected) ? selected : 'en';
     return SegmentedButton<String>(
       segments: const [
         ButtonSegment(value: 'en', label: Text('English')),
         ButtonSegment(value: 'es', label: Text('Español')),
-        ButtonSegment(value: 'zh', label: Text('中文')),
-        ButtonSegment(value: 'ar', label: Text('العربية')),
       ],
-      selected: {selected},
+      selected: {sel},
       onSelectionChanged: (s) => onChanged(s.first),
     );
   }

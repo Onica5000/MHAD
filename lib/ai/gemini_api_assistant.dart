@@ -33,16 +33,20 @@ class LlmAssistant implements AiAssistant {
   final http.Client _httpClient;
   late final LlmClient _llm;
 
+  /// [httpClient] is injectable for tests (e.g. asserting no raw PII leaves the
+  /// assistant); production passes none and gets the cert-pinned client.
   LlmAssistant({
     required this.apiKey,
     this.provider = AiProvider.gemini,
     String? model,
+    http.Client? httpClient,
   })  : model = (model != null && model.trim().isNotEmpty)
             ? model.trim()
             : (provider == AiProvider.gemini
                 ? appData.ai.model
                 : provider.defaultModel),
-        _httpClient = CertificatePinningService.createPinnedClient() {
+        _httpClient =
+            httpClient ?? CertificatePinningService.createPinnedClient() {
     _llm = LlmClient(
       provider: provider,
       model: this.model,

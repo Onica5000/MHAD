@@ -76,7 +76,7 @@ class AccessibilitySettings {
   final bool reduceMotion;
   final bool highContrast;
   final bool boldText;
-  final String languageCode; // 'en' / 'es' / 'zh' / 'ar'
+  final String languageCode; // 'en' / 'es' (only translated locales offered)
 
   const AccessibilitySettings({
     this.textScale = 1.0,
