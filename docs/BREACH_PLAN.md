@@ -39,10 +39,12 @@ to third-party services:
 - Agent/witness info: names, addresses, signatures
 - Guardian nomination details
 
-**Third-party (Google Gemini API):**
-- AI conversation logs (text sent to and received from Google's servers)
-- Note: PII stripping is applied before transmission, but residual PHI may be present
-  in free-text user messages
+**Third-party (the user's chosen AI provider — Google Gemini by default, or
+Anthropic Claude, OpenAI, or xAI Grok):**
+- AI conversation logs (text sent to and received from the provider's servers)
+- Note: PII stripping is applied before transmission for chat/suggestions, but
+  residual PHI may be present in free-text user messages; document autofill and
+  voice dictation intentionally send personal details (with explicit consent)
 
 ## Notification Timeline
 
@@ -154,12 +156,14 @@ The MHAD app includes the following security measures that reduce breach risk:
 
 ## Third-Party Service Provider Obligations
 
-**Google Gemini API (AI assistant):**
-- Google's data handling is governed by the Google API Terms of Service
-- Free-tier usage: Google may use conversations for model improvement
-- The app discloses this to users before they use the AI feature
-- If Google notifies us of a breach on their end, we will follow this plan
-  for any MHAD user data affected
+**AI provider (user-chosen: Google Gemini default, or Anthropic / OpenAI / xAI):**
+- Each provider's data handling is governed by that provider's own API terms.
+- Gemini free-tier usage: Google may use conversations for model improvement;
+  other providers handle data under their own API data policies.
+- The app discloses the active provider and its data practices to users before
+  they use the AI feature (per-session consent names the recipient).
+- If the active provider notifies us of a breach on their end, we will follow
+  this plan for any MHAD user data affected.
 
 ## Contact
 
@@ -184,3 +188,4 @@ This plan should be reviewed:
 |---------|------------|----------------------------------|
 | 1.0     | 2026-03-16 | Initial breach notification plan |
 | 1.1     | 2026-05-19 | Updated to amended 16 CFR Part 318 (eff. 2024-07-29): concurrent FTC notice for ≥500, third-party-identity content field, ≥2 contact methods incl. in-app, "protecting affected individuals" content strengthened. (V4-H3.) |
+| 1.2     | 2026-06-28 | Generalized the third-party AI references from Gemini-only to the user-chosen provider (Gemini default; Anthropic/OpenAI/xAI optional) after the multi-provider AI change. (Gap-audit H2.) |

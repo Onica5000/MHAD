@@ -65,7 +65,8 @@ class _AiSuggestButtonState extends ConsumerState<AiSuggestButton> {
 
     // Per-session AI consent gate
     if (!ref.read(aiConsentGivenProvider)) {
-      final accepted = await showAiConsentDialog(context);
+      final accepted = await showAiConsentDialog(context,
+          provider: ref.read(activeProviderProvider));
       if (!accepted || !mounted) return;
       ref.read(aiConsentGivenProvider.notifier).state = true;
     }

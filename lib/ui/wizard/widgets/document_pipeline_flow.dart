@@ -366,7 +366,8 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
     // would contradict how autofill works. Shown before each read; on accept we
     // also record the session AI-consent flag so chat/suggest don't re-prompt.
     if (!mounted) return;
-    final authorized = await showAutofillConsentDialog(context);
+    final authorized =
+        await showAutofillConsentDialog(context, provider: aiCfg.provider);
     if (!authorized || !mounted) return;
     ref.read(aiConsentGivenProvider.notifier).state = true;
 

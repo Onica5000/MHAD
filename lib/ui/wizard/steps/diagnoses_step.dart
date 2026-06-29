@@ -133,7 +133,8 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
     }
     // Per-session AI consent gate.
     if (!ref.read(aiConsentGivenProvider)) {
-      final ok = await showAiConsentDialog(context);
+      final ok = await showAiConsentDialog(context,
+          provider: ref.read(activeProviderProvider));
       if (!ok || !mounted) return;
       ref.read(aiConsentGivenProvider.notifier).state = true;
     }

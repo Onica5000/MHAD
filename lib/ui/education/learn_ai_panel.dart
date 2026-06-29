@@ -52,7 +52,8 @@ class _LearnAiPanelState extends ConsumerState<LearnAiPanel> {
       // No directive context on the Learn page — just a general "learning"
       // session. PII is stripped downstream regardless.
       assistantContext: const AssistantContext(stepName: 'Learning'),
-      requestConsent: () => showAiConsentDialog(context),
+      requestConsent: () =>
+          showAiConsentDialog(context, provider: ref.read(activeProviderProvider)),
       onSent: _scrollToBottom,
     );
     if (!mounted) return;

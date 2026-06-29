@@ -190,7 +190,8 @@ class _AiConsistencyScreenState extends ConsumerState<AiConsistencyScreen> {
     if (assistant == null) return; // rules-only when AI isn't set up
 
     if (!ref.read(aiConsentGivenProvider)) {
-      final ok = await showAiConsentDialog(context);
+      final ok = await showAiConsentDialog(context,
+          provider: ref.read(activeProviderProvider));
       if (!ok || !mounted) {
         if (mounted) setState(() => _aiDeclined = true);
         return;

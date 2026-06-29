@@ -72,17 +72,21 @@ class PrivacyPolicyScreen extends StatelessWidget {
               title: 'AI Features & Third-Party Data Sharing',
               body:
                   'If you choose to use the optional AI features (AI Assistant '
-                  'chat or AI Suggest), text you submit is sent to Google\'s '
-                  'Gemini API for processing.\n\n'
-                  'On the free tier, Google may:\n'
+                  'chat or AI Suggest), text you submit is sent to the AI '
+                  'provider you select — Google Gemini by default, or Anthropic '
+                  'Claude, OpenAI, or xAI Grok if you choose one and add your '
+                  'own key — for processing.\n\n'
+                  'On Google\'s Gemini free tier, Google may:\n'
                   '  - Use your input/output data to improve their products\n'
                   '  - Allow human reviewers to read your inputs and outputs\n'
-                  '  - Retain data indefinitely (no automatic expiration)\n\n'
+                  '  - Retain data indefinitely (no automatic expiration)\n'
+                  'Other providers handle your data under their own API data '
+                  'policies — review the policy of whichever provider you use.\n\n'
                   'The app strips common personally identifiable information '
                   '(SSNs, phone numbers, emails, dates of birth, addresses, '
-                  'names, and facility names) before sending data to Google, '
-                  'but this is a best-effort filter and cannot guarantee '
-                  'complete removal.\n\n'
+                  'names, and facility names) before sending your text to any '
+                  'provider, but this is a best-effort filter and cannot '
+                  'guarantee complete removal.\n\n'
                   'AI features are entirely optional. The app is fully '
                   'functional without them.',
               headingStyle: headingStyle,
@@ -105,6 +109,10 @@ class PrivacyPolicyScreen extends StatelessWidget {
                   'upgrading to the paid Gemini tier, which offers stronger '
                   'data protection policies and does not use your data for '
                   'model training.\n\n'
+                  'If you select a different provider (Anthropic, OpenAI, or '
+                  'xAI) instead of Gemini, that provider\'s own data and '
+                  'retention policy applies — review it before sending '
+                  'sensitive content.\n\n'
                   'You can avoid all third-party data sharing by not using '
                   'the AI features.',
               headingStyle: headingStyle,
@@ -133,9 +141,9 @@ class PrivacyPolicyScreen extends StatelessWidget {
                   'transmission.\n'
                   '  - Right to restriction: You may use the app in Public '
                   'Mode without any data persistence.\n\n'
-                  'Data sent to Google\'s Gemini API is processed under '
-                  'Google\'s own privacy policy and data processing terms. '
-                  'We cannot control or delete data once sent to Google.',
+                  'Data sent to your chosen AI provider is processed under that '
+                  'provider\'s own privacy policy and data processing terms. '
+                  'We cannot control or delete data once it has been sent.',
               headingStyle: headingStyle,
               bodyStyle: bodyStyle,
             ),
@@ -154,8 +162,9 @@ class PrivacyPolicyScreen extends StatelessWidget {
                   'you create your advance directive. (2) We **do not sell** '
                   'your health data — there is no commercial recipient. '
                   '(3) The only third party that may receive any of your text '
-                  'is Google (Gemini API), and **only** if you affirmatively '
-                  'opt in to AI features each session. (4) We use no '
+                  'is the AI provider you choose (Google Gemini by default, or '
+                  'Anthropic, OpenAI, or xAI), and **only** if you '
+                  'affirmatively opt in to AI features each session. (4) We use no '
                   'third-party SDKs, no analytics, no advertising frameworks, '
                   'no tracking pixels or cookies. (5) You may delete all '
                   'locally stored data at any time via "Delete All Data" in '
@@ -229,8 +238,8 @@ class PrivacyPolicyScreen extends StatelessWidget {
                   'screen. Deleting a directive removes all associated data '
                   '(personal info, agents, medications, witnesses, signatures) '
                   'from the local database.\n\n'
-                  'You can remove your Gemini API key at any time from the '
-                  'AI Setup screen.\n\n'
+                  'You can remove your AI provider API key(s) at any time from '
+                  'the AI Setup screen.\n\n'
                   'Uninstalling the app removes all locally stored data.',
               headingStyle: headingStyle,
               bodyStyle: bodyStyle,
@@ -243,7 +252,8 @@ class PrivacyPolicyScreen extends StatelessWidget {
                   'advertising frameworks, crash reporting services (such as '
                   'Firebase, Crashlytics, or Sentry), or tracking pixels.\n\n'
                   'The only external network connections this app makes are:\n'
-                  '  - Google Gemini API (only when you use AI features)\n'
+                  '  - Your chosen AI provider — Google Gemini (default), '
+                  'Anthropic, OpenAI, or xAI — only when you use AI features\n'
                   '  - NIH/NLM Clinical Table Search Service — medication, '
                   'condition, and provider (doctor) lookups\n'
                   '  - NLM MedlinePlus Connect & RxNav — plain-language '
@@ -284,10 +294,10 @@ class PrivacyPolicyScreen extends StatelessWidget {
                   'users within 60 calendar days of discovering the breach.\n\n'
                   'Because this app stores data locally on your device and '
                   'does not maintain a server-side database, breach risk is '
-                  'limited to the optional AI features. If Google notifies us '
-                  'of a breach affecting Gemini API data, we will pass that '
-                  'notification along through app store updates and in-app '
-                  'notices.',
+                  'limited to the optional AI features. If your chosen AI '
+                  'provider notifies us of a breach affecting data sent through '
+                  'the app, we will pass that notification along through app '
+                  'store updates and in-app notices.',
               headingStyle: headingStyle,
               bodyStyle: bodyStyle,
             ),

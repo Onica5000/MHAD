@@ -76,7 +76,8 @@ class _WizardAiRailState extends ConsumerState<WizardAiRail> {
         stepName: widget.stepName,
         filledFields: filled.isEmpty ? null : filled,
       ),
-      requestConsent: () => showAiConsentDialog(context),
+      requestConsent: () =>
+          showAiConsentDialog(context, provider: ref.read(activeProviderProvider)),
       onSent: _scrollToBottom,
     );
     if (!mounted) return;

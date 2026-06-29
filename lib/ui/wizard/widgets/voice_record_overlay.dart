@@ -103,7 +103,8 @@ class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
     setState(() => _error = null);
     // AI mode requires consent (audio with personal details goes to Google).
     if (_aiMode && !ref.read(aiConsentGivenProvider)) {
-      final ok = await showAudioConsentDialog(context);
+      final ok = await showAudioConsentDialog(context,
+          provider: _aiConfig!.provider);
       if (!mounted) return;
       if (ok) {
         ref.read(aiConsentGivenProvider.notifier).state = true;

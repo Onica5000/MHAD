@@ -62,7 +62,8 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
       ref,
       text: text,
       assistantContext: widget.context,
-      requestConsent: () => showAiConsentDialog(context),
+      requestConsent: () =>
+          showAiConsentDialog(context, provider: ref.read(activeProviderProvider)),
       onSent: _scrollToBottom,
     );
     if (!mounted) return;
@@ -117,7 +118,8 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
       ref,
       question: question,
       assistantContext: widget.context,
-      requestConsent: () => showAiConsentDialog(context),
+      requestConsent: () =>
+          showAiConsentDialog(context, provider: ref.read(activeProviderProvider)),
     );
     if (!mounted) return;
     if (result.needsKey) {
