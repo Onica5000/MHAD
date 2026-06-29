@@ -57,7 +57,7 @@ enum AiProvider {
     models: [
       'grok-4.3', // default — xAI's most intelligent AND fastest
       'grok-4.20-0309-non-reasoning', // capable, no reasoning latency
-      'grok-4.20-0309-reasoning', // deeper reasoning (slower / pricier)
+      'grok-4.20-0309-reasoning', // deeper reasoning (same token price; slower / more tokens)
       'grok-build-0.1', // cheapest/efficient tier
     ],
   );
