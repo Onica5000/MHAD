@@ -117,7 +117,13 @@ were superseded by regulations that changed *after* they were written.
   each consolidated wizard step (validate/save/restore); a router redirect test
   (disclaimer→mode→home gating); a `FormType.steps` ↔ `_buildStep` exhaustiveness test;
   a bottom-nav/route-highlight test. Target the wizard + router first (highest risk).
-- **Status:** [ ]
+- **Status:** [~] — Progress 2026-06-28: router-redirect gating (`router_test.dart`) and
+  `FormType.steps` composition (`form_type_test.dart`) are covered; added the first
+  wizard-step validate/save/restore widget test
+  (`test/wizard/people_i_trust_step_test.dart`, locking the agents-step collapse
+  regression) + multi-provider storage tests (`test/ai/ai_prefs_test.dart`). Remaining:
+  per-step persistence for the other consolidated steps + golden PDF tests
+  (`pdf_generator_test.dart` has smoke tests, not goldens).
 
 ### V4-H7: Localization is half-wired — two competing string layers, neither complete
 - **Files:** `lib/l10n/app_*.arb` + generated `AppLocalizations` (used ~31×) **and**
