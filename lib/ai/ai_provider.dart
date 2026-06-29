@@ -83,6 +83,14 @@ enum AiProvider {
   /// fall back to the browser/OS speech service.
   bool get supportsAudio => this == AiProvider.gemini;
 
+  /// Whether the provider's API can be called directly from a browser (CORS).
+  /// Gemini allows it; Anthropic allows it via the
+  /// `anthropic-dangerous-direct-browser-access` header (sent by LlmClient).
+  /// OpenAI / xAI generally do NOT send CORS headers, so on web they tend to be
+  /// blocked — surfaced as a warning in the setup UI (this is the ship surface).
+  bool get worksInBrowser =>
+      this == AiProvider.gemini || this == AiProvider.anthropic;
+
   /// OpenAI-compatible Chat Completions endpoint (OpenAI and xAI share the wire
   /// format). Throws for non-compatible providers.
   String get chatCompletionsUrl => switch (this) {

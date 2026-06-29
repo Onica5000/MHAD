@@ -37,6 +37,16 @@ void main() {
     for (final p in AiProvider.values) {
       expect(p.supportsVision, isTrue);
     }
+    // Audio is Gemini-only.
+    expect(AiProvider.gemini.supportsAudio, isTrue);
+    for (final p in [AiProvider.anthropic, AiProvider.openai, AiProvider.grok]) {
+      expect(p.supportsAudio, isFalse);
+    }
+    // Browser/CORS: Gemini + Anthropic work in-browser; OpenAI/Grok flagged off.
+    expect(AiProvider.gemini.worksInBrowser, isTrue);
+    expect(AiProvider.anthropic.worksInBrowser, isTrue);
+    expect(AiProvider.openai.worksInBrowser, isFalse);
+    expect(AiProvider.grok.worksInBrowser, isFalse);
   });
 
   test('chatCompletionsUrl for OpenAI-compatible providers', () {

@@ -334,6 +334,10 @@ class LlmClient {
           'content-type': 'application/json',
           'x-api-key': apiKey,
           'anthropic-version': '2023-06-01',
+          // Required for Anthropic to allow direct browser (CORS) calls — the
+          // app is a BYO-key client, so the user's own key is used from their
+          // own browser (same trust model as the Gemini path).
+          'anthropic-dangerous-direct-browser-access': 'true',
         },
         body: jsonEncode(body),
       ),

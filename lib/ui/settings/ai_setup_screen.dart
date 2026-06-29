@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -263,6 +264,36 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
             onModelChanged: (m) => setState(() => _model = m),
           ),
           const SizedBox(height: 16),
+
+          // ---- Web/CORS caveat for providers that browsers tend to block ----
+          if (kIsWeb && !_provider.worksInBrowser) ...[
+            Card(
+              color: cs.errorContainer,
+              child: Padding(
+                padding: const EdgeInsets.all(14),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Icon(Icons.public_off,
+                        size: 20, color: cs.onErrorContainer),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        '${_provider.label} may be blocked by your browser\'s '
+                        'security (CORS) on the web. If it doesn\'t respond, '
+                        'pick Gemini or Claude — both work in the browser.',
+                        style: TextStyle(
+                            fontSize: 12.5,
+                            color: cs.onErrorContainer,
+                            height: 1.4),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+          ],
 
           // ---- Instructions ----
           Text(
