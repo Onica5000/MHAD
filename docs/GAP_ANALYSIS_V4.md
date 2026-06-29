@@ -169,9 +169,15 @@ were superseded by regulations that changed *after* they were written.
   legally required anyway — lean into that); (2) ensure focused inputs scroll clear of the
   sticky bottom nav/footer (insets/`Scrollable.ensureVisible`); (3) extend
   `accessibility_test.dart` beyond the home screen to the wizard and disclaimer.
-- **Status:** `[x]` **MOOTED** — the draw-to-sign `signature` pad was dropped; signing is
-  wet-ink-only (typed name in-app, then print + sign on paper), so there's no dragging
-  movement to remediate. The focus-not-obscured (2.4.11) point remains worth a check.
+- **Status:** `[x]` **MOOTED + 2.4.11 VERIFIED 2026-06-29** — the draw-to-sign `signature`
+  pad was dropped; signing is wet-ink-only (typed name in-app, then print + sign on paper),
+  so there's no dragging movement to remediate. **Focus Not Obscured (2.4.11):** verified
+  compliant — the global mobile nav lays out in a `Column` (`Expanded(child)` above
+  `MhadBottomNav`, see `responsive_shell.dart`) and the wizard bar is a
+  `Scaffold.bottomNavigationBar`, so content/focused fields are always laid out *above*
+  them (never overlaid). No `Positioned` sticky footer overlays any input form (the 5
+  `Positioned` bottom uses are badges/heroes/autocomplete dropdowns/wallet-card art).
+  Nothing to remediate.
 
 ### V4-M10: Crisis-time availability — the "transmitter/receiver problem"
 - **Evidence:** PAD implementation research repeatedly identifies the core failure mode:

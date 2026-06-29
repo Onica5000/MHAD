@@ -327,6 +327,40 @@ void main() {
       expect(bytes, isNotEmpty);
     });
 
+    test('each form type produces a structurally valid PDF (%PDF- header)',
+        () async {
+      const generators = [
+        PdfGenerator(
+          includeCombined: true,
+          includeDeclaration: false,
+          includePoa: false,
+          includeSupplementary: false,
+          includeNotes: false,
+        ),
+        PdfGenerator(
+          includeCombined: false,
+          includeDeclaration: true,
+          includePoa: false,
+          includeSupplementary: false,
+          includeNotes: false,
+        ),
+        PdfGenerator(
+          includeCombined: false,
+          includeDeclaration: false,
+          includePoa: true,
+          includeSupplementary: false,
+          includeNotes: false,
+        ),
+      ];
+      for (final g in generators) {
+        final bytes = await generate(g);
+        // PDF files begin with the magic number "%PDF-": a real validity check
+        // beyond "non-empty" (catches a generator that emits garbage bytes).
+        expect(String.fromCharCodes(bytes.take(5)), '%PDF-',
+            reason: 'output should be a valid PDF document');
+      }
+    });
+
     test('generates without error when optional data is null', () async {
       final generator = const PdfGenerator(
         includeCombined: true,
