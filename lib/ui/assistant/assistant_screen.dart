@@ -4,6 +4,7 @@ import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/ai/ai_assistant.dart';
+import 'package:mhad/ai/ai_provider.dart';
 import 'package:mhad/ai/gemini_api_assistant.dart';
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/domain/model/directive.dart';
@@ -492,6 +493,11 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
 class _RateLimitBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // The free-tier rate tracker is Gemini-specific; for other providers the
+    // user's own account/plan governs limits, so don't show meaningless numbers.
+    if (ref.watch(activeProviderProvider) != AiProvider.gemini) {
+      return const SizedBox.shrink();
+    }
     final tracker = ref.watch(geminiRateTrackerProvider);
     if (!tracker.showStatus) return const SizedBox.shrink();
 
