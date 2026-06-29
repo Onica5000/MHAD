@@ -9,34 +9,57 @@
 /// Per-provider transport lives in [LlmClient] (lib/ai/llm_client.dart).
 enum AiProvider {
   // A short, curated set of the most useful models per provider (not the full
-  // catalog). First entry is the default. Edit these lists as models change.
+  // catalog). First entry is the DEFAULT — chosen as each provider's best
+  // efficiency/quality balance for this app (fast chat, vision autofill, JSON),
+  // followed by a cheaper option and a flagship. Refreshed from each provider's
+  // model docs 2026-06-29; edit as models change.
   gemini(
     label: 'Google Gemini',
     keyHint: 'Gemini API key (AIza…)',
     host: 'generativelanguage.googleapis.com',
     getKeyUrl: 'https://aistudio.google.com/app/apikey',
-    models: ['gemini-3.5-flash', 'gemini-2.5-flash', 'gemini-2.5-pro', 'gemini-2.5-flash-lite'],
+    models: [
+      'gemini-3.5-flash', // default (also app_data.ai.model) — best Flash
+      'gemini-3.1-flash-lite', // cheapest, frontier-class
+      'gemini-2.5-flash', // stable, strong price/perf
+      'gemini-2.5-pro', // flagship reasoning
+    ],
   ),
   anthropic(
     label: 'Anthropic Claude',
     keyHint: 'Anthropic key (sk-ant-…)',
     host: 'api.anthropic.com',
     getKeyUrl: 'https://console.anthropic.com/settings/keys',
-    models: ['claude-opus-4-8', 'claude-sonnet-4-6', 'claude-haiku-4-5'],
+    models: [
+      'claude-sonnet-4-6', // default — best speed+intelligence balance
+      'claude-haiku-4-5', // fastest + cheapest, near-frontier
+      'claude-opus-4-8', // most capable Opus
+      'claude-fable-5', // flagship
+    ],
   ),
   openai(
     label: 'OpenAI GPT',
     keyHint: 'OpenAI key (sk-…)',
     host: 'api.openai.com',
     getKeyUrl: 'https://platform.openai.com/api-keys',
-    models: ['gpt-4o', 'gpt-4o-mini', 'gpt-4.1', 'o3'],
+    models: [
+      'gpt-5.4-mini', // default — OpenAI's latency/cost pick (vision + JSON)
+      'gpt-5.4-nano', // cheapest
+      'gpt-5.4', // standard flagship
+      'gpt-5.5', // top flagship
+    ],
   ),
   grok(
     label: 'xAI Grok',
     keyHint: 'xAI key (xai-…)',
     host: 'api.x.ai',
     getKeyUrl: 'https://console.x.ai',
-    models: ['grok-4', 'grok-3', 'grok-3-mini'],
+    models: [
+      'grok-4.3', // default — xAI's most intelligent AND fastest
+      'grok-4.20-0309-non-reasoning', // capable, no reasoning latency
+      'grok-4.20-0309-reasoning', // deeper reasoning (slower / pricier)
+      'grok-build-0.1', // cheapest/efficient tier
+    ],
   );
 
   const AiProvider({
