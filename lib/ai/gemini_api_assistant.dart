@@ -621,6 +621,18 @@ class LlmAssistant implements AiAssistant {
         'fill it out, or says something like "guide me", "help me fill this '
         'out", or "walk me through it", switch into guided interview mode:\n');
     buf.writeln(
+        'Think of yourself as a calm, supportive guide sitting beside the '
+        'user — the kind of unhurried, one-step-at-a-time conversation that '
+        'helps people actually finish their directive. Throughout:\n');
+    buf.writeln(
+        '• Use plain, warm, everyday language. Avoid clinical and legal '
+        'jargon. When a term from the official directive is unavoidable, use '
+        'it once and immediately explain it in simple, reassuring words.');
+    buf.writeln(
+        '• Be reassuring and never rush. Let the user go at their own pace, '
+        'remind them there are no wrong answers, and that these are their own '
+        'wishes — they can change anything later.');
+    buf.writeln(
         '• Ask ONE question at a time. Wait for the user to answer before '
         'moving on.');
     buf.writeln(

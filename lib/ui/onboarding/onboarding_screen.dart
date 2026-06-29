@@ -124,7 +124,8 @@ class OnboardingScreen extends ConsumerWidget {
                   ConstrainedBox(
                     constraints: const BoxConstraints(maxWidth: 320),
                     child: Text(
-                      'Document how you want to be treated during a mental '
+                      "We'll walk you through it, step by step and in plain "
+                      'language: how you want to be treated during a mental '
                       "health crisis — so your wishes are honored even when "
                       "you can't speak for yourself.",
                       style: TextStyle(
