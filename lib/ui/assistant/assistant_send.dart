@@ -98,7 +98,8 @@ Future<AssistantSendResult> sendAssistantMessage(
   // Estimate tokens and auto-trim oldest turns to fit (reserve 20% for the
   // reply). Mirrors the assistant screen's budgeting.
   final gemini = assistant as GeminiApiAssistant;
-  final maxInputTokens = (GeminiApiAssistant.maxContextTokens * 0.8).toInt();
+  // 80% of the ACTIVE provider's context window (reserve 20% for the reply).
+  final maxInputTokens = (gemini.contextWindowTokens * 0.8).toInt();
   var tokens = gemini.estimateTokens(
     userMessage: trimmed,
     chatHistory: strippedHistory,

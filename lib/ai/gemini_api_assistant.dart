@@ -76,8 +76,20 @@ class LlmAssistant implements AiAssistant {
     return text;
   }
 
-  /// Maximum input tokens for the model (from app_data.json).
+  /// Maximum input tokens for the Gemini model (from app_data.json). Kept for
+  /// the Gemini rate-bar UI; for the input-budget cap use [contextWindowTokens].
   static int get maxContextTokens => appData.ai.maxContextTokens;
+
+  /// Approximate input-token budget for the ACTIVE provider. Gemini reads its
+  /// window from app_data (admin-updatable); the others use a conservative floor
+  /// that fits even their smallest curated model, so the chat-history cap never
+  /// over-sends to a small-window model (e.g. Claude Haiku ~200k tokens).
+  int get contextWindowTokens => switch (provider) {
+        AiProvider.gemini => appData.ai.maxContextTokens,
+        AiProvider.anthropic => 200000,
+        AiProvider.openai => 256000,
+        AiProvider.grok => 256000,
+      };
 
   /// PII-stripping chokepoint applied to every outbound user payload before
   /// it reaches Google. Centralised here so tests can pin the contract and

@@ -44,7 +44,10 @@ lib/
     model/        -- directive.dart (enums, extensions)
   ai/
     ai_assistant.dart          -- Abstract interface
-    gemini_api_assistant.dart   -- Gemini API via google_generative_ai package
+    ai_provider.dart           -- AiProvider enum (the multi-provider source of truth)
+    llm_client.dart            -- Provider-agnostic transport (Gemini/Claude/OpenAI/Grok)
+    gemini_api_assistant.dart   -- LlmAssistant (typedef GeminiApiAssistant); chat + helpers
+    document_extractor.dart / smart_fill_service.dart -- multimodal autofill / smart-fill
   ui/
     theme/        -- app_theme.dart (teal Material3 theme)
     home/         -- HomeScreen
@@ -60,10 +63,10 @@ lib/
 - **State**: flutter_riverpod + riverpod_annotation (code gen with riverpod_generator)
 - **Database**: drift + sqlcipher_flutter_libs (encrypted SQLite; code gen — run build_runner after schema changes)
 - **Navigation**: go_router
-- **AI**: google_generative_ai (Gemini 3.5 Flash free tier)
+- **AI**: multi-provider (BYO key) via `LlmClient` — Google Gemini (default, `google_generative_ai`), Anthropic Claude, OpenAI, xAI Grok (REST)
 - **PDF**: pdf + printing (pixel-perfect PDF generation)
 - **Signature**: signature
-- **Secure storage**: flutter_secure_storage (Gemini API key)
+- **Secure storage**: flutter_secure_storage (per-provider AI API keys)
 
 ## After Any Database Schema Change
 Run: `flutter pub run build_runner build --delete-conflicting-outputs`
@@ -80,13 +83,25 @@ This regenerates `app_database.g.dart`.
 - One renderer for all three form types (layout differences handled in code)
 - Dynamic text expansion: measure text, expand box, shift content down
 
-## AI Assistant
-- Model: `gemini-3.5-flash` (single source: `appData.ai.model` ← `assets/data/app_data.json`) via `google_generative_ai` package
-- API key stored in flutter_secure_storage in private mode (never in source)
-- In public mode, API key is ephemeral (in-memory only, 10-min TTL cache for crash recovery)
-- Always inject context: form type, current step, filled fields
-- PII stripping before sending to external API
-- "Not legal advice" disclaimer always shown in UI
+## AI Assistant (multi-provider — see lib/ai/)
+- **Provider-agnostic** since 2026-06-28. `AiProvider` (lib/ai/ai_provider.dart) is the
+  single source of truth (label/keyHint/models/host + capability flags); `LlmClient`
+  (lib/ai/llm_client.dart) is the transport (Gemini via `google_generative_ai`; Anthropic
+  Messages REST; OpenAI/Grok Chat Completions REST). The chat/extractor/smart-fill take
+  `(provider, model, apiKey)`; `GeminiApiAssistant` is now a typedef onto `LlmAssistant`.
+- **Default = Gemini** (`appData.ai.model` = `gemini-3.5-flash`, admin-updatable). Other
+  providers' curated model lists live in `AiProvider.models` (current defaults: Claude
+  `claude-sonnet-4-6`, OpenAI `gpt-5.4-mini`, Grok `grok-4.3`).
+- **Per-provider keys** (`ai_key_<provider>`): private mode → flutter_secure_storage;
+  public/web → in-memory + 10-min TTL crash-recovery cache. Active provider/model resolved
+  via `aiConfigProvider` (lib/providers/assistant_providers.dart).
+- **Capabilities differ:** web-search grounding + audio = Gemini only; PDF autofill =
+  Gemini + Claude; images = all; OpenAI/Grok are often CORS-blocked in-browser (web).
+- Always inject context: form type, current step, filled fields.
+- PII stripping (`sanitizeForApi`) before sending — chat (incl. history), suggestions,
+  smart-fill. **Document autofill is the one PII-exempt path** (sends the doc as-is, with
+  explicit consent). Keep AI copy provider-agnostic (don't hardcode "Gemini").
+- "Not legal advice" disclaimer always shown in UI.
 
 ## Navigation (current model — no hamburger drawer)
 - **Mobile**: floating pill `MhadBottomNav` (Home · Learn · Ask · Settings) on the four
