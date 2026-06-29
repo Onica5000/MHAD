@@ -8,6 +8,7 @@ import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/services/admin_backup_store.dart';
 import 'package:mhad/services/admin_update_service.dart';
 import 'package:mhad/services/federal_register_service.dart';
+import 'package:mhad/services/ai_model_catalog_service.dart';
 import 'package:mhad/services/gemini_model_service.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/utils/launch_utils.dart';
@@ -41,9 +42,10 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
   // entered here, ephemeral to this screen, and never persisted).
   AdminAiProvider _provider = AdminAiProvider.gemini;
   String _model = AdminAiProvider.gemini.defaultModel;
-  // Live free-tier Gemini model ids, fetched on demand to refresh the dropdown
-  // from the real catalog (null = not fetched; falls back to the curated enum).
-  List<String>? _geminiLiveModels;
+  // Live model ids for the SELECTED provider, fetched on demand to refresh the
+  // dropdown from the real catalog (null = not fetched; falls back to the
+  // curated enum list). Reset when the provider changes.
+  List<String>? _liveModels;
   final _keyCtrl = TextEditingController();
   AdminDataTarget _target = AdminDataTarget.appData;
   Map<String, dynamic> _base = const {};
@@ -134,20 +136,20 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
     }
   }
 
-  /// Refresh the Gemini model dropdown from the live catalog, filtered to the
-  /// applicable FREE-tier text models (the app uses Gemini so users pay
-  /// nothing). Falls back to the curated enum list if never run.
-  Future<void> _refreshGeminiModels() async {
-    // Gemini-specific key (NOT the active provider's) — these call Google's
-    // ListModels, so an Anthropic/OpenAI key must never be sent here.
+  /// Refresh the model dropdown from the SELECTED provider's live catalog —
+  /// the "check the newest models" capability, for any provider. Gemini uses the
+  /// curated free-tier filter; the others list every model the key can reach.
+  /// Falls back to the curated enum list if never run. The key used is that
+  /// provider's saved key (so a key is never sent to the wrong provider), or the
+  /// one typed on this screen.
+  Future<void> _refreshModels() async {
+    final p = _provider;
     final savedKey =
-        (ref.read(aiPrefsProvider).valueOrNull?.keys[AdminAiProvider.gemini] ??
-                '')
-            .trim();
+        (ref.read(aiPrefsProvider).valueOrNull?.keys[p] ?? '').trim();
     final key = savedKey.isNotEmpty ? savedKey : _keyCtrl.text.trim();
     if (key.isEmpty) {
       setState(() => _error =
-          'Need a Gemini API key (AIza…) to refresh the model list.');
+          'Need a ${p.label} API key (${p.keyHint}) to refresh the model list.');
       return;
     }
     setState(() {
@@ -155,13 +157,15 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
       _error = null;
     });
     try {
-      final ids = await GeminiModelService(key).freeModelIds();
+      final ids = p == AdminAiProvider.gemini
+          ? await GeminiModelService(key).freeModelIds()
+          : await AiModelCatalogService().fetchModelIds(p, key);
       if (!mounted) return;
       setState(() {
         _loading = false;
-        _geminiLiveModels = ids;
+        _liveModels = ids;
         if (ids.isEmpty) {
-          _error = 'No free-tier text models returned by the API.';
+          _error = 'No models returned by the API.';
         } else if (!ids.contains(_model)) {
           _model = ids.first;
         }
@@ -612,19 +616,22 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
             ],
             onChanged: (p) => setState(() {
               _provider = p ?? AdminAiProvider.gemini;
-              // Reset to the new provider's default model.
+              // Reset to the new provider's default model; live list is
+              // per-provider, so drop it until refreshed for the new one.
               _model = _provider.defaultModel;
+              _liveModels = null;
             }),
           ),
           const SizedBox(height: 12),
-          // Model for the chosen provider. For Gemini the list can be refreshed
-          // from the live catalog (free-tier text models only); otherwise it's
-          // the curated enum defaults.
+          // Model for the chosen provider. The refresh button pulls the live
+          // model list from the selected provider's API (Gemini = curated
+          // free-tier; others = every model the key can reach). Falls back to
+          // the curated enum list until refreshed.
           Builder(builder: (_) {
             final isGemini = _provider == AdminAiProvider.gemini;
-            final live = _geminiLiveModels ?? const [];
+            final live = _liveModels ?? const <String>[];
             final opts = [
-              ...(isGemini && live.isNotEmpty ? live : _provider.models),
+              ...(live.isNotEmpty ? live : _provider.models),
             ];
             if (!opts.contains(_model)) opts.insert(0, _model);
             return Row(
@@ -635,8 +642,9 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
                     decoration: InputDecoration(
                       border: const OutlineInputBorder(),
                       labelText: 'Model',
-                      helperText: isGemini && live.isNotEmpty
-                          ? 'Live free-tier models (refreshed from the catalog)'
+                      helperText: live.isNotEmpty
+                          ? 'Live ${_provider.label} models'
+                              '${isGemini ? ' (free tier)' : ''} — from the API'
                           : null,
                     ),
                     items: [
@@ -647,14 +655,12 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
                         setState(() => _model = m ?? _provider.defaultModel),
                   ),
                 ),
-                if (isGemini) ...[
-                  const SizedBox(width: 8),
-                  IconButton(
-                    tooltip: 'Refresh free-tier models from the live catalog',
-                    onPressed: _loading ? null : _refreshGeminiModels,
-                    icon: const Icon(Icons.refresh),
-                  ),
-                ],
+                const SizedBox(width: 8),
+                IconButton(
+                  tooltip: 'Check the newest ${_provider.label} models (live API)',
+                  onPressed: _loading ? null : _refreshModels,
+                  icon: const Icon(Icons.refresh),
+                ),
               ],
             );
           }),

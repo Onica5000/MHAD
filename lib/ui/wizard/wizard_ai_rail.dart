@@ -162,7 +162,7 @@ class _WizardAiRailState extends ConsumerState<WizardAiRail> {
           ),
           const SizedBox(height: 4),
           Text(
-            '● GEMINI · PII STRIPPED',
+            '● ${ref.watch(activeProviderProvider).name.toUpperCase()} · PII STRIPPED',
             style: TextStyle(
               fontFamily: kMonoFamily,
               fontFamilyFallback: const [

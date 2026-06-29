@@ -194,8 +194,8 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                   ),
                   Text(
                     hasKey
-                        ? '● ACTIVE · ${appData.ai.model.toUpperCase().replaceAll('-', ' ')} · TEXT PII STRIPPED BEFORE SEND'
-                        : '○ NOT SET UP · ADD A FREE KEY TO USE THE AI',
+                        ? '● ACTIVE · ${ref.watch(activeModelProvider).toUpperCase().replaceAll('-', ' ')} · TEXT PII STRIPPED BEFORE SEND'
+                        : '○ NOT SET UP · ADD A KEY TO USE THE AI',
                     style: TextStyle(
                       fontFamily: kMonoFamily,
                       fontFamilyFallback: const [
@@ -400,7 +400,7 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                       const Icon(Icons.smart_toy_outlined, size: 32),
                       const SizedBox(height: 8),
                       const Text(
-                        'To use the AI assistant, set up your free Gemini API key.',
+                        "To use the AI assistant, set up an AI key — Gemini's free tier works.",
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 13),
                       ),

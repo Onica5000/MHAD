@@ -115,13 +115,13 @@ class _LearnAiPanelState extends ConsumerState<LearnAiPanel> {
                 ],
               ),
             ),
-            // Mirror the wizard step rail's AI-panel header — the
-            // "GEMINI · PII STRIPPED" badge — for a consistent AI panel
+            // Mirror the wizard step rail's AI-panel header — the active
+            // provider + "PII STRIPPED" badge — for a consistent AI panel
             // across the app. (The "not advice" line moves down by the input.)
             Padding(
               padding: const EdgeInsets.fromLTRB(18, 0, 18, 12),
               child: Text(
-                '● GEMINI · PII STRIPPED',
+                '● ${ref.watch(activeProviderProvider).name.toUpperCase()} · PII STRIPPED',
                 style: TextStyle(
                   fontFamily: kMonoFamily,
                   fontFamilyFallback: const [

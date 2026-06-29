@@ -342,7 +342,7 @@ List<_SectionData> _buildSections(MhadPalette p) {
         _Para(spans: const [
           TextSpan(
               text:
-                  "If you use the optional AI Assistant (Google Gemini), text you send is transmitted to Google's servers. On the free tier, Google may use this data to improve their products and human reviewers may read inputs."),
+                  "If you use the optional AI Assistant, text you send is transmitted to the AI provider you choose (Google Gemini by default; or Anthropic, OpenAI, or xAI). On Gemini's free tier, Google may use this data to improve their products and human reviewers may read inputs; other providers handle your data under their own API policies."),
         ], palette: p),
         _Para(spans: [
           const TextSpan(text: 'To protect you, the app '),
@@ -361,8 +361,8 @@ List<_SectionData> _buildSections(MhadPalette p) {
           const TextSpan(
               text:
                   'Documents you upload for autofill are different: the whole '
-                  'file is sent to Google\'s AI as-is, and to fill in your '
-                  'directive the AI reads the personal details in it (your '
+                  'file is sent to your chosen AI provider as-is, and to fill '
+                  'in your directive the AI reads the personal details in it (your '
                   'name, date of birth, address, and your agent\'s or '
                   'guardian\'s details). You review everything before it is '
                   'saved. '),

@@ -18,8 +18,8 @@ class FriendlyError {
       return 'Too many requests. Please wait a moment and try again.';
     }
 
-    // Gemini-specific
-    if (msg.contains('Empty response from Gemini')) {
+    // Empty model output (any provider).
+    if (msg.contains('Empty response from the AI')) {
       return 'The AI returned no results. Try again or enter the information manually.';
     }
     if (msg.contains('Could not parse AI response')) {

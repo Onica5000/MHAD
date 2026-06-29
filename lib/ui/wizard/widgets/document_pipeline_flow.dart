@@ -237,9 +237,9 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
         content: const Text(
           'Snap-to-fill uses AI to read your uploaded document (photo, PDF, or '
           'text) and pull out details to fill your form — medications, '
-          'conditions, care preferences, and your contact details. It needs a '
-          'free Gemini key — about 30 seconds to set up. You review every field '
-          'before anything lands in your form.',
+          'conditions, care preferences, and your contact details. It needs an '
+          "AI key — Gemini's free tier takes about 30 seconds to set up. You "
+          'review every field before anything lands in your form.',
         ),
         actions: [
           TextButton(
@@ -1020,7 +1020,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                 child: Text(
                   hasKey
                       ? 'Held on this device. Nothing is sent until you tap '
-                          'Read — then it goes to Google\'s AI to read.'
+                          'Read — then it goes to your AI provider to read.'
                       : 'Held on this device. Reading needs AI set up first '
                           '(free, ~30 seconds) — nothing is sent until then.',
                   style: TextStyle(
@@ -1141,8 +1141,8 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
           const SizedBox(height: 6),
           Text(
             'You can see how snap-to-fill works below, but reading a real photo '
-            'or PDF needs a free Gemini key (about 30 seconds). You review '
-            'every field before it lands in your form.',
+            "or PDF needs an AI key (Gemini's free tier takes about 30 "
+            'seconds). You review every field before it lands in your form.',
             style: TextStyle(
               fontFamily: kSansFamily,
               fontSize: 12.5,
@@ -1278,10 +1278,10 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                   Expanded(
                     child: Text(
                       'To autofill, your file — including any personal details '
-                      "in it — is sent to Google's AI to read. The app saves "
-                      'nothing (it\'s gone when this tab closes), but Google\'s '
-                      'free tier may retain it. You review everything before it '
-                      'is added to your directive.',
+                      'in it — is sent to your AI provider to read. The app saves '
+                      "nothing (it's gone when this tab closes), but the provider "
+                      "may retain it (Gemini's free tier does). You review "
+                      'everything before it is added to your directive.',
                       style: TextStyle(
                         fontFamily: kSansFamily,
                         fontSize: 11.5,
@@ -1657,9 +1657,10 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
           const SizedBox(width: 8),
           Expanded(
             child: Text(
-              "Your file (including any personal details) is sent to Google's "
-              'AI to read it. The app saves nothing; Google may retain it on '
-              'the free tier. You review before anything is added.',
+              'Your file (including any personal details) is sent to your AI '
+              'provider to read it. The app saves nothing; the provider may '
+              "retain it (Gemini's free tier does). You review before anything "
+              'is added.',
               style: TextStyle(
                 fontFamily: kSansFamily,
                 fontSize: 11,

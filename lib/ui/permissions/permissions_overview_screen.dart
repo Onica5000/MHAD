@@ -159,8 +159,9 @@ class PermissionsOverviewScreen extends StatelessWidget {
             text:
                 'No analytics. No tracking pixels. No cookies. No third-party '
                 'SDKs for advertising or measurement. The only outbound flows '
-                'are the opt-in AI features (Gemini) and NLM medical-reference '
-                'lookups, both with PII stripping at a single chokepoint.',
+                'are the opt-in AI features (your chosen AI provider) and NLM '
+                'medical-reference lookups, both with PII stripping at a single '
+                'chokepoint.',
           ),
         ],
       )),

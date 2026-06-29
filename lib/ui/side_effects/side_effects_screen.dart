@@ -282,7 +282,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
             ),
             const SizedBox(height: 6),
             Text(
-              'This uses your free Gemini key to list common side effects of '
+              'This uses your AI assistant to list common side effects of '
               'your current medications for you to review.',
               style: TextStyle(
                 fontFamily: kSansFamily,

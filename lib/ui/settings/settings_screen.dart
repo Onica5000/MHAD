@@ -89,7 +89,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 _SettingsRow(
                   icon: Icons.auto_awesome,
                   title: 'AI Assistant Setup',
-                  subtitle: 'Configure your free Gemini API key',
+                  subtitle: 'Choose a provider and add your API key',
                   onTap: () => context.push(AppRoutes.aiSetup),
                 ),
                 Divider(height: 1, color: p.border),

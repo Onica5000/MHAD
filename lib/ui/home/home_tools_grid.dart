@@ -34,7 +34,7 @@ class ToolsGrid extends ConsumerWidget {
       _ToolTile(
         icon: Icons.auto_awesome,
         label: 'AI assistant',
-        sub: aiReady ? 'Suggests + checks' : 'Set up Gemini',
+        sub: aiReady ? 'Suggests + checks' : 'Set up AI',
         onTap: () => context.go(
           aiReady ? AppRoutes.assistant : AppRoutes.aiSetup,
         ),
