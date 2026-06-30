@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mhad/ai/ai_provider.dart';
+import 'package:mhad/data/app_data/app_data.dart';
 
 void main() {
   group('AiProvider.looksLikeKey', () {
@@ -56,6 +57,31 @@ void main() {
         'https://api.x.ai/v1/chat/completions');
     expect(() => AiProvider.gemini.chatCompletionsUrl, throwsStateError);
     expect(() => AiProvider.anthropic.chatCompletionsUrl, throwsStateError);
+  });
+
+  group('availableModels (app_data externalization)', () {
+    // Restore default app_data so the mutation doesn't leak to other tests.
+    tearDown(() => AppData.instance = AppData.fromJson(const {}));
+
+    test('falls back to the hardcoded models when app_data has no override', () {
+      AppData.instance = AppData.fromJson(const {});
+      for (final p in AiProvider.values) {
+        expect(p.availableModels, p.models);
+      }
+    });
+
+    test('uses the app_data list when present (per provider)', () {
+      AppData.instance = AppData.fromJson(const {
+        'ai': {
+          'providerModels': {
+            'grok': ['grok-test-a', 'grok-test-b'],
+          },
+        },
+      });
+      expect(AiProvider.grok.availableModels, ['grok-test-a', 'grok-test-b']);
+      // Providers without an override still fall back to the hardcoded list.
+      expect(AiProvider.gemini.availableModels, AiProvider.gemini.models);
+    });
   });
 
   test('fromName round-trips and defaults to gemini', () {

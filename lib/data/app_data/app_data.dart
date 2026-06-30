@@ -52,6 +52,12 @@ class AiConfig {
   /// When the rate limits were last verified, e.g. "Dec 2025".
   final String rateLimitsAsOf;
 
+  /// Curated model-picker options per provider, keyed by provider name
+  /// (`gemini`/`anthropic`/`openai`/`grok`). Externalized so the admin
+  /// propose/approve flow can refresh the picker lists without a code edit;
+  /// empty/absent → the consumer falls back to the hardcoded `AiProvider.models`.
+  final Map<String, List<String>> providerModels;
+
   const AiConfig({
     this.model = 'gemini-3.5-flash',
     this.maxContextTokens = 1048576,
@@ -60,7 +66,14 @@ class AiConfig {
     this.tpm = 1000000,
     this.maxOutputTokens = 65536,
     this.rateLimitsAsOf = '',
+    this.providerModels = const {},
   });
+
+  /// The curated picker list for [providerName], or null if not externalized.
+  List<String>? modelsFor(String providerName) {
+    final list = providerModels[providerName];
+    return (list != null && list.isNotEmpty) ? list : null;
+  }
 
   factory AiConfig.fromJson(Map<String, dynamic> m) => AiConfig(
         model: (m['model'] ?? 'gemini-3.5-flash').toString(),
@@ -70,7 +83,23 @@ class AiConfig {
         tpm: (m['tpm'] as num?)?.toInt() ?? 1000000,
         maxOutputTokens: (m['maxOutputTokens'] as num?)?.toInt() ?? 65536,
         rateLimitsAsOf: (m['rateLimitsAsOf'] ?? '').toString(),
+        providerModels: _parseProviderModels(m['providerModels']),
       );
+
+  static Map<String, List<String>> _parseProviderModels(Object? raw) {
+    if (raw is! Map) return const {};
+    final out = <String, List<String>>{};
+    raw.forEach((k, v) {
+      if (v is List) {
+        final ids = [
+          for (final e in v)
+            if (e != null && e.toString().trim().isNotEmpty) e.toString().trim()
+        ];
+        if (ids.isNotEmpty) out[k.toString()] = ids;
+      }
+    });
+    return out;
+  }
 }
 
 /// Backend behavioral knobs (timeouts, retries, reminder windows, caps) — the

@@ -656,11 +656,13 @@ class _ProviderModelPicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
-    // The active model may not be in the curated list (e.g. a Gemini id set via
-    // app_data) — include it so the dropdown can render the current selection.
+    // Picker options come from the admin-updatable app_data list (falling back
+    // to the hardcoded set). The active model may not be in it (e.g. a Gemini id
+    // set via app_data) — include it so the dropdown can render the selection.
+    final curated = provider.availableModels;
     final models = <String>[
-      ...provider.models,
-      if (!provider.models.contains(model)) model,
+      ...curated,
+      if (!curated.contains(model)) model,
     ];
     return Card(
       color: cs.surfaceContainerHighest,

@@ -1,3 +1,5 @@
+import 'package:mhad/data/app_data/app_data.dart';
+
 /// The AI providers the app can talk to. Gemini is the default (free tier,
 /// multimodal, web-search grounding); Anthropic Claude, OpenAI, and xAI Grok
 /// are bring-your-own-key alternatives.
@@ -89,6 +91,12 @@ enum AiProvider {
   /// defaults to `appData.ai.model` at the storage layer so the admin update
   /// flow keeps tracking Google's current model id — this is only the fallback.
   String get defaultModel => models.first;
+
+  /// The model-picker options for this provider: the externalized,
+  /// admin-updatable list from `appData.ai.providerModels[name]` if present,
+  /// else the hardcoded [models] fallback. Use this for the pickers; keep
+  /// [defaultModel] (the const first entry) as the canonical storage default.
+  List<String> get availableModels => appData.ai.modelsFor(name) ?? models;
 
   /// Only Gemini supports Google-Search grounding ("Verify on the web"). Other
   /// providers degrade to an ungrounded answer with no sources.

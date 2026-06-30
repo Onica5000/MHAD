@@ -631,7 +631,7 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
             final isGemini = _provider == AdminAiProvider.gemini;
             final live = _liveModels ?? const <String>[];
             final opts = [
-              ...(live.isNotEmpty ? live : _provider.models),
+              ...(live.isNotEmpty ? live : _provider.availableModels),
             ];
             if (!opts.contains(_model)) opts.insert(0, _model);
             return Row(
