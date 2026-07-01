@@ -4,7 +4,6 @@ import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/data/repository/directive_repository.dart';
 import 'package:mhad/domain/model/directive.dart';
@@ -186,6 +185,9 @@ void main() {
 /// A repository whose reads block on a gate until [release] is called — lets a
 /// test hold a wizard step in its "not yet loaded" state deterministically.
 class _HangingReadRepo extends DirectiveRepository {
+  // Not a super parameter: DirectiveRepository's constructor field is private
+  // (`this._db`), so `super.db` can't reference it from this library.
+  // ignore: use_super_parameters
   _HangingReadRepo(AppDatabase db) : super(db);
 
   final Completer<void> _gate = Completer<void>();
