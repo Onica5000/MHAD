@@ -50,6 +50,31 @@ void main() {
       selfBindingEnabled: const Value(true),
       sideEffectsJson: const Value('{"items":[]}'),
     ));
+    await repo.upsertGuardianNomination(GuardianNominationsCompanion(
+      directiveId: Value(id),
+      nomineeFullName: const Value('Bob Guardian'),
+      guardianCanRevoke: const Value(true),
+      guardianCanRevokeNote: const Value('with court approval'),
+      guardianCanChangeAgent: const Value(true),
+      guardianCanChangeAgentNote: const Value('only for medications'),
+      guardianMustConsultAgent: const Value(true),
+      guardianMustConsultAgentNote: const Value('by phone first'),
+      guardianRelation: const Value('different'),
+    ));
+    await repo.insertMedication(MedicationEntriesCompanion.insert(
+      directiveId: id,
+      entryType: 'current',
+      medicationName: const Value('Lithium'),
+      dosage: const Value('300 mg twice daily'),
+      sortOrder: const Value(0),
+    ));
+    await repo.upsertAgent(AgentsCompanion(
+      directiveId: Value(id),
+      agentType: const Value('primary'),
+      fullName: const Value('Mary Agent'),
+      acceptedAt: const Value(1700000000000),
+      acceptanceNotes: const Value('accepted in person'),
+    ));
 
     final snap = await repo.snapshotDirective(id, full: true);
     final newId = await repo.restoreFromSnapshot(snap);
@@ -73,5 +98,22 @@ void main() {
     final d = await repo.getDirectiveById(newId);
     expect(d!.fullName, 'Jane Doe');
     expect(d.zip, '19103');
+
+    // Guardian condition notes (previously dropped).
+    final guardian = await repo.getGuardianNomination(newId);
+    expect(guardian!.guardianCanRevokeNote, 'with court approval');
+    expect(guardian.guardianCanChangeAgentNote, 'only for medications');
+    expect(guardian.guardianMustConsultAgentNote, 'by phone first');
+
+    // Medication dosage (previously dropped).
+    final meds = await repo.watchMedications(newId).first;
+    expect(meds, hasLength(1));
+    expect(meds.single.dosage, '300 mg twice daily');
+
+    // Agent acceptance log (now carried per approval).
+    final agents = await repo.getAgents(newId);
+    final primary = agents.firstWhere((a) => a.agentType == 'primary');
+    expect(primary.acceptedAt, 1700000000000);
+    expect(primary.acceptanceNotes, 'accepted in person');
   });
 }
