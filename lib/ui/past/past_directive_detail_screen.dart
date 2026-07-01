@@ -282,9 +282,8 @@ class _DocPreviewCard extends ConsumerWidget {
         '_${directive.fullName.trim().split(RegExp(r'\s+')).lastOrNull ?? 'MHAD'}.pdf';
 
     return FutureBuilder<List<WitnessesData>>(
-      future: ref
-          .read(directiveRepositoryProvider)
-          .getWitnesses(directive.id),
+      // Cached via the provider so this doesn't re-query on every rebuild.
+      future: ref.watch(witnessesProvider(directive.id).future),
       builder: (context, snapshot) {
         final witnesses = snapshot.data ?? const <WitnessesData>[];
         String witnessShort(int n) {

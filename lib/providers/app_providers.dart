@@ -60,6 +60,11 @@ final directiveByIdProvider =
     FutureProvider.family<Directive?, int>((ref, id) =>
         ref.watch(directiveRepositoryProvider).getDirectiveById(id));
 
+/// Witnesses for a directive, cached by Riverpod so screens can read them once
+/// across rebuilds instead of firing a fresh `getWitnesses` query each build.
+final witnessesProvider = FutureProvider.family<List<WitnessesData>, int>(
+    (ref, id) => ref.watch(directiveRepositoryProvider).getWitnesses(id));
+
 // ---------------------------------------------------------------------------
 // Accessibility settings
 // ---------------------------------------------------------------------------

@@ -98,6 +98,19 @@ class ClinicalDataService {
     return resp.body;
   }
 
+  /// Decode an NIH Clinical Tables response to a JSON list, tolerating a
+  /// malformed 200 body (a proxy error page, truncated payload, or a
+  /// non-list shape). Returns null so callers degrade to "no results" instead
+  /// of throwing into the keystroke-frequency autocomplete path.
+  static List? _decodeList(String body) {
+    try {
+      final data = jsonDecode(body);
+      return data is List ? data : null;
+    } catch (_) {
+      return null;
+    }
+  }
+
   /// Search for medication names with strengths/forms.
   /// Returns [MedicationResult] objects containing the drug name and its
   /// available dosage strengths.
@@ -110,7 +123,8 @@ class ClinicalDataService {
         '&ef=STRENGTHS_AND_FORMS&count=$count');
     final body = await _fetch(uri);
     if (body == null) return [];
-    final data = jsonDecode(body) as List;
+    final data = _decodeList(body);
+    if (data == null) return [];
     if (data.length < 2 || data[1] is! List) return [];
 
     final names = List<String>.from(data[1] as List);
@@ -145,7 +159,8 @@ class ClinicalDataService {
         '&terms=${Uri.encodeComponent(query)}&count=$count');
     final body = await _fetch(uri);
     if (body == null) return [];
-    final data = jsonDecode(body) as List;
+    final data = _decodeList(body);
+    if (data == null) return [];
     if (data.length >= 4 && data[3] is List) {
       return (data[3] as List).map((item) {
         final arr = item as List;
@@ -172,7 +187,8 @@ class ClinicalDataService {
         '&ef=addr_practice.phone,addr_practice.full');
     final body = await _fetch(uri);
     if (body == null) return [];
-    final data = jsonDecode(body) as List;
+    final data = _decodeList(body);
+    if (data == null) return [];
     if (data.length < 4 || data[3] is! List) return [];
     final rows = data[3] as List;
     final extra = data.length >= 3 && data[2] is Map
@@ -206,7 +222,8 @@ class ClinicalDataService {
         '&df=name.full,addr_practice.full');
     final body = await _fetch(uri);
     if (body == null) return [];
-    final data = jsonDecode(body) as List;
+    final data = _decodeList(body);
+    if (data == null) return [];
     if (data.length < 4 || data[3] is! List) return [];
     final rows = data[3] as List;
     return rows.map((r) {
