@@ -26,7 +26,8 @@ class AgentDesignationStep extends ConsumerStatefulWidget {
 }
 
 class _AgentDesignationStepState
-    extends ConsumerState<AgentDesignationStep> with WizardStepMixin {
+    extends ConsumerState<AgentDesignationStep>
+    with WizardStepMixin, WizardStepLoadGuard {
   final _formKey = GlobalKey<FormState>();
 
   final _nameCtrl = TextEditingController();
@@ -63,6 +64,7 @@ class _AgentDesignationStepState
     final agents = await ref
         .read(directiveRepositoryProvider)
         .getAgents(widget.directiveId);
+    markLoaded();
     final primary = agents.primaryAgent;
     if (primary != null && mounted) {
       setState(() {
@@ -85,6 +87,9 @@ class _AgentDesignationStepState
 
   @override
   Future<bool> validateAndSave() async {
+    // Guard the save-before-load race: without this, an unloaded step would
+    // insert a second, empty 'primary' agent (id absent) → duplicate.
+    if (!isLoaded) return true;
     // Validate but don't block — always save whatever is entered
     _formKey.currentState?.validate();
 

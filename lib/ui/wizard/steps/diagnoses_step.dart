@@ -39,7 +39,7 @@ class DiagnosesStep extends ConsumerStatefulWidget {
 }
 
 class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
-    with WizardStepMixin {
+    with WizardStepMixin, WizardStepLoadGuard {
   final _searchCtrl = TextEditingController();
   final _searchDebouncer = Debouncer();
   List<IcdCondition> _searchResults = [];
@@ -62,6 +62,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
       final d = await ref
           .read(directiveRepositoryProvider)
           .getDirectiveById(widget.directiveId);
+      markLoaded();
       if (d != null && mounted) {
         setState(() {
           _docNameCtrl.text = d.primaryDoctorName;
@@ -198,6 +199,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
 
   @override
   Future<bool> validateAndSave() async {
+    if (!isLoaded) return true; // don't wipe the doctor fields before load
     // Diagnosis entries save on each add/remove; persist the primary-care
     // doctor here on step change.
     await ref.read(directiveRepositoryProvider).updatePrimaryDoctor(

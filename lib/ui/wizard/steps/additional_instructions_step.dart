@@ -26,7 +26,7 @@ class AdditionalInstructionsStep extends ConsumerStatefulWidget {
 
 class _AdditionalInstructionsStepState
     extends ConsumerState<AdditionalInstructionsStep>
-    with WizardStepMixin, AutoSaveMixin {
+    with WizardStepMixin, AutoSaveMixin, WizardStepLoadGuard {
   final _formKey = GlobalKey<FormState>();
 
   final _activitiesCtrl = TextEditingController();
@@ -96,6 +96,7 @@ class _AdditionalInstructionsStepState
     final data = await ref
         .read(directiveRepositoryProvider)
         .getAdditionalInstructions(widget.directiveId);
+    markLoaded();
     if (data != null && mounted) {
       setState(() {
         _activitiesCtrl.text = data.activities;
@@ -204,6 +205,7 @@ class _AdditionalInstructionsStepState
 
   @override
   Future<bool> validateAndSave() async {
+    if (!isLoaded) return true; // don't overwrite instructions before load
     _formKey.currentState?.validate();
 
     await ref.read(directiveRepositoryProvider).upsertAdditionalInstructions(

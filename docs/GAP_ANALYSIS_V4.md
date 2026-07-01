@@ -121,9 +121,22 @@ were superseded by regulations that changed *after* they were written.
   `FormType.steps` composition (`form_type_test.dart`) are covered; added the first
   wizard-step validate/save/restore widget test
   (`test/wizard/people_i_trust_step_test.dart`, locking the agents-step collapse
-  regression) + multi-provider storage tests (`test/ai/ai_prefs_test.dart`). Remaining:
-  per-step persistence for the other consolidated steps + golden PDF tests
-  (`pdf_generator_test.dart` has smoke tests, not goldens).
+  regression) + multi-provider storage tests (`test/ai/ai_prefs_test.dart`).
+  Progress 2026-06-30: more wizard-step persistence widget tests (About-you, Guardian,
+  Treatment-facility in `test/wizard/wizard_steps_persistence_test.dart`); PDF structure
+  tests strengthened beyond `%PDF-` (page-tree count + `%%EOF` trailer per form type, and
+  a "supplementary/notes add pages" invariant in `pdf_generator_test.dart`); and a new
+  repository-level upsert regression suite (`test/unit/directive_repository_upsert_test.dart`).
+  **That coverage caught a real crash bug** (now fixed): `upsertAdditionalInstructions`
+  and `upsertGuardianNomination` used `insertOnConflictUpdate`, which targets the
+  autoincrement `id` PK, so a *second* save for the same directive (re-opening a saved
+  draft and passing through the Additional-Instructions or Guardian step again) inserted a
+  fresh row and tripped `UNIQUE(directiveId)` → the save threw `SqliteException(2067)`.
+  Both now use the update-then-insert pattern of `upsertPreferences`. Full suite: **285
+  tests, green**. Remaining: Medications/Diagnoses steps resist widget-level testing (their
+  `_loadData`/build entangle with Drift watch-streams — a never-firing `.first` / a pending
+  coalescing timer); their persistence is covered at the repository level instead. True
+  golden (pixel/byte) PDFs still optional.
 
 ### V4-H7: Localization is half-wired — two competing string layers, neither complete
 - **Files:** `lib/l10n/app_*.arb` + generated `AppLocalizations` (used ~31×) **and**
@@ -292,14 +305,23 @@ were superseded by regulations that changed *after* they were written.
   be a conscious, documented decision rather than an unstated gap.
 - **Fix:** Document the threat model + the deliberate MASVS-R scope decision; revisit a
   RASP solution only if distribution risk warrants it. Don't gold-plate.
-- **Status:** [ ]
+- **Status:** `[x]` **DONE 2026-06-30** — `docs/THREAT_MODEL.md` carries the explicit
+  MASVS-RESILIENCE deferral rationale (local-only data, no server secret/licensed content
+  to protect) plus a web-first-pivot clause (RASP is doubly moot on the browser-sandboxed
+  web build that ships). A reviewed scope decision, not an unaddressed gap.
 
 ### V4-L14: `safe_device` MissingPluginException noise in tests
 - **Evidence:** Every test run logs `MissingPluginException ... isJailBroken`. Harmless
   but obscures real failures (it nearly masked the nav-rewrite failure this session).
 - **Fix:** Guard `DeviceSecurityService` behind a platform/`kIsWeb`/test check or inject a
   no-op in the test harness.
-- **Status:** [ ]
+- **Status:** `[x]` **DONE 2026-06-30** — under `flutter_test`, `defaultTargetPlatform`
+  defaults to `android`, so the mobile guard passed and `SafeDevice.isJailBroken` *was*
+  invoked, spamming `MissingPluginException` every run (the prior code comment claiming it
+  was unavoidable plugin-registration noise was wrong). Added a web-safe `isRunningInTest`
+  helper (`lib/utils/test_environment*.dart`, `FLUTTER_TEST` env via conditional import)
+  and guard on it in `DeviceSecurityService.checkAndWarn`. Production behavior is unchanged
+  (`isRunningInTest` is always false in real builds).
 
 ### V4-L15: AI consent re-affirmation & data-minimization cadence
 - **Evidence:** Consent dialog is strong but verify: shown before the *first* send each
@@ -320,7 +342,7 @@ Re-scoped for the web-first pivot (2026-06-20):
 | Critical | 0 | (Both prior Criticals were Play-submission blockers → `deferred — native`.) |
 | High | 2 live | **V4-H6 test coverage** + HBNR/multi-state health-data alignment (H3/H4, largely addressed in privacy copy). H5 → deferred-native. |
 | Medium | 3 | PDF-protection (encrypted-export now exists, [~]), crisis availability (M10), stale docs (M11, in progress). M9 mooted. |
-| Low | 4 | Facilitation framing, MASVS-R, test noise, AI consent cadence |
+| Low | 2 live | Facilitation framing, AI consent cadence. (MASVS-R doc + safe_device test noise → DONE 2026-06-30.) |
 | Deferred — native | 3 | V4-C1 (privacy URL), V4-C2 (Play org account), V4-H5 (Apple AI rule) |
 | Closed since V4 | 2 | V4-H7 (orphan `AppStrings` deleted), V4-M9 (draw-to-sign pad dropped) |
 

@@ -26,7 +26,8 @@ class AgentAuthorityStep extends ConsumerStatefulWidget {
 }
 
 class _AgentAuthorityStepState
-    extends ConsumerState<AgentAuthorityStep> with WizardStepMixin {
+    extends ConsumerState<AgentAuthorityStep>
+    with WizardStepMixin, WizardStepLoadGuard {
   final _formKey = GlobalKey<FormState>();
 
   bool _canConsentHospitalization = true;
@@ -49,6 +50,7 @@ class _AgentAuthorityStepState
     final pref = await ref
         .read(directiveRepositoryProvider)
         .getPreferences(widget.directiveId);
+    markLoaded();
     if (pref != null && mounted) {
       setState(() {
         _canConsentHospitalization = pref.agentCanConsentHospitalization;
@@ -60,6 +62,7 @@ class _AgentAuthorityStepState
 
   @override
   Future<bool> validateAndSave() async {
+    if (!isLoaded) return true; // don't reset agent authority before load
     _formKey.currentState?.validate();
 
     await ref.read(directiveRepositoryProvider).upsertPreferences(

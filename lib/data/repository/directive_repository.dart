@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/model/directive.dart';
 
@@ -146,13 +147,34 @@ class DirectiveRepository {
   /// Called by the wet-ink sign step when the user advances past the
   /// print-and-sign instructions — flips downstream "Signed in effect"
   /// status pills and date columns from draft to complete.
-  Future<void> setExecutionDate(int id, int now) =>
-      (_db.update(_db.directives)..where((t) => t.id.equals(id))).write(
-        DirectivesCompanion(
-          executionDate: Value(now),
-          updatedAt: Value(DateTime.now().millisecondsSinceEpoch),
-        ),
-      );
+  ///
+  /// Also derives `expirationDate` (PA: two years from execution, per
+  /// `appData.legal.validityYears`) so the renewal reminder
+  /// ([ReminderScheduler]) and the "Expires …" displays have a date to act on —
+  /// without this, `expirationDate` was never written and every expiry feature
+  /// was inert. `now == 0` is the revert-to-draft sentinel: clear both dates.
+  Future<void> setExecutionDate(int id, int now) {
+    int? expiration;
+    if (now > 0) {
+      final exec = DateTime.fromMillisecondsSinceEpoch(now);
+      expiration = DateTime(
+        exec.year + appData.legal.validityYears,
+        exec.month,
+        exec.day,
+        exec.hour,
+        exec.minute,
+        exec.second,
+        exec.millisecond,
+      ).millisecondsSinceEpoch;
+    }
+    return (_db.update(_db.directives)..where((t) => t.id.equals(id))).write(
+      DirectivesCompanion(
+        executionDate: Value(now),
+        expirationDate: Value(expiration),
+        updatedAt: Value(DateTime.now().millisecondsSinceEpoch),
+      ),
+    );
+  }
 
   Future<void> updateStatus(int id, DirectiveStatus status) =>
       (_db.update(_db.directives)..where((t) => t.id.equals(id))).write(
@@ -233,11 +255,22 @@ class DirectiveRepository {
             ..where((t) => t.directiveId.equals(directiveId)))
           .getSingleOrNull();
 
+  // Upsert keyed on the unique `directiveId` (NOT the autoincrement `id` PK).
+  // `insertOnConflictUpdate` targets the primary key, so on a second save for
+  // the same directive it would insert a fresh row and violate the
+  // `UNIQUE(directiveId)` constraint — crashing when a saved draft is edited and
+  // the Additional Instructions step is passed through again. Mirror the
+  // update-then-insert pattern used by [upsertPreferences].
   Future<void> upsertAdditionalInstructions(
-          AdditionalInstructionsTableCompanion data) =>
-      _db
-          .into(_db.additionalInstructionsTable)
-          .insertOnConflictUpdate(data);
+      AdditionalInstructionsTableCompanion data) async {
+    final directiveId = data.directiveId.value;
+    final updated = await (_db.update(_db.additionalInstructionsTable)
+          ..where((t) => t.directiveId.equals(directiveId)))
+        .write(data);
+    if (updated == 0) {
+      await _db.into(_db.additionalInstructionsTable).insert(data);
+    }
+  }
 
   // ── Witnesses ─────────────────────────────────────────────────────────────
 
@@ -257,8 +290,20 @@ class DirectiveRepository {
             ..where((t) => t.directiveId.equals(directiveId)))
           .getSingleOrNull();
 
-  Future<void> upsertGuardianNomination(GuardianNominationsCompanion data) =>
-      _db.into(_db.guardianNominations).insertOnConflictUpdate(data);
+  // Upsert keyed on the unique `directiveId` (not the autoincrement `id` PK) —
+  // same fix as [upsertAdditionalInstructions]: `insertOnConflictUpdate` targets
+  // the PK and would crash on a second save for the same directive (re-editing a
+  // saved draft) by violating `UNIQUE(directiveId)`.
+  Future<void> upsertGuardianNomination(
+      GuardianNominationsCompanion data) async {
+    final directiveId = data.directiveId.value;
+    final updated = await (_db.update(_db.guardianNominations)
+          ..where((t) => t.directiveId.equals(directiveId)))
+        .write(data);
+    if (updated == 0) {
+      await _db.into(_db.guardianNominations).insert(data);
+    }
+  }
 
   // ── Diagnoses ──────────────────────────────────────────────────────────────
 

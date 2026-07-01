@@ -56,3 +56,26 @@ mixin AutoSaveMixin<T extends StatefulWidget> on State<T> {
     super.dispose();
   }
 }
+
+/// Guards the "save-before-load" race. Wizard steps read their persisted data in
+/// a post-frame callback (an async DB read), but the persistent nav bar lets the
+/// user hit Next/Save immediately — before that load runs. A destructive
+/// [WizardStepMixin.validateAndSave] (delete-all-then-insert, full-row overwrite,
+/// or insert-new) fired in that window would wipe or duplicate the not-yet-loaded
+/// data.
+///
+/// Steps mix this in, call [markLoaded] once their load has read the DB (even if
+/// there was nothing to load), and begin `validateAndSave` with
+/// `if (!isLoaded) return true;` — reporting "valid, nothing to save" so the
+/// wizard still advances while the on-disk data is left untouched. (The window is
+/// sub-frame, so a user who has actually typed anything is always past it; this
+/// only defends against instant/rapid navigation over an unloaded step.)
+mixin WizardStepLoadGuard<T extends StatefulWidget> on State<T> {
+  bool _wizardStepLoaded = false;
+
+  /// True once the step's initial async load has completed.
+  bool get isLoaded => _wizardStepLoaded;
+
+  /// Call at the end of the step's async load (after the DB read).
+  void markLoaded() => _wizardStepLoaded = true;
+}

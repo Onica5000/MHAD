@@ -19,7 +19,8 @@ class TreatmentFacilityStep extends ConsumerStatefulWidget {
 }
 
 class _TreatmentFacilityStepState
-    extends ConsumerState<TreatmentFacilityStep> with WizardStepMixin {
+    extends ConsumerState<TreatmentFacilityStep>
+    with WizardStepMixin, WizardStepLoadGuard {
   final _formKey = GlobalKey<FormState>();
   final List<_FacilityRow> _preferred = [];
   final List<_FacilityRow> _avoid = [];
@@ -95,6 +96,7 @@ class _TreatmentFacilityStepState
     final pref = await ref
         .read(directiveRepositoryProvider)
         .getPreferences(widget.directiveId);
+    markLoaded();
     if (pref != null && mounted) {
       setState(() {
         _preferred.addAll(_parseFacilities(pref.preferredFacilityName));
@@ -135,6 +137,7 @@ class _TreatmentFacilityStepState
 
   @override
   Future<bool> validateAndSave() async {
+    if (!isLoaded) return true; // don't overwrite facilities before load
     _formKey.currentState?.validate();
 
     final preferred = _serializeFacilities(_preferred);

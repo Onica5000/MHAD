@@ -427,7 +427,12 @@ class ExtractedAllergy {
       );
 
   String get display {
-    final sev = severity[0].toUpperCase() + severity.substring(1);
+    // Guard the empty string: extraction maps `severity` from raw model JSON
+    // (`a['severity']?.toString() ?? 'moderate'`), which yields "" — not the
+    // default — if the model emits an empty value, and `severity[0]` would then
+    // throw a RangeError in the autofill review UI.
+    final s = severity.isEmpty ? 'moderate' : severity;
+    final sev = s[0].toUpperCase() + s.substring(1);
     final base = '$substance ($sev)';
     return reactions != null && reactions!.isNotEmpty ? '$base — $reactions' : base;
   }
