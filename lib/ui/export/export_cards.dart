@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mhad/data/database/app_database.dart';
+import 'package:mhad/utils/date_format.dart';
 
 /// Presentational cards/banners extracted from `export_screen.dart` — pure
 /// widgets with no dependency on the screen's mutable state, split out to trim
@@ -54,12 +55,12 @@ class ExportPrincipalCard extends StatelessWidget {
             Text(directive.fullName, style: const TextStyle(fontSize: 13)),
             if (directive.executionDate != null)
               Text(
-                'Executed: ${DateTime.fromMillisecondsSinceEpoch(directive.executionDate!).toString().split(' ').first}',
+                'Executed: ${formatShortDate(DateTime.fromMillisecondsSinceEpoch(directive.executionDate!))}',
                 style: const TextStyle(fontSize: 12),
               ),
             if (directive.expirationDate != null)
               Text(
-                'Expires: ${DateTime.fromMillisecondsSinceEpoch(directive.expirationDate!).toString().split(' ').first}',
+                'Expires: ${formatShortDate(DateTime.fromMillisecondsSinceEpoch(directive.expirationDate!))}',
                 style: const TextStyle(fontSize: 12),
               ),
           ],

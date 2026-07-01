@@ -430,6 +430,11 @@ class DirectiveRepository {
         // recovery silently drops room chips, crisis-plan JSON and the
         // Ulysses acknowledgment flag.
         'roomPreferences': prefs.roomPreferences,
+        // Schema v16 room fields — without these the snapshot round-trip
+        // (web-reload recovery + encrypted export/import) silently drops the
+        // free-text room note and the same-gender-roommate choice.
+        'roomPreferencesNote': prefs.roomPreferencesNote,
+        'roommateGenderMatch': prefs.roommateGenderMatch,
         'crisisPlanJson': prefs.crisisPlanJson,
         'selfBindingEnabled': prefs.selfBindingEnabled,
         'sideEffectsJson': prefs.sideEffectsJson,
@@ -546,6 +551,8 @@ class DirectiveRepository {
         agentCanConsentMedication: _vBool(p['agentCanConsentMedication']),
         // Phase 2 + Phase 4 additions — round-trip pair to snapshotDirective.
         roomPreferences: _v(p['roomPreferences']),
+        roomPreferencesNote: _v(p['roomPreferencesNote']),
+        roommateGenderMatch: _v(p['roommateGenderMatch']),
         crisisPlanJson: _v(p['crisisPlanJson']),
         selfBindingEnabled: _vBool(p['selfBindingEnabled']),
         sideEffectsJson: _v(p['sideEffectsJson']),

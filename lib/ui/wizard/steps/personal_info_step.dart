@@ -235,6 +235,9 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
             const SizedBox(height: 8),
             TextFormField(
               controller: _fullNameCtrl,
+              // Land the cursor here on the first wizard step so users can start
+              // typing immediately (About You is the entry point).
+              autofocus: true,
               decoration: const InputDecoration(
                 labelText: 'Full legal name *',
                 border: OutlineInputBorder(),
