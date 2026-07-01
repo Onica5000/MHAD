@@ -300,9 +300,11 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         );
       }
     } catch (e) {
+      debugPrint('PDF export failed: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error generating PDF: $e')),
+          const SnackBar(
+              content: Text("Couldn't generate the PDF. Please try again.")),
         );
       }
     } finally {
@@ -367,9 +369,11 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         ),
       );
     } catch (e) {
+      debugPrint('PDF export failed: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error generating PDF: $e')),
+          const SnackBar(
+              content: Text("Couldn't generate the PDF. Please try again.")),
         );
       }
     } finally {
@@ -1009,9 +1013,11 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         subject: 'MHAD editable directive copy',
       );
     } catch (e) {
+      debugPrint('Editable-file export failed: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Could not create the file: $e')),
+          const SnackBar(
+              content: Text("Couldn't save the file. Please try again.")),
         );
       }
     }
@@ -1139,6 +1145,13 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         ],
         subject: 'PA MHAD directive bundle',
       );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text(
+                  'Exported your directive bundle — PDF, JSON, XML and CSV.')),
+        );
+      }
     } catch (e) {
       debugPrint('Zip bundle export failed: $e');
       if (mounted) {
@@ -1171,9 +1184,12 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
     try {
       await WalletCardService.generateAndShare(_directive!, _agents);
     } catch (e) {
+      debugPrint('Wallet-card export failed: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error generating wallet card: $e')),
+          const SnackBar(
+              content:
+                  Text("Couldn't generate the wallet card. Please try again.")),
         );
       }
     } finally {

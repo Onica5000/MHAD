@@ -140,7 +140,7 @@ Future<void> checkAndOfferDraftRecovery(
     await DraftRecoveryService.clearDraft();
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to restore draft: $e')),
+        const SnackBar(content: Text("Couldn't restore the draft.")),
       );
     }
   }
