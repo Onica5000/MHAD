@@ -155,7 +155,7 @@ class ConsentChoiceStep extends ConsumerStatefulWidget {
 }
 
 class _ConsentChoiceStepState extends ConsumerState<ConsentChoiceStep>
-    with WizardStepMixin {
+    with WizardStepMixin, WizardStepLoadGuard {
   final _formKey = GlobalKey<FormState>();
   ConsentOption _consent = ConsentOption.no;
   final _conditionsCtrl = TextEditingController();
@@ -177,6 +177,7 @@ class _ConsentChoiceStepState extends ConsumerState<ConsentChoiceStep>
     final repo = ref.read(directiveRepositoryProvider);
     final directive = await repo.getDirectiveById(widget.directiveId);
     final pref = await repo.getPreferences(widget.directiveId);
+    markLoaded();
 
     if (!mounted) return;
     setState(() {
@@ -206,6 +207,7 @@ class _ConsentChoiceStepState extends ConsumerState<ConsentChoiceStep>
 
   @override
   Future<bool> validateAndSave() async {
+    if (!isLoaded) return true; // don't reset the consent choice before load
     _formKey.currentState?.validate();
 
     final String consentValue;

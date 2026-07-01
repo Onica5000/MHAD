@@ -16,7 +16,7 @@ class PersonalInfoStep extends ConsumerStatefulWidget {
 }
 
 class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
-    with WizardStepMixin {
+    with WizardStepMixin, WizardStepLoadGuard {
   final _formKey = GlobalKey<FormState>();
   bool _zipLookingUp = false;
 
@@ -60,6 +60,7 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
   Future<void> _loadData() async {
     final repo = ref.read(directiveRepositoryProvider);
     final d = await repo.getDirectiveById(widget.directiveId);
+    markLoaded();
     if (d != null && mounted) {
       setState(() {
         _fullNameCtrl.text = d.fullName;
@@ -173,6 +174,7 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
 
   @override
   Future<bool> validateAndSave() async {
+    if (!isLoaded) return true; // don't overwrite identity fields before load
     _formKey.currentState?.validate(); // Show warnings but don't block
     await ref.read(directiveRepositoryProvider).updatePersonalInfo(
       widget.directiveId,
