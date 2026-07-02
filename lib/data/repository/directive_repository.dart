@@ -402,6 +402,8 @@ class DirectiveRepository {
                 'homePhone': a.homePhone,
                 'workPhone': a.workPhone,
                 'cellPhone': a.cellPhone,
+                'acceptedAt': a.acceptedAt,
+                'acceptanceNotes': a.acceptanceNotes,
               })
           .toList(),
       'formType': d.formType,
@@ -430,11 +432,20 @@ class DirectiveRepository {
         // recovery silently drops room chips, crisis-plan JSON and the
         // Ulysses acknowledgment flag.
         'roomPreferences': prefs.roomPreferences,
+        // Schema v16 room fields — without these the snapshot round-trip
+        // (web-reload recovery + encrypted export/import) silently drops the
+        // free-text room note and the same-gender-roommate choice.
+        'roomPreferencesNote': prefs.roomPreferencesNote,
+        'roommateGenderMatch': prefs.roommateGenderMatch,
         'crisisPlanJson': prefs.crisisPlanJson,
         'selfBindingEnabled': prefs.selfBindingEnabled,
         'sideEffectsJson': prefs.sideEffectsJson,
       },
-      if (guardian != null) 'guardian': {
+      // Gated on `full` (like `personal`/`agents`): the guardian nominee's
+      // name/address/phone are third-party identity PII and must not land in
+      // the unencrypted web-reload cache. Recovered only from a full snapshot
+      // (encrypted export/import).
+      if (full && guardian != null) 'guardian': {
         'nomineeFullName': guardian.nomineeFullName,
         'nomineeAddress': guardian.nomineeAddress,
         'nomineeAddress2': guardian.nomineeAddress2,
@@ -446,6 +457,9 @@ class DirectiveRepository {
         'guardianCanRevoke': guardian.guardianCanRevoke,
         'guardianCanChangeAgent': guardian.guardianCanChangeAgent,
         'guardianMustConsultAgent': guardian.guardianMustConsultAgent,
+        'guardianCanRevokeNote': guardian.guardianCanRevokeNote,
+        'guardianCanChangeAgentNote': guardian.guardianCanChangeAgentNote,
+        'guardianMustConsultAgentNote': guardian.guardianMustConsultAgentNote,
         'guardianRelation': guardian.guardianRelation,
       },
       if (instr != null) 'instructions': {
@@ -464,6 +478,7 @@ class DirectiveRepository {
         'entryType': m.entryType,
         'medicationName': m.medicationName,
         'reason': m.reason,
+        'dosage': m.dosage,
         'sortOrder': m.sortOrder,
       }).toList(),
       if (diags.isNotEmpty) 'diagnoses': diags.map((d) => {
@@ -546,6 +561,8 @@ class DirectiveRepository {
         agentCanConsentMedication: _vBool(p['agentCanConsentMedication']),
         // Phase 2 + Phase 4 additions — round-trip pair to snapshotDirective.
         roomPreferences: _v(p['roomPreferences']),
+        roomPreferencesNote: _v(p['roomPreferencesNote']),
+        roommateGenderMatch: _v(p['roommateGenderMatch']),
         crisisPlanJson: _v(p['crisisPlanJson']),
         selfBindingEnabled: _vBool(p['selfBindingEnabled']),
         sideEffectsJson: _v(p['sideEffectsJson']),
@@ -588,6 +605,10 @@ class DirectiveRepository {
           homePhone: _v(a['homePhone']),
           workPhone: _v(a['workPhone']),
           cellPhone: _v(a['cellPhone']),
+          acceptedAt: a['acceptedAt'] is int
+              ? Value(a['acceptedAt'] as int)
+              : const Value.absent(),
+          acceptanceNotes: _v(a['acceptanceNotes']),
         ));
       }
     }
@@ -608,6 +629,9 @@ class DirectiveRepository {
         guardianCanRevoke: _vBool(g['guardianCanRevoke']),
         guardianCanChangeAgent: _vBool(g['guardianCanChangeAgent']),
         guardianMustConsultAgent: _vBool(g['guardianMustConsultAgent']),
+        guardianCanRevokeNote: _v(g['guardianCanRevokeNote']),
+        guardianCanChangeAgentNote: _v(g['guardianCanChangeAgentNote']),
+        guardianMustConsultAgentNote: _v(g['guardianMustConsultAgentNote']),
         guardianRelation: _v(g['guardianRelation']),
       ));
     }
@@ -640,6 +664,7 @@ class DirectiveRepository {
             entryType: m['entryType']?.toString() ?? 'preferred',
             medicationName: Value(m['medicationName']?.toString() ?? ''),
             reason: Value(m['reason']?.toString() ?? ''),
+            dosage: Value(m['dosage']?.toString() ?? ''),
             sortOrder: Value(m['sortOrder'] as int? ?? 0),
           ));
         }

@@ -248,11 +248,12 @@ class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
           setState(() => _partial = result.recognizedWords);
         }
       },
-      listenFor: const Duration(seconds: 60),
-      pauseFor: const Duration(seconds: 5),
       listenOptions: stt.SpeechListenOptions(
         listenMode: stt.ListenMode.dictation,
         partialResults: true,
+        // speech_to_text 7.4.0 moved these off the top-level listen() params.
+        listenFor: const Duration(seconds: 60),
+        pauseFor: const Duration(seconds: 5),
       ),
     );
   }

@@ -570,13 +570,14 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
   Widget _zoomBtn(
       MhadPalette p, String label, bool enabled, VoidCallback onTap) {
     return SizedBox(
-      width: 30,
-      height: 30,
+      // 44×44 meets the WCAG 2.5.5 AA minimum tap target (was 30×30).
+      width: 44,
+      height: 44,
       child: OutlinedButton(
         onPressed: enabled ? onTap : null,
         style: OutlinedButton.styleFrom(
           padding: EdgeInsets.zero,
-          minimumSize: const Size(30, 30),
+          minimumSize: const Size(44, 44),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           side: BorderSide(color: p.border),
@@ -599,8 +600,10 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
     return GestureDetector(
       onTap: () => _setZoom(1.0),
       child: Container(
+        // Match the 44px zoom buttons so the row aligns and the toggle also
+        // meets the WCAG 2.5.5 AA tap-target minimum.
         constraints: const BoxConstraints(minWidth: 64),
-        height: 30,
+        height: 44,
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: isFit ? p.primaryTint : p.card,

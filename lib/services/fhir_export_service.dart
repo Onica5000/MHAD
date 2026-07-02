@@ -107,7 +107,12 @@ class FhirExportService {
     }
 
     if (provisions.isNotEmpty) {
-      resource['provision'] = {
+      // Must be typed <String, dynamic>: the diagnoses branch below reassigns
+      // 'provision' to a spread `List<dynamic>`, which would fail a runtime
+      // covariance check if this map were inferred as
+      // Map<String, List<Map<String, dynamic>>> (crashing FHIR-JSON export for
+      // any directive that has both medications/ECT and diagnoses).
+      resource['provision'] = <String, dynamic>{
         'provision': provisions,
       };
     }

@@ -94,39 +94,33 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
     if (prior.isEmpty || !mounted) return;
 
     final source = prior.first;
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Copy Personal Info?'),
-        content: Text(
-          'Would you like to copy your personal information from a '
-          'previous directive (${source.fullName})?',
+    // Non-blocking offer. This used to be an AlertDialog that auto-fired on the
+    // step's first paint — an interruption before the user did anything. A
+    // snackbar with a Copy action lets them keep typing and ignore it, and it
+    // auto-dismisses so it never lingers onto later steps.
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: const Duration(seconds: 8),
+        content: Text('Reuse your details from ${source.fullName}?'),
+        action: SnackBarAction(
+          label: 'Copy',
+          onPressed: () {
+            if (!mounted) return;
+            setState(() {
+              _fullNameCtrl.text = source.fullName;
+              _dobCtrl.text = source.dateOfBirth;
+              _addressCtrl.text = source.address;
+              _address2Ctrl.text = source.address2;
+              _cityCtrl.text = source.city;
+              _countyCtrl.text = source.county;
+              _stateCtrl.text = source.state.isEmpty ? 'PA' : source.state;
+              _zipCtrl.text = source.zip;
+              _phoneCtrl.text = source.phone;
+            });
+          },
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('No, start fresh'),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Yes, copy'),
-          ),
-        ],
       ),
     );
-    if (confirmed == true && mounted) {
-      setState(() {
-        _fullNameCtrl.text = source.fullName;
-        _dobCtrl.text = source.dateOfBirth;
-        _addressCtrl.text = source.address;
-        _address2Ctrl.text = source.address2;
-        _cityCtrl.text = source.city;
-        _countyCtrl.text = source.county;
-        _stateCtrl.text = source.state.isEmpty ? 'PA' : source.state;
-        _zipCtrl.text = source.zip;
-        _phoneCtrl.text = source.phone;
-      });
-    }
   }
 
   /// Fill city, county and state from the entered ZIP using free, keyless,
@@ -241,6 +235,9 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
             const SizedBox(height: 8),
             TextFormField(
               controller: _fullNameCtrl,
+              // Land the cursor here on the first wizard step so users can start
+              // typing immediately (About You is the entry point).
+              autofocus: true,
               decoration: const InputDecoration(
                 labelText: 'Full legal name *',
                 border: OutlineInputBorder(),

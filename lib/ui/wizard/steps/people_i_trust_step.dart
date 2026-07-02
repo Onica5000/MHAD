@@ -204,6 +204,12 @@ class _AgentCard extends ConsumerStatefulWidget {
 class _AgentCardState extends ConsumerState<_AgentCard> {
   bool? _expanded; // null until first data load decides the default
 
+  // Read the agents ONCE (lazily, on first build) instead of firing a fresh DB
+  // query on every rebuild — this card rebuilds on each expand/collapse tap and
+  // the FutureBuilder was re-reading the DB (and could flicker) each time.
+  late final Future<List<Agent>> _agentsFuture =
+      ref.read(directiveRepositoryProvider).getAgents(widget.directiveId);
+
   String _initials(String name) {
     final parts =
         name.split(RegExp(r'\s+')).where((p) => p.isNotEmpty).toList();
@@ -225,8 +231,7 @@ class _AgentCardState extends ConsumerState<_AgentCard> {
     final p = Theme.of(context).mhadPalette;
 
     return FutureBuilder<List<Agent>>(
-      future:
-          ref.read(directiveRepositoryProvider).getAgents(widget.directiveId),
+      future: _agentsFuture,
       builder: (context, snap) {
         final agents = snap.data ?? const <Agent>[];
         Agent? agent;

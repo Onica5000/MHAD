@@ -4,6 +4,7 @@ import 'package:drift/drift.dart' show Value;
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/agent_ext.dart';
 import 'package:mhad/providers/app_providers.dart';
+import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/forms/address_fields.dart';
 import 'package:mhad/ui/wizard/widgets/contact_picker_button.dart';
 import 'package:mhad/ui/wizard/widgets/wizard_help_button.dart';
@@ -144,35 +145,12 @@ class _AgentDesignationStepState
             ),
             const SizedBox(height: 12),
             // Definition of "agent" lives in the info card below (kept once).
-            Card(
-              color: Theme.of(context).colorScheme.secondaryContainer,
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Icon(
-                      Icons.info_outline,
-                      size: 20,
-                      color: Theme.of(context).colorScheme.onSecondaryContainer,
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        'An agent (healthcare proxy) is someone you choose to make '
-                        'mental health care decisions on your behalf when you cannot.',
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSecondaryContainer,
-                          height: 1.4,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+            const InfoBanner(
+              icon: Icons.info_outline,
+              margin: EdgeInsets.zero,
+              text:
+                  'An agent (healthcare proxy) is someone you choose to make '
+                  'mental health care decisions on your behalf when you cannot.',
             ),
             const SizedBox(height: 12),
             ContactPickerButton(
@@ -206,37 +184,14 @@ class _AgentDesignationStepState
               textInputAction: TextInputAction.next,
             ),
             const SizedBox(height: 12),
-            Card(
-              color: Theme.of(context).colorScheme.secondaryContainer,
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Icon(
-                      Icons.info_outline,
-                      size: 20,
-                      color: Theme.of(context).colorScheme.onSecondaryContainer,
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        'Note: Under PA Act 194 \u00a75838, if you designate your '
-                        'spouse as your agent, that designation is automatically '
-                        'revoked if either spouse files for divorce, unless you '
-                        'state otherwise in this directive.',
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSecondaryContainer,
-                          height: 1.4,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+            const InfoBanner(
+              icon: Icons.info_outline,
+              margin: EdgeInsets.zero,
+              text:
+                  'Note: Under PA Act 194 \u00a75838, if you designate your '
+                  'spouse as your agent, that designation is automatically '
+                  'revoked if either spouse files for divorce, unless you '
+                  'state otherwise in this directive.',
             ),
             const SizedBox(height: 12),
             AddressFields(
