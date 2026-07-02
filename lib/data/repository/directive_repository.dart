@@ -441,7 +441,11 @@ class DirectiveRepository {
         'selfBindingEnabled': prefs.selfBindingEnabled,
         'sideEffectsJson': prefs.sideEffectsJson,
       },
-      if (guardian != null) 'guardian': {
+      // Gated on `full` (like `personal`/`agents`): the guardian nominee's
+      // name/address/phone are third-party identity PII and must not land in
+      // the unencrypted web-reload cache. Recovered only from a full snapshot
+      // (encrypted export/import).
+      if (full && guardian != null) 'guardian': {
         'nomineeFullName': guardian.nomineeFullName,
         'nomineeAddress': guardian.nomineeAddress,
         'nomineeAddress2': guardian.nomineeAddress2,

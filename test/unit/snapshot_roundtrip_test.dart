@@ -116,4 +116,38 @@ void main() {
     expect(primary.acceptedAt, 1700000000000);
     expect(primary.acceptanceNotes, 'accepted in person');
   });
+
+  test('non-full snapshot omits identity PII (personal, agents, guardian)',
+      () async {
+    // The non-full snapshot backs the unencrypted web-reload cache in public
+    // web mode — it must not persist the principal, the agents, OR the guardian
+    // nominee (all third-party/identity PII).
+    await repo.updatePersonalInfo(
+      id,
+      fullName: 'Jane Doe',
+      dateOfBirth: '',
+      address: '',
+      address2: '',
+      city: '',
+      county: '',
+      state: 'PA',
+      zip: '',
+      phone: '',
+    );
+    await repo.upsertAgent(AgentsCompanion(
+      directiveId: Value(id),
+      agentType: const Value('primary'),
+      fullName: const Value('Mary Agent'),
+    ));
+    await repo.upsertGuardianNomination(GuardianNominationsCompanion(
+      directiveId: Value(id),
+      nomineeFullName: const Value('Bob Guardian'),
+    ));
+
+    final snap = await repo.snapshotDirective(id); // non-full (web cache)
+    expect(snap.containsKey('personal'), isFalse);
+    expect(snap.containsKey('agents'), isFalse);
+    expect(snap.containsKey('guardian'), isFalse,
+        reason: 'guardian nominee PII must not persist to the web cache');
+  });
 }
