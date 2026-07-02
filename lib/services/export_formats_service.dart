@@ -52,8 +52,13 @@ class ExportFormatsService {
     for (final a in agents) {
       if (a.fullName.isEmpty) continue;
       final section = 'Agent (${a.agentType})';
-      row(section, a.fullName,
-          [a.relationship, a.cellPhone].where((s) => s.isNotEmpty).join(' · '));
+      // Emit directly (not via row(), which drops empty-detail rows) so an
+      // agent with only a name still appears.
+      rows.add([
+        section,
+        a.fullName,
+        [a.relationship, a.cellPhone].where((s) => s.isNotEmpty).join(' · '),
+      ]);
       row(section, 'Address', a.fullAddress);
     }
 
@@ -96,7 +101,7 @@ class ExportFormatsService {
       for (final w in witnesses) {
         if (w.fullName.isEmpty) continue;
         final section = 'Witness ${w.witnessNumber}';
-        row(section, w.fullName, '');
+        rows.add([section, w.fullName, '']); // name row always emitted
         row(section, 'Address', w.fullAddress);
         row(section, 'Phone', w.phone);
       }
