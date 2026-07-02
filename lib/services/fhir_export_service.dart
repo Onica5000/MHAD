@@ -4,6 +4,7 @@ import 'package:mhad/constants.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/agent_ext.dart';
 import 'package:mhad/services/instruction_fields.dart';
+import 'package:mhad/utils/medication_display.dart';
 
 /// Generates a FHIR R4 Consent resource JSON from a completed directive.
 /// This enables future EHR integration. The output conforms to the FHIR
@@ -81,7 +82,7 @@ class FhirExportService {
         'type': med.entryType == 'exception' ? 'deny' : 'permit',
         'code': [
           {
-            'text': med.medicationName,
+            'text': medicationWithDosage(med.medicationName, med.dosage),
           }
         ],
         if (med.reason.isNotEmpty) 'data': [{'meaning': 'related', 'reference': {'display': med.reason}}],

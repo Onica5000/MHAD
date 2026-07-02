@@ -66,6 +66,16 @@ MedicationEntry _med() => const MedicationEntry(
       sortOrder: 0,
     );
 
+MedicationEntry _currentMed() => const MedicationEntry(
+      id: 2,
+      directiveId: 7,
+      entryType: 'current',
+      medicationName: 'Lithium',
+      reason: '',
+      dosage: '300 mg twice daily',
+      sortOrder: 1,
+    );
+
 DirectivePref _prefs() => const DirectivePref(
       id: 1,
       directiveId: 7,
@@ -136,7 +146,7 @@ void main() {
     final csv = ExportFormatsService.exportAsCsv(
       directive: _directive(),
       agents: [_agent()],
-      medications: [_med()],
+      medications: [_med(), _currentMed()],
       prefs: _prefs(),
       additional: _additional(),
       guardian: _guardian(),
@@ -154,6 +164,13 @@ void main() {
       expect(csv, contains('Play calming music'));
     });
 
+    test('labels currently-taking meds correctly and includes dosage', () {
+      expect(csv, contains('Currently taking'));
+      // 'current' must NOT fall through to the "Limitation" catch-all.
+      expect(csv, isNot(contains('Medication · Limitation')));
+      expect(csv, contains('Lithium (300 mg twice daily)'));
+    });
+
     test('quotes a field containing a comma', () {
       // effectiveCondition contains a comma → must be wrapped in quotes.
       expect(csv, contains('"when two professionals certify, in writing"'));
@@ -169,7 +186,7 @@ void main() {
     final xml = ExportFormatsService.exportAsFhirXml(
       directive: _directive(),
       agents: [_agent()],
-      medications: [_med()],
+      medications: [_med(), _currentMed()],
       prefs: _prefs(),
       additional: _additional(),
       guardian: _guardian(),
@@ -192,6 +209,10 @@ void main() {
       expect(xml, contains('<type value="deny"/>'));
     });
 
+    test('includes medication dosage in the provision text', () {
+      expect(xml, contains('Lithium (300 mg twice daily)'));
+    });
+
     test('emits actors for the agent and guardian', () {
       expect(xml, contains('Healthcare Power of Attorney'));
       expect(xml, contains('<display value="Guardian"/>'));
@@ -202,7 +223,7 @@ void main() {
     final json = FhirExportService.exportAsJson(
       directive: _directive(),
       agents: [_agent()],
-      medications: [_med()],
+      medications: [_med(), _currentMed()],
       prefs: _prefs(),
       additional: _additional(),
       guardian: _guardian(),

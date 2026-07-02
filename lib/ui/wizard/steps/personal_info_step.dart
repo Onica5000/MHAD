@@ -189,9 +189,19 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
     if (value == null || value.isEmpty) return 'Required';
     final parts = value.split('/');
     if (parts.length != 3) return 'Use MM/DD/YYYY format';
-    final dob = DateTime.tryParse(
-        '${parts[2]}-${parts[0].padLeft(2, '0')}-${parts[1].padLeft(2, '0')}');
-    if (dob == null) return 'Invalid date';
+    final month = int.tryParse(parts[0]);
+    final day = int.tryParse(parts[1]);
+    final year = int.tryParse(parts[2]);
+    if (month == null || day == null || year == null) return 'Invalid date';
+    final dob = DateTime(year, month, day);
+    // The DateTime constructor normalizes overflow (02/30 → Mar 1), so an
+    // impossible date is caught by checking the components round-trip.
+    if (dob.year != year || dob.month != month || dob.day != day) {
+      return 'Invalid date';
+    }
+    if (dob.isAfter(DateTime.now())) {
+      return 'Date of birth can\'t be in the future';
+    }
     if (!isAdult(dob)) {
       return 'Must be 18 or older (or an emancipated minor) to create a directive';
     }
