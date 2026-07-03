@@ -2,6 +2,7 @@ import 'package:mhad/constants.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/agent_ext.dart';
 import 'package:mhad/services/instruction_fields.dart';
+import 'package:mhad/utils/medication_display.dart';
 
 /// Additional machine-readable export formats beyond the FHIR JSON produced by
 /// [FhirExportService] — a flat CSV and a FHIR R4 Consent in XML. Both are
@@ -51,18 +52,32 @@ class ExportFormatsService {
     for (final a in agents) {
       if (a.fullName.isEmpty) continue;
       final section = 'Agent (${a.agentType})';
-      row(section, a.fullName,
-          [a.relationship, a.cellPhone].where((s) => s.isNotEmpty).join(' · '));
+      // Emit directly (not via row(), which drops empty-detail rows) so an
+      // agent with only a name still appears.
+      rows.add([
+        section,
+        a.fullName,
+        [a.relationship, a.cellPhone].where((s) => s.isNotEmpty).join(' · '),
+      ]);
       row(section, 'Address', a.fullAddress);
     }
 
     for (final m in medications) {
+      if (m.medicationName.trim().isEmpty) continue;
       final kind = switch (m.entryType) {
         'exception' => 'Avoid',
         'preferred' => 'Preferred',
+        'current' => 'Currently taking',
         _ => 'Limitation',
       };
-      row('Medication · $kind', m.medicationName, m.reason);
+      // Add directly rather than via row(), which drops empty-detail rows — a
+      // medication with a name but no reason (e.g. a "currently taking" entry
+      // that only carries a dosage) must still appear.
+      rows.add([
+        'Medication · $kind',
+        medicationWithDosage(m.medicationName.trim(), m.dosage),
+        m.reason.trim(),
+      ]);
     }
 
     if (prefs != null) {
@@ -86,7 +101,7 @@ class ExportFormatsService {
       for (final w in witnesses) {
         if (w.fullName.isEmpty) continue;
         final section = 'Witness ${w.witnessNumber}';
-        row(section, w.fullName, '');
+        rows.add([section, w.fullName, '']); // name row always emitted
         row(section, 'Address', w.fullAddress);
         row(section, 'Phone', w.phone);
       }
@@ -170,7 +185,8 @@ class ExportFormatsService {
       b.writeln('      <type value="'
           '${med.entryType == 'exception' ? 'deny' : 'permit'}"/>');
       b.writeln('      <code>');
-      b.writeln('        <text value="${_xml(med.medicationName)}"/>');
+      b.writeln('        <text value="'
+          '${_xml(medicationWithDosage(med.medicationName, med.dosage))}"/>');
       b.writeln('      </code>');
       b.writeln('    </provision>');
     }

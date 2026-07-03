@@ -5,6 +5,7 @@ import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/services/clinical_data_service.dart';
 import 'package:mhad/utils/debouncer.dart';
+import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/wizard/widgets/wizard_help_button.dart';
 import 'package:mhad/ui/wizard/wizard_mixins.dart';
 
@@ -165,7 +166,6 @@ class _TreatmentFacilityStepState
 
   @override
   Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
     const helpText =
         'You may specify treatment facilities you prefer or want to avoid. '
         'These preferences guide your agent and treatment providers but '
@@ -178,28 +178,12 @@ class _TreatmentFacilityStepState
         children: [
           WizardHelpButton(helpText: helpText, stepId: 'treatmentFacility'),
           const SizedBox(height: 8),
-          Card(
-            color: cs.secondaryContainer,
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Icon(Icons.info_outline, size: 18,
-                      color: cs.onSecondaryContainer),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      'Leave both sections empty if you have no preference. '
-                      'Your directive will indicate "No Preference" for '
-                      'treatment facilities.',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: cs.onSecondaryContainer),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          const InfoBanner(
+            icon: Icons.info_outline,
+            margin: EdgeInsets.zero,
+            text: 'Leave both sections empty if you have no preference. '
+                'Your directive will indicate "No Preference" for '
+                'treatment facilities.',
           ),
           const SizedBox(height: 16),
           _FacilitySection(

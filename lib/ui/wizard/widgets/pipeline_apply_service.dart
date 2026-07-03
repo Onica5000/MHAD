@@ -57,7 +57,7 @@ extension _PipelineApplyLogic on _PipelineScreenState {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Smart Fill failed: $e')),
+          SnackBar(content: Text('Autofill hit a problem. ${FriendlyError.from(e)}')),
         );
         // Still apply extracted data
         await _applyAll();

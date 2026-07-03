@@ -12,6 +12,7 @@ import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/utils/nav_utils.dart';
+import 'package:mhad/ui/export/export_cards.dart';
 import 'package:mhad/ui/export/pdf_preview_screen.dart';
 import 'package:mhad/ui/export/pdf/pdf_generator.dart';
 import 'package:mhad/ui/export/pdf/pdf_helpers.dart';
@@ -300,9 +301,11 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         );
       }
     } catch (e) {
+      debugPrint('PDF export failed: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error generating PDF: $e')),
+          const SnackBar(
+              content: Text("Couldn't generate the PDF. Please try again.")),
         );
       }
     } finally {
@@ -367,9 +370,11 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         ),
       );
     } catch (e) {
+      debugPrint('PDF export failed: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error generating PDF: $e')),
+          const SnackBar(
+              content: Text("Couldn't generate the PDF. Please try again.")),
         );
       }
     } finally {
@@ -449,85 +454,16 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
   }
 
   // Legal “before sharing” disclaimer (PA Act 194 — legally substantive).
-  Widget _buildLegalDisclaimerCard() => Semantics(
-        label: 'Important: Before sharing, ensure this directive has been '
-            'signed, dated, and witnessed by two adults as required by '
-            'PA Act 194. Give copies to your agent, physician, and '
-            'support people.',
-        container: true,
-        child: Card(
-          color: Theme.of(context).colorScheme.errorContainer,
-          child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Text(
-              'Before sharing: ensure this directive has been signed, dated, '
-              'and witnessed by two adults (18+) as required by PA Act 194. '
-              'Give copies to your agent, physician, and support people.',
-              style: TextStyle(
-                fontSize: 12,
-                color: Theme.of(context).colorScheme.onErrorContainer,
-              ),
-            ),
-          ),
-        ),
-      );
+  // These presentational pieces live in export_cards.dart; the thin wrappers
+  // keep the existing call sites unchanged.
+  Widget _buildLegalDisclaimerCard() => const ExportLegalDisclaimerCard();
 
-  Widget _buildPrincipalCard() {
-    if (_directive == null) return const SizedBox.shrink();
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text('Principal',
-                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
-            const SizedBox(height: 4),
-            Text(_directive!.fullName, style: const TextStyle(fontSize: 13)),
-            if (_directive!.executionDate != null)
-              Text(
-                'Executed: ${DateTime.fromMillisecondsSinceEpoch(_directive!.executionDate!).toString().split(' ').first}',
-                style: const TextStyle(fontSize: 12),
-              ),
-            if (_directive!.expirationDate != null)
-              Text(
-                'Expires: ${DateTime.fromMillisecondsSinceEpoch(_directive!.expirationDate!).toString().split(' ').first}',
-                style: const TextStyle(fontSize: 12),
-              ),
-          ],
-        ),
-      ),
-    );
-  }
+  Widget _buildPrincipalCard() => _directive == null
+      ? const SizedBox.shrink()
+      : ExportPrincipalCard(directive: _directive!);
 
   // V4-M8 — persistent banner: the PDF is unencrypted by design.
-  Widget _buildUnencryptedBanner() => Container(
-        margin: const EdgeInsets.only(bottom: 8),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.errorContainer,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(Icons.lock_open_outlined,
-                size: 18,
-                color: Theme.of(context).colorScheme.onErrorContainer),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                'The exported PDF is not encrypted. Share only via '
-                'channels you trust.',
-                style: TextStyle(
-                  fontSize: 12.5,
-                  color: Theme.of(context).colorScheme.onErrorContainer,
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
+  Widget _buildUnencryptedBanner() => const ExportUnencryptedBanner();
 
   List<Widget> _buildHeaderChildren(MhadPalette p) => [
         const SectionLabel('Export & share'),
@@ -1009,9 +945,11 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         subject: 'MHAD editable directive copy',
       );
     } catch (e) {
+      debugPrint('Editable-file export failed: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Could not create the file: $e')),
+          const SnackBar(
+              content: Text("Couldn't save the file. Please try again.")),
         );
       }
     }
@@ -1139,6 +1077,13 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         ],
         subject: 'PA MHAD directive bundle',
       );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text(
+                  'Exported your directive bundle — PDF, JSON, XML and CSV.')),
+        );
+      }
     } catch (e) {
       debugPrint('Zip bundle export failed: $e');
       if (mounted) {
@@ -1171,9 +1116,12 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
     try {
       await WalletCardService.generateAndShare(_directive!, _agents);
     } catch (e) {
+      debugPrint('Wallet-card export failed: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error generating wallet card: $e')),
+          const SnackBar(
+              content:
+                  Text("Couldn't generate the wallet card. Please try again.")),
         );
       }
     } finally {

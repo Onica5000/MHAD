@@ -20,8 +20,11 @@ class AudioGuideScreen extends StatelessWidget {
         name: 'MHAD-voice-questionnaire.pdf',
       );
     } catch (e) {
+      debugPrint('Audio questionnaire print failed: $e');
       messenger.showSnackBar(
-        SnackBar(content: Text('Could not open the questionnaire to print: $e')),
+        const SnackBar(
+            content: Text(
+                "Couldn't open the questionnaire to print. Please try again.")),
       );
     }
   }

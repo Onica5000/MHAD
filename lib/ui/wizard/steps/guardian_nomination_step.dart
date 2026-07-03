@@ -4,6 +4,7 @@ import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/providers/app_providers.dart';
+import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/forms/address_fields.dart';
 import 'package:mhad/ui/wizard/widgets/contact_picker_button.dart';
 import 'package:mhad/ui/wizard/widgets/wizard_help_button.dart';
@@ -215,36 +216,12 @@ class _GuardianNominationStepState
                 ),
           ),
           const SizedBox(height: 12),
-          Card(
-            color: Theme.of(context).colorScheme.secondaryContainer,
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Icon(
-                    Icons.info_outline,
-                    size: 20,
-                    color: Theme.of(context).colorScheme.onSecondaryContainer,
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      'A guardian is different from your agent. A guardian is '
-                      'appointed by a court during formal incapacity proceedings. '
-                      'This nomination tells the court who you prefer.',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onSecondaryContainer,
-                        height: 1.4,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          const InfoBanner(
+            icon: Icons.info_outline,
+            margin: EdgeInsets.zero,
+            text: 'A guardian is different from your agent. A guardian is '
+                'appointed by a court during formal incapacity proceedings. '
+                'This nomination tells the court who you prefer.',
           ),
           const SizedBox(height: 12),
           // Phase 2 — 4-radio Opt pattern per v2 prototype's `ScrWizardGuardian`.

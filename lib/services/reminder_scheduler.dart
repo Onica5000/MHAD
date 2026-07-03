@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/data/app_data/app_data.dart';
+import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/reminders/reminder_sheets.dart';
@@ -68,14 +69,7 @@ class ReminderScheduler {
 
     // Renewal first — sort by closest expiration so the most urgent
     // directive's sheet shows.
-    final renewCandidates = completed.where((d) {
-      final exp = d.expirationDate;
-      if (exp == null) return false;
-      final daysLeft = DateTime.fromMillisecondsSinceEpoch(exp)
-          .difference(now)
-          .inDays;
-      return daysLeft <= _renewWindow;
-    }).toList()
+    final renewCandidates = completed.where((d) => renewalDue(d, now)).toList()
       ..sort((a, b) =>
           (a.expirationDate ?? 0).compareTo(b.expirationDate ?? 0));
     for (final d in renewCandidates) {
@@ -99,12 +93,7 @@ class ReminderScheduler {
 
     // Check-in — sort by furthest-out updatedAt (the directive that
     // hasn't been touched longest gets the prompt).
-    final checkInCandidates = completed.where((d) {
-      final daysSinceEdit = now
-          .difference(DateTime.fromMillisecondsSinceEpoch(d.updatedAt))
-          .inDays;
-      return daysSinceEdit >= _checkInWindow;
-    }).toList()
+    final checkInCandidates = completed.where((d) => checkInDue(d, now)).toList()
       ..sort((a, b) => a.updatedAt.compareTo(b.updatedAt));
     for (final d in checkInCandidates) {
       if (_isCooledDown(prefs.getInt('$_kCheckInLastShown${d.id}'),
@@ -126,5 +115,26 @@ class ReminderScheduler {
     if (lastShownMs == null) return true;
     final last = DateTime.fromMillisecondsSinceEpoch(lastShownMs);
     return now.difference(last) >= cooldown;
+  }
+
+  /// Pure predicate: is this directive inside its renewal window
+  /// (`expirationDate - now <= renewWindow`)? Null expiry never qualifies.
+  /// Extracted so the window logic is unit-testable without the UI sheets.
+  @visibleForTesting
+  static bool renewalDue(Directive d, DateTime now) {
+    final exp = d.expirationDate;
+    if (exp == null) return false;
+    final daysLeft =
+        DateTime.fromMillisecondsSinceEpoch(exp).difference(now).inDays;
+    return daysLeft <= _renewWindow;
+  }
+
+  /// Pure predicate: has it been at least `checkInWindow` days since the
+  /// directive was last edited?
+  @visibleForTesting
+  static bool checkInDue(Directive d, DateTime now) {
+    final daysSinceEdit =
+        now.difference(DateTime.fromMillisecondsSinceEpoch(d.updatedAt)).inDays;
+    return daysSinceEdit >= _checkInWindow;
   }
 }

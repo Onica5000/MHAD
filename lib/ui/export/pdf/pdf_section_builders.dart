@@ -14,6 +14,10 @@ import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/ui/export/pdf/pdf_layout.dart';
 import 'package:pdf/widgets.dart' as pw;
 
+// medicationWithDosage moved to a shared util; re-exported here so the PDF
+// builders that import this file keep resolving it unchanged.
+export 'package:mhad/utils/medication_display.dart';
+
 /// Resolves the four nominee display fields for the Guardian section based
 /// on the `guardian_relation` choice. The Phase-2 GuardianNominationStep
 /// blanks the persisted nominee columns for the three non-"different"
@@ -448,10 +452,3 @@ String? _roommateMatchLabel(String raw) {
 /// Returns the best available phone number for an agent, or empty string.
 String agentBestPhone(Agent? agent) => agent?.bestPhone ?? '';
 
-/// Appends a dosage to a medication name for display — `"Lisinopril (10 mg
-/// daily)"` — or just the name when no dosage was given. Used for the
-/// currently-taking section, the only one that captures a dosage.
-String medicationWithDosage(String name, String dosage) {
-  final d = dosage.trim();
-  return d.isEmpty ? name : '$name ($d)';
-}

@@ -26,34 +26,6 @@ class DraftRecoveryService {
   /// crash-recovery window in the app is the same length.
   static Duration get ttl => sessionCacheTtl;
 
-  /// Fields that are safe to auto-save (non-PII).
-  static const safeFields = {
-    'effectiveCondition',
-    'medications',
-    'treatmentFacilityPref',
-    'preferredFacilityName',
-    'avoidFacilityName',
-    'medicationConsent',
-    'ectConsent',
-    'experimentalConsent',
-    'drugTrialConsent',
-    'agentCanConsentHospitalization',
-    'agentCanConsentMedication',
-    'agentAuthorityLimitations',
-    'activities',
-    'crisisIntervention',
-    'healthHistory',
-    'dietary',
-    'religious',
-    'childrenCustody',
-    'familyNotification',
-    'recordsDisclosure',
-    'petCustody',
-    'other',
-    'lastStepIndex',
-    'formType',
-  };
-
   /// PII fields that are NEVER saved to the draft.
   static const piiFields = {
     'fullName',
