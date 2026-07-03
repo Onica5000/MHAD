@@ -6,6 +6,16 @@ import 'package:mhad/ui/export/pdf/notes_pdf.dart';
 import 'package:mhad/ui/export/pdf/pdf_generator.dart';
 import 'package:mhad/ui/export/pdf/supplementary_pdf.dart';
 
+// ─── Structural helpers ──────────────────────────────────────────────────────
+
+/// Counts PDF page objects ("/Type /Page", excluding the "/Type /Pages" tree
+/// root) in the raw bytes. A structural assertion stronger than "non-empty": it
+/// verifies the generator actually emitted a page tree of the expected shape.
+/// package:pdf writes object dictionaries in plaintext (only the content
+/// streams are Flate-compressed), so these markers are scannable.
+int _pageCount(Uint8List bytes) =>
+    RegExp(r'/Type\s*/Page(?![s])').allMatches(String.fromCharCodes(bytes)).length;
+
 // ─── Shared test fixtures ────────────────────────────────────────────────────
 
 /// Minimal valid Directive for testing — all required fields populated with
@@ -359,6 +369,65 @@ void main() {
         expect(String.fromCharCodes(bytes.take(5)), '%PDF-',
             reason: 'output should be a valid PDF document');
       }
+    });
+
+    test('each form type emits a page tree and a valid %%EOF trailer',
+        () async {
+      const generators = [
+        PdfGenerator(
+          includeCombined: true,
+          includeDeclaration: false,
+          includePoa: false,
+          includeSupplementary: false,
+          includeNotes: false,
+        ),
+        PdfGenerator(
+          includeCombined: false,
+          includeDeclaration: true,
+          includePoa: false,
+          includeSupplementary: false,
+          includeNotes: false,
+        ),
+        PdfGenerator(
+          includeCombined: false,
+          includeDeclaration: false,
+          includePoa: true,
+          includeSupplementary: false,
+          includeNotes: false,
+        ),
+      ];
+      for (final g in generators) {
+        final bytes = await generate(g);
+        // Structure beyond the header: a real page tree, and a complete file
+        // (truncated/aborted output would lack the %%EOF trailer).
+        expect(_pageCount(bytes), greaterThanOrEqualTo(1),
+            reason: 'every form type must render at least one page');
+        expect(String.fromCharCodes(bytes).trimRight(), endsWith('%%EOF'),
+            reason: 'a complete PDF ends with the %%EOF trailer');
+      }
+    });
+
+    test('optional supplementary + notes sections add pages to the document',
+        () async {
+      final combinedOnly = await generate(const PdfGenerator(
+        includeCombined: true,
+        includeDeclaration: false,
+        includePoa: false,
+        includeSupplementary: false,
+        includeNotes: false,
+      ));
+      final withExtras = await generate(const PdfGenerator(
+        includeCombined: true,
+        includeDeclaration: false,
+        includePoa: false,
+        includeSupplementary: true,
+        includeNotes: true,
+      ));
+      // A monotonic structural invariant (not a brittle exact-page golden):
+      // turning on the supplementary + notes sections must yield strictly more
+      // page objects than the form alone.
+      expect(_pageCount(withExtras), greaterThan(_pageCount(combinedOnly)),
+          reason: 'supplementary + notes each contribute at least one page');
     });
 
     test('generates without error when optional data is null', () async {

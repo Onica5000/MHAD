@@ -48,3 +48,12 @@ user's own data on their own device. Adding it would increase binary size, false
 positives, and maintenance for negligible user-data benefit. **Decision: stay at
 L1/L2 + non-blocking root warning.** Revisit only if a server component or paid tier is
 introduced. This is an explicit, reviewed choice — not an unaddressed gap.
+
+**Web-first pivot note (2026-06):** the shipping surface is now the Chrome/Edge web app
+(native is deferred — see CLAUDE.md). RASP is doubly moot there: a web build runs inside
+the browser sandbox with no native binary to harden, and the resilience controls in the
+table above (FLAG_SECURE, root/jailbreak warning, cert pinning, obfuscation) are
+native-only and gracefully absent on web. Web's exposure is instead governed by the
+local-first, public-mode-only posture (in-memory DB, no persistence) and the network
+allowlist — not by anti-tamper RASP. The deferral therefore stands unchanged for the
+surface that actually ships.

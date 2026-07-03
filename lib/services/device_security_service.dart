@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/utils/test_environment.dart';
 import 'package:safe_device/safe_device.dart';
 
 /// Service that checks for root/jailbreak and warns the user.
@@ -23,17 +24,16 @@ class DeviceSecurityService {
   Future<void> checkAndWarn(BuildContext context) async {
     if (_hasWarned) return;
 
-    // Skip on desktop / web / test host to avoid false positives.
+    // Skip on web / test host to avoid false positives and plugin noise.
     //
-    // V4-L14 — Flutter widget tests run on the Dart VM with the host OS
-    // (Windows/macOS/Linux), so `defaultTargetPlatform` is *not* Android/iOS
-    // and `_isMobilePlatform()` already short-circuits this method before
-    // `SafeDevice.isJailBroken` is called. The "Error checking JailBroken
-    // status: MissingPluginException" line that may appear in test output
-    // is logged by the plugin's own native side during plugin registration
-    // and is harmless — there is no Dart-side change that can suppress it
-    // without dropping the dependency.
+    // V4-L14 — under `flutter_test`, `defaultTargetPlatform` defaults to
+    // `TargetPlatform.android` (NOT the host OS), so `_isMobilePlatform()`
+    // would pass and `SafeDevice.isJailBroken` would be invoked — throwing a
+    // `MissingPluginException` (no native side registered on the test VM) that
+    // spammed every test run. Guard on `isRunningInTest` (FLUTTER_TEST env var,
+    // web-safe) so the native channel is never touched in tests.
     if (kIsWeb) return;
+    if (isRunningInTest) return;
     if (!_isMobilePlatform()) return;
 
     try {

@@ -26,7 +26,7 @@ class EffectiveConditionStep extends ConsumerStatefulWidget {
 
 class _EffectiveConditionStepState
     extends ConsumerState<EffectiveConditionStep>
-    with WizardStepMixin, AutoSaveMixin {
+    with WizardStepMixin, AutoSaveMixin, WizardStepLoadGuard {
   final _formKey = GlobalKey<FormState>();
   final _ctrl = TextEditingController();
   final _doctorNameCtrl = TextEditingController();
@@ -66,6 +66,7 @@ class _EffectiveConditionStepState
     final directive = await ref
         .read(directiveRepositoryProvider)
         .getDirectiveById(widget.directiveId);
+    markLoaded();
     if (directive != null && mounted) {
       setState(() {
         _ctrl.text = directive.effectiveCondition;
@@ -80,6 +81,7 @@ class _EffectiveConditionStepState
 
   @override
   Future<bool> validateAndSave() async {
+    if (!isLoaded) return true; // don't overwrite the trigger fields before load
     _formKey.currentState?.validate(); // Show warnings but don't block
     final repo = ref.read(directiveRepositoryProvider);
     await repo.updateEffectiveCondition(

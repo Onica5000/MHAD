@@ -47,7 +47,8 @@ enum _GuardianRel {
 }
 
 class _GuardianNominationStepState
-    extends ConsumerState<GuardianNominationStep> with WizardStepMixin {
+    extends ConsumerState<GuardianNominationStep>
+    with WizardStepMixin, WizardStepLoadGuard {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _nameCtrl;
   late final TextEditingController _addressCtrl;
@@ -104,6 +105,7 @@ class _GuardianNominationStepState
     final g = await ref
         .read(directiveRepositoryProvider)
         .getGuardianNomination(widget.directiveId);
+    markLoaded();
     if (g != null && mounted) {
       setState(() {
         _existingId = g.id;
@@ -128,6 +130,7 @@ class _GuardianNominationStepState
 
   @override
   Future<bool> validateAndSave() async {
+    if (!isLoaded) return true; // don't overwrite the guardian before load
     _formKey.currentState?.validate();
     // PRESERVE the nominee text fields even when the user is currently on a
     // non-'different' radio: we always write whatever's in the controllers

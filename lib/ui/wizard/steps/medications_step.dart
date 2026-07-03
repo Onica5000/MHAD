@@ -28,7 +28,7 @@ class MedicationsStep extends ConsumerStatefulWidget {
 }
 
 class _MedicationsStepState extends ConsumerState<MedicationsStep>
-    with WizardStepMixin {
+    with WizardStepMixin, WizardStepLoadGuard {
   final _formKey = GlobalKey<FormState>();
 
   // Each entry: {name controller, reason controller, existing id or null}
@@ -66,6 +66,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
     final repo = ref.read(directiveRepositoryProvider);
     final meds = await repo.watchMedications(widget.directiveId).first;
     final prefs = await repo.getPreferences(widget.directiveId);
+    markLoaded();
 
     if (!mounted) return;
     setState(() {
@@ -130,6 +131,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
 
   @override
   Future<bool> validateAndSave() async {
+    if (!isLoaded) return true; // don't wipe meds before the load populates them
     _formKey.currentState?.validate();
     final repo = ref.read(directiveRepositoryProvider);
 
