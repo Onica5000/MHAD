@@ -108,7 +108,8 @@ were superseded by regulations that changed *after* they were written.
   side-effects JSON, extraction/personal-info contracts). It still **under-covers** the
   wizard *step widgets* (validate/save/restore per step), routing/redirect gating, and the
   `MhadBottomNav`/`ResponsiveShell` layout — the highest-risk, mostly-untested areas.
-  ACTION_PLAN Phase 7 promised wizard-step, provider, and AI tests; partially delivered.
+  The original build plan's test phase promised wizard-step, provider, and AI tests;
+  partially delivered.
 - **Impact:** This is a 2-year legal document generator handling mental-health PII; a
   silent regression in step persistence, form-type step omission, or PDF field mapping is
   high-consequence and currently uncaught. The nav rewrite this session was only saved by
@@ -278,9 +279,10 @@ were superseded by regulations that changed *after* they were written.
 - **Fix:** Update ACTION_PLAN + CLAUDE.md to reflect Gemini, the removed deps, the 9-step
   consolidated wizard, and the bottom-nav/sidebar navigation; add a one-line "superseded
   by V4" banner to V2/V3 so their "all closed" summaries aren't taken at face value.
-- **Status:** [~] — CLAUDE.md is current (Gemini, web pivot, navigation). `ACTION_PLAN.md`
-  has been retitled **historical** with a corrective banner (2026-06-20) rather than kept
-  as a live plan; its body is superseded by CLAUDE.md + README.
+- **Status:** `[x]` **DONE** — CLAUDE.md is current (Gemini, web pivot, navigation), and the
+  materially-stale `ACTION_PLAN.md` was **removed** 2026-07-04 (its body was fully superseded
+  by CLAUDE.md + README; git history preserves it). The former `DEDUP_PLAN.md` and
+  `UI_UX_AUDIT.md` audit worklists were pruned in the same pass.
 
 ---
 

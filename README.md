@@ -146,7 +146,7 @@ lib/
     ulysses/                           -- Self-binding clause opt-in (§ 5802)
     wizard/                            -- Adaptive 6/9/11-step flow per FormType
     widgets/design/                    -- bottom_nav, web_sidebar, responsive_shell, …
-docs/                                  -- ACTION_PLAN, BREACH_PLAN, THREAT_MODEL, GAP_ANALYSIS_V4
+docs/                                  -- BREACH_PLAN, THREAT_MODEL, GAP_ANALYSIS_V4, …
 PRIVACY_POLICY.md                      -- Public privacy policy source (mirrors in-app)
 ```
 
