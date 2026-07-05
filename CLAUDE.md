@@ -23,7 +23,7 @@ The shipped UI/UX (fonts, layout, look) is the source of truth — preserve it. 
 Claude Design artboard/handoff bundle was removed 2026-06-28 (it had served its purpose
 and was stale); do not reintroduce it or design against it.
 
-Source PDF: `PA MHAD.pdf`. Plan: `ACTION_PLAN.md`.
+Source PDF: `PA MHAD.pdf`. Improvement backlog: `docs/GAP_ANALYSIS_V4.md`.
 
 ## Flutter / Dart
 - Flutter 3.41.4, Dart 3.11.1
