@@ -57,9 +57,12 @@ void main() {
 
     // Resolve database encryption key from secure storage (generates on first
     // launch). This must complete before runApp so the key is available
-    // synchronously to the appDatabaseProvider.
+    // synchronously to the appDatabaseProvider. Web never uses it — the web
+    // database is always in-memory (createEncryptedDatabase ignores the key),
+    // so skip the secure-storage round-trip there rather than let a browser
+    // storage failure block boot for a key nothing reads.
     final dbEncryptionKey =
-        await DatabaseEncryptionService.getOrCreateKey();
+        kIsWeb ? '' : await DatabaseEncryptionService.getOrCreateKey();
 
     // Pre-load cached AI prefs (per-provider keys / active provider / models)
     // from SharedPreferences so they're available synchronously on the first
