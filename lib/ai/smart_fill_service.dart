@@ -323,7 +323,7 @@ class SmartFillService {
   /// token usage (for rate tracking).
   Future<SmartFillResponse> generate(SmartFillInput rawInput) async {
     final input = rawInput.sanitized();
-    final prompt = _buildPrompt(input);
+    final prompt = buildPrompt(input);
     debugPrint('SmartFill prompt: ${prompt.length} chars '
         '(~${(prompt.length / 4).round()} tokens), '
         '${input.conditions.length} conditions, '
@@ -377,7 +377,10 @@ class SmartFillService {
     }
   }
 
-  String _buildPrompt(SmartFillInput input) {
+  /// Builds the full generation prompt. Exposed for tests so the consent
+  /// wording and PII-stripping contract can be pinned without a network call.
+  @visibleForTesting
+  String buildPrompt(SmartFillInput input) {
     final buf = StringBuffer();
 
     buf.writeln('PA Mental Health Advance Directive auto-fill.');
@@ -433,10 +436,10 @@ class SmartFillService {
     // The AI MUST respect these decisions and never suggest overriding them.
     existing.add('');
     existing.add('=== CONSENT DECISIONS (BINDING — do NOT contradict) ===');
-    existing.add('Medication consent: ${s(_describeConsent(input.existingMedicationConsent))}');
-    existing.add('ECT consent: ${s(_describeConsent(input.existingEctConsent))}');
-    existing.add('Experimental studies consent: ${s(_describeConsent(input.existingExperimentalConsent))}');
-    existing.add('Drug trial consent: ${s(_describeConsent(input.existingDrugTrialConsent))}');
+    existing.add('Medication consent: ${s(describeConsent(input.existingMedicationConsent))}');
+    existing.add('ECT consent: ${s(describeConsent(input.existingEctConsent))}');
+    existing.add('Experimental studies consent: ${s(describeConsent(input.existingExperimentalConsent))}');
+    existing.add('Drug trial consent: ${s(describeConsent(input.existingDrugTrialConsent))}');
     // Agent authority (POA/combined only) — always send full picture
     if (input.formType != 'declaration') {
       existing.add('Agent consent to hospitalization: ${input.existingAgentCanConsentHospitalization ? "YES — agent authorized" : "NO — agent NOT authorized"}');
@@ -654,7 +657,8 @@ class SmartFillService {
 
   /// Translate stored consent values into clear human-readable descriptions
   /// so the AI understands the user's hard decisions.
-  static String _describeConsent(String value) {
+  @visibleForTesting
+  static String describeConsent(String value) {
     if (value == consentYes) return 'YES — user consents';
     if (value == consentNo) return 'NO — user refuses (hard no, do NOT suggest otherwise)';
     if (value == consentAgentDecides) return 'AGENT DECIDES — user delegated to agent';
