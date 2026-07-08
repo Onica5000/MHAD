@@ -13,7 +13,6 @@ import 'package:mhad/ai/side_effect_item.dart';
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/data/educational_content.dart';
 import 'package:mhad/domain/model/directive.dart';
-import 'package:mhad/services/certificate_pinning_service.dart';
 import 'package:mhad/services/openfda_service.dart';
 import 'package:mhad/utils/json_utils.dart';
 
@@ -31,38 +30,31 @@ class LlmAssistant implements AiAssistant {
   final AiProvider provider;
   final String model;
   final String apiKey;
-  final http.Client _httpClient;
-  final bool _ownsClient;
   late final LlmClient _llm;
 
   /// [httpClient] is injectable for tests (e.g. asserting no raw PII leaves the
-  /// assistant); production passes none and gets the cert-pinned client.
+  /// assistant); production passes none and [LlmClient] creates (and owns) the
+  /// cert-pinned client.
   LlmAssistant({
     required this.apiKey,
     this.provider = AiProvider.gemini,
     String? model,
     http.Client? httpClient,
-  })  : model = (model != null && model.trim().isNotEmpty)
-            ? model.trim()
-            : (provider == AiProvider.gemini
-                ? appData.ai.model
-                : provider.defaultModel),
-        _httpClient =
-            httpClient ?? CertificatePinningService.createPinnedClient(),
-        _ownsClient = httpClient == null {
+  }) : model = provider.resolveModel(model) {
     _llm = LlmClient(
       provider: provider,
       model: this.model,
       apiKey: apiKey,
-      httpClient: _httpClient,
+      httpClient: httpClient,
     );
   }
 
+  /// The pinned client, shared with the grounded-search REST call below.
+  http.Client get _httpClient => _llm.httpClient;
+
   /// Closes the HTTP client this assistant created (no-op for injected test
   /// clients). Called when [aiAssistantProvider] rebuilds or is disposed.
-  void dispose() {
-    if (_ownsClient) _httpClient.close();
-  }
+  void dispose() => _llm.dispose();
 
   /// Shared JSON-mode generation for the structured helpers below: strips PII,
   /// asks the active provider for a raw JSON object, and removes any markdown

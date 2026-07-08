@@ -68,6 +68,11 @@ class LlmClient {
   })  : _http = httpClient ?? CertificatePinningService.createPinnedClient(),
         _ownsClient = httpClient == null;
 
+  /// The underlying HTTP client — exposed for the one call that bypasses this
+  /// transport (the assistant's Gemini grounded-search REST call), so it can
+  /// share the same pinned connection instead of creating a second client.
+  http.Client get httpClient => _http;
+
   /// Closes the underlying HTTP client if this instance created it. Injected
   /// clients stay open — whoever passed them in owns their lifecycle.
   void dispose() {

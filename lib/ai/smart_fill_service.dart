@@ -2,14 +2,12 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
 import 'package:mhad/ai/ai_clinical_policy.dart';
 import 'package:mhad/ai/ai_provider.dart';
 import 'package:mhad/ai/llm_client.dart';
 import 'package:mhad/ai/pii_stripper.dart';
 import 'package:mhad/constants.dart';
 import 'package:mhad/data/app_data/app_data.dart';
-import 'package:mhad/services/certificate_pinning_service.dart';
 import 'package:mhad/services/clinical_data_service.dart';
 import 'package:mhad/services/gemini_rate_tracker.dart';
 import 'package:mhad/utils/json_utils.dart';
@@ -294,29 +292,18 @@ class SmartFillService {
   final AiProvider provider;
   final String model;
   final String apiKey;
-  final http.Client _httpClient;
   late final LlmClient _llm;
 
   SmartFillService({
     required this.apiKey,
     this.provider = AiProvider.gemini,
     String? model,
-  })  : model = (model != null && model.trim().isNotEmpty)
-            ? model.trim()
-            : (provider == AiProvider.gemini
-                ? appData.ai.model
-                : provider.defaultModel),
-        _httpClient = CertificatePinningService.createPinnedClient() {
-    _llm = LlmClient(
-      provider: provider,
-      model: this.model,
-      apiKey: apiKey,
-      httpClient: _httpClient,
-    );
+  }) : model = provider.resolveModel(model) {
+    _llm = LlmClient(provider: provider, model: this.model, apiKey: apiKey);
   }
 
   /// Closes the HTTP client. Call when the smart-fill run is finished.
-  void dispose() => _httpClient.close();
+  void dispose() => _llm.dispose();
 
   /// Given structured clinical data, ask the AI to generate directive content.
   /// Returns [SmartFillResponse] containing the parsed result and an estimate of

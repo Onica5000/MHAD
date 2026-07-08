@@ -25,11 +25,7 @@ class AudioTranscriptionService {
     required this.apiKey,
     this.provider = AiProvider.gemini,
     String? model,
-  }) : model = (model != null && model.trim().isNotEmpty)
-            ? model.trim()
-            : (provider == AiProvider.gemini
-                ? appData.ai.model
-                : provider.defaultModel);
+  }) : model = provider.resolveModel(model);
 
   Future<String> transcribe(
     Uint8List audioBytes, {

@@ -2,13 +2,11 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:google_generative_ai/google_generative_ai.dart' show Schema;
-import 'package:http/http.dart' as http;
 import 'package:image/image.dart' as img;
 import 'package:mhad/ai/ai_provider.dart';
 import 'package:mhad/ai/document_extraction_result.dart';
 import 'package:mhad/ai/llm_client.dart';
 import 'package:mhad/data/app_data/app_data.dart';
-import 'package:mhad/services/certificate_pinning_service.dart';
 import 'package:mhad/utils/json_utils.dart';
 
 /// Sends a document (image, PDF, text, or audio) to the active AI provider and
@@ -19,29 +17,18 @@ class DocumentExtractor {
   final AiProvider provider;
   final String model;
   final String apiKey;
-  final http.Client _httpClient;
   late final LlmClient _llm;
 
   DocumentExtractor({
     required this.apiKey,
     this.provider = AiProvider.gemini,
     String? model,
-  })  : model = (model != null && model.trim().isNotEmpty)
-            ? model.trim()
-            : (provider == AiProvider.gemini
-                ? appData.ai.model
-                : provider.defaultModel),
-        _httpClient = CertificatePinningService.createPinnedClient() {
-    _llm = LlmClient(
-      provider: provider,
-      model: this.model,
-      apiKey: apiKey,
-      httpClient: _httpClient,
-    );
+  }) : model = provider.resolveModel(model) {
+    _llm = LlmClient(provider: provider, model: this.model, apiKey: apiKey);
   }
 
   /// Closes the HTTP client. Call when the extraction run is finished.
-  void dispose() => _httpClient.close();
+  void dispose() => _llm.dispose();
 
   // Gemini tiles images into 768x768 chunks at ~258 tokens each.
   // 1024px max keeps a portrait document to ~2 tiles (~516 tokens).
