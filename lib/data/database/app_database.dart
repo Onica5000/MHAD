@@ -293,9 +293,32 @@ class AppDatabase extends _$AppDatabase {
   @override
   int get schemaVersion => 20;
 
+  /// The lookup indexes on every child table's directive_id. Historically
+  /// created only by the migrations below, which left *fresh* databases
+  /// (every new install / web session) without them; onCreate now creates
+  /// them too so fresh and upgraded databases have identical schemas
+  /// (locked by test/unit/app_database_migration_test.dart).
+  static const _directiveIdIndexes = [
+    'CREATE INDEX IF NOT EXISTS idx_agents_directive '
+        'ON agents (directive_id)',
+    'CREATE INDEX IF NOT EXISTS idx_meds_directive '
+        'ON medication_entries (directive_id)',
+    'CREATE INDEX IF NOT EXISTS idx_witnesses_directive '
+        'ON witnesses (directive_id)',
+    'CREATE INDEX IF NOT EXISTS idx_diagnosis_directive '
+        'ON diagnosis_entries (directive_id)',
+    'CREATE INDEX IF NOT EXISTS idx_allergies_directive '
+        'ON directive_allergies (directive_id)',
+  ];
+
   @override
   MigrationStrategy get migration => MigrationStrategy(
-        onCreate: (m) => m.createAll(),
+        onCreate: (m) async {
+          await m.createAll();
+          for (final stmt in _directiveIdIndexes) {
+            await customStatement(stmt);
+          }
+        },
         onUpgrade: (m, from, to) async {
           if (from < 2) {
             await customStatement(
@@ -327,7 +350,11 @@ class AppDatabase extends _$AppDatabase {
           if (from < 6) {
             await customStatement(
                 'CREATE TABLE IF NOT EXISTS diagnosis_entries ('
-                'id INTEGER PRIMARY KEY AUTOINCREMENT, '
+                // NOT NULL matches drift's generated DDL so migrated and
+                // fresh-created databases end up schema-identical (locked by
+                // app_database_migration_test.dart). Same below for
+                // directive_allergies.
+                'id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, '
                 'directive_id INTEGER NOT NULL REFERENCES directives(id) ON DELETE CASCADE, '
                 "icd_code TEXT NOT NULL DEFAULT '', "
                 "name TEXT NOT NULL DEFAULT '', "
@@ -375,7 +402,7 @@ class AppDatabase extends _$AppDatabase {
             // Phase 3: new directive_allergies table for wizard step 8.
             await customStatement(
                 'CREATE TABLE IF NOT EXISTS directive_allergies ('
-                'id INTEGER PRIMARY KEY AUTOINCREMENT, '
+                'id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, '
                 'directive_id INTEGER NOT NULL REFERENCES directives(id) ON DELETE CASCADE, '
                 "kind TEXT NOT NULL DEFAULT 'drug', "
                 "substance TEXT NOT NULL DEFAULT '', "
