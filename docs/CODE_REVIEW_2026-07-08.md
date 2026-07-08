@@ -50,8 +50,8 @@ user-approved QoL items. One commit per item; commit hash recorded on completion
 
 | # | Item | Status | Commit |
 |---|---|---|---|
-| 19 | `context.l10n` extension (`lib/l10n/l10n.dart`) — the missing ergonomic piece; also re-exports `AppLocalizations` | ✅ | (see below) |
-| 20 | Screen-by-screen migration to ARB (en) — per-screen table below. **First unit shipped: global navigation** (`MhadBottomNav` + `WebSidebar`, 12 new keys incl. AI badges). English values byte-identical to shipped copy. | 🟡 in progress | (see below) |
+| 19 | `context.l10n` extension (`lib/l10n/l10n.dart`) — the missing ergonomic piece; also re-exports `AppLocalizations` | ✅ | 1276cb4 |
+| 20 | Screen-by-screen migration to ARB (en) — per-screen table below. **First unit shipped: global navigation** (`MhadBottomNav` + `WebSidebar`, 12 new keys incl. AI badges). English values byte-identical to shipped copy. | 🟡 in progress | 1276cb4 |
 | 21 | Spanish policy: es only for fully-covered non-legal screens; legal copy flagged for human review, never machine-translated. New keys deliberately NOT added to `app_es.arb` — untranslated messages fall back to English, so es-locale behavior is unchanged until a screen is fully covered. | ✅ (policy) | — |
 
 ### Per-screen migration progress
@@ -66,6 +66,18 @@ user-approved QoL items. One commit per item; commit hash recorded on completion
 | (remaining ~110 UI files) | ~440 | ☐ |
 
 **Migration recipe (for future sessions):** add key to `app_en.arb` with the exact shipped English; `flutter gen-l10n`; replace the literal with `context.l10n.<key>`; import `package:mhad/l10n/l10n.dart`; leave `app_es.arb` alone until the whole screen is covered AND translations are human-reviewed. Also reconcile the ~70 pre-existing unused ARB keys as their screens migrate (some values are stale, e.g. `education`: "Education" vs the shipped "Learn").
+
+## Outcome summary (2026-07-08)
+
+All four approved packages executed on `chore/code-review-2026-07-08` — 12 commits,
+full suite green after every one (285 → **345 tests**). Three real bugs fixed
+(encryption-key overwrite data loss; broken `$1` trailing-comma JSON repair; missing
+indexes + `NOT NULL` divergence on fresh-created databases), two user-visible QoL
+wins (web loading splash ✱, boot-error screen with retry ✱), three new test suites,
+six de-duplication/consistency refactors, a curated stricter lint set, and the
+localization mechanism finally consumed (global nav migrated; remainder tracked
+above). Three surveyed findings were re-verified and **rejected with rationale**
+(items 14, 16, 17) rather than churned.
 
 ## Noted, deliberately not done
 - **Major dependency upgrades** (Riverpod 3, go_router 17, drift 2.34, flutter_local_notifications 22, …): deferred — churn risk out of scope for this pass.

@@ -128,6 +128,12 @@ were superseded by regulations that changed *after* they were written.
   tests strengthened beyond `%PDF-` (page-tree count + `%%EOF` trailer per form type, and
   a "supplementary/notes add pages" invariant in `pdf_generator_test.dart`); and a new
   repository-level upsert regression suite (`test/unit/directive_repository_upsert_test.dart`).
+  Progress 2026-07-08 (code-review pass, `docs/CODE_REVIEW_2026-07-08.md`): first-ever
+  **schema-migration tests** (v1→v20 + intermediate replays with schema-parity + data
+  assertions — they caught two real fresh-vs-migrated schema divergences, both fixed),
+  encrypted directive-file codec round-trip/tamper tests, smart-fill prompt/consent
+  tests, and an encryption-key-service test locking the new no-overwrite-on-read-failure
+  behavior. Suite now **345 tests, green**.
   **That coverage caught a real crash bug** (now fixed): `upsertAdditionalInstructions`
   and `upsertGuardianNomination` used `insertOnConflictUpdate`, which targets the
   autoincrement `id` PK, so a *second* save for the same directive (re-opening a saved
@@ -331,7 +337,11 @@ were superseded by regulations that changed *after* they were written.
   every outbound payload (it is unit-tested in isolation — confirm it's actually invoked
   in `gemini_api_assistant.dart` before transmission).
 - **Fix:** Add an integration test asserting no raw PII leaves `GeminiApiAssistant`.
-- **Status:** [ ]
+- **Status:** `[x]` **DONE** — `test/ai/assistant_pii_test.dart` pins that the message AND
+  history are stripped before transmission, and (2026-07-08 review pass)
+  `test/unit/smart_fill_prompt_test.dart` pins the smart-fill side: free-text wizard
+  fields are PII-stripped before entering the prompt and every consent decision is sent
+  as BINDING. See `docs/CODE_REVIEW_2026-07-08.md` items 7 and 9.
 
 ---
 
