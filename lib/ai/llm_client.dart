@@ -47,13 +47,21 @@ class LlmClient {
   final String model;
   final String apiKey;
   final http.Client _http;
+  final bool _ownsClient;
 
   LlmClient({
     required this.provider,
     required this.model,
     required this.apiKey,
     http.Client? httpClient,
-  }) : _http = httpClient ?? CertificatePinningService.createPinnedClient();
+  })  : _http = httpClient ?? CertificatePinningService.createPinnedClient(),
+        _ownsClient = httpClient == null;
+
+  /// Closes the underlying HTTP client if this instance created it. Injected
+  /// clients stay open — whoever passed them in owns their lifecycle.
+  void dispose() {
+    if (_ownsClient) _http.close();
+  }
 
   // ── Single-turn text ──────────────────────────────────────────────────────
 

@@ -39,6 +39,9 @@ class DocumentExtractor {
     );
   }
 
+  /// Closes the HTTP client. Call when the extraction run is finished.
+  void dispose() => _httpClient.close();
+
   // Gemini tiles images into 768x768 chunks at ~258 tokens each.
   // 1024px max keeps a portrait document to ~2 tiles (~516 tokens).
   // Read from the dynamic `config` block (`config.aiInput.*`).

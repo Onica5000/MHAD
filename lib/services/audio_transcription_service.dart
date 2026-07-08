@@ -37,12 +37,16 @@ class AudioTranscriptionService {
   }) async {
     final client =
         LlmClient(provider: provider, model: model, apiKey: apiKey);
-    final text = await client.generateMultimodal(
-      parts: [LlmText(_prompt), LlmData(mimeType, audioBytes)],
-      maxOutputTokens: appData.ai.maxOutputTokens,
-      timeout: appData.config.documentExtractionTimeout,
-    );
-    return text.trim();
+    try {
+      final text = await client.generateMultimodal(
+        parts: [LlmText(_prompt), LlmData(mimeType, audioBytes)],
+        maxOutputTokens: appData.ai.maxOutputTokens,
+        timeout: appData.config.documentExtractionTimeout,
+      );
+      return text.trim();
+    } finally {
+      client.dispose();
+    }
   }
 
   static const _prompt = '''

@@ -315,6 +315,9 @@ class SmartFillService {
     );
   }
 
+  /// Closes the HTTP client. Call when the smart-fill run is finished.
+  void dispose() => _httpClient.close();
+
   /// Given structured clinical data, ask the AI to generate directive content.
   /// Returns [SmartFillResponse] containing the parsed result and an estimate of
   /// token usage (for rate tracking).

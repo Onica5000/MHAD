@@ -31,6 +31,7 @@ class LlmAssistant implements AiAssistant {
   final String model;
   final String apiKey;
   final http.Client _httpClient;
+  final bool _ownsClient;
   late final LlmClient _llm;
 
   /// [httpClient] is injectable for tests (e.g. asserting no raw PII leaves the
@@ -46,13 +47,20 @@ class LlmAssistant implements AiAssistant {
                 ? appData.ai.model
                 : provider.defaultModel),
         _httpClient =
-            httpClient ?? CertificatePinningService.createPinnedClient() {
+            httpClient ?? CertificatePinningService.createPinnedClient(),
+        _ownsClient = httpClient == null {
     _llm = LlmClient(
       provider: provider,
       model: this.model,
       apiKey: apiKey,
       httpClient: _httpClient,
     );
+  }
+
+  /// Closes the HTTP client this assistant created (no-op for injected test
+  /// clients). Called when [aiAssistantProvider] rebuilds or is disposed.
+  void dispose() {
+    if (_ownsClient) _httpClient.close();
   }
 
   /// Shared JSON-mode generation for the structured helpers below: strips PII,

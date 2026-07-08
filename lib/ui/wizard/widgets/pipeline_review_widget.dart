@@ -1026,15 +1026,21 @@ extension _PipelineReviewUi on _PipelineScreenState {
       return;
     }
     setState(() => _consolidating[it.key] = true);
-    final merged = await DocumentExtractor(
+    final extractor = DocumentExtractor(
       apiKey: aiCfg.key,
       provider: aiCfg.provider,
       model: aiCfg.model,
-    ).consolidate(
-      fieldLabel: _displayLabel(it.key),
-      existing: it.existing!.trim(),
-      extracted: it.extracted.trim(),
     );
+    final String merged;
+    try {
+      merged = await extractor.consolidate(
+        fieldLabel: _displayLabel(it.key),
+        existing: it.existing!.trim(),
+        extracted: it.extracted.trim(),
+      );
+    } finally {
+      extractor.dispose();
+    }
     if (!mounted) return;
     setState(() {
       _consolidating[it.key] = false;

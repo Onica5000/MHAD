@@ -434,8 +434,9 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
       _statusMessage = 'Extracting page 1 of ${docs.length}...';
     });
 
+    DocumentExtractor? extractor;
     try {
-      final extractor = DocumentExtractor(
+      extractor = DocumentExtractor(
         apiKey: aiCfg.key,
         provider: aiCfg.provider,
         model: aiCfg.model,
@@ -555,6 +556,8 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
           _step = _PipelineStep.pick;
         });
       }
+    } finally {
+      extractor?.dispose();
     }
   }
 

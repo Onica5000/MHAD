@@ -277,11 +277,16 @@ final aiConsentGivenProvider = StateProvider<bool>((_) => false);
 final aiAssistantProvider = Provider<AiAssistant?>((ref) {
   final cfg = ref.watch(aiConfigProvider);
   if (cfg == null) return null;
-  return LlmAssistant(
+  final assistant = LlmAssistant(
     provider: cfg.provider,
     model: cfg.model,
     apiKey: cfg.key,
   );
+  // Close the assistant's HTTP client when the config changes and this
+  // provider rebuilds (otherwise every provider/model/key switch leaks a
+  // connection pool on native/desktop).
+  ref.onDispose(assistant.dispose);
+  return assistant;
 });
 
 // ---------------------------------------------------------------------------

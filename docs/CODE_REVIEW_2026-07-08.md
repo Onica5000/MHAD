@@ -16,7 +16,7 @@ user-approved QoL items. One commit per item; commit hash recorded on completion
 | # | Finding | Fix | Status | Commit |
 |---|---|---|---|---|
 | 1 | **[BUG — data loss]** `DatabaseEncryptionService.getOrCreateKey` generates + persists a NEW key when the secure-storage read *throws* (transient keystore failure), silently bricking an existing encrypted private-mode DB. Runs every boot. | Read retries once then throws `DatabaseKeyUnavailableException`; key generated only when the read succeeded and found nothing. Web skips the round-trip entirely (key provably unused there). 6 unit tests. | ✅ | (this commit) |
-| 2 | **[LEAK]** `DocumentExtractor`/`SmartFillService`/`LlmAssistant`/`LlmClient` own pinned `http.Client`s with no close path; call sites instantiate-and-discard. | Add `dispose()`; call at pipeline call sites + `ref.onDispose` in `aiAssistantProvider`. | ☐ | |
+| 2 | **[LEAK]** `DocumentExtractor`/`SmartFillService`/`LlmAssistant`/`LlmClient` (+ `AudioTranscriptionService`, found during fix) own pinned `http.Client`s with no close path; call sites instantiate-and-discard. | `dispose()` added (owned clients only — injected test clients untouched); called via try/finally at all 4 call sites + `ref.onDispose` in `aiAssistantProvider`. | ✅ | (this commit) |
 | 3 | **[HARDENING]** `main()` serial await chain — any load throwing → blank screen; independent loads not parallelized. | `Future.wait` independent loads; minimal error/retry screen fallback. | ☐ | |
 | 4 | ✱ **[QoL]** Blank page while `main.dart.js` downloads (no pre-Flutter loading indicator). | Inline CSS splash in `web/index.html`, hidden on `flutter-first-frame`. | ☐ | |
 
