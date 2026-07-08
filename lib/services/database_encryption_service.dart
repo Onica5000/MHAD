@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:mhad/services/secure_storage_config.dart';
 
 /// Thrown when the database encryption key exists (or may exist) in secure
 /// storage but could not be read. Callers must NOT fall back to generating a
@@ -23,16 +24,9 @@ class DatabaseKeyUnavailableException implements Exception {
 /// in flutter_secure_storage. It is used as the SQLCipher PRAGMA key for the
 /// encrypted Drift database in private mode.
 class DatabaseEncryptionService {
-  static const _storageKey = 'mhad_db_encryption_key';
+  static const _storageKey = SecureStorageKeys.dbEncryptionKey;
 
-  static const FlutterSecureStorage _defaultStorage = FlutterSecureStorage(
-    aOptions: AndroidOptions(encryptedSharedPreferences: true),
-    iOptions: IOSOptions(
-      accessibility: KeychainAccessibility.first_unlock_this_device,
-    ),
-  );
-
-  static FlutterSecureStorage _storage = _defaultStorage;
+  static FlutterSecureStorage _storage = appSecureStorage;
 
   /// Replaces the secure-storage backend in tests.
   @visibleForTesting
@@ -40,7 +34,7 @@ class DatabaseEncryptionService {
 
   /// Restores the real secure-storage backend after a test.
   @visibleForTesting
-  static void resetStorage() => _storage = _defaultStorage;
+  static void resetStorage() => _storage = appSecureStorage;
 
   /// Returns the encryption key, generating and persisting one if it does not
   /// yet exist.

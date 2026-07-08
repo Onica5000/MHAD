@@ -10,21 +10,17 @@ import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/services/draft_recovery_service.dart';
 import 'package:mhad/services/gemini_rate_tracker.dart';
 import 'package:mhad/services/public_session_cache.dart';
+import 'package:mhad/services/secure_storage_config.dart';
 
-// Secure-storage keys. Keys/models are stored per provider so switching
-// providers doesn't lose a previously-entered key.
-String _keyStorageKey(AiProvider p) => 'ai_key_${p.name}';
-String _modelStorageKey(AiProvider p) => 'ai_model_${p.name}';
-const _activeProviderStorageKey = 'ai_active_provider';
-const _legacyGeminiKeyStorageKey = 'gemini_api_key'; // pre-multi-provider
+// Secure-storage keys (see SecureStorageKeys). Keys/models are stored per
+// provider so switching providers doesn't lose a previously-entered key.
+String _keyStorageKey(AiProvider p) => SecureStorageKeys.aiKey(p);
+String _modelStorageKey(AiProvider p) => SecureStorageKeys.aiModel(p);
+const _activeProviderStorageKey = SecureStorageKeys.aiActiveProvider;
+const _legacyGeminiKeyStorageKey = SecureStorageKeys.legacyGeminiKey;
 
-final _secureStorageProvider = Provider<FlutterSecureStorage>(
-  (_) => const FlutterSecureStorage(
-    aOptions: AndroidOptions(encryptedSharedPreferences: true),
-    iOptions: IOSOptions(
-        accessibility: KeychainAccessibility.first_unlock_this_device),
-  ),
-);
+final _secureStorageProvider =
+    Provider<FlutterSecureStorage>((_) => appSecureStorage);
 
 // ---------------------------------------------------------------------------
 // Private mode — AI prefs persisted to flutter_secure_storage
