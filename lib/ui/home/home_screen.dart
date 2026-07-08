@@ -1,4 +1,6 @@
-﻿import 'package:flutter/foundation.dart';
+﻿import 'dart:async';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -48,7 +50,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         if (kIsWeb && mounted) {
           await _tryWebSessionRestore();
         }
-        if (mounted) checkAndOfferDraftRecovery(context, ref);
+        if (mounted) unawaited(checkAndOfferDraftRecovery(context, ref));
         // Reminder auto-fire (in-app, per-launch). Runs after onboarding +
         // draft recovery so it never stacks on top of those flows. The
         // scheduler is a silent no-op when no reminder is due.
@@ -379,7 +381,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             duration: Duration(seconds: 4),
           ),
         );
-        context.push(AppRoutes.wizardRoute(newId));
+        unawaited(context.push(AppRoutes.wizardRoute(newId)));
       }
     } catch (e) {
       debugPrint('Web session restore failed: $e');
@@ -460,7 +462,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     await repo.updateEffectiveCondition(newId, old.effectiveCondition);
 
     if (context.mounted) {
-      context.push(AppRoutes.wizardRoute(newId));
+      unawaited(context.push(AppRoutes.wizardRoute(newId)));
     }
   }
 
@@ -507,7 +509,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     await repo.updateStatus(d.id, DirectiveStatus.draft);
 
     if (context.mounted) {
-      context.push(AppRoutes.wizardRoute(d.id));
+      unawaited(context.push(AppRoutes.wizardRoute(d.id)));
     }
   }
 

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -130,7 +132,7 @@ Future<void> checkAndOfferDraftRecovery(
           duration: Duration(seconds: 4),
         ),
       );
-      context.push(AppRoutes.wizardRoute(newId));
+      unawaited(context.push(AppRoutes.wizardRoute(newId)));
     }
   } catch (e) {
     debugPrint('Draft restore failed: $e');

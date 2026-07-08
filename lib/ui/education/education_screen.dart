@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:mhad/data/educational_content.dart';
 import 'package:mhad/ui/education/education_category_browser.dart';
@@ -192,10 +194,10 @@ class _EditorialLearnHub extends StatelessWidget {
                   delegate: _EducationSearchDelegate(),
                 );
                 if (result != null && ctx.mounted) {
-                  Navigator.of(ctx).push(MaterialPageRoute(
+                  unawaited(Navigator.of(ctx).push(MaterialPageRoute(
                     builder: (_) =>
                         _SectionDetailRoute(section: result),
-                  ));
+                  )));
                 }
               },
               child: Container(

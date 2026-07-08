@@ -17,7 +17,7 @@ void main() {
 
   group('parseProposal', () {
     test('parses changes, attaches old value, and sets approval by tier', () {
-      final model = '''
+      const model = '''
 Sure! Here is the proposal:
 ```json
 {"changes":[

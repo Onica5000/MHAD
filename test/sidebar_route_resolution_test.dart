@@ -8,6 +8,8 @@
 // pushed from the home dashboard resolved to `/`, lighting up "Start" instead of
 // the real destination. This test pins the correct resolution so reverting to
 // `.uri.path` can't silently bring the bug back.
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
@@ -41,12 +43,12 @@ void main() {
     await tester.pumpAndSettle();
 
     // Push from the home dashboard (the case the old build got wrong).
-    r.push('/upload/1');
+    unawaited(r.push('/upload/1'));
     await tester.pumpAndSettle();
     expect(shellRoute(r), '/upload/1',
         reason: 'pushed /upload/:id must light up Autofill, not Start');
 
-    r.push('/admin');
+    unawaited(r.push('/admin'));
     await tester.pumpAndSettle();
     expect(shellRoute(r), '/admin');
   });

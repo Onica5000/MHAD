@@ -143,7 +143,7 @@ class LlmAssistant implements AiAssistant {
         ? Duration.zero
         : backoffList[i < backoffList.length ? i : backoffList.length - 1];
 
-    Object? lastError;
+    Exception? lastError;
     for (var attempt = 0; attempt < maxAttempts; attempt++) {
       try {
         final text = await _llm.chat(

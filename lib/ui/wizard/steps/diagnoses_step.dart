@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -129,7 +131,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
     final assistant = ref.read(aiAssistantProvider);
     if (assistant is! GeminiApiAssistant) {
       // No AI yet — send them to set it up (same as the AI Suggest button).
-      context.push(AppRoutes.aiSetup);
+      unawaited(context.push(AppRoutes.aiSetup));
       return;
     }
     // Per-session AI consent gate.
