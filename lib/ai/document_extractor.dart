@@ -9,6 +9,7 @@ import 'package:mhad/ai/document_extraction_result.dart';
 import 'package:mhad/ai/llm_client.dart';
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/services/certificate_pinning_service.dart';
+import 'package:mhad/utils/json_utils.dart';
 
 /// Sends a document (image, PDF, text, or audio) to the active AI provider and
 /// extracts structured MHAD-relevant fields (medications, conditions,
@@ -155,16 +156,7 @@ $extracted''';
   }
 
   DocumentExtractionResult _parseResponse(String text) {
-    // Strip markdown code fences (handles \r\n from some API responses)
-    var cleaned = text.trim();
-    if (cleaned.startsWith('```')) {
-      cleaned = cleaned
-          .replaceFirst(RegExp(r'^```(?:json)?\s*[\r\n]*'), '')
-          .replaceFirst(RegExp(r'[\r\n]*```\s*$'), '');
-    }
-    // Remove trailing commas before } or ] (common AI JSON quirk)
-    cleaned = cleaned.replaceAll(RegExp(r',(\s*[}\]])'), r'$1');
-
+    final cleaned = cleanLlmJson(text);
     try {
       final json = jsonDecode(cleaned) as Map<String, dynamic>;
       return DocumentExtractionResult.fromJson(json);

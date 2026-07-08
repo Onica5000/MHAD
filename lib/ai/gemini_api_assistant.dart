@@ -15,6 +15,7 @@ import 'package:mhad/data/educational_content.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/services/certificate_pinning_service.dart';
 import 'package:mhad/services/openfda_service.dart';
+import 'package:mhad/utils/json_utils.dart';
 
 /// Backward-compatible name: the assistant is now provider-agnostic (Gemini is
 /// just the default). Still imported as `GeminiApiAssistant` across the app.
@@ -73,15 +74,8 @@ class LlmAssistant implements AiAssistant {
       json: true,
       timeout: timeout,
     );
-    var text = raw.trim();
-    if (text.isEmpty) return null;
-    if (text.startsWith('```')) {
-      text = text.replaceFirst(RegExp(r'^```(?:json)?'), '').trim();
-      if (text.endsWith('```')) {
-        text = text.substring(0, text.length - 3).trim();
-      }
-    }
-    return text;
+    final text = stripLlmCodeFences(raw);
+    return text.isEmpty ? null : text;
   }
 
   /// Maximum input tokens for the Gemini model (from app_data.json). Kept for

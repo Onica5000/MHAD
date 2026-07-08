@@ -2,8 +2,31 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mhad/constants.dart';
 import 'package:mhad/utils/date_format.dart';
 import 'package:mhad/utils/debouncer.dart';
+import 'package:mhad/utils/json_utils.dart';
 
 void main() {
+  group('stripLlmCodeFences / cleanLlmJson', () {
+    test('passes plain JSON through unchanged', () {
+      expect(stripLlmCodeFences('{"a":1}'), '{"a":1}');
+      expect(cleanLlmJson('{"a":1}'), '{"a":1}');
+    });
+    test('strips ```json fences with newlines', () {
+      expect(stripLlmCodeFences('```json\n{"a":1}\n```'), '{"a":1}');
+    });
+    test('strips bare ``` fences and surrounding whitespace', () {
+      expect(stripLlmCodeFences('  ```\r\n{"a":1}\r\n```  '), '{"a":1}');
+    });
+    test('strips fences without a newline after the tag', () {
+      expect(stripLlmCodeFences('```json{"a":1}```'), '{"a":1}');
+    });
+    test('removes trailing commas before } and ]', () {
+      expect(cleanLlmJson('{"a":[1,2,],}'), '{"a":[1,2]}');
+    });
+    test('empty fenced block cleans to empty string', () {
+      expect(stripLlmCodeFences('```json\n```'), '');
+    });
+  });
+
   group('ageInYears / isAdult', () {
     final asOf = DateTime(2026, 6, 23);
     test('exact 18th birthday today is adult', () {

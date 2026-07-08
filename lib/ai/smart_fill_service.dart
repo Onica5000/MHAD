@@ -669,15 +669,7 @@ class SmartFillService {
   }
 
   SmartFillResult _parse(String text) {
-    var cleaned = text.trim();
-    // Strip markdown code fences (handles \r\n from some API responses)
-    if (cleaned.startsWith('```')) {
-      cleaned = cleaned
-          .replaceFirst(RegExp(r'^```(?:json)?\s*[\r\n]*'), '')
-          .replaceFirst(RegExp(r'[\r\n]*```\s*$'), '');
-    }
-    // Remove trailing commas before } or ] (common AI JSON quirk)
-    cleaned = cleaned.replaceAll(RegExp(r',(\s*[}\]])'), r'$1');
+    final cleaned = cleanLlmJson(text);
     try {
       final json = jsonDecode(cleaned) as Map<String, dynamic>;
       return SmartFillResult.fromJson(json);
