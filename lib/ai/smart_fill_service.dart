@@ -8,6 +8,7 @@ import 'package:mhad/ai/llm_client.dart';
 import 'package:mhad/ai/pii_stripper.dart';
 import 'package:mhad/constants.dart';
 import 'package:mhad/data/app_data/app_data.dart';
+import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/services/clinical_data_service.dart';
 import 'package:mhad/services/gemini_rate_tracker.dart';
 import 'package:mhad/utils/json_utils.dart';
@@ -19,7 +20,6 @@ class SmartFillInput {
   static int get maxConditions => appData.config.maxIcdConditions;
   static int get maxMedsPerCategory => appData.config.maxMedicationsPerCategory;
   static int get maxFieldLength => appData.config.maxFieldChars;
-  static const _validFormTypes = {'combined', 'declaration', 'poa'};
 
   final List<IcdCondition> conditions;
   final List<String> currentMedications;
@@ -95,7 +95,7 @@ class SmartFillInput {
   /// Validates and clamps input to safe bounds.
   SmartFillInput sanitized() {
     final safeFormType =
-        _validFormTypes.contains(formType) ? formType : 'combined';
+        (formTypeFromName(formType) ?? FormType.combined).name;
     return SmartFillInput(
       conditions: conditions.take(maxConditions).toList(),
       currentMedications: currentMedications.take(maxMedsPerCategory).toList(),
@@ -422,7 +422,7 @@ class SmartFillService {
     existing.add('Experimental studies consent: ${s(describeConsent(input.existingExperimentalConsent))}');
     existing.add('Drug trial consent: ${s(describeConsent(input.existingDrugTrialConsent))}');
     // Agent authority (POA/combined only) — always send full picture
-    if (input.formType != 'declaration') {
+    if (input.formType != FormType.declaration.name) {
       existing.add('Agent consent to hospitalization: ${input.existingAgentCanConsentHospitalization ? "YES — agent authorized" : "NO — agent NOT authorized"}');
       existing.add('Agent consent to medication: ${input.existingAgentCanConsentMedication ? "YES — agent authorized" : "NO — agent NOT authorized"}');
       if (input.existingAgentAuthorityLimitations.isNotEmpty) {
@@ -623,8 +623,8 @@ class SmartFillService {
     buf.writeln('  "pet_custody": "${fieldDesc(
         'Arrangements for pets during treatment — who should care for them, '
         'feeding/medication schedules, veterinary contacts',
-        input.existingPetCustody)}"${input.formType != 'declaration' ? ',' : ''}');
-    if (input.formType != 'declaration') {
+        input.existingPetCustody)}"${input.formType != FormType.declaration.name ? ',' : ''}');
+    if (input.formType != FormType.declaration.name) {
       buf.writeln('  "agent_guidance": "${fieldDesc(
           'What the agent should know — warning signs the user has described and '
           'the treatment preferences the user has stated for the agent to advocate '

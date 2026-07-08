@@ -64,11 +64,8 @@ Future<void> checkAndOfferDraftRecovery(
     final repo = ref.read(directiveRepositoryProvider);
 
     // Determine form type from draft data
-    final formTypeName = draft.data['formType']?.toString() ?? 'combined';
-    final formType = FormType.values.firstWhere(
-      (e) => e.name == formTypeName,
-      orElse: () => FormType.combined,
-    );
+    final formType = formTypeFromName(draft.data['formType']?.toString()) ??
+        FormType.combined;
 
     // Create a new directive (the old one is gone after crash)
     final newId = await repo.createDirective(formType);

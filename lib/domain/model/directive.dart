@@ -43,6 +43,16 @@ FormType? formTypeFromName(String? name) {
   return null;
 }
 
+/// Parse a stored medication entry-type name (e.g. 'current') to a
+/// [MedicationEntryType], or null if unrecognized — the enum-typed way to
+/// branch on `medication_entries.entry_type` values.
+MedicationEntryType? medicationEntryTypeFromName(String? name) {
+  for (final t in MedicationEntryType.values) {
+    if (t.name == name) return t;
+  }
+  return null;
+}
+
 extension FormTypeExt on FormType {
   String get displayName => switch (this) {
         FormType.combined => 'Combined Declaration & Power of Attorney',

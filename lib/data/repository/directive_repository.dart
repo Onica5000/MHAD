@@ -661,7 +661,8 @@ class DirectiveRepository {
         if (m is Map<String, dynamic>) {
           await insertMedication(MedicationEntriesCompanion.insert(
             directiveId: id,
-            entryType: m['entryType']?.toString() ?? 'preferred',
+            entryType:
+                m['entryType']?.toString() ?? MedicationEntryType.preferred.name,
             medicationName: Value(m['medicationName']?.toString() ?? ''),
             reason: Value(m['reason']?.toString() ?? ''),
             dosage: Value(m['dosage']?.toString() ?? ''),

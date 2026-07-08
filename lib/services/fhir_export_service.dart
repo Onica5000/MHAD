@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:mhad/constants.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/agent_ext.dart';
+import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/services/instruction_fields.dart';
 import 'package:mhad/utils/medication_display.dart';
 
@@ -79,7 +80,9 @@ class FhirExportService {
     // Medications
     for (final med in medications) {
       provisions.add({
-        'type': med.entryType == 'exception' ? 'deny' : 'permit',
+        'type': med.entryType == MedicationEntryType.exception.name
+            ? 'deny'
+            : 'permit',
         'code': [
           {
             'text': medicationWithDosage(med.medicationName, med.dosage),

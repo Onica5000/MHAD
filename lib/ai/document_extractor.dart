@@ -7,6 +7,7 @@ import 'package:mhad/ai/ai_provider.dart';
 import 'package:mhad/ai/document_extraction_result.dart';
 import 'package:mhad/ai/llm_client.dart';
 import 'package:mhad/data/app_data/app_data.dart';
+import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/utils/json_utils.dart';
 
 /// Sends a document (image, PDF, text, or audio) to the active AI provider and
@@ -286,15 +287,15 @@ $extracted''';
   /// Appended to the prompt to scope extraction to the form the user chose, so
   /// the AI returns ONLY the fields that form uses. Empty for Combined.
   static String _formScope(String formType) {
-    switch (formType) {
-      case 'poa':
+    switch (formTypeFromName(formType)) {
+      case FormType.poa:
         return '''
 
 ═══ FORM SCOPE: POWER OF ATTORNEY (agent only) ═══
 The user is filling a POWER OF ATTORNEY form. It names a decision-maker but does NOT record treatment preferences.
 EXTRACT ONLY: personal_info for the DECLARANT and for the agent / alternate_agent / guardian; agent_can_consent_hospitalization; agent_can_consent_medication; agent_authority_limitations; effective_condition.
 LEAVE NULL / DO NOT EXTRACT everything else — medications_*, diagnoses, allergies, preferred_facility, avoid_facility, room_preferences_note, same_gender_roommate, ect_consent, experimental_consent, drug_trial_consent, self_binding_ulysses, health_history, dietary, religious, activities, crisis_intervention, records_disclosure, family_notification, pet_custody, children_custody, other. Ignore that content even if it appears in the document.''';
-      case 'declaration':
+      case FormType.declaration:
         return '''
 
 ═══ FORM SCOPE: DECLARATION (treatment preferences only — NO agent) ═══
