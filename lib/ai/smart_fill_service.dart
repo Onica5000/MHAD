@@ -340,10 +340,8 @@ class SmartFillService {
             timeout: appData.config.smartFillTimeout,
           );
           break; // success
-        } catch (e) {
-          final msg = e.toString().toLowerCase();
-          if ((msg.contains('429') || msg.contains('rate limit')) &&
-              attempt == 0) {
+        } on LlmRateLimitError {
+          if (attempt == 0) {
             await Future<void>.delayed(appData.config.rateLimitBackoff);
             continue;
           }
@@ -368,12 +366,8 @@ class SmartFillService {
       );
     } on TimeoutException {
       throw Exception('Request timed out. Please try again.');
-    } catch (e) {
-      final msg = e.toString().toLowerCase();
-      if (msg.contains('429') || msg.contains('rate limit')) {
-        throw Exception('Rate limited. Please wait a moment and try again.');
-      }
-      rethrow;
+    } on LlmRateLimitError {
+      throw Exception('Rate limited. Please wait a moment and try again.');
     }
   }
 

@@ -169,19 +169,17 @@ class LlmAssistant implements AiAssistant {
         lastError = Exception(
             'The request timed out. Please check your internet connection and '
             'try again.');
+      } on LlmRateLimitError {
+        // Fail fast with the quota explanation \u2014 retrying into a rate limit
+        // only digs the hole deeper.
+        final tier = provider == AiProvider.gemini
+            ? 'The free tier allows about ${appData.ai.rpm} requests per '
+                'minute (${appData.ai.rpd} per day). '
+            : '';
+        throw Exception(
+            'Too many requests. ${tier}Please wait 1\u20132 minutes and try '
+            'again.');
       } catch (e) {
-        final msg = e.toString().toLowerCase();
-        if (msg.contains('429') ||
-            msg.contains('rate limit') ||
-            msg.contains('quota')) {
-          final tier = provider == AiProvider.gemini
-              ? 'The free tier allows about ${appData.ai.rpm} requests per '
-                  'minute (${appData.ai.rpd} per day). '
-              : '';
-          throw Exception(
-              'Too many requests. ${tier}Please wait 1\u20132 minutes and try '
-              'again.');
-        }
         debugPrint('AI error (attempt ${attempt + 1}): $e');
         lastError = Exception('AI service error: $e');
       }
@@ -255,8 +253,8 @@ class LlmAssistant implements AiAssistant {
               headers: {'Content-Type': 'application/json'}, body: body)
           .timeout(appData.config.groundingTimeout);
       if (resp.statusCode == 429) {
-        throw Exception('Too many requests. Please wait a minute and try '
-            'again.');
+        throw const LlmRateLimitError(
+            'Too many requests. Please wait a minute and try again.');
       }
       if (resp.statusCode != 200) {
         throw Exception(

@@ -1,8 +1,14 @@
+import 'package:mhad/ai/llm_client.dart';
+
 /// Converts raw exceptions into user-friendly messages.
 class FriendlyError {
   FriendlyError._();
 
   static String from(Object error) {
+    // Typed transport errors first — their messages are already user-facing.
+    if (error is LlmRateLimitError) return error.message;
+    if (error is UnsupportedInputError) return error.message;
+
     final msg = error.toString();
 
     // Network errors

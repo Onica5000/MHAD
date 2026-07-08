@@ -96,6 +96,39 @@ void main() {
     });
   });
 
+  test('HTTP 429 surfaces as the typed LlmRateLimitError', () {
+    final mock = MockClient(
+        (req) async => http.Response('{"error":"rate_limited"}', 429));
+    final client = LlmClient(
+      provider: AiProvider.anthropic,
+      model: 'claude-x',
+      apiKey: 'k',
+      httpClient: mock,
+    );
+    expect(
+      () => client.generateText('hello'),
+      throwsA(isA<LlmRateLimitError>()),
+      reason: 'callers key their retry/backoff policy off this type',
+    );
+  });
+
+  test('non-429 HTTP errors stay generic (not rate-limit typed)', () {
+    final mock = MockClient((req) async => http.Response('boom', 500));
+    final client = LlmClient(
+      provider: AiProvider.openai,
+      model: 'gpt-x',
+      apiKey: 'k',
+      httpClient: mock,
+    );
+    expect(
+      () => client.generateText('hello'),
+      throwsA(predicate((e) =>
+          e is Exception &&
+          e is! LlmRateLimitError &&
+          e.toString().contains('API error (500)'))),
+    );
+  });
+
   test('PDF input throws UnsupportedInputError on a vision-only provider',
       () {
     final mock = MockClient((req) async => http.Response('{}', 200));
