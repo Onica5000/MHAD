@@ -367,6 +367,12 @@ class SmartFillService {
     buf.writeln('PA Mental Health Advance Directive auto-fill.');
     buf.writeln('Form: ${input.formType}');
 
+    // PII chokepoint for EVERY user-entered value in this prompt — the
+    // free-text fields below AND the medication/condition lists (a user can
+    // type anything, including a name or phone number, into a med field).
+    // Validated drug and ICD names pass through the stripper unchanged.
+    String s(String text) => PiiStripper.strip(text);
+
     if (input.conditions.isNotEmpty) {
       final psychiatric = input.conditions
           .where((c) => c.code.startsWith('F'))
@@ -377,30 +383,26 @@ class SmartFillService {
       if (psychiatric.isNotEmpty) {
         buf.writeln('Psychiatric diagnoses (ICD-10):');
         for (final c in psychiatric) {
-          buf.writeln('- ${c.code} ${c.name}');
+          buf.writeln('- ${c.code} ${s(c.name)}');
         }
       }
       if (medical.isNotEmpty) {
         buf.writeln('Medical diagnoses (ICD-10):');
         for (final c in medical) {
-          buf.writeln('- ${c.code} ${c.name}');
+          buf.writeln('- ${c.code} ${s(c.name)}');
         }
       }
     }
 
     if (input.currentMedications.isNotEmpty) {
-      buf.writeln('Current meds: ${input.currentMedications.join(", ")}');
+      buf.writeln('Current meds: ${input.currentMedications.map(s).join(", ")}');
     }
 
     if (input.medicationsToAvoid.isNotEmpty) {
-      buf.writeln('Avoid meds: ${input.medicationsToAvoid.join(", ")}');
+      buf.writeln('Avoid meds: ${input.medicationsToAvoid.map(s).join(", ")}');
     }
 
     // Include existing wizard data so AI can supplement, not duplicate.
-    // Strip PII from free-text fields — users may have typed names,
-    // addresses, or other identifying info into these fields.
-    String s(String text) => PiiStripper.strip(text);
-
     final existing = <String>[];
     // Directive
     if (input.existingEffectiveCondition.isNotEmpty) {

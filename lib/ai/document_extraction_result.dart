@@ -278,10 +278,21 @@ class DocumentExtractionResult {
   }
 
   factory DocumentExtractionResult.fromJson(Map<String, dynamic> json) {
+    // Code-level enforcement of the STEP-0 relevance contract: when the model
+    // marks the document irrelevant, discard EVERYTHING else it returned —
+    // even if it (wrongly) extracted fields anyway. Without this, a mixed
+    // upload batch could merge an irrelevant document's data because the
+    // scrub was enforced only by the prompt.
+    if (json['document_relevant'] == false) {
+      return DocumentExtractionResult(
+        documentRelevant: false,
+        documentKind: optStr(json['document_kind']),
+      );
+    }
     return DocumentExtractionResult(
       // Only an explicit false rejects; a missing flag is treated as relevant
       // so older/edge responses still extract.
-      documentRelevant: json['document_relevant'] != false,
+      documentRelevant: true,
       documentKind: optStr(json['document_kind']),
       medicationsToAvoid: _parseMeds(json['medications_to_avoid']),
       medicationsPreferred: _parseMeds(json['medications_preferred']),

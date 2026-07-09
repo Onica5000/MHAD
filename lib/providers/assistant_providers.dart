@@ -312,6 +312,11 @@ typedef RailSuggestionKey = ({String formType, String stepName, int directiveId}
 final wizardRailSuggestionsProvider = FutureProvider.autoDispose.family<
     ({String headsUp, List<String> chips})?, RailSuggestionKey>(
   (ref, key) async {
+    // Consent gate: every outbound AI request must wait for the per-session
+    // consent (this provider auto-fires when the rail mounts, so without the
+    // gate directive context could leave the device before the user accepts).
+    // `watch` so the rail activates the moment consent is granted.
+    if (!ref.watch(aiConsentGivenProvider)) return null;
     final assistant = ref.watch(aiAssistantProvider);
     if (assistant is! LlmAssistant) return null;
     final repo = ref.read(directiveRepositoryProvider);
