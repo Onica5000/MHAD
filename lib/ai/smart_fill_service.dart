@@ -345,7 +345,7 @@ class SmartFillService {
       final result = _parse(text);
       final display = result.toDisplayMap();
       debugPrint('SmartFill fields returned: ${display.keys.join(', ')} '
-          '(${display.length} of 13 possible)');
+          '(${display.length} fields)');
 
       return SmartFillResponse(
         result: result,
@@ -545,7 +545,9 @@ class SmartFillService {
     buf.writeln('- Do NOT include patient name, DOB, or any PII.');
     buf.writeln('- PA NTI drug rule: Narrow Therapeutic Index drugs '
         '(${appData.legal.ntiDrugs.join(', ')}) CANNOT have generics substituted under '
-        'PA law (${appData.legal.ntiCitation}). Note monitoring requirements in the reason field.');
+        'PA law (${appData.legal.ntiCitation}). If the user takes one of these, you may '
+        'note its monitoring requirements in health_history — never as a new '
+        'medication suggestion.');
 
     buf.writeln();
     buf.writeln('{');
