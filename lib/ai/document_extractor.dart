@@ -233,6 +233,29 @@ $extracted''';
       'trigger_two_professionals': Schema.boolean(nullable: true),
       'trigger_court_order': Schema.boolean(nullable: true),
       'trigger_involuntary_commitment': Schema.boolean(nullable: true),
+      // Guardianship conditions — set only on an explicit statement about a
+      // court-appointed guardian; each note carries the stated qualification.
+      'guardian_can_revoke': Schema.boolean(nullable: true),
+      'guardian_can_revoke_note': Schema.string(nullable: true),
+      'guardian_can_change_agent': Schema.boolean(nullable: true),
+      'guardian_can_change_agent_note': Schema.string(nullable: true),
+      'guardian_must_consult_agent': Schema.boolean(nullable: true),
+      'guardian_must_consult_agent_note': Schema.string(nullable: true),
+      // Room-preference chips (subset of: singleRoom, windowIfPossible,
+      // quietFloor, sameGenderRoommate) + the same-gender match detail
+      // ("women" | "men" | "sameAsIdentity").
+      'room_preference_chips':
+          Schema.array(nullable: true, items: Schema.string()),
+      'roommate_gender_match': Schema.string(nullable: true),
+      // Structured crisis plan → DirectivePrefs.crisisPlanJson. Short phrases,
+      // one item each; free-text stays in crisis_intervention.
+      'crisis_plan': Schema.object(nullable: true, properties: {
+        'early_warning': Schema.array(nullable: true, items: Schema.string()),
+        'triggers': Schema.array(nullable: true, items: Schema.string()),
+        'helps': Schema.array(nullable: true, items: Schema.string()),
+        'say_to_me': Schema.array(nullable: true, items: Schema.string()),
+        'dont_do': Schema.array(nullable: true, items: Schema.string()),
+      }),
       // Room preferences as free-text note.
       'room_preferences_note': Schema.string(nullable: true),
       // True ONLY if the person explicitly asks for a same-gender / same-as-
@@ -303,15 +326,15 @@ $extracted''';
 
 ═══ FORM SCOPE: POWER OF ATTORNEY (agent only) ═══
 The user is filling a POWER OF ATTORNEY form. It names a decision-maker but does NOT record treatment preferences.
-EXTRACT ONLY: personal_info for the DECLARANT and for the agent / alternate_agent / guardian; agent_can_consent_hospitalization; agent_can_consent_medication; agent_authority_limitations; effective_condition; trigger_two_professionals; trigger_court_order; trigger_involuntary_commitment.
-LEAVE NULL / DO NOT EXTRACT everything else — medications_*, diagnoses, allergies, preferred_facility, avoid_facility, room_preferences_note, same_gender_roommate, ect_consent, experimental_consent, drug_trial_consent, medication_consent, self_binding_ulysses, health_history, dietary, religious, activities, crisis_intervention, records_disclosure, family_notification, pet_custody, children_custody, other. Ignore that content even if it appears in the document.''';
+EXTRACT ONLY: personal_info for the DECLARANT and for the agent / alternate_agent / guardian; agent_can_consent_hospitalization; agent_can_consent_medication; agent_authority_limitations; effective_condition; trigger_two_professionals; trigger_court_order; trigger_involuntary_commitment; guardian_can_revoke (+ note); guardian_can_change_agent (+ note); guardian_must_consult_agent (+ note).
+LEAVE NULL / DO NOT EXTRACT everything else — medications_*, diagnoses, allergies, preferred_facility, avoid_facility, room_preferences_note, room_preference_chips, same_gender_roommate, roommate_gender_match, ect_consent, experimental_consent, drug_trial_consent, medication_consent, self_binding_ulysses, health_history, dietary, religious, activities, crisis_plan, crisis_intervention, records_disclosure, family_notification, pet_custody, children_custody, other. Ignore that content even if it appears in the document.''';
       case FormType.declaration:
         return '''
 
 ═══ FORM SCOPE: DECLARATION (treatment preferences only — NO agent) ═══
 The user is filling a DECLARATION form. It records treatment preferences but does NOT name an agent.
-EXTRACT the DECLARANT's personal_info, effective_condition, the trigger_* fields, and all treatment-preference fields (medications_*, diagnoses, allergies, preferred_facility, avoid_facility, room_preferences_note, same_gender_roommate, ect/experimental/drug_trial/medication consent, self_binding_ulysses, health_history, dietary, religious, activities, crisis_intervention, records_disclosure, family_notification, pet_custody, children_custody, other).
-LEAVE NULL / DO NOT EXTRACT: personal_info.agent, personal_info.alternate_agent, personal_info.guardian, agent_can_consent_hospitalization, agent_can_consent_medication, agent_authority_limitations. Ignore any agent designation even if it appears in the document.''';
+EXTRACT the DECLARANT's personal_info, effective_condition, the trigger_* fields, and all treatment-preference fields (medications_*, diagnoses, allergies, preferred_facility, avoid_facility, room_preferences_note, room_preference_chips, same_gender_roommate, roommate_gender_match, ect/experimental/drug_trial/medication consent, self_binding_ulysses, health_history, dietary, religious, activities, crisis_plan, crisis_intervention, records_disclosure, family_notification, pet_custody, children_custody, other).
+LEAVE NULL / DO NOT EXTRACT: personal_info.agent, personal_info.alternate_agent, personal_info.guardian, agent_can_consent_hospitalization, agent_can_consent_medication, agent_authority_limitations, guardian_can_revoke (+ note), guardian_can_change_agent (+ note), guardian_must_consult_agent (+ note). Ignore any agent designation even if it appears in the document.''';
       default:
         return ''; // Combined — extract everything as described above.
     }
@@ -448,8 +471,26 @@ medication_consent
 room_preferences_note
   → Free-text room preference notes: private room, smoking policy, same-gender roommate, etc. Leave null if not mentioned.
 
+room_preference_chips
+  → The app's standard room-preference options, returned ONLY for explicit requests:
+    • "singleRoom" — a private/single room
+    • "windowIfPossible" — a room with a window
+    • "quietFloor" — a quiet floor / low-stimulation unit
+    • "sameGenderRoommate" — a same-gender roommate (see below)
+  → Return the matching subset (e.g. ["singleRoom", "quietFloor"]). Use ONLY these exact ids; anything else stays in room_preferences_note. Leave null when none are requested.
+
 same_gender_roommate
-  → true ONLY if the person explicitly asks to share a room only with someone of the same gender / their own gender identity (e.g. "I want a female roommate", "same-gender roommate only"). Otherwise leave null. Do NOT infer from anything else.
+  → true ONLY if the person explicitly asks to share a room only with someone of the same gender / their own gender identity (e.g. "I want a female roommate", "same-gender roommate only"). Otherwise leave null. Do NOT infer from anything else. (Also include "sameGenderRoommate" in room_preference_chips when true.)
+
+roommate_gender_match
+  → ONLY when same_gender_roommate is true: which match the person asked for — "women" | "men" | "sameAsIdentity" (they said "same as my gender/identity" without naming one). Leave null when not stated or not applicable.
+
+guardian_can_revoke / guardian_can_change_agent / guardian_must_consult_agent (+ *_note)
+  → Guardianship conditions, set ONLY on an explicit statement about a court-appointed guardian:
+    • guardian_can_revoke — true/false if the person explicitly states whether a guardian MAY override/revoke this directive.
+    • guardian_can_change_agent — whether a guardian may replace the named agent.
+    • guardian_must_consult_agent — whether a guardian must consult the agent before acting.
+  → Each *_note carries the person's stated qualification for that condition, verbatim (e.g. "only if my agent is unavailable"). Leave everything null when guardianship conditions aren't addressed — never infer from the mere nomination of a guardian.
 
 agent_can_consent_hospitalization
   → true if the person explicitly says their agent MAY admit them to / consent to hospitalization (voluntary inpatient admission); false if they explicitly say their agent may NOT. Leave null if not addressed. Do NOT infer from naming an agent.
@@ -500,9 +541,17 @@ activities
   → Coping strategies, therapeutic activities, comfort items, things that HELP during hospitalization: music, walks, crafts, grounding techniques, pet as comfort.
   → NOT crisis de-escalation plans. NOT dietary. NOT health history.
 
+crisis_plan  (structured lists — each item ONE short phrase, no sentences)
+  → early_warning: signs the person is heading into crisis (e.g. "stops sleeping", "racing speech").
+  → triggers: situations or things that set off or worsen a crisis (e.g. "loud crowds", "being grabbed").
+  → helps: what helps during a crisis (e.g. "dim lights", "let me pace", "weighted blanket").
+  → say_to_me: phrases people should say (e.g. "you are safe", "I'm staying with you").
+  → dont_do: what NOT to do (e.g. "don't touch me without asking", "don't raise your voice").
+  → Extract ONLY explicitly stated items — never invent list entries. Anything crisis-related that doesn't fit these lists stays in crisis_intervention (not both).
+
 crisis_intervention
-  → Instructions specifically for CRISIS situations: de-escalation preferences, early warning signs, what NOT to do, restraint/seclusion preferences, who to call in a crisis (not as contact storage — as a preference like "call my sister first").
-  → NOT general history. NOT general comfort activities.
+  → Free-text instructions specifically for CRISIS situations that don't fit the crisis_plan lists above: de-escalation narrative, restraint/seclusion preferences, who to call in a crisis (not as contact storage — as a preference like "call my sister first").
+  → NOT general history. NOT general comfort activities. NOT a duplicate of crisis_plan items.
 
 pet_custody
   → Who cares for PETS while the person is hospitalized: who feeds/houses them, vet info.

@@ -155,6 +155,15 @@ class ClinicalDataValidator {
       triggerInvoluntaryCommitment: raw.triggerInvoluntaryCommitment,
       roomPreferencesNote: raw.roomPreferencesNote,
       sameGenderRoommate: raw.sameGenderRoommate,
+      roomPreferenceChips: raw.roomPreferenceChips,
+      roommateGenderMatch: raw.roommateGenderMatch,
+      guardianCanRevoke: raw.guardianCanRevoke,
+      guardianCanRevokeNote: raw.guardianCanRevokeNote,
+      guardianCanChangeAgent: raw.guardianCanChangeAgent,
+      guardianCanChangeAgentNote: raw.guardianCanChangeAgentNote,
+      guardianMustConsultAgent: raw.guardianMustConsultAgent,
+      guardianMustConsultAgentNote: raw.guardianMustConsultAgentNote,
+      crisisPlan: raw.crisisPlan,
       agentCanConsentHospitalization: raw.agentCanConsentHospitalization,
       agentCanConsentMedication: raw.agentCanConsentMedication,
       selfBindingUlysses: raw.selfBindingUlysses,
@@ -242,6 +251,15 @@ class ValidatedExtractionResult {
   final bool? triggerInvoluntaryCommitment;
   final String? roomPreferencesNote;
   final bool? sameGenderRoommate;
+  final List<String> roomPreferenceChips;
+  final String? roommateGenderMatch;
+  final bool? guardianCanRevoke;
+  final String? guardianCanRevokeNote;
+  final bool? guardianCanChangeAgent;
+  final String? guardianCanChangeAgentNote;
+  final bool? guardianMustConsultAgent;
+  final String? guardianMustConsultAgentNote;
+  final ExtractedCrisisPlan? crisisPlan;
   final bool? agentCanConsentHospitalization;
   final bool? agentCanConsentMedication;
   final bool? selfBindingUlysses;
@@ -281,6 +299,15 @@ class ValidatedExtractionResult {
     this.triggerInvoluntaryCommitment,
     this.roomPreferencesNote,
     this.sameGenderRoommate,
+    this.roomPreferenceChips = const [],
+    this.roommateGenderMatch,
+    this.guardianCanRevoke,
+    this.guardianCanRevokeNote,
+    this.guardianCanChangeAgent,
+    this.guardianCanChangeAgentNote,
+    this.guardianMustConsultAgent,
+    this.guardianMustConsultAgentNote,
+    this.crisisPlan,
     this.agentCanConsentHospitalization,
     this.agentCanConsentMedication,
     this.selfBindingUlysses,

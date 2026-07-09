@@ -221,8 +221,60 @@ extension _PipelineReviewUi on _PipelineScreenState {
           'Self-binding (Ulysses): follow my directive even if I object';
     }
     if (v.sameGenderRoommate == true) {
+      final match = switch (v.roommateGenderMatch) {
+        'women' => ' (women)',
+        'men' => ' (men)',
+        'sameAsIdentity' => ' (same as my identity)',
+        _ => '',
+      };
       _reviewChecked['roommate_same_gender'] = true;
-      _reviewEdited['roommate_same_gender'] = 'Same-gender roommate requested';
+      _reviewEdited['roommate_same_gender'] =
+          'Same-gender roommate requested$match';
+    }
+    // Room-preference chips beyond the same-gender one — a single
+    // confirmable row; apply reads the ids from the validated result.
+    const chipLabels = {
+      'singleRoom': 'Single room',
+      'windowIfPossible': 'Window if possible',
+      'quietFloor': 'Quiet floor',
+    };
+    final extraChips = v.roomPreferenceChips
+        .where(chipLabels.containsKey)
+        .map((c) => chipLabels[c]!)
+        .toList();
+    if (extraChips.isNotEmpty) {
+      _reviewChecked['room_pref_chips'] = true;
+      _reviewEdited['room_pref_chips'] = extraChips.join(', ');
+    }
+    // Guardianship conditions (explicit statements only) — the display is a
+    // sentence; apply reads the booleans/notes from the validated result.
+    void guardianCondition(String key, bool? value, String? note,
+        {required String yes, required String no}) {
+      if (value == null) return;
+      final suffix = (note != null && note.isNotEmpty) ? ' — $note' : '';
+      _reviewChecked[key] = true;
+      _reviewEdited[key] = '${value ? yes : no}$suffix';
+    }
+
+    guardianCondition('guardian_can_revoke', v.guardianCanRevoke,
+        v.guardianCanRevokeNote,
+        yes: 'A guardian MAY override this directive',
+        no: 'A guardian may NOT override this directive');
+    guardianCondition('guardian_can_change_agent', v.guardianCanChangeAgent,
+        v.guardianCanChangeAgentNote,
+        yes: 'A guardian MAY replace my agent',
+        no: 'A guardian may NOT replace my agent');
+    guardianCondition(
+        'guardian_must_consult_agent', v.guardianMustConsultAgent,
+        v.guardianMustConsultAgentNote,
+        yes: 'A guardian MUST consult my agent first',
+        no: 'A guardian does NOT need to consult my agent');
+
+    // Structured crisis plan — one confirmable row; apply reads the lists
+    // from the validated result and merges into crisisPlanJson.
+    if (v.crisisPlan != null && !v.crisisPlan!.isEmpty) {
+      _reviewChecked['crisis_plan'] = true;
+      _reviewEdited['crisis_plan'] = v.crisisPlan!.display();
     }
 
     // ── Personal info (PII) — autofill the declarant + the people they
@@ -446,6 +498,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
     if (key == 'religious') return 'Religious/Cultural';
     if (key == 'activities') return 'Activities';
     if (key == 'crisis') return 'Crisis Intervention';
+    if (key == 'crisis_plan') return 'Crisis plan';
     if (key == 'agent_authority_limitations') return 'Agent authority limits';
     if (key == 'ect_consent') return 'ECT consent';
     if (key == 'experimental_consent') return 'Experimental treatment consent';
@@ -457,7 +510,11 @@ extension _PipelineReviewUi on _PipelineScreenState {
       return 'Trigger: involuntary commitment';
     }
     if (key == 'room_prefs_note') return 'Room preferences';
+    if (key == 'room_pref_chips') return 'Room options';
     if (key == 'roommate_same_gender') return 'Same-gender roommate';
+    if (key == 'guardian_can_revoke') return 'Guardian: override';
+    if (key == 'guardian_can_change_agent') return 'Guardian: replace agent';
+    if (key == 'guardian_must_consult_agent') return 'Guardian: consult agent';
     if (key == 'authority_hospitalization') return 'Agent: hospitalization';
     if (key == 'authority_medication') return 'Agent: medications';
     if (key == 'ulysses_optin') return 'Self-binding (Ulysses)';
@@ -531,6 +588,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
       return 'Agent Authority';
     }
     if (key == 'ulysses_optin') return 'Self-binding';
+    if (key == 'crisis_plan') return 'Crisis Plan';
     if (key == 'ect_consent' ||
         key == 'experimental_consent' ||
         key == 'drug_trial_consent' ||
@@ -538,7 +596,9 @@ extension _PipelineReviewUi on _PipelineScreenState {
       return 'Consent';
     }
     if (key.startsWith('trigger_')) return 'When this kicks in';
-    if (key == 'room_prefs_note' || key == 'roommate_same_gender') {
+    if (key == 'room_prefs_note' ||
+        key == 'room_pref_chips' ||
+        key == 'roommate_same_gender') {
       return 'Room Preferences';
     }
     if (key.startsWith('alt_agent_')) return 'Alternate agent';
@@ -566,6 +626,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
     if (key == 'facility_prefer' ||
         key == 'facility_avoid' ||
         key == 'room_prefs_note' ||
+        key == 'room_pref_chips' ||
         key == 'roommate_same_gender') {
       return (5, 'Where I want care');
     }

@@ -588,11 +588,26 @@ extension _PipelineApplyLogic on _PipelineScreenState {
     final gState = pv('guardian_state');
     final gZip = pv('guardian_zip');
     final gPhone = pv('guardian_phone');
+    // Guardianship conditions — booleans/notes come from the validated
+    // result (the review row is a confirmable sentence), gated on the row
+    // still being checked.
+    final gCanRevoke = _reviewChecked['guardian_can_revoke'] == true
+        ? validated?.guardianCanRevoke
+        : null;
+    final gCanChange = _reviewChecked['guardian_can_change_agent'] == true
+        ? validated?.guardianCanChangeAgent
+        : null;
+    final gMustConsult = _reviewChecked['guardian_must_consult_agent'] == true
+        ? validated?.guardianMustConsultAgent
+        : null;
     if (gName != null ||
         gRel != null ||
         gAddr1 != null ||
         gCity != null ||
-        gPhone != null) {
+        gPhone != null ||
+        gCanRevoke != null ||
+        gCanChange != null ||
+        gMustConsult != null) {
       final cur = await repo.getGuardianNomination(id);
       await repo.upsertGuardianNomination(GuardianNominationsCompanion(
         id: cur != null ? Value(cur.id) : const Value.absent(),
@@ -605,8 +620,25 @@ extension _PipelineApplyLogic on _PipelineScreenState {
         nomineeState: Value(gState ?? cur?.nomineeState ?? ''),
         nomineeZip: Value(gZip ?? cur?.nomineeZip ?? ''),
         nomineePhone: Value(gPhone ?? cur?.nomineePhone ?? ''),
+        guardianCanRevoke:
+            gCanRevoke != null ? Value(gCanRevoke) : const Value.absent(),
+        guardianCanRevokeNote: gCanRevoke != null
+            ? Value(validated?.guardianCanRevokeNote ?? '')
+            : const Value.absent(),
+        guardianCanChangeAgent:
+            gCanChange != null ? Value(gCanChange) : const Value.absent(),
+        guardianCanChangeAgentNote: gCanChange != null
+            ? Value(validated?.guardianCanChangeAgentNote ?? '')
+            : const Value.absent(),
+        guardianMustConsultAgent:
+            gMustConsult != null ? Value(gMustConsult) : const Value.absent(),
+        guardianMustConsultAgentNote: gMustConsult != null
+            ? Value(validated?.guardianMustConsultAgentNote ?? '')
+            : const Value.absent(),
       ));
       applied += [gName, gRel, gAddr1, gCity, gPhone].whereType<String>().length;
+      applied +=
+          [gCanRevoke, gCanChange, gMustConsult].whereType<bool>().length;
     }
 
     // ── Apply agent authority limitations ─────────────────────────────
@@ -658,6 +690,42 @@ extension _PipelineApplyLogic on _PipelineScreenState {
         validated?.selfBindingUlysses == true;
     final applyRoommate = _reviewChecked['roommate_same_gender'] == true &&
         validated?.sameGenderRoommate == true;
+    // Room-preference chips: union of the confirmed extracted chips, the
+    // same-gender chip, and whatever the user already selected in the wizard
+    // (never clobber existing chips with a replacement csv).
+    const validRoomChips = {
+      'singleRoom',
+      'windowIfPossible',
+      'quietFloor',
+      'sameGenderRoommate',
+    };
+    final confirmedChips = _reviewChecked['room_pref_chips'] == true
+        ? (validated?.roomPreferenceChips ?? const <String>[])
+            .where(validRoomChips.contains)
+            .toSet()
+        : <String>{};
+    final wantChips = {
+      ...confirmedChips,
+      if (applyRoommate) 'sameGenderRoommate',
+    };
+    String? mergedChipsCsv;
+    if (wantChips.isNotEmpty) {
+      final curPrefs = await repo.getPreferences(id);
+      mergedChipsCsv = {
+        ...(curPrefs?.roomPreferences ?? '')
+            .split(',')
+            .map((s) => s.trim())
+            .where((s) => s.isNotEmpty),
+        ...wantChips,
+      }.join(',');
+    }
+    // The extracted match detail wins over the default same-as-identity.
+    final genderMatch = applyRoommate
+        ? (const {'women', 'men', 'sameAsIdentity'}
+                .contains(validated?.roommateGenderMatch)
+            ? validated!.roommateGenderMatch!
+            : 'sameAsIdentity')
+        : null;
     if (ectVal != null ||
         expVal != null ||
         drugVal != null ||
@@ -666,7 +734,8 @@ extension _PipelineApplyLogic on _PipelineScreenState {
         applyHosp ||
         applyMeds ||
         applyUlysses ||
-        applyRoommate) {
+        applyRoommate ||
+        mergedChipsCsv != null) {
       await repo.upsertPreferences(DirectivePrefsCompanion(
         directiveId: Value(id),
         ectConsent: ectVal != null ? Value(ectVal) : const Value.absent(),
@@ -684,16 +753,52 @@ extension _PipelineApplyLogic on _PipelineScreenState {
             : const Value.absent(),
         selfBindingEnabled:
             applyUlysses ? const Value(true) : const Value.absent(),
-        roomPreferences:
-            applyRoommate ? const Value('sameGenderRoommate') : const Value.absent(),
+        roomPreferences: mergedChipsCsv != null
+            ? Value(mergedChipsCsv)
+            : const Value.absent(),
         roommateGenderMatch:
-            applyRoommate ? const Value('sameAsIdentity') : const Value.absent(),
+            genderMatch != null ? Value(genderMatch) : const Value.absent(),
       ));
       applied += [ectVal, expVal, drugVal, medConsentVal, roomNote]
           .whereType<String>()
           .length;
       applied +=
           [applyHosp, applyMeds, applyUlysses, applyRoommate].where((b) => b).length;
+      applied += confirmedChips.length;
+    }
+
+    // ── Apply the structured crisis plan (merged into crisisPlanJson) ──
+    final cp =
+        _reviewChecked['crisis_plan'] == true ? validated?.crisisPlan : null;
+    if (cp != null && !cp.isEmpty) {
+      final curPrefs = await repo.getPreferences(id);
+      final existing = <String, List<String>>{
+        'earlyWarning': [],
+        'triggers': [],
+        'helps': [],
+        'sayToMe': [],
+        'dontDo': [],
+      };
+      final rawJson = curPrefs?.crisisPlanJson ?? '';
+      if (rawJson.isNotEmpty) {
+        try {
+          final m = jsonDecode(rawJson) as Map<String, dynamic>;
+          for (final k in existing.keys) {
+            existing[k] =
+                ((m[k] as List?) ?? []).map((e) => e.toString()).toList();
+          }
+        } catch (_) {/* malformed existing plan — treat as empty */}
+      }
+      final incoming = cp.toCrisisPlanMap();
+      final merged = {
+        for (final k in existing.keys)
+          k: {...existing[k]!, ...incoming[k] ?? const <String>[]}.toList(),
+      };
+      await repo.upsertPreferences(DirectivePrefsCompanion(
+        directiveId: Value(id),
+        crisisPlanJson: Value(jsonEncode(merged)),
+      ));
+      applied++;
     }
 
     // ── Apply the statutory activation triggers ("when this kicks in") ──
