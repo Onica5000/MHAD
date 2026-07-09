@@ -103,6 +103,61 @@ extension _PipelineApplyLogic on _PipelineScreenState {
           m.entryType == entryType);
     }
 
+    // A medication row's review value is the display composite
+    // ('name — reason [badge]'; current meds: 'name (dosage) [badge]').
+    // Honor the user's review-screen edits by parsing the composite back —
+    // previously apply re-read the validated objects and silently discarded
+    // any edit. When the (badge-stripped) value matches the original
+    // composite, the validated values are used verbatim (no parse risk for
+    // names that themselves contain parentheses or dashes).
+    ({String name, String reason, String dosage}) medFromReview(
+      String key, {
+      required String name,
+      String reason = '',
+      String dosage = '',
+      bool isCurrent = false,
+    }) {
+      var v = (_reviewEdited[key] ?? '').trim();
+      for (final badge in const [' [RxNorm verified]', ' [unverified]']) {
+        if (v.endsWith(badge)) {
+          v = v.substring(0, v.length - badge.length).trimRight();
+          break;
+        }
+      }
+      // The composite as originally displayed: current meds show
+      // 'name (dosage)' (their reason is never displayed, so it is always
+      // preserved); the preference categories show 'name — reason'.
+      final original = isCurrent
+          ? (dosage.isNotEmpty ? '$name ($dosage)' : name)
+          : (reason.isNotEmpty ? '$name — $reason' : name);
+      if (v.isEmpty || v == original) {
+        return (name: name, reason: reason, dosage: dosage);
+      }
+      if (isCurrent) {
+        if (v.endsWith(')')) {
+          final open = v.lastIndexOf(' (');
+          if (open > 0) {
+            return (
+              name: v.substring(0, open).trim(),
+              reason: reason,
+              dosage: v.substring(open + 2, v.length - 1).trim(),
+            );
+          }
+        }
+        return (name: v, reason: reason, dosage: '');
+      }
+      final dash = v.indexOf(' — ');
+      if (dash > 0) {
+        return (
+          name: v.substring(0, dash).trim(),
+          reason: v.substring(dash + 3).trim(),
+          dosage: '',
+        );
+      }
+      // The user removed the visible reason — honor the removal.
+      return (name: v, reason: '', dosage: '');
+    }
+
     // Promote the nullable field to a local so the med/condition branches
     // below are null-safe. `_applyAll` can be invoked from the always-enabled
     // "Autofill Information" button before any successful extraction (or after
@@ -119,12 +174,13 @@ extension _PipelineApplyLogic on _PipelineScreenState {
       if (validated != null && key.startsWith('med_prefer_')) {
         final med = validated.preferredMeds
             .firstWhere((m) => 'med_prefer_${m.originalName}' == key);
-        if (!medExists(med.displayName, MedicationEntryType.preferred.name)) {
+        final r = medFromReview(key, name: med.displayName, reason: med.reason);
+        if (!medExists(r.name, MedicationEntryType.preferred.name)) {
           await repo.insertMedication(MedicationEntriesCompanion.insert(
             directiveId: id,
             entryType: MedicationEntryType.preferred.name,
-            medicationName: Value(med.displayName),
-            reason: Value(med.reason),
+            medicationName: Value(r.name),
+            reason: Value(r.reason),
             sortOrder: Value(medOrder++),
           ));
           applied++;
@@ -132,12 +188,13 @@ extension _PipelineApplyLogic on _PipelineScreenState {
       } else if (validated != null && key.startsWith('med_avoid_')) {
         final med = validated.avoidMeds
             .firstWhere((m) => 'med_avoid_${m.originalName}' == key);
-        if (!medExists(med.displayName, MedicationEntryType.exception.name)) {
+        final r = medFromReview(key, name: med.displayName, reason: med.reason);
+        if (!medExists(r.name, MedicationEntryType.exception.name)) {
           await repo.insertMedication(MedicationEntriesCompanion.insert(
             directiveId: id,
             entryType: MedicationEntryType.exception.name,
-            medicationName: Value(med.displayName),
-            reason: Value(med.reason),
+            medicationName: Value(r.name),
+            reason: Value(r.reason),
             sortOrder: Value(medOrder++),
           ));
           applied++;
@@ -159,21 +216,30 @@ extension _PipelineApplyLogic on _PipelineScreenState {
       }
     }
 
-    // Write conditions to effective condition field
+    // Write the effective condition. Prefer the person's VERBATIM "when it
+    // kicks in" wording from the document (reviewed/edited by the user);
+    // fall back to the synthesized conditions sentence only when the document
+    // had no trigger language but condition chips were confirmed.
+    final ecEdited = _reviewChecked['effective_condition'] == true
+        ? (_reviewEdited['effective_condition'] ?? '').trim()
+        : '';
     final condNames = validated == null
         ? <String>[]
         : validated.conditions
             .where((c) => _reviewChecked['cond_${c.originalText}'] == true)
             .map((c) => c.displayName)
             .toList();
-    if (condNames.isNotEmpty) {
+    if (ecEdited.isNotEmpty || condNames.isNotEmpty) {
       final directive = await repo.getDirectiveById(id);
       if (directive != null && directive.effectiveCondition.isEmpty) {
         await repo.updateEffectiveCondition(
           id,
-          'This directive becomes effective when I am unable to make mental '
-          'health treatment decisions as determined by qualified professionals. '
-          'Relevant conditions: ${condNames.join(", ")}.',
+          ecEdited.isNotEmpty
+              ? ecEdited
+              : 'This directive becomes effective when I am unable to make '
+                  'mental health treatment decisions as determined by '
+                  'qualified professionals. '
+                  'Relevant conditions: ${condNames.join(", ")}.',
         );
         applied++;
       }
@@ -219,37 +285,44 @@ extension _PipelineApplyLogic on _PipelineScreenState {
         }
       }
 
-      final hh = smartVal('Health History');
-      if (hh != null) {
-        instrMap['healthHistory'] = instrMap.containsKey('healthHistory')
-            ? '${instrMap['healthHistory']}\n$hh'
-            : hh;
+      // Append a checked smart-fill value onto an additional-instructions
+      // field (merging under anything the extraction path already queued).
+      void addSmart(String displayKey, String instrField, {String? label}) {
+        final t = smartVal(displayKey);
+        if (t == null) return;
+        final text = label == null ? t : '$label: $t';
+        instrMap[instrField] = instrMap.containsKey(instrField)
+            ? '${instrMap[instrField]}\n$text'
+            : text;
       }
-      final ci = smartVal('Crisis Intervention');
-      if (ci != null) {
-        instrMap['crisisIntervention'] =
-            instrMap.containsKey('crisisIntervention')
-                ? '${instrMap['crisisIntervention']}\n$ci'
-                : ci;
-      }
-      final act = smartVal('Helpful Activities');
-      if (act != null) {
-        instrMap['activities'] = instrMap.containsKey('activities')
-            ? '${instrMap['activities']}\n$act'
-            : act;
-      }
-      final diet = smartVal('Dietary Considerations');
-      if (diet != null) {
-        instrMap['dietary'] = instrMap.containsKey('dietary')
-            ? '${instrMap['dietary']}\n$diet'
-            : diet;
-      }
-      final ag = smartVal('Agent Guidance');
-      if (ag != null) {
-        instrMap['other'] = instrMap.containsKey('other')
-            ? '${instrMap['other']}\n$ag'
-            : ag;
-      }
+
+      addSmart('Health History', 'healthHistory');
+      addSmart('Crisis Intervention', 'crisisIntervention');
+      addSmart('Helpful Activities', 'activities');
+      addSmart('Dietary Considerations', 'dietary');
+      addSmart('Agent Guidance', 'other');
+      // Fields with exact additional-instructions columns.
+      addSmart('Religious/Spiritual', 'religious');
+      addSmart('Children/Dependent Care', 'childrenCustody');
+      addSmart('Family Notification', 'familyNotification');
+      addSmart('Records Disclosure', 'recordsDisclosure');
+      addSmart('Pet Care', 'petCustody');
+      // Crisis-adjacent guidance joins the crisis-intervention narrative.
+      addSmart('De-escalation Techniques', 'crisisIntervention',
+          label: 'De-escalation');
+      addSmart('Crisis Triggers', 'crisisIntervention',
+          label: 'Known triggers');
+      // Facility NOTES describe the kind of setting (not a facility name),
+      // so they can't go into the name columns — keep them, labeled, in
+      // "Other instructions".
+      addSmart('Facility Notes (preferred)', 'other',
+          label: 'Preferred facility type');
+      addSmart('Facility Notes (avoid)', 'other',
+          label: 'Facility settings to avoid');
+      // NOT applied on purpose: 'ECT Guidance', 'Experimental Studies
+      // Guidance', 'Drug Trials Guidance' — neutral drafting guidance the
+      // user reads (marked guidance-only in the results UI); AI meta-text
+      // must never print into the legal form.
       // Smart-fill no longer suggests medications — the AI must never
       // recommend or name drugs the user didn't enter (see smart_fill_service).
     }
@@ -349,6 +422,7 @@ extension _PipelineApplyLogic on _PipelineScreenState {
           substance: Value(a.substance),
           severity: Value(severity),
           reactions: Value(a.reactions ?? ''),
+          notes: Value(a.notes ?? ''),
           sortOrder: Value(allergyOrder++),
         ));
         if (kind == 'drug') appliedDrugAllergens.add(a.substance);
@@ -361,14 +435,19 @@ extension _PipelineApplyLogic on _PipelineScreenState {
       for (final med in validated.currentMeds) {
         final key = 'med_current_${med.originalName}';
         if (_reviewChecked[key] != true) continue;
-        if (!medExists(med.displayName, MedicationEntryType.current.name)) {
+        final r = medFromReview(key,
+            name: med.displayName,
+            reason: med.reason,
+            dosage: med.dosage,
+            isCurrent: true);
+        if (!medExists(r.name, MedicationEntryType.current.name)) {
           await repo.insertMedication(MedicationEntriesCompanion.insert(
             directiveId: id,
             entryType: MedicationEntryType.current.name,
-            medicationName: Value(med.displayName),
-            reason: Value(med.reason),
+            medicationName: Value(r.name),
+            reason: Value(r.reason),
             // Dosage is captured only for currently-taking meds.
-            dosage: Value(med.dosage),
+            dosage: Value(r.dosage),
             sortOrder: Value(medOrder++),
           ));
           applied++;
@@ -381,12 +460,13 @@ extension _PipelineApplyLogic on _PipelineScreenState {
       for (final med in validated.limitedMeds) {
         final key = 'med_limit_${med.originalName}';
         if (_reviewChecked[key] != true) continue;
-        if (!medExists(med.displayName, MedicationEntryType.limitation.name)) {
+        final r = medFromReview(key, name: med.displayName, reason: med.reason);
+        if (!medExists(r.name, MedicationEntryType.limitation.name)) {
           await repo.insertMedication(MedicationEntriesCompanion.insert(
             directiveId: id,
             entryType: MedicationEntryType.limitation.name,
-            medicationName: Value(med.displayName),
-            reason: Value(med.reason),
+            medicationName: Value(r.name),
+            reason: Value(r.reason),
             sortOrder: Value(medOrder++),
           ));
           applied++;

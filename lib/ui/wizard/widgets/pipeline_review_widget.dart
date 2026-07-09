@@ -14,6 +14,16 @@ part of 'document_pipeline_flow.dart';
 const String facilityVerifiedBadge = ' [NPI verified]';
 const String facilityUnverifiedBadge = ' [unverified]';
 
+/// Smart-fill display keys that are drafting GUIDANCE for the user to read,
+/// deliberately never written into the directive (AI meta-text must not print
+/// into the legal form). The user makes the actual choice in the Procedures &
+/// research step. Keys match [SmartFillResult.toDisplayMap].
+const Set<String> _smartGuidanceOnlyKeys = {
+  'ECT Guidance',
+  'Experimental Studies Guidance',
+  'Drug Trials Guidance',
+};
+
 extension _PipelineReviewUi on _PipelineScreenState {
   void _buildReviewData(ValidatedExtractionResult v) {
     _reviewChecked = {};
@@ -45,6 +55,13 @@ extension _PipelineReviewUi on _PipelineScreenState {
     if (v.healthHistory != null) {
       _reviewChecked['hh_note'] = true;
       _reviewEdited['hh_note'] = v.healthHistory!;
+    }
+    // The person's verbatim "when it kicks in" wording — editable and applied
+    // as written (the cond_* chips above are derived context, not a
+    // replacement for the person's own trigger language).
+    if (v.effectiveCondition != null) {
+      _reviewChecked['effective_condition'] = true;
+      _reviewEdited['effective_condition'] = v.effectiveCondition!;
     }
     // Pass-through text fields
     // Facility names carry an NPI-registry check (verified = recognized
@@ -358,7 +375,10 @@ extension _PipelineReviewUi on _PipelineScreenState {
       'agent_city': primaryAgent?.city ?? '',
       'agent_state': primaryAgent?.state ?? '',
       'agent_zip': primaryAgent?.zip ?? '',
-      'agent_phone': primaryAgent?.homePhone ?? '',
+      // cellPhone, not homePhone: the wizard and applyAgent both store the
+      // single phone in cellPhone, so conflict detection must read the same
+      // column (else an existing phone is never flagged before overwrite).
+      'agent_phone': primaryAgent?.cellPhone ?? '',
       // Alternate agent — split address
       'alt_agent_name': altAgent?.fullName ?? '',
       'alt_agent_relationship': altAgent?.relationship ?? '',
@@ -367,7 +387,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
       'alt_agent_city': altAgent?.city ?? '',
       'alt_agent_state': altAgent?.state ?? '',
       'alt_agent_zip': altAgent?.zip ?? '',
-      'alt_agent_phone': altAgent?.homePhone ?? '',
+      'alt_agent_phone': altAgent?.cellPhone ?? '',
       // Guardian — split address
       'guardian_name': guardian?.nomineeFullName ?? '',
       'guardian_relationship': guardian?.nomineeRelationship ?? '',
@@ -398,6 +418,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
     if (key.startsWith('diag_')) return 'Diagnosis';
     if (key.startsWith('allergy_')) return 'Allergy';
     if (key.startsWith('hh_')) return 'Health History';
+    if (key == 'effective_condition') return 'When this kicks in (your words)';
     if (key == 'facility_prefer') return 'Preferred Facility';
     if (key == 'facility_avoid') return 'Facility to Avoid';
     if (key == 'dietary') return 'Dietary';
@@ -472,6 +493,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
     if (key.startsWith('diag_')) return 'Diagnoses';
     if (key.startsWith('allergy_')) return 'Allergies';
     if (key.startsWith('hh_')) return 'Health History';
+    if (key == 'effective_condition') return 'When this kicks in';
     if (key.startsWith('person_')) return 'Your details';
     if (key.startsWith('agent_') && !key.startsWith('agent_authority')) {
       return 'Your agent';
@@ -500,6 +522,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
   /// the wizard instead of one long list. Order mirrors the wizard step order.
   (int, String) _wizardSection(String key) {
     if (key.startsWith('person_eval_doctor')) return (2, 'When this kicks in');
+    if (key == 'effective_condition') return (2, 'When this kicks in');
     if (key.startsWith('person_doctor')) return (6, 'Diagnoses');
     if (key.startsWith('person_')) return (1, 'About you');
     if (key == 'authority_hospitalization' ||
@@ -1130,7 +1153,12 @@ extension _PipelineReviewUi on _PipelineScreenState {
           ),
         ),
         ...keys.map((key) {
-          final checked = _smartChecked[key] ?? false;
+          // The three procedure fields are neutral drafting guidance ("help
+          // the user state their OWN preference") — they are shown to read,
+          // never saved: AI meta-guidance must not print into the legal form.
+          // The user sets the actual choice in Procedures & research.
+          final guidanceOnly = _smartGuidanceOnlyKeys.contains(key);
+          final checked = !guidanceOnly && (_smartChecked[key] ?? false);
           return Card(
             margin: const EdgeInsets.only(bottom: 6),
             color: checked
@@ -1138,17 +1166,24 @@ extension _PipelineReviewUi on _PipelineScreenState {
                 : cs.surfaceContainerHighest.withValues(alpha: 0.5),
             child: InkWell(
               borderRadius: BorderRadius.circular(12),
-              onTap: () => _editSmartField(key),
+              onTap: guidanceOnly ? null : () => _editSmartField(key),
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(4, 4, 12, 4),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Checkbox(
-                      value: checked,
-                      onChanged: (v) =>
-                          setState(() => _smartChecked[key] = v ?? false),
-                    ),
+                    if (guidanceOnly)
+                      Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Icon(Icons.menu_book_outlined,
+                            size: 20, color: cs.onSurfaceVariant),
+                      )
+                    else
+                      Checkbox(
+                        value: checked,
+                        onChanged: (v) =>
+                            setState(() => _smartChecked[key] = v ?? false),
+                      ),
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8),
@@ -1163,6 +1198,19 @@ extension _PipelineReviewUi on _PipelineScreenState {
                                       color: checked
                                           ? cs.onSurface
                                           : cs.onSurfaceVariant)),
+                            if (guidanceOnly) ...[
+                              const SizedBox(height: 2),
+                              Text(
+                                'Guidance to read — not saved to your form. '
+                                'Set your choice in Procedures & research.',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelSmall
+                                    ?.copyWith(
+                                        color: cs.tertiary,
+                                        fontStyle: FontStyle.italic),
+                              ),
+                            ],
                             const SizedBox(height: 4),
                             Text(
                               _smartEdited[key] ?? '',

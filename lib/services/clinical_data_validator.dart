@@ -134,6 +134,11 @@ class ClinicalDataValidator {
       // user to review. Do NOT run it through the condition/ICD splitter,
       // which fragments sentences and drops anything it can't match.
       healthHistory: raw.healthHistory,
+      // The person's VERBATIM "when it kicks in" wording. The condition
+      // splitter above only feeds the ICD chips — without this passthrough
+      // the actual trigger language from the document was dropped and apply
+      // wrote a canned sentence instead.
+      effectiveCondition: raw.effectiveCondition,
       preferredFacility: raw.preferredFacility,
       avoidFacility: raw.avoidFacility,
       dietary: raw.dietary,
@@ -210,6 +215,9 @@ class ValidatedExtractionResult {
   final List<ExtractedDiagnosis> diagnoses;
   final List<ExtractedAllergy> allergies;
   final String? healthHistory;
+  /// Verbatim "when this kicks in" text from the document (the ICD-split
+  /// [conditions] chips are derived from it, but never replace it).
+  final String? effectiveCondition;
   final String? preferredFacility;
   final String? avoidFacility;
   // True when the facility name was matched in the NPI organization registry
@@ -246,6 +254,7 @@ class ValidatedExtractionResult {
     this.diagnoses = const [],
     this.allergies = const [],
     this.healthHistory,
+    this.effectiveCondition,
     this.preferredFacility,
     this.avoidFacility,
     this.preferredFacilityVerified = false,
