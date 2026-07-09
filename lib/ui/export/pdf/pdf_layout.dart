@@ -265,7 +265,7 @@ pw.Widget checkRow(String text, {bool checked = false}) {
 }
 
 /// An initials row — used for the three authorizations (ECT, experimental
-/// studies, drug trials) that PA law (20 Pa.C.S. §5805(c)(4)) requires the
+/// studies, drug trials) that PA law (20 Pa.C.S. §5836(c)) requires the
 /// declarant to initial rather than merely check. The box is always printed
 /// empty; the declarant must physically write their initials at signing.
 /// [highlighted] draws a light background to visually guide the signer when

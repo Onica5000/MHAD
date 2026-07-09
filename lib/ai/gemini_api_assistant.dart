@@ -685,7 +685,7 @@ class LlmAssistant implements AiAssistant {
     buf.writeln('   • AGENT AUTHORITY — specific powers granted or '
         'withheld: consent to admission, consent to medication, access to '
         'records. Also sets whether the agent may consent to ECT, '
-        'experimental studies, and drug trials — under §5805(c)(4) these '
+        'experimental studies, and drug trials — under §5836(c) these '
         'three require the declarant to PHYSICALLY INITIAL the printed '
         'form (a checkbox alone is not sufficient).');
     buf.writeln('   • ADDITIONAL LIMITATIONS — free-text restrictions on '

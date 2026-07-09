@@ -1164,7 +1164,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
     });
   }
 
-  /// §5805(c)(4) reminder: when an autofilled consent would delegate ECT,
+  /// §5836(c) reminder: when an autofilled consent would delegate ECT,
   /// experimental studies, or drug trials to the agent, that delegation only
   /// takes legal effect if the declarant physically initials it on the printed
   /// form. Surfaced here so the user confirms the AI's assumption deliberately.
@@ -1185,7 +1185,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
           const SizedBox(width: 6),
           Expanded(
             child: Text(
-              'This lets your agent decide. Under PA law (§5805(c)(4)) it only '
+              'This lets your agent decide. Under PA law (§5836(c)) it only '
               'takes effect if you physically initial this authorization on the '
               'printed form — confirm this is what you want.',
               style: TextStyle(

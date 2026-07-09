@@ -442,7 +442,7 @@ ect_consent
   → CRITICAL: do NOT answer "agent" just because the document grants the agent
     broad or general authority (e.g. "my agent may consent to or refuse the
     treatments I describe", "my agent may make all mental health care
-    decisions"). Under PA law (20 Pa.C.S. §5805(c)(4)), delegating ECT to the
+    decisions"). Under PA law (20 Pa.C.S. §5836(c)), delegating ECT to the
     agent requires a SPECIFIC, separately-initialed authorization — broad
     language does NOT grant it. Use "agent" ONLY when the document specifically
     addresses ECT and delegates ECT decisions to the agent. If ECT is never
@@ -451,14 +451,14 @@ ect_consent
 
 experimental_consent
   → Whether the person consents to experimental research studies. Same values: "yes" | "agent" | "no" | null.
-  → Same §5805(c)(4) rule as ECT: use "agent" ONLY if the document specifically
+  → Same §5836(c) rule as ECT: use "agent" ONLY if the document specifically
     delegates experimental-study decisions to the agent. Broad/general agent
     authority does NOT count — leave null when experimental studies aren't
     specifically addressed.
 
 drug_trial_consent
   → Whether the person consents to clinical drug trials. Values as above.
-  → Same §5805(c)(4) rule: use "agent" ONLY if the document specifically
+  → Same §5836(c) rule: use "agent" ONLY if the document specifically
     delegates drug-trial decisions to the agent. Broad/general authority does
     NOT count — leave null when drug trials aren't specifically addressed.
 
