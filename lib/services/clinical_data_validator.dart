@@ -149,6 +149,10 @@ class ClinicalDataValidator {
       ectConsent: raw.ectConsent,
       experimentalConsent: raw.experimentalConsent,
       drugTrialConsent: raw.drugTrialConsent,
+      medicationConsent: raw.medicationConsent,
+      triggerTwoProfessionals: raw.triggerTwoProfessionals,
+      triggerCourtOrder: raw.triggerCourtOrder,
+      triggerInvoluntaryCommitment: raw.triggerInvoluntaryCommitment,
       roomPreferencesNote: raw.roomPreferencesNote,
       sameGenderRoommate: raw.sameGenderRoommate,
       agentCanConsentHospitalization: raw.agentCanConsentHospitalization,
@@ -232,6 +236,10 @@ class ValidatedExtractionResult {
   final String? ectConsent;
   final String? experimentalConsent;
   final String? drugTrialConsent;
+  final String? medicationConsent;
+  final bool? triggerTwoProfessionals;
+  final bool? triggerCourtOrder;
+  final bool? triggerInvoluntaryCommitment;
   final String? roomPreferencesNote;
   final bool? sameGenderRoommate;
   final bool? agentCanConsentHospitalization;
@@ -267,6 +275,10 @@ class ValidatedExtractionResult {
     this.ectConsent,
     this.experimentalConsent,
     this.drugTrialConsent,
+    this.medicationConsent,
+    this.triggerTwoProfessionals,
+    this.triggerCourtOrder,
+    this.triggerInvoluntaryCommitment,
     this.roomPreferencesNote,
     this.sameGenderRoommate,
     this.agentCanConsentHospitalization,

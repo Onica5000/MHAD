@@ -220,10 +220,19 @@ $extracted''';
           'notes': Schema.string(nullable: true),
         }),
       ),
-      // ECT / experimental / drug trial consent: "yes" | "agent" | "no" | null
+      // Consent fields: "yes" | "agent" | "no" |
+      // "conditional: <stated restriction>" | null
       'ect_consent': Schema.string(nullable: true),
       'experimental_consent': Schema.string(nullable: true),
       'drug_trial_consent': Schema.string(nullable: true),
+      // The person's own general consent to psychiatric medications —
+      // distinct from agent_can_consent_medication (the agent's authority).
+      'medication_consent': Schema.string(nullable: true),
+      // The three statutory activation triggers ("when this kicks in"
+      // checkboxes). true ONLY on an explicit designation; never inferred.
+      'trigger_two_professionals': Schema.boolean(nullable: true),
+      'trigger_court_order': Schema.boolean(nullable: true),
+      'trigger_involuntary_commitment': Schema.boolean(nullable: true),
       // Room preferences as free-text note.
       'room_preferences_note': Schema.string(nullable: true),
       // True ONLY if the person explicitly asks for a same-gender / same-as-
@@ -294,14 +303,14 @@ $extracted''';
 
 ═══ FORM SCOPE: POWER OF ATTORNEY (agent only) ═══
 The user is filling a POWER OF ATTORNEY form. It names a decision-maker but does NOT record treatment preferences.
-EXTRACT ONLY: personal_info for the DECLARANT and for the agent / alternate_agent / guardian; agent_can_consent_hospitalization; agent_can_consent_medication; agent_authority_limitations; effective_condition.
-LEAVE NULL / DO NOT EXTRACT everything else — medications_*, diagnoses, allergies, preferred_facility, avoid_facility, room_preferences_note, same_gender_roommate, ect_consent, experimental_consent, drug_trial_consent, self_binding_ulysses, health_history, dietary, religious, activities, crisis_intervention, records_disclosure, family_notification, pet_custody, children_custody, other. Ignore that content even if it appears in the document.''';
+EXTRACT ONLY: personal_info for the DECLARANT and for the agent / alternate_agent / guardian; agent_can_consent_hospitalization; agent_can_consent_medication; agent_authority_limitations; effective_condition; trigger_two_professionals; trigger_court_order; trigger_involuntary_commitment.
+LEAVE NULL / DO NOT EXTRACT everything else — medications_*, diagnoses, allergies, preferred_facility, avoid_facility, room_preferences_note, same_gender_roommate, ect_consent, experimental_consent, drug_trial_consent, medication_consent, self_binding_ulysses, health_history, dietary, religious, activities, crisis_intervention, records_disclosure, family_notification, pet_custody, children_custody, other. Ignore that content even if it appears in the document.''';
       case FormType.declaration:
         return '''
 
 ═══ FORM SCOPE: DECLARATION (treatment preferences only — NO agent) ═══
 The user is filling a DECLARATION form. It records treatment preferences but does NOT name an agent.
-EXTRACT the DECLARANT's personal_info, effective_condition, and all treatment-preference fields (medications_*, diagnoses, allergies, preferred_facility, avoid_facility, room_preferences_note, same_gender_roommate, ect/experimental/drug_trial consent, self_binding_ulysses, health_history, dietary, religious, activities, crisis_intervention, records_disclosure, family_notification, pet_custody, children_custody, other).
+EXTRACT the DECLARANT's personal_info, effective_condition, the trigger_* fields, and all treatment-preference fields (medications_*, diagnoses, allergies, preferred_facility, avoid_facility, room_preferences_note, same_gender_roommate, ect/experimental/drug_trial/medication consent, self_binding_ulysses, health_history, dietary, religious, activities, crisis_intervention, records_disclosure, family_notification, pet_custody, children_custody, other).
 LEAVE NULL / DO NOT EXTRACT: personal_info.agent, personal_info.alternate_agent, personal_info.guardian, agent_can_consent_hospitalization, agent_can_consent_medication, agent_authority_limitations. Ignore any agent designation even if it appears in the document.''';
       default:
         return ''; // Combined — extract everything as described above.
@@ -400,9 +409,13 @@ allergies  (the ONLY place allergies go — separate from medications_to_avoid)
   → reactions/notes: copy what the document states; do NOT invent symptoms. Severity: use what the document states; only when none is stated may you map from stated symptoms (mild = rash/GI; moderate = hives/swelling; severe = anaphylaxis/ER).
   → Do NOT also place allergies in medications_to_avoid — the two sections are separate and must not be conflated.
 
+CONSENT VALUES (ect_consent, experimental_consent, drug_trial_consent, medication_consent)
+  → "yes" (I consent) | "agent" (my agent decides) | "no" (I do not consent) | "conditional: <restriction>" | null (not mentioned).
+  → Use "conditional: <restriction>" ONLY when the document consents WITH an explicit stated restriction — copy the restriction verbatim (e.g. "ECT only after two independent opinions" → "conditional: only after two independent opinions"). Do NOT paraphrase or invent a condition.
+
 ect_consent
   → Whether the person consents to electroconvulsive therapy (ECT).
-  → Values: "yes" (I consent), "agent" (my agent decides), "no" (I do not consent). Leave null if not mentioned.
+  → Values as above. Leave null if not mentioned.
   → CRITICAL: do NOT answer "agent" just because the document grants the agent
     broad or general authority (e.g. "my agent may consent to or refuse the
     treatments I describe", "my agent may make all mental health care
@@ -421,10 +434,16 @@ experimental_consent
     specifically addressed.
 
 drug_trial_consent
-  → Whether the person consents to clinical drug trials. Same values: "yes" | "agent" | "no" | null.
+  → Whether the person consents to clinical drug trials. Values as above.
   → Same §5805(c)(4) rule: use "agent" ONLY if the document specifically
     delegates drug-trial decisions to the agent. Broad/general authority does
     NOT count — leave null when drug trials aren't specifically addressed.
+
+medication_consent
+  → The person's OWN general consent to psychiatric medications (values as above).
+  → This is their consent — NOT the agent's authority over medications (that is agent_can_consent_medication).
+  → "conditional" example: "I consent to oral medications but not injections" → "conditional: oral medications only, no injections".
+  → Leave null when the document doesn't state a general medication consent position. A medications_preferred/avoid list alone is NOT a general consent statement.
 
 room_preferences_note
   → Free-text room preference notes: private room, smoking policy, same-gender roommate, etc. Leave null if not mentioned.
@@ -450,8 +469,15 @@ avoid_facility
   → Name of a hospital or treatment center the person wants to AVOID.
 
 effective_condition
-  → The specific circumstances that TRIGGER this directive (e.g., "when two professionals certify I lack capacity", "during involuntary commitment").
+  → The specific circumstances that TRIGGER this directive, copied as the person wrote them.
   → This is the "when it kicks in" language — NOT diagnoses, NOT treatment preferences.
+
+trigger_two_professionals / trigger_court_order / trigger_involuntary_commitment
+  → The three STATUTORY activation triggers the app offers as checkboxes. Set one true ONLY when the document explicitly designates it as when the directive takes effect:
+    • trigger_two_professionals — activation when professionals (e.g. "a psychiatrist and one other professional", "two mental health professionals") determine the person cannot make mental-health decisions.
+    • trigger_court_order — activation by court order.
+    • trigger_involuntary_commitment — activation upon involuntary commitment/302.
+  → Never infer; leave null when not explicitly designated. ALSO keep the person's full trigger wording in effective_condition — both may be set.
 
 agent_authority_limitations
   → Any limitations or conditions on what the agent is or is NOT authorized to do (e.g., "my agent cannot consent to ECT", "my agent must consult my sister before deciding").

@@ -622,9 +622,18 @@ extension _PipelineApplyLogic on _PipelineScreenState {
       applied++;
     }
 
-    // ── Apply ECT / experimental / drug trial consent ──────────────────
-    // Map extracted "yes"/"agent"/"no" → the canonical ConsentOption.name values.
+    // ── Apply ECT / experimental / drug trial / medication consent ────
+    // Map extracted "yes"/"agent"/"no"/"conditional: <text>" → the canonical
+    // stored values (ConsentOption.name, or the 'conditional:' prefix form).
     String? toConsentValue(String? extracted) {
+      if (extracted == null) return null;
+      if (extracted.startsWith('conditional:')) {
+        final restriction =
+            extracted.substring('conditional:'.length).trim();
+        return restriction.isEmpty
+            ? null
+            : '$consentConditionalPrefix$restriction';
+      }
       switch (extracted) {
         case 'yes': return ConsentOption.yes.name;
         case 'agent': return ConsentOption.agentDecides.name;
@@ -635,6 +644,7 @@ extension _PipelineApplyLogic on _PipelineScreenState {
     final ectVal = toConsentValue(pv('ect_consent'));
     final expVal = toConsentValue(pv('experimental_consent'));
     final drugVal = toConsentValue(pv('drug_trial_consent'));
+    final medConsentVal = toConsentValue(pv('medication_consent'));
     final roomNote = pv('room_prefs_note');
     // Structured toggles — apply only if still checked in review AND the AI
     // actually set a value (the boolean lives on the validated result, not the
@@ -651,6 +661,7 @@ extension _PipelineApplyLogic on _PipelineScreenState {
     if (ectVal != null ||
         expVal != null ||
         drugVal != null ||
+        medConsentVal != null ||
         roomNote != null ||
         applyHosp ||
         applyMeds ||
@@ -661,6 +672,9 @@ extension _PipelineApplyLogic on _PipelineScreenState {
         ectConsent: ectVal != null ? Value(ectVal) : const Value.absent(),
         experimentalConsent: expVal != null ? Value(expVal) : const Value.absent(),
         drugTrialConsent: drugVal != null ? Value(drugVal) : const Value.absent(),
+        medicationConsent: medConsentVal != null
+            ? Value(medConsentVal)
+            : const Value.absent(),
         roomPreferencesNote: roomNote != null ? Value(roomNote) : const Value.absent(),
         agentCanConsentHospitalization: applyHosp
             ? Value(validated!.agentCanConsentHospitalization!)
@@ -675,9 +689,33 @@ extension _PipelineApplyLogic on _PipelineScreenState {
         roommateGenderMatch:
             applyRoommate ? const Value('sameAsIdentity') : const Value.absent(),
       ));
-      applied += [ectVal, expVal, drugVal, roomNote].whereType<String>().length;
+      applied += [ectVal, expVal, drugVal, medConsentVal, roomNote]
+          .whereType<String>()
+          .length;
       applied +=
           [applyHosp, applyMeds, applyUlysses, applyRoommate].where((b) => b).length;
+    }
+
+    // ── Apply the statutory activation triggers ("when this kicks in") ──
+    // Confirmed-in-review trigger checkboxes; the effective-condition TEXT
+    // (written above) is preserved by re-writing the current value.
+    final trigTwo = _reviewChecked['trigger_two_professionals'] == true &&
+        validated?.triggerTwoProfessionals == true;
+    final trigCourt = _reviewChecked['trigger_court_order'] == true &&
+        validated?.triggerCourtOrder == true;
+    final trigCommit =
+        _reviewChecked['trigger_involuntary_commitment'] == true &&
+            validated?.triggerInvoluntaryCommitment == true;
+    if (trigTwo || trigCourt || trigCommit) {
+      final d = await repo.getDirectiveById(id);
+      await repo.updateEffectiveCondition(
+        id,
+        d?.effectiveCondition ?? '',
+        twoProfessionals: trigTwo ? true : null,
+        courtOrder: trigCourt ? true : null,
+        involuntaryCommitment: trigCommit ? true : null,
+      );
+      applied += [trigTwo, trigCourt, trigCommit].where((b) => b).length;
     }
 
     // Each additional-instruction field actually written counts once (review

@@ -171,6 +171,27 @@ extension _PipelineReviewUi on _PipelineScreenState {
       _reviewChecked['drug_trial_consent'] = true;
       _reviewEdited['drug_trial_consent'] = v.drugTrialConsent!;
     }
+    if (v.medicationConsent != null) {
+      _reviewChecked['medication_consent'] = true;
+      _reviewEdited['medication_consent'] = v.medicationConsent!;
+    }
+
+    // ── Statutory activation triggers (set only on an explicit designation)
+    if (v.triggerTwoProfessionals == true) {
+      _reviewChecked['trigger_two_professionals'] = true;
+      _reviewEdited['trigger_two_professionals'] =
+          'Activate when professionals determine I cannot make '
+          'mental-health decisions';
+    }
+    if (v.triggerCourtOrder == true) {
+      _reviewChecked['trigger_court_order'] = true;
+      _reviewEdited['trigger_court_order'] = 'Activate upon a court order';
+    }
+    if (v.triggerInvoluntaryCommitment == true) {
+      _reviewChecked['trigger_involuntary_commitment'] = true;
+      _reviewEdited['trigger_involuntary_commitment'] =
+          'Activate upon involuntary commitment';
+    }
 
     // ── Room preferences note
     if (v.roomPreferencesNote != null) {
@@ -429,6 +450,12 @@ extension _PipelineReviewUi on _PipelineScreenState {
     if (key == 'ect_consent') return 'ECT consent';
     if (key == 'experimental_consent') return 'Experimental treatment consent';
     if (key == 'drug_trial_consent') return 'Drug trial consent';
+    if (key == 'medication_consent') return 'Medication consent';
+    if (key == 'trigger_two_professionals') return 'Trigger: professionals';
+    if (key == 'trigger_court_order') return 'Trigger: court order';
+    if (key == 'trigger_involuntary_commitment') {
+      return 'Trigger: involuntary commitment';
+    }
     if (key == 'room_prefs_note') return 'Room preferences';
     if (key == 'roommate_same_gender') return 'Same-gender roommate';
     if (key == 'authority_hospitalization') return 'Agent: hospitalization';
@@ -506,9 +533,11 @@ extension _PipelineReviewUi on _PipelineScreenState {
     if (key == 'ulysses_optin') return 'Self-binding';
     if (key == 'ect_consent' ||
         key == 'experimental_consent' ||
-        key == 'drug_trial_consent') {
+        key == 'drug_trial_consent' ||
+        key == 'medication_consent') {
       return 'Consent';
     }
+    if (key.startsWith('trigger_')) return 'When this kicks in';
     if (key == 'room_prefs_note' || key == 'roommate_same_gender') {
       return 'Room Preferences';
     }
@@ -523,6 +552,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
   (int, String) _wizardSection(String key) {
     if (key.startsWith('person_eval_doctor')) return (2, 'When this kicks in');
     if (key == 'effective_condition') return (2, 'When this kicks in');
+    if (key.startsWith('trigger_')) return (2, 'When this kicks in');
     if (key.startsWith('person_doctor')) return (6, 'Diagnoses');
     if (key.startsWith('person_')) return (1, 'About you');
     if (key == 'authority_hospitalization' ||
@@ -547,6 +577,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
     if (key == 'ect_consent' ||
         key == 'experimental_consent' ||
         key == 'drug_trial_consent' ||
+        key == 'medication_consent' ||
         key == 'ulysses_optin') {
       return (9, 'Procedures & research');
     }

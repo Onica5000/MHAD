@@ -45,10 +45,19 @@ class DocumentExtractionResult {
   // Maps to DirectivePrefs.agentAuthorityLimitations.
   final String? agentAuthorityLimitations;
 
-  // Consent fields: "yes" | "agent" | "no" | null
+  // Consent fields: "yes" | "agent" | "no" | "conditional: <text>" | null
   final String? ectConsent;
   final String? experimentalConsent;
   final String? drugTrialConsent;
+  // The person's own general medication consent (same vocabulary) — distinct
+  // from agentCanConsentMedication (the agent's authority).
+  final String? medicationConsent;
+
+  // The three statutory activation triggers ("when this kicks in"
+  // checkboxes) — true only on an explicit designation, never inferred.
+  final bool? triggerTwoProfessionals;
+  final bool? triggerCourtOrder;
+  final bool? triggerInvoluntaryCommitment;
 
   // Room preferences free-text note. Maps to DirectivePrefs.roomPreferencesNote.
   final String? roomPreferencesNote;
@@ -97,6 +106,10 @@ class DocumentExtractionResult {
     this.ectConsent,
     this.experimentalConsent,
     this.drugTrialConsent,
+    this.medicationConsent,
+    this.triggerTwoProfessionals,
+    this.triggerCourtOrder,
+    this.triggerInvoluntaryCommitment,
     this.roomPreferencesNote,
     this.sameGenderRoommate,
     this.agentCanConsentHospitalization,
@@ -129,6 +142,10 @@ class DocumentExtractionResult {
       ectConsent == null &&
       experimentalConsent == null &&
       drugTrialConsent == null &&
+      medicationConsent == null &&
+      triggerTwoProfessionals == null &&
+      triggerCourtOrder == null &&
+      triggerInvoluntaryCommitment == null &&
       roomPreferencesNote == null &&
       sameGenderRoommate == null &&
       agentCanConsentHospitalization == null &&
@@ -165,6 +182,12 @@ class DocumentExtractionResult {
       ectConsent: ectConsent ?? other.ectConsent,
       experimentalConsent: experimentalConsent ?? other.experimentalConsent,
       drugTrialConsent: drugTrialConsent ?? other.drugTrialConsent,
+      medicationConsent: medicationConsent ?? other.medicationConsent,
+      triggerTwoProfessionals:
+          triggerTwoProfessionals ?? other.triggerTwoProfessionals,
+      triggerCourtOrder: triggerCourtOrder ?? other.triggerCourtOrder,
+      triggerInvoluntaryCommitment:
+          triggerInvoluntaryCommitment ?? other.triggerInvoluntaryCommitment,
       roomPreferencesNote: _mergeText(roomPreferencesNote, other.roomPreferencesNote),
       sameGenderRoommate: sameGenderRoommate ?? other.sameGenderRoommate,
       agentCanConsentHospitalization:
@@ -272,6 +295,16 @@ class DocumentExtractionResult {
     if (ectConsent != null) map['ECT Consent'] = ectConsent!;
     if (experimentalConsent != null) map['Experimental Treatment Consent'] = experimentalConsent!;
     if (drugTrialConsent != null) map['Drug Trial Consent'] = drugTrialConsent!;
+    if (medicationConsent != null) map['Medication Consent'] = medicationConsent!;
+    if (triggerTwoProfessionals == true) {
+      map['Activation Trigger'] = 'Two professionals determine incapacity';
+    }
+    if (triggerCourtOrder == true) {
+      map['Activation Trigger (court)'] = 'Court order';
+    }
+    if (triggerInvoluntaryCommitment == true) {
+      map['Activation Trigger (302)'] = 'Involuntary commitment';
+    }
     if (roomPreferencesNote != null) map['Room Preferences'] = roomPreferencesNote!;
     if (other != null) map['Other Instructions'] = other!;
     return map;
@@ -307,6 +340,11 @@ class DocumentExtractionResult {
       ectConsent: optStr(json['ect_consent']),
       experimentalConsent: optStr(json['experimental_consent']),
       drugTrialConsent: optStr(json['drug_trial_consent']),
+      medicationConsent: optStr(json['medication_consent']),
+      triggerTwoProfessionals: json['trigger_two_professionals'] as bool?,
+      triggerCourtOrder: json['trigger_court_order'] as bool?,
+      triggerInvoluntaryCommitment:
+          json['trigger_involuntary_commitment'] as bool?,
       roomPreferencesNote: optStr(json['room_preferences_note']),
       sameGenderRoommate: json['same_gender_roommate'] as bool?,
       agentCanConsentHospitalization:
