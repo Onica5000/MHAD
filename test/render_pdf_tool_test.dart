@@ -121,10 +121,41 @@ void main() {
     roomPreferences: 'singleRoom,windowIfPossible,quietFloor,sameGenderRoommate',
     roomPreferencesNote: 'Away from loud areas if possible.',
     roommateGenderMatch: 'women',
-    crisisPlanJson: '',
-    selfBindingEnabled: false,
+    crisisPlanJson: '{"earlyWarning":["stops sleeping","racing speech"],'
+        '"triggers":["loud crowds"],'
+        '"helps":["dim lights","let me pace"],'
+        '"sayToMe":["you are safe"],'
+        '"dontDo":["do not touch me without asking"]}',
+    selfBindingEnabled: true,
     sideEffectsJson: '',
   );
+
+  const allergies = [
+    DirectiveAllergy(
+      id: 1,
+      directiveId: 1,
+      kind: 'drug',
+      substance: 'Penicillin',
+      code: '',
+      codeSource: 'manual',
+      severity: 'severe',
+      reactions: 'Hives, throat swelling',
+      notes: 'Confirmed twice; carry an allergy card.',
+      sortOrder: 0,
+    ),
+    DirectiveAllergy(
+      id: 2,
+      directiveId: 1,
+      kind: 'food',
+      substance: 'Shellfish',
+      code: '',
+      codeSource: 'manual',
+      severity: 'moderate',
+      reactions: 'Hives',
+      notes: '',
+      sortOrder: 1,
+    ),
+  ];
 
   const additional = AdditionalInstructionsTableData(
     id: 1,
@@ -242,6 +273,7 @@ void main() {
         medications: medications,
         witnesses: witnesses,
         diagnoses: const [],
+        allergies: allergies,
       );
       final filledPath = 'build/_pdfcmp/filled_${type.name}.pdf';
       File(filledPath).writeAsBytesSync(filled);

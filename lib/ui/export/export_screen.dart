@@ -23,6 +23,7 @@ import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/design/wallet_card.dart';
 import 'package:mhad/ui/widgets/design/wizard_header.dart';
+import 'package:mhad/services/blank_form_service.dart';
 import 'package:mhad/services/directive_export_service.dart';
 import 'package:mhad/services/export_formats_service.dart';
 import 'package:mhad/services/fhir_export_service.dart';
@@ -98,6 +99,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
   List<MedicationEntry> _medications = [];
   List<WitnessesData> _witnesses = [];
   List<DiagnosisEntry> _diagnoses = [];
+  List<DirectiveAllergy> _allergies = [];
   bool _loading = true;
   bool _notFound = false;
 
@@ -141,6 +143,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       _medications = bundle.medications;
       _witnesses = bundle.witnesses;
       _diagnoses = bundle.diagnoses;
+      _allergies = bundle.allergies;
       _loading = false;
 
       // Pre-select the form type the user filled in
@@ -277,6 +280,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
           medications: medications,
           witnesses: witnesses,
           diagnoses: _diagnoses,
+          allergies: _allergies,
         ));
         if (!mounted) return;
         final suffix = modes.length > 1 ? '_${_draftModeFileSuffix(mode)}' : '';
@@ -334,6 +338,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
           medications: _medications,
           witnesses: _witnesses,
           diagnoses: _diagnoses,
+          allergies: _allergies,
         ));
   }
 
@@ -544,6 +549,13 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
           subtitle: 'Blank pages for handwritten notes',
           value: _includeNotes,
           onChanged: (v) => setState(() => _includeNotes = v ?? false),
+        ),
+        // Blank official forms (any of the three types) — for filling in by
+        // hand; separate from this directive's data.
+        TextButton.icon(
+          onPressed: () => showBlankFormPicker(context),
+          icon: const Icon(Icons.print_outlined, size: 18),
+          label: const Text('Print a blank form (fill in by hand)'),
         ),
       ];
 
@@ -1024,6 +1036,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
             medications: _medications,
             witnesses: _witnesses,
             diagnoses: _diagnoses,
+            allergies: _allergies,
           ));
       final json = FhirExportService.exportAsJson(
         directive: _directive!,

@@ -15,6 +15,7 @@ class DirectiveBundle {
   final List<MedicationEntry> medications;
   final List<WitnessesData> witnesses;
   final List<DiagnosisEntry> diagnoses;
+  final List<DirectiveAllergy> allergies;
 
   const DirectiveBundle({
     required this.directive,
@@ -25,6 +26,7 @@ class DirectiveBundle {
     required this.medications,
     required this.witnesses,
     required this.diagnoses,
+    this.allergies = const [],
   });
 }
 
@@ -353,6 +355,7 @@ class DirectiveRepository {
       medications: await watchMedications(directiveId).first,
       witnesses: await getWitnesses(directiveId),
       diagnoses: await getDiagnoses(directiveId),
+      allergies: await getAllergies(directiveId),
     );
   }
 

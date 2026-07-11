@@ -5,6 +5,7 @@ import 'package:mhad/domain/model/directive.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
+import 'attachments_pdf.dart';
 import 'combined_pdf.dart';
 import 'pdf_helpers.dart';
 import 'declaration_pdf.dart';
@@ -50,6 +51,9 @@ class PdfGenerator {
     required List<MedicationEntry> medications,
     required List<WitnessesData> witnesses,
     List<DiagnosisEntry> diagnoses = const [],
+    // Allergies print as a labeled attachment (2026-07-09 PDF audit,
+    // defect #1 — an entire wizard step previously never reached print).
+    List<DirectiveAllergy> allergies = const [],
   }) async {
     final theme = await loadEditorialTheme();
 
@@ -128,6 +132,18 @@ class PdfGenerator {
         medications: medications,
         witnesses: witnesses,
         diagnoses: diagnoses,
+        draftMode: draftMode,
+      ));
+    }
+
+    // Attachments (allergies / crisis plan / self-binding acknowledgment)
+    // follow the form pages whenever any of that data exists — they are part
+    // of the signed packet, ahead of the informational supplementary pages.
+    if (includeCombined || includeDeclaration || includePoa) {
+      pages.addAll(buildAttachmentPages(
+        directive: directive,
+        allergies: allergies,
+        prefs: prefs,
         draftMode: draftMode,
       ));
     }

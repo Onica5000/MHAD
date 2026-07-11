@@ -478,5 +478,72 @@ void main() {
       expect(bytes, isA<Uint8List>());
       expect(bytes, isNotEmpty);
     });
+
+    test('attachment pages appear only when attachment data exists', () async {
+      const generator = PdfGenerator(
+        includeCombined: true,
+        includeDeclaration: false,
+        includePoa: false,
+        includeSupplementary: false,
+        includeNotes: false,
+      );
+
+      // No allergies / crisis plan / self-binding → no attachment pages.
+      final withoutAttachments = await generator.generate(
+        directive: directive,
+        agents: agents,
+        prefs: prefs,
+        additional: additional,
+        guardian: guardian,
+        medications: const [],
+        witnesses: const [],
+      );
+
+      // An allergy → the attachments MultiPage is appended.
+      final withAttachments = await generator.generate(
+        directive: directive,
+        agents: agents,
+        prefs: prefs,
+        additional: additional,
+        guardian: guardian,
+        medications: const [],
+        witnesses: const [],
+        allergies: const [
+          DirectiveAllergy(
+            id: 1,
+            directiveId: 1,
+            kind: 'drug',
+            substance: 'Penicillin',
+            code: '',
+            codeSource: 'manual',
+            severity: 'severe',
+            reactions: 'Hives',
+            notes: '',
+            sortOrder: 0,
+          ),
+        ],
+      );
+
+      expect(_pageCount(withAttachments),
+          greaterThan(_pageCount(withoutAttachments)),
+          reason: 'allergy data must add the attachments page(s)');
+
+      // A crisis plan alone also triggers the attachment (via prefs).
+      final crisisPrefs = prefs.copyWith(
+        crisisPlanJson: '{"helps":["dim lights"]}',
+      );
+      final withCrisisPlan = await generator.generate(
+        directive: directive,
+        agents: agents,
+        prefs: crisisPrefs,
+        additional: additional,
+        guardian: guardian,
+        medications: const [],
+        witnesses: const [],
+      );
+      expect(_pageCount(withCrisisPlan),
+          greaterThan(_pageCount(withoutAttachments)),
+          reason: 'a crisis plan must add the attachments page(s)');
+    });
   });
 }
