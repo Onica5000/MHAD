@@ -624,11 +624,11 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
 }
 
 /// Desktop step rail rendered at widths ≥1000px. Matches the prototype's
-/// `w-wizard` left column (web-wizard-steps.jsx). Read-only in this pass:
-/// it shows progress with completed / current / pending dot states but
-/// does not let the user jump arbitrarily (which would skip per-step
-/// validation). Navigation still happens via Continue / Back at the
-/// bottom bar.
+/// `w-wizard` left column (web-wizard-steps.jsx). Shows progress with
+/// completed / current / pending dot states AND lets the user jump to any
+/// step via [onStepTap] → `_jumpToStep` (which runs the current step's
+/// best-effort validateAndSave first, so jumping can't silently drop
+/// entered data). Continue / Back live directly under the step list.
 class _WideStepRail extends StatelessWidget {
   final List<WizardStep> steps;
   final int currentIndex;

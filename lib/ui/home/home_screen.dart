@@ -94,8 +94,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       backgroundColor: p.scaffoldBackground,
       body: SafeArea(
         bottom: false,
-        // Prototype `w-home`: at >=1000px the dashboard splits into the main
-        // content column + a right "Tools" sidebar (reusing _ToolsGrid). Below
+        // Prototype `w-home`: at >=1000px the dashboard renders
+        // _buildWideDashboard (ToolsGrid is currently narrow-only; the wide
+        // dashboard exposes tools via the sidebar + its own tiles). Below
         // that the mobile single-column layout is unchanged.
         child: Builder(
           builder: (context) {
@@ -798,7 +799,10 @@ class _PastDirectiveRow extends StatelessWidget {
     final updated = DateTime.fromMillisecondsSinceEpoch(directive.updatedAt);
     final stamp = formatShortDate(updated);
     return switch (status) {
-      'complete' => 'Complete · $stamp',
+      // "Prepared", not "Complete": landing on Sign stamps executionDate
+      // (sign_screen.dart), but the app cannot know a paper signature
+      // actually happened — don't overclaim (2026-07-11 UX audit B6).
+      'complete' => 'Prepared · $stamp',
       'expired' => 'Expired · revoke or copy to new',
       'revoked' => 'Revoked · $stamp',
       _ => stamp,
