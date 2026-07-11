@@ -40,6 +40,7 @@ void main() {
         primaryDoctorSpecialty: 'Family medicine',
         primaryDoctorPhone: '412-555-0120',
         lastStepIndex: 10,
+        displayLabel: '',
       );
 
   Directive blankDirective(FormType type) => Directive(
@@ -67,6 +68,7 @@ void main() {
         primaryDoctorSpecialty: '',
         primaryDoctorPhone: '',
         lastStepIndex: 0,
+        displayLabel: '',
       );
 
   const agents = [

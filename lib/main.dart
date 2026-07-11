@@ -20,6 +20,7 @@ import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/responsive_shell.dart';
 import 'package:mhad/utils/platform_utils.dart';
+import 'package:mhad/utils/unsaved_guard.dart';
 
 void main() {
   // Global error handler for Flutter framework errors
@@ -175,6 +176,17 @@ class MhadApp extends ConsumerWidget {
     // (in the theme) and MediaQuery.disableAnimations (for implicit animations).
     final a11y = ref.watch(accessibilitySettingsProvider);
     final locale = Locale(a11y.languageCode);
+    // Web data-loss guard (2026-07-11 UX audit B12): arm the beforeunload
+    // prompt whenever ANY directive exists in the in-memory DB — Sign,
+    // Export, and Assistant used to be unguarded because only the wizard
+    // armed it. `select` keeps this from rebuilding the app on every save.
+    if (kIsWeb) {
+      ref.listen(
+        allDirectivesProvider.select((av) =>
+            av.maybeWhen(data: (l) => l.isNotEmpty, orElse: () => false)),
+        (_, hasData) => setUnsavedGuard(hasData),
+      );
+    }
     return MaterialApp.router(
       title: 'PA Mental Health Advance Directive',
       theme: buildMhadTheme(

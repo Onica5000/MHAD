@@ -315,6 +315,18 @@ class $DirectivesTable extends Directives
     requiredDuringInsert: false,
     defaultValue: const Constant(0),
   );
+  static const VerificationMeta _displayLabelMeta = const VerificationMeta(
+    'displayLabel',
+  );
+  @override
+  late final GeneratedColumn<String> displayLabel = GeneratedColumn<String>(
+    'display_label',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -343,6 +355,7 @@ class $DirectivesTable extends Directives
     primaryDoctorSpecialty,
     primaryDoctorPhone,
     lastStepIndex,
+    displayLabel,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -554,6 +567,15 @@ class $DirectivesTable extends Directives
         ),
       );
     }
+    if (data.containsKey('display_label')) {
+      context.handle(
+        _displayLabelMeta,
+        displayLabel.isAcceptableOrUnknown(
+          data['display_label']!,
+          _displayLabelMeta,
+        ),
+      );
+    }
     return context;
   }
 
@@ -667,6 +689,10 @@ class $DirectivesTable extends Directives
         DriftSqlType.int,
         data['${effectivePrefix}last_step_index'],
       )!,
+      displayLabel: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}display_label'],
+      )!,
     );
   }
 
@@ -703,6 +729,7 @@ class Directive extends DataClass implements Insertable<Directive> {
   final String primaryDoctorSpecialty;
   final String primaryDoctorPhone;
   final int lastStepIndex;
+  final String displayLabel;
   const Directive({
     required this.id,
     required this.formType,
@@ -730,6 +757,7 @@ class Directive extends DataClass implements Insertable<Directive> {
     required this.primaryDoctorSpecialty,
     required this.primaryDoctorPhone,
     required this.lastStepIndex,
+    required this.displayLabel,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -766,6 +794,7 @@ class Directive extends DataClass implements Insertable<Directive> {
     map['primary_doctor_specialty'] = Variable<String>(primaryDoctorSpecialty);
     map['primary_doctor_phone'] = Variable<String>(primaryDoctorPhone);
     map['last_step_index'] = Variable<int>(lastStepIndex);
+    map['display_label'] = Variable<String>(displayLabel);
     return map;
   }
 
@@ -801,6 +830,7 @@ class Directive extends DataClass implements Insertable<Directive> {
       primaryDoctorSpecialty: Value(primaryDoctorSpecialty),
       primaryDoctorPhone: Value(primaryDoctorPhone),
       lastStepIndex: Value(lastStepIndex),
+      displayLabel: Value(displayLabel),
     );
   }
 
@@ -850,6 +880,7 @@ class Directive extends DataClass implements Insertable<Directive> {
         json['primaryDoctorPhone'],
       ),
       lastStepIndex: serializer.fromJson<int>(json['lastStepIndex']),
+      displayLabel: serializer.fromJson<String>(json['displayLabel']),
     );
   }
   @override
@@ -890,6 +921,7 @@ class Directive extends DataClass implements Insertable<Directive> {
       ),
       'primaryDoctorPhone': serializer.toJson<String>(primaryDoctorPhone),
       'lastStepIndex': serializer.toJson<int>(lastStepIndex),
+      'displayLabel': serializer.toJson<String>(displayLabel),
     };
   }
 
@@ -920,6 +952,7 @@ class Directive extends DataClass implements Insertable<Directive> {
     String? primaryDoctorSpecialty,
     String? primaryDoctorPhone,
     int? lastStepIndex,
+    String? displayLabel,
   }) => Directive(
     id: id ?? this.id,
     formType: formType ?? this.formType,
@@ -955,6 +988,7 @@ class Directive extends DataClass implements Insertable<Directive> {
         primaryDoctorSpecialty ?? this.primaryDoctorSpecialty,
     primaryDoctorPhone: primaryDoctorPhone ?? this.primaryDoctorPhone,
     lastStepIndex: lastStepIndex ?? this.lastStepIndex,
+    displayLabel: displayLabel ?? this.displayLabel,
   );
   Directive copyWithCompanion(DirectivesCompanion data) {
     return Directive(
@@ -1010,6 +1044,9 @@ class Directive extends DataClass implements Insertable<Directive> {
       lastStepIndex: data.lastStepIndex.present
           ? data.lastStepIndex.value
           : this.lastStepIndex,
+      displayLabel: data.displayLabel.present
+          ? data.displayLabel.value
+          : this.displayLabel,
     );
   }
 
@@ -1043,7 +1080,8 @@ class Directive extends DataClass implements Insertable<Directive> {
           ..write('primaryDoctorName: $primaryDoctorName, ')
           ..write('primaryDoctorSpecialty: $primaryDoctorSpecialty, ')
           ..write('primaryDoctorPhone: $primaryDoctorPhone, ')
-          ..write('lastStepIndex: $lastStepIndex')
+          ..write('lastStepIndex: $lastStepIndex, ')
+          ..write('displayLabel: $displayLabel')
           ..write(')'))
         .toString();
   }
@@ -1076,6 +1114,7 @@ class Directive extends DataClass implements Insertable<Directive> {
     primaryDoctorSpecialty,
     primaryDoctorPhone,
     lastStepIndex,
+    displayLabel,
   ]);
   @override
   bool operator ==(Object other) =>
@@ -1107,7 +1146,8 @@ class Directive extends DataClass implements Insertable<Directive> {
           other.primaryDoctorName == this.primaryDoctorName &&
           other.primaryDoctorSpecialty == this.primaryDoctorSpecialty &&
           other.primaryDoctorPhone == this.primaryDoctorPhone &&
-          other.lastStepIndex == this.lastStepIndex);
+          other.lastStepIndex == this.lastStepIndex &&
+          other.displayLabel == this.displayLabel);
 }
 
 class DirectivesCompanion extends UpdateCompanion<Directive> {
@@ -1137,6 +1177,7 @@ class DirectivesCompanion extends UpdateCompanion<Directive> {
   final Value<String> primaryDoctorSpecialty;
   final Value<String> primaryDoctorPhone;
   final Value<int> lastStepIndex;
+  final Value<String> displayLabel;
   const DirectivesCompanion({
     this.id = const Value.absent(),
     this.formType = const Value.absent(),
@@ -1164,6 +1205,7 @@ class DirectivesCompanion extends UpdateCompanion<Directive> {
     this.primaryDoctorSpecialty = const Value.absent(),
     this.primaryDoctorPhone = const Value.absent(),
     this.lastStepIndex = const Value.absent(),
+    this.displayLabel = const Value.absent(),
   });
   DirectivesCompanion.insert({
     this.id = const Value.absent(),
@@ -1192,6 +1234,7 @@ class DirectivesCompanion extends UpdateCompanion<Directive> {
     this.primaryDoctorSpecialty = const Value.absent(),
     this.primaryDoctorPhone = const Value.absent(),
     this.lastStepIndex = const Value.absent(),
+    this.displayLabel = const Value.absent(),
   }) : formType = Value(formType),
        createdAt = Value(createdAt),
        updatedAt = Value(updatedAt);
@@ -1222,6 +1265,7 @@ class DirectivesCompanion extends UpdateCompanion<Directive> {
     Expression<String>? primaryDoctorSpecialty,
     Expression<String>? primaryDoctorPhone,
     Expression<int>? lastStepIndex,
+    Expression<String>? displayLabel,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1256,6 +1300,7 @@ class DirectivesCompanion extends UpdateCompanion<Directive> {
       if (primaryDoctorPhone != null)
         'primary_doctor_phone': primaryDoctorPhone,
       if (lastStepIndex != null) 'last_step_index': lastStepIndex,
+      if (displayLabel != null) 'display_label': displayLabel,
     });
   }
 
@@ -1286,6 +1331,7 @@ class DirectivesCompanion extends UpdateCompanion<Directive> {
     Value<String>? primaryDoctorSpecialty,
     Value<String>? primaryDoctorPhone,
     Value<int>? lastStepIndex,
+    Value<String>? displayLabel,
   }) {
     return DirectivesCompanion(
       id: id ?? this.id,
@@ -1318,6 +1364,7 @@ class DirectivesCompanion extends UpdateCompanion<Directive> {
           primaryDoctorSpecialty ?? this.primaryDoctorSpecialty,
       primaryDoctorPhone: primaryDoctorPhone ?? this.primaryDoctorPhone,
       lastStepIndex: lastStepIndex ?? this.lastStepIndex,
+      displayLabel: displayLabel ?? this.displayLabel,
     );
   }
 
@@ -1412,6 +1459,9 @@ class DirectivesCompanion extends UpdateCompanion<Directive> {
     if (lastStepIndex.present) {
       map['last_step_index'] = Variable<int>(lastStepIndex.value);
     }
+    if (displayLabel.present) {
+      map['display_label'] = Variable<String>(displayLabel.value);
+    }
     return map;
   }
 
@@ -1445,7 +1495,8 @@ class DirectivesCompanion extends UpdateCompanion<Directive> {
           ..write('primaryDoctorName: $primaryDoctorName, ')
           ..write('primaryDoctorSpecialty: $primaryDoctorSpecialty, ')
           ..write('primaryDoctorPhone: $primaryDoctorPhone, ')
-          ..write('lastStepIndex: $lastStepIndex')
+          ..write('lastStepIndex: $lastStepIndex, ')
+          ..write('displayLabel: $displayLabel')
           ..write(')'))
         .toString();
   }
@@ -7381,6 +7432,7 @@ typedef $$DirectivesTableCreateCompanionBuilder =
       Value<String> primaryDoctorSpecialty,
       Value<String> primaryDoctorPhone,
       Value<int> lastStepIndex,
+      Value<String> displayLabel,
     });
 typedef $$DirectivesTableUpdateCompanionBuilder =
     DirectivesCompanion Function({
@@ -7410,6 +7462,7 @@ typedef $$DirectivesTableUpdateCompanionBuilder =
       Value<String> primaryDoctorSpecialty,
       Value<String> primaryDoctorPhone,
       Value<int> lastStepIndex,
+      Value<String> displayLabel,
     });
 
 final class $$DirectivesTableReferences
@@ -7737,6 +7790,11 @@ class $$DirectivesTableFilterComposer
 
   ColumnFilters<int> get lastStepIndex => $composableBuilder(
     column: $table.lastStepIndex,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get displayLabel => $composableBuilder(
+    column: $table.displayLabel,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -8083,6 +8141,11 @@ class $$DirectivesTableOrderingComposer
     column: $table.lastStepIndex,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<String> get displayLabel => $composableBuilder(
+    column: $table.displayLabel,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$DirectivesTableAnnotationComposer
@@ -8195,6 +8258,11 @@ class $$DirectivesTableAnnotationComposer
 
   GeneratedColumn<int> get lastStepIndex => $composableBuilder(
     column: $table.lastStepIndex,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get displayLabel => $composableBuilder(
+    column: $table.displayLabel,
     builder: (column) => column,
   );
 
@@ -8469,6 +8537,7 @@ class $$DirectivesTableTableManager
                 Value<String> primaryDoctorSpecialty = const Value.absent(),
                 Value<String> primaryDoctorPhone = const Value.absent(),
                 Value<int> lastStepIndex = const Value.absent(),
+                Value<String> displayLabel = const Value.absent(),
               }) => DirectivesCompanion(
                 id: id,
                 formType: formType,
@@ -8496,6 +8565,7 @@ class $$DirectivesTableTableManager
                 primaryDoctorSpecialty: primaryDoctorSpecialty,
                 primaryDoctorPhone: primaryDoctorPhone,
                 lastStepIndex: lastStepIndex,
+                displayLabel: displayLabel,
               ),
           createCompanionCallback:
               ({
@@ -8525,6 +8595,7 @@ class $$DirectivesTableTableManager
                 Value<String> primaryDoctorSpecialty = const Value.absent(),
                 Value<String> primaryDoctorPhone = const Value.absent(),
                 Value<int> lastStepIndex = const Value.absent(),
+                Value<String> displayLabel = const Value.absent(),
               }) => DirectivesCompanion.insert(
                 id: id,
                 formType: formType,
@@ -8552,6 +8623,7 @@ class $$DirectivesTableTableManager
                 primaryDoctorSpecialty: primaryDoctorSpecialty,
                 primaryDoctorPhone: primaryDoctorPhone,
                 lastStepIndex: lastStepIndex,
+                displayLabel: displayLabel,
               ),
           withReferenceMapper: (p0) => p0
               .map(

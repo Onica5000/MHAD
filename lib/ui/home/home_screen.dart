@@ -33,6 +33,11 @@ class HomeScreen extends ConsumerStatefulWidget {
   ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
+/// Directive ids hidden from Home while their delete-undo snackbar is open
+/// (UX audit B10). The actual repository delete only happens when the
+/// snackbar closes without Undo.
+final pendingDeleteProvider = StateProvider<Set<int>>((_) => <int>{});
+
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   static bool _checkedDraftRecovery = false;
 
@@ -61,7 +66,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final directivesAsync = ref.watch(allDirectivesProvider);
+    // Hide directives whose delete-undo window is still open (B10) — every
+    // downstream branch (narrow drafts/past, wide dashboard) sees the
+    // filtered list.
+    final pendingDelete = ref.watch(pendingDeleteProvider);
+    final directivesAsync = ref.watch(allDirectivesProvider).whenData(
+        (l) => l.where((d) => !pendingDelete.contains(d.id)).toList());
     final privacyMode = ref.watch(privacyModeNotifierProvider);
     final p = Theme.of(context).mhadPalette;
 
@@ -159,6 +169,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         onTap: () =>
                             context.go(AppRoutes.wizardRoute(d.id)),
                         onDelete: () => _confirmDelete(context, ref, d.id),
+                        onRename: () => _renameDirective(context, ref, d),
                       ),
                     ],
                   ],
@@ -219,6 +230,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             : null,
                         onExport: () => context
                             .push(AppRoutes.exportRoute(d.id)),
+                        onRename: () => _renameDirective(context, ref, d),
                       ),
                       const SizedBox(height: 8),
                     ],
@@ -321,6 +333,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   directive: d,
                   onTap: () => context.go(AppRoutes.wizardRoute(d.id)),
                   onDelete: () => _confirmDelete(context, ref, d.id),
+                  onRename: () => _renameDirective(context, ref, d),
                 ),
               ],
               const SizedBox(height: 28),
@@ -429,7 +442,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       builder: (_) => AlertDialog(
         title: const Text('Delete directive?'),
         content: const Text(
-            'This cannot be undone. All data for this directive will be permanently deleted.'),
+            'All data for this directive will be permanently deleted.'),
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(context, false),
@@ -443,10 +456,75 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ],
       ),
     );
-    if (confirmed == true) {
-      await ref.read(directiveRepositoryProvider).deleteDirective(id);
-      await NotificationService.instance.cancelReminders(id);
-    }
+    if (confirmed != true || !context.mounted) return;
+
+    // Soft delete with Undo (UX audit B10): hide the directive immediately
+    // but only delete it for real when the snackbar closes un-undone. This
+    // keeps full fidelity (status/signatures untouched) if the user undoes
+    // — a snapshot-restore would legally have to demote it to a draft.
+    final notifier = ref.read(pendingDeleteProvider.notifier);
+    final repo = ref.read(directiveRepositoryProvider);
+    notifier.update((s) => {...s, id});
+    var undone = false;
+    final controller = ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const Text('Directive deleted.'),
+        duration: const Duration(seconds: 6),
+        action: SnackBarAction(
+          label: 'Undo',
+          onPressed: () {
+            undone = true;
+            notifier.update((s) => s.difference({id}));
+          },
+        ),
+      ),
+    );
+    unawaited(controller.closed.then((_) async {
+      if (!undone) {
+        await repo.deleteDirective(id);
+        await NotificationService.instance.cancelReminders(id);
+        notifier.update((s) => s.difference({id}));
+      }
+    }));
+  }
+
+  /// Rename dialog (UX audit B11): sets the app-side display label so
+  /// multiple directives are distinguishable. Empty input clears the label
+  /// (falls back to the principal's name).
+  Future<void> _renameDirective(
+      BuildContext context, WidgetRef ref, Directive d) async {
+    final ctrl = TextEditingController(text: d.displayLabel);
+    final label = await showDialog<String>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Rename directive'),
+        content: TextField(
+          controller: ctrl,
+          autofocus: true,
+          maxLength: 60,
+          decoration: const InputDecoration(
+            labelText: 'Display label',
+            helperText:
+                'Shown only in this list \u2014 never printed on the form. '
+                'Leave empty to use the name on the directive.',
+            helperMaxLines: 3,
+          ),
+          onSubmitted: (v) => Navigator.pop(ctx, v),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(ctx, ctrl.text),
+            child: const Text('Save'),
+          ),
+        ],
+      ),
+    );
+    if (label == null) return;
+    await ref.read(directiveRepositoryProvider).updateDisplayLabel(d.id, label);
   }
 
   // _confirmRevoke (inline dialog) removed \u2014 the "Revoke" action now opens the
@@ -845,6 +923,7 @@ class _PastDirectiveRow extends StatelessWidget {
   final VoidCallback? onRenew;
   final VoidCallback? onAmend;
   final VoidCallback? onExport;
+  final VoidCallback? onRename;
 
   const _PastDirectiveRow({
     required this.directive,
@@ -854,6 +933,7 @@ class _PastDirectiveRow extends StatelessWidget {
     this.onRenew,
     this.onAmend,
     this.onExport,
+    this.onRename,
   });
 
   String _subLine() {
@@ -881,6 +961,10 @@ class _PastDirectiveRow extends StatelessWidget {
 
   String _nameLine() {
     final year = DateTime.fromMillisecondsSinceEpoch(directive.updatedAt).year;
+    // User-chosen label wins (Rename action, UX audit B11); fall back to
+    // the principal's name.
+    final label = directive.displayLabel.trim();
+    if (label.isNotEmpty) return '$label · $year';
     final n = directive.fullName.trim();
     return n.isEmpty ? 'Directive · $year' : '$n · $year';
   }
@@ -968,6 +1052,18 @@ class _PastDirectiveRow extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              if (onRename != null)
+                ListTile(
+                  leading: Icon(Icons.drive_file_rename_outline,
+                      color: p.primary),
+                  title: const Text('Rename'),
+                  subtitle: const Text(
+                      'Label shown in this list only — never printed'),
+                  onTap: () {
+                    Navigator.pop(sheetCtx);
+                    onRename!();
+                  },
+                ),
               if (onExport != null)
                 ListTile(
                   leading: Icon(Icons.ios_share, color: p.primary),

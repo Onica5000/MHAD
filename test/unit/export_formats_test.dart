@@ -37,6 +37,7 @@ Directive _directive() => const Directive(
       primaryDoctorSpecialty: '',
       primaryDoctorPhone: '',
       lastStepIndex: 0,
+      displayLabel: '',
     );
 
 Agent _agent() => const Agent(

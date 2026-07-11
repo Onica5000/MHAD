@@ -29,7 +29,6 @@ import 'package:mhad/ui/wizard/steps/review_and_sign_step.dart';
 import 'package:mhad/ui/wizard/steps/treatment_facility_step.dart';
 import 'package:mhad/ui/wizard/steps/when_it_kicks_in_step.dart';
 import 'package:mhad/utils/a11y_announce.dart';
-import 'package:mhad/utils/unsaved_guard.dart';
 
 class WizardScreen extends ConsumerStatefulWidget {
   final int directiveId;
@@ -73,10 +72,10 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
   @override
   void initState() {
     super.initState();
-    // On web the directive lives only in memory, so a reload/tab-close while
-    // editing silently loses the work. Arm the browser "leave site?" prompt
-    // while the wizard is open. No-op on native (data persists).
-    setUnsavedGuard(true);
+    // The beforeunload "leave site?" guard is now armed app-wide from
+    // main.dart whenever any directive exists in the in-memory DB (UX
+    // audit B12) — the wizard no longer owns it, so leaving the wizard
+    // for Sign/Export/Assistant stays protected.
     if (kIsWeb) {
       _webCacheHeartbeat = Timer.periodic(
         const Duration(minutes: 1),
@@ -89,7 +88,6 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
   void dispose() {
     _webCacheHeartbeat?.cancel();
     _savedHintTimer?.cancel();
-    setUnsavedGuard(false);
     super.dispose();
   }
 
@@ -422,23 +420,31 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                   ],
                 );
                 if (!shellActive) return mainColumn;
+                // FocusTraversalGroups (UX audit A8): Tab walks the step
+                // rail, then the whole form column, then the AI rail — one
+                // pane at a time in reading order, instead of an
+                // unpredictable interleave across the three columns.
                 return Row(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    _WideStepRail(
-                      steps: steps,
-                      currentIndex: _stepIndex,
-                      onNext: () => _goNext(context, isLastStep),
-                      onBack: _stepIndex > 0 ? _goBack : null,
-                      nextLabel: isLastStep ? 'Preview' :'Next',
-                      nextLoading: _isSaving,
-                      onStepTap: _jumpToStep,
+                    FocusTraversalGroup(
+                      child: _WideStepRail(
+                        steps: steps,
+                        currentIndex: _stepIndex,
+                        onNext: () => _goNext(context, isLastStep),
+                        onBack: _stepIndex > 0 ? _goBack : null,
+                        nextLabel: isLastStep ? 'Preview' :'Next',
+                        nextLoading: _isSaving,
+                        onStepTap: _jumpToStep,
+                      ),
                     ),
                     Container(width: 1, color: p.border),
                     Expanded(
-                      child: ConstrainedBox(
-                        constraints: const BoxConstraints(maxWidth: 760),
-                        child: mainColumn,
+                      child: FocusTraversalGroup(
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 760),
+                          child: mainColumn,
+                        ),
                       ),
                     ),
                     // Prototype `w-wizard` right rail (320px): a contextual AI
@@ -447,15 +453,17 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                     // inside mainColumn takes its place.
                     if (showAiRail) ...[
                       Container(width: 1, color: p.border),
-                      WizardAiRail(
-                        formType: formType.name,
-                        step: currentStep,
-                        stepName: currentStep.displayName,
-                        directiveId: directive.id,
-                        onOpenFull: () => _openStepAi(
-                          context,
-                          formType,
-                          currentStep.displayName,
+                      FocusTraversalGroup(
+                        child: WizardAiRail(
+                          formType: formType.name,
+                          step: currentStep,
+                          stepName: currentStep.displayName,
+                          directiveId: directive.id,
+                          onOpenFull: () => _openStepAi(
+                            context,
+                            formType,
+                            currentStep.displayName,
+                          ),
                         ),
                       ),
                     ],
