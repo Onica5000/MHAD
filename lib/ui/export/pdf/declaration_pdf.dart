@@ -137,7 +137,6 @@ List<pw.Page> buildDeclarationPages({
           guardian: guardian,
           agents: const [],
           docNoun: ft.guardianDocNoun,
-          nomineeUsesTwoCol: false,
         ),
         pw.SizedBox(height: 8),
 

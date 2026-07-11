@@ -112,23 +112,36 @@ def cmd_diff() -> int:
     return 0
 
 
+def _write_png_gray(path: Path, w: int, h: int, data: bytes) -> None:
+    """Minimal 8-bit grayscale PNG writer (no third-party image lib)."""
+    import struct
+    import zlib
+
+    def chunk(tag: bytes, payload: bytes) -> bytes:
+        return (struct.pack(">I", len(payload)) + tag + payload
+                + struct.pack(">I", zlib.crc32(tag + payload)))
+
+    raw = b"".join(b"\x00" + data[y * w:(y + 1) * w] for y in range(h))
+    png = (b"\x89PNG\r\n\x1a\n"
+           + chunk(b"IHDR", struct.pack(">IIBBBBB", w, h, 8, 0, 0, 0, 0))
+           + chunk(b"IDAT", zlib.compress(raw))
+           + chunk(b"IEND", b""))
+    path.write_bytes(png)
+
+
 def _write_diff_image(base_png: Path, cur_png: Path, w: int, h: int,
                       bs: bytes, cs: bytes) -> None:
-    """Side-by-side: baseline | current | changed pixels highlighted."""
+    """Side-by-side: baseline | current | changed pixels (black on white)."""
     gap = 8
-    out = fitz.Pixmap(fitz.csGRAY, fitz.IRect(0, 0, w * 3 + gap * 2, h), 0)
-    # fitz.Pixmap has no blit; build the composite via raw samples.
-    row = bytearray()
+    out_w = w * 3 + gap * 2
     composite = bytearray()
     for y in range(h):
         brow = bs[y * w:(y + 1) * w]
         crow = cs[y * w:(y + 1) * w]
-        drow = bytes(0 if x != y2 else 255 for x, y2 in zip(brow, crow))
-        row = brow + b"\xff" * gap + crow + b"\xff" * gap + drow
-        composite.extend(row)
-    out = fitz.Pixmap(fitz.csGRAY, fitz.IRect(0, 0, w * 3 + gap * 2, h),
-                      bytes(composite))
-    out.save(DIFFS / f"diff_{base_png.name}")
+        drow = bytes(0 if a != b else 255 for a, b in zip(brow, crow))
+        composite += brow + b"\xff" * gap + crow + b"\xff" * gap + drow
+    _write_png_gray(DIFFS / f"diff_{base_png.name}", out_w, h,
+                    bytes(composite))
 
 
 def cmd_rasterize(pdf: str, outdir: str) -> int:

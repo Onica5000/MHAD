@@ -13,6 +13,7 @@ import 'pdf_helpers.dart';
 List<pw.Page> buildLegalLanguagePages({
   required Directive directive,
   required List<Agent> agents,
+  DraftMode draftMode = DraftMode.finalCopy,
 }) {
   final primary = agents.primaryAgent;
   final alternate = agents.alternateAgent;
@@ -57,8 +58,13 @@ List<pw.Page> buildLegalLanguagePages({
 
   return [
     pw.MultiPage(
-      pageFormat: kPageFormat,
-      margin: pageMargins,
+      // Draft watermark applied like the form pages (audit defect #9 — this
+      // path previously skipped it, so a draft printed clean).
+      pageTheme: pw.PageTheme(
+        pageFormat: kPageFormat,
+        margin: pageMargins,
+        buildBackground: (ctx) => draftWatermark(draftMode),
+      ),
       header: (_) => pageHeader('Legal-Language Version (Informational)'),
       footer: (_) =>
           pageFooter('Legal-language version · informational only'),

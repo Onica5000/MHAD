@@ -60,8 +60,10 @@ List<pw.Page> buildPoaPages({
         ...formTitleBlock(ft.titleLines),
         ...introBlock(ft.introParagraphs(name)),
         ...dobBlock(directive),
+        // Primary-care doctor included since the 2026-07-09 PDF audit
+        // (defect #5): the other two forms always rendered it.
         ...diagnosesDoctorBlock(directive, diagnoses,
-            includePrimaryDoctor: false),
+            includePrimaryDoctor: true),
 
         // A / B. Agent designations (the POA leads with them).
         ...agentDesignationSection(
@@ -95,6 +97,10 @@ List<pw.Page> buildPoaPages({
         pw.Text('1. Choice of treatment facility.', style: boldStyle()),
         pw.SizedBox(height: 4),
         ...facilitySection(prefs),
+        // Room/environment preferences included since the 2026-07-09 PDF
+        // audit (defect #4): they rendered on Combined + Declaration but were
+        // silently dropped from POA-only exports.
+        ...roomPreferencesBlock(prefs),
         pw.SizedBox(height: 8),
 
         if (prefs != null) ...hospitalizationAuthorityBlock(prefs),

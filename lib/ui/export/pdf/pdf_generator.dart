@@ -1,7 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:flutter/foundation.dart' show debugPrint;
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:pdf/pdf.dart';
@@ -12,6 +10,7 @@ import 'pdf_helpers.dart';
 import 'declaration_pdf.dart';
 import 'legal_language_pdf.dart';
 import 'notes_pdf.dart';
+import 'pdf_theme.dart';
 import 'poa_pdf.dart';
 import 'supplementary_pdf.dart';
 
@@ -42,32 +41,6 @@ class PdfGenerator {
     this.legalLanguage = false,
   });
 
-  /// Loads the editorial typeface trio (DM Sans regular + bold, Instrument
-  /// Serif italic) and returns a `pw.ThemeData` so every page inherits the
-  /// same typography the app uses on screen. Falls back to the default
-  /// Helvetica theme if asset loading fails (e.g. inside unit tests that
-  /// do not initialise the Flutter test binding).
-  Future<pw.ThemeData?> _loadEditorialTheme() async {
-    try {
-      final dmRegular = pw.Font.ttf(
-          await rootBundle.load('assets/fonts/DMSans-Regular.ttf'));
-      final dmBold = pw.Font.ttf(
-          await rootBundle.load('assets/fonts/DMSans-Bold.ttf'));
-      final serifItalic = pw.Font.ttf(
-          await rootBundle.load('assets/fonts/InstrumentSerif-Italic.ttf'));
-      // boldItalic falls back to italic; that's fine for legal-form copy.
-      return pw.ThemeData.withFont(
-        base: dmRegular,
-        bold: dmBold,
-        italic: serifItalic,
-      );
-    } catch (e) {
-      debugPrint('PDF theme: editorial fonts unavailable, '
-          'falling back to default Helvetica: $e');
-      return null;
-    }
-  }
-
   Future<Uint8List> generate({
     required Directive directive,
     required List<Agent> agents,
@@ -78,7 +51,7 @@ class PdfGenerator {
     required List<WitnessesData> witnesses,
     List<DiagnosisEntry> diagnoses = const [],
   }) async {
-    final theme = await _loadEditorialTheme();
+    final theme = await loadEditorialTheme();
 
     // Metadata marker follows the chosen print type (draftMode), so a "Final
     // copy" export has clean metadata even while the directive is a draft.
@@ -110,6 +83,7 @@ class PdfGenerator {
       pages.addAll(buildLegalLanguagePages(
         directive: directive,
         agents: agents,
+        draftMode: draftMode,
       ));
       for (final page in pages) {
         pdf.addPage(page);

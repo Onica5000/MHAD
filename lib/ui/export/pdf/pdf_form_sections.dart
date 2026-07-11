@@ -316,6 +316,23 @@ List<pw.Widget> medicationPreferencesSection({
     genericNote: genericNote,
   );
 
+  // Conditional medication consent (audit defect #6): unlike ECT /
+  // experimental / drug trials, the medication field had no
+  // 'conditional:' printing, so a conditional value (reachable via AI
+  // autofill) would silently vanish. Mirrors the procedure sections.
+  final conditionalRows = isConsentConditional(prefs.medicationConsent)
+      ? <pw.Widget>[
+          checkRow(
+            'I consent to medications under the following conditions:',
+            checked: true,
+          ),
+          dataBlock(
+            'Conditions:',
+            consentConditionText(prefs.medicationConsent),
+          ),
+        ]
+      : const <pw.Widget>[];
+
   switch (variant) {
     case MedsSectionVariant.declaration:
     case MedsSectionVariant.combined:
@@ -333,6 +350,7 @@ List<pw.Widget> medicationPreferencesSection({
           checked: prefs.medicationConsent == consentYes && hasLists,
         ),
         ...tables,
+        ...conditionalRows,
         if (variant == MedsSectionVariant.combined)
           checkRow(
             'I have designated an agent under the Power of Attorney portion of this '
@@ -361,6 +379,7 @@ List<pw.Widget> medicationPreferencesSection({
               hasLists,
         ),
         ...tables,
+        ...conditionalRows,
         checkRow(
           'My agent is not authorized to consent to the use of any medications.',
           checked: prefs.medicationConsent == consentNo,
@@ -721,10 +740,6 @@ List<pw.Widget> guardianSection({
   required GuardianNomination? guardian,
   required List<Agent> agents,
   required String docNoun,
-  // Pre-globalization parity: the Declaration renderer printed the nominee
-  // without the City/State/Zip line (defect #11 — the official form p. 37
-  // has it). Removed in P3; until then the Declaration passes false.
-  bool nomineeUsesTwoCol = true,
 }) {
   final g = resolveGuardianDisplay(guardian, agents);
   return [
@@ -742,13 +757,10 @@ List<pw.Widget> guardianSection({
       dataLine('Name of Person', g.fullName),
       if (g.relationship.isNotEmpty) dataLine('Relationship', g.relationship),
       dataLine('Address', g.address),
-      if (nomineeUsesTwoCol)
-        twoCol(
-          dataLine('City, State, Zip Code', g.cityStateZip),
-          dataLine('Phone Number', g.phone),
-        )
-      else
+      twoCol(
+        dataLine('City, State, Zip Code', g.cityStateZip),
         dataLine('Phone Number', g.phone),
+      ),
     ] else ...[
       blankLine('Name of Person'),
       blankLine('Address'),
