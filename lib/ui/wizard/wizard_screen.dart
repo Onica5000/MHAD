@@ -333,6 +333,9 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                         child: StepDots(
                           current: _stepIndex + 1,
                           total: steps.length,
+                          // Mobile parity with the desktop rail: tap a bar
+                          // to jump to that step (UX audit B7).
+                          onStepTap: _jumpToStep,
                         ),
                       ),
                     // The single exit-to-home affordance now lives in the

@@ -166,6 +166,27 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
   String _statusMessage = '';
   String? _error;
 
+  // Monotonic id of the current extract/validate run. Cancel bumps it, so
+  // any in-flight run notices its id is stale after the next await and
+  // stops without applying anything (UX audit B8 — a long AI read used to
+  // be unabortable).
+  int _processingRunId = 0;
+
+  /// Aborts the in-flight extract/validate run and returns to the pick
+  /// step. The stale run's awaits still complete but their results are
+  /// discarded (checked via [_processingRunId]).
+  void _cancelProcessing() {
+    _processingRunId++;
+    setState(() {
+      _step = _PipelineStep.pick;
+      _statusMessage = '';
+      _error = null;
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Processing cancelled — nothing was applied.')),
+    );
+  }
+
   // The form the user is filling. In modal mode it's fixed (the wizard's type);
   // in standalone the user picks it BEFORE extraction so the AI only reads/
   // returns the fields that form uses. Defaults to the constructor value.
@@ -432,6 +453,9 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
     }
 
     // ── Step 1: Extract each page one at a time, merge results ────
+    final runId = ++_processingRunId;
+    // Stale after Cancel (or a newer run) — results must be discarded.
+    bool cancelled() => !mounted || runId != _processingRunId;
     setState(() {
       _step = _PipelineStep.extracting;
       _statusMessage = 'Extracting page 1 of ${docs.length}...';
@@ -453,7 +477,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
       String? irrelevantKind;
 
       for (var i = 0; i < docs.length; i++) {
-        if (!mounted) return;
+        if (cancelled()) return;
         setState(() {
           _statusMessage = docs.length > 1
               ? 'Extracting page ${i + 1} of ${docs.length}...'
@@ -469,6 +493,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
           mimeType: docs[i].mimeType,
           formType: _activeFormType,
         );
+        if (cancelled()) return;
 
         // Record this extraction in the rate tracker
         // Images: ~258 tokens per 768x768 tile; 1024px image ≈ 2 tiles ≈ 516 tokens
@@ -502,7 +527,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
         }
       }
 
-      if (!mounted) return;
+      if (cancelled()) return;
       _piiStripped = allPii;
 
       // No uploaded file was a health/care document — refuse to use any of it.
@@ -538,7 +563,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
       });
 
       final validated = await ClinicalDataValidator.validate(merged);
-      if (!mounted) return;
+      if (cancelled()) return;
 
       // Build review data + reconcile against the directive's current values
       _validated = validated;
@@ -547,13 +572,14 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
       // state / county, fill them from the ZIP (Zippopotam + FCC) so the
       // declarant + designated people land more complete. Best-effort.
       await _geoBackfillReview();
-      if (!mounted) return;
+      if (cancelled()) return;
       await _buildReconciliation();
-      if (!mounted) return;
+      if (cancelled()) return;
 
       setState(() => _step = _PipelineStep.review);
     } catch (e) {
-      if (mounted) {
+      // A cancelled run's failure must not clobber the pick step's state.
+      if (mounted && runId == _processingRunId) {
         setState(() {
           _error = FriendlyError.from(e);
           _step = _PipelineStep.pick;
@@ -578,9 +604,15 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
       canPop: !isProcessing,
       onPopInvokedWithResult: (didPop, _) {
         if (!didPop && isProcessing) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Please wait while processing...')),
-          );
+          if (_step == _PipelineStep.generating) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Please wait while processing...')),
+            );
+          } else {
+            // Back during extract/validate = cancel back to the pick step
+            // (UX audit B8) — the user can then leave normally.
+            _cancelProcessing();
+          }
         }
       },
       child: Scaffold(

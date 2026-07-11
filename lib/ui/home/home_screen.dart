@@ -149,6 +149,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     // "Continue where you left off" sits BELOW the form picker
                     // (under "You can switch form types later").
                     ActiveDirectiveHero(directive: drafts.first),
+                    // Additional drafts used to be invisible (only the most
+                    // recent got the hero) — list them with their step
+                    // progress (UX audit B9).
+                    for (final d in drafts.skip(1)) ...[
+                      const SizedBox(height: 8),
+                      _PastDirectiveRow(
+                        directive: d,
+                        onTap: () =>
+                            context.go(AppRoutes.wizardRoute(d.id)),
+                        onDelete: () => _confirmDelete(context, ref, d.id),
+                      ),
+                    ],
                   ],
                 );
               },
@@ -301,6 +313,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ActiveDirectiveHero(directive: drafts.first),
+              // Additional drafts with step progress (UX audit B9) — they
+              // used to be unreachable from the dashboard.
+              for (final d in drafts.skip(1)) ...[
+                const SizedBox(height: 8),
+                _PastDirectiveRow(
+                  directive: d,
+                  onTap: () => context.go(AppRoutes.wizardRoute(d.id)),
+                  onDelete: () => _confirmDelete(context, ref, d.id),
+                ),
+              ],
               const SizedBox(height: 28),
               newDirective,
             ],
@@ -838,6 +860,14 @@ class _PastDirectiveRow extends StatelessWidget {
     final status = directive.status;
     final updated = DateTime.fromMillisecondsSinceEpoch(directive.updatedAt);
     final stamp = formatShortDate(updated);
+    if (status == 'draft') {
+      // Returning users should see how far they got (UX audit B9).
+      final formType =
+          formTypeFromName(directive.formType) ?? FormType.combined;
+      final total = formType.steps.length;
+      final step = (directive.lastStepIndex + 1).clamp(1, total);
+      return 'Draft · step $step of $total · $stamp';
+    }
     return switch (status) {
       // "Prepared", not "Complete": landing on Sign stamps executionDate
       // (sign_screen.dart), but the app cannot know a paper signature
