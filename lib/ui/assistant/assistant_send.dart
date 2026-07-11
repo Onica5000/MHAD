@@ -33,6 +33,10 @@ class AssistantSendResult {
   /// Number of old messages trimmed to fit the context window.
   final int trimmedCount;
 
+  /// True when the request was issued but the model call threw (an error
+  /// turn was appended) — the caller can offer a Retry.
+  final bool sendFailed;
+
   const AssistantSendResult({
     this.sent = false,
     this.needsKey = false,
@@ -41,6 +45,7 @@ class AssistantSendResult {
     this.blockReason,
     this.piiStripped = false,
     this.trimmedCount = 0,
+    this.sendFailed = false,
   });
 }
 
@@ -122,6 +127,7 @@ Future<AssistantSendResult> sendAssistantMessage(
   ref.read(isSendingProvider.notifier).state = true;
   onSent?.call();
 
+  var sendFailed = false;
   try {
     final reply = await assistant.sendMessage(
       trimmed,
@@ -134,6 +140,7 @@ Future<AssistantSendResult> sendAssistantMessage(
         );
   } catch (e) {
     debugPrint('AI assistant error: $e');
+    sendFailed = true;
     ref.read(conversationProvider.notifier).add(
           ChatMessage(
             role: MessageRole.assistant,
@@ -148,6 +155,34 @@ Future<AssistantSendResult> sendAssistantMessage(
     sent: true,
     piiStripped: piiStripped,
     trimmedCount: trimmedCount,
+    sendFailed: sendFailed,
+  );
+}
+
+/// Re-sends the last user turn after a failed model call: pops the trailing
+/// error reply + its user turn from the conversation, then runs the normal
+/// [sendAssistantMessage] pipeline again with the same text. No-op when the
+/// conversation doesn't end in (user turn, assistant turn).
+Future<AssistantSendResult> retryLastSend(
+  WidgetRef ref, {
+  required Future<bool> Function() requestConsent,
+  AssistantContext? assistantContext,
+  VoidCallback? onSent,
+}) async {
+  final convo = ref.read(conversationProvider);
+  if (convo.length < 2) return const AssistantSendResult();
+  final last = convo[convo.length - 1];
+  final prev = convo[convo.length - 2];
+  if (last.role != MessageRole.assistant || prev.role != MessageRole.user) {
+    return const AssistantSendResult();
+  }
+  ref.read(conversationProvider.notifier).removeLast(2);
+  return sendAssistantMessage(
+    ref,
+    text: prev.content,
+    requestConsent: requestConsent,
+    assistantContext: assistantContext,
+    onSent: onSent,
   );
 }
 

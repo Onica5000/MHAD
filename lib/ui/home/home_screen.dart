@@ -224,7 +224,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
               error: (e, _) {
                 debugPrint('Error loading directives: $e');
-                return const DirectiveFormChoice();
+                // Don't silently render the form picker — that reads as
+                // "my directives vanished" (2026-07-11 UX audit B4).
+                return const _DirectivesLoadError();
               },
             ),
           ],
@@ -271,7 +273,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (e, _) {
         debugPrint('Error loading directives: $e');
-        return WebDashboardLanding(isPublic: isPublic);
+        // Same as the narrow branch: surface the failure instead of
+        // silently rendering the empty-state landing (UX audit B4).
+        return const Center(child: _DirectivesLoadError());
       },
       data: (directives) {
         // First-time / no-directive web user → the editorial landing
@@ -763,6 +767,42 @@ class _PublicGuestGreeting extends StatelessWidget {
         height: 1.05,
         letterSpacing: -0.5,
         fontWeight: FontWeight.w400,
+      ),
+    );
+  }
+}
+
+/// Visible failure state for the directives stream (UX audit B4): says what
+/// happened and offers a one-tap retry, instead of silently rendering the
+/// empty-state form picker as if the user's directives never existed.
+class _DirectivesLoadError extends ConsumerWidget {
+  const _DirectivesLoadError();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final p = Theme.of(context).mhadPalette;
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 24),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.cloud_off_outlined, size: 32, color: p.textMuted),
+          const SizedBox(height: 10),
+          Semantics(
+            liveRegion: true,
+            child: Text(
+              "Couldn't load your directives.",
+              textAlign: TextAlign.center,
+              style: TextStyle(color: p.text),
+            ),
+          ),
+          const SizedBox(height: 12),
+          OutlinedButton.icon(
+            onPressed: () => ref.invalidate(allDirectivesProvider),
+            icon: const Icon(Icons.refresh),
+            label: const Text('Retry'),
+          ),
+        ],
       ),
     );
   }

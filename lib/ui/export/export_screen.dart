@@ -308,8 +308,11 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       debugPrint('PDF export failed: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text("Couldn't generate the PDF. Please try again.")),
+          SnackBar(
+            content: const Text("Couldn't generate the PDF."),
+            action: SnackBarAction(
+                label: 'Retry', onPressed: _generateAndShare),
+          ),
         );
       }
     } finally {
@@ -378,8 +381,10 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       debugPrint('PDF export failed: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text("Couldn't generate the PDF. Please try again.")),
+          SnackBar(
+            content: const Text("Couldn't generate the PDF."),
+            action: SnackBarAction(label: 'Retry', onPressed: _previewPdf),
+          ),
         );
       }
     } finally {

@@ -28,6 +28,7 @@ import 'package:mhad/ui/wizard/steps/procedures_research_step.dart';
 import 'package:mhad/ui/wizard/steps/review_and_sign_step.dart';
 import 'package:mhad/ui/wizard/steps/treatment_facility_step.dart';
 import 'package:mhad/ui/wizard/steps/when_it_kicks_in_step.dart';
+import 'package:mhad/utils/a11y_announce.dart';
 import 'package:mhad/utils/unsaved_guard.dart';
 
 class WizardScreen extends ConsumerStatefulWidget {
@@ -51,6 +52,11 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
   int _stepIndex = 0;
   List<WizardStep>? _steps;
   bool _isSaving = false;
+  // Transient "✓ Saved" hint after a successful autosave (UX audit B5) —
+  // users otherwise get no feedback that navigation persisted their step.
+  bool _showSavedHint = false;
+  DateTime? _lastSavedFlash;
+  Timer? _savedHintTimer;
   // Set once we've canonicalised the URL with a step param (or arrived with
   // one), so the resume-redirect only fires a single time.
   bool _resumed = false;
@@ -82,8 +88,28 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
   @override
   void dispose() {
     _webCacheHeartbeat?.cancel();
+    _savedHintTimer?.cancel();
     setUnsavedGuard(false);
     super.dispose();
+  }
+
+  /// Flashes a transient "✓ Saved" hint (throttled to one per 4s so rapid
+  /// step-hopping doesn't strobe) and politely announces it to screen
+  /// readers. Called after a successful best-effort autosave.
+  void _flashSavedHint() {
+    final now = DateTime.now();
+    if (_lastSavedFlash != null &&
+        now.difference(_lastSavedFlash!) < const Duration(seconds: 4)) {
+      return;
+    }
+    _lastSavedFlash = now;
+    _savedHintTimer?.cancel();
+    if (!mounted) return;
+    announce(context, 'Progress saved');
+    setState(() => _showSavedHint = true);
+    _savedHintTimer = Timer(const Duration(milliseconds: 1800), () {
+      if (mounted) setState(() => _showSavedHint = false);
+    });
   }
 
   Future<void> _persistStep(int index) async {
@@ -155,9 +181,30 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                   Semantics(
                     liveRegion: true,
                     child: const Text(
-                      'Unable to load this directive.\nPlease go back and try again.',
+                      'Unable to load this directive.',
                       textAlign: TextAlign.center,
                     ),
+                  ),
+                  const SizedBox(height: 20),
+                  // Don't dead-end: give the user a way to retry the load
+                  // and a way home (2026-07-11 UX audit B1).
+                  Wrap(
+                    spacing: 12,
+                    runSpacing: 8,
+                    alignment: WrapAlignment.center,
+                    children: [
+                      OutlinedButton.icon(
+                        onPressed: () => ref.invalidate(
+                            directiveByIdProvider(widget.directiveId)),
+                        icon: const Icon(Icons.refresh),
+                        label: const Text('Retry'),
+                      ),
+                      FilledButton.icon(
+                        onPressed: () => context.go(AppRoutes.home),
+                        icon: const Icon(Icons.home_outlined),
+                        label: const Text('Back to home'),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -300,10 +347,51 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                       onExit: () => _saveAndExit(context),
                     ),
                     Expanded(
-                      child: _buildStep(
-                        currentStep,
-                        directive.id,
-                        formType,
+                      // Stack so the transient "✓ Saved" chip (UX audit B5)
+                      // overlays the step content without shifting layout.
+                      child: Stack(
+                        children: [
+                          _buildStep(
+                            currentStep,
+                            directive.id,
+                            formType,
+                          ),
+                          Positioned(
+                            top: 4,
+                            right: 16,
+                            child: IgnorePointer(
+                              child: AnimatedOpacity(
+                                opacity: _showSavedHint ? 1 : 0,
+                                duration: const Duration(milliseconds: 200),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 5),
+                                  decoration: BoxDecoration(
+                                    color: p.card,
+                                    border: Border.all(color: p.border),
+                                    borderRadius: BorderRadius.circular(999),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(Icons.check,
+                                          size: 14, color: p.textMuted),
+                                      const SizedBox(width: 5),
+                                      Text(
+                                        'Saved',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: p.textMuted,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     // Prototype `w-wiz-mobile`: the AI rail collapses to a slim
@@ -461,6 +549,9 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
       if (state != null && state is WizardStepMixin) {
         try {
           stepValid = await (state as WizardStepMixin).validateAndSave();
+          // Only flash "Saved" when there's no competing "incomplete"
+          // snackbar, so the two messages never contradict each other.
+          if (stepValid && mounted && !isLastStep) _flashSavedHint();
         } catch (e) {
           debugPrint('Step save error (non-blocking): $e');
         }
@@ -509,6 +600,7 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
     if (state is WizardStepMixin) {
       try {
         await (state as WizardStepMixin).validateAndSave();
+        if (mounted) _flashSavedHint();
       } catch (e) {
         debugPrint('Auto-save on back failed: $e');
       }
@@ -528,6 +620,7 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
     if (state is WizardStepMixin) {
       try {
         await (state as WizardStepMixin).validateAndSave();
+        if (mounted) _flashSavedHint();
       } catch (e) {
         debugPrint('Auto-save on step-jump failed: $e');
       }
