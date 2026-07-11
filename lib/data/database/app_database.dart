@@ -146,9 +146,10 @@ class DirectivePrefs extends Table {
   TextColumn get crisisPlanJson =>
       text().withDefault(const Constant(''))();
   // Phase 4 — Self-binding (Ulysses) clause opt-in.
-  // Per v3 prototype: PA Act 194 § 5802 makes self-binding structural; this
-  // toggle confirms the principal acknowledges the structural effect.
-  // Schema 10.
+  // Per v3 prototype: PA Act 194 makes self-binding structural (revocation
+  // requires capacity, §§ 5825/5839; the directive stays in effect during
+  // incapacity, §§ 5824(e)/5834(c)); this toggle confirms the principal
+  // acknowledges the structural effect. Schema 10.
   BoolColumn get selfBindingEnabled =>
       boolean().withDefault(const Constant(false))();
   // "Are you experiencing these side effects?" checklist (Schema 18). JSON:
@@ -515,7 +516,8 @@ class AppDatabase extends _$AppDatabase {
           }
           if (from < 20) {
             // Dosage for currently-taking medications (informational, for the
-            // care team — not binding under 20 Pa.C.S. § 5808).
+            // care team — the official form itself states dosage instructions
+            // are not binding on the physician).
             await customStatement(
                 "ALTER TABLE medication_entries ADD COLUMN dosage "
                 "TEXT NOT NULL DEFAULT ''");

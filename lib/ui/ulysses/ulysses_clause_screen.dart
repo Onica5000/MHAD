@@ -15,8 +15,9 @@ import 'package:mhad/ui/widgets/design/wizard_header.dart';
 ///
 /// IMPORTANT (per v3): in Pennsylvania, self-binding is **structural, not
 /// opt-in** — once two qualified professionals find the principal incapable,
-/// the directive can only be revoked when capacity returns (20 Pa.C.S.
-/// § 5808). The toggle on this screen simply records the principal's
+/// the directive can only be revoked when capacity returns (revocation:
+/// 20 Pa.C.S. §§ 5825, 5839; continued effect during incapacity:
+/// §§ 5824(e), 5834(c)). The toggle on this screen simply records the principal's
 /// **acknowledgment** that they understand this structural effect, so the
 /// rendered PDF can include a one-line acknowledgment that the principal
 /// reviewed the boundary.
@@ -178,11 +179,11 @@ class _UlyssesClauseScreenState extends ConsumerState<UlyssesClauseScreen> {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'Per PA Act 194 (20 Pa.C.S. § 5808), this directive '
-                          "may be revoked only while I have capacity. Once I'm "
-                          "found incapable, what I wrote here stands — even "
-                          'over my in-the-moment protest — until capacity '
-                          'returns.',
+                          'Per PA Act 194 (20 Pa.C.S. §§ 5825, 5839), this '
+                          'directive may be revoked only while I have '
+                          "capacity. Once I'm found incapable, what I wrote "
+                          'here stands — even over my in-the-moment protest — '
+                          'until capacity returns.',
                           style: TextStyle(
                             fontFamily: kSansFamily,
                             fontSize: 13.5,
@@ -245,7 +246,8 @@ class _BoundariesCard extends StatelessWidget {
       'Does not authorize physical restraint',
       'A court-appointed guardian (not the agent) may revoke, suspend, or terminate',
       'My directive still terminates at 2 years — unless I am incapable when '
-          'it would expire, in which case it remains in effect (§ 5808)',
+          'it would expire, in which case it remains in effect '
+          '(§§ 5824(e), 5834(c))',
     ];
     return Card(
       child: Padding(

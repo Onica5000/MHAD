@@ -85,7 +85,7 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
       children: [
         const WizardHelpButton(
           helpText:
-              'Per 20 Pa.C.S. § 5821 / § 5832, a Mental Health Advance '
+              'Per 20 Pa.C.S. § 5822 / § 5832, a Mental Health Advance '
               'Directive must be signed on paper by you and two adult '
               'witnesses, all present at the same time. The app cannot '
               "witness it for you — this step walks you through what to do.",

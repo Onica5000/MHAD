@@ -162,7 +162,8 @@ void main() {
       expect(pages, isNotEmpty);
     });
 
-    test('returns exactly one page', () {
+    test('returns a single MultiPage (content may flow across printed pages)',
+        () {
       final pages = buildSupplementaryPages();
       expect(pages, hasLength(1));
     });

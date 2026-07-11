@@ -26,8 +26,9 @@ class PickedContactData {
 /// `showContactPickerSheet` editorial bottom sheet (see prototype
 /// `ScrContactPicker`, mobile-extra.jsx L2327-2470) instead of the
 /// OS-native `FlutterContacts.native.showPicker()`. The sheet adds the
-/// prototype's eligibility heuristics (PA Act 194 § 5822 disqualifiers —
-/// under 18 is a hard block, provider-looking names get a soft warn).
+/// prototype's eligibility heuristics (agents must be adults per
+/// 20 Pa.C.S. § 5835; witness disqualifiers per §§ 5822/5832 — under 18 is a
+/// hard block, provider-looking names get a soft warn).
 /// Function preserved: the button still says "Import from Contacts",
 /// still produces a `PickedContactData` on success, still surfaces a
 /// snackbar when fields are missing, and still no-ops on non-mobile.

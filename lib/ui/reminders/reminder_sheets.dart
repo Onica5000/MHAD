@@ -180,7 +180,12 @@ class _RenewSheet extends StatelessWidget {
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
-                              const TextSpan(text: '.'),
+                              const TextSpan(
+                                  text:
+                                      '. (If you are incapable of making mental '
+                                      'health decisions when it would expire, it '
+                                      'stays in effect until your capacity '
+                                      'returns.)'),
                             ],
                           ),
                         ),

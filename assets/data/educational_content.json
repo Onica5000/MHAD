@@ -517,8 +517,8 @@
     },
     "supp_incapacity_declaration": {
       "category": "supplementary",
-      "title": "Declaration of Incapacity (§5811)",
-      "content": "Under 20 Pa.C.S. §5811, a declaration of incapacity requires evaluation by two qualified professionals:\n\n1. A psychiatrist must be one of the evaluating professionals\n2. The second evaluator may be: another psychiatrist, a licensed psychologist, your family physician, your attending physician, or another mental health treatment professional\n\nBoth evaluators must agree that you lack capacity before your directive becomes operative. You are presumed to have capacity unless a proper declaration of incapacity has been made.\n\nThe declaration of incapacity must be documented in your medical records. Once capacity is restored (as certified by the same types of professionals), the directive ceases to be operative, though it remains valid for future use until it expires or is revoked."
+      "title": "Determination of Incapacity (§§5823, 5833)",
+      "content": "Under the statutory form language in 20 Pa.C.S. §§5823 and 5833 (which your directive incorporates), the determination that you are incapable of making mental health care decisions requires evaluation by two qualified professionals:\n\n1. A psychiatrist must be one of the evaluating professionals\n2. The second evaluator may be: another psychiatrist, a licensed psychologist, your family physician, your attending physician, or another mental health treatment professional\n\nBoth evaluators must agree that you lack capacity before your directive becomes operative. You are presumed to have capacity unless a proper declaration of incapacity has been made.\n\nThe declaration of incapacity must be documented in your medical records. Once capacity is restored (as certified by the same types of professionals), the directive ceases to be operative, though it remains valid for future use until it expires or is revoked."
     },
     "supp_resources": {
       "category": "supplementary",

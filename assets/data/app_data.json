@@ -97,15 +97,15 @@
       "citation": "50 P.S. §7301-7306"
     },
     "citations": {
-      "providerMustComply": "20 Pa.C.S. §5842",
-      "incapacityDetermination": "20 Pa.C.S. §5811",
-      "revocation": "20 Pa.C.S. §5808",
+      "providerMustComply": "20 Pa.C.S. §§5804, 5842",
+      "incapacityDetermination": "20 Pa.C.S. §§5823, 5833",
+      "revocation": "20 Pa.C.S. §§5825, 5839",
       "substitutedJudgment": "20 Pa.C.S. §5836",
       "conflictingDirectives": "20 Pa.C.S. §5844",
       "interstateValidity": "20 Pa.C.S. §5845",
       "criminalPenalty": "20 Pa.C.S. §5806",
       "goodFaithImmunity": "20 Pa.C.S. §5805",
-      "psychosurgeryProhibition": "20 Pa.C.S. §5804"
+      "psychosurgeryProhibition": "20 Pa.C.S. §5836(b)"
     },
     "proseLocations": [
       "lib/data/educational_content.dart",

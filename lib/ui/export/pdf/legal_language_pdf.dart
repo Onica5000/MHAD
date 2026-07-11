@@ -29,8 +29,8 @@ List<pw.Page> buildLegalLanguagePages({
 
   final paras = <String>[
     'I, $name, being of sound mind and at least eighteen (18) years of age, do '
-        'hereby execute this Mental Health Advance Directive pursuant to the '
-        'Mental Health Advance Directive Act of 2004, 20 Pa.C.S. Ch. 58.',
+        'hereby execute this Mental Health Advance Directive pursuant to '
+        'Pennsylvania Act 194 of 2004, 20 Pa.C.S. Ch. 58.',
     'This Directive shall become effective upon a written determination by a '
         'psychiatrist and one of the following: another psychiatrist, a licensed '
         'psychologist, a family physician, an attending physician, or a mental '

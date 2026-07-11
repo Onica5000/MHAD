@@ -9,7 +9,7 @@ import 'package:mhad/ui/wizard/widgets/contact_picker_button.dart'
 /// Eligibility verdict for a candidate contact.
 enum _Eligibility {
   /// Under 18 — hard block; the user can't select this contact for the
-  /// agent role (PA Act 194 § 5822 disqualifies minors).
+  /// agent role (agents must be adults, 20 Pa.C.S. § 5835).
   blocked,
 
   /// Name pattern suggests a provider — soft warning; the user can

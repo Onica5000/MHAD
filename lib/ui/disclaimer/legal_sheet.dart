@@ -275,7 +275,7 @@ List<_SectionData> _buildSections(MhadPalette p) {
           _bold('must comply'),
           const TextSpan(
               text:
-                  ' with your directive (20 Pa.C.S. § 5837). However, a provider may decline to follow specific instructions that are against accepted medical practice, or when the provider is not physically available.'),
+                  ' with your directive (20 Pa.C.S. §§ 5804, 5842). However, a provider may decline to follow specific instructions that are against accepted medical practice, or when the provider is not physically available.'),
         ], palette: p),
       ],
     ),

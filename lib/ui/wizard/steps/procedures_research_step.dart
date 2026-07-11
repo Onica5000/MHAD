@@ -83,7 +83,7 @@ class _ProceduresResearchStepState
           variant: InfoBannerVariant.info,
         ),
         const SizedBox(height: 12),
-        // FACTUAL_ANALYSIS C4 / F8 + F9 — Per § 5808 / § 5836(c), an agent
+        // FACTUAL_ANALYSIS C4 / F8 + F9 — Per § 5836(c), an agent
         // CANNOT consent to ECT, experimental studies, or drug trials unless
         // you expressly grant that power in the directive. Without an
         // express grant, only YOU can consent (or refuse).
@@ -98,10 +98,12 @@ class _ProceduresResearchStepState
           variant: InfoBannerVariant.warning,
         ),
         const SizedBox(height: 12),
-        // FACTUAL_ANALYSIS C4 / F10 — Hard statutory exclusions per § 5804
-        // (and § 5808): "Mental health care does not include psychosurgery
-        // or termination of parental rights." An agent may NEVER consent to
-        // these. Rendered as read-only so users understand the limit.
+        // FACTUAL_ANALYSIS C4 / F10 — Hard statutory exclusions per
+        // § 5836(b): "A mental health power of attorney may not convey the
+        // power to relinquish parental rights or consent to psychosurgery."
+        // An agent may NEVER consent to these. Rendered as read-only so
+        // users understand the limit. (Cite corrected 2026-07-11 legal
+        // audit — §§ 5804/5808 do not contain this rule.)
         _NeverAuthorizedCard(),
         SizedBox(height: 4, child: Container(color: p.scaffoldBackground)),
       ],
@@ -110,8 +112,8 @@ class _ProceduresResearchStepState
 }
 
 /// Read-only "Never authorized under PA Act 194" card. Surfaces the two
-/// statutory hard exclusions (§ 5804) so users understand that no clause
-/// they write — and no agent decision — can authorize them.
+/// statutory hard exclusions (§ 5836(b)) so users understand that no
+/// clause they write — and no agent decision — can authorize them.
 class _NeverAuthorizedCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -154,9 +156,9 @@ class _NeverAuthorizedCard extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           Text(
-            'By statute (20 Pa.C.S. § 5804), mental health care under this '
-            'directive does NOT include the following — no clause in this '
-            'document and no decision by your agent can authorize them:',
+            'By statute (20 Pa.C.S. § 5836(b)), this directive can never '
+            'convey the power to consent to the following — no clause in '
+            'this document and no decision by your agent can authorize them:',
             style: TextStyle(
               fontFamily: kSansFamily,
               fontSize: 12.5,

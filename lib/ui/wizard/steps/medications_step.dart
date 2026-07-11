@@ -208,7 +208,8 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
             stepId: 'medications',
           ),
           const SizedBox(height: 8),
-          // FACTUAL_ANALYSIS C5 / F16 \u2014 PA Act 194 \u00a7 5823(B)(2) / \u00a7 5808:
+          // FACTUAL_ANALYSIS C5 / F16 \u2014 PA Act 194 \u00a7 5823(b)(2) (the
+          // statutory declaration form itself states this):
           // dose instructions are not binding on the physician. Surface this
           // honestly so users understand the limits of dose-level preferences.
           Card(
