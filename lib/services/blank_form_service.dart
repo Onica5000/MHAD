@@ -39,6 +39,30 @@ Directive _blankDirective(FormType type) => Directive(
       lastStepIndex: 0,
     );
 
+/// Lets the user pick which of the three official forms to print blank
+/// (2026-07-09 PDF audit, defect #8 — the UI previously offered only the
+/// Combined form even though all three render). Prints on selection.
+Future<void> showBlankFormPicker(BuildContext context) async {
+  final type = await showDialog<FormType>(
+    context: context,
+    builder: (ctx) => SimpleDialog(
+      title: const Text('Print a blank form'),
+      children: [
+        for (final t in FormType.values)
+          SimpleDialogOption(
+            onPressed: () => Navigator.pop(ctx, t),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 6),
+              child: Text(t.displayName),
+            ),
+          ),
+      ],
+    ),
+  );
+  if (type == null || !context.mounted) return;
+  await printBlankForm(context, type: type);
+}
+
 /// Generates the blank form for [type] (Combined by default) and opens the
 /// system print dialog (the browser print sheet on web). On failure shows a
 /// snackbar rather than failing silently.

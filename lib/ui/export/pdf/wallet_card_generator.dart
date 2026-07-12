@@ -11,6 +11,7 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
 import 'pdf_helpers.dart';
+import 'pdf_theme.dart';
 
 /// Credit-card dimensions: 3.375 x 2.125 inches at 72 DPI.
 const _cardWidth = 3.375 * PdfPageFormat.inch;
@@ -33,6 +34,9 @@ class WalletCardGenerator {
       title: 'PA MHAD Wallet Card',
       author: directive.fullName,
       subject: 'PA Mental Health Advance Directive — Wallet Card',
+      // Same embedded editorial typefaces as the forms (audit defect #10 —
+      // the card previously always fell back to Helvetica).
+      theme: await loadEditorialTheme(),
     );
 
     final primaryAgent = agents.primaryAgent;

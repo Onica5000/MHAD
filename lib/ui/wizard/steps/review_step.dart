@@ -435,10 +435,12 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
         const SizedBox(height: 12),
 
         // FACTUAL_ANALYSIS C6 / F15+F18 — providers SHALL comply with the
-        // directive (§ 5837), but a provider may decline to follow specific
-        // instructions that are against accepted medical practice or when the
-        // provider is not physically available. Surfacing this here sets
-        // accurate expectations before signing.
+        // directive (§ 5804 compliance; § 5842 duties toward agent decisions
+        // — § 5837 is agent REMOVAL; corrected 2026-07-11 legal audit), but a
+        // provider may decline to follow specific instructions that are
+        // against accepted medical practice or when the provider is not
+        // physically available. Surfacing this here sets accurate
+        // expectations before signing.
         const _CalloutCard(
           variant: _CalloutVariant.surface,
           icon: Icons.info_outline,
@@ -450,10 +452,10 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
               ),
               TextSpan(
                 text:
-                    'with your directive under PA Act 194 § 5837. A provider '
-                    'may decline specific instructions only if they conflict '
-                    'with accepted medical practice, or when the provider is '
-                    'not physically available.',
+                    'with your directive under PA Act 194 (20 Pa.C.S. §§ 5804, '
+                    '5842). A provider may decline specific instructions only '
+                    'if they conflict with accepted medical practice, or when '
+                    'the provider is not physically available.',
               ),
             ],
           ),

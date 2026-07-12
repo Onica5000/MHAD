@@ -13,6 +13,7 @@ import 'pdf_helpers.dart';
 List<pw.Page> buildLegalLanguagePages({
   required Directive directive,
   required List<Agent> agents,
+  DraftMode draftMode = DraftMode.finalCopy,
 }) {
   final primary = agents.primaryAgent;
   final alternate = agents.alternateAgent;
@@ -28,8 +29,8 @@ List<pw.Page> buildLegalLanguagePages({
 
   final paras = <String>[
     'I, $name, being of sound mind and at least eighteen (18) years of age, do '
-        'hereby execute this Mental Health Advance Directive pursuant to the '
-        'Mental Health Advance Directive Act of 2004, 20 Pa.C.S. Ch. 58.',
+        'hereby execute this Mental Health Advance Directive pursuant to '
+        'Pennsylvania Act 194 of 2004, 20 Pa.C.S. Ch. 58.',
     'This Directive shall become effective upon a written determination by a '
         'psychiatrist and one of the following: another psychiatrist, a licensed '
         'psychologist, a family physician, an attending physician, or a mental '
@@ -57,8 +58,13 @@ List<pw.Page> buildLegalLanguagePages({
 
   return [
     pw.MultiPage(
-      pageFormat: kPageFormat,
-      margin: pageMargins,
+      // Draft watermark applied like the form pages (audit defect #9 — this
+      // path previously skipped it, so a draft printed clean).
+      pageTheme: pw.PageTheme(
+        pageFormat: kPageFormat,
+        margin: pageMargins,
+        buildBackground: (ctx) => draftWatermark(draftMode),
+      ),
       header: (_) => pageHeader('Legal-Language Version (Informational)'),
       footer: (_) =>
           pageFooter('Legal-language version · informational only'),

@@ -95,7 +95,12 @@ void main() {
       expect(l.ntiDrugs, contains('valproic acid'));
       expect(l.involuntaryCommitment['section302Hours'], 120);
       expect(l.involuntaryCommitment['section304Days'], 90);
-      expect(l.citations['providerMustComply'], '20 Pa.C.S. §5842');
+      // Citations corrected in the 2026-07-11 legal audit (§5811 does not
+      // exist; §5808 is combining-instruments; psychosurgery ban is §5836(b)).
+      expect(l.citations['providerMustComply'], '20 Pa.C.S. §§5804, 5842');
+      expect(l.citations['revocation'], '20 Pa.C.S. §§5825, 5839');
+      expect(l.citations['incapacityDetermination'], '20 Pa.C.S. §§5823, 5833');
+      expect(l.citations['psychosurgeryProhibition'], '20 Pa.C.S. §5836(b)');
       // The prose-location manifest the Phase-4 admin flow uses for verify-tier
       // edits must point at the real source files.
       expect(l.proseLocations, contains('lib/data/educational_content.dart'));

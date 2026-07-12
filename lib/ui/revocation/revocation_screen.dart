@@ -14,11 +14,13 @@ import 'package:mhad/ui/widgets/design/wizard_header.dart';
 /// Revocation flow (v2 prototype `m-revoke`, v3 canonical PA statutory
 /// wording).
 ///
-/// Per 20 Pa.C.S. § 5808: revocation is effective when communicated to the
-/// attending physician/provider, either by the principal or by a witness,
-/// **and only while the principal has capacity**. The app records the
-/// revocation locally (status → revoked); the user is responsible for
-/// actually communicating it.
+/// Per 20 Pa.C.S. §§ 5825 (declaration) and 5839 (power of attorney):
+/// revocation is effective when communicated to the attending
+/// physician/provider, either by the principal or by a witness, **and only
+/// while the principal has capacity**. The app records the revocation
+/// locally (status → revoked); the user is responsible for actually
+/// communicating it. (§ 5808 — cited here previously — is "Combining mental
+/// health instruments", not revocation; corrected 2026-07-11 legal audit.)
 ///
 /// Per Decision 26 / v3 spec: two provider lists (specific + generic
 /// categories); explicit per-row notification opt-in (no batch sends).
@@ -71,8 +73,8 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'Per 20 Pa.C.S. § 5808, revocation is effective only when '
-              'communicated to your attending physician or provider. '
+              'Per 20 Pa.C.S. §§ 5825 and 5839, revocation is effective only '
+              'when communicated to your attending physician or provider. '
               'Marking this directive revoked here does not communicate it — '
               'you still need to tell each recipient.',
             ),
@@ -138,8 +140,9 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
           Text(
             'Your directive will no longer be legally binding once you '
             'communicate the revocation to your attending physician or '
-            'provider (20 Pa.C.S. § 5808). This app marks the directive '
-            'revoked locally and helps you generate a revocation letter.',
+            'provider (20 Pa.C.S. §§ 5825, 5839). This app marks the '
+            'directive revoked locally and helps you generate a revocation '
+            'letter.',
             style: TextStyle(
               fontFamily: kSansFamily,
               fontSize: 14,

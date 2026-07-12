@@ -551,7 +551,7 @@ class _AdditionalInstructionsStepState
             subtitle:
                 'Acknowledge that, once two professionals find you incapable, '
                 'what you wrote stands even over your in-the-moment protest, '
-                'until capacity returns (PA Act 194 § 5808).',
+                'until capacity returns (20 Pa.C.S. §§ 5824, 5834).',
             onTap: () =>
                 context.push(AppRoutes.ulyssesRoute(widget.directiveId)),
           ),

@@ -76,19 +76,19 @@ class WebDashboardLanding extends ConsumerWidget {
         const DirectiveFormChoice(),
         const SizedBox(height: 22),
 
-        // ── Print the blank form — generates the empty official form and
-        //    opens the print dialog directly; does NOT start a wizard draft.
+        // ── Print a blank form — pick any of the three official forms and
+        //    open the print dialog directly; does NOT start a wizard draft.
         Align(
           alignment: Alignment.centerLeft,
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 380),
             child: _ToolCard(
               icon: Icons.print_outlined,
-              title: 'Print the blank form',
-              sub: 'Prefer paper? Open the empty form to print and fill in by '
-                  'hand — no account or wizard needed.',
+              title: 'Print a blank form',
+              sub: 'Prefer paper? Open any of the three empty official forms '
+                  'to print and fill in by hand — no account or wizard needed.',
               cta: 'Print blank form',
-              onTap: () => printBlankForm(context),
+              onTap: () => showBlankFormPicker(context),
             ),
           ),
         ),
