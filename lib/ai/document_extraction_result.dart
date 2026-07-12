@@ -45,10 +45,19 @@ class DocumentExtractionResult {
   // Maps to DirectivePrefs.agentAuthorityLimitations.
   final String? agentAuthorityLimitations;
 
-  // Consent fields: "yes" | "agent" | "no" | null
+  // Consent fields: "yes" | "agent" | "no" | "conditional: <text>" | null
   final String? ectConsent;
   final String? experimentalConsent;
   final String? drugTrialConsent;
+  // The person's own general medication consent (same vocabulary) — distinct
+  // from agentCanConsentMedication (the agent's authority).
+  final String? medicationConsent;
+
+  // The three statutory activation triggers ("when this kicks in"
+  // checkboxes) — true only on an explicit designation, never inferred.
+  final bool? triggerTwoProfessionals;
+  final bool? triggerCourtOrder;
+  final bool? triggerInvoluntaryCommitment;
 
   // Room preferences free-text note. Maps to DirectivePrefs.roomPreferencesNote.
   final String? roomPreferencesNote;
@@ -56,11 +65,27 @@ class DocumentExtractionResult {
   // ── Structured toggles (set only on an explicit statement) ────────────────
   // Same-gender roommate request → DirectivePrefs.roomPreferences chip.
   final bool? sameGenderRoommate;
+  // Room-preference chip ids (subset of the wizard's chip set) →
+  // DirectivePrefs.roomPreferences csv.
+  final List<String> roomPreferenceChips;
+  // 'women' | 'men' | 'sameAsIdentity' → DirectivePrefs.roommateGenderMatch.
+  final String? roommateGenderMatch;
+  // Guardianship conditions (explicit statements only) →
+  // GuardianNominations.guardianCanRevoke / CanChangeAgent / MustConsultAgent.
+  final bool? guardianCanRevoke;
+  final String? guardianCanRevokeNote;
+  final bool? guardianCanChangeAgent;
+  final String? guardianCanChangeAgentNote;
+  final bool? guardianMustConsultAgent;
+  final String? guardianMustConsultAgentNote;
   // Agent authority → DirectivePrefs.agentCanConsentHospitalization / Medication.
   final bool? agentCanConsentHospitalization;
   final bool? agentCanConsentMedication;
   // Self-binding ("Ulysses") opt-in → DirectivePrefs.selfBindingEnabled.
   final bool? selfBindingUlysses;
+
+  // Structured crisis plan → DirectivePrefs.crisisPlanJson.
+  final ExtractedCrisisPlan? crisisPlan;
 
   // ── Additional instructions ─────────────────────────────────────────────
   final String? healthHistory;
@@ -97,8 +122,21 @@ class DocumentExtractionResult {
     this.ectConsent,
     this.experimentalConsent,
     this.drugTrialConsent,
+    this.medicationConsent,
+    this.triggerTwoProfessionals,
+    this.triggerCourtOrder,
+    this.triggerInvoluntaryCommitment,
     this.roomPreferencesNote,
     this.sameGenderRoommate,
+    this.roomPreferenceChips = const [],
+    this.roommateGenderMatch,
+    this.guardianCanRevoke,
+    this.guardianCanRevokeNote,
+    this.guardianCanChangeAgent,
+    this.guardianCanChangeAgentNote,
+    this.guardianMustConsultAgent,
+    this.guardianMustConsultAgentNote,
+    this.crisisPlan,
     this.agentCanConsentHospitalization,
     this.agentCanConsentMedication,
     this.selfBindingUlysses,
@@ -129,8 +167,18 @@ class DocumentExtractionResult {
       ectConsent == null &&
       experimentalConsent == null &&
       drugTrialConsent == null &&
+      medicationConsent == null &&
+      triggerTwoProfessionals == null &&
+      triggerCourtOrder == null &&
+      triggerInvoluntaryCommitment == null &&
       roomPreferencesNote == null &&
       sameGenderRoommate == null &&
+      roomPreferenceChips.isEmpty &&
+      roommateGenderMatch == null &&
+      guardianCanRevoke == null &&
+      guardianCanChangeAgent == null &&
+      guardianMustConsultAgent == null &&
+      (crisisPlan == null || crisisPlan!.isEmpty) &&
       agentCanConsentHospitalization == null &&
       agentCanConsentMedication == null &&
       selfBindingUlysses == null &&
@@ -165,8 +213,33 @@ class DocumentExtractionResult {
       ectConsent: ectConsent ?? other.ectConsent,
       experimentalConsent: experimentalConsent ?? other.experimentalConsent,
       drugTrialConsent: drugTrialConsent ?? other.drugTrialConsent,
+      medicationConsent: medicationConsent ?? other.medicationConsent,
+      triggerTwoProfessionals:
+          triggerTwoProfessionals ?? other.triggerTwoProfessionals,
+      triggerCourtOrder: triggerCourtOrder ?? other.triggerCourtOrder,
+      triggerInvoluntaryCommitment:
+          triggerInvoluntaryCommitment ?? other.triggerInvoluntaryCommitment,
       roomPreferencesNote: _mergeText(roomPreferencesNote, other.roomPreferencesNote),
       sameGenderRoommate: sameGenderRoommate ?? other.sameGenderRoommate,
+      roomPreferenceChips: {
+        ...roomPreferenceChips,
+        ...other.roomPreferenceChips,
+      }.toList(),
+      roommateGenderMatch: roommateGenderMatch ?? other.roommateGenderMatch,
+      guardianCanRevoke: guardianCanRevoke ?? other.guardianCanRevoke,
+      guardianCanRevokeNote:
+          _mergeText(guardianCanRevokeNote, other.guardianCanRevokeNote),
+      guardianCanChangeAgent:
+          guardianCanChangeAgent ?? other.guardianCanChangeAgent,
+      guardianCanChangeAgentNote: _mergeText(
+          guardianCanChangeAgentNote, other.guardianCanChangeAgentNote),
+      guardianMustConsultAgent:
+          guardianMustConsultAgent ?? other.guardianMustConsultAgent,
+      guardianMustConsultAgentNote: _mergeText(
+          guardianMustConsultAgentNote, other.guardianMustConsultAgentNote),
+      crisisPlan: crisisPlan == null
+          ? other.crisisPlan
+          : crisisPlan!.merge(other.crisisPlan),
       agentCanConsentHospitalization:
           agentCanConsentHospitalization ?? other.agentCanConsentHospitalization,
       agentCanConsentMedication:
@@ -272,16 +345,37 @@ class DocumentExtractionResult {
     if (ectConsent != null) map['ECT Consent'] = ectConsent!;
     if (experimentalConsent != null) map['Experimental Treatment Consent'] = experimentalConsent!;
     if (drugTrialConsent != null) map['Drug Trial Consent'] = drugTrialConsent!;
+    if (medicationConsent != null) map['Medication Consent'] = medicationConsent!;
+    if (triggerTwoProfessionals == true) {
+      map['Activation Trigger'] = 'Two professionals determine incapacity';
+    }
+    if (triggerCourtOrder == true) {
+      map['Activation Trigger (court)'] = 'Court order';
+    }
+    if (triggerInvoluntaryCommitment == true) {
+      map['Activation Trigger (302)'] = 'Involuntary commitment';
+    }
     if (roomPreferencesNote != null) map['Room Preferences'] = roomPreferencesNote!;
     if (other != null) map['Other Instructions'] = other!;
     return map;
   }
 
   factory DocumentExtractionResult.fromJson(Map<String, dynamic> json) {
+    // Code-level enforcement of the STEP-0 relevance contract: when the model
+    // marks the document irrelevant, discard EVERYTHING else it returned —
+    // even if it (wrongly) extracted fields anyway. Without this, a mixed
+    // upload batch could merge an irrelevant document's data because the
+    // scrub was enforced only by the prompt.
+    if (json['document_relevant'] == false) {
+      return DocumentExtractionResult(
+        documentRelevant: false,
+        documentKind: optStr(json['document_kind']),
+      );
+    }
     return DocumentExtractionResult(
       // Only an explicit false rejects; a missing flag is treated as relevant
       // so older/edge responses still extract.
-      documentRelevant: json['document_relevant'] != false,
+      documentRelevant: true,
       documentKind: optStr(json['document_kind']),
       medicationsToAvoid: _parseMeds(json['medications_to_avoid']),
       medicationsPreferred: _parseMeds(json['medications_preferred']),
@@ -296,8 +390,32 @@ class DocumentExtractionResult {
       ectConsent: optStr(json['ect_consent']),
       experimentalConsent: optStr(json['experimental_consent']),
       drugTrialConsent: optStr(json['drug_trial_consent']),
+      medicationConsent: optStr(json['medication_consent']),
+      triggerTwoProfessionals: json['trigger_two_professionals'] as bool?,
+      triggerCourtOrder: json['trigger_court_order'] as bool?,
+      triggerInvoluntaryCommitment:
+          json['trigger_involuntary_commitment'] as bool?,
       roomPreferencesNote: optStr(json['room_preferences_note']),
       sameGenderRoommate: json['same_gender_roommate'] as bool?,
+      roomPreferenceChips: json['room_preference_chips'] is List
+          ? (json['room_preference_chips'] as List)
+              .map((e) => e.toString())
+              .where((s) => s.isNotEmpty)
+              .toList()
+          : const [],
+      roommateGenderMatch: optStr(json['roommate_gender_match']),
+      guardianCanRevoke: json['guardian_can_revoke'] as bool?,
+      guardianCanRevokeNote: optStr(json['guardian_can_revoke_note']),
+      guardianCanChangeAgent: json['guardian_can_change_agent'] as bool?,
+      guardianCanChangeAgentNote:
+          optStr(json['guardian_can_change_agent_note']),
+      guardianMustConsultAgent: json['guardian_must_consult_agent'] as bool?,
+      guardianMustConsultAgentNote:
+          optStr(json['guardian_must_consult_agent_note']),
+      crisisPlan: json['crisis_plan'] is Map<String, dynamic>
+          ? ExtractedCrisisPlan.fromJson(
+              json['crisis_plan'] as Map<String, dynamic>)
+          : null,
       agentCanConsentHospitalization:
           json['agent_can_consent_hospitalization'] as bool?,
       agentCanConsentMedication: json['agent_can_consent_medication'] as bool?,
@@ -358,6 +476,83 @@ class DocumentExtractionResult {
             ))
         .where((a) => a.substance.isNotEmpty)
         .toList();
+  }
+}
+
+/// Structured crisis plan extracted from a document. List keys mirror the
+/// crisis-plan screen's `crisisPlanJson` structure (earlyWarning / triggers /
+/// helps / sayToMe / dontDo) — see [toCrisisPlanMap].
+class ExtractedCrisisPlan {
+  final List<String> earlyWarning;
+  final List<String> triggers;
+  final List<String> helps;
+  final List<String> sayToMe;
+  final List<String> dontDo;
+
+  const ExtractedCrisisPlan({
+    this.earlyWarning = const [],
+    this.triggers = const [],
+    this.helps = const [],
+    this.sayToMe = const [],
+    this.dontDo = const [],
+  });
+
+  static List<String> _list(dynamic v) => v is List
+      ? v.map((e) => e.toString().trim()).where((s) => s.isNotEmpty).toList()
+      : const [];
+
+  factory ExtractedCrisisPlan.fromJson(Map<String, dynamic> json) =>
+      ExtractedCrisisPlan(
+        earlyWarning: _list(json['early_warning']),
+        triggers: _list(json['triggers']),
+        helps: _list(json['helps']),
+        sayToMe: _list(json['say_to_me']),
+        dontDo: _list(json['dont_do']),
+      );
+
+  bool get isEmpty =>
+      earlyWarning.isEmpty &&
+      triggers.isEmpty &&
+      helps.isEmpty &&
+      sayToMe.isEmpty &&
+      dontDo.isEmpty;
+
+  ExtractedCrisisPlan merge(ExtractedCrisisPlan? other) {
+    if (other == null) return this;
+    List<String> union(List<String> a, List<String> b) =>
+        {...a, ...b}.toList();
+    return ExtractedCrisisPlan(
+      earlyWarning: union(earlyWarning, other.earlyWarning),
+      triggers: union(triggers, other.triggers),
+      helps: union(helps, other.helps),
+      sayToMe: union(sayToMe, other.sayToMe),
+      dontDo: union(dontDo, other.dontDo),
+    );
+  }
+
+  /// The exact map shape the crisis-plan screen persists as
+  /// `DirectivePrefs.crisisPlanJson`.
+  Map<String, List<String>> toCrisisPlanMap() => {
+        'earlyWarning': earlyWarning,
+        'triggers': triggers,
+        'helps': helps,
+        'sayToMe': sayToMe,
+        'dontDo': dontDo,
+      };
+
+  /// Compact human-readable rendering for the review row.
+  String display() {
+    final parts = <String>[];
+    void add(String label, List<String> items) {
+      if (items.isNotEmpty) parts.add('$label: ${items.join('; ')}');
+    }
+
+    add('Early warning', earlyWarning);
+    add('Triggers', triggers);
+    add('What helps', helps);
+    add('Say to me', sayToMe);
+    add("Don't", dontDo);
+    return parts.join('\n');
   }
 }
 

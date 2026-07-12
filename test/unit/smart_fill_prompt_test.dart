@@ -106,6 +106,22 @@ void main() {
       expect(prompt, isNot(contains('reyes@example.com')),
           reason: 'email addresses must never reach the AI prompt');
     });
+
+    test('medication list entries are PII-stripped too', () {
+      final prompt = service.buildPrompt(SmartFillInput(
+        conditions: const [IcdCondition(code: 'F31.9', name: 'Bipolar')],
+        currentMedications: const [
+          'Lamotrigine',
+          'call me at 555-867-5309', // junk a user could type in a med field
+        ],
+        medicationsToAvoid: const ['haldol reyes@example.com'],
+        formType: 'combined',
+      ));
+      expect(prompt, contains('Lamotrigine'));
+      expect(prompt, isNot(contains('555-867-5309')),
+          reason: 'med-list entries must pass the PII chokepoint');
+      expect(prompt, isNot(contains('reyes@example.com')));
+    });
   });
 
   group('SmartFillInput.sanitized', () {

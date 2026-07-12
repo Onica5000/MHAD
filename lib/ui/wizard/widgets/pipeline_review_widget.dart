@@ -14,6 +14,16 @@ part of 'document_pipeline_flow.dart';
 const String facilityVerifiedBadge = ' [NPI verified]';
 const String facilityUnverifiedBadge = ' [unverified]';
 
+/// Smart-fill display keys that are drafting GUIDANCE for the user to read,
+/// deliberately never written into the directive (AI meta-text must not print
+/// into the legal form). The user makes the actual choice in the Procedures &
+/// research step. Keys match [SmartFillResult.toDisplayMap].
+const Set<String> _smartGuidanceOnlyKeys = {
+  'ECT Guidance',
+  'Experimental Studies Guidance',
+  'Drug Trials Guidance',
+};
+
 extension _PipelineReviewUi on _PipelineScreenState {
   void _buildReviewData(ValidatedExtractionResult v) {
     _reviewChecked = {};
@@ -45,6 +55,13 @@ extension _PipelineReviewUi on _PipelineScreenState {
     if (v.healthHistory != null) {
       _reviewChecked['hh_note'] = true;
       _reviewEdited['hh_note'] = v.healthHistory!;
+    }
+    // The person's verbatim "when it kicks in" wording — editable and applied
+    // as written (the cond_* chips above are derived context, not a
+    // replacement for the person's own trigger language).
+    if (v.effectiveCondition != null) {
+      _reviewChecked['effective_condition'] = true;
+      _reviewEdited['effective_condition'] = v.effectiveCondition!;
     }
     // Pass-through text fields
     // Facility names carry an NPI-registry check (verified = recognized
@@ -154,6 +171,27 @@ extension _PipelineReviewUi on _PipelineScreenState {
       _reviewChecked['drug_trial_consent'] = true;
       _reviewEdited['drug_trial_consent'] = v.drugTrialConsent!;
     }
+    if (v.medicationConsent != null) {
+      _reviewChecked['medication_consent'] = true;
+      _reviewEdited['medication_consent'] = v.medicationConsent!;
+    }
+
+    // ── Statutory activation triggers (set only on an explicit designation)
+    if (v.triggerTwoProfessionals == true) {
+      _reviewChecked['trigger_two_professionals'] = true;
+      _reviewEdited['trigger_two_professionals'] =
+          'Activate when professionals determine I cannot make '
+          'mental-health decisions';
+    }
+    if (v.triggerCourtOrder == true) {
+      _reviewChecked['trigger_court_order'] = true;
+      _reviewEdited['trigger_court_order'] = 'Activate upon a court order';
+    }
+    if (v.triggerInvoluntaryCommitment == true) {
+      _reviewChecked['trigger_involuntary_commitment'] = true;
+      _reviewEdited['trigger_involuntary_commitment'] =
+          'Activate upon involuntary commitment';
+    }
 
     // ── Room preferences note
     if (v.roomPreferencesNote != null) {
@@ -183,8 +221,60 @@ extension _PipelineReviewUi on _PipelineScreenState {
           'Self-binding (Ulysses): follow my directive even if I object';
     }
     if (v.sameGenderRoommate == true) {
+      final match = switch (v.roommateGenderMatch) {
+        'women' => ' (women)',
+        'men' => ' (men)',
+        'sameAsIdentity' => ' (same as my identity)',
+        _ => '',
+      };
       _reviewChecked['roommate_same_gender'] = true;
-      _reviewEdited['roommate_same_gender'] = 'Same-gender roommate requested';
+      _reviewEdited['roommate_same_gender'] =
+          'Same-gender roommate requested$match';
+    }
+    // Room-preference chips beyond the same-gender one — a single
+    // confirmable row; apply reads the ids from the validated result.
+    const chipLabels = {
+      'singleRoom': 'Single room',
+      'windowIfPossible': 'Window if possible',
+      'quietFloor': 'Quiet floor',
+    };
+    final extraChips = v.roomPreferenceChips
+        .where(chipLabels.containsKey)
+        .map((c) => chipLabels[c]!)
+        .toList();
+    if (extraChips.isNotEmpty) {
+      _reviewChecked['room_pref_chips'] = true;
+      _reviewEdited['room_pref_chips'] = extraChips.join(', ');
+    }
+    // Guardianship conditions (explicit statements only) — the display is a
+    // sentence; apply reads the booleans/notes from the validated result.
+    void guardianCondition(String key, bool? value, String? note,
+        {required String yes, required String no}) {
+      if (value == null) return;
+      final suffix = (note != null && note.isNotEmpty) ? ' — $note' : '';
+      _reviewChecked[key] = true;
+      _reviewEdited[key] = '${value ? yes : no}$suffix';
+    }
+
+    guardianCondition('guardian_can_revoke', v.guardianCanRevoke,
+        v.guardianCanRevokeNote,
+        yes: 'A guardian MAY override this directive',
+        no: 'A guardian may NOT override this directive');
+    guardianCondition('guardian_can_change_agent', v.guardianCanChangeAgent,
+        v.guardianCanChangeAgentNote,
+        yes: 'A guardian MAY replace my agent',
+        no: 'A guardian may NOT replace my agent');
+    guardianCondition(
+        'guardian_must_consult_agent', v.guardianMustConsultAgent,
+        v.guardianMustConsultAgentNote,
+        yes: 'A guardian MUST consult my agent first',
+        no: 'A guardian does NOT need to consult my agent');
+
+    // Structured crisis plan — one confirmable row; apply reads the lists
+    // from the validated result and merges into crisisPlanJson.
+    if (v.crisisPlan != null && !v.crisisPlan!.isEmpty) {
+      _reviewChecked['crisis_plan'] = true;
+      _reviewEdited['crisis_plan'] = v.crisisPlan!.display();
     }
 
     // ── Personal info (PII) — autofill the declarant + the people they
@@ -358,7 +448,10 @@ extension _PipelineReviewUi on _PipelineScreenState {
       'agent_city': primaryAgent?.city ?? '',
       'agent_state': primaryAgent?.state ?? '',
       'agent_zip': primaryAgent?.zip ?? '',
-      'agent_phone': primaryAgent?.homePhone ?? '',
+      // cellPhone, not homePhone: the wizard and applyAgent both store the
+      // single phone in cellPhone, so conflict detection must read the same
+      // column (else an existing phone is never flagged before overwrite).
+      'agent_phone': primaryAgent?.cellPhone ?? '',
       // Alternate agent — split address
       'alt_agent_name': altAgent?.fullName ?? '',
       'alt_agent_relationship': altAgent?.relationship ?? '',
@@ -367,7 +460,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
       'alt_agent_city': altAgent?.city ?? '',
       'alt_agent_state': altAgent?.state ?? '',
       'alt_agent_zip': altAgent?.zip ?? '',
-      'alt_agent_phone': altAgent?.homePhone ?? '',
+      'alt_agent_phone': altAgent?.cellPhone ?? '',
       // Guardian — split address
       'guardian_name': guardian?.nomineeFullName ?? '',
       'guardian_relationship': guardian?.nomineeRelationship ?? '',
@@ -398,18 +491,30 @@ extension _PipelineReviewUi on _PipelineScreenState {
     if (key.startsWith('diag_')) return 'Diagnosis';
     if (key.startsWith('allergy_')) return 'Allergy';
     if (key.startsWith('hh_')) return 'Health History';
+    if (key == 'effective_condition') return 'When this kicks in (your words)';
     if (key == 'facility_prefer') return 'Preferred Facility';
     if (key == 'facility_avoid') return 'Facility to Avoid';
     if (key == 'dietary') return 'Dietary';
     if (key == 'religious') return 'Religious/Cultural';
     if (key == 'activities') return 'Activities';
     if (key == 'crisis') return 'Crisis Intervention';
+    if (key == 'crisis_plan') return 'Crisis plan';
     if (key == 'agent_authority_limitations') return 'Agent authority limits';
     if (key == 'ect_consent') return 'ECT consent';
     if (key == 'experimental_consent') return 'Experimental treatment consent';
     if (key == 'drug_trial_consent') return 'Drug trial consent';
+    if (key == 'medication_consent') return 'Medication consent';
+    if (key == 'trigger_two_professionals') return 'Trigger: professionals';
+    if (key == 'trigger_court_order') return 'Trigger: court order';
+    if (key == 'trigger_involuntary_commitment') {
+      return 'Trigger: involuntary commitment';
+    }
     if (key == 'room_prefs_note') return 'Room preferences';
+    if (key == 'room_pref_chips') return 'Room options';
     if (key == 'roommate_same_gender') return 'Same-gender roommate';
+    if (key == 'guardian_can_revoke') return 'Guardian: override';
+    if (key == 'guardian_can_change_agent') return 'Guardian: replace agent';
+    if (key == 'guardian_must_consult_agent') return 'Guardian: consult agent';
     if (key == 'authority_hospitalization') return 'Agent: hospitalization';
     if (key == 'authority_medication') return 'Agent: medications';
     if (key == 'ulysses_optin') return 'Self-binding (Ulysses)';
@@ -472,6 +577,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
     if (key.startsWith('diag_')) return 'Diagnoses';
     if (key.startsWith('allergy_')) return 'Allergies';
     if (key.startsWith('hh_')) return 'Health History';
+    if (key == 'effective_condition') return 'When this kicks in';
     if (key.startsWith('person_')) return 'Your details';
     if (key.startsWith('agent_') && !key.startsWith('agent_authority')) {
       return 'Your agent';
@@ -482,12 +588,17 @@ extension _PipelineReviewUi on _PipelineScreenState {
       return 'Agent Authority';
     }
     if (key == 'ulysses_optin') return 'Self-binding';
+    if (key == 'crisis_plan') return 'Crisis Plan';
     if (key == 'ect_consent' ||
         key == 'experimental_consent' ||
-        key == 'drug_trial_consent') {
+        key == 'drug_trial_consent' ||
+        key == 'medication_consent') {
       return 'Consent';
     }
-    if (key == 'room_prefs_note' || key == 'roommate_same_gender') {
+    if (key.startsWith('trigger_')) return 'When this kicks in';
+    if (key == 'room_prefs_note' ||
+        key == 'room_pref_chips' ||
+        key == 'roommate_same_gender') {
       return 'Room Preferences';
     }
     if (key.startsWith('alt_agent_')) return 'Alternate agent';
@@ -500,6 +611,8 @@ extension _PipelineReviewUi on _PipelineScreenState {
   /// the wizard instead of one long list. Order mirrors the wizard step order.
   (int, String) _wizardSection(String key) {
     if (key.startsWith('person_eval_doctor')) return (2, 'When this kicks in');
+    if (key == 'effective_condition') return (2, 'When this kicks in');
+    if (key.startsWith('trigger_')) return (2, 'When this kicks in');
     if (key.startsWith('person_doctor')) return (6, 'Diagnoses');
     if (key.startsWith('person_')) return (1, 'About you');
     if (key == 'authority_hospitalization' ||
@@ -513,6 +626,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
     if (key == 'facility_prefer' ||
         key == 'facility_avoid' ||
         key == 'room_prefs_note' ||
+        key == 'room_pref_chips' ||
         key == 'roommate_same_gender') {
       return (5, 'Where I want care');
     }
@@ -524,6 +638,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
     if (key == 'ect_consent' ||
         key == 'experimental_consent' ||
         key == 'drug_trial_consent' ||
+        key == 'medication_consent' ||
         key == 'ulysses_optin') {
       return (9, 'Procedures & research');
     }
@@ -1049,7 +1164,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
     });
   }
 
-  /// §5805(c)(4) reminder: when an autofilled consent would delegate ECT,
+  /// §5836(c) reminder: when an autofilled consent would delegate ECT,
   /// experimental studies, or drug trials to the agent, that delegation only
   /// takes legal effect if the declarant physically initials it on the printed
   /// form. Surfaced here so the user confirms the AI's assumption deliberately.
@@ -1070,7 +1185,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
           const SizedBox(width: 6),
           Expanded(
             child: Text(
-              'This lets your agent decide. Under PA law (§5805(c)(4)) it only '
+              'This lets your agent decide. Under PA law (§5836(c)) it only '
               'takes effect if you physically initial this authorization on the '
               'printed form — confirm this is what you want.',
               style: TextStyle(
@@ -1130,7 +1245,12 @@ extension _PipelineReviewUi on _PipelineScreenState {
           ),
         ),
         ...keys.map((key) {
-          final checked = _smartChecked[key] ?? false;
+          // The three procedure fields are neutral drafting guidance ("help
+          // the user state their OWN preference") — they are shown to read,
+          // never saved: AI meta-guidance must not print into the legal form.
+          // The user sets the actual choice in Procedures & research.
+          final guidanceOnly = _smartGuidanceOnlyKeys.contains(key);
+          final checked = !guidanceOnly && (_smartChecked[key] ?? false);
           return Card(
             margin: const EdgeInsets.only(bottom: 6),
             color: checked
@@ -1138,17 +1258,24 @@ extension _PipelineReviewUi on _PipelineScreenState {
                 : cs.surfaceContainerHighest.withValues(alpha: 0.5),
             child: InkWell(
               borderRadius: BorderRadius.circular(12),
-              onTap: () => _editSmartField(key),
+              onTap: guidanceOnly ? null : () => _editSmartField(key),
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(4, 4, 12, 4),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Checkbox(
-                      value: checked,
-                      onChanged: (v) =>
-                          setState(() => _smartChecked[key] = v ?? false),
-                    ),
+                    if (guidanceOnly)
+                      Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Icon(Icons.menu_book_outlined,
+                            size: 20, color: cs.onSurfaceVariant),
+                      )
+                    else
+                      Checkbox(
+                        value: checked,
+                        onChanged: (v) =>
+                            setState(() => _smartChecked[key] = v ?? false),
+                      ),
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8),
@@ -1163,6 +1290,19 @@ extension _PipelineReviewUi on _PipelineScreenState {
                                       color: checked
                                           ? cs.onSurface
                                           : cs.onSurfaceVariant)),
+                            if (guidanceOnly) ...[
+                              const SizedBox(height: 2),
+                              Text(
+                                'Guidance to read — not saved to your form. '
+                                'Set your choice in Procedures & research.',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelSmall
+                                    ?.copyWith(
+                                        color: cs.tertiary,
+                                        fontStyle: FontStyle.italic),
+                              ),
+                            ],
                             const SizedBox(height: 4),
                             Text(
                               _smartEdited[key] ?? '',

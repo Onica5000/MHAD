@@ -90,7 +90,7 @@ class _AiConsistencyScreenState extends ConsumerState<AiConsistencyScreen> {
     // Agent-authorization review. PA Act 194 lets a principal BOTH record their
     // own consent AND, separately, authorize their agent to consent on their
     // behalf (for ECT, experimental studies, and drug trials that agent
-    // authorization needs the principal's physical initials, §5805(c)(4)).
+    // authorization needs the principal's physical initials, §5836(c)).
     // Because the app stores a single choice per procedure, some valid
     // combinations print statements that read as contradictory — so surface
     // them as "confirm this is intended" notes (the official form allows both;
@@ -118,7 +118,7 @@ class _AiConsistencyScreenState extends ConsumerState<AiConsistencyScreen> {
           body: 'Pennsylvania’s form lets you do both: give your own '
               'consent AND authorize your agent to consent on your behalf (that '
               'agent authorization needs your physical initials, '
-              '§5805(c)(4)). As entered, only your own consent is recorded, '
+              '§5836(c)). As entered, only your own consent is recorded, '
               'so the document says your agent may not consent to $name. That '
               'is allowed and may be exactly what you intend — keep both if so. '
               'If you also want your agent able to consent (e.g. if you later '

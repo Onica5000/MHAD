@@ -134,6 +134,11 @@ class ClinicalDataValidator {
       // user to review. Do NOT run it through the condition/ICD splitter,
       // which fragments sentences and drops anything it can't match.
       healthHistory: raw.healthHistory,
+      // The person's VERBATIM "when it kicks in" wording. The condition
+      // splitter above only feeds the ICD chips — without this passthrough
+      // the actual trigger language from the document was dropped and apply
+      // wrote a canned sentence instead.
+      effectiveCondition: raw.effectiveCondition,
       preferredFacility: raw.preferredFacility,
       avoidFacility: raw.avoidFacility,
       dietary: raw.dietary,
@@ -144,8 +149,21 @@ class ClinicalDataValidator {
       ectConsent: raw.ectConsent,
       experimentalConsent: raw.experimentalConsent,
       drugTrialConsent: raw.drugTrialConsent,
+      medicationConsent: raw.medicationConsent,
+      triggerTwoProfessionals: raw.triggerTwoProfessionals,
+      triggerCourtOrder: raw.triggerCourtOrder,
+      triggerInvoluntaryCommitment: raw.triggerInvoluntaryCommitment,
       roomPreferencesNote: raw.roomPreferencesNote,
       sameGenderRoommate: raw.sameGenderRoommate,
+      roomPreferenceChips: raw.roomPreferenceChips,
+      roommateGenderMatch: raw.roommateGenderMatch,
+      guardianCanRevoke: raw.guardianCanRevoke,
+      guardianCanRevokeNote: raw.guardianCanRevokeNote,
+      guardianCanChangeAgent: raw.guardianCanChangeAgent,
+      guardianCanChangeAgentNote: raw.guardianCanChangeAgentNote,
+      guardianMustConsultAgent: raw.guardianMustConsultAgent,
+      guardianMustConsultAgentNote: raw.guardianMustConsultAgentNote,
+      crisisPlan: raw.crisisPlan,
       agentCanConsentHospitalization: raw.agentCanConsentHospitalization,
       agentCanConsentMedication: raw.agentCanConsentMedication,
       selfBindingUlysses: raw.selfBindingUlysses,
@@ -210,6 +228,9 @@ class ValidatedExtractionResult {
   final List<ExtractedDiagnosis> diagnoses;
   final List<ExtractedAllergy> allergies;
   final String? healthHistory;
+  /// Verbatim "when this kicks in" text from the document (the ICD-split
+  /// [conditions] chips are derived from it, but never replace it).
+  final String? effectiveCondition;
   final String? preferredFacility;
   final String? avoidFacility;
   // True when the facility name was matched in the NPI organization registry
@@ -224,8 +245,21 @@ class ValidatedExtractionResult {
   final String? ectConsent;
   final String? experimentalConsent;
   final String? drugTrialConsent;
+  final String? medicationConsent;
+  final bool? triggerTwoProfessionals;
+  final bool? triggerCourtOrder;
+  final bool? triggerInvoluntaryCommitment;
   final String? roomPreferencesNote;
   final bool? sameGenderRoommate;
+  final List<String> roomPreferenceChips;
+  final String? roommateGenderMatch;
+  final bool? guardianCanRevoke;
+  final String? guardianCanRevokeNote;
+  final bool? guardianCanChangeAgent;
+  final String? guardianCanChangeAgentNote;
+  final bool? guardianMustConsultAgent;
+  final String? guardianMustConsultAgentNote;
+  final ExtractedCrisisPlan? crisisPlan;
   final bool? agentCanConsentHospitalization;
   final bool? agentCanConsentMedication;
   final bool? selfBindingUlysses;
@@ -246,6 +280,7 @@ class ValidatedExtractionResult {
     this.diagnoses = const [],
     this.allergies = const [],
     this.healthHistory,
+    this.effectiveCondition,
     this.preferredFacility,
     this.avoidFacility,
     this.preferredFacilityVerified = false,
@@ -258,8 +293,21 @@ class ValidatedExtractionResult {
     this.ectConsent,
     this.experimentalConsent,
     this.drugTrialConsent,
+    this.medicationConsent,
+    this.triggerTwoProfessionals,
+    this.triggerCourtOrder,
+    this.triggerInvoluntaryCommitment,
     this.roomPreferencesNote,
     this.sameGenderRoommate,
+    this.roomPreferenceChips = const [],
+    this.roommateGenderMatch,
+    this.guardianCanRevoke,
+    this.guardianCanRevokeNote,
+    this.guardianCanChangeAgent,
+    this.guardianCanChangeAgentNote,
+    this.guardianMustConsultAgent,
+    this.guardianMustConsultAgentNote,
+    this.crisisPlan,
     this.agentCanConsentHospitalization,
     this.agentCanConsentMedication,
     this.selfBindingUlysses,

@@ -391,7 +391,7 @@ List<pw.Page> buildPoaPages({
         ),
         pw.SizedBox(height: 4),
         if (prefs != null) ...[
-          // §5805(c)(4): agent ECT authority is ONLY effective if declarant
+          // §5836(c): agent ECT authority is ONLY effective if declarant
           // physically initials this box — checkbox is legally insufficient.
           initialRow(
             'My agent is authorized to consent to the administration of '
@@ -424,7 +424,7 @@ List<pw.Page> buildPoaPages({
         ),
         pw.SizedBox(height: 4),
         if (prefs != null) ...[
-          // §5805(c)(4): requires initials, not a checkbox.
+          // §5836(c): requires initials, not a checkbox.
           initialRow(
             'My agent is authorized to consent to my participation in experimental '
             'studies if, after consultation with my treating physician and any other '
@@ -455,7 +455,7 @@ List<pw.Page> buildPoaPages({
         pw.Text('5. Preferences regarding drug trials.', style: boldStyle()),
         pw.SizedBox(height: 4),
         if (prefs != null) ...[
-          // §5805(c)(4): requires initials, not a checkbox.
+          // §5836(c): requires initials, not a checkbox.
           initialRow(
             'My agent is authorized to consent to my participation in drug trials '
             'if, after consultation with my treating physician and any other '

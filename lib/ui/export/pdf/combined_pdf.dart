@@ -387,7 +387,7 @@ List<pw.Page> buildCombinedPages({
             ),
             dataBlock('Conditions:', consentConditionText(prefs.ectConsent)),
           ],
-          // §5805(c)(4): delegating ECT decisions to the agent requires the
+          // §5836(c): delegating ECT decisions to the agent requires the
           // declarant's physical INITIALS, not a checkbox.
           initialRow(
             'I have designated an agent under the Power of Attorney portion of this '
@@ -420,7 +420,7 @@ List<pw.Page> buildCombinedPages({
               consentConditionText(prefs.experimentalConsent),
             ),
           ],
-          // §5805(c)(4): delegating experimental-study decisions to the agent
+          // §5836(c): delegating experimental-study decisions to the agent
           // requires the declarant's physical INITIALS, not a checkbox.
           initialRow(
             'I have designated an agent under the Power of Attorney portion of this '
@@ -453,7 +453,7 @@ List<pw.Page> buildCombinedPages({
               consentConditionText(prefs.drugTrialConsent),
             ),
           ],
-          // §5805(c)(4): delegating drug-trial decisions to the agent requires
+          // §5836(c): delegating drug-trial decisions to the agent requires
           // the declarant's physical INITIALS, not a checkbox.
           initialRow(
             'I have designated an agent under the Power of Attorney portion of this '
@@ -660,7 +660,7 @@ List<pw.Page> buildCombinedPages({
           ),
           pw.SizedBox(height: 4),
 
-          // 2. ECT — §5805(c)(4): agent authority requires declarant's initials.
+          // 2. ECT — §5836(c): agent authority requires declarant's initials.
           pw.Text(
             '2. Preferences regarding electroconvulsive therapy (ECT).',
             style: boldStyle(),
@@ -685,7 +685,7 @@ List<pw.Page> buildCombinedPages({
           ),
           pw.SizedBox(height: 4),
 
-          // 3. Experimental studies — §5805(c)(4): requires initials.
+          // 3. Experimental studies — §5836(c): requires initials.
           pw.Text(
             '3. Preferences for experimental studies.',
             style: boldStyle(),
@@ -712,7 +712,7 @@ List<pw.Page> buildCombinedPages({
           ),
           pw.SizedBox(height: 4),
 
-          // 4. Drug trials — §5805(c)(4): requires initials.
+          // 4. Drug trials — §5836(c): requires initials.
           pw.Text('4. Preferences regarding drug trials.', style: boldStyle()),
           pw.SizedBox(height: 2),
           initialRow(

@@ -176,7 +176,7 @@ const List<AudioQSection> audioQSections = [
         'For ECT, I do not consent. For experimental studies, I want my agent '
         'to decide. For drug trials, I do not consent.',
     note: 'If you choose "my agent decides" for any of these three, '
-        'Pennsylvania law (§5805(c)(4)) requires you to physically INITIAL '
+        'Pennsylvania law (§5836(c)) requires you to physically INITIAL '
         'that authorization on the PRINTED form — the recording captures your '
         'choice, but it can\'t initial for you.',
   ),

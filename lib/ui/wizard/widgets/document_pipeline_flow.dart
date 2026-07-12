@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -7,6 +8,7 @@ import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/ai/document_extraction_result.dart';
+import 'package:mhad/constants.dart';
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/ai/document_extractor.dart';
 import 'package:mhad/ai/smart_fill_service.dart';
