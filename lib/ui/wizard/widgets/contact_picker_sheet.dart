@@ -373,10 +373,18 @@ class _ContactPickerSheetState extends State<_ContactPickerSheet> {
                           ),
                         ),
                         if (_searchCtrl.text.isNotEmpty)
-                          GestureDetector(
-                            onTap: () =>
+                          // Focusable clear button (was a bare
+                          // GestureDetector — UX audit A2).
+                          IconButton(
+                            onPressed: () =>
                                 setState(() => _searchCtrl.clear()),
-                            child: Icon(Icons.close,
+                            tooltip: 'Clear search',
+                            iconSize: 14,
+                            visualDensity: VisualDensity.compact,
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(
+                                minWidth: 40, minHeight: 40),
+                            icon: Icon(Icons.close,
                                 size: 14, color: p.textMuted),
                           ),
                       ],

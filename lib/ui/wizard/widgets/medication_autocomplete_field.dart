@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mhad/services/clinical_data_service.dart';
 import 'package:mhad/utils/debouncer.dart';
 
@@ -33,12 +34,47 @@ class _MedicationAutocompleteFieldState
   final _focusNode = FocusNode();
   final _layerLink = LayerLink();
   OverlayEntry? _overlayEntry;
+  // Keyboard-highlighted suggestion row (-1 = none). Arrow keys move it,
+  // Enter selects, Esc closes — the custom overlay was mouse-only before
+  // (2026-07-11 UX audit A9).
+  int _highlighted = -1;
 
   @override
   void initState() {
     super.initState();
     widget.controller.addListener(_onTextChanged);
     _focusNode.addListener(_onFocusChanged);
+    _focusNode.onKeyEvent = _handleKey;
+  }
+
+  KeyEventResult _handleKey(FocusNode node, KeyEvent event) {
+    if (_overlayEntry == null || _suggestions.isEmpty) {
+      return KeyEventResult.ignored;
+    }
+    if (event is! KeyDownEvent && event is! KeyRepeatEvent) {
+      return KeyEventResult.ignored;
+    }
+    final key = event.logicalKey;
+    if (key == LogicalKeyboardKey.arrowDown) {
+      _highlighted = (_highlighted + 1) % _suggestions.length;
+      _overlayEntry?.markNeedsBuild();
+      return KeyEventResult.handled;
+    }
+    if (key == LogicalKeyboardKey.arrowUp) {
+      _highlighted =
+          (_highlighted - 1 + _suggestions.length) % _suggestions.length;
+      _overlayEntry?.markNeedsBuild();
+      return KeyEventResult.handled;
+    }
+    if (key == LogicalKeyboardKey.enter && _highlighted >= 0) {
+      _selectMedication(_suggestions[_highlighted].name);
+      return KeyEventResult.handled;
+    }
+    if (key == LogicalKeyboardKey.escape) {
+      _removeOverlay();
+      return KeyEventResult.handled;
+    }
+    return KeyEventResult.ignored;
   }
 
   @override
@@ -82,6 +118,7 @@ class _MedicationAutocompleteFieldState
               count: 8);
       if (mounted) {
         setState(() => _suggestions = results);
+        _highlighted = -1;
         if (results.isNotEmpty && _focusNode.hasFocus) {
           _showOverlay();
         } else {
@@ -138,7 +175,10 @@ class _MedicationAutocompleteFieldState
                               '${isNti ? ', narrow therapeutic index drug' : ''}',
                           child: InkWell(
                             onTap: () => _selectMedication(med.name),
-                            child: Padding(
+                            child: Container(
+                              color: i == _highlighted
+                                  ? cs.primaryContainer.withValues(alpha: 0.5)
+                                  : null,
                               padding: const EdgeInsets.fromLTRB(12, 10, 12, 4),
                               child: Row(
                                 children: [
@@ -229,6 +269,7 @@ class _MedicationAutocompleteFieldState
   void _removeOverlay() {
     _overlayEntry?.remove();
     _overlayEntry = null;
+    _highlighted = -1;
   }
 
   @override
@@ -246,12 +287,15 @@ class _MedicationAutocompleteFieldState
           border: const OutlineInputBorder(),
           isDense: true,
           suffixIcon: _loading
-              ? const Padding(
-                  padding: EdgeInsets.all(12),
+              ? Padding(
+                  padding: const EdgeInsets.all(12),
                   child: SizedBox(
                       width: 16,
                       height: 16,
-                      child: CircularProgressIndicator(strokeWidth: 2)),
+                      child: Semantics(
+                          label: 'Searching medications',
+                          child:
+                              const CircularProgressIndicator(strokeWidth: 2))),
                 )
               : widget.controller.text.isNotEmpty
                   ? const Icon(Icons.medication, size: 18)
