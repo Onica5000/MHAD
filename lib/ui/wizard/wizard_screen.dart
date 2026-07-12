@@ -395,14 +395,14 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
     final filled = await buildAiFilledFields(
         ref.read(directiveRepositoryProvider), widget.directiveId);
     if (!context.mounted) return;
-    context.push(
+    unawaited(context.push(
       AppRoutes.assistant,
       extra: AssistantContext(
         formType: formType.name,
         stepName: stepName,
         filledFields: filled.isEmpty ? null : filled,
       ),
-    );
+    ));
   }
 
   Widget _buildStep(WizardStep step, int directiveId, FormType formType) {
@@ -479,7 +479,7 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
 
       if (mounted) {
         if (isLastStep) {
-          if (kIsWeb) WebSessionCache.clear();
+          if (kIsWeb) unawaited(WebSessionCache.clear());
           if (context.mounted) {
             // Prototype split (2026-06-04): Review → Sign → Done.
             // The wizard's last step ends at Review; "Continue" hands

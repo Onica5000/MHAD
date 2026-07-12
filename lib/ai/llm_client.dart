@@ -35,6 +35,17 @@ class UnsupportedInputError implements Exception {
   String toString() => message;
 }
 
+/// Thrown when the provider rejects a request for rate/quota reasons —
+/// HTTP 429 on the REST providers, or the Gemini SDK's quota errors. Typed
+/// here at the transport so callers can apply their own retry/backoff policy
+/// without string-sniffing exception text. Carries a user-facing [message].
+class LlmRateLimitError implements Exception {
+  final String message;
+  const LlmRateLimitError(this.message);
+  @override
+  String toString() => message;
+}
+
 /// Provider-agnostic transport to a single AI model. The caller picks the
 /// provider/model/key (see [AiProvider] and the storage layer); this class only
 /// knows how to talk to each provider's wire format.
@@ -47,13 +58,26 @@ class LlmClient {
   final String model;
   final String apiKey;
   final http.Client _http;
+  final bool _ownsClient;
 
   LlmClient({
     required this.provider,
     required this.model,
     required this.apiKey,
     http.Client? httpClient,
-  }) : _http = httpClient ?? CertificatePinningService.createPinnedClient();
+  })  : _http = httpClient ?? CertificatePinningService.createPinnedClient(),
+        _ownsClient = httpClient == null;
+
+  /// The underlying HTTP client — exposed for the one call that bypasses this
+  /// transport (the assistant's Gemini grounded-search REST call), so it can
+  /// share the same pinned connection instead of creating a second client.
+  http.Client get httpClient => _http;
+
+  /// Closes the underlying HTTP client if this instance created it. Injected
+  /// clients stay open — whoever passed them in owns their lifecycle.
+  void dispose() {
+    if (_ownsClient) _http.close();
+  }
 
   // ── Single-turn text ──────────────────────────────────────────────────────
 
@@ -301,8 +325,22 @@ class LlmClient {
         maxOutputTokens: maxOutputTokens,
       ),
     );
-    final resp = await _await(model.generateContent(contents), timeout);
-    return resp.text ?? '';
+    try {
+      final resp = await _await(model.generateContent(contents), timeout);
+      return resp.text ?? '';
+    } on gen.GenerativeAIException catch (e) {
+      // The Gemini SDK reports quota/rate failures only via message text —
+      // normalize them to the typed error the REST providers already throw.
+      final msg = e.message.toLowerCase();
+      if (msg.contains('429') ||
+          msg.contains('rate limit') ||
+          msg.contains('quota')) {
+        throw LlmRateLimitError(
+            'Too many requests to ${provider.label}. Please wait a minute '
+            'and try again.');
+      }
+      rethrow;
+    }
   }
 
   /// Anthropic Messages API. [messages] content may be a plain string or an
@@ -399,7 +437,7 @@ class LlmClient {
 
   Exception _httpError(http.Response resp) {
     if (resp.statusCode == 429) {
-      return Exception(
+      return LlmRateLimitError(
           'Too many requests to ${provider.label}. Please wait a minute and '
           'try again.');
     }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -64,11 +66,8 @@ Future<void> checkAndOfferDraftRecovery(
     final repo = ref.read(directiveRepositoryProvider);
 
     // Determine form type from draft data
-    final formTypeName = draft.data['formType']?.toString() ?? 'combined';
-    final formType = FormType.values.firstWhere(
-      (e) => e.name == formTypeName,
-      orElse: () => FormType.combined,
-    );
+    final formType = formTypeFromName(draft.data['formType']?.toString()) ??
+        FormType.combined;
 
     // Create a new directive (the old one is gone after crash)
     final newId = await repo.createDirective(formType);
@@ -133,7 +132,7 @@ Future<void> checkAndOfferDraftRecovery(
           duration: Duration(seconds: 4),
         ),
       );
-      context.push(AppRoutes.wizardRoute(newId));
+      unawaited(context.push(AppRoutes.wizardRoute(newId)));
     }
   } catch (e) {
     debugPrint('Draft restore failed: $e');

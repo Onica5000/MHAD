@@ -1,5 +1,6 @@
 import 'package:mhad/constants.dart';
 import 'package:mhad/data/repository/directive_repository.dart';
+import 'package:mhad/domain/model/directive.dart';
 
 /// Builds the "answers so far" context map handed to the AI assistant.
 ///
@@ -26,24 +27,24 @@ Future<Map<String, String>> buildAiFilledFields(
     if (diagNames.isNotEmpty) map['Diagnoses listed'] = diagNames.join(', ');
     final meds = await repo.watchMedications(directiveId).first;
     final preferred = meds
-        .where((m) => m.entryType == 'preferred')
+        .where((m) => m.entryType == MedicationEntryType.preferred.name)
         .map((m) => m.medicationName.trim())
         .where((x) => x.isNotEmpty)
         .toList();
     final current = meds
-        .where((m) => m.entryType == 'current')
+        .where((m) => m.entryType == MedicationEntryType.current.name)
         .map((m) => m.medicationName.trim())
         .where((x) => x.isNotEmpty)
         .toList();
     final avoid = meds
-        .where((m) => m.entryType == 'exception')
+        .where((m) => m.entryType == MedicationEntryType.exception.name)
         .map((m) => m.medicationName.trim())
         .where((x) => x.isNotEmpty)
         .toList();
     // limitation = consented under restrictions (NOT "to avoid" — these are
     // meds the person accepts in specific circumstances).
     final limited = meds
-        .where((m) => m.entryType == 'limitation')
+        .where((m) => m.entryType == MedicationEntryType.limitation.name)
         .map((m) => m.medicationName.trim())
         .where((x) => x.isNotEmpty)
         .toList();

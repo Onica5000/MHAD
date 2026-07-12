@@ -2,13 +2,13 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:google_generative_ai/google_generative_ai.dart' show Schema;
-import 'package:http/http.dart' as http;
 import 'package:image/image.dart' as img;
 import 'package:mhad/ai/ai_provider.dart';
 import 'package:mhad/ai/document_extraction_result.dart';
 import 'package:mhad/ai/llm_client.dart';
 import 'package:mhad/data/app_data/app_data.dart';
-import 'package:mhad/services/certificate_pinning_service.dart';
+import 'package:mhad/domain/model/directive.dart';
+import 'package:mhad/utils/json_utils.dart';
 
 /// Sends a document (image, PDF, text, or audio) to the active AI provider and
 /// extracts structured MHAD-relevant fields (medications, conditions,
@@ -18,26 +18,18 @@ class DocumentExtractor {
   final AiProvider provider;
   final String model;
   final String apiKey;
-  final http.Client _httpClient;
   late final LlmClient _llm;
 
   DocumentExtractor({
     required this.apiKey,
     this.provider = AiProvider.gemini,
     String? model,
-  })  : model = (model != null && model.trim().isNotEmpty)
-            ? model.trim()
-            : (provider == AiProvider.gemini
-                ? appData.ai.model
-                : provider.defaultModel),
-        _httpClient = CertificatePinningService.createPinnedClient() {
-    _llm = LlmClient(
-      provider: provider,
-      model: this.model,
-      apiKey: apiKey,
-      httpClient: _httpClient,
-    );
+  }) : model = provider.resolveModel(model) {
+    _llm = LlmClient(provider: provider, model: this.model, apiKey: apiKey);
   }
+
+  /// Closes the HTTP client. Call when the extraction run is finished.
+  void dispose() => _llm.dispose();
 
   // Gemini tiles images into 768x768 chunks at ~258 tokens each.
   // 1024px max keeps a portrait document to ~2 tiles (~516 tokens).
@@ -152,16 +144,7 @@ $extracted''';
   }
 
   DocumentExtractionResult _parseResponse(String text) {
-    // Strip markdown code fences (handles \r\n from some API responses)
-    var cleaned = text.trim();
-    if (cleaned.startsWith('```')) {
-      cleaned = cleaned
-          .replaceFirst(RegExp(r'^```(?:json)?\s*[\r\n]*'), '')
-          .replaceFirst(RegExp(r'[\r\n]*```\s*$'), '');
-    }
-    // Remove trailing commas before } or ] (common AI JSON quirk)
-    cleaned = cleaned.replaceAll(RegExp(r',(\s*[}\]])'), r'$1');
-
+    final cleaned = cleanLlmJson(text);
     try {
       final json = jsonDecode(cleaned) as Map<String, dynamic>;
       return DocumentExtractionResult.fromJson(json);
@@ -304,15 +287,15 @@ $extracted''';
   /// Appended to the prompt to scope extraction to the form the user chose, so
   /// the AI returns ONLY the fields that form uses. Empty for Combined.
   static String _formScope(String formType) {
-    switch (formType) {
-      case 'poa':
+    switch (formTypeFromName(formType)) {
+      case FormType.poa:
         return '''
 
 ═══ FORM SCOPE: POWER OF ATTORNEY (agent only) ═══
 The user is filling a POWER OF ATTORNEY form. It names a decision-maker but does NOT record treatment preferences.
 EXTRACT ONLY: personal_info for the DECLARANT and for the agent / alternate_agent / guardian; agent_can_consent_hospitalization; agent_can_consent_medication; agent_authority_limitations; effective_condition.
 LEAVE NULL / DO NOT EXTRACT everything else — medications_*, diagnoses, allergies, preferred_facility, avoid_facility, room_preferences_note, same_gender_roommate, ect_consent, experimental_consent, drug_trial_consent, self_binding_ulysses, health_history, dietary, religious, activities, crisis_intervention, records_disclosure, family_notification, pet_custody, children_custody, other. Ignore that content even if it appears in the document.''';
-      case 'declaration':
+      case FormType.declaration:
         return '''
 
 ═══ FORM SCOPE: DECLARATION (treatment preferences only — NO agent) ═══

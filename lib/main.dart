@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -33,66 +34,134 @@ void main() {
   runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
 
-    // Load the app's dynamic facts (contacts/resources, later AI config + legal
-    // facts) from assets/data/app_data.json into the AppData singleton before
-    // the first frame, so every read site has it synchronously.
-    await AppData.load();
-
-    // Load the educational corpus (Learn page + AI assistant reference) from
-    // assets/data/educational_content.json into the EducationalContent store
-    // before the first frame, so the Learn UI and AI prompt builder read it
-    // synchronously.
-    await EducationalContent.load();
-
-    // Lock to portrait orientation on mobile (irrelevant on desktop/web)
-    if (platformIsMobile) {
-      await SystemChrome.setPreferredOrientations([
-        DeviceOrientation.portraitUp,
-        DeviceOrientation.portraitDown,
-      ]);
+    try {
+      await _bootstrap();
+    } catch (error, stack) {
+      // A required startup load failed (asset, storage, secure keystore).
+      // Show an explanation + retry instead of stranding the user on a
+      // blank frame.
+      debugPrint('Startup failed: $error\n$stack');
+      runApp(_BootErrorApp(error));
     }
-    // Load persisted disclaimer + onboarding state
-    final disclaimerNotifier = await DisclaimerNotifier.load();
-    final onboardingNotifier = await OnboardingNotifier.load();
-
-    // Resolve database encryption key from secure storage (generates on first
-    // launch). This must complete before runApp so the key is available
-    // synchronously to the appDatabaseProvider.
-    final dbEncryptionKey =
-        await DatabaseEncryptionService.getOrCreateKey();
-
-    // Pre-load cached AI prefs (per-provider keys / active provider / models)
-    // from SharedPreferences so they're available synchronously on the first
-    // frame (avoids async race on web reload).
-    final cachedAiPrefs = await PublicSessionCache.getCachedPrefs();
-
-    // Privacy mode starts fresh every launch (not persisted)
-    final privacyModeNotifier = PrivacyModeNotifier();
-
-    // Wire the gate notifiers into the router before runApp
-    initRouter(disclaimerNotifier, onboardingNotifier, privacyModeNotifier);
-
-    // Non-fatal background init
-    await NotificationService.instance.initialize();
-
-    runApp(ProviderScope(
-      overrides: [
-        // Expose the same PrivacyModeNotifier instance to Riverpod so that
-        // appDatabaseProvider can watch its mode changes.
-        privacyModeNotifierProvider.overrideWith((_) => privacyModeNotifier),
-        // Inject the database encryption key so appDatabaseProvider can use it
-        // to open the SQLCipher-encrypted database in private mode.
-        dbEncryptionKeyProvider.overrideWithValue(dbEncryptionKey),
-        // Pre-loaded AI prefs from SharedPreferences cache (avoids async race
-        // on web page reload).
-        if (cachedAiPrefs != null)
-          preloadedAiPrefsProvider.overrideWith((_) => cachedAiPrefs),
-      ],
-      child: const MhadApp(),
-    ));
   }, (error, stack) {
     debugPrint('Unhandled async error: $error\n$stack');
   });
+}
+
+/// Runs every pre-frame load and calls [runApp]. All loads below must
+/// complete before the first frame so their read sites stay synchronous;
+/// they are independent of each other, so they run in parallel.
+Future<void> _bootstrap() async {
+  // AppData: dynamic facts (contacts/resources, AI config, legal facts) from
+  // assets/data/app_data.json into the AppData singleton.
+  final appDataLoad = AppData.load();
+  // Educational corpus (Learn page + AI assistant reference).
+  final educationalLoad = EducationalContent.load();
+  // Persisted disclaimer + onboarding state.
+  final disclaimerLoad = DisclaimerNotifier.load();
+  final onboardingLoad = OnboardingNotifier.load();
+  // Database encryption key from secure storage (generates on first launch),
+  // needed synchronously by appDatabaseProvider. Web never uses it — the web
+  // database is always in-memory (createEncryptedDatabase ignores the key),
+  // so skip the secure-storage round-trip there rather than let a browser
+  // storage failure block boot for a key nothing reads.
+  final dbKeyLoad = kIsWeb
+      ? Future<String>.value('')
+      : DatabaseEncryptionService.getOrCreateKey();
+  // Cached AI prefs (per-provider keys / active provider / models) from
+  // SharedPreferences, available synchronously on the first frame (avoids
+  // async race on web reload).
+  final cachedAiPrefsLoad = PublicSessionCache.getCachedPrefs();
+
+  // Lock to portrait orientation on mobile (irrelevant on desktop/web)
+  if (platformIsMobile) {
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+  }
+
+  await Future.wait<void>(
+      [appDataLoad, educationalLoad, disclaimerLoad, onboardingLoad]);
+  final disclaimerNotifier = await disclaimerLoad;
+  final onboardingNotifier = await onboardingLoad;
+  final dbEncryptionKey = await dbKeyLoad;
+  final cachedAiPrefs = await cachedAiPrefsLoad;
+
+  // Privacy mode starts fresh every launch (not persisted)
+  final privacyModeNotifier = PrivacyModeNotifier();
+
+  // Wire the gate notifiers into the router before runApp
+  initRouter(disclaimerNotifier, onboardingNotifier, privacyModeNotifier);
+
+  // Non-fatal background init
+  await NotificationService.instance.initialize();
+
+  runApp(ProviderScope(
+    overrides: [
+      // Expose the same PrivacyModeNotifier instance to Riverpod so that
+      // appDatabaseProvider can watch its mode changes.
+      privacyModeNotifierProvider.overrideWith((_) => privacyModeNotifier),
+      // Inject the database encryption key so appDatabaseProvider can use it
+      // to open the SQLCipher-encrypted database in private mode.
+      dbEncryptionKeyProvider.overrideWithValue(dbEncryptionKey),
+      // Pre-loaded AI prefs from SharedPreferences cache (avoids async race
+      // on web page reload).
+      if (cachedAiPrefs != null)
+        preloadedAiPrefsProvider.overrideWith((_) => cachedAiPrefs),
+    ],
+    child: const MhadApp(),
+  ));
+}
+
+/// Fallback UI when a required startup load throws — explains the failure
+/// and offers a retry, instead of the blank frame the user got before.
+/// Deliberately self-contained (no router/theme/l10n: those may be exactly
+/// what failed to load).
+class _BootErrorApp extends StatelessWidget {
+  final Object error;
+  const _BootErrorApp(this.error);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        body: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 420),
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.error_outline, size: 48),
+                  const SizedBox(height: 16),
+                  const Text(
+                    "The app couldn't start",
+                    style: TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.w600),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Something needed at startup failed to load. '
+                    'Your saved data has not been changed.\n\n$error',
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 24),
+                  FilledButton(
+                    onPressed: main,
+                    child: const Text('Try again'),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class MhadApp extends ConsumerWidget {

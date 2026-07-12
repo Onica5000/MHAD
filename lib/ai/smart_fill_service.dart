@@ -2,14 +2,13 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
 import 'package:mhad/ai/ai_clinical_policy.dart';
 import 'package:mhad/ai/ai_provider.dart';
 import 'package:mhad/ai/llm_client.dart';
 import 'package:mhad/ai/pii_stripper.dart';
 import 'package:mhad/constants.dart';
 import 'package:mhad/data/app_data/app_data.dart';
-import 'package:mhad/services/certificate_pinning_service.dart';
+import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/services/clinical_data_service.dart';
 import 'package:mhad/services/gemini_rate_tracker.dart';
 import 'package:mhad/utils/json_utils.dart';
@@ -21,7 +20,6 @@ class SmartFillInput {
   static int get maxConditions => appData.config.maxIcdConditions;
   static int get maxMedsPerCategory => appData.config.maxMedicationsPerCategory;
   static int get maxFieldLength => appData.config.maxFieldChars;
-  static const _validFormTypes = {'combined', 'declaration', 'poa'};
 
   final List<IcdCondition> conditions;
   final List<String> currentMedications;
@@ -97,7 +95,7 @@ class SmartFillInput {
   /// Validates and clamps input to safe bounds.
   SmartFillInput sanitized() {
     final safeFormType =
-        _validFormTypes.contains(formType) ? formType : 'combined';
+        (formTypeFromName(formType) ?? FormType.combined).name;
     return SmartFillInput(
       conditions: conditions.take(maxConditions).toList(),
       currentMedications: currentMedications.take(maxMedsPerCategory).toList(),
@@ -294,33 +292,25 @@ class SmartFillService {
   final AiProvider provider;
   final String model;
   final String apiKey;
-  final http.Client _httpClient;
   late final LlmClient _llm;
 
   SmartFillService({
     required this.apiKey,
     this.provider = AiProvider.gemini,
     String? model,
-  })  : model = (model != null && model.trim().isNotEmpty)
-            ? model.trim()
-            : (provider == AiProvider.gemini
-                ? appData.ai.model
-                : provider.defaultModel),
-        _httpClient = CertificatePinningService.createPinnedClient() {
-    _llm = LlmClient(
-      provider: provider,
-      model: this.model,
-      apiKey: apiKey,
-      httpClient: _httpClient,
-    );
+  }) : model = provider.resolveModel(model) {
+    _llm = LlmClient(provider: provider, model: this.model, apiKey: apiKey);
   }
+
+  /// Closes the HTTP client. Call when the smart-fill run is finished.
+  void dispose() => _llm.dispose();
 
   /// Given structured clinical data, ask the AI to generate directive content.
   /// Returns [SmartFillResponse] containing the parsed result and an estimate of
   /// token usage (for rate tracking).
   Future<SmartFillResponse> generate(SmartFillInput rawInput) async {
     final input = rawInput.sanitized();
-    final prompt = _buildPrompt(input);
+    final prompt = buildPrompt(input);
     debugPrint('SmartFill prompt: ${prompt.length} chars '
         '(~${(prompt.length / 4).round()} tokens), '
         '${input.conditions.length} conditions, '
@@ -337,10 +327,8 @@ class SmartFillService {
             timeout: appData.config.smartFillTimeout,
           );
           break; // success
-        } catch (e) {
-          final msg = e.toString().toLowerCase();
-          if ((msg.contains('429') || msg.contains('rate limit')) &&
-              attempt == 0) {
+        } on LlmRateLimitError {
+          if (attempt == 0) {
             await Future<void>.delayed(appData.config.rateLimitBackoff);
             continue;
           }
@@ -365,16 +353,15 @@ class SmartFillService {
       );
     } on TimeoutException {
       throw Exception('Request timed out. Please try again.');
-    } catch (e) {
-      final msg = e.toString().toLowerCase();
-      if (msg.contains('429') || msg.contains('rate limit')) {
-        throw Exception('Rate limited. Please wait a moment and try again.');
-      }
-      rethrow;
+    } on LlmRateLimitError {
+      throw Exception('Rate limited. Please wait a moment and try again.');
     }
   }
 
-  String _buildPrompt(SmartFillInput input) {
+  /// Builds the full generation prompt. Exposed for tests so the consent
+  /// wording and PII-stripping contract can be pinned without a network call.
+  @visibleForTesting
+  String buildPrompt(SmartFillInput input) {
     final buf = StringBuffer();
 
     buf.writeln('PA Mental Health Advance Directive auto-fill.');
@@ -430,12 +417,12 @@ class SmartFillService {
     // The AI MUST respect these decisions and never suggest overriding them.
     existing.add('');
     existing.add('=== CONSENT DECISIONS (BINDING — do NOT contradict) ===');
-    existing.add('Medication consent: ${s(_describeConsent(input.existingMedicationConsent))}');
-    existing.add('ECT consent: ${s(_describeConsent(input.existingEctConsent))}');
-    existing.add('Experimental studies consent: ${s(_describeConsent(input.existingExperimentalConsent))}');
-    existing.add('Drug trial consent: ${s(_describeConsent(input.existingDrugTrialConsent))}');
+    existing.add('Medication consent: ${s(describeConsent(input.existingMedicationConsent))}');
+    existing.add('ECT consent: ${s(describeConsent(input.existingEctConsent))}');
+    existing.add('Experimental studies consent: ${s(describeConsent(input.existingExperimentalConsent))}');
+    existing.add('Drug trial consent: ${s(describeConsent(input.existingDrugTrialConsent))}');
     // Agent authority (POA/combined only) — always send full picture
-    if (input.formType != 'declaration') {
+    if (input.formType != FormType.declaration.name) {
       existing.add('Agent consent to hospitalization: ${input.existingAgentCanConsentHospitalization ? "YES — agent authorized" : "NO — agent NOT authorized"}');
       existing.add('Agent consent to medication: ${input.existingAgentCanConsentMedication ? "YES — agent authorized" : "NO — agent NOT authorized"}');
       if (input.existingAgentAuthorityLimitations.isNotEmpty) {
@@ -636,8 +623,8 @@ class SmartFillService {
     buf.writeln('  "pet_custody": "${fieldDesc(
         'Arrangements for pets during treatment — who should care for them, '
         'feeding/medication schedules, veterinary contacts',
-        input.existingPetCustody)}"${input.formType != 'declaration' ? ',' : ''}');
-    if (input.formType != 'declaration') {
+        input.existingPetCustody)}"${input.formType != FormType.declaration.name ? ',' : ''}');
+    if (input.formType != FormType.declaration.name) {
       buf.writeln('  "agent_guidance": "${fieldDesc(
           'What the agent should know — warning signs the user has described and '
           'the treatment preferences the user has stated for the agent to advocate '
@@ -651,7 +638,8 @@ class SmartFillService {
 
   /// Translate stored consent values into clear human-readable descriptions
   /// so the AI understands the user's hard decisions.
-  static String _describeConsent(String value) {
+  @visibleForTesting
+  static String describeConsent(String value) {
     if (value == consentYes) return 'YES — user consents';
     if (value == consentNo) return 'NO — user refuses (hard no, do NOT suggest otherwise)';
     if (value == consentAgentDecides) return 'AGENT DECIDES — user delegated to agent';
@@ -662,15 +650,7 @@ class SmartFillService {
   }
 
   SmartFillResult _parse(String text) {
-    var cleaned = text.trim();
-    // Strip markdown code fences (handles \r\n from some API responses)
-    if (cleaned.startsWith('```')) {
-      cleaned = cleaned
-          .replaceFirst(RegExp(r'^```(?:json)?\s*[\r\n]*'), '')
-          .replaceFirst(RegExp(r'[\r\n]*```\s*$'), '');
-    }
-    // Remove trailing commas before } or ] (common AI JSON quirk)
-    cleaned = cleaned.replaceAll(RegExp(r',(\s*[}\]])'), r'$1');
+    final cleaned = cleanLlmJson(text);
     try {
       final json = jsonDecode(cleaned) as Map<String, dynamic>;
       return SmartFillResult.fromJson(json);

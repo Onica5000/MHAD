@@ -1,4 +1,6 @@
-﻿import 'package:flutter/material.dart';
+﻿import 'dart:async';
+
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
@@ -99,7 +101,7 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
       ),
     );
     if (!mounted) return;
-    Navigator.of(context).maybePop();
+    unawaited(Navigator.of(context).maybePop());
   }
 
   @override

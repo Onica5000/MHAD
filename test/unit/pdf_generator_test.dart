@@ -217,7 +217,7 @@ void main() {
         );
 
     test('only combinedSelected → produces non-empty PDF bytes', () async {
-      final generator = const PdfGenerator(
+      const generator = PdfGenerator(
         includeCombined: true,
         includeDeclaration: false,
         includePoa: false,
@@ -232,7 +232,7 @@ void main() {
     });
 
     test('only supplementary selected → produces non-empty PDF bytes', () async {
-      final generator = const PdfGenerator(
+      const generator = PdfGenerator(
         includeCombined: false,
         includeDeclaration: false,
         includePoa: false,
@@ -247,7 +247,7 @@ void main() {
     });
 
     test('only notes selected → produces non-empty PDF bytes', () async {
-      final generator = const PdfGenerator(
+      const generator = PdfGenerator(
         includeCombined: false,
         includeDeclaration: false,
         includePoa: false,
@@ -262,7 +262,7 @@ void main() {
     });
 
     test('all flags true → produces non-empty PDF bytes', () async {
-      final generator = const PdfGenerator(
+      const generator = PdfGenerator(
         includeCombined: true,
         includeDeclaration: true,
         includePoa: true,
@@ -278,7 +278,7 @@ void main() {
 
     test('supplementary + notes (no form pages) → produces non-empty PDF bytes',
         () async {
-      final generator = const PdfGenerator(
+      const generator = PdfGenerator(
         includeCombined: false,
         includeDeclaration: false,
         includePoa: false,
@@ -293,7 +293,7 @@ void main() {
     });
 
     test('combined + supplementary → produces non-empty PDF bytes', () async {
-      final generator = const PdfGenerator(
+      const generator = PdfGenerator(
         includeCombined: true,
         includeDeclaration: false,
         includePoa: false,
@@ -308,7 +308,7 @@ void main() {
     });
 
     test('declaration only → produces non-empty PDF bytes', () async {
-      final generator = const PdfGenerator(
+      const generator = PdfGenerator(
         includeCombined: false,
         includeDeclaration: true,
         includePoa: false,
@@ -323,7 +323,7 @@ void main() {
     });
 
     test('POA only → produces non-empty PDF bytes', () async {
-      final generator = const PdfGenerator(
+      const generator = PdfGenerator(
         includeCombined: false,
         includeDeclaration: false,
         includePoa: true,
@@ -431,7 +431,7 @@ void main() {
     });
 
     test('generates without error when optional data is null', () async {
-      final generator = const PdfGenerator(
+      const generator = PdfGenerator(
         includeCombined: true,
         includeDeclaration: true,
         includePoa: true,
@@ -457,7 +457,7 @@ void main() {
 
     test('generates without error when agents and medications lists are empty',
         () async {
-      final generator = const PdfGenerator(
+      const generator = PdfGenerator(
         includeCombined: true,
         includeDeclaration: false,
         includePoa: true,

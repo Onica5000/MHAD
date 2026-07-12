@@ -376,7 +376,7 @@ void main() {
 
     group('combined stripping', () {
       test('strips multiple PII types in one message', () {
-        final input = 'My name is John, SSN 123-45-6789, '
+        const input = 'My name is John, SSN 123-45-6789, '
             'email john@example.com, phone (215) 555-1234';
         final result = PiiStripper.strip(input);
         expect(result, isNot(contains('123-45-6789')));
@@ -385,7 +385,7 @@ void main() {
       });
 
       test('strips name + address + DOB together', () {
-        final input = 'I am John Smith, born on 01/15/1990, '
+        const input = 'I am John Smith, born on 01/15/1990, '
             'living at 123 Main Street';
         final result = PiiStripper.strip(input);
         expect(result, isNot(contains('John Smith')));

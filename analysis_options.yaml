@@ -9,6 +9,12 @@
 # packages, and plugins designed to encourage good coding practices.
 include: package:flutter_lints/flutter.yaml
 
+analyzer:
+  exclude:
+    # Untracked local backup of pre-visual-polish screens (kept out of git;
+    # the durable revert anchor is the `pre-visual-polish` tag). Don't lint it.
+    - _visual_backup/**
+
 linter:
   # The lint rules applied to this project can be customized in the
   # section below to disable rules from the `package:flutter_lints/flutter.yaml`
@@ -21,8 +27,16 @@ linter:
   # `// ignore_for_file: name_of_lint` syntax on the line or in the file
   # producing the lint.
   rules:
-    # avoid_print: false  # Uncomment to disable the `avoid_print` rule
-    # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
+    # Additions on top of flutter_lints (code-review 2026-07-08) — a curated,
+    # high-signal set the codebase already passes. Keep this list short;
+    # don't add churny style rules.
+    unawaited_futures: true          # fire-and-forget futures must be explicit
+    cancel_subscriptions: true       # StreamSubscriptions need cancel()
+    always_declare_return_types: true
+    unnecessary_await_in_return: true
+    prefer_const_declarations: true
+    avoid_bool_literals_in_conditional_expressions: true
+    only_throw_errors: true
 
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options

@@ -1,6 +1,7 @@
 import 'package:mhad/constants.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/agent_ext.dart';
+import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/services/instruction_fields.dart';
 import 'package:mhad/utils/medication_display.dart';
 
@@ -64,10 +65,10 @@ class ExportFormatsService {
 
     for (final m in medications) {
       if (m.medicationName.trim().isEmpty) continue;
-      final kind = switch (m.entryType) {
-        'exception' => 'Avoid',
-        'preferred' => 'Preferred',
-        'current' => 'Currently taking',
+      final kind = switch (medicationEntryTypeFromName(m.entryType)) {
+        MedicationEntryType.exception => 'Avoid',
+        MedicationEntryType.preferred => 'Preferred',
+        MedicationEntryType.current => 'Currently taking',
         _ => 'Limitation',
       };
       // Add directly rather than via row(), which drops empty-detail rows — a
@@ -183,7 +184,7 @@ class ExportFormatsService {
     for (final med in medications) {
       b.writeln('    <provision>');
       b.writeln('      <type value="'
-          '${med.entryType == 'exception' ? 'deny' : 'permit'}"/>');
+          '${med.entryType == MedicationEntryType.exception.name ? 'deny' : 'permit'}"/>');
       b.writeln('      <code>');
       b.writeln('        <text value="'
           '${_xml(medicationWithDosage(med.medicationName, med.dosage))}"/>');

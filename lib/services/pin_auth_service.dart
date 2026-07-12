@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:crypto/crypto.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:mhad/services/secure_storage_config.dart';
 
 /// Manages a user-chosen passcode for Private Mode on devices without
 /// biometric authentication.
@@ -11,15 +12,10 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 /// before being stored in [FlutterSecureStorage] (hardware-backed encrypted
 /// storage). The salt is stored alongside the hash.
 class PinAuthService {
-  static const _pinHashKey = 'mhad_pin_hash';
-  static const _pinSaltKey = 'mhad_pin_salt';
+  static const _pinHashKey = SecureStorageKeys.pinHash;
+  static const _pinSaltKey = SecureStorageKeys.pinSalt;
 
-  static const FlutterSecureStorage _storage = FlutterSecureStorage(
-    aOptions: AndroidOptions(encryptedSharedPreferences: true),
-    iOptions: IOSOptions(
-      accessibility: KeychainAccessibility.first_unlock_this_device,
-    ),
-  );
+  static const FlutterSecureStorage _storage = appSecureStorage;
 
   /// Generates a cryptographically random 32-byte hex salt.
   static String _generateSalt() {

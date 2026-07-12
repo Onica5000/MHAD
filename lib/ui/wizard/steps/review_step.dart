@@ -144,9 +144,15 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
     final primaryAgent = agents.primaryAgent;
     final altAgent = agents.alternateAgent;
 
-    final exceptions = meds.where((m) => m.entryType == 'exception').toList();
-    final limitations = meds.where((m) => m.entryType == 'limitation').toList();
-    final preferred = meds.where((m) => m.entryType == 'preferred').toList();
+    final exceptions = meds
+        .where((m) => m.entryType == MedicationEntryType.exception.name)
+        .toList();
+    final limitations = meds
+        .where((m) => m.entryType == MedicationEntryType.limitation.name)
+        .toList();
+    final preferred = meds
+        .where((m) => m.entryType == MedicationEntryType.preferred.name)
+        .toList();
 
     String firstPhone(Agent? a) => a == null
         ? ''

@@ -12,6 +12,42 @@ class AppLocalizationsEs extends AppLocalizations {
   String get appTitle => 'Directiva Anticipada de\nSalud Mental de PA';
 
   @override
+  String get navHome => 'Home';
+
+  @override
+  String get navLearn => 'Learn';
+
+  @override
+  String get navAsk => 'Ask';
+
+  @override
+  String get navSettings => 'Settings';
+
+  @override
+  String get navMore => 'More';
+
+  @override
+  String get navStart => 'Start';
+
+  @override
+  String get navAutofill => 'Autofill';
+
+  @override
+  String get navAiAssistant => 'AI assistant';
+
+  @override
+  String get navDownloadPrint => 'Download & print';
+
+  @override
+  String get navResetForm => 'Reset Form';
+
+  @override
+  String get badgeAiReady => 'READY';
+
+  @override
+  String get badgeAiSetUp => 'SET UP';
+
+  @override
   String get newDirective => 'Nueva Directiva';
 
   @override

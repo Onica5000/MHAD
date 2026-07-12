@@ -104,6 +104,78 @@ abstract class AppLocalizations {
   /// **'PA Mental Health\nAdvance Directive'**
   String get appTitle;
 
+  /// No description provided for @navHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get navHome;
+
+  /// No description provided for @navLearn.
+  ///
+  /// In en, this message translates to:
+  /// **'Learn'**
+  String get navLearn;
+
+  /// No description provided for @navAsk.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask'**
+  String get navAsk;
+
+  /// No description provided for @navSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get navSettings;
+
+  /// No description provided for @navMore.
+  ///
+  /// In en, this message translates to:
+  /// **'More'**
+  String get navMore;
+
+  /// No description provided for @navStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get navStart;
+
+  /// No description provided for @navAutofill.
+  ///
+  /// In en, this message translates to:
+  /// **'Autofill'**
+  String get navAutofill;
+
+  /// No description provided for @navAiAssistant.
+  ///
+  /// In en, this message translates to:
+  /// **'AI assistant'**
+  String get navAiAssistant;
+
+  /// No description provided for @navDownloadPrint.
+  ///
+  /// In en, this message translates to:
+  /// **'Download & print'**
+  String get navDownloadPrint;
+
+  /// No description provided for @navResetForm.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset Form'**
+  String get navResetForm;
+
+  /// No description provided for @badgeAiReady.
+  ///
+  /// In en, this message translates to:
+  /// **'READY'**
+  String get badgeAiReady;
+
+  /// No description provided for @badgeAiSetUp.
+  ///
+  /// In en, this message translates to:
+  /// **'SET UP'**
+  String get badgeAiSetUp;
+
   /// No description provided for @newDirective.
   ///
   /// In en, this message translates to:

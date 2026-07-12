@@ -14,6 +14,7 @@ import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/brand_motif.dart';
+import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/design/wizard_header.dart';
@@ -59,7 +60,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
     // not ones they take now; avoid/limitation entries aren't taken either —
     // none of those belong in a side-effect check of current medications.
     final names = meds
-        .where((m) => m.entryType == 'current')
+        .where((m) => m.entryType == MedicationEntryType.current.name)
         .map((m) => m.medicationName.trim())
         .where((n) => n.isNotEmpty)
         .toSet()

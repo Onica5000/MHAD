@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -83,7 +85,7 @@ class _WizardAiRailState extends ConsumerState<WizardAiRail> {
     if (!mounted) return;
     if (result.needsKey) {
       _inputCtrl.text = text;
-      context.push(AppRoutes.aiSetup);
+      unawaited(context.push(AppRoutes.aiSetup));
       return;
     }
     if (result.consentDeclined || result.alreadySending) {

@@ -1,5 +1,6 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
@@ -35,21 +36,21 @@ class MhadBottomNav extends ConsumerWidget {
       _NavItem(
         icon: Icons.home_outlined,
         activeIcon: Icons.home,
-        label: 'Home',
+        label: context.l10n.navHome,
         active: loc == AppRoutes.home,
         onTap: () => appRouter.go(AppRoutes.home),
       ),
       _NavItem(
         icon: Icons.menu_book_outlined,
         activeIcon: Icons.menu_book,
-        label: 'Learn',
+        label: context.l10n.navLearn,
         active: loc == AppRoutes.education,
         onTap: () => appRouter.go(AppRoutes.education),
       ),
       _NavItem(
         icon: Icons.auto_awesome_outlined,
         activeIcon: Icons.auto_awesome,
-        label: 'Ask',
+        label: context.l10n.navAsk,
         active: loc == AppRoutes.assistant || loc == AppRoutes.aiSetup,
         onTap: () => appRouter.go(
           aiReady ? AppRoutes.assistant : AppRoutes.aiSetup,
@@ -58,7 +59,7 @@ class MhadBottomNav extends ConsumerWidget {
       _NavItem(
         icon: Icons.settings_outlined,
         activeIcon: Icons.settings,
-        label: 'Settings',
+        label: context.l10n.navSettings,
         active: loc == AppRoutes.settings,
         onTap: () => appRouter.go(AppRoutes.settings),
       ),
@@ -69,7 +70,7 @@ class MhadBottomNav extends ConsumerWidget {
       _NavItem(
         icon: Icons.more_horiz,
         activeIcon: Icons.more_horiz,
-        label: 'More',
+        label: context.l10n.navMore,
         active: false,
         onTap: () {
           final ctx = rootNavigatorKey.currentContext;

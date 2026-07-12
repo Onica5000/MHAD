@@ -20,8 +20,9 @@ extension _PipelineApplyLogic on _PipelineScreenState {
       _statusMessage = 'AI is generating personalized suggestions...';
     });
 
+    SmartFillService? service;
     try {
-      final service = SmartFillService(
+      service = SmartFillService(
         apiKey: aiCfg.key,
         provider: aiCfg.provider,
         model: aiCfg.model,
@@ -62,6 +63,8 @@ extension _PipelineApplyLogic on _PipelineScreenState {
         // Still apply extracted data
         await _applyAll();
       }
+    } finally {
+      service?.dispose();
     }
   }
 

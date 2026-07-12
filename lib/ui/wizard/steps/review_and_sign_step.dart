@@ -40,7 +40,7 @@ class _ReviewAndSignStepState extends ConsumerState<ReviewAndSignStep>
   Future<bool> validateAndSave() async {
     final s = _reviewKey.currentState;
     if (s is WizardStepMixin) {
-      return await (s as WizardStepMixin).validateAndSave();
+      return (s as WizardStepMixin).validateAndSave();
     }
     return true;
   }

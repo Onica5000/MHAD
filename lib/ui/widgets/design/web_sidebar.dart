@@ -1,4 +1,5 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
@@ -102,21 +103,21 @@ class WebSidebar extends ConsumerWidget {
       _SidebarItem(
         icon: Icons.home_outlined,
         activeIcon: Icons.home,
-        label: 'Start',
+        label: context.l10n.navStart,
         isActive: activeRoute == AppRoutes.home,
         onTap: () => appRouter.go(AppRoutes.home),
       ),
       _SidebarItem(
         icon: Icons.menu_book_outlined,
         activeIcon: Icons.menu_book,
-        label: 'Learn',
+        label: context.l10n.navLearn,
         isActive: activeRoute == AppRoutes.education,
         onTap: () => appRouter.go(AppRoutes.education),
       ),
       _SidebarItem(
         icon: Icons.document_scanner_outlined,
         activeIcon: Icons.document_scanner,
-        label: 'Autofill',
+        label: context.l10n.navAutofill,
         isActive: activeRoute.startsWith('/upload/'),
         // Reuse the most-recent directive (the one you're working on) so the
         // page autofills it; with none on file (fresh web session), create a
@@ -133,17 +134,19 @@ class WebSidebar extends ConsumerWidget {
       _SidebarItem(
         icon: aiReady ? Icons.auto_awesome : Icons.auto_awesome_outlined,
         activeIcon: Icons.auto_awesome,
-        label: 'AI assistant',
+        label: context.l10n.navAiAssistant,
         isActive: activeRoute == AppRoutes.assistant ||
             activeRoute == AppRoutes.aiSetup,
-        trailing: aiReady ? _Badge('READY', tone: 'ok') : _Badge('SET UP'),
+        trailing: aiReady
+            ? _Badge(context.l10n.badgeAiReady, tone: 'ok')
+            : _Badge(context.l10n.badgeAiSetUp),
         onTap: () =>
             appRouter.go(aiReady ? AppRoutes.assistant : AppRoutes.aiSetup),
       ),
       _SidebarItem(
         icon: Icons.print_outlined,
         activeIcon: Icons.print,
-        label: 'Download & print',
+        label: context.l10n.navDownloadPrint,
         isActive: activeRoute.startsWith('/export/'),
         // Open the export/preview screen for the directive you're working on
         // (same destination as the wizard's "Preview & download packet"). With
@@ -171,7 +174,7 @@ class WebSidebar extends ConsumerWidget {
       _SidebarItem(
         icon: Icons.settings_outlined,
         activeIcon: Icons.settings,
-        label: 'Settings',
+        label: context.l10n.navSettings,
         isActive: activeRoute == AppRoutes.settings,
         onTap: () => appRouter.go(AppRoutes.settings),
       ),
@@ -181,7 +184,7 @@ class WebSidebar extends ConsumerWidget {
       _SidebarItem(
         icon: Icons.delete_sweep_outlined,
         activeIcon: Icons.delete_sweep_outlined,
-        label: 'Reset Form',
+        label: context.l10n.navResetForm,
         isActive: false,
         onTap: () => _resetForm(ref),
       ),

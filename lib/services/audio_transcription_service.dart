@@ -25,11 +25,7 @@ class AudioTranscriptionService {
     required this.apiKey,
     this.provider = AiProvider.gemini,
     String? model,
-  }) : model = (model != null && model.trim().isNotEmpty)
-            ? model.trim()
-            : (provider == AiProvider.gemini
-                ? appData.ai.model
-                : provider.defaultModel);
+  }) : model = provider.resolveModel(model);
 
   Future<String> transcribe(
     Uint8List audioBytes, {
@@ -37,12 +33,16 @@ class AudioTranscriptionService {
   }) async {
     final client =
         LlmClient(provider: provider, model: model, apiKey: apiKey);
-    final text = await client.generateMultimodal(
-      parts: [LlmText(_prompt), LlmData(mimeType, audioBytes)],
-      maxOutputTokens: appData.ai.maxOutputTokens,
-      timeout: appData.config.documentExtractionTimeout,
-    );
-    return text.trim();
+    try {
+      final text = await client.generateMultimodal(
+        parts: [LlmText(_prompt), LlmData(mimeType, audioBytes)],
+        maxOutputTokens: appData.ai.maxOutputTokens,
+        timeout: appData.config.documentExtractionTimeout,
+      );
+      return text.trim();
+    } finally {
+      client.dispose();
+    }
   }
 
   static const _prompt = '''

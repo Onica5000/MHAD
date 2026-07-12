@@ -13,8 +13,8 @@ import 'package:mhad/ai/side_effect_item.dart';
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/data/educational_content.dart';
 import 'package:mhad/domain/model/directive.dart';
-import 'package:mhad/services/certificate_pinning_service.dart';
 import 'package:mhad/services/openfda_service.dart';
+import 'package:mhad/utils/json_utils.dart';
 
 /// Backward-compatible name: the assistant is now provider-agnostic (Gemini is
 /// just the default). Still imported as `GeminiApiAssistant` across the app.
@@ -30,30 +30,31 @@ class LlmAssistant implements AiAssistant {
   final AiProvider provider;
   final String model;
   final String apiKey;
-  final http.Client _httpClient;
   late final LlmClient _llm;
 
   /// [httpClient] is injectable for tests (e.g. asserting no raw PII leaves the
-  /// assistant); production passes none and gets the cert-pinned client.
+  /// assistant); production passes none and [LlmClient] creates (and owns) the
+  /// cert-pinned client.
   LlmAssistant({
     required this.apiKey,
     this.provider = AiProvider.gemini,
     String? model,
     http.Client? httpClient,
-  })  : model = (model != null && model.trim().isNotEmpty)
-            ? model.trim()
-            : (provider == AiProvider.gemini
-                ? appData.ai.model
-                : provider.defaultModel),
-        _httpClient =
-            httpClient ?? CertificatePinningService.createPinnedClient() {
+  }) : model = provider.resolveModel(model) {
     _llm = LlmClient(
       provider: provider,
       model: this.model,
       apiKey: apiKey,
-      httpClient: _httpClient,
+      httpClient: httpClient,
     );
   }
+
+  /// The pinned client, shared with the grounded-search REST call below.
+  http.Client get _httpClient => _llm.httpClient;
+
+  /// Closes the HTTP client this assistant created (no-op for injected test
+  /// clients). Called when [aiAssistantProvider] rebuilds or is disposed.
+  void dispose() => _llm.dispose();
 
   /// Shared JSON-mode generation for the structured helpers below: strips PII,
   /// asks the active provider for a raw JSON object, and removes any markdown
@@ -65,15 +66,8 @@ class LlmAssistant implements AiAssistant {
       json: true,
       timeout: timeout,
     );
-    var text = raw.trim();
-    if (text.isEmpty) return null;
-    if (text.startsWith('```')) {
-      text = text.replaceFirst(RegExp(r'^```(?:json)?'), '').trim();
-      if (text.endsWith('```')) {
-        text = text.substring(0, text.length - 3).trim();
-      }
-    }
-    return text;
+    final text = stripLlmCodeFences(raw);
+    return text.isEmpty ? null : text;
   }
 
   /// Maximum input tokens for the Gemini model (from app_data.json). Kept for
@@ -149,7 +143,7 @@ class LlmAssistant implements AiAssistant {
         ? Duration.zero
         : backoffList[i < backoffList.length ? i : backoffList.length - 1];
 
-    Object? lastError;
+    Exception? lastError;
     for (var attempt = 0; attempt < maxAttempts; attempt++) {
       try {
         final text = await _llm.chat(
@@ -167,19 +161,17 @@ class LlmAssistant implements AiAssistant {
         lastError = Exception(
             'The request timed out. Please check your internet connection and '
             'try again.');
+      } on LlmRateLimitError {
+        // Fail fast with the quota explanation \u2014 retrying into a rate limit
+        // only digs the hole deeper.
+        final tier = provider == AiProvider.gemini
+            ? 'The free tier allows about ${appData.ai.rpm} requests per '
+                'minute (${appData.ai.rpd} per day). '
+            : '';
+        throw Exception(
+            'Too many requests. ${tier}Please wait 1\u20132 minutes and try '
+            'again.');
       } catch (e) {
-        final msg = e.toString().toLowerCase();
-        if (msg.contains('429') ||
-            msg.contains('rate limit') ||
-            msg.contains('quota')) {
-          final tier = provider == AiProvider.gemini
-              ? 'The free tier allows about ${appData.ai.rpm} requests per '
-                  'minute (${appData.ai.rpd} per day). '
-              : '';
-          throw Exception(
-              'Too many requests. ${tier}Please wait 1\u20132 minutes and try '
-              'again.');
-        }
         debugPrint('AI error (attempt ${attempt + 1}): $e');
         lastError = Exception('AI service error: $e');
       }
@@ -253,8 +245,8 @@ class LlmAssistant implements AiAssistant {
               headers: {'Content-Type': 'application/json'}, body: body)
           .timeout(appData.config.groundingTimeout);
       if (resp.statusCode == 429) {
-        throw Exception('Too many requests. Please wait a minute and try '
-            'again.');
+        throw const LlmRateLimitError(
+            'Too many requests. Please wait a minute and try again.');
       }
       if (resp.statusCode != 200) {
         throw Exception(

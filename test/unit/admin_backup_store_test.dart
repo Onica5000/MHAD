@@ -25,8 +25,8 @@ void main() {
   });
 
   test('snapshots older than a year are archived on the next append', () async {
-    final now = 500 * dayMs;
-    final old = now - (AdminBackupStore.retentionDays + 10) * dayMs;
+    const now = 500 * dayMs;
+    const old = now - (AdminBackupStore.retentionDays + 10) * dayMs;
     // First snapshot is "old" relative to the second append's clock.
     await AdminBackupStore.append(target, '{"old":true}', old);
     await AdminBackupStore.append(target, '{"new":true}', now);
@@ -40,8 +40,8 @@ void main() {
   });
 
   test('archived snapshots decompress back to the original JSON', () async {
-    final now = 500 * dayMs;
-    final old = now - (AdminBackupStore.retentionDays + 10) * dayMs;
+    const now = 500 * dayMs;
+    const old = now - (AdminBackupStore.retentionDays + 10) * dayMs;
     const payload = '{"big":"some content with unicode — 20× ✓","n":42}';
     await AdminBackupStore.append(target, payload, old);
     await AdminBackupStore.append(target, '{"new":true}', now);
