@@ -354,6 +354,9 @@ class _ContactPickerSheetState extends State<_ContactPickerSheet> {
                         Expanded(
                           child: TextField(
                             controller: _searchCtrl,
+                            // Initial focus when the sheet opens (A3) —
+                            // searching is the primary action here.
+                            autofocus: true,
                             onChanged: (_) => setState(() {}),
                             decoration: const InputDecoration(
                               hintText: 'Search by name or number',

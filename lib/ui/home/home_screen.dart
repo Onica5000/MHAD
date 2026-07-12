@@ -24,6 +24,7 @@ import 'package:mhad/ui/widgets/design/brand_motif.dart';
 import 'package:mhad/ui/widgets/design/design_card.dart';
 import 'package:mhad/ui/widgets/design/reveal.dart';
 import 'package:mhad/ui/widgets/draft_recovery_dialog.dart';
+import 'package:mhad/utils/a11y_announce.dart';
 import 'package:mhad/utils/date_format.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -415,6 +416,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       await WebSessionCache.clear();
 
       if (mounted && context.mounted) {
+        announce(context,
+            'Session restored. Personal info must be re-entered.');
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Session restored. Personal info must be re-entered.'),

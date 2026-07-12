@@ -27,6 +27,7 @@ import 'package:mhad/services/blank_form_service.dart';
 import 'package:mhad/services/directive_export_service.dart';
 import 'package:mhad/services/export_formats_service.dart';
 import 'package:mhad/services/fhir_export_service.dart';
+import 'package:mhad/utils/a11y_announce.dart';
 import 'package:mhad/utils/background_runner.dart';
 import 'package:mhad/utils/open_pdf.dart';
 import 'package:printing/printing.dart';
@@ -233,6 +234,8 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
               child: const Text('Cancel'),
             ),
             FilledButton(
+              // Initial focus on the primary action (UX audit A3).
+              autofocus: true,
               onPressed: () => Navigator.pop(ctx, true),
               child: const Text('I understand, continue'),
             ),
@@ -294,14 +297,16 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         }
       }
       if (kIsWeb && mounted) {
+        final msg = modes.length > 1
+            ? 'Opened ${modes.length} PDFs in new tabs — print or save each '
+                'from your PDF viewer.'
+            : 'Opened in a new tab — use Print or Download in your PDF '
+                'viewer.';
+        // Announce for screen readers too — the snackbar alone is not
+        // reliably read on web (UX audit A4).
+        announce(context, msg);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(modes.length > 1
-                ? 'Opened ${modes.length} PDFs in new tabs — print or save each '
-                    'from your PDF viewer.'
-                : 'Opened in a new tab — use Print or Download in your PDF '
-                    'viewer.'),
-          ),
+          SnackBar(content: Text(msg)),
         );
       }
     } catch (e) {
@@ -843,6 +848,9 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         _includePoa ||
         _includeSupplementary ||
         _includeNotes;
+    // FocusTraversalGroups (UX audit A8): Tab finishes the preview pane
+    // before entering the control rail, keeping keyboard order = reading
+    // order across the two panes.
     return Row(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -850,12 +858,14 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         // (heading, page counter, zoom, page-thumbnail selector) on the left
         // and the page image in the middle.
         Expanded(
-          child: ExportPdfPreview(
-            signature: _selectionSignature(),
-            buildBytes: _buildPdfBytes,
-            hasSelection: anySelected,
-            ready: _directive != null,
-            onClose: () => Navigator.of(context).maybePop(),
+          child: FocusTraversalGroup(
+            child: ExportPdfPreview(
+              signature: _selectionSignature(),
+              buildBytes: _buildPdfBytes,
+              hasSelection: anySelected,
+              ready: _directive != null,
+              onClose: () => Navigator.of(context).maybePop(),
+            ),
           ),
         ),
         // RIGHT — control rail.
@@ -865,25 +875,27 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
             color: p.card,
             border: Border(left: BorderSide(color: p.border)),
           ),
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(22, 22, 22, 40),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                if (_isGenerating)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
-                    child: LinearProgressIndicator(
-                        borderRadius: BorderRadius.circular(4)),
-                  ),
-                _buildLegalDisclaimerCard(),
-                const SizedBox(height: 16),
-                ..._buildSectionCheckboxChildren(),
-                const SizedBox(height: 16),
-                _buildUnencryptedBanner(),
-                const SizedBox(height: 4),
-                ..._buildDistributionChildren(),
-              ],
+          child: FocusTraversalGroup(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(22, 22, 22, 40),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  if (_isGenerating)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: LinearProgressIndicator(
+                          borderRadius: BorderRadius.circular(4)),
+                    ),
+                  _buildLegalDisclaimerCard(),
+                  const SizedBox(height: 16),
+                  ..._buildSectionCheckboxChildren(),
+                  const SizedBox(height: 16),
+                  _buildUnencryptedBanner(),
+                  const SizedBox(height: 4),
+                  ..._buildDistributionChildren(),
+                ],
+              ),
             ),
           ),
         ),

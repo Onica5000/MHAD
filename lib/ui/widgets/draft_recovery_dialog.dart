@@ -49,6 +49,8 @@ Future<void> checkAndOfferDraftRecovery(
             child: const Text('Discard'),
           ),
           FilledButton(
+            // Initial focus on the primary action (UX audit A3).
+            autofocus: true,
             onPressed: () => Navigator.pop(ctx, true),
             child: const Text('Restore'),
           ),

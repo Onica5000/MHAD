@@ -22,6 +22,7 @@ import 'package:mhad/services/gemini_rate_tracker.dart';
 import 'package:mhad/services/geo_service.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/utils/a11y_announce.dart';
 import 'package:mhad/ui/widgets/ai_consent_dialog.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/friendly_error.dart';
@@ -109,6 +110,13 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
   /// navigates into the wizard (via the "Autofill Information" button).
   void _onApplied(int appliedCount) {
     if (!mounted) return;
+    // Screen readers don't reliably get the visual confirmation on web —
+    // announce the outcome explicitly (UX audit A4).
+    announce(
+        context,
+        appliedCount > 0
+            ? 'Autofill applied $appliedCount fields to your directive'
+            : 'Autofill finished — no new fields were added');
     if (_standalone) {
       _toWizard();
     } else {

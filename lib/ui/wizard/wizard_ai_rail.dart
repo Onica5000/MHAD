@@ -13,6 +13,7 @@ import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/ai_consent_dialog.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
+import 'package:mhad/ui/widgets/design/labeled_spinner.dart';
 
 /// Desktop right rail (prototype `w-wizard`, 320px): a per-step AI helper with
 /// a live "heads-up" + suggested-question chips, an inline mini-chat, and
@@ -343,10 +344,11 @@ class _RailHeadsUp extends ConsumerWidget {
     return async.when(
       loading: () => card(Row(
         children: [
-          SizedBox(
-            width: 12,
-            height: 12,
-            child: CircularProgressIndicator(strokeWidth: 2, color: p.primary),
+          LabeledSpinner(
+            label: 'Checking this step',
+            size: 12,
+            strokeWidth: 2,
+            color: p.primary,
           ),
           const SizedBox(width: 10),
           Text(
@@ -594,11 +596,11 @@ class _RailInput extends ConsumerWidget {
             visualDensity: VisualDensity.compact,
             tooltip: 'Send',
             icon: isSending
-                ? SizedBox(
-                    width: 16,
-                    height: 16,
-                    child:
-                        CircularProgressIndicator(strokeWidth: 2, color: p.primary),
+                ? LabeledSpinner(
+                    label: 'Sending',
+                    size: 16,
+                    strokeWidth: 2,
+                    color: p.primary,
                   )
                 : Icon(Icons.arrow_upward, size: 18, color: p.primary),
           ),

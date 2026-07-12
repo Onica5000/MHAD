@@ -98,7 +98,10 @@ class PdfPreviewScreen extends StatelessWidget {
           ],
         ),
         loadingWidget: Center(
-          child: CircularProgressIndicator(color: p.primary),
+          child: Semantics(
+            label: 'Rendering PDF preview',
+            child: CircularProgressIndicator(color: p.primary),
+          ),
         ),
       ),
       // Editorial action bar — matches prototype's 3-button Save / Print /
@@ -326,7 +329,12 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
     }
     if (_error) return _centeredNote('Could not render the preview.', p);
     if (_pages.isEmpty) {
-      return Center(child: CircularProgressIndicator(color: p.primary));
+      return Center(
+        child: Semantics(
+          label: 'Rendering PDF preview',
+          child: CircularProgressIndicator(color: p.primary),
+        ),
+      );
     }
     return LayoutBuilder(
       builder: (context, c) {

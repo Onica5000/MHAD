@@ -11,6 +11,7 @@ import 'package:mhad/services/gemini_rate_tracker.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/widgets/ai_consent_dialog.dart';
 import 'package:mhad/ui/widgets/friendly_error.dart';
+import 'package:mhad/utils/a11y_announce.dart';
 
 /// A small "AI Suggest" button that appears next to narrative text fields
 /// in the wizard.  When tapped, it sends the current field value to Gemini
@@ -284,6 +285,8 @@ Return only the draft text — no explanation, no quotes, no preamble.''';
   /// so accepting an AI suggestion is always reversible.
   void _showUndo(String previous) {
     if (!mounted) return;
+    // Snackbars aren't reliably read by web screen readers (UX audit A4).
+    announce(context, 'AI suggestion applied. Undo available.');
     final messenger = ScaffoldMessenger.of(context)..clearSnackBars();
     messenger.showSnackBar(
       SnackBar(
