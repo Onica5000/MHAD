@@ -354,6 +354,9 @@ class _ContactPickerSheetState extends State<_ContactPickerSheet> {
                         Expanded(
                           child: TextField(
                             controller: _searchCtrl,
+                            // Initial focus when the sheet opens (A3) —
+                            // searching is the primary action here.
+                            autofocus: true,
                             onChanged: (_) => setState(() {}),
                             decoration: const InputDecoration(
                               hintText: 'Search by name or number',
@@ -370,10 +373,18 @@ class _ContactPickerSheetState extends State<_ContactPickerSheet> {
                           ),
                         ),
                         if (_searchCtrl.text.isNotEmpty)
-                          GestureDetector(
-                            onTap: () =>
+                          // Focusable clear button (was a bare
+                          // GestureDetector — UX audit A2).
+                          IconButton(
+                            onPressed: () =>
                                 setState(() => _searchCtrl.clear()),
-                            child: Icon(Icons.close,
+                            tooltip: 'Clear search',
+                            iconSize: 14,
+                            visualDensity: VisualDensity.compact,
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(
+                                minWidth: 40, minHeight: 40),
+                            icon: Icon(Icons.close,
                                 size: 14, color: p.textMuted),
                           ),
                       ],
@@ -752,7 +763,7 @@ class _EligibilityRulesCard extends StatelessWidget {
                         'Courier New',
                         'monospace',
                       ],
-                      fontSize: 8.5,
+                      fontSize: 10,
                       fontWeight: FontWeight.w700,
                       letterSpacing: 0.4,
                       color:

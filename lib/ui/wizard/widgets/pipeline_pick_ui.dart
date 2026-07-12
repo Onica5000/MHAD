@@ -855,7 +855,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                                       'Courier New',
                                       'monospace',
                                     ],
-                                    fontSize: 8.5,
+                                    fontSize: 10,
                                     fontWeight: FontWeight.w700,
                                     letterSpacing: 0.5,
                                     color: p.onPrimaryLight,
@@ -933,6 +933,17 @@ extension _PipelinePickUi on _PipelineScreenState {
           const CircularProgressIndicator(),
           const SizedBox(height: 16),
           Text(_statusMessage),
+          // A long AI read shouldn't hold the user hostage (UX audit B8).
+          // The generating stage (apply service) stays uncancellable — it's
+          // short and its results screen has its own back affordance.
+          if (_step != _PipelineStep.generating) ...[
+            const SizedBox(height: 12),
+            TextButton.icon(
+              onPressed: _cancelProcessing,
+              icon: const Icon(Icons.close, size: 18),
+              label: const Text('Cancel'),
+            ),
+          ],
           // Keep the document list visible while the AI reads — initiating
           // autofill shouldn't make the files the user added disappear.
           if (_sourceDocs.isNotEmpty) ...[

@@ -92,7 +92,7 @@ class _PeopleITrustStepState extends ConsumerState<PeopleITrustStep>
                     'Courier New',
                     'monospace',
                   ],
-                  fontSize: 9.5,
+                  fontSize: 10,
                   color: p.textMuted,
                   letterSpacing: 0.4,
                 ),
@@ -334,7 +334,7 @@ class _AgentCardState extends ConsumerState<_AgentCard> {
                                     'Primary',
                                     style: TextStyle(
                                       fontFamily: kSansFamily,
-                                      fontSize: 9.5,
+                                      fontSize: 10,
                                       fontWeight: FontWeight.w700,
                                       letterSpacing: 0.4,
                                       color: p.onPrimaryLight,

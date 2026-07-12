@@ -28,7 +28,7 @@ import 'package:mhad/ui/wizard/steps/procedures_research_step.dart';
 import 'package:mhad/ui/wizard/steps/review_and_sign_step.dart';
 import 'package:mhad/ui/wizard/steps/treatment_facility_step.dart';
 import 'package:mhad/ui/wizard/steps/when_it_kicks_in_step.dart';
-import 'package:mhad/utils/unsaved_guard.dart';
+import 'package:mhad/utils/a11y_announce.dart';
 
 class WizardScreen extends ConsumerStatefulWidget {
   final int directiveId;
@@ -51,6 +51,11 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
   int _stepIndex = 0;
   List<WizardStep>? _steps;
   bool _isSaving = false;
+  // Transient "✓ Saved" hint after a successful autosave (UX audit B5) —
+  // users otherwise get no feedback that navigation persisted their step.
+  bool _showSavedHint = false;
+  DateTime? _lastSavedFlash;
+  Timer? _savedHintTimer;
   // Set once we've canonicalised the URL with a step param (or arrived with
   // one), so the resume-redirect only fires a single time.
   bool _resumed = false;
@@ -67,10 +72,10 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
   @override
   void initState() {
     super.initState();
-    // On web the directive lives only in memory, so a reload/tab-close while
-    // editing silently loses the work. Arm the browser "leave site?" prompt
-    // while the wizard is open. No-op on native (data persists).
-    setUnsavedGuard(true);
+    // The beforeunload "leave site?" guard is now armed app-wide from
+    // main.dart whenever any directive exists in the in-memory DB (UX
+    // audit B12) — the wizard no longer owns it, so leaving the wizard
+    // for Sign/Export/Assistant stays protected.
     if (kIsWeb) {
       _webCacheHeartbeat = Timer.periodic(
         const Duration(minutes: 1),
@@ -82,8 +87,27 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
   @override
   void dispose() {
     _webCacheHeartbeat?.cancel();
-    setUnsavedGuard(false);
+    _savedHintTimer?.cancel();
     super.dispose();
+  }
+
+  /// Flashes a transient "✓ Saved" hint (throttled to one per 4s so rapid
+  /// step-hopping doesn't strobe) and politely announces it to screen
+  /// readers. Called after a successful best-effort autosave.
+  void _flashSavedHint() {
+    final now = DateTime.now();
+    if (_lastSavedFlash != null &&
+        now.difference(_lastSavedFlash!) < const Duration(seconds: 4)) {
+      return;
+    }
+    _lastSavedFlash = now;
+    _savedHintTimer?.cancel();
+    if (!mounted) return;
+    announce(context, 'Progress saved');
+    setState(() => _showSavedHint = true);
+    _savedHintTimer = Timer(const Duration(milliseconds: 1800), () {
+      if (mounted) setState(() => _showSavedHint = false);
+    });
   }
 
   Future<void> _persistStep(int index) async {
@@ -155,9 +179,30 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                   Semantics(
                     liveRegion: true,
                     child: const Text(
-                      'Unable to load this directive.\nPlease go back and try again.',
+                      'Unable to load this directive.',
                       textAlign: TextAlign.center,
                     ),
+                  ),
+                  const SizedBox(height: 20),
+                  // Don't dead-end: give the user a way to retry the load
+                  // and a way home (2026-07-11 UX audit B1).
+                  Wrap(
+                    spacing: 12,
+                    runSpacing: 8,
+                    alignment: WrapAlignment.center,
+                    children: [
+                      OutlinedButton.icon(
+                        onPressed: () => ref.invalidate(
+                            directiveByIdProvider(widget.directiveId)),
+                        icon: const Icon(Icons.refresh),
+                        label: const Text('Retry'),
+                      ),
+                      FilledButton.icon(
+                        onPressed: () => context.go(AppRoutes.home),
+                        icon: const Icon(Icons.home_outlined),
+                        label: const Text('Back to home'),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -286,6 +331,9 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                         child: StepDots(
                           current: _stepIndex + 1,
                           total: steps.length,
+                          // Mobile parity with the desktop rail: tap a bar
+                          // to jump to that step (UX audit B7).
+                          onStepTap: _jumpToStep,
                         ),
                       ),
                     // The single exit-to-home affordance now lives in the
@@ -300,10 +348,51 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                       onExit: () => _saveAndExit(context),
                     ),
                     Expanded(
-                      child: _buildStep(
-                        currentStep,
-                        directive.id,
-                        formType,
+                      // Stack so the transient "✓ Saved" chip (UX audit B5)
+                      // overlays the step content without shifting layout.
+                      child: Stack(
+                        children: [
+                          _buildStep(
+                            currentStep,
+                            directive.id,
+                            formType,
+                          ),
+                          Positioned(
+                            top: 4,
+                            right: 16,
+                            child: IgnorePointer(
+                              child: AnimatedOpacity(
+                                opacity: _showSavedHint ? 1 : 0,
+                                duration: const Duration(milliseconds: 200),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 5),
+                                  decoration: BoxDecoration(
+                                    color: p.card,
+                                    border: Border.all(color: p.border),
+                                    borderRadius: BorderRadius.circular(999),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(Icons.check,
+                                          size: 14, color: p.textMuted),
+                                      const SizedBox(width: 5),
+                                      Text(
+                                        'Saved',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: p.textMuted,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     // Prototype `w-wiz-mobile`: the AI rail collapses to a slim
@@ -331,23 +420,31 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                   ],
                 );
                 if (!shellActive) return mainColumn;
+                // FocusTraversalGroups (UX audit A8): Tab walks the step
+                // rail, then the whole form column, then the AI rail — one
+                // pane at a time in reading order, instead of an
+                // unpredictable interleave across the three columns.
                 return Row(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    _WideStepRail(
-                      steps: steps,
-                      currentIndex: _stepIndex,
-                      onNext: () => _goNext(context, isLastStep),
-                      onBack: _stepIndex > 0 ? _goBack : null,
-                      nextLabel: isLastStep ? 'Preview' :'Next',
-                      nextLoading: _isSaving,
-                      onStepTap: _jumpToStep,
+                    FocusTraversalGroup(
+                      child: _WideStepRail(
+                        steps: steps,
+                        currentIndex: _stepIndex,
+                        onNext: () => _goNext(context, isLastStep),
+                        onBack: _stepIndex > 0 ? _goBack : null,
+                        nextLabel: isLastStep ? 'Preview' :'Next',
+                        nextLoading: _isSaving,
+                        onStepTap: _jumpToStep,
+                      ),
                     ),
                     Container(width: 1, color: p.border),
                     Expanded(
-                      child: ConstrainedBox(
-                        constraints: const BoxConstraints(maxWidth: 760),
-                        child: mainColumn,
+                      child: FocusTraversalGroup(
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 760),
+                          child: mainColumn,
+                        ),
                       ),
                     ),
                     // Prototype `w-wizard` right rail (320px): a contextual AI
@@ -356,15 +453,17 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                     // inside mainColumn takes its place.
                     if (showAiRail) ...[
                       Container(width: 1, color: p.border),
-                      WizardAiRail(
-                        formType: formType.name,
-                        step: currentStep,
-                        stepName: currentStep.displayName,
-                        directiveId: directive.id,
-                        onOpenFull: () => _openStepAi(
-                          context,
-                          formType,
-                          currentStep.displayName,
+                      FocusTraversalGroup(
+                        child: WizardAiRail(
+                          formType: formType.name,
+                          step: currentStep,
+                          stepName: currentStep.displayName,
+                          directiveId: directive.id,
+                          onOpenFull: () => _openStepAi(
+                            context,
+                            formType,
+                            currentStep.displayName,
+                          ),
                         ),
                       ),
                     ],
@@ -461,6 +560,9 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
       if (state != null && state is WizardStepMixin) {
         try {
           stepValid = await (state as WizardStepMixin).validateAndSave();
+          // Only flash "Saved" when there's no competing "incomplete"
+          // snackbar, so the two messages never contradict each other.
+          if (stepValid && mounted && !isLastStep) _flashSavedHint();
         } catch (e) {
           debugPrint('Step save error (non-blocking): $e');
         }
@@ -509,6 +611,7 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
     if (state is WizardStepMixin) {
       try {
         await (state as WizardStepMixin).validateAndSave();
+        if (mounted) _flashSavedHint();
       } catch (e) {
         debugPrint('Auto-save on back failed: $e');
       }
@@ -528,6 +631,7 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
     if (state is WizardStepMixin) {
       try {
         await (state as WizardStepMixin).validateAndSave();
+        if (mounted) _flashSavedHint();
       } catch (e) {
         debugPrint('Auto-save on step-jump failed: $e');
       }
@@ -624,11 +728,11 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
 }
 
 /// Desktop step rail rendered at widths ≥1000px. Matches the prototype's
-/// `w-wizard` left column (web-wizard-steps.jsx). Read-only in this pass:
-/// it shows progress with completed / current / pending dot states but
-/// does not let the user jump arbitrarily (which would skip per-step
-/// validation). Navigation still happens via Continue / Back at the
-/// bottom bar.
+/// `w-wizard` left column (web-wizard-steps.jsx). Shows progress with
+/// completed / current / pending dot states AND lets the user jump to any
+/// step via [onStepTap] → `_jumpToStep` (which runs the current step's
+/// best-effort validateAndSave first, so jumping can't silently drop
+/// entered data). Continue / Back live directly under the step list.
 class _WideStepRail extends StatelessWidget {
   final List<WizardStep> steps;
   final int currentIndex;

@@ -18,7 +18,9 @@ import 'package:mhad/ui/wizard/steps/execution_step.dart';
 /// Landing on this screen stamps the directive's executionDate so the
 /// status flips from `draft` to `complete` — the user has committed to
 /// the printed-and-signed workflow even if they haven't generated the PDF
-/// yet. The visible content is delegated to [ExecutionStep] (which already
+/// yet. Because the app can't verify a paper signature happened, Home
+/// deliberately labels this status "Prepared" (not "Complete") — see
+/// home_screen.dart `_subLine` (2026-07-11 UX audit B6). The visible content is delegated to [ExecutionStep] (which already
 /// renders the prototype's 3-step timeline, witness eligibility banner,
 /// and packet checklist). [ExecutionStep]'s single CTA — **Preview & download
 /// packet** → `/export/:id` — opens the export screen ("Your directive, on

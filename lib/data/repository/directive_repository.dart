@@ -89,6 +89,16 @@ class DirectiveRepository {
         ),
       );
 
+  /// User-chosen Home display label (UX audit B11). Empty = fall back to
+  /// fullName. App-side organizational label only — never printed.
+  Future<void> updateDisplayLabel(int id, String label) =>
+      (_db.update(_db.directives)..where((t) => t.id.equals(id))).write(
+        DirectivesCompanion(
+          displayLabel: Value(label.trim()),
+          updatedAt: Value(DateTime.now().millisecondsSinceEpoch),
+        ),
+      );
+
   Future<void> updateLastStepIndex(int id, int stepIndex) =>
       (_db.update(_db.directives)..where((t) => t.id.equals(id))).write(
         DirectivesCompanion(
@@ -391,6 +401,9 @@ class DirectiveRepository {
         'state': d.state,
         'zip': d.zip,
         'phone': d.phone,
+        // User-chosen Home label (schema 21). Gated with `personal` because
+        // it's free text the user may have made identifying.
+        'displayLabel': d.displayLabel,
       },
       if (full && agents.isNotEmpty) 'agents': agents
           .map((a) => {
@@ -587,6 +600,8 @@ class DirectiveRepository {
         zip: personal['zip']?.toString() ?? '',
         phone: personal['phone']?.toString() ?? '',
       );
+      final label = personal['displayLabel']?.toString() ?? '';
+      if (label.isNotEmpty) await updateDisplayLabel(id, label);
     }
 
     // Designated agents (only present in a `full` / encrypted-export snapshot).

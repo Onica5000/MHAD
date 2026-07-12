@@ -1454,23 +1454,30 @@ class _SnapReviewRow extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          GestureDetector(
-            onTap: onToggle,
-            child: Container(
-              width: 22,
-              height: 22,
-              margin: const EdgeInsets.only(top: 1),
-              decoration: BoxDecoration(
-                color: ok ? p.primary : p.surface,
-                border: ok
-                    ? null
-                    : Border.all(color: p.border, width: 1.5),
-                borderRadius: BorderRadius.circular(6),
+          // Focusable checkbox with a real toggle role (was a bare
+          // GestureDetector — UX audit A2).
+          Semantics(
+            checked: ok,
+            label: 'Include this field',
+            child: InkWell(
+              onTap: onToggle,
+              borderRadius: BorderRadius.circular(6),
+              child: Container(
+                width: 22,
+                height: 22,
+                margin: const EdgeInsets.only(top: 1),
+                decoration: BoxDecoration(
+                  color: ok ? p.primary : p.surface,
+                  border: ok
+                      ? null
+                      : Border.all(color: p.border, width: 1.5),
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                alignment: Alignment.center,
+                child: ok
+                    ? Icon(Icons.check, size: 13, color: p.onPrimary)
+                    : Icon(Icons.close, size: 11, color: p.textMuted),
               ),
-              alignment: Alignment.center,
-              child: ok
-                  ? Icon(Icons.check, size: 13, color: p.onPrimary)
-                  : Icon(Icons.close, size: 11, color: p.textMuted),
             ),
           ),
           const SizedBox(width: 12),
@@ -1534,13 +1541,15 @@ class _SnapReviewRow extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 6),
-          GestureDetector(
-            onTap: onEdit,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 2),
-              child: Icon(Icons.edit_outlined,
-                  size: 14, color: p.textMuted),
-            ),
+          // Focusable edit affordance (was a bare GestureDetector — A2).
+          IconButton(
+            onPressed: onEdit,
+            tooltip: 'Edit',
+            visualDensity: VisualDensity.compact,
+            padding: EdgeInsets.zero,
+            constraints:
+                const BoxConstraints(minWidth: 40, minHeight: 40),
+            icon: Icon(Icons.edit_outlined, size: 14, color: p.textMuted),
           ),
         ],
       ),

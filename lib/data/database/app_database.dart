@@ -58,6 +58,11 @@ class Directives extends Table {
 
   // Wizard resume — tracks which step the user last visited
   IntColumn get lastStepIndex => integer().withDefault(const Constant(0))();
+
+  // Optional user-chosen display label (schema 21) so multiple directives
+  // are distinguishable on Home. Falls back to fullName when empty; never
+  // printed on the PDF (it's an app-side organizational label only).
+  TextColumn get displayLabel => text().withDefault(const Constant(''))();
 }
 
 class Agents extends Table {
@@ -292,7 +297,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase(super.executor);
 
   @override
-  int get schemaVersion => 20;
+  int get schemaVersion => 21;
 
   /// The lookup indexes on every child table's directive_id. Historically
   /// created only by the migrations below, which left *fresh* databases
@@ -520,6 +525,13 @@ class AppDatabase extends _$AppDatabase {
             // are not binding on the physician).
             await customStatement(
                 "ALTER TABLE medication_entries ADD COLUMN dosage "
+                "TEXT NOT NULL DEFAULT ''");
+          }
+          if (from < 21) {
+            // User-chosen display label for the Home list (rename action —
+            // 2026-07-11 UX audit B11). App-side only, never printed.
+            await customStatement(
+                "ALTER TABLE directives ADD COLUMN display_label "
                 "TEXT NOT NULL DEFAULT ''");
           }
         },

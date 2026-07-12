@@ -24,6 +24,7 @@ import 'package:mhad/ui/widgets/design/brand_motif.dart';
 import 'package:mhad/ui/widgets/design/design_card.dart';
 import 'package:mhad/ui/widgets/design/reveal.dart';
 import 'package:mhad/ui/widgets/draft_recovery_dialog.dart';
+import 'package:mhad/utils/a11y_announce.dart';
 import 'package:mhad/utils/date_format.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -32,6 +33,11 @@ class HomeScreen extends ConsumerStatefulWidget {
   @override
   ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
+
+/// Directive ids hidden from Home while their delete-undo snackbar is open
+/// (UX audit B10). The actual repository delete only happens when the
+/// snackbar closes without Undo.
+final pendingDeleteProvider = StateProvider<Set<int>>((_) => <int>{});
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   static bool _checkedDraftRecovery = false;
@@ -61,7 +67,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final directivesAsync = ref.watch(allDirectivesProvider);
+    // Hide directives whose delete-undo window is still open (B10) — every
+    // downstream branch (narrow drafts/past, wide dashboard) sees the
+    // filtered list.
+    final pendingDelete = ref.watch(pendingDeleteProvider);
+    final directivesAsync = ref.watch(allDirectivesProvider).whenData(
+        (l) => l.where((d) => !pendingDelete.contains(d.id)).toList());
     final privacyMode = ref.watch(privacyModeNotifierProvider);
     final p = Theme.of(context).mhadPalette;
 
@@ -94,8 +105,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       backgroundColor: p.scaffoldBackground,
       body: SafeArea(
         bottom: false,
-        // Prototype `w-home`: at >=1000px the dashboard splits into the main
-        // content column + a right "Tools" sidebar (reusing _ToolsGrid). Below
+        // Prototype `w-home`: at >=1000px the dashboard renders
+        // _buildWideDashboard (ToolsGrid is currently narrow-only; the wide
+        // dashboard exposes tools via the sidebar + its own tiles). Below
         // that the mobile single-column layout is unchanged.
         child: Builder(
           builder: (context) {
@@ -128,26 +140,47 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             // Active draft hero + outline "Start a new directive" button.
             // Spacing matches prototype L255 (22 above hero) and L296
             // (18 above outline button).
+            // Single deterministic form-picker slot (UX audit C7): the picker
+            // used to render from three independent branches — and a user
+            // whose only directives were past/complete got NO picker at all.
+            // Now it always renders once on data, followed by the draft hero
+            // when a draft exists.
             directivesAsync.maybeWhen(
               data: (directives) {
                 final drafts = directives
                     .where((d) => d.status == 'draft')
                     .toList()
                   ..sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
-                if (drafts.isEmpty) return const SizedBox.shrink();
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 22),
                     // Start-a-new-directive picker (the form-type page was
                     // retired — picking happens on the dashboard now).
-                    const SectionLabel('Start a new directive'),
+                    SectionLabel(directives.isEmpty
+                        ? 'Start your directive'
+                        : 'Start a new directive'),
                     const SizedBox(height: 12),
                     const DirectiveFormChoice(),
-                    const SizedBox(height: 28),
-                    // "Continue where you left off" sits BELOW the form picker
-                    // (under "You can switch form types later").
-                    ActiveDirectiveHero(directive: drafts.first),
+                    if (drafts.isNotEmpty) ...[
+                      const SizedBox(height: 28),
+                      // "Continue where you left off" sits BELOW the form
+                      // picker (under "You can switch form types later").
+                      ActiveDirectiveHero(directive: drafts.first),
+                      // Additional drafts used to be invisible (only the most
+                      // recent got the hero) — list them with their step
+                      // progress (UX audit B9).
+                      for (final d in drafts.skip(1)) ...[
+                        const SizedBox(height: 8),
+                        _PastDirectiveRow(
+                          directive: d,
+                          onTap: () =>
+                              context.go(AppRoutes.wizardRoute(d.id)),
+                          onDelete: () => _confirmDelete(context, ref, d.id),
+                          onRename: () => _renameDirective(context, ref, d),
+                        ),
+                      ],
+                    ],
                   ],
                 );
               },
@@ -172,16 +205,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     .where((d) => d.status != 'draft')
                     .toList()
                   ..sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
-                if (directives.isEmpty) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      SectionLabel('Start your directive'),
-                      SizedBox(height: 12),
-                      DirectiveFormChoice(),
-                    ],
-                  );
-                }
+                // Empty state renders the form picker in the slot ABOVE
+                // (single deterministic placement — UX audit C7).
                 if (past.isEmpty) return const SizedBox.shrink();
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -206,6 +231,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             : null,
                         onExport: () => context
                             .push(AppRoutes.exportRoute(d.id)),
+                        onRename: () => _renameDirective(context, ref, d),
                       ),
                       const SizedBox(height: 8),
                     ],
@@ -223,7 +249,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
               error: (e, _) {
                 debugPrint('Error loading directives: $e');
-                return const DirectiveFormChoice();
+                // Don't silently render the form picker — that reads as
+                // "my directives vanished" (2026-07-11 UX audit B4).
+                return const _DirectivesLoadError();
               },
             ),
           ],
@@ -270,7 +298,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (e, _) {
         debugPrint('Error loading directives: $e');
-        return WebDashboardLanding(isPublic: isPublic);
+        // Same as the narrow branch: surface the failure instead of
+        // silently rendering the empty-state landing (UX audit B4).
+        return const Center(child: _DirectivesLoadError());
       },
       data: (directives) {
         // First-time / no-directive web user → the editorial landing
@@ -296,6 +326,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ActiveDirectiveHero(directive: drafts.first),
+              // Additional drafts with step progress (UX audit B9) — they
+              // used to be unreachable from the dashboard.
+              for (final d in drafts.skip(1)) ...[
+                const SizedBox(height: 8),
+                _PastDirectiveRow(
+                  directive: d,
+                  onTap: () => context.go(AppRoutes.wizardRoute(d.id)),
+                  onDelete: () => _confirmDelete(context, ref, d.id),
+                  onRename: () => _renameDirective(context, ref, d),
+                ),
+              ],
               const SizedBox(height: 28),
               newDirective,
             ],
@@ -319,6 +360,59 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             const SizedBox(height: 28),
             // Primary action column, now full width.
             primary,
+            // "Make it findable" was previously narrow-only (the ToolsGrid)
+            // — desktop had NO entry point to the crisis-readiness
+            // checklist (UX audit C2). The other grid tiles (AI, Learn,
+            // Crisis) already live in the sidebar, so only this one is
+            // surfaced here.
+            ...(() {
+              final p = Theme.of(context).mhadPalette;
+              final sorted = [...directives]
+                ..sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
+              final mostRecent = sorted.isEmpty ? null : sorted.first;
+              if (mostRecent == null) return const <Widget>[];
+              return <Widget>[
+                const SizedBox(height: 16),
+                DesignCard(
+                  padding: const EdgeInsets.all(14),
+                  onTap: () =>
+                      context.push(AppRoutes.findableRoute(mostRecent.id)),
+                  child: Row(
+                    children: [
+                      Icon(Icons.health_and_safety_outlined,
+                          size: 20, color: p.primary),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Make it findable in a crisis',
+                              style: TextStyle(
+                                fontFamily: kSansFamily,
+                                fontSize: 13.5,
+                                fontWeight: FontWeight.w600,
+                                color: p.text,
+                              ),
+                            ),
+                            Text(
+                              'Share copies, carry the wallet card, tell '
+                              'your people where it is',
+                              style: TextStyle(
+                                fontFamily: kSansFamily,
+                                fontSize: 11.5,
+                                color: p.textMuted,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Icon(Icons.chevron_right, size: 18, color: p.textMuted),
+                    ],
+                  ),
+                ),
+              ];
+            })(),
             // Past directives — 2-column grid filling the full width.
             if (past.isNotEmpty) ...[
               const SizedBox(height: 28),
@@ -375,6 +469,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       await WebSessionCache.clear();
 
       if (mounted && context.mounted) {
+        announce(context,
+            'Session restored. Personal info must be re-entered.');
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Session restored. Personal info must be re-entered.'),
@@ -402,7 +498,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       builder: (_) => AlertDialog(
         title: const Text('Delete directive?'),
         content: const Text(
-            'This cannot be undone. All data for this directive will be permanently deleted.'),
+            'All data for this directive will be permanently deleted.'),
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(context, false),
@@ -416,10 +512,75 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ],
       ),
     );
-    if (confirmed == true) {
-      await ref.read(directiveRepositoryProvider).deleteDirective(id);
-      await NotificationService.instance.cancelReminders(id);
-    }
+    if (confirmed != true || !context.mounted) return;
+
+    // Soft delete with Undo (UX audit B10): hide the directive immediately
+    // but only delete it for real when the snackbar closes un-undone. This
+    // keeps full fidelity (status/signatures untouched) if the user undoes
+    // — a snapshot-restore would legally have to demote it to a draft.
+    final notifier = ref.read(pendingDeleteProvider.notifier);
+    final repo = ref.read(directiveRepositoryProvider);
+    notifier.update((s) => {...s, id});
+    var undone = false;
+    final controller = ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const Text('Directive deleted.'),
+        duration: const Duration(seconds: 6),
+        action: SnackBarAction(
+          label: 'Undo',
+          onPressed: () {
+            undone = true;
+            notifier.update((s) => s.difference({id}));
+          },
+        ),
+      ),
+    );
+    unawaited(controller.closed.then((_) async {
+      if (!undone) {
+        await repo.deleteDirective(id);
+        await NotificationService.instance.cancelReminders(id);
+        notifier.update((s) => s.difference({id}));
+      }
+    }));
+  }
+
+  /// Rename dialog (UX audit B11): sets the app-side display label so
+  /// multiple directives are distinguishable. Empty input clears the label
+  /// (falls back to the principal's name).
+  Future<void> _renameDirective(
+      BuildContext context, WidgetRef ref, Directive d) async {
+    final ctrl = TextEditingController(text: d.displayLabel);
+    final label = await showDialog<String>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Rename directive'),
+        content: TextField(
+          controller: ctrl,
+          autofocus: true,
+          maxLength: 60,
+          decoration: const InputDecoration(
+            labelText: 'Display label',
+            helperText:
+                'Shown only in this list \u2014 never printed on the form. '
+                'Leave empty to use the name on the directive.',
+            helperMaxLines: 3,
+          ),
+          onSubmitted: (v) => Navigator.pop(ctx, v),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(ctx, ctrl.text),
+            child: const Text('Save'),
+          ),
+        ],
+      ),
+    );
+    if (label == null) return;
+    await ref.read(directiveRepositoryProvider).updateDisplayLabel(d.id, label);
   }
 
   // _confirmRevoke (inline dialog) removed \u2014 the "Revoke" action now opens the
@@ -767,6 +928,42 @@ class _PublicGuestGreeting extends StatelessWidget {
   }
 }
 
+/// Visible failure state for the directives stream (UX audit B4): says what
+/// happened and offers a one-tap retry, instead of silently rendering the
+/// empty-state form picker as if the user's directives never existed.
+class _DirectivesLoadError extends ConsumerWidget {
+  const _DirectivesLoadError();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final p = Theme.of(context).mhadPalette;
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 24),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.cloud_off_outlined, size: 32, color: p.textMuted),
+          const SizedBox(height: 10),
+          Semantics(
+            liveRegion: true,
+            child: Text(
+              "Couldn't load your directives.",
+              textAlign: TextAlign.center,
+              style: TextStyle(color: p.text),
+            ),
+          ),
+          const SizedBox(height: 12),
+          OutlinedButton.icon(
+            onPressed: () => ref.invalidate(allDirectivesProvider),
+            icon: const Icon(Icons.refresh),
+            label: const Text('Retry'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 /// Prototype `ScrHome` past-directive compact row (mobile.jsx L327-334).
 ///
 /// Layout: 14px-padded card, FileText icon (20pt muted) + flex column
@@ -782,6 +979,7 @@ class _PastDirectiveRow extends StatelessWidget {
   final VoidCallback? onRenew;
   final VoidCallback? onAmend;
   final VoidCallback? onExport;
+  final VoidCallback? onRename;
 
   const _PastDirectiveRow({
     required this.directive,
@@ -791,14 +989,26 @@ class _PastDirectiveRow extends StatelessWidget {
     this.onRenew,
     this.onAmend,
     this.onExport,
+    this.onRename,
   });
 
   String _subLine() {
     final status = directive.status;
     final updated = DateTime.fromMillisecondsSinceEpoch(directive.updatedAt);
     final stamp = formatShortDate(updated);
+    if (status == 'draft') {
+      // Returning users should see how far they got (UX audit B9).
+      final formType =
+          formTypeFromName(directive.formType) ?? FormType.combined;
+      final total = formType.steps.length;
+      final step = (directive.lastStepIndex + 1).clamp(1, total);
+      return 'Draft · step $step of $total · $stamp';
+    }
     return switch (status) {
-      'complete' => 'Complete · $stamp',
+      // "Prepared", not "Complete": landing on Sign stamps executionDate
+      // (sign_screen.dart), but the app cannot know a paper signature
+      // actually happened — don't overclaim (2026-07-11 UX audit B6).
+      'complete' => 'Prepared · $stamp',
       'expired' => 'Expired · revoke or copy to new',
       'revoked' => 'Revoked · $stamp',
       _ => stamp,
@@ -807,6 +1017,10 @@ class _PastDirectiveRow extends StatelessWidget {
 
   String _nameLine() {
     final year = DateTime.fromMillisecondsSinceEpoch(directive.updatedAt).year;
+    // User-chosen label wins (Rename action, UX audit B11); fall back to
+    // the principal's name.
+    final label = directive.displayLabel.trim();
+    if (label.isNotEmpty) return '$label · $year';
     final n = directive.fullName.trim();
     return n.isEmpty ? 'Directive · $year' : '$n · $year';
   }
@@ -866,8 +1080,10 @@ class _PastDirectiveRow extends StatelessWidget {
                   iconSize: 18,
                   visualDensity: VisualDensity.compact,
                   padding: EdgeInsets.zero,
+                  // ≥40px hit target (glyph stays 18pt) — was 32×32
+                  // (UX audit A7).
                   constraints:
-                      const BoxConstraints(minWidth: 32, minHeight: 32),
+                      const BoxConstraints(minWidth: 40, minHeight: 40),
                   icon: Icon(Icons.more_horiz, color: p.textMuted),
                   tooltip: 'More',
                   onPressed: () => _showActions(context),
@@ -894,10 +1110,24 @@ class _PastDirectiveRow extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              if (onRename != null)
+                ListTile(
+                  leading: Icon(Icons.drive_file_rename_outline,
+                      color: p.primary),
+                  title: const Text('Rename'),
+                  subtitle: const Text(
+                      'Label shown in this list only — never printed'),
+                  onTap: () {
+                    Navigator.pop(sheetCtx);
+                    onRename!();
+                  },
+                ),
               if (onExport != null)
                 ListTile(
                   leading: Icon(Icons.ios_share, color: p.primary),
-                  title: const Text('Export'),
+                  // "Download & print" everywhere (sidebar, More sheet, and
+                  // here) — one name per destination (UX audit C6).
+                  title: const Text('Download & print'),
                   onTap: () {
                     Navigator.pop(sheetCtx);
                     onExport!();

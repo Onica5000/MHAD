@@ -13,6 +13,7 @@ import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/ai_consent_dialog.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
+import 'package:mhad/ui/widgets/design/labeled_spinner.dart';
 
 /// Desktop right rail (prototype `w-wizard`, 320px): a per-step AI helper with
 /// a live "heads-up" + suggested-question chips, an inline mini-chat, and
@@ -102,6 +103,46 @@ class _WizardAiRailState extends ConsumerState<WizardAiRail> {
       );
       return;
     }
+    // Model call failed after the request was issued — offer a one-tap
+    // retry instead of making the user retype (2026-07-11 UX audit B3).
+    if (result.sendFailed) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text("The reply failed."),
+          duration: const Duration(seconds: 6),
+          action: SnackBarAction(label: 'Retry', onPressed: _retrySend),
+        ),
+      );
+    }
+    _scrollToBottom();
+  }
+
+  /// Pops the failed turn pair and re-sends the same user message.
+  Future<void> _retrySend() async {
+    final filled = await buildAiFilledFields(
+        ref.read(directiveRepositoryProvider), widget.directiveId);
+    if (!mounted) return;
+    final result = await retryLastSend(
+      ref,
+      assistantContext: AssistantContext(
+        formType: widget.formType,
+        stepName: widget.stepName,
+        filledFields: filled.isEmpty ? null : filled,
+      ),
+      requestConsent: () => showAiConsentDialog(context,
+          provider: ref.read(activeProviderProvider)),
+      onSent: _scrollToBottom,
+    );
+    if (!mounted) return;
+    if (result.sendFailed) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text("Still failing — check your connection or key."),
+          duration: const Duration(seconds: 6),
+          action: SnackBarAction(label: 'Retry', onPressed: _retrySend),
+        ),
+      );
+    }
     _scrollToBottom();
   }
 
@@ -173,7 +214,7 @@ class _WizardAiRailState extends ConsumerState<WizardAiRail> {
                 'Courier New',
                 'monospace',
               ],
-              fontSize: 9.5,
+              fontSize: 10,
               letterSpacing: 0.5,
               color: hasKey ? p.primary : p.textMuted,
             ),
@@ -303,10 +344,11 @@ class _RailHeadsUp extends ConsumerWidget {
     return async.when(
       loading: () => card(Row(
         children: [
-          SizedBox(
-            width: 12,
-            height: 12,
-            child: CircularProgressIndicator(strokeWidth: 2, color: p.primary),
+          LabeledSpinner(
+            label: 'Checking this step',
+            size: 12,
+            strokeWidth: 2,
+            color: p.primary,
           ),
           const SizedBox(width: 10),
           Text(
@@ -356,7 +398,7 @@ class _RailHeadsUp extends ConsumerWidget {
                     'Courier New',
                     'monospace',
                   ],
-                  fontSize: 9,
+                  fontSize: 10,
                   letterSpacing: 0.6,
                   color: p.textMuted,
                 ),
@@ -554,11 +596,11 @@ class _RailInput extends ConsumerWidget {
             visualDensity: VisualDensity.compact,
             tooltip: 'Send',
             icon: isSending
-                ? SizedBox(
-                    width: 16,
-                    height: 16,
-                    child:
-                        CircularProgressIndicator(strokeWidth: 2, color: p.primary),
+                ? LabeledSpinner(
+                    label: 'Sending',
+                    size: 16,
+                    strokeWidth: 2,
+                    color: p.primary,
                   )
                 : Icon(Icons.arrow_upward, size: 18, color: p.primary),
           ),

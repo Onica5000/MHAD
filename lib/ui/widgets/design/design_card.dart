@@ -73,29 +73,21 @@ class DesignCard extends StatelessWidget {
       return Container(margin: margin, child: content);
     }
 
-    if (hoverLift) {
-      return Container(
-        margin: margin,
-        child: _HoverLiftCard(
+    // Tappable cards get an explicit button role for screen readers and a
+    // visible keyboard-focus ring (2026-07-11 UX audit A1) — the InkWell
+    // alone announced as a generic tappable and had no focus indication.
+    return Container(
+      margin: margin,
+      child: Semantics(
+        button: true,
+        child: _TappableCard(
           bg: bg,
           border: effectiveBorder,
           radius: r,
           padding: padding,
           onTap: onTap!,
+          hoverLift: hoverLift,
           child: child,
-        ),
-      );
-    }
-
-    return Container(
-      margin: margin,
-      child: Material(
-        color: Colors.transparent,
-        borderRadius: BorderRadius.circular(r),
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(r),
-          child: content,
         ),
       ),
     );
@@ -154,36 +146,43 @@ class _HoverLiftState extends State<HoverLift> {
   }
 }
 
-/// Hover-aware tappable card: deeper shadow + a small rise on pointer hover
-/// (web/desktop). Animation is skipped under reduce-motion.
-class _HoverLiftCard extends StatefulWidget {
+/// Tappable card body shared by both DesignCard tap paths: hover lift
+/// (optional, web/desktop), plus a visible keyboard-focus ring drawn as a
+/// spread shadow (no layout shift). Animation is skipped under
+/// reduce-motion. (Replaces the old _HoverLiftCard — UX audit A1.)
+class _TappableCard extends StatefulWidget {
   final Color bg;
   final BorderSide border;
   final double radius;
   final EdgeInsetsGeometry padding;
   final VoidCallback onTap;
+  final bool hoverLift;
   final Widget child;
-  const _HoverLiftCard({
+  const _TappableCard({
     required this.bg,
     required this.border,
     required this.radius,
     required this.padding,
     required this.onTap,
+    required this.hoverLift,
     required this.child,
   });
 
   @override
-  State<_HoverLiftCard> createState() => _HoverLiftCardState();
+  State<_TappableCard> createState() => _TappableCardState();
 }
 
-class _HoverLiftCardState extends State<_HoverLiftCard> {
+class _TappableCardState extends State<_TappableCard> {
   bool _hover = false;
+  bool _focused = false;
 
   @override
   Widget build(BuildContext context) {
-    final b = Theme.of(context).brightness;
+    final theme = Theme.of(context);
+    final b = theme.brightness;
+    final p = theme.mhadPalette;
     final reduce = MediaQuery.maybeOf(context)?.disableAnimations ?? false;
-    final lifted = _hover && !reduce;
+    final lifted = widget.hoverLift && _hover && !reduce;
     return MouseRegion(
       onEnter: (_) => setState(() => _hover = true),
       onExit: (_) => setState(() => _hover = false),
@@ -198,9 +197,14 @@ class _HoverLiftCardState extends State<_HoverLiftCard> {
           color: widget.bg,
           borderRadius: BorderRadius.circular(widget.radius),
           border: Border.fromBorderSide(widget.border),
-          boxShadow: _hover
-              ? DesignTokens.raisedShadow(b)
-              : DesignTokens.cardShadow(b),
+          boxShadow: [
+            // Keyboard-focus ring: a hard spread shadow (no layout shift).
+            if (_focused)
+              BoxShadow(color: p.primary, spreadRadius: 2),
+            ...(widget.hoverLift && _hover
+                ? DesignTokens.raisedShadow(b)
+                : DesignTokens.cardShadow(b)),
+          ],
         ),
         child: Material(
           color: Colors.transparent,
@@ -208,6 +212,7 @@ class _HoverLiftCardState extends State<_HoverLiftCard> {
           child: InkWell(
             onTap: widget.onTap,
             borderRadius: BorderRadius.circular(widget.radius),
+            onFocusChange: (f) => setState(() => _focused = f),
             child: Padding(padding: widget.padding, child: widget.child),
           ),
         ),

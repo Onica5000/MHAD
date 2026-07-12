@@ -90,6 +90,19 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
       return;
     }
 
+    // The request was issued but the model call failed (error bubble was
+    // appended) — offer a one-tap retry instead of making the user retype
+    // (2026-07-11 UX audit B3).
+    if (result.sendFailed) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text("The reply failed."),
+          duration: const Duration(seconds: 6),
+          action: SnackBarAction(label: 'Retry', onPressed: _retrySend),
+        ),
+      );
+    }
+
     if (result.piiStripped) {
       _piiTimer?.cancel();
       setState(() => _piiStripped = true);
@@ -105,6 +118,28 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
             'the AI\'s context limit. Recent messages are preserved.',
           ),
           duration: const Duration(seconds: 4),
+        ),
+      );
+    }
+    _scrollToBottom();
+  }
+
+  /// Pops the failed turn pair and re-sends the same user message.
+  Future<void> _retrySend() async {
+    final result = await retryLastSend(
+      ref,
+      assistantContext: widget.context,
+      requestConsent: () => showAiConsentDialog(context,
+          provider: ref.read(activeProviderProvider)),
+      onSent: _scrollToBottom,
+    );
+    if (!mounted) return;
+    if (result.sendFailed) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text("Still failing — check your connection or key."),
+          duration: const Duration(seconds: 6),
+          action: SnackBarAction(label: 'Retry', onPressed: _retrySend),
         ),
       );
     }

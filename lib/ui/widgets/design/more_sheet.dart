@@ -164,6 +164,9 @@ class _MoreSheet extends StatelessWidget {
                 icon: Icons.health_and_safety_outlined,
                 title: 'Crisis help',
                 detail: 'Call or text 988 · 24/7 support',
+                // Keyboard/screen-reader users land on the first action when
+                // the sheet opens (UX audit A3).
+                autofocus: true,
                 onTap: () {
                   Navigator.of(context).pop();
                   final ctx = rootNavigatorKey.currentContext;
@@ -221,6 +224,7 @@ class _MoreRow extends StatelessWidget {
   final String detail;
   final bool destructive;
   final VoidCallback onTap;
+  final bool autofocus;
 
   const _MoreRow({
     required this.icon,
@@ -228,6 +232,7 @@ class _MoreRow extends StatelessWidget {
     required this.detail,
     required this.onTap,
     this.destructive = false,
+    this.autofocus = false,
   });
 
   @override
@@ -262,6 +267,7 @@ class _MoreRow extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         child: InkWell(
           onTap: onTap,
+          autofocus: autofocus,
           borderRadius: BorderRadius.circular(12),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),

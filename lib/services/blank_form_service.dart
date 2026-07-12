@@ -37,6 +37,7 @@ Directive _blankDirective(FormType type) => Directive(
       primaryDoctorSpecialty: '',
       primaryDoctorPhone: '',
       lastStepIndex: 0,
+      displayLabel: '',
     );
 
 /// Lets the user pick which of the three official forms to print blank

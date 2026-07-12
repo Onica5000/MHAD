@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/data/educational_content.dart';
+import 'package:mhad/ui/education/education_article_detail.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/design_card.dart';
 
@@ -248,7 +248,9 @@ class SectionTile extends StatelessWidget {
         onTap: () => Navigator.of(context).push(
           MaterialPageRoute(
             fullscreenDialog: true,
-            builder: (_) => _SectionDetailScreen(section: section),
+            // One shared editorial detail screen for every entry path
+            // (UX audit C4 — the Material variant was retired).
+            builder: (_) => ArticleDetailScreen(section: section),
           ),
         ),
         // ≥48px tap target for the whole card per a11y guideline; the
@@ -335,54 +337,6 @@ class _CategoryBadge extends StatelessWidget {
       child: Text(
         category.displayName,
         style: TextStyle(fontSize: 10, color: color, fontWeight: FontWeight.w600),
-      ),
-    );
-  }
-}
-
-class _SectionDetailScreen extends StatelessWidget {
-  final EducationSection section;
-  const _SectionDetailScreen({required this.section});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(section.category.displayName)),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _CategoryBadge(category: section.category),
-            const SizedBox(height: 12),
-            Text(
-              section.title,
-              style: Theme.of(context)
-                  .textTheme
-                  .titleLarge
-                  ?.copyWith(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              section.content,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium
-                  ?.copyWith(height: 1.6),
-            ),
-            const SizedBox(height: 32),
-            const Divider(),
-            const SizedBox(height: 8),
-            Text(
-              'Questions? Contact PA Protection & Advocacy: ${appData.phoneOf('paProtectionAdvocacy')}',
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    fontStyle: FontStyle.italic,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-            ),
-            const SizedBox(height: 24),
-          ],
-        ),
       ),
     );
   }

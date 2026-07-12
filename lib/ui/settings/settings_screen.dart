@@ -80,19 +80,44 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           ),
           const SizedBox(height: 20),
 
-          const SectionLabel('AI & Privacy'),
+          // Regrouped 2026-07-11 (UX audit C3): the old "AI & Privacy" card
+          // mixed one functional item (AI setup) with three legal/
+          // informational ones. AI assistant is now its own functional
+          // section; the legal/privacy items live under "Legal & privacy".
+          const SectionLabel('AI assistant'),
+          const SizedBox(height: 8),
+          DesignCard(
+            padding: EdgeInsets.zero,
+            child: _SettingsRow(
+              icon: Icons.auto_awesome,
+              title: 'AI assistant',
+              subtitle: 'Choose a provider and add your API key',
+              onTap: () => context.push(AppRoutes.aiSetup),
+            ),
+          ),
+          const SizedBox(height: 20),
+
+          // "Get help" moved to the left sidebar (above the crisis card) for
+          // prominence. Accessibility stays here.
+          const SectionLabel('Accessibility'),
+          const SizedBox(height: 8),
+          DesignCard(
+            padding: EdgeInsets.zero,
+            child: _SettingsRow(
+              icon: Icons.accessibility_new,
+              title: 'Accessibility',
+              subtitle: 'Text size, dyslexia font, bold text, contrast, language',
+              onTap: () => context.push(AppRoutes.accessibility),
+            ),
+          ),
+          const SizedBox(height: 20),
+
+          const SectionLabel('Legal & privacy'),
           const SizedBox(height: 8),
           DesignCard(
             padding: EdgeInsets.zero,
             child: Column(
               children: [
-                _SettingsRow(
-                  icon: Icons.auto_awesome,
-                  title: 'AI Assistant Setup',
-                  subtitle: 'Choose a provider and add your API key',
-                  onTap: () => context.push(AppRoutes.aiSetup),
-                ),
-                Divider(height: 1, color: p.border),
                 _SettingsRow(
                   icon: Icons.privacy_tip_outlined,
                   title: 'Privacy Policy',
@@ -172,44 +197,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               ],
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 24),
 
           // (The "Data & privacy" and "Learn More" sections were removed —
           // Learn lives in the main nav, and session/end-session controls live
-          // on the public-mode notice.)
-
-          // "Get help" moved to the left sidebar (above the crisis card) for
-          // prominence. Accessibility stays here.
-          const SectionLabel('Accessibility'),
-          const SizedBox(height: 8),
-          DesignCard(
-            padding: EdgeInsets.zero,
-            child: _SettingsRow(
-              icon: Icons.accessibility_new,
-              title: 'Accessibility',
-              subtitle: 'Text size, dyslexia font, bold text, contrast, language',
-              onTap: () => context.push(AppRoutes.accessibility),
-            ),
-          ),
-          const SizedBox(height: 24),
-
-          // Maintainer tool: visible (so the owner can find and test it) but
-          // still passphrase-gated on the screen itself. The long-press on the
-          // "About" heading below remains as a discreet alternate entry point.
-          DesignCard(
-            variant: DesignCardVariant.surface,
-            padding: EdgeInsets.zero,
-            child: _SettingsRow(
-              icon: Icons.admin_panel_settings_outlined,
-              title: 'AI data update tool',
-              subtitle:
-                  'Maintainer tool — have the AI propose updates to the app’s '
-                  'information (contacts, AI limits, legal facts) and review them '
-                  'before applying. Passphrase-protected.',
-              onTap: () => context.push(AppRoutes.admin),
-            ),
-          ),
-          const SizedBox(height: 24),
+          // on the public-mode notice. The visible "AI data update tool" card
+          // was removed 2026-07-11 (UX audit C3) — the maintainer tool is
+          // reached via the long-press on the "About" heading below, still
+          // passphrase-gated.)
 
           DesignCard(
             variant: DesignCardVariant.surface,

@@ -398,7 +398,7 @@ class _SigCol extends StatelessWidget {
               'Courier New',
               'monospace',
             ],
-            fontSize: 9.5,
+            fontSize: 10,
             letterSpacing: 0.4,
             color: p.textMuted,
           ),

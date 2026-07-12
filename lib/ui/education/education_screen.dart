@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:mhad/data/educational_content.dart';
+import 'package:mhad/ui/education/education_article_detail.dart';
 import 'package:mhad/ui/education/education_category_browser.dart';
 import 'package:mhad/ui/education/learn_ai_panel.dart';
-import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/responsive_shell.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
@@ -196,7 +196,7 @@ class _EditorialLearnHub extends StatelessWidget {
                 if (result != null && ctx.mounted) {
                   unawaited(Navigator.of(ctx).push(MaterialPageRoute(
                     builder: (_) =>
-                        _SectionDetailRoute(section: result),
+                        ArticleDetailScreen(section: result),
                   )));
                 }
               },
@@ -229,13 +229,6 @@ class _EditorialLearnHub extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 16),
-        // Comprehensive topic index — moved up here (right under the search
-        // box) so the full library of EducationCategory buckets is immediately
-        // browsable, before the editorial tabs/grid.
-        const SectionLabel('Browse all topics'),
-        const SizedBox(height: 8),
-        const BrowseByTopic(),
-        const SizedBox(height: 18),
         // Category filter pills, centered in a blue box (replaces the old
         // featured "What is the PA MHAD" card — that section is now a normal
         // grid tile below).
@@ -292,6 +285,14 @@ class _EditorialLearnHub extends StatelessWidget {
             );
           },
         ),
+        const SizedBox(height: 22),
+        // Comprehensive topic index — moved BELOW the grid (UX audit C4):
+        // the pills are the hub's primary organizer for quick filtering;
+        // this 8-way per-category index is the deep browse, so it no longer
+        // competes with the pills at the top of the page.
+        const SectionLabel('Browse all topics'),
+        const SizedBox(height: 8),
+        const BrowseByTopic(),
         const SizedBox(height: 18),
         // Full-width editorial pull-quote, centered. (The "Read the booklet"
         // CTA was removed — the topic index + tabs above already lead into the
@@ -422,7 +423,7 @@ class _GridCard extends StatelessWidget {
       child: InkWell(
         onTap: () => Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (_) => _SectionDetailRoute(section: section),
+            builder: (_) => ArticleDetailScreen(section: section),
           ),
         ),
         borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
@@ -476,133 +477,6 @@ class _GridCard extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _SectionDetailRoute extends StatelessWidget {
-  final EducationSection section;
-  const _SectionDetailRoute({required this.section});
-
-  @override
-  Widget build(BuildContext context) {
-    final p = Theme.of(context).mhadPalette;
-    final source = section.category == EducationCategory.supplementary
-        ? 'BEYOND THE BOOKLET'
-        : 'FROM THE OFFICIAL BOOKLET';
-    return Scaffold(
-      appBar: AppBar(title: Text(section.title)),
-      body: ListView(
-        padding: const EdgeInsets.all(20),
-        children: [
-          // Source line (artboard WebArticle).
-          Text(
-            source,
-            style: TextStyle(
-              fontFamily: kMonoFamily,
-              fontFamilyFallback: const [
-                'Consolas',
-                'Menlo',
-                'Courier New',
-                'monospace',
-              ],
-              fontSize: 10.5,
-              letterSpacing: 0.6,
-              fontWeight: FontWeight.w700,
-              color: p.textMuted,
-            ),
-          ),
-          const SizedBox(height: 10),
-          Text(
-            section.title,
-            style: const TextStyle(
-              fontFamily: 'Instrument Serif',
-              fontFamilyFallback: ['Georgia', 'serif'],
-              fontStyle: FontStyle.italic,
-              fontSize: 30,
-              fontWeight: FontWeight.w400,
-              height: 1.05,
-              letterSpacing: -0.4,
-            ),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            section.content,
-            style: const TextStyle(
-              fontFamily: kSansFamily,
-              fontSize: 14.5,
-              height: 1.6,
-            ),
-          ),
-          const SizedBox(height: 24),
-          // "TRY IT — Ready to write yours?" inline CTA (artboard WebArticle).
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: p.primaryTint,
-              border: Border.all(color: p.primaryLight),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'TRY IT',
-                  style: TextStyle(
-                    fontFamily: kMonoFamily,
-                    fontFamilyFallback: const [
-                      'Consolas',
-                      'Menlo',
-                      'Courier New',
-                      'monospace',
-                    ],
-                    fontSize: 10,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 0.6,
-                    color: p.primary,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  'Ready to write yours?',
-                  style: TextStyle(
-                    fontFamily: kSansFamily,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    color: p.text,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'The guided wizard takes about 20 minutes and works '
-                  'anonymously.',
-                  style: TextStyle(
-                    fontFamily: kSansFamily,
-                    fontSize: 13,
-                    height: 1.5,
-                    color: p.textMuted,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                FilledButton.icon(
-                  // Close this article, then start the new-directive flow.
-                  // (The detail route is pushed imperatively, so pop first —
-                  // same pattern as the snap-to-fill → AI-setup hop.)
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    appRouter.go(AppRoutes.home);
-                  },
-                  icon: const Icon(Icons.arrow_forward, size: 16),
-                  label: const Text('Start my directive'),
-                  style: FilledButton.styleFrom(
-                    iconAlignment: IconAlignment.end,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }

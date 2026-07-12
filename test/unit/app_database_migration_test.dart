@@ -41,6 +41,7 @@ const _columnsAddedByMigrations = <String, Set<String>>{
     'trigger_involuntary_commitment', // v13
     'primary_doctor_name', 'primary_doctor_specialty',
     'primary_doctor_phone', // v15
+    'display_label', // v21
   },
   'agents': {
     'accepted_at', 'acceptance_notes', // v11
@@ -287,6 +288,7 @@ void main() {
           'trigger_two_professionals': 13, 'trigger_court_order': 13,
           'trigger_involuntary_commitment': 13, 'primary_doctor_name': 15,
           'primary_doctor_specialty': 15, 'primary_doctor_phone': 15,
+          'display_label': 21,
         },
         'agents': {
           'accepted_at': 11, 'acceptance_notes': 11,

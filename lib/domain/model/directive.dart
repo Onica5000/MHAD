@@ -16,10 +16,11 @@ enum MedicationEntryType { current, exception, limitation, preferred }
 /// on `ScrAllergies` (Mild / Moderate / Severe).
 enum AllergySeverity { mild, moderate, severe }
 
-/// The 11-step wizard flow per PROTOTYPE_DIFF_DECISIONS Decision 5.
-/// User-overridden order: Diagnoses (6) → Medications (7) → Allergies (8)
-/// so the Allergies-Severe → Medications-Avoid link runs backwards as a
-/// nudge rather than a pre-fill.
+/// The wizard steps. Display order is defined ONLY by [FormTypeExt.steps]
+/// (shipped order: … Diagnoses → Allergies → Medications …, so the
+/// Allergies-Severe → Medications-Avoid link runs forwards as a nudge).
+/// The declaration order below is NOT meaningful — nothing persists or
+/// compares `WizardStep.index`; steps are addressed via `steps.indexOf`.
 enum WizardStep {
   aboutYou,
   whenItKicksIn,

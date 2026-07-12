@@ -98,7 +98,10 @@ class PdfPreviewScreen extends StatelessWidget {
           ],
         ),
         loadingWidget: Center(
-          child: CircularProgressIndicator(color: p.primary),
+          child: Semantics(
+            label: 'Rendering PDF preview',
+            child: CircularProgressIndicator(color: p.primary),
+          ),
         ),
       ),
       // Editorial action bar — matches prototype's 3-button Save / Print /
@@ -326,7 +329,12 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
     }
     if (_error) return _centeredNote('Could not render the preview.', p);
     if (_pages.isEmpty) {
-      return Center(child: CircularProgressIndicator(color: p.primary));
+      return Center(
+        child: Semantics(
+          label: 'Rendering PDF preview',
+          child: CircularProgressIndicator(color: p.primary),
+        ),
+      );
     }
     return LayoutBuilder(
       builder: (context, c) {
@@ -508,8 +516,15 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
               separatorBuilder: (_, _) => const SizedBox(height: 12),
               itemBuilder: (context, i) {
                 final selected = i == _current;
-                return GestureDetector(
+                // InkWell (not GestureDetector) so page thumbnails are
+                // Tab-reachable and Enter-activatable on web (UX audit A2).
+                return Semantics(
+                  button: true,
+                  selected: selected,
+                  label: 'Go to page ${i + 1}',
+                  child: InkWell(
                   onTap: () => _jumpToPage(i),
+                  borderRadius: BorderRadius.circular(4),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -544,6 +559,7 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
                         ),
                       ),
                     ],
+                  ),
                   ),
                 );
               },
@@ -597,8 +613,13 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
 
   Widget _fitToggle(MhadPalette p, int pct) {
     final isFit = _zoom == 1.0;
-    return GestureDetector(
+    // InkWell so the toggle is keyboard-reachable on web (UX audit A2).
+    return Semantics(
+      button: true,
+      label: 'Fit page to window',
+      child: InkWell(
       onTap: () => _setZoom(1.0),
+      borderRadius: BorderRadius.circular(8),
       child: Container(
         // Match the 44px zoom buttons so the row aligns and the toggle also
         // meets the WCAG 2.5.5 AA tap-target minimum.
@@ -621,6 +642,7 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
             color: isFit ? p.primary : p.text,
           ),
         ),
+      ),
       ),
     );
   }

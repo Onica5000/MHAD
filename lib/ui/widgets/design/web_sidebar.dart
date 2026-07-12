@@ -414,7 +414,7 @@ class _Badge extends StatelessWidget {
             'Courier New',
             'monospace'
           ],
-          fontSize: 9,
+          fontSize: 10,
           fontWeight: FontWeight.w700,
           letterSpacing: 0.6,
           color: fg,
@@ -459,7 +459,7 @@ class _CrisisCard extends StatelessWidget {
                     style: TextStyle(
                       fontFamily: kMonoFamily,
                       fontFamilyFallback: ['Consolas', 'Courier New', 'monospace'],
-                      fontSize: 9.5,
+                      fontSize: 10,
                       fontWeight: FontWeight.w700,
                       letterSpacing: 0.7,
                       color: SemanticColors.errorTextLight,

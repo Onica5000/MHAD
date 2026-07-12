@@ -246,6 +246,13 @@ class ConversationNotifier extends StateNotifier<List<ChatMessage>> {
     }
   }
 
+  /// Removes the last [n] turns (used by the retry path to pop a failed
+  /// user turn + its error reply before re-sending).
+  void removeLast(int n) {
+    if (n <= 0) return;
+    state = n >= state.length ? [] : state.sublist(0, state.length - n);
+  }
+
   void clear() => state = [];
 }
 

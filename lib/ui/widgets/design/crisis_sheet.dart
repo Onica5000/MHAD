@@ -110,6 +110,9 @@ class _CrisisSheet extends StatelessWidget {
                 detail: 'Call or text 988',
                 icon: Icons.phone_outlined,
                 accent: true,
+                // First action gets initial keyboard/screen-reader focus
+                // when the sheet opens (UX audit A3).
+                autofocus: true,
                 onTap: () => _launch(context, 'tel:${appData.phoneOf('crisis988')}',
                     copyValue: appData.phoneOf('crisis988')),
               ),
@@ -249,6 +252,7 @@ class _CrisisRow extends StatelessWidget {
   final IconData icon;
   final bool accent;
   final VoidCallback onTap;
+  final bool autofocus;
 
   const _CrisisRow({
     required this.name,
@@ -256,6 +260,7 @@ class _CrisisRow extends StatelessWidget {
     required this.icon,
     required this.onTap,
     this.accent = false,
+    this.autofocus = false,
   });
 
   @override
@@ -286,6 +291,7 @@ class _CrisisRow extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         child: InkWell(
           onTap: onTap,
+          autofocus: autofocus,
           borderRadius: BorderRadius.circular(12),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),

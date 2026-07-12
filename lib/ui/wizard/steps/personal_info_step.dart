@@ -253,6 +253,13 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
                 border: OutlineInputBorder(),
                 helperText: 'Use your full legal name as it appears on official ID',
               ),
+              // DELIBERATE (applies to every PII field in this step): empty
+              // autofillHints opt these fields OUT of browser/OS autofill so
+              // the browser never captures directive PII (name, address,
+              // phone) into its own autofill store — that would outlive the
+              // app's in-memory-only privacy promise on web. Confirmed as a
+              // kept tradeoff in the 2026-07-11 UX audit (B13); do not
+              // "fix" by adding AutofillHints.
               autofillHints: const [],
               textCapitalization: TextCapitalization.words,
               textInputAction: TextInputAction.next,

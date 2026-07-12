@@ -343,7 +343,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                 style: TextStyle(
                   fontFamily: kMonoFamily,
                   fontFamilyFallback: kMonoFallbacks,
-                  fontSize: 9,
+                  fontSize: 10,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 0.5,
                   color: p.primary,
@@ -421,7 +421,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
         style: TextStyle(
           fontFamily: kMonoFamily,
           fontFamilyFallback: kMonoFallbacks,
-          fontSize: 9.5,
+          fontSize: 10,
           fontWeight: FontWeight.w700,
           letterSpacing: 0.6,
           color: p.textMuted,
