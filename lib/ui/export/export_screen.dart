@@ -623,6 +623,11 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
   //   3. Advanced — machine-readable data exports.
   List<Widget> _buildDistributionChildren() => [
         // ── 1. Your official directive ───────────────────────────────────
+        // Group headers (UX audit C5): the narrow layout renders this list
+        // as one long scroll, so the three groups get visible SectionLabel
+        // landmarks (they read equally well in the wide rail).
+        const SectionLabel('Your official directive'),
+        const SizedBox(height: 8),
         _railTitle('Printed copy type'),
         _railBody(
           'A draft prints a light “DRAFT” watermark on every page — for '
@@ -707,6 +712,8 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
           const Divider(),
           const SizedBox(height: 16),
           // ── 2. Keep a copy ─────────────────────────────────────────────
+          const SectionLabel('Keep a copy'),
+          const SizedBox(height: 8),
           _railTitle('Wallet card'),
           _railBody('A credit-card-sized summary you can print and carry.'),
           const SizedBox(height: 8),
@@ -768,6 +775,8 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
           const Divider(),
           const SizedBox(height: 16),
           // ── 3. Advanced: machine-readable data ─────────────────────────
+          const SectionLabel('Advanced · data exports'),
+          const SizedBox(height: 8),
           _railTitle('Machine-readable formats'),
           _railBody(
             'Your PDF above is the document you sign — these are data exports '

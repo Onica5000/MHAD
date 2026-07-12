@@ -140,38 +140,46 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             // Active draft hero + outline "Start a new directive" button.
             // Spacing matches prototype L255 (22 above hero) and L296
             // (18 above outline button).
+            // Single deterministic form-picker slot (UX audit C7): the picker
+            // used to render from three independent branches — and a user
+            // whose only directives were past/complete got NO picker at all.
+            // Now it always renders once on data, followed by the draft hero
+            // when a draft exists.
             directivesAsync.maybeWhen(
               data: (directives) {
                 final drafts = directives
                     .where((d) => d.status == 'draft')
                     .toList()
                   ..sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
-                if (drafts.isEmpty) return const SizedBox.shrink();
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 22),
                     // Start-a-new-directive picker (the form-type page was
                     // retired — picking happens on the dashboard now).
-                    const SectionLabel('Start a new directive'),
+                    SectionLabel(directives.isEmpty
+                        ? 'Start your directive'
+                        : 'Start a new directive'),
                     const SizedBox(height: 12),
                     const DirectiveFormChoice(),
-                    const SizedBox(height: 28),
-                    // "Continue where you left off" sits BELOW the form picker
-                    // (under "You can switch form types later").
-                    ActiveDirectiveHero(directive: drafts.first),
-                    // Additional drafts used to be invisible (only the most
-                    // recent got the hero) — list them with their step
-                    // progress (UX audit B9).
-                    for (final d in drafts.skip(1)) ...[
-                      const SizedBox(height: 8),
-                      _PastDirectiveRow(
-                        directive: d,
-                        onTap: () =>
-                            context.go(AppRoutes.wizardRoute(d.id)),
-                        onDelete: () => _confirmDelete(context, ref, d.id),
-                        onRename: () => _renameDirective(context, ref, d),
-                      ),
+                    if (drafts.isNotEmpty) ...[
+                      const SizedBox(height: 28),
+                      // "Continue where you left off" sits BELOW the form
+                      // picker (under "You can switch form types later").
+                      ActiveDirectiveHero(directive: drafts.first),
+                      // Additional drafts used to be invisible (only the most
+                      // recent got the hero) — list them with their step
+                      // progress (UX audit B9).
+                      for (final d in drafts.skip(1)) ...[
+                        const SizedBox(height: 8),
+                        _PastDirectiveRow(
+                          directive: d,
+                          onTap: () =>
+                              context.go(AppRoutes.wizardRoute(d.id)),
+                          onDelete: () => _confirmDelete(context, ref, d.id),
+                          onRename: () => _renameDirective(context, ref, d),
+                        ),
+                      ],
                     ],
                   ],
                 );
@@ -197,16 +205,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     .where((d) => d.status != 'draft')
                     .toList()
                   ..sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
-                if (directives.isEmpty) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      SectionLabel('Start your directive'),
-                      SizedBox(height: 12),
-                      DirectiveFormChoice(),
-                    ],
-                  );
-                }
+                // Empty state renders the form picker in the slot ABOVE
+                // (single deterministic placement — UX audit C7).
                 if (past.isEmpty) return const SizedBox.shrink();
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -360,6 +360,59 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             const SizedBox(height: 28),
             // Primary action column, now full width.
             primary,
+            // "Make it findable" was previously narrow-only (the ToolsGrid)
+            // — desktop had NO entry point to the crisis-readiness
+            // checklist (UX audit C2). The other grid tiles (AI, Learn,
+            // Crisis) already live in the sidebar, so only this one is
+            // surfaced here.
+            ...(() {
+              final p = Theme.of(context).mhadPalette;
+              final sorted = [...directives]
+                ..sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
+              final mostRecent = sorted.isEmpty ? null : sorted.first;
+              if (mostRecent == null) return const <Widget>[];
+              return <Widget>[
+                const SizedBox(height: 16),
+                DesignCard(
+                  padding: const EdgeInsets.all(14),
+                  onTap: () =>
+                      context.push(AppRoutes.findableRoute(mostRecent.id)),
+                  child: Row(
+                    children: [
+                      Icon(Icons.health_and_safety_outlined,
+                          size: 20, color: p.primary),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Make it findable in a crisis',
+                              style: TextStyle(
+                                fontFamily: kSansFamily,
+                                fontSize: 13.5,
+                                fontWeight: FontWeight.w600,
+                                color: p.text,
+                              ),
+                            ),
+                            Text(
+                              'Share copies, carry the wallet card, tell '
+                              'your people where it is',
+                              style: TextStyle(
+                                fontFamily: kSansFamily,
+                                fontSize: 11.5,
+                                color: p.textMuted,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Icon(Icons.chevron_right, size: 18, color: p.textMuted),
+                    ],
+                  ),
+                ),
+              ];
+            })(),
             // Past directives — 2-column grid filling the full width.
             if (past.isNotEmpty) ...[
               const SizedBox(height: 28),
