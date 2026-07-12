@@ -1027,8 +1027,10 @@ class _PastDirectiveRow extends StatelessWidget {
                   iconSize: 18,
                   visualDensity: VisualDensity.compact,
                   padding: EdgeInsets.zero,
+                  // ≥40px hit target (glyph stays 18pt) — was 32×32
+                  // (UX audit A7).
                   constraints:
-                      const BoxConstraints(minWidth: 32, minHeight: 32),
+                      const BoxConstraints(minWidth: 40, minHeight: 40),
                   icon: Icon(Icons.more_horiz, color: p.textMuted),
                   tooltip: 'More',
                   onPressed: () => _showActions(context),

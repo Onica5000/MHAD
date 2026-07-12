@@ -212,6 +212,14 @@ class _TypingIndicatorState extends State<TypingIndicator>
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
+    // Honor reduce-motion: freeze the looping dots (UX audit A10) — the
+    // rest of the app already strips animations under this setting.
+    final reduce = MediaQuery.maybeOf(context)?.disableAnimations ?? false;
+    if (reduce) {
+      if (_ctrl.isAnimating) _ctrl.stop();
+    } else if (!_ctrl.isAnimating) {
+      _ctrl.repeat(reverse: true);
+    }
     return Semantics(
       label: 'AI is typing',
       liveRegion: true,

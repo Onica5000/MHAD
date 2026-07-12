@@ -204,7 +204,7 @@ class WalletCard extends StatelessWidget {
               'Courier New',
               'monospace'
             ],
-            fontSize: 9.5,
+            fontSize: 10,
             fontWeight: FontWeight.w600,
             letterSpacing: 1.0,
             color: color.withValues(alpha: 0.7),

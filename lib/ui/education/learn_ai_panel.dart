@@ -132,7 +132,7 @@ class _LearnAiPanelState extends ConsumerState<LearnAiPanel> {
                     'Courier New',
                     'monospace',
                   ],
-                  fontSize: 9.5,
+                  fontSize: 10,
                   letterSpacing: 0.5,
                   color: hasKey ? p.primary : p.textMuted,
                 ),

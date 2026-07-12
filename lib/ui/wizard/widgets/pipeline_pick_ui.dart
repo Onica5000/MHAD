@@ -855,7 +855,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                                       'Courier New',
                                       'monospace',
                                     ],
-                                    fontSize: 8.5,
+                                    fontSize: 10,
                                     fontWeight: FontWeight.w700,
                                     letterSpacing: 0.5,
                                     color: p.onPrimaryLight,

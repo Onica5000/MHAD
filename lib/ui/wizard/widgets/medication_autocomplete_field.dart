@@ -164,7 +164,7 @@ class _MedicationAutocompleteFieldState
                                         ),
                                         child: Text('NTI',
                                             style: TextStyle(
-                                              fontSize: 9,
+                                              fontSize: 10,
                                               fontWeight: FontWeight.w700,
                                               color: cs.onTertiaryContainer,
                                             )),

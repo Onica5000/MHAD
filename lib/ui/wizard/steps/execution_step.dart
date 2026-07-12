@@ -305,7 +305,7 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
                 'Courier New',
                 'monospace',
               ],
-              fontSize: 9.5,
+              fontSize: 10,
               letterSpacing: 0.6,
               height: 1.4,
               color: p.textMuted,

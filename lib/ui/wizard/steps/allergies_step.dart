@@ -504,7 +504,7 @@ class _KindSegment extends StatelessWidget {
                 style: TextStyle(
                   fontFamily: kMonoFamily,
                   fontFamilyFallback: kMonoFallbacks,
-                  fontSize: 8,
+                  fontSize: 10,
                   letterSpacing: 0.4,
                   color: active ? p.primary : p.textMuted,
                 ),
@@ -611,7 +611,7 @@ class _SearchField extends StatelessWidget {
                     style: TextStyle(
                       fontFamily: kMonoFamily,
                       fontFamilyFallback: kMonoFallbacks,
-                      fontSize: 9,
+                      fontSize: 10,
                       fontWeight: FontWeight.w700,
                       letterSpacing: 0.5,
                       color: p.primary,
@@ -663,7 +663,7 @@ class _AutoComplete extends StatelessWidget {
                     style: TextStyle(
                       fontFamily: kMonoFamily,
                       fontFamilyFallback: kMonoFallbacks,
-                      fontSize: 9.5,
+                      fontSize: 10,
                       fontWeight: FontWeight.w700,
                       letterSpacing: 0.6,
                       color: p.primary,
@@ -675,7 +675,7 @@ class _AutoComplete extends StatelessWidget {
                   style: TextStyle(
                     fontFamily: kMonoFamily,
                     fontFamilyFallback: kMonoFallbacks,
-                    fontSize: 9.5,
+                    fontSize: 10,
                     letterSpacing: 0.4,
                     color: p.textMuted,
                   ),

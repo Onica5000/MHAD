@@ -180,7 +180,7 @@ class HealthChip extends StatelessWidget {
                               'Courier New',
                               'monospace'
                             ],
-                            fontSize: 9,
+                            fontSize: 10,
                             fontWeight: FontWeight.w700,
                             letterSpacing: 0.4,
                             color: codeBg,
