@@ -17,7 +17,6 @@ import 'package:mhad/ui/education/education_screen.dart';
 import 'package:mhad/ui/export/export_screen.dart';
 import 'package:mhad/ui/facilitator/facilitator_screen.dart';
 import 'package:mhad/ui/home/home_screen.dart';
-import 'package:mhad/ui/legal_toggle/plain_legal_toggle_screen.dart';
 import 'package:mhad/ui/past/past_directive_detail_screen.dart';
 import 'package:mhad/ui/revocation/revocation_screen.dart';
 import 'package:mhad/ui/settings/accessibility_settings_screen.dart';
@@ -70,11 +69,13 @@ abstract class AppRoutes {
       '/wizard/$directiveId?step=$step';
   static String exportRoute(int directiveId) => '/export/$directiveId';
 
-  // Phase 4 — net-new screens per v2 prototype artboards. All reachable via
-  // existing surfaces (Home Tools tile, Settings → My directive, etc.).
+  // Phase 4 — net-new screens per v2 prototype artboards, reachable via
+  // existing surfaces (Home Tools tile, wizard steps, row actions).
+  // (The orphaned /legal-toggle screen was deleted 2026-07-11 — its
+  // Plain⇄Legal feature lives in the export screen's "Document language"
+  // segmented control.)
   static const accessibility = '/accessibility';
   static const facilitator = '/facilitator';
-  static const legalToggle = '/legal-toggle/:directiveId';
   static const crisisPlan = '/crisis-plan/:directiveId';
   static const ulysses = '/ulysses/:directiveId';
   static const sideEffects = '/side-effects/:directiveId';
@@ -89,8 +90,6 @@ abstract class AppRoutes {
   // long-press on Settings → About, behind a passphrase. Not in any nav.
   static const admin = '/admin';
 
-  static String legalToggleRoute(int directiveId) =>
-      '/legal-toggle/$directiveId';
   static String crisisPlanRoute(int directiveId) =>
       '/crisis-plan/$directiveId';
   static String ulyssesRoute(int directiveId) => '/ulysses/$directiveId';
@@ -269,11 +268,6 @@ GoRouter _buildRouter(DisclaimerNotifier disclaimer,
         GoRoute(
           path: AppRoutes.admin,
           builder: (_, _) => const AdminUpdateScreen(),
-        ),
-        GoRoute(
-          path: AppRoutes.legalToggle,
-          builder: (_, state) => _withDirectiveId(
-              state, (id) => PlainLegalToggleScreen(directiveId: id)),
         ),
         GoRoute(
           path: AppRoutes.crisisPlan,

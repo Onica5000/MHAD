@@ -1072,7 +1072,9 @@ class _PastDirectiveRow extends StatelessWidget {
               if (onExport != null)
                 ListTile(
                   leading: Icon(Icons.ios_share, color: p.primary),
-                  title: const Text('Export'),
+                  // "Download & print" everywhere (sidebar, More sheet, and
+                  // here) — one name per destination (UX audit C6).
+                  title: const Text('Download & print'),
                   onTap: () {
                     Navigator.pop(sheetCtx);
                     onExport!();

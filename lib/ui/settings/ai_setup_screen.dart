@@ -208,7 +208,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('AI Assistant Setup'),
+        title: const Text('AI assistant setup'),
         actions: [
           if (hasKey)
             IconButton(
