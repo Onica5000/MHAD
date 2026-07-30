@@ -101,7 +101,7 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
             children: [
               Expanded(
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.fromLTRB(22, 20, 22, 40),
+                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 40),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -189,7 +189,7 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontFamily: kSansFamily,
-                            fontSize: 11.5,
+                            fontSize: 12,
                             height: 1.45,
                             color: p.textMuted,
                           ),
@@ -245,14 +245,14 @@ class _Card2 extends StatelessWidget {
         duration: const Duration(milliseconds: 200),
         child: Material(
           color: p.card,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
           child: InkWell(
             onTap: onTap,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
             child: Container(
               padding: const EdgeInsets.all(18),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
                 border: Border.all(color: borderColor, width: 1.5),
               ),
               child: Stack(
@@ -269,7 +269,7 @@ class _Card2 extends StatelessWidget {
                             height: 38,
                             decoration: BoxDecoration(
                               color: p.primaryLight,
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
                             ),
                             alignment: Alignment.center,
                             child: loading
@@ -310,7 +310,7 @@ class _Card2 extends StatelessWidget {
                         subtitle,
                         style: TextStyle(
                           fontFamily: kSansFamily,
-                          fontSize: 13.5,
+                          fontSize: 14,
                           height: 1.45,
                           color: p.textMuted,
                         ),
@@ -325,7 +325,7 @@ class _Card2 extends StatelessWidget {
                                       horizontal: 8, vertical: 3),
                                   decoration: BoxDecoration(
                                     color: p.scaffoldBackground,
-                                    borderRadius: BorderRadius.circular(100),
+                                    borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
                                     border: Border.all(color: p.border),
                                   ),
                                   child: Text(
@@ -355,7 +355,7 @@ class _Card2 extends StatelessWidget {
                             horizontal: 9, vertical: 4),
                         decoration: BoxDecoration(
                           color: p.primary,
-                          borderRadius: BorderRadius.circular(6),
+                          borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
                         ),
                         child: Text(
                           'RECOMMENDED',

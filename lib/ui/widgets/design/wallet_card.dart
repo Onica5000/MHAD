@@ -115,7 +115,7 @@ class WalletCard extends StatelessWidget {
                               'Has an active directive on file',
                               style: TextStyle(
                                 fontFamily: kSansFamily,
-                                fontSize: 11.5,
+                                fontSize: 12,
                                 color: p.onPrimary.withValues(alpha: 0.85),
                               ),
                             ),
@@ -129,7 +129,7 @@ class WalletCard extends StatelessWidget {
                         padding: const EdgeInsets.all(4),
                         decoration: BoxDecoration(
                           color: Colors.white.withValues(alpha: 0.95),
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
                         ),
                         child: QrImageView(
                           data: qrPayload,
@@ -215,7 +215,7 @@ class WalletCard extends StatelessWidget {
           value,
           style: TextStyle(
             fontFamily: kSansFamily,
-            fontSize: 11.5,
+            fontSize: 12,
             fontWeight: FontWeight.w600,
             color: color,
           ),

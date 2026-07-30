@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:drift/drift.dart' show Value;
 import 'package:mhad/data/database/app_database.dart';
@@ -174,7 +175,7 @@ class _TreatmentFacilityStepState
     return Form(
       key: _formKey,
       child: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(20),
         children: [
           WizardHelpButton(helpText: helpText, stepId: 'treatmentFacility'),
           const SizedBox(height: 8),
@@ -573,7 +574,7 @@ class _FacilitySectionState extends State<_FacilitySection> {
       decoration: BoxDecoration(
         color: cs.surface,
         border: Border.all(color: cs.outlineVariant),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
       ),
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxHeight: 240),
@@ -584,7 +585,7 @@ class _FacilitySectionState extends State<_FacilitySection> {
             for (final f in _results)
               InkWell(
                 onTap: () => _pick(i, f),
-                borderRadius: BorderRadius.circular(7),
+                borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
                 child: Padding(
                   padding: const EdgeInsets.all(8),
                   child: Column(
@@ -601,7 +602,7 @@ class _FacilitySectionState extends State<_FacilitySection> {
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                                fontSize: 11.5, color: cs.onSurfaceVariant),
+                                fontSize: 12, color: cs.onSurfaceVariant),
                           ),
                         ),
                     ],
@@ -614,7 +615,7 @@ class _FacilitySectionState extends State<_FacilitySection> {
                 'Facility names from the NPI registry (NIH Clinical Tables). '
                 'Verify details before relying on them.',
                 style: TextStyle(
-                    fontSize: 10,
+                    fontSize: 11,
                     fontStyle: FontStyle.italic,
                     color: cs.onSurfaceVariant),
               ),

@@ -61,7 +61,7 @@ Future<void> showMedlinePlusDialog(
                       'advice.',
                       style: TextStyle(
                         fontFamily: kSans,
-                        fontSize: 10.5,
+                        fontSize: 11,
                         fontStyle: FontStyle.italic,
                         color: p.textMuted,
                       ),

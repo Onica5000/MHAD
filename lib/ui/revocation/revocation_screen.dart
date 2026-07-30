@@ -362,7 +362,7 @@ class _RevokeStep extends StatelessWidget {
                 text,
                 style: TextStyle(
                   fontFamily: kSansFamily,
-                  fontSize: 13.5,
+                  fontSize: 14,
                   height: 1.5,
                   color: p.text,
                 ),

@@ -197,7 +197,7 @@ class _GuardianNominationStepState
     return Form(
       key: _formKey,
       child: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(20),
         children: [
           WizardHelpButton(
             // The on-screen description below already says this is optional and
@@ -372,12 +372,12 @@ class _GuardianConditionRow extends StatelessWidget {
       final selected = value == isYes;
       return InkWell(
         onTap: () => onChanged(isYes),
-        borderRadius: BorderRadius.circular(100),
+        borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 6),
           decoration: BoxDecoration(
             color: selected ? cs.primary : Colors.transparent,
-            borderRadius: BorderRadius.circular(100),
+            borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
           ),
           child: Text(
             text,
@@ -417,7 +417,7 @@ class _GuardianConditionRow extends StatelessWidget {
             padding: const EdgeInsets.all(3),
             decoration: BoxDecoration(
               border: Border.all(color: cs.outlineVariant),
-              borderRadius: BorderRadius.circular(100),
+              borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -449,7 +449,7 @@ class _GuardianRelOptCard extends StatelessWidget {
     final cs = Theme.of(context).colorScheme;
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 140),
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
@@ -459,7 +459,7 @@ class _GuardianRelOptCard extends StatelessWidget {
             color: selected ? cs.primary : cs.outlineVariant,
             width: selected ? 2 : 1,
           ),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -496,7 +496,7 @@ class _GuardianRelOptCard extends StatelessWidget {
                     option.label,
                     style: TextStyle(
                       fontFamily: kSansFamily,
-                      fontSize: 14.5,
+                      fontSize: 15,
                       fontWeight: FontWeight.w600,
                       color: cs.onSurface,
                       height: 1.3,
@@ -508,7 +508,7 @@ class _GuardianRelOptCard extends StatelessWidget {
                       option.hint,
                       style: TextStyle(
                         fontFamily: kSansFamily,
-                        fontSize: 12.5,
+                        fontSize: 13,
                         color: cs.onSurfaceVariant,
                         height: 1.4,
                       ),

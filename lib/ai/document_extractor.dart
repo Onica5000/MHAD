@@ -91,7 +91,11 @@ $extracted''';
       parts.add(LlmText('--- DOCUMENT CONTENT ---\n$rawText'));
     } else if (mimeType.startsWith('image/')) {
       // Images — cannot strip PII client-side, rely on prompt instruction.
-      parts.add(LlmData('image/jpeg', _optimizeImage(bytes)));
+      // Label with what the bytes actually are: formats the `image` package
+      // can't decode (HEIC/HEIF) pass through untouched and must keep their
+      // original MIME, or the provider rejects them.
+      final optimized = _optimizeImage(bytes, mimeType);
+      parts.add(LlmData(optimized.mimeType, optimized.bytes));
     } else {
       // PDFs (Gemini/Claude) and audio (Gemini only) — sent as-is. A provider
       // that can't read the kind throws an [UnsupportedInputError] the caller
@@ -123,10 +127,24 @@ $extracted''';
 
   /// Decodes an image, resizes so the longest side is ≤ [_maxImageDimension],
   /// and re-encodes as JPEG. This minimizes Gemini token usage while keeping
-  /// text readable. Falls back to the original bytes if decoding fails.
-  Uint8List _optimizeImage(Uint8List bytes) {
+  /// text readable.
+  ///
+  /// Returns the bytes **and the MIME type that actually describes them**. When
+  /// decoding fails the original bytes pass through unchanged, so the caller
+  /// must label them with their original type — the previous version returned
+  /// bare bytes that the caller always tagged `image/jpeg`. HEIC/HEIF (the
+  /// iPhone default, and an extension the file picker explicitly offers) is not
+  /// decodable by the `image` package, so every iPhone photo was uploaded as
+  /// HEIC bytes claiming to be a JPEG. The provider then failed to read it, and
+  /// because nothing extracted, the pipeline reported "this doesn't look like a
+  /// health or medical document" for a perfectly valid record.
+  ///
+  /// Gemini and Claude both accept HEIC natively, so passing it through with an
+  /// honest MIME type makes those uploads work rather than fail.
+  ({Uint8List bytes, String mimeType}) _optimizeImage(
+      Uint8List bytes, String originalMime) {
     final decoded = img.decodeImage(bytes);
-    if (decoded == null) return bytes;
+    if (decoded == null) return (bytes: bytes, mimeType: originalMime);
 
     img.Image image = decoded;
 
@@ -141,7 +159,10 @@ $extracted''';
       }
     }
 
-    return Uint8List.fromList(img.encodeJpg(image, quality: _jpegQuality));
+    return (
+      bytes: Uint8List.fromList(img.encodeJpg(image, quality: _jpegQuality)),
+      mimeType: 'image/jpeg',
+    );
   }
 
   DocumentExtractionResult _parseResponse(String text) {

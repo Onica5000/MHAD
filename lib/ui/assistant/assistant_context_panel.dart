@@ -42,7 +42,7 @@ class AssistantContextPanel extends StatelessWidget {
         border: Border(left: BorderSide(color: p.border)),
       ),
       child: ListView(
-        padding: const EdgeInsets.fromLTRB(18, 8, 18, 24),
+        padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
         children: [
           if (hasContext) ...[
             // "Context the AI sees" — structured key/value list mirroring the
@@ -74,7 +74,7 @@ class AssistantContextPanel extends StatelessWidget {
                 'anything in the PA MHAD booklet. Try one of these:',
                 style: TextStyle(
                   fontFamily: kSansFamily,
-                  fontSize: 12.5,
+                  fontSize: 13,
                   height: 1.45,
                   color: p.textMuted,
                 ),
@@ -108,7 +108,7 @@ class AssistantContextPanel extends StatelessWidget {
                       style: TextStyle(
                         fontFamily: kMonoFamily,
                         fontFamilyFallback: const ['Consolas', 'monospace'],
-                        fontSize: 10.5,
+                        fontSize: 11,
                         fontWeight: FontWeight.w700,
                         letterSpacing: 0.6,
                         color: p.primary,
@@ -196,17 +196,17 @@ class _ContextPromptTile extends StatelessWidget {
       label: text,
       child: Material(
         color: p.card,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
           child: Container(
             constraints: const BoxConstraints(minHeight: 44),
             padding:
                 const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
             decoration: BoxDecoration(
               border: Border.all(color: p.border),
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
             ),
             child: Row(
               children: [
@@ -215,7 +215,7 @@ class _ContextPromptTile extends StatelessWidget {
                     text,
                     style: TextStyle(
                       fontFamily: kSansFamily,
-                      fontSize: 12.5,
+                      fontSize: 13,
                       height: 1.3,
                       color: p.text,
                     ),

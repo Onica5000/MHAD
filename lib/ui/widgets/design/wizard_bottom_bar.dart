@@ -49,7 +49,7 @@ class WizardBottomBar extends StatelessWidget {
       child: SafeArea(
         top: false,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(18, 16, 18, 12),
+          padding: const EdgeInsets.fromLTRB(20, 16, 20, 12),
           // spaceBetween (NOT a Spacer): a Spacer is a flex child, which makes
           // the Row measure its non-flex children (the FilledButton) at an
           // unbounded width first — and the button can't lay out under infinite

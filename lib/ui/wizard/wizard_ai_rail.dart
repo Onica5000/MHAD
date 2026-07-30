@@ -186,7 +186,7 @@ class _WizardAiRailState extends ConsumerState<WizardAiRail> {
               if (hasKey)
                 InkWell(
                   onTap: widget.onOpenFull,
-                  borderRadius: BorderRadius.circular(6),
+                  borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
                   child: Padding(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
@@ -214,7 +214,7 @@ class _WizardAiRailState extends ConsumerState<WizardAiRail> {
                 'Courier New',
                 'monospace',
               ],
-              fontSize: 10,
+              fontSize: 11,
               letterSpacing: 0.5,
               color: hasKey ? p.primary : p.textMuted,
             ),
@@ -252,7 +252,7 @@ class _WizardAiRailState extends ConsumerState<WizardAiRail> {
               'Not legal or medical advice.',
               style: TextStyle(
                 fontFamily: kSansFamily,
-                fontSize: 10.5,
+                fontSize: 11,
                 color: p.textMuted,
               ),
             ),
@@ -298,7 +298,7 @@ class _RailNoAiCard extends StatelessWidget {
           'questions. You can fill out the whole wizard without it.',
           style: TextStyle(
             fontFamily: kSansFamily,
-            fontSize: 11.5,
+            fontSize: 12,
             height: 1.4,
             color: p.textMuted,
           ),
@@ -336,7 +336,7 @@ class _RailHeadsUp extends ConsumerWidget {
           decoration: BoxDecoration(
             color: p.primaryTint,
             border: Border.all(color: p.primaryLight),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
           ),
           child: child,
         );
@@ -378,7 +378,7 @@ class _RailHeadsUp extends ConsumerWidget {
                       s.headsUp,
                       style: TextStyle(
                         fontFamily: kSansFamily,
-                        fontSize: 12.5,
+                        fontSize: 13,
                         height: 1.4,
                         color: p.onPrimaryLight,
                       ),
@@ -398,7 +398,7 @@ class _RailHeadsUp extends ConsumerWidget {
                     'Courier New',
                     'monospace',
                   ],
-                  fontSize: 10,
+                  fontSize: 11,
                   letterSpacing: 0.6,
                   color: p.textMuted,
                 ),
@@ -411,20 +411,20 @@ class _RailHeadsUp extends ConsumerWidget {
                   for (final c in s.chips)
                     InkWell(
                       onTap: () => onAsk(c),
-                      borderRadius: BorderRadius.circular(100),
+                      borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
                       child: Container(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 10, vertical: 6),
                         decoration: BoxDecoration(
                           color: p.surface,
                           border: Border.all(color: p.border),
-                          borderRadius: BorderRadius.circular(100),
+                          borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
                         ),
                         child: Text(
                           c,
                           style: TextStyle(
                             fontFamily: kSansFamily,
-                            fontSize: 11.5,
+                            fontSize: 12,
                             fontWeight: FontWeight.w600,
                             color: p.text,
                           ),
@@ -462,7 +462,7 @@ class _RailFacilitySearch extends StatelessWidget {
           hintText: 'Find a PA facility by name or county…',
           prefixIcon: Icon(Icons.search, size: 18, color: p.textMuted),
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
           ),
         ),
       ),
@@ -540,14 +540,14 @@ class _RailBubble extends StatelessWidget {
         constraints: const BoxConstraints(maxWidth: 250),
         decoration: BoxDecoration(
           color: isUser ? p.primary : p.surface,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
           border: isUser ? null : Border.all(color: p.border),
         ),
         child: Text(
           text,
           style: TextStyle(
             fontFamily: kSansFamily,
-            fontSize: 12.5,
+            fontSize: 13,
             height: 1.4,
             fontStyle: muted ? FontStyle.italic : FontStyle.normal,
             color: isUser
@@ -572,7 +572,7 @@ class _RailInput extends ConsumerWidget {
     return Container(
       decoration: BoxDecoration(
         color: p.surface,
-        borderRadius: BorderRadius.circular(100),
+        borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
         border: Border.all(color: p.border),
       ),
       padding: const EdgeInsets.only(left: 14, right: 4),

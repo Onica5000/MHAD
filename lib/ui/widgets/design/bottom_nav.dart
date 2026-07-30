@@ -90,7 +90,7 @@ class MhadBottomNav extends ConsumerWidget {
           decoration: BoxDecoration(
             color: p.card,
             border: Border.all(color: p.border),
-            borderRadius: BorderRadius.circular(100),
+            borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withValues(alpha: 0.06),
@@ -149,7 +149,7 @@ class _NavPill extends StatelessWidget {
     final pill = Container(
       decoration: BoxDecoration(
         color: item.active ? p.primaryLight : Colors.transparent,
-        borderRadius: BorderRadius.circular(100),
+        borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       child: Row(
@@ -162,7 +162,7 @@ class _NavPill extends StatelessWidget {
               item.label,
               style: TextStyle(
                 fontFamily: kSansFamily,
-                fontSize: 12.5,
+                fontSize: 13,
                 fontWeight: FontWeight.w600,
                 color: fg,
               ),
@@ -178,7 +178,7 @@ class _NavPill extends StatelessWidget {
       label: item.label,
       child: InkWell(
         onTap: item.active ? null : item.onTap,
-        borderRadius: BorderRadius.circular(100),
+        borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
         // 48px tall hit target (meets the accessibility guideline) with the
         // ~36px visible pill centred inside it — matches the prototype look.
         // FittedBox(scaleDown) lets the active item's icon+label shrink to fit

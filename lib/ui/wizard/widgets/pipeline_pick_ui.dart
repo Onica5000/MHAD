@@ -72,7 +72,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                       'confidential.',
                       style: TextStyle(
                         fontFamily: kSansFamily,
-                        fontSize: 12.5,
+                        fontSize: 13,
                         height: 1.45,
                         color: p.textMuted,
                       ),
@@ -217,7 +217,7 @@ extension _PipelinePickUi on _PipelineScreenState {
       decoration: BoxDecoration(
         color: p.card,
         border: Border.all(color: p.border),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -238,7 +238,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                       'Courier New',
                       'monospace',
                     ],
-                    fontSize: 10,
+                    fontSize: 11,
                     letterSpacing: 0.4,
                     color: p.textMuted,
                   ),
@@ -273,7 +273,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                           '(free, ~30 seconds) — nothing is sent until then.',
                   style: TextStyle(
                     fontFamily: kSansFamily,
-                    fontSize: 11.5,
+                    fontSize: 12,
                     height: 1.4,
                     color: p.textMuted,
                   ),
@@ -309,7 +309,7 @@ extension _PipelinePickUi on _PipelineScreenState {
             decoration: BoxDecoration(
               color: p.surface,
               border: Border.all(color: p.border),
-              borderRadius: BorderRadius.circular(6),
+              borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
             ),
             alignment: Alignment.center,
             child: Icon(_docIcon(d), size: 16, color: p.textMuted),
@@ -363,7 +363,7 @@ extension _PipelinePickUi on _PipelineScreenState {
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: p.primaryTint,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
         border: Border.all(color: p.primaryLight),
       ),
       child: Column(
@@ -393,7 +393,7 @@ extension _PipelinePickUi on _PipelineScreenState {
             'seconds). You review every field before it lands in your form.',
             style: TextStyle(
               fontFamily: kSansFamily,
-              fontSize: 12.5,
+              fontSize: 13,
               height: 1.45,
               color: p.textMuted,
             ),
@@ -416,7 +416,7 @@ extension _PipelinePickUi on _PipelineScreenState {
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: cs.errorContainer,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -440,18 +440,18 @@ extension _PipelinePickUi on _PipelineScreenState {
       onDragDone: (detail) => _handleDroppedFiles(detail.files),
       child: InkWell(
         onTap: _browseFiles,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 120),
           decoration: BoxDecoration(
             color: _dragOver ? p.primaryLight : p.primaryTint,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
             border: Border.all(
               color: p.primary,
               width: _dragOver ? 3 : 2,
             ),
           ),
-          padding: const EdgeInsets.fromLTRB(24, 30, 24, 22),
+          padding: const EdgeInsets.fromLTRB(20, 30, 20, 22),
         child: Column(
           children: [
             Container(
@@ -459,7 +459,7 @@ extension _PipelinePickUi on _PipelineScreenState {
               height: 60,
               decoration: BoxDecoration(
                 color: p.primary,
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
               ),
               child: Icon(Icons.upload_file, size: 28, color: p.onPrimary),
             ),
@@ -472,7 +472,7 @@ extension _PipelinePickUi on _PipelineScreenState {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontFamily: kSansFamily,
-                fontSize: 19,
+                fontSize: 18,
                 fontWeight: FontWeight.w700,
                 color: p.text,
               ),
@@ -488,7 +488,7 @@ extension _PipelinePickUi on _PipelineScreenState {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontFamily: kSansFamily,
-                fontSize: 12.5,
+                fontSize: 13,
                 color: p.textMuted,
               ),
             ),
@@ -517,7 +517,7 @@ extension _PipelinePickUi on _PipelineScreenState {
               decoration: BoxDecoration(
                 color: p.card,
                 border: Border.all(color: p.primaryLight),
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
               ),
               child: Row(
                 children: [
@@ -532,7 +532,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                       'everything before it is added to your directive.',
                       style: TextStyle(
                         fontFamily: kSansFamily,
-                        fontSize: 11.5,
+                        fontSize: 12,
                         height: 1.4,
                         color: p.text,
                       ),
@@ -558,13 +558,13 @@ extension _PipelinePickUi on _PipelineScreenState {
     Widget tile((IconData, String, String) t) => Expanded(
           child: InkWell(
             onTap: _browseFiles,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
             child: Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 color: p.card,
                 border: Border.all(color: p.border),
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -575,7 +575,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                     height: 30,
                     decoration: BoxDecoration(
                       color: p.primaryTint,
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
                     ),
                     child: Icon(t.$1, size: 16, color: p.primary),
                   ),
@@ -632,7 +632,7 @@ extension _PipelinePickUi on _PipelineScreenState {
             decoration: BoxDecoration(
               color: p.card,
               border: Border.all(color: p.border),
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -647,7 +647,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                         'On a phone instead?',
                         style: TextStyle(
                           fontFamily: kSansFamily,
-                          fontSize: 12.5,
+                          fontSize: 13,
                           fontWeight: FontWeight.w700,
                           color: p.text,
                         ),
@@ -658,7 +658,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                         'with its camera.',
                         style: TextStyle(
                           fontFamily: kSansFamily,
-                          fontSize: 11.5,
+                          fontSize: 12,
                           height: 1.35,
                           color: p.textMuted,
                         ),
@@ -730,12 +730,12 @@ extension _PipelinePickUi on _PipelineScreenState {
     final p = Theme.of(context).mhadPalette;
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(14),
+      borderRadius: BorderRadius.circular(DesignTokens.buttonRadius),
       child: Container(
         padding: const EdgeInsets.fromLTRB(14, 16, 14, 14),
         decoration: BoxDecoration(
           color: bg,
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(DesignTokens.buttonRadius),
           border: filled ? null : Border.all(color: p.border, width: 1.5),
         ),
         child: Column(
@@ -747,7 +747,7 @@ extension _PipelinePickUi on _PipelineScreenState {
               height: 32,
               decoration: BoxDecoration(
                 color: iconBg,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
               ),
               child: Icon(icon, size: 18, color: iconFg ?? fg),
             ),
@@ -798,13 +798,13 @@ extension _PipelinePickUi on _PipelineScreenState {
         for (final t in targets) ...[
           InkWell(
             onTap: _browseFiles,
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
               decoration: BoxDecoration(
                 color: p.card,
                 border: Border.all(color: p.border),
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
               ),
               child: Row(
                 children: [
@@ -813,7 +813,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                     height: 28,
                     decoration: BoxDecoration(
                       color: p.primaryTint,
-                      borderRadius: BorderRadius.circular(7),
+                      borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
                     ),
                     child: Icon(t.$1, size: 14, color: p.primary),
                   ),
@@ -843,7 +843,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                                     horizontal: 5, vertical: 1),
                                 decoration: BoxDecoration(
                                   color: p.primaryLight,
-                                  borderRadius: BorderRadius.circular(3),
+                                  borderRadius: BorderRadius.circular(DesignTokens.radiusXs),
                                 ),
                                 child: Text(
                                   'FASTEST',
@@ -855,7 +855,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                                       'Courier New',
                                       'monospace',
                                     ],
-                                    fontSize: 10,
+                                    fontSize: 11,
                                     fontWeight: FontWeight.w700,
                                     letterSpacing: 0.5,
                                     color: p.onPrimaryLight,
@@ -870,7 +870,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                           t.$3,
                           style: TextStyle(
                             fontFamily: kSansFamily,
-                            fontSize: 11.5,
+                            fontSize: 12,
                             color: p.textMuted,
                           ),
                         ),
@@ -896,7 +896,7 @@ extension _PipelinePickUi on _PipelineScreenState {
       decoration: BoxDecoration(
         color: p.surface,
         border: Border.all(color: p.border),
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -955,7 +955,7 @@ extension _PipelinePickUi on _PipelineScreenState {
               decoration: BoxDecoration(
                 color: p.surface,
                 border: Border.all(color: p.border),
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -992,7 +992,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 fontFamily: kSansFamily,
-                                fontSize: 12.5,
+                                fontSize: 13,
                                 color: p.text,
                               ),
                             ),
@@ -1023,13 +1023,13 @@ extension _PipelinePickUi on _PipelineScreenState {
       decoration: BoxDecoration(
         color: p.card,
         border: Border.all(color: p.border),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
             child: isImage
                 ? Image.memory(
                     doc.bytes!,
@@ -1075,7 +1075,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                       : "$n files read by Google's AI to autofill.",
                   style: TextStyle(
                     fontFamily: kSansFamily,
-                    fontSize: 11.5,
+                    fontSize: 12,
                     height: 1.4,
                     color: p.textMuted,
                   ),
@@ -1101,7 +1101,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                 text,
                 style: TextStyle(
                   fontFamily: kSansFamily,
-                  fontSize: 12.5,
+                  fontSize: 13,
                   height: 1.45,
                   color: p.textMuted,
                 ),

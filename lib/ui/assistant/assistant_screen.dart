@@ -202,7 +202,7 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
               height: 36,
               decoration: BoxDecoration(
                 color: Theme.of(context).mhadPalette.primaryTint,
-                borderRadius: BorderRadius.circular(9),
+                borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
               ),
               alignment: Alignment.center,
               child: Icon(
@@ -221,7 +221,7 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                     'AI assistant',
                     style: TextStyle(
                       fontFamily: kSansFamily,
-                      fontSize: 14.5,
+                      fontSize: 15,
                       fontWeight: FontWeight.w700,
                       letterSpacing: -0.2,
                       color: Theme.of(context).mhadPalette.text,
@@ -239,7 +239,7 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                         'Courier New',
                         'monospace',
                       ],
-                      fontSize: 10,
+                      fontSize: 11,
                       letterSpacing: 0.5,
                       color: Theme.of(context).mhadPalette.textMuted,
                     ),
@@ -617,7 +617,7 @@ class _InputBar extends StatelessWidget {
                 decoration: InputDecoration(
                   hintText: 'Ask a question about your directive...',
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(24),
+                    borderRadius: BorderRadius.circular(DesignTokens.radiusLg),
                   ),
                   // vertical 14 (was 10) brings the single-line height to
                   // ~52 — comfortably over the 48px a11y guideline.
@@ -716,14 +716,14 @@ class _SuggestionChip extends StatelessWidget {
         label: text,
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
           child: Container(
             constraints: const BoxConstraints(minHeight: 48),
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
             decoration: BoxDecoration(
               border: Border.all(
                   color: Theme.of(context).colorScheme.outlineVariant),
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
             ),
             child: Row(
               children: [

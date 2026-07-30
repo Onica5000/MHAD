@@ -4,10 +4,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/ai/ai_provider.dart';
+import 'package:mhad/ai/llm_client.dart';
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/design/design_card.dart';
+import 'package:mhad/ui/widgets/design/labeled_spinner.dart';
+import 'package:mhad/ui/widgets/friendly_error.dart';
 import 'package:mhad/utils/platform_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -36,6 +40,11 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
   bool _obscure = true;
   late AiProvider _provider;
   late String _model;
+
+  // Connection-test state.
+  bool _testing = false;
+  bool _testOk = false;
+  String? _testResult;
 
   bool get _isEphemeral => isEphemeralApiKeyMode(ref);
 
@@ -114,6 +123,51 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
         // (e.g. onto the "In your words" onboarding intro if it isn't done).
         context.go(AppRoutes.home);
       }
+    }
+  }
+
+  /// Sends one tiny real request with the key/model currently typed in, and
+  /// reports exactly what came back.
+  ///
+  /// Without this the first sign that a key was wrong, expired, or pointed at a
+  /// retired model was a failed action somewhere deep in the app — reported, at
+  /// the time, as "please try again later". A round trip here costs one request
+  /// and turns an unexplained dead end into a specific, fixable message.
+  Future<void> _testConnection() async {
+    final key = _keyCtrl.text.trim();
+    if (key.isEmpty) return;
+    setState(() {
+      _testing = true;
+      _testResult = null;
+      _testOk = false;
+    });
+    final client = LlmClient(
+      provider: _provider,
+      model: _provider.resolveModel(_model),
+      apiKey: key,
+    );
+    try {
+      // Minimal prompt + tiny output cap: enough to prove the key, model and
+      // network path all work, without burning quota.
+      await client.generateText(
+        'Reply with the single word: ok',
+        timeout: const Duration(seconds: 20),
+        maxOutputTokens: 16,
+      );
+      if (!mounted) return;
+      setState(() {
+        _testOk = true;
+        _testResult = '${_provider.label} responded. This key and model work.';
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _testOk = false;
+        _testResult = FriendlyError.from(e);
+      });
+    } finally {
+      client.dispose();
+      if (mounted) setState(() => _testing = false);
     }
   }
 
@@ -244,7 +298,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                         'the app reloads — then discarded when you close the '
                         'app or clear your data.',
                         style: TextStyle(
-                            fontSize: 12.5,
+                            fontSize: 13,
                             color: cs.onTertiaryContainer,
                             height: 1.4),
                       ),
@@ -283,7 +337,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                         'security (CORS) on the web. If it doesn\'t respond, '
                         'pick Gemini or Claude — both work in the browser.',
                         style: TextStyle(
-                            fontSize: 12.5,
+                            fontSize: 13,
                             color: cs.onErrorContainer,
                             height: 1.4),
                       ),
@@ -349,7 +403,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                     'API key. To protect your login on shared or public '
                     'devices, open a private browsing window first:',
                     style: TextStyle(
-                        fontSize: 12.5, color: cs.onErrorContainer,
+                        fontSize: 13, color: cs.onErrorContainer,
                         height: 1.4),
                   ),
                   const SizedBox(height: 10),
@@ -403,7 +457,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                     'Your Google login will be automatically forgotten when '
                     'you close the private window.',
                     style: TextStyle(
-                        fontSize: 12.5, color: cs.onErrorContainer,
+                        fontSize: 13, color: cs.onErrorContainer,
                         fontWeight: FontWeight.w600, height: 1.4),
                   ),
                 ],
@@ -522,6 +576,55 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                 ? 'Use Key for This Session'
                 : 'Save API Key'),
           ),
+          const SizedBox(height: 8),
+
+          // ---- Test connection ----
+          // Verifies key + model + reachability before the user relies on it.
+          OutlinedButton.icon(
+            onPressed:
+                _testing || _keyCtrl.text.trim().isEmpty ? null : _testConnection,
+            icon: _testing
+                ? const SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: LabeledSpinner(
+                        label: 'Testing connection', strokeWidth: 2),
+                  )
+                : const Icon(Icons.wifi_tethering),
+            label: Text(_testing ? 'Testing…' : 'Test connection'),
+          ),
+          if (_testResult != null) ...[
+            const SizedBox(height: 8),
+            Semantics(
+              liveRegion: true,
+              child: DesignCard(
+                variant: _testOk
+                    ? DesignCardVariant.surface
+                    : DesignCardVariant.error,
+                padding: const EdgeInsets.all(12),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Icon(
+                      _testOk ? Icons.check_circle_outline : Icons.error_outline,
+                      size: 18,
+                      color: _testOk
+                          ? SemanticColors.successText(
+                              Theme.of(context).brightness)
+                          : cs.error,
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        _testResult!,
+                        style: TextStyle(fontSize: 13, height: 1.4),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
           const SizedBox(height: 24),
 
           // ---- Privacy notice ----
@@ -756,7 +859,7 @@ class _StepTile extends StatelessWidget {
                   const SizedBox(height: 2),
                   Text(subtitle!,
                       style: TextStyle(
-                          fontSize: 12.5,
+                          fontSize: 13,
                           color: cs.onSurfaceVariant,
                           height: 1.3)),
                 ],
@@ -842,7 +945,7 @@ class _FaqTile extends StatelessWidget {
         children: [
           Text(answer,
               style: TextStyle(
-                  fontSize: 12.5, color: cs.onSurfaceVariant, height: 1.4)),
+                  fontSize: 13, color: cs.onSurfaceVariant, height: 1.4)),
         ],
       ),
     );

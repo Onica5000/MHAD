@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/utils/date_format.dart';
 
@@ -80,7 +81,7 @@ class ExportUnencryptedBanner extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.errorContainer,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -94,7 +95,7 @@ class ExportUnencryptedBanner extends StatelessWidget {
                 'The exported PDF is not encrypted. Share only via '
                 'channels you trust.',
                 style: TextStyle(
-                  fontSize: 12.5,
+                  fontSize: 13,
                   color: Theme.of(context).colorScheme.onErrorContainer,
                 ),
               ),

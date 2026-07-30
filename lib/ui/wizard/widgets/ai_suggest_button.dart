@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/ai/ai_clinical_policy.dart';
@@ -210,7 +211,7 @@ Return only the draft text — no explanation, no quotes, no preamble.''';
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
                       color: cs.surfaceContainerHighest,
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
                       border:
                           Border.all(color: cs.outline.withValues(alpha: 0.3)),
                     ),
@@ -230,7 +231,7 @@ Return only the draft text — no explanation, no quotes, no preamble.''';
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     color: cs.primaryContainer.withValues(alpha: 0.3),
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
                     border: Border.all(color: cs.primary.withValues(alpha: 0.3)),
                   ),
                   child: SelectableText(

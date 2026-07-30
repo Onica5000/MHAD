@@ -22,7 +22,7 @@ class StepDots extends StatelessWidget {
     required this.current,
     required this.total,
     this.height = 3,
-    this.padding = const EdgeInsets.fromLTRB(22, 12, 22, 0),
+    this.padding = const EdgeInsets.fromLTRB(20, 12, 20, 0),
     this.onStepTap,
     super.key,
   });
@@ -35,7 +35,7 @@ class StepDots extends StatelessWidget {
           height: height,
           decoration: BoxDecoration(
             color: i < current ? p.primary : p.border,
-            borderRadius: BorderRadius.circular(2),
+            borderRadius: BorderRadius.circular(DesignTokens.radiusXs),
           ),
         );
 
@@ -55,7 +55,7 @@ class StepDots extends StatelessWidget {
                         label: 'Go to step ${i + 1} of $total',
                         child: InkWell(
                           onTap: () => onStepTap!(i),
-                          borderRadius: BorderRadius.circular(4),
+                          borderRadius: BorderRadius.circular(DesignTokens.radiusXs),
                           child: SizedBox(
                             height: 20,
                             child: Center(child: bar(i)),

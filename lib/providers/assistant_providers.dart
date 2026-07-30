@@ -342,5 +342,17 @@ final wizardRailSuggestionsProvider = FutureProvider.autoDispose.family<
 // Gemini rate limit tracker (per-session, in-memory)
 // ---------------------------------------------------------------------------
 
+/// The limits this tracker enforces are Gemini's **free-tier** quota, so they
+/// only gate requests while Gemini is the active provider. Switching provider
+/// flips enforcement without clearing the request log, so the counts stay
+/// accurate if the user switches back.
 final geminiRateTrackerProvider =
-    ChangeNotifierProvider<GeminiRateTracker>((_) => GeminiRateTracker());
+    ChangeNotifierProvider<GeminiRateTracker>((ref) {
+  final tracker = GeminiRateTracker();
+  ref.listen<AiProvider>(
+    activeProviderProvider,
+    (_, next) => tracker.enforced = next == AiProvider.gemini,
+    fireImmediately: true,
+  );
+  return tracker;
+});

@@ -127,7 +127,7 @@ class DirectiveFormChoice extends ConsumerWidget {
           'Combined is the broadest.',
           style: TextStyle(
             fontFamily: kSansFamily,
-            fontSize: 12.5,
+            fontSize: 13,
             height: 1.4,
             color: p.textMuted,
           ),
@@ -146,7 +146,7 @@ class _CombinedCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
     return ClipRRect(
-      borderRadius: BorderRadius.circular(20),
+      borderRadius: BorderRadius.circular(DesignTokens.sheetRadius),
       child: Container(
         // Brand CTA gradient (primary → primaryMid) for a richer feature hero
         // than the flat primary fill. Foreground stays onPrimary, fully legible.
@@ -179,7 +179,7 @@ class _CombinedCard extends StatelessWidget {
                         horizontal: 9, vertical: 4),
                     decoration: BoxDecoration(
                       color: p.onPrimary.withValues(alpha: 0.18),
-                      borderRadius: BorderRadius.circular(6),
+                      borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
                     ),
                     child: Text(
                       'RECOMMENDED',
@@ -209,7 +209,7 @@ class _CombinedCard extends StatelessWidget {
                     'one document. 11 short steps · about 20 minutes.',
                     style: TextStyle(
                       fontFamily: kSansFamily,
-                      fontSize: 13.5,
+                      fontSize: 14,
                       height: 1.5,
                       color: p.onPrimary.withValues(alpha: 0.9),
                     ),
@@ -226,7 +226,7 @@ class _CombinedCard extends StatelessWidget {
                       minimumSize: const Size(0, 44),
                       padding: const EdgeInsets.symmetric(horizontal: 18),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14),
+                        borderRadius: BorderRadius.circular(DesignTokens.buttonRadius),
                       ),
                     ),
                   ),
@@ -258,15 +258,15 @@ class _SingleFormCard extends StatelessWidget {
     final p = Theme.of(context).mhadPalette;
     return Material(
       color: p.card,
-      borderRadius: BorderRadius.circular(14),
+      borderRadius: BorderRadius.circular(DesignTokens.buttonRadius),
       child: InkWell(
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(DesignTokens.buttonRadius),
         onTap: onTap,
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             border: Border.all(color: p.border),
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(DesignTokens.buttonRadius),
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -276,7 +276,7 @@ class _SingleFormCard extends StatelessWidget {
                 height: 34,
                 decoration: BoxDecoration(
                   color: p.primaryTint,
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
                 ),
                 child: Icon(icon, size: 18, color: p.primary),
               ),
@@ -330,15 +330,15 @@ class _HelpMeChooseBanner extends StatelessWidget {
       label: 'Take the 4-question quiz to choose a form',
       child: Material(
         color: p.primaryLight,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
             constraints: const BoxConstraints(minHeight: 48),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
               border: Border.all(color: p.primary.withValues(alpha: 0.20)),
             ),
             child: Row(
@@ -361,7 +361,7 @@ class _HelpMeChooseBanner extends StatelessWidget {
                   'Help me choose →',
                   style: TextStyle(
                     fontFamily: kSansFamily,
-                    fontSize: 12.5,
+                    fontSize: 13,
                     fontWeight: FontWeight.w700,
                     color: p.primary,
                   ),

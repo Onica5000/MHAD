@@ -60,7 +60,7 @@ class PdfPreviewScreen extends StatelessWidget {
                   'Courier New',
                   'monospace',
                 ],
-                fontSize: 10,
+                fontSize: 11,
                 letterSpacing: 0.5,
                 color: p.textMuted,
               ),
@@ -88,7 +88,7 @@ class PdfPreviewScreen extends StatelessWidget {
         pdfPreviewPageDecoration: BoxDecoration(
           color: Colors.white,
           border: Border.all(color: p.border),
-          borderRadius: BorderRadius.circular(4),
+          borderRadius: BorderRadius.circular(DesignTokens.radiusXs),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.08),
@@ -303,7 +303,7 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
             color: p.card,
             border: Border(right: BorderSide(color: p.border)),
           ),
-          padding: const EdgeInsets.fromLTRB(18, 16, 18, 16),
+          padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
           child: _controlPanel(p),
         ),
         Expanded(
@@ -399,7 +399,7 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border.all(color: p.border),
-        borderRadius: BorderRadius.circular(2),
+        borderRadius: BorderRadius.circular(DesignTokens.radiusXs),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.08),
@@ -475,7 +475,7 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
             'Page ${_current + 1} of $pageCount',
             style: TextStyle(
               fontFamily: kSansFamily,
-              fontSize: 12.5,
+              fontSize: 13,
               fontWeight: FontWeight.w600,
               color: p.text,
             ),
@@ -498,7 +498,7 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
             style: TextStyle(
               fontFamily: kMonoFamily,
               fontFamilyFallback: const ['Consolas', 'monospace'],
-              fontSize: 10,
+              fontSize: 11,
               letterSpacing: 1,
               fontWeight: FontWeight.w700,
               color: p.textMuted,
@@ -524,7 +524,7 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
                   label: 'Go to page ${i + 1}',
                   child: InkWell(
                   onTap: () => _jumpToPage(i),
-                  borderRadius: BorderRadius.circular(4),
+                  borderRadius: BorderRadius.circular(DesignTokens.radiusXs),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -536,7 +536,7 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
                               color: selected ? p.primary : p.border,
                               width: selected ? 2 : 1,
                             ),
-                            borderRadius: BorderRadius.circular(3),
+                            borderRadius: BorderRadius.circular(DesignTokens.radiusXs),
                           ),
                           clipBehavior: Clip.antiAlias,
                           child: Image.memory(
@@ -552,7 +552,7 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontFamily: kSansFamily,
-                          fontSize: 11.5,
+                          fontSize: 12,
                           fontWeight:
                               selected ? FontWeight.w700 : FontWeight.w500,
                           color: selected ? p.primary : p.textMuted,
@@ -595,7 +595,7 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
           padding: EdgeInsets.zero,
           minimumSize: const Size(44, 44),
           shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(DesignTokens.radiusSm)),
           side: BorderSide(color: p.border),
         ),
         child: Text(
@@ -619,7 +619,7 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
       label: 'Fit page to window',
       child: InkWell(
       onTap: () => _setZoom(1.0),
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
       child: Container(
         // Match the 44px zoom buttons so the row aligns and the toggle also
         // meets the WCAG 2.5.5 AA tap-target minimum.
@@ -629,7 +629,7 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
         decoration: BoxDecoration(
           color: isFit ? p.primaryTint : p.card,
           border: Border.all(color: isFit ? p.primary : p.border),
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
         ),
         child: Text(
           isFit ? 'FIT' : '$pct%',

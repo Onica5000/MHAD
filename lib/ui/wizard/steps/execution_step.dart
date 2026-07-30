@@ -115,7 +115,7 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
           decoration: BoxDecoration(
             color: p.surface,
             border: Border.all(color: p.border),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -204,7 +204,7 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
           decoration: BoxDecoration(
             color: warnBg,
             border: Border.all(color: warnBorder),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -217,7 +217,7 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
                   TextSpan(
                     style: TextStyle(
                       fontFamily: kSansFamily,
-                      fontSize: 12.5,
+                      fontSize: 13,
                       color: warnText,
                       height: 1.45,
                     ),
@@ -305,7 +305,7 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
                 'Courier New',
                 'monospace',
               ],
-              fontSize: 10,
+              fontSize: 11,
               letterSpacing: 0.6,
               height: 1.4,
               color: p.textMuted,
@@ -383,7 +383,7 @@ class _SignStep extends StatelessWidget {
                     title,
                     style: TextStyle(
                       fontFamily: kSansFamily,
-                      fontSize: 14.5,
+                      fontSize: 15,
                       fontWeight: FontWeight.w700,
                       color: p.text,
                     ),
@@ -393,7 +393,7 @@ class _SignStep extends StatelessWidget {
                     body,
                     style: TextStyle(
                       fontFamily: kSansFamily,
-                      fontSize: 12.5,
+                      fontSize: 13,
                       color: p.textMuted,
                       height: 1.45,
                     ),
@@ -426,7 +426,7 @@ class _PacketRow extends StatelessWidget {
       decoration: BoxDecoration(
         color: p.card,
         border: Border.all(color: p.border),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
       ),
       child: Row(
         children: [
@@ -449,7 +449,7 @@ class _PacketRow extends StatelessWidget {
                   sub,
                   style: TextStyle(
                     fontFamily: kSansFamily,
-                    fontSize: 11.5,
+                    fontSize: 12,
                     color: p.textMuted,
                   ),
                 ),

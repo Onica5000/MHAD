@@ -666,7 +666,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
             padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
             decoration: BoxDecoration(
               color: p.primaryTint,
-              borderRadius: BorderRadius.circular(100),
+              borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -683,7 +683,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
                       'Courier New',
                       'monospace',
                     ],
-                    fontSize: 10.5,
+                    fontSize: 11,
                     letterSpacing: 0.6,
                     fontWeight: FontWeight.w700,
                     color: p.primary,
@@ -788,7 +788,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
             decoration: BoxDecoration(
               color: p.primaryTint,
               border: Border.all(color: p.primary.withValues(alpha: 0.2)),
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -801,7 +801,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
                     '${_piiStripped.toSet().join(", ")}',
                     style: TextStyle(
                       fontFamily: kSansFamily,
-                      fontSize: 11.5,
+                      fontSize: 12,
                       height: 1.4,
                       color: p.text,
                     ),
@@ -822,7 +822,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
               'Courier New',
               'monospace',
             ],
-            fontSize: 10.5,
+            fontSize: 11,
             fontWeight: FontWeight.w700,
             letterSpacing: 1.2,
             color: p.textMuted,
@@ -837,7 +837,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
           decoration: BoxDecoration(
             color: p.surface,
             border: Border.all(color: p.border),
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -851,7 +851,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
                   'discard.',
                   style: TextStyle(
                     fontFamily: kSansFamily,
-                    fontSize: 11.5,
+                    fontSize: 12,
                     color: p.textMuted,
                     height: 1.4,
                   ),
@@ -872,7 +872,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
               'Courier New',
               'monospace',
             ],
-            fontSize: 10.5,
+            fontSize: 11,
             letterSpacing: 0.6,
             color: checkedCount > 0 ? okText : p.textMuted,
           ),
@@ -1002,7 +1002,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
                 text: '$tag: ',
                 style: TextStyle(
                   fontFamily: kSansFamily,
-                  fontSize: 11.5,
+                  fontSize: 12,
                   fontWeight: FontWeight.w700,
                   color: p.textMuted,
                 ),
@@ -1011,7 +1011,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
                 text: value,
                 style: TextStyle(
                   fontFamily: kSansFamily,
-                  fontSize: 12.5,
+                  fontSize: 13,
                   color: p.text,
                 ),
               ),
@@ -1077,7 +1077,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
                 'one yourself.',
                 style: TextStyle(
                   fontFamily: kSansFamily,
-                  fontSize: 11.5,
+                  fontSize: 12,
                   fontStyle: FontStyle.italic,
                   color: p.textMuted,
                 ),
@@ -1099,7 +1099,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
               _reviewEdited[it.key] ?? '',
               style: TextStyle(
                 fontFamily: kSansFamily,
-                fontSize: 12.5,
+                fontSize: 13,
                 color: p.text,
                 height: 1.4,
               ),
@@ -1190,7 +1190,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
               'printed form — confirm this is what you want.',
               style: TextStyle(
                 fontFamily: kSansFamily,
-                fontSize: 11.5,
+                fontSize: 12,
                 height: 1.4,
                 color: p.textMuted,
               ),
@@ -1211,7 +1211,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
             'Courier New',
             'monospace',
           ],
-          fontSize: 10.5,
+          fontSize: 11,
           fontWeight: FontWeight.w700,
           letterSpacing: 1.2,
           color: p.textMuted,
@@ -1232,7 +1232,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
           margin: const EdgeInsets.only(bottom: 12),
           decoration: BoxDecoration(
             color: cs.tertiaryContainer,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
           ),
           child: Text(
             'The AI generated these additional suggestions based on your '
@@ -1257,7 +1257,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
                 ? cs.surfaceContainerLow
                 : cs.surfaceContainerHighest.withValues(alpha: 0.5),
             child: InkWell(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
               onTap: guidanceOnly ? null : () => _editSmartField(key),
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(4, 4, 12, 4),
@@ -1353,7 +1353,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
 
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+        padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
         // The primary action is a FULL-WIDTH button on its own line so it can
         // never be clipped off the right edge by a too-narrow footer (the old
         // single-Row layout with a Spacer overflowed and hid this button when
@@ -1461,7 +1461,7 @@ class _SnapReviewRow extends StatelessWidget {
             label: 'Include this field',
             child: InkWell(
               onTap: onToggle,
-              borderRadius: BorderRadius.circular(6),
+              borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
               child: Container(
                 width: 22,
                 height: 22,
@@ -1471,7 +1471,7 @@ class _SnapReviewRow extends StatelessWidget {
                   border: ok
                       ? null
                       : Border.all(color: p.border, width: 1.5),
-                  borderRadius: BorderRadius.circular(6),
+                  borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
                 ),
                 alignment: Alignment.center,
                 child: ok
@@ -1517,7 +1517,7 @@ class _SnapReviewRow extends StatelessWidget {
                           'Courier New',
                           'monospace',
                         ],
-                        fontSize: 10,
+                        fontSize: 11,
                         fontWeight: FontWeight.w700,
                         letterSpacing: 0.4,
                         color: ok ? p.primary : p.textMuted,

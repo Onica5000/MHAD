@@ -46,6 +46,45 @@ class LlmRateLimitError implements Exception {
   String toString() => message;
 }
 
+/// Thrown when the provider rejects the API key itself — HTTP 401/403, or the
+/// Gemini SDK's "API key not valid" family.
+///
+/// This used to fall through to a generic "API error", which the UI rendered as
+/// "please try again later" — advice that can never work, since waiting does
+/// not repair a bad key. Retrying is futile for this class of failure, so it
+/// gets its own type and its own message.
+class LlmAuthError implements Exception {
+  final String message;
+  const LlmAuthError(this.message);
+  @override
+  String toString() => message;
+}
+
+/// Thrown when the provider doesn't recognise the requested model — HTTP 404,
+/// or Gemini's "model not found" / "not supported for generateContent". Almost
+/// always a retired or mistyped model id, which is fixable in AI setup, so it
+/// must not be reported as a transient server problem.
+class LlmModelNotFoundError implements Exception {
+  final String message;
+  const LlmModelNotFoundError(this.message);
+  @override
+  String toString() => message;
+}
+
+/// Thrown when the request never reached the provider: no connectivity, DNS
+/// failure, or — on web — a CORS rejection.
+///
+/// Browsers surface all of these as an opaque `ClientException: Failed to
+/// fetch`, with the real reason visible only in the devtools console. The web
+/// build is the shipping surface and `SocketException` never fires there, so
+/// without this type the app had no network-error path on web at all.
+class LlmNetworkError implements Exception {
+  final String message;
+  const LlmNetworkError(this.message);
+  @override
+  String toString() => message;
+}
+
 /// Provider-agnostic transport to a single AI model. The caller picks the
 /// provider/model/key (see [AiProvider] and the storage layer); this class only
 /// knows how to talk to each provider's wire format.
@@ -138,26 +177,12 @@ class LlmClient {
   }) {
     switch (provider) {
       case AiProvider.gemini:
-        final model = gen.GenerativeModel(
-          model: this.model,
-          apiKey: apiKey,
-          httpClient: _http,
-          systemInstruction:
-              system == null ? null : gen.Content.system(system),
+        return _geminiChat(
+          system: system,
+          history: history,
+          userMessage: userMessage,
+          timeout: timeout,
         );
-        final chat = model.startChat(
-          history: [
-            for (final m in history)
-              gen.Content(
-                m.role == MessageRole.user ? 'user' : 'model',
-                [gen.TextPart(m.content)],
-              ),
-          ],
-        );
-        return _await(
-          chat.sendMessage(gen.Content.text(userMessage)),
-          timeout,
-        ).then((r) => r.text ?? '');
       case AiProvider.anthropic:
         return _anthropic(
           system: system,
@@ -188,6 +213,41 @@ class LlmClient {
     }
   }
 
+  /// Gemini multi-turn chat. Kept separate so it can share [_mapGeminiError]:
+  /// this path previously let raw SDK exceptions escape, so a rejected key
+  /// surfaced in chat as an unexplained generic failure.
+  Future<String> _geminiChat({
+    String? system,
+    required List<ChatMessage> history,
+    required String userMessage,
+    Duration? timeout,
+  }) async {
+    final m = gen.GenerativeModel(
+      model: model,
+      apiKey: apiKey,
+      httpClient: _http,
+      systemInstruction: system == null ? null : gen.Content.system(system),
+    );
+    final chat = m.startChat(
+      history: [
+        for (final msg in history)
+          gen.Content(
+            msg.role == MessageRole.user ? 'user' : 'model',
+            [gen.TextPart(msg.content)],
+          ),
+      ],
+    );
+    try {
+      final resp =
+          await _await(chat.sendMessage(gen.Content.text(userMessage)), timeout);
+      return resp.text ?? '';
+    } on gen.GenerativeAIException catch (e) {
+      throw _mapGeminiError(e);
+    } on http.ClientException catch (e) {
+      throw _networkError(e.message);
+    }
+  }
+
   // ── Multimodal (text + image/PDF) ─────────────────────────────────────────
 
   Future<String> generateMultimodal({
@@ -204,7 +264,19 @@ class LlmClient {
       if (p is! LlmData) continue;
       final isImage = p.mimeType.startsWith('image/');
       final isPdf = p.mimeType == 'application/pdf';
-      if (isImage) continue; // every provider reads images
+      // HEIC/HEIF is the iPhone default but only Gemini decodes it — Anthropic
+      // and the OpenAI-compatible APIs accept jpeg/png/gif/webp only. The app
+      // can't transcode it (the Dart `image` package has no HEIC decoder), so
+      // say so plainly instead of uploading something the provider will reject.
+      if (isImage &&
+          (p.mimeType == 'image/heic' || p.mimeType == 'image/heif') &&
+          provider != AiProvider.gemini) {
+        throw UnsupportedInputError(
+          "${provider.label} can't read HEIC/HEIF photos (the iPhone default). "
+          'Switch to Gemini, or re-save the photo as JPEG or PNG first.',
+        );
+      }
+      if (isImage) continue; // every provider reads the common image formats
       if (isPdf && !provider.supportsPdf) {
         throw UnsupportedInputError(
           "${provider.label} can't read PDFs here — switch to Gemini or "
@@ -329,19 +401,60 @@ class LlmClient {
       final resp = await _await(model.generateContent(contents), timeout);
       return resp.text ?? '';
     } on gen.GenerativeAIException catch (e) {
-      // The Gemini SDK reports quota/rate failures only via message text —
-      // normalize them to the typed error the REST providers already throw.
-      final msg = e.message.toLowerCase();
-      if (msg.contains('429') ||
-          msg.contains('rate limit') ||
-          msg.contains('quota')) {
-        throw LlmRateLimitError(
-            'Too many requests to ${provider.label}. Please wait a minute '
-            'and try again.');
-      }
-      rethrow;
+      throw _mapGeminiError(e);
+    } on http.ClientException catch (e) {
+      throw _networkError(e.message);
     }
   }
+
+  /// The Gemini SDK signals every failure class through one exception type with
+  /// only a human-readable message, so the class has to be recovered from that
+  /// text. Maps onto the same typed errors the REST providers throw, so callers
+  /// and [FriendlyError] can treat all four providers identically.
+  ///
+  /// Returns the original exception when nothing matches — better to surface an
+  /// unknown Gemini message verbatim than to mislabel it.
+  Exception _mapGeminiError(gen.GenerativeAIException e) {
+    final msg = e.message.toLowerCase();
+    if (msg.contains('429') ||
+        msg.contains('rate limit') ||
+        msg.contains('quota') ||
+        msg.contains('resource_exhausted')) {
+      return LlmRateLimitError(
+          'Too many requests to ${provider.label}. Please wait a minute '
+          'and try again.');
+    }
+    // "API key not valid", "API_KEY_INVALID", "permission denied", 401/403.
+    if (msg.contains('api key') ||
+        msg.contains('api_key') ||
+        msg.contains('unauthenticated') ||
+        msg.contains('permission denied') ||
+        msg.contains('permission_denied') ||
+        msg.contains('401') ||
+        msg.contains('403')) {
+      return LlmAuthError(
+          '${provider.label} rejected your API key. Open AI setup and check '
+          'the key is correct, still active, and has the Generative Language '
+          'API enabled.');
+    }
+    // "models/x is not found", "not supported for generateContent", 404.
+    if (msg.contains('not found') ||
+        msg.contains('not_found') ||
+        msg.contains('is not supported') ||
+        msg.contains('404')) {
+      return LlmModelNotFoundError(
+          '${provider.label} doesn\'t recognise the model "$model" — it may '
+          'have been retired. Pick a different model in AI setup.');
+    }
+    return e;
+  }
+
+  LlmNetworkError _networkError(String detail) => LlmNetworkError(
+        "Couldn't reach ${provider.label} ($detail). Check your internet "
+        'connection. If you are on the web app, this provider may also be '
+        "blocked by your browser's CORS policy — Gemini and Claude both work "
+        'in the browser.',
+      );
 
   /// Anthropic Messages API. [messages] content may be a plain string or an
   /// array of content blocks (text/image/document).
@@ -365,21 +478,19 @@ class LlmClient {
         'system': effectiveSystem,
       'messages': messages,
     };
-    final resp = await _await(
-      _http.post(
-        Uri.parse('https://api.anthropic.com/v1/messages'),
-        headers: {
-          'content-type': 'application/json',
-          'x-api-key': apiKey,
-          'anthropic-version': '2023-06-01',
-          // Required for Anthropic to allow direct browser (CORS) calls — the
-          // app is a BYO-key client, so the user's own key is used from their
-          // own browser (same trust model as the Gemini path).
-          'anthropic-dangerous-direct-browser-access': 'true',
-        },
-        body: jsonEncode(body),
-      ),
-      timeout,
+    final resp = await _post(
+      Uri.parse('https://api.anthropic.com/v1/messages'),
+      headers: {
+        'content-type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        // Required for Anthropic to allow direct browser (CORS) calls — the
+        // app is a BYO-key client, so the user's own key is used from their
+        // own browser (same trust model as the Gemini path).
+        'anthropic-dangerous-direct-browser-access': 'true',
+      },
+      body: jsonEncode(body),
+      timeout: timeout,
     );
     if (resp.statusCode != 200) throw _httpError(resp);
     final data = jsonDecode(resp.body) as Map<String, dynamic>;
@@ -404,16 +515,14 @@ class LlmClient {
       if (json) 'response_format': {'type': 'json_object'},
     };
     if (maxTokens != null) body['max_tokens'] = maxTokens;
-    final resp = await _await(
-      _http.post(
-        Uri.parse(provider.chatCompletionsUrl),
-        headers: {
-          'content-type': 'application/json',
-          'authorization': 'Bearer $apiKey',
-        },
-        body: jsonEncode(body),
-      ),
-      timeout,
+    final resp = await _post(
+      Uri.parse(provider.chatCompletionsUrl),
+      headers: {
+        'content-type': 'application/json',
+        'authorization': 'Bearer $apiKey',
+      },
+      body: jsonEncode(body),
+      timeout: timeout,
     );
     if (resp.statusCode != 200) throw _httpError(resp);
     final data = jsonDecode(resp.body) as Map<String, dynamic>;
@@ -436,11 +545,51 @@ class LlmClient {
       timeout == null ? future : future.timeout(timeout);
 
   Exception _httpError(http.Response resp) {
-    if (resp.statusCode == 429) {
-      return LlmRateLimitError(
-          'Too many requests to ${provider.label}. Please wait a minute and '
-          'try again.');
+    switch (resp.statusCode) {
+      case 429:
+        return LlmRateLimitError(
+            'Too many requests to ${provider.label}. Please wait a minute and '
+            'try again.');
+      case 401:
+      case 403:
+        return LlmAuthError(
+            '${provider.label} rejected your API key. Open AI setup and check '
+            'the key is correct, still active, and belongs to '
+            '${provider.label}.');
+      case 404:
+        return LlmModelNotFoundError(
+            '${provider.label} doesn\'t recognise the model "$model". Pick a '
+            'different model in AI setup.');
+      case 500:
+      case 502:
+      case 503:
+      case 504:
+        return Exception(
+            '${provider.label} is having server trouble (${resp.statusCode}). '
+            'This one usually is temporary — try again shortly.');
+      default:
+        return Exception('${provider.label} API error (${resp.statusCode}).');
     }
-    return Exception('${provider.label} API error (${resp.statusCode}).');
+  }
+
+  /// Runs [send] and converts transport-level failures into [LlmNetworkError].
+  ///
+  /// `http` throws [http.ClientException] for both a dead connection and a
+  /// browser CORS rejection; there is no way to tell them apart from Dart, so
+  /// the message names both possibilities rather than guessing wrong.
+  Future<http.Response> _post(
+    Uri url, {
+    required Map<String, String> headers,
+    required Object body,
+    Duration? timeout,
+  }) async {
+    try {
+      return await _await(
+        _http.post(url, headers: headers, body: body),
+        timeout,
+      );
+    } on http.ClientException catch (e) {
+      throw _networkError(e.message);
+    }
   }
 }

@@ -1,5 +1,6 @@
 ﻿import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/status_views.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/providers/app_providers.dart';
@@ -108,7 +109,7 @@ class _UlyssesClauseScreenState extends ConsumerState<UlyssesClauseScreen> {
           actionLabel: '',
         ),
         Expanded(child: _loading
-          ? const Center(child: CircularProgressIndicator())
+          ? const PageLoading()
           : ListView(
               padding: const EdgeInsets.fromLTRB(20, 14, 20, 32),
               children: [
@@ -186,7 +187,7 @@ class _UlyssesClauseScreenState extends ConsumerState<UlyssesClauseScreen> {
                           'until capacity returns.',
                           style: TextStyle(
                             fontFamily: kSansFamily,
-                            fontSize: 13.5,
+                            fontSize: 14,
                             height: 1.45,
                             color: _acknowledged
                                 ? cs.onPrimary
@@ -271,7 +272,7 @@ class _BoundariesCard extends StatelessWidget {
                       child: Text(b,
                           style: const TextStyle(
                             fontFamily: kSansFamily,
-                            fontSize: 13.5,
+                            fontSize: 14,
                             height: 1.4,
                           )),
                     ),
