@@ -225,35 +225,39 @@ class WebSidebar extends ConsumerWidget {
                     ),
                   ),
                   const SizedBox(width: 10),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'PA MHAD',
-                        style: TextStyle(
-                          fontFamily: kSansFamily,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: -0.2,
-                          color: p.text,
+                  Flexible(
+                    // Lets the wordmark wrap instead of overflowing the fixed-width
+                    // sidebar when the fallback font runs wide.
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'PA MHAD',
+                          style: TextStyle(
+                            fontFamily: kSansFamily,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: -0.2,
+                            color: p.text,
+                          ),
                         ),
-                      ),
-                      Text(
-                        'ACT 194 · 2004',
-                        style: TextStyle(
-                          fontFamily: kMonoFamily,
-                          fontFamilyFallback: const [
-                            'Consolas',
-                            'Menlo',
-                            'Courier New',
-                            'monospace'
-                          ],
-                          fontSize: 11,
-                          letterSpacing: 0.6,
-                          color: p.textMuted,
+                        Text(
+                          'ACT 194 · 2004',
+                          style: TextStyle(
+                            fontFamily: kMonoFamily,
+                            fontFamilyFallback: const [
+                              'Consolas',
+                              'Menlo',
+                              'Courier New',
+                              'monospace'
+                            ],
+                            fontSize: 11,
+                            letterSpacing: 0.6,
+                            color: p.textMuted,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ],
               ),
