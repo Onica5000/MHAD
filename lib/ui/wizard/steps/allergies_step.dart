@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/model/directive.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/services/clinical_data_service.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
@@ -23,11 +24,20 @@ enum _AllergyKind { drug, food, material, other }
 
 extension _AllergyKindX on _AllergyKind {
   String get id => name;
-  String get label => switch (this) {
-        _AllergyKind.drug => 'Drug',
-        _AllergyKind.food => 'Food',
-        _AllergyKind.material => 'Material',
-        _AllergyKind.other => 'Other',
+  /// Display label only — the persisted value is [id].
+  String label(AppLocalizations l10n) => switch (this) {
+        _AllergyKind.drug => l10n.allergiesKindDrug,
+        _AllergyKind.food => l10n.allergiesKindFood,
+        _AllergyKind.material => l10n.allergiesKindMaterial,
+        _AllergyKind.other => l10n.allergiesKindOther,
+      };
+
+  /// Search-field hint for this kind.
+  String searchHint(AppLocalizations l10n) => switch (this) {
+        _AllergyKind.drug => l10n.allergiesSearchDrugHint,
+        _AllergyKind.food => l10n.allergiesSearchFoodHint,
+        _AllergyKind.material => l10n.allergiesSearchMaterialHint,
+        _AllergyKind.other => l10n.allergiesSearchOtherHint,
       };
 
   /// Data-source label rendered in mono under the kind label and used as the
@@ -191,7 +201,8 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
       );
       if (added > 0 && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Added $name to “Medications I never want”.')),
+          SnackBar(
+              content: Text(context.l10n.allergiesAddedToNeverWant(name))),
         );
       }
     }
@@ -213,15 +224,17 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
         _ => HealthChipTone.primary,
       };
 
-  String _codeFor(String severity) => switch (severity) {
-        'severe' => 'SEVERE',
-        'moderate' => 'MOD',
-        _ => 'MILD',
+  // Display-only badge text; [severity] is the persisted enum name.
+  String _codeFor(AppLocalizations l10n, String severity) => switch (severity) {
+        'severe' => l10n.allergiesCodeSevere,
+        'moderate' => l10n.allergiesCodeModerate,
+        _ => l10n.allergiesCodeMild,
       };
 
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
+    final l10n = context.l10n;
 
     return ListView(
       shrinkWrap: widget.embedded,
@@ -230,18 +243,14 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
           ? const EdgeInsets.symmetric(horizontal: 4)
           : const EdgeInsets.fromLTRB(16, 8, 16, 24),
       children: [
-        const WizardHelpButton(
-          helpText:
-              'List drug allergies, sensitivities, and past adverse reactions. '
-              'ER staff check this section first. Severity = Mild / Moderate / '
-              'Severe. Allergies and the "Medications I never want" list are '
-              'separate sections — add a medication you refuse there yourself.',
+        WizardHelpButton(
+          helpText: l10n.allergiesHelpText,
           stepId: 'allergies',
         ),
         const SizedBox(height: 8),
 
         // ── Add an allergy ────────────────────────────────────────────────
-        const SectionLabel('Add an allergy'),
+        SectionLabel(l10n.allergiesAddSection),
 
         // Kind toggle — switches the autocomplete data source.
         _KindToggle(
@@ -259,9 +268,7 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
         // Search field + autocomplete.
         _SearchField(
           controller: _substanceCtrl,
-          hint: _kind == _AllergyKind.drug
-              ? 'Search a drug or class…'
-              : 'Search ${_kind.label.toLowerCase()} allergens…',
+          hint: _kind.searchHint(l10n),
           badge: _kind.source,
           searching: _searching,
           onChanged: _onSearchChanged,
@@ -275,8 +282,8 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
           const SizedBox(height: 6),
           _AutoComplete(
             source: _kind == _AllergyKind.drug
-                ? 'RxTerms · NLM clinical tables'
-                : 'ICD-10-CM · NLM clinical tables',
+                ? l10n.allergiesSourceRxTerms
+                : l10n.allergiesSourceIcd,
             query: _query,
             items: _suggestions,
             onPick: _pickSuggestion,
@@ -286,7 +293,7 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 12),
             child: Text(
-              _searching ? '' : 'No results found.',
+              _searching ? '' : l10n.allergiesNoResults,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontFamily: kSansFamily,
@@ -297,9 +304,7 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
         Padding(
           padding: const EdgeInsets.fromLTRB(2, 6, 2, 0),
           child: Text(
-            'Drug allergies search RxTerms. Food, material & other allergies '
-            'search ICD-10 (e.g. Z91.01 food allergy, T78.4 unspecified '
-            'allergy).',
+            l10n.allergiesSourceNote,
             style: TextStyle(
               fontFamily: kSansFamily,
               fontSize: 10.5,
@@ -313,7 +318,7 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
         const SizedBox(height: 14),
 
         // ── Severity & reaction ───────────────────────────────────────────
-        const SectionLabel('Severity & reaction'),
+        SectionLabel(l10n.allergiesSeveritySection),
         Container(
           decoration: BoxDecoration(
             color: p.card,
@@ -324,20 +329,20 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _MonoLabel('How serious is it?'),
+              _MonoLabel(l10n.allergiesHowSerious),
               const SizedBox(height: 8),
               _SeveritySelector(
                 selected: _severity,
                 onChanged: (s) => setState(() => _severity = s),
               ),
               const SizedBox(height: 12),
-              _MonoLabel('What happens'),
+              _MonoLabel(l10n.allergiesWhatHappens),
               const SizedBox(height: 6),
               TextField(
                 controller: _reactionsCtrl,
                 decoration: InputDecoration(
                   isDense: true,
-                  hintText: 'e.g. Hives, Swelling, Throat closing',
+                  hintText: l10n.allergiesReactionsHint,
                   hintStyle: TextStyle(color: p.textMuted, fontSize: 13),
                   border: const OutlineInputBorder(),
                 ),
@@ -348,7 +353,7 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
                 child: FilledButton.icon(
                   onPressed: _addAllergy,
                   icon: const Icon(Icons.add, size: 18),
-                  label: const Text('Add allergy'),
+                  label: Text(l10n.allergiesAddButton),
                 ),
               ),
             ],
@@ -358,12 +363,13 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
         // ── Added list ─────────────────────────────────────────────────────
         if (_entries.isNotEmpty) ...[
           SectionLabel(
-            'Added · ${_entries.length} '
-            '${_entries.length == 1 ? 'allergy' : 'allergies'}',
+            _entries.length == 1
+                ? l10n.allergiesAddedOne(_entries.length)
+                : l10n.allergiesAddedMany(_entries.length),
           ),
           for (final a in _entries) ...[
             HealthChip(
-              code: _codeFor(a.severity),
+              code: _codeFor(l10n, a.severity),
               label: a.substance,
               sub: a.reactions.isNotEmpty ? a.reactions : null,
               sourceTag: a.kind == _AllergyKind.drug.id ? 'RxTerms' : 'ICD-10',
@@ -377,8 +383,7 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
         const SizedBox(height: 4),
         // Footer reassurance, matching the prototype's tone.
         Text(
-          "You're not required to list anything. Anything you do list is shared "
-          'only with the people your directive names.',
+          l10n.allergiesFooter,
           style: TextStyle(
             fontFamily: kSansFamily,
             fontSize: 11,
@@ -465,7 +470,7 @@ class _KindSegment extends StatelessWidget {
     return Semantics(
       button: true,
       selected: active,
-      label: '${kind.label} (${kind.source})',
+      label: '${kind.label(context.l10n)} (${kind.source})',
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(100),
@@ -488,7 +493,7 @@ class _KindSegment extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                kind.label,
+                kind.label(context.l10n),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: kSansFamily,
@@ -584,7 +589,7 @@ class _SearchField extends StatelessWidget {
           else if (controller.text.isNotEmpty)
             Semantics(
               button: true,
-              label: 'Clear search',
+              label: context.l10n.allergiesClearSearch,
               child: InkWell(
                 onTap: onClear,
                 borderRadius: BorderRadius.circular(8),
@@ -671,7 +676,7 @@ class _AutoComplete extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '${items.length} matches',
+                  context.l10n.allergiesMatches(items.length),
                   style: TextStyle(
                     fontFamily: kMonoFamily,
                     fontFamilyFallback: kMonoFallbacks,
@@ -816,25 +821,32 @@ class _SeveritySelector extends StatelessWidget {
   final ValueChanged<AllergySeverity> onChanged;
   const _SeveritySelector({required this.selected, required this.onChanged});
 
-  static const _options = <(AllergySeverity, String, String)>[
-    (AllergySeverity.mild, 'Mild', 'rash, mild GI'),
-    (AllergySeverity.moderate, 'Moderate', 'hives, swelling'),
-    (AllergySeverity.severe, 'Severe', 'anaphylaxis · ER'),
-  ];
+  // Display labels only; the persisted value is the AllergySeverity enum name.
+  static List<(AllergySeverity, String, String)> _optionsFor(
+          AppLocalizations l10n) =>
+      [
+        (AllergySeverity.mild, l10n.allergiesSeverityMild,
+            l10n.allergiesSeverityMildDesc),
+        (AllergySeverity.moderate, l10n.allergiesSeverityModerate,
+            l10n.allergiesSeverityModerateDesc),
+        (AllergySeverity.severe, l10n.allergiesSeveritySevere,
+            l10n.allergiesSeveritySevereDesc),
+      ];
 
   @override
   Widget build(BuildContext context) {
+    final options = _optionsFor(context.l10n);
     return Row(
       children: [
-        for (var i = 0; i < _options.length; i++) ...[
+        for (var i = 0; i < options.length; i++) ...[
           if (i > 0) const SizedBox(width: 6),
           Expanded(
             child: _SeverityOption(
-              severity: _options[i].$1,
-              label: _options[i].$2,
-              desc: _options[i].$3,
-              active: _options[i].$1 == selected,
-              onTap: () => onChanged(_options[i].$1),
+              severity: options[i].$1,
+              label: options[i].$2,
+              desc: options[i].$3,
+              active: options[i].$1 == selected,
+              onTap: () => onChanged(options[i].$1),
             ),
           ),
         ],
@@ -906,7 +918,7 @@ class _SeverityOption extends StatelessWidget {
     return Semantics(
       button: true,
       selected: active,
-      label: '$label severity',
+      label: context.l10n.allergiesSeveritySemantics(label),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(10),

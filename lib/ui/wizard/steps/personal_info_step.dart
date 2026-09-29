@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/providers/app_providers.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/services/geo_service.dart';
 import 'package:mhad/utils/date_format.dart';
 import 'package:mhad/ui/wizard/widgets/wizard_help_button.dart';
@@ -101,9 +102,9 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         duration: const Duration(seconds: 8),
-        content: Text('Reuse your details from ${source.fullName}?'),
+        content: Text(context.l10n.personalInfoStepReuseDetails(source.fullName)),
         action: SnackBarAction(
-          label: 'Copy',
+          label: context.l10n.personalInfoStepCopy,
           onPressed: () {
             if (!mounted) return;
             setState(() {
@@ -128,7 +129,7 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
   Future<void> _lookupFromZip() async {
     final zip = _zipCtrl.text.replaceAll(RegExp(r'\D'), '');
     if (zip.length < 5) {
-      _toast('Enter a 5-digit ZIP first.');
+      _toast(context.l10n.personalInfoStepZipFirst);
       return;
     }
     setState(() => _zipLookingUp = true);
@@ -150,14 +151,14 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
       }
     });
     if (z == null) {
-      _toast('Couldn\'t look up that ZIP — you can type it in.');
+      _toast(context.l10n.personalInfoStepZipLookupFailed);
     } else {
       final filled = [
         z.city,
-        if (county != null) '$county County',
+        if (county != null) context.l10n.personalInfoStepCountyName(county),
         z.stateAbbr,
       ].where((s) => s.isNotEmpty).join(', ');
-      _toast('Filled: $filled');
+      _toast(context.l10n.personalInfoStepFilled(filled));
     }
   }
 
@@ -186,24 +187,24 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
   }
 
   String? _validateAge(String? value) {
-    if (value == null || value.isEmpty) return 'Required';
+    if (value == null || value.isEmpty) return context.l10n.required;
     final parts = value.split('/');
-    if (parts.length != 3) return 'Use MM/DD/YYYY format';
+    if (parts.length != 3) return context.l10n.personalInfoStepDateFormat;
     final month = int.tryParse(parts[0]);
     final day = int.tryParse(parts[1]);
     final year = int.tryParse(parts[2]);
-    if (month == null || day == null || year == null) return 'Invalid date';
+    if (month == null || day == null || year == null) return context.l10n.personalInfoStepInvalidDate;
     final dob = DateTime(year, month, day);
     // The DateTime constructor normalizes overflow (02/30 → Mar 1), so an
     // impossible date is caught by checking the components round-trip.
     if (dob.year != year || dob.month != month || dob.day != day) {
-      return 'Invalid date';
+      return context.l10n.personalInfoStepInvalidDate;
     }
     if (dob.isAfter(DateTime.now())) {
-      return 'Date of birth can\'t be in the future';
+      return context.l10n.personalInfoStepDobFuture;
     }
     if (!isAdult(dob)) {
-      return 'Must be 18 or older (or an emancipated minor) to create a directive';
+      return context.l10n.personalInfoStepMustBeAdult;
     }
     return null;
   }
@@ -215,7 +216,7 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
       initialDate: now.subtract(const Duration(days: 365 * 30)),
       firstDate: DateTime(1900),
       lastDate: now,
-      helpText: 'Select your date of birth',
+      helpText: context.l10n.personalInfoStepSelectDob,
     );
     if (picked != null) {
       _dobCtrl.text =
@@ -236,10 +237,7 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
           padding: const EdgeInsets.all(16),
           children: [
             WizardHelpButton(
-              helpText:
-                  'Provide your legal name as it appears on official documents. '
-                  'You must be 18 years of age or older, or an emancipated minor, '
-                  'to create a Mental Health Advance Directive under PA Act 194 of 2004.',
+              helpText: context.l10n.personalInfoStepHelp,
               stepId: 'personalInfo',
             ),
             const SizedBox(height: 8),
@@ -248,10 +246,10 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
               // Land the cursor here on the first wizard step so users can start
               // typing immediately (About You is the entry point).
               autofocus: true,
-              decoration: const InputDecoration(
-                labelText: 'Full legal name *',
-                border: OutlineInputBorder(),
-                helperText: 'Use your full legal name as it appears on official ID',
+              decoration: InputDecoration(
+                labelText: context.l10n.personalInfoStepFullLegalName,
+                border: const OutlineInputBorder(),
+                helperText: context.l10n.personalInfoStepFullLegalNameHelper,
               ),
               // DELIBERATE (applies to every PII field in this step): empty
               // autofillHints opt these fields OUT of browser/OS autofill so
@@ -264,19 +262,19 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
               textCapitalization: TextCapitalization.words,
               textInputAction: TextInputAction.next,
               validator: (v) =>
-                  (v == null || v.trim().isEmpty) ? 'Required' : null,
+                  (v == null || v.trim().isEmpty) ? context.l10n.required : null,
             ),
             const SizedBox(height: 16),
             TextFormField(
               controller: _dobCtrl,
               decoration: InputDecoration(
-                labelText: 'Date of birth (MM/DD/YYYY) *',
+                labelText: context.l10n.personalInfoStepDobLabel,
                 border: const OutlineInputBorder(),
                 hintText: 'MM/DD/YYYY',
-                helperText: 'Used to verify your identity on the directive',
+                helperText: context.l10n.personalInfoStepDobHelper,
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.calendar_month),
-                  tooltip: 'Pick date',
+                  tooltip: context.l10n.personalInfoStepPickDate,
                   onPressed: _pickDateOfBirth,
                 ),
               ),
@@ -288,10 +286,10 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
             const SizedBox(height: 24),
             TextFormField(
               controller: _addressCtrl,
-              decoration: const InputDecoration(
-                labelText: 'Street address',
-                border: OutlineInputBorder(),
-                helperText: 'Your current residential address',
+              decoration: InputDecoration(
+                labelText: context.l10n.personalInfoStepStreetAddress,
+                border: const OutlineInputBorder(),
+                helperText: context.l10n.personalInfoStepStreetAddressHelper,
               ),
               autofillHints: const [],
               textCapitalization: TextCapitalization.words,
@@ -300,9 +298,9 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
             const SizedBox(height: 16),
             TextFormField(
               controller: _address2Ctrl,
-              decoration: const InputDecoration(
-                labelText: 'Apt, suite, unit, etc.',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: context.l10n.personalInfoStepAddress2,
+                border: const OutlineInputBorder(),
               ),
               autofillHints: const [],
               textCapitalization: TextCapitalization.words,
@@ -314,9 +312,9 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
                 Expanded(
                   child: TextFormField(
                     controller: _cityCtrl,
-                    decoration: const InputDecoration(
-                      labelText: 'City',
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      labelText: context.l10n.city,
+                      border: const OutlineInputBorder(),
                     ),
                     autofillHints: const [],
                     textCapitalization: TextCapitalization.words,
@@ -327,9 +325,9 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
                 Expanded(
                   child: TextFormField(
                     controller: _countyCtrl,
-                    decoration: const InputDecoration(
-                      labelText: 'County',
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      labelText: context.l10n.personalInfoStepCounty,
+                      border: const OutlineInputBorder(),
                     ),
                     autofillHints: const [],
                     textCapitalization: TextCapitalization.words,
@@ -344,9 +342,9 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
                 Expanded(
                   child: TextFormField(
                     controller: _stateCtrl,
-                    decoration: const InputDecoration(
-                      labelText: 'State',
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      labelText: context.l10n.state,
+                      border: const OutlineInputBorder(),
                     ),
                     autofillHints: const [],
                     textCapitalization: TextCapitalization.characters,
@@ -362,9 +360,9 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
                   child: TextFormField(
                     controller: _zipCtrl,
                     decoration: InputDecoration(
-                      labelText: 'ZIP',
-                      hintText: '12345 or 12345-6789',
-                      helperText: 'Tap the icon to fill city, county & state',
+                      labelText: context.l10n.personalInfoStepZip,
+                      hintText: context.l10n.personalInfoStepZipHint,
+                      helperText: context.l10n.personalInfoStepZipHelper,
                       border: const OutlineInputBorder(),
                       suffixIcon: _zipLookingUp
                           ? const Padding(
@@ -378,7 +376,7 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
                             )
                           : IconButton(
                               icon: const Icon(Icons.travel_explore),
-                              tooltip: 'Fill city, county & state from ZIP',
+                              tooltip: context.l10n.personalInfoStepZipTooltip,
                               onPressed: _lookupFromZip,
                             ),
                     ),
@@ -390,7 +388,7 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
                       if (v == null || v.trim().isEmpty) return null;
                       final digits = v.replaceAll(RegExp(r'\D'), '');
                       if (digits.length != 5 && digits.length != 9) {
-                        return 'Enter 5-digit or 5+4-digit ZIP';
+                        return context.l10n.personalInfoStepZipInvalid;
                       }
                       return null;
                     },
@@ -401,10 +399,10 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
             const SizedBox(height: 24),
             TextFormField(
               controller: _phoneCtrl,
-              decoration: const InputDecoration(
-                labelText: 'Phone number',
+              decoration: InputDecoration(
+                labelText: context.l10n.phone,
                 hintText: '(215) 555-1234',
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
               ),
               autofillHints: const [],
               keyboardType: TextInputType.phone,
@@ -414,7 +412,7 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
                 if (v == null || v.trim().isEmpty) return null;
                 final digits = v.replaceAll(RegExp(r'\D'), '');
                 if (digits.length < 10) {
-                  return 'Enter a valid 10-digit phone number';
+                  return context.l10n.personalInfoStepPhoneInvalid;
                 }
                 return null;
               },

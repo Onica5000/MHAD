@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/ai/gemini_api_assistant.dart';
 import 'package:mhad/data/database/app_database.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/services/clinical_data_service.dart';
@@ -237,7 +238,8 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
     // Skip if already added
     if (current.any((d) => d.icdCode == condition.code)) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('${condition.name} is already added')),
+        SnackBar(
+            content: Text(context.l10n.diagnosesAlreadyAdded(condition.name))),
       );
       return;
     }
@@ -294,7 +296,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                 border: InputBorder.none,
                 enabledBorder: InputBorder.none,
                 focusedBorder: InputBorder.none,
-                hintText: 'Search a condition (e.g. depression, ADHD)…',
+                hintText: context.l10n.diagnosesSearchHint,
                 hintStyle: TextStyle(
                   fontFamily: kSansFamily,
                   fontSize: 14,
@@ -316,7 +318,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
           else if (_searchCtrl.text.isNotEmpty)
             Semantics(
               button: true,
-              label: 'Clear search',
+              label: context.l10n.diagnosesClearSearch,
               child: InkWell(
                 onTap: () {
                   _searchCtrl.clear();
@@ -437,15 +439,8 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
         .watch(directiveRepositoryProvider)
         .watchDiagnoses(widget.directiveId);
 
-    const helpText =
-        'Search for your psychiatric and medical diagnoses using ICD-10 codes. '
-        'These are the official medical classification codes used by healthcare '
-        'providers. Adding your diagnoses helps your care team and agent '
-        'understand your conditions.\n\n'
-        'Psychiatric diagnoses (F-codes) and medical diagnoses are shown '
-        'in separate sections.\n\n'
-        'This lookup is free and uses the NIH Clinical Tables Service — '
-        'no AI tokens are used.';
+    final l10n = context.l10n;
+    final helpText = l10n.diagnosesHelpText;
 
     final list = ListView(
       shrinkWrap: widget.embedded,
@@ -482,7 +477,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                     padding: EdgeInsets.zero,
                     children: [
                       if (psych.isNotEmpty) ...[
-                        _resultSectionHeader('Psychiatric', p),
+                        _resultSectionHeader(l10n.diagnosesPsychiatric, p),
                         ...psych.map((c) => _buildResultTile(
                               c,
                               current.any((d) => d.icdCode == c.code),
@@ -491,7 +486,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                             )),
                       ],
                       if (med.isNotEmpty) ...[
-                        _resultSectionHeader('Medical', p),
+                        _resultSectionHeader(l10n.diagnosesMedical, p),
                         ...med.map((c) => _buildResultTile(
                               c,
                               current.any((d) => d.icdCode == c.code),
@@ -510,7 +505,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 12),
             child: Text(
-              _searching ? '' : 'No results found.',
+              _searching ? '' : l10n.diagnosesNoResults,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontFamily: kSansFamily,
@@ -541,7 +536,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                           size: 36, color: p.textMuted),
                       const SizedBox(height: 8),
                       Text(
-                        'No diagnoses added yet',
+                        l10n.diagnosesEmptyTitle,
                         style: TextStyle(
                           fontFamily: kSansFamily,
                           fontWeight: FontWeight.w600,
@@ -550,7 +545,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'Use the search above to find and add your diagnoses.',
+                        l10n.diagnosesEmptyBody,
                         style: TextStyle(
                           fontFamily: kSansFamily,
                           fontSize: 12,
@@ -583,11 +578,12 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SectionLabel('Added · ${diagnoses.length} '
-                    '${diagnoses.length == 1 ? 'condition' : 'conditions'}'),
+                SectionLabel(diagnoses.length == 1
+                    ? l10n.diagnosesAddedOne(diagnoses.length)
+                    : l10n.diagnosesAddedMany(diagnoses.length)),
                 if (psychiatric.isNotEmpty) ...[
                   SectionLabel(
-                    'Psychiatric (${psychiatric.length})',
+                    l10n.diagnosesPsychiatricCount(psychiatric.length),
                     padding: const EdgeInsets.fromLTRB(0, 4, 0, 8),
                     style: TextStyle(color: p.primary),
                   ),
@@ -598,7 +594,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                 ],
                 if (medical.isNotEmpty) ...[
                   SectionLabel(
-                    'Medical (${medical.length})',
+                    l10n.diagnosesMedicalCount(medical.length),
                     padding: const EdgeInsets.fromLTRB(0, 4, 0, 8),
                     style: TextStyle(color: p.primary),
                   ),
@@ -615,15 +611,15 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
         const SizedBox(height: 16),
 
         // Primary care doctor (artboard optional card).
-        const SectionLabel('Primary care doctor · optional'),
+        SectionLabel(l10n.diagnosesDoctorSection),
         const SizedBox(height: 8),
         TextField(
           controller: _docNameCtrl,
           textCapitalization: TextCapitalization.words,
           onChanged: _onDocNameChanged,
           decoration: InputDecoration(
-            labelText: 'Doctor name',
-            hintText: 'Type a name to search the provider registry',
+            labelText: l10n.diagnosesDoctorName,
+            hintText: l10n.diagnosesDoctorNameHint,
             border: const OutlineInputBorder(),
             suffixIcon: _docSearching
                 ? const Padding(
@@ -690,8 +686,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                   Padding(
                     padding: const EdgeInsets.fromLTRB(8, 4, 8, 2),
                     child: Text(
-                      'Provider names from the NPI registry (NIH Clinical '
-                      'Tables). Verify details before relying on them.',
+                      l10n.diagnosesNpiNote,
                       style: TextStyle(
                         fontFamily: kSansFamily,
                         fontSize: 10,
@@ -712,9 +707,9 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
               child: TextField(
                 controller: _docSpecialtyCtrl,
                 textCapitalization: TextCapitalization.words,
-                decoration: const InputDecoration(
-                  labelText: 'Specialty',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: l10n.diagnosesSpecialty,
+                  border: const OutlineInputBorder(),
                 ),
               ),
             ),
@@ -724,9 +719,9 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
               child: TextField(
                 controller: _docPhoneCtrl,
                 keyboardType: TextInputType.phone,
-                decoration: const InputDecoration(
-                  labelText: 'Phone',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: l10n.diagnosesPhone,
+                  border: const OutlineInputBorder(),
                 ),
               ),
             ),
@@ -740,7 +735,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
         // registry before you add it. Routes to AI setup if AI isn't on yet.
         Semantics(
           button: true,
-          label: 'Describe a condition to find its official name',
+          label: l10n.diagnosesDescribeSemantics,
           child: InkWell(
             onTap: _openDescribeDialog,
             borderRadius: BorderRadius.circular(12),
@@ -765,22 +760,20 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                           height: 1.45,
                           color: p.text,
                         ),
-                        children: const [
-                          TextSpan(text: "Don't know the official name? "),
+                        children: [
+                          TextSpan(text: l10n.diagnosesDescribeLead),
                           TextSpan(
-                            text: 'Describe how it shows up for you',
-                            style: TextStyle(fontWeight: FontWeight.w700),
+                            text: l10n.diagnosesDescribeBold,
+                            style: const TextStyle(fontWeight: FontWeight.w700),
                           ),
-                          TextSpan(
-                              text: " and I'll suggest the closest ICD-10 code "
-                                  'for you to confirm.'),
+                          TextSpan(text: l10n.diagnosesDescribeTail),
                         ],
                       ),
                     ),
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    'Try →',
+                    l10n.diagnosesTry,
                     style: TextStyle(
                       fontFamily: kSansFamily,
                       fontSize: 12,
@@ -798,8 +791,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
 
         // Footer note
         Text(
-          "You're not required to list anything. Anything you do list is "
-          'shared only with the people your directive names.',
+          l10n.diagnosesFooter,
           style: TextStyle(
             fontFamily: kSansFamily,
             fontSize: 11,
@@ -867,7 +859,9 @@ class _DescribeConditionDialogState extends State<_DescribeConditionDialog> {
     setState(() => _added.add(c.code));
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content:
-          Text(added ? 'Added “${c.name}”' : '“${c.name}” is already added'),
+          Text(added
+              ? context.l10n.diagnosesAddedName(c.name)
+              : context.l10n.diagnosesAlreadyAddedQuoted(c.name)),
       duration: const Duration(seconds: 2),
     ));
   }
@@ -875,8 +869,9 @@ class _DescribeConditionDialogState extends State<_DescribeConditionDialog> {
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
+    final l10n = context.l10n;
     return AlertDialog(
-      title: const Text('Describe what you experience'),
+      title: Text(l10n.diagnosesDescribeTitle),
       content: SizedBox(
         width: 440,
         child: Column(
@@ -884,10 +879,7 @@ class _DescribeConditionDialogState extends State<_DescribeConditionDialog> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'In your own words — symptoms, how it affects you, when it '
-              'happens. We\'ll suggest possible conditions and confirm each '
-              'against the ICD-10 registry. These are suggestions to review, '
-              'not a diagnosis.',
+              l10n.diagnosesDescribeIntro,
               style: TextStyle(
                   fontSize: 12.5, height: 1.4, color: cs.onSurfaceVariant),
             ),
@@ -899,10 +891,9 @@ class _DescribeConditionDialogState extends State<_DescribeConditionDialog> {
               autofocus: true,
               textInputAction: TextInputAction.search,
               onSubmitted: (_) => _find(),
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'e.g. long stretches where I feel hopeless and '
-                    'can\'t get out of bed',
+              decoration: InputDecoration(
+                border: const OutlineInputBorder(),
+                hintText: l10n.diagnosesDescribeHint,
               ),
             ),
             const SizedBox(height: 10),
@@ -916,15 +907,14 @@ class _DescribeConditionDialogState extends State<_DescribeConditionDialog> {
                         height: 16,
                         child: CircularProgressIndicator(strokeWidth: 2))
                     : const Icon(Icons.auto_awesome, size: 16),
-                label: Text(_loading ? 'Finding…' : 'Find matches'),
+                label: Text(_loading ? l10n.diagnosesFinding : l10n.diagnosesFindMatches),
               ),
             ),
             if (_searched && !_loading) ...[
               const SizedBox(height: 8),
               if (_results.isEmpty)
                 Text(
-                  'No close matches. Try adding more detail, or use the search '
-                  'box on the page if you know part of the name.',
+                  l10n.diagnosesNoMatches,
                   style: TextStyle(fontSize: 12.5, color: cs.onSurfaceVariant),
                 )
               else
@@ -937,8 +927,7 @@ class _DescribeConditionDialogState extends State<_DescribeConditionDialog> {
                 ),
               const SizedBox(height: 8),
               Text(
-                'Suggestions only — confirm with your records or your doctor. '
-                'Codes from NIH Clinical Tables (ICD-10-CM).',
+                l10n.diagnosesSuggestionsNote,
                 style: TextStyle(
                     fontSize: 10.5,
                     fontStyle: FontStyle.italic,
@@ -951,7 +940,7 @@ class _DescribeConditionDialogState extends State<_DescribeConditionDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Done'),
+          child: Text(l10n.diagnosesDone),
         ),
       ],
     );

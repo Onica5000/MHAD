@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:drift/drift.dart' show Value;
 import 'package:mhad/data/database/app_database.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/services/clinical_data_service.dart';
 import 'package:mhad/utils/debouncer.dart';
@@ -54,12 +55,13 @@ class _TreatmentFacilityStepState
     super.dispose();
   }
 
-  static const _roommateOptions = <(String, String)>[
-    ('women', 'Women'),
-    ('men', 'Men'),
-    ('sameAsIdentity', 'Same as my gender identity'),
-    ('specify', 'Let me specify'),
-  ];
+  static List<(String, String)> _roommateOptions(AppLocalizations l10n) =>
+      <(String, String)>[
+        ('women', l10n.facilityRoommateWomen),
+        ('men', l10n.facilityRoommateMen),
+        ('sameAsIdentity', l10n.facilityRoommateSameAsIdentity),
+        ('specify', l10n.facilityRoommateSpecify),
+      ];
 
   void _parseRoommateMatch(String raw) {
     final v = raw.trim();
@@ -166,10 +168,8 @@ class _TreatmentFacilityStepState
 
   @override
   Widget build(BuildContext context) {
-    const helpText =
-        'You may specify treatment facilities you prefer or want to avoid. '
-        'These preferences guide your agent and treatment providers but '
-        'may not always be possible to honor. Both sections are optional.';
+    final l10n = context.l10n;
+    final helpText = l10n.facilityHelpText;
 
     return Form(
       key: _formKey,
@@ -178,17 +178,15 @@ class _TreatmentFacilityStepState
         children: [
           WizardHelpButton(helpText: helpText, stepId: 'treatmentFacility'),
           const SizedBox(height: 8),
-          const InfoBanner(
+          InfoBanner(
             icon: Icons.info_outline,
             margin: EdgeInsets.zero,
-            text: 'Leave both sections empty if you have no preference. '
-                'Your directive will indicate "No Preference" for '
-                'treatment facilities.',
+            text: l10n.facilityNoPreferenceBanner,
           ),
           const SizedBox(height: 16),
           _FacilitySection(
-            title: 'Preferred Facilities',
-            subtitle: 'Facilities where you would prefer to be treated',
+            title: l10n.facilityPreferredTitle,
+            subtitle: l10n.facilityPreferredSubtitle,
             rows: _preferred,
             onAdd: () => setState(() => _preferred.add(_FacilityRow())),
             onRemove: (i) => setState(() {
@@ -198,8 +196,8 @@ class _TreatmentFacilityStepState
           ),
           const SizedBox(height: 24),
           _FacilitySection(
-            title: 'Facilities to Avoid',
-            subtitle: 'Facilities where you do not want to be treated',
+            title: l10n.facilityAvoidTitle,
+            subtitle: l10n.facilityAvoidSubtitle,
             rows: _avoid,
             onAdd: () => setState(() => _avoid.add(_FacilityRow())),
             onRemove: (i) => setState(() {
@@ -225,7 +223,7 @@ class _TreatmentFacilityStepState
           if (_roomPrefs.contains('sameGenderRoommate')) ...[
             const SizedBox(height: 10),
             _RoommateMatchSelector(
-              options: _roommateOptions,
+              options: _roommateOptions(l10n),
               selected: _roommateOption,
               specifyCtrl: _roommateSpecifyCtrl,
               onSelect: (id) => setState(() => _roommateOption = id),
@@ -239,13 +237,11 @@ class _TreatmentFacilityStepState
             maxLines: 5,
             keyboardType: TextInputType.multiline,
             textInputAction: TextInputAction.newline,
-            decoration: const InputDecoration(
-              labelText: 'Other room preferences',
-              hintText:
-                  'Anything else about your room or surroundings — e.g. '
-                  'low lighting, near a window, away from loud areas…',
+            decoration: InputDecoration(
+              labelText: l10n.facilityOtherRoomPrefsLabel,
+              hintText: l10n.facilityOtherRoomPrefsHint,
               alignLabelWithHint: true,
-              border: OutlineInputBorder(),
+              border: const OutlineInputBorder(),
             ),
           ),
         ],
@@ -262,15 +258,15 @@ class _RoomChip {
   final String label;
   const _RoomChip(this.id, this.label);
 
-  static const all = <_RoomChip>[
-    _RoomChip('singleRoom', 'Single room'),
-    _RoomChip('windowIfPossible', 'Window if possible'),
-    _RoomChip('quietFloor', 'Quiet floor'),
-    _RoomChip('sameGenderRoommate', 'Same-gender roommate'),
-    _RoomChip('noRoommate', 'No roommate'),
-    _RoomChip('transAffirmingStaff', 'Trans-affirming staff'),
-    _RoomChip('lowStimulationUnit', 'Low-stimulation unit'),
-  ];
+  static List<_RoomChip> all(AppLocalizations l10n) => <_RoomChip>[
+        _RoomChip('singleRoom', l10n.facilityRoomSingle),
+        _RoomChip('windowIfPossible', l10n.facilityRoomWindow),
+        _RoomChip('quietFloor', l10n.facilityRoomQuietFloor),
+        _RoomChip('sameGenderRoommate', l10n.facilityRoomSameGender),
+        _RoomChip('noRoommate', l10n.facilityRoomNoRoommate),
+        _RoomChip('transAffirmingStaff', l10n.facilityRoomTransAffirming),
+        _RoomChip('lowStimulationUnit', l10n.facilityRoomLowStimulation),
+      ];
 }
 
 class _RoomPreferencesCard extends StatelessWidget {
@@ -292,14 +288,14 @@ class _RoomPreferencesCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Room preferences',
+              context.l10n.facilityRoomPrefsTitle,
               style: Theme.of(context)
                   .textTheme
                   .titleSmall
                   ?.copyWith(fontWeight: FontWeight.w600),
             ),
             Text(
-              'Optional — guides staff if a choice is available.',
+              context.l10n.facilityRoomPrefsSubtitle,
               style: Theme.of(context)
                   .textTheme
                   .bodySmall
@@ -310,7 +306,7 @@ class _RoomPreferencesCard extends StatelessWidget {
               spacing: 8,
               runSpacing: 8,
               children: [
-                for (final chip in _RoomChip.all)
+                for (final chip in _RoomChip.all(context.l10n))
                   FilterChip(
                     label: Text(chip.label),
                     selected: selected.contains(chip.id),
@@ -356,7 +352,7 @@ class _RoommateMatchSelector extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'For "same-gender roommate", match me with:',
+            context.l10n.facilityRoommateMatchPrompt,
             style: Theme.of(context)
                 .textTheme
                 .bodySmall
@@ -380,11 +376,11 @@ class _RoommateMatchSelector extends StatelessWidget {
             const SizedBox(height: 10),
             TextField(
               controller: specifyCtrl,
-              decoration: const InputDecoration(
-                labelText: 'Match me with',
-                hintText: 'Describe your roommate-matching preference',
+              decoration: InputDecoration(
+                labelText: context.l10n.facilityMatchMeWithLabel,
+                hintText: context.l10n.facilityMatchMeWithHint,
                 isDense: true,
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
               ),
             ),
           ],
@@ -503,8 +499,8 @@ class _FacilitySectionState extends State<_FacilitySection> {
                             controller: widget.rows[i].nameCtrl,
                             onChanged: (q) => _onNameChanged(i, q),
                             decoration: InputDecoration(
-                              labelText: 'Facility name',
-                              hintText: 'Type to search facilities',
+                              labelText: context.l10n.facilityNameLabel,
+                              hintText: context.l10n.facilityNameHint,
                               border: const OutlineInputBorder(),
                               isDense: true,
                               prefixIcon: Icon(Icons.local_hospital,
@@ -529,10 +525,10 @@ class _FacilitySectionState extends State<_FacilitySection> {
                           const SizedBox(height: 8),
                           TextFormField(
                             controller: widget.rows[i].locationCtrl,
-                            decoration: const InputDecoration(
-                              labelText: 'Location (optional)',
-                              hintText: 'e.g., 123 Main St, Philadelphia, PA',
-                              border: OutlineInputBorder(),
+                            decoration: InputDecoration(
+                              labelText: context.l10n.facilityLocationLabel,
+                              hintText: context.l10n.facilityLocationHint,
+                              border: const OutlineInputBorder(),
                               isDense: true,
                             ),
                             textInputAction: TextInputAction.done,
@@ -543,7 +539,7 @@ class _FacilitySectionState extends State<_FacilitySection> {
                     IconButton(
                       icon: const Icon(Icons.remove_circle_outline),
                       color: cs.error,
-                      tooltip: 'Remove facility',
+                      tooltip: context.l10n.facilityRemoveTooltip,
                       onPressed: () => widget.onRemove(i),
                     ),
                   ],
@@ -552,11 +548,11 @@ class _FacilitySectionState extends State<_FacilitySection> {
             }),
             Semantics(
               button: true,
-              label: 'Add facility to ${widget.title}',
+              label: context.l10n.facilityAddToSemantics(widget.title),
               child: TextButton.icon(
                 onPressed: widget.onAdd,
                 icon: const Icon(Icons.add, size: 16),
-                label: const Text('Add facility'),
+                label: Text(context.l10n.facilityAddButton),
                 style: TextButton.styleFrom(
                     visualDensity: VisualDensity.compact),
               ),
@@ -611,8 +607,7 @@ class _FacilitySectionState extends State<_FacilitySection> {
             Padding(
               padding: const EdgeInsets.fromLTRB(8, 4, 8, 2),
               child: Text(
-                'Facility names from the NPI registry (NIH Clinical Tables). '
-                'Verify details before relying on them.',
+                context.l10n.facilityNpiAttribution,
                 style: TextStyle(
                     fontSize: 10,
                     fontStyle: FontStyle.italic,

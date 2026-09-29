@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/ai/ai_clinical_policy.dart';
 import 'package:mhad/data/app_data/app_data.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/wizard/widgets/ai_suggest_button.dart';
 import 'package:mhad/ui/wizard/widgets/example_text_button.dart';
@@ -101,14 +102,8 @@ class _EffectiveConditionStepState
 
   @override
   Widget build(BuildContext context) {
-    const helpText =
-        'Describe the circumstances under which you want this directive to take '
-        'effect — for example, "when two qualified professionals certify that I '
-        'lack capacity to make treatment decisions." Under PA Act 194, the '
-        'declaration becomes operative when a psychiatrist and one of the '
-        'following certify you lack capacity: another psychiatrist, a licensed '
-        'psychologist, your family physician, your attending physician, or '
-        'another mental health treatment professional.';
+    final l10n = context.l10n;
+    final helpText = l10n.effCondHelpText;
 
     return Form(
       key: _formKey,
@@ -123,70 +118,54 @@ class _EffectiveConditionStepState
         children: [
           WizardHelpButton(helpText: helpText, stepId: 'effectiveCondition'),
           Text(
-            'This directive should take effect when…',
+            l10n.effCondTakeEffectWhen,
             style: Theme.of(context).textTheme.titleSmall,
           ),
           const SizedBox(height: 8),
           _TriggerTile(
             value: _triggerTwo,
             onChanged: (v) => setState(() => _triggerTwo = v),
-            title: 'A psychiatrist + one other professional find I lack '
-                'capacity',
-            subtitle:
-                'The standard PA Act 194 trigger — two qualified professionals '
-                'certify you can\'t make mental-health treatment decisions.',
+            title: l10n.effCondTriggerTwoTitle,
+            subtitle: l10n.effCondTriggerTwoSubtitle,
           ),
           _TriggerTile(
             value: _triggerCourt,
             onChanged: (v) => setState(() => _triggerCourt = v),
-            title: 'A court determines I lack capacity',
+            title: l10n.effCondTriggerCourtTitle,
           ),
           _TriggerTile(
             value: _triggerCommit,
             onChanged: (v) => setState(() => _triggerCommit = v),
-            title: 'I am involuntarily committed',
+            title: l10n.effCondTriggerCommitTitle,
           ),
           const SizedBox(height: 16),
           Text(
-            'Anything else about timing (optional)',
+            l10n.effCondAnythingElseTitle,
             style: Theme.of(context).textTheme.titleSmall,
           ),
           const SizedBox(height: 4),
           Text(
-            'Add your own words, or pick an example to start from.',
+            l10n.effCondAnythingElseSubtitle,
             style: Theme.of(context).textTheme.bodySmall,
           ),
           const SizedBox(height: 8),
-          const ExampleTextButton(
-            fieldName: 'Effective Condition',
+          ExampleTextButton(
+            fieldName: l10n.effCondExampleFieldName,
             examples: [
               // Standard — two professionals certify
-              'This directive takes effect when I am unable to make mental '
-              'health treatment decisions for myself, as determined by two '
-              'qualified professionals.',
+              l10n.effCondExample1,
 
               // Broader — any hospitalization or crisis
-              'This directive becomes effective any time I am admitted to a '
-              'psychiatric facility or crisis unit, whether voluntary or '
-              'involuntary, and I am unable to clearly communicate my wishes.',
+              l10n.effCondExample2,
 
               // Specific symptoms
-              'This directive takes effect when I am experiencing a severe '
-              'episode of psychosis, mania, or dissociation that prevents me '
-              'from understanding my treatment options or communicating my '
-              'preferences.',
+              l10n.effCondExample3,
 
               // Self-identified trigger
-              'This directive becomes effective when I tell my agent or '
-              'treatment provider that I want it activated, or when I am '
-              'unable to make consistent and informed decisions about my '
-              'mental health care.',
+              l10n.effCondExample4,
 
               // Broad with agent authority
-              'This directive is effective when my designated agent, in '
-              'consultation with any treating professional, determines that '
-              'I would benefit from having my pre-stated treatment '
-              'preferences followed.',
+              l10n.effCondExample5,
             ],
           ),
           const SizedBox(height: 8),
@@ -195,7 +174,7 @@ class _EffectiveConditionStepState
             maxLines: 5,
             maxLength: appData.config.textFieldMaxChars,
             decoration: InputDecoration(
-              labelText: 'In your own words (optional)',
+              labelText: l10n.effCondOwnWordsLabel,
               border: const OutlineInputBorder(),
               suffixIcon: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -213,29 +192,28 @@ class _EffectiveConditionStepState
           ),
           const SizedBox(height: 24),
           Text(
-            'Preferred evaluating doctor (optional)',
+            l10n.effCondDoctorTitle,
             style: Theme.of(context).textTheme.titleSmall,
           ),
           const SizedBox(height: 4),
           Text(
-            'If you have a preferred doctor to evaluate your capacity, '
-            'enter their information below.',
+            l10n.effCondDoctorSubtitle,
             style: Theme.of(context).textTheme.bodySmall,
           ),
           const SizedBox(height: 8),
           TextFormField(
             controller: _doctorNameCtrl,
-            decoration: const InputDecoration(
-              labelText: 'Name of Doctor',
-              border: OutlineInputBorder(),
+            decoration: InputDecoration(
+              labelText: l10n.effCondDoctorNameLabel,
+              border: const OutlineInputBorder(),
             ),
           ),
           const SizedBox(height: 8),
           TextFormField(
             controller: _doctorContactCtrl,
-            decoration: const InputDecoration(
-              labelText: 'Address / Phone Number',
-              border: OutlineInputBorder(),
+            decoration: InputDecoration(
+              labelText: l10n.effCondDoctorContactLabel,
+              border: const OutlineInputBorder(),
             ),
           ),
         ],

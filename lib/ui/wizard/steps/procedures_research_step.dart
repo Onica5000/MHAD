@@ -1,5 +1,6 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
@@ -43,7 +44,7 @@ class _ProceduresResearchStepState
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
       children: [
-        const SectionLabel('Electroconvulsive therapy (ECT)'),
+        SectionLabel(context.l10n.procResearchEctLabel),
         const SizedBox(height: 4),
         ConsentChoiceStep(
           key: _ectKey,
@@ -54,7 +55,7 @@ class _ProceduresResearchStepState
         const SizedBox(height: 16),
         const Divider(),
         const SizedBox(height: 8),
-        const SectionLabel('Experimental studies'),
+        SectionLabel(context.l10n.procResearchExperimentalLabel),
         const SizedBox(height: 4),
         ConsentChoiceStep(
           key: _experimentalKey,
@@ -65,7 +66,7 @@ class _ProceduresResearchStepState
         const SizedBox(height: 16),
         const Divider(),
         const SizedBox(height: 8),
-        const SectionLabel('Drug trials'),
+        SectionLabel(context.l10n.procResearchDrugTrialsLabel),
         const SizedBox(height: 4),
         ConsentChoiceStep(
           key: _drugTrialsKey,
@@ -76,10 +77,7 @@ class _ProceduresResearchStepState
         const SizedBox(height: 24),
         InfoBanner(
           icon: Icons.info_outline,
-          text:
-              'Why these three? PA Act 194 specifically calls out ECT, '
-              'experimental studies, and drug trials as requiring documented '
-              'consent. Other treatments fall under your general preferences.',
+          text: context.l10n.procResearchWhyTheseThree,
           variant: InfoBannerVariant.info,
         ),
         const SizedBox(height: 12),
@@ -89,12 +87,7 @@ class _ProceduresResearchStepState
         // express grant, only YOU can consent (or refuse).
         InfoBanner(
           icon: Icons.warning_amber_rounded,
-          text:
-              'Agent authority for these three: your agent cannot consent to '
-              'ECT, experimental studies, or drug trials on your behalf '
-              'unless you expressly grant that power below. Without an '
-              'express grant, only you can consent — or these will not be '
-              'available during incapacity.',
+          text: context.l10n.procResearchAgentAuthority,
           variant: InfoBannerVariant.warning,
         ),
         const SizedBox(height: 12),
@@ -144,7 +137,7 @@ class _NeverAuthorizedCard extends StatelessWidget {
               Icon(Icons.block, size: 18, color: fg),
               const SizedBox(width: 8),
               Text(
-                'Never authorized under PA Act 194',
+                context.l10n.procResearchNeverAuthorizedTitle,
                 style: TextStyle(
                   fontFamily: kSansFamily,
                   fontSize: 13,
@@ -156,9 +149,7 @@ class _NeverAuthorizedCard extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           Text(
-            'By statute (20 Pa.C.S. § 5836(b)), this directive can never '
-            'convey the power to consent to the following — no clause in '
-            'this document and no decision by your agent can authorize them:',
+            context.l10n.procResearchNeverAuthorizedBody,
             style: TextStyle(
               fontFamily: kSansFamily,
               fontSize: 12.5,
@@ -168,11 +159,13 @@ class _NeverAuthorizedCard extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           _NeverItem(
-              text: 'Psychosurgery (brain surgery meant to change mood or '
-                  'behavior)',
+              text: context.l10n.procResearchPsychosurgery,
               fg: fg,
               palette: p),
-          _NeverItem(text: 'Termination of parental rights', fg: fg, palette: p),
+          _NeverItem(
+              text: context.l10n.procResearchParentalRights,
+              fg: fg,
+              palette: p),
         ],
       ),
     );

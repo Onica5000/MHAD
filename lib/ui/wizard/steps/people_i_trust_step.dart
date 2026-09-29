@@ -1,6 +1,7 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/data/database/app_database.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
@@ -55,7 +56,7 @@ class _PeopleITrustStepState extends ConsumerState<PeopleITrustStep>
         _AgentCard(
           directiveId: widget.directiveId,
           agentType: 'primary',
-          roleLabel: 'PRIMARY AGENT',
+          roleLabel: context.l10n.peopleTrustPrimaryAgent,
           isPrimary: true,
           form: AgentDesignationStep(
             key: _primaryKey,
@@ -67,7 +68,7 @@ class _PeopleITrustStepState extends ConsumerState<PeopleITrustStep>
         _AgentCard(
           directiveId: widget.directiveId,
           agentType: 'alternate',
-          roleLabel: 'ALTERNATE AGENT',
+          roleLabel: context.l10n.peopleTrustAlternateAgent,
           isPrimary: false,
           form: AlternateAgentStep(
             key: _alternateKey,
@@ -79,7 +80,7 @@ class _PeopleITrustStepState extends ConsumerState<PeopleITrustStep>
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            const Expanded(child: SectionLabel('What can they decide?')),
+            Expanded(child: SectionLabel(context.l10n.peopleTrustWhatCanTheyDecide)),
             Padding(
               padding: const EdgeInsets.only(bottom: 8),
               child: Text(
@@ -101,7 +102,7 @@ class _PeopleITrustStepState extends ConsumerState<PeopleITrustStep>
           ],
         ),
         Text(
-          'Limit or expand your agent’s authority. Default is broad authority.',
+          context.l10n.peopleTrustAuthorityIntro,
           style: TextStyle(
             fontFamily: kSansFamily,
             fontSize: 13,
@@ -139,25 +140,24 @@ class _PeopleITrustStepState extends ConsumerState<PeopleITrustStep>
                     ),
                     children: [
                       TextSpan(
-                        text: '"Agent decides"',
+                        text: context.l10n.peopleTrustLegendAgentDecides,
                         style: TextStyle(
                             color: p.text, fontWeight: FontWeight.w700),
                       ),
-                      const TextSpan(text: ' grants the power; '),
+                      TextSpan(text: context.l10n.peopleTrustLegendGrants),
                       TextSpan(
-                        text: '"No"',
+                        text: context.l10n.peopleTrustLegendNo,
                         style: TextStyle(
                             color: p.text, fontWeight: FontWeight.w700),
                       ),
-                      const TextSpan(text: ' withholds it entirely; '),
+                      TextSpan(text: context.l10n.peopleTrustLegendWithholds),
                       TextSpan(
-                        text: '"If…"',
+                        text: context.l10n.peopleTrustLegendIf,
                         style: TextStyle(
                             color: p.text, fontWeight: FontWeight.w700),
                       ),
-                      const TextSpan(
-                          text:
-                              ' lets you add a condition in your own words.'),
+                      TextSpan(
+                          text: context.l10n.peopleTrustLegendCondition),
                     ],
                   ),
                 ),
@@ -331,7 +331,7 @@ class _AgentCardState extends ConsumerState<_AgentCard> {
                                         BorderRadius.circular(4),
                                   ),
                                   child: Text(
-                                    'Primary',
+                                    context.l10n.peopleTrustPrimaryBadge,
                                     style: TextStyle(
                                       fontFamily: kSansFamily,
                                       fontSize: 10,
@@ -349,8 +349,8 @@ class _AgentCardState extends ConsumerState<_AgentCard> {
                             hasName
                                 ? agent!.fullName
                                 : (widget.isPrimary
-                                    ? 'Add someone'
-                                    : 'Optional'),
+                                    ? context.l10n.peopleTrustAddSomeone
+                                    : context.l10n.peopleTrustOptional),
                             style: TextStyle(
                               fontFamily: kSansFamily,
                               fontSize: 15,
@@ -411,11 +411,11 @@ class _AgentCardState extends ConsumerState<_AgentCard> {
                     runSpacing: 6,
                     children: [
                       _StatusChip(
-                        label: 'Contact picker',
+                        label: context.l10n.peopleTrustContactPicker,
                         ok: agent!.address.isNotEmpty,
                       ),
                       _StatusChip(
-                        label: 'Phone on file',
+                        label: context.l10n.peopleTrustPhoneOnFile,
                         ok: _phoneOf(agent).isNotEmpty,
                       ),
                     ],

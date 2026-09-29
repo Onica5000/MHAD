@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/data/repository/directive_repository.dart';
 import 'package:mhad/domain/model/directive.dart';
+import 'package:mhad/l10n/app_localizations.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/wizard/steps/people_i_trust_step.dart';
 import 'package:mhad/ui/wizard/wizard_mixins.dart';
@@ -38,6 +39,8 @@ void main() {
       ProviderScope(
         overrides: [appDatabaseProvider.overrideWithValue(db)],
         child: MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           home: Scaffold(
             body: PeopleITrustStep(key: key, directiveId: directiveId),
           ),

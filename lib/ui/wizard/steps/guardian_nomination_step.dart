@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/data/database/app_database.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/forms/address_fields.dart';
@@ -26,19 +27,29 @@ class GuardianNominationStep extends ConsumerStatefulWidget {
 enum _GuardianRel {
   // "No preference" is intentionally first (per user direction) — it's the
   // default and the lowest-effort choice.
-  noPreference('noPreference', 'No preference',
-      'Let the court decide. They will usually appoint a family member or county guardianship office.'),
-  sameAsPrimary('sameAsPrimary', 'Same as my primary agent',
-      'The simplest path. The court is not required to follow this, but it is strong guidance.'),
-  sameAsAlternate('sameAsAlternate', 'Same as my alternate agent',
-      'Use this if your alternate would be a better fit for a longer-term guardianship role.'),
-  different('different', 'Someone different',
-      'Choose another person — e.g. an attorney, sibling, or close friend not already named.');
+  noPreference('noPreference'),
+  sameAsPrimary('sameAsPrimary'),
+  sameAsAlternate('sameAsAlternate'),
+  different('different');
 
   final String id;
-  final String label;
-  final String hint;
-  const _GuardianRel(this.id, this.label, this.hint);
+  const _GuardianRel(this.id);
+
+  /// Display label (localized). Only [id] is persisted.
+  String label(AppLocalizations l) => switch (this) {
+        noPreference => l.guardianNomNoPreference,
+        sameAsPrimary => l.guardianNomSameAsPrimary,
+        sameAsAlternate => l.guardianNomSameAsAlternate,
+        different => l.guardianNomDifferent,
+      };
+
+  /// Sub-explanation shown on the selected card (localized).
+  String hint(AppLocalizations l) => switch (this) {
+        noPreference => l.guardianNomNoPreferenceHint,
+        sameAsPrimary => l.guardianNomSameAsPrimaryHint,
+        sameAsAlternate => l.guardianNomSameAsAlternateHint,
+        different => l.guardianNomDifferentHint,
+      };
 
   static _GuardianRel fromId(String id) =>
       _GuardianRel.values.firstWhere(
@@ -202,39 +213,33 @@ class _GuardianNominationStepState
           WizardHelpButton(
             // The on-screen description below already says this is optional and
             // what a nomination is; help only carries the binding-status detail.
-            helpText:
-                'Your nomination is not binding — the court will consider it '
-                'but makes the final decision on who to appoint.',
+            helpText: context.l10n.guardianNomHelp,
             stepId: 'guardianNomination',
           ),
           const SizedBox(height: 8),
           Text(
-            'This section is optional. You may nominate a guardian in case a '
-            'court ever needs to appoint one for you.',
+            context.l10n.guardianNomOptionalIntro,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
           ),
           const SizedBox(height: 12),
-          const InfoBanner(
+          InfoBanner(
             icon: Icons.info_outline,
             margin: EdgeInsets.zero,
-            text: 'A guardian is different from your agent. A guardian is '
-                'appointed by a court during formal incapacity proceedings. '
-                'This nomination tells the court who you prefer.',
+            text: context.l10n.guardianNomGuardianVsAgent,
           ),
           const SizedBox(height: 12),
           // Phase 2 — 4-radio Opt pattern per v2 prototype's `ScrWizardGuardian`.
           // The 'Someone different' branch expands inline to show the existing
           // free-text fields; other branches hide them (and clear on save).
           Text(
-            'Preferred guardian',
+            context.l10n.guardianNomPreferredGuardian,
             style: Theme.of(context).textTheme.titleSmall,
           ),
           const SizedBox(height: 4),
           Text(
-            'Pick what fits — your nomination is guidance for the court, not '
-            'a binding instruction.',
+            context.l10n.guardianNomPickWhatFits,
             style: Theme.of(context).textTheme.bodySmall,
           ),
           const SizedBox(height: 12),
@@ -265,18 +270,18 @@ class _GuardianNominationStepState
             const SizedBox(height: 16),
             TextFormField(
               controller: _nameCtrl,
-              decoration: const InputDecoration(
-                labelText: 'Nominee full name',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: context.l10n.guardianNomNomineeFullName,
+                border: const OutlineInputBorder(),
               ),
               textCapitalization: TextCapitalization.words,
             ),
             const SizedBox(height: 16),
             TextFormField(
               controller: _relationshipCtrl,
-              decoration: const InputDecoration(
-                labelText: 'Relationship to you',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: context.l10n.guardianNomRelationshipToYou,
+                border: const OutlineInputBorder(),
               ),
               textCapitalization: TextCapitalization.words,
             ),
@@ -291,10 +296,10 @@ class _GuardianNominationStepState
             const SizedBox(height: 16),
             TextFormField(
               controller: _phoneCtrl,
-              decoration: const InputDecoration(
-                labelText: 'Phone number',
+              decoration: InputDecoration(
+                labelText: context.l10n.phone,
                 hintText: '(215) 555-1234',
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
               ),
               keyboardType: TextInputType.phone,
               autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -304,46 +309,45 @@ class _GuardianNominationStepState
           ],
           const SizedBox(height: 24),
           Text(
-            'Conditions on the guardianship',
+            context.l10n.guardianNomConditionsTitle,
             style: Theme.of(context).textTheme.titleSmall,
           ),
           const SizedBox(height: 4),
           Text(
-            'If a court appoints a guardian, set the limits you want it to '
-            'honor. These are guidance for the court, not binding.',
+            context.l10n.guardianNomConditionsIntro,
             style: Theme.of(context).textTheme.bodySmall,
           ),
           const SizedBox(height: 12),
           _GuardianConditionRow(
-            label: 'Can change my agent',
+            label: context.l10n.guardianNomCanChangeAgent,
             value: _guardianCanChangeAgent,
             onChanged: (v) => setState(() => _guardianCanChangeAgent = v),
           ),
           if (_guardianCanChangeAgent)
             _conditionNote(
               _changeAgentNoteCtrl,
-              'When or how may the guardian change my agent? (optional)',
+              context.l10n.guardianNomCanChangeAgentHint,
             ),
           _GuardianConditionRow(
-            label: 'Can override this directive',
-            sub: 'Revoke, suspend, or terminate it.',
+            label: context.l10n.guardianNomCanOverride,
+            sub: context.l10n.guardianNomCanOverrideSub,
             value: _guardianCanRevoke,
             onChanged: (v) => setState(() => _guardianCanRevoke = v),
           ),
           if (_guardianCanRevoke)
             _conditionNote(
               _revokeNoteCtrl,
-              'Any limits on overriding this directive? (optional)',
+              context.l10n.guardianNomCanOverrideHint,
             ),
           _GuardianConditionRow(
-            label: 'Must consult my agent first',
+            label: context.l10n.guardianNomMustConsult,
             value: _guardianMustConsultAgent,
             onChanged: (v) => setState(() => _guardianMustConsultAgent = v),
           ),
           if (_guardianMustConsultAgent)
             _conditionNote(
               _consultNoteCtrl,
-              'What should the guardian consult my agent about? (optional)',
+              context.l10n.guardianNomMustConsultHint,
             ),
         ],
       ),
@@ -421,7 +425,10 @@ class _GuardianConditionRow extends StatelessWidget {
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
-              children: [pill('No', false), pill('Yes', true)],
+              children: [
+                pill(context.l10n.no, false),
+                pill(context.l10n.yes, true),
+              ],
             ),
           ),
         ],
@@ -493,7 +500,7 @@ class _GuardianRelOptCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    option.label,
+                    option.label(context.l10n),
                     style: TextStyle(
                       fontFamily: kSansFamily,
                       fontSize: 14.5,
@@ -505,7 +512,7 @@ class _GuardianRelOptCard extends StatelessWidget {
                   if (selected) ...[
                     const SizedBox(height: 4),
                     Text(
-                      option.hint,
+                      option.hint(context.l10n),
                       style: TextStyle(
                         fontFamily: kSansFamily,
                         fontSize: 12.5,

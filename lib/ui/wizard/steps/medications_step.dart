@@ -6,6 +6,7 @@ import 'package:mhad/constants.dart';
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/model/directive.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/services/clinical_data_service.dart';
 import 'package:mhad/services/medline_plus_service.dart';
@@ -100,8 +101,8 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
     if (rows.length >= _maxMedsPerCategory) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content:
-              Text('Maximum $_maxMedsPerCategory medications per category'),
+          content: Text(
+              context.l10n.medsStepMaxPerCategory(_maxMedsPerCategory)),
         ),
       );
       return;
@@ -186,6 +187,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
         dark ? const Color(0xFFFBBF24) : const Color(0xFFCA8A04);
     final preferColor =
         dark ? SemanticColors.successTextDark : SemanticColors.successTextLight;
+    final l10n = context.l10n;
     return Form(
       key: _formKey,
       child: ListView(
@@ -195,16 +197,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
             // The meaning of each category (Never give / Limitations /
             // Preferred) is shown inline as each section's subtitle below, so
             // help only carries the detail that isn't already on screen.
-            helpText:
-                'List medications by name. Your preferences apply to generic, '
-                'brand name, and trade name equivalents unless you specify '
-                'otherwise in the notes — to request brand-name only, note it '
-                'in the reason field.\n\n'
-                'Narrow Therapeutic Index (NTI) drugs — ones with only a small '
-                'safety margin between a helpful dose and a harmful one, like '
-                'lithium, carbamazepine, and valproic acid — cannot have '
-                'generics substituted under PA law (35 P.S. §960.3). These are '
-                'marked with an "NTI" badge when you search.',
+            helpText: l10n.medsStepHelpText,
             stepId: 'medications',
           ),
           const SizedBox(height: 8),
@@ -236,16 +229,15 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
                               .onSurfaceVariant,
                         ),
                         children: [
-                          const TextSpan(
-                            text: 'Heads up \u2014 ',
-                            style: TextStyle(fontWeight: FontWeight.w600),
-                          ),
-                          const TextSpan(
-                            text:
-                                'your refusal of a medication and any limits you set on its use are binding under PA Act 194, but ',
+                          TextSpan(
+                            text: l10n.medsStepHeadsUpLead,
+                            style: const TextStyle(fontWeight: FontWeight.w600),
                           ),
                           TextSpan(
-                            text: 'specific dosage instructions are not binding',
+                            text: l10n.medsStepHeadsUpBody,
+                          ),
+                          TextSpan(
+                            text: l10n.medsStepHeadsUpBold,
                             style: TextStyle(
                               fontWeight: FontWeight.w600,
                               color: Theme.of(context)
@@ -253,9 +245,8 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
                                   .onSurfaceVariant,
                             ),
                           ),
-                          const TextSpan(
-                            text:
-                                ' on the physician \u2014 they choose the dose.',
+                          TextSpan(
+                            text: l10n.medsStepHeadsUpTail,
                           ),
                         ],
                       ),
@@ -271,16 +262,15 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
               value: _agentDecidesMeds,
               onChanged: (v) =>
                   setState(() => _agentDecidesMeds = v ?? false),
-              title: const Text(
-                  'I have designated an agent to make decisions about my medications'),
+              title: Text(l10n.medsStepAgentDecides),
               controlAffinity: ListTileControlAffinity.leading,
               contentPadding: EdgeInsets.zero,
             ),
             const Divider(),
           ],
           _MedTable(
-            title: 'Medications I am currently taking',
-            subtitle: 'For your care team’s reference — not a preference',
+            title: l10n.medsStepCurrentTitle,
+            subtitle: l10n.medsStepCurrentSubtitle,
             rows: _current,
             accentColor: Theme.of(context).colorScheme.secondary,
             showDosage: true,
@@ -294,8 +284,8 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
           ),
           const SizedBox(height: 16),
           _MedTable(
-            title: 'Medications I NEVER want',
-            subtitle: 'These medications should not be administered',
+            title: l10n.medsStepNeverTitle,
+            subtitle: l10n.medsStepNeverSubtitle,
             rows: _exceptions,
             accentColor: neverColor,
             onAdd: () => _addMedRow(_exceptions),
@@ -308,8 +298,8 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
           ),
           const SizedBox(height: 16),
           _MedTable(
-            title: 'Medications with limitations',
-            subtitle: 'May be given but with restrictions',
+            title: l10n.medsStepLimitTitle,
+            subtitle: l10n.medsStepLimitSubtitle,
             rows: _limitations,
             accentColor: limitColor,
             onAdd: () => _addMedRow(_limitations),
@@ -322,8 +312,8 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
           ),
           const SizedBox(height: 16),
           _MedTable(
-            title: 'Preferred medications',
-            subtitle: 'Medications that have worked well for you',
+            title: l10n.medsStepPreferredTitle,
+            subtitle: l10n.medsStepPreferredSubtitle,
             rows: _preferred,
             accentColor: preferColor,
             onAdd: () => _addMedRow(_preferred),
@@ -373,9 +363,9 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Side effects you may be experiencing',
-                      style: TextStyle(
+                    Text(
+                      context.l10n.medsStepSideEffectsTitle,
+                      style: const TextStyle(
                         fontFamily: kSansFamily,
                         fontWeight: FontWeight.w600,
                         fontSize: 15,
@@ -383,10 +373,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      'For the medications you take now, check common side '
-                      'effects — especially any that affect your daily '
-                      'activities — so your care team knows. Needs AI set up. '
-                      'Not medical advice.',
+                      context.l10n.medsStepSideEffectsBody,
                       style: TextStyle(
                         fontFamily: kSansFamily,
                         fontSize: 12,
@@ -506,11 +493,7 @@ class _MedTable extends StatelessWidget {
                                     const SizedBox(width: 6),
                                     Expanded(
                                       child: Text(
-                                        'Narrow therapeutic index drug — $note. '
-                                        'Pennsylvania law bars generic '
-                                        'substitution for these; note any '
-                                        'monitoring needs below. (Informational, '
-                                        'not medical advice.)',
+                                        context.l10n.medsStepNtiNote(note),
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodySmall
@@ -527,9 +510,9 @@ class _MedTable extends StatelessWidget {
                             const SizedBox(height: 8),
                             TextFormField(
                               controller: rows[i].dosageCtrl,
-                              decoration: const InputDecoration(
-                                labelText: 'Dosage (e.g. 20 mg twice daily)',
-                                border: OutlineInputBorder(),
+                              decoration: InputDecoration(
+                                labelText: context.l10n.medsStepDosageLabel,
+                                border: const OutlineInputBorder(),
                                 isDense: true,
                               ),
                             ),
@@ -538,9 +521,9 @@ class _MedTable extends StatelessWidget {
                           TextFormField(
                             controller: rows[i].reasonCtrl,
                             maxLength: appData.config.medicationNoteMaxChars,
-                            decoration: const InputDecoration(
-                              labelText: 'Reason / notes (optional)',
-                              border: OutlineInputBorder(),
+                            decoration: InputDecoration(
+                              labelText: context.l10n.medsStepReasonLabel,
+                              border: const OutlineInputBorder(),
                               isDense: true,
                             ),
                           ),
@@ -555,22 +538,21 @@ class _MedTable extends StatelessWidget {
                           if (name.isEmpty) return const SizedBox.shrink();
                           return PopupMenuButton<String>(
                             icon: Icon(Icons.info_outline, color: cs.primary),
-                            tooltip: 'Learn about $name',
+                            tooltip: context.l10n.medsStepLearnAbout(name),
                             onSelected: (v) {
                               if (v == 'medline') onMedlineInfo?.call(name);
                               if (v == 'fda') onFdaInfo?.call(name);
                             },
                             itemBuilder: (_) => [
                               if (onMedlineInfo != null)
-                                const PopupMenuItem(
+                                PopupMenuItem(
                                   value: 'medline',
-                                  child: Text('Plain-language info (MedlinePlus)'),
+                                  child: Text(context.l10n.medsStepMedlineInfo),
                                 ),
                               if (onFdaInfo != null)
-                                const PopupMenuItem(
+                                PopupMenuItem(
                                   value: 'fda',
-                                  child: Text('Official FDA label (side effects & '
-                                      'interactions)'),
+                                  child: Text(context.l10n.medsStepFdaInfo),
                                 ),
                             ],
                           );
@@ -580,7 +562,10 @@ class _MedTable extends StatelessWidget {
                       icon:
                           const Icon(Icons.remove_circle_outline),
                       color: cs.error,
-                      tooltip: 'Remove ${rows[i].nameCtrl.text.isEmpty ? 'medication' : rows[i].nameCtrl.text}',
+                      tooltip: rows[i].nameCtrl.text.isEmpty
+                          ? context.l10n.medsStepRemoveDefault
+                          : context.l10n.medsStepRemoveNamed(
+                              rows[i].nameCtrl.text),
                       onPressed: () => onRemove(i),
                     ),
                   ],
@@ -589,11 +574,11 @@ class _MedTable extends StatelessWidget {
             }),
             Semantics(
               button: true,
-              label: 'Add medication to $title list',
+              label: context.l10n.medsStepAddToList(title),
               child: TextButton.icon(
                 onPressed: onAdd,
                 icon: const Icon(Icons.add, size: 16),
-                label: const Text('Add medication'),
+                label: Text(context.l10n.medsStepAddButton),
               ),
             ),
           ],

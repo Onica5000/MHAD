@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/domain/model/directive.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
@@ -76,7 +77,7 @@ class _SignScreenState extends ConsumerState<SignScreen> {
         backgroundColor: p.scaffoldBackground,
         body: Center(
           child: Semantics(
-            label: 'Preparing signing packet',
+            label: context.l10n.signScreenPreparing,
             child: const CircularProgressIndicator(),
           ),
         ),
@@ -87,7 +88,7 @@ class _SignScreenState extends ConsumerState<SignScreen> {
       body: Column(
         children: [
           WizardHeader(
-            backLabel: 'Back to review',
+            backLabel: context.l10n.signScreenBackToReview,
             onBack: () =>
                 context.go(AppRoutes.wizardRoute(widget.directiveId)),
             // Sign isn't a wizard step — no "Save & exit" here. The empty

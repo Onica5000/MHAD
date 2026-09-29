@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:drift/drift.dart' show Value;
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/agent_ext.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/forms/address_fields.dart';
@@ -120,12 +121,7 @@ class _AgentDesignationStepState
 
   @override
   Widget build(BuildContext context) {
-    const helpText =
-        'Your agent must be 18 or older. Under PA Act 194, they cannot be '
-        'your mental health care provider or an employee of a mental health '
-        'care facility or residential facility where you receive care — '
-        'unless they are related to you. Choose someone you trust to '
-        'honor your wishes.';
+    final helpText = context.l10n.agentDesigHelp;
 
     return Form(
       key: _formKey,
@@ -140,17 +136,15 @@ class _AgentDesignationStepState
             WizardHelpButton(helpText: helpText, stepId: 'agentDesignation'),
             const SizedBox(height: 8),
             Text(
-              'Primary Agent Designation',
+              context.l10n.agentDesigTitle,
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 12),
             // Definition of "agent" lives in the info card below (kept once).
-            const InfoBanner(
+            InfoBanner(
               icon: Icons.info_outline,
               margin: EdgeInsets.zero,
-              text:
-                  'An agent (healthcare proxy) is someone you choose to make '
-                  'mental health care decisions on your behalf when you cannot.',
+              text: context.l10n.agentDesigAgentDefinition,
             ),
             const SizedBox(height: 12),
             ContactPickerButton(
@@ -165,33 +159,29 @@ class _AgentDesignationStepState
             const SizedBox(height: 16),
             TextFormField(
               controller: _nameCtrl,
-              decoration: const InputDecoration(
-                labelText: 'Full name',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: context.l10n.fullName,
+                border: const OutlineInputBorder(),
               ),
               autofillHints: const [],
               textInputAction: TextInputAction.next,
               validator: (v) =>
-                  (v == null || v.trim().isEmpty) ? 'Required' : null,
+                  (v == null || v.trim().isEmpty) ? context.l10n.required : null,
             ),
             const SizedBox(height: 12),
             TextFormField(
               controller: _relationshipCtrl,
-              decoration: const InputDecoration(
-                labelText: 'Relationship',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: context.l10n.agentDesigRelationship,
+                border: const OutlineInputBorder(),
               ),
               textInputAction: TextInputAction.next,
             ),
             const SizedBox(height: 12),
-            const InfoBanner(
+            InfoBanner(
               icon: Icons.info_outline,
               margin: EdgeInsets.zero,
-              text:
-                  'Note: Under PA Act 194 \u00a75838, if you designate your '
-                  'spouse as your agent, that designation is automatically '
-                  'revoked if either spouse files for divorce, unless you '
-                  'state otherwise in this directive.',
+              text: context.l10n.agentDesigSpouseNote,
             ),
             const SizedBox(height: 12),
             AddressFields(
@@ -205,10 +195,10 @@ class _AgentDesignationStepState
             TextFormField(
               controller: _phoneCtrl,
               keyboardType: TextInputType.phone,
-              decoration: const InputDecoration(
-                labelText: 'Phone number',
+              decoration: InputDecoration(
+                labelText: context.l10n.phone,
                 hintText: '(215) 555-1234',
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
               ),
               autofillHints: const [],
               textInputAction: TextInputAction.done,

@@ -4,6 +4,7 @@ import 'package:drift/drift.dart' show Value;
 import 'package:mhad/ai/ai_clinical_policy.dart';
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/data/database/app_database.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/wizard/widgets/ai_suggest_button.dart';
 import 'package:mhad/ui/wizard/widgets/example_text_button.dart';
@@ -78,10 +79,7 @@ class _AgentAuthorityStepState
 
   @override
   Widget build(BuildContext context) {
-    const helpText =
-        'Consider carefully before restricting your agent\'s authority. '
-        'Broad authority gives your agent flexibility to respond to '
-        'situations you may not anticipate.';
+    final helpText = context.l10n.agentAuthHelp;
 
     return Form(
       key: _formKey,
@@ -96,13 +94,12 @@ class _AgentAuthorityStepState
           WizardHelpButton(helpText: helpText, stepId: 'agentAuthority'),
           const SizedBox(height: 8),
           Text(
-            'Agent Authority & Limits',
+            context.l10n.agentAuthority,
             style: Theme.of(context).textTheme.titleLarge,
           ),
           const SizedBox(height: 8),
-          const Text(
-            'By default your agent has broad authority to make mental health '
-            'treatment decisions. You may restrict this authority here.',
+          Text(
+            context.l10n.agentAuthIntro,
           ),
           const SizedBox(height: 16),
           Card(
@@ -119,7 +116,7 @@ class _AgentAuthorityStepState
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
-                            'Important: Scope of Authority (20 Pa.C.S. § 5836)',
+                            context.l10n.agentAuthScopeTitle,
                             style: TextStyle(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 13,
@@ -129,17 +126,7 @@ class _AgentAuthorityStepState
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'The checkboxes below apply ONLY to:\n'
-                    '  \u2022 Voluntary hospitalization (admission to a treatment facility)\n'
-                    '  \u2022 General psychiatric medications\n\n'
-                    'They do NOT cover:\n'
-                    '  \u2022 Electroconvulsive therapy (ECT)\n'
-                    '  \u2022 Experimental studies or procedures\n'
-                    '  \u2022 Clinical drug trials\n\n'
-                    'Your consent choices for ECT, experimental studies, and drug '
-                    'trials are set on their dedicated pages earlier in this form. '
-                    'Under PA Act 194, your agent CANNOT override those decisions — '
-                    'they are binding regardless of agent authority.',
+                    context.l10n.agentAuthScopeBody,
                     style: TextStyle(
                       fontSize: 12,
                       color: Theme.of(context).colorScheme.onTertiaryContainer,
@@ -179,13 +166,12 @@ class _AgentAuthorityStepState
                               .onPrimaryContainer,
                         ),
                         children: [
-                          const TextSpan(
-                            text: 'The standard your agent must follow: ',
-                            style: TextStyle(fontWeight: FontWeight.w700),
+                          TextSpan(
+                            text: context.l10n.agentAuthStandardLead,
+                            style: const TextStyle(fontWeight: FontWeight.w700),
                           ),
-                          const TextSpan(
-                            text:
-                                'under § 5836(d), your agent is legally bound to make the decision you would make if you were competent, guided by what you write in this directive and any clear prior instructions, after consulting with providers. The more you fill in, the closer their decisions can match yours.',
+                          TextSpan(
+                            text: context.l10n.agentAuthStandardBody,
                           ),
                         ],
                       ),
@@ -197,8 +183,8 @@ class _AgentAuthorityStepState
           ),
           const SizedBox(height: 16),
           CheckboxListTile(
-            title: const Text('Agent may consent to voluntary hospitalization'),
-            subtitle: Text('Admission to a psychiatric treatment facility only',
+            title: Text(context.l10n.agentAuthHospitalization),
+            subtitle: Text(context.l10n.agentAuthHospitalizationSub,
                 style: TextStyle(fontSize: 12,
                     color: Theme.of(context).colorScheme.onSurfaceVariant)),
             value: _canConsentHospitalization,
@@ -207,8 +193,8 @@ class _AgentAuthorityStepState
             controlAffinity: ListTileControlAffinity.leading,
           ),
           CheckboxListTile(
-            title: const Text('Agent may consent to medication'),
-            subtitle: Text('General psychiatric medications only — does not include ECT',
+            title: Text(context.l10n.agentAuthMedication),
+            subtitle: Text(context.l10n.agentAuthMedicationSub,
                 style: TextStyle(fontSize: 12,
                     color: Theme.of(context).colorScheme.onSurfaceVariant)),
             value: _canConsentMedication,
@@ -217,16 +203,12 @@ class _AgentAuthorityStepState
             controlAffinity: ListTileControlAffinity.leading,
           ),
           const SizedBox(height: 12),
-          const ExampleTextButton(
-            fieldName: 'Agent Limitations',
+          ExampleTextButton(
+            fieldName: context.l10n.agentAuthExamplesField,
             examples: [
-              'My agent may not consent to electroconvulsive therapy (ECT) '
-              'under any circumstances.',
-              'My agent should consult with my therapist, Dr. Smith, before '
-              'agreeing to any changes in my medication regimen.',
-              'My agent may consent to voluntary inpatient admission for up '
-              'to 72 hours, but may not consent to longer stays without '
-              'consulting my family.',
+              context.l10n.agentAuthExample1,
+              context.l10n.agentAuthExample2,
+              context.l10n.agentAuthExample3,
             ],
           ),
           TextFormField(
@@ -234,7 +216,7 @@ class _AgentAuthorityStepState
             maxLines: 4,
             maxLength: appData.config.textFieldMaxChars,
             decoration: InputDecoration(
-              labelText: 'Additional limitations or instructions (optional)',
+              labelText: context.l10n.agentAuthLimitationsLabel,
               border: const OutlineInputBorder(),
               suffixIcon: Row(
                 mainAxisSize: MainAxisSize.min,
