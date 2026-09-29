@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -64,14 +66,10 @@ void main() {
     required String initial,
     String? apiKey,
   }) async {
-    // Always boot at phone width, then resize. At >= the breakpoint the
-    // shell's ListenableBuilder wraps the routed child, so the router's
-    // initial-route notification fires while that subtree is building and a
-    // debug build asserts ("markNeedsBuild() called during build"), leaving
-    // the shell on its pre-route layout. Booting narrow (child outside the
-    // listener) and then resizing exercises the same route -> layout decision
-    // for a direct load without tripping that first-frame assert.
-    tester.view.physicalSize = const Size(390, 844);
+    // Boot directly at the requested size: at desktop width this is the
+    // direct-load path where the router notifies mid-build (see
+    // _RouteListener in responsive_shell.dart).
+    tester.view.physicalSize = size;
     tester.view.devicePixelRatio = 1.0;
     addTearDown(() {
       tester.view.resetPhysicalSize();
@@ -94,10 +92,6 @@ void main() {
       ),
     ));
     await tester.pumpAndSettle();
-    if (size != tester.view.physicalSize) {
-      tester.view.physicalSize = size;
-      await tester.pumpAndSettle();
-    }
   }
 
   const phone = Size(390, 844);
@@ -207,6 +201,18 @@ void main() {
         expect(pageWidth(tester, loc), contentArea(tester));
       });
     }
+
+    testWidgets(
+        'a route pushed over a reading route uses ITS layout, not the '
+        'underlying one', (tester) async {
+      await pumpShell(tester, size: desktop, initial: AppRoutes.settings);
+      unawaited(appRouter.push('/export/7'));
+      await tester.pumpAndSettle();
+
+      expect(currentRoute(), '/export/7');
+      expect(pageWidth(tester, '/export/7'), contentArea(tester),
+          reason: 'pushed export must not inherit the 760px reading column');
+    });
   });
 
   // ── Bottom nav highlight + navigation ────────────────────────────────────
