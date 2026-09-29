@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:drift/drift.dart' show Value;
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/agent_ext.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/widgets/forms/address_fields.dart';
 import 'package:mhad/ui/wizard/widgets/contact_picker_button.dart';
@@ -114,11 +115,7 @@ class _AlternateAgentStepState
 
   @override
   Widget build(BuildContext context) {
-    const helpText =
-        'Your agent must be 18 or older. They cannot be your treating '
-        'physician, an employee of your treatment facility (unless a '
-        'relative), or someone with financial interest in your estate. '
-        'Choose someone you trust to honor your wishes.';
+    final helpText = context.l10n.altAgentHelp;
 
     return Form(
       key: _formKey,
@@ -133,22 +130,20 @@ class _AlternateAgentStepState
             WizardHelpButton(helpText: helpText, stepId: 'alternateAgent'),
             const SizedBox(height: 8),
             Text(
-              'Alternate Agent Designation',
+              context.l10n.altAgentTitle,
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 8),
-            const Text(
-              'Your alternate agent acts if your primary agent is unable or '
-              'unwilling to serve.',
-            ),
-            const SizedBox(height: 4),
-            const Text(
-              'The alternate agent has the same authority as the primary agent '
-              'but only steps in when the primary agent cannot act.',
+            Text(
+              context.l10n.altAgentActsIf,
             ),
             const SizedBox(height: 4),
             Text(
-              'You are not required to designate an alternate agent.',
+              context.l10n.altAgentSameAuthority,
+            ),
+            const SizedBox(height: 4),
+            Text(
+              context.l10n.altAgentNotRequired,
               style: Theme.of(context)
                   .textTheme
                   .bodySmall
@@ -167,9 +162,9 @@ class _AlternateAgentStepState
             const SizedBox(height: 16),
             TextFormField(
               controller: _nameCtrl,
-              decoration: const InputDecoration(
-                labelText: 'Full name',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: context.l10n.fullName,
+                border: const OutlineInputBorder(),
               ),
               autofillHints: const [],
               textInputAction: TextInputAction.next,
@@ -177,9 +172,9 @@ class _AlternateAgentStepState
             const SizedBox(height: 12),
             TextFormField(
               controller: _relationshipCtrl,
-              decoration: const InputDecoration(
-                labelText: 'Relationship',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: context.l10n.altAgentRelationship,
+                border: const OutlineInputBorder(),
               ),
               textInputAction: TextInputAction.next,
             ),
@@ -195,10 +190,10 @@ class _AlternateAgentStepState
             TextFormField(
               controller: _phoneCtrl,
               keyboardType: TextInputType.phone,
-              decoration: const InputDecoration(
-                labelText: 'Phone number',
+              decoration: InputDecoration(
+                labelText: context.l10n.phone,
                 hintText: '(215) 555-1234',
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
               ),
               autofillHints: const [],
               textInputAction: TextInputAction.done,

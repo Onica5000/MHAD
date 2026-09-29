@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/agent_ext.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/utils/address_format.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
@@ -88,9 +89,9 @@ class _ReviewRowData {
 
   /// Compact one-line summary: joins the non-empty values (or "key: value"
   /// where the key carries meaning, e.g. ICD codes) with middle dots.
-  String get summary {
+  String summary(AppLocalizations l10n) {
     final parts = nonEmpty.map((e) => e.value).toList();
-    if (parts.isEmpty) return 'Not provided yet';
+    if (parts.isEmpty) return l10n.reviewStepNotProvidedYet;
     return parts.join(' · ');
   }
 }
@@ -134,6 +135,7 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
   /// and field that the legacy `_ReviewSection` layout rendered is preserved
   /// here — only the presentation changed.
   List<_ReviewRowData> _buildRows(_ReviewData data) {
+    final l = context.l10n;
     final d = data.directive;
     final agents = data.agents;
     final prefs = data.prefs;
@@ -184,58 +186,58 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
     for (final step in widget.formType.steps) {
       switch (step) {
         case WizardStep.aboutYou:
-          rows.add(row(step, 'Personal Information', {
-            'Name': d.fullName,
-            'Date of birth': d.dateOfBirth,
-            'Address': composeAddressInline(
+          rows.add(row(step, l.personalInfo, {
+            l.reviewStepName: d.fullName,
+            l.dateOfBirth: d.dateOfBirth,
+            l.address: composeAddressInline(
                 line1: d.address,
                 line2: d.address2,
                 city: d.city,
                 state: d.state,
                 zip: d.zip),
-            'Phone': d.phone,
+            l.reviewStepPhone: d.phone,
           }, ok: d.fullName.trim().isNotEmpty));
 
         case WizardStep.whenItKicksIn:
-          rows.add(row(step, 'Effective Condition',
-              {'Condition': d.effectiveCondition}));
+          rows.add(row(step, l.effectiveCondition,
+              {l.reviewStepCondition: d.effectiveCondition}));
 
         case WizardStep.peopleITrust:
-          rows.add(row(step, 'Primary Agent', {
-            'Name': primaryAgent?.fullName ?? '',
-            'Relationship': primaryAgent?.relationship ?? '',
-            'Phone': firstPhone(primaryAgent),
+          rows.add(row(step, l.reviewStepPrimaryAgent, {
+            l.reviewStepName: primaryAgent?.fullName ?? '',
+            l.reviewStepRelationship: primaryAgent?.relationship ?? '',
+            l.reviewStepPhone: firstPhone(primaryAgent),
           }));
           // Alternate agent is optional — only its own row when one is named.
           if (altAgent != null) {
-            rows.add(row(step, 'Alternate Agent', {
-              'Name': altAgent.fullName,
-              'Relationship': altAgent.relationship,
-              'Phone': firstPhone(altAgent),
+            rows.add(row(step, l.alternateAgent, {
+              l.reviewStepName: altAgent.fullName,
+              l.reviewStepRelationship: altAgent.relationship,
+              l.reviewStepPhone: firstPhone(altAgent),
             }));
           }
 
         case WizardStep.guardianNomination:
-          rows.add(row(step, 'Guardian Nomination', {
-            'Name': guardian?.nomineeFullName ?? '',
-            'Relationship': guardian?.nomineeRelationship ?? '',
-            'Phone': guardian?.nomineePhone ?? '',
+          rows.add(row(step, l.guardianNomination, {
+            l.reviewStepName: guardian?.nomineeFullName ?? '',
+            l.reviewStepRelationship: guardian?.nomineeRelationship ?? '',
+            l.reviewStepPhone: guardian?.nomineePhone ?? '',
           }));
 
         case WizardStep.whereIWantCare:
-          rows.add(row(step, 'Where I want care', {
-            'Treatment facility': prefs?.treatmentFacilityPref ?? '',
-            'Medication consent': prefs?.medicationConsent ?? '',
+          rows.add(row(step, l.reviewStepWhereIWantCare, {
+            l.reviewStepTreatmentFacility: prefs?.treatmentFacilityPref ?? '',
+            l.reviewStepMedicationConsent: prefs?.medicationConsent ?? '',
           }));
 
         case WizardStep.diagnoses:
-          rows.add(row(step, 'Medical Diagnoses', {
+          rows.add(row(step, l.reviewStepMedicalDiagnoses, {
             for (final dx in data.diagnoses) dx.icdCode: dx.name,
           }));
 
         case WizardStep.allergies:
-          rows.add(row(step, 'Allergies & reactions', {
-            'Allergies': data.allergies
+          rows.add(row(step, l.reviewStepAllergiesReactions, {
+            l.reviewStepAllergies: data.allergies
                 .map((a) => a.severity.isNotEmpty
                     ? '${a.substance} (${a.severity})'
                     : a.substance)
@@ -244,31 +246,36 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
           }));
 
         case WizardStep.medications:
-          rows.add(row(step, 'Medications', {
-            'Never give': exceptions.map((m) => m.medicationName).join(', '),
-            'With limits': limitations.map((m) => m.medicationName).join(', '),
-            'Preferred': preferred.map((m) => m.medicationName).join(', '),
+          rows.add(row(step, l.medications, {
+            l.reviewStepNeverGive:
+                exceptions.map((m) => m.medicationName).join(', '),
+            l.reviewStepWithLimits:
+                limitations.map((m) => m.medicationName).join(', '),
+            l.reviewStepPreferred:
+                preferred.map((m) => m.medicationName).join(', '),
           }));
 
         case WizardStep.proceduresResearch:
-          rows.add(row(step, 'Procedures & research', {
-            'ECT consent': prefs?.ectConsent ?? '',
-            'Experimental studies': prefs?.experimentalConsent ?? '',
-            'Drug trials': prefs?.drugTrialConsent ?? '',
+          rows.add(row(step, l.reviewStepProceduresResearch, {
+            l.reviewStepEctConsent: prefs?.ectConsent ?? '',
+            l.reviewStepExperimentalStudies: prefs?.experimentalConsent ?? '',
+            l.reviewStepDrugTrials: prefs?.drugTrialConsent ?? '',
           }));
 
         case WizardStep.anythingElse:
-          rows.add(row(step, 'Additional Instructions', {
-            'Activities': additional?.activities ?? '',
-            'Crisis intervention': additional?.crisisIntervention ?? '',
-            'Health history': additional?.healthHistory ?? '',
-            'Dietary': additional?.dietary ?? '',
-            'Religious': additional?.religious ?? '',
-            'Children': additional?.childrenCustody ?? '',
-            'Family notification': additional?.familyNotification ?? '',
-            'Records disclosure': additional?.recordsDisclosure ?? '',
-            'Pet care': additional?.petCustody ?? '',
-            'Other': additional?.other ?? '',
+          rows.add(row(step, l.additionalInstructions, {
+            l.reviewStepActivities: additional?.activities ?? '',
+            l.reviewStepCrisisIntervention:
+                additional?.crisisIntervention ?? '',
+            l.reviewStepHealthHistory: additional?.healthHistory ?? '',
+            l.reviewStepDietary: additional?.dietary ?? '',
+            l.reviewStepReligious: additional?.religious ?? '',
+            l.reviewStepChildren: additional?.childrenCustody ?? '',
+            l.reviewStepFamilyNotification:
+                additional?.familyNotification ?? '',
+            l.reviewStepRecordsDisclosure: additional?.recordsDisclosure ?? '',
+            l.reviewStepPetCare: additional?.petCustody ?? '',
+            l.reviewStepOther: additional?.other ?? '',
           }));
 
         case WizardStep.reviewAndSign:
@@ -284,25 +291,26 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
   /// review step nudges the user to acquire them so the care team can actually
   /// reach the agent / guardian.
   List<String> _missingRecommended(_ReviewData data) {
+    final l = context.l10n;
     final out = <String>[];
     void check(String who, bool hasPhone, bool hasAddress) {
-      if (!hasPhone) out.add("$who's phone number");
-      if (!hasAddress) out.add("$who's address");
+      if (!hasPhone) out.add(l.reviewStepWhoPhone(who));
+      if (!hasAddress) out.add(l.reviewStepWhoAddress(who));
     }
 
     final primary = data.agents.primaryAgent;
     if (primary != null && primary.fullName.isNotEmpty) {
-      check('your primary agent', primary.bestPhone.isNotEmpty,
+      check(l.reviewStepYourPrimaryAgent, primary.bestPhone.isNotEmpty,
           primary.fullAddress.isNotEmpty);
     }
     final alt = data.agents.alternateAgent;
     if (alt != null && alt.fullName.isNotEmpty) {
-      check('your alternate agent', alt.bestPhone.isNotEmpty,
+      check(l.reviewStepYourAlternateAgent, alt.bestPhone.isNotEmpty,
           alt.fullAddress.isNotEmpty);
     }
     final g = data.guardian;
     if (g != null && g.nomineeFullName.isNotEmpty) {
-      check('your guardian nominee', g.nomineePhone.isNotEmpty,
+      check(l.reviewStepYourGuardianNominee, g.nomineePhone.isNotEmpty,
           g.fullNomineeAddress.isNotEmpty);
     }
     return out;
@@ -313,7 +321,7 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
     if (_data == null) {
       return Center(
         child: Semantics(
-          label: 'Loading',
+          label: context.l10n.reviewStepLoading,
           child: const CircularProgressIndicator(),
         ),
       );
@@ -337,7 +345,7 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
         // subtitle above this step, so we avoid a duplicate H1 and instead
         // lead with a short editorial summary line (prototype ScrReview copy).
         Text(
-          "One last look, then we'll make your signing packet.",
+          context.l10n.reviewStepOneLastLook,
           style: TextStyle(
             fontFamily: kSansFamily,
             fontSize: 14,
@@ -353,15 +361,14 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
             icon: Icons.warning_amber_rounded,
             variant: InfoBannerVariant.warning,
             text: warnCount == 1
-                ? '1 section still needs your attention before signing.'
-                : '$warnCount sections still need your attention before '
-                    'signing.',
+                ? context.l10n.reviewStepOneSectionNeedsAttention
+                : context.l10n.reviewStepSectionsNeedAttention(warnCount),
           )
         else
-          const InfoBanner(
+          InfoBanner(
             icon: Icons.check_circle_outline,
             variant: InfoBannerVariant.success,
-            text: 'Everything looks good. All sections reviewed.',
+            text: context.l10n.reviewStepAllGood,
           ),
 
         // Optional-but-recommended contact details that are still blank. These
@@ -371,14 +378,12 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
           InfoBanner(
             icon: Icons.info_outline,
             variant: InfoBannerVariant.info,
-            text: 'Optional, but worth gathering before you sign: '
-                '${_missingRecommended(_data!).join('; ')}. '
-                'They help your care team reach the people you named — you can '
-                'still sign without them.',
+            text: context.l10n.reviewStepOptionalGather(
+                _missingRecommended(_data!).join('; ')),
           ),
         ],
 
-        const SectionLabel('Your directive at a glance'),
+        SectionLabel(context.l10n.reviewStepAtAGlance),
 
         // Numbered editorial rows.
         ...List.generate(rows.length, (i) {
@@ -398,7 +403,7 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
         // Opt-in review (moved here from Settings). Built-in rules flag
         // cross-step contradictions; when the AI is set up it adds an optional
         // AI review (gaps + things to double-check) on the same screen.
-        const SectionLabel('Optional check'),
+        SectionLabel(context.l10n.reviewStepOptionalCheck),
         const SizedBox(height: 8),
         SizedBox(
           width: double.infinity,
@@ -406,15 +411,12 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
             onPressed: () =>
                 context.push(AppRoutes.aiCheckRoute(widget.directiveId)),
             icon: const Icon(Icons.fact_check_outlined, size: 18),
-            label: const Text('Run a consistency check'),
+            label: Text(context.l10n.reviewStepRunConsistencyCheck),
           ),
         ),
         const SizedBox(height: 4),
         Text(
-          'Scans your answers for cross-step contradictions (e.g. an agent-'
-          'consent that conflicts with an avoid list), and — if the AI is set '
-          'up — adds an optional AI review of gaps to double-check. Optional; '
-          'you can sign without it.',
+          context.l10n.reviewStepConsistencyCheckHelp,
           style: TextStyle(
             fontFamily: kSansFamily,
             fontSize: 12,
@@ -428,9 +430,8 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
         // Ready-to-sign call-to-action card (preserved from legacy layout).
         _CalloutCard(
           variant: _CalloutVariant.primary,
-          title: 'Ready to sign?',
-          body: 'Review all sections above. When satisfied, tap '
-              'Preview to continue to signing and dating the directive.',
+          title: context.l10n.reviewStepReadyToSign,
+          body: context.l10n.reviewStepReadyToSignBody,
         ),
         const SizedBox(height: 12),
 
@@ -441,21 +442,17 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
         // against accepted medical practice or when the provider is not
         // physically available. Surfacing this here sets accurate
         // expectations before signing.
-        const _CalloutCard(
+        _CalloutCard(
           variant: _CalloutVariant.surface,
           icon: Icons.info_outline,
           richBody: TextSpan(
             children: [
               TextSpan(
-                text: 'Providers must comply ',
-                style: TextStyle(fontWeight: FontWeight.w600),
+                text: context.l10n.reviewStepProvidersMustComply,
+                style: const TextStyle(fontWeight: FontWeight.w600),
               ),
               TextSpan(
-                text:
-                    'with your directive under PA Act 194 (20 Pa.C.S. §§ 5804, '
-                    '5842). A provider may decline specific instructions only '
-                    'if they conflict with accepted medical practice, or when '
-                    'the provider is not physically available.',
+                text: context.l10n.reviewStepProvidersMustComplyBody,
               ),
             ],
           ),
@@ -498,7 +495,7 @@ class _ReviewRow extends StatelessWidget {
         .map((e) => '${e.key}: ${e.value}')
         .join(', ');
     final a11yLabel = a11yEntries.isEmpty
-        ? '${data.label}. No information entered.'
+        ? context.l10n.reviewStepA11yNoInfo(data.label)
         : '${data.label}. $a11yEntries.';
 
     final content = Semantics(
@@ -547,7 +544,9 @@ class _ReviewRow extends StatelessWidget {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    data.hasContent ? data.summary : 'No information entered',
+                    data.hasContent
+                        ? data.summary(context.l10n)
+                        : context.l10n.reviewStepNoInfoEntered,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(

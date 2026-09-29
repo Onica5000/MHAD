@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mhad/ai/ai_assistant.dart' show AssistantContext;
 import 'package:mhad/ai/ai_context_builder.dart';
 import 'package:mhad/domain/model/directive.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/services/web_session_cache.dart';
 import 'package:mhad/ui/router.dart';
@@ -103,7 +104,7 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
     _lastSavedFlash = now;
     _savedHintTimer?.cancel();
     if (!mounted) return;
-    announce(context, 'Progress saved');
+    announce(context, context.l10n.wizardProgressSaved);
     setState(() => _showSavedHint = true);
     _savedHintTimer = Timer(const Duration(milliseconds: 1800), () {
       if (mounted) setState(() => _showSavedHint = false);
@@ -157,7 +158,7 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
       loading: () => Scaffold(
         body: Center(
           child: Semantics(
-            label: 'Loading',
+            label: context.l10n.wizardLoading,
             child: const CircularProgressIndicator(),
           ),
         ),
@@ -165,7 +166,7 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
       error: (e, _) {
         debugPrint('Error loading directive: $e');
         return Scaffold(
-          appBar: AppBar(title: const Text('Error')),
+          appBar: AppBar(title: Text(context.l10n.wizardError)),
           body: Center(
             child: Padding(
               padding: const EdgeInsets.all(24),
@@ -178,8 +179,8 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                   const SizedBox(height: 16),
                   Semantics(
                     liveRegion: true,
-                    child: const Text(
-                      'Unable to load this directive.',
+                    child: Text(
+                      context.l10n.wizardUnableToLoad,
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -195,12 +196,12 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                         onPressed: () => ref.invalidate(
                             directiveByIdProvider(widget.directiveId)),
                         icon: const Icon(Icons.refresh),
-                        label: const Text('Retry'),
+                        label: Text(context.l10n.retry),
                       ),
                       FilledButton.icon(
                         onPressed: () => context.go(AppRoutes.home),
                         icon: const Icon(Icons.home_outlined),
-                        label: const Text('Back to home'),
+                        label: Text(context.l10n.wizardBackToHome),
                       ),
                     ],
                   ),
@@ -213,8 +214,8 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
       data: (directive) {
         if (directive == null) {
           return Scaffold(
-            appBar: AppBar(title: const Text('Not found')),
-            body: const Center(child: Text('Directive not found.')),
+            appBar: AppBar(title: Text(context.l10n.wizardNotFound)),
+            body: Center(child: Text(context.l10n.wizardDirectiveNotFound)),
           );
         }
 
@@ -288,11 +289,14 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                 MediaQuery.sizeOf(context).width >= kWideLayoutBreakpoint
                     ? null
                     : WizardBottomBar(
-                        primaryLabel: isLastStep ? 'Preview' : 'Continue',
+                        primaryLabel: isLastStep
+                            ? context.l10n.wizardPreview
+                            : context.l10n.wizardContinue,
                         primaryIcon: Icons.arrow_forward,
                         primaryLoading: _isSaving,
                         onPrimary: () => _goNext(context, isLastStep),
-                        secondaryLabel: _stepIndex > 0 ? 'Back' : null,
+                        secondaryLabel:
+                            _stepIndex > 0 ? context.l10n.back : null,
                         onSecondary: _stepIndex > 0 ? _goBack : null,
                         showGradient: false,
                       ),
@@ -379,7 +383,7 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                                           size: 14, color: p.textMuted),
                                       const SizedBox(width: 5),
                                       Text(
-                                        'Saved',
+                                        context.l10n.wizardSaved,
                                         style: TextStyle(
                                           fontSize: 12,
                                           color: p.textMuted,
@@ -433,7 +437,9 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                         currentIndex: _stepIndex,
                         onNext: () => _goNext(context, isLastStep),
                         onBack: _stepIndex > 0 ? _goBack : null,
-                        nextLabel: isLastStep ? 'Preview' :'Next',
+                        nextLabel: isLastStep
+                            ? context.l10n.wizardPreview
+                            : context.l10n.next,
                         nextLoading: _isSaving,
                         onStepTap: _jumpToStep,
                       ),
@@ -572,8 +578,8 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(isPrivate
-                ? 'Some fields are incomplete — you can come back to finish later.'
-                : 'Some fields are incomplete — you can fill them in before you finish.'),
+                ? context.l10n.wizardIncompletePrivate
+                : context.l10n.wizardIncompletePublic),
             duration: const Duration(seconds: 3),
           ),
         );
@@ -656,28 +662,21 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
       builder: (ctx) => AlertDialog(
         icon: Icon(Icons.warning_amber_rounded,
             color: Theme.of(context).colorScheme.error, size: 40),
-        title: const Text('Exit Without Saving?'),
+        title: Text(context.l10n.wizardExitWithoutSaving),
         content: Text(
             kIsWeb
-                ? 'The web app does not save your progress permanently.\n\n'
-                  'If you leave, close the tab, or the app crashes, your work '
-                  'is kept on this device for 10 minutes so you can reopen and '
-                  'recover it — then it’s erased. Export or print your document '
-                  'to keep a copy.'
-                : 'You are in Public Mode — your data is stored in memory '
-                  'only and will be lost when the app closes.\n\n'
-                  'Export or print your document before leaving. '
-                  'To save across sessions, use Private Mode instead.'),
+                ? context.l10n.wizardExitWebBody
+                : context.l10n.wizardExitPublicBody),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Stay'),
+            child: Text(context.l10n.wizardStay),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(ctx, true),
             style: FilledButton.styleFrom(
                 backgroundColor: Theme.of(ctx).colorScheme.error),
-            child: const Text('Exit'),
+            child: Text(context.l10n.wizardExit),
           ),
         ],
       ),
@@ -692,18 +691,16 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Save & Exit'),
-        content: const Text(
-            'Your progress on this step will be saved. '
-            'You can return to continue later.'),
+        title: Text(context.l10n.saveAndExit),
+        content: Text(context.l10n.wizardSaveExitBody),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Cancel'),
+            child: Text(context.l10n.cancel),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Save & Exit'),
+            child: Text(context.l10n.saveAndExit),
           ),
         ],
       ),
@@ -766,7 +763,7 @@ class _WideStepRail extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'YOUR DIRECTIVE',
+              context.l10n.wizardYourDirective,
               style: TextStyle(
                 fontFamily: kMonoFamily,
                 fontFamilyFallback: const [
@@ -835,7 +832,7 @@ class _WideStepRail extends StatelessWidget {
                 child: OutlinedButton.icon(
                   onPressed: onBack,
                   icon: const Icon(Icons.arrow_back, size: 16),
-                  label: const Text('Back'),
+                  label: Text(context.l10n.back),
                   style: OutlinedButton.styleFrom(
                     minimumSize: const Size.fromHeight(44),
                   ),

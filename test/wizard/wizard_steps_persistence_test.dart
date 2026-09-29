@@ -7,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/data/repository/directive_repository.dart';
 import 'package:mhad/domain/model/directive.dart';
+import 'package:mhad/l10n/app_localizations.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/wizard/steps/guardian_nomination_step.dart';
 import 'package:mhad/ui/wizard/steps/personal_info_step.dart';
@@ -55,7 +56,11 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [appDatabaseProvider.overrideWithValue(db)],
-        child: MaterialApp(home: Scaffold(body: step)),
+        child: MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: Scaffold(body: step),
+        ),
       ),
     );
     await settle(tester);
@@ -159,6 +164,8 @@ void main() {
           directiveRepositoryProvider.overrideWithValue(hangingRepo),
         ],
         child: MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           home: Scaffold(
             body: PersonalInfoStep(key: key, directiveId: directiveId),
           ),

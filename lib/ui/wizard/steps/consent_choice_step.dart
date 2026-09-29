@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/constants.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/model/directive.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
@@ -17,19 +18,19 @@ import 'package:mhad/ui/wizard/wizard_mixins.dart';
 /// each) into one widget + three configs. The [read]/[write] callbacks bind
 /// each instance to its own preference column.
 class ConsentChoiceConfig {
-  final String sectionLabel;
-  final String title;
-  final String subtitle;
-  final String helpText;
+  final String Function(AppLocalizations l) sectionLabel;
+  final String Function(AppLocalizations l) title;
+  final String Function(AppLocalizations l) subtitle;
+  final String Function(AppLocalizations l) helpText;
   final String stepId;
-  final String infoBannerText;
-  final String noTitle;
-  final String noDescription;
-  final String yesTitle;
-  final String yesDescription;
-  final String agentTitle;
-  final String agentDescription;
-  final String conditionalHint;
+  final String Function(AppLocalizations l) infoBannerText;
+  final String Function(AppLocalizations l) noTitle;
+  final String Function(AppLocalizations l) noDescription;
+  final String Function(AppLocalizations l) yesTitle;
+  final String Function(AppLocalizations l) yesDescription;
+  final String Function(AppLocalizations l) agentTitle;
+  final String Function(AppLocalizations l) agentDescription;
+  final String Function(AppLocalizations l) conditionalHint;
 
   /// Read this treatment's stored consent string from the prefs row.
   final String Function(DirectivePref pref) read;
@@ -56,79 +57,57 @@ class ConsentChoiceConfig {
   });
 
   static final ConsentChoiceConfig ect = ConsentChoiceConfig(
-    sectionLabel: 'TREATMENT CONSENT',
-    title: 'Electroconvulsive Therapy (ECT)',
-    subtitle:
-        'ECT is a psychiatric treatment in which seizures are electrically '
-        'induced. State your preferences below.',
-    helpText:
-        'ECT can be an effective treatment for severe depression and other '
-        'conditions. Under PA law, you can consent in advance, refuse in '
-        'advance, or set conditions.',
+    sectionLabel: (l) => l.consentChoiceEctSectionLabel,
+    title: (l) => l.consentChoiceEctTitle,
+    subtitle: (l) => l.consentChoiceEctSubtitle,
+    helpText: (l) => l.consentChoiceEctHelpText,
     stepId: 'ect',
-    infoBannerText: 'Under PA Act 194, your agent cannot consent to ECT unless '
-        'you explicitly authorize it here.',
-    noTitle: 'I do not consent to ECT',
-    noDescription: 'ECT must not be performed on me.',
-    yesTitle: 'I consent to ECT',
-    yesDescription: 'My provider may perform ECT if indicated.',
-    agentTitle: 'My agent will decide about ECT',
-    agentDescription:
-        'Authorize your agent to consent to or refuse ECT on your behalf.',
-    conditionalHint:
-        'e.g., only if other treatments have failed and my agent agrees',
+    infoBannerText: (l) => l.consentChoiceEctInfoBannerText,
+    noTitle: (l) => l.consentChoiceEctNoTitle,
+    noDescription: (l) => l.consentChoiceEctNoDescription,
+    yesTitle: (l) => l.consentChoiceEctYesTitle,
+    yesDescription: (l) => l.consentChoiceEctYesDescription,
+    agentTitle: (l) => l.consentChoiceEctAgentTitle,
+    agentDescription: (l) => l.consentChoiceEctAgentDescription,
+    conditionalHint: (l) => l.consentChoiceEctConditionalHint,
     read: (pref) => pref.ectConsent,
     write: (id, value) => DirectivePrefsCompanion(
         directiveId: Value(id), ectConsent: Value(value)),
   );
 
   static final ConsentChoiceConfig experimental = ConsentChoiceConfig(
-    sectionLabel: 'RESEARCH CONSENT',
-    title: 'Experimental Studies',
-    subtitle:
-        'State your preferences regarding participation in experimental '
-        'research during mental health treatment.',
-    helpText:
-        'You have the right to consent to or refuse participation in '
-        'experimental research. Your preferences here will guide your care '
-        'team and agent.',
+    sectionLabel: (l) => l.consentChoiceExperimentalSectionLabel,
+    title: (l) => l.consentChoiceExperimentalTitle,
+    subtitle: (l) => l.consentChoiceExperimentalSubtitle,
+    helpText: (l) => l.consentChoiceExperimentalHelpText,
     stepId: 'experimentalStudies',
-    infoBannerText: 'Under PA Act 194, your agent cannot consent to '
-        'experimental research unless you explicitly authorize it here.',
-    noTitle: 'I do not consent',
-    noDescription: 'I refuse participation in experimental studies.',
-    yesTitle: 'I consent to experimental studies',
-    yesDescription:
-        'I am willing to participate in research studies during treatment.',
-    agentTitle: 'My agent will decide',
-    agentDescription:
-        'Authorize your agent to consent or refuse on your behalf.',
-    conditionalHint: 'e.g., only non-invasive studies approved by my agent',
+    infoBannerText: (l) => l.consentChoiceExperimentalInfoBannerText,
+    noTitle: (l) => l.consentChoiceNoConsentTitle,
+    noDescription: (l) => l.consentChoiceExperimentalNoDescription,
+    yesTitle: (l) => l.consentChoiceExperimentalYesTitle,
+    yesDescription: (l) => l.consentChoiceExperimentalYesDescription,
+    agentTitle: (l) => l.consentChoiceAgentDecidesTitle,
+    agentDescription: (l) => l.consentChoiceAgentDecidesDescription,
+    conditionalHint: (l) => l.consentChoiceExperimentalConditionalHint,
     read: (pref) => pref.experimentalConsent,
     write: (id, value) => DirectivePrefsCompanion(
         directiveId: Value(id), experimentalConsent: Value(value)),
   );
 
   static final ConsentChoiceConfig drugTrials = ConsentChoiceConfig(
-    sectionLabel: 'CLINICAL TRIALS',
-    title: 'Drug Trials',
-    subtitle:
-        'State your preferences regarding participation in clinical drug '
-        'trials during mental health treatment.',
-    helpText:
-        'Clinical drug trials test new medications. You can consent, refuse, '
-        'or set conditions for your participation.',
+    sectionLabel: (l) => l.consentChoiceDrugTrialsSectionLabel,
+    title: (l) => l.consentChoiceDrugTrialsTitle,
+    subtitle: (l) => l.consentChoiceDrugTrialsSubtitle,
+    helpText: (l) => l.consentChoiceDrugTrialsHelpText,
     stepId: 'drugTrials',
-    infoBannerText: 'Under PA Act 194, your agent cannot consent to drug '
-        'trials unless you explicitly authorize it here.',
-    noTitle: 'I do not consent',
-    noDescription: 'I refuse participation in drug trials.',
-    yesTitle: 'I consent to drug trials',
-    yesDescription: 'I am willing to participate in clinical drug trials.',
-    agentTitle: 'My agent will decide',
-    agentDescription:
-        'Authorize your agent to consent or refuse on your behalf.',
-    conditionalHint: 'e.g., only trials with an independent safety monitor',
+    infoBannerText: (l) => l.consentChoiceDrugTrialsInfoBannerText,
+    noTitle: (l) => l.consentChoiceNoConsentTitle,
+    noDescription: (l) => l.consentChoiceDrugTrialsNoDescription,
+    yesTitle: (l) => l.consentChoiceDrugTrialsYesTitle,
+    yesDescription: (l) => l.consentChoiceDrugTrialsYesDescription,
+    agentTitle: (l) => l.consentChoiceAgentDecidesTitle,
+    agentDescription: (l) => l.consentChoiceAgentDecidesDescription,
+    conditionalHint: (l) => l.consentChoiceDrugTrialsConditionalHint,
     read: (pref) => pref.drugTrialConsent,
     write: (id, value) => DirectivePrefsCompanion(
         directiveId: Value(id), drugTrialConsent: Value(value)),
@@ -227,6 +206,7 @@ class _ConsentChoiceStepState extends ConsumerState<ConsentChoiceStep>
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
     final c = widget.config;
+    final l = context.l10n;
 
     return Form(
       key: _formKey,
@@ -238,12 +218,12 @@ class _ConsentChoiceStepState extends ConsumerState<ConsentChoiceStep>
             ? const EdgeInsets.symmetric(horizontal: 4)
             : const EdgeInsets.fromLTRB(20, 16, 20, 24),
         children: [
-          SectionLabel(c.sectionLabel),
+          SectionLabel(c.sectionLabel(l)),
           const SizedBox(height: 6),
-          Text(c.title, style: Theme.of(context).textTheme.headlineSmall),
+          Text(c.title(l), style: Theme.of(context).textTheme.headlineSmall),
           const SizedBox(height: 6),
           Text(
-            c.subtitle,
+            c.subtitle(l),
             style: TextStyle(
               fontFamily: kSansFamily,
               fontSize: 13,
@@ -255,29 +235,29 @@ class _ConsentChoiceStepState extends ConsumerState<ConsentChoiceStep>
           InfoBanner(
             icon: Icons.gavel_outlined,
             variant: InfoBannerVariant.warning,
-            text: c.infoBannerText,
+            text: c.infoBannerText(l),
           ),
           const SizedBox(height: 8),
-          WizardHelpButton(helpText: c.helpText, stepId: c.stepId),
+          WizardHelpButton(helpText: c.helpText(l), stepId: c.stepId),
           const SizedBox(height: 16),
           ConsentOptionTile(
             icon: Icons.block,
-            title: c.noTitle,
-            description: c.noDescription,
+            title: c.noTitle(l),
+            description: c.noDescription(l),
             selected: _consent == ConsentOption.no,
             onTap: () => setState(() => _consent = ConsentOption.no),
           ),
           ConsentOptionTile(
             icon: Icons.check_circle_outline,
-            title: c.yesTitle,
-            description: c.yesDescription,
+            title: c.yesTitle(l),
+            description: c.yesDescription(l),
             selected: _consent == ConsentOption.yes,
             onTap: () => setState(() => _consent = ConsentOption.yes),
           ),
           ConsentOptionTile(
             icon: Icons.rule,
-            title: 'I consent under specific conditions',
-            description: 'Describe the conditions in the box below.',
+            title: l.consentChoiceConditionalTitle,
+            description: l.consentChoiceConditionalDescription,
             selected: _consent == ConsentOption.conditional,
             onTap: () =>
                 setState(() => _consent = ConsentOption.conditional),
@@ -285,8 +265,8 @@ class _ConsentChoiceStepState extends ConsumerState<ConsentChoiceStep>
           if (_hasAgentSections)
             ConsentOptionTile(
               icon: Icons.person_outline,
-              title: c.agentTitle,
-              description: c.agentDescription,
+              title: c.agentTitle(l),
+              description: c.agentDescription(l),
               selected: _consent == ConsentOption.agentDecides,
               onTap: () =>
                   setState(() => _consent = ConsentOption.agentDecides),
@@ -297,11 +277,11 @@ class _ConsentChoiceStepState extends ConsumerState<ConsentChoiceStep>
               controller: _conditionsCtrl,
               maxLines: 3,
               decoration: InputDecoration(
-                labelText: 'Conditions',
-                hintText: c.conditionalHint,
+                labelText: l.consentChoiceConditionsLabel,
+                hintText: c.conditionalHint(l),
               ),
               validator: (v) =>
-                  (v == null || v.trim().isEmpty) ? 'Required' : null,
+                  (v == null || v.trim().isEmpty) ? l.required : null,
             ),
           ],
         ],

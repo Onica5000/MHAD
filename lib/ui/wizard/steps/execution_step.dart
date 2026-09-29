@@ -2,6 +2,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/domain/model/directive.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
@@ -83,24 +84,19 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
           ? const EdgeInsets.symmetric(horizontal: 4)
           : const EdgeInsets.fromLTRB(20, 8, 20, 32),
       children: [
-        const WizardHelpButton(
-          helpText:
-              'Per 20 Pa.C.S. § 5822 / § 5832, a Mental Health Advance '
-              'Directive must be signed on paper by you and two adult '
-              'witnesses, all present at the same time. The app cannot '
-              "witness it for you — this step walks you through what to do.",
+        WizardHelpButton(
+          helpText: context.l10n.executionHelpText,
           stepId: 'execution',
         ),
         const SizedBox(height: 8),
-        const SectionLabel('Final step · on paper'),
-        const EditorialHeading(
-          text: 'Make it legal — with a pen.',
+        SectionLabel(context.l10n.executionFinalStepLabel),
+        EditorialHeading(
+          text: context.l10n.executionHeading,
           size: 32,
         ),
         const SizedBox(height: 6),
         Text(
-          "Pennsylvania law requires a real signature on paper. We can't "
-          "witness it for you — but here's exactly what to do.",
+          context.l10n.executionIntro,
           style: TextStyle(
             fontFamily: kSansFamily,
             fontSize: 14,
@@ -133,27 +129,21 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
                     ),
                     children: [
                       TextSpan(
-                        text: 'Why not sign in the app? ',
+                        text: context.l10n.executionWhyNotAppLead,
                         style: TextStyle(
                           color: p.text,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
-                      const TextSpan(
-                          text:
-                              'Under Act 194 the directive is only valid '
-                              'when you and two adult witnesses sign '
-                              'the '),
+                      TextSpan(text: context.l10n.executionWhyNotAppBody),
                       TextSpan(
-                        text: 'same paper document',
+                        text: context.l10n.executionSamePaperDocument,
                         style: TextStyle(
                           color: p.text,
                           fontStyle: FontStyle.italic,
                         ),
                       ),
-                      const TextSpan(
-                          text:
-                              ", together. A tap-to-sign wouldn't hold up."),
+                      TextSpan(text: context.l10n.executionWhyNotAppTail),
                     ],
                   ),
                 ),
@@ -165,11 +155,7 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
         // A3 / F19: reassure that any correctly-executed document is valid —
         // the PA forms are recommended, not mandatory; content controls.
         Text(
-          'You don’t have to use a specific form. Pennsylvania’s '
-          'official forms are recommended, not required — what makes your '
-          'directive valid is its content and being signed and witnessed '
-          'correctly. If a facility hands you a different form, this one '
-          'still counts.',
+          context.l10n.executionAnyFormValid,
           style: TextStyle(
             fontFamily: kSansFamily,
             fontSize: 12,
@@ -178,23 +164,20 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
           ),
         ),
         const SizedBox(height: 22),
-        const _SignStep(
+        _SignStep(
           n: 1,
-          title: 'Print the packet',
-          body: 'Print the PDF we just made. It already has signature '
-              'lines for you and two witnesses.',
+          title: context.l10n.executionStep1Title,
+          body: context.l10n.executionStep1Body,
         ),
-        const _SignStep(
+        _SignStep(
           n: 2,
-          title: 'Gather two adult witnesses',
-          body: 'Both must be 18 or older and in the room with you when '
-              'you sign. (Who can’t witness is below.)',
+          title: context.l10n.executionStep2Title,
+          body: context.l10n.executionStep2Body,
         ),
-        const _SignStep(
+        _SignStep(
           n: 3,
-          title: 'Everyone signs, same place, same time',
-          body: 'Sign and date the witness page in front of both '
-              'witnesses. They sign right after you, while you watch.',
+          title: context.l10n.executionStep3Title,
+          body: context.l10n.executionStep3Body,
           last: true,
         ),
         const SizedBox(height: 8),
@@ -222,17 +205,13 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
                       height: 1.45,
                     ),
                     children: [
-                      const TextSpan(text: 'A witness '),
-                      const TextSpan(
-                        text: 'cannot',
-                        style: TextStyle(fontWeight: FontWeight.w700),
+                      TextSpan(text: context.l10n.executionWitnessLead),
+                      TextSpan(
+                        text: context.l10n.executionWitnessCannot,
+                        style: const TextStyle(fontWeight: FontWeight.w700),
                       ),
-                      const TextSpan(
-                        text: ' be your agent or alternate agent, your mental '
-                            'health care provider, or an employee of the '
-                            'facility where you receive treatment — unless '
-                            'they are related to you by blood, marriage, or '
-                            'adoption.',
+                      TextSpan(
+                        text: context.l10n.executionWitnessRest,
                       ),
                     ],
                   ),
@@ -242,30 +221,30 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
           ),
         ),
         const SizedBox(height: 18),
-        const SectionLabel('In your packet'),
+        SectionLabel(context.l10n.executionInYourPacket),
         const SizedBox(height: 8),
-        const _PacketRow(
+        _PacketRow(
           icon: Icons.description_outlined,
-          title: 'Your completed MHAD',
-          sub: 'PDF · PA Act 194 format',
+          title: context.l10n.executionPacketMhadTitle,
+          sub: context.l10n.executionPacketMhadSub,
         ),
         const SizedBox(height: 8),
-        const _PacketRow(
+        _PacketRow(
           icon: Icons.draw_outlined,
-          title: 'Signature & witness page',
-          sub: 'Pre-filled with your name and the date lines',
+          title: context.l10n.executionPacketSignatureTitle,
+          sub: context.l10n.executionPacketSignatureSub,
         ),
         const SizedBox(height: 8),
-        const _PacketRow(
+        _PacketRow(
           icon: Icons.people_outlined,
-          title: 'Witness eligibility guide',
-          sub: "One page — who can and can't sign",
+          title: context.l10n.executionPacketWitnessTitle,
+          sub: context.l10n.executionPacketWitnessSub,
         ),
         const SizedBox(height: 8),
-        const _PacketRow(
+        _PacketRow(
           icon: Icons.checklist_outlined,
-          title: 'What to do after signing',
-          sub: 'Who to give copies to, how to distribute',
+          title: context.l10n.executionPacketAfterTitle,
+          sub: context.l10n.executionPacketAfterSub,
         ),
         const SizedBox(height: 22),
         SizedBox(
@@ -274,7 +253,7 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
             onPressed: () =>
                 context.push(AppRoutes.exportRoute(widget.directiveId)),
             icon: const Icon(Icons.visibility_outlined, size: 18),
-            label: const Text('Preview & open packet'),
+            label: Text(context.l10n.executionPreviewPacket),
             style: FilledButton.styleFrom(
               minimumSize:
                   const Size.fromHeight(DesignTokens.buttonHeightLg),
@@ -294,8 +273,7 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
         // plus two qualified witnesses.
         Center(
           child: Text(
-            'NOT YET VALID · BECOMES LEGAL ONCE SIGNED ON PAPER '
-            'BY YOU + 2 WITNESSES',
+            context.l10n.executionNotYetValid,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontFamily: kMonoFamily,

@@ -7,6 +7,7 @@ import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/data/repository/directive_repository.dart';
 import 'package:mhad/domain/model/directive.dart';
+import 'package:mhad/l10n/app_localizations.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/wizard/steps/allergies_step.dart';
 import 'package:mhad/ui/wizard/steps/procedures_research_step.dart';
@@ -48,7 +49,11 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [appDatabaseProvider.overrideWithValue(db)],
-        child: MaterialApp(home: Scaffold(body: step)),
+        child: MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: Scaffold(body: step),
+        ),
       ),
     );
     await settle(tester);

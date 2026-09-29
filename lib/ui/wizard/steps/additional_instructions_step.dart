@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:drift/drift.dart' show Value;
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/data/database/app_database.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
@@ -228,7 +229,10 @@ class _AdditionalInstructionsStepState
 
   static int get _maxFieldLength => appData.config.textFieldMaxChars;
 
+  // [aiName] is the English field name sent to the AI (kept unlocalized);
+  // [title] is the localized display label.
   Widget _buildSection(
+      String aiName,
       String title,
       TextEditingController ctrl,
       String hint,
@@ -266,7 +270,7 @@ class _AdditionalInstructionsStepState
                   AiSuggestButton(
                     controller: ctrl,
                     directiveId: widget.directiveId,
-                    fieldName: title,
+                    fieldName: aiName,
                     fieldGuidance: guidance,
                   ),
                 ],
@@ -281,6 +285,7 @@ class _AdditionalInstructionsStepState
   // A single structured records-field (release / withhold / other) used inside
   // the Records Disclosure section. Mirrors _buildSection's input styling.
   Widget _recordsField({
+    required String aiName,
     required String label,
     required TextEditingController ctrl,
     required String hint,
@@ -304,7 +309,7 @@ class _AdditionalInstructionsStepState
               AiSuggestButton(
                 controller: ctrl,
                 directiveId: widget.directiveId,
-                fieldName: label,
+                fieldName: aiName,
                 fieldGuidance: guidance,
               ),
             ],
@@ -320,16 +325,12 @@ class _AdditionalInstructionsStepState
   Widget _buildRecordsDisclosureSection() {
     final cs = Theme.of(context).colorScheme;
     return ExpansionTile(
-      title: const Text('Records Disclosure & Limitations'),
+      title: Text(context.l10n.addlInstrRecordsTitle),
       children: [
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
           child: Text(
-            'Choose who may — and may not — receive copies of your mental '
-            'health records. Under 20 Pa.C.S. § 5836(e), the disclosure '
-            'authority you grant here can override certain confidentiality '
-            'protections (including drug & alcohol, mental-health-procedures, '
-            'and HIV confidentiality laws), so be specific.',
+            context.l10n.addlInstrRecordsDescription,
             style: TextStyle(
               fontSize: 12,
               color: cs.onSurfaceVariant,
@@ -338,25 +339,28 @@ class _AdditionalInstructionsStepState
           ),
         ),
         _recordsField(
-          label: 'Who may receive my records',
+          aiName: 'Who may receive my records',
+          label: context.l10n.addlInstrRecordsReleaseLabel,
           ctrl: _recordsReleaseCtrl,
-          hint: 'e.g. my agent Jane Doe; my treatment team; Dr. Smith',
+          hint: context.l10n.addlInstrRecordsReleaseHint,
           guidance:
               'individuals or organizations the person authorizes to receive '
               'copies of their mental health treatment records',
         ),
         _recordsField(
-          label: 'Who must NOT receive my records',
+          aiName: 'Who must NOT receive my records',
+          label: context.l10n.addlInstrRecordsWithholdLabel,
           ctrl: _recordsWithholdCtrl,
-          hint: 'e.g. my ex-spouse; specific family members',
+          hint: context.l10n.addlInstrRecordsWithholdHint,
           guidance:
               'individuals or organizations the person wants excluded from '
               'receiving any of their mental health treatment records',
         ),
         _recordsField(
-          label: 'Other limitations on disclosure',
+          aiName: 'Other limitations on disclosure',
+          label: context.l10n.addlInstrRecordsOtherLabel,
           ctrl: _recordsOtherCtrl,
-          hint: 'e.g. release only records from the last 12 months',
+          hint: context.l10n.addlInstrRecordsOtherHint,
           guidance:
               'any other limits on how, when, or which mental health records '
               'may be disclosed',
@@ -367,9 +371,8 @@ class _AdditionalInstructionsStepState
 
   @override
   Widget build(BuildContext context) {
-    const helpText =
-        'These sections are all optional. Use them to give guidance to your '
-        'agent and treatment team beyond the basic preferences above.';
+    final l10n = context.l10n;
+    final helpText = l10n.addlInstrHelpText;
 
     return Form(
       key: _formKey,
@@ -377,181 +380,139 @@ class _AdditionalInstructionsStepState
         padding: const EdgeInsets.all(20),
         children: [
           WizardHelpButton(helpText: helpText, stepId: 'additionalInstructions'),
-          const ExampleTextButton(
-            fieldName: 'Additional Instructions',
+          ExampleTextButton(
+            fieldName: l10n.addlInstrExampleFieldName,
             examples: [
-              'I find listening to calming music and going for walks '
-              'helpful during periods of distress. Please allow me access '
-              'to my personal music player.',
-              'I am vegetarian for religious reasons. Please ensure my dietary '
-              'needs are respected during any inpatient stay. I would also '
-              'like access to a chaplain or spiritual advisor.',
-              'Please notify my sister, Jane Doe, if I am admitted. Do not '
-              'contact my ex-spouse under any circumstances. My therapist, '
-              'Dr. Smith, should be informed of any treatment changes.',
+              l10n.addlInstrExample1,
+              l10n.addlInstrExample2,
+              l10n.addlInstrExample3,
             ],
           ),
           const SizedBox(height: 8),
           _buildSection(
             'Activities & Environment',
+            l10n.addlInstrActivitiesTitle,
             _activitiesCtrl,
-            'Preferences about daily activities, environment, restraints, seclusion',
+            l10n.addlInstrActivitiesHint,
             'preferences about daily activities, physical environment, use of restraints or seclusion during treatment',
-            'Describe activities that help you feel better (e.g., walking, '
-            'reading, music) and your preferences about your physical '
-            'environment during treatment. You can also state whether you '
-            'consent to or refuse the use of restraints (being physically held '
-            'or strapped down, or given medication to restrict your movement '
-            'or behavior — a "chemical restraint") or seclusion (being '
-            'confined alone in a room).',
+            l10n.addlInstrActivitiesDescription,
           ),
           _buildSection(
             'Crisis Intervention',
+            l10n.addlInstrCrisisTitle,
             _crisisCtrl,
-            'What helps or doesn\'t help during a crisis',
+            l10n.addlInstrCrisisHint,
             'specific things that help or make things worse during a mental health crisis, based on past experience',
-            'Based on your past experience, describe what helps you during '
-            'a mental health crisis and what makes things worse. This helps '
-            'your treatment team respond in the way that works best for you.',
+            l10n.addlInstrCrisisDescription,
           ),
           _buildSection(
             'De-escalation Techniques',
+            l10n.addlInstrDeescTitle,
             _deescalationCtrl,
-            'e.g., music, deep breathing, quiet room, weighted blanket',
+            l10n.addlInstrDeescHint,
             'techniques and strategies that calm you during distress — '
             'for example, listening to music, going for a walk, deep '
             'breathing, speaking with a specific person, being in a '
             'quiet room, or using a weighted blanket',
-            'List specific techniques or strategies that help calm you '
-            'when you are distressed. Examples include listening to music, '
-            'deep breathing, being in a quiet room, using a weighted '
-            'blanket, speaking with a specific person, or going for a walk.',
+            l10n.addlInstrDeescDescription,
           ),
           _buildSection(
             'Potential Crisis Triggers',
+            l10n.addlInstrTriggersTitle,
             _triggersCtrl,
-            'e.g., loud environments, specific topics, being alone',
+            l10n.addlInstrTriggersHint,
             'situations or stimuli that may worsen a crisis — for example, '
             'loud environments, specific conversation topics, being touched '
             'without permission, being alone, or certain people or settings',
-            'Identify situations, environments, or topics that may trigger '
-            'or worsen a crisis for you. This helps your treatment team '
-            'avoid these triggers. Examples: loud environments, being '
-            'touched without permission, certain conversation topics, '
-            'being left alone, or specific people.',
+            l10n.addlInstrTriggersDescription,
           ),
           _buildSection(
             'Health History',
+            l10n.addlInstrHealthHistoryTitle,
             _healthHistoryCtrl,
-            'Relevant mental health history, diagnoses, hospitalizations',
+            l10n.addlInstrHealthHistoryHint,
             'relevant mental health history including diagnoses, past hospitalizations, and treatments that did or did not work',
-            'Summarize your relevant mental health history, including '
-            'past diagnoses, hospitalizations, and treatments that worked '
-            'well or did not work. This gives your treatment team context '
-            'about your care history.',
+            l10n.addlInstrHealthHistoryDescription,
           ),
           _buildSection(
             'Dietary Preferences',
+            l10n.addlInstrDietaryTitle,
             _dietaryCtrl,
-            'Food restrictions, preferences, religious dietary laws',
+            l10n.addlInstrDietaryHint,
             'dietary restrictions, food allergies, religious dietary requirements, and food preferences',
-            'List any food allergies, dietary restrictions, or preferences '
-            'your treatment team should know about. This includes religious '
-            'dietary laws (e.g., kosher, halal, vegetarian), food '
-            'intolerances, and any foods to avoid due to medication '
-            'interactions.',
+            l10n.addlInstrDietaryDescription,
           ),
           _buildSection(
             'Religious & Spiritual',
+            l10n.addlInstrReligiousTitle,
             _religiousCtrl,
-            'Religious practices, spiritual needs, clergy contact',
+            l10n.addlInstrReligiousHint,
             'religious affiliation, spiritual practices, need for chaplain or clergy access during treatment',
-            'Describe any religious or spiritual practices that are '
-            'important to you during treatment. This may include prayer '
-            'times, clergy or chaplain visits, religious texts or items '
-            'you would like to have access to, fasting observances, or '
-            'faith-based coping practices.',
+            l10n.addlInstrReligiousDescription,
           ),
           _buildSection(
             'Children & Custody',
+            l10n.addlInstrChildrenTitle,
             _childrenCustodyCtrl,
-            'Instructions regarding care of your minor children',
+            l10n.addlInstrChildrenHint,
             'instructions for the care and custody of minor children if you are hospitalized',
-            'If you have minor children or dependents, describe who should '
-            'care for them if you are hospitalized. Include contact '
-            'information for caregivers, school details, and any custody '
-            'arrangements your treatment team should be aware of.',
+            l10n.addlInstrChildrenDescription,
           ),
           _buildSection(
             'Family Notification',
+            l10n.addlInstrFamilyNotifyTitle,
             _familyNotificationCtrl,
-            'Who should be notified and how',
+            l10n.addlInstrFamilyNotifyHint,
             'who should be notified of your hospitalization, how to contact them, and what information may be shared',
-            'Specify who should be notified if you are hospitalized or if '
-            'your treatment changes. Include how to reach them and what '
-            'information may be shared. You can also specify people who '
-            'should NOT be contacted.',
+            l10n.addlInstrFamilyNotifyDescription,
           ),
           _buildRecordsDisclosureSection(),
           _buildSection(
             'Pet Care',
+            l10n.addlInstrPetCareTitle,
             _petCustodyCtrl,
-            'Instructions for care of your pets',
+            l10n.addlInstrPetCareHint,
             'instructions for care and custody of pets if you are hospitalized',
-            'If you have pets, describe who should care for them if you '
-            'are hospitalized. Include the caregiver\'s contact information, '
-            'feeding and medication schedules, veterinary contacts, and any '
-            'special care instructions.',
+            l10n.addlInstrPetCareDescription,
           ),
           _buildSection(
             'Reproductive Health Care',
+            l10n.addlInstrReproTitle,
             _reproductiveCtrl,
-            'Pregnancy testing, contraception, etc.',
+            l10n.addlInstrReproHint,
             'reproductive health care preferences during a mental health '
             'crisis — for example, pregnancy testing before medication '
             'changes, contraception preferences, or reproductive health '
             'conditions your treatment team should be aware of',
-            'Describe any reproductive health care preferences your '
-            'treatment team should know about. This may include whether '
-            'you want pregnancy testing before medication changes, '
-            'contraception preferences, or reproductive health conditions '
-            'that could affect your treatment.',
+            l10n.addlInstrReproDescription,
           ),
           _buildSection(
             'Other Instructions',
+            l10n.addlInstrOtherTitle,
             _otherCtrl,
-            'Any other instructions not covered above',
+            l10n.addlInstrOtherHint,
             'any additional instructions for your treatment team or agent not addressed in the sections above',
-            'Use this section for any instructions to your treatment team '
-            'or agent that are not covered by the sections above. This is '
-            'a catch-all for anything else you want to communicate about '
-            'your care preferences.',
+            l10n.addlInstrOtherDescription,
           ),
 
           // Optional add-ons, moved here from Settings (2026-06-13). Each opens
           // its own full screen, which keeps the complete explanation; these
           // cards just carry a short summary and the entry point.
           const SizedBox(height: 8),
-          const SectionLabel('Optional add-ons'),
+          SectionLabel(l10n.addlInstrOptionalAddOns),
           const SizedBox(height: 8),
           _addOnCard(
             icon: Icons.favorite_outline,
-            title: 'Crisis plan',
-            subtitle:
-                'Your early-warning signs, triggers, what genuinely helps, and '
-                "what not to do. Not required by Act 194 — but it's the part "
-                'agents and ER staff read first.',
+            title: l10n.addlInstrCrisisPlanTitle,
+            subtitle: l10n.addlInstrCrisisPlanSubtitle,
             onTap: () =>
                 context.push(AppRoutes.crisisPlanRoute(widget.directiveId)),
           ),
           const SizedBox(height: 8),
           _addOnCard(
             icon: Icons.anchor_outlined,
-            title: 'Self-binding (Ulysses) clause',
-            subtitle:
-                'Acknowledge that, once two professionals find you incapable, '
-                'what you wrote stands even over your in-the-moment protest, '
-                'until capacity returns (20 Pa.C.S. §§ 5824, 5834).',
+            title: l10n.addlInstrUlyssesTitle,
+            subtitle: l10n.addlInstrUlyssesSubtitle,
             onTap: () =>
                 context.push(AppRoutes.ulyssesRoute(widget.directiveId)),
           ),
