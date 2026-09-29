@@ -41,7 +41,7 @@ class _ProceduresResearchStepState
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
     return ListView(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+      padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
       children: [
         const SectionLabel('Electroconvulsive therapy (ECT)'),
         const SizedBox(height: 4),
@@ -134,7 +134,7 @@ class _NeverAuthorizedCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: bg,
         border: Border.all(color: border),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -161,7 +161,7 @@ class _NeverAuthorizedCard extends StatelessWidget {
             'this document and no decision by your agent can authorize them:',
             style: TextStyle(
               fontFamily: kSansFamily,
-              fontSize: 12.5,
+              fontSize: 13,
               color: fg,
               height: 1.45,
             ),

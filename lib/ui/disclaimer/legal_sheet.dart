@@ -31,7 +31,7 @@ class _ReadOnlyAccordionState extends State<ReadOnlyAccordion> {
       appBar: AppBar(title: const Text('Legal Disclaimer')),
       body: SafeArea(
         child: ListView(
-          padding: const EdgeInsets.fromLTRB(22, 16, 22, 24),
+          padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
           children: [
             Text(
               'Full legal disclosure',
@@ -98,11 +98,11 @@ class _FullLegalSheetState extends State<FullLegalSheet> {
           height: 4,
           decoration: BoxDecoration(
             color: p.border,
-            borderRadius: BorderRadius.circular(100),
+            borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
           ),
         ),
         Padding(
-          padding: const EdgeInsets.fromLTRB(22, 4, 22, 10),
+          padding: const EdgeInsets.fromLTRB(20, 4, 20, 10),
           child: Row(
             children: [
               Expanded(
@@ -127,7 +127,7 @@ class _FullLegalSheetState extends State<FullLegalSheet> {
         Expanded(
           child: ListView(
             controller: widget.scrollController,
-            padding: const EdgeInsets.fromLTRB(22, 0, 22, 24),
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
             children: [
               for (int i = 0; i < sections.length; i++) ...[
                 _AccordionSection(
@@ -454,7 +454,7 @@ class _Para extends StatelessWidget {
         ),
         style: TextStyle(
           fontFamily: kSansFamily,
-          fontSize: 13.5,
+          fontSize: 14,
           color: palette.textMuted,
           height: 1.55,
         ),
@@ -495,7 +495,7 @@ class _Bullet extends StatelessWidget {
               ),
               style: TextStyle(
                 fontFamily: kSansFamily,
-                fontSize: 13.5,
+                fontSize: 14,
                 color: palette.textMuted,
                 height: 1.55,
               ),
@@ -555,7 +555,7 @@ class _Resource extends StatelessWidget {
           ),
           style: const TextStyle(
             fontFamily: kSansFamily,
-            fontSize: 13.5,
+            fontSize: 14,
             height: 1.45,
           ),
         ),
@@ -607,7 +607,7 @@ class _AccordionSection extends StatelessWidget {
               ? p.primary.withValues(alpha: 0.25)
               : p.border,
         ),
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(DesignTokens.buttonRadius),
       ),
       clipBehavior: Clip.antiAlias,
       child: Column(

@@ -1,6 +1,8 @@
 ﻿import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/design_card.dart';
+import 'package:mhad/ui/widgets/design/status_views.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/data/database/app_database.dart';
@@ -47,7 +49,7 @@ class PastDirectiveDetailScreen extends ConsumerWidget {
           ),
           Expanded(
             child: directiveAsync.when(
-              loading: () => const Center(child: CircularProgressIndicator()),
+              loading: () => const PageLoading(label: 'Loading this directive'),
               error: (e, _) => Center(child: Text('Unable to load: $e')),
               data: (d) {
                 if (d == null) {
@@ -142,7 +144,7 @@ class _Body extends ConsumerWidget {
           ].join(' · '),
           style: TextStyle(
             fontFamily: kSansFamily,
-            fontSize: 13.5,
+            fontSize: 14,
             color: p.textMuted,
           ),
         ),
@@ -298,13 +300,8 @@ class _DocPreviewCard extends ConsumerWidget {
           return '${parts.first[0]}. ${parts.last}';
         }
 
-        return Container(
+        return DesignCard(
           padding: const EdgeInsets.all(14),
-          decoration: BoxDecoration(
-            color: p.card,
-            border: Border.all(color: p.border),
-            borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
-          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -321,7 +318,7 @@ class _DocPreviewCard extends ConsumerWidget {
                           filename,
                           style: TextStyle(
                             fontFamily: kSansFamily,
-                            fontSize: 13.5,
+                            fontSize: 14,
                             fontWeight: FontWeight.w600,
                             color: p.text,
                           ),
@@ -332,7 +329,7 @@ class _DocPreviewCard extends ConsumerWidget {
                           'Generated on demand · ~6 pages',
                           style: TextStyle(
                             fontFamily: kSansFamily,
-                            fontSize: 11.5,
+                            fontSize: 12,
                             color: p.textMuted,
                           ),
                         ),
@@ -398,7 +395,7 @@ class _SigCol extends StatelessWidget {
               'Courier New',
               'monospace',
             ],
-            fontSize: 10,
+            fontSize: 11,
             letterSpacing: 0.4,
             color: p.textMuted,
           ),

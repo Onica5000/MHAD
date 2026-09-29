@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/ai/ai_clinical_policy.dart';
 import 'package:mhad/data/app_data/app_data.dart';
@@ -265,7 +266,7 @@ class _TriggerTile extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 8),
       child: InkWell(
         onTap: () => onChanged(!value),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
         child: Container(
           padding: const EdgeInsets.fromLTRB(12, 10, 14, 10),
           decoration: BoxDecoration(
@@ -274,7 +275,7 @@ class _TriggerTile extends StatelessWidget {
               color: value ? cs.primary : theme.dividerColor,
               width: value ? 1.5 : 1,
             ),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,

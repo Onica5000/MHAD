@@ -138,7 +138,7 @@ class _AnonBanner extends StatelessWidget {
       decoration: BoxDecoration(
         color: p.primaryTint,
         border: Border.all(color: p.primaryLight),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
       ),
       child: Row(
         children: [
@@ -147,7 +147,7 @@ class _AnonBanner extends StatelessWidget {
             height: 32,
             decoration: BoxDecoration(
               color: p.primary,
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
             ),
             child: Icon(Icons.lock_outline, size: 16, color: p.onPrimary),
           ),
@@ -185,7 +185,7 @@ class _AnonBanner extends StatelessWidget {
           // model in full.
           InkWell(
             onTap: () => context.push(AppRoutes.privacyPolicy),
-            borderRadius: BorderRadius.circular(6),
+            borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
               child: Text(
@@ -198,7 +198,7 @@ class _AnonBanner extends StatelessWidget {
                     'Courier New',
                     'monospace',
                   ],
-                  fontSize: 10,
+                  fontSize: 11,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 0.6,
                   color: p.primary,
@@ -232,15 +232,15 @@ class _ToolCard extends StatelessWidget {
     final p = Theme.of(context).mhadPalette;
     return Material(
       color: p.card,
-      borderRadius: BorderRadius.circular(14),
+      borderRadius: BorderRadius.circular(DesignTokens.buttonRadius),
       child: InkWell(
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(DesignTokens.buttonRadius),
         onTap: onTap,
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             border: Border.all(color: p.border),
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(DesignTokens.buttonRadius),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -250,7 +250,7 @@ class _ToolCard extends StatelessWidget {
                 height: 34,
                 decoration: BoxDecoration(
                   color: p.primaryTint,
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
                 ),
                 child: Icon(icon, size: 18, color: p.primary),
               ),
@@ -309,7 +309,7 @@ class _PrivacyPromiseCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: p.card,
         border: Border.all(color: p.border),
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(DesignTokens.buttonRadius),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -358,7 +358,7 @@ class _PromiseItem extends StatelessWidget {
           height: 26,
           decoration: BoxDecoration(
             color: p.primaryTint,
-            borderRadius: BorderRadius.circular(6),
+            borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
           ),
           child: Icon(icon, size: 14, color: p.primary),
         ),
@@ -412,7 +412,7 @@ class _BookletQuoteCard extends StatelessWidget {
           decoration: BoxDecoration(
             color: p.primaryTint,
             border: Border.all(color: p.primaryLight),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -434,7 +434,7 @@ class _BookletQuoteCard extends StatelessWidget {
                 '— PA MHAD booklet · Office of Mental Health',
                 style: TextStyle(
                   fontFamily: kSansFamily,
-                  fontSize: 11.5,
+                  fontSize: 12,
                   letterSpacing: 0.3,
                   color: p.textMuted,
                 ),

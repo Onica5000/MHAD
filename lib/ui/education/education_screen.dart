@@ -136,7 +136,7 @@ class _EditorialLearnHub extends StatelessWidget {
     final grid = _gridSections();
 
     return ListView(
-      padding: const EdgeInsets.fromLTRB(22, 8, 22, 28),
+      padding: const EdgeInsets.fromLTRB(20, 8, 20, 28),
       children: [
         // Brand-motif hero header — decorative backdrop behind the Learn
         // headline + intro (content unchanged).
@@ -172,7 +172,7 @@ class _EditorialLearnHub extends StatelessWidget {
                 'opinions — just the rules and what they mean.',
                 style: TextStyle(
                   fontFamily: kSansFamily,
-                  fontSize: 13.5,
+                  fontSize: 14,
                   height: 1.5,
                   color: p.textMuted,
                 ),
@@ -185,9 +185,9 @@ class _EditorialLearnHub extends StatelessWidget {
         Builder(
           builder: (ctx) => Material(
             color: p.card,
-            borderRadius: BorderRadius.circular(100),
+            borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
             child: InkWell(
-              borderRadius: BorderRadius.circular(100),
+              borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
               onTap: () async {
                 final result = await showSearch<EducationSection?>(
                   context: ctx,
@@ -208,7 +208,7 @@ class _EditorialLearnHub extends StatelessWidget {
                     horizontal: 14, vertical: 12),
                 decoration: BoxDecoration(
                   border: Border.all(color: p.border),
-                  borderRadius: BorderRadius.circular(100),
+                  borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
                 ),
                 child: Row(
                   children: [
@@ -218,7 +218,7 @@ class _EditorialLearnHub extends StatelessWidget {
                       'Search articles, glossary, FAQs…',
                       style: TextStyle(
                         fontFamily: kSansFamily,
-                        fontSize: 13.5,
+                        fontSize: 14,
                         color: p.textMuted,
                       ),
                     ),
@@ -299,7 +299,7 @@ class _EditorialLearnHub extends StatelessWidget {
         // booklet content.)
         Container(
           width: double.infinity,
-          padding: const EdgeInsets.fromLTRB(18, 18, 18, 16),
+          padding: const EdgeInsets.fromLTRB(20, 18, 20, 16),
           decoration: BoxDecoration(
             color: p.primaryTint,
             border: Border.all(color: p.primary.withValues(alpha: 0.15)),
@@ -316,7 +316,7 @@ class _EditorialLearnHub extends StatelessWidget {
                   fontFamily: 'Instrument Serif',
                   fontFamilyFallback: const ['Georgia', 'serif'],
                   fontStyle: FontStyle.italic,
-                  fontSize: 19,
+                  fontSize: 18,
                   height: 1.3,
                   color: p.primaryDark,
                 ),
@@ -334,7 +334,7 @@ class _EditorialLearnHub extends StatelessWidget {
                     'Courier New',
                     'monospace',
                   ],
-                  fontSize: 10,
+                  fontSize: 11,
                   letterSpacing: 0.6,
                   color: p.textMuted,
                 ),
@@ -364,23 +364,23 @@ class _CategoryPill extends StatelessWidget {
     final p = Theme.of(context).mhadPalette;
     return Material(
       color: active ? p.primary : p.card,
-      borderRadius: BorderRadius.circular(100),
+      borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(100),
+        borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
           decoration: BoxDecoration(
             border: Border.all(
               color: active ? p.primary : p.border,
             ),
-            borderRadius: BorderRadius.circular(100),
+            borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
           ),
           child: Text(
             label,
             style: TextStyle(
               fontFamily: kSansFamily,
-              fontSize: 12.5,
+              fontSize: 13,
               fontWeight: FontWeight.w700,
               color: active ? p.onPrimary : p.textMuted,
             ),
@@ -442,7 +442,7 @@ class _GridCard extends StatelessWidget {
                 height: 32,
                 decoration: BoxDecoration(
                   color: p.primaryTint,
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
                 ),
                 alignment: Alignment.center,
                 child: Icon(_iconFor(section.category),
@@ -469,7 +469,7 @@ class _GridCard extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   fontFamily: kSansFamily,
-                  fontSize: 11.5,
+                  fontSize: 12,
                   height: 1.4,
                   color: p.textMuted,
                 ),

@@ -44,7 +44,7 @@ Future<void> showFdaLabelDialog(
                 body,
                 style: TextStyle(
                     fontFamily: kSans,
-                    fontSize: 12.5,
+                    fontSize: 13,
                     height: 1.45,
                     color: p.text),
               ),
@@ -93,7 +93,7 @@ Future<void> showFdaLabelDialog(
                       'Discuss anything here with your doctor or pharmacist.',
                       style: TextStyle(
                         fontFamily: kSans,
-                        fontSize: 10.5,
+                        fontSize: 11,
                         fontStyle: FontStyle.italic,
                         color: p.textMuted,
                       ),

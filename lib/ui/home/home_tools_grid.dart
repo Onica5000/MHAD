@@ -112,15 +112,15 @@ class _ToolTileCard extends StatelessWidget {
         radius: 12,
         child: Material(
         color: palette.card,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
         child: InkWell(
           onTap: tile.onTap,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
           child: Container(
             constraints: const BoxConstraints(minHeight: 96),
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
               border: Border.all(color: palette.border),
             ),
             child: Column(
@@ -131,7 +131,7 @@ class _ToolTileCard extends StatelessWidget {
                   height: 32,
                   decoration: BoxDecoration(
                     color: palette.primaryTint,
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
                   ),
                   alignment: Alignment.center,
                   child: Icon(tile.icon,
@@ -145,7 +145,7 @@ class _ToolTileCard extends StatelessWidget {
                   tile.label,
                   style: TextStyle(
                     fontFamily: kSansFamily,
-                    fontSize: 13.5,
+                    fontSize: 14,
                     fontWeight: FontWeight.w600,
                     color: palette.text,
                   ),
@@ -154,7 +154,7 @@ class _ToolTileCard extends StatelessWidget {
                   tile.sub,
                   style: TextStyle(
                     fontFamily: kSansFamily,
-                    fontSize: 11.5,
+                    fontSize: 12,
                     color: palette.textMuted,
                   ),
                 ),

@@ -172,7 +172,7 @@ class _AgentAuthorityStepState
                     child: Text.rich(
                       TextSpan(
                         style: TextStyle(
-                          fontSize: 12.5,
+                          fontSize: 13,
                           height: 1.45,
                           color: Theme.of(context)
                               .colorScheme

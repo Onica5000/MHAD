@@ -14,8 +14,13 @@ class DesignCard extends StatelessWidget {
   final double? radius;
   final BorderSide? overrideBorder;
   /// Web/desktop hover-lift: when true AND [onTap] is set, the card raises on
-  /// hover (deeper shadow + a few px rise). Opt-in; default keeps the flat
-  /// resting card. Honors reduce-motion (no animation when disabled).
+  /// hover (deeper shadow + a few px rise). Honors reduce-motion (no animation
+  /// when disabled), and is inert on touch devices, which never send hover.
+  ///
+  /// Defaults to **true**: web is the only actively-developed surface, so a
+  /// tappable card that doesn't respond to the cursor reads as broken. Pass
+  /// `false` for cards that are tappable but shouldn't advertise it (e.g. a
+  /// card whose tap is a secondary detail toggle rather than navigation).
   final bool hoverLift;
 
   const DesignCard({
@@ -26,7 +31,7 @@ class DesignCard extends StatelessWidget {
     this.margin,
     this.radius,
     this.overrideBorder,
-    this.hoverLift = false,
+    this.hoverLift = true,
     super.key,
   });
 

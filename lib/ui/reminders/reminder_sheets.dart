@@ -108,7 +108,7 @@ class _RenewSheet extends StatelessWidget {
           top: false,
           child: ListView(
             controller: scrollController,
-            padding: const EdgeInsets.fromLTRB(22, 14, 22, 24),
+            padding: const EdgeInsets.fromLTRB(20, 14, 20, 24),
             children: [
               Center(
                 child: Container(
@@ -116,7 +116,7 @@ class _RenewSheet extends StatelessWidget {
                   height: 4,
                   decoration: BoxDecoration(
                     color: p.border,
-                    borderRadius: BorderRadius.circular(100),
+                    borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
                   ),
                 ),
               ),
@@ -129,7 +129,7 @@ class _RenewSheet extends StatelessWidget {
                     height: 56,
                     decoration: BoxDecoration(
                       color: warnBg,
-                      borderRadius: BorderRadius.circular(14),
+                      borderRadius: BorderRadius.circular(DesignTokens.buttonRadius),
                     ),
                     alignment: Alignment.center,
                     child:
@@ -201,7 +201,7 @@ class _RenewSheet extends StatelessWidget {
                   color: p.primaryTint,
                   border: Border.all(
                       color: p.primary.withValues(alpha: 0.15)),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -229,7 +229,7 @@ class _RenewSheet extends StatelessWidget {
                       'with two witnesses.',
                       style: TextStyle(
                         fontFamily: kSansFamily,
-                        fontSize: 12.5,
+                        fontSize: 13,
                         height: 1.5,
                         color: p.text,
                       ),
@@ -290,7 +290,7 @@ class _RenewSheet extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: kSansFamily,
-                  fontSize: 10.5,
+                  fontSize: 11,
                   height: 1.5,
                   color: p.textMuted,
                 ),
@@ -402,7 +402,7 @@ class _CheckInSheet extends StatelessWidget {
           top: false,
           child: ListView(
             controller: scrollController,
-            padding: const EdgeInsets.fromLTRB(22, 14, 22, 24),
+            padding: const EdgeInsets.fromLTRB(20, 14, 20, 24),
             children: [
               Center(
                 child: Container(
@@ -410,7 +410,7 @@ class _CheckInSheet extends StatelessWidget {
                   height: 4,
                   decoration: BoxDecoration(
                     color: p.border,
-                    borderRadius: BorderRadius.circular(100),
+                    borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
                   ),
                 ),
               ),
@@ -423,7 +423,7 @@ class _CheckInSheet extends StatelessWidget {
                     height: 56,
                     decoration: BoxDecoration(
                       color: p.primaryTint,
-                      borderRadius: BorderRadius.circular(14),
+                      borderRadius: BorderRadius.circular(DesignTokens.buttonRadius),
                     ),
                     alignment: Alignment.center,
                     child: Icon(Icons.favorite_outline,
@@ -524,7 +524,7 @@ class _CheckInSheet extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: kSansFamily,
-                  fontSize: 10.5,
+                  fontSize: 11,
                   height: 1.5,
                   color: p.textMuted,
                 ),
@@ -559,7 +559,7 @@ class _CheckInRow extends StatelessWidget {
         decoration: BoxDecoration(
           color: p.surface,
           border: Border.all(color: p.border),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
         ),
         child: Row(
           children: [
@@ -568,7 +568,7 @@ class _CheckInRow extends StatelessWidget {
               height: 30,
               decoration: BoxDecoration(
                 color: p.primaryTint,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
               ),
               alignment: Alignment.center,
               child: Icon(icon, size: 15, color: p.primary),
@@ -591,7 +591,7 @@ class _CheckInRow extends StatelessWidget {
                     sub,
                     style: TextStyle(
                       fontFamily: kSansFamily,
-                      fontSize: 11.5,
+                      fontSize: 12,
                       color: p.textMuted,
                     ),
                     overflow: TextOverflow.ellipsis,
@@ -604,7 +604,7 @@ class _CheckInRow extends StatelessWidget {
               '$stepLabel ›',
               style: TextStyle(
                 fontFamily: kSansFamily,
-                fontSize: 11.5,
+                fontSize: 12,
                 fontWeight: FontWeight.w700,
                 color: p.primary,
               ),

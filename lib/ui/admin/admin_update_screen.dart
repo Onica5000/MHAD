@@ -812,11 +812,11 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
                 color: c.isVerify
                     ? SemanticColors.warningBg(Theme.of(context).brightness)
                     : SemanticColors.successBg(Theme.of(context).brightness),
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: BorderRadius.circular(DesignTokens.radiusXs),
               ),
               child: Text(c.autonomy.toUpperCase(),
                   style: const TextStyle(
-                      fontSize: 10, fontWeight: FontWeight.w700)),
+                      fontSize: 11, fontWeight: FontWeight.w700)),
             ),
             const SizedBox(width: 8),
             Expanded(
@@ -852,7 +852,7 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
               color: SemanticColors.warningBg(Theme.of(context).brightness),
-              borderRadius: BorderRadius.circular(4),
+              borderRadius: BorderRadius.circular(DesignTokens.radiusXs),
             ),
             child: Text(
               'RESTORED — the selected field(s) have been rolled back to the '

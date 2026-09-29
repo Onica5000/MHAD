@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/design_card.dart';
 import 'package:mhad/services/disclaimer_service.dart';
 import 'package:mhad/services/notification_service.dart';
 import 'package:mhad/ui/disclaimer/legal_sheet.dart';
@@ -126,7 +127,7 @@ class _GateLayout extends StatelessWidget {
             // layout impact); uses the gate's threaded palette.
             BrandBackdrop(intensity: 0.6, palette: palette),
             Padding(
-              padding: const EdgeInsets.fromLTRB(22, 18, 22, 16),
+              padding: const EdgeInsets.fromLTRB(20, 18, 20, 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -152,7 +153,7 @@ class _GateLayout extends StatelessWidget {
                     'before continuing.',
                     style: TextStyle(
                       fontFamily: kSansFamily,
-                      fontSize: 13.5,
+                      fontSize: 14,
                       color: palette.textMuted,
                       height: 1.5,
                     ),
@@ -302,7 +303,7 @@ class _SectionLabel extends StatelessWidget {
           'Courier New',
           'monospace'
         ],
-        fontSize: 10.5,
+        fontSize: 11,
         fontWeight: FontWeight.w600,
         letterSpacing: 1.2,
         color: palette.textMuted,
@@ -326,13 +327,9 @@ class _DisclaimerCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
-    return Container(
+    return DesignCard(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-      decoration: BoxDecoration(
-        color: p.card,
-        border: Border.all(color: p.border),
-        borderRadius: BorderRadius.circular(12),
-      ),
+      radius: DesignTokens.inputRadius,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -341,7 +338,7 @@ class _DisclaimerCard extends StatelessWidget {
             height: 38,
             decoration: BoxDecoration(
               color: p.primaryLight,
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
             ),
             alignment: Alignment.center,
             child: Icon(icon, size: 19, color: p.primary),
@@ -398,16 +395,16 @@ class _AckRow extends StatelessWidget {
       button: true,
       child: Material(
         color: palette.primaryTint,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
         child: InkWell(
           onTap: onToggle,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
           child: Container(
             constraints: const BoxConstraints(minHeight: 48),
             padding:
                 const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
               border: Border.all(color: palette.primaryLight),
             ),
             child: Row(
@@ -419,7 +416,7 @@ class _AckRow extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: checked ? palette.primary : Colors.transparent,
                     border: Border.all(color: palette.primary, width: 1.8),
-                    borderRadius: BorderRadius.circular(6),
+                    borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
                   ),
                   alignment: Alignment.center,
                   child: checked
@@ -432,7 +429,7 @@ class _AckRow extends StatelessWidget {
                     "I'm 18 or older, and I understand and want to continue.",
                     style: TextStyle(
                       fontFamily: kSansFamily,
-                      fontSize: 13.5,
+                      fontSize: 14,
                       fontWeight: FontWeight.w600,
                       color: palette.text,
                     ),

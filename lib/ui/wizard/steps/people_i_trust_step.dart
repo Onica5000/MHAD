@@ -50,7 +50,7 @@ class _PeopleITrustStepState extends ConsumerState<PeopleITrustStep>
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
     return ListView(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+      padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
       children: [
         _AgentCard(
           directiveId: widget.directiveId,
@@ -92,7 +92,7 @@ class _PeopleITrustStepState extends ConsumerState<PeopleITrustStep>
                     'Courier New',
                     'monospace',
                   ],
-                  fontSize: 10,
+                  fontSize: 11,
                   color: p.textMuted,
                   letterSpacing: 0.4,
                 ),
@@ -121,7 +121,7 @@ class _PeopleITrustStepState extends ConsumerState<PeopleITrustStep>
           decoration: BoxDecoration(
             color: p.surface,
             border: Border.all(color: p.border),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -264,7 +264,7 @@ class _AgentCardState extends ConsumerState<_AgentCard> {
               InkWell(
                 onTap: () =>
                     setState(() => _expanded = !isExpanded),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
                 child: Row(
                   children: [
                     Container(
@@ -314,7 +314,7 @@ class _AgentCardState extends ConsumerState<_AgentCard> {
                                     'Courier New',
                                     'monospace',
                                   ],
-                                  fontSize: 10.5,
+                                  fontSize: 11,
                                   fontWeight: FontWeight.w600,
                                   letterSpacing: 1,
                                   color: p.textMuted,
@@ -328,13 +328,13 @@ class _AgentCardState extends ConsumerState<_AgentCard> {
                                   decoration: BoxDecoration(
                                     color: p.primaryLight,
                                     borderRadius:
-                                        BorderRadius.circular(4),
+                                        BorderRadius.circular(DesignTokens.radiusXs),
                                   ),
                                   child: Text(
                                     'Primary',
                                     style: TextStyle(
                                       fontFamily: kSansFamily,
-                                      fontSize: 10,
+                                      fontSize: 11,
                                       fontWeight: FontWeight.w700,
                                       letterSpacing: 0.4,
                                       color: p.onPrimaryLight,
@@ -462,7 +462,7 @@ class _StatusChip extends StatelessWidget {
       decoration: BoxDecoration(
         color: bg,
         border: Border.all(color: ok ? fg.withValues(alpha: 0.2) : p.border),
-        borderRadius: BorderRadius.circular(100),
+        borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

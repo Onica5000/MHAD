@@ -41,7 +41,7 @@ class ConsentOptionTile extends StatelessWidget {
               height: 40,
               decoration: BoxDecoration(
                 color: selected ? p.primary : p.primaryLight,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
               ),
               child: Icon(
                 icon,

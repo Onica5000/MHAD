@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/design_card.dart';
 import 'package:mhad/data/audio_questionnaire_content.dart';
 import 'package:mhad/ui/export/pdf/questionnaire_pdf.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
@@ -44,7 +45,7 @@ class AudioGuideScreen extends StatelessWidget {
             'every field before anything is saved.',
             style: TextStyle(
               fontFamily: kSansFamily,
-              fontSize: 14.5,
+              fontSize: 15,
               height: 1.5,
               color: p.text,
             ),
@@ -117,7 +118,7 @@ class AudioGuideScreen extends StatelessWidget {
             audioQIntro,
             style: TextStyle(
               fontFamily: kSansFamily,
-              fontSize: 13.5,
+              fontSize: 14,
               height: 1.5,
               color: p.textMuted,
             ),
@@ -132,7 +133,7 @@ class AudioGuideScreen extends StatelessWidget {
             'Set these in the app:',
             style: TextStyle(
               fontFamily: kSansFamily,
-              fontSize: 12.5,
+              fontSize: 13,
               color: p.textMuted,
             ),
           ),
@@ -143,7 +144,7 @@ class AudioGuideScreen extends StatelessWidget {
             'Worth saying out loud — autofill now captures these:',
             style: TextStyle(
               fontFamily: kSansFamily,
-              fontSize: 12.5,
+              fontSize: 13,
               color: p.textMuted,
             ),
           ),
@@ -197,14 +198,14 @@ class AudioGuideScreen extends StatelessWidget {
             Text('•  ',
                 style: TextStyle(
                     fontFamily: kSansFamily,
-                    fontSize: 13.5,
+                    fontSize: 14,
                     color: muted ? p.textMuted : p.text)),
             Expanded(
               child: Text(
                 text,
                 style: TextStyle(
                   fontFamily: kSansFamily,
-                  fontSize: 13.5,
+                  fontSize: 14,
                   height: 1.45,
                   color: muted ? p.textMuted : p.text,
                 ),
@@ -214,14 +215,10 @@ class AudioGuideScreen extends StatelessWidget {
         ),
       );
 
-  Widget _section(MhadPalette p, AudioQSection s) => Container(
+  Widget _section(MhadPalette p, AudioQSection s) => DesignCard(
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          color: p.card,
-          border: Border.all(color: p.border),
-          borderRadius: BorderRadius.circular(12),
-        ),
+        radius: DesignTokens.inputRadius,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -240,7 +237,7 @@ class AudioGuideScreen extends StatelessWidget {
                 s.appliesWhen!,
                 style: TextStyle(
                   fontFamily: kSansFamily,
-                  fontSize: 11.5,
+                  fontSize: 12,
                   fontStyle: FontStyle.italic,
                   color: p.textMuted,
                 ),
@@ -255,13 +252,13 @@ class AudioGuideScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   color: p.surface,
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
                 ),
                 child: Text(
                   'Example: ${s.example}',
                   style: TextStyle(
                     fontFamily: kSansFamily,
-                    fontSize: 12.5,
+                    fontSize: 13,
                     fontStyle: FontStyle.italic,
                     height: 1.45,
                     color: p.textMuted,

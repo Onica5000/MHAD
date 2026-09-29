@@ -325,7 +325,7 @@ class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
               height: 4,
               decoration: BoxDecoration(
                 color: p.border,
-                borderRadius: BorderRadius.circular(100),
+                borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
               ),
             ),
             const SizedBox(height: 18),
@@ -373,7 +373,7 @@ class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontFamily: kSansFamily,
-                      fontSize: 12.5,
+                      fontSize: 13,
                       height: 1.5,
                       color: p.textMuted,
                     ),
@@ -483,7 +483,7 @@ class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
                     'Courier New',
                     'monospace',
                   ],
-                  fontSize: 10.5,
+                  fontSize: 11,
                   letterSpacing: 0.5,
                   color: p.textMuted,
                 ),
@@ -519,7 +519,7 @@ class _TranscribingCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: surface,
         border: Border.all(color: borderColor),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -534,7 +534,7 @@ class _TranscribingCard extends StatelessWidget {
             'Transcribing your recording…',
             style: TextStyle(
               fontFamily: kSansFamily,
-              fontSize: 13.5,
+              fontSize: 14,
               color: textColor,
             ),
           ),
@@ -591,7 +591,7 @@ class _Waveform extends StatelessWidget {
       height: height,
       decoration: BoxDecoration(
         color: active ? activeColor : restColor,
-        borderRadius: BorderRadius.circular(100),
+        borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
       ),
     );
   }
@@ -652,7 +652,7 @@ class _LiveCaptionState extends State<_LiveCaption>
       decoration: BoxDecoration(
         color: widget.surface,
         border: Border.all(color: widget.borderColor),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
       ),
       child: Text.rich(
         TextSpan(
@@ -702,7 +702,7 @@ class _LiveCaptionState extends State<_LiveCaption>
         ),
         style: TextStyle(
           fontFamily: kSansFamily,
-          fontSize: 13.5,
+          fontSize: 14,
           height: 1.5,
           color: widget.textColor,
         ),
@@ -813,7 +813,7 @@ class _RecordCircle extends StatelessWidget {
                     height: 26,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(DesignTokens.radiusXs),
                     ),
                   )
                 // White circle = "record" when paused

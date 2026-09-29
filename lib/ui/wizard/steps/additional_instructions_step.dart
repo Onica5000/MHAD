@@ -374,7 +374,7 @@ class _AdditionalInstructionsStepState
     return Form(
       key: _formKey,
       child: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(20),
         children: [
           WizardHelpButton(helpText: helpText, stepId: 'additionalInstructions'),
           const ExampleTextButton(
@@ -584,7 +584,7 @@ class _AdditionalInstructionsStepState
                 height: 36,
                 decoration: BoxDecoration(
                   color: p.primaryLight,
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
                 ),
                 child: Icon(icon, color: p.primary, size: 20),
               ),

@@ -676,7 +676,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
 
     Widget backLink(String label, VoidCallback? onTap) => InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(6),
+          borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
             child: Row(
@@ -696,7 +696,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
 
     if (_step == _PipelineStep.pick) {
       return Padding(
-        padding: const EdgeInsets.fromLTRB(24, 14, 24, 0),
+        padding: const EdgeInsets.fromLTRB(20, 14, 20, 0),
         child: Row(
           children: [
             backLink('Wizard', _toWizard),
@@ -715,7 +715,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
       _ => ('Snap to fill', isProcessing ? null : _discardExtraction),
     };
     return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 14, 24, 0),
+      padding: const EdgeInsets.fromLTRB(20, 14, 20, 0),
       child: Row(
         children: [
           backLink(label, onBack),

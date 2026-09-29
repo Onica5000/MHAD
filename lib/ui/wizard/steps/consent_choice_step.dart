@@ -236,7 +236,7 @@ class _ConsentChoiceStepState extends ConsumerState<ConsentChoiceStep>
             widget.embedded ? const NeverScrollableScrollPhysics() : null,
         padding: widget.embedded
             ? const EdgeInsets.symmetric(horizontal: 4)
-            : const EdgeInsets.fromLTRB(16, 16, 16, 24),
+            : const EdgeInsets.fromLTRB(20, 16, 20, 24),
         children: [
           SectionLabel(c.sectionLabel),
           const SizedBox(height: 6),

@@ -23,7 +23,7 @@ class StepHead extends StatelessWidget {
     required this.title,
     this.subtitle,
     this.onExit,
-    this.padding = const EdgeInsets.fromLTRB(22, 10, 22, 16),
+    this.padding = const EdgeInsets.fromLTRB(20, 10, 20, 16),
     super.key,
   });
 
@@ -67,7 +67,7 @@ class StepHead extends StatelessWidget {
                   label: 'Exit',
                   child: InkWell(
                     onTap: onExit,
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
                     child: SizedBox(
                       height: 44,
                       child: Padding(

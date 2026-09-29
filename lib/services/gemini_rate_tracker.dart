@@ -27,6 +27,28 @@ class GeminiRateTracker extends ChangeNotifier {
   /// Rough estimate: 1 token ≈ 4 characters in English.
   static const double charsPerToken = 4.0;
 
+  // ── Enforcement scope ────────────────────────────────────────────────
+  /// Whether these caps should actually gate requests.
+  ///
+  /// The numbers above are **Gemini free-tier** limits, but this tracker was
+  /// consulted on every AI path regardless of the active provider — so a user
+  /// on a paid Anthropic/OpenAI/xAI key was blocked by Google's free quota and
+  /// told they had used their "free requests" for the day. Requests are still
+  /// *recorded* for every provider (the usage read-out stays truthful); only
+  /// the blocking is scoped to the provider the limits describe.
+  ///
+  /// Kept as mutable state rather than a constructor arg so switching provider
+  /// mid-session updates enforcement without discarding the request log.
+  bool _enforced = true;
+
+  bool get enforced => _enforced;
+
+  set enforced(bool value) {
+    if (_enforced == value) return;
+    _enforced = value;
+    notifyListeners();
+  }
+
   // ── Request log ──────────────────────────────────────────────────────
   final _minuteLog = Queue<DateTime>();
   final _dayLog = Queue<DateTime>();
@@ -70,7 +92,9 @@ class GeminiRateTracker extends ChangeNotifier {
     return _minuteLog.length;
   }
 
-  int get remainingRpm => (maxRpm - requestsThisMinute).clamp(0, maxRpm);
+  int get remainingRpm => _enforced
+      ? (maxRpm - requestsThisMinute).clamp(0, maxRpm)
+      : maxRpm;
 
   int get secondsUntilRpmSlot {
     if (remainingRpm > 0) return 0;
@@ -88,9 +112,11 @@ class GeminiRateTracker extends ChangeNotifier {
     return _dayLog.length;
   }
 
-  int get remainingRpd => (maxRpd - requestsToday).clamp(0, maxRpd);
+  int get remainingRpd => _enforced
+      ? (maxRpd - requestsToday).clamp(0, maxRpd)
+      : maxRpd;
 
-  bool get dailyLimitReached => remainingRpd <= 0;
+  bool get dailyLimitReached => _enforced && remainingRpd <= 0;
 
   // ── Token estimation ─────────────────────────────────────────────────
 
@@ -99,7 +125,9 @@ class GeminiRateTracker extends ChangeNotifier {
     return _tokenMinuteLog.fold(0, (sum, e) => sum + e.tokens);
   }
 
-  int get remainingTpm => (maxTpm - tokensThisMinute).clamp(0, maxTpm);
+  int get remainingTpm => _enforced
+      ? (maxTpm - tokensThisMinute).clamp(0, maxTpm)
+      : maxTpm;
 
   /// Estimate tokens from a character count.
   static int estimateTokens(int charCount) =>
@@ -121,6 +149,8 @@ class GeminiRateTracker extends ChangeNotifier {
   /// Returns a user-facing reason if the request should be blocked,
   /// or null if it's safe to send.
   String? get blockReason {
+    // Another provider's quota is the provider's business, not ours to guess.
+    if (!_enforced) return null;
     if (dailyLimitReached) {
       return 'You\'ve used all $maxRpd free requests for today. '
           'The limit resets at midnight. Consider upgrading to a paid '
@@ -142,6 +172,9 @@ class GeminiRateTracker extends ChangeNotifier {
   /// Short status for the app bar or info chip.
   String get statusText {
     _prune(DateTime.now());
+    // Don't quote Gemini's free-tier allowance at someone using another
+    // provider — we have no visibility into their plan's limits.
+    if (!_enforced) return '';
     if (dailyLimitReached) {
       return 'Daily limit reached';
     }
@@ -154,10 +187,11 @@ class GeminiRateTracker extends ChangeNotifier {
 
   /// Whether to show a warning indicator (approaching limits).
   bool get showWarning =>
-      remainingRpd <= 25 || remainingRpm <= 2 || dailyLimitReached;
+      _enforced &&
+      (remainingRpd <= 25 || remainingRpm <= 2 || dailyLimitReached);
 
   /// Whether to show the status at all (hide when no requests made).
-  bool get showStatus => requestsToday > 0;
+  bool get showStatus => _enforced && requestsToday > 0;
 
   /// Last request's estimated token count (for display).
   int get lastRequestTokens => _lastRequestTokens;

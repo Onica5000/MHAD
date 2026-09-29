@@ -298,7 +298,7 @@ class _ContactPickerSheetState extends State<_ContactPickerSheet> {
               height: 4,
               decoration: BoxDecoration(
                 color: p.border,
-                borderRadius: BorderRadius.circular(100),
+                borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
               ),
             ),
             const SizedBox(height: 14),
@@ -333,7 +333,7 @@ class _ContactPickerSheetState extends State<_ContactPickerSheet> {
                     'search runs locally.',
                     style: TextStyle(
                       fontFamily: kSansFamily,
-                      fontSize: 12.5,
+                      fontSize: 13,
                       height: 1.45,
                       color: p.textMuted,
                     ),
@@ -343,7 +343,7 @@ class _ContactPickerSheetState extends State<_ContactPickerSheet> {
                     decoration: BoxDecoration(
                       color: p.surface,
                       border: Border.all(color: p.border),
-                      borderRadius: BorderRadius.circular(100),
+                      borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
                     ),
                     padding: const EdgeInsets.symmetric(horizontal: 14),
                     child: Row(
@@ -397,7 +397,7 @@ class _ContactPickerSheetState extends State<_ContactPickerSheet> {
             Expanded(
               child: ListView(
                 controller: scrollController,
-                padding: const EdgeInsets.fromLTRB(22, 6, 22, 12),
+                padding: const EdgeInsets.fromLTRB(20, 6, 20, 12),
                 children: [
                   SectionLabel('Contacts · ${others.length}'),
                   for (final c in others)
@@ -423,7 +423,7 @@ class _ContactPickerSheetState extends State<_ContactPickerSheet> {
             ),
             Container(
               padding:
-                  const EdgeInsets.fromLTRB(18, 12, 18, 24),
+                  const EdgeInsets.fromLTRB(20, 12, 20, 24),
               decoration: BoxDecoration(
                 border: Border(top: BorderSide(color: p.border)),
               ),
@@ -519,15 +519,15 @@ class _PersonTile extends StatelessWidget {
         padding: const EdgeInsets.only(bottom: 6),
         child: Material(
           color: p.card,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
           child: InkWell(
             onTap: onTap,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
             child: Container(
               padding:
                   const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
                 border: Border.all(color: borderColor, width: 1.5),
               ),
               child: Row(
@@ -661,11 +661,11 @@ class _ManualEntryTile extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
             border: Border.all(
               color: p.border,
               width: 1.5,
@@ -717,7 +717,7 @@ class _EligibilityRulesCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: p.surface,
         border: Border.all(color: p.border),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -763,7 +763,7 @@ class _EligibilityRulesCard extends StatelessWidget {
                         'Courier New',
                         'monospace',
                       ],
-                      fontSize: 10,
+                      fontSize: 11,
                       fontWeight: FontWeight.w700,
                       letterSpacing: 0.4,
                       color:
@@ -781,7 +781,7 @@ class _EligibilityRulesCard extends StatelessWidget {
             'override — confirm only if they truly aren\'t treating you.',
             style: TextStyle(
               fontFamily: kSansFamily,
-              fontSize: 10.5,
+              fontSize: 11,
               color: p.textMuted,
               fontStyle: FontStyle.italic,
               height: 1.4,

@@ -37,7 +37,7 @@ class ArticleDetailScreen extends StatelessWidget {
                 'Courier New',
                 'monospace',
               ],
-              fontSize: 10.5,
+              fontSize: 11,
               letterSpacing: 0.6,
               fontWeight: FontWeight.w700,
               color: p.textMuted,
@@ -61,7 +61,7 @@ class ArticleDetailScreen extends StatelessWidget {
             section.content,
             style: const TextStyle(
               fontFamily: kSansFamily,
-              fontSize: 14.5,
+              fontSize: 15,
               height: 1.6,
             ),
           ),
@@ -72,7 +72,7 @@ class ArticleDetailScreen extends StatelessWidget {
             decoration: BoxDecoration(
               color: p.primaryTint,
               border: Border.all(color: p.primaryLight),
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,7 +87,7 @@ class ArticleDetailScreen extends StatelessWidget {
                       'Courier New',
                       'monospace',
                     ],
-                    fontSize: 10,
+                    fontSize: 11,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 0.6,
                     color: p.primary,
