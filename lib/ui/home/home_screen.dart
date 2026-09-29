@@ -2,6 +2,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/status_views.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/data/database/app_database.dart';
@@ -121,7 +122,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             final list = ListView(
           // The persistent bottom nav now reserves its own space (rendered by
           // ResponsiveShell below this screen), so no extra bottom gap is needed.
-          padding: const EdgeInsets.fromLTRB(22, 20, 22, 24),
+          padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
           children: [
             const _DeviceSecurityCheck(),
             SectionLabel(dateLabel),
@@ -238,15 +239,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ],
                 );
               },
-              loading: () => Padding(
-                padding: const EdgeInsets.symmetric(vertical: 32),
-                child: Center(
-                  child: Semantics(
-                    label: 'Loading',
-                    child: const CircularProgressIndicator(),
-                  ),
-                ),
-              ),
+              loading: () =>
+                  const PageLoading(label: 'Loading your directives'),
               error: (e, _) {
                 debugPrint('Error loading directives: $e');
                 // Don't silently render the form picker — that reads as
@@ -295,7 +289,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
 
     return directivesAsync.when(
-      loading: () => const Center(child: CircularProgressIndicator()),
+      loading: () => const PageLoading(label: 'Loading your directives'),
       error: (e, _) {
         debugPrint('Error loading directives: $e');
         // Same as the narrow branch: surface the failure instead of
@@ -390,7 +384,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               'Make it findable in a crisis',
                               style: TextStyle(
                                 fontFamily: kSansFamily,
-                                fontSize: 13.5,
+                                fontSize: 14,
                                 fontWeight: FontWeight.w600,
                                 color: p.text,
                               ),
@@ -400,7 +394,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               'your people where it is',
                               style: TextStyle(
                                 fontFamily: kSansFamily,
-                                fontSize: 11.5,
+                                fontSize: 12,
                                 color: p.textMuted,
                               ),
                             ),
@@ -716,7 +710,7 @@ class _PrivacyByDesignCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: p.primaryTint,
         border: Border.all(color: p.primaryLight),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -751,7 +745,7 @@ class _PrivacyByDesignCard extends StatelessWidget {
                     'with.',
             style: TextStyle(
               fontFamily: kSansFamily,
-              fontSize: 12.5,
+              fontSize: 13,
               height: 1.45,
               color: p.onPrimaryLight,
             ),
@@ -899,7 +893,7 @@ class _GreetingRow extends StatelessWidget {
 
     return RevealOnMount(
       child: BrandMotif(
-        padding: const EdgeInsets.fromLTRB(22, 22, 22, 24),
+        padding: const EdgeInsets.fromLTRB(20, 22, 20, 24),
         child: Align(alignment: Alignment.centerLeft, child: inner),
       ),
     );
@@ -936,29 +930,15 @@ class _DirectivesLoadError extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final p = Theme.of(context).mhadPalette;
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 24),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(Icons.cloud_off_outlined, size: 32, color: p.textMuted),
-          const SizedBox(height: 10),
-          Semantics(
-            liveRegion: true,
-            child: Text(
-              "Couldn't load your directives.",
-              textAlign: TextAlign.center,
-              style: TextStyle(color: p.text),
-            ),
-          ),
-          const SizedBox(height: 12),
-          OutlinedButton.icon(
-            onPressed: () => ref.invalidate(allDirectivesProvider),
-            icon: const Icon(Icons.refresh),
-            label: const Text('Retry'),
-          ),
-        ],
+    return EmptyState(
+      icon: Icons.cloud_off_outlined,
+      title: "Couldn't load your directives.",
+      message: 'Nothing was lost — this is a display problem, not a data one.',
+      announce: true,
+      action: OutlinedButton.icon(
+        onPressed: () => ref.invalidate(allDirectivesProvider),
+        icon: const Icon(Icons.refresh),
+        label: const Text('Retry'),
       ),
     );
   }
@@ -1035,14 +1015,14 @@ class _PastDirectiveRow extends StatelessWidget {
         radius: 12,
         child: Material(
         color: p.card,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
           child: Container(
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
               border: Border.all(color: p.border),
             ),
             child: Row(
@@ -1059,7 +1039,7 @@ class _PastDirectiveRow extends StatelessWidget {
                         _nameLine(),
                         style: TextStyle(
                           fontFamily: kSansFamily,
-                          fontSize: 13.5,
+                          fontSize: 14,
                           fontWeight: FontWeight.w600,
                           color: p.text,
                         ),
@@ -1068,7 +1048,7 @@ class _PastDirectiveRow extends StatelessWidget {
                         _subLine(),
                         style: TextStyle(
                           fontFamily: kSansFamily,
-                          fontSize: 11.5,
+                          fontSize: 12,
                           color: p.textMuted,
                         ),
                       ),

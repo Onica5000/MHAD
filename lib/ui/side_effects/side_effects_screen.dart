@@ -2,6 +2,8 @@
 
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/design_card.dart';
+import 'package:mhad/ui/widgets/design/status_views.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/ai/gemini_api_assistant.dart';
@@ -166,7 +168,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
         ),
         Expanded(
           child: _loading
-              ? const Center(child: CircularProgressIndicator())
+              ? const PageLoading()
               : ListView(
                   padding: const EdgeInsets.fromLTRB(20, 14, 20, 32),
                   children: [
@@ -266,7 +268,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
           color: p.primaryTint,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
           border: Border.all(color: p.primaryLight),
         ),
         child: Column(
@@ -287,7 +289,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
               'your current medications for you to review.',
               style: TextStyle(
                 fontFamily: kSansFamily,
-                fontSize: 12.5,
+                fontSize: 13,
                 height: 1.45,
                 color: p.textMuted,
               ),
@@ -316,7 +318,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
               : 'Re-check for: ${_currentMeds.join(', ')}',
           style: TextStyle(
             fontFamily: kSansFamily,
-            fontSize: 12.5,
+            fontSize: 13,
             color: p.textMuted,
           ),
         ),
@@ -371,14 +373,10 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
   /// A single possible-interaction note: the meds involved + a plain-language
   /// question to ask a doctor or pharmacist. Informational only.
   Widget _interactionCard(MhadPalette p, InteractionNote note) {
-    return Container(
+    return DesignCard(
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      decoration: BoxDecoration(
-        color: p.card,
-        border: Border.all(color: p.border),
-        borderRadius: BorderRadius.circular(10),
-      ),
+      radius: DesignTokens.inputRadius,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -425,7 +423,7 @@ class _SideEffectRow extends StatelessWidget {
         color: p.card,
         border: Border.all(
             color: item.serious ? seriousColor.withValues(alpha: 0.5) : p.border),
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -475,7 +473,7 @@ class _SideEffectRow extends StatelessWidget {
                             'Worth discussing with your doctor',
                             style: TextStyle(
                               fontFamily: kSansFamily,
-                              fontSize: 11.5,
+                              fontSize: 12,
                               fontWeight: FontWeight.w700,
                               color: seriousColor,
                             ),

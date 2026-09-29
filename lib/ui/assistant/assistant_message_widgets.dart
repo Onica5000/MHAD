@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ai/ai_assistant.dart';
 import 'package:mhad/constants.dart';
 import 'package:mhad/utils/date_format.dart';
@@ -71,7 +72,7 @@ class MessageBubble extends StatelessWidget {
                   Text(
                     timeStr,
                     style: TextStyle(
-                      fontSize: 10,
+                      fontSize: 11,
                       color: cs.onSurfaceVariant,
                     ),
                   ),
@@ -81,7 +82,7 @@ class MessageBubble extends StatelessWidget {
                       child: Text(
                         aiNotAdvice,
                         style: TextStyle(
-                          fontSize: 10,
+                          fontSize: 11,
                           fontStyle: FontStyle.italic,
                           color: cs.onSurfaceVariant,
                         ),
@@ -99,7 +100,7 @@ class MessageBubble extends StatelessWidget {
                           Text(
                             'Verified with web search',
                             style: TextStyle(
-                              fontSize: 10.5,
+                              fontSize: 11,
                               fontWeight: FontWeight.w700,
                               color: cs.primary,
                             ),
@@ -113,7 +114,7 @@ class MessageBubble extends StatelessWidget {
                     Text(
                       'Sources',
                       style: TextStyle(
-                        fontSize: 10.5,
+                        fontSize: 11,
                         fontWeight: FontWeight.w700,
                         color: cs.onSurfaceVariant,
                       ),
@@ -140,7 +141,7 @@ class MessageBubble extends StatelessWidget {
                       padding: const EdgeInsets.only(top: 4),
                       child: InkWell(
                         onTap: onVerify,
-                        borderRadius: BorderRadius.circular(6),
+                        borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 4, vertical: 2),

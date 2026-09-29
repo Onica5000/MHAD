@@ -505,7 +505,7 @@ class _ReviewRow extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: p.card,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
           border: Border.all(color: p.border),
         ),
         padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
@@ -519,7 +519,7 @@ class _ReviewRow extends StatelessWidget {
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 color: p.primaryTint,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
               ),
               child: SerifNumeral(
                 value: number,
@@ -592,10 +592,10 @@ class _ReviewRow extends StatelessWidget {
 
     return Material(
       color: Colors.transparent,
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
       child: InkWell(
         onTap: onEdit,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
         child: content,
       ),
     );
@@ -661,7 +661,7 @@ class _CalloutCard extends StatelessWidget {
         richBody!,
         style: TextStyle(
           fontFamily: kSansFamily,
-          fontSize: 12.5,
+          fontSize: 13,
           height: 1.45,
           color: fg,
         ),
@@ -676,7 +676,7 @@ class _CalloutCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: bg,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
         border: Border.all(color: border),
       ),
       padding: const EdgeInsets.all(14),

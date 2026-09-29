@@ -10,12 +10,23 @@ const kMonoFallbacks = ['Consolas', 'Menlo', 'Courier New', 'monospace'];
 /// Design tokens — single source of truth for radii, spacing, shadows used
 /// throughout the MHAD redesign. Keep in sync with the prototype.
 class DesignTokens {
+  // ── Radius scale ──────────────────────────────────────────────────────────
+  // Six steps, nothing between them. Screens had drifted to 18 distinct radii
+  // (7, 9, 11 sitting beside 8, 10, 12), which reads as sloppy rather than
+  // deliberate at a glance. Snap to the nearest step instead of inventing one.
   static const cardRadius = 16.0;
   static const buttonRadius = 14.0;
   static const inputRadius = 12.0;
   static const chipRadius = 100.0;
   static const sheetRadius = 20.0;
   static const iconTileRadius = 12.0;
+
+  /// Small radius — inline pills, progress tracks, thumbnails, tight tiles.
+  static const radiusSm = 8.0;
+  /// Extra-small radius — hairline accents, tiny swatches, dot indicators.
+  static const radiusXs = 4.0;
+  /// Large radius — hero panels, full-bleed feature surfaces, overlays.
+  static const radiusLg = 24.0;
 
   static const buttonHeightMd = 52.0;
   static const buttonHeightSm = 40.0;
@@ -38,6 +49,33 @@ class DesignTokens {
   static const space40 = 40.0;
   static const space48 = 48.0;
   static const space64 = 64.0;
+
+  // ── Page gutter ───────────────────────────────────────────────────────────
+  /// Horizontal inset for a screen's primary scroll view. Every screen used to
+  /// pick its own (8/14/16/18/20/22/24), so moving between tabs nudged content
+  /// sideways a few pixels — subtle, but it reads as "unfinished". One value.
+  static const pageGutter = 20.0;
+  /// Top inset for a screen's primary scroll view.
+  static const pageTop = 20.0;
+  /// Bottom inset — clears the floating bottom nav / action bars.
+  static const pageBottom = 24.0;
+
+  /// Standard page padding for a screen's primary [ListView]/[SingleChildScrollView].
+  static const pagePadding = EdgeInsets.fromLTRB(
+      pageGutter, pageTop, pageGutter, pageBottom);
+
+  // ── Type scale ────────────────────────────────────────────────────────────
+  // Prefer `Theme.of(context).textTheme` over a raw size. These exist for the
+  // dense, non-body chrome (meta rows, pills, captions) that has no textTheme
+  // slot. The half-point sizes screens had drifted to (9.5/10.5/11.5/12.5/
+  // 13.5/14.5) are gone — they never rendered as a distinct step anyway, they
+  // just made two adjacent labels look accidentally misaligned.
+  /// Dense caption / meta line under a title.
+  static const fontCaption = 12.0;
+  /// Dense row title (list rows, compact tiles).
+  static const fontRowTitle = 14.0;
+  /// Smallest legible label — mono status strings, badge text.
+  static const fontMicro = 11.0;
 
   /// Resting card depth — a soft two-layer shadow so cards read as objects, not
   /// just outlined rectangles. Subtle in light, lifted in dark.
@@ -197,7 +235,7 @@ class MhadPalette {
   BoxDecoration get dropdownDecoration => BoxDecoration(
         color: card,
         border: Border.all(color: border),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
         boxShadow: const [
           BoxShadow(
             color: Color(0x1A000000),
@@ -728,14 +766,14 @@ ThemeData buildMhadTheme(
         color: brightness == Brightness.dark ? p.card : Colors.white,
       ),
       behavior: SnackBarBehavior.floating,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(DesignTokens.inputRadius)),
     ),
 
     dialogTheme: DialogThemeData(
       backgroundColor: p.card,
       surfaceTintColor: Colors.transparent,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(DesignTokens.sheetRadius),
       ),
     ),
 

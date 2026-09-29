@@ -146,7 +146,7 @@ class OnboardingScreen extends ConsumerWidget {
                         horizontal: 14, vertical: 12),
                     decoration: BoxDecoration(
                       color: p.primaryLight,
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
                     ),
                     child: Text.rich(
                       TextSpan(
@@ -167,7 +167,7 @@ class OnboardingScreen extends ConsumerWidget {
                       ),
                       style: TextStyle(
                         fontFamily: kSansFamily,
-                        fontSize: 13.5,
+                        fontSize: 14,
                         height: 1.4,
                         color: p.onPrimaryLight,
                       ),
@@ -184,7 +184,7 @@ class OnboardingScreen extends ConsumerWidget {
                     'capacity returns. (PA Act 194, effective 2005.)',
                     style: TextStyle(
                       fontFamily: kSansFamily,
-                      fontSize: 11.5,
+                      fontSize: 12,
                       height: 1.4,
                       color: p.textMuted,
                     ),
@@ -309,7 +309,7 @@ class _WelcomePills extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
               color: p.primaryLight,
-              borderRadius: BorderRadius.circular(100),
+              borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,

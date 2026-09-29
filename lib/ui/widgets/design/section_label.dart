@@ -41,7 +41,7 @@ class SectionLabel extends StatelessWidget {
             'Courier New',
             'monospace',
           ],
-          fontSize: 10.5,
+          fontSize: 11,
           fontWeight: FontWeight.w600,
           letterSpacing: 1.2,
           color: Theme.of(context).colorScheme.onSurfaceVariant,

@@ -93,7 +93,7 @@ class HealthChip extends StatelessWidget {
       decoration: BoxDecoration(
         color: bg,
         border: Border.all(color: border),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       child: Row(
@@ -105,7 +105,7 @@ class HealthChip extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
               decoration: BoxDecoration(
                 color: codeBg,
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: BorderRadius.circular(DesignTokens.radiusXs),
               ),
               child: Text(
                 code,
@@ -117,7 +117,7 @@ class HealthChip extends StatelessWidget {
                     'Courier New',
                     'monospace'
                   ],
-                  fontSize: 10,
+                  fontSize: 11,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 0.4,
                   color: codeFg,
@@ -139,7 +139,7 @@ class HealthChip extends StatelessWidget {
                       label,
                       style: TextStyle(
                         fontFamily: kSansFamily,
-                        fontSize: 13.5,
+                        fontSize: 14,
                         fontWeight: FontWeight.w700,
                         color: text,
                       ),
@@ -155,7 +155,7 @@ class HealthChip extends StatelessWidget {
                             'Courier New',
                             'monospace'
                           ],
-                          fontSize: 10.5,
+                          fontSize: 11,
                           fontWeight: FontWeight.w600,
                           letterSpacing: 0.4,
                           color: text.withValues(alpha: 0.75),
@@ -168,7 +168,7 @@ class HealthChip extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: p.card,
                           border: Border.all(color: border),
-                          borderRadius: BorderRadius.circular(3),
+                          borderRadius: BorderRadius.circular(DesignTokens.radiusXs),
                         ),
                         child: Text(
                           sourceTag!,
@@ -180,7 +180,7 @@ class HealthChip extends StatelessWidget {
                               'Courier New',
                               'monospace'
                             ],
-                            fontSize: 10,
+                            fontSize: 11,
                             fontWeight: FontWeight.w700,
                             letterSpacing: 0.4,
                             color: codeBg,
@@ -195,7 +195,7 @@ class HealthChip extends StatelessWidget {
                     sub!,
                     style: TextStyle(
                       fontFamily: kSansFamily,
-                      fontSize: 11.5,
+                      fontSize: 12,
                       height: 1.35,
                       color: text.withValues(alpha: 0.78),
                     ),
@@ -210,7 +210,7 @@ class HealthChip extends StatelessWidget {
               label: 'Learn about $label',
               child: InkWell(
                 onTap: onInfo,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
                 child: Padding(
                   padding: const EdgeInsets.all(6),
                   child: Icon(Icons.info_outline, size: 16, color: text),
@@ -223,7 +223,7 @@ class HealthChip extends StatelessWidget {
               label: 'Remove $label',
               child: InkWell(
                 onTap: onRemove,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
                 child: Padding(
                   padding: const EdgeInsets.all(6),
                   child: Icon(Icons.close, size: 14, color: text),

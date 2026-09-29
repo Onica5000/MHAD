@@ -210,7 +210,7 @@ class WebSidebar extends ConsumerWidget {
                     height: 32,
                     decoration: BoxDecoration(
                       color: p.primary,
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
                     ),
                     alignment: Alignment.center,
                     child: Text(
@@ -225,35 +225,39 @@ class WebSidebar extends ConsumerWidget {
                     ),
                   ),
                   const SizedBox(width: 10),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'PA MHAD',
-                        style: TextStyle(
-                          fontFamily: kSansFamily,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: -0.2,
-                          color: p.text,
+                  Flexible(
+                    // Lets the wordmark wrap instead of overflowing the fixed-width
+                    // sidebar when the fallback font runs wide.
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'PA MHAD',
+                          style: TextStyle(
+                            fontFamily: kSansFamily,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: -0.2,
+                            color: p.text,
+                          ),
                         ),
-                      ),
-                      Text(
-                        'ACT 194 · 2004',
-                        style: TextStyle(
-                          fontFamily: kMonoFamily,
-                          fontFamilyFallback: const [
-                            'Consolas',
-                            'Menlo',
-                            'Courier New',
-                            'monospace'
-                          ],
-                          fontSize: 10,
-                          letterSpacing: 0.6,
-                          color: p.textMuted,
+                        Text(
+                          'ACT 194 · 2004',
+                          style: TextStyle(
+                            fontFamily: kMonoFamily,
+                            fontFamilyFallback: const [
+                              'Consolas',
+                              'Menlo',
+                              'Courier New',
+                              'monospace'
+                            ],
+                            fontSize: 11,
+                            letterSpacing: 0.6,
+                            color: p.textMuted,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -335,10 +339,10 @@ class _SidebarItemRow extends StatelessWidget {
         // web canvas; p.card matches the sidebar background, so it looks the
         // same as a transparent row but always receives the tap.
         color: active ? p.primaryLight : p.card,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
           child: Padding(
             padding:
                 const EdgeInsets.symmetric(horizontal: 8, vertical: 9),
@@ -351,7 +355,7 @@ class _SidebarItemRow extends StatelessWidget {
                   height: 18,
                   decoration: BoxDecoration(
                     color: active ? p.primary : Colors.transparent,
-                    borderRadius: BorderRadius.circular(2),
+                    borderRadius: BorderRadius.circular(DesignTokens.radiusXs),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -368,7 +372,7 @@ class _SidebarItemRow extends StatelessWidget {
                     item.label,
                     style: TextStyle(
                       fontFamily: kSansFamily,
-                      fontSize: 13.5,
+                      fontSize: 14,
                       fontWeight: active ? FontWeight.w700 : FontWeight.w500,
                       color: active ? p.onPrimaryLight : p.textMuted,
                     ),
@@ -402,7 +406,7 @@ class _Badge extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       decoration: BoxDecoration(
         color: bg,
-        borderRadius: BorderRadius.circular(100),
+        borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
       ),
       child: Text(
         label,
@@ -414,7 +418,7 @@ class _Badge extends StatelessWidget {
             'Courier New',
             'monospace'
           ],
-          fontSize: 10,
+          fontSize: 11,
           fontWeight: FontWeight.w700,
           letterSpacing: 0.6,
           color: fg,
@@ -432,17 +436,17 @@ class _CrisisCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: SemanticColors.errorBgLight,
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
       child: InkWell(
         onTap: () {
           final ctx = rootNavigatorKey.currentContext;
           if (ctx != null) showCrisisSheet(ctx);
         },
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
         child: Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
             border: Border.all(color: SemanticColors.errorBorderLight),
           ),
           child: Column(
@@ -459,7 +463,7 @@ class _CrisisCard extends StatelessWidget {
                     style: TextStyle(
                       fontFamily: kMonoFamily,
                       fontFamilyFallback: ['Consolas', 'Courier New', 'monospace'],
-                      fontSize: 10,
+                      fontSize: 11,
                       fontWeight: FontWeight.w700,
                       letterSpacing: 0.7,
                       color: SemanticColors.errorTextLight,
@@ -507,7 +511,7 @@ class _GetHelpCard extends StatelessWidget {
     final p = Theme.of(context).mhadPalette;
     return Material(
       color: p.primaryTint,
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
       child: InkWell(
         onTap: () async {
           if (_getHelpOpen) return;
@@ -518,11 +522,11 @@ class _GetHelpCard extends StatelessWidget {
             _getHelpOpen = false;
           }
         },
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
         child: Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
             border: Border.all(color: p.primary.withValues(alpha: 0.20)),
           ),
           child: Row(

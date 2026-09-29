@@ -1,6 +1,8 @@
 ﻿import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/design_card.dart';
+import 'package:mhad/ui/widgets/design/status_views.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/ai/ai_clinical_policy.dart';
@@ -512,23 +514,23 @@ Return plain-text suggestions (short bullets are fine). No preamble.''';
       return [
         label(),
         const SizedBox(height: 8),
-        Container(
-          width: double.infinity,
+        DesignCard(
           padding: const EdgeInsets.all(14),
-          decoration: BoxDecoration(
-            color: p.card,
-            border: Border.all(color: p.border),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: SelectableText(
-            _aiSuggestions!.isNotEmpty
-                ? _aiSuggestions!
-                : 'The AI did not return any suggestions.',
-            style: TextStyle(
-              fontFamily: kSansFamily,
-              fontSize: 13.5,
-              height: 1.5,
-              color: p.text,
+          radius: DesignTokens.inputRadius,
+          // Was a width:double.infinity Container; SizedBox keeps it stretching
+          // to the column width now that the decoration lives in DesignCard.
+          child: SizedBox(
+            width: double.infinity,
+            child: SelectableText(
+              _aiSuggestions!.isNotEmpty
+                  ? _aiSuggestions!
+                  : 'The AI did not return any suggestions.',
+              style: TextStyle(
+                fontFamily: kSansFamily,
+                fontSize: 14,
+                height: 1.5,
+                color: p.text,
+              ),
             ),
           ),
         ),
@@ -537,7 +539,7 @@ Return plain-text suggestions (short bullets are fine). No preamble.''';
           '$aiNotAdvice Optional suggestions based only on what you entered.',
           style: TextStyle(
             fontFamily: kSansFamily,
-            fontSize: 11.5,
+            fontSize: 12,
             fontStyle: FontStyle.italic,
             color: p.textMuted,
           ),
@@ -571,7 +573,7 @@ Return plain-text suggestions (short bullets are fine). No preamble.''';
         ),
         Expanded(
           child: _loading
-              ? const Center(child: CircularProgressIndicator())
+              ? const PageLoading(label: 'Checking your directive')
               : _error != null
               ? Center(
                   child: Padding(
@@ -786,13 +788,13 @@ class _ConflictCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: p.card,
         border: Border.all(color: p.border),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
       ),
       child: Text(
         text,
         style: TextStyle(
           fontFamily: kSansFamily,
-          fontSize: 12.5,
+          fontSize: 13,
           height: 1.3,
           fontWeight: FontWeight.w600,
           color: p.text,
@@ -817,7 +819,7 @@ class _ConflictCard extends StatelessWidget {
       color: warnBg,
       shape: RoundedRectangleBorder(
         side: BorderSide(color: warnBorder, width: 1.5),
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(DesignTokens.buttonRadius),
       ),
       child: Padding(
         padding: const EdgeInsets.all(14),
@@ -838,7 +840,7 @@ class _ConflictCard extends StatelessWidget {
                       'Courier New',
                       'monospace',
                     ],
-                    fontSize: 10.5,
+                    fontSize: 11,
                     letterSpacing: 0.8,
                     fontWeight: FontWeight.w700,
                     color: warnText,
@@ -889,7 +891,7 @@ class _ConflictCard extends StatelessWidget {
               conflict.body,
               style: TextStyle(
                 fontFamily: kSansFamily,
-                fontSize: 13.5,
+                fontSize: 14,
                 height: 1.45,
                 color: p.text,
               ),

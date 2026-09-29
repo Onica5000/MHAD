@@ -234,7 +234,7 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
       key: _formKey,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       child: ListView(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(20),
           children: [
             WizardHelpButton(
               helpText: context.l10n.personalInfoStepHelp,

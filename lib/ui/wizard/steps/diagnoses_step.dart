@@ -270,7 +270,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
           color: active ? p.primary : p.border,
           width: 1.5,
         ),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
       child: Row(
@@ -324,7 +324,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                   _searchCtrl.clear();
                   setState(() => _searchResults = []);
                 },
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
                 child: Padding(
                   padding: const EdgeInsets.all(4),
                   child: Icon(Icons.close, size: 16, color: p.textMuted),
@@ -338,14 +338,14 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                   const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
               decoration: BoxDecoration(
                 color: p.primaryTint,
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: BorderRadius.circular(DesignTokens.radiusXs),
               ),
               child: Text(
                 'ICD-10',
                 style: TextStyle(
                   fontFamily: kMonoFamily,
                   fontFamilyFallback: kMonoFallbacks,
-                  fontSize: 10,
+                  fontSize: 11,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 0.5,
                   color: p.primary,
@@ -362,7 +362,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
       IcdCondition c, bool alreadyAdded, List<DiagnosisEntry> current, MhadPalette p) {
     return InkWell(
       onTap: alreadyAdded ? null : () => _addDiagnosis(c, current),
-      borderRadius: BorderRadius.circular(7),
+      borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: Row(
@@ -375,14 +375,14 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
               decoration: BoxDecoration(
                 color: p.card,
                 border: Border.all(color: p.primaryLight),
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: BorderRadius.circular(DesignTokens.radiusXs),
               ),
               child: Text(
                 c.code,
                 style: TextStyle(
                   fontFamily: kMonoFamily,
                   fontFamilyFallback: kMonoFallbacks,
-                  fontSize: 10,
+                  fontSize: 11,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 0.4,
                   color: p.primary,
@@ -423,7 +423,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
         style: TextStyle(
           fontFamily: kMonoFamily,
           fontFamilyFallback: kMonoFallbacks,
-          fontSize: 10,
+          fontSize: 11,
           fontWeight: FontWeight.w700,
           letterSpacing: 0.6,
           color: p.textMuted,
@@ -527,7 +527,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                   decoration: BoxDecoration(
                     color: p.surface,
                     border: Border.all(color: p.border),
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
                   ),
                   padding: const EdgeInsets.all(24),
                   child: Column(
@@ -648,7 +648,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                   for (final r in _docResults)
                     InkWell(
                       onTap: () => _pickProvider(r),
-                      borderRadius: BorderRadius.circular(7),
+                      borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
                       child: Padding(
                         padding: const EdgeInsets.all(8),
                         child: Column(
@@ -674,7 +674,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     fontFamily: kSansFamily,
-                                    fontSize: 11.5,
+                                    fontSize: 12,
                                     color: p.textMuted,
                                   ),
                                 ),
@@ -689,7 +689,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                       l10n.diagnosesNpiNote,
                       style: TextStyle(
                         fontFamily: kSansFamily,
-                        fontSize: 10,
+                        fontSize: 11,
                         fontStyle: FontStyle.italic,
                         color: p.textMuted,
                       ),
@@ -738,12 +738,12 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
           label: l10n.diagnosesDescribeSemantics,
           child: InkWell(
             onTap: _openDescribeDialog,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
             child: Container(
               decoration: BoxDecoration(
                 color: p.primaryTint,
                 border: Border.all(color: p.primaryLight),
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
               ),
               padding: const EdgeInsets.all(12),
               child: Row(
@@ -756,7 +756,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                       TextSpan(
                         style: TextStyle(
                           fontFamily: kSansFamily,
-                          fontSize: 12.5,
+                          fontSize: 13,
                           height: 1.45,
                           color: p.text,
                         ),
@@ -881,7 +881,7 @@ class _DescribeConditionDialogState extends State<_DescribeConditionDialog> {
             Text(
               l10n.diagnosesDescribeIntro,
               style: TextStyle(
-                  fontSize: 12.5, height: 1.4, color: cs.onSurfaceVariant),
+                  fontSize: 13, height: 1.4, color: cs.onSurfaceVariant),
             ),
             const SizedBox(height: 12),
             TextField(
@@ -915,7 +915,7 @@ class _DescribeConditionDialogState extends State<_DescribeConditionDialog> {
               if (_results.isEmpty)
                 Text(
                   l10n.diagnosesNoMatches,
-                  style: TextStyle(fontSize: 12.5, color: cs.onSurfaceVariant),
+                  style: TextStyle(fontSize: 13, color: cs.onSurfaceVariant),
                 )
               else
                 ConstrainedBox(
@@ -929,7 +929,7 @@ class _DescribeConditionDialogState extends State<_DescribeConditionDialog> {
               Text(
                 l10n.diagnosesSuggestionsNote,
                 style: TextStyle(
-                    fontSize: 10.5,
+                    fontSize: 11,
                     fontStyle: FontStyle.italic,
                     color: cs.onSurfaceVariant),
               ),
@@ -950,7 +950,7 @@ class _DescribeConditionDialogState extends State<_DescribeConditionDialog> {
     final added = _added.contains(c.code);
     return InkWell(
       onTap: added ? null : () => _add(c),
-      borderRadius: BorderRadius.circular(7),
+      borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 6),
         child: Row(
@@ -961,11 +961,11 @@ class _DescribeConditionDialogState extends State<_DescribeConditionDialog> {
               padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
               decoration: BoxDecoration(
                 color: cs.surfaceContainerHighest,
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: BorderRadius.circular(DesignTokens.radiusXs),
               ),
               child: Text(c.code,
                   style: TextStyle(
-                      fontSize: 10,
+                      fontSize: 11,
                       fontWeight: FontWeight.w700,
                       color: cs.primary)),
             ),

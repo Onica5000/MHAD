@@ -1,5 +1,6 @@
 ﻿import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/design_card.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
@@ -196,13 +197,8 @@ class _PermissionCard extends StatelessWidget {
     final mutedText = p.textMuted;
     final statusColor = statusOk ? okText : mutedText;
 
-    return Container(
+    return DesignCard(
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: p.card,
-        border: Border.all(color: p.border),
-        borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -213,7 +209,7 @@ class _PermissionCard extends StatelessWidget {
                 height: 44,
                 decoration: BoxDecoration(
                   color: p.primaryLight,
-                  borderRadius: BorderRadius.circular(11),
+                  borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
                 ),
                 alignment: Alignment.center,
                 child: Icon(icon, size: 22, color: p.onPrimaryLight),
@@ -255,7 +251,7 @@ class _PermissionCard extends StatelessWidget {
                                 'Courier New',
                                 'monospace',
                               ],
-                              fontSize: 10,
+                              fontSize: 11,
                               letterSpacing: 0.5,
                               color: statusColor,
                             ),
@@ -284,7 +280,7 @@ class _PermissionCard extends StatelessWidget {
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               color: p.surface,
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

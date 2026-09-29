@@ -374,7 +374,7 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                                   decoration: BoxDecoration(
                                     color: p.card,
                                     border: Border.all(color: p.border),
-                                    borderRadius: BorderRadius.circular(999),
+                                    borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
                                   ),
                                   child: Row(
                                     mainAxisSize: MainAxisSize.min,
@@ -772,7 +772,7 @@ class _WideStepRail extends StatelessWidget {
                   'Courier New',
                   'monospace',
                 ],
-                fontSize: 10.5,
+                fontSize: 11,
                 fontWeight: FontWeight.w700,
                 letterSpacing: 1.2,
                 color: p.textMuted,
@@ -890,7 +890,7 @@ class _RailStepRow extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 2),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
           child: Row(
@@ -929,7 +929,7 @@ class _RailStepRow extends StatelessWidget {
               title,
               style: TextStyle(
                 fontFamily: kSansFamily,
-                fontSize: 13.5,
+                fontSize: 14,
                 fontWeight: titleWeight,
                 color: titleColor,
                 height: 1.2,

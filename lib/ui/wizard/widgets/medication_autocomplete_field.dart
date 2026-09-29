@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:flutter/services.dart';
 import 'package:mhad/services/clinical_data_service.dart';
 import 'package:mhad/utils/debouncer.dart';
@@ -155,7 +156,7 @@ class _MedicationAutocompleteFieldState
             child: Material(
               elevation: 4,
               color: cs.surfaceContainerLow,
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxHeight: 300),
                 child: ListView.builder(
@@ -200,11 +201,11 @@ class _MedicationAutocompleteFieldState
                                         decoration: BoxDecoration(
                                           color: cs.tertiaryContainer,
                                           borderRadius:
-                                              BorderRadius.circular(4),
+                                              BorderRadius.circular(DesignTokens.radiusXs),
                                         ),
                                         child: Text('NTI',
                                             style: TextStyle(
-                                              fontSize: 10,
+                                              fontSize: 11,
                                               fontWeight: FontWeight.w700,
                                               color: cs.onTertiaryContainer,
                                             )),
@@ -230,7 +231,7 @@ class _MedicationAutocompleteFieldState
                                   button: true,
                                   label: 'Select $display',
                                   child: InkWell(
-                                    borderRadius: BorderRadius.circular(12),
+                                    borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
                                     onTap: () => _selectMedication(display),
                                     child: Container(
                                       padding: const EdgeInsets.symmetric(
@@ -238,7 +239,7 @@ class _MedicationAutocompleteFieldState
                                       decoration: BoxDecoration(
                                         color: cs.primaryContainer,
                                         borderRadius:
-                                            BorderRadius.circular(12),
+                                            BorderRadius.circular(DesignTokens.inputRadius),
                                       ),
                                       child: Text(
                                         s,

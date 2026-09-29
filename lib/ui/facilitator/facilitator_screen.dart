@@ -206,7 +206,7 @@ class _PathwayCard extends StatelessWidget {
             Text(body,
                 style: TextStyle(
                   fontFamily: kSansFamily,
-                  fontSize: 13.5,
+                  fontSize: 14,
                   height: 1.45,
                   color: primary ? cs.onPrimary : cs.onSurfaceVariant,
                 )),
@@ -223,7 +223,7 @@ class _PathwayCard extends StatelessWidget {
                       color: primary
                           ? cs.onPrimary.withValues(alpha: 0.15)
                           : cs.surfaceContainerHighest,
-                      borderRadius: BorderRadius.circular(100),
+                      borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
                     ),
                     child: Text(m,
                         style: TextStyle(
@@ -234,7 +234,7 @@ class _PathwayCard extends StatelessWidget {
                             'Courier New',
                             'monospace'
                           ],
-                          fontSize: 10.5,
+                          fontSize: 11,
                           letterSpacing: 0.4,
                           color: primary
                               ? cs.onPrimary
@@ -279,7 +279,7 @@ class _ReferralRow extends StatelessWidget {
                     Text(label,
                         style: const TextStyle(
                           fontFamily: kSansFamily,
-                          fontSize: 13.5,
+                          fontSize: 14,
                           fontWeight: FontWeight.w600,
                         )),
                     Text(sub,

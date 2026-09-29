@@ -191,7 +191,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
     return Form(
       key: _formKey,
       child: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(20),
         children: [
           WizardHelpButton(
             // The meaning of each category (Never give / Limitations /
@@ -222,7 +222,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
                     child: Text.rich(
                       TextSpan(
                         style: TextStyle(
-                          fontSize: 12.5,
+                          fontSize: 13,
                           height: 1.45,
                           color: Theme.of(context)
                               .colorScheme
@@ -354,7 +354,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
                 height: 36,
                 decoration: BoxDecoration(
                   color: p.primaryLight,
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
                 ),
                 child: Icon(Icons.healing_outlined, color: p.primary, size: 20),
               ),
@@ -442,7 +442,7 @@ class _MedTable extends StatelessWidget {
       color: cs.surfaceContainerLow,
       shape: accentColor != null
           ? RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
               side: BorderSide(color: accentColor!, width: 2),
             )
           : null,

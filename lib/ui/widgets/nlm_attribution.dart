@@ -26,7 +26,7 @@ class NlmAttribution extends StatelessWidget {
         'Source: U.S. National Library of Medicine. $medicalDisclaimer',
         style: Theme.of(context).textTheme.bodySmall?.copyWith(
               color: cs.onSurfaceVariant,
-              fontSize: 10,
+              fontSize: 11,
             ),
       ),
     );

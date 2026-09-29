@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/widgets/design/bottom_nav.dart';
 import 'package:mhad/ui/widgets/design/web_sidebar.dart';
@@ -92,7 +93,7 @@ class ResponsiveShell extends StatelessWidget {
       return Column(
         children: [
           Expanded(child: child),
-          ListenableBuilder(
+          _RouteListener(
             listenable: appRouter.routerDelegate,
             builder: (context, _) {
               final route = appRouter
@@ -112,7 +113,7 @@ class ResponsiveShell extends StatelessWidget {
     // searches ancestors, so it cannot find the router here. Instead we read
     // the current route from the global appRouter directly and rebuild on
     // every navigation by listening to the routerDelegate (a ChangeNotifier).
-    return ListenableBuilder(
+    return _RouteListener(
       listenable: appRouter.routerDelegate,
       builder: (context, _) {
         // Use the TOP match's concrete location, not `.uri.path`.
@@ -201,4 +202,66 @@ class ResponsiveShell extends StatelessWidget {
       },
     );
   }
+}
+
+/// A [ListenableBuilder] for the router delegate that tolerates notifications
+/// fired mid-build.
+///
+/// The shell sits ABOVE the routed Navigator, but the router can notify while
+/// its own subtree is building: on the initial route parse, and when an
+/// imperative `push()` settles. On wide layouts the routed child is built
+/// inside this listener (via LayoutBuilder), so a plain [ListenableBuilder]
+/// would call markNeedsBuild on an ancestor during build — a debug assert that
+/// also drops the rebuild, leaving the shell on the previous route's layout.
+/// Here a notification during the build/layout phase is deferred to the end
+/// of the frame; any other notification rebuilds immediately.
+class _RouteListener extends StatefulWidget {
+  final Listenable listenable;
+  final TransitionBuilder builder;
+  const _RouteListener({required this.listenable, required this.builder});
+
+  @override
+  State<_RouteListener> createState() => _RouteListenerState();
+}
+
+class _RouteListenerState extends State<_RouteListener> {
+  bool _rebuildScheduled = false;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.listenable.addListener(_onChange);
+  }
+
+  @override
+  void didUpdateWidget(_RouteListener oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.listenable != widget.listenable) {
+      oldWidget.listenable.removeListener(_onChange);
+      widget.listenable.addListener(_onChange);
+    }
+  }
+
+  @override
+  void dispose() {
+    widget.listenable.removeListener(_onChange);
+    super.dispose();
+  }
+
+  void _onChange() {
+    final phase = SchedulerBinding.instance.schedulerPhase;
+    if (phase != SchedulerPhase.persistentCallbacks) {
+      if (mounted) setState(() {});
+      return;
+    }
+    if (_rebuildScheduled) return;
+    _rebuildScheduled = true;
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      _rebuildScheduled = false;
+      if (mounted) setState(() {});
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) => widget.builder(context, null);
 }

@@ -53,7 +53,7 @@ class _CrisisSheet extends StatelessWidget {
           top: false,
           child: ListView(
             controller: scrollController,
-            padding: const EdgeInsets.fromLTRB(22, 14, 22, 24),
+            padding: const EdgeInsets.fromLTRB(20, 14, 20, 24),
             children: [
               Center(
                 child: Container(
@@ -61,7 +61,7 @@ class _CrisisSheet extends StatelessWidget {
                   height: 4,
                   decoration: BoxDecoration(
                     color: p.border,
-                    borderRadius: BorderRadius.circular(100),
+                    borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
                   ),
                 ),
               ),
@@ -203,10 +203,10 @@ class _Emergency911Callout extends StatelessWidget {
     final p = Theme.of(context).mhadPalette;
     return Material(
       color: p.primaryLight,
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
       child: InkWell(
         onTap: () => _call(context),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
           child: Row(
@@ -288,15 +288,15 @@ class _CrisisRow extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 8),
       child: Material(
         color: bg,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
         child: InkWell(
           onTap: onTap,
           autofocus: autofocus,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
               border: Border.all(color: border),
             ),
             child: Row(
@@ -319,7 +319,7 @@ class _CrisisRow extends StatelessWidget {
                         name,
                         style: TextStyle(
                           fontFamily: kSansFamily,
-                          fontSize: 14.5,
+                          fontSize: 15,
                           fontWeight: FontWeight.w700,
                           color: accent
                               ? (dark

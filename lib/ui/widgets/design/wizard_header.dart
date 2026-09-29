@@ -42,7 +42,7 @@ class WizardHeader extends StatelessWidget {
     this.actionLabel = 'Save & exit',
     this.onAction,
     this.right,
-    this.padding = const EdgeInsets.fromLTRB(22, 8, 22, 0),
+    this.padding = const EdgeInsets.fromLTRB(20, 8, 20, 0),
     super.key,
   });
 
@@ -64,7 +64,7 @@ class WizardHeader extends StatelessWidget {
               label: backLabel,
               child: InkWell(
                 onTap: onBack,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
                 child: SizedBox(
                   height: 48,
                   child: Padding(
@@ -98,7 +98,7 @@ class WizardHeader extends StatelessWidget {
                 label: actionLabel,
                 child: InkWell(
                   onTap: onAction,
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
                   child: SizedBox(
                     height: 48,
                     child: Padding(
