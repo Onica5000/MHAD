@@ -228,7 +228,7 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
       physics: widget.embedded ? const NeverScrollableScrollPhysics() : null,
       padding: widget.embedded
           ? const EdgeInsets.symmetric(horizontal: 4)
-          : const EdgeInsets.fromLTRB(16, 8, 16, 24),
+          : const EdgeInsets.fromLTRB(20, 8, 20, 24),
       children: [
         const WizardHelpButton(
           helpText:
@@ -302,7 +302,7 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
             'allergy).',
             style: TextStyle(
               fontFamily: kSansFamily,
-              fontSize: 10.5,
+              fontSize: 11,
               fontStyle: FontStyle.italic,
               height: 1.4,
               color: p.textMuted,
@@ -318,7 +318,7 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
           decoration: BoxDecoration(
             color: p.card,
             border: Border.all(color: p.border),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
           ),
           padding: const EdgeInsets.all(14),
           child: Column(
@@ -431,7 +431,7 @@ class _KindToggle extends StatelessWidget {
       decoration: BoxDecoration(
         color: p.surface,
         border: Border.all(color: p.border),
-        borderRadius: BorderRadius.circular(100),
+        borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
       ),
       child: Row(
         children: [
@@ -468,12 +468,12 @@ class _KindSegment extends StatelessWidget {
       label: '${kind.label} (${kind.source})',
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(100),
+        borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 4),
           decoration: BoxDecoration(
             color: active ? p.card : Colors.transparent,
-            borderRadius: BorderRadius.circular(100),
+            borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
             boxShadow: active
                 ? const [
                     BoxShadow(
@@ -492,7 +492,7 @@ class _KindSegment extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: kSansFamily,
-                  fontSize: 12.5,
+                  fontSize: 13,
                   fontWeight: FontWeight.w700,
                   color: active ? p.text : p.textMuted,
                 ),
@@ -504,7 +504,7 @@ class _KindSegment extends StatelessWidget {
                 style: TextStyle(
                   fontFamily: kMonoFamily,
                   fontFamilyFallback: kMonoFallbacks,
-                  fontSize: 10,
+                  fontSize: 11,
                   letterSpacing: 0.4,
                   color: active ? p.primary : p.textMuted,
                 ),
@@ -544,7 +544,7 @@ class _SearchField extends StatelessWidget {
       decoration: BoxDecoration(
         color: p.card,
         border: Border.all(color: p.border, width: 1.5),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
       ),
       child: Row(
         children: [
@@ -587,7 +587,7 @@ class _SearchField extends StatelessWidget {
               label: 'Clear search',
               child: InkWell(
                 onTap: onClear,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
                 child: Padding(
                   padding: const EdgeInsets.all(4),
                   child: Icon(Icons.close, size: 16, color: p.textMuted),
@@ -599,7 +599,7 @@ class _SearchField extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
               decoration: BoxDecoration(
                 color: p.primaryTint,
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: BorderRadius.circular(DesignTokens.radiusXs),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -611,7 +611,7 @@ class _SearchField extends StatelessWidget {
                     style: TextStyle(
                       fontFamily: kMonoFamily,
                       fontFamilyFallback: kMonoFallbacks,
-                      fontSize: 10,
+                      fontSize: 11,
                       fontWeight: FontWeight.w700,
                       letterSpacing: 0.5,
                       color: p.primary,
@@ -663,7 +663,7 @@ class _AutoComplete extends StatelessWidget {
                     style: TextStyle(
                       fontFamily: kMonoFamily,
                       fontFamilyFallback: kMonoFallbacks,
-                      fontSize: 10,
+                      fontSize: 11,
                       fontWeight: FontWeight.w700,
                       letterSpacing: 0.6,
                       color: p.primary,
@@ -675,7 +675,7 @@ class _AutoComplete extends StatelessWidget {
                   style: TextStyle(
                     fontFamily: kMonoFamily,
                     fontFamilyFallback: kMonoFallbacks,
-                    fontSize: 10,
+                    fontSize: 11,
                     letterSpacing: 0.4,
                     color: p.textMuted,
                   ),
@@ -753,12 +753,12 @@ class _AutoCompleteRow extends StatelessWidget {
     final p = Theme.of(context).mhadPalette;
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(7),
+      borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
       child: Container(
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           color: first ? p.primaryTint : Colors.transparent,
-          borderRadius: BorderRadius.circular(7),
+          borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -769,14 +769,14 @@ class _AutoCompleteRow extends StatelessWidget {
               decoration: BoxDecoration(
                 color: p.card,
                 border: Border.all(color: p.primaryLight),
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: BorderRadius.circular(DesignTokens.radiusXs),
               ),
               child: Text(
                 item.code,
                 style: TextStyle(
                   fontFamily: kMonoFamily,
                   fontFamilyFallback: kMonoFallbacks,
-                  fontSize: 10,
+                  fontSize: 11,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 0.4,
                   color: p.primary,
@@ -909,7 +909,7 @@ class _SeverityOption extends StatelessWidget {
       label: '$label severity',
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 6),
           decoration: BoxDecoration(
@@ -918,7 +918,7 @@ class _SeverityOption extends StatelessWidget {
               color: active ? activeBg : border,
               width: 1.5,
             ),
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -928,7 +928,7 @@ class _SeverityOption extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: kSansFamily,
-                  fontSize: 12.5,
+                  fontSize: 13,
                   fontWeight: FontWeight.w700,
                   height: 1.25,
                   color: active ? activeFg : fg,
@@ -940,7 +940,7 @@ class _SeverityOption extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: kSansFamily,
-                  fontSize: 10,
+                  fontSize: 11,
                   fontWeight: FontWeight.w500,
                   height: 1.2,
                   color: (active ? activeFg : fg).withValues(alpha: 0.85),

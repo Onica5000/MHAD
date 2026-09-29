@@ -39,7 +39,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         children: [
           Expanded(
             child: ListView(
-              padding: const EdgeInsets.fromLTRB(22, 20, 22, 24),
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
               children: [
                 const SectionLabel('Account'),
                 const EditorialHeading(
@@ -167,7 +167,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         height: 36,
                         decoration: BoxDecoration(
                           color: p.primaryLight,
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
                         ),
                         child: Icon(
                           ScreenshotProtectionService.isEnabled
@@ -290,7 +290,7 @@ class _SettingsRow extends StatelessWidget {
               height: 36,
               decoration: BoxDecoration(
                 color: tBg,
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
               ),
               child: Icon(icon, color: fg, size: 20),
             ),
@@ -344,7 +344,7 @@ class _ThemeModeSegment extends StatelessWidget {
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
         color: p.primaryTint,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
       ),
       child: Row(
         children: options.map((opt) {
@@ -352,12 +352,12 @@ class _ThemeModeSegment extends StatelessWidget {
           return Expanded(
             child: InkWell(
               onTap: () => onChanged(opt.$1),
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 decoration: BoxDecoration(
                   color: selected ? p.card : Colors.transparent,
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
                   boxShadow: selected
                       ? [
                           BoxShadow(

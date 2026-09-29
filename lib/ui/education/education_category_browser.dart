@@ -139,7 +139,7 @@ class _BrowseRow extends StatelessWidget {
                       title,
                       style: TextStyle(
                         fontFamily: kSansFamily,
-                        fontSize: 13.5,
+                        fontSize: 14,
                         fontWeight: FontWeight.w600,
                         color: p.text,
                       ),
@@ -149,7 +149,7 @@ class _BrowseRow extends StatelessWidget {
                       sub,
                       style: TextStyle(
                         fontFamily: kSansFamily,
-                        fontSize: 11.5,
+                        fontSize: 12,
                         color: p.textMuted,
                       ),
                     ),
@@ -164,7 +164,7 @@ class _BrowseRow extends StatelessWidget {
                     const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                 decoration: BoxDecoration(
                   color: p.primaryTint,
-                  borderRadius: BorderRadius.circular(4),
+                  borderRadius: BorderRadius.circular(DesignTokens.radiusXs),
                 ),
                 child: Text(
                   '$count',
@@ -176,7 +176,7 @@ class _BrowseRow extends StatelessWidget {
                       'Courier New',
                       'monospace',
                     ],
-                    fontSize: 10.5,
+                    fontSize: 11,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 0.4,
                     color: p.primary,
@@ -244,7 +244,7 @@ class SectionTile extends StatelessWidget {
         child: Card(
       margin: const EdgeInsets.only(bottom: 8),
       child: InkWell(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
         onTap: () => Navigator.of(context).push(
           MaterialPageRoute(
             fullscreenDialog: true,
@@ -331,12 +331,12 @@ class _CategoryBadge extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
         border: Border.all(color: color.withValues(alpha: 0.4)),
       ),
       child: Text(
         category.displayName,
-        style: TextStyle(fontSize: 10, color: color, fontWeight: FontWeight.w600),
+        style: TextStyle(fontSize: 11, color: color, fontWeight: FontWeight.w600),
       ),
     );
   }

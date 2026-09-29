@@ -258,7 +258,7 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
                     height: 36,
                     decoration: BoxDecoration(
                       color: p.primary,
-                      borderRadius: BorderRadius.circular(9),
+                      borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
                     ),
                     alignment: Alignment.center,
                     child: Text(
@@ -297,7 +297,7 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
                             'Courier New',
                             'monospace',
                           ],
-                          fontSize: 10,
+                          fontSize: 11,
                           letterSpacing: 0.6,
                           color: p.textMuted,
                         ),
@@ -331,7 +331,7 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
                       decoration: BoxDecoration(
                         color: p.card,
                         border: Border.all(color: p.primary, width: 2),
-                        borderRadius: BorderRadius.circular(28),
+                        borderRadius: BorderRadius.circular(DesignTokens.radiusLg),
                       ),
                       alignment: Alignment.center,
                       child: Icon(
@@ -350,7 +350,7 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
                           color: p.primary.withValues(alpha: 0.30),
                           width: 2,
                         ),
-                        borderRadius: BorderRadius.circular(32),
+                        borderRadius: BorderRadius.circular(DesignTokens.radiusLg),
                       ),
                     ),
                   ],
@@ -384,7 +384,7 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: kSansFamily,
-                  fontSize: 13.5,
+                  fontSize: 14,
                   height: 1.5,
                   color: p.textMuted,
                 ),
@@ -404,7 +404,7 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
                           : (_lockedOut
                               ? cs.errorContainer
                               : p.primaryTint),
-                      borderRadius: BorderRadius.circular(100),
+                      borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -436,7 +436,7 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
                               'Courier New',
                               'monospace',
                             ],
-                            fontSize: 10.5,
+                            fontSize: 11,
                             fontWeight: FontWeight.w700,
                             letterSpacing: 0.8,
                             color: _verifying

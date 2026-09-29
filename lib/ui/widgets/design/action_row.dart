@@ -57,15 +57,15 @@ class ActionRow extends StatelessWidget {
 
     return Material(
       color: p.card,
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
           decoration: BoxDecoration(
             border: Border.all(color: p.border),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
           ),
           child: Row(
             children: [
@@ -74,7 +74,7 @@ class ActionRow extends StatelessWidget {
                 height: 36,
                 decoration: BoxDecoration(
                   color: iconBg,
-                  borderRadius: BorderRadius.circular(9),
+                  borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
                 ),
                 alignment: Alignment.center,
                 child: Icon(icon, size: 18, color: accent),
@@ -88,7 +88,7 @@ class ActionRow extends StatelessWidget {
                       title,
                       style: TextStyle(
                         fontFamily: kSansFamily,
-                        fontSize: 13.5,
+                        fontSize: 14,
                         fontWeight: FontWeight.w600,
                         color: titleColor,
                       ),
@@ -100,7 +100,7 @@ class ActionRow extends StatelessWidget {
                           subtitle!,
                           style: TextStyle(
                             fontFamily: kSansFamily,
-                            fontSize: 11.5,
+                            fontSize: 12,
                             color: p.textMuted,
                           ),
                         ),

@@ -48,7 +48,7 @@ class ActiveDirectiveHero extends StatelessWidget {
           'Continue your $formLabel — $pctLabel, last edited $lastEdited',
       child: Material(
         color: p.primary,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
         clipBehavior: Clip.antiAlias,
         child: InkWell(
           onTap: () =>
@@ -84,7 +84,7 @@ class ActiveDirectiveHero extends StatelessWidget {
                               horizontal: 8, vertical: 3),
                           decoration: BoxDecoration(
                             color: p.onPrimary.withValues(alpha: 0.18),
-                            borderRadius: BorderRadius.circular(100),
+                            borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
                           ),
                           child: Text(
                             '● Draft',
@@ -105,7 +105,7 @@ class ActiveDirectiveHero extends StatelessWidget {
                               'Consolas',
                               'monospace'
                             ],
-                            fontSize: 11.5,
+                            fontSize: 12,
                             color: p.onPrimary.withValues(alpha: 0.85),
                           ),
                         ),
@@ -134,7 +134,7 @@ class ActiveDirectiveHero extends StatelessWidget {
                     ),
                     const SizedBox(height: 14),
                     ClipRRect(
-                      borderRadius: BorderRadius.circular(100),
+                      borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
                       child: SizedBox(
                         height: 4,
                         child: LinearProgressIndicator(
@@ -193,7 +193,7 @@ class ActiveDirectiveHero extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 14),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
                           ),
                         ),
                       ),

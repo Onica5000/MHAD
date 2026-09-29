@@ -25,7 +25,7 @@ class MonoPill extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
         color: background,
-        borderRadius: BorderRadius.circular(100),
+        borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
       ),
       child: Text(
         '${dot ? '● ' : ''}${label.toUpperCase()}',

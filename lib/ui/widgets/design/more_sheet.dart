@@ -131,7 +131,7 @@ class _MoreSheet extends StatelessWidget {
           top: false,
           child: ListView(
             controller: scrollController,
-            padding: const EdgeInsets.fromLTRB(22, 14, 22, 24),
+            padding: const EdgeInsets.fromLTRB(20, 14, 20, 24),
             children: [
               Center(
                 child: Container(
@@ -139,7 +139,7 @@ class _MoreSheet extends StatelessWidget {
                   height: 4,
                   decoration: BoxDecoration(
                     color: p.border,
-                    borderRadius: BorderRadius.circular(100),
+                    borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
                   ),
                 ),
               ),
@@ -264,15 +264,15 @@ class _MoreRow extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 8),
       child: Material(
         color: bg,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
         child: InkWell(
           onTap: onTap,
           autofocus: autofocus,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
               border: Border.all(color: border),
             ),
             child: Row(
@@ -295,7 +295,7 @@ class _MoreRow extends StatelessWidget {
                         title,
                         style: TextStyle(
                           fontFamily: kSansFamily,
-                          fontSize: 14.5,
+                          fontSize: 15,
                           fontWeight: FontWeight.w700,
                           color: titleColor,
                         ),

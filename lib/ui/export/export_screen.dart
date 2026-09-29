@@ -500,7 +500,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         if (_isGenerating)
           Padding(
             padding: const EdgeInsets.only(bottom: 12),
-            child: LinearProgressIndicator(borderRadius: BorderRadius.circular(4)),
+            child: LinearProgressIndicator(borderRadius: BorderRadius.circular(DesignTokens.radiusXs)),
           ),
         _buildLegalDisclaimerCard(),
         const SizedBox(height: 16),
@@ -886,7 +886,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
           ),
           child: FocusTraversalGroup(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(22, 22, 22, 40),
+              padding: const EdgeInsets.fromLTRB(20, 22, 20, 40),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -894,7 +894,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
                     Padding(
                       padding: const EdgeInsets.only(bottom: 12),
                       child: LinearProgressIndicator(
-                          borderRadius: BorderRadius.circular(4)),
+                          borderRadius: BorderRadius.circular(DesignTokens.radiusXs)),
                     ),
                   _buildLegalDisclaimerCard(),
                   const SizedBox(height: 16),
@@ -913,7 +913,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
   }
 
   Widget _narrowLayout(MhadPalette p) => ListView(
-        padding: const EdgeInsets.fromLTRB(22, 4, 22, 16),
+        padding: const EdgeInsets.fromLTRB(20, 4, 20, 16),
         children: [
           ..._buildHeaderChildren(p),
           ..._buildDocumentChildren(),

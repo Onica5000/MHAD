@@ -112,7 +112,7 @@ class _QuizDialogState extends State<_QuizDialog> {
     return Dialog(
       backgroundColor: p.scaffoldBackground,
       insetPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 24),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(DesignTokens.sheetRadius)),
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 460, maxHeight: 720),
         child: _step >= _questions.length
@@ -163,7 +163,7 @@ class _QuestionBody extends StatelessWidget {
       children: [
         // Header — back row + step dots + "question N of 4" eyebrow
         Padding(
-          padding: const EdgeInsets.fromLTRB(18, 14, 18, 6),
+          padding: const EdgeInsets.fromLTRB(20, 14, 20, 6),
           child: Row(
             children: [
               IconButton(
@@ -183,7 +183,7 @@ class _QuestionBody extends StatelessWidget {
                         'Courier New',
                         'monospace'
                       ],
-                      fontSize: 10.5,
+                      fontSize: 11,
                       letterSpacing: 1,
                       color: p.textMuted,
                     ),
@@ -202,7 +202,7 @@ class _QuestionBody extends StatelessWidget {
         // Scrollable body
         Expanded(
           child: ListView(
-            padding: const EdgeInsets.fromLTRB(22, 20, 22, 16),
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
             children: [
               const SectionLabel('In your words'),
               const SizedBox(height: 8),
@@ -216,7 +216,7 @@ class _QuestionBody extends StatelessWidget {
                 question.sub,
                 style: TextStyle(
                   fontFamily: kSansFamily,
-                  fontSize: 13.5,
+                  fontSize: 14,
                   color: p.textMuted,
                   height: 1.45,
                 ),
@@ -271,7 +271,7 @@ class _OptCard extends StatelessWidget {
     final p = Theme.of(context).mhadPalette;
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 140),
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
@@ -281,7 +281,7 @@ class _OptCard extends StatelessWidget {
             color: selected ? p.primary : p.border,
             width: selected ? 2 : 1,
           ),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -318,7 +318,7 @@ class _OptCard extends StatelessWidget {
                     label,
                     style: TextStyle(
                       fontFamily: kSansFamily,
-                      fontSize: 14.5,
+                      fontSize: 15,
                       fontWeight: FontWeight.w600,
                       color: p.text,
                       height: 1.3,
@@ -330,7 +330,7 @@ class _OptCard extends StatelessWidget {
                       hint,
                       style: TextStyle(
                         fontFamily: kSansFamily,
-                        fontSize: 12.5,
+                        fontSize: 13,
                         color: p.textMuted,
                         height: 1.4,
                       ),
@@ -372,7 +372,7 @@ class _ResultBody extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(18, 14, 18, 6),
+          padding: const EdgeInsets.fromLTRB(20, 14, 20, 6),
           child: Row(
             children: [
               IconButton(
@@ -392,7 +392,7 @@ class _ResultBody extends StatelessWidget {
                         'Courier New',
                         'monospace'
                       ],
-                      fontSize: 10.5,
+                      fontSize: 11,
                       letterSpacing: 1,
                       color: p.textMuted,
                     ),
@@ -405,7 +405,7 @@ class _ResultBody extends StatelessWidget {
         ),
         Expanded(
           child: ListView(
-            padding: const EdgeInsets.fromLTRB(22, 20, 22, 16),
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
             children: [
               const SectionLabel('Recommended for you'),
               const SizedBox(height: 8),
@@ -437,7 +437,7 @@ class _ResultBody extends StatelessWidget {
 
               // Stacked confidence bar with three segments
               ClipRRect(
-                borderRadius: BorderRadius.circular(100),
+                borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
                 child: SizedBox(
                   height: 10,
                   child: Row(
@@ -481,7 +481,7 @@ class _ResultBody extends StatelessWidget {
           ),
         ),
         Container(
-          padding: const EdgeInsets.fromLTRB(18, 12, 18, 14),
+          padding: const EdgeInsets.fromLTRB(20, 12, 20, 14),
           decoration: BoxDecoration(
             color: p.card,
             border: Border(top: BorderSide(color: p.border)),
@@ -555,7 +555,7 @@ class _LegendRow extends StatelessWidget {
             height: 10,
             decoration: BoxDecoration(
               color: color,
-              borderRadius: BorderRadius.circular(2),
+              borderRadius: BorderRadius.circular(DesignTokens.radiusXs),
             ),
           ),
           const SizedBox(width: 8),

@@ -52,7 +52,7 @@ class InfoBanner extends StatelessWidget {
       margin: margin ?? const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
         color: bg,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
         border: Border.all(color: border),
       ),
       padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),

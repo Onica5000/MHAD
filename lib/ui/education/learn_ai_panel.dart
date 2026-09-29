@@ -100,7 +100,7 @@ class _LearnAiPanelState extends ConsumerState<LearnAiPanel> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(18, 18, 18, 4),
+              padding: const EdgeInsets.fromLTRB(20, 18, 20, 4),
               child: Row(
                 children: [
                   Icon(Icons.auto_awesome, size: 18, color: p.primary),
@@ -121,7 +121,7 @@ class _LearnAiPanelState extends ConsumerState<LearnAiPanel> {
             // provider + "PII STRIPPED" badge — for a consistent AI panel
             // across the app. (The "not advice" line moves down by the input.)
             Padding(
-              padding: const EdgeInsets.fromLTRB(18, 0, 18, 12),
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
               child: Text(
                 '● ${ref.watch(activeProviderProvider).name.toUpperCase()} · PII STRIPPED',
                 style: TextStyle(
@@ -132,7 +132,7 @@ class _LearnAiPanelState extends ConsumerState<LearnAiPanel> {
                     'Courier New',
                     'monospace',
                   ],
-                  fontSize: 10,
+                  fontSize: 11,
                   letterSpacing: 0.5,
                   color: hasKey ? p.primary : p.textMuted,
                 ),
@@ -154,7 +154,7 @@ class _LearnAiPanelState extends ConsumerState<LearnAiPanel> {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontFamily: kSansFamily,
-                            fontSize: 12.5,
+                            fontSize: 13,
                             height: 1.5,
                             color: p.textMuted,
                           ),
@@ -221,7 +221,7 @@ class _LearnAiPanelState extends ConsumerState<LearnAiPanel> {
                 'Not legal or medical advice.',
                 style: TextStyle(
                   fontFamily: kSansFamily,
-                  fontSize: 10.5,
+                  fontSize: 11,
                   color: p.textMuted,
                 ),
               ),
@@ -251,13 +251,13 @@ class _LearnChatBubble extends StatelessWidget {
         decoration: BoxDecoration(
           color: isUser ? p.primary : p.surface,
           border: isUser ? null : Border.all(color: p.border),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
         ),
         child: Text(
           message.content,
           style: TextStyle(
             fontFamily: kSansFamily,
-            fontSize: 12.5,
+            fontSize: 13,
             height: 1.4,
             color: isUser ? p.onPrimary : p.text,
           ),

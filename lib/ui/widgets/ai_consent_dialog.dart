@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ai/ai_provider.dart';
 
 /// Provider-aware data caveat shown in the consent dialogs. Gemini's free tier
@@ -50,7 +51,7 @@ Future<bool> showAutofillConsentDialog(
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     color: cs.errorContainer,
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
                   ),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -134,7 +135,7 @@ Future<bool> showAudioConsentDialog(
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     color: cs.errorContainer,
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
                   ),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -212,7 +213,7 @@ Future<bool> showAiConsentDialog(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                 color: cs.errorContainer,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
