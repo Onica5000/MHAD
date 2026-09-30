@@ -7077,4 +7077,193 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get assistantContextHelperSession =>
       'Sesión guiada · ayudando a alguien';
+
+  @override
+  String get accessibilitySettingsSectionReading => 'Lectura';
+
+  @override
+  String get accessibilitySettingsSectionLanguage => 'Idioma';
+
+  @override
+  String get accessibilitySettingsTextSizeSmall => 'Pequeño';
+
+  @override
+  String get accessibilitySettingsTextSizeDefault => 'Predeterminado';
+
+  @override
+  String get accessibilitySettingsTextSizeLarge => 'Grande';
+
+  @override
+  String get accessibilitySettingsTextSizeHuge => 'Muy grande';
+
+  @override
+  String get accessibilitySettingsSpanishReviewNotice =>
+      'La traducción al español se hizo con ayuda de herramientas automáticas y todavía no la ha revisado un hablante nativo. Si alguna redacción no está clara, cambie a inglés para verificarla. El PDF de su directiva siempre se genera en inglés.';
+
+  @override
+  String get settingsThemeAuto => 'Automático';
+
+  @override
+  String get settingsThemeLight => 'Claro';
+
+  @override
+  String get settingsThemeDark => 'Oscuro';
+
+  @override
+  String get settingsStatusWebInMemory => '● APLICACIÓN WEB · SOLO EN MEMORIA';
+
+  @override
+  String settingsStatusNative(String mode, String auth) {
+    return '● MODO $mode · $auth';
+  }
+
+  @override
+  String get settingsStatusPrivate => 'PRIVADO';
+
+  @override
+  String get settingsStatusPublic => 'PÚBLICO';
+
+  @override
+  String get settingsStatusNoSession => 'SIN SESIÓN';
+
+  @override
+  String get settingsStatusBiometrics => 'BIOMETRÍA';
+
+  @override
+  String get settingsStatusEphemeral => 'EFÍMERO';
+
+  @override
+  String get pinDialogAuthenticating => 'AUTENTICANDO…';
+
+  @override
+  String get pinDialogLockedWait => 'BLOQUEADO · ESPERE 30 S';
+
+  @override
+  String pinDialogAttempt(int count, int max) {
+    return 'INTENTO $count / $max';
+  }
+
+  @override
+  String get modeSelectionRecommendedSuffix => ' (recomendado)';
+
+  @override
+  String get onboardingPillValidTwoYears => 'Válida 2 años';
+
+  @override
+  String get onboardingPillTwoWitnesses => '2 testigos';
+
+  @override
+  String get onboardingPillAct194 => 'Ley 194 de PA';
+
+  @override
+  String get onboardingPillNothingSaved => 'No se guarda nada';
+
+  @override
+  String get onboardingPillStaysOnDevice => 'Se queda en su dispositivo';
+
+  @override
+  String get educationHelpTitle => 'Ayuda';
+
+  @override
+  String get educationTabAll => 'Todo';
+
+  @override
+  String get educationTabArticles => 'Artículos';
+
+  @override
+  String get educationTabGlossary => 'Glosario';
+
+  @override
+  String get educationTabFaq => 'Preguntas';
+
+  @override
+  String get educationTabChecklists => 'Listas';
+
+  @override
+  String get educationCategoryFaq => 'Preguntas frecuentes';
+
+  @override
+  String get educationSourceBeyondBooklet => 'MÁS ALLÁ DEL FOLLETO';
+
+  @override
+  String get educationSourceOfficialBooklet => 'DEL FOLLETO OFICIAL';
+
+  @override
+  String get commonLoading => 'Cargando';
+
+  @override
+  String get wizardHeaderSaveAndExit => 'Guardar y salir';
+
+  @override
+  String get fdaLabelDialogAdverseReactions =>
+      'Reacciones adversas (efectos secundarios)';
+
+  @override
+  String get fdaLabelDialogDrugInteractions =>
+      'Interacciones con otros medicamentos';
+
+  @override
+  String get addressFieldsEnterZipFirst =>
+      'Primero ingrese un código postal de 5 dígitos.';
+
+  @override
+  String get addressFieldsZipLookupFailed =>
+      'No se pudo buscar ese código postal; puede escribirlo usted.';
+
+  @override
+  String addressFieldsFilled(String place) {
+    return 'Completado: $place';
+  }
+
+  @override
+  String get aiConsentDialogGeminiCaveat =>
+      'En el nivel gratuito de Gemini, Google puede conservar sus datos y usarlos para mejorar su IA, revisores humanos pueden verlos y lo que se envía no se puede recuperar ni borrar después.';
+
+  @override
+  String aiConsentDialogProviderCaveat(String provider) {
+    return 'Sus datos se envían a $provider y se tratan según su política de datos de API; ni usted ni esta aplicación pueden recuperar ni borrar lo que se envía.';
+  }
+
+  @override
+  String get reminderSheetsExpiresSoon => 'pronto';
+
+  @override
+  String get reminderSheetsExpiresToday => 'hoy';
+
+  @override
+  String reminderSheetsExpiresInDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'en $count días',
+      one: 'en 1 día',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get reminderSheetsYourRenewalDate => 'su fecha de renovación';
+
+  @override
+  String get pastDirectiveDetailPrincipalYou => 'Usted';
+
+  @override
+  String get exportShareSubjectEditable =>
+      'Copia editable de la directiva DASM';
+
+  @override
+  String get exportShareSubjectFhirJson => 'Recurso FHIR Consent de la DASM';
+
+  @override
+  String get exportShareSubjectFhirXml =>
+      'Recurso FHIR Consent de la DASM (XML)';
+
+  @override
+  String get exportShareSubjectCsv => 'Directiva DASM (CSV)';
+
+  @override
+  String get exportShareSubjectBundle => 'Paquete de la directiva DASM de PA';
+
+  @override
+  String get assistantContextLearning => 'Aprendizaje';
 }

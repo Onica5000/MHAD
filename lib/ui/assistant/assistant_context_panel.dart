@@ -54,7 +54,9 @@ class AssistantContextPanel extends StatelessWidget {
             _ContextKV(label: buildContext.l10n.assistantContextPanelFormType, value: _ctxFormType(context!, buildContext.l10n)),
             _ContextKV(
                 label: buildContext.l10n.assistantContextPanelCurrentStep,
-                value: context!.stepName ?? buildContext.l10n.assistantGeneralQuestion),
+                value: context!.stepName == null
+                    ? buildContext.l10n.assistantGeneralQuestion
+                    : localizedStepName(context!.stepName!, buildContext.l10n)),
             _ContextKV(
                 label: buildContext.l10n.assistantContextPanelFilledFields,
                 value: '${context!.filledFields?.length ?? 0}'),

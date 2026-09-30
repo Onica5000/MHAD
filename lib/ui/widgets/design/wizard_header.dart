@@ -1,4 +1,5 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 
 /// Thin in-body header row that replaces the wizard's Material AppBar
@@ -14,7 +15,7 @@ import 'package:mhad/ui/theme/app_theme.dart';
 /// content below scroll up under it visually if the caller wants.
 class WizardHeader extends StatelessWidget {
   /// Label for the left affordance. Defaults to "Back".
-  final String backLabel;
+  final String? backLabel;
 
   /// Tap handler for the left affordance. When null the row renders the
   /// label but doesn't respond to taps (used on step 1 where there's no
@@ -24,7 +25,7 @@ class WizardHeader extends StatelessWidget {
 
   /// Label for the right affordance. Defaults to "Save & exit". Set to an
   /// empty string to hide the right side entirely.
-  final String actionLabel;
+  final String? actionLabel;
 
   /// Tap handler for the right affordance.
   final VoidCallback? onAction;
@@ -37,9 +38,9 @@ class WizardHeader extends StatelessWidget {
   final EdgeInsetsGeometry padding;
 
   const WizardHeader({
-    this.backLabel = 'Back',
+    this.backLabel,
     this.onBack,
-    this.actionLabel = 'Save & exit',
+    this.actionLabel,
     this.onAction,
     this.right,
     this.padding = const EdgeInsets.fromLTRB(20, 8, 20, 0),
@@ -49,6 +50,8 @@ class WizardHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
+    final backLabel = this.backLabel ?? context.l10n.back;
+    final actionLabel = this.actionLabel ?? context.l10n.wizardHeaderSaveAndExit;
     return Padding(
       padding: padding,
       // Row sits 48dp tall so each side's InkWell renders a ≥48×48 tap target

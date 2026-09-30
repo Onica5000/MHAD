@@ -44,7 +44,7 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    return id!;
+    return id;
   }
 
   FilledButton revokeButton(WidgetTester tester) =>

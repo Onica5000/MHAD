@@ -276,7 +276,7 @@ class _DocPreviewCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final p = Theme.of(context).mhadPalette;
     final principal = directive.fullName.trim().isEmpty
-        ? 'You'
+        ? context.l10n.pastDirectiveDetailPrincipalYou
         : directive.fullName.trim().split(RegExp(r'\s+')).first;
     final filename =
         'Directive_${DateTime.fromMillisecondsSinceEpoch(directive.executionDate ?? directive.createdAt).year}'

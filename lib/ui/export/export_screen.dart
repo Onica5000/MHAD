@@ -943,6 +943,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
   Future<void> _downloadEditableCopy() async {
     try {
       final repo = ref.read(directiveRepositoryProvider);
+      final subject = context.l10n.exportShareSubjectEditable;
       final bytes = await DirectiveExportService(repo).buildFile(
         widget.directiveId,
         encrypted: _encryptEditableCopy,
@@ -955,7 +956,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
           XFile.fromData(bytes,
               mimeType: 'application/octet-stream', name: name)
         ],
-        subject: 'MHAD editable directive copy',
+        subject: subject,
       );
     } catch (e) {
       debugPrint('Editable-file export failed: $e');
@@ -980,7 +981,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       guardian: _guardian,
       diagnoses: _diagnoses,
     );
-    await _shareText(json, 'MHAD FHIR Consent Resource');
+    await _shareText(json, context.l10n.exportShareSubjectFhirJson);
   }
 
   Future<void> _exportFhirXml() async {
@@ -995,7 +996,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       guardian: _guardian,
       diagnoses: _diagnoses,
     );
-    await _shareText(xml, 'MHAD FHIR Consent Resource (XML)');
+    await _shareText(xml, context.l10n.exportShareSubjectFhirXml);
   }
 
   Future<void> _exportCsv() async {
@@ -1010,7 +1011,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       guardian: _guardian,
       diagnoses: _diagnoses,
     );
-    await _shareText(csv, 'MHAD directive (CSV)');
+    await _shareText(csv, context.l10n.exportShareSubjectCsv);
   }
 
   /// Artboard `WebDataExport` "bundle everything as a .zip" — packages the
@@ -1089,7 +1090,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
             mimeType: 'application/zip',
           ),
         ],
-        subject: 'PA MHAD directive bundle',
+        subject: context.l10n.exportShareSubjectBundle,
       );
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

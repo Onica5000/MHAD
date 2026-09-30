@@ -34,7 +34,8 @@ class StepHead extends StatelessWidget {
     // One clean spoken announcement that re-fires on every step change
     // (liveRegion) instead of the screen reader reading the decorative serif
     // numeral, the mono caption, and the title as three separate nodes.
-    final announcement = StringBuffer('Step $stepNumber of $totalSteps. $title');
+    final announcement = StringBuffer(
+        '${context.l10n.stepDotsStepOf(stepNumber, totalSteps)}. $title');
     if (subtitle != null) announcement.write('. $subtitle');
     return Semantics(
       liveRegion: true,
@@ -56,7 +57,8 @@ class StepHead extends StatelessWidget {
                     const SizedBox(width: 14),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 8),
-                      child: MonoCaption('Step $stepNumber of $totalSteps'),
+                      child: MonoCaption(
+                          context.l10n.stepDotsStepOf(stepNumber, totalSteps)),
                     ),
                   ],
                 ),

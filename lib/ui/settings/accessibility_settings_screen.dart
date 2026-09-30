@@ -64,7 +64,7 @@ class AccessibilitySettingsScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 14),
 
-          _SectionHeader('Reading'),
+          _SectionHeader(context.l10n.accessibilitySettingsSectionReading),
           _ToggleRow(
             title: context.l10n.accessibilitySettingsDyslexiaFriendlyFont,
             sub: context.l10n.accessibilitySettingsAtkinsonHyperlegibleClearerEasierLetter,
@@ -99,7 +99,7 @@ class AccessibilitySettingsScreen extends ConsumerWidget {
           ),
 
           const SizedBox(height: 14),
-          _SectionHeader('Language'),
+          _SectionHeader(context.l10n.accessibilitySettingsSectionLanguage),
           _LanguagePicker(
             selected: settings.languageCode,
             onChanged: (code) => ref
@@ -113,6 +113,14 @@ class AccessibilitySettingsScreen extends ConsumerWidget {
             text:
                 context.l10n.accessibilitySettingsLegalTextIsAlwaysRendered,
           ),
+          if (settings.languageCode == 'es') ...[
+            const SizedBox(height: 10),
+            InfoBanner(
+              icon: Icons.translate,
+              variant: InfoBannerVariant.warning,
+              text: context.l10n.accessibilitySettingsSpanishReviewNotice,
+            ),
+          ],
 
           const SizedBox(height: 18),
           // Read it aloud with your browser or device — see the in-app guide.
@@ -268,10 +276,10 @@ class _TextSizeCard extends StatelessWidget {
                     divisions: 3,
                     value: value,
                     label: switch (value.round()) {
-                      0 => 'Small',
-                      1 => 'Default',
-                      2 => 'Large',
-                      _ => 'Huge',
+                      0 => context.l10n.accessibilitySettingsTextSizeSmall,
+                      1 => context.l10n.accessibilitySettingsTextSizeDefault,
+                      2 => context.l10n.accessibilitySettingsTextSizeLarge,
+                      _ => context.l10n.accessibilitySettingsTextSizeHuge,
                     },
                     onChanged: onChanged,
                   ),

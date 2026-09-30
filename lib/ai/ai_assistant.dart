@@ -23,12 +23,18 @@ class ChatMessage {
   /// Web sources backing a grounded reply (empty/null otherwise).
   final List<GroundingSource>? sources;
 
+  /// True for an error notice the app inserted in place of a reply. Flagged
+  /// explicitly because the text is localized, so it can't be recognised by
+  /// its wording.
+  final bool isError;
+
   ChatMessage({
     required this.role,
     required this.content,
     DateTime? timestamp,
     this.grounded = false,
     this.sources,
+    this.isError = false,
   }) : timestamp = timestamp ?? DateTime.now();
 }
 

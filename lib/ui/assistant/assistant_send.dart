@@ -150,6 +150,7 @@ Future<AssistantSendResult> sendAssistantMessage(
           ChatMessage(
             role: MessageRole.assistant,
             content: (l10n ?? _en).assistantSendError(FriendlyError.from(e, l10n)),
+            isError: true,
           ),
         );
   } finally {
@@ -256,6 +257,7 @@ Future<AssistantSendResult> verifyOnWeb(
             role: MessageRole.assistant,
             content: (l10n ?? _en)
                 .assistantVerifyError(FriendlyError.from(e, l10n)),
+            isError: true,
           ),
         );
   } finally {

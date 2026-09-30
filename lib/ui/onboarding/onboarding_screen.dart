@@ -279,15 +279,17 @@ class OnboardingScreen extends ConsumerWidget {
 class _WelcomePills extends StatelessWidget {
   const _WelcomePills();
 
-  static const _pills = <(IconData, String)>[
-    (Icons.calendar_today_outlined, 'Valid 2 years'),
-    (Icons.people_alt_outlined, '2 witnesses'),
-    (Icons.shield_outlined, 'PA Act 194'),
+  static List<(IconData, String)> _pills(BuildContext context) => [
+    (Icons.calendar_today_outlined, context.l10n.onboardingPillValidTwoYears),
+    (Icons.people_alt_outlined, context.l10n.onboardingPillTwoWitnesses),
+    (Icons.shield_outlined, context.l10n.onboardingPillAct194),
     // Web is in-memory only (nothing persists), so "stays on your device"
-    // would be false there; kIsWeb is const so this stays a const list.
+    // would be false there.
     (
       Icons.lock_outline,
-      kIsWeb ? 'Nothing is saved' : 'Stays on your device'
+      kIsWeb
+          ? context.l10n.onboardingPillNothingSaved
+          : context.l10n.onboardingPillStaysOnDevice
     ),
   ];
 
@@ -298,7 +300,7 @@ class _WelcomePills extends StatelessWidget {
       spacing: 8,
       runSpacing: 8,
       children: [
-        for (final (icon, label) in _pills)
+        for (final (icon, label) in _pills(context))
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(

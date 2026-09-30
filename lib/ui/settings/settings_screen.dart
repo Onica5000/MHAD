@@ -323,10 +323,10 @@ class _ThemeModeSegment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
-    const options = [
-      (ThemeMode.system, 'Auto', Icons.brightness_auto),
-      (ThemeMode.light, 'Light', Icons.light_mode),
-      (ThemeMode.dark, 'Dark', Icons.dark_mode),
+    final options = [
+      (ThemeMode.system, context.l10n.settingsThemeAuto, Icons.brightness_auto),
+      (ThemeMode.light, context.l10n.settingsThemeLight, Icons.light_mode),
+      (ThemeMode.dark, context.l10n.settingsThemeDark, Icons.dark_mode),
     ];
     return Container(
       padding: const EdgeInsets.all(4),
@@ -407,15 +407,16 @@ class _ProfileChip extends ConsumerWidget {
   String _statusFor(BuildContext context, PrivacyModeNotifier mode) {
     // The web app is the only shipping surface — always in-memory, no
     // public/private mode choice exists.
-    if (kIsWeb) return '● WEB APP · IN-MEMORY ONLY';
+    final l = context.l10n;
+    if (kIsWeb) return l.settingsStatusWebInMemory;
     // Native (deferred): public/private mode + auth method.
     final modeWord = mode.isPrivate
-        ? 'PRIVATE'
-        : (mode.isPublic ? 'PUBLIC' : 'NO SESSION');
+        ? l.settingsStatusPrivate
+        : (mode.isPublic ? l.settingsStatusPublic : l.settingsStatusNoSession);
     final authPart = mode.isPrivate
-        ? 'BIOMETRICS'
-        : (mode.isPublic ? 'EPHEMERAL' : '—');
-    return '● $modeWord MODE · $authPart';
+        ? l.settingsStatusBiometrics
+        : (mode.isPublic ? l.settingsStatusEphemeral : '—');
+    return l.settingsStatusNative(modeWord, authPart);
   }
 
   @override

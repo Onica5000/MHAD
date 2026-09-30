@@ -492,7 +492,7 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                       String? priorQuestion;
                       if (m.role == MessageRole.assistant &&
                           !m.grounded &&
-                          !m.content.startsWith('Sorry,')) {
+                          !m.isError) {
                         for (var j = i - 1; j >= 0; j--) {
                           if (messages[j].role == MessageRole.user) {
                             priorQuestion = messages[j].content;
@@ -540,7 +540,9 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
     final parts = <String>[];
     final ft = formTypeFromName(ctx.formType);
     if (ft != null) parts.add(ft.shortLabel(context.l10n));
-    if (ctx.stepName != null) parts.add(ctx.stepName!);
+    if (ctx.stepName != null) {
+      parts.add(localizedStepName(ctx.stepName!, context.l10n));
+    }
     if (parts.isEmpty && ctx.guidedSession) {
       return ctx.facilitatorMode
           ? context.l10n.assistantContextHelperSession

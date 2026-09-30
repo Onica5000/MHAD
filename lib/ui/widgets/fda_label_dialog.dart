@@ -83,9 +83,9 @@ Future<void> showFdaLabelDialog(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     if (side != null && side.isNotEmpty)
-                      section('Adverse reactions (side effects)', side),
+                      section(context.l10n.fdaLabelDialogAdverseReactions, side),
                     if (inter != null && inter.isNotEmpty)
-                      section('Drug interactions', inter),
+                      section(context.l10n.fdaLabelDialogDrugInteractions, inter),
                     Text(
                       context.l10n.fdaLabelDialogOfficialUSFdaDrug,
                       style: TextStyle(

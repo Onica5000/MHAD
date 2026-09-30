@@ -20,8 +20,8 @@ class ArticleDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
     final source = section.category == EducationCategory.supplementary
-        ? 'BEYOND THE BOOKLET'
-        : 'FROM THE OFFICIAL BOOKLET';
+        ? context.l10n.educationSourceBeyondBooklet
+        : context.l10n.educationSourceOfficialBooklet;
     return Scaffold(
       appBar: AppBar(title: Text(section.title)),
       body: ListView(

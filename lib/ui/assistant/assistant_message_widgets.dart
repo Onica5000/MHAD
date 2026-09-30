@@ -20,7 +20,7 @@ class MessageBubble extends StatelessWidget {
     final isUser = message.role == MessageRole.user;
     final cs = Theme.of(context).colorScheme;
     final timeStr = formatTimeOfDay(message.timestamp);
-    final isError = !isUser && message.content.startsWith('Sorry, I encountered an error');
+    final isError = !isUser && message.isError;
 
     return Semantics(
       label: context.l10n.assistantMessageWidgetsAt(isUser ? context.l10n.assistantSenderYou : context.l10n.assistantSenderAi, timeStr, message.content),

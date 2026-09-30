@@ -17,11 +17,12 @@ class EducationScreen extends StatefulWidget {
   /// or the start page's "Read the basics").
   final List<String>? filterIds;
 
-  /// AppBar title for the filtered view. Defaults to 'Help' (wizard Help), but
-  /// a deep-link can label it for its context (e.g. 'The basics').
-  final String filterTitle;
+  /// AppBar title for the filtered view. Defaults to the localized "Help"
+  /// (wizard Help), but a deep-link can label it for its context
+  /// (e.g. 'The basics').
+  final String? filterTitle;
 
-  const EducationScreen({this.filterIds, this.filterTitle = 'Help', super.key});
+  const EducationScreen({this.filterIds, this.filterTitle, super.key});
 
   @override
   State<EducationScreen> createState() => _EducationScreenState();
@@ -54,7 +55,8 @@ class _EducationScreenState extends State<EducationScreen> {
     // already lives inside the body widget.
     if (isFiltered) {
       return Scaffold(
-        appBar: AppBar(title: Text(widget.filterTitle)),
+        appBar: AppBar(
+            title: Text(widget.filterTitle ?? context.l10n.educationHelpTitle)),
         body: _filteredSections.isEmpty
             ? _emptyArt(SpotArt.search, context.l10n.educationNoResultsFound)
             : ListView.builder(
@@ -119,12 +121,12 @@ class _EditorialLearnHub extends StatelessWidget {
   // bucket (intro + combined + declaration + poa + supplementary) — the
   // mapping lives on EducationTabKind itself so the screen-level filter and
   // the hub agree on what each tab means.
-  static const _tabs = <(EducationTabKind, String)>[
-    (EducationTabKind.all, 'All'),
-    (EducationTabKind.articles, 'Articles'),
-    (EducationTabKind.glossary, 'Glossary'),
-    (EducationTabKind.faq, 'FAQ'),
-    (EducationTabKind.checklists, 'Checklists'),
+  static List<(EducationTabKind, String)> _tabs(BuildContext context) => [
+    (EducationTabKind.all, context.l10n.educationTabAll),
+    (EducationTabKind.articles, context.l10n.educationTabArticles),
+    (EducationTabKind.glossary, context.l10n.educationTabGlossary),
+    (EducationTabKind.faq, context.l10n.educationTabFaq),
+    (EducationTabKind.checklists, context.l10n.educationTabChecklists),
   ];
 
   /// All sections in the active filter, as grid tiles (the former "featured"
@@ -244,7 +246,7 @@ class _EditorialLearnHub extends StatelessWidget {
             spacing: 8,
             runSpacing: 8,
             children: [
-              for (final t in _tabs)
+              for (final t in _tabs(context))
                 _CategoryPill(
                   label: t.$2,
                   active: activeTab == t.$1,

@@ -11784,6 +11784,336 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Guided session · helping someone'**
   String get assistantContextHelperSession;
+
+  /// No description provided for @accessibilitySettingsSectionReading.
+  ///
+  /// In en, this message translates to:
+  /// **'Reading'**
+  String get accessibilitySettingsSectionReading;
+
+  /// No description provided for @accessibilitySettingsSectionLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get accessibilitySettingsSectionLanguage;
+
+  /// No description provided for @accessibilitySettingsTextSizeSmall.
+  ///
+  /// In en, this message translates to:
+  /// **'Small'**
+  String get accessibilitySettingsTextSizeSmall;
+
+  /// No description provided for @accessibilitySettingsTextSizeDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'Default'**
+  String get accessibilitySettingsTextSizeDefault;
+
+  /// No description provided for @accessibilitySettingsTextSizeLarge.
+  ///
+  /// In en, this message translates to:
+  /// **'Large'**
+  String get accessibilitySettingsTextSizeLarge;
+
+  /// No description provided for @accessibilitySettingsTextSizeHuge.
+  ///
+  /// In en, this message translates to:
+  /// **'Huge'**
+  String get accessibilitySettingsTextSizeHuge;
+
+  /// No description provided for @accessibilitySettingsSpanishReviewNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'The Spanish translation was made with machine assistance and has not yet been reviewed by a native speaker. If any wording is unclear, switch to English to check it. Your directive PDF is always generated in English.'**
+  String get accessibilitySettingsSpanishReviewNotice;
+
+  /// No description provided for @settingsThemeAuto.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto'**
+  String get settingsThemeAuto;
+
+  /// No description provided for @settingsThemeLight.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get settingsThemeLight;
+
+  /// No description provided for @settingsThemeDark.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get settingsThemeDark;
+
+  /// No description provided for @settingsStatusWebInMemory.
+  ///
+  /// In en, this message translates to:
+  /// **'● WEB APP · IN-MEMORY ONLY'**
+  String get settingsStatusWebInMemory;
+
+  /// No description provided for @settingsStatusNative.
+  ///
+  /// In en, this message translates to:
+  /// **'● {mode} MODE · {auth}'**
+  String settingsStatusNative(String mode, String auth);
+
+  /// No description provided for @settingsStatusPrivate.
+  ///
+  /// In en, this message translates to:
+  /// **'PRIVATE'**
+  String get settingsStatusPrivate;
+
+  /// No description provided for @settingsStatusPublic.
+  ///
+  /// In en, this message translates to:
+  /// **'PUBLIC'**
+  String get settingsStatusPublic;
+
+  /// No description provided for @settingsStatusNoSession.
+  ///
+  /// In en, this message translates to:
+  /// **'NO SESSION'**
+  String get settingsStatusNoSession;
+
+  /// No description provided for @settingsStatusBiometrics.
+  ///
+  /// In en, this message translates to:
+  /// **'BIOMETRICS'**
+  String get settingsStatusBiometrics;
+
+  /// No description provided for @settingsStatusEphemeral.
+  ///
+  /// In en, this message translates to:
+  /// **'EPHEMERAL'**
+  String get settingsStatusEphemeral;
+
+  /// No description provided for @pinDialogAuthenticating.
+  ///
+  /// In en, this message translates to:
+  /// **'AUTHENTICATING…'**
+  String get pinDialogAuthenticating;
+
+  /// No description provided for @pinDialogLockedWait.
+  ///
+  /// In en, this message translates to:
+  /// **'LOCKED · WAIT 30S'**
+  String get pinDialogLockedWait;
+
+  /// No description provided for @pinDialogAttempt.
+  ///
+  /// In en, this message translates to:
+  /// **'ATTEMPT {count} / {max}'**
+  String pinDialogAttempt(int count, int max);
+
+  /// No description provided for @modeSelectionRecommendedSuffix.
+  ///
+  /// In en, this message translates to:
+  /// **' (recommended)'**
+  String get modeSelectionRecommendedSuffix;
+
+  /// No description provided for @onboardingPillValidTwoYears.
+  ///
+  /// In en, this message translates to:
+  /// **'Valid 2 years'**
+  String get onboardingPillValidTwoYears;
+
+  /// No description provided for @onboardingPillTwoWitnesses.
+  ///
+  /// In en, this message translates to:
+  /// **'2 witnesses'**
+  String get onboardingPillTwoWitnesses;
+
+  /// No description provided for @onboardingPillAct194.
+  ///
+  /// In en, this message translates to:
+  /// **'PA Act 194'**
+  String get onboardingPillAct194;
+
+  /// No description provided for @onboardingPillNothingSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing is saved'**
+  String get onboardingPillNothingSaved;
+
+  /// No description provided for @onboardingPillStaysOnDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'Stays on your device'**
+  String get onboardingPillStaysOnDevice;
+
+  /// No description provided for @educationHelpTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Help'**
+  String get educationHelpTitle;
+
+  /// No description provided for @educationTabAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get educationTabAll;
+
+  /// No description provided for @educationTabArticles.
+  ///
+  /// In en, this message translates to:
+  /// **'Articles'**
+  String get educationTabArticles;
+
+  /// No description provided for @educationTabGlossary.
+  ///
+  /// In en, this message translates to:
+  /// **'Glossary'**
+  String get educationTabGlossary;
+
+  /// No description provided for @educationTabFaq.
+  ///
+  /// In en, this message translates to:
+  /// **'FAQ'**
+  String get educationTabFaq;
+
+  /// No description provided for @educationTabChecklists.
+  ///
+  /// In en, this message translates to:
+  /// **'Checklists'**
+  String get educationTabChecklists;
+
+  /// No description provided for @educationCategoryFaq.
+  ///
+  /// In en, this message translates to:
+  /// **'FAQ'**
+  String get educationCategoryFaq;
+
+  /// No description provided for @educationSourceBeyondBooklet.
+  ///
+  /// In en, this message translates to:
+  /// **'BEYOND THE BOOKLET'**
+  String get educationSourceBeyondBooklet;
+
+  /// No description provided for @educationSourceOfficialBooklet.
+  ///
+  /// In en, this message translates to:
+  /// **'FROM THE OFFICIAL BOOKLET'**
+  String get educationSourceOfficialBooklet;
+
+  /// No description provided for @commonLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading'**
+  String get commonLoading;
+
+  /// No description provided for @wizardHeaderSaveAndExit.
+  ///
+  /// In en, this message translates to:
+  /// **'Save & exit'**
+  String get wizardHeaderSaveAndExit;
+
+  /// No description provided for @fdaLabelDialogAdverseReactions.
+  ///
+  /// In en, this message translates to:
+  /// **'Adverse reactions (side effects)'**
+  String get fdaLabelDialogAdverseReactions;
+
+  /// No description provided for @fdaLabelDialogDrugInteractions.
+  ///
+  /// In en, this message translates to:
+  /// **'Drug interactions'**
+  String get fdaLabelDialogDrugInteractions;
+
+  /// No description provided for @addressFieldsEnterZipFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a 5-digit ZIP first.'**
+  String get addressFieldsEnterZipFirst;
+
+  /// No description provided for @addressFieldsZipLookupFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t look up that ZIP — you can type it in.'**
+  String get addressFieldsZipLookupFailed;
+
+  /// No description provided for @addressFieldsFilled.
+  ///
+  /// In en, this message translates to:
+  /// **'Filled: {place}'**
+  String addressFieldsFilled(String place);
+
+  /// No description provided for @aiConsentDialogGeminiCaveat.
+  ///
+  /// In en, this message translates to:
+  /// **'On the Gemini free tier, Google may retain your data and use it to improve their AI, human reviewers may see it, and what is sent cannot be recalled or deleted afterward.'**
+  String get aiConsentDialogGeminiCaveat;
+
+  /// No description provided for @aiConsentDialogProviderCaveat.
+  ///
+  /// In en, this message translates to:
+  /// **'Your data is sent to {provider} and handled under their API data policy; what is sent cannot be recalled or deleted by you or this app.'**
+  String aiConsentDialogProviderCaveat(String provider);
+
+  /// No description provided for @reminderSheetsExpiresSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'soon'**
+  String get reminderSheetsExpiresSoon;
+
+  /// No description provided for @reminderSheetsExpiresToday.
+  ///
+  /// In en, this message translates to:
+  /// **'today'**
+  String get reminderSheetsExpiresToday;
+
+  /// No description provided for @reminderSheetsExpiresInDays.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{in 1 day} other{in {count} days}}'**
+  String reminderSheetsExpiresInDays(int count);
+
+  /// No description provided for @reminderSheetsYourRenewalDate.
+  ///
+  /// In en, this message translates to:
+  /// **'your renewal date'**
+  String get reminderSheetsYourRenewalDate;
+
+  /// No description provided for @pastDirectiveDetailPrincipalYou.
+  ///
+  /// In en, this message translates to:
+  /// **'You'**
+  String get pastDirectiveDetailPrincipalYou;
+
+  /// No description provided for @exportShareSubjectEditable.
+  ///
+  /// In en, this message translates to:
+  /// **'MHAD editable directive copy'**
+  String get exportShareSubjectEditable;
+
+  /// No description provided for @exportShareSubjectFhirJson.
+  ///
+  /// In en, this message translates to:
+  /// **'MHAD FHIR Consent Resource'**
+  String get exportShareSubjectFhirJson;
+
+  /// No description provided for @exportShareSubjectFhirXml.
+  ///
+  /// In en, this message translates to:
+  /// **'MHAD FHIR Consent Resource (XML)'**
+  String get exportShareSubjectFhirXml;
+
+  /// No description provided for @exportShareSubjectCsv.
+  ///
+  /// In en, this message translates to:
+  /// **'MHAD directive (CSV)'**
+  String get exportShareSubjectCsv;
+
+  /// No description provided for @exportShareSubjectBundle.
+  ///
+  /// In en, this message translates to:
+  /// **'PA MHAD directive bundle'**
+  String get exportShareSubjectBundle;
+
+  /// No description provided for @assistantContextLearning.
+  ///
+  /// In en, this message translates to:
+  /// **'Learning'**
+  String get assistantContextLearning;
 }
 
 class _AppLocalizationsDelegate

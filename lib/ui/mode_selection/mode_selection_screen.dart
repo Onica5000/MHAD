@@ -232,7 +232,7 @@ class _Card2 extends StatelessWidget {
 
     return Semantics(
       button: true,
-      label: context.l10n.modeSelectionSelect(title, recommended ? ' (recommended)' : ''),
+      label: context.l10n.modeSelectionSelect(title, recommended ? context.l10n.modeSelectionRecommendedSuffix : ''),
       child: AnimatedOpacity(
         opacity: dimmed ? 0.5 : 1,
         duration: const Duration(milliseconds: 200),

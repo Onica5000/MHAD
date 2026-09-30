@@ -6963,4 +6963,189 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get assistantContextHelperSession =>
       'Guided session · helping someone';
+
+  @override
+  String get accessibilitySettingsSectionReading => 'Reading';
+
+  @override
+  String get accessibilitySettingsSectionLanguage => 'Language';
+
+  @override
+  String get accessibilitySettingsTextSizeSmall => 'Small';
+
+  @override
+  String get accessibilitySettingsTextSizeDefault => 'Default';
+
+  @override
+  String get accessibilitySettingsTextSizeLarge => 'Large';
+
+  @override
+  String get accessibilitySettingsTextSizeHuge => 'Huge';
+
+  @override
+  String get accessibilitySettingsSpanishReviewNotice =>
+      'The Spanish translation was made with machine assistance and has not yet been reviewed by a native speaker. If any wording is unclear, switch to English to check it. Your directive PDF is always generated in English.';
+
+  @override
+  String get settingsThemeAuto => 'Auto';
+
+  @override
+  String get settingsThemeLight => 'Light';
+
+  @override
+  String get settingsThemeDark => 'Dark';
+
+  @override
+  String get settingsStatusWebInMemory => '● WEB APP · IN-MEMORY ONLY';
+
+  @override
+  String settingsStatusNative(String mode, String auth) {
+    return '● $mode MODE · $auth';
+  }
+
+  @override
+  String get settingsStatusPrivate => 'PRIVATE';
+
+  @override
+  String get settingsStatusPublic => 'PUBLIC';
+
+  @override
+  String get settingsStatusNoSession => 'NO SESSION';
+
+  @override
+  String get settingsStatusBiometrics => 'BIOMETRICS';
+
+  @override
+  String get settingsStatusEphemeral => 'EPHEMERAL';
+
+  @override
+  String get pinDialogAuthenticating => 'AUTHENTICATING…';
+
+  @override
+  String get pinDialogLockedWait => 'LOCKED · WAIT 30S';
+
+  @override
+  String pinDialogAttempt(int count, int max) {
+    return 'ATTEMPT $count / $max';
+  }
+
+  @override
+  String get modeSelectionRecommendedSuffix => ' (recommended)';
+
+  @override
+  String get onboardingPillValidTwoYears => 'Valid 2 years';
+
+  @override
+  String get onboardingPillTwoWitnesses => '2 witnesses';
+
+  @override
+  String get onboardingPillAct194 => 'PA Act 194';
+
+  @override
+  String get onboardingPillNothingSaved => 'Nothing is saved';
+
+  @override
+  String get onboardingPillStaysOnDevice => 'Stays on your device';
+
+  @override
+  String get educationHelpTitle => 'Help';
+
+  @override
+  String get educationTabAll => 'All';
+
+  @override
+  String get educationTabArticles => 'Articles';
+
+  @override
+  String get educationTabGlossary => 'Glossary';
+
+  @override
+  String get educationTabFaq => 'FAQ';
+
+  @override
+  String get educationTabChecklists => 'Checklists';
+
+  @override
+  String get educationCategoryFaq => 'FAQ';
+
+  @override
+  String get educationSourceBeyondBooklet => 'BEYOND THE BOOKLET';
+
+  @override
+  String get educationSourceOfficialBooklet => 'FROM THE OFFICIAL BOOKLET';
+
+  @override
+  String get commonLoading => 'Loading';
+
+  @override
+  String get wizardHeaderSaveAndExit => 'Save & exit';
+
+  @override
+  String get fdaLabelDialogAdverseReactions =>
+      'Adverse reactions (side effects)';
+
+  @override
+  String get fdaLabelDialogDrugInteractions => 'Drug interactions';
+
+  @override
+  String get addressFieldsEnterZipFirst => 'Enter a 5-digit ZIP first.';
+
+  @override
+  String get addressFieldsZipLookupFailed =>
+      'Couldn\'t look up that ZIP — you can type it in.';
+
+  @override
+  String addressFieldsFilled(String place) {
+    return 'Filled: $place';
+  }
+
+  @override
+  String get aiConsentDialogGeminiCaveat =>
+      'On the Gemini free tier, Google may retain your data and use it to improve their AI, human reviewers may see it, and what is sent cannot be recalled or deleted afterward.';
+
+  @override
+  String aiConsentDialogProviderCaveat(String provider) {
+    return 'Your data is sent to $provider and handled under their API data policy; what is sent cannot be recalled or deleted by you or this app.';
+  }
+
+  @override
+  String get reminderSheetsExpiresSoon => 'soon';
+
+  @override
+  String get reminderSheetsExpiresToday => 'today';
+
+  @override
+  String reminderSheetsExpiresInDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'in $count days',
+      one: 'in 1 day',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get reminderSheetsYourRenewalDate => 'your renewal date';
+
+  @override
+  String get pastDirectiveDetailPrincipalYou => 'You';
+
+  @override
+  String get exportShareSubjectEditable => 'MHAD editable directive copy';
+
+  @override
+  String get exportShareSubjectFhirJson => 'MHAD FHIR Consent Resource';
+
+  @override
+  String get exportShareSubjectFhirXml => 'MHAD FHIR Consent Resource (XML)';
+
+  @override
+  String get exportShareSubjectCsv => 'MHAD directive (CSV)';
+
+  @override
+  String get exportShareSubjectBundle => 'PA MHAD directive bundle';
+
+  @override
+  String get assistantContextLearning => 'Learning';
 }

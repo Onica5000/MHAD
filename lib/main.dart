@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:mhad/l10n/l10n.dart';
@@ -238,6 +239,16 @@ class MhadApp extends ConsumerWidget {
           )
           ? locale
           : null,
+      // Keep package:intl (DateFormat in lib/utils/date_format.dart) in step
+      // with the resolved UI language so dates are localized too.
+      localeResolutionCallback: (requested, supported) {
+        final resolved = supported.firstWhere(
+          (l) => l.languageCode == requested?.languageCode,
+          orElse: () => supported.first,
+        );
+        Intl.defaultLocale = resolved.languageCode;
+        return resolved;
+      },
       builder: (context, child) {
         final mq = MediaQuery.of(context);
         return MediaQuery(

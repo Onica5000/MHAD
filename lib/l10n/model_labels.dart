@@ -1,4 +1,5 @@
 import 'package:mhad/domain/model/directive.dart';
+import 'package:mhad/data/educational_content.dart';
 import 'package:mhad/l10n/app_localizations.dart';
 
 /// Localized display labels for domain enums. The English getters on the
@@ -45,5 +46,30 @@ extension WizardStepL10n on WizardStep {
         WizardStep.proceduresResearch => l.stepSubtitleProceduresResearch,
         WizardStep.anythingElse => l.stepSubtitleAnythingElse,
         WizardStep.reviewAndSign => l.stepSubtitleReviewAndSign,
+      };
+}
+
+/// Localizes a step name carried in [AssistantContext.stepName]. That field
+/// holds the English [WizardStepExt.displayName] because it also feeds the AI
+/// prompt. 'Learning' is the Learn page's context; anything else passes
+/// through unchanged.
+String localizedStepName(String stepName, AppLocalizations l) {
+  for (final s in WizardStep.values) {
+    if (s.displayName == stepName) return s.title(l);
+  }
+  if (stepName == 'Learning') return l.assistantContextLearning;
+  return stepName;
+}
+
+extension EducationCategoryL10n on EducationCategory {
+  String label(AppLocalizations l) => switch (this) {
+        EducationCategory.intro => l.eduBrowseIntroduction,
+        EducationCategory.faq => l.educationCategoryFaq,
+        EducationCategory.combined => l.eduBrowseCombinedForm,
+        EducationCategory.declaration => l.formTypeShortDeclaration,
+        EducationCategory.poa => l.eduBrowsePowerOfAttorney,
+        EducationCategory.glossary => l.eduBrowseGlossary,
+        EducationCategory.supplementary => l.eduBrowseBeyondTheBooklet,
+        EducationCategory.checklist => l.eduBrowseYourChecklist,
       };
 }

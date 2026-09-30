@@ -36,14 +36,17 @@ String relativeTime(DateTime t, {DateTime? asOf, AppLocalizations? l10n}) {
 }
 
 // ── Named display formatters ───────────────────────────────────────────────
-String formatMonthDay(DateTime t) => DateFormat('MMM d').format(t); // Jun 23
+// Locale-aware skeletons: they follow Intl.defaultLocale (set from the app
+// language in main.dart), so Spanish shows "23 de junio de 2026". Examples
+// below are en_US, which matches the former fixed English patterns.
+String formatMonthDay(DateTime t) => DateFormat.MMMd().format(t); // Jun 23
 String formatShortDate(DateTime t) =>
-    DateFormat('MMM d, y').format(t); // Jun 23, 2026
+    DateFormat.yMMMd().format(t); // Jun 23, 2026
 String formatLongDate(DateTime t) =>
-    DateFormat('MMMM d, y').format(t); // June 23, 2026
+    DateFormat.yMMMMd().format(t); // June 23, 2026
 String formatMonthYear(DateTime t) =>
-    DateFormat('MMMM y').format(t); // June 2026
+    DateFormat.yMMMM().format(t); // June 2026
 String formatTimeOfDay(DateTime t) =>
-    DateFormat('h:mm a').format(t); // 3:05 PM
+    DateFormat.jm().format(t); // 3:05 PM
 String formatWeekdayMonthDay(DateTime t) =>
-    DateFormat('EEEE · MMMM d').format(t); // Tuesday · June 23
+    '${DateFormat.EEEE().format(t)} · ${DateFormat.MMMMd().format(t)}'; // Tuesday · June 23

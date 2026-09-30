@@ -2895,5 +2895,87 @@
   "facilitatorGuidedOpeningPrompt": "I'd like a guided session. Please walk me through my advance directive one question at a time, starting with what a crisis looks like for me.",
   "facilitatorHelperOpeningPrompt": "I'm helping someone complete their advance directive. Please guide us through it one question at a time, starting with what a crisis looks like for them.",
   "assistantContextGuidedSession": "Guided session",
-  "assistantContextHelperSession": "Guided session · helping someone"
+  "assistantContextHelperSession": "Guided session · helping someone",
+  "accessibilitySettingsSectionReading": "Reading",
+  "accessibilitySettingsSectionLanguage": "Language",
+  "accessibilitySettingsTextSizeSmall": "Small",
+  "accessibilitySettingsTextSizeDefault": "Default",
+  "accessibilitySettingsTextSizeLarge": "Large",
+  "accessibilitySettingsTextSizeHuge": "Huge",
+  "accessibilitySettingsSpanishReviewNotice": "The Spanish translation was made with machine assistance and has not yet been reviewed by a native speaker. If any wording is unclear, switch to English to check it. Your directive PDF is always generated in English.",
+  "settingsThemeAuto": "Auto",
+  "settingsThemeLight": "Light",
+  "settingsThemeDark": "Dark",
+  "settingsStatusWebInMemory": "● WEB APP · IN-MEMORY ONLY",
+  "settingsStatusNative": "● {mode} MODE · {auth}",
+  "@settingsStatusNative": {
+    "placeholders": {
+      "mode": {"type": "String"},
+      "auth": {"type": "String"}
+    }
+  },
+  "settingsStatusPrivate": "PRIVATE",
+  "settingsStatusPublic": "PUBLIC",
+  "settingsStatusNoSession": "NO SESSION",
+  "settingsStatusBiometrics": "BIOMETRICS",
+  "settingsStatusEphemeral": "EPHEMERAL",
+  "pinDialogAuthenticating": "AUTHENTICATING…",
+  "pinDialogLockedWait": "LOCKED · WAIT 30S",
+  "pinDialogAttempt": "ATTEMPT {count} / {max}",
+  "@pinDialogAttempt": {
+    "placeholders": {
+      "count": {"type": "int"},
+      "max": {"type": "int"}
+    }
+  },
+  "modeSelectionRecommendedSuffix": " (recommended)",
+  "onboardingPillValidTwoYears": "Valid 2 years",
+  "onboardingPillTwoWitnesses": "2 witnesses",
+  "onboardingPillAct194": "PA Act 194",
+  "onboardingPillNothingSaved": "Nothing is saved",
+  "onboardingPillStaysOnDevice": "Stays on your device",
+  "educationHelpTitle": "Help",
+  "educationTabAll": "All",
+  "educationTabArticles": "Articles",
+  "educationTabGlossary": "Glossary",
+  "educationTabFaq": "FAQ",
+  "educationTabChecklists": "Checklists",
+  "educationCategoryFaq": "FAQ",
+  "educationSourceBeyondBooklet": "BEYOND THE BOOKLET",
+  "educationSourceOfficialBooklet": "FROM THE OFFICIAL BOOKLET",
+  "commonLoading": "Loading",
+  "wizardHeaderSaveAndExit": "Save & exit",
+  "fdaLabelDialogAdverseReactions": "Adverse reactions (side effects)",
+  "fdaLabelDialogDrugInteractions": "Drug interactions",
+  "addressFieldsEnterZipFirst": "Enter a 5-digit ZIP first.",
+  "addressFieldsZipLookupFailed": "Couldn't look up that ZIP — you can type it in.",
+  "addressFieldsFilled": "Filled: {place}",
+  "@addressFieldsFilled": {
+    "placeholders": {
+      "place": {"type": "String"}
+    }
+  },
+  "aiConsentDialogGeminiCaveat": "On the Gemini free tier, Google may retain your data and use it to improve their AI, human reviewers may see it, and what is sent cannot be recalled or deleted afterward.",
+  "aiConsentDialogProviderCaveat": "Your data is sent to {provider} and handled under their API data policy; what is sent cannot be recalled or deleted by you or this app.",
+  "@aiConsentDialogProviderCaveat": {
+    "placeholders": {
+      "provider": {"type": "String"}
+    }
+  },
+  "reminderSheetsExpiresSoon": "soon",
+  "reminderSheetsExpiresToday": "today",
+  "reminderSheetsExpiresInDays": "{count, plural, =1{in 1 day} other{in {count} days}}",
+  "@reminderSheetsExpiresInDays": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "reminderSheetsYourRenewalDate": "your renewal date",
+  "pastDirectiveDetailPrincipalYou": "You",
+  "exportShareSubjectEditable": "MHAD editable directive copy",
+  "exportShareSubjectFhirJson": "MHAD FHIR Consent Resource",
+  "exportShareSubjectFhirXml": "MHAD FHIR Consent Resource (XML)",
+  "exportShareSubjectCsv": "MHAD directive (CSV)",
+  "exportShareSubjectBundle": "PA MHAD directive bundle",
+  "assistantContextLearning": "Learning"
 }

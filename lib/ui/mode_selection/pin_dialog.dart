@@ -424,10 +424,10 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
                         const SizedBox(width: 6),
                         Text(
                           _verifying
-                              ? 'AUTHENTICATING…'
+                              ? context.l10n.pinDialogAuthenticating
                               : (_lockedOut
-                                  ? 'LOCKED · WAIT 30S'
-                                  : 'ATTEMPT $_failedAttempts / 5'),
+                                  ? context.l10n.pinDialogLockedWait
+                                  : context.l10n.pinDialogAttempt(_failedAttempts, 5)),
                           style: TextStyle(
                             fontFamily: kMonoFamily,
                             fontFamilyFallback: const [

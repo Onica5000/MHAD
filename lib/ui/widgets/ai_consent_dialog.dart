@@ -6,12 +6,10 @@ import 'package:mhad/ai/ai_provider.dart';
 /// Provider-aware data caveat shown in the consent dialogs. Gemini's free tier
 /// has a specific "used to improve their AI / human reviewers" risk; other
 /// providers are governed by their own API data policy.
-String _providerDataCaveat(AiProvider provider) => provider == AiProvider.gemini
-    ? 'On the Gemini free tier, Google may retain your data and use it to '
-        'improve their AI, human reviewers may see it, and what is sent cannot '
-        'be recalled or deleted afterward.'
-    : 'Your data is sent to ${provider.label} and handled under their API data '
-        'policy; what is sent cannot be recalled or deleted by you or this app.';
+String _providerDataCaveat(BuildContext context, AiProvider provider) =>
+    provider == AiProvider.gemini
+        ? context.l10n.aiConsentDialogGeminiCaveat
+        : context.l10n.aiConsentDialogProviderCaveat(provider.label);
 
 /// Consent + data notice for the document-autofill flow specifically.
 ///
@@ -59,7 +57,7 @@ Future<bool> showAutofillConsentDialog(
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
-                          _providerDataCaveat(provider),
+                          _providerDataCaveat(context, provider),
                           style: TextStyle(
                             color: cs.onErrorContainer,
                             fontSize: 13,
@@ -134,7 +132,7 @@ Future<bool> showAudioConsentDialog(
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
-                          _providerDataCaveat(provider),
+                          _providerDataCaveat(context, provider),
                           style: TextStyle(
                             color: cs.onErrorContainer,
                             fontSize: 13,
@@ -192,7 +190,7 @@ Future<bool> showAiConsentDialog(
               context.l10n.aiConsentDialogThisAiAssistantIsNot,
             ),
             Text(
-              context.l10n.aiConsentDialogTextYouEnterWillBe(provider.label, _providerDataCaveat(provider)),
+              context.l10n.aiConsentDialogTextYouEnterWillBe(provider.label, _providerDataCaveat(context, provider)),
             ),
             Container(
               padding: const EdgeInsets.all(10),

@@ -88,10 +88,10 @@ class _RenewSheet extends StatelessWidget {
         : DateTime.fromMillisecondsSinceEpoch(directive.expirationDate!);
     final daysLeft = exp?.difference(DateTime.now()).inDays;
     final dayLabel = daysLeft == null
-        ? 'soon'
+        ? context.l10n.reminderSheetsExpiresSoon
         : (daysLeft <= 0
-            ? 'today'
-            : 'in $daysLeft ${daysLeft == 1 ? 'day' : 'days'}');
+            ? context.l10n.reminderSheetsExpiresToday
+            : context.l10n.reminderSheetsExpiresInDays(daysLeft));
     final expDateLabel = exp == null ? '—' : formatLongDate(exp);
 
     return DraggableScrollableSheet(
@@ -349,7 +349,7 @@ class _CheckInSheet extends StatelessWidget {
     final exp = directive.expirationDate == null
         ? null
         : DateTime.fromMillisecondsSinceEpoch(directive.expirationDate!);
-    final expLabel = exp == null ? 'your renewal date' : formatMonthYear(exp);
+    final expLabel = exp == null ? context.l10n.reminderSheetsYourRenewalDate : formatMonthYear(exp);
 
     // Form-aware "common changes" prompts — agents only for forms that have
     // them; medications + facility for any clinical-preference form.

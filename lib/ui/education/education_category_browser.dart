@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mhad/l10n/l10n.dart';
+import 'package:mhad/l10n/model_labels.dart';
 import 'package:mhad/data/educational_content.dart';
 import 'package:mhad/ui/education/education_article_detail.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
@@ -210,7 +211,7 @@ class _CategoryListScreen extends StatelessWidget {
         .where((s) => s.category == category)
         .toList();
     return Scaffold(
-      appBar: AppBar(title: Text(category.displayName)),
+      appBar: AppBar(title: Text(category.label(context.l10n))),
       body: sections.isEmpty
           ? Center(
               child: Text(
@@ -240,7 +241,7 @@ class SectionTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Semantics(
       button: true,
-      label: '${section.category.displayName}: ${section.title}',
+      label: '${section.category.label(context.l10n)}: ${section.title}',
       child: HoverLift(
         radius: 12,
         child: Card(
@@ -337,7 +338,7 @@ class _CategoryBadge extends StatelessWidget {
         border: Border.all(color: color.withValues(alpha: 0.4)),
       ),
       child: Text(
-        category.displayName,
+        category.label(context.l10n),
         style: TextStyle(fontSize: 11, color: color, fontWeight: FontWeight.w600),
       ),
     );

@@ -19,7 +19,7 @@ class AddressFields extends StatefulWidget {
   final TextEditingController zip;
 
   /// Label for line 1 (default "Street address").
-  final String line1Label;
+  final String? line1Label;
 
   /// Vertical gap between fields.
   final double gap;
@@ -30,7 +30,7 @@ class AddressFields extends StatefulWidget {
     required this.city,
     required this.state,
     required this.zip,
-    this.line1Label = 'Street address',
+    this.line1Label,
     this.gap = 12,
     super.key,
   });
@@ -45,7 +45,7 @@ class _AddressFieldsState extends State<AddressFields> {
   Future<void> _lookupFromZip() async {
     final zip = widget.zip.text.replaceAll(RegExp(r'\D'), '');
     if (zip.length < 5) {
-      _toast('Enter a 5-digit ZIP first.');
+      _toast(context.l10n.addressFieldsEnterZipFirst);
       return;
     }
     setState(() => _lookingUp = true);
@@ -61,10 +61,10 @@ class _AddressFieldsState extends State<AddressFields> {
       }
     });
     if (z == null) {
-      _toast('Couldn\'t look up that ZIP — you can type it in.');
+      _toast(context.l10n.addressFieldsZipLookupFailed);
     } else {
-      _toast(
-          'Filled: ${[z.city, z.stateAbbr].where((s) => s.isNotEmpty).join(', ')}');
+      _toast(context.l10n.addressFieldsFilled(
+          [z.city, z.stateAbbr].where((s) => s.isNotEmpty).join(', ')));
     }
   }
 
@@ -81,7 +81,8 @@ class _AddressFieldsState extends State<AddressFields> {
         TextFormField(
           controller: widget.line1,
           decoration: InputDecoration(
-            labelText: widget.line1Label,
+            labelText: widget.line1Label ??
+                context.l10n.personalInfoStepStreetAddress,
             border: const OutlineInputBorder(),
           ),
           textCapitalization: TextCapitalization.words,

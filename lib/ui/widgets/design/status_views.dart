@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/labeled_spinner.dart';
 
@@ -14,7 +15,7 @@ import 'package:mhad/ui/widgets/design/labeled_spinner.dart';
 /// directives") so assistive tech announces something useful; it doubles as the
 /// visible caption unless [showCaption] is false.
 class PageLoading extends StatelessWidget {
-  final String label;
+  final String? label;
 
   /// Whether to draw [label] as visible muted text under the spinner. Keep it
   /// on for slow/page-level waits; turn it off inside small inline panes where
@@ -26,7 +27,7 @@ class PageLoading extends StatelessWidget {
   final double minHeight;
 
   const PageLoading({
-    this.label = 'Loading',
+    this.label,
     this.showCaption = true,
     this.minHeight = 180,
     super.key,
@@ -35,6 +36,7 @@ class PageLoading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
+    final label = this.label ?? context.l10n.commonLoading;
     return ConstrainedBox(
       constraints: BoxConstraints(minHeight: minHeight),
       child: Center(
