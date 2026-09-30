@@ -72,7 +72,15 @@ were superseded by regulations that changed *after* they were written.
 - **Fix:** Revise `BREACH_PLAN.md` to the amended content/timing; add an in-app breach
   notice surface as one of the two contact channels (the app is local-first, so an
   in-app banner is the realistic primary channel).
-- **Status:** [~]
+- **Status:** `[x]` **DONE 2026-09-30** (one owner-side input left) — `BREACH_PLAN.md` was
+  already on the amended content/timing (v1.1). Now the in-app channel exists: a
+  `breachNotice` block in `app_data.json` → full-screen `BreachNoticeGate` shown until the
+  user acknowledges that notice id (`test/unit/breach_notice_test.dart`; the bundled JSON
+  is pinned to ship with *no* active notice). The privacy policy is hosted at
+  `/MHAD/privacy.html` (generated from the in-app screen by `tool/gen_privacy_html.py`, CI
+  drift check), which is the second contact method and the 90-day posting location.
+  **Owner input still needed:** the developer contact block in `BREACH_PLAN.md` (name /
+  email) — not something to invent.
 
 ### V4-H4: Consumer-health-data laws beyond Washington (CT, NV, NY) not addressed
 - **Files:** `lib/ui/settings/privacy_policy_screen.dart` (V3-M11 added WA MHMDA only)
@@ -84,7 +92,12 @@ were superseded by regulations that changed *after* they were written.
 - **Fix:** Broaden the privacy-policy section from "WA MHMDA" to a "Consumer Health Data
   (WA/CT/NV/NY)" section; explicitly state no sale, no targeted ads, no third-party SDKs,
   and that the only third-party transfer is the *opt-in* AI feature (already consented).
-- **Status:** [~]
+- **Status:** `[x]` **DONE** (verified 2026-09-30) — the in-app policy has a "US State
+  Consumer Health Data Laws (CA, WA, CT, NV, NY)" section stating no sale, no SDKs/ads/
+  tracking, opt-in-only AI transfer, and delete-all; it is now also published at
+  `/MHAD/privacy.html`. The stale `PRIVACY_POLICY.md` copy (Gemini-only, "mobile app") was
+  replaced by a pointer to the single source. The Contact section no longer claims an
+  app-store listing that doesn't exist on the web-only build.
 
 ### V4-H5: Apple Nov 2025 guideline — explicit disclosure + permission before third-party AI
 - **Files:** `lib/ui/widgets/ai_consent_dialog.dart`, `ios/Runner/PrivacyInfo.xcprivacy`,
