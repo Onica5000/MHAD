@@ -1,4 +1,5 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/ai/ai_assistant.dart';
 import 'package:mhad/ai/gemini_api_assistant.dart';
@@ -58,8 +59,12 @@ class AssistantSendResult {
 /// granted; it should show the consent dialog and resolve true if accepted.
 /// [onSent] fires right after the user's turn is appended (before the model
 /// reply arrives) so the caller can scroll.
+/// English fallback when a caller passes no [AppLocalizations].
+final _en = lookupAppLocalizations(const Locale('en'));
+
 Future<AssistantSendResult> sendAssistantMessage(
   WidgetRef ref, {
+  AppLocalizations? l10n,
   required String text,
   required Future<bool> Function() requestConsent,
   AssistantContext? assistantContext,
@@ -84,7 +89,7 @@ Future<AssistantSendResult> sendAssistantMessage(
 
   // Rate-limit gate.
   final tracker = ref.read(geminiRateTrackerProvider);
-  final blockReason = tracker.blockReason;
+  final blockReason = tracker.blockReasonFor(l10n);
   if (blockReason != null) {
     return AssistantSendResult(blockReason: blockReason);
   }
@@ -144,7 +149,7 @@ Future<AssistantSendResult> sendAssistantMessage(
     ref.read(conversationProvider.notifier).add(
           ChatMessage(
             role: MessageRole.assistant,
-            content: 'Sorry, I encountered an error: ${FriendlyError.from(e)}',
+            content: (l10n ?? _en).assistantSendError(FriendlyError.from(e, l10n)),
           ),
         );
   } finally {
@@ -165,6 +170,7 @@ Future<AssistantSendResult> sendAssistantMessage(
 /// conversation doesn't end in (user turn, assistant turn).
 Future<AssistantSendResult> retryLastSend(
   WidgetRef ref, {
+  AppLocalizations? l10n,
   required Future<bool> Function() requestConsent,
   AssistantContext? assistantContext,
   VoidCallback? onSent,
@@ -183,6 +189,7 @@ Future<AssistantSendResult> retryLastSend(
     requestConsent: requestConsent,
     assistantContext: assistantContext,
     onSent: onSent,
+    l10n: l10n,
   );
 }
 
@@ -192,6 +199,7 @@ Future<AssistantSendResult> retryLastSend(
 /// in-flight). Does NOT append a user turn — it re-verifies an existing one.
 Future<AssistantSendResult> verifyOnWeb(
   WidgetRef ref, {
+  AppLocalizations? l10n,
   required String question,
   required Future<bool> Function() requestConsent,
   AssistantContext? assistantContext,
@@ -215,7 +223,7 @@ Future<AssistantSendResult> verifyOnWeb(
   }
 
   final tracker = ref.read(geminiRateTrackerProvider);
-  final blockReason = tracker.blockReason;
+  final blockReason = tracker.blockReasonFor(l10n);
   if (blockReason != null) {
     return AssistantSendResult(blockReason: blockReason);
   }
@@ -246,8 +254,8 @@ Future<AssistantSendResult> verifyOnWeb(
     ref.read(conversationProvider.notifier).add(
           ChatMessage(
             role: MessageRole.assistant,
-            content:
-                'Sorry, I couldn\'t verify that on the web: ${FriendlyError.from(e)}',
+            content: (l10n ?? _en)
+                .assistantVerifyError(FriendlyError.from(e, l10n)),
           ),
         );
   } finally {

@@ -232,14 +232,12 @@ class _UlyssesClauseScreenState extends ConsumerState<UlyssesClauseScreen> {
 class _BoundariesCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    const boundaries = [
-      'Only applies once I have been formally found to lack capacity',
-      'Only for treatments I explicitly named (medications, ECT, facility)',
-      'Does not authorize physical restraint',
-      'A court-appointed guardian (not the agent) may revoke, suspend, or terminate',
-      'My directive still terminates at 2 years — unless I am incapable when '
-          'it would expire, in which case it remains in effect '
-          '(§§ 5824(e), 5834(c))',
+    final boundaries = [
+      context.l10n.ulyssesOnlyAppliesOnceIHave,
+      context.l10n.ulyssesOnlyForTreatmentsIExplicitly,
+      context.l10n.ulyssesDoesNotAuthorizePhysicalRestraint,
+      context.l10n.ulyssesACourtAppointedGuardianNot,
+      context.l10n.ulyssesMyDirectiveStillTerminatesAt,
     ];
     return Card(
       child: Padding(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -32,7 +33,7 @@ Future<void> launchOrCopy(
     await Clipboard.setData(ClipboardData(text: copyValue));
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('$copyValue copied to clipboard')),
+        SnackBar(content: Text(context.l10n.launchCopiedToClipboard(copyValue))),
       );
     }
   }

@@ -66,13 +66,13 @@ class DirectiveFormChoice extends ConsumerWidget {
     final declaration = _SingleFormCard(
       icon: Icons.description_outlined,
       title: context.l10n.quizLegendDeclaration,
-      sub: 'Treatment preferences without naming an agent.',
+      sub: context.l10n.directiveFormChoiceTreatmentPreferencesWithoutNamingAn,
       onTap: () => _start(context, ref, FormType.declaration),
     );
     final poa = _SingleFormCard(
       icon: Icons.people_alt_outlined,
       title: context.l10n.directiveFormChoicePowerOfAttorneyOnly,
-      sub: 'Name a decision-maker without listing preferences.',
+      sub: context.l10n.directiveFormChoiceNameADecisionMakerWithout,
       onTap: () => _startPoa(context, ref),
     );
     return Column(

@@ -146,7 +146,7 @@ class _CrisisPlanScreenState extends ConsumerState<CrisisPlanScreen> {
           const SizedBox(height: 18),
           _Section(
             title: context.l10n.crisisPlanEarlyWarningSigns,
-            sub: 'The first things I notice when my mood shifts.',
+            sub: context.l10n.crisisPlanTheFirstThingsINotice,
             icon: Icons.wb_sunny_outlined,
             items: _data['earlyWarning']!,
             onAdd: () => _addItem('earlyWarning'),
@@ -154,7 +154,7 @@ class _CrisisPlanScreenState extends ConsumerState<CrisisPlanScreen> {
           ),
           _Section(
             title: context.l10n.crisisPlanTriggersToWatchFor,
-            sub: 'External things that have set off episodes before.',
+            sub: context.l10n.crisisPlanExternalThingsThatHaveSet,
             icon: Icons.warning_amber_rounded,
             tone: _SecTone.crisis,
             items: _data['triggers']!,
@@ -163,7 +163,7 @@ class _CrisisPlanScreenState extends ConsumerState<CrisisPlanScreen> {
           ),
           _Section(
             title: context.l10n.crisisPlanThingsThatGenuinelyHelp,
-            sub: "Specific, concrete. Not 'self-care' — what actually works.",
+            sub: context.l10n.crisisPlanSpecificConcreteNotSelfCare,
             icon: Icons.favorite_outline,
             items: _data['helps']!,
             onAdd: () => _addItem('helps'),
@@ -171,7 +171,7 @@ class _CrisisPlanScreenState extends ConsumerState<CrisisPlanScreen> {
           ),
           _Section(
             title: context.l10n.crisisPlanThingsToSayToMe,
-            sub: 'Words that ground me. Useful for staff, EMS, family.',
+            sub: context.l10n.crisisPlanWordsThatGroundMeUseful,
             icon: Icons.chat_bubble_outline,
             items: _data['sayToMe']!,
             onAdd: () => _addItem('sayToMe'),
@@ -179,7 +179,7 @@ class _CrisisPlanScreenState extends ConsumerState<CrisisPlanScreen> {
           ),
           _Section(
             title: context.l10n.crisisPlanDonTDoThese,
-            sub: 'Approaches that escalate me. Be specific.',
+            sub: context.l10n.crisisPlanApproachesThatEscalateMeBe,
             icon: Icons.do_not_disturb_outlined,
             tone: _SecTone.crisis,
             items: _data['dontDo']!,

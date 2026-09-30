@@ -60,7 +60,7 @@ extension _PipelineApplyLogic on _PipelineScreenState {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
               content: Text(
-                  context.l10n.pipelineAutofillProblem(FriendlyError.from(e)))),
+                  context.l10n.pipelineAutofillProblem(FriendlyError.from(e, context.l10n)))),
         );
         // Still apply extracted data
         await _applyAll();

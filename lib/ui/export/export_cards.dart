@@ -52,12 +52,12 @@ class ExportPrincipalCard extends StatelessWidget {
             Text(directive.fullName, style: const TextStyle(fontSize: 13)),
             if (directive.executionDate != null)
               Text(
-                'Executed: ${formatShortDate(DateTime.fromMillisecondsSinceEpoch(directive.executionDate!))}',
+                context.l10n.exportCardsExecuted(formatShortDate(DateTime.fromMillisecondsSinceEpoch(directive.executionDate!))),
                 style: const TextStyle(fontSize: 12),
               ),
             if (directive.expirationDate != null)
               Text(
-                'Expires: ${formatShortDate(DateTime.fromMillisecondsSinceEpoch(directive.expirationDate!))}',
+                context.l10n.exportCardsExpires(formatShortDate(DateTime.fromMillisecondsSinceEpoch(directive.expirationDate!))),
                 style: const TextStyle(fontSize: 12),
               ),
           ],

@@ -65,17 +65,16 @@ class PermissionsOverviewScreen extends StatelessWidget {
           _PermissionCard(
             icon: Icons.fingerprint,
             title: context.l10n.permissionsOverviewBiometricsPasscode,
-            usedFor: 'Unlocking encrypted on-device storage (native app only; '
-                'not used by the web app).',
-            promises: const [
-              'Used only to verify your identity on unlock',
-              'Biometric data never leaves the OS keystore',
-              'No biometric data is sent to any server',
-              'Falls back to a passcode you choose if biometrics fail',
+            usedFor: context.l10n.permissionsOverviewUnlockingEncryptedOnDeviceStorage,
+            promises: [
+              context.l10n.permissionsOverviewUsedOnlyToVerifyYour,
+              context.l10n.permissionsOverviewBiometricDataNeverLeavesThe,
+              context.l10n.permissionsOverviewNoBiometricDataIsSent,
+              context.l10n.permissionsOverviewFallsBackToAPasscode,
             ],
             statusLine: !kIsWeb && platformIsMobile
-                ? 'Available · OS-managed'
-                : 'Not applicable on this platform',
+                ? context.l10n.permissionsOverviewAvailableOsManaged
+                : context.l10n.permissionsOverviewNotApplicableOnThisPlatform,
             statusOk: !kIsWeb && platformIsMobile,
           ),
           const SizedBox(height: 12),
@@ -83,16 +82,16 @@ class PermissionsOverviewScreen extends StatelessWidget {
             icon: Icons.notifications_outlined,
             title: context.l10n.permissionsOverviewNotifications,
             usedFor:
-                'Reminding you about witness signing, renewals, and check-ins.',
-            promises: const [
-              'You choose which reminders to enable',
-              'Notifications are scheduled locally on this device',
-              'No content (PII, directive text) is in any notification body',
-              'Disable per-category in device Settings → Notifications',
+                context.l10n.permissionsOverviewRemindingYouAboutWitnessSigning,
+            promises: [
+              context.l10n.permissionsOverviewYouChooseWhichRemindersTo,
+              context.l10n.permissionsOverviewNotificationsAreScheduledLocallyOn,
+              context.l10n.permissionsOverviewNoContentPiiDirectiveText,
+              context.l10n.permissionsOverviewDisablePerCategoryInDevice,
             ],
             statusLine: !kIsWeb && platformIsMobile
-                ? 'Available · OS-managed'
-                : 'Not applicable on this platform',
+                ? context.l10n.permissionsOverviewAvailableOsManaged
+                : context.l10n.permissionsOverviewNotApplicableOnThisPlatform,
             statusOk: !kIsWeb && platformIsMobile,
           ),
           const SizedBox(height: 12),
@@ -100,15 +99,14 @@ class PermissionsOverviewScreen extends StatelessWidget {
             icon: Icons.camera_alt_outlined,
             title: context.l10n.permissionsOverviewCamera,
             usedFor:
-                'Snapping a photo of your ID, medication labels, or condition lists '
-                'for AI-assisted field extraction. Coming in a later release.',
-            promises: const [
-              'Photo is sent to AI only to read it',
-              'Photo is discarded right after extraction',
-              "Nothing is saved to your device's photo library by default",
-              "You review every field before it's used",
+                context.l10n.permissionsOverviewSnappingAPhotoOfYour,
+            promises: [
+              context.l10n.permissionsOverviewPhotoIsSentToAi,
+              context.l10n.permissionsOverviewPhotoIsDiscardedRightAfter,
+              context.l10n.permissionsOverviewNothingIsSavedToYour,
+              context.l10n.permissionsOverviewYouReviewEveryFieldBefore,
             ],
-            statusLine: 'Not yet wired — feature in a future release',
+            statusLine: context.l10n.permissionsOverviewNotYetWiredFeatureIn,
             statusOk: false,
           ),
           const SizedBox(height: 12),
@@ -116,15 +114,14 @@ class PermissionsOverviewScreen extends StatelessWidget {
             icon: Icons.mic_outlined,
             title: context.l10n.permissionsOverviewMicrophone,
             usedFor:
-                'Speaking long-form answers (e.g. "anything else") instead of typing. '
-                'Coming in a later release.',
-            promises: const [
-              "Audio is processed on-device when possible",
-              "If sent to AI for transcription, it isn't stored",
-              "Transcript stays in your session — never uploaded",
-              "Toggle off at any time in Settings",
+                context.l10n.permissionsOverviewSpeakingLongFormAnswersE,
+            promises: [
+              context.l10n.permissionsOverviewAudioIsProcessedOnDevice,
+              context.l10n.permissionsOverviewIfSentToAiFor,
+              context.l10n.permissionsOverviewTranscriptStaysInYourSession,
+              context.l10n.permissionsOverviewToggleOffAtAnyTime,
             ],
-            statusLine: 'Not yet wired — feature in a future release',
+            statusLine: context.l10n.permissionsOverviewNotYetWiredFeatureIn,
             statusOk: false,
           ),
           const SizedBox(height: 12),
@@ -132,15 +129,14 @@ class PermissionsOverviewScreen extends StatelessWidget {
             icon: Icons.contacts_outlined,
             title: context.l10n.permissionsOverviewContacts,
             usedFor:
-                'Picking an agent or witness from your address book instead of '
-                "typing their details. Coming in a later release.",
-            promises: const [
-              'We never upload your contacts',
-              'Search runs locally on this device',
-              "Only the contact you pick is brought into the directive",
-              'You can revoke access in Settings any time',
+                context.l10n.permissionsOverviewPickingAnAgentOrWitness,
+            promises: [
+              context.l10n.permissionsOverviewWeNeverUploadYourContacts,
+              context.l10n.permissionsOverviewSearchRunsLocallyOnThis,
+              context.l10n.permissionsOverviewOnlyTheContactYouPick,
+              context.l10n.permissionsOverviewYouCanRevokeAccessIn,
             ],
-            statusLine: 'Not yet wired — feature in a future release',
+            statusLine: context.l10n.permissionsOverviewNotYetWiredFeatureIn,
             statusOk: false,
           ),
           const SizedBox(height: 18),

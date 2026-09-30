@@ -51,7 +51,7 @@ Future<void> importSavedDirectiveFile(
   } on DirectiveImportException catch (e) {
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.message)),
+        SnackBar(content: Text(e.messageIn(context.l10n))),
       );
     }
   }

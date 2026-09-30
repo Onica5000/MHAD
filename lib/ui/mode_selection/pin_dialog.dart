@@ -41,11 +41,11 @@ class _PinSetupDialogState extends State<PinSetupDialog> {
     final confirm = _confirmController.text;
 
     if (passcode.length < 4) {
-      setState(() => _error = 'Passcode must be at least 4 characters.');
+      setState(() => _error = context.l10n.pinDialogPasscodeTooShort);
       return;
     }
     if (passcode != confirm) {
-      setState(() => _error = 'Passcodes do not match.');
+      setState(() => _error = context.l10n.pinDialogPasscodesDontMatch);
       _confirmController.clear();
       _confirmFocus.requestFocus();
       return;
@@ -81,7 +81,7 @@ class _PinSetupDialogState extends State<PinSetupDialog> {
                   icon: Icon(
                       _obscure ? Icons.visibility : Icons.visibility_off),
                   tooltip:
-                      _obscure ? 'Show passcode' : 'Hide passcode',
+                      _obscure ? context.l10n.pinDialogShowPasscode : context.l10n.pinDialogHidePasscode,
                   onPressed: () => setState(() => _obscure = !_obscure),
                 ),
               ),
@@ -148,7 +148,7 @@ class PinEntryDialog extends StatefulWidget {
     final result = await showGeneralDialog<PinUnlockResult>(
       context: context,
       barrierDismissible: false,
-      barrierLabel: 'Unlock private mode',
+      barrierLabel: context.l10n.pinDialogUnlockPrivateMode,
       barrierColor: Colors.transparent,
       transitionDuration: const Duration(milliseconds: 220),
       pageBuilder: (_, _, _) => const PinEntryDialog(),
@@ -188,7 +188,7 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
   Future<void> _submit() async {
     final passcode = _controller.text;
     if (passcode.isEmpty) {
-      setState(() => _error = 'Please enter your passcode.');
+      setState(() => _error = context.l10n.pinDialogEnterPasscode);
       return;
     }
 
@@ -211,7 +211,7 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
         setState(() {
           _verifying = false;
           _lockedOut = true;
-          _error = 'Too many attempts. Please wait 30 seconds.';
+          _error = context.l10n.pinDialogTooManyAttempts;
         });
         await Future.delayed(const Duration(seconds: 30));
         if (!mounted) return;
@@ -229,7 +229,7 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
         }
         setState(() {
           _verifying = false;
-          _error = 'Incorrect passcode. Please try again.';
+          _error = context.l10n.pinDialogIncorrectPasscode;
         });
       }
     }
@@ -487,7 +487,7 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
                   suffixIcon: IconButton(
                     icon: Icon(
                         _obscure ? Icons.visibility : Icons.visibility_off),
-                    tooltip: _obscure ? 'Show passcode' : 'Hide passcode',
+                    tooltip: _obscure ? context.l10n.pinDialogShowPasscode : context.l10n.pinDialogHidePasscode,
                     onPressed: () => setState(() => _obscure = !_obscure),
                   ),
                 ),

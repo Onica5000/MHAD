@@ -144,7 +144,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
     }
     // Respect the rate limiter.
     final tracker = ref.read(geminiRateTrackerProvider);
-    final block = tracker.blockReason;
+    final block = tracker.blockReasonFor(context.l10n);
     if (block != null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(block), duration: const Duration(seconds: 5)),

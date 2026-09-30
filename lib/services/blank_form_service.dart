@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
+import 'package:mhad/l10n/model_labels.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/ui/export/pdf/pdf_generator.dart';
@@ -47,14 +49,14 @@ Future<void> showBlankFormPicker(BuildContext context) async {
   final type = await showDialog<FormType>(
     context: context,
     builder: (ctx) => SimpleDialog(
-      title: const Text('Print a blank form'),
+      title: Text(ctx.l10n.blankFormPrintTitle),
       children: [
         for (final t in FormType.values)
           SimpleDialogOption(
             onPressed: () => Navigator.pop(ctx, t),
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 6),
-              child: Text(t.displayName),
+              child: Text(t.label(ctx.l10n)),
             ),
           ),
       ],
@@ -72,6 +74,7 @@ Future<void> printBlankForm(
   FormType type = FormType.combined,
 }) async {
   final messenger = ScaffoldMessenger.of(context);
+  final l10n = context.l10n;
   try {
     final generator = PdfGenerator(
       includeCombined: type == FormType.combined,
@@ -94,7 +97,7 @@ Future<void> printBlankForm(
     );
   } catch (e) {
     messenger.showSnackBar(
-      SnackBar(content: Text('Could not open the blank form to print: $e')),
+      SnackBar(content: Text(l10n.blankFormPrintError('$e'))),
     );
   }
 }

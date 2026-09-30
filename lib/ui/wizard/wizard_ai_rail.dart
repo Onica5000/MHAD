@@ -74,6 +74,7 @@ class _WizardAiRailState extends ConsumerState<WizardAiRail> {
     if (!mounted) return;
     final result = await sendAssistantMessage(
       ref,
+      l10n: context.l10n,
       text: text,
       assistantContext: AssistantContext(
         formType: widget.formType,
@@ -125,6 +126,7 @@ class _WizardAiRailState extends ConsumerState<WizardAiRail> {
     if (!mounted) return;
     final result = await retryLastSend(
       ref,
+      l10n: context.l10n,
       assistantContext: AssistantContext(
         formType: widget.formType,
         stepName: widget.stepName,
@@ -206,7 +208,7 @@ class _WizardAiRailState extends ConsumerState<WizardAiRail> {
           ),
           const SizedBox(height: 4),
           Text(
-            '● ${ref.watch(activeProviderProvider).name.toUpperCase()} · PII STRIPPED',
+            context.l10n.learnAiPanelPiiStripped(ref.watch(activeProviderProvider).name.toUpperCase()),
             style: TextStyle(
               fontFamily: kMonoFamily,
               fontFamilyFallback: const [

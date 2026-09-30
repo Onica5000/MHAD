@@ -1,11 +1,18 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:flutter/widgets.dart' show Locale;
 import 'package:google_generative_ai/google_generative_ai.dart' as gen;
 import 'package:http/http.dart' as http;
 import 'package:mhad/ai/ai_assistant.dart' show ChatMessage, MessageRole;
 import 'package:mhad/ai/ai_provider.dart';
+import 'package:mhad/l10n/app_localizations.dart';
 import 'package:mhad/services/certificate_pinning_service.dart';
+
+/// Builds a user-facing error message in a given locale.
+typedef LocalizedMessage = String Function(AppLocalizations l);
+
+final _en = lookupAppLocalizations(const Locale('en'));
 
 /// One piece of multimodal input for [LlmClient.generateMultimodal].
 sealed class LlmPart {
@@ -30,7 +37,14 @@ class LlmData extends LlmPart {
 /// vision-only OpenAI/Grok model). Carries a user-facing [message].
 class UnsupportedInputError implements Exception {
   final String message;
-  const UnsupportedInputError(this.message);
+
+  /// Optional localized form of [message]; see [messageIn].
+  final LocalizedMessage? localized;
+  const UnsupportedInputError(this.message, [this.localized]);
+
+  /// [message] in [l]'s locale when a localized form exists, else [message].
+  String messageIn(AppLocalizations? l) =>
+      l != null && localized != null ? localized!(l) : message;
   @override
   String toString() => message;
 }
@@ -41,7 +55,14 @@ class UnsupportedInputError implements Exception {
 /// without string-sniffing exception text. Carries a user-facing [message].
 class LlmRateLimitError implements Exception {
   final String message;
-  const LlmRateLimitError(this.message);
+
+  /// Optional localized form of [message]; see [messageIn].
+  final LocalizedMessage? localized;
+  const LlmRateLimitError(this.message, [this.localized]);
+
+  /// [message] in [l]'s locale when a localized form exists, else [message].
+  String messageIn(AppLocalizations? l) =>
+      l != null && localized != null ? localized!(l) : message;
   @override
   String toString() => message;
 }
@@ -55,7 +76,14 @@ class LlmRateLimitError implements Exception {
 /// gets its own type and its own message.
 class LlmAuthError implements Exception {
   final String message;
-  const LlmAuthError(this.message);
+
+  /// Optional localized form of [message]; see [messageIn].
+  final LocalizedMessage? localized;
+  const LlmAuthError(this.message, [this.localized]);
+
+  /// [message] in [l]'s locale when a localized form exists, else [message].
+  String messageIn(AppLocalizations? l) =>
+      l != null && localized != null ? localized!(l) : message;
   @override
   String toString() => message;
 }
@@ -66,7 +94,14 @@ class LlmAuthError implements Exception {
 /// must not be reported as a transient server problem.
 class LlmModelNotFoundError implements Exception {
   final String message;
-  const LlmModelNotFoundError(this.message);
+
+  /// Optional localized form of [message]; see [messageIn].
+  final LocalizedMessage? localized;
+  const LlmModelNotFoundError(this.message, [this.localized]);
+
+  /// [message] in [l]'s locale when a localized form exists, else [message].
+  String messageIn(AppLocalizations? l) =>
+      l != null && localized != null ? localized!(l) : message;
   @override
   String toString() => message;
 }
@@ -80,7 +115,14 @@ class LlmModelNotFoundError implements Exception {
 /// without this type the app had no network-error path on web at all.
 class LlmNetworkError implements Exception {
   final String message;
-  const LlmNetworkError(this.message);
+
+  /// Optional localized form of [message]; see [messageIn].
+  final LocalizedMessage? localized;
+  const LlmNetworkError(this.message, [this.localized]);
+
+  /// [message] in [l]'s locale when a localized form exists, else [message].
+  String messageIn(AppLocalizations? l) =>
+      l != null && localized != null ? localized!(l) : message;
   @override
   String toString() => message;
 }
@@ -271,23 +313,15 @@ class LlmClient {
       if (isImage &&
           (p.mimeType == 'image/heic' || p.mimeType == 'image/heif') &&
           provider != AiProvider.gemini) {
-        throw UnsupportedInputError(
-          "${provider.label} can't read HEIC/HEIF photos (the iPhone default). "
-          'Switch to Gemini, or re-save the photo as JPEG or PNG first.',
-        );
+        throw _unsupported((l) => l.llmHeicUnsupported(provider.label));
       }
       if (isImage) continue; // every provider reads the common image formats
       if (isPdf && !provider.supportsPdf) {
-        throw UnsupportedInputError(
-          "${provider.label} can't read PDFs here — switch to Gemini or "
-          'Claude, or paste the document text instead.',
-        );
+        throw _unsupported((l) => l.llmPdfUnsupported(provider.label));
       }
       if (!isPdf && provider != AiProvider.gemini) {
-        throw UnsupportedInputError(
-          "${provider.label} can't read ${p.mimeType} files here — switch to "
-          'Gemini, or paste the text instead.',
-        );
+        throw _unsupported(
+            (l) => l.llmFileTypeUnsupported(provider.label, p.mimeType));
       }
     }
     switch (provider) {
@@ -420,9 +454,7 @@ class LlmClient {
         msg.contains('rate limit') ||
         msg.contains('quota') ||
         msg.contains('resource_exhausted')) {
-      return LlmRateLimitError(
-          'Too many requests to ${provider.label}. Please wait a minute '
-          'and try again.');
+      return _rateLimited();
     }
     // "API key not valid", "API_KEY_INVALID", "permission denied", 401/403.
     if (msg.contains('api key') ||
@@ -432,29 +464,32 @@ class LlmClient {
         msg.contains('permission_denied') ||
         msg.contains('401') ||
         msg.contains('403')) {
-      return LlmAuthError(
-          '${provider.label} rejected your API key. Open AI setup and check '
-          'the key is correct, still active, and has the Generative Language '
-          'API enabled.');
+      String m(AppLocalizations l) => l.llmGeminiKeyRejected(provider.label);
+      return LlmAuthError(m(_en), m);
     }
     // "models/x is not found", "not supported for generateContent", 404.
     if (msg.contains('not found') ||
         msg.contains('not_found') ||
         msg.contains('is not supported') ||
         msg.contains('404')) {
-      return LlmModelNotFoundError(
-          '${provider.label} doesn\'t recognise the model "$model" — it may '
-          'have been retired. Pick a different model in AI setup.');
+      String m(AppLocalizations l) => l.llmGeminiModelNotFound(provider.label, model);
+      return LlmModelNotFoundError(m(_en), m);
     }
     return e;
   }
 
-  LlmNetworkError _networkError(String detail) => LlmNetworkError(
-        "Couldn't reach ${provider.label} ($detail). Check your internet "
-        'connection. If you are on the web app, this provider may also be '
-        "blocked by your browser's CORS policy — Gemini and Claude both work "
-        'in the browser.',
-      );
+  LlmNetworkError _networkError(String detail) {
+    String m(AppLocalizations l) => l.llmNetworkError(provider.label, detail);
+    return LlmNetworkError(m(_en), m);
+  }
+
+  UnsupportedInputError _unsupported(LocalizedMessage m) =>
+      UnsupportedInputError(m(_en), m);
+
+  LlmRateLimitError _rateLimited() {
+    String m(AppLocalizations l) => l.llmRateLimited(provider.label);
+    return LlmRateLimitError(m(_en), m);
+  }
 
   /// Anthropic Messages API. [messages] content may be a plain string or an
   /// array of content blocks (text/image/document).
@@ -547,19 +582,14 @@ class LlmClient {
   Exception _httpError(http.Response resp) {
     switch (resp.statusCode) {
       case 429:
-        return LlmRateLimitError(
-            'Too many requests to ${provider.label}. Please wait a minute and '
-            'try again.');
+        return _rateLimited();
       case 401:
       case 403:
-        return LlmAuthError(
-            '${provider.label} rejected your API key. Open AI setup and check '
-            'the key is correct, still active, and belongs to '
-            '${provider.label}.');
+        String m(AppLocalizations l) => l.llmKeyRejected(provider.label);
+        return LlmAuthError(m(_en), m);
       case 404:
-        return LlmModelNotFoundError(
-            '${provider.label} doesn\'t recognise the model "$model". Pick a '
-            'different model in AI setup.');
+        String m(AppLocalizations l) => l.llmModelNotFound(provider.label, model);
+        return LlmModelNotFoundError(m(_en), m);
       case 500:
       case 502:
       case 503:

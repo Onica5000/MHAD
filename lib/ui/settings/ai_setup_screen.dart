@@ -90,8 +90,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-              "That doesn't look like a valid ${_provider.label} key "
-              '(${_provider.keyHint}).'),
+              context.l10n.aiSetupThatDoesnTLookLike(_provider.label, _provider.keyHint)),
         ),
       );
       return;
@@ -106,8 +105,8 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(_isEphemeral
-              ? 'API key set for this session'
-              : 'API key saved'),
+              ? context.l10n.aiSetupApiKeySetForThis
+              : context.l10n.aiSetupApiKeySaved),
         ),
       );
       final ret = widget.returnRoute;
@@ -158,13 +157,13 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
       if (!mounted) return;
       setState(() {
         _testOk = true;
-        _testResult = '${_provider.label} responded. This key and model work.';
+        _testResult = context.l10n.aiSetupTestOk(_provider.label);
       });
     } catch (e) {
       if (!mounted) return;
       setState(() {
         _testOk = false;
-        _testResult = FriendlyError.from(e);
+        _testResult = FriendlyError.from(e, context.l10n);
       });
     } finally {
       client.dispose();
@@ -212,7 +211,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
               content: Text(
-                  'Could not paste. Try pasting manually ($pasteShortcutLabel).')),
+                  context.l10n.aiSetupCouldNotPasteTryPasting(pasteShortcutLabel))),
         );
       }
     }
@@ -235,22 +234,12 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
   /// Provider-aware privacy-notice body.
   String get _privacyNotice {
     final lead = _provider == AiProvider.gemini
-        ? 'On the Gemini free tier, Google may use data you send to improve '
-            'their AI products, and human reviewers may read your inputs.'
-        : 'Your ${_provider.label} key sends data to ${_provider.label}; '
-            'their data-use and retention policy applies.';
+        ? context.l10n.aiSetupPrivacyLeadGemini
+        : context.l10n.aiSetupPrivacyLeadOther(_provider.label);
     final keyLine = _isEphemeral
-        ? 'Your API key is kept in memory for this session, with a temporary '
-            'copy for up to 10 minutes (for crash recovery); it is discarded '
-            'when the session ends.'
-        : 'Your API key is stored securely on this device only and is never '
-            'shared with anyone other than your AI provider.';
-    return '$lead\n\n'
-        'The AI features in this app send text you enter in form fields and '
-        "chat messages to your AI provider's servers. Do not include "
-        'personally identifying details (full legal name, Social Security '
-        'number, date of birth, etc.) in AI chat or when using AI Suggest.'
-        '\n\n$keyLine';
+        ? context.l10n.aiSetupPrivacyKeyEphemeral
+        : context.l10n.aiSetupPrivacyKeyStored;
+    return context.l10n.aiSetupPrivacyNoticeBody(lead, keyLine);
   }
 
   @override
@@ -330,9 +319,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                     const SizedBox(width: 10),
                     Expanded(
                       child: Text(
-                        '${_provider.label} may be blocked by your browser\'s '
-                        'security (CORS) on the web. If it doesn\'t respond, '
-                        'pick Gemini or Claude — both work in the browser.',
+                        context.l10n.aiSetupMayBeBlockedByYour(_provider.label),
                         style: TextStyle(
                             fontSize: 13,
                             color: cs.onErrorContainer,
@@ -349,8 +336,8 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
           // ---- Instructions ----
           Text(
               _provider == AiProvider.gemini
-                  ? 'Get Your Free Gemini API Key'
-                  : 'Add Your ${_provider.label} API Key',
+                  ? context.l10n.aiSetupGetYourFreeGeminiApi
+                  : context.l10n.aiSetupAddYourApiKey(_provider.label),
               style: Theme.of(context)
                   .textTheme
                   .titleMedium
@@ -358,12 +345,8 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
           const SizedBox(height: 6),
           Text(
             _provider == AiProvider.gemini
-                ? 'The assistant uses Google\'s Gemini model. You need a free '
-                    'API key from Google AI Studio — it takes about 30 seconds.'
-                : 'You bring your own ${_provider.label} API key. Your '
-                    'provider\'s usage limits and billing apply — this app '
-                    'never sees or charges for your usage. Gemini stays the '
-                    'free default if you\'d rather not pay.',
+                ? context.l10n.aiSetupTheAssistantUsesGoogleS
+                : context.l10n.aiSetupYouBringYourOwnApi(_provider.label),
             style: TextStyle(
                 fontSize: 13, color: cs.onSurfaceVariant, height: 1.4),
           ),
@@ -428,7 +411,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                   ),
                   _BrowserShortcut(
                     browser: 'DuckDuckGo',
-                    shortcut: 'All browsing is private (Fire Button clears)',
+                    shortcut: context.l10n.aiSetupDuckDuckGoNote,
                     macShortcut: '',
                     color: cs.onErrorContainer,
                     isNote: true,
@@ -463,30 +446,28 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
           _StepTile(
             number: '2',
             title: _provider == AiProvider.gemini
-                ? 'Open Google AI Studio (in your private window)'
-                : 'Open ${_provider.label} (in your private window)',
+                ? context.l10n.aiSetupOpenGoogleAiStudioIn
+                : context.l10n.aiSetupOpenInYourPrivateWindow(_provider.label),
             subtitle: _provider == AiProvider.gemini
-                ? 'Use any Google account (personal Gmail works fine)'
-                : 'Sign in, then open the API keys page',
+                ? context.l10n.aiSetupUseAnyGoogleAccountPersonal
+                : context.l10n.aiSetupSignInThenOpenThe,
             trailing: OutlinedButton.icon(
               onPressed: () => launchUrl(_getKeyUri,
                   mode: LaunchMode.externalApplication),
               icon: const Icon(Icons.open_in_new, size: 16),
               label: Text(_provider == AiProvider.gemini
-                  ? 'Open AI Studio'
-                  : 'Open ${_provider.label}'),
+                  ? context.l10n.aiSetupOpenAiStudio
+                  : context.l10n.aiSetupOpen(_provider.label)),
             ),
           ),
           _StepTile(
             number: '3',
             title: _provider == AiProvider.gemini
-                ? 'Sign in with Google'
-                : 'Sign in to ${_provider.label}',
+                ? context.l10n.aiSetupSignInWithGoogle
+                : context.l10n.aiSetupSignInTo(_provider.label),
             subtitle: _provider == AiProvider.gemini
-                ? 'No credit card or payment is needed. The free tier is '
-                    'generous and sufficient for this app.'
-                : 'Most providers require a paid account with credits to use '
-                    'the API. Your provider bills you directly.',
+                ? context.l10n.aiSetupNoCreditCardOrPayment
+                : context.l10n.aiSetupMostProvidersRequireAPaid,
           ),
           _StepTile(
             number: '4',
@@ -497,8 +478,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
             number: '5',
             title: context.l10n.aiSetupCopyAndPasteBelow,
             subtitle:
-                'The key looks like "${_provider.keyHint}" — copy it, then '
-                'use the paste button or paste it manually.',
+                context.l10n.aiSetupTheKeyLooksLikeCopy(_provider.keyHint),
             trailing: hasKey
                 ? Builder(builder: (context) {
                     final success = SemanticColors.successText(
@@ -509,8 +489,8 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                         const SizedBox(width: 6),
                         Text(
                           _isEphemeral
-                              ? 'Key set for this session'
-                              : 'Key saved',
+                              ? context.l10n.aiSetupKeySetForThisSession
+                              : context.l10n.aiSetupKeySaved,
                           style: TextStyle(
                               color: success,
                               fontWeight: FontWeight.w600,
@@ -528,7 +508,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
             controller: _keyCtrl,
             obscureText: _obscure,
             decoration: InputDecoration(
-              labelText: '${_provider.label} API Key',
+              labelText: context.l10n.aiSetupApiKey(_provider.label),
               hintText: _keyExample,
               border: const OutlineInputBorder(),
               suffixIcon: Row(
@@ -543,7 +523,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                     icon: Icon(
                         _obscure ? Icons.visibility_off : Icons.visibility,
                         size: 20),
-                    tooltip: _obscure ? 'Show API key' : 'Hide API key',
+                    tooltip: _obscure ? context.l10n.aiSetupShowApiKey : context.l10n.aiSetupHideApiKey,
                     onPressed: () => setState(() => _obscure = !_obscure),
                   ),
                 ],
@@ -565,8 +545,8 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                   )
                 : const Icon(Icons.check),
             label: Text(_isEphemeral
-                ? 'Use Key for This Session'
-                : 'Save API Key'),
+                ? context.l10n.aiSetupUseKeyForThisSession
+                : context.l10n.aiSetupSaveApiKey),
           ),
           const SizedBox(height: 8),
 
@@ -583,7 +563,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                         label: context.l10n.aiSetupTestingConnection, strokeWidth: 2),
                   )
                 : const Icon(Icons.wifi_tethering),
-            label: Text(_testing ? 'Testing…' : 'Test connection'),
+            label: Text(_testing ? context.l10n.aiSetupTesting : context.l10n.aiSetupTestConnection),
           ),
           if (_testResult != null) ...[
             const SizedBox(height: 8),
@@ -764,7 +744,7 @@ class _ProviderModelPicker extends StatelessWidget {
                   DropdownMenuItem(
                     value: p,
                     child: Text(p == AiProvider.gemini
-                        ? '${p.label} (free)'
+                        ? context.l10n.aiSetupProviderFree(p.label)
                         : p.label),
                   ),
               ],
@@ -875,9 +855,9 @@ class _BrowserShortcut extends StatelessWidget {
     if (isNote) {
       text = '$browser:  $shortcut';
     } else if (shortcut.isNotEmpty && macShortcut.isNotEmpty) {
-      text = '$browser:  $shortcut  (Mac: $macShortcut)';
+      text = context.l10n.aiSetupShortcutWithMac(browser, shortcut, macShortcut);
     } else if (macShortcut.isNotEmpty) {
-      text = '$browser:  $macShortcut  (Mac only)';
+      text = context.l10n.aiSetupShortcutMacOnly(browser, macShortcut);
     } else {
       text = '$browser:  $shortcut';
     }

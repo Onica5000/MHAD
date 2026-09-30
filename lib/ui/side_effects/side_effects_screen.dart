@@ -125,10 +125,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
       final interactions = results[1] as List<InteractionNote>;
       if (!mounted) return;
       if (found.isEmpty) {
-        setState(() => _error =
-            'We couldn\'t find common side effects to list right now. You can '
-            'add anything you\'re experiencing in the Anything-else step, and '
-            'always raise side-effect concerns with your doctor.');
+        setState(() => _error = context.l10n.sideEffectsNoneFound);
       } else {
         // Preserve any previously-checked items that match.
         final priorChecked = {
@@ -146,8 +143,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
       await _persist();
     } catch (e) {
       if (mounted) {
-        setState(() => _error = 'Something went wrong generating the list. '
-            'Please try again, or note side effects yourself.');
+        setState(() => _error = context.l10n.sideEffectsGenerateError);
       }
     } finally {
       if (mounted) setState(() => _generating = false);
@@ -301,8 +297,8 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
       children: [
         Text(
           _items.isEmpty
-              ? 'Checking covers: ${_currentMeds.join(', ')}'
-              : 'Re-check for: ${_currentMeds.join(', ')}',
+              ? context.l10n.sideEffectsCheckingCovers(_currentMeds.join(', '))
+              : context.l10n.sideEffectsReCheckFor(_currentMeds.join(', ')),
           style: TextStyle(
             fontFamily: kSansFamily,
             fontSize: 13,
@@ -319,7 +315,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
                   child: CircularProgressIndicator(strokeWidth: 2),
                 )
               : const Icon(Icons.auto_awesome, size: 16),
-          label: Text(_items.isEmpty ? 'Check side effects' : 'Re-check'),
+          label: Text(_items.isEmpty ? context.l10n.sideEffectsCheckSideEffects : context.l10n.sideEffectsReCheck),
         ),
       ],
     );
@@ -439,7 +435,7 @@ class _SideEffectRow extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(top: 2),
                     child: Text(
-                      'May affect: ${item.adlImpact}',
+                      context.l10n.sideEffectsMayAffect(item.adlImpact),
                       style: TextStyle(
                         fontFamily: kSansFamily,
                         fontSize: 12,

@@ -9349,6 +9349,2315 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Call · text · chat'**
   String get crisisSheetCallTextChat;
+
+  /// No description provided for @assistantSenderYou.
+  ///
+  /// In en, this message translates to:
+  /// **'You'**
+  String get assistantSenderYou;
+
+  /// No description provided for @assistantSenderAi.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Assistant'**
+  String get assistantSenderAi;
+
+  /// No description provided for @aiSetupApiKeySetForThis.
+  ///
+  /// In en, this message translates to:
+  /// **'API key set for this session'**
+  String get aiSetupApiKeySetForThis;
+
+  /// No description provided for @aiSetupApiKeySaved.
+  ///
+  /// In en, this message translates to:
+  /// **'API key saved'**
+  String get aiSetupApiKeySaved;
+
+  /// No description provided for @aiSetupGetYourFreeGeminiApi.
+  ///
+  /// In en, this message translates to:
+  /// **'Get Your Free Gemini API Key'**
+  String get aiSetupGetYourFreeGeminiApi;
+
+  /// No description provided for @aiSetupAddYourApiKey.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Your {label} API Key'**
+  String aiSetupAddYourApiKey(Object label);
+
+  /// No description provided for @aiSetupTheAssistantUsesGoogleS.
+  ///
+  /// In en, this message translates to:
+  /// **'The assistant uses Google\'s Gemini model. You need a free API key from Google AI Studio — it takes about 30 seconds.'**
+  String get aiSetupTheAssistantUsesGoogleS;
+
+  /// No description provided for @aiSetupYouBringYourOwnApi.
+  ///
+  /// In en, this message translates to:
+  /// **'You bring your own {label} API key. Your provider\'s usage limits and billing apply — this app never sees or charges for your usage. Gemini stays the free default if you\'d rather not pay.'**
+  String aiSetupYouBringYourOwnApi(Object label);
+
+  /// No description provided for @aiSetupOpenGoogleAiStudioIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Google AI Studio (in your private window)'**
+  String get aiSetupOpenGoogleAiStudioIn;
+
+  /// No description provided for @aiSetupOpenInYourPrivateWindow.
+  ///
+  /// In en, this message translates to:
+  /// **'Open {label} (in your private window)'**
+  String aiSetupOpenInYourPrivateWindow(Object label);
+
+  /// No description provided for @aiSetupUseAnyGoogleAccountPersonal.
+  ///
+  /// In en, this message translates to:
+  /// **'Use any Google account (personal Gmail works fine)'**
+  String get aiSetupUseAnyGoogleAccountPersonal;
+
+  /// No description provided for @aiSetupSignInThenOpenThe.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in, then open the API keys page'**
+  String get aiSetupSignInThenOpenThe;
+
+  /// No description provided for @aiSetupOpenAiStudio.
+  ///
+  /// In en, this message translates to:
+  /// **'Open AI Studio'**
+  String get aiSetupOpenAiStudio;
+
+  /// No description provided for @aiSetupOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Open {label}'**
+  String aiSetupOpen(Object label);
+
+  /// No description provided for @aiSetupSignInWithGoogle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in with Google'**
+  String get aiSetupSignInWithGoogle;
+
+  /// No description provided for @aiSetupSignInTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to {label}'**
+  String aiSetupSignInTo(Object label);
+
+  /// No description provided for @aiSetupNoCreditCardOrPayment.
+  ///
+  /// In en, this message translates to:
+  /// **'No credit card or payment is needed. The free tier is generous and sufficient for this app.'**
+  String get aiSetupNoCreditCardOrPayment;
+
+  /// No description provided for @aiSetupMostProvidersRequireAPaid.
+  ///
+  /// In en, this message translates to:
+  /// **'Most providers require a paid account with credits to use the API. Your provider bills you directly.'**
+  String get aiSetupMostProvidersRequireAPaid;
+
+  /// No description provided for @aiSetupKeySetForThisSession.
+  ///
+  /// In en, this message translates to:
+  /// **'Key set for this session'**
+  String get aiSetupKeySetForThisSession;
+
+  /// No description provided for @aiSetupKeySaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Key saved'**
+  String get aiSetupKeySaved;
+
+  /// No description provided for @aiSetupShowApiKey.
+  ///
+  /// In en, this message translates to:
+  /// **'Show API key'**
+  String get aiSetupShowApiKey;
+
+  /// No description provided for @aiSetupHideApiKey.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide API key'**
+  String get aiSetupHideApiKey;
+
+  /// No description provided for @aiSetupUseKeyForThisSession.
+  ///
+  /// In en, this message translates to:
+  /// **'Use Key for This Session'**
+  String get aiSetupUseKeyForThisSession;
+
+  /// No description provided for @aiSetupSaveApiKey.
+  ///
+  /// In en, this message translates to:
+  /// **'Save API Key'**
+  String get aiSetupSaveApiKey;
+
+  /// No description provided for @aiSetupTesting.
+  ///
+  /// In en, this message translates to:
+  /// **'Testing…'**
+  String get aiSetupTesting;
+
+  /// No description provided for @aiSetupTestConnection.
+  ///
+  /// In en, this message translates to:
+  /// **'Test connection'**
+  String get aiSetupTestConnection;
+
+  /// No description provided for @aiSetupThatDoesnTLookLike.
+  ///
+  /// In en, this message translates to:
+  /// **'That doesn\'t look like a valid {label} key ({keyHint}).'**
+  String aiSetupThatDoesnTLookLike(Object label, Object keyHint);
+
+  /// No description provided for @aiSetupCouldNotPasteTryPasting.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not paste. Try pasting manually ({pasteShortcutLabel}).'**
+  String aiSetupCouldNotPasteTryPasting(Object pasteShortcutLabel);
+
+  /// No description provided for @aiSetupMayBeBlockedByYour.
+  ///
+  /// In en, this message translates to:
+  /// **'{label} may be blocked by your browser\'s security (CORS) on the web. If it doesn\'t respond, pick Gemini or Claude — both work in the browser.'**
+  String aiSetupMayBeBlockedByYour(Object label);
+
+  /// No description provided for @aiSetupTheKeyLooksLikeCopy.
+  ///
+  /// In en, this message translates to:
+  /// **'The key looks like \"{keyHint}\" — copy it, then use the paste button or paste it manually.'**
+  String aiSetupTheKeyLooksLikeCopy(Object keyHint);
+
+  /// No description provided for @aiSetupApiKey.
+  ///
+  /// In en, this message translates to:
+  /// **'{label} API Key'**
+  String aiSetupApiKey(Object label);
+
+  /// No description provided for @adminUpdateBlankUseTheAppS.
+  ///
+  /// In en, this message translates to:
+  /// **'Blank = use the app\'s saved Gemini key. Not stored.'**
+  String get adminUpdateBlankUseTheAppS;
+
+  /// No description provided for @adminUpdateEnteredForThisSessionOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Entered for this session only — not stored.'**
+  String get adminUpdateEnteredForThisSessionOnly;
+
+  /// No description provided for @adminUpdateDrafting.
+  ///
+  /// In en, this message translates to:
+  /// **'Drafting…'**
+  String get adminUpdateDrafting;
+
+  /// No description provided for @adminUpdateStartUpdateWithAi.
+  ///
+  /// In en, this message translates to:
+  /// **'Start update with AI'**
+  String get adminUpdateStartUpdateWithAi;
+
+  /// No description provided for @adminUpdateRestoreFromBackupFieldS.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore from backup: {changesLength} field(s) differ from the previous version of {assetPath}. Tick the part(s) to roll back (all pre-ticked = full revert).'**
+  String adminUpdateRestoreFromBackupFieldS(
+    Object changesLength,
+    Object assetPath,
+  );
+
+  /// No description provided for @adminUpdateProposedChangeSReviewEach.
+  ///
+  /// In en, this message translates to:
+  /// **'{changesLength} proposed change(s). Review each — tick VERIFY items only if you have confirmed them.'**
+  String adminUpdateProposedChangeSReviewEach(Object changesLength);
+
+  /// No description provided for @adminUpdateVerifyTierChangeSNot.
+  ///
+  /// In en, this message translates to:
+  /// **'{verifyCount} verify-tier change(s) not yet approved'**
+  String adminUpdateVerifyTierChangeSNot(Object verifyCount);
+
+  /// No description provided for @adminUpdateReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready'**
+  String get adminUpdateReady;
+
+  /// No description provided for @adminUpdateBuildRestoredJson.
+  ///
+  /// In en, this message translates to:
+  /// **'Build restored JSON'**
+  String get adminUpdateBuildRestoredJson;
+
+  /// No description provided for @adminUpdateBuildUpdatedJson.
+  ///
+  /// In en, this message translates to:
+  /// **'Build updated JSON'**
+  String get adminUpdateBuildUpdatedJson;
+
+  /// No description provided for @adminUpdateContextInOut.
+  ///
+  /// In en, this message translates to:
+  /// **'{displayName}\n{note}\ncontext {inputTokenLimit} in / {outputTokenLimit} out'**
+  String adminUpdateContextInOut(
+    Object displayName,
+    Object note,
+    Object inputTokenLimit,
+    Object outputTokenLimit,
+  );
+
+  /// No description provided for @adminUpdateBestGeminiModelNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Best Gemini model (now: {currentModel})'**
+  String adminUpdateBestGeminiModelNow(Object currentModel);
+
+  /// No description provided for @adminUpdateCheckTheNewestModelsLive.
+  ///
+  /// In en, this message translates to:
+  /// **'Check the newest {label} models (live API)'**
+  String adminUpdateCheckTheNewestModelsLive(Object label);
+
+  /// No description provided for @adminUpdateApiKey.
+  ///
+  /// In en, this message translates to:
+  /// **'{label} API key'**
+  String adminUpdateApiKey(Object label);
+
+  /// No description provided for @adminUpdateSource.
+  ///
+  /// In en, this message translates to:
+  /// **'Source: {source}'**
+  String adminUpdateSource(Object source);
+
+  /// No description provided for @adminUpdateRestoredTheSelectedFieldS.
+  ///
+  /// In en, this message translates to:
+  /// **'RESTORED — the selected field(s) have been rolled back to the backup. Commit this over {assetPath} to apply the roll-back.'**
+  String adminUpdateRestoredTheSelectedFieldS(Object assetPath);
+
+  /// No description provided for @adminUpdateUpdatedReplaceThatFileWith.
+  ///
+  /// In en, this message translates to:
+  /// **'Updated {assetPath}. Replace that file with this and commit — the release makes it live for everyone.'**
+  String adminUpdateUpdatedReplaceThatFileWith(Object assetPath);
+
+  /// No description provided for @reminderSheetsTimeToRenew.
+  ///
+  /// In en, this message translates to:
+  /// **'Time to renew.'**
+  String get reminderSheetsTimeToRenew;
+
+  /// No description provided for @reminderSheetsTimeToRenew2.
+  ///
+  /// In en, this message translates to:
+  /// **'Time to renew, {firstName}.'**
+  String reminderSheetsTimeToRenew2(Object firstName);
+
+  /// No description provided for @reminderSheetsExpires.
+  ///
+  /// In en, this message translates to:
+  /// **'● Expires {dayLabel}'**
+  String reminderSheetsExpires(Object dayLabel);
+
+  /// No description provided for @revocationWillBeReferencedInYour.
+  ///
+  /// In en, this message translates to:
+  /// **'Will be referenced in your revocation letter'**
+  String get revocationWillBeReferencedInYour;
+
+  /// No description provided for @revocationTapToInclude.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to include'**
+  String get revocationTapToInclude;
+
+  /// No description provided for @revocationRevoking.
+  ///
+  /// In en, this message translates to:
+  /// **'Revoking…'**
+  String get revocationRevoking;
+
+  /// No description provided for @revocationRevokeNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Revoke now'**
+  String get revocationRevokeNow;
+
+  /// No description provided for @pastDirectiveDetailUnableToLoad.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load: {error}'**
+  String pastDirectiveDetailUnableToLoad(Object error);
+
+  /// No description provided for @pastDirectiveDetailTheDirectiveRemainsRegardless.
+  ///
+  /// In en, this message translates to:
+  /// **'The directive remains {status} regardless'**
+  String pastDirectiveDetailTheDirectiveRemainsRegardless(Object status);
+
+  /// No description provided for @pinDialogShowPasscode.
+  ///
+  /// In en, this message translates to:
+  /// **'Show passcode'**
+  String get pinDialogShowPasscode;
+
+  /// No description provided for @pinDialogHidePasscode.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide passcode'**
+  String get pinDialogHidePasscode;
+
+  /// No description provided for @modeSelectionOnTheWebYourData.
+  ///
+  /// In en, this message translates to:
+  /// **'On the web your data is kept in memory only and is never sent to a server, so encrypted on-device (Private mode) storage is not available here.'**
+  String get modeSelectionOnTheWebYourData;
+
+  /// No description provided for @modeSelectionThisAppIsNotHipaa.
+  ///
+  /// In en, this message translates to:
+  /// **'This app is not HIPAA-compliant. Nothing is sent to a server for storage.'**
+  String get modeSelectionThisAppIsNotHipaa;
+
+  /// No description provided for @modeSelectionSelect.
+  ///
+  /// In en, this message translates to:
+  /// **'Select {title}{recommended}'**
+  String modeSelectionSelect(Object title, Object recommended);
+
+  /// No description provided for @sideEffectsCheckingCovers.
+  ///
+  /// In en, this message translates to:
+  /// **'Checking covers: {currentMedsJoin}'**
+  String sideEffectsCheckingCovers(Object currentMedsJoin);
+
+  /// No description provided for @sideEffectsReCheckFor.
+  ///
+  /// In en, this message translates to:
+  /// **'Re-check for: {currentMedsJoin}'**
+  String sideEffectsReCheckFor(Object currentMedsJoin);
+
+  /// No description provided for @sideEffectsCheckSideEffects.
+  ///
+  /// In en, this message translates to:
+  /// **'Check side effects'**
+  String get sideEffectsCheckSideEffects;
+
+  /// No description provided for @sideEffectsReCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'Re-check'**
+  String get sideEffectsReCheck;
+
+  /// No description provided for @sideEffectsMayAffect.
+  ///
+  /// In en, this message translates to:
+  /// **'May affect: {adlImpact}'**
+  String sideEffectsMayAffect(Object adlImpact);
+
+  /// No description provided for @educationCategoryBrowserSections.
+  ///
+  /// In en, this message translates to:
+  /// **'{title}, {count} sections. {sub}'**
+  String educationCategoryBrowserSections(
+    Object title,
+    Object count,
+    Object sub,
+  );
+
+  /// No description provided for @learnAiPanelAskAQuestionToGet.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask a question to get started — e.g. \"What\'s the difference between a declaration and a power of attorney?\"'**
+  String get learnAiPanelAskAQuestionToGet;
+
+  /// No description provided for @learnAiPanelSetUpTheFreeAi.
+  ///
+  /// In en, this message translates to:
+  /// **'Set up the free AI assistant to ask questions while you read.'**
+  String get learnAiPanelSetUpTheFreeAi;
+
+  /// No description provided for @learnAiPanelPiiStripped.
+  ///
+  /// In en, this message translates to:
+  /// **'● {nameToUpperCase} · PII STRIPPED'**
+  String learnAiPanelPiiStripped(Object nameToUpperCase);
+
+  /// No description provided for @educationArticleDetailQuestionsContactPaProtectionAdvocacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Questions? Contact PA Protection & Advocacy: {paProtectionAdvocacy}'**
+  String educationArticleDetailQuestionsContactPaProtectionAdvocacy(
+    Object paProtectionAdvocacy,
+  );
+
+  /// No description provided for @audioGuideExample.
+  ///
+  /// In en, this message translates to:
+  /// **'Example: {example}'**
+  String audioGuideExample(Object example);
+
+  /// No description provided for @exportCardsExecuted.
+  ///
+  /// In en, this message translates to:
+  /// **'Executed: {executionDate}'**
+  String exportCardsExecuted(Object executionDate);
+
+  /// No description provided for @exportCardsExpires.
+  ///
+  /// In en, this message translates to:
+  /// **'Expires: {expirationDate}'**
+  String exportCardsExpires(Object expirationDate);
+
+  /// No description provided for @pdfPreviewFit.
+  ///
+  /// In en, this message translates to:
+  /// **'FIT'**
+  String get pdfPreviewFit;
+
+  /// No description provided for @pdfPreviewPageOf.
+  ///
+  /// In en, this message translates to:
+  /// **'Page {current} of {pageCount}'**
+  String pdfPreviewPageOf(Object current, Object pageCount);
+
+  /// No description provided for @pdfPreviewGoToPage.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to page {i}'**
+  String pdfPreviewGoToPage(Object i);
+
+  /// No description provided for @pdfPreviewPage.
+  ///
+  /// In en, this message translates to:
+  /// **'Page {i}'**
+  String pdfPreviewPage(Object i);
+
+  /// No description provided for @exportGeneratingPdfPreview.
+  ///
+  /// In en, this message translates to:
+  /// **'Generating PDF preview'**
+  String get exportGeneratingPdfPreview;
+
+  /// No description provided for @exportPreviewPdfBeforeSharing.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview PDF before sharing'**
+  String get exportPreviewPdfBeforeSharing;
+
+  /// No description provided for @exportTheFollowingFieldsAreEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'The following fields are empty or missing:\n\n{n}\n\nAn incomplete directive may not be legally valid under PA Act 194. Export anyway?'**
+  String exportTheFollowingFieldsAreEmpty(Object n);
+
+  /// No description provided for @privacyPolicyLastUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Last updated: {privacyPolicyUpdated} ({privacyPolicyVersion})'**
+  String privacyPolicyLastUpdated(
+    Object privacyPolicyUpdated,
+    Object privacyPolicyVersion,
+  );
+
+  /// No description provided for @privacyPolicyYouCanReachTheDeveloper.
+  ///
+  /// In en, this message translates to:
+  /// **'You can reach the developer through any of the following (the FTC Health Breach Notification Rule requires at least two contact methods — we provide three):\n\n  - In-app: an in-app breach notice will be shown on next launch if a breach affects you.\n  - Online: {privacyPolicyUrl} (also used for breach postings if direct contact information is insufficient).\n  - App store listing: the developer support address shown on the Google Play / App Store product page.'**
+  String privacyPolicyYouCanReachTheDeveloper(Object privacyPolicyUrl);
+
+  /// No description provided for @settingsScreenshotsAreBlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Screenshots are blocked'**
+  String get settingsScreenshotsAreBlocked;
+
+  /// No description provided for @settingsScreenshotsAreAllowed.
+  ///
+  /// In en, this message translates to:
+  /// **'Screenshots are allowed'**
+  String get settingsScreenshotsAreAllowed;
+
+  /// No description provided for @assistantMessageWidgetsAt.
+  ///
+  /// In en, this message translates to:
+  /// **'{sender} at {timeStr}: {content}'**
+  String assistantMessageWidgetsAt(
+    Object sender,
+    Object timeStr,
+    Object content,
+  );
+
+  /// No description provided for @assistantActiveTextPiiStrippedBefore.
+  ///
+  /// In en, this message translates to:
+  /// **'● ACTIVE · {model} · TEXT PII STRIPPED BEFORE SEND'**
+  String assistantActiveTextPiiStrippedBefore(Object model);
+
+  /// No description provided for @assistantNotSetUpAddA.
+  ///
+  /// In en, this message translates to:
+  /// **'○ NOT SET UP · ADD A KEY TO USE THE AI'**
+  String get assistantNotSetUpAddA;
+
+  /// No description provided for @assistantOlderMessagesWereTrimmedTo.
+  ///
+  /// In en, this message translates to:
+  /// **'{trimmedCount} older messages were trimmed to fit within the AI\'s context limit. Recent messages are preserved.'**
+  String assistantOlderMessagesWereTrimmedTo(Object trimmedCount);
+
+  /// No description provided for @assistantNotLegalOrMedicalAdvice.
+  ///
+  /// In en, this message translates to:
+  /// **'Not legal or medical advice. For legal questions contact PA Protection & Advocacy: {paProtectionAdvocacy}'**
+  String assistantNotLegalOrMedicalAdvice(Object paProtectionAdvocacy);
+
+  /// No description provided for @assistantFreeTierRequestsMinRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'{model} free tier:\n{maxRpm} requests/min\n{maxRpd} requests/day\n{tpmK}K tokens/min\n{contextK}K max context'**
+  String assistantFreeTierRequestsMinRequests(
+    Object model,
+    Object maxRpm,
+    Object maxRpd,
+    Object tpmK,
+    Object contextK,
+  );
+
+  /// No description provided for @homeToolsGridSuggestsChecks.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggests + checks'**
+  String get homeToolsGridSuggestsChecks;
+
+  /// No description provided for @homeToolsGridShareCarry.
+  ///
+  /// In en, this message translates to:
+  /// **'Share + carry'**
+  String get homeToolsGridShareCarry;
+
+  /// No description provided for @homeToolsGridNoDirectiveYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No directive yet'**
+  String get homeToolsGridNoDirectiveYet;
+
+  /// No description provided for @homeDirectiveHeroContinueYourLastEdited.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue your {formLabel} — {pctLabel}, last edited {lastEdited}'**
+  String homeDirectiveHeroContinueYourLastEdited(
+    Object formLabel,
+    Object pctLabel,
+    Object lastEdited,
+  );
+
+  /// No description provided for @homeDirectiveHeroStepOf.
+  ///
+  /// In en, this message translates to:
+  /// **'Step {currentStep} of {totalSteps}'**
+  String homeDirectiveHeroStepOf(Object currentStep, Object totalSteps);
+
+  /// No description provided for @homeDirectiveHeroLastEdited.
+  ///
+  /// In en, this message translates to:
+  /// **'{formLabel} · last edited {lastEdited}'**
+  String homeDirectiveHeroLastEdited(Object formLabel, Object lastEdited);
+
+  /// No description provided for @facilitatorPickTheKindOfSupport.
+  ///
+  /// In en, this message translates to:
+  /// **'{facilitatorCompletionStat} Pick the kind of support that fits today.'**
+  String facilitatorPickTheKindOfSupport(Object facilitatorCompletionStat);
+
+  /// No description provided for @disclaimerYouWorkAnonymouslyInThis.
+  ///
+  /// In en, this message translates to:
+  /// **'You work anonymously in this browser tab — no account, no cloud, no tracking. If you close the tab your work is kept on this device for about 10 minutes for recovery, then wiped — open and save your PDF to keep it.'**
+  String get disclaimerYouWorkAnonymouslyInThis;
+
+  /// No description provided for @disclaimerNoAccountNoCloudNo.
+  ///
+  /// In en, this message translates to:
+  /// **'No account, no cloud, no tracking — nothing goes to our servers. Anything you save stays encrypted on this device, where only you can open it.'**
+  String get disclaimerNoAccountNoCloudNo;
+
+  /// No description provided for @draftRecoveryDialogItLooksLikeTheApp.
+  ///
+  /// In en, this message translates to:
+  /// **'It looks like the app closed unexpectedly. An auto-saved draft was found from {ageDescription}.\n\nThis draft contains your treatment preferences and medical data (no personal information was saved).\n\nWould you like to restore it?'**
+  String draftRecoveryDialogItLooksLikeTheApp(Object ageDescription);
+
+  /// No description provided for @stepDotsStepOf.
+  ///
+  /// In en, this message translates to:
+  /// **'Step {current} of {total}'**
+  String stepDotsStepOf(Object current, Object total);
+
+  /// No description provided for @stepDotsGoToStepOf.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to step {i} of {total}'**
+  String stepDotsGoToStepOf(Object i, Object total);
+
+  /// No description provided for @healthChipLearnAbout.
+  ///
+  /// In en, this message translates to:
+  /// **'Learn about {label}'**
+  String healthChipLearnAbout(Object label);
+
+  /// No description provided for @healthChipRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove {label}'**
+  String healthChipRemove(Object label);
+
+  /// No description provided for @crisisSheetTextHomeTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Text HOME to {crisisTextLine}'**
+  String crisisSheetTextHomeTo(Object crisisTextLine);
+
+  /// No description provided for @crisisSheetTreatmentReferrals.
+  ///
+  /// In en, this message translates to:
+  /// **'{samhsa} · treatment referrals'**
+  String crisisSheetTreatmentReferrals(Object samhsa);
+
+  /// No description provided for @crisisSheetKnowYourRights.
+  ///
+  /// In en, this message translates to:
+  /// **'{paProtectionAdvocacy} · know your rights'**
+  String crisisSheetKnowYourRights(Object paProtectionAdvocacy);
+
+  /// No description provided for @fdaLabelDialogFdaLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{medName} — FDA label'**
+  String fdaLabelDialogFdaLabel(Object medName);
+
+  /// No description provided for @nlmAttributionSourceUSNationalLibrary.
+  ///
+  /// In en, this message translates to:
+  /// **'Source: U.S. National Library of Medicine. {medicalDisclaimer}'**
+  String nlmAttributionSourceUSNationalLibrary(Object medicalDisclaimer);
+
+  /// No description provided for @aiConsentDialogToAutofillYourDirectiveThe.
+  ///
+  /// In en, this message translates to:
+  /// **'To autofill your directive, the whole document — including any personal details on it (names, dates of birth, addresses, phone numbers) — is sent to {label} so it can read it and fill in your fields.'**
+  String aiConsentDialogToAutofillYourDirectiveThe(Object label);
+
+  /// No description provided for @aiConsentDialogForMoreAccurateTranscriptionEspecially.
+  ///
+  /// In en, this message translates to:
+  /// **'For more accurate transcription (especially medication names and conditions), your voice recording — including any personal details you say — is sent to {label} to turn into text.'**
+  String aiConsentDialogForMoreAccurateTranscriptionEspecially(Object label);
+
+  /// No description provided for @aiConsentDialogTextYouEnterWillBe.
+  ///
+  /// In en, this message translates to:
+  /// **'• Text you enter will be sent to {label} for AI processing. {provider}\n'**
+  String aiConsentDialogTextYouEnterWillBe(Object label, Object provider);
+
+  /// No description provided for @aiConsentDialogByTappingIAuthorizeYou.
+  ///
+  /// In en, this message translates to:
+  /// **'\nBy tapping \"I Authorize,\" you consent to sending your text to {label} for AI processing under these terms.\n\nThis notice appears once per session.'**
+  String aiConsentDialogByTappingIAuthorizeYou(Object label);
+
+  /// No description provided for @exportDraftModeFinal.
+  ///
+  /// In en, this message translates to:
+  /// **'Final copy'**
+  String get exportDraftModeFinal;
+
+  /// No description provided for @exportDraftModeDraft.
+  ///
+  /// In en, this message translates to:
+  /// **'Draft'**
+  String get exportDraftModeDraft;
+
+  /// No description provided for @exportDraftModeSignedExists.
+  ///
+  /// In en, this message translates to:
+  /// **'Draft · signed copy exists'**
+  String get exportDraftModeSignedExists;
+
+  /// No description provided for @exportOpenedManyPdfs.
+  ///
+  /// In en, this message translates to:
+  /// **'Opened {count} PDFs in new tabs — print or save each from your PDF viewer.'**
+  String exportOpenedManyPdfs(int count);
+
+  /// No description provided for @exportOpenedOnePdf.
+  ///
+  /// In en, this message translates to:
+  /// **'Opened in a new tab — use Print or Download in your PDF viewer.'**
+  String get exportOpenedOnePdf;
+
+  /// No description provided for @exportNoAgentDesignated.
+  ///
+  /// In en, this message translates to:
+  /// **'No agent designated — agent sections will be blank'**
+  String get exportNoAgentDesignated;
+
+  /// No description provided for @exportWalletYourName.
+  ///
+  /// In en, this message translates to:
+  /// **'Your name'**
+  String get exportWalletYourName;
+
+  /// No description provided for @exportWalletSignToActivate.
+  ///
+  /// In en, this message translates to:
+  /// **'sign to activate'**
+  String get exportWalletSignToActivate;
+
+  /// No description provided for @exportEffectiveCondition.
+  ///
+  /// In en, this message translates to:
+  /// **'Effective condition'**
+  String get exportEffectiveCondition;
+
+  /// No description provided for @exportWitnessSignatures.
+  ///
+  /// In en, this message translates to:
+  /// **'Witness signatures'**
+  String get exportWitnessSignatures;
+
+  /// No description provided for @exportPrintedCopyType.
+  ///
+  /// In en, this message translates to:
+  /// **'Printed copy type'**
+  String get exportPrintedCopyType;
+
+  /// No description provided for @exportADraftPrintsALight.
+  ///
+  /// In en, this message translates to:
+  /// **'A draft prints a light “DRAFT” watermark on every page — for sending a copy while you keep the signed paper original. Tick as many as you like — Download gives you one PDF of each.'**
+  String get exportADraftPrintsALight;
+
+  /// No description provided for @exportDocumentLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Document language'**
+  String get exportDocumentLanguage;
+
+  /// No description provided for @exportThePlainLanguageOfficialForm.
+  ///
+  /// In en, this message translates to:
+  /// **'The plain-language official form is the one you sign and use — it is the legally valid directive. The legal-language version restates it in formal statutory wording for reference only and is not the document you sign.'**
+  String get exportThePlainLanguageOfficialForm;
+
+  /// No description provided for @exportThisOpensYourDirectiveIn.
+  ///
+  /// In en, this message translates to:
+  /// **'This opens your directive in your PDF viewer (a new browser tab), where you can Print it or save/Download it — it will NOT download automatically.'**
+  String get exportThisOpensYourDirectiveIn;
+
+  /// No description provided for @exportWalletCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallet card'**
+  String get exportWalletCard;
+
+  /// No description provided for @exportACreditCardSizedSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'A credit-card-sized summary you can print and carry.'**
+  String get exportACreditCardSizedSummary;
+
+  /// No description provided for @exportSaveAnEditableCopy.
+  ///
+  /// In en, this message translates to:
+  /// **'Save an editable copy'**
+  String get exportSaveAnEditableCopy;
+
+  /// No description provided for @exportNotAFinishedDocumentThis.
+  ///
+  /// In en, this message translates to:
+  /// **'Not a finished document — this is how you save your progress. The web app can’t store your work on this device, so download this file to keep it, then re-upload it later (here or on another device) to keep editing. Nothing is stored online.'**
+  String get exportNotAFinishedDocumentThis;
+
+  /// No description provided for @exportEncryptingHindersOthersFromReading.
+  ///
+  /// In en, this message translates to:
+  /// **'Encrypting hinders others from reading it; the app still opens it with no passphrase.'**
+  String get exportEncryptingHindersOthersFromReading;
+
+  /// No description provided for @exportMachineReadableFormats.
+  ///
+  /// In en, this message translates to:
+  /// **'Machine-readable formats'**
+  String get exportMachineReadableFormats;
+
+  /// No description provided for @exportYourPdfAboveIsThe.
+  ///
+  /// In en, this message translates to:
+  /// **'Your PDF above is the document you sign — these are data exports for your records, a spreadsheet, or a health system. FHIR is the standard format hospitals use to exchange medical records; CSV is a spreadsheet file (opens in Excel or Google Sheets).'**
+  String get exportYourPdfAboveIsThe;
+
+  /// No description provided for @aiSetupTestOk.
+  ///
+  /// In en, this message translates to:
+  /// **'{provider} responded. This key and model work.'**
+  String aiSetupTestOk(String provider);
+
+  /// No description provided for @aiSetupPrivacyLeadGemini.
+  ///
+  /// In en, this message translates to:
+  /// **'On the Gemini free tier, Google may use data you send to improve their AI products, and human reviewers may read your inputs.'**
+  String get aiSetupPrivacyLeadGemini;
+
+  /// No description provided for @aiSetupPrivacyLeadOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Your {provider} key sends data to {provider}; their data-use and retention policy applies.'**
+  String aiSetupPrivacyLeadOther(String provider);
+
+  /// No description provided for @aiSetupPrivacyKeyEphemeral.
+  ///
+  /// In en, this message translates to:
+  /// **'Your API key is kept in memory for this session, with a temporary copy for up to 10 minutes (for crash recovery); it is discarded when the session ends.'**
+  String get aiSetupPrivacyKeyEphemeral;
+
+  /// No description provided for @aiSetupPrivacyKeyStored.
+  ///
+  /// In en, this message translates to:
+  /// **'Your API key is stored securely on this device only and is never shared with anyone other than your AI provider.'**
+  String get aiSetupPrivacyKeyStored;
+
+  /// No description provided for @aiSetupPrivacyNoticeBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{lead}\n\nThe AI features in this app send text you enter in form fields and chat messages to your AI provider\'s servers. Do not include personally identifying details (full legal name, Social Security number, date of birth, etc.) in AI chat or when using AI Suggest.\n\n{keyLine}'**
+  String aiSetupPrivacyNoticeBody(String lead, String keyLine);
+
+  /// No description provided for @aiSetupDuckDuckGoNote.
+  ///
+  /// In en, this message translates to:
+  /// **'All browsing is private (Fire Button clears)'**
+  String get aiSetupDuckDuckGoNote;
+
+  /// No description provided for @aiSetupProviderFree.
+  ///
+  /// In en, this message translates to:
+  /// **'{provider} (free)'**
+  String aiSetupProviderFree(String provider);
+
+  /// No description provided for @aiSetupShortcutWithMac.
+  ///
+  /// In en, this message translates to:
+  /// **'{browser}:  {shortcut}  (Mac: {macShortcut})'**
+  String aiSetupShortcutWithMac(
+    String browser,
+    String shortcut,
+    String macShortcut,
+  );
+
+  /// No description provided for @aiSetupShortcutMacOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'{browser}:  {macShortcut}  (Mac only)'**
+  String aiSetupShortcutMacOnly(String browser, String macShortcut);
+
+  /// No description provided for @feAiUnreachable.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t reach the AI service. Check your internet connection. If you are using the web app, this provider may also be blocked by your browser\'s security policy — Gemini and Claude both work in the browser.'**
+  String get feAiUnreachable;
+
+  /// No description provided for @feNoInternet.
+  ///
+  /// In en, this message translates to:
+  /// **'No internet connection. Please check your network and try again.'**
+  String get feNoInternet;
+
+  /// No description provided for @feTimeout.
+  ///
+  /// In en, this message translates to:
+  /// **'The request timed out. Please check your connection and try again.'**
+  String get feTimeout;
+
+  /// No description provided for @feBlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t reach the AI service — the request was blocked or the connection failed. Check your internet connection, and if you are on the web app try Gemini or Claude, which work in the browser.'**
+  String get feBlocked;
+
+  /// No description provided for @feRateLimited.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many requests. Please wait a moment and try again.'**
+  String get feRateLimited;
+
+  /// No description provided for @feKeyRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Your API key was rejected. Open AI setup and check the key is correct, still active, and belongs to the selected provider.'**
+  String get feKeyRejected;
+
+  /// No description provided for @feModelUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'The selected AI model isn\'t available — it may have been retired. Pick a different model in AI setup.'**
+  String get feModelUnavailable;
+
+  /// No description provided for @feEmptyResponse.
+  ///
+  /// In en, this message translates to:
+  /// **'The AI returned no results. Try again or enter the information manually.'**
+  String get feEmptyResponse;
+
+  /// No description provided for @feBadFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'The AI response was not in the expected format. Please try again.'**
+  String get feBadFormat;
+
+  /// No description provided for @feServiceError.
+  ///
+  /// In en, this message translates to:
+  /// **'The AI service encountered an error. Please try again later.'**
+  String get feServiceError;
+
+  /// No description provided for @fePermission.
+  ///
+  /// In en, this message translates to:
+  /// **'Permission was not granted. Please check your device settings.'**
+  String get fePermission;
+
+  /// No description provided for @feGeneric.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Please try again.'**
+  String get feGeneric;
+
+  /// No description provided for @assistantSendError.
+  ///
+  /// In en, this message translates to:
+  /// **'Sorry, I encountered an error: {error}'**
+  String assistantSendError(String error);
+
+  /// No description provided for @assistantVerifyError.
+  ///
+  /// In en, this message translates to:
+  /// **'Sorry, I couldn\'t verify that on the web: {error}'**
+  String assistantVerifyError(String error);
+
+  /// No description provided for @permissionsOverviewUnlockingEncryptedOnDeviceStorage.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlocking encrypted on-device storage (native app only; not used by the web app).'**
+  String get permissionsOverviewUnlockingEncryptedOnDeviceStorage;
+
+  /// No description provided for @permissionsOverviewUsedOnlyToVerifyYour.
+  ///
+  /// In en, this message translates to:
+  /// **'Used only to verify your identity on unlock'**
+  String get permissionsOverviewUsedOnlyToVerifyYour;
+
+  /// No description provided for @permissionsOverviewBiometricDataNeverLeavesThe.
+  ///
+  /// In en, this message translates to:
+  /// **'Biometric data never leaves the OS keystore'**
+  String get permissionsOverviewBiometricDataNeverLeavesThe;
+
+  /// No description provided for @permissionsOverviewNoBiometricDataIsSent.
+  ///
+  /// In en, this message translates to:
+  /// **'No biometric data is sent to any server'**
+  String get permissionsOverviewNoBiometricDataIsSent;
+
+  /// No description provided for @permissionsOverviewFallsBackToAPasscode.
+  ///
+  /// In en, this message translates to:
+  /// **'Falls back to a passcode you choose if biometrics fail'**
+  String get permissionsOverviewFallsBackToAPasscode;
+
+  /// No description provided for @permissionsOverviewNotApplicableOnThisPlatform.
+  ///
+  /// In en, this message translates to:
+  /// **'Not applicable on this platform'**
+  String get permissionsOverviewNotApplicableOnThisPlatform;
+
+  /// No description provided for @permissionsOverviewRemindingYouAboutWitnessSigning.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminding you about witness signing, renewals, and check-ins.'**
+  String get permissionsOverviewRemindingYouAboutWitnessSigning;
+
+  /// No description provided for @permissionsOverviewYouChooseWhichRemindersTo.
+  ///
+  /// In en, this message translates to:
+  /// **'You choose which reminders to enable'**
+  String get permissionsOverviewYouChooseWhichRemindersTo;
+
+  /// No description provided for @permissionsOverviewNotificationsAreScheduledLocallyOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications are scheduled locally on this device'**
+  String get permissionsOverviewNotificationsAreScheduledLocallyOn;
+
+  /// No description provided for @permissionsOverviewNoContentPiiDirectiveText.
+  ///
+  /// In en, this message translates to:
+  /// **'No content (PII, directive text) is in any notification body'**
+  String get permissionsOverviewNoContentPiiDirectiveText;
+
+  /// No description provided for @permissionsOverviewDisablePerCategoryInDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'Disable per-category in device Settings → Notifications'**
+  String get permissionsOverviewDisablePerCategoryInDevice;
+
+  /// No description provided for @permissionsOverviewSnappingAPhotoOfYour.
+  ///
+  /// In en, this message translates to:
+  /// **'Snapping a photo of your ID, medication labels, or condition lists for AI-assisted field extraction. Coming in a later release.'**
+  String get permissionsOverviewSnappingAPhotoOfYour;
+
+  /// No description provided for @permissionsOverviewPhotoIsSentToAi.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo is sent to AI only to read it'**
+  String get permissionsOverviewPhotoIsSentToAi;
+
+  /// No description provided for @permissionsOverviewPhotoIsDiscardedRightAfter.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo is discarded right after extraction'**
+  String get permissionsOverviewPhotoIsDiscardedRightAfter;
+
+  /// No description provided for @permissionsOverviewNothingIsSavedToYour.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing is saved to your device\'s photo library by default'**
+  String get permissionsOverviewNothingIsSavedToYour;
+
+  /// No description provided for @permissionsOverviewYouReviewEveryFieldBefore.
+  ///
+  /// In en, this message translates to:
+  /// **'You review every field before it\'s used'**
+  String get permissionsOverviewYouReviewEveryFieldBefore;
+
+  /// No description provided for @permissionsOverviewNotYetWiredFeatureIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Not yet wired — feature in a future release'**
+  String get permissionsOverviewNotYetWiredFeatureIn;
+
+  /// No description provided for @permissionsOverviewSpeakingLongFormAnswersE.
+  ///
+  /// In en, this message translates to:
+  /// **'Speaking long-form answers (e.g. \"anything else\") instead of typing. Coming in a later release.'**
+  String get permissionsOverviewSpeakingLongFormAnswersE;
+
+  /// No description provided for @permissionsOverviewAudioIsProcessedOnDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio is processed on-device when possible'**
+  String get permissionsOverviewAudioIsProcessedOnDevice;
+
+  /// No description provided for @permissionsOverviewIfSentToAiFor.
+  ///
+  /// In en, this message translates to:
+  /// **'If sent to AI for transcription, it isn\'t stored'**
+  String get permissionsOverviewIfSentToAiFor;
+
+  /// No description provided for @permissionsOverviewTranscriptStaysInYourSession.
+  ///
+  /// In en, this message translates to:
+  /// **'Transcript stays in your session — never uploaded'**
+  String get permissionsOverviewTranscriptStaysInYourSession;
+
+  /// No description provided for @permissionsOverviewToggleOffAtAnyTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Toggle off at any time in Settings'**
+  String get permissionsOverviewToggleOffAtAnyTime;
+
+  /// No description provided for @permissionsOverviewPickingAnAgentOrWitness.
+  ///
+  /// In en, this message translates to:
+  /// **'Picking an agent or witness from your address book instead of typing their details. Coming in a later release.'**
+  String get permissionsOverviewPickingAnAgentOrWitness;
+
+  /// No description provided for @permissionsOverviewWeNeverUploadYourContacts.
+  ///
+  /// In en, this message translates to:
+  /// **'We never upload your contacts'**
+  String get permissionsOverviewWeNeverUploadYourContacts;
+
+  /// No description provided for @permissionsOverviewSearchRunsLocallyOnThis.
+  ///
+  /// In en, this message translates to:
+  /// **'Search runs locally on this device'**
+  String get permissionsOverviewSearchRunsLocallyOnThis;
+
+  /// No description provided for @permissionsOverviewOnlyTheContactYouPick.
+  ///
+  /// In en, this message translates to:
+  /// **'Only the contact you pick is brought into the directive'**
+  String get permissionsOverviewOnlyTheContactYouPick;
+
+  /// No description provided for @permissionsOverviewYouCanRevokeAccessIn.
+  ///
+  /// In en, this message translates to:
+  /// **'You can revoke access in Settings any time'**
+  String get permissionsOverviewYouCanRevokeAccessIn;
+
+  /// No description provided for @permissionsOverviewAvailableOsManaged.
+  ///
+  /// In en, this message translates to:
+  /// **'Available · OS-managed'**
+  String get permissionsOverviewAvailableOsManaged;
+
+  /// No description provided for @eduBrowseIntroduction.
+  ///
+  /// In en, this message translates to:
+  /// **'Introduction'**
+  String get eduBrowseIntroduction;
+
+  /// No description provided for @eduBrowseWhatAnMhadIsAnd.
+  ///
+  /// In en, this message translates to:
+  /// **'What an MHAD is and who should sign one'**
+  String get eduBrowseWhatAnMhadIsAnd;
+
+  /// No description provided for @eduBrowseCombinedForm.
+  ///
+  /// In en, this message translates to:
+  /// **'Combined Form'**
+  String get eduBrowseCombinedForm;
+
+  /// No description provided for @eduBrowseBothAnAgentAndTreatment.
+  ///
+  /// In en, this message translates to:
+  /// **'Both an agent and treatment preferences'**
+  String get eduBrowseBothAnAgentAndTreatment;
+
+  /// No description provided for @eduBrowseTreatmentPreferencesWithoutAnAgent.
+  ///
+  /// In en, this message translates to:
+  /// **'Treatment preferences without an agent'**
+  String get eduBrowseTreatmentPreferencesWithoutAnAgent;
+
+  /// No description provided for @eduBrowsePowerOfAttorney.
+  ///
+  /// In en, this message translates to:
+  /// **'Power of Attorney'**
+  String get eduBrowsePowerOfAttorney;
+
+  /// No description provided for @eduBrowseAgentDesignationWithoutPreferences.
+  ///
+  /// In en, this message translates to:
+  /// **'Agent designation without preferences'**
+  String get eduBrowseAgentDesignationWithoutPreferences;
+
+  /// No description provided for @eduBrowseFrequentlyAsked.
+  ///
+  /// In en, this message translates to:
+  /// **'Frequently Asked'**
+  String get eduBrowseFrequentlyAsked;
+
+  /// No description provided for @eduBrowseCommonQuestionsAboutMhads.
+  ///
+  /// In en, this message translates to:
+  /// **'Common questions about MHADs'**
+  String get eduBrowseCommonQuestionsAboutMhads;
+
+  /// No description provided for @eduBrowseGlossary.
+  ///
+  /// In en, this message translates to:
+  /// **'Glossary'**
+  String get eduBrowseGlossary;
+
+  /// No description provided for @eduBrowseEveryLegalTermDefined.
+  ///
+  /// In en, this message translates to:
+  /// **'Every legal term, defined'**
+  String get eduBrowseEveryLegalTermDefined;
+
+  /// No description provided for @eduBrowseBeyondTheBooklet.
+  ///
+  /// In en, this message translates to:
+  /// **'Beyond the Booklet'**
+  String get eduBrowseBeyondTheBooklet;
+
+  /// No description provided for @eduBrowseTopicsNotCoveredInThe.
+  ///
+  /// In en, this message translates to:
+  /// **'Topics not covered in the official PA booklet'**
+  String get eduBrowseTopicsNotCoveredInThe;
+
+  /// No description provided for @eduBrowseYourChecklist.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Checklist'**
+  String get eduBrowseYourChecklist;
+
+  /// No description provided for @eduBrowseStepByStepDistributionRevocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Step-by-step distribution + revocation guides'**
+  String get eduBrowseStepByStepDistributionRevocation;
+
+  /// No description provided for @webLandingPreferPaperOpenAnyOf.
+  ///
+  /// In en, this message translates to:
+  /// **'Prefer paper? Open any of the three empty official forms to print and fill in by hand — no account or wizard needed.'**
+  String get webLandingPreferPaperOpenAnyOf;
+
+  /// No description provided for @webLandingNoAccountRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'No account required'**
+  String get webLandingNoAccountRequired;
+
+  /// No description provided for @webLandingNoEmailNoPasswordNo.
+  ///
+  /// In en, this message translates to:
+  /// **'No email, no password, no sign-up.'**
+  String get webLandingNoEmailNoPasswordNo;
+
+  /// No description provided for @webLandingNothingLeavesYourBrowser.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing leaves your browser'**
+  String get webLandingNothingLeavesYourBrowser;
+
+  /// No description provided for @webLandingYourAnswersLiveInThis.
+  ///
+  /// In en, this message translates to:
+  /// **'Your answers live in this tab. We never see them.'**
+  String get webLandingYourAnswersLiveInThis;
+
+  /// No description provided for @webLandingNoCookiesNoTracking.
+  ///
+  /// In en, this message translates to:
+  /// **'No cookies, no tracking'**
+  String get webLandingNoCookiesNoTracking;
+
+  /// No description provided for @webLandingNoAnalyticsNoThirdParty.
+  ///
+  /// In en, this message translates to:
+  /// **'No analytics, no third-party scripts.'**
+  String get webLandingNoAnalyticsNoThirdParty;
+
+  /// No description provided for @webLandingYouKeepTheFile.
+  ///
+  /// In en, this message translates to:
+  /// **'You keep the file'**
+  String get webLandingYouKeepTheFile;
+
+  /// No description provided for @webLandingSaveThePdfFromYour.
+  ///
+  /// In en, this message translates to:
+  /// **'Save the PDF from your viewer — that’s the only copy.'**
+  String get webLandingSaveThePdfFromYour;
+
+  /// No description provided for @pinDialogPasscodeTooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Passcode must be at least 4 characters.'**
+  String get pinDialogPasscodeTooShort;
+
+  /// No description provided for @pinDialogPasscodesDontMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Passcodes do not match.'**
+  String get pinDialogPasscodesDontMatch;
+
+  /// No description provided for @pinDialogUnlockPrivateMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock private mode'**
+  String get pinDialogUnlockPrivateMode;
+
+  /// No description provided for @pinDialogEnterPasscode.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your passcode.'**
+  String get pinDialogEnterPasscode;
+
+  /// No description provided for @pinDialogTooManyAttempts.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many attempts. Please wait 30 seconds.'**
+  String get pinDialogTooManyAttempts;
+
+  /// No description provided for @pinDialogIncorrectPasscode.
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect passcode. Please try again.'**
+  String get pinDialogIncorrectPasscode;
+
+  /// No description provided for @deviceSecurityWarningTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Device Security Warning'**
+  String get deviceSecurityWarningTitle;
+
+  /// No description provided for @deviceSecurityWarningBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your device appears to be rooted/jailbroken. This may put your sensitive health data at risk. Consider using a non-modified device for storing advance directives.'**
+  String get deviceSecurityWarningBody;
+
+  /// No description provided for @deviceSecurityIUnderstand.
+  ///
+  /// In en, this message translates to:
+  /// **'I Understand'**
+  String get deviceSecurityIUnderstand;
+
+  /// No description provided for @blankFormPrintTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Print a blank form'**
+  String get blankFormPrintTitle;
+
+  /// No description provided for @blankFormPrintError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open the blank form to print: {error}'**
+  String blankFormPrintError(String error);
+
+  /// No description provided for @launchCopiedToClipboard.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} copied to clipboard'**
+  String launchCopiedToClipboard(String value);
+
+  /// No description provided for @reminderRenewMetricSections.
+  ///
+  /// In en, this message translates to:
+  /// **'sections'**
+  String get reminderRenewMetricSections;
+
+  /// No description provided for @reminderRenewMetricWetInk.
+  ///
+  /// In en, this message translates to:
+  /// **'wet-ink'**
+  String get reminderRenewMetricWetInk;
+
+  /// No description provided for @reminderRenewMetricSigning.
+  ///
+  /// In en, this message translates to:
+  /// **'signing'**
+  String get reminderRenewMetricSigning;
+
+  /// No description provided for @reminderRenewMetricMin.
+  ///
+  /// In en, this message translates to:
+  /// **'min'**
+  String get reminderRenewMetricMin;
+
+  /// No description provided for @educationBefore.
+  ///
+  /// In en, this message translates to:
+  /// **'before'**
+  String get educationBefore;
+
+  /// No description provided for @assistantGeneralQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'General question'**
+  String get assistantGeneralQuestion;
+
+  /// No description provided for @assistantContextPanelStrippedBeforeSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Stripped before send'**
+  String get assistantContextPanelStrippedBeforeSend;
+
+  /// No description provided for @assistantSuggestWalkMeThroughFillingOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Walk me through filling out my directive step by step'**
+  String get assistantSuggestWalkMeThroughFillingOut;
+
+  /// No description provided for @assistantSuggestWhatIsAMentalHealth.
+  ///
+  /// In en, this message translates to:
+  /// **'What is a Mental Health Advance Directive?'**
+  String get assistantSuggestWhatIsAMentalHealth;
+
+  /// No description provided for @assistantSuggestWhatSTheDifferenceBetween.
+  ///
+  /// In en, this message translates to:
+  /// **'What\'s the difference between Combined, Declaration, and POA?'**
+  String get assistantSuggestWhatSTheDifferenceBetween;
+
+  /// No description provided for @assistantSuggestWhoCanBeMyAgent.
+  ///
+  /// In en, this message translates to:
+  /// **'Who can be my agent?'**
+  String get assistantSuggestWhoCanBeMyAgent;
+
+  /// No description provided for @assistantSuggestWhatMedicationsShouldIList.
+  ///
+  /// In en, this message translates to:
+  /// **'What medications should I list?'**
+  String get assistantSuggestWhatMedicationsShouldIList;
+
+  /// No description provided for @assistantSuggestWhatDoesEctMean.
+  ///
+  /// In en, this message translates to:
+  /// **'What does ECT mean?'**
+  String get assistantSuggestWhatDoesEctMean;
+
+  /// No description provided for @assistantSuggestHowLongIsTheDirective.
+  ///
+  /// In en, this message translates to:
+  /// **'How long is the directive valid?'**
+  String get assistantSuggestHowLongIsTheDirective;
+
+  /// No description provided for @assistantSuggestCanIChangeMyDirective.
+  ///
+  /// In en, this message translates to:
+  /// **'Can I change my directive later?'**
+  String get assistantSuggestCanIChangeMyDirective;
+
+  /// No description provided for @ulyssesOnlyAppliesOnceIHave.
+  ///
+  /// In en, this message translates to:
+  /// **'Only applies once I have been formally found to lack capacity'**
+  String get ulyssesOnlyAppliesOnceIHave;
+
+  /// No description provided for @ulyssesOnlyForTreatmentsIExplicitly.
+  ///
+  /// In en, this message translates to:
+  /// **'Only for treatments I explicitly named (medications, ECT, facility)'**
+  String get ulyssesOnlyForTreatmentsIExplicitly;
+
+  /// No description provided for @ulyssesDoesNotAuthorizePhysicalRestraint.
+  ///
+  /// In en, this message translates to:
+  /// **'Does not authorize physical restraint'**
+  String get ulyssesDoesNotAuthorizePhysicalRestraint;
+
+  /// No description provided for @ulyssesACourtAppointedGuardianNot.
+  ///
+  /// In en, this message translates to:
+  /// **'A court-appointed guardian (not the agent) may revoke, suspend, or terminate'**
+  String get ulyssesACourtAppointedGuardianNot;
+
+  /// No description provided for @ulyssesMyDirectiveStillTerminatesAt.
+  ///
+  /// In en, this message translates to:
+  /// **'My directive still terminates at 2 years — unless I am incapable when it would expire, in which case it remains in effect (§§ 5824(e), 5834(c))'**
+  String get ulyssesMyDirectiveStillTerminatesAt;
+
+  /// No description provided for @homeHeroPercentComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent}% complete'**
+  String homeHeroPercentComplete(int percent);
+
+  /// No description provided for @homeHeroReadyToReviewSign.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready to review & sign'**
+  String get homeHeroReadyToReviewSign;
+
+  /// No description provided for @homeHeroMoreSteps.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{~ 1 more step} other{~ {count} more steps}}'**
+  String homeHeroMoreSteps(int count);
+
+  /// No description provided for @homeHeroCombinedForm.
+  ///
+  /// In en, this message translates to:
+  /// **'Combined form'**
+  String get homeHeroCombinedForm;
+
+  /// No description provided for @homeHeroDeclarationOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Declaration only'**
+  String get homeHeroDeclarationOnly;
+
+  /// No description provided for @homeHeroNamedMhad.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}’s MHAD'**
+  String homeHeroNamedMhad(String name);
+
+  /// No description provided for @homeHeroYourMhad.
+  ///
+  /// In en, this message translates to:
+  /// **'Your MHAD'**
+  String get homeHeroYourMhad;
+
+  /// No description provided for @educationNoResultsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No results found.'**
+  String get educationNoResultsFound;
+
+  /// No description provided for @educationNoResultsFor.
+  ///
+  /// In en, this message translates to:
+  /// **'No results for \"{query}\"'**
+  String educationNoResultsFor(String query);
+
+  /// No description provided for @relativeJustNow.
+  ///
+  /// In en, this message translates to:
+  /// **'just now'**
+  String get relativeJustNow;
+
+  /// No description provided for @relativeMinsAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 min ago} other{{count} mins ago}}'**
+  String relativeMinsAgo(int count);
+
+  /// No description provided for @relativeHoursAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 hour ago} other{{count} hours ago}}'**
+  String relativeHoursAgo(int count);
+
+  /// No description provided for @relativeDaysAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 day ago} other{{count} days ago}}'**
+  String relativeDaysAgo(int count);
+
+  /// No description provided for @revocationNotifyPrimaryCareDoctor.
+  ///
+  /// In en, this message translates to:
+  /// **'Primary care doctor'**
+  String get revocationNotifyPrimaryCareDoctor;
+
+  /// No description provided for @revocationNotifyPsychiatristTherapist.
+  ///
+  /// In en, this message translates to:
+  /// **'Psychiatrist / therapist'**
+  String get revocationNotifyPsychiatristTherapist;
+
+  /// No description provided for @revocationNotifyNearestHospitalEr.
+  ///
+  /// In en, this message translates to:
+  /// **'Nearest hospital ER'**
+  String get revocationNotifyNearestHospitalEr;
+
+  /// No description provided for @revocationNotifyPharmacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Pharmacy'**
+  String get revocationNotifyPharmacy;
+
+  /// No description provided for @revocationNotifyLocalRightsAdvocate.
+  ///
+  /// In en, this message translates to:
+  /// **'Local rights advocate'**
+  String get revocationNotifyLocalRightsAdvocate;
+
+  /// No description provided for @legalSheetBoldNot.
+  ///
+  /// In en, this message translates to:
+  /// **'not'**
+  String get legalSheetBoldNot;
+
+  /// No description provided for @legalSheetBoldOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'only'**
+  String get legalSheetBoldOnly;
+
+  /// No description provided for @legalSheetBoldTwoAdultWitnesses.
+  ///
+  /// In en, this message translates to:
+  /// **'two adult witnesses'**
+  String get legalSheetBoldTwoAdultWitnesses;
+
+  /// No description provided for @legalSheetBoldWitnessesCannotBe.
+  ///
+  /// In en, this message translates to:
+  /// **'Witnesses cannot be: '**
+  String get legalSheetBoldWitnessesCannotBe;
+
+  /// No description provided for @legalSheetBoldPrinted.
+  ///
+  /// In en, this message translates to:
+  /// **'printed'**
+  String get legalSheetBoldPrinted;
+
+  /// No description provided for @legalSheetBoldMustComply.
+  ///
+  /// In en, this message translates to:
+  /// **'must comply'**
+  String get legalSheetBoldMustComply;
+
+  /// No description provided for @legalSheetBoldTwoYears.
+  ///
+  /// In en, this message translates to:
+  /// **'two years'**
+  String get legalSheetBoldTwoYears;
+
+  /// No description provided for @legalSheetBoldUnlessYouAreFoundIncapable.
+  ///
+  /// In en, this message translates to:
+  /// **'unless you are found incapable'**
+  String get legalSheetBoldUnlessYouAreFoundIncapable;
+
+  /// No description provided for @legalSheetBoldNotSavedPermanently.
+  ///
+  /// In en, this message translates to:
+  /// **'not saved permanently'**
+  String get legalSheetBoldNotSavedPermanently;
+
+  /// No description provided for @legalSheetBoldAutomaticallyKeepsIdentifyingDetailsOut.
+  ///
+  /// In en, this message translates to:
+  /// **'automatically keeps identifying details out of what it sends to the AI assistant and its suggestions'**
+  String get legalSheetBoldAutomaticallyKeepsIdentifyingDetailsOut;
+
+  /// No description provided for @legalSheetBoldUploadingIsNeverRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Uploading is never required'**
+  String get legalSheetBoldUploadingIsNeverRequired;
+
+  /// No description provided for @legalSheetBoldTheseLookupsSendOnlyThe.
+  ///
+  /// In en, this message translates to:
+  /// **'These lookups send only the medical term, code, or provider name being searched'**
+  String get legalSheetBoldTheseLookupsSendOnlyThe;
+
+  /// No description provided for @legalSheetYourRightsUnderAct194.
+  ///
+  /// In en, this message translates to:
+  /// **'Your rights under Act 194'**
+  String get legalSheetYourRightsUnderAct194;
+
+  /// No description provided for @legalSheet247FreeConfidential.
+  ///
+  /// In en, this message translates to:
+  /// **'24/7, free, confidential'**
+  String get legalSheet247FreeConfidential;
+
+  /// No description provided for @legalSheetCallOrText988.
+  ///
+  /// In en, this message translates to:
+  /// **'Call or text 988'**
+  String get legalSheetCallOrText988;
+
+  /// No description provided for @crisisPlanTheFirstThingsINotice.
+  ///
+  /// In en, this message translates to:
+  /// **'The first things I notice when my mood shifts.'**
+  String get crisisPlanTheFirstThingsINotice;
+
+  /// No description provided for @crisisPlanExternalThingsThatHaveSet.
+  ///
+  /// In en, this message translates to:
+  /// **'External things that have set off episodes before.'**
+  String get crisisPlanExternalThingsThatHaveSet;
+
+  /// No description provided for @crisisPlanSpecificConcreteNotSelfCare.
+  ///
+  /// In en, this message translates to:
+  /// **'Specific, concrete. Not \'self-care\' — what actually works.'**
+  String get crisisPlanSpecificConcreteNotSelfCare;
+
+  /// No description provided for @crisisPlanWordsThatGroundMeUseful.
+  ///
+  /// In en, this message translates to:
+  /// **'Words that ground me. Useful for staff, EMS, family.'**
+  String get crisisPlanWordsThatGroundMeUseful;
+
+  /// No description provided for @crisisPlanApproachesThatEscalateMeBe.
+  ///
+  /// In en, this message translates to:
+  /// **'Approaches that escalate me. Be specific.'**
+  String get crisisPlanApproachesThatEscalateMeBe;
+
+  /// No description provided for @reminderSheetsAgentsPrimaryAndAlternate.
+  ///
+  /// In en, this message translates to:
+  /// **'Agents — primary and alternate'**
+  String get reminderSheetsAgentsPrimaryAndAlternate;
+
+  /// No description provided for @reminderSheetsCurrentMedsOnesYouDon.
+  ///
+  /// In en, this message translates to:
+  /// **'Current meds, ones you don\'t want, allergies'**
+  String get reminderSheetsCurrentMedsOnesYouDon;
+
+  /// No description provided for @reminderSheetsPreferredFacilityRoomEnvironment.
+  ///
+  /// In en, this message translates to:
+  /// **'Preferred facility, room environment'**
+  String get reminderSheetsPreferredFacilityRoomEnvironment;
+
+  /// No description provided for @accessibilitySettingsAtkinsonHyperlegibleClearerEasierLetter.
+  ///
+  /// In en, this message translates to:
+  /// **'Atkinson Hyperlegible — clearer, easier letter shapes'**
+  String get accessibilitySettingsAtkinsonHyperlegibleClearerEasierLetter;
+
+  /// No description provided for @accessibilitySettingsHeavierTextWeightEverywhere.
+  ///
+  /// In en, this message translates to:
+  /// **'Heavier text weight everywhere'**
+  String get accessibilitySettingsHeavierTextWeightEverywhere;
+
+  /// No description provided for @accessibilitySettingsRemovesScreenTransitionsAndAnimations.
+  ///
+  /// In en, this message translates to:
+  /// **'Removes screen transitions and animations'**
+  String get accessibilitySettingsRemovesScreenTransitionsAndAnimations;
+
+  /// No description provided for @accessibilitySettingsMaximizesSeparationBetweenTextAnd.
+  ///
+  /// In en, this message translates to:
+  /// **'Maximizes separation between text and background'**
+  String get accessibilitySettingsMaximizesSeparationBetweenTextAnd;
+
+  /// No description provided for @accessibilitySettingsUseYourBrowserOrDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'Use your browser or device read-aloud — see the guide below'**
+  String get accessibilitySettingsUseYourBrowserOrDevice;
+
+  /// No description provided for @accessibilitySettingsChromeEdgeDesktop.
+  ///
+  /// In en, this message translates to:
+  /// **'Chrome / Edge (desktop)'**
+  String get accessibilitySettingsChromeEdgeDesktop;
+
+  /// No description provided for @directiveFormChoiceTreatmentPreferencesWithoutNamingAn.
+  ///
+  /// In en, this message translates to:
+  /// **'Treatment preferences without naming an agent.'**
+  String get directiveFormChoiceTreatmentPreferencesWithoutNamingAn;
+
+  /// No description provided for @directiveFormChoiceNameADecisionMakerWithout.
+  ///
+  /// In en, this message translates to:
+  /// **'Name a decision-maker without listing preferences.'**
+  String get directiveFormChoiceNameADecisionMakerWithout;
+
+  /// No description provided for @homeToolsGridFaqGlossary.
+  ///
+  /// In en, this message translates to:
+  /// **'FAQ, glossary'**
+  String get homeToolsGridFaqGlossary;
+
+  /// No description provided for @homeToolsGrid988More.
+  ///
+  /// In en, this message translates to:
+  /// **'988 + more'**
+  String get homeToolsGrid988More;
+
+  /// No description provided for @facilitator45Min.
+  ///
+  /// In en, this message translates to:
+  /// **'~45 min'**
+  String get facilitator45Min;
+
+  /// No description provided for @facilitatorFree.
+  ///
+  /// In en, this message translates to:
+  /// **'Free'**
+  String get facilitatorFree;
+
+  /// No description provided for @facilitatorPaBased.
+  ///
+  /// In en, this message translates to:
+  /// **'PA-based'**
+  String get facilitatorPaBased;
+
+  /// No description provided for @facilitatorInPerson.
+  ///
+  /// In en, this message translates to:
+  /// **'In person'**
+  String get facilitatorInPerson;
+
+  /// No description provided for @facilitatorYouStayInControl.
+  ///
+  /// In en, this message translates to:
+  /// **'You stay in control'**
+  String get facilitatorYouStayInControl;
+
+  /// No description provided for @facilitatorEmailComposer.
+  ///
+  /// In en, this message translates to:
+  /// **'Email composer'**
+  String get facilitatorEmailComposer;
+
+  /// No description provided for @facilitatorManualTranscribeBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Manual transcribe back'**
+  String get facilitatorManualTranscribeBack;
+
+  /// No description provided for @modeSelectionBiometrics.
+  ///
+  /// In en, this message translates to:
+  /// **'Biometrics'**
+  String get modeSelectionBiometrics;
+
+  /// No description provided for @modeSelectionAes256.
+  ///
+  /// In en, this message translates to:
+  /// **'AES-256'**
+  String get modeSelectionAes256;
+
+  /// No description provided for @modeSelectionSaveDrafts.
+  ///
+  /// In en, this message translates to:
+  /// **'Save drafts'**
+  String get modeSelectionSaveDrafts;
+
+  /// No description provided for @modeSelectionAcrossSessions.
+  ///
+  /// In en, this message translates to:
+  /// **'Across sessions'**
+  String get modeSelectionAcrossSessions;
+
+  /// No description provided for @modeSelectionNothingSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing saved'**
+  String get modeSelectionNothingSaved;
+
+  /// No description provided for @modeSelectionInMemoryOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'In-memory only'**
+  String get modeSelectionInMemoryOnly;
+
+  /// No description provided for @modeSelectionSingleSession.
+  ///
+  /// In en, this message translates to:
+  /// **'Single session'**
+  String get modeSelectionSingleSession;
+
+  /// No description provided for @pdfPreviewLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading…'**
+  String get pdfPreviewLoading;
+
+  /// No description provided for @pdfPreviewSelectASectionToPreview.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a section to preview.'**
+  String get pdfPreviewSelectASectionToPreview;
+
+  /// No description provided for @pdfPreviewCouldNotRenderThePreview.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not render the preview.'**
+  String get pdfPreviewCouldNotRenderThePreview;
+
+  /// No description provided for @reminderSheetsStepN.
+  ///
+  /// In en, this message translates to:
+  /// **'Step {n}'**
+  String reminderSheetsStepN(int n);
+
+  /// No description provided for @sideEffectsNoneFound.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t find common side effects to list right now. You can add anything you\'re experiencing in the Anything-else step, and always raise side-effect concerns with your doctor.'**
+  String get sideEffectsNoneFound;
+
+  /// No description provided for @sideEffectsGenerateError.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong generating the list. Please try again, or note side effects yourself.'**
+  String get sideEffectsGenerateError;
+
+  /// No description provided for @inputPhoneInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid 10-digit phone number'**
+  String get inputPhoneInvalid;
+
+  /// No description provided for @inputZipInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a 5-digit or 5+4-digit ZIP'**
+  String get inputZipInvalid;
+
+  /// No description provided for @audioGuideTipQualityDoesnTMatterAny.
+  ///
+  /// In en, this message translates to:
+  /// **'Quality doesn\'t matter. Any phone voice memo works — the AI downsamples audio anyway, so a small low-quality file transcribes just as well as a large one.'**
+  String get audioGuideTipQualityDoesnTMatterAny;
+
+  /// No description provided for @audioGuideTipKeepEachClipShortUnder.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep each clip short — under about 2 minutes. Record one clip per section below and upload them together; the app merges them. Long clips can time out.'**
+  String get audioGuideTipKeepEachClipShortUnder;
+
+  /// No description provided for @audioGuideTipSayMedicationAndDoctorNames.
+  ///
+  /// In en, this message translates to:
+  /// **'Say medication and doctor names slowly and spell them. The AI won\'t guess a drug or condition it didn\'t clearly hear.'**
+  String get audioGuideTipSayMedicationAndDoctorNames;
+
+  /// No description provided for @stepSubtitleAboutYou.
+  ///
+  /// In en, this message translates to:
+  /// **'Just the basics so this document is uniquely yours. Drop a photo of your ID and we\'ll read these for you.'**
+  String get stepSubtitleAboutYou;
+
+  /// No description provided for @stepSubtitleWhenItKicksIn.
+  ///
+  /// In en, this message translates to:
+  /// **'The conditions under which your directive becomes active. You can pick more than one.'**
+  String get stepSubtitleWhenItKicksIn;
+
+  /// No description provided for @stepSubtitlePeopleITrust.
+  ///
+  /// In en, this message translates to:
+  /// **'They speak for you if you can\'t. You can name a primary, an alternate, and set limits on what they decide.'**
+  String get stepSubtitlePeopleITrust;
+
+  /// No description provided for @stepSubtitleGuardianNomination.
+  ///
+  /// In en, this message translates to:
+  /// **'Rare, but worth planning for. A guardian is named by a court — not by you — and has broader authority than an agent.'**
+  String get stepSubtitleGuardianNomination;
+
+  /// No description provided for @stepSubtitleWhereIWantCare.
+  ///
+  /// In en, this message translates to:
+  /// **'Facilities you prefer — and any you specifically want to avoid — plus room and environment preferences.'**
+  String get stepSubtitleWhereIWantCare;
+
+  /// No description provided for @stepSubtitleDiagnoses.
+  ///
+  /// In en, this message translates to:
+  /// **'Help your care team see the whole picture in a crisis. Search by name — we attach the ICD-10 code your doctors use.'**
+  String get stepSubtitleDiagnoses;
+
+  /// No description provided for @stepSubtitleMedications.
+  ///
+  /// In en, this message translates to:
+  /// **'What you take now (for your care team) plus the medications you refuse, limit, or prefer. Your refusals and limits are binding under Act 194.'**
+  String get stepSubtitleMedications;
+
+  /// No description provided for @stepSubtitleAllergies.
+  ///
+  /// In en, this message translates to:
+  /// **'Drug allergies, sensitivities, past adverse reactions. This is the most-checked section by ER staff.'**
+  String get stepSubtitleAllergies;
+
+  /// No description provided for @stepSubtitleProceduresResearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Three treatments under PA law need your explicit consent. Set each one — your agent fills any gaps.'**
+  String get stepSubtitleProceduresResearch;
+
+  /// No description provided for @stepSubtitleAnythingElse.
+  ///
+  /// In en, this message translates to:
+  /// **'Free-form preferences not covered above. This is your voice — write it how you\'d say it.'**
+  String get stepSubtitleAnythingElse;
+
+  /// No description provided for @stepSubtitleReviewAndSign.
+  ///
+  /// In en, this message translates to:
+  /// **'One last look, then we\'ll make your signing packet. Tap any section to edit.'**
+  String get stepSubtitleReviewAndSign;
+
+  /// No description provided for @formTypeNameCombined.
+  ///
+  /// In en, this message translates to:
+  /// **'Combined Declaration & Power of Attorney'**
+  String get formTypeNameCombined;
+
+  /// No description provided for @formTypeNameDeclaration.
+  ///
+  /// In en, this message translates to:
+  /// **'Declaration Only'**
+  String get formTypeNameDeclaration;
+
+  /// No description provided for @formTypeNamePoa.
+  ///
+  /// In en, this message translates to:
+  /// **'Power of Attorney Only'**
+  String get formTypeNamePoa;
+
+  /// No description provided for @formTypeShortCombined.
+  ///
+  /// In en, this message translates to:
+  /// **'Combined'**
+  String get formTypeShortCombined;
+
+  /// No description provided for @formTypeShortDeclaration.
+  ///
+  /// In en, this message translates to:
+  /// **'Declaration'**
+  String get formTypeShortDeclaration;
+
+  /// No description provided for @formTypeShortPoa.
+  ///
+  /// In en, this message translates to:
+  /// **'Power of Attorney'**
+  String get formTypeShortPoa;
+
+  /// No description provided for @stepTitleAboutYou.
+  ///
+  /// In en, this message translates to:
+  /// **'About you'**
+  String get stepTitleAboutYou;
+
+  /// No description provided for @stepTitleWhenItKicksIn.
+  ///
+  /// In en, this message translates to:
+  /// **'When this kicks in'**
+  String get stepTitleWhenItKicksIn;
+
+  /// No description provided for @stepTitlePeopleITrust.
+  ///
+  /// In en, this message translates to:
+  /// **'People I trust'**
+  String get stepTitlePeopleITrust;
+
+  /// No description provided for @stepTitleGuardianNomination.
+  ///
+  /// In en, this message translates to:
+  /// **'If a court appoints a guardian'**
+  String get stepTitleGuardianNomination;
+
+  /// No description provided for @stepTitleWhereIWantCare.
+  ///
+  /// In en, this message translates to:
+  /// **'Where I want care'**
+  String get stepTitleWhereIWantCare;
+
+  /// No description provided for @stepTitleDiagnoses.
+  ///
+  /// In en, this message translates to:
+  /// **'Diagnoses'**
+  String get stepTitleDiagnoses;
+
+  /// No description provided for @stepTitleMedications.
+  ///
+  /// In en, this message translates to:
+  /// **'Medications'**
+  String get stepTitleMedications;
+
+  /// No description provided for @stepTitleAllergies.
+  ///
+  /// In en, this message translates to:
+  /// **'Allergies & reactions'**
+  String get stepTitleAllergies;
+
+  /// No description provided for @stepTitleProceduresResearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Procedures & research'**
+  String get stepTitleProceduresResearch;
+
+  /// No description provided for @stepTitleAnythingElse.
+  ///
+  /// In en, this message translates to:
+  /// **'Anything else'**
+  String get stepTitleAnythingElse;
+
+  /// No description provided for @stepTitleReviewAndSign.
+  ///
+  /// In en, this message translates to:
+  /// **'Review'**
+  String get stepTitleReviewAndSign;
+
+  /// No description provided for @directiveStatusRevoked.
+  ///
+  /// In en, this message translates to:
+  /// **'Revoked'**
+  String get directiveStatusRevoked;
+
+  /// No description provided for @directiveStatusExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Expired'**
+  String get directiveStatusExpired;
+
+  /// No description provided for @directiveStatusActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get directiveStatusActive;
+
+  /// No description provided for @directiveStatusDraft.
+  ///
+  /// In en, this message translates to:
+  /// **'Draft'**
+  String get directiveStatusDraft;
+
+  /// No description provided for @pastDirectiveSignedOn.
+  ///
+  /// In en, this message translates to:
+  /// **'signed {date}'**
+  String pastDirectiveSignedOn(String date);
+
+  /// No description provided for @pastDirectiveExpiredOn.
+  ///
+  /// In en, this message translates to:
+  /// **'expired {date}'**
+  String pastDirectiveExpiredOn(String date);
+
+  /// No description provided for @pastDirectiveExpiresOn.
+  ///
+  /// In en, this message translates to:
+  /// **'expires {date}'**
+  String pastDirectiveExpiresOn(String date);
+
+  /// No description provided for @settingsDefaultUserName.
+  ///
+  /// In en, this message translates to:
+  /// **'PA MHAD user'**
+  String get settingsDefaultUserName;
+
+  /// No description provided for @rateDailyLimitUsed.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve used all {max} free requests for today. The limit resets at midnight. Consider upgrading to a paid API key for higher limits.'**
+  String rateDailyLimitUsed(int max);
+
+  /// No description provided for @rateTooManyThisMinute.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many requests this minute (limit: {max}/min). Please wait {seconds} seconds.'**
+  String rateTooManyThisMinute(int max, int seconds);
+
+  /// No description provided for @rateTokenLimitThisMinute.
+  ///
+  /// In en, this message translates to:
+  /// **'Token limit reached this minute ({thousands}K/min). Please wait a moment before sending another request.'**
+  String rateTokenLimitThisMinute(int thousands);
+
+  /// No description provided for @rateDailyLimitReached.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily limit reached'**
+  String get rateDailyLimitReached;
+
+  /// No description provided for @rateWaitStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Wait {seconds}s • {remaining} requests left today'**
+  String rateWaitStatus(int seconds, int remaining);
+
+  /// No description provided for @rateRemainingStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'{remainingToday} requests left today • {remainingMinute} this minute'**
+  String rateRemainingStatus(int remainingToday, int remainingMinute);
+
+  /// No description provided for @llmHeicUnsupported.
+  ///
+  /// In en, this message translates to:
+  /// **'{provider} can\'t read HEIC/HEIF photos (the iPhone default). Switch to Gemini, or re-save the photo as JPEG or PNG first.'**
+  String llmHeicUnsupported(String provider);
+
+  /// No description provided for @llmPdfUnsupported.
+  ///
+  /// In en, this message translates to:
+  /// **'{provider} can\'t read PDFs here — switch to Gemini or Claude, or paste the document text instead.'**
+  String llmPdfUnsupported(String provider);
+
+  /// No description provided for @llmFileTypeUnsupported.
+  ///
+  /// In en, this message translates to:
+  /// **'{provider} can\'t read {mimeType} files here — switch to Gemini, or paste the text instead.'**
+  String llmFileTypeUnsupported(String provider, String mimeType);
+
+  /// No description provided for @llmRateLimited.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many requests to {provider}. Please wait a minute and try again.'**
+  String llmRateLimited(String provider);
+
+  /// No description provided for @llmGeminiKeyRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'{provider} rejected your API key. Open AI setup and check the key is correct, still active, and has the Generative Language API enabled.'**
+  String llmGeminiKeyRejected(String provider);
+
+  /// No description provided for @llmGeminiModelNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'{provider} doesn\'t recognise the model \"{model}\" — it may have been retired. Pick a different model in AI setup.'**
+  String llmGeminiModelNotFound(String provider, String model);
+
+  /// No description provided for @llmNetworkError.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t reach {provider} ({detail}). Check your internet connection. If you are on the web app, this provider may also be blocked by your browser\'s CORS policy — Gemini and Claude both work in the browser.'**
+  String llmNetworkError(String provider, String detail);
+
+  /// No description provided for @llmKeyRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'{provider} rejected your API key. Open AI setup and check the key is correct, still active, and belongs to {provider}.'**
+  String llmKeyRejected(String provider);
+
+  /// No description provided for @llmModelNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'{provider} doesn\'t recognise the model \"{model}\". Pick a different model in AI setup.'**
+  String llmModelNotFound(String provider, String model);
+
+  /// No description provided for @importFileUnreadable.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not read the file — it is corrupted or not an MHAD directive file.'**
+  String get importFileUnreadable;
+
+  /// No description provided for @importFileUnrecognized.
+  ///
+  /// In en, this message translates to:
+  /// **'This file is not a recognized directive file.'**
+  String get importFileUnrecognized;
+
+  /// No description provided for @importFileCorrupted.
+  ///
+  /// In en, this message translates to:
+  /// **'The file is corrupted.'**
+  String get importFileCorrupted;
+
+  /// No description provided for @importNotDirectiveFile.
+  ///
+  /// In en, this message translates to:
+  /// **'This is not a directive file.'**
+  String get importNotDirectiveFile;
+
+  /// No description provided for @importNotMhadFile.
+  ///
+  /// In en, this message translates to:
+  /// **'This is not an MHAD directive file.'**
+  String get importNotMhadFile;
+
+  /// No description provided for @importNewerVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'This file was made by a newer version of the app. Please update to open it.'**
+  String get importNewerVersion;
+
+  /// No description provided for @importNoDirectiveData.
+  ///
+  /// In en, this message translates to:
+  /// **'The file contains no directive data.'**
+  String get importNoDirectiveData;
 }
 
 class _AppLocalizationsDelegate

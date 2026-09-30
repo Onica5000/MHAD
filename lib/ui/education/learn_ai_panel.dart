@@ -51,6 +51,7 @@ class _LearnAiPanelState extends ConsumerState<LearnAiPanel> {
     _inputCtrl.clear();
     final result = await sendAssistantMessage(
       ref,
+      l10n: context.l10n,
       text: text,
       // No directive context on the Learn page — just a general "learning"
       // session. PII is stripped downstream regardless.
@@ -124,7 +125,7 @@ class _LearnAiPanelState extends ConsumerState<LearnAiPanel> {
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
               child: Text(
-                '● ${ref.watch(activeProviderProvider).name.toUpperCase()} · PII STRIPPED',
+                context.l10n.learnAiPanelPiiStripped(ref.watch(activeProviderProvider).name.toUpperCase()),
                 style: TextStyle(
                   fontFamily: kMonoFamily,
                   fontFamilyFallback: const [
@@ -147,11 +148,8 @@ class _LearnAiPanelState extends ConsumerState<LearnAiPanel> {
                         padding: const EdgeInsets.all(20),
                         child: Text(
                           hasKey
-                              ? 'Ask a question to get started — e.g. "What\'s '
-                                  'the difference between a declaration and a '
-                                  'power of attorney?"'
-                              : 'Set up the free AI assistant to ask questions '
-                                  'while you read.',
+                              ? context.l10n.learnAiPanelAskAQuestionToGet
+                              : context.l10n.learnAiPanelSetUpTheFreeAi,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontFamily: kSansFamily,

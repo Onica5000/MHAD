@@ -1,7 +1,12 @@
 // Shared date / age / relative-time helpers. Single source of truth for date
 // display so labels stay consistent across the app (previously each screen
 // hand-rolled its own DateFormat patterns and age math).
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
+import 'package:mhad/l10n/l10n.dart';
+
+/// English fallback when a caller passes no [AppLocalizations].
+final _en = lookupAppLocalizations(const Locale('en'));
 
 /// Whole years between [dob] and [asOf] (default: now).
 int ageInYears(DateTime dob, {DateTime? asOf}) {
@@ -20,18 +25,13 @@ bool isAdult(DateTime dob, {DateTime? asOf}) =>
 
 /// Human "time ago" for recent timestamps; after a week falls back to a short
 /// "MMM d" date. e.g. "just now", "5 mins ago", "3 hours ago", "2 days ago".
-String relativeTime(DateTime t, {DateTime? asOf}) {
+String relativeTime(DateTime t, {DateTime? asOf, AppLocalizations? l10n}) {
+  final l = l10n ?? _en;
   final diff = (asOf ?? DateTime.now()).difference(t);
-  if (diff.inSeconds < 60) return 'just now';
-  if (diff.inMinutes < 60) {
-    return '${diff.inMinutes} min${diff.inMinutes == 1 ? '' : 's'} ago';
-  }
-  if (diff.inHours < 24) {
-    return '${diff.inHours} hour${diff.inHours == 1 ? '' : 's'} ago';
-  }
-  if (diff.inDays < 7) {
-    return '${diff.inDays} day${diff.inDays == 1 ? '' : 's'} ago';
-  }
+  if (diff.inSeconds < 60) return l.relativeJustNow;
+  if (diff.inMinutes < 60) return l.relativeMinsAgo(diff.inMinutes);
+  if (diff.inHours < 24) return l.relativeHoursAgo(diff.inHours);
+  if (diff.inDays < 7) return l.relativeDaysAgo(diff.inDays);
   return formatMonthDay(t);
 }
 

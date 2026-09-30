@@ -56,7 +56,7 @@ class _EducationScreenState extends State<EducationScreen> {
       return Scaffold(
         appBar: AppBar(title: Text(widget.filterTitle)),
         body: _filteredSections.isEmpty
-            ? _emptyArt(SpotArt.search, 'No results found.')
+            ? _emptyArt(SpotArt.search, context.l10n.educationNoResultsFound)
             : ListView.builder(
                 padding: const EdgeInsets.all(12),
                 itemCount: _filteredSections.length,
@@ -66,7 +66,7 @@ class _EducationScreenState extends State<EducationScreen> {
       );
     }
     final hub = _filteredSections.isEmpty
-        ? _emptyArt(SpotArt.search, 'No results found.')
+        ? _emptyArt(SpotArt.search, context.l10n.educationNoResultsFound)
         : _EditorialLearnHub(
             sections: _filteredSections,
             activeTab: _activeTab,
@@ -152,7 +152,7 @@ class _EditorialLearnHub extends StatelessWidget {
                   children: [
                     TextSpan(text: context.l10n.educationUnderstand),
                     TextSpan(
-                        text: 'before', style: TextStyle(color: p.primary)),
+                        text: context.l10n.educationBefore, style: TextStyle(color: p.primary)),
                     TextSpan(text: context.l10n.educationYouSign),
                   ],
                 ),
@@ -528,7 +528,7 @@ class _EducationSearchDelegate extends SearchDelegate<EducationSection?> {
         .toList();
 
     if (results.isEmpty) {
-      return _emptyArt(SpotArt.search, 'No results for "$query"');
+      return _emptyArt(SpotArt.search, context.l10n.educationNoResultsFor(query));
     }
     return ListView.builder(
       padding: const EdgeInsets.all(12),

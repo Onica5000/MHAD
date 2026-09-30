@@ -35,11 +35,7 @@ Future<void> checkAndOfferDraftRecovery(
           ],
         ),
         content: Text(
-          'It looks like the app closed unexpectedly. '
-          'An auto-saved draft was found from ${draft.ageDescription}.\n\n'
-          'This draft contains your treatment preferences and '
-          'medical data (no personal information was saved).\n\n'
-          'Would you like to restore it?',
+          context.l10n.draftRecoveryDialogItLooksLikeTheApp(draft.ageDescription),
         ),
         actions: [
           TextButton(

@@ -142,14 +142,14 @@ class _RenewSheet extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SectionLabel(
-                          '● Expires $dayLabel',
+                          context.l10n.reminderSheetsExpires(dayLabel),
                           style: TextStyle(color: warnText),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           firstName == null
-                              ? 'Time to renew.'
-                              : 'Time to renew, $firstName.',
+                              ? context.l10n.reminderSheetsTimeToRenew
+                              : context.l10n.reminderSheetsTimeToRenew2(firstName),
                           style: TextStyle(
                             fontFamily: 'Instrument Serif',
                             fontFamilyFallback: const ['Georgia', 'serif'],
@@ -232,17 +232,17 @@ class _RenewSheet extends StatelessWidget {
                     const SizedBox(height: 10),
                     Row(
                       children: [
-                        _RenewMetric(num: '11', label: 'sections'),
+                        _RenewMetric(num: '11', label: context.l10n.reminderRenewMetricSections),
                         const SizedBox(width: 14),
                         Text('·',
                             style: TextStyle(color: p.textMuted)),
                         const SizedBox(width: 14),
-                        _RenewMetric(num: 'wet-ink', label: 'signing'),
+                        _RenewMetric(num: context.l10n.reminderRenewMetricWetInk, label: context.l10n.reminderRenewMetricSigning),
                         const SizedBox(width: 14),
                         Text('·',
                             style: TextStyle(color: p.textMuted)),
                         const SizedBox(width: 14),
-                        _RenewMetric(num: '~5', label: 'min'),
+                        _RenewMetric(num: '~5', label: context.l10n.reminderRenewMetricMin),
                       ],
                     ),
                   ],
@@ -363,22 +363,22 @@ class _CheckInSheet extends StatelessWidget {
       rows.add(_CheckInRow(
         icon: Icons.people_alt_outlined,
         title: context.l10n.reminderSheetsStillTheRightPeople,
-        sub: 'Agents — primary and alternate',
-        stepLabel: 'Step 3',
+        sub: context.l10n.reminderSheetsAgentsPrimaryAndAlternate,
+        stepLabel: context.l10n.reminderSheetsStepN(3),
       ));
     }
     if (formType != FormType.poa) {
       rows.add(_CheckInRow(
         icon: Icons.medication_outlined,
         title: context.l10n.reminderSheetsMedicationsUpToDate,
-        sub: "Current meds, ones you don't want, allergies",
-        stepLabel: 'Step 7',
+        sub: context.l10n.reminderSheetsCurrentMedsOnesYouDon,
+        stepLabel: context.l10n.reminderSheetsStepN(7),
       ));
       rows.add(_CheckInRow(
         icon: Icons.location_on_outlined,
         title: context.l10n.reminderSheetsCarePreferencesStillRight,
-        sub: 'Preferred facility, room environment',
-        stepLabel: 'Step 5',
+        sub: context.l10n.reminderSheetsPreferredFacilityRoomEnvironment,
+        stepLabel: context.l10n.reminderSheetsStepN(5),
       ));
     }
 

@@ -119,7 +119,7 @@ class _CrisisSheet extends StatelessWidget {
               ),
               _CrisisRow(
                 name: 'Crisis Text Line',
-                detail: 'Text HOME to ${appData.phoneOf('crisisTextLine')}',
+                detail: context.l10n.crisisSheetTextHomeTo(appData.phoneOf('crisisTextLine')),
                 icon: Icons.sms_outlined,
                 onTap: () => _launch(
                     context, 'sms:${appData.phoneOf('crisisTextLine')}?body=HOME',
@@ -127,14 +127,14 @@ class _CrisisSheet extends StatelessWidget {
               ),
               _CrisisRow(
                 name: 'SAMHSA National Helpline',
-                detail: '${appData.phoneOf('samhsa')} · treatment referrals',
+                detail: context.l10n.crisisSheetTreatmentReferrals(appData.phoneOf('samhsa')),
                 icon: Icons.favorite_border,
                 onTap: () => _launch(context, 'tel:${appData.phoneOf('samhsa')}',
                     copyValue: appData.phoneOf('samhsa')),
               ),
               _CrisisRow(
                 name: 'PA Protection & Advocacy',
-                detail: '${appData.phoneOf('paProtectionAdvocacy')} · know your rights',
+                detail: context.l10n.crisisSheetKnowYourRights(appData.phoneOf('paProtectionAdvocacy')),
                 icon: Icons.shield_outlined,
                 onTap: () => _launch(context,
                     'tel:${appData.phoneOf('paProtectionAdvocacy')}',

@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:mhad/l10n/l10n.dart';
+import 'package:mhad/l10n/model_labels.dart';
 import 'package:mhad/ui/widgets/design/design_card.dart';
 import 'package:mhad/ui/widgets/design/status_views.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -51,7 +52,7 @@ class PastDirectiveDetailScreen extends ConsumerWidget {
           Expanded(
             child: directiveAsync.when(
               loading: () => PageLoading(label: context.l10n.pastDirectiveDetailLoadingThisDirective),
-              error: (e, _) => Center(child: Text('Unable to load: $e')),
+              error: (e, _) => Center(child: Text(context.l10n.pastDirectiveDetailUnableToLoad(e))),
               data: (d) {
                 if (d == null) {
                   return Center(child: Text(context.l10n.wizardDirectiveNotFound));
@@ -109,7 +110,7 @@ class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final p = Theme.of(context).mhadPalette;
-    final status = directiveStatusLabel(directive.status);
+    final status = directiveStatusLabel(directive.status, context.l10n);
     final dark = Theme.of(context).brightness == Brightness.dark;
     final statusColor = directiveStatusColor(directive.status, dark: dark);
 
@@ -133,13 +134,13 @@ class _Body extends ConsumerWidget {
             FormType.values
                 .firstWhere((e) => e.name == directive.formType,
                     orElse: () => FormType.combined)
-                .displayName,
+                .label(context.l10n),
             if (directive.executionDate != null)
-              'signed ${formatShortDate(DateTime.fromMillisecondsSinceEpoch(directive.executionDate!))}',
+              context.l10n.pastDirectiveSignedOn(formatShortDate(DateTime.fromMillisecondsSinceEpoch(directive.executionDate!))),
             if (directive.expirationDate != null)
-              status == 'Expired'
-                  ? 'expired ${formatShortDate(DateTime.fromMillisecondsSinceEpoch(directive.expirationDate!))}'
-                  : 'expires ${formatShortDate(DateTime.fromMillisecondsSinceEpoch(directive.expirationDate!))}',
+              directive.status == DirectiveStatus.expired.name
+                  ? context.l10n.pastDirectiveExpiredOn(formatShortDate(DateTime.fromMillisecondsSinceEpoch(directive.expirationDate!)))
+                  : context.l10n.pastDirectiveExpiresOn(formatShortDate(DateTime.fromMillisecondsSinceEpoch(directive.expirationDate!))),
           ].join(' · '),
           style: TextStyle(
             fontFamily: kSansFamily,
@@ -217,7 +218,7 @@ class _Body extends ConsumerWidget {
           tone: ActionRowTone.danger,
           icon: Icons.delete_outline,
           title: context.l10n.pastDirectiveDetailDeleteFromThisDevice2,
-          subtitle: 'The directive remains $status regardless',
+          subtitle: context.l10n.pastDirectiveDetailTheDirectiveRemainsRegardless(status),
           onTap: () => _confirmDelete(context, ref),
         ),
       ],

@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/utils/test_environment.dart';
 import 'package:safe_device/safe_device.dart';
@@ -65,17 +66,12 @@ class DeviceSecurityService {
           color: SemanticColors.warningText(Theme.of(ctx).brightness),
           size: 48,
         ),
-        title: const Text('Device Security Warning'),
-        content: const Text(
-          'Your device appears to be rooted/jailbroken. '
-          'This may put your sensitive health data at risk. '
-          'Consider using a non-modified device for storing '
-          'advance directives.',
-        ),
+        title: Text(ctx.l10n.deviceSecurityWarningTitle),
+        content: Text(ctx.l10n.deviceSecurityWarningBody),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
-            child: const Text('I Understand'),
+            child: Text(ctx.l10n.deviceSecurityIUnderstand),
           ),
         ],
       ),

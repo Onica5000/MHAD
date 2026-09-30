@@ -2,13 +2,21 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:mhad/data/repository/directive_repository.dart';
+import 'package:mhad/l10n/app_localizations.dart';
 import 'package:mhad/services/directive_file_codec.dart';
 
 /// Thrown when an imported directive file can't be opened (corrupt, not a
 /// directive file, or made by a newer app).
 class DirectiveImportException implements Exception {
   final String message;
-  DirectiveImportException(this.message);
+
+  /// Optional localized form of [message]; see [messageIn].
+  final String Function(AppLocalizations l)? localized;
+  DirectiveImportException(this.message, [this.localized]);
+
+  /// [message] in [l]'s locale when a localized form exists, else [message].
+  String messageIn(AppLocalizations? l) =>
+      l != null && localized != null ? localized!(l) : message;
   @override
   String toString() => message;
 }
@@ -51,28 +59,33 @@ class DirectiveExportService {
     try {
       json = DirectiveFileCodec.decode(bytes);
     } on DirectiveFileException catch (e) {
-      throw DirectiveImportException(e.message);
+      throw DirectiveImportException(e.message, e.localized);
     }
     final Object? decoded;
     try {
       decoded = jsonDecode(json);
     } catch (_) {
-      throw DirectiveImportException('The file is corrupted.');
+      throw DirectiveImportException(
+          'The file is corrupted.', (l) => l.importFileCorrupted);
     }
     if (decoded is! Map<String, dynamic>) {
-      throw DirectiveImportException('This is not a directive file.');
+      throw DirectiveImportException(
+          'This is not a directive file.', (l) => l.importNotDirectiveFile);
     }
     if (decoded['format'] != fileFormat) {
-      throw DirectiveImportException('This is not an MHAD directive file.');
+      throw DirectiveImportException('This is not an MHAD directive file.',
+          (l) => l.importNotMhadFile);
     }
     final version = (decoded['version'] as num?)?.toInt() ?? 0;
     if (version > fileVersion) {
       throw DirectiveImportException(
-          'This file was made by a newer version of the app. Please update to open it.');
+          'This file was made by a newer version of the app. Please update to open it.',
+          (l) => l.importNewerVersion);
     }
     final data = decoded['data'];
     if (data is! Map<String, dynamic>) {
-      throw DirectiveImportException('The file contains no directive data.');
+      throw DirectiveImportException('The file contains no directive data.',
+          (l) => l.importNoDirectiveData);
     }
     return data;
   }

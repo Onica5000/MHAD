@@ -75,9 +75,10 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       : (_draftModes.isEmpty ? DraftMode.finalCopy : _draftModes.first);
 
   String _draftModeLabel(DraftMode m) => switch (m) {
-        DraftMode.finalCopy => 'Final copy',
-        DraftMode.draftGeneral => 'Draft',
-        DraftMode.draftSignedAvailable => 'Draft · signed copy exists',
+        DraftMode.finalCopy => context.l10n.exportDraftModeFinal,
+        DraftMode.draftGeneral => context.l10n.exportDraftModeDraft,
+        DraftMode.draftSignedAvailable =>
+          context.l10n.exportDraftModeSignedExists,
       };
 
   String _draftModeFileSuffix(DraftMode m) => switch (m) {
@@ -167,15 +168,15 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
     // Completeness check — warn about missing critical fields
     final warnings = <String>[];
     if (_directive != null) {
-      if (_directive!.fullName.isEmpty) warnings.add('Full name');
-      if (_directive!.dateOfBirth.isEmpty) warnings.add('Date of birth');
+      if (_directive!.fullName.isEmpty) warnings.add(context.l10n.fullName);
+      if (_directive!.dateOfBirth.isEmpty) warnings.add(context.l10n.dateOfBirth);
       if (_directive!.effectiveCondition.isEmpty) {
-        warnings.add('Effective condition');
+        warnings.add(context.l10n.exportEffectiveCondition);
       }
       if (_directive!.status == 'draft') {
         final hasSignatures = _witnesses.any(
             (w) => w.signatureBase64 != null && w.signatureBase64!.isNotEmpty);
-        if (!hasSignatures) warnings.add('Witness signatures');
+        if (!hasSignatures) warnings.add(context.l10n.exportWitnessSignatures);
       }
     }
     if (warnings.isNotEmpty) {
@@ -184,10 +185,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         builder: (ctx) => AlertDialog(
           title: Text(context.l10n.exportIncompleteDirective),
           content: Text(
-            'The following fields are empty or missing:\n\n'
-            '${warnings.map((w) => '  \u2022 $w').join('\n')}\n\n'
-            'An incomplete directive may not be legally valid under '
-            'PA Act 194. Export anyway?',
+            context.l10n.exportTheFollowingFieldsAreEmpty(warnings.map((w) => '  \u2022 $w').join('\n')),
           ),
           actions: [
             TextButton(
@@ -293,10 +291,8 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       }
       if (kIsWeb && mounted) {
         final msg = modes.length > 1
-            ? 'Opened ${modes.length} PDFs in new tabs — print or save each '
-                'from your PDF viewer.'
-            : 'Opened in a new tab — use Print or Download in your PDF '
-                'viewer.';
+            ? context.l10n.exportOpenedManyPdfs(modes.length)
+            : context.l10n.exportOpenedOnePdf;
         // Announce for screen readers too — the snackbar alone is not
         // reliably read on web (UX audit A4).
         announce(context, msg);
@@ -517,7 +513,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
           value: _includeCombined,
           onChanged: (v) => setState(() => _includeCombined = v ?? false),
           warning: _includeCombined && _agents.isEmpty
-              ? 'No agent designated — agent sections will be blank'
+              ? context.l10n.exportNoAgentDesignated
               : null,
         ),
         _FormCheckbox(
@@ -532,7 +528,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
           value: _includePoa,
           onChanged: (v) => setState(() => _includePoa = v ?? false),
           warning: _includePoa && _agents.isEmpty
-              ? 'No agent designated — agent sections will be blank'
+              ? context.l10n.exportNoAgentDesignated
               : null,
         ),
         const SizedBox(height: 16),
@@ -571,8 +567,8 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         Semantics(
           button: true,
           label: _isGenerating
-              ? 'Generating PDF preview'
-              : 'Preview PDF before sharing',
+              ? context.l10n.exportGeneratingPdfPreview
+              : context.l10n.exportPreviewPdfBeforeSharing,
           child: FilledButton.icon(
             onPressed: _isGenerating ? null : _previewPdf,
             icon: _isGenerating
@@ -622,11 +618,9 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         // landmarks (they read equally well in the wide rail).
         SectionLabel(context.l10n.exportYourOfficialDirective),
         const SizedBox(height: 8),
-        _railTitle('Printed copy type'),
+        _railTitle(context.l10n.exportPrintedCopyType),
         _railBody(
-          'A draft prints a light “DRAFT” watermark on every page — for '
-          'sending a copy while you keep the signed paper original. Tick as '
-          'many as you like — Download gives you one PDF of each.',
+          context.l10n.exportADraftPrintsALight,
         ),
         const SizedBox(height: 4),
         for (final m in _draftModeOrder)
@@ -646,12 +640,9 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
             controlAffinity: ListTileControlAffinity.leading,
           ),
         const SizedBox(height: 16),
-        _railTitle('Document language'),
+        _railTitle(context.l10n.exportDocumentLanguage),
         _railBody(
-          'The plain-language official form is the one you sign and use — '
-          'it is the legally valid directive. The legal-language version '
-          'restates it in formal statutory wording for reference only and '
-          'is not the document you sign.',
+          context.l10n.exportThePlainLanguageOfficialForm,
         ),
         const SizedBox(height: 8),
         SegmentedButton<bool>(
@@ -681,9 +672,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         ],
         const SizedBox(height: 16),
         _railBody(
-          'This opens your directive in your PDF viewer (a new browser tab), '
-          'where you can Print it or save/Download it — it will NOT download '
-          'automatically.',
+          context.l10n.exportThisOpensYourDirectiveIn,
         ),
         const SizedBox(height: 8),
         // Primary action — placed after the settings that control it. Opens the
@@ -707,16 +696,16 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
           // ── 2. Keep a copy ─────────────────────────────────────────────
           SectionLabel(context.l10n.exportKeepACopy),
           const SizedBox(height: 8),
-          _railTitle('Wallet card'),
-          _railBody('A credit-card-sized summary you can print and carry.'),
+          _railTitle(context.l10n.exportWalletCard),
+          _railBody(context.l10n.exportACreditCardSizedSummary),
           const SizedBox(height: 8),
           WalletCard(
             principalName: _directive!.fullName.trim().isEmpty
-                ? 'Your name'
+                ? context.l10n.exportWalletYourName
                 : _directive!.fullName,
             agentName: _walletAgent?.fullName,
             agentPhone: _walletAgent?.bestPhone,
-            validThrough: _walletValidThrough(),
+            validThrough: _walletValidThrough(context.l10n),
             qrPayload: 'MHAD-${widget.directiveId}',
           ),
           const SizedBox(height: 8),
@@ -729,12 +718,9 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
             ),
           ),
           const SizedBox(height: 16),
-          _railTitle('Save an editable copy'),
+          _railTitle(context.l10n.exportSaveAnEditableCopy),
           _railBody(
-            'Not a finished document — this is how you save your progress. The '
-            'web app can’t store your work on this device, so download this '
-            'file to keep it, then re-upload it later (here or on another '
-            'device) to keep editing. Nothing is stored online.',
+            context.l10n.exportNotAFinishedDocumentThis,
           ),
           const SizedBox(height: 4),
           Row(
@@ -748,8 +734,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
             ],
           ),
           _railBody(
-            'Encrypting hinders others from reading it; the app still opens it '
-            'with no passphrase.',
+            context.l10n.exportEncryptingHindersOthersFromReading,
           ),
           const SizedBox(height: 8),
           Semantics(
@@ -770,12 +755,9 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
           // ── 3. Advanced: machine-readable data ─────────────────────────
           SectionLabel(context.l10n.exportAdvancedDataExports),
           const SizedBox(height: 8),
-          _railTitle('Machine-readable formats'),
+          _railTitle(context.l10n.exportMachineReadableFormats),
           _railBody(
-            'Your PDF above is the document you sign — these are data exports '
-            'for your records, a spreadsheet, or a health system. FHIR is the '
-            'standard format hospitals use to exchange medical records; CSV is '
-            'a spreadsheet file (opens in Excel or Google Sheets).',
+            context.l10n.exportYourPdfAboveIsThe,
           ),
           const SizedBox(height: 8),
           Wrap(
@@ -1135,9 +1117,9 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
 
   Agent? get _walletAgent => _agents.primaryAgent;
 
-  String _walletValidThrough() {
+  String _walletValidThrough(AppLocalizations l) {
     final exp = _directive?.expirationDate;
-    if (exp == null || exp == 0) return 'sign to activate';
+    if (exp == null || exp == 0) return l.exportWalletSignToActivate;
     final d = DateTime.fromMillisecondsSinceEpoch(exp);
     return '${d.month.toString().padLeft(2, '0')} · ${d.year}';
   }

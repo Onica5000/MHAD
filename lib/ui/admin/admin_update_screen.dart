@@ -286,7 +286,7 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
               Text('$tag — ${m.id}',
                   style: const TextStyle(fontWeight: FontWeight.w700)),
               Text(
-                '${m.displayName}\n$note\ncontext ${m.inputTokenLimit} in / ${m.outputTokenLimit} out',
+                context.l10n.adminUpdateContextInOut(m.displayName, note, m.inputTokenLimit, m.outputTokenLimit),
                 style: const TextStyle(fontSize: 12),
               ),
             ],
@@ -295,7 +295,7 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
     return showDialog<GeminiModel>(
       context: context,
       builder: (ctx) => SimpleDialog(
-        title: Text('Best Gemini model (now: ${rec.currentModel})'),
+        title: Text(context.l10n.adminUpdateBestGeminiModelNow(rec.currentModel)),
         children: [
           if (rec.bestFlash != null)
             option('RECOMMENDED · Flash', rec.bestFlash!,
@@ -653,7 +653,7 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
                 ),
                 const SizedBox(width: 8),
                 IconButton(
-                  tooltip: 'Check the newest ${_provider.label} models (live API)',
+                  tooltip: context.l10n.adminUpdateCheckTheNewestModelsLive(_provider.label),
                   onPressed: _loading ? null : _refreshModels,
                   icon: const Icon(Icons.refresh),
                 ),
@@ -667,11 +667,11 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
             autofillHints: const [],
             decoration: InputDecoration(
               border: const OutlineInputBorder(),
-              labelText: '${_provider.label} API key',
+              labelText: context.l10n.adminUpdateApiKey(_provider.label),
               hintText: _provider.keyHint,
               helperText: _provider == AdminAiProvider.gemini
-                  ? 'Blank = use the app\'s saved Gemini key. Not stored.'
-                  : 'Entered for this session only — not stored.',
+                  ? context.l10n.adminUpdateBlankUseTheAppS
+                  : context.l10n.adminUpdateEnteredForThisSessionOnly,
             ),
           ),
           const SizedBox(height: 12),
@@ -709,7 +709,7 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
                       height: 16,
                       child: CircularProgressIndicator(strokeWidth: 2))
                   : const Icon(Icons.auto_awesome),
-              label: Text(_loading ? 'Drafting…' : 'Start update with AI'),
+              label: Text(_loading ? context.l10n.adminUpdateDrafting : context.l10n.adminUpdateStartUpdateWithAi),
               style: FilledButton.styleFrom(
                 minimumSize: const Size.fromHeight(48),
               ),
@@ -753,11 +753,8 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(_isRevert
-            ? 'Restore from backup: ${_changes.length} field(s) differ from the '
-                'previous version of ${_target.assetPath}. Tick the part(s) to '
-                'roll back (all pre-ticked = full revert).'
-            : '${_changes.length} proposed change(s). '
-                'Review each — tick VERIFY items only if you have confirmed them.'),
+            ? context.l10n.adminUpdateRestoreFromBackupFieldS(_changes.length, _target.assetPath)
+            : context.l10n.adminUpdateProposedChangeSReviewEach(_changes.length)),
         _error_(_error),
         const SizedBox(height: 8),
         Expanded(
@@ -773,8 +770,8 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
             Expanded(
               child: Text(
                 verifyCount > 0
-                    ? '$verifyCount verify-tier change(s) not yet approved'
-                    : 'Ready',
+                    ? context.l10n.adminUpdateVerifyTierChangeSNot(verifyCount)
+                    : context.l10n.adminUpdateReady,
                 style: TextStyle(
                     color: verifyCount > 0
                         ? SemanticColors.warningText(
@@ -785,7 +782,7 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
             ),
             FilledButton(
               onPressed: _changes.any((c) => c.approved) ? _build : null,
-              child: Text(_isRevert ? 'Build restored JSON' : 'Build updated JSON'),
+              child: Text(_isRevert ? context.l10n.adminUpdateBuildRestoredJson : context.l10n.adminUpdateBuildUpdatedJson),
             ),
           ],
         ),
@@ -825,7 +822,7 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
         ),
         Text('${c.oldValue ?? "(none)"}  →  ${c.newValue}'),
         if (c.source.isNotEmpty)
-          Text('Source: ${c.source}',
+          Text(context.l10n.adminUpdateSource(c.source),
               style: const TextStyle(fontSize: 12, color: Colors.blue)),
         if (c.rationale.isNotEmpty)
           Text(c.rationale,
@@ -849,9 +846,7 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
               borderRadius: BorderRadius.circular(DesignTokens.radiusXs),
             ),
             child: Text(
-              'RESTORED — the selected field(s) have been rolled back to the '
-              'backup. Commit this over ${_target.assetPath} to apply the '
-              'roll-back.',
+              context.l10n.adminUpdateRestoredTheSelectedFieldS(_target.assetPath),
               style: TextStyle(
                   fontWeight: FontWeight.w700,
                   color: SemanticColors.warningText(
@@ -859,8 +854,7 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
             ),
           ),
         Text(
-            'Updated ${_target.assetPath}. Replace that file with this and '
-            'commit — the release makes it live for everyone.'),
+            context.l10n.adminUpdateUpdatedReplaceThatFileWith(_target.assetPath)),
         const SizedBox(height: 8),
         Expanded(
           child: Container(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 
 /// Required NLM attribution notice for screens that use RxTerms or ICD-10-CM
 /// APIs. Per NLM Terms of Service, products using NLM data must include this
@@ -23,7 +24,7 @@ class NlmAttribution extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Text(
-        'Source: U.S. National Library of Medicine. $medicalDisclaimer',
+        context.l10n.nlmAttributionSourceUSNationalLibrary(medicalDisclaimer),
         style: Theme.of(context).textTheme.bodySmall?.copyWith(
               color: cs.onSurfaceVariant,
               fontSize: 11,

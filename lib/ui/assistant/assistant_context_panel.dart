@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mhad/l10n/l10n.dart';
+import 'package:mhad/l10n/model_labels.dart';
 import 'package:mhad/ai/ai_assistant.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
@@ -24,11 +25,11 @@ class AssistantContextPanel extends StatelessWidget {
     super.key,
   });
 
-  static const _examplePrompts = [
-    'What is a Mental Health Advance Directive?',
-    'Who can be my agent?',
-    'How long is the directive valid?',
-    'Can I change my directive later?',
+  static List<String> _examplePrompts(BuildContext context) => [
+    context.l10n.assistantSuggestWhatIsAMentalHealth,
+    context.l10n.assistantSuggestWhoCanBeMyAgent,
+    context.l10n.assistantSuggestHowLongIsTheDirective,
+    context.l10n.assistantSuggestCanIChangeMyDirective,
   ];
 
   @override
@@ -50,14 +51,14 @@ class AssistantContextPanel extends StatelessWidget {
             // Claude Design `WebAI` right panel.
             SectionLabel(buildContext.l10n.assistantContextPanelContextTheAiSees),
             const SizedBox(height: 8),
-            _ContextKV(label: buildContext.l10n.assistantContextPanelFormType, value: _ctxFormType(context!)),
+            _ContextKV(label: buildContext.l10n.assistantContextPanelFormType, value: _ctxFormType(context!, buildContext.l10n)),
             _ContextKV(
                 label: buildContext.l10n.assistantContextPanelCurrentStep,
-                value: context!.stepName ?? 'General question'),
+                value: context!.stepName ?? buildContext.l10n.assistantGeneralQuestion),
             _ContextKV(
                 label: buildContext.l10n.assistantContextPanelFilledFields,
                 value: '${context!.filledFields?.length ?? 0}'),
-            _ContextKV(label: buildContext.l10n.assistantContextPanelPii, value: 'Stripped before send'),
+            _ContextKV(label: buildContext.l10n.assistantContextPanelPii, value: buildContext.l10n.assistantContextPanelStrippedBeforeSend),
             const SizedBox(height: 16),
             SectionLabel(buildContext.l10n.assistantContextPanelSuggestedPrompts),
           ] else ...[
@@ -82,7 +83,7 @@ class AssistantContextPanel extends StatelessWidget {
             ),
             const SizedBox(height: 12),
           ],
-          for (final prompt in _examplePrompts) ...[
+          for (final prompt in _examplePrompts(buildContext)) ...[
             _ContextPromptTile(text: prompt, onTap: () => onPromptTap(prompt)),
             const SizedBox(height: 8),
           ],
@@ -134,8 +135,8 @@ class AssistantContextPanel extends StatelessWidget {
     );
   }
 
-  String _ctxFormType(AssistantContext ctx) =>
-      formTypeFromName(ctx.formType)?.shortName ?? '—';
+  String _ctxFormType(AssistantContext ctx, AppLocalizations l) =>
+      formTypeFromName(ctx.formType)?.shortLabel(l) ?? '—';
 }
 
 /// One "Context the AI sees" key/value row (label left, value right).

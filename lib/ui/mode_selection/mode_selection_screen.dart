@@ -145,11 +145,11 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                           title: context.l10n.modeSelectionPrivateMode,
                           subtitle:
                               context.l10n.modeSelectionYourDataStaysOnThis,
-                          badges: const [
-                            'Biometrics',
-                            'AES-256',
-                            'Save drafts',
-                            'Across sessions',
+                          badges: [
+                            context.l10n.modeSelectionBiometrics,
+                            context.l10n.modeSelectionAes256,
+                            context.l10n.modeSelectionSaveDrafts,
+                            context.l10n.modeSelectionAcrossSessions,
                           ],
                           recommended: true,
                           loading: _loading == 'private',
@@ -163,10 +163,10 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                         title: context.l10n.modeSelectionPublicMode,
                         subtitle:
                             context.l10n.modeSelectionNoDataIsSavedAfter,
-                        badges: const [
-                          'Nothing saved',
-                          'In-memory only',
-                          'Single session',
+                        badges: [
+                          context.l10n.modeSelectionNothingSaved,
+                          context.l10n.modeSelectionInMemoryOnly,
+                          context.l10n.modeSelectionSingleSession,
                         ],
                         loading: _loading == 'public',
                         dimmed: _loading == 'private',
@@ -177,12 +177,8 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                       Center(
                         child: Text(
                           kIsWeb
-                              ? 'On the web your data is kept in memory only '
-                                'and is never sent to a server, so encrypted '
-                                'on-device (Private mode) storage is not '
-                                'available here.'
-                              : 'This app is not HIPAA-compliant. Nothing '
-                                'is sent to a server for storage.',
+                              ? context.l10n.modeSelectionOnTheWebYourData
+                              : context.l10n.modeSelectionThisAppIsNotHipaa,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontFamily: kSansFamily,
@@ -236,7 +232,7 @@ class _Card2 extends StatelessWidget {
 
     return Semantics(
       button: true,
-      label: 'Select $title${recommended ? ' (recommended)' : ''}',
+      label: context.l10n.modeSelectionSelect(title, recommended ? ' (recommended)' : ''),
       child: AnimatedOpacity(
         opacity: dimmed ? 0.5 : 1,
         duration: const Duration(milliseconds: 200),

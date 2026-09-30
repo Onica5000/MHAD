@@ -5366,4 +5366,1533 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get crisisSheetCallTextChat => 'Call · text · chat';
+
+  @override
+  String get assistantSenderYou => 'You';
+
+  @override
+  String get assistantSenderAi => 'AI Assistant';
+
+  @override
+  String get aiSetupApiKeySetForThis => 'API key set for this session';
+
+  @override
+  String get aiSetupApiKeySaved => 'API key saved';
+
+  @override
+  String get aiSetupGetYourFreeGeminiApi => 'Get Your Free Gemini API Key';
+
+  @override
+  String aiSetupAddYourApiKey(Object label) {
+    return 'Add Your $label API Key';
+  }
+
+  @override
+  String get aiSetupTheAssistantUsesGoogleS =>
+      'The assistant uses Google\'s Gemini model. You need a free API key from Google AI Studio — it takes about 30 seconds.';
+
+  @override
+  String aiSetupYouBringYourOwnApi(Object label) {
+    return 'You bring your own $label API key. Your provider\'s usage limits and billing apply — this app never sees or charges for your usage. Gemini stays the free default if you\'d rather not pay.';
+  }
+
+  @override
+  String get aiSetupOpenGoogleAiStudioIn =>
+      'Open Google AI Studio (in your private window)';
+
+  @override
+  String aiSetupOpenInYourPrivateWindow(Object label) {
+    return 'Open $label (in your private window)';
+  }
+
+  @override
+  String get aiSetupUseAnyGoogleAccountPersonal =>
+      'Use any Google account (personal Gmail works fine)';
+
+  @override
+  String get aiSetupSignInThenOpenThe => 'Sign in, then open the API keys page';
+
+  @override
+  String get aiSetupOpenAiStudio => 'Open AI Studio';
+
+  @override
+  String aiSetupOpen(Object label) {
+    return 'Open $label';
+  }
+
+  @override
+  String get aiSetupSignInWithGoogle => 'Sign in with Google';
+
+  @override
+  String aiSetupSignInTo(Object label) {
+    return 'Sign in to $label';
+  }
+
+  @override
+  String get aiSetupNoCreditCardOrPayment =>
+      'No credit card or payment is needed. The free tier is generous and sufficient for this app.';
+
+  @override
+  String get aiSetupMostProvidersRequireAPaid =>
+      'Most providers require a paid account with credits to use the API. Your provider bills you directly.';
+
+  @override
+  String get aiSetupKeySetForThisSession => 'Key set for this session';
+
+  @override
+  String get aiSetupKeySaved => 'Key saved';
+
+  @override
+  String get aiSetupShowApiKey => 'Show API key';
+
+  @override
+  String get aiSetupHideApiKey => 'Hide API key';
+
+  @override
+  String get aiSetupUseKeyForThisSession => 'Use Key for This Session';
+
+  @override
+  String get aiSetupSaveApiKey => 'Save API Key';
+
+  @override
+  String get aiSetupTesting => 'Testing…';
+
+  @override
+  String get aiSetupTestConnection => 'Test connection';
+
+  @override
+  String aiSetupThatDoesnTLookLike(Object label, Object keyHint) {
+    return 'That doesn\'t look like a valid $label key ($keyHint).';
+  }
+
+  @override
+  String aiSetupCouldNotPasteTryPasting(Object pasteShortcutLabel) {
+    return 'Could not paste. Try pasting manually ($pasteShortcutLabel).';
+  }
+
+  @override
+  String aiSetupMayBeBlockedByYour(Object label) {
+    return '$label may be blocked by your browser\'s security (CORS) on the web. If it doesn\'t respond, pick Gemini or Claude — both work in the browser.';
+  }
+
+  @override
+  String aiSetupTheKeyLooksLikeCopy(Object keyHint) {
+    return 'The key looks like \"$keyHint\" — copy it, then use the paste button or paste it manually.';
+  }
+
+  @override
+  String aiSetupApiKey(Object label) {
+    return '$label API Key';
+  }
+
+  @override
+  String get adminUpdateBlankUseTheAppS =>
+      'Blank = use the app\'s saved Gemini key. Not stored.';
+
+  @override
+  String get adminUpdateEnteredForThisSessionOnly =>
+      'Entered for this session only — not stored.';
+
+  @override
+  String get adminUpdateDrafting => 'Drafting…';
+
+  @override
+  String get adminUpdateStartUpdateWithAi => 'Start update with AI';
+
+  @override
+  String adminUpdateRestoreFromBackupFieldS(
+    Object changesLength,
+    Object assetPath,
+  ) {
+    return 'Restore from backup: $changesLength field(s) differ from the previous version of $assetPath. Tick the part(s) to roll back (all pre-ticked = full revert).';
+  }
+
+  @override
+  String adminUpdateProposedChangeSReviewEach(Object changesLength) {
+    return '$changesLength proposed change(s). Review each — tick VERIFY items only if you have confirmed them.';
+  }
+
+  @override
+  String adminUpdateVerifyTierChangeSNot(Object verifyCount) {
+    return '$verifyCount verify-tier change(s) not yet approved';
+  }
+
+  @override
+  String get adminUpdateReady => 'Ready';
+
+  @override
+  String get adminUpdateBuildRestoredJson => 'Build restored JSON';
+
+  @override
+  String get adminUpdateBuildUpdatedJson => 'Build updated JSON';
+
+  @override
+  String adminUpdateContextInOut(
+    Object displayName,
+    Object note,
+    Object inputTokenLimit,
+    Object outputTokenLimit,
+  ) {
+    return '$displayName\n$note\ncontext $inputTokenLimit in / $outputTokenLimit out';
+  }
+
+  @override
+  String adminUpdateBestGeminiModelNow(Object currentModel) {
+    return 'Best Gemini model (now: $currentModel)';
+  }
+
+  @override
+  String adminUpdateCheckTheNewestModelsLive(Object label) {
+    return 'Check the newest $label models (live API)';
+  }
+
+  @override
+  String adminUpdateApiKey(Object label) {
+    return '$label API key';
+  }
+
+  @override
+  String adminUpdateSource(Object source) {
+    return 'Source: $source';
+  }
+
+  @override
+  String adminUpdateRestoredTheSelectedFieldS(Object assetPath) {
+    return 'RESTORED — the selected field(s) have been rolled back to the backup. Commit this over $assetPath to apply the roll-back.';
+  }
+
+  @override
+  String adminUpdateUpdatedReplaceThatFileWith(Object assetPath) {
+    return 'Updated $assetPath. Replace that file with this and commit — the release makes it live for everyone.';
+  }
+
+  @override
+  String get reminderSheetsTimeToRenew => 'Time to renew.';
+
+  @override
+  String reminderSheetsTimeToRenew2(Object firstName) {
+    return 'Time to renew, $firstName.';
+  }
+
+  @override
+  String reminderSheetsExpires(Object dayLabel) {
+    return '● Expires $dayLabel';
+  }
+
+  @override
+  String get revocationWillBeReferencedInYour =>
+      'Will be referenced in your revocation letter';
+
+  @override
+  String get revocationTapToInclude => 'Tap to include';
+
+  @override
+  String get revocationRevoking => 'Revoking…';
+
+  @override
+  String get revocationRevokeNow => 'Revoke now';
+
+  @override
+  String pastDirectiveDetailUnableToLoad(Object error) {
+    return 'Unable to load: $error';
+  }
+
+  @override
+  String pastDirectiveDetailTheDirectiveRemainsRegardless(Object status) {
+    return 'The directive remains $status regardless';
+  }
+
+  @override
+  String get pinDialogShowPasscode => 'Show passcode';
+
+  @override
+  String get pinDialogHidePasscode => 'Hide passcode';
+
+  @override
+  String get modeSelectionOnTheWebYourData =>
+      'On the web your data is kept in memory only and is never sent to a server, so encrypted on-device (Private mode) storage is not available here.';
+
+  @override
+  String get modeSelectionThisAppIsNotHipaa =>
+      'This app is not HIPAA-compliant. Nothing is sent to a server for storage.';
+
+  @override
+  String modeSelectionSelect(Object title, Object recommended) {
+    return 'Select $title$recommended';
+  }
+
+  @override
+  String sideEffectsCheckingCovers(Object currentMedsJoin) {
+    return 'Checking covers: $currentMedsJoin';
+  }
+
+  @override
+  String sideEffectsReCheckFor(Object currentMedsJoin) {
+    return 'Re-check for: $currentMedsJoin';
+  }
+
+  @override
+  String get sideEffectsCheckSideEffects => 'Check side effects';
+
+  @override
+  String get sideEffectsReCheck => 'Re-check';
+
+  @override
+  String sideEffectsMayAffect(Object adlImpact) {
+    return 'May affect: $adlImpact';
+  }
+
+  @override
+  String educationCategoryBrowserSections(
+    Object title,
+    Object count,
+    Object sub,
+  ) {
+    return '$title, $count sections. $sub';
+  }
+
+  @override
+  String get learnAiPanelAskAQuestionToGet =>
+      'Ask a question to get started — e.g. \"What\'s the difference between a declaration and a power of attorney?\"';
+
+  @override
+  String get learnAiPanelSetUpTheFreeAi =>
+      'Set up the free AI assistant to ask questions while you read.';
+
+  @override
+  String learnAiPanelPiiStripped(Object nameToUpperCase) {
+    return '● $nameToUpperCase · PII STRIPPED';
+  }
+
+  @override
+  String educationArticleDetailQuestionsContactPaProtectionAdvocacy(
+    Object paProtectionAdvocacy,
+  ) {
+    return 'Questions? Contact PA Protection & Advocacy: $paProtectionAdvocacy';
+  }
+
+  @override
+  String audioGuideExample(Object example) {
+    return 'Example: $example';
+  }
+
+  @override
+  String exportCardsExecuted(Object executionDate) {
+    return 'Executed: $executionDate';
+  }
+
+  @override
+  String exportCardsExpires(Object expirationDate) {
+    return 'Expires: $expirationDate';
+  }
+
+  @override
+  String get pdfPreviewFit => 'FIT';
+
+  @override
+  String pdfPreviewPageOf(Object current, Object pageCount) {
+    return 'Page $current of $pageCount';
+  }
+
+  @override
+  String pdfPreviewGoToPage(Object i) {
+    return 'Go to page $i';
+  }
+
+  @override
+  String pdfPreviewPage(Object i) {
+    return 'Page $i';
+  }
+
+  @override
+  String get exportGeneratingPdfPreview => 'Generating PDF preview';
+
+  @override
+  String get exportPreviewPdfBeforeSharing => 'Preview PDF before sharing';
+
+  @override
+  String exportTheFollowingFieldsAreEmpty(Object n) {
+    return 'The following fields are empty or missing:\n\n$n\n\nAn incomplete directive may not be legally valid under PA Act 194. Export anyway?';
+  }
+
+  @override
+  String privacyPolicyLastUpdated(
+    Object privacyPolicyUpdated,
+    Object privacyPolicyVersion,
+  ) {
+    return 'Last updated: $privacyPolicyUpdated ($privacyPolicyVersion)';
+  }
+
+  @override
+  String privacyPolicyYouCanReachTheDeveloper(Object privacyPolicyUrl) {
+    return 'You can reach the developer through any of the following (the FTC Health Breach Notification Rule requires at least two contact methods — we provide three):\n\n  - In-app: an in-app breach notice will be shown on next launch if a breach affects you.\n  - Online: $privacyPolicyUrl (also used for breach postings if direct contact information is insufficient).\n  - App store listing: the developer support address shown on the Google Play / App Store product page.';
+  }
+
+  @override
+  String get settingsScreenshotsAreBlocked => 'Screenshots are blocked';
+
+  @override
+  String get settingsScreenshotsAreAllowed => 'Screenshots are allowed';
+
+  @override
+  String assistantMessageWidgetsAt(
+    Object sender,
+    Object timeStr,
+    Object content,
+  ) {
+    return '$sender at $timeStr: $content';
+  }
+
+  @override
+  String assistantActiveTextPiiStrippedBefore(Object model) {
+    return '● ACTIVE · $model · TEXT PII STRIPPED BEFORE SEND';
+  }
+
+  @override
+  String get assistantNotSetUpAddA => '○ NOT SET UP · ADD A KEY TO USE THE AI';
+
+  @override
+  String assistantOlderMessagesWereTrimmedTo(Object trimmedCount) {
+    return '$trimmedCount older messages were trimmed to fit within the AI\'s context limit. Recent messages are preserved.';
+  }
+
+  @override
+  String assistantNotLegalOrMedicalAdvice(Object paProtectionAdvocacy) {
+    return 'Not legal or medical advice. For legal questions contact PA Protection & Advocacy: $paProtectionAdvocacy';
+  }
+
+  @override
+  String assistantFreeTierRequestsMinRequests(
+    Object model,
+    Object maxRpm,
+    Object maxRpd,
+    Object tpmK,
+    Object contextK,
+  ) {
+    return '$model free tier:\n$maxRpm requests/min\n$maxRpd requests/day\n${tpmK}K tokens/min\n${contextK}K max context';
+  }
+
+  @override
+  String get homeToolsGridSuggestsChecks => 'Suggests + checks';
+
+  @override
+  String get homeToolsGridShareCarry => 'Share + carry';
+
+  @override
+  String get homeToolsGridNoDirectiveYet => 'No directive yet';
+
+  @override
+  String homeDirectiveHeroContinueYourLastEdited(
+    Object formLabel,
+    Object pctLabel,
+    Object lastEdited,
+  ) {
+    return 'Continue your $formLabel — $pctLabel, last edited $lastEdited';
+  }
+
+  @override
+  String homeDirectiveHeroStepOf(Object currentStep, Object totalSteps) {
+    return 'Step $currentStep of $totalSteps';
+  }
+
+  @override
+  String homeDirectiveHeroLastEdited(Object formLabel, Object lastEdited) {
+    return '$formLabel · last edited $lastEdited';
+  }
+
+  @override
+  String facilitatorPickTheKindOfSupport(Object facilitatorCompletionStat) {
+    return '$facilitatorCompletionStat Pick the kind of support that fits today.';
+  }
+
+  @override
+  String get disclaimerYouWorkAnonymouslyInThis =>
+      'You work anonymously in this browser tab — no account, no cloud, no tracking. If you close the tab your work is kept on this device for about 10 minutes for recovery, then wiped — open and save your PDF to keep it.';
+
+  @override
+  String get disclaimerNoAccountNoCloudNo =>
+      'No account, no cloud, no tracking — nothing goes to our servers. Anything you save stays encrypted on this device, where only you can open it.';
+
+  @override
+  String draftRecoveryDialogItLooksLikeTheApp(Object ageDescription) {
+    return 'It looks like the app closed unexpectedly. An auto-saved draft was found from $ageDescription.\n\nThis draft contains your treatment preferences and medical data (no personal information was saved).\n\nWould you like to restore it?';
+  }
+
+  @override
+  String stepDotsStepOf(Object current, Object total) {
+    return 'Step $current of $total';
+  }
+
+  @override
+  String stepDotsGoToStepOf(Object i, Object total) {
+    return 'Go to step $i of $total';
+  }
+
+  @override
+  String healthChipLearnAbout(Object label) {
+    return 'Learn about $label';
+  }
+
+  @override
+  String healthChipRemove(Object label) {
+    return 'Remove $label';
+  }
+
+  @override
+  String crisisSheetTextHomeTo(Object crisisTextLine) {
+    return 'Text HOME to $crisisTextLine';
+  }
+
+  @override
+  String crisisSheetTreatmentReferrals(Object samhsa) {
+    return '$samhsa · treatment referrals';
+  }
+
+  @override
+  String crisisSheetKnowYourRights(Object paProtectionAdvocacy) {
+    return '$paProtectionAdvocacy · know your rights';
+  }
+
+  @override
+  String fdaLabelDialogFdaLabel(Object medName) {
+    return '$medName — FDA label';
+  }
+
+  @override
+  String nlmAttributionSourceUSNationalLibrary(Object medicalDisclaimer) {
+    return 'Source: U.S. National Library of Medicine. $medicalDisclaimer';
+  }
+
+  @override
+  String aiConsentDialogToAutofillYourDirectiveThe(Object label) {
+    return 'To autofill your directive, the whole document — including any personal details on it (names, dates of birth, addresses, phone numbers) — is sent to $label so it can read it and fill in your fields.';
+  }
+
+  @override
+  String aiConsentDialogForMoreAccurateTranscriptionEspecially(Object label) {
+    return 'For more accurate transcription (especially medication names and conditions), your voice recording — including any personal details you say — is sent to $label to turn into text.';
+  }
+
+  @override
+  String aiConsentDialogTextYouEnterWillBe(Object label, Object provider) {
+    return '• Text you enter will be sent to $label for AI processing. $provider\n';
+  }
+
+  @override
+  String aiConsentDialogByTappingIAuthorizeYou(Object label) {
+    return '\nBy tapping \"I Authorize,\" you consent to sending your text to $label for AI processing under these terms.\n\nThis notice appears once per session.';
+  }
+
+  @override
+  String get exportDraftModeFinal => 'Final copy';
+
+  @override
+  String get exportDraftModeDraft => 'Draft';
+
+  @override
+  String get exportDraftModeSignedExists => 'Draft · signed copy exists';
+
+  @override
+  String exportOpenedManyPdfs(int count) {
+    return 'Opened $count PDFs in new tabs — print or save each from your PDF viewer.';
+  }
+
+  @override
+  String get exportOpenedOnePdf =>
+      'Opened in a new tab — use Print or Download in your PDF viewer.';
+
+  @override
+  String get exportNoAgentDesignated =>
+      'No agent designated — agent sections will be blank';
+
+  @override
+  String get exportWalletYourName => 'Your name';
+
+  @override
+  String get exportWalletSignToActivate => 'sign to activate';
+
+  @override
+  String get exportEffectiveCondition => 'Effective condition';
+
+  @override
+  String get exportWitnessSignatures => 'Witness signatures';
+
+  @override
+  String get exportPrintedCopyType => 'Printed copy type';
+
+  @override
+  String get exportADraftPrintsALight =>
+      'A draft prints a light “DRAFT” watermark on every page — for sending a copy while you keep the signed paper original. Tick as many as you like — Download gives you one PDF of each.';
+
+  @override
+  String get exportDocumentLanguage => 'Document language';
+
+  @override
+  String get exportThePlainLanguageOfficialForm =>
+      'The plain-language official form is the one you sign and use — it is the legally valid directive. The legal-language version restates it in formal statutory wording for reference only and is not the document you sign.';
+
+  @override
+  String get exportThisOpensYourDirectiveIn =>
+      'This opens your directive in your PDF viewer (a new browser tab), where you can Print it or save/Download it — it will NOT download automatically.';
+
+  @override
+  String get exportWalletCard => 'Wallet card';
+
+  @override
+  String get exportACreditCardSizedSummary =>
+      'A credit-card-sized summary you can print and carry.';
+
+  @override
+  String get exportSaveAnEditableCopy => 'Save an editable copy';
+
+  @override
+  String get exportNotAFinishedDocumentThis =>
+      'Not a finished document — this is how you save your progress. The web app can’t store your work on this device, so download this file to keep it, then re-upload it later (here or on another device) to keep editing. Nothing is stored online.';
+
+  @override
+  String get exportEncryptingHindersOthersFromReading =>
+      'Encrypting hinders others from reading it; the app still opens it with no passphrase.';
+
+  @override
+  String get exportMachineReadableFormats => 'Machine-readable formats';
+
+  @override
+  String get exportYourPdfAboveIsThe =>
+      'Your PDF above is the document you sign — these are data exports for your records, a spreadsheet, or a health system. FHIR is the standard format hospitals use to exchange medical records; CSV is a spreadsheet file (opens in Excel or Google Sheets).';
+
+  @override
+  String aiSetupTestOk(String provider) {
+    return '$provider responded. This key and model work.';
+  }
+
+  @override
+  String get aiSetupPrivacyLeadGemini =>
+      'On the Gemini free tier, Google may use data you send to improve their AI products, and human reviewers may read your inputs.';
+
+  @override
+  String aiSetupPrivacyLeadOther(String provider) {
+    return 'Your $provider key sends data to $provider; their data-use and retention policy applies.';
+  }
+
+  @override
+  String get aiSetupPrivacyKeyEphemeral =>
+      'Your API key is kept in memory for this session, with a temporary copy for up to 10 minutes (for crash recovery); it is discarded when the session ends.';
+
+  @override
+  String get aiSetupPrivacyKeyStored =>
+      'Your API key is stored securely on this device only and is never shared with anyone other than your AI provider.';
+
+  @override
+  String aiSetupPrivacyNoticeBody(String lead, String keyLine) {
+    return '$lead\n\nThe AI features in this app send text you enter in form fields and chat messages to your AI provider\'s servers. Do not include personally identifying details (full legal name, Social Security number, date of birth, etc.) in AI chat or when using AI Suggest.\n\n$keyLine';
+  }
+
+  @override
+  String get aiSetupDuckDuckGoNote =>
+      'All browsing is private (Fire Button clears)';
+
+  @override
+  String aiSetupProviderFree(String provider) {
+    return '$provider (free)';
+  }
+
+  @override
+  String aiSetupShortcutWithMac(
+    String browser,
+    String shortcut,
+    String macShortcut,
+  ) {
+    return '$browser:  $shortcut  (Mac: $macShortcut)';
+  }
+
+  @override
+  String aiSetupShortcutMacOnly(String browser, String macShortcut) {
+    return '$browser:  $macShortcut  (Mac only)';
+  }
+
+  @override
+  String get feAiUnreachable =>
+      'Couldn\'t reach the AI service. Check your internet connection. If you are using the web app, this provider may also be blocked by your browser\'s security policy — Gemini and Claude both work in the browser.';
+
+  @override
+  String get feNoInternet =>
+      'No internet connection. Please check your network and try again.';
+
+  @override
+  String get feTimeout =>
+      'The request timed out. Please check your connection and try again.';
+
+  @override
+  String get feBlocked =>
+      'Couldn\'t reach the AI service — the request was blocked or the connection failed. Check your internet connection, and if you are on the web app try Gemini or Claude, which work in the browser.';
+
+  @override
+  String get feRateLimited =>
+      'Too many requests. Please wait a moment and try again.';
+
+  @override
+  String get feKeyRejected =>
+      'Your API key was rejected. Open AI setup and check the key is correct, still active, and belongs to the selected provider.';
+
+  @override
+  String get feModelUnavailable =>
+      'The selected AI model isn\'t available — it may have been retired. Pick a different model in AI setup.';
+
+  @override
+  String get feEmptyResponse =>
+      'The AI returned no results. Try again or enter the information manually.';
+
+  @override
+  String get feBadFormat =>
+      'The AI response was not in the expected format. Please try again.';
+
+  @override
+  String get feServiceError =>
+      'The AI service encountered an error. Please try again later.';
+
+  @override
+  String get fePermission =>
+      'Permission was not granted. Please check your device settings.';
+
+  @override
+  String get feGeneric => 'Something went wrong. Please try again.';
+
+  @override
+  String assistantSendError(String error) {
+    return 'Sorry, I encountered an error: $error';
+  }
+
+  @override
+  String assistantVerifyError(String error) {
+    return 'Sorry, I couldn\'t verify that on the web: $error';
+  }
+
+  @override
+  String get permissionsOverviewUnlockingEncryptedOnDeviceStorage =>
+      'Unlocking encrypted on-device storage (native app only; not used by the web app).';
+
+  @override
+  String get permissionsOverviewUsedOnlyToVerifyYour =>
+      'Used only to verify your identity on unlock';
+
+  @override
+  String get permissionsOverviewBiometricDataNeverLeavesThe =>
+      'Biometric data never leaves the OS keystore';
+
+  @override
+  String get permissionsOverviewNoBiometricDataIsSent =>
+      'No biometric data is sent to any server';
+
+  @override
+  String get permissionsOverviewFallsBackToAPasscode =>
+      'Falls back to a passcode you choose if biometrics fail';
+
+  @override
+  String get permissionsOverviewNotApplicableOnThisPlatform =>
+      'Not applicable on this platform';
+
+  @override
+  String get permissionsOverviewRemindingYouAboutWitnessSigning =>
+      'Reminding you about witness signing, renewals, and check-ins.';
+
+  @override
+  String get permissionsOverviewYouChooseWhichRemindersTo =>
+      'You choose which reminders to enable';
+
+  @override
+  String get permissionsOverviewNotificationsAreScheduledLocallyOn =>
+      'Notifications are scheduled locally on this device';
+
+  @override
+  String get permissionsOverviewNoContentPiiDirectiveText =>
+      'No content (PII, directive text) is in any notification body';
+
+  @override
+  String get permissionsOverviewDisablePerCategoryInDevice =>
+      'Disable per-category in device Settings → Notifications';
+
+  @override
+  String get permissionsOverviewSnappingAPhotoOfYour =>
+      'Snapping a photo of your ID, medication labels, or condition lists for AI-assisted field extraction. Coming in a later release.';
+
+  @override
+  String get permissionsOverviewPhotoIsSentToAi =>
+      'Photo is sent to AI only to read it';
+
+  @override
+  String get permissionsOverviewPhotoIsDiscardedRightAfter =>
+      'Photo is discarded right after extraction';
+
+  @override
+  String get permissionsOverviewNothingIsSavedToYour =>
+      'Nothing is saved to your device\'s photo library by default';
+
+  @override
+  String get permissionsOverviewYouReviewEveryFieldBefore =>
+      'You review every field before it\'s used';
+
+  @override
+  String get permissionsOverviewNotYetWiredFeatureIn =>
+      'Not yet wired — feature in a future release';
+
+  @override
+  String get permissionsOverviewSpeakingLongFormAnswersE =>
+      'Speaking long-form answers (e.g. \"anything else\") instead of typing. Coming in a later release.';
+
+  @override
+  String get permissionsOverviewAudioIsProcessedOnDevice =>
+      'Audio is processed on-device when possible';
+
+  @override
+  String get permissionsOverviewIfSentToAiFor =>
+      'If sent to AI for transcription, it isn\'t stored';
+
+  @override
+  String get permissionsOverviewTranscriptStaysInYourSession =>
+      'Transcript stays in your session — never uploaded';
+
+  @override
+  String get permissionsOverviewToggleOffAtAnyTime =>
+      'Toggle off at any time in Settings';
+
+  @override
+  String get permissionsOverviewPickingAnAgentOrWitness =>
+      'Picking an agent or witness from your address book instead of typing their details. Coming in a later release.';
+
+  @override
+  String get permissionsOverviewWeNeverUploadYourContacts =>
+      'We never upload your contacts';
+
+  @override
+  String get permissionsOverviewSearchRunsLocallyOnThis =>
+      'Search runs locally on this device';
+
+  @override
+  String get permissionsOverviewOnlyTheContactYouPick =>
+      'Only the contact you pick is brought into the directive';
+
+  @override
+  String get permissionsOverviewYouCanRevokeAccessIn =>
+      'You can revoke access in Settings any time';
+
+  @override
+  String get permissionsOverviewAvailableOsManaged => 'Available · OS-managed';
+
+  @override
+  String get eduBrowseIntroduction => 'Introduction';
+
+  @override
+  String get eduBrowseWhatAnMhadIsAnd =>
+      'What an MHAD is and who should sign one';
+
+  @override
+  String get eduBrowseCombinedForm => 'Combined Form';
+
+  @override
+  String get eduBrowseBothAnAgentAndTreatment =>
+      'Both an agent and treatment preferences';
+
+  @override
+  String get eduBrowseTreatmentPreferencesWithoutAnAgent =>
+      'Treatment preferences without an agent';
+
+  @override
+  String get eduBrowsePowerOfAttorney => 'Power of Attorney';
+
+  @override
+  String get eduBrowseAgentDesignationWithoutPreferences =>
+      'Agent designation without preferences';
+
+  @override
+  String get eduBrowseFrequentlyAsked => 'Frequently Asked';
+
+  @override
+  String get eduBrowseCommonQuestionsAboutMhads =>
+      'Common questions about MHADs';
+
+  @override
+  String get eduBrowseGlossary => 'Glossary';
+
+  @override
+  String get eduBrowseEveryLegalTermDefined => 'Every legal term, defined';
+
+  @override
+  String get eduBrowseBeyondTheBooklet => 'Beyond the Booklet';
+
+  @override
+  String get eduBrowseTopicsNotCoveredInThe =>
+      'Topics not covered in the official PA booklet';
+
+  @override
+  String get eduBrowseYourChecklist => 'Your Checklist';
+
+  @override
+  String get eduBrowseStepByStepDistributionRevocation =>
+      'Step-by-step distribution + revocation guides';
+
+  @override
+  String get webLandingPreferPaperOpenAnyOf =>
+      'Prefer paper? Open any of the three empty official forms to print and fill in by hand — no account or wizard needed.';
+
+  @override
+  String get webLandingNoAccountRequired => 'No account required';
+
+  @override
+  String get webLandingNoEmailNoPasswordNo =>
+      'No email, no password, no sign-up.';
+
+  @override
+  String get webLandingNothingLeavesYourBrowser =>
+      'Nothing leaves your browser';
+
+  @override
+  String get webLandingYourAnswersLiveInThis =>
+      'Your answers live in this tab. We never see them.';
+
+  @override
+  String get webLandingNoCookiesNoTracking => 'No cookies, no tracking';
+
+  @override
+  String get webLandingNoAnalyticsNoThirdParty =>
+      'No analytics, no third-party scripts.';
+
+  @override
+  String get webLandingYouKeepTheFile => 'You keep the file';
+
+  @override
+  String get webLandingSaveThePdfFromYour =>
+      'Save the PDF from your viewer — that’s the only copy.';
+
+  @override
+  String get pinDialogPasscodeTooShort =>
+      'Passcode must be at least 4 characters.';
+
+  @override
+  String get pinDialogPasscodesDontMatch => 'Passcodes do not match.';
+
+  @override
+  String get pinDialogUnlockPrivateMode => 'Unlock private mode';
+
+  @override
+  String get pinDialogEnterPasscode => 'Please enter your passcode.';
+
+  @override
+  String get pinDialogTooManyAttempts =>
+      'Too many attempts. Please wait 30 seconds.';
+
+  @override
+  String get pinDialogIncorrectPasscode =>
+      'Incorrect passcode. Please try again.';
+
+  @override
+  String get deviceSecurityWarningTitle => 'Device Security Warning';
+
+  @override
+  String get deviceSecurityWarningBody =>
+      'Your device appears to be rooted/jailbroken. This may put your sensitive health data at risk. Consider using a non-modified device for storing advance directives.';
+
+  @override
+  String get deviceSecurityIUnderstand => 'I Understand';
+
+  @override
+  String get blankFormPrintTitle => 'Print a blank form';
+
+  @override
+  String blankFormPrintError(String error) {
+    return 'Could not open the blank form to print: $error';
+  }
+
+  @override
+  String launchCopiedToClipboard(String value) {
+    return '$value copied to clipboard';
+  }
+
+  @override
+  String get reminderRenewMetricSections => 'sections';
+
+  @override
+  String get reminderRenewMetricWetInk => 'wet-ink';
+
+  @override
+  String get reminderRenewMetricSigning => 'signing';
+
+  @override
+  String get reminderRenewMetricMin => 'min';
+
+  @override
+  String get educationBefore => 'before';
+
+  @override
+  String get assistantGeneralQuestion => 'General question';
+
+  @override
+  String get assistantContextPanelStrippedBeforeSend => 'Stripped before send';
+
+  @override
+  String get assistantSuggestWalkMeThroughFillingOut =>
+      'Walk me through filling out my directive step by step';
+
+  @override
+  String get assistantSuggestWhatIsAMentalHealth =>
+      'What is a Mental Health Advance Directive?';
+
+  @override
+  String get assistantSuggestWhatSTheDifferenceBetween =>
+      'What\'s the difference between Combined, Declaration, and POA?';
+
+  @override
+  String get assistantSuggestWhoCanBeMyAgent => 'Who can be my agent?';
+
+  @override
+  String get assistantSuggestWhatMedicationsShouldIList =>
+      'What medications should I list?';
+
+  @override
+  String get assistantSuggestWhatDoesEctMean => 'What does ECT mean?';
+
+  @override
+  String get assistantSuggestHowLongIsTheDirective =>
+      'How long is the directive valid?';
+
+  @override
+  String get assistantSuggestCanIChangeMyDirective =>
+      'Can I change my directive later?';
+
+  @override
+  String get ulyssesOnlyAppliesOnceIHave =>
+      'Only applies once I have been formally found to lack capacity';
+
+  @override
+  String get ulyssesOnlyForTreatmentsIExplicitly =>
+      'Only for treatments I explicitly named (medications, ECT, facility)';
+
+  @override
+  String get ulyssesDoesNotAuthorizePhysicalRestraint =>
+      'Does not authorize physical restraint';
+
+  @override
+  String get ulyssesACourtAppointedGuardianNot =>
+      'A court-appointed guardian (not the agent) may revoke, suspend, or terminate';
+
+  @override
+  String get ulyssesMyDirectiveStillTerminatesAt =>
+      'My directive still terminates at 2 years — unless I am incapable when it would expire, in which case it remains in effect (§§ 5824(e), 5834(c))';
+
+  @override
+  String homeHeroPercentComplete(int percent) {
+    return '$percent% complete';
+  }
+
+  @override
+  String get homeHeroReadyToReviewSign => 'Ready to review & sign';
+
+  @override
+  String homeHeroMoreSteps(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '~ $count more steps',
+      one: '~ 1 more step',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get homeHeroCombinedForm => 'Combined form';
+
+  @override
+  String get homeHeroDeclarationOnly => 'Declaration only';
+
+  @override
+  String homeHeroNamedMhad(String name) {
+    return '$name’s MHAD';
+  }
+
+  @override
+  String get homeHeroYourMhad => 'Your MHAD';
+
+  @override
+  String get educationNoResultsFound => 'No results found.';
+
+  @override
+  String educationNoResultsFor(String query) {
+    return 'No results for \"$query\"';
+  }
+
+  @override
+  String get relativeJustNow => 'just now';
+
+  @override
+  String relativeMinsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count mins ago',
+      one: '1 min ago',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String relativeHoursAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count hours ago',
+      one: '1 hour ago',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String relativeDaysAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count days ago',
+      one: '1 day ago',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get revocationNotifyPrimaryCareDoctor => 'Primary care doctor';
+
+  @override
+  String get revocationNotifyPsychiatristTherapist =>
+      'Psychiatrist / therapist';
+
+  @override
+  String get revocationNotifyNearestHospitalEr => 'Nearest hospital ER';
+
+  @override
+  String get revocationNotifyPharmacy => 'Pharmacy';
+
+  @override
+  String get revocationNotifyLocalRightsAdvocate => 'Local rights advocate';
+
+  @override
+  String get legalSheetBoldNot => 'not';
+
+  @override
+  String get legalSheetBoldOnly => 'only';
+
+  @override
+  String get legalSheetBoldTwoAdultWitnesses => 'two adult witnesses';
+
+  @override
+  String get legalSheetBoldWitnessesCannotBe => 'Witnesses cannot be: ';
+
+  @override
+  String get legalSheetBoldPrinted => 'printed';
+
+  @override
+  String get legalSheetBoldMustComply => 'must comply';
+
+  @override
+  String get legalSheetBoldTwoYears => 'two years';
+
+  @override
+  String get legalSheetBoldUnlessYouAreFoundIncapable =>
+      'unless you are found incapable';
+
+  @override
+  String get legalSheetBoldNotSavedPermanently => 'not saved permanently';
+
+  @override
+  String get legalSheetBoldAutomaticallyKeepsIdentifyingDetailsOut =>
+      'automatically keeps identifying details out of what it sends to the AI assistant and its suggestions';
+
+  @override
+  String get legalSheetBoldUploadingIsNeverRequired =>
+      'Uploading is never required';
+
+  @override
+  String get legalSheetBoldTheseLookupsSendOnlyThe =>
+      'These lookups send only the medical term, code, or provider name being searched';
+
+  @override
+  String get legalSheetYourRightsUnderAct194 => 'Your rights under Act 194';
+
+  @override
+  String get legalSheet247FreeConfidential => '24/7, free, confidential';
+
+  @override
+  String get legalSheetCallOrText988 => 'Call or text 988';
+
+  @override
+  String get crisisPlanTheFirstThingsINotice =>
+      'The first things I notice when my mood shifts.';
+
+  @override
+  String get crisisPlanExternalThingsThatHaveSet =>
+      'External things that have set off episodes before.';
+
+  @override
+  String get crisisPlanSpecificConcreteNotSelfCare =>
+      'Specific, concrete. Not \'self-care\' — what actually works.';
+
+  @override
+  String get crisisPlanWordsThatGroundMeUseful =>
+      'Words that ground me. Useful for staff, EMS, family.';
+
+  @override
+  String get crisisPlanApproachesThatEscalateMeBe =>
+      'Approaches that escalate me. Be specific.';
+
+  @override
+  String get reminderSheetsAgentsPrimaryAndAlternate =>
+      'Agents — primary and alternate';
+
+  @override
+  String get reminderSheetsCurrentMedsOnesYouDon =>
+      'Current meds, ones you don\'t want, allergies';
+
+  @override
+  String get reminderSheetsPreferredFacilityRoomEnvironment =>
+      'Preferred facility, room environment';
+
+  @override
+  String get accessibilitySettingsAtkinsonHyperlegibleClearerEasierLetter =>
+      'Atkinson Hyperlegible — clearer, easier letter shapes';
+
+  @override
+  String get accessibilitySettingsHeavierTextWeightEverywhere =>
+      'Heavier text weight everywhere';
+
+  @override
+  String get accessibilitySettingsRemovesScreenTransitionsAndAnimations =>
+      'Removes screen transitions and animations';
+
+  @override
+  String get accessibilitySettingsMaximizesSeparationBetweenTextAnd =>
+      'Maximizes separation between text and background';
+
+  @override
+  String get accessibilitySettingsUseYourBrowserOrDevice =>
+      'Use your browser or device read-aloud — see the guide below';
+
+  @override
+  String get accessibilitySettingsChromeEdgeDesktop =>
+      'Chrome / Edge (desktop)';
+
+  @override
+  String get directiveFormChoiceTreatmentPreferencesWithoutNamingAn =>
+      'Treatment preferences without naming an agent.';
+
+  @override
+  String get directiveFormChoiceNameADecisionMakerWithout =>
+      'Name a decision-maker without listing preferences.';
+
+  @override
+  String get homeToolsGridFaqGlossary => 'FAQ, glossary';
+
+  @override
+  String get homeToolsGrid988More => '988 + more';
+
+  @override
+  String get facilitator45Min => '~45 min';
+
+  @override
+  String get facilitatorFree => 'Free';
+
+  @override
+  String get facilitatorPaBased => 'PA-based';
+
+  @override
+  String get facilitatorInPerson => 'In person';
+
+  @override
+  String get facilitatorYouStayInControl => 'You stay in control';
+
+  @override
+  String get facilitatorEmailComposer => 'Email composer';
+
+  @override
+  String get facilitatorManualTranscribeBack => 'Manual transcribe back';
+
+  @override
+  String get modeSelectionBiometrics => 'Biometrics';
+
+  @override
+  String get modeSelectionAes256 => 'AES-256';
+
+  @override
+  String get modeSelectionSaveDrafts => 'Save drafts';
+
+  @override
+  String get modeSelectionAcrossSessions => 'Across sessions';
+
+  @override
+  String get modeSelectionNothingSaved => 'Nothing saved';
+
+  @override
+  String get modeSelectionInMemoryOnly => 'In-memory only';
+
+  @override
+  String get modeSelectionSingleSession => 'Single session';
+
+  @override
+  String get pdfPreviewLoading => 'Loading…';
+
+  @override
+  String get pdfPreviewSelectASectionToPreview =>
+      'Select a section to preview.';
+
+  @override
+  String get pdfPreviewCouldNotRenderThePreview =>
+      'Could not render the preview.';
+
+  @override
+  String reminderSheetsStepN(int n) {
+    return 'Step $n';
+  }
+
+  @override
+  String get sideEffectsNoneFound =>
+      'We couldn\'t find common side effects to list right now. You can add anything you\'re experiencing in the Anything-else step, and always raise side-effect concerns with your doctor.';
+
+  @override
+  String get sideEffectsGenerateError =>
+      'Something went wrong generating the list. Please try again, or note side effects yourself.';
+
+  @override
+  String get inputPhoneInvalid => 'Enter a valid 10-digit phone number';
+
+  @override
+  String get inputZipInvalid => 'Enter a 5-digit or 5+4-digit ZIP';
+
+  @override
+  String get audioGuideTipQualityDoesnTMatterAny =>
+      'Quality doesn\'t matter. Any phone voice memo works — the AI downsamples audio anyway, so a small low-quality file transcribes just as well as a large one.';
+
+  @override
+  String get audioGuideTipKeepEachClipShortUnder =>
+      'Keep each clip short — under about 2 minutes. Record one clip per section below and upload them together; the app merges them. Long clips can time out.';
+
+  @override
+  String get audioGuideTipSayMedicationAndDoctorNames =>
+      'Say medication and doctor names slowly and spell them. The AI won\'t guess a drug or condition it didn\'t clearly hear.';
+
+  @override
+  String get stepSubtitleAboutYou =>
+      'Just the basics so this document is uniquely yours. Drop a photo of your ID and we\'ll read these for you.';
+
+  @override
+  String get stepSubtitleWhenItKicksIn =>
+      'The conditions under which your directive becomes active. You can pick more than one.';
+
+  @override
+  String get stepSubtitlePeopleITrust =>
+      'They speak for you if you can\'t. You can name a primary, an alternate, and set limits on what they decide.';
+
+  @override
+  String get stepSubtitleGuardianNomination =>
+      'Rare, but worth planning for. A guardian is named by a court — not by you — and has broader authority than an agent.';
+
+  @override
+  String get stepSubtitleWhereIWantCare =>
+      'Facilities you prefer — and any you specifically want to avoid — plus room and environment preferences.';
+
+  @override
+  String get stepSubtitleDiagnoses =>
+      'Help your care team see the whole picture in a crisis. Search by name — we attach the ICD-10 code your doctors use.';
+
+  @override
+  String get stepSubtitleMedications =>
+      'What you take now (for your care team) plus the medications you refuse, limit, or prefer. Your refusals and limits are binding under Act 194.';
+
+  @override
+  String get stepSubtitleAllergies =>
+      'Drug allergies, sensitivities, past adverse reactions. This is the most-checked section by ER staff.';
+
+  @override
+  String get stepSubtitleProceduresResearch =>
+      'Three treatments under PA law need your explicit consent. Set each one — your agent fills any gaps.';
+
+  @override
+  String get stepSubtitleAnythingElse =>
+      'Free-form preferences not covered above. This is your voice — write it how you\'d say it.';
+
+  @override
+  String get stepSubtitleReviewAndSign =>
+      'One last look, then we\'ll make your signing packet. Tap any section to edit.';
+
+  @override
+  String get formTypeNameCombined => 'Combined Declaration & Power of Attorney';
+
+  @override
+  String get formTypeNameDeclaration => 'Declaration Only';
+
+  @override
+  String get formTypeNamePoa => 'Power of Attorney Only';
+
+  @override
+  String get formTypeShortCombined => 'Combined';
+
+  @override
+  String get formTypeShortDeclaration => 'Declaration';
+
+  @override
+  String get formTypeShortPoa => 'Power of Attorney';
+
+  @override
+  String get stepTitleAboutYou => 'About you';
+
+  @override
+  String get stepTitleWhenItKicksIn => 'When this kicks in';
+
+  @override
+  String get stepTitlePeopleITrust => 'People I trust';
+
+  @override
+  String get stepTitleGuardianNomination => 'If a court appoints a guardian';
+
+  @override
+  String get stepTitleWhereIWantCare => 'Where I want care';
+
+  @override
+  String get stepTitleDiagnoses => 'Diagnoses';
+
+  @override
+  String get stepTitleMedications => 'Medications';
+
+  @override
+  String get stepTitleAllergies => 'Allergies & reactions';
+
+  @override
+  String get stepTitleProceduresResearch => 'Procedures & research';
+
+  @override
+  String get stepTitleAnythingElse => 'Anything else';
+
+  @override
+  String get stepTitleReviewAndSign => 'Review';
+
+  @override
+  String get directiveStatusRevoked => 'Revoked';
+
+  @override
+  String get directiveStatusExpired => 'Expired';
+
+  @override
+  String get directiveStatusActive => 'Active';
+
+  @override
+  String get directiveStatusDraft => 'Draft';
+
+  @override
+  String pastDirectiveSignedOn(String date) {
+    return 'signed $date';
+  }
+
+  @override
+  String pastDirectiveExpiredOn(String date) {
+    return 'expired $date';
+  }
+
+  @override
+  String pastDirectiveExpiresOn(String date) {
+    return 'expires $date';
+  }
+
+  @override
+  String get settingsDefaultUserName => 'PA MHAD user';
+
+  @override
+  String rateDailyLimitUsed(int max) {
+    return 'You\'ve used all $max free requests for today. The limit resets at midnight. Consider upgrading to a paid API key for higher limits.';
+  }
+
+  @override
+  String rateTooManyThisMinute(int max, int seconds) {
+    return 'Too many requests this minute (limit: $max/min). Please wait $seconds seconds.';
+  }
+
+  @override
+  String rateTokenLimitThisMinute(int thousands) {
+    return 'Token limit reached this minute (${thousands}K/min). Please wait a moment before sending another request.';
+  }
+
+  @override
+  String get rateDailyLimitReached => 'Daily limit reached';
+
+  @override
+  String rateWaitStatus(int seconds, int remaining) {
+    return 'Wait ${seconds}s • $remaining requests left today';
+  }
+
+  @override
+  String rateRemainingStatus(int remainingToday, int remainingMinute) {
+    return '$remainingToday requests left today • $remainingMinute this minute';
+  }
+
+  @override
+  String llmHeicUnsupported(String provider) {
+    return '$provider can\'t read HEIC/HEIF photos (the iPhone default). Switch to Gemini, or re-save the photo as JPEG or PNG first.';
+  }
+
+  @override
+  String llmPdfUnsupported(String provider) {
+    return '$provider can\'t read PDFs here — switch to Gemini or Claude, or paste the document text instead.';
+  }
+
+  @override
+  String llmFileTypeUnsupported(String provider, String mimeType) {
+    return '$provider can\'t read $mimeType files here — switch to Gemini, or paste the text instead.';
+  }
+
+  @override
+  String llmRateLimited(String provider) {
+    return 'Too many requests to $provider. Please wait a minute and try again.';
+  }
+
+  @override
+  String llmGeminiKeyRejected(String provider) {
+    return '$provider rejected your API key. Open AI setup and check the key is correct, still active, and has the Generative Language API enabled.';
+  }
+
+  @override
+  String llmGeminiModelNotFound(String provider, String model) {
+    return '$provider doesn\'t recognise the model \"$model\" — it may have been retired. Pick a different model in AI setup.';
+  }
+
+  @override
+  String llmNetworkError(String provider, String detail) {
+    return 'Couldn\'t reach $provider ($detail). Check your internet connection. If you are on the web app, this provider may also be blocked by your browser\'s CORS policy — Gemini and Claude both work in the browser.';
+  }
+
+  @override
+  String llmKeyRejected(String provider) {
+    return '$provider rejected your API key. Open AI setup and check the key is correct, still active, and belongs to $provider.';
+  }
+
+  @override
+  String llmModelNotFound(String provider, String model) {
+    return '$provider doesn\'t recognise the model \"$model\". Pick a different model in AI setup.';
+  }
+
+  @override
+  String get importFileUnreadable =>
+      'Could not read the file — it is corrupted or not an MHAD directive file.';
+
+  @override
+  String get importFileUnrecognized =>
+      'This file is not a recognized directive file.';
+
+  @override
+  String get importFileCorrupted => 'The file is corrupted.';
+
+  @override
+  String get importNotDirectiveFile => 'This is not a directive file.';
+
+  @override
+  String get importNotMhadFile => 'This is not an MHAD directive file.';
+
+  @override
+  String get importNewerVersion =>
+      'This file was made by a newer version of the app. Please update to open it.';
+
+  @override
+  String get importNoDirectiveData => 'The file contains no directive data.';
 }

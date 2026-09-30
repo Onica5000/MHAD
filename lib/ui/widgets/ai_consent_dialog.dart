@@ -42,10 +42,7 @@ Future<bool> showAutofillConsentDialog(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'To autofill your directive, the whole document — including '
-                  'any personal details on it (names, dates of birth, '
-                  'addresses, phone numbers) — is sent to ${provider.label} so '
-                  'it can read it and fill in your fields.',
+                  context.l10n.aiConsentDialogToAutofillYourDirectiveThe(provider.label),
                 ),
                 const SizedBox(height: 10),
                 Container(
@@ -121,10 +118,7 @@ Future<bool> showAudioConsentDialog(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'For more accurate transcription (especially medication names '
-                  'and conditions), your voice recording — including any '
-                  'personal details you say — is sent to ${provider.label} to '
-                  'turn into text.',
+                  context.l10n.aiConsentDialogForMoreAccurateTranscriptionEspecially(provider.label),
                 ),
                 const SizedBox(height: 10),
                 Container(
@@ -198,8 +192,7 @@ Future<bool> showAiConsentDialog(
               context.l10n.aiConsentDialogThisAiAssistantIsNot,
             ),
             Text(
-              '• Text you enter will be sent to ${provider.label} for AI '
-              'processing. ${_providerDataCaveat(provider)}\n',
+              context.l10n.aiConsentDialogTextYouEnterWillBe(provider.label, _providerDataCaveat(provider)),
             ),
             Container(
               padding: const EdgeInsets.all(10),
@@ -226,9 +219,7 @@ Future<bool> showAiConsentDialog(
             ),
             const SizedBox(height: 8),
             Text(
-              '\nBy tapping "I Authorize," you consent to sending your text to '
-              '${provider.label} for AI processing under these terms.\n\n'
-              'This notice appears once per session.',
+              context.l10n.aiConsentDialogByTappingIAuthorizeYou(provider.label),
             ),
           ],
         ),

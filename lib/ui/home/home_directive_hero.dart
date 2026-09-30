@@ -27,26 +27,26 @@ class ActiveDirectiveHero extends StatelessWidget {
     final currentStep =
         (directive.lastStepIndex + 1).clamp(1, totalSteps);
     final pct = (currentStep / totalSteps).clamp(0.0, 1.0);
-    final pctLabel = '${(pct * 100).round()}% complete';
+    final pctLabel = context.l10n.homeHeroPercentComplete((pct * 100).round());
     final remaining = totalSteps - currentStep;
     final remainingLabel = remaining <= 0
-        ? 'Ready to review & sign'
-        : '~ $remaining more step${remaining == 1 ? '' : 's'}';
+        ? context.l10n.homeHeroReadyToReviewSign
+        : context.l10n.homeHeroMoreSteps(remaining);
     final updated = DateTime.fromMillisecondsSinceEpoch(directive.updatedAt);
-    final lastEdited = relativeTime(updated);
+    final lastEdited = relativeTime(updated, l10n: context.l10n);
     final formLabel = switch (formType) {
-      FormType.combined => 'Combined form',
-      FormType.declaration => 'Declaration only',
-      FormType.poa => 'Power of Attorney',
+      FormType.combined => context.l10n.homeHeroCombinedForm,
+      FormType.declaration => context.l10n.homeHeroDeclarationOnly,
+      FormType.poa => context.l10n.eduBrowsePowerOfAttorney,
     };
     final headline = directive.fullName.trim().isNotEmpty
-        ? '${directive.fullName.split(' ').first}’s MHAD'
-        : 'Your MHAD';
+        ? context.l10n.homeHeroNamedMhad(directive.fullName.split(' ').first)
+        : context.l10n.homeHeroYourMhad;
 
     return Semantics(
       button: true,
       label:
-          'Continue your $formLabel — $pctLabel, last edited $lastEdited',
+          context.l10n.homeDirectiveHeroContinueYourLastEdited(formLabel, pctLabel, lastEdited),
       child: Material(
         color: p.primary,
         borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
@@ -99,7 +99,7 @@ class ActiveDirectiveHero extends StatelessWidget {
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          'Step $currentStep of $totalSteps',
+                          context.l10n.homeDirectiveHeroStepOf(currentStep, totalSteps),
                           style: TextStyle(
                             fontFamily: kMonoFamily,
                             fontFamilyFallback: const [
@@ -125,7 +125,7 @@ class ActiveDirectiveHero extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      '$formLabel · last edited $lastEdited',
+                      context.l10n.homeDirectiveHeroLastEdited(formLabel, lastEdited),
                       style: TextStyle(
                         fontFamily: kSansFamily,
                         fontSize: 13,

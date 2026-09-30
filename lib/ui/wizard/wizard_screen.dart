@@ -8,6 +8,7 @@ import 'package:mhad/ai/ai_assistant.dart' show AssistantContext;
 import 'package:mhad/ai/ai_context_builder.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/l10n/l10n.dart';
+import 'package:mhad/l10n/model_labels.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/services/web_session_cache.dart';
 import 'package:mhad/ui/router.dart';
@@ -347,8 +348,8 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                     StepHead(
                       stepNumber: _stepIndex + 1,
                       totalSteps: steps.length,
-                      title: currentStep.displayName,
-                      subtitle: currentStep.subtitle,
+                      title: currentStep.title(context.l10n),
+                      subtitle: currentStep.localizedSubtitle(context.l10n),
                       onExit: () => _saveAndExit(context),
                     ),
                     Expanded(
@@ -796,7 +797,7 @@ class _WideStepRail extends StatelessWidget {
             for (var i = 0; i < steps.length; i++)
               _RailStepRow(
                 index: i + 1,
-                title: steps[i].displayName,
+                title: steps[i].title(context.l10n),
                 state: i < currentIndex
                     ? _RailStepState.done
                     : i == currentIndex

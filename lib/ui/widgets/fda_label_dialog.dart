@@ -54,7 +54,7 @@ Future<void> showFdaLabelDialog(
           );
 
       return AlertDialog(
-        title: Text('$medName — FDA label',
+        title: Text(context.l10n.fdaLabelDialogFdaLabel(medName),
             style: const TextStyle(fontFamily: kSans)),
         content: SizedBox(
           width: 460,

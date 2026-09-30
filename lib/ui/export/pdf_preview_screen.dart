@@ -324,11 +324,11 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
   /// readable; the ± zoom scales them all. Falls back to a status note while
   /// it renders.
   Widget _pageArea(MhadPalette p) {
-    if (!widget.ready) return _centeredNote('Loading…', p);
+    if (!widget.ready) return _centeredNote(context.l10n.pdfPreviewLoading, p);
     if (!widget.hasSelection) {
-      return _centeredNote('Select a section to preview.', p);
+      return _centeredNote(context.l10n.pdfPreviewSelectASectionToPreview, p);
     }
-    if (_error) return _centeredNote('Could not render the preview.', p);
+    if (_error) return _centeredNote(context.l10n.pdfPreviewCouldNotRenderThePreview, p);
     if (_pages.isEmpty) {
       return Center(
         child: Semantics(
@@ -472,7 +472,7 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
           Divider(height: 1, color: p.border),
           const SizedBox(height: 14),
           Text(
-            'Page ${_current + 1} of $pageCount',
+            context.l10n.pdfPreviewPageOf(_current + 1, pageCount),
             style: TextStyle(
               fontFamily: kSansFamily,
               fontSize: 13,
@@ -521,7 +521,7 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
                 return Semantics(
                   button: true,
                   selected: selected,
-                  label: 'Go to page ${i + 1}',
+                  label: context.l10n.pdfPreviewGoToPage(i + 1),
                   child: InkWell(
                   onTap: () => _jumpToPage(i),
                   borderRadius: BorderRadius.circular(DesignTokens.radiusXs),
@@ -548,7 +548,7 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
                       ),
                       const SizedBox(height: 5),
                       Text(
-                        'Page ${i + 1}',
+                        context.l10n.pdfPreviewPage(i + 1),
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontFamily: kSansFamily,

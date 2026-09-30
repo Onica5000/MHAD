@@ -138,8 +138,7 @@ class ArticleDetailScreen extends StatelessWidget {
           const Divider(),
           const SizedBox(height: 8),
           Text(
-            'Questions? Contact PA Protection & Advocacy: '
-            '${appData.phoneOf('paProtectionAdvocacy')}',
+            context.l10n.educationArticleDetailQuestionsContactPaProtectionAdvocacy(appData.phoneOf('paProtectionAdvocacy')),
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   fontStyle: FontStyle.italic,
                   color: Theme.of(context).colorScheme.onSurfaceVariant,

@@ -67,7 +67,7 @@ class AccessibilitySettingsScreen extends ConsumerWidget {
           _SectionHeader('Reading'),
           _ToggleRow(
             title: context.l10n.accessibilitySettingsDyslexiaFriendlyFont,
-            sub: 'Atkinson Hyperlegible — clearer, easier letter shapes',
+            sub: context.l10n.accessibilitySettingsAtkinsonHyperlegibleClearerEasierLetter,
             value: settings.dyslexiaFont,
             onChanged: (v) => ref
                 .read(accessibilitySettingsProvider.notifier)
@@ -75,7 +75,7 @@ class AccessibilitySettingsScreen extends ConsumerWidget {
           ),
           _ToggleRow(
             title: context.l10n.accessibilitySettingsBoldText,
-            sub: 'Heavier text weight everywhere',
+            sub: context.l10n.accessibilitySettingsHeavierTextWeightEverywhere,
             value: settings.boldText,
             onChanged: (v) => ref
                 .read(accessibilitySettingsProvider.notifier)
@@ -83,7 +83,7 @@ class AccessibilitySettingsScreen extends ConsumerWidget {
           ),
           _ToggleRow(
             title: context.l10n.accessibilitySettingsReduceMotion,
-            sub: 'Removes screen transitions and animations',
+            sub: context.l10n.accessibilitySettingsRemovesScreenTransitionsAndAnimations,
             value: settings.reduceMotion,
             onChanged: (v) => ref
                 .read(accessibilitySettingsProvider.notifier)
@@ -91,7 +91,7 @@ class AccessibilitySettingsScreen extends ConsumerWidget {
           ),
           _ToggleRow(
             title: context.l10n.accessibilitySettingsHighContrast,
-            sub: 'Maximizes separation between text and background',
+            sub: context.l10n.accessibilitySettingsMaximizesSeparationBetweenTextAnd,
             value: settings.highContrast,
             onChanged: (v) => ref
                 .read(accessibilitySettingsProvider.notifier)
@@ -118,7 +118,7 @@ class AccessibilitySettingsScreen extends ConsumerWidget {
           // Read it aloud with your browser or device — see the in-app guide.
           _ToggleRow(
             title: context.l10n.accessibilitySettingsReadAloud,
-            sub: 'Use your browser or device read-aloud — see the guide below',
+            sub: context.l10n.accessibilitySettingsUseYourBrowserOrDevice,
             handoff: true,
             value: false,
             onChanged: null,
@@ -164,7 +164,7 @@ class AccessibilitySettingsScreen extends ConsumerWidget {
               ),
               SizedBox(height: 12),
               _GuideItem(
-                head: 'Chrome / Edge (desktop)',
+                head: context.l10n.accessibilitySettingsChromeEdgeDesktop,
                 body: context.l10n.accessibilitySettingsRightClickThePageRead,
               ),
               _GuideItem(

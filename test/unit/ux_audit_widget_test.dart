@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mhad/ai/ai_assistant.dart';
+import 'package:mhad/l10n/app_localizations.dart';
 import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/design_card.dart';
@@ -16,6 +17,8 @@ import 'package:mhad/ui/widgets/design/step_dots.dart';
 void main() {
   Widget wrap(Widget child) => MaterialApp(
         theme: buildMhadTheme(ThemePalette.navy, Brightness.light),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(body: Center(child: child)),
       );
 

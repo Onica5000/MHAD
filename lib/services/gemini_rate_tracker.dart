@@ -1,7 +1,11 @@
 import 'dart:collection';
 
-import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/data/app_data/app_data.dart';
+
+/// English fallback when a caller passes no [AppLocalizations].
+final _en = lookupAppLocalizations(const Locale('en'));
 
 /// Tracks Gemini API usage against the free tier limits.
 ///
@@ -148,21 +152,19 @@ class GeminiRateTracker extends ChangeNotifier {
 
   /// Returns a user-facing reason if the request should be blocked,
   /// or null if it's safe to send.
-  String? get blockReason {
+  String? get blockReason => blockReasonFor();
+
+  /// [blockReason] in the caller's locale (English when [l10n] is null).
+  String? blockReasonFor([AppLocalizations? l10n]) {
+    final l = l10n ?? _en;
     // Another provider's quota is the provider's business, not ours to guess.
     if (!_enforced) return null;
-    if (dailyLimitReached) {
-      return 'You\'ve used all $maxRpd free requests for today. '
-          'The limit resets at midnight. Consider upgrading to a paid '
-          'API key for higher limits.';
-    }
+    if (dailyLimitReached) return l.rateDailyLimitUsed(maxRpd);
     if (remainingRpm <= 0) {
-      return 'Too many requests this minute (limit: $maxRpm/min). '
-          'Please wait $secondsUntilRpmSlot seconds.';
+      return l.rateTooManyThisMinute(maxRpm, secondsUntilRpmSlot);
     }
     if (remainingTpm <= 0) {
-      return 'Token limit reached this minute (${(maxTpm / 1000).round()}K/min). '
-          'Please wait a moment before sending another request.';
+      return l.rateTokenLimitThisMinute((maxTpm / 1000).round());
     }
     return null;
   }
@@ -170,19 +172,23 @@ class GeminiRateTracker extends ChangeNotifier {
   // ── UI display ───────────────────────────────────────────────────────
 
   /// Short status for the app bar or info chip.
-  String get statusText {
+  String get statusText => statusTextFor();
+
+  /// [statusText] in the caller's locale (English when [l10n] is null).
+  String statusTextFor([AppLocalizations? l10n]) {
+    final l = l10n ?? _en;
     _prune(DateTime.now());
     // Don't quote Gemini's free-tier allowance at someone using another
     // provider — we have no visibility into their plan's limits.
     if (!_enforced) return '';
     if (dailyLimitReached) {
-      return 'Daily limit reached';
+      return l.rateDailyLimitReached;
     }
     if (remainingRpm <= 0) {
-      return 'Wait ${secondsUntilRpmSlot}s \u2022 $remainingRpd requests left today';
+      return l.rateWaitStatus(secondsUntilRpmSlot, remainingRpd);
     }
     if (requestsToday == 0) return '';
-    return '$remainingRpd requests left today \u2022 $remainingRpm this minute';
+    return l.rateRemainingStatus(remainingRpd, remainingRpm);
   }
 
   /// Whether to show a warning indicator (approaching limits).

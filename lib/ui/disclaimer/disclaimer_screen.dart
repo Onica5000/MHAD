@@ -189,15 +189,8 @@ class _GateLayout extends StatelessWidget {
                           // Accurate on each platform: web is in-memory only;
                           // native Private Mode stores encrypted on-device.
                           body: kIsWeb
-                              ? 'You work anonymously in this browser tab — no '
-                                  'account, no cloud, no tracking. If you close '
-                                  'the tab your work is kept on this device for '
-                                  'about 10 minutes for recovery, then wiped — '
-                                  'open and save your PDF to keep it.'
-                              : 'No account, no cloud, no tracking — nothing '
-                                  'goes to our servers. Anything you save '
-                                  'stays encrypted on this device, where only '
-                                  'you can open it.',
+                              ? context.l10n.disclaimerYouWorkAnonymouslyInThis
+                              : context.l10n.disclaimerNoAccountNoCloudNo,
                         ),
                         const SizedBox(height: 10),
                         _DisclaimerCard(

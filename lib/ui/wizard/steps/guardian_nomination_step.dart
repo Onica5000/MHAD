@@ -304,7 +304,7 @@ class _GuardianNominationStepState
               keyboardType: TextInputType.phone,
               autovalidateMode: AutovalidateMode.onUserInteraction,
               inputFormatters: const [PhoneInputFormatter()],
-              validator: optionalPhoneValidator,
+              validator: (v) => optionalPhoneValidator(v, context.l10n),
             ),
           ],
           const SizedBox(height: 24),

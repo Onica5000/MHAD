@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 
 /// Thin progress dots row, one bar per step. Filled bars = completed/current.
@@ -41,7 +42,7 @@ class StepDots extends StatelessWidget {
 
     return Semantics(
       container: true,
-      label: 'Step $current of $total',
+      label: context.l10n.stepDotsStepOf(current, total),
       child: Padding(
         padding: padding,
         child: Row(
@@ -52,7 +53,7 @@ class StepDots extends StatelessWidget {
                     ? bar(i)
                     : Semantics(
                         button: true,
-                        label: 'Go to step ${i + 1} of $total',
+                        label: context.l10n.stepDotsGoToStepOf(i + 1, total),
                         child: InkWell(
                           onTap: () => onStepTap!(i),
                           borderRadius: BorderRadius.circular(DesignTokens.radiusXs),

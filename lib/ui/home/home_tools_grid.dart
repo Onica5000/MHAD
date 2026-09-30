@@ -35,7 +35,7 @@ class ToolsGrid extends ConsumerWidget {
       _ToolTile(
         icon: Icons.auto_awesome,
         label: context.l10n.navAiAssistant,
-        sub: aiReady ? 'Suggests + checks' : 'Set up AI',
+        sub: aiReady ? context.l10n.homeToolsGridSuggestsChecks : context.l10n.pipelineSetupAi,
         onTap: () => context.go(
           aiReady ? AppRoutes.assistant : AppRoutes.aiSetup,
         ),
@@ -43,15 +43,15 @@ class ToolsGrid extends ConsumerWidget {
       _ToolTile(
         icon: Icons.menu_book_outlined,
         label: context.l10n.navLearn,
-        sub: 'FAQ, glossary',
+        sub: context.l10n.homeToolsGridFaqGlossary,
         onTap: () => context.go(AppRoutes.education),
       ),
       _ToolTile(
         icon: Icons.health_and_safety_outlined,
         label: context.l10n.homeToolsGridMakeItFindable,
         sub: mostRecentDirective != null
-            ? 'Share + carry'
-            : 'No directive yet',
+            ? context.l10n.homeToolsGridShareCarry
+            : context.l10n.homeToolsGridNoDirectiveYet,
         onTap: mostRecentDirective != null
             ? () => context.push(
                 AppRoutes.findableRoute(mostRecentDirective.id))
@@ -60,7 +60,7 @@ class ToolsGrid extends ConsumerWidget {
       _ToolTile(
         icon: Icons.favorite_outline,
         label: context.l10n.homeToolsGridCrisisHelp,
-        sub: '988 + more',
+        sub: context.l10n.homeToolsGrid988More,
         onTap: () => showCrisisSheet(context),
       ),
     ];

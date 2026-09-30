@@ -70,8 +70,7 @@ class FacilitatorScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        '${appData.fact('facilitatorCompletionStat')} '
-                        'Pick the kind of support that fits today.',
+                        context.l10n.facilitatorPickTheKindOfSupport(appData.fact('facilitatorCompletionStat')),
                         style: TextStyle(
                           fontFamily: kSansFamily,
                           fontSize: 14,
@@ -96,7 +95,7 @@ class FacilitatorScreen extends StatelessWidget {
             title: context.l10n.facilitatorTalkToSomeoneTrained,
             body:
                 context.l10n.facilitatorPennsylvaniaPeerSpecialistsAndRights,
-            meta: const ['~45 min', 'Free', 'PA-based'],
+            meta: [context.l10n.facilitator45Min, context.l10n.facilitatorFree, context.l10n.facilitatorPaBased],
           ),
           const SizedBox(height: 8),
           // Referral partners come from app_data.json (assets/data) so the
@@ -121,7 +120,7 @@ class FacilitatorScreen extends StatelessWidget {
             title: context.l10n.facilitatorPrintReviewItTogether,
             body:
                 context.l10n.facilitatorPrintOrScreenShareYour,
-            meta: const ['In person', 'You stay in control'],
+            meta: [context.l10n.facilitatorInPerson, context.l10n.facilitatorYouStayInControl],
           ),
 
           const SizedBox(height: 18),
@@ -132,7 +131,7 @@ class FacilitatorScreen extends StatelessWidget {
             title: context.l10n.facilitatorEmailADraftToMy,
             body:
                 context.l10n.facilitatorGenerateThePdfInExport,
-            meta: const ['Email composer', 'Manual transcribe back'],
+            meta: [context.l10n.facilitatorEmailComposer, context.l10n.facilitatorManualTranscribeBack],
           ),
 
           const SizedBox(height: 18),

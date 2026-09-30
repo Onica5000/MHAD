@@ -579,7 +579,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
       // A cancelled run's failure must not clobber the pick step's state.
       if (mounted && runId == _processingRunId) {
         setState(() {
-          _error = FriendlyError.from(e);
+          _error = FriendlyError.from(e, context.l10n);
           _step = _PipelineStep.pick;
         });
       }

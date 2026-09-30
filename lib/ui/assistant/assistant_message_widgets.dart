@@ -23,7 +23,7 @@ class MessageBubble extends StatelessWidget {
     final isError = !isUser && message.content.startsWith('Sorry, I encountered an error');
 
     return Semantics(
-      label: '${isUser ? 'You' : 'AI Assistant'} at $timeStr: ${message.content}',
+      label: context.l10n.assistantMessageWidgetsAt(isUser ? context.l10n.assistantSenderYou : context.l10n.assistantSenderAi, timeStr, message.content),
       liveRegion: isError,
       child: Padding(
         padding: const EdgeInsets.only(bottom: 12),

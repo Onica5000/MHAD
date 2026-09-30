@@ -1,4 +1,9 @@
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
+import 'package:mhad/l10n/l10n.dart';
+
+/// English fallback when a caller passes no [AppLocalizations].
+final _en = lookupAppLocalizations(const Locale('en'));
 
 /// Shared text-input formatters used across every form that collects a phone
 /// number, ZIP code, or date, so the whole app standardizes on the same
@@ -74,20 +79,20 @@ class DateInputFormatter extends TextInputFormatter {
 
 /// Returns a phone validator error message, or null when valid/empty. Phone is
 /// always optional, so empty passes; a non-empty value must have 10 digits.
-String? optionalPhoneValidator(String? value) {
+String? optionalPhoneValidator(String? value, [AppLocalizations? l10n]) {
   if (value == null || value.trim().isEmpty) return null;
   final digits = value.replaceAll(RegExp(r'\D'), '');
-  if (digits.length != 10) return 'Enter a valid 10-digit phone number';
+  if (digits.length != 10) return (l10n ?? _en).inputPhoneInvalid;
   return null;
 }
 
 /// Returns a ZIP validator error message, or null when valid/empty. ZIP is
 /// always optional; a non-empty value must be 5 or 9 digits.
-String? optionalZipValidator(String? value) {
+String? optionalZipValidator(String? value, [AppLocalizations? l10n]) {
   if (value == null || value.trim().isEmpty) return null;
   final digits = value.replaceAll(RegExp(r'\D'), '');
   if (digits.length != 5 && digits.length != 9) {
-    return 'Enter a 5-digit or 5+4-digit ZIP';
+    return (l10n ?? _en).inputZipInvalid;
   }
   return null;
 }

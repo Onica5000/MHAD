@@ -84,8 +84,7 @@ class WebDashboardLanding extends ConsumerWidget {
             child: _ToolCard(
               icon: Icons.print_outlined,
               title: context.l10n.webLandingPrintABlankForm,
-              sub: 'Prefer paper? Open any of the three empty official forms '
-                  'to print and fill in by hand — no account or wizard needed.',
+              sub: context.l10n.webLandingPreferPaperOpenAnyOf,
               cta: context.l10n.webLandingPrintBlankForm,
               onTap: () => showBlankFormPicker(context),
             ),
@@ -290,15 +289,15 @@ class _PrivacyPromiseCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
-    const rows = <(IconData, String, String)>[
-      (Icons.lock_outline, 'No account required',
-          'No email, no password, no sign-up.'),
-      (Icons.shield_outlined, 'Nothing leaves your browser',
-          'Your answers live in this tab. We never see them.'),
-      (Icons.block, 'No cookies, no tracking',
-          'No analytics, no third-party scripts.'),
-      (Icons.download_outlined, 'You keep the file',
-          'Save the PDF from your viewer — that’s the only copy.'),
+    final rows = <(IconData, String, String)>[
+      (Icons.lock_outline, context.l10n.webLandingNoAccountRequired,
+          context.l10n.webLandingNoEmailNoPasswordNo),
+      (Icons.shield_outlined, context.l10n.webLandingNothingLeavesYourBrowser,
+          context.l10n.webLandingYourAnswersLiveInThis),
+      (Icons.block, context.l10n.webLandingNoCookiesNoTracking,
+          context.l10n.webLandingNoAnalyticsNoThirdParty),
+      (Icons.download_outlined, context.l10n.webLandingYouKeepTheFile,
+          context.l10n.webLandingSaveThePdfFromYour),
     ];
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 18, 20, 18),

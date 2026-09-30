@@ -79,7 +79,7 @@ class _AiConsistencyScreenState extends ConsumerState<AiConsistencyScreen> {
     } catch (e) {
       if (!mounted) return;
       setState(() {
-        _error = FriendlyError.from(e);
+        _error = FriendlyError.from(e, context.l10n);
         _loading = false;
       });
     }
@@ -185,8 +185,9 @@ class _AiConsistencyScreenState extends ConsumerState<AiConsistencyScreen> {
     }
 
     final tracker = ref.read(geminiRateTrackerProvider);
-    if (tracker.blockReason != null) {
-      setState(() => _aiError = tracker.blockReason);
+    final block = tracker.blockReasonFor(context.l10n);
+    if (block != null) {
+      setState(() => _aiError = block);
       return;
     }
 
@@ -207,7 +208,7 @@ class _AiConsistencyScreenState extends ConsumerState<AiConsistencyScreen> {
     } catch (e) {
       if (!mounted) return;
       setState(() {
-        _aiError = FriendlyError.from(e);
+        _aiError = FriendlyError.from(e, context.l10n);
         _aiLoading = false;
       });
     }

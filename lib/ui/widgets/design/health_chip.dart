@@ -1,4 +1,5 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 
 /// Tone for a [HealthChip] — drives the colour family.
@@ -207,7 +208,7 @@ class HealthChip extends StatelessWidget {
           if (onInfo != null)
             Semantics(
               button: true,
-              label: 'Learn about $label',
+              label: context.l10n.healthChipLearnAbout(label),
               child: InkWell(
                 onTap: onInfo,
                 borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
@@ -220,7 +221,7 @@ class HealthChip extends StatelessWidget {
           if (onRemove != null)
             Semantics(
               button: true,
-              label: 'Remove $label',
+              label: context.l10n.healthChipRemove(label),
               child: InkWell(
                 onTap: onRemove,
                 borderRadius: BorderRadius.circular(DesignTokens.radiusSm),

@@ -156,7 +156,7 @@ class _AddressFieldsState extends State<AddressFields> {
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
                 inputFormatters: const [ZipInputFormatter()],
-                validator: optionalZipValidator,
+                validator: (v) => optionalZipValidator(v, context.l10n),
               ),
             ),
           ],

@@ -73,16 +73,11 @@ class AudioGuideScreen extends StatelessWidget {
           SectionLabel(context.l10n.audioGuideHowToRecord),
           const SizedBox(height: 8),
           _tip(p, Icons.high_quality_outlined,
-              'Quality doesn\'t matter. Any phone voice memo works — the AI '
-              'downsamples audio anyway, so a small low-quality file '
-              'transcribes just as well as a large one.'),
+              context.l10n.audioGuideTipQualityDoesnTMatterAny),
           _tip(p, Icons.timer_outlined,
-              'Keep each clip short — under about 2 minutes. Record one clip '
-              'per section below and upload them together; the app merges them. '
-              'Long clips can time out.'),
+              context.l10n.audioGuideTipKeepEachClipShortUnder),
           _tip(p, Icons.spellcheck_outlined,
-              'Say medication and doctor names slowly and spell them. The AI '
-              'won\'t guess a drug or condition it didn\'t clearly hear.'),
+              context.l10n.audioGuideTipSayMedicationAndDoctorNames),
           const SizedBox(height: 10),
           InfoBanner(
             icon: Icons.privacy_tip_outlined,
@@ -118,7 +113,7 @@ class AudioGuideScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          for (final s in audioQSections) _section(p, s),
+          for (final s in audioQSections) _section(context, p, s),
 
           const SizedBox(height: 16),
           SectionLabel(context.l10n.audioGuideWhatTheRecordingCanT),
@@ -209,7 +204,7 @@ class AudioGuideScreen extends StatelessWidget {
         ),
       );
 
-  Widget _section(MhadPalette p, AudioQSection s) => DesignCard(
+  Widget _section(BuildContext context, MhadPalette p, AudioQSection s) => DesignCard(
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(14),
         radius: DesignTokens.inputRadius,
@@ -249,7 +244,7 @@ class AudioGuideScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
                 ),
                 child: Text(
-                  'Example: ${s.example}',
+                  context.l10n.audioGuideExample(s.example!),
                   style: TextStyle(
                     fontFamily: kSansFamily,
                     fontSize: 13,

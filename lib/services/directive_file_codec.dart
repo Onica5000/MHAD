@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:archive/archive.dart';
 import 'package:crypto/crypto.dart';
 import 'package:encrypt/encrypt.dart' as enc;
+import 'package:mhad/l10n/app_localizations.dart';
 
 /// Encodes/decodes the portable directive file.
 ///
@@ -78,7 +79,8 @@ class DirectiveFileCodec {
         return json;
       } catch (_) {
         throw const DirectiveFileException(
-            'Could not read the file — it is corrupted or not an MHAD directive file.');
+            'Could not read the file — it is corrupted or not an MHAD directive file.',
+            _unreadable);
       }
     }
     try {
@@ -87,14 +89,24 @@ class DirectiveFileCodec {
       return json;
     } catch (_) {
       throw const DirectiveFileException(
-          'This file is not a recognized directive file.');
+          'This file is not a recognized directive file.', _unrecognized);
     }
   }
 }
 
 class DirectiveFileException implements Exception {
   final String message;
-  const DirectiveFileException(this.message);
+
+  /// Optional localized form of [message]; see [messageIn].
+  final String Function(AppLocalizations l)? localized;
+  const DirectiveFileException(this.message, [this.localized]);
+
+  /// [message] in [l]'s locale when a localized form exists, else [message].
+  String messageIn(AppLocalizations? l) =>
+      l != null && localized != null ? localized!(l) : message;
   @override
   String toString() => message;
 }
+
+String _unreadable(AppLocalizations l) => l.importFileUnreadable;
+String _unrecognized(AppLocalizations l) => l.importFileUnrecognized;

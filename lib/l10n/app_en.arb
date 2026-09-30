@@ -1960,5 +1960,913 @@
   "crisisSheetYouAreNotAlone": "You are not alone.",
   "crisisSheetCallOrText988": "Call or text 988",
   "crisisSheetCall988Press1": "Call 988, press 1",
-  "crisisSheetCallTextChat": "Call · text · chat"
+  "crisisSheetCallTextChat": "Call · text · chat",
+  "assistantSenderYou": "You",
+  "assistantSenderAi": "AI Assistant",
+  "aiSetupApiKeySetForThis": "API key set for this session",
+  "aiSetupApiKeySaved": "API key saved",
+  "aiSetupGetYourFreeGeminiApi": "Get Your Free Gemini API Key",
+  "aiSetupAddYourApiKey": "Add Your {label} API Key",
+  "@aiSetupAddYourApiKey": {
+    "placeholders": {
+      "label": {"type": "Object"}
+    }
+  },
+  "aiSetupTheAssistantUsesGoogleS": "The assistant uses Google's Gemini model. You need a free API key from Google AI Studio — it takes about 30 seconds.",
+  "aiSetupYouBringYourOwnApi": "You bring your own {label} API key. Your provider's usage limits and billing apply — this app never sees or charges for your usage. Gemini stays the free default if you'd rather not pay.",
+  "@aiSetupYouBringYourOwnApi": {
+    "placeholders": {
+      "label": {"type": "Object"}
+    }
+  },
+  "aiSetupOpenGoogleAiStudioIn": "Open Google AI Studio (in your private window)",
+  "aiSetupOpenInYourPrivateWindow": "Open {label} (in your private window)",
+  "@aiSetupOpenInYourPrivateWindow": {
+    "placeholders": {
+      "label": {"type": "Object"}
+    }
+  },
+  "aiSetupUseAnyGoogleAccountPersonal": "Use any Google account (personal Gmail works fine)",
+  "aiSetupSignInThenOpenThe": "Sign in, then open the API keys page",
+  "aiSetupOpenAiStudio": "Open AI Studio",
+  "aiSetupOpen": "Open {label}",
+  "@aiSetupOpen": {
+    "placeholders": {
+      "label": {"type": "Object"}
+    }
+  },
+  "aiSetupSignInWithGoogle": "Sign in with Google",
+  "aiSetupSignInTo": "Sign in to {label}",
+  "@aiSetupSignInTo": {
+    "placeholders": {
+      "label": {"type": "Object"}
+    }
+  },
+  "aiSetupNoCreditCardOrPayment": "No credit card or payment is needed. The free tier is generous and sufficient for this app.",
+  "aiSetupMostProvidersRequireAPaid": "Most providers require a paid account with credits to use the API. Your provider bills you directly.",
+  "aiSetupKeySetForThisSession": "Key set for this session",
+  "aiSetupKeySaved": "Key saved",
+  "aiSetupShowApiKey": "Show API key",
+  "aiSetupHideApiKey": "Hide API key",
+  "aiSetupUseKeyForThisSession": "Use Key for This Session",
+  "aiSetupSaveApiKey": "Save API Key",
+  "aiSetupTesting": "Testing…",
+  "aiSetupTestConnection": "Test connection",
+  "aiSetupThatDoesnTLookLike": "That doesn't look like a valid {label} key ({keyHint}).",
+  "@aiSetupThatDoesnTLookLike": {
+    "placeholders": {
+      "label": {"type": "Object"},
+      "keyHint": {"type": "Object"}
+    }
+  },
+  "aiSetupCouldNotPasteTryPasting": "Could not paste. Try pasting manually ({pasteShortcutLabel}).",
+  "@aiSetupCouldNotPasteTryPasting": {
+    "placeholders": {
+      "pasteShortcutLabel": {"type": "Object"}
+    }
+  },
+  "aiSetupMayBeBlockedByYour": "{label} may be blocked by your browser's security (CORS) on the web. If it doesn't respond, pick Gemini or Claude — both work in the browser.",
+  "@aiSetupMayBeBlockedByYour": {
+    "placeholders": {
+      "label": {"type": "Object"}
+    }
+  },
+  "aiSetupTheKeyLooksLikeCopy": "The key looks like \"{keyHint}\" — copy it, then use the paste button or paste it manually.",
+  "@aiSetupTheKeyLooksLikeCopy": {
+    "placeholders": {
+      "keyHint": {"type": "Object"}
+    }
+  },
+  "aiSetupApiKey": "{label} API Key",
+  "@aiSetupApiKey": {
+    "placeholders": {
+      "label": {"type": "Object"}
+    }
+  },
+  "adminUpdateBlankUseTheAppS": "Blank = use the app's saved Gemini key. Not stored.",
+  "adminUpdateEnteredForThisSessionOnly": "Entered for this session only — not stored.",
+  "adminUpdateDrafting": "Drafting…",
+  "adminUpdateStartUpdateWithAi": "Start update with AI",
+  "adminUpdateRestoreFromBackupFieldS": "Restore from backup: {changesLength} field(s) differ from the previous version of {assetPath}. Tick the part(s) to roll back (all pre-ticked = full revert).",
+  "@adminUpdateRestoreFromBackupFieldS": {
+    "placeholders": {
+      "changesLength": {"type": "Object"},
+      "assetPath": {"type": "Object"}
+    }
+  },
+  "adminUpdateProposedChangeSReviewEach": "{changesLength} proposed change(s). Review each — tick VERIFY items only if you have confirmed them.",
+  "@adminUpdateProposedChangeSReviewEach": {
+    "placeholders": {
+      "changesLength": {"type": "Object"}
+    }
+  },
+  "adminUpdateVerifyTierChangeSNot": "{verifyCount} verify-tier change(s) not yet approved",
+  "@adminUpdateVerifyTierChangeSNot": {
+    "placeholders": {
+      "verifyCount": {"type": "Object"}
+    }
+  },
+  "adminUpdateReady": "Ready",
+  "adminUpdateBuildRestoredJson": "Build restored JSON",
+  "adminUpdateBuildUpdatedJson": "Build updated JSON",
+  "adminUpdateContextInOut": "{displayName}\n{note}\ncontext {inputTokenLimit} in / {outputTokenLimit} out",
+  "@adminUpdateContextInOut": {
+    "placeholders": {
+      "displayName": {"type": "Object"},
+      "note": {"type": "Object"},
+      "inputTokenLimit": {"type": "Object"},
+      "outputTokenLimit": {"type": "Object"}
+    }
+  },
+  "adminUpdateBestGeminiModelNow": "Best Gemini model (now: {currentModel})",
+  "@adminUpdateBestGeminiModelNow": {
+    "placeholders": {
+      "currentModel": {"type": "Object"}
+    }
+  },
+  "adminUpdateCheckTheNewestModelsLive": "Check the newest {label} models (live API)",
+  "@adminUpdateCheckTheNewestModelsLive": {
+    "placeholders": {
+      "label": {"type": "Object"}
+    }
+  },
+  "adminUpdateApiKey": "{label} API key",
+  "@adminUpdateApiKey": {
+    "placeholders": {
+      "label": {"type": "Object"}
+    }
+  },
+  "adminUpdateSource": "Source: {source}",
+  "@adminUpdateSource": {
+    "placeholders": {
+      "source": {"type": "Object"}
+    }
+  },
+  "adminUpdateRestoredTheSelectedFieldS": "RESTORED — the selected field(s) have been rolled back to the backup. Commit this over {assetPath} to apply the roll-back.",
+  "@adminUpdateRestoredTheSelectedFieldS": {
+    "placeholders": {
+      "assetPath": {"type": "Object"}
+    }
+  },
+  "adminUpdateUpdatedReplaceThatFileWith": "Updated {assetPath}. Replace that file with this and commit — the release makes it live for everyone.",
+  "@adminUpdateUpdatedReplaceThatFileWith": {
+    "placeholders": {
+      "assetPath": {"type": "Object"}
+    }
+  },
+  "reminderSheetsTimeToRenew": "Time to renew.",
+  "reminderSheetsTimeToRenew2": "Time to renew, {firstName}.",
+  "@reminderSheetsTimeToRenew2": {
+    "placeholders": {
+      "firstName": {"type": "Object"}
+    }
+  },
+  "reminderSheetsExpires": "● Expires {dayLabel}",
+  "@reminderSheetsExpires": {
+    "placeholders": {
+      "dayLabel": {"type": "Object"}
+    }
+  },
+  "revocationWillBeReferencedInYour": "Will be referenced in your revocation letter",
+  "revocationTapToInclude": "Tap to include",
+  "revocationRevoking": "Revoking…",
+  "revocationRevokeNow": "Revoke now",
+  "pastDirectiveDetailUnableToLoad": "Unable to load: {error}",
+  "@pastDirectiveDetailUnableToLoad": {
+    "placeholders": {
+      "error": {"type": "Object"}
+    }
+  },
+  "pastDirectiveDetailTheDirectiveRemainsRegardless": "The directive remains {status} regardless",
+  "@pastDirectiveDetailTheDirectiveRemainsRegardless": {
+    "placeholders": {
+      "status": {"type": "Object"}
+    }
+  },
+  "pinDialogShowPasscode": "Show passcode",
+  "pinDialogHidePasscode": "Hide passcode",
+  "modeSelectionOnTheWebYourData": "On the web your data is kept in memory only and is never sent to a server, so encrypted on-device (Private mode) storage is not available here.",
+  "modeSelectionThisAppIsNotHipaa": "This app is not HIPAA-compliant. Nothing is sent to a server for storage.",
+  "modeSelectionSelect": "Select {title}{recommended}",
+  "@modeSelectionSelect": {
+    "placeholders": {
+      "title": {"type": "Object"},
+      "recommended": {"type": "Object"}
+    }
+  },
+  "sideEffectsCheckingCovers": "Checking covers: {currentMedsJoin}",
+  "@sideEffectsCheckingCovers": {
+    "placeholders": {
+      "currentMedsJoin": {"type": "Object"}
+    }
+  },
+  "sideEffectsReCheckFor": "Re-check for: {currentMedsJoin}",
+  "@sideEffectsReCheckFor": {
+    "placeholders": {
+      "currentMedsJoin": {"type": "Object"}
+    }
+  },
+  "sideEffectsCheckSideEffects": "Check side effects",
+  "sideEffectsReCheck": "Re-check",
+  "sideEffectsMayAffect": "May affect: {adlImpact}",
+  "@sideEffectsMayAffect": {
+    "placeholders": {
+      "adlImpact": {"type": "Object"}
+    }
+  },
+  "educationCategoryBrowserSections": "{title}, {count} sections. {sub}",
+  "@educationCategoryBrowserSections": {
+    "placeholders": {
+      "title": {"type": "Object"},
+      "count": {"type": "Object"},
+      "sub": {"type": "Object"}
+    }
+  },
+  "learnAiPanelAskAQuestionToGet": "Ask a question to get started — e.g. \"What's the difference between a declaration and a power of attorney?\"",
+  "learnAiPanelSetUpTheFreeAi": "Set up the free AI assistant to ask questions while you read.",
+  "learnAiPanelPiiStripped": "● {nameToUpperCase} · PII STRIPPED",
+  "@learnAiPanelPiiStripped": {
+    "placeholders": {
+      "nameToUpperCase": {"type": "Object"}
+    }
+  },
+  "educationArticleDetailQuestionsContactPaProtectionAdvocacy": "Questions? Contact PA Protection & Advocacy: {paProtectionAdvocacy}",
+  "@educationArticleDetailQuestionsContactPaProtectionAdvocacy": {
+    "placeholders": {
+      "paProtectionAdvocacy": {"type": "Object"}
+    }
+  },
+  "audioGuideExample": "Example: {example}",
+  "@audioGuideExample": {
+    "placeholders": {
+      "example": {"type": "Object"}
+    }
+  },
+  "exportCardsExecuted": "Executed: {executionDate}",
+  "@exportCardsExecuted": {
+    "placeholders": {
+      "executionDate": {"type": "Object"}
+    }
+  },
+  "exportCardsExpires": "Expires: {expirationDate}",
+  "@exportCardsExpires": {
+    "placeholders": {
+      "expirationDate": {"type": "Object"}
+    }
+  },
+  "pdfPreviewFit": "FIT",
+  "pdfPreviewPageOf": "Page {current} of {pageCount}",
+  "@pdfPreviewPageOf": {
+    "placeholders": {
+      "current": {"type": "Object"},
+      "pageCount": {"type": "Object"}
+    }
+  },
+  "pdfPreviewGoToPage": "Go to page {i}",
+  "@pdfPreviewGoToPage": {
+    "placeholders": {
+      "i": {"type": "Object"}
+    }
+  },
+  "pdfPreviewPage": "Page {i}",
+  "@pdfPreviewPage": {
+    "placeholders": {
+      "i": {"type": "Object"}
+    }
+  },
+  "exportGeneratingPdfPreview": "Generating PDF preview",
+  "exportPreviewPdfBeforeSharing": "Preview PDF before sharing",
+  "exportTheFollowingFieldsAreEmpty": "The following fields are empty or missing:\n\n{n}\n\nAn incomplete directive may not be legally valid under PA Act 194. Export anyway?",
+  "@exportTheFollowingFieldsAreEmpty": {
+    "placeholders": {
+      "n": {"type": "Object"}
+    }
+  },
+  "privacyPolicyLastUpdated": "Last updated: {privacyPolicyUpdated} ({privacyPolicyVersion})",
+  "@privacyPolicyLastUpdated": {
+    "placeholders": {
+      "privacyPolicyUpdated": {"type": "Object"},
+      "privacyPolicyVersion": {"type": "Object"}
+    }
+  },
+  "privacyPolicyYouCanReachTheDeveloper": "You can reach the developer through any of the following (the FTC Health Breach Notification Rule requires at least two contact methods — we provide three):\n\n  - In-app: an in-app breach notice will be shown on next launch if a breach affects you.\n  - Online: {privacyPolicyUrl} (also used for breach postings if direct contact information is insufficient).\n  - App store listing: the developer support address shown on the Google Play / App Store product page.",
+  "@privacyPolicyYouCanReachTheDeveloper": {
+    "placeholders": {
+      "privacyPolicyUrl": {"type": "Object"}
+    }
+  },
+  "settingsScreenshotsAreBlocked": "Screenshots are blocked",
+  "settingsScreenshotsAreAllowed": "Screenshots are allowed",
+  "assistantMessageWidgetsAt": "{sender} at {timeStr}: {content}",
+  "@assistantMessageWidgetsAt": {
+    "placeholders": {
+      "sender": {"type": "Object"},
+      "timeStr": {"type": "Object"},
+      "content": {"type": "Object"}
+    }
+  },
+  "assistantActiveTextPiiStrippedBefore": "● ACTIVE · {model} · TEXT PII STRIPPED BEFORE SEND",
+  "@assistantActiveTextPiiStrippedBefore": {
+    "placeholders": {
+      "model": {"type": "Object"}
+    }
+  },
+  "assistantNotSetUpAddA": "○ NOT SET UP · ADD A KEY TO USE THE AI",
+  "assistantOlderMessagesWereTrimmedTo": "{trimmedCount} older messages were trimmed to fit within the AI's context limit. Recent messages are preserved.",
+  "@assistantOlderMessagesWereTrimmedTo": {
+    "placeholders": {
+      "trimmedCount": {"type": "Object"}
+    }
+  },
+  "assistantNotLegalOrMedicalAdvice": "Not legal or medical advice. For legal questions contact PA Protection & Advocacy: {paProtectionAdvocacy}",
+  "@assistantNotLegalOrMedicalAdvice": {
+    "placeholders": {
+      "paProtectionAdvocacy": {"type": "Object"}
+    }
+  },
+  "assistantFreeTierRequestsMinRequests": "{model} free tier:\n{maxRpm} requests/min\n{maxRpd} requests/day\n{tpmK}K tokens/min\n{contextK}K max context",
+  "@assistantFreeTierRequestsMinRequests": {
+    "placeholders": {
+      "model": {"type": "Object"},
+      "maxRpm": {"type": "Object"},
+      "maxRpd": {"type": "Object"},
+      "tpmK": {"type": "Object"},
+      "contextK": {"type": "Object"}
+    }
+  },
+  "homeToolsGridSuggestsChecks": "Suggests + checks",
+  "homeToolsGridShareCarry": "Share + carry",
+  "homeToolsGridNoDirectiveYet": "No directive yet",
+  "homeDirectiveHeroContinueYourLastEdited": "Continue your {formLabel} — {pctLabel}, last edited {lastEdited}",
+  "@homeDirectiveHeroContinueYourLastEdited": {
+    "placeholders": {
+      "formLabel": {"type": "Object"},
+      "pctLabel": {"type": "Object"},
+      "lastEdited": {"type": "Object"}
+    }
+  },
+  "homeDirectiveHeroStepOf": "Step {currentStep} of {totalSteps}",
+  "@homeDirectiveHeroStepOf": {
+    "placeholders": {
+      "currentStep": {"type": "Object"},
+      "totalSteps": {"type": "Object"}
+    }
+  },
+  "homeDirectiveHeroLastEdited": "{formLabel} · last edited {lastEdited}",
+  "@homeDirectiveHeroLastEdited": {
+    "placeholders": {
+      "formLabel": {"type": "Object"},
+      "lastEdited": {"type": "Object"}
+    }
+  },
+  "facilitatorPickTheKindOfSupport": "{facilitatorCompletionStat} Pick the kind of support that fits today.",
+  "@facilitatorPickTheKindOfSupport": {
+    "placeholders": {
+      "facilitatorCompletionStat": {"type": "Object"}
+    }
+  },
+  "disclaimerYouWorkAnonymouslyInThis": "You work anonymously in this browser tab — no account, no cloud, no tracking. If you close the tab your work is kept on this device for about 10 minutes for recovery, then wiped — open and save your PDF to keep it.",
+  "disclaimerNoAccountNoCloudNo": "No account, no cloud, no tracking — nothing goes to our servers. Anything you save stays encrypted on this device, where only you can open it.",
+  "draftRecoveryDialogItLooksLikeTheApp": "It looks like the app closed unexpectedly. An auto-saved draft was found from {ageDescription}.\n\nThis draft contains your treatment preferences and medical data (no personal information was saved).\n\nWould you like to restore it?",
+  "@draftRecoveryDialogItLooksLikeTheApp": {
+    "placeholders": {
+      "ageDescription": {"type": "Object"}
+    }
+  },
+  "stepDotsStepOf": "Step {current} of {total}",
+  "@stepDotsStepOf": {
+    "placeholders": {
+      "current": {"type": "Object"},
+      "total": {"type": "Object"}
+    }
+  },
+  "stepDotsGoToStepOf": "Go to step {i} of {total}",
+  "@stepDotsGoToStepOf": {
+    "placeholders": {
+      "i": {"type": "Object"},
+      "total": {"type": "Object"}
+    }
+  },
+  "healthChipLearnAbout": "Learn about {label}",
+  "@healthChipLearnAbout": {
+    "placeholders": {
+      "label": {"type": "Object"}
+    }
+  },
+  "healthChipRemove": "Remove {label}",
+  "@healthChipRemove": {
+    "placeholders": {
+      "label": {"type": "Object"}
+    }
+  },
+  "crisisSheetTextHomeTo": "Text HOME to {crisisTextLine}",
+  "@crisisSheetTextHomeTo": {
+    "placeholders": {
+      "crisisTextLine": {"type": "Object"}
+    }
+  },
+  "crisisSheetTreatmentReferrals": "{samhsa} · treatment referrals",
+  "@crisisSheetTreatmentReferrals": {
+    "placeholders": {
+      "samhsa": {"type": "Object"}
+    }
+  },
+  "crisisSheetKnowYourRights": "{paProtectionAdvocacy} · know your rights",
+  "@crisisSheetKnowYourRights": {
+    "placeholders": {
+      "paProtectionAdvocacy": {"type": "Object"}
+    }
+  },
+  "fdaLabelDialogFdaLabel": "{medName} — FDA label",
+  "@fdaLabelDialogFdaLabel": {
+    "placeholders": {
+      "medName": {"type": "Object"}
+    }
+  },
+  "nlmAttributionSourceUSNationalLibrary": "Source: U.S. National Library of Medicine. {medicalDisclaimer}",
+  "@nlmAttributionSourceUSNationalLibrary": {
+    "placeholders": {
+      "medicalDisclaimer": {"type": "Object"}
+    }
+  },
+  "aiConsentDialogToAutofillYourDirectiveThe": "To autofill your directive, the whole document — including any personal details on it (names, dates of birth, addresses, phone numbers) — is sent to {label} so it can read it and fill in your fields.",
+  "@aiConsentDialogToAutofillYourDirectiveThe": {
+    "placeholders": {
+      "label": {"type": "Object"}
+    }
+  },
+  "aiConsentDialogForMoreAccurateTranscriptionEspecially": "For more accurate transcription (especially medication names and conditions), your voice recording — including any personal details you say — is sent to {label} to turn into text.",
+  "@aiConsentDialogForMoreAccurateTranscriptionEspecially": {
+    "placeholders": {
+      "label": {"type": "Object"}
+    }
+  },
+  "aiConsentDialogTextYouEnterWillBe": "• Text you enter will be sent to {label} for AI processing. {provider}\n",
+  "@aiConsentDialogTextYouEnterWillBe": {
+    "placeholders": {
+      "label": {"type": "Object"},
+      "provider": {"type": "Object"}
+    }
+  },
+  "aiConsentDialogByTappingIAuthorizeYou": "\nBy tapping \"I Authorize,\" you consent to sending your text to {label} for AI processing under these terms.\n\nThis notice appears once per session.",
+  "@aiConsentDialogByTappingIAuthorizeYou": {
+    "placeholders": {
+      "label": {"type": "Object"}
+    }
+  },
+  "exportDraftModeFinal": "Final copy",
+  "exportDraftModeDraft": "Draft",
+  "exportDraftModeSignedExists": "Draft · signed copy exists",
+  "exportOpenedManyPdfs": "Opened {count} PDFs in new tabs — print or save each from your PDF viewer.",
+  "@exportOpenedManyPdfs": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "exportOpenedOnePdf": "Opened in a new tab — use Print or Download in your PDF viewer.",
+  "exportNoAgentDesignated": "No agent designated — agent sections will be blank",
+  "exportWalletYourName": "Your name",
+  "exportWalletSignToActivate": "sign to activate",
+  "exportEffectiveCondition": "Effective condition",
+  "exportWitnessSignatures": "Witness signatures",
+  "exportPrintedCopyType": "Printed copy type",
+  "exportADraftPrintsALight": "A draft prints a light “DRAFT” watermark on every page — for sending a copy while you keep the signed paper original. Tick as many as you like — Download gives you one PDF of each.",
+  "exportDocumentLanguage": "Document language",
+  "exportThePlainLanguageOfficialForm": "The plain-language official form is the one you sign and use — it is the legally valid directive. The legal-language version restates it in formal statutory wording for reference only and is not the document you sign.",
+  "exportThisOpensYourDirectiveIn": "This opens your directive in your PDF viewer (a new browser tab), where you can Print it or save/Download it — it will NOT download automatically.",
+  "exportWalletCard": "Wallet card",
+  "exportACreditCardSizedSummary": "A credit-card-sized summary you can print and carry.",
+  "exportSaveAnEditableCopy": "Save an editable copy",
+  "exportNotAFinishedDocumentThis": "Not a finished document — this is how you save your progress. The web app can’t store your work on this device, so download this file to keep it, then re-upload it later (here or on another device) to keep editing. Nothing is stored online.",
+  "exportEncryptingHindersOthersFromReading": "Encrypting hinders others from reading it; the app still opens it with no passphrase.",
+  "exportMachineReadableFormats": "Machine-readable formats",
+  "exportYourPdfAboveIsThe": "Your PDF above is the document you sign — these are data exports for your records, a spreadsheet, or a health system. FHIR is the standard format hospitals use to exchange medical records; CSV is a spreadsheet file (opens in Excel or Google Sheets).",
+  "aiSetupTestOk": "{provider} responded. This key and model work.",
+  "@aiSetupTestOk": {
+    "placeholders": {
+      "provider": {"type": "String"}
+    }
+  },
+  "aiSetupPrivacyLeadGemini": "On the Gemini free tier, Google may use data you send to improve their AI products, and human reviewers may read your inputs.",
+  "aiSetupPrivacyLeadOther": "Your {provider} key sends data to {provider}; their data-use and retention policy applies.",
+  "@aiSetupPrivacyLeadOther": {
+    "placeholders": {
+      "provider": {"type": "String"}
+    }
+  },
+  "aiSetupPrivacyKeyEphemeral": "Your API key is kept in memory for this session, with a temporary copy for up to 10 minutes (for crash recovery); it is discarded when the session ends.",
+  "aiSetupPrivacyKeyStored": "Your API key is stored securely on this device only and is never shared with anyone other than your AI provider.",
+  "aiSetupPrivacyNoticeBody": "{lead}\n\nThe AI features in this app send text you enter in form fields and chat messages to your AI provider's servers. Do not include personally identifying details (full legal name, Social Security number, date of birth, etc.) in AI chat or when using AI Suggest.\n\n{keyLine}",
+  "@aiSetupPrivacyNoticeBody": {
+    "placeholders": {
+      "lead": {"type": "String"},
+      "keyLine": {"type": "String"}
+    }
+  },
+  "aiSetupDuckDuckGoNote": "All browsing is private (Fire Button clears)",
+  "aiSetupProviderFree": "{provider} (free)",
+  "@aiSetupProviderFree": {
+    "placeholders": {
+      "provider": {"type": "String"}
+    }
+  },
+  "aiSetupShortcutWithMac": "{browser}:  {shortcut}  (Mac: {macShortcut})",
+  "@aiSetupShortcutWithMac": {
+    "placeholders": {
+      "browser": {"type": "String"},
+      "shortcut": {"type": "String"},
+      "macShortcut": {"type": "String"}
+    }
+  },
+  "aiSetupShortcutMacOnly": "{browser}:  {macShortcut}  (Mac only)",
+  "@aiSetupShortcutMacOnly": {
+    "placeholders": {
+      "browser": {"type": "String"},
+      "macShortcut": {"type": "String"}
+    }
+  },
+  "feAiUnreachable": "Couldn't reach the AI service. Check your internet connection. If you are using the web app, this provider may also be blocked by your browser's security policy — Gemini and Claude both work in the browser.",
+  "feNoInternet": "No internet connection. Please check your network and try again.",
+  "feTimeout": "The request timed out. Please check your connection and try again.",
+  "feBlocked": "Couldn't reach the AI service — the request was blocked or the connection failed. Check your internet connection, and if you are on the web app try Gemini or Claude, which work in the browser.",
+  "feRateLimited": "Too many requests. Please wait a moment and try again.",
+  "feKeyRejected": "Your API key was rejected. Open AI setup and check the key is correct, still active, and belongs to the selected provider.",
+  "feModelUnavailable": "The selected AI model isn't available — it may have been retired. Pick a different model in AI setup.",
+  "feEmptyResponse": "The AI returned no results. Try again or enter the information manually.",
+  "feBadFormat": "The AI response was not in the expected format. Please try again.",
+  "feServiceError": "The AI service encountered an error. Please try again later.",
+  "fePermission": "Permission was not granted. Please check your device settings.",
+  "feGeneric": "Something went wrong. Please try again.",
+  "assistantSendError": "Sorry, I encountered an error: {error}",
+  "@assistantSendError": {
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  },
+  "assistantVerifyError": "Sorry, I couldn't verify that on the web: {error}",
+  "@assistantVerifyError": {
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  },
+  "permissionsOverviewUnlockingEncryptedOnDeviceStorage": "Unlocking encrypted on-device storage (native app only; not used by the web app).",
+  "permissionsOverviewUsedOnlyToVerifyYour": "Used only to verify your identity on unlock",
+  "permissionsOverviewBiometricDataNeverLeavesThe": "Biometric data never leaves the OS keystore",
+  "permissionsOverviewNoBiometricDataIsSent": "No biometric data is sent to any server",
+  "permissionsOverviewFallsBackToAPasscode": "Falls back to a passcode you choose if biometrics fail",
+  "permissionsOverviewNotApplicableOnThisPlatform": "Not applicable on this platform",
+  "permissionsOverviewRemindingYouAboutWitnessSigning": "Reminding you about witness signing, renewals, and check-ins.",
+  "permissionsOverviewYouChooseWhichRemindersTo": "You choose which reminders to enable",
+  "permissionsOverviewNotificationsAreScheduledLocallyOn": "Notifications are scheduled locally on this device",
+  "permissionsOverviewNoContentPiiDirectiveText": "No content (PII, directive text) is in any notification body",
+  "permissionsOverviewDisablePerCategoryInDevice": "Disable per-category in device Settings → Notifications",
+  "permissionsOverviewSnappingAPhotoOfYour": "Snapping a photo of your ID, medication labels, or condition lists for AI-assisted field extraction. Coming in a later release.",
+  "permissionsOverviewPhotoIsSentToAi": "Photo is sent to AI only to read it",
+  "permissionsOverviewPhotoIsDiscardedRightAfter": "Photo is discarded right after extraction",
+  "permissionsOverviewNothingIsSavedToYour": "Nothing is saved to your device's photo library by default",
+  "permissionsOverviewYouReviewEveryFieldBefore": "You review every field before it's used",
+  "permissionsOverviewNotYetWiredFeatureIn": "Not yet wired — feature in a future release",
+  "permissionsOverviewSpeakingLongFormAnswersE": "Speaking long-form answers (e.g. \"anything else\") instead of typing. Coming in a later release.",
+  "permissionsOverviewAudioIsProcessedOnDevice": "Audio is processed on-device when possible",
+  "permissionsOverviewIfSentToAiFor": "If sent to AI for transcription, it isn't stored",
+  "permissionsOverviewTranscriptStaysInYourSession": "Transcript stays in your session — never uploaded",
+  "permissionsOverviewToggleOffAtAnyTime": "Toggle off at any time in Settings",
+  "permissionsOverviewPickingAnAgentOrWitness": "Picking an agent or witness from your address book instead of typing their details. Coming in a later release.",
+  "permissionsOverviewWeNeverUploadYourContacts": "We never upload your contacts",
+  "permissionsOverviewSearchRunsLocallyOnThis": "Search runs locally on this device",
+  "permissionsOverviewOnlyTheContactYouPick": "Only the contact you pick is brought into the directive",
+  "permissionsOverviewYouCanRevokeAccessIn": "You can revoke access in Settings any time",
+  "permissionsOverviewAvailableOsManaged": "Available · OS-managed",
+  "eduBrowseIntroduction": "Introduction",
+  "eduBrowseWhatAnMhadIsAnd": "What an MHAD is and who should sign one",
+  "eduBrowseCombinedForm": "Combined Form",
+  "eduBrowseBothAnAgentAndTreatment": "Both an agent and treatment preferences",
+  "eduBrowseTreatmentPreferencesWithoutAnAgent": "Treatment preferences without an agent",
+  "eduBrowsePowerOfAttorney": "Power of Attorney",
+  "eduBrowseAgentDesignationWithoutPreferences": "Agent designation without preferences",
+  "eduBrowseFrequentlyAsked": "Frequently Asked",
+  "eduBrowseCommonQuestionsAboutMhads": "Common questions about MHADs",
+  "eduBrowseGlossary": "Glossary",
+  "eduBrowseEveryLegalTermDefined": "Every legal term, defined",
+  "eduBrowseBeyondTheBooklet": "Beyond the Booklet",
+  "eduBrowseTopicsNotCoveredInThe": "Topics not covered in the official PA booklet",
+  "eduBrowseYourChecklist": "Your Checklist",
+  "eduBrowseStepByStepDistributionRevocation": "Step-by-step distribution + revocation guides",
+  "webLandingPreferPaperOpenAnyOf": "Prefer paper? Open any of the three empty official forms to print and fill in by hand — no account or wizard needed.",
+  "webLandingNoAccountRequired": "No account required",
+  "webLandingNoEmailNoPasswordNo": "No email, no password, no sign-up.",
+  "webLandingNothingLeavesYourBrowser": "Nothing leaves your browser",
+  "webLandingYourAnswersLiveInThis": "Your answers live in this tab. We never see them.",
+  "webLandingNoCookiesNoTracking": "No cookies, no tracking",
+  "webLandingNoAnalyticsNoThirdParty": "No analytics, no third-party scripts.",
+  "webLandingYouKeepTheFile": "You keep the file",
+  "webLandingSaveThePdfFromYour": "Save the PDF from your viewer — that’s the only copy.",
+  "pinDialogPasscodeTooShort": "Passcode must be at least 4 characters.",
+  "pinDialogPasscodesDontMatch": "Passcodes do not match.",
+  "pinDialogUnlockPrivateMode": "Unlock private mode",
+  "pinDialogEnterPasscode": "Please enter your passcode.",
+  "pinDialogTooManyAttempts": "Too many attempts. Please wait 30 seconds.",
+  "pinDialogIncorrectPasscode": "Incorrect passcode. Please try again.",
+  "deviceSecurityWarningTitle": "Device Security Warning",
+  "deviceSecurityWarningBody": "Your device appears to be rooted/jailbroken. This may put your sensitive health data at risk. Consider using a non-modified device for storing advance directives.",
+  "deviceSecurityIUnderstand": "I Understand",
+  "blankFormPrintTitle": "Print a blank form",
+  "blankFormPrintError": "Could not open the blank form to print: {error}",
+  "@blankFormPrintError": {
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  },
+  "launchCopiedToClipboard": "{value} copied to clipboard",
+  "@launchCopiedToClipboard": {
+    "placeholders": {
+      "value": {"type": "String"}
+    }
+  },
+  "reminderRenewMetricSections": "sections",
+  "reminderRenewMetricWetInk": "wet-ink",
+  "reminderRenewMetricSigning": "signing",
+  "reminderRenewMetricMin": "min",
+  "educationBefore": "before",
+  "assistantGeneralQuestion": "General question",
+  "assistantContextPanelStrippedBeforeSend": "Stripped before send",
+  "assistantSuggestWalkMeThroughFillingOut": "Walk me through filling out my directive step by step",
+  "assistantSuggestWhatIsAMentalHealth": "What is a Mental Health Advance Directive?",
+  "assistantSuggestWhatSTheDifferenceBetween": "What's the difference between Combined, Declaration, and POA?",
+  "assistantSuggestWhoCanBeMyAgent": "Who can be my agent?",
+  "assistantSuggestWhatMedicationsShouldIList": "What medications should I list?",
+  "assistantSuggestWhatDoesEctMean": "What does ECT mean?",
+  "assistantSuggestHowLongIsTheDirective": "How long is the directive valid?",
+  "assistantSuggestCanIChangeMyDirective": "Can I change my directive later?",
+  "ulyssesOnlyAppliesOnceIHave": "Only applies once I have been formally found to lack capacity",
+  "ulyssesOnlyForTreatmentsIExplicitly": "Only for treatments I explicitly named (medications, ECT, facility)",
+  "ulyssesDoesNotAuthorizePhysicalRestraint": "Does not authorize physical restraint",
+  "ulyssesACourtAppointedGuardianNot": "A court-appointed guardian (not the agent) may revoke, suspend, or terminate",
+  "ulyssesMyDirectiveStillTerminatesAt": "My directive still terminates at 2 years — unless I am incapable when it would expire, in which case it remains in effect (§§ 5824(e), 5834(c))",
+  "homeHeroPercentComplete": "{percent}% complete",
+  "@homeHeroPercentComplete": {
+    "placeholders": {
+      "percent": {"type": "int"}
+    }
+  },
+  "homeHeroReadyToReviewSign": "Ready to review & sign",
+  "homeHeroMoreSteps": "{count, plural, =1{~ 1 more step} other{~ {count} more steps}}",
+  "@homeHeroMoreSteps": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "homeHeroCombinedForm": "Combined form",
+  "homeHeroDeclarationOnly": "Declaration only",
+  "homeHeroNamedMhad": "{name}’s MHAD",
+  "@homeHeroNamedMhad": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "homeHeroYourMhad": "Your MHAD",
+  "educationNoResultsFound": "No results found.",
+  "educationNoResultsFor": "No results for \"{query}\"",
+  "@educationNoResultsFor": {
+    "placeholders": {
+      "query": {"type": "String"}
+    }
+  },
+  "relativeJustNow": "just now",
+  "relativeMinsAgo": "{count, plural, =1{1 min ago} other{{count} mins ago}}",
+  "@relativeMinsAgo": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "relativeHoursAgo": "{count, plural, =1{1 hour ago} other{{count} hours ago}}",
+  "@relativeHoursAgo": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "relativeDaysAgo": "{count, plural, =1{1 day ago} other{{count} days ago}}",
+  "@relativeDaysAgo": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "revocationNotifyPrimaryCareDoctor": "Primary care doctor",
+  "revocationNotifyPsychiatristTherapist": "Psychiatrist / therapist",
+  "revocationNotifyNearestHospitalEr": "Nearest hospital ER",
+  "revocationNotifyPharmacy": "Pharmacy",
+  "revocationNotifyLocalRightsAdvocate": "Local rights advocate",
+  "legalSheetBoldNot": "not",
+  "legalSheetBoldOnly": "only",
+  "legalSheetBoldTwoAdultWitnesses": "two adult witnesses",
+  "legalSheetBoldWitnessesCannotBe": "Witnesses cannot be: ",
+  "legalSheetBoldPrinted": "printed",
+  "legalSheetBoldMustComply": "must comply",
+  "legalSheetBoldTwoYears": "two years",
+  "legalSheetBoldUnlessYouAreFoundIncapable": "unless you are found incapable",
+  "legalSheetBoldNotSavedPermanently": "not saved permanently",
+  "legalSheetBoldAutomaticallyKeepsIdentifyingDetailsOut": "automatically keeps identifying details out of what it sends to the AI assistant and its suggestions",
+  "legalSheetBoldUploadingIsNeverRequired": "Uploading is never required",
+  "legalSheetBoldTheseLookupsSendOnlyThe": "These lookups send only the medical term, code, or provider name being searched",
+  "legalSheetYourRightsUnderAct194": "Your rights under Act 194",
+  "legalSheet247FreeConfidential": "24/7, free, confidential",
+  "legalSheetCallOrText988": "Call or text 988",
+  "crisisPlanTheFirstThingsINotice": "The first things I notice when my mood shifts.",
+  "crisisPlanExternalThingsThatHaveSet": "External things that have set off episodes before.",
+  "crisisPlanSpecificConcreteNotSelfCare": "Specific, concrete. Not 'self-care' — what actually works.",
+  "crisisPlanWordsThatGroundMeUseful": "Words that ground me. Useful for staff, EMS, family.",
+  "crisisPlanApproachesThatEscalateMeBe": "Approaches that escalate me. Be specific.",
+  "reminderSheetsAgentsPrimaryAndAlternate": "Agents — primary and alternate",
+  "reminderSheetsCurrentMedsOnesYouDon": "Current meds, ones you don't want, allergies",
+  "reminderSheetsPreferredFacilityRoomEnvironment": "Preferred facility, room environment",
+  "accessibilitySettingsAtkinsonHyperlegibleClearerEasierLetter": "Atkinson Hyperlegible — clearer, easier letter shapes",
+  "accessibilitySettingsHeavierTextWeightEverywhere": "Heavier text weight everywhere",
+  "accessibilitySettingsRemovesScreenTransitionsAndAnimations": "Removes screen transitions and animations",
+  "accessibilitySettingsMaximizesSeparationBetweenTextAnd": "Maximizes separation between text and background",
+  "accessibilitySettingsUseYourBrowserOrDevice": "Use your browser or device read-aloud — see the guide below",
+  "accessibilitySettingsChromeEdgeDesktop": "Chrome / Edge (desktop)",
+  "directiveFormChoiceTreatmentPreferencesWithoutNamingAn": "Treatment preferences without naming an agent.",
+  "directiveFormChoiceNameADecisionMakerWithout": "Name a decision-maker without listing preferences.",
+  "homeToolsGridFaqGlossary": "FAQ, glossary",
+  "homeToolsGrid988More": "988 + more",
+  "facilitator45Min": "~45 min",
+  "facilitatorFree": "Free",
+  "facilitatorPaBased": "PA-based",
+  "facilitatorInPerson": "In person",
+  "facilitatorYouStayInControl": "You stay in control",
+  "facilitatorEmailComposer": "Email composer",
+  "facilitatorManualTranscribeBack": "Manual transcribe back",
+  "modeSelectionBiometrics": "Biometrics",
+  "modeSelectionAes256": "AES-256",
+  "modeSelectionSaveDrafts": "Save drafts",
+  "modeSelectionAcrossSessions": "Across sessions",
+  "modeSelectionNothingSaved": "Nothing saved",
+  "modeSelectionInMemoryOnly": "In-memory only",
+  "modeSelectionSingleSession": "Single session",
+  "pdfPreviewLoading": "Loading…",
+  "pdfPreviewSelectASectionToPreview": "Select a section to preview.",
+  "pdfPreviewCouldNotRenderThePreview": "Could not render the preview.",
+  "reminderSheetsStepN": "Step {n}",
+  "@reminderSheetsStepN": {
+    "placeholders": {
+      "n": {"type": "int"}
+    }
+  },
+  "sideEffectsNoneFound": "We couldn't find common side effects to list right now. You can add anything you're experiencing in the Anything-else step, and always raise side-effect concerns with your doctor.",
+  "sideEffectsGenerateError": "Something went wrong generating the list. Please try again, or note side effects yourself.",
+  "inputPhoneInvalid": "Enter a valid 10-digit phone number",
+  "inputZipInvalid": "Enter a 5-digit or 5+4-digit ZIP",
+  "audioGuideTipQualityDoesnTMatterAny": "Quality doesn't matter. Any phone voice memo works — the AI downsamples audio anyway, so a small low-quality file transcribes just as well as a large one.",
+  "audioGuideTipKeepEachClipShortUnder": "Keep each clip short — under about 2 minutes. Record one clip per section below and upload them together; the app merges them. Long clips can time out.",
+  "audioGuideTipSayMedicationAndDoctorNames": "Say medication and doctor names slowly and spell them. The AI won't guess a drug or condition it didn't clearly hear.",
+  "stepSubtitleAboutYou": "Just the basics so this document is uniquely yours. Drop a photo of your ID and we'll read these for you.",
+  "stepSubtitleWhenItKicksIn": "The conditions under which your directive becomes active. You can pick more than one.",
+  "stepSubtitlePeopleITrust": "They speak for you if you can't. You can name a primary, an alternate, and set limits on what they decide.",
+  "stepSubtitleGuardianNomination": "Rare, but worth planning for. A guardian is named by a court — not by you — and has broader authority than an agent.",
+  "stepSubtitleWhereIWantCare": "Facilities you prefer — and any you specifically want to avoid — plus room and environment preferences.",
+  "stepSubtitleDiagnoses": "Help your care team see the whole picture in a crisis. Search by name — we attach the ICD-10 code your doctors use.",
+  "stepSubtitleMedications": "What you take now (for your care team) plus the medications you refuse, limit, or prefer. Your refusals and limits are binding under Act 194.",
+  "stepSubtitleAllergies": "Drug allergies, sensitivities, past adverse reactions. This is the most-checked section by ER staff.",
+  "stepSubtitleProceduresResearch": "Three treatments under PA law need your explicit consent. Set each one — your agent fills any gaps.",
+  "stepSubtitleAnythingElse": "Free-form preferences not covered above. This is your voice — write it how you'd say it.",
+  "stepSubtitleReviewAndSign": "One last look, then we'll make your signing packet. Tap any section to edit.",
+  "formTypeNameCombined": "Combined Declaration & Power of Attorney",
+  "formTypeNameDeclaration": "Declaration Only",
+  "formTypeNamePoa": "Power of Attorney Only",
+  "formTypeShortCombined": "Combined",
+  "formTypeShortDeclaration": "Declaration",
+  "formTypeShortPoa": "Power of Attorney",
+  "stepTitleAboutYou": "About you",
+  "stepTitleWhenItKicksIn": "When this kicks in",
+  "stepTitlePeopleITrust": "People I trust",
+  "stepTitleGuardianNomination": "If a court appoints a guardian",
+  "stepTitleWhereIWantCare": "Where I want care",
+  "stepTitleDiagnoses": "Diagnoses",
+  "stepTitleMedications": "Medications",
+  "stepTitleAllergies": "Allergies & reactions",
+  "stepTitleProceduresResearch": "Procedures & research",
+  "stepTitleAnythingElse": "Anything else",
+  "stepTitleReviewAndSign": "Review",
+  "directiveStatusRevoked": "Revoked",
+  "directiveStatusExpired": "Expired",
+  "directiveStatusActive": "Active",
+  "directiveStatusDraft": "Draft",
+  "pastDirectiveSignedOn": "signed {date}",
+  "@pastDirectiveSignedOn": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "pastDirectiveExpiredOn": "expired {date}",
+  "@pastDirectiveExpiredOn": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "pastDirectiveExpiresOn": "expires {date}",
+  "@pastDirectiveExpiresOn": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "settingsDefaultUserName": "PA MHAD user",
+  "rateDailyLimitUsed": "You've used all {max} free requests for today. The limit resets at midnight. Consider upgrading to a paid API key for higher limits.",
+  "@rateDailyLimitUsed": {
+    "placeholders": {
+      "max": {"type": "int"}
+    }
+  },
+  "rateTooManyThisMinute": "Too many requests this minute (limit: {max}/min). Please wait {seconds} seconds.",
+  "@rateTooManyThisMinute": {
+    "placeholders": {
+      "max": {"type": "int"},
+      "seconds": {"type": "int"}
+    }
+  },
+  "rateTokenLimitThisMinute": "Token limit reached this minute ({thousands}K/min). Please wait a moment before sending another request.",
+  "@rateTokenLimitThisMinute": {
+    "placeholders": {
+      "thousands": {"type": "int"}
+    }
+  },
+  "rateDailyLimitReached": "Daily limit reached",
+  "rateWaitStatus": "Wait {seconds}s • {remaining} requests left today",
+  "@rateWaitStatus": {
+    "placeholders": {
+      "seconds": {"type": "int"},
+      "remaining": {"type": "int"}
+    }
+  },
+  "rateRemainingStatus": "{remainingToday} requests left today • {remainingMinute} this minute",
+  "@rateRemainingStatus": {
+    "placeholders": {
+      "remainingToday": {"type": "int"},
+      "remainingMinute": {"type": "int"}
+    }
+  },
+  "llmHeicUnsupported": "{provider} can't read HEIC/HEIF photos (the iPhone default). Switch to Gemini, or re-save the photo as JPEG or PNG first.",
+  "@llmHeicUnsupported": {
+    "placeholders": {
+      "provider": {"type": "String"}
+    }
+  },
+  "llmPdfUnsupported": "{provider} can't read PDFs here — switch to Gemini or Claude, or paste the document text instead.",
+  "@llmPdfUnsupported": {
+    "placeholders": {
+      "provider": {"type": "String"}
+    }
+  },
+  "llmFileTypeUnsupported": "{provider} can't read {mimeType} files here — switch to Gemini, or paste the text instead.",
+  "@llmFileTypeUnsupported": {
+    "placeholders": {
+      "provider": {"type": "String"},
+      "mimeType": {"type": "String"}
+    }
+  },
+  "llmRateLimited": "Too many requests to {provider}. Please wait a minute and try again.",
+  "@llmRateLimited": {
+    "placeholders": {
+      "provider": {"type": "String"}
+    }
+  },
+  "llmGeminiKeyRejected": "{provider} rejected your API key. Open AI setup and check the key is correct, still active, and has the Generative Language API enabled.",
+  "@llmGeminiKeyRejected": {
+    "placeholders": {
+      "provider": {"type": "String"}
+    }
+  },
+  "llmGeminiModelNotFound": "{provider} doesn't recognise the model \"{model}\" — it may have been retired. Pick a different model in AI setup.",
+  "@llmGeminiModelNotFound": {
+    "placeholders": {
+      "provider": {"type": "String"},
+      "model": {"type": "String"}
+    }
+  },
+  "llmNetworkError": "Couldn't reach {provider} ({detail}). Check your internet connection. If you are on the web app, this provider may also be blocked by your browser's CORS policy — Gemini and Claude both work in the browser.",
+  "@llmNetworkError": {
+    "placeholders": {
+      "provider": {"type": "String"},
+      "detail": {"type": "String"}
+    }
+  },
+  "llmKeyRejected": "{provider} rejected your API key. Open AI setup and check the key is correct, still active, and belongs to {provider}.",
+  "@llmKeyRejected": {
+    "placeholders": {
+      "provider": {"type": "String"}
+    }
+  },
+  "llmModelNotFound": "{provider} doesn't recognise the model \"{model}\". Pick a different model in AI setup.",
+  "@llmModelNotFound": {
+    "placeholders": {
+      "provider": {"type": "String"},
+      "model": {"type": "String"}
+    }
+  },
+  "importFileUnreadable": "Could not read the file — it is corrupted or not an MHAD directive file.",
+  "importFileUnrecognized": "This file is not a recognized directive file.",
+  "importFileCorrupted": "The file is corrupted.",
+  "importNotDirectiveFile": "This is not a directive file.",
+  "importNotMhadFile": "This is not an MHAD directive file.",
+  "importNewerVersion": "This file was made by a newer version of the app. Please update to open it.",
+  "importNoDirectiveData": "The file contains no directive data."
 }

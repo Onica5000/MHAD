@@ -1,6 +1,7 @@
 ﻿import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mhad/l10n/l10n.dart';
+import 'package:mhad/l10n/model_labels.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -61,6 +62,7 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
     _inputCtrl.clear();
     final result = await sendAssistantMessage(
       ref,
+      l10n: context.l10n,
       text: text,
       assistantContext: widget.context,
       requestConsent: () =>
@@ -115,8 +117,7 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            '${result.trimmedCount} older messages were trimmed to fit within '
-            'the AI\'s context limit. Recent messages are preserved.',
+            context.l10n.assistantOlderMessagesWereTrimmedTo(result.trimmedCount),
           ),
           duration: const Duration(seconds: 4),
         ),
@@ -129,6 +130,7 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
   Future<void> _retrySend() async {
     final result = await retryLastSend(
       ref,
+      l10n: context.l10n,
       assistantContext: widget.context,
       requestConsent: () => showAiConsentDialog(context,
           provider: ref.read(activeProviderProvider)),
@@ -152,6 +154,7 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
   Future<void> _verify(String question) async {
     final result = await verifyOnWeb(
       ref,
+      l10n: context.l10n,
       question: question,
       assistantContext: widget.context,
       requestConsent: () =>
@@ -230,8 +233,8 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                   ),
                   Text(
                     hasKey
-                        ? '● ACTIVE · ${ref.watch(activeModelProvider).toUpperCase().replaceAll('-', ' ')} · TEXT PII STRIPPED BEFORE SEND'
-                        : '○ NOT SET UP · ADD A KEY TO USE THE AI',
+                        ? context.l10n.assistantActiveTextPiiStrippedBefore(ref.watch(activeModelProvider).toUpperCase().replaceAll('-', ' '))
+                        : context.l10n.assistantNotSetUpAddA,
                     style: TextStyle(
                       fontFamily: kMonoFamily,
                       fontFamilyFallback: const [
@@ -382,9 +385,7 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
-                          'Not legal or medical advice. For legal questions '
-                          'contact PA Protection & Advocacy: '
-                          '${appData.phoneOf('paProtectionAdvocacy')}',
+                          context.l10n.assistantNotLegalOrMedicalAdvice(appData.phoneOf('paProtectionAdvocacy')),
                           style: TextStyle(
                             fontFamily: kSansFamily,
                             fontSize: 11,
@@ -519,9 +520,9 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
   String _contextLabel(AssistantContext ctx) {
     final parts = <String>[];
     final ft = formTypeFromName(ctx.formType);
-    if (ft != null) parts.add(ft.shortName);
+    if (ft != null) parts.add(ft.shortLabel(context.l10n));
     if (ctx.stepName != null) parts.add(ctx.stepName!);
-    return parts.isEmpty ? 'General question' : parts.join(' › ');
+    return parts.isEmpty ? context.l10n.assistantGeneralQuestion : parts.join(' › ');
   }
 }
 
@@ -570,16 +571,12 @@ class _RateLimitBar extends ConsumerWidget {
             const SizedBox(width: 6),
             Expanded(
               child: Text(
-                tracker.statusText,
+                tracker.statusTextFor(context.l10n),
                 style: TextStyle(fontSize: 11, color: fg),
               ),
             ),
             Tooltip(
-              message: '${appData.ai.model} free tier:\n'
-                  '${GeminiRateTracker.maxRpm} requests/min\n'
-                  '${GeminiRateTracker.maxRpd} requests/day\n'
-                  '${(GeminiRateTracker.maxTpm / 1000).round()}K tokens/min\n'
-                  '${(GeminiApiAssistant.maxContextTokens / 1000).round()}K max context',
+              message: context.l10n.assistantFreeTierRequestsMinRequests(appData.ai.model, GeminiRateTracker.maxRpm, GeminiRateTracker.maxRpd, (GeminiRateTracker.maxTpm / 1000).round(), (GeminiApiAssistant.maxContextTokens / 1000).round()),
               child: Icon(Icons.info_outline, size: 14, color: fg),
             ),
           ],
@@ -656,14 +653,14 @@ class _EmptyState extends StatelessWidget {
   final ValueChanged<String> onPromptTap;
   const _EmptyState({required this.onPromptTap});
 
-  static const _suggestions = [
-    'Walk me through filling out my directive step by step',
-    'What is a Mental Health Advance Directive?',
-    'What\'s the difference between Combined, Declaration, and POA?',
-    'Who can be my agent?',
-    'What medications should I list?',
-    'What does ECT mean?',
-    'How long is the directive valid?',
+  static List<String> _suggestions(BuildContext context) => [
+    context.l10n.assistantSuggestWalkMeThroughFillingOut,
+    context.l10n.assistantSuggestWhatIsAMentalHealth,
+    context.l10n.assistantSuggestWhatSTheDifferenceBetween,
+    context.l10n.assistantSuggestWhoCanBeMyAgent,
+    context.l10n.assistantSuggestWhatMedicationsShouldIList,
+    context.l10n.assistantSuggestWhatDoesEctMean,
+    context.l10n.assistantSuggestHowLongIsTheDirective,
   ];
 
   @override
@@ -693,7 +690,7 @@ class _EmptyState extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8),
-        ..._suggestions.map((s) => _SuggestionChip(
+        ..._suggestions(context).map((s) => _SuggestionChip(
               text: s,
               onTap: () => onPromptTap(s),
             )),

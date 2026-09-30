@@ -47,23 +47,23 @@ enum EducationTabKind {
 class BrowseByTopic extends StatelessWidget {
   const BrowseByTopic({super.key});
 
-  static const _rows = <(EducationCategory, String, String)>[
-    (EducationCategory.intro, 'Introduction',
-        'What an MHAD is and who should sign one'),
-    (EducationCategory.combined, 'Combined Form',
-        'Both an agent and treatment preferences'),
-    (EducationCategory.declaration, 'Declaration Only',
-        'Treatment preferences without an agent'),
-    (EducationCategory.poa, 'Power of Attorney',
-        'Agent designation without preferences'),
-    (EducationCategory.faq, 'Frequently Asked',
-        'Common questions about MHADs'),
-    (EducationCategory.glossary, 'Glossary',
-        'Every legal term, defined'),
-    (EducationCategory.supplementary, 'Beyond the Booklet',
-        'Topics not covered in the official PA booklet'),
-    (EducationCategory.checklist, 'Your Checklist',
-        'Step-by-step distribution + revocation guides'),
+  static List<(EducationCategory, String, String)> _rows(BuildContext context) => [
+    (EducationCategory.intro, context.l10n.eduBrowseIntroduction,
+        context.l10n.eduBrowseWhatAnMhadIsAnd),
+    (EducationCategory.combined, context.l10n.eduBrowseCombinedForm,
+        context.l10n.eduBrowseBothAnAgentAndTreatment),
+    (EducationCategory.declaration, context.l10n.declarationOnly,
+        context.l10n.eduBrowseTreatmentPreferencesWithoutAnAgent),
+    (EducationCategory.poa, context.l10n.eduBrowsePowerOfAttorney,
+        context.l10n.eduBrowseAgentDesignationWithoutPreferences),
+    (EducationCategory.faq, context.l10n.eduBrowseFrequentlyAsked,
+        context.l10n.eduBrowseCommonQuestionsAboutMhads),
+    (EducationCategory.glossary, context.l10n.eduBrowseGlossary,
+        context.l10n.eduBrowseEveryLegalTermDefined),
+    (EducationCategory.supplementary, context.l10n.eduBrowseBeyondTheBooklet,
+        context.l10n.eduBrowseTopicsNotCoveredInThe),
+    (EducationCategory.checklist, context.l10n.eduBrowseYourChecklist,
+        context.l10n.eduBrowseStepByStepDistributionRevocation),
   ];
 
   /// Every row opens its own page listing that category's sections (the
@@ -77,6 +77,7 @@ class BrowseByTopic extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
+    final rows = _rows(context);
     return Container(
       decoration: BoxDecoration(
         color: p.card,
@@ -86,17 +87,17 @@ class BrowseByTopic extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       child: Column(
         children: [
-          for (var i = 0; i < _rows.length; i++) ...[
+          for (var i = 0; i < rows.length; i++) ...[
             _BrowseRow(
-              category: _rows[i].$1,
-              title: _rows[i].$2,
-              sub: _rows[i].$3,
+              category: rows[i].$1,
+              title: rows[i].$2,
+              sub: rows[i].$3,
               count: allEducationSections
-                  .where((s) => s.category == _rows[i].$1)
+                  .where((s) => s.category == rows[i].$1)
                   .length,
-              onTap: () => _open(context, _rows[i].$1),
+              onTap: () => _open(context, rows[i].$1),
             ),
-            if (i < _rows.length - 1)
+            if (i < rows.length - 1)
               Divider(height: 1, color: p.border),
           ],
         ],
@@ -125,7 +126,7 @@ class _BrowseRow extends StatelessWidget {
     final p = Theme.of(context).mhadPalette;
     return Semantics(
       button: true,
-      label: '$title, $count sections. $sub',
+      label: context.l10n.educationCategoryBrowserSections(title, count, sub),
       child: InkWell(
         onTap: onTap,
         child: Padding(

@@ -32,8 +32,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
             Text(context.l10n.privacyPolicyPaMhadAppPrivacyPolicy, style: headingStyle),
             const SizedBox(height: 4),
             Text(
-              'Last updated: ${appData.dateFact('privacyPolicyUpdated')} '
-              '(${appData.dateFact('privacyPolicyVersion')})',
+              context.l10n.privacyPolicyLastUpdated(appData.dateFact('privacyPolicyUpdated'), appData.dateFact('privacyPolicyVersion')),
               style: bodyStyle?.copyWith(color: cs.onSurfaceVariant),
             ),
             const SizedBox(height: 16),
@@ -137,15 +136,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
             _PolicySection(
               title: context.l10n.privacyPolicyContact,
               body:
-                  'You can reach the developer through any of the following '
-                  '(the FTC Health Breach Notification Rule requires at least '
-                  'two contact methods — we provide three):\n\n'
-                  '  - In-app: an in-app breach notice will be shown on next '
-                  'launch if a breach affects you.\n'
-                  '  - Online: ${appData.privacyPolicyUrl} (also used for breach '
-                  'postings if direct contact information is insufficient).\n'
-                  '  - App store listing: the developer support address shown '
-                  'on the Google Play / App Store product page.',
+                  context.l10n.privacyPolicyYouCanReachTheDeveloper(appData.privacyPolicyUrl),
               headingStyle: headingStyle,
               bodyStyle: bodyStyle,
             ),

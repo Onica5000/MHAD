@@ -180,8 +180,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       title: Text(context.l10n.settingsScreenshotProtection),
                       subtitle: Text(
                         ScreenshotProtectionService.isEnabled
-                            ? 'Screenshots are blocked'
-                            : 'Screenshots are allowed',
+                            ? context.l10n.settingsScreenshotsAreBlocked
+                            : context.l10n.settingsScreenshotsAreAllowed,
                         style: TextStyle(color: p.textMuted, fontSize: 12),
                       ),
                       value: ScreenshotProtectionService.isEnabled,
@@ -438,7 +438,7 @@ class _ProfileChip extends ConsumerWidget {
       orElse: () => '',
     );
 
-    final displayName = name.isEmpty ? 'PA MHAD user' : name;
+    final displayName = name.isEmpty ? context.l10n.settingsDefaultUserName : name;
     final initials = _initialsFor(name);
 
     return Container(

@@ -38,12 +38,12 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
   final Set<String> _notifyPicked = {};
   bool _busy = false;
 
-  static const _genericNotifyCategories = [
-    'Primary care doctor',
-    'Psychiatrist / therapist',
-    'Nearest hospital ER',
-    'Pharmacy',
-    'Local rights advocate',
+  static List<String> _genericNotifyCategories(BuildContext context) => [
+    context.l10n.revocationNotifyPrimaryCareDoctor,
+    context.l10n.revocationNotifyPsychiatristTherapist,
+    context.l10n.revocationNotifyNearestHospitalEr,
+    context.l10n.revocationNotifyPharmacy,
+    context.l10n.revocationNotifyLocalRightsAdvocate,
   ];
 
   @override
@@ -211,13 +211,13 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
           // Specific list: agents + preferred doctor (loaded via repository
           // would require additional plumbing; we surface the categories the
           // user manually picks).
-          for (final cat in _genericNotifyCategories)
+          for (final cat in _genericNotifyCategories(context))
             CheckboxListTile(
               title: Text(cat),
               subtitle: Text(
                 _notifyPicked.contains(cat)
-                    ? 'Will be referenced in your revocation letter'
-                    : 'Tap to include',
+                    ? context.l10n.revocationWillBeReferencedInYour
+                    : context.l10n.revocationTapToInclude,
                 style: Theme.of(context).textTheme.bodySmall,
               ),
               value: _notifyPicked.contains(cat),
@@ -268,7 +268,7 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
                         ? _revoke
                         : null,
                     icon: const Icon(Icons.delete_forever_outlined),
-                    label: Text(_busy ? 'Revoking…' : 'Revoke now'),
+                    label: Text(_busy ? context.l10n.revocationRevoking : context.l10n.revocationRevokeNow),
                     style: FilledButton.styleFrom(
                       backgroundColor: cs.error,
                       foregroundColor: cs.onError,

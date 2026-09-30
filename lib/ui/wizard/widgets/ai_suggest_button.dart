@@ -78,7 +78,7 @@ class _AiSuggestButtonState extends ConsumerState<AiSuggestButton> {
 
     // Check rate limits
     final tracker = ref.read(geminiRateTrackerProvider);
-    final blockReason = tracker.blockReason;
+    final blockReason = tracker.blockReasonFor(context.l10n);
     if (blockReason != null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(blockReason), duration: const Duration(seconds: 5)),
@@ -113,7 +113,7 @@ class _AiSuggestButtonState extends ConsumerState<AiSuggestButton> {
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(FriendlyError.from(e))),
+        SnackBar(content: Text(FriendlyError.from(e, context.l10n))),
       );
     } finally {
       if (mounted) setState(() => _loading = false);

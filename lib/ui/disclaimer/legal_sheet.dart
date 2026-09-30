@@ -175,7 +175,7 @@ List<_SectionData> _buildSections(BuildContext context, MhadPalette p) {
           TextSpan(
               text:
                   context.l10n.legalSheetTheInformationIsForInformational),
-          _bold('not'),
+          _bold(context.l10n.legalSheetBoldNot),
           TextSpan(text: context.l10n.legalSheetConstituteLegalOrMedicalAdvice),
         ], palette: p),
         _Para(spans: [
@@ -191,7 +191,7 @@ List<_SectionData> _buildSections(BuildContext context, MhadPalette p) {
       body: [
         _Para(spans: [
           TextSpan(text: context.l10n.legalSheetUseOfThisAppDoes),
-          _bold('not'),
+          _bold(context.l10n.legalSheetBoldNot),
           TextSpan(
               text:
                   context.l10n.legalSheetCreateAnAttorneyClientRelationship),
@@ -232,7 +232,7 @@ List<_SectionData> _buildSections(BuildContext context, MhadPalette p) {
           TextSpan(
               text:
                   context.l10n.legalSheetAPaMentalHealthAdvance),
-          _bold('only'),
+          _bold(context.l10n.legalSheetBoldOnly),
           TextSpan(text: context.l10n.legalSheetWhen),
         ], palette: p),
         _Bullet(spans: [
@@ -242,7 +242,7 @@ List<_SectionData> _buildSections(BuildContext context, MhadPalette p) {
         ], palette: p),
         _Bullet(spans: [
           TextSpan(text: context.l10n.legalSheetItIsSignedInThe),
-          _bold('two adult witnesses'),
+          _bold(context.l10n.legalSheetBoldTwoAdultWitnesses),
         ], palette: p),
         _Bullet(spans: [
           TextSpan(
@@ -250,7 +250,7 @@ List<_SectionData> _buildSections(BuildContext context, MhadPalette p) {
                   context.l10n.legalSheetBothWitnessesMeetEligibilityRequirements),
         ], palette: p),
         _Para(spans: [
-          _bold('Witnesses cannot be: '),
+          _bold(context.l10n.legalSheetBoldWitnessesCannotBe),
           TextSpan(
               text:
                   context.l10n.legalSheetYourDesignatedAgentOrAlternate),
@@ -259,14 +259,14 @@ List<_SectionData> _buildSections(BuildContext context, MhadPalette p) {
           TextSpan(
               text:
                   context.l10n.legalSheetThisAppCapturesTouchDrawn),
-          _bold('printed'),
+          _bold(context.l10n.legalSheetBoldPrinted),
           TextSpan(
               text:
                   context.l10n.legalSheetDirectiveMustBeSignedIn),
         ], palette: p),
         _Para(spans: [
           TextSpan(text: context.l10n.legalSheetOnceSignedProvidersAndYour),
-          _bold('must comply'),
+          _bold(context.l10n.legalSheetBoldMustComply),
           TextSpan(
               text:
                   context.l10n.legalSheetWithYourDirective20Pa),
@@ -279,11 +279,11 @@ List<_SectionData> _buildSections(BuildContext context, MhadPalette p) {
       body: [
         _Para(spans: [
           TextSpan(text: context.l10n.legalSheetUnderPaAct194An),
-          _bold('two years'),
+          _bold(context.l10n.legalSheetBoldTwoYears),
           TextSpan(
               text:
                   context.l10n.legalSheetFromTheDateOfExecution),
-          _bold('unless you are found incapable'),
+          _bold(context.l10n.legalSheetBoldUnlessYouAreFoundIncapable),
           TextSpan(
               text:
                   context.l10n.legalSheetOfMakingMentalHealthDecisions),
@@ -322,11 +322,11 @@ List<_SectionData> _buildSections(BuildContext context, MhadPalette p) {
           TextSpan(
               text:
                   context.l10n.legalSheetThisIsAWebApp),
-          _bold('not saved permanently'),
+          _bold(context.l10n.legalSheetBoldNotSavedPermanently),
           TextSpan(
               text:
                   context.l10n.legalSheetIfYouCloseTheTab),
-          _bold('not'),
+          _bold(context.l10n.legalSheetBoldNot),
           TextSpan(text: context.l10n.legalSheetHipaaCompliant),
         ], palette: p),
         _Para(spans: [
@@ -336,8 +336,7 @@ List<_SectionData> _buildSections(BuildContext context, MhadPalette p) {
         ], palette: p),
         _Para(spans: [
           TextSpan(text: context.l10n.legalSheetToProtectYouTheApp),
-          _bold('automatically keeps identifying details out of what it sends '
-              'to the AI assistant and its suggestions'),
+          _bold(context.l10n.legalSheetBoldAutomaticallyKeepsIdentifyingDetailsOut),
           TextSpan(
               text:
                   context.l10n.legalSheetYourNameDateOfBirth),
@@ -346,7 +345,7 @@ List<_SectionData> _buildSections(BuildContext context, MhadPalette p) {
           TextSpan(
               text:
                   context.l10n.legalSheetDocumentsYouUploadForAutofill),
-          _bold('Uploading is never required'),
+          _bold(context.l10n.legalSheetBoldUploadingIsNeverRequired),
           TextSpan(
               text:
                   context.l10n.legalSheetBlackOutAnythingYouDon),
@@ -355,8 +354,7 @@ List<_SectionData> _buildSections(BuildContext context, MhadPalette p) {
           TextSpan(
               text:
                   context.l10n.legalSheetSeparatelyToHelpYouFill),
-          _bold('These lookups send only the medical term, code, or provider '
-              'name being searched'),
+          _bold(context.l10n.legalSheetBoldTheseLookupsSendOnlyThe),
           TextSpan(
               text:
                   context.l10n.legalSheetNeverYourIdentityThePeople),
@@ -374,7 +372,7 @@ List<_SectionData> _buildSections(BuildContext context, MhadPalette p) {
       body: [
         _Resource(
             title: context.l10n.legalSheetPaProtectionAdvocacy,
-            sub: 'Your rights under Act 194',
+            sub: context.l10n.legalSheetYourRightsUnderAct194,
             mono:
                 '${appData.phoneOf('paProtectionAdvocacy')} · TDD/TTY ${appData.contact('paProtectionAdvocacy').tdd ?? ''}',
             palette: p),
@@ -393,8 +391,8 @@ List<_SectionData> _buildSections(BuildContext context, MhadPalette p) {
         const SizedBox(height: 10),
         _Resource(
             title: context.l10n.legalSheet988SuicideCrisisLifeline,
-            sub: '24/7, free, confidential',
-            mono: 'Call or text 988',
+            sub: context.l10n.legalSheet247FreeConfidential,
+            mono: context.l10n.legalSheetCallOrText988,
             palette: p),
       ],
     ),
