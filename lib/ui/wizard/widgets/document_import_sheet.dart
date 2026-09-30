@@ -38,27 +38,25 @@ Future<List<PickedDocument>?> pickDocumentFiles() async {
   }
 
   // Native: file_picker with FileType.any + Dart-side extension filtering.
-  final result = await FilePicker.platform.pickFiles(
-    type: FileType.any,
-    allowMultiple: true,
-    // REQUIRED: load the file bytes into memory. On native (Android/iOS/
-    // desktop) FilePicker returns only a path unless withData is set, and the
-    // extraction pipeline reads `PickedDocument.bytes` — without this every
-    // picked file was silently skipped. On web bytes are already loaded.
-    withData: true,
-  );
-  if (result == null) return null; // cancelled
+  // file_picker 13: pickFiles() is multi-select and returns an empty list
+  // when cancelled; bytes are read explicitly (the extraction pipeline needs
+  // `PickedDocument.bytes`, and native pickers only hand back a URI).
+  final files = await FilePicker.pickFiles(type: FileType.any);
+  if (files.isEmpty) return null; // cancelled
   final docs = <PickedDocument>[];
-  for (final f in result.files) {
-    // With withData:true, bytes are loaded on every platform (web preloads
-    // them regardless). Skip anything that still has no bytes.
-    if (f.bytes == null) continue;
+  for (final f in files) {
     final mime = _fileMimeType(f.name);
     if (mime == 'application/octet-stream') continue; // unsupported extension
+    final Uint8List bytes;
+    try {
+      bytes = await f.readAsBytes();
+    } catch (_) {
+      continue; // unreadable — skip, as before
+    }
     docs.add(PickedDocument(
       path: f.path ?? f.name,
       mimeType: mime,
-      bytes: f.bytes,
+      bytes: bytes,
     ));
   }
   return docs;

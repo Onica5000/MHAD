@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:mhad/l10n/l10n.dart';
@@ -18,13 +20,17 @@ Future<void> importSavedDirectiveFile(
   // survives both the file-picker gap and the navigation below.
   final messenger = ScaffoldMessenger.of(context);
   final l10n = context.l10n;
-  final result = await FilePicker.platform.pickFiles(
+  final file = await FilePicker.pickFile(
     type: FileType.custom,
     allowedExtensions: ['mhad', 'json', 'txt'],
-    withData: true, // load bytes on every platform (web preloads them)
   );
-  if (result == null) return; // cancelled
-  final bytes = result.files.isEmpty ? null : result.files.first.bytes;
+  if (file == null) return; // cancelled
+  Uint8List? bytes;
+  try {
+    bytes = await file.readAsBytes();
+  } catch (_) {
+    bytes = null;
+  }
   if (bytes == null) {
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(

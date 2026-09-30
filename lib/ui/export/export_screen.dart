@@ -926,7 +926,8 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
   /// the Web Share API is unavailable.
   Future<void> _shareText(String text, String subject) async {
     try {
-      await Share.share(text, subject: subject);
+      await SharePlus.instance
+          .share(ShareParams(text: text, subject: subject));
     } catch (e) {
       debugPrint('Share API unavailable, falling back to clipboard: $e');
       await Clipboard.setData(ClipboardData(text: text));
@@ -951,13 +952,13 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       );
       final name =
           _encryptEditableCopy ? 'directive.mhad' : 'directive-readable.mhad';
-      await Share.shareXFiles(
-        [
+      await SharePlus.instance.share(ShareParams(
+        files: [
           XFile.fromData(bytes,
               mimeType: 'application/octet-stream', name: name)
         ],
         subject: subject,
-      );
+      ));
     } catch (e) {
       debugPrint('Editable-file export failed: $e');
       if (mounted) {
@@ -1082,8 +1083,8 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       final zip = ZipEncoder().encode(archive);
 
       if (!mounted) return;
-      await Share.shareXFiles(
-        [
+      await SharePlus.instance.share(ShareParams(
+        files: [
           XFile.fromData(
             Uint8List.fromList(zip),
             name: 'PA_MHAD_$safe.zip',
@@ -1091,7 +1092,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
           ),
         ],
         subject: context.l10n.exportShareSubjectBundle,
-      );
+      ));
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

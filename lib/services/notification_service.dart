@@ -58,7 +58,7 @@ class NotificationService {
         requestSoundPermission: false,
       );
       await _plugin.initialize(
-        const InitializationSettings(android: android, iOS: ios),
+        settings: const InitializationSettings(android: android, iOS: ios),
       );
 
       // Create the Android notification channel (no-op on iOS)
@@ -98,9 +98,9 @@ class NotificationService {
   /// Cancels any reminders previously scheduled for [directiveId].
   Future<void> cancelReminders(int directiveId) async {
     try {
-      await _plugin.cancel(directiveId * 10 + 1);
-      await _plugin.cancel(directiveId * 10 + 2);
-      await _plugin.cancel(directiveId * 10 + 3);
+      await _plugin.cancel(id: directiveId * 10 + 1);
+      await _plugin.cancel(id: directiveId * 10 + 2);
+      await _plugin.cancel(id: directiveId * 10 + 3);
     } catch (e) {
       debugPrint('NotificationService cancel error: $e');
     }

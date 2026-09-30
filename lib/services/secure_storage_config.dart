@@ -5,7 +5,12 @@ import 'package:mhad/ai/ai_provider.dart';
 /// consumer (AI keys, DB encryption key, PIN hash) must use this instance so
 /// the Android/iOS options never drift apart between features.
 const FlutterSecureStorage appSecureStorage = FlutterSecureStorage(
-  aOptions: AndroidOptions(encryptedSharedPreferences: true),
+  // v11 removed encryptedSharedPreferences (Jetpack Security is deprecated).
+  // Only v10 migrated that data, so values written by a v9 Android build are
+  // not readable after this upgrade. Acceptable while native is unshipped
+  // (web-only; see CLAUDE.md). If an Android build ever shipped on v9, ship a
+  // v10 release first.
+  aOptions: AndroidOptions(),
   iOptions: IOSOptions(
     accessibility: KeychainAccessibility.first_unlock_this_device,
   ),

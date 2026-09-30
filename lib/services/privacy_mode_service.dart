@@ -72,10 +72,8 @@ class PrivacyModeNotifier extends ChangeNotifier {
       final authenticated = await _auth.authenticate(
         localizedReason:
             'Authenticate to access your saved Mental Health Advance Directives',
-        options: const AuthenticationOptions(
-          biometricOnly: false, // also allow device PIN/pattern fallback
-          stickyAuth: true,
-        ),
+        biometricOnly: false, // also allow device PIN/pattern fallback
+        persistAcrossBackgrounding: true, // formerly stickyAuth
       );
 
       if (authenticated) {
