@@ -318,7 +318,7 @@ were superseded by regulations that changed *after* they were written.
   interview arc; cite the evidence in education content; consider an optional "guided
   session" mode. Differentiator + better outcomes + marketing-safe (process, not medical
   claims — keep within `MARKETING_GUIDELINES.md`).
-- **Status:** [ ]
+- **Status:** `[x]` **DONE 2026-09-30** — (1) the assistant's guided interview now follows the facilitated-PAD order (reflect → crisis history → who you trust → preferences → form details last) for every conversation; (2) **guided session** mode: *Get help → Talk it through* opens the assistant with an opening message and starts the interview immediately, and *I'm helping someone* switches on the helper/facilitator prompt (the flag existed but nothing ever set it); (3) the evidence is cited in the Learn content (`intro_why_take_your_time`) and on the Get-help screen (Swanson et al. 2006). Copy stays within MARKETING_GUIDELINES (process, not treatment claims). Tests: `test/ai/guided_session_test.dart`, `test/facilitator_guided_session_test.dart`.
 
 ### V4-L13: Resilience hardening (OWASP MASVS-R) is partial
 - **Evidence:** App has SQLCipher, secure storage, cert pinning, root/jailbreak detection,

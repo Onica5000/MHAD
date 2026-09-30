@@ -11712,6 +11712,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'MM/DD/YYYY'**
   String get dateInputHint;
+
+  /// No description provided for @facilitatorGuidedTag.
+  ///
+  /// In en, this message translates to:
+  /// **'GUIDED SESSION · IN THE APP'**
+  String get facilitatorGuidedTag;
+
+  /// No description provided for @facilitatorGuidedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Talk it through, one question at a time'**
+  String get facilitatorGuidedTitle;
+
+  /// No description provided for @facilitatorGuidedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The AI assistant asks the questions a trained facilitator would, in the same order: what a crisis looks like for you, what has helped or made things worse, who you trust, and then your choices. You fill in the form yourself — the assistant explains, it doesn\'t decide.'**
+  String get facilitatorGuidedBody;
+
+  /// No description provided for @facilitatorGuidedMetaPace.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop any time'**
+  String get facilitatorGuidedMetaPace;
+
+  /// No description provided for @facilitatorGuidedMetaAi.
+  ///
+  /// In en, this message translates to:
+  /// **'Uses your AI key'**
+  String get facilitatorGuidedMetaAi;
+
+  /// No description provided for @facilitatorGuidedStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start a guided session'**
+  String get facilitatorGuidedStart;
+
+  /// No description provided for @facilitatorHelperStart.
+  ///
+  /// In en, this message translates to:
+  /// **'I\'m helping someone'**
+  String get facilitatorHelperStart;
+
+  /// No description provided for @facilitatorGuidedOpeningPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'I\'d like a guided session. Please walk me through my advance directive one question at a time, starting with what a crisis looks like for me.'**
+  String get facilitatorGuidedOpeningPrompt;
+
+  /// No description provided for @facilitatorHelperOpeningPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'I\'m helping someone complete their advance directive. Please guide us through it one question at a time, starting with what a crisis looks like for them.'**
+  String get facilitatorHelperOpeningPrompt;
+
+  /// No description provided for @assistantContextGuidedSession.
+  ///
+  /// In en, this message translates to:
+  /// **'Guided session'**
+  String get assistantContextGuidedSession;
+
+  /// No description provided for @assistantContextHelperSession.
+  ///
+  /// In en, this message translates to:
+  /// **'Guided session · helping someone'**
+  String get assistantContextHelperSession;
 }
 
 class _AppLocalizationsDelegate

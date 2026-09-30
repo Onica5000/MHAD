@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
@@ -11,6 +11,9 @@ import 'package:mhad/ui/widgets/design/wizard_header.dart';
 import 'package:mhad/utils/launch_utils.dart';
 import 'package:mhad/utils/nav_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:go_router/go_router.dart';
+import 'package:mhad/ai/ai_assistant.dart';
+import 'package:mhad/ui/router.dart';
 
 /// "Get help" / Facilitator mode (v2 prototype `m-facilitator`, v3 re-spec).
 ///
@@ -30,11 +33,11 @@ class FacilitatorScreen extends StatelessWidget {
       launchOrCopy(context, url, mode: LaunchMode.externalApplication);
 
   Future<void> _tel(BuildContext context, String number) => launchOrCopy(
-        context,
-        'tel:${number.replaceAll(RegExp(r'[^0-9+]'), '')}',
-        copyValue: number,
-        mode: LaunchMode.externalApplication,
-      );
+    context,
+    'tel:${number.replaceAll(RegExp(r'[^0-9+]'), '')}',
+    copyValue: number,
+    mode: LaunchMode.externalApplication,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -44,106 +47,163 @@ class FacilitatorScreen extends StatelessWidget {
       // Prototype ScrFacilitator (gap-analysis.jsx L1254-1338) has CrisisBar
       // + in-body Back chevron — the editorial "You don't have to do this
       // alone." 32pt headline owns the visual title.
-      body: Column(children: [
-        WizardHeader(
-          backLabel: context.l10n.back,
-          onBack: () => safeBack(context),
-          actionLabel: '',
-        ),
-        Expanded(child: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 14, 20, 32),
+      body: Column(
         children: [
-          BrandMotif(
-            padding: const EdgeInsets.fromLTRB(20, 16, 14, 18),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
+          WizardHeader(
+            backLabel: context.l10n.back,
+            onBack: () => safeBack(context),
+            actionLabel: '',
+          ),
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(20, 14, 20, 32),
               children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                BrandMotif(
+                  padding: const EdgeInsets.fromLTRB(20, 16, 14, 18),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      SectionLabel(context.l10n.facilitatorGetHelpEvidenceBased),
-                      const SizedBox(height: 6),
-                      EditorialHeading(
-                        text: context.l10n.facilitatorYouDonTHaveTo,
-                        size: 32,
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        context.l10n.facilitatorPickTheKindOfSupport(appData.fact('facilitatorCompletionStat')),
-                        style: TextStyle(
-                          fontFamily: kSansFamily,
-                          fontSize: 14,
-                          color: p.textMuted,
-                          height: 1.5,
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SectionLabel(
+                              context.l10n.facilitatorGetHelpEvidenceBased,
+                            ),
+                            const SizedBox(height: 6),
+                            EditorialHeading(
+                              text: context.l10n.facilitatorYouDonTHaveTo,
+                              size: 32,
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              context.l10n.facilitatorPickTheKindOfSupport(
+                                appData.fact('facilitatorCompletionStat'),
+                              ),
+                              style: TextStyle(
+                                fontFamily: kSansFamily,
+                                fontSize: 14,
+                                color: p.textMuted,
+                                height: 1.5,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
+                      const SizedBox(width: 8),
+                      const SpotIllustration(art: SpotArt.shield, size: 72),
                     ],
                   ),
                 ),
-                const SizedBox(width: 8),
-                const SpotIllustration(art: SpotArt.shield, size: 72),
+                const SizedBox(height: 18),
+
+                // Pathway 1 — Referral to PA partners
+                _PathwayCard(
+                  primary: true,
+                  tag: context.l10n.facilitatorPeerSpecialistAdvocateReferral,
+                  title: context.l10n.facilitatorTalkToSomeoneTrained,
+                  body: context
+                      .l10n
+                      .facilitatorPennsylvaniaPeerSpecialistsAndRights,
+                  meta: [
+                    context.l10n.facilitator45Min,
+                    context.l10n.facilitatorFree,
+                    context.l10n.facilitatorPaBased,
+                  ],
+                ),
+                const SizedBox(height: 8),
+                // Referral partners come from app_data.json (assets/data) so the
+                // numbers/links can be updated without touching code.
+                for (final partner in appData.referralPartners)
+                  _ReferralRow(
+                    label: partner.contact.name,
+                    sub: partner.sub,
+                    onCall: partner.contact.phone == null
+                        ? null
+                        : () => _tel(context, partner.contact.phone!),
+                    onWeb: partner.contact.web == null
+                        ? null
+                        : () => _open(context, partner.contact.web!),
+                  ),
+
+                const SizedBox(height: 18),
+
+                // Pathway 1b — guided session in the app (V4-L12): the AI assistant
+                // leads the facilitation interview (reflection → crisis history →
+                // who you trust → choices). Two ways in: for yourself, or as the
+                // helper sitting with someone.
+                _PathwayCard(
+                  tag: context.l10n.facilitatorGuidedTag,
+                  title: context.l10n.facilitatorGuidedTitle,
+                  body: context.l10n.facilitatorGuidedBody,
+                  meta: [
+                    context.l10n.facilitatorGuidedMetaPace,
+                    context.l10n.facilitatorGuidedMetaAi,
+                  ],
+                  actions: [
+                    FilledButton(
+                      onPressed: () => context.push(
+                        AppRoutes.assistant,
+                        extra: AssistantContext(
+                          guidedSession: true,
+                          openingPrompt:
+                              context.l10n.facilitatorGuidedOpeningPrompt,
+                        ),
+                      ),
+                      child: Text(context.l10n.facilitatorGuidedStart),
+                    ),
+                    OutlinedButton(
+                      onPressed: () => context.push(
+                        AppRoutes.assistant,
+                        extra: AssistantContext(
+                          guidedSession: true,
+                          facilitatorMode: true,
+                          openingPrompt:
+                              context.l10n.facilitatorHelperOpeningPrompt,
+                        ),
+                      ),
+                      child: Text(context.l10n.facilitatorHelperStart),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 18),
+
+                // Pathway 2 — print + review in person
+                _PathwayCard(
+                  tag: context.l10n.facilitatorSomeoneIAlreadyTrust,
+                  title: context.l10n.facilitatorPrintReviewItTogether,
+                  body: context.l10n.facilitatorPrintOrScreenShareYour,
+                  meta: [
+                    context.l10n.facilitatorInPerson,
+                    context.l10n.facilitatorYouStayInControl,
+                  ],
+                ),
+
+                const SizedBox(height: 18),
+
+                // Pathway 3 — email draft to clinician
+                _PathwayCard(
+                  tag: context.l10n.facilitatorMyCareTeam,
+                  title: context.l10n.facilitatorEmailADraftToMy,
+                  body: context.l10n.facilitatorGenerateThePdfInExport,
+                  meta: [
+                    context.l10n.facilitatorEmailComposer,
+                    context.l10n.facilitatorManualTranscribeBack,
+                  ],
+                ),
+
+                const SizedBox(height: 18),
+                InfoBanner(
+                  icon: Icons.info_outline,
+                  variant: InfoBannerVariant.info,
+                  text: context.l10n.facilitatorPreferToDoItYourself,
+                ),
               ],
             ),
           ),
-          const SizedBox(height: 18),
-
-          // Pathway 1 — Referral to PA partners
-          _PathwayCard(
-            primary: true,
-            tag: context.l10n.facilitatorPeerSpecialistAdvocateReferral,
-            title: context.l10n.facilitatorTalkToSomeoneTrained,
-            body:
-                context.l10n.facilitatorPennsylvaniaPeerSpecialistsAndRights,
-            meta: [context.l10n.facilitator45Min, context.l10n.facilitatorFree, context.l10n.facilitatorPaBased],
-          ),
-          const SizedBox(height: 8),
-          // Referral partners come from app_data.json (assets/data) so the
-          // numbers/links can be updated without touching code.
-          for (final partner in appData.referralPartners)
-            _ReferralRow(
-              label: partner.contact.name,
-              sub: partner.sub,
-              onCall: partner.contact.phone == null
-                  ? null
-                  : () => _tel(context, partner.contact.phone!),
-              onWeb: partner.contact.web == null
-                  ? null
-                  : () => _open(context, partner.contact.web!),
-            ),
-
-          const SizedBox(height: 18),
-
-          // Pathway 2 — print + review in person
-          _PathwayCard(
-            tag: context.l10n.facilitatorSomeoneIAlreadyTrust,
-            title: context.l10n.facilitatorPrintReviewItTogether,
-            body:
-                context.l10n.facilitatorPrintOrScreenShareYour,
-            meta: [context.l10n.facilitatorInPerson, context.l10n.facilitatorYouStayInControl],
-          ),
-
-          const SizedBox(height: 18),
-
-          // Pathway 3 — email draft to clinician
-          _PathwayCard(
-            tag: context.l10n.facilitatorMyCareTeam,
-            title: context.l10n.facilitatorEmailADraftToMy,
-            body:
-                context.l10n.facilitatorGenerateThePdfInExport,
-            meta: [context.l10n.facilitatorEmailComposer, context.l10n.facilitatorManualTranscribeBack],
-          ),
-
-          const SizedBox(height: 18),
-          InfoBanner(
-            icon: Icons.info_outline,
-            variant: InfoBannerVariant.info,
-            text:
-                context.l10n.facilitatorPreferToDoItYourself,
-          ),
         ],
-      )),
-      ]),
+      ),
     );
   }
 }
@@ -154,12 +214,16 @@ class _PathwayCard extends StatelessWidget {
   final String title;
   final String body;
   final List<String> meta;
+
+  /// Optional buttons under the card body.
+  final List<Widget> actions;
   const _PathwayCard({
     this.primary = false,
     required this.tag,
     required this.title,
     required this.body,
     required this.meta,
+    this.actions = const [],
   });
 
   @override
@@ -172,36 +236,42 @@ class _PathwayCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(tag,
-                style: TextStyle(
-                  fontFamily: kMonoFamily,
-                  fontFamilyFallback: const [
-                    'Consolas',
-                    'Menlo',
-                    'Courier New',
-                    'monospace'
-                  ],
-                  fontSize: 11,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 0.6,
-                  color: primary ? cs.onPrimary : cs.onSurfaceVariant,
-                )),
+            Text(
+              tag,
+              style: TextStyle(
+                fontFamily: kMonoFamily,
+                fontFamilyFallback: const [
+                  'Consolas',
+                  'Menlo',
+                  'Courier New',
+                  'monospace',
+                ],
+                fontSize: 11,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 0.6,
+                color: primary ? cs.onPrimary : cs.onSurfaceVariant,
+              ),
+            ),
             const SizedBox(height: 6),
-            Text(title,
-                style: TextStyle(
-                  fontFamily: kSansFamily,
-                  fontSize: 17,
-                  fontWeight: FontWeight.w700,
-                  color: primary ? cs.onPrimary : cs.onSurface,
-                )),
+            Text(
+              title,
+              style: TextStyle(
+                fontFamily: kSansFamily,
+                fontSize: 17,
+                fontWeight: FontWeight.w700,
+                color: primary ? cs.onPrimary : cs.onSurface,
+              ),
+            ),
             const SizedBox(height: 6),
-            Text(body,
-                style: TextStyle(
-                  fontFamily: kSansFamily,
-                  fontSize: 14,
-                  height: 1.45,
-                  color: primary ? cs.onPrimary : cs.onSurfaceVariant,
-                )),
+            Text(
+              body,
+              style: TextStyle(
+                fontFamily: kSansFamily,
+                fontSize: 14,
+                height: 1.45,
+                color: primary ? cs.onPrimary : cs.onSurfaceVariant,
+              ),
+            ),
             const SizedBox(height: 10),
             Wrap(
               spacing: 6,
@@ -210,31 +280,39 @@ class _PathwayCard extends StatelessWidget {
                 for (final m in meta)
                   Container(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 8, vertical: 4),
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
                     decoration: BoxDecoration(
                       color: primary
                           ? cs.onPrimary.withValues(alpha: 0.15)
                           : cs.surfaceContainerHighest,
-                      borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
+                      borderRadius: BorderRadius.circular(
+                        DesignTokens.chipRadius,
+                      ),
                     ),
-                    child: Text(m,
-                        style: TextStyle(
-                          fontFamily: kMonoFamily,
-                          fontFamilyFallback: const [
-                            'Consolas',
-                            'Menlo',
-                            'Courier New',
-                            'monospace'
-                          ],
-                          fontSize: 11,
-                          letterSpacing: 0.4,
-                          color: primary
-                              ? cs.onPrimary
-                              : cs.onSurfaceVariant,
-                        )),
+                    child: Text(
+                      m,
+                      style: TextStyle(
+                        fontFamily: kMonoFamily,
+                        fontFamilyFallback: const [
+                          'Consolas',
+                          'Menlo',
+                          'Courier New',
+                          'monospace',
+                        ],
+                        fontSize: 11,
+                        letterSpacing: 0.4,
+                        color: primary ? cs.onPrimary : cs.onSurfaceVariant,
+                      ),
+                    ),
                   ),
               ],
             ),
+            if (actions.isNotEmpty) ...[
+              const SizedBox(height: 14),
+              Wrap(spacing: 10, runSpacing: 8, children: actions),
+            ],
           ],
         ),
       ),
@@ -268,14 +346,15 @@ class _ReferralRow extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(label,
-                        style: const TextStyle(
-                          fontFamily: kSansFamily,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                        )),
-                    Text(sub,
-                        style: Theme.of(context).textTheme.bodySmall),
+                    Text(
+                      label,
+                      style: const TextStyle(
+                        fontFamily: kSansFamily,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Text(sub, style: Theme.of(context).textTheme.bodySmall),
                   ],
                 ),
               ),

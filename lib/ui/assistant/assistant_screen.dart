@@ -36,6 +36,14 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
   Timer? _piiTimer;
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _maybeSendOpeningPrompt();
+    });
+  }
+
+  @override
   void dispose() {
     _piiTimer?.cancel();
     _inputCtrl.dispose();
@@ -53,6 +61,17 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
         );
       }
     });
+  }
+
+  /// Guided sessions (V4-L12) open with a first message so the user doesn't
+  /// face an empty chat. Goes through [_send], so the key / consent / rate
+  /// checks all still apply.
+  void _maybeSendOpeningPrompt() {
+    final opening = widget.context?.openingPrompt;
+    if (opening == null || opening.isEmpty) return;
+    if (ref.read(conversationProvider).isNotEmpty) return;
+    _inputCtrl.text = opening;
+    _send();
   }
 
   Future<void> _send() async {
@@ -522,6 +541,11 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
     final ft = formTypeFromName(ctx.formType);
     if (ft != null) parts.add(ft.shortLabel(context.l10n));
     if (ctx.stepName != null) parts.add(ctx.stepName!);
+    if (parts.isEmpty && ctx.guidedSession) {
+      return ctx.facilitatorMode
+          ? context.l10n.assistantContextHelperSession
+          : context.l10n.assistantContextGuidedSession;
+    }
     return parts.isEmpty ? context.l10n.assistantGeneralQuestion : parts.join(' › ');
   }
 }

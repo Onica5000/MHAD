@@ -2883,5 +2883,16 @@
   "dateInputHint": "MM/DD/YYYY",
   "@dateInputHint": {
     "description": "Placeholder for typed dates. The field parses US month/day/year order, so translations must keep that order (e.g. es: MM/DD/AAAA)."
-  }
+  },
+  "facilitatorGuidedTag": "GUIDED SESSION · IN THE APP",
+  "facilitatorGuidedTitle": "Talk it through, one question at a time",
+  "facilitatorGuidedBody": "The AI assistant asks the questions a trained facilitator would, in the same order: what a crisis looks like for you, what has helped or made things worse, who you trust, and then your choices. You fill in the form yourself — the assistant explains, it doesn't decide.",
+  "facilitatorGuidedMetaPace": "Stop any time",
+  "facilitatorGuidedMetaAi": "Uses your AI key",
+  "facilitatorGuidedStart": "Start a guided session",
+  "facilitatorHelperStart": "I'm helping someone",
+  "facilitatorGuidedOpeningPrompt": "I'd like a guided session. Please walk me through my advance directive one question at a time, starting with what a crisis looks like for me.",
+  "facilitatorHelperOpeningPrompt": "I'm helping someone complete their advance directive. Please guide us through it one question at a time, starting with what a crisis looks like for them.",
+  "assistantContextGuidedSession": "Guided session",
+  "assistantContextHelperSession": "Guided session · helping someone"
 }

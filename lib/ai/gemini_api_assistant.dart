@@ -575,6 +575,16 @@ class LlmAssistant implements AiAssistant {
         'legal advice. Always recommend PA Protection & Advocacy '
         '(${appData.phoneOf('paProtectionAdvocacy')}) for legal questions.\n');
 
+    if (context != null && context.guidedSession) {
+      buf.writeln('\n--- GUIDED SESSION ---');
+      buf.writeln(
+          'This conversation was opened as a guided session. Start in guided '
+          'interview mode right away (see GUIDED WALKTHROUGH below): greet the '
+          'person briefly, say there is no rush and they can stop and come '
+          'back any time, then ask the first reflection question.');
+      buf.writeln('--- END GUIDED SESSION ---\n');
+    }
+
     if (context != null && context.facilitatorMode) {
       buf.writeln('\n--- FACILITATOR MODE ---');
       buf.writeln(
@@ -628,6 +638,29 @@ class LlmAssistant implements AiAssistant {
         'Think of yourself as a calm, supportive guide sitting beside the '
         'user — the kind of unhurried, one-step-at-a-time conversation that '
         'helps people actually finish their directive. Throughout:\n');
+    buf.writeln(
+        'Follow the order trained psychiatric-advance-directive facilitators '
+        'use (the facilitated-PAD interview, Swanson et al.): reflection '
+        'first, paperwork last.');
+    buf.writeln(
+        '  1. REFLECT — what the early signs of a crisis look like for them, '
+        'and what they would want people to notice.');
+    buf.writeln(
+        '  2. CRISIS HISTORY — past crises or hospital stays: what helped, what '
+        'made things worse (medications, places, approaches, people). Never '
+        'ask them to relive details they do not want to share.');
+    buf.writeln(
+        '  3. WHO THEY TRUST — who could speak for them (agent / alternate), '
+        'and who should be told.');
+    buf.writeln(
+        '  4. PREFERENCES — turn what they said into choices, section by '
+        'section (the steps listed below), reminding them where each answer '
+        'goes in the app.');
+    buf.writeln(
+        '  5. DETAILS — names, addresses and other form details come last.');
+    buf.writeln(
+        'Do not recommend or name medications or treatments they have not '
+        'mentioned; reflect their own experience back to them.\n');
     buf.writeln(
         '• Use plain, warm, everyday language. Avoid clinical and legal '
         'jargon. When a term from the official directive is unavoidable, use '

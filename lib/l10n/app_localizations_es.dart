@@ -6922,4 +6922,42 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get dateInputHint => 'MM/DD/YYYY';
+
+  @override
+  String get facilitatorGuidedTag => 'GUIDED SESSION · IN THE APP';
+
+  @override
+  String get facilitatorGuidedTitle =>
+      'Talk it through, one question at a time';
+
+  @override
+  String get facilitatorGuidedBody =>
+      'The AI assistant asks the questions a trained facilitator would, in the same order: what a crisis looks like for you, what has helped or made things worse, who you trust, and then your choices. You fill in the form yourself — the assistant explains, it doesn\'t decide.';
+
+  @override
+  String get facilitatorGuidedMetaPace => 'Stop any time';
+
+  @override
+  String get facilitatorGuidedMetaAi => 'Uses your AI key';
+
+  @override
+  String get facilitatorGuidedStart => 'Start a guided session';
+
+  @override
+  String get facilitatorHelperStart => 'I\'m helping someone';
+
+  @override
+  String get facilitatorGuidedOpeningPrompt =>
+      'I\'d like a guided session. Please walk me through my advance directive one question at a time, starting with what a crisis looks like for me.';
+
+  @override
+  String get facilitatorHelperOpeningPrompt =>
+      'I\'m helping someone complete their advance directive. Please guide us through it one question at a time, starting with what a crisis looks like for them.';
+
+  @override
+  String get assistantContextGuidedSession => 'Guided session';
+
+  @override
+  String get assistantContextHelperSession =>
+      'Guided session · helping someone';
 }

@@ -48,11 +48,21 @@ class AssistantContext {
   /// assisting the user, not the user themselves).
   final bool facilitatorMode;
 
+  /// Opened as a guided session (V4-L12): the assistant leads a
+  /// facilitation-style interview from the first message.
+  final bool guidedSession;
+
+  /// Sent automatically when the assistant opens with an empty chat, so a
+  /// guided session starts without the user having to know what to type.
+  final String? openingPrompt;
+
   const AssistantContext({
     this.formType,
     this.stepName,
     this.filledFields,
     this.facilitatorMode = false,
+    this.guidedSession = false,
+    this.openingPrompt,
   });
 }
 
