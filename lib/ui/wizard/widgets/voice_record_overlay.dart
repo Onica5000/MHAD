@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/services/audio_transcription_service.dart';
@@ -148,7 +149,7 @@ class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
     try {
       if (!await _recorder.hasPermission()) {
         if (mounted) {
-          setState(() => _error = 'Microphone permission is needed.');
+          setState(() => _error = context.l10n.voiceMicPermission);
         }
         return false;
       }
@@ -201,7 +202,7 @@ class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
       if (!mounted) return;
       setState(() {
         _transcribing = false;
-        _error = "Couldn't transcribe. Try again, or type it instead.";
+        _error = context.l10n.voiceTranscribeFailed;
       });
     }
   }
@@ -215,7 +216,7 @@ class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
           if (!mounted) return;
           setState(() {
             _listening = false;
-            _error = 'Speech recognition error.';
+            _error = context.l10n.voiceSpeechError;
           });
         },
         onStatus: (status) {
@@ -229,8 +230,8 @@ class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
       if (!available) {
         if (mounted) {
           setState(() => _error = kIsWeb
-              ? 'Voice needs Chrome, Edge, or Safari.'
-              : 'Speech recognition is not available on this device.');
+              ? context.l10n.voiceNeedsBrowser
+              : context.l10n.voiceNotAvailable);
         }
         return;
       }
@@ -299,9 +300,9 @@ class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
 
   String _statusLabel() {
     if (_error != null) return '● ${_error!.toUpperCase()}';
-    if (_transcribing) return '● Transcribing';
-    if (_listening) return '● Recording';
-    return '● Paused';
+    if (_transcribing) return context.l10n.voiceStatusTranscribing;
+    if (_listening) return context.l10n.voiceStatusRecording;
+    return context.l10n.voiceStatusPaused;
   }
 
   @override
@@ -344,7 +345,7 @@ class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
                     ),
                   ),
                   Text(
-                    'Say it your way.',
+                    context.l10n.voiceSayItYourWay,
                     style: TextStyle(
                       fontFamily: 'Instrument Serif',
                       fontFamilyFallback: const ['Georgia', 'serif'],
@@ -361,15 +362,10 @@ class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
                     // the recording to Google's Gemini; the fallback uses the
                     // browser/OS speech service (often Google on web too).
                     _aiMode
-                        ? 'For better accuracy on medication names and '
-                            "conditions, your recording goes to Google's AI to "
-                            'transcribe. Review the text before saving.'
+                        ? context.l10n.voiceExplainAi
                         : (kIsWeb
-                            ? 'To transcribe, your browser sends the audio to '
-                                "its speech service (often Google). We don't "
-                                'keep the audio or text — edit it before saving.'
-                            : 'Your device turns speech into text. We never '
-                                'store the audio — you can edit before saving.'),
+                            ? context.l10n.voiceExplainBrowser
+                            : context.l10n.voiceExplainDevice),
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontFamily: kSansFamily,
@@ -423,9 +419,8 @@ class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
                           surface: p.surface,
                           // AI mode has no live partials; prompt accordingly.
                           emptyHint: _aiMode
-                              ? 'Tap the red button, speak, then tap stop to '
-                                  'transcribe…'
-                              : 'Tap the red record button and start speaking…',
+                              ? context.l10n.voiceEmptyHintAi
+                              : context.l10n.voiceEmptyHintLive,
                         ),
                 ],
               ),
@@ -438,12 +433,12 @@ class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
                 children: [
                   _CircleButton(
                     size: 52,
-                    label: 'Cancel',
+                    label: context.l10n.cancel,
                     bg: p.surface,
                     border: p.border,
                     fg: p.textMuted,
                     onTap: _onCancel,
-                    semantics: 'Cancel voice recording',
+                    semantics: context.l10n.voiceCancelA11y,
                   ),
                   const SizedBox(width: 26),
                   _RecordCircle(
@@ -460,7 +455,7 @@ class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
                     border: p.primary,
                     fg: p.onPrimary,
                     onTap: _onConfirm,
-                    semantics: 'Confirm and use transcript',
+                    semantics: context.l10n.voiceConfirmA11y,
                   ),
                 ],
               ),
@@ -470,10 +465,10 @@ class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Text(
                 _aiMode
-                    ? "WE STORE NOTHING · GOOGLE'S AI TRANSCRIBES THE RECORDING"
+                    ? context.l10n.voiceFooterAi
                     : (kIsWeb
-                        ? "WE STORE NOTHING · YOUR BROWSER'S SPEECH SERVICE TRANSCRIBES THE AUDIO"
-                        : "AUDIO ISN'T SAVED · TRANSCRIPT STAYS IN THIS SESSION"),
+                        ? context.l10n.voiceFooterBrowser
+                        : context.l10n.voiceFooterDevice),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: kMonoFamily,
@@ -531,7 +526,7 @@ class _TranscribingCard extends StatelessWidget {
           ),
           const SizedBox(width: 12),
           Text(
-            'Transcribing your recording…',
+            context.l10n.voiceTranscribingCard,
             style: TextStyle(
               fontFamily: kSansFamily,
               fontSize: 14,
@@ -783,7 +778,9 @@ class _RecordCircle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Semantics(
       button: true,
-      label: listening ? 'Stop recording' : 'Start recording',
+      label: listening
+          ? context.l10n.voiceStopRecording
+          : context.l10n.voiceStartRecording,
       child: GestureDetector(
         onTap: onTap,
         child: Container(

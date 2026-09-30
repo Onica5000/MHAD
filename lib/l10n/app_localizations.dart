@@ -3163,6 +3163,2280 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Authorize your agent to consent or refuse on your behalf.'**
   String get consentChoiceAgentDecidesDescription;
+
+  /// No description provided for @voiceInputOpenDictation.
+  ///
+  /// In en, this message translates to:
+  /// **'Open voice dictation'**
+  String get voiceInputOpenDictation;
+
+  /// No description provided for @voiceInputDictateText.
+  ///
+  /// In en, this message translates to:
+  /// **'Dictate text'**
+  String get voiceInputDictateText;
+
+  /// No description provided for @savedImportCouldNotRead.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not read that file.'**
+  String get savedImportCouldNotRead;
+
+  /// No description provided for @savedImportImportedAsDraft.
+  ///
+  /// In en, this message translates to:
+  /// **'Imported as an editable draft. After reviewing, re-sign and re-witness it to make it valid again — the previous signature does not carry over.'**
+  String get savedImportImportedAsDraft;
+
+  /// No description provided for @contactPickerBtnMissingName.
+  ///
+  /// In en, this message translates to:
+  /// **'name'**
+  String get contactPickerBtnMissingName;
+
+  /// No description provided for @contactPickerBtnMissingAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'address'**
+  String get contactPickerBtnMissingAddress;
+
+  /// No description provided for @contactPickerBtnMissingPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'phone number'**
+  String get contactPickerBtnMissingPhone;
+
+  /// No description provided for @contactPickerBtnMissingFields.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact is missing: {fields}. Please fill in the missing fields manually.'**
+  String contactPickerBtnMissingFields(String fields);
+
+  /// No description provided for @contactPickerBtnImportA11y.
+  ///
+  /// In en, this message translates to:
+  /// **'Import from contacts'**
+  String get contactPickerBtnImportA11y;
+
+  /// No description provided for @contactPickerBtnImport.
+  ///
+  /// In en, this message translates to:
+  /// **'Import from Contacts'**
+  String get contactPickerBtnImport;
+
+  /// No description provided for @medAutoSelectA11y.
+  ///
+  /// In en, this message translates to:
+  /// **'Select medication {name}'**
+  String medAutoSelectA11y(String name);
+
+  /// No description provided for @medAutoSelectNtiA11y.
+  ///
+  /// In en, this message translates to:
+  /// **'Select medication {name}, narrow therapeutic index drug'**
+  String medAutoSelectNtiA11y(String name);
+
+  /// No description provided for @medAutoNtiTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Narrow Therapeutic Index (NTI) drug — no generic substitution in PA'**
+  String get medAutoNtiTooltip;
+
+  /// No description provided for @medAutoNtiBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'NTI'**
+  String get medAutoNtiBadge;
+
+  /// No description provided for @medAutoSelectStrengthA11y.
+  ///
+  /// In en, this message translates to:
+  /// **'Select {medication}'**
+  String medAutoSelectStrengthA11y(String medication);
+
+  /// No description provided for @medAutoFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Medication name'**
+  String get medAutoFieldLabel;
+
+  /// No description provided for @medAutoSearchingA11y.
+  ///
+  /// In en, this message translates to:
+  /// **'Searching medications'**
+  String get medAutoSearchingA11y;
+
+  /// No description provided for @wizardHelpA11y.
+  ///
+  /// In en, this message translates to:
+  /// **'Help for this step. Opens help sheet.'**
+  String get wizardHelpA11y;
+
+  /// No description provided for @wizardHelpButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Help'**
+  String get wizardHelpButton;
+
+  /// No description provided for @wizardHelpLearnMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Learn More'**
+  String get wizardHelpLearnMore;
+
+  /// No description provided for @wizardHelpQuestionsContact.
+  ///
+  /// In en, this message translates to:
+  /// **'Questions? Contact PA Protection & Advocacy: {phone}'**
+  String wizardHelpQuestionsContact(String phone);
+
+  /// No description provided for @neverWantCrossAddTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to “Medications I never want”?'**
+  String get neverWantCrossAddTitle;
+
+  /// No description provided for @neverWantCrossAddBodySingle.
+  ///
+  /// In en, this message translates to:
+  /// **'You listed a drug allergy. Do you also want to refuse it as a medication, adding it to your “Medications I never want” list?'**
+  String get neverWantCrossAddBodySingle;
+
+  /// No description provided for @neverWantCrossAddBodyMulti.
+  ///
+  /// In en, this message translates to:
+  /// **'You listed these drug allergies. Choose any you also want to refuse as medications — they’ll be added to your “Medications I never want” list.'**
+  String get neverWantCrossAddBodyMulti;
+
+  /// No description provided for @neverWantCrossAddNotNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Not now'**
+  String get neverWantCrossAddNotNow;
+
+  /// No description provided for @neverWantCrossAddConfirmSingle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to never-want'**
+  String get neverWantCrossAddConfirmSingle;
+
+  /// No description provided for @neverWantCrossAddConfirmMulti.
+  ///
+  /// In en, this message translates to:
+  /// **'Add selected'**
+  String get neverWantCrossAddConfirmMulti;
+
+  /// No description provided for @exampleTextSeeExamples.
+  ///
+  /// In en, this message translates to:
+  /// **'See examples'**
+  String get exampleTextSeeExamples;
+
+  /// No description provided for @exampleTextTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Example: {fieldName}'**
+  String exampleTextTitle(String fieldName);
+
+  /// No description provided for @exampleTextIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Here are some examples of what others have written. Use your own words to describe your specific preferences.'**
+  String get exampleTextIntro;
+
+  /// No description provided for @exampleTextNumbered.
+  ///
+  /// In en, this message translates to:
+  /// **'Example {number}'**
+  String exampleTextNumbered(int number);
+
+  /// No description provided for @exampleTextDisclaimer.
+  ///
+  /// In en, this message translates to:
+  /// **'These are samples only. Your directive should reflect your own wishes and circumstances.'**
+  String get exampleTextDisclaimer;
+
+  /// No description provided for @exampleTextGotIt.
+  ///
+  /// In en, this message translates to:
+  /// **'Got it'**
+  String get exampleTextGotIt;
+
+  /// No description provided for @quizQ1Headline.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you have someone in mind to **speak for you**?'**
+  String get quizQ1Headline;
+
+  /// No description provided for @quizQ1Sub.
+  ///
+  /// In en, this message translates to:
+  /// **'A family member, partner, or close friend who could make treatment decisions if you can\'t.'**
+  String get quizQ1Sub;
+
+  /// No description provided for @quizQ1O1Label.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes — and I trust them completely'**
+  String get quizQ1O1Label;
+
+  /// No description provided for @quizQ1O1Hint.
+  ///
+  /// In en, this message translates to:
+  /// **'You probably want a Combined or POA-only form.'**
+  String get quizQ1O1Hint;
+
+  /// No description provided for @quizQ1O2Label.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes, but I want to set firm limits'**
+  String get quizQ1O2Label;
+
+  /// No description provided for @quizQ1O2Hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Combined gives you both an agent and a binding declaration.'**
+  String get quizQ1O2Hint;
+
+  /// No description provided for @quizQ1O3Label.
+  ///
+  /// In en, this message translates to:
+  /// **'No — I want providers to follow my written wishes'**
+  String get quizQ1O3Label;
+
+  /// No description provided for @quizQ1O3Hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Declaration-only is for you.'**
+  String get quizQ1O3Hint;
+
+  /// No description provided for @quizQ1O4Label.
+  ///
+  /// In en, this message translates to:
+  /// **'I\'m not sure yet'**
+  String get quizQ1O4Label;
+
+  /// No description provided for @quizQ1O4Hint.
+  ///
+  /// In en, this message translates to:
+  /// **'No problem — we can come back to this.'**
+  String get quizQ1O4Hint;
+
+  /// No description provided for @quizQ2Headline.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you want to **write down** specific treatment preferences?'**
+  String get quizQ2Headline;
+
+  /// No description provided for @quizQ2Sub.
+  ///
+  /// In en, this message translates to:
+  /// **'Medications, facilities, ECT, experimental studies, drug trials.'**
+  String get quizQ2Sub;
+
+  /// No description provided for @quizQ2O1Label.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes — I have specific things I want or refuse'**
+  String get quizQ2O1Label;
+
+  /// No description provided for @quizQ2O1Hint.
+  ///
+  /// In en, this message translates to:
+  /// **'You probably want a Combined or Declaration form.'**
+  String get quizQ2O1Hint;
+
+  /// No description provided for @quizQ2O2Label.
+  ///
+  /// In en, this message translates to:
+  /// **'Some preferences, but I\'d rather my agent decide'**
+  String get quizQ2O2Label;
+
+  /// No description provided for @quizQ2O2Hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Combined still works — agent decides where you didn\'t write.'**
+  String get quizQ2O2Hint;
+
+  /// No description provided for @quizQ2O3Label.
+  ///
+  /// In en, this message translates to:
+  /// **'No — let my agent or doctors decide everything'**
+  String get quizQ2O3Label;
+
+  /// No description provided for @quizQ2O3Hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Power of Attorney only is the lightest path.'**
+  String get quizQ2O3Hint;
+
+  /// No description provided for @quizQ2O4Label.
+  ///
+  /// In en, this message translates to:
+  /// **'I\'m not sure yet'**
+  String get quizQ2O4Label;
+
+  /// No description provided for @quizQ2O4Hint.
+  ///
+  /// In en, this message translates to:
+  /// **'No problem — Combined leaves both doors open.'**
+  String get quizQ2O4Hint;
+
+  /// No description provided for @quizQ3Headline.
+  ///
+  /// In en, this message translates to:
+  /// **'If you can\'t decide, **whose voice** should reach the doctors first?'**
+  String get quizQ3Headline;
+
+  /// No description provided for @quizQ3Sub.
+  ///
+  /// In en, this message translates to:
+  /// **'The directive you write today, or the person you trust?'**
+  String get quizQ3Sub;
+
+  /// No description provided for @quizQ3O1Label.
+  ///
+  /// In en, this message translates to:
+  /// **'What I wrote — even over what someone says in the moment'**
+  String get quizQ3O1Label;
+
+  /// No description provided for @quizQ3O1Hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Declaration-only or Combined with strong written preferences.'**
+  String get quizQ3O1Hint;
+
+  /// No description provided for @quizQ3O2Label.
+  ///
+  /// In en, this message translates to:
+  /// **'My agent — they can read the situation in real time'**
+  String get quizQ3O2Label;
+
+  /// No description provided for @quizQ3O2Hint.
+  ///
+  /// In en, this message translates to:
+  /// **'POA-only or Combined where the agent has broad authority.'**
+  String get quizQ3O2Hint;
+
+  /// No description provided for @quizQ3O3Label.
+  ///
+  /// In en, this message translates to:
+  /// **'Both — what I wrote, with my agent filling gaps'**
+  String get quizQ3O3Label;
+
+  /// No description provided for @quizQ3O3Hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Combined is the strongest fit.'**
+  String get quizQ3O3Hint;
+
+  /// No description provided for @quizQ3O4Label.
+  ///
+  /// In en, this message translates to:
+  /// **'I\'m not sure yet'**
+  String get quizQ3O4Label;
+
+  /// No description provided for @quizQ3O4Hint.
+  ///
+  /// In en, this message translates to:
+  /// **'No problem — Combined supports both pathways.'**
+  String get quizQ3O4Hint;
+
+  /// No description provided for @quizQ4Headline.
+  ///
+  /// In en, this message translates to:
+  /// **'What\'s the **most important** thing this document does for you?'**
+  String get quizQ4Headline;
+
+  /// No description provided for @quizQ4Sub.
+  ///
+  /// In en, this message translates to:
+  /// **'There\'s no wrong answer — this just confirms what we\'re seeing.'**
+  String get quizQ4Sub;
+
+  /// No description provided for @quizQ4O1Label.
+  ///
+  /// In en, this message translates to:
+  /// **'Names who I trust to speak for me'**
+  String get quizQ4O1Label;
+
+  /// No description provided for @quizQ4O1Hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Combined or POA-only.'**
+  String get quizQ4O1Hint;
+
+  /// No description provided for @quizQ4O2Label.
+  ///
+  /// In en, this message translates to:
+  /// **'Locks in specific treatments I want — or refuse'**
+  String get quizQ4O2Label;
+
+  /// No description provided for @quizQ4O2Hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Combined or Declaration-only.'**
+  String get quizQ4O2Hint;
+
+  /// No description provided for @quizQ4O3Label.
+  ///
+  /// In en, this message translates to:
+  /// **'Both — equally'**
+  String get quizQ4O3Label;
+
+  /// No description provided for @quizQ4O3Hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Combined.'**
+  String get quizQ4O3Hint;
+
+  /// No description provided for @quizQ4O4Label.
+  ///
+  /// In en, this message translates to:
+  /// **'Just having something on file'**
+  String get quizQ4O4Label;
+
+  /// No description provided for @quizQ4O4Hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Any form works. Combined gives the broadest coverage.'**
+  String get quizQ4O4Hint;
+
+  /// No description provided for @quizQuestionEyebrow.
+  ///
+  /// In en, this message translates to:
+  /// **'Help me choose · question {current} of {total}'**
+  String quizQuestionEyebrow(int current, int total);
+
+  /// No description provided for @quizInYourWords.
+  ///
+  /// In en, this message translates to:
+  /// **'In your words'**
+  String get quizInYourWords;
+
+  /// No description provided for @quizResultEyebrow.
+  ///
+  /// In en, this message translates to:
+  /// **'Help me choose · result'**
+  String get quizResultEyebrow;
+
+  /// No description provided for @quizRecommendedForYou.
+  ///
+  /// In en, this message translates to:
+  /// **'Recommended for you'**
+  String get quizRecommendedForYou;
+
+  /// No description provided for @quizYouProbablyWant.
+  ///
+  /// In en, this message translates to:
+  /// **'You probably want\n'**
+  String get quizYouProbablyWant;
+
+  /// No description provided for @quizLegendCombined.
+  ///
+  /// In en, this message translates to:
+  /// **'Combined'**
+  String get quizLegendCombined;
+
+  /// No description provided for @quizLegendDeclaration.
+  ///
+  /// In en, this message translates to:
+  /// **'Declaration only'**
+  String get quizLegendDeclaration;
+
+  /// No description provided for @quizLegendPoa.
+  ///
+  /// In en, this message translates to:
+  /// **'Power of Attorney only'**
+  String get quizLegendPoa;
+
+  /// No description provided for @quizRetake.
+  ///
+  /// In en, this message translates to:
+  /// **'Retake'**
+  String get quizRetake;
+
+  /// No description provided for @quizUseForm.
+  ///
+  /// In en, this message translates to:
+  /// **'Use {formName}'**
+  String quizUseForm(String formName);
+
+  /// No description provided for @quizFormNameCombined.
+  ///
+  /// In en, this message translates to:
+  /// **'Combined'**
+  String get quizFormNameCombined;
+
+  /// No description provided for @quizFormNameDeclaration.
+  ///
+  /// In en, this message translates to:
+  /// **'Declaration'**
+  String get quizFormNameDeclaration;
+
+  /// No description provided for @quizFormNamePoa.
+  ///
+  /// In en, this message translates to:
+  /// **'POA'**
+  String get quizFormNamePoa;
+
+  /// No description provided for @quizExplainCombined.
+  ///
+  /// In en, this message translates to:
+  /// **'Includes both your treatment preferences AND an agent designation. The most comprehensive option — and what most people choose.'**
+  String get quizExplainCombined;
+
+  /// No description provided for @quizExplainPoa.
+  ///
+  /// In en, this message translates to:
+  /// **'Designates an agent to make decisions for you, without locking in specific treatment preferences. Best when you trust someone completely and want them to decide in the moment.'**
+  String get quizExplainPoa;
+
+  /// No description provided for @quizExplainDeclaration.
+  ///
+  /// In en, this message translates to:
+  /// **'Documents your treatment preferences without naming an agent. Your treatment team will follow your written wishes directly.'**
+  String get quizExplainDeclaration;
+
+  /// No description provided for @aiSuggestDraftTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Draft'**
+  String get aiSuggestDraftTitle;
+
+  /// No description provided for @aiSuggestSuggestionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Suggestion'**
+  String get aiSuggestSuggestionTitle;
+
+  /// No description provided for @aiSuggestYourText.
+  ///
+  /// In en, this message translates to:
+  /// **'Your text:'**
+  String get aiSuggestYourText;
+
+  /// No description provided for @aiSuggestDraftLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'AI draft:'**
+  String get aiSuggestDraftLabel;
+
+  /// No description provided for @aiSuggestSuggestionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'AI suggestion:'**
+  String get aiSuggestSuggestionLabel;
+
+  /// No description provided for @aiSuggestReviewCarefully.
+  ///
+  /// In en, this message translates to:
+  /// **'{notAdvice} Review carefully.'**
+  String aiSuggestReviewCarefully(String notAdvice);
+
+  /// No description provided for @aiSuggestDismiss.
+  ///
+  /// In en, this message translates to:
+  /// **'Dismiss'**
+  String get aiSuggestDismiss;
+
+  /// No description provided for @aiSuggestAddToMine.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to mine'**
+  String get aiSuggestAddToMine;
+
+  /// No description provided for @aiSuggestUseDraft.
+  ///
+  /// In en, this message translates to:
+  /// **'Use this draft'**
+  String get aiSuggestUseDraft;
+
+  /// No description provided for @aiSuggestUseInstead.
+  ///
+  /// In en, this message translates to:
+  /// **'Use instead'**
+  String get aiSuggestUseInstead;
+
+  /// No description provided for @aiSuggestAppliedA11y.
+  ///
+  /// In en, this message translates to:
+  /// **'AI suggestion applied. Undo available.'**
+  String get aiSuggestAppliedA11y;
+
+  /// No description provided for @aiSuggestApplied.
+  ///
+  /// In en, this message translates to:
+  /// **'AI suggestion applied.'**
+  String get aiSuggestApplied;
+
+  /// No description provided for @aiSuggestUndo.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo'**
+  String get aiSuggestUndo;
+
+  /// No description provided for @aiSuggestLoadingA11y.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Suggest, loading suggestion for {fieldName}'**
+  String aiSuggestLoadingA11y(String fieldName);
+
+  /// No description provided for @aiSuggestForFieldA11y.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Suggest for {fieldName}'**
+  String aiSuggestForFieldA11y(String fieldName);
+
+  /// No description provided for @aiSuggestSetupA11y.
+  ///
+  /// In en, this message translates to:
+  /// **'Set up AI Assistant to use suggestions'**
+  String get aiSuggestSetupA11y;
+
+  /// No description provided for @aiSuggestTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Get an AI suggestion for this field'**
+  String get aiSuggestTooltip;
+
+  /// No description provided for @aiSuggestSetupTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Set up AI Assistant to use this feature'**
+  String get aiSuggestSetupTooltip;
+
+  /// No description provided for @aiSuggestIconTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'AI suggestion'**
+  String get aiSuggestIconTooltip;
+
+  /// No description provided for @contactSheetPermissionRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact permission is required to import.'**
+  String get contactSheetPermissionRequired;
+
+  /// No description provided for @contactSheetRolePrimaryAgent.
+  ///
+  /// In en, this message translates to:
+  /// **'primary agent'**
+  String get contactSheetRolePrimaryAgent;
+
+  /// No description provided for @contactSheetPickYour.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick your '**
+  String get contactSheetPickYour;
+
+  /// No description provided for @contactSheetLocalOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'From your phone\'s contacts. We never upload them — search runs locally.'**
+  String get contactSheetLocalOnly;
+
+  /// No description provided for @contactSheetSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by name or number'**
+  String get contactSheetSearchHint;
+
+  /// No description provided for @contactSheetClearSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear search'**
+  String get contactSheetClearSearch;
+
+  /// No description provided for @contactSheetContactsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Contacts · {count}'**
+  String contactSheetContactsCount(int count);
+
+  /// No description provided for @contactSheetPickAContact.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a contact'**
+  String get contactSheetPickAContact;
+
+  /// No description provided for @contactSheetUseName.
+  ///
+  /// In en, this message translates to:
+  /// **'Use {name}'**
+  String contactSheetUseName(String name);
+
+  /// No description provided for @contactSheetThisContact.
+  ///
+  /// In en, this message translates to:
+  /// **'this contact'**
+  String get contactSheetThisContact;
+
+  /// No description provided for @contactSheetLooksLikeProvider.
+  ///
+  /// In en, this message translates to:
+  /// **'Looks like a provider'**
+  String get contactSheetLooksLikeProvider;
+
+  /// No description provided for @contactSheetUnder18.
+  ///
+  /// In en, this message translates to:
+  /// **'Under 18'**
+  String get contactSheetUnder18;
+
+  /// No description provided for @contactSheetWarnConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'⚠ {note} — confirm they\'re not treating you'**
+  String contactSheetWarnConfirm(String note);
+
+  /// No description provided for @contactSheetEligible.
+  ///
+  /// In en, this message translates to:
+  /// **'✓ Eligible · 18+'**
+  String get contactSheetEligible;
+
+  /// No description provided for @contactSheetEnterManually.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter someone manually'**
+  String get contactSheetEnterManually;
+
+  /// No description provided for @contactSheetHardBlock.
+  ///
+  /// In en, this message translates to:
+  /// **'hard block'**
+  String get contactSheetHardBlock;
+
+  /// No description provided for @contactSheetSoftWarn.
+  ///
+  /// In en, this message translates to:
+  /// **'soft warn'**
+  String get contactSheetSoftWarn;
+
+  /// No description provided for @contactSheetRuleProvider.
+  ///
+  /// In en, this message translates to:
+  /// **'Your current treating provider or their employee'**
+  String get contactSheetRuleProvider;
+
+  /// No description provided for @contactSheetRuleFacilityOwner.
+  ///
+  /// In en, this message translates to:
+  /// **'An owner/operator of a facility where you receive care'**
+  String get contactSheetRuleFacilityOwner;
+
+  /// No description provided for @contactSheetWhoCantBeAgent.
+  ///
+  /// In en, this message translates to:
+  /// **'Who can\'t be your agent'**
+  String get contactSheetWhoCantBeAgent;
+
+  /// No description provided for @contactSheetRulesFootnote.
+  ///
+  /// In en, this message translates to:
+  /// **'Under-18 is blocked automatically from the contact\'s birthday. We can\'t tell who your providers are, so anything that looks like a provider is a soft warning you can override — confirm only if they truly aren\'t treating you.'**
+  String get contactSheetRulesFootnote;
+
+  /// No description provided for @voiceMicPermission.
+  ///
+  /// In en, this message translates to:
+  /// **'Microphone permission is needed.'**
+  String get voiceMicPermission;
+
+  /// No description provided for @voiceTranscribeFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t transcribe. Try again, or type it instead.'**
+  String get voiceTranscribeFailed;
+
+  /// No description provided for @voiceSpeechError.
+  ///
+  /// In en, this message translates to:
+  /// **'Speech recognition error.'**
+  String get voiceSpeechError;
+
+  /// No description provided for @voiceNeedsBrowser.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice needs Chrome, Edge, or Safari.'**
+  String get voiceNeedsBrowser;
+
+  /// No description provided for @voiceNotAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Speech recognition is not available on this device.'**
+  String get voiceNotAvailable;
+
+  /// No description provided for @voiceStatusTranscribing.
+  ///
+  /// In en, this message translates to:
+  /// **'● Transcribing'**
+  String get voiceStatusTranscribing;
+
+  /// No description provided for @voiceStatusRecording.
+  ///
+  /// In en, this message translates to:
+  /// **'● Recording'**
+  String get voiceStatusRecording;
+
+  /// No description provided for @voiceStatusPaused.
+  ///
+  /// In en, this message translates to:
+  /// **'● Paused'**
+  String get voiceStatusPaused;
+
+  /// No description provided for @voiceSayItYourWay.
+  ///
+  /// In en, this message translates to:
+  /// **'Say it your way.'**
+  String get voiceSayItYourWay;
+
+  /// No description provided for @voiceExplainAi.
+  ///
+  /// In en, this message translates to:
+  /// **'For better accuracy on medication names and conditions, your recording goes to Google\'s AI to transcribe. Review the text before saving.'**
+  String get voiceExplainAi;
+
+  /// No description provided for @voiceExplainBrowser.
+  ///
+  /// In en, this message translates to:
+  /// **'To transcribe, your browser sends the audio to its speech service (often Google). We don\'t keep the audio or text — edit it before saving.'**
+  String get voiceExplainBrowser;
+
+  /// No description provided for @voiceExplainDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'Your device turns speech into text. We never store the audio — you can edit before saving.'**
+  String get voiceExplainDevice;
+
+  /// No description provided for @voiceEmptyHintAi.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the red button, speak, then tap stop to transcribe…'**
+  String get voiceEmptyHintAi;
+
+  /// No description provided for @voiceEmptyHintLive.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the red record button and start speaking…'**
+  String get voiceEmptyHintLive;
+
+  /// No description provided for @voiceCancelA11y.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel voice recording'**
+  String get voiceCancelA11y;
+
+  /// No description provided for @voiceConfirmA11y.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm and use transcript'**
+  String get voiceConfirmA11y;
+
+  /// No description provided for @voiceFooterAi.
+  ///
+  /// In en, this message translates to:
+  /// **'WE STORE NOTHING · GOOGLE\'S AI TRANSCRIBES THE RECORDING'**
+  String get voiceFooterAi;
+
+  /// No description provided for @voiceFooterBrowser.
+  ///
+  /// In en, this message translates to:
+  /// **'WE STORE NOTHING · YOUR BROWSER\'S SPEECH SERVICE TRANSCRIBES THE AUDIO'**
+  String get voiceFooterBrowser;
+
+  /// No description provided for @voiceFooterDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'AUDIO ISN\'T SAVED · TRANSCRIPT STAYS IN THIS SESSION'**
+  String get voiceFooterDevice;
+
+  /// No description provided for @voiceTranscribingCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Transcribing your recording…'**
+  String get voiceTranscribingCard;
+
+  /// No description provided for @voiceStopRecording.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop recording'**
+  String get voiceStopRecording;
+
+  /// No description provided for @voiceStartRecording.
+  ///
+  /// In en, this message translates to:
+  /// **'Start recording'**
+  String get voiceStartRecording;
+
+  /// No description provided for @pipelineGeneratingSuggestions.
+  ///
+  /// In en, this message translates to:
+  /// **'AI is generating personalized suggestions...'**
+  String get pipelineGeneratingSuggestions;
+
+  /// No description provided for @pipelineNoAdditionalSuggestions.
+  ///
+  /// In en, this message translates to:
+  /// **'AI could not generate additional suggestions.'**
+  String get pipelineNoAdditionalSuggestions;
+
+  /// No description provided for @pipelineAutofillProblem.
+  ///
+  /// In en, this message translates to:
+  /// **'Autofill hit a problem. {error}'**
+  String pipelineAutofillProblem(String error);
+
+  /// No description provided for @pipelineAppliedA11y.
+  ///
+  /// In en, this message translates to:
+  /// **'Autofill applied {count} fields to your directive'**
+  String pipelineAppliedA11y(int count);
+
+  /// No description provided for @pipelineAppliedNoneA11y.
+  ///
+  /// In en, this message translates to:
+  /// **'Autofill finished — no new fields were added'**
+  String get pipelineAppliedNoneA11y;
+
+  /// No description provided for @pipelinePastedImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Pasted image'**
+  String get pipelinePastedImage;
+
+  /// No description provided for @pipelineDocument.
+  ///
+  /// In en, this message translates to:
+  /// **'Document'**
+  String get pipelineDocument;
+
+  /// No description provided for @pipelineKindPdf.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF'**
+  String get pipelineKindPdf;
+
+  /// No description provided for @pipelineKindPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo'**
+  String get pipelineKindPhoto;
+
+  /// No description provided for @pipelineKindText.
+  ///
+  /// In en, this message translates to:
+  /// **'Text'**
+  String get pipelineKindText;
+
+  /// No description provided for @pipelineKindAudio.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio'**
+  String get pipelineKindAudio;
+
+  /// No description provided for @pipelineKindFile.
+  ///
+  /// In en, this message translates to:
+  /// **'File'**
+  String get pipelineKindFile;
+
+  /// No description provided for @pipelineCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Processing cancelled — nothing was applied.'**
+  String get pipelineCancelled;
+
+  /// No description provided for @pipelineSetupAiTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Set up AI to read documents'**
+  String get pipelineSetupAiTitle;
+
+  /// No description provided for @pipelineSetupAiBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Snap-to-fill uses AI to read your uploaded document (photo, PDF, or text) and pull out details to fill your form — medications, conditions, care preferences, and your contact details. It needs an AI key — Gemini\'s free tier takes about 30 seconds to set up. You review every field before anything lands in your form.'**
+  String get pipelineSetupAiBody;
+
+  /// No description provided for @pipelineSetupAi.
+  ///
+  /// In en, this message translates to:
+  /// **'Set up AI'**
+  String get pipelineSetupAi;
+
+  /// No description provided for @pipelineDroppedFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Dropped file'**
+  String get pipelineDroppedFile;
+
+  /// No description provided for @pipelineUnsupportedType.
+  ///
+  /// In en, this message translates to:
+  /// **'That file type isn\'t supported. Use a JPG, PNG, HEIC, PDF, or text file.'**
+  String get pipelineUnsupportedType;
+
+  /// No description provided for @pipelineRpmLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'Processing {pages} pages requires {pages} requests, but only {remaining} requests are available this minute. Please wait {seconds} seconds or select fewer pages.'**
+  String pipelineRpmLimit(int pages, int remaining, int seconds);
+
+  /// No description provided for @pipelineRpdLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'Processing {pages} pages requires {pages} requests, but only {remaining} requests remain today (daily limit: {limit}).'**
+  String pipelineRpdLimit(int pages, int remaining, int limit);
+
+  /// No description provided for @pipelineFileTooLarge.
+  ///
+  /// In en, this message translates to:
+  /// **'File \"{name}\" is too large ({sizeMb} MB). Maximum file size is 10 MB per document.'**
+  String pipelineFileTooLarge(String name, String sizeMb);
+
+  /// No description provided for @pipelineExtractingPage.
+  ///
+  /// In en, this message translates to:
+  /// **'Extracting page {current} of {total}...'**
+  String pipelineExtractingPage(int current, int total);
+
+  /// No description provided for @pipelineExtractingSingle.
+  ///
+  /// In en, this message translates to:
+  /// **'Extracting medical data from document...'**
+  String get pipelineExtractingSingle;
+
+  /// No description provided for @pipelineLooksLikeKind.
+  ///
+  /// In en, this message translates to:
+  /// **' (it looks like a {kind})'**
+  String pipelineLooksLikeKind(String kind);
+
+  /// No description provided for @pipelineNotMedicalSingle.
+  ///
+  /// In en, this message translates to:
+  /// **'This doesn\'t look like a health or medical document{kind}, so nothing was used. Upload a medical record, medication or allergy list, or an existing advance directive.'**
+  String pipelineNotMedicalSingle(String kind);
+
+  /// No description provided for @pipelineNotMedicalMulti.
+  ///
+  /// In en, this message translates to:
+  /// **'These don\'t look like health or medical documents{kind}, so nothing was used.'**
+  String pipelineNotMedicalMulti(String kind);
+
+  /// No description provided for @pipelineNoMedicalInfoSingle.
+  ///
+  /// In en, this message translates to:
+  /// **'No medical information found in this document.'**
+  String get pipelineNoMedicalInfoSingle;
+
+  /// No description provided for @pipelineNoMedicalInfoMulti.
+  ///
+  /// In en, this message translates to:
+  /// **'No medical information found in these {count} pages.'**
+  String pipelineNoMedicalInfoMulti(int count);
+
+  /// No description provided for @pipelineValidating.
+  ///
+  /// In en, this message translates to:
+  /// **'Validating medications and conditions...'**
+  String get pipelineValidating;
+
+  /// No description provided for @pipelinePleaseWait.
+  ///
+  /// In en, this message translates to:
+  /// **'Please wait while processing...'**
+  String get pipelinePleaseWait;
+
+  /// No description provided for @pipelineBackWizard.
+  ///
+  /// In en, this message translates to:
+  /// **'Wizard'**
+  String get pipelineBackWizard;
+
+  /// No description provided for @pipelineBackReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Review'**
+  String get pipelineBackReview;
+
+  /// No description provided for @pipelineTitleSnapToFill.
+  ///
+  /// In en, this message translates to:
+  /// **'Snap to fill'**
+  String get pipelineTitleSnapToFill;
+
+  /// No description provided for @pipelineTitleProcessing.
+  ///
+  /// In en, this message translates to:
+  /// **'Processing'**
+  String get pipelineTitleProcessing;
+
+  /// No description provided for @pipelineTitleReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Review Extracted Data'**
+  String get pipelineTitleReview;
+
+  /// No description provided for @pipelineTitleGenerating.
+  ///
+  /// In en, this message translates to:
+  /// **'Generating Suggestions'**
+  String get pipelineTitleGenerating;
+
+  /// No description provided for @pipelineTitleResults.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Suggestions'**
+  String get pipelineTitleResults;
+
+  /// No description provided for @pipelinePickerFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t open the file picker ({error}). Try dragging the file onto the box above instead.'**
+  String pipelinePickerFailed(String error);
+
+  /// No description provided for @pipelineCouldNotRead.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t read that file. Please use a PDF, JPG, PNG, WEBP, HEIC, or plain-text file under 10 MB.'**
+  String get pipelineCouldNotRead;
+
+  /// No description provided for @pipelineFormCombined.
+  ///
+  /// In en, this message translates to:
+  /// **'Combined'**
+  String get pipelineFormCombined;
+
+  /// No description provided for @pipelineFormDeclaration.
+  ///
+  /// In en, this message translates to:
+  /// **'Declaration only'**
+  String get pipelineFormDeclaration;
+
+  /// No description provided for @pipelineFormPoa.
+  ///
+  /// In en, this message translates to:
+  /// **'Power of Attorney only'**
+  String get pipelineFormPoa;
+
+  /// No description provided for @pipelineFormCombinedSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Treatment preferences AND a decision-maker (broadest).'**
+  String get pipelineFormCombinedSub;
+
+  /// No description provided for @pipelineFormDeclarationSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Treatment preferences, without naming an agent.'**
+  String get pipelineFormDeclarationSub;
+
+  /// No description provided for @pipelineFormPoaSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Name a decision-maker, without listing preferences.'**
+  String get pipelineFormPoaSub;
+
+  /// No description provided for @pipelineWhichForm.
+  ///
+  /// In en, this message translates to:
+  /// **'Which form do you want to fill?'**
+  String get pipelineWhichForm;
+
+  /// No description provided for @pipelineWhichFormBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your form first — the AI will then read only the parts that form needs. Combined is the broadest; you can change this later.'**
+  String get pipelineWhichFormBody;
+
+  /// No description provided for @pickSnapOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'Snap to fill · optional'**
+  String get pickSnapOptional;
+
+  /// No description provided for @pickHeadlineLead.
+  ///
+  /// In en, this message translates to:
+  /// **'Have a photo handy? '**
+  String get pickHeadlineLead;
+
+  /// No description provided for @pickHeadlineAccent.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'ll read it.'**
+  String get pickHeadlineAccent;
+
+  /// No description provided for @pickIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Drop a photo, PDF, or audio recording — ID, medication list, prescription label, an old directive, or just describe your wishes out loud — and the AI will extract what it can. You review every field before it lands in the form. Or skip and type it all yourself.'**
+  String get pickIntro;
+
+  /// No description provided for @pickPrivacyNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Your privacy: black out anything sensitive before uploading. You never have to upload personal details at all — any field can be typed in by hand to keep it confidential.'**
+  String get pickPrivacyNote;
+
+  /// No description provided for @pickVoiceGuideLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Recording a voice file? See the questionnaire & how-to'**
+  String get pickVoiceGuideLink;
+
+  /// No description provided for @pickSkipTypeAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip — I\'ll type it all'**
+  String get pickSkipTypeAll;
+
+  /// No description provided for @pickContinueStep2.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue to step 2'**
+  String get pickContinueStep2;
+
+  /// No description provided for @pickYourDocuments.
+  ///
+  /// In en, this message translates to:
+  /// **'Your documents'**
+  String get pickYourDocuments;
+
+  /// No description provided for @pickFilesKeptInMemory.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 FILE · KEPT IN MEMORY} other{{count} FILES · KEPT IN MEMORY}}'**
+  String pickFilesKeptInMemory(int count);
+
+  /// No description provided for @pickClearAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear all'**
+  String get pickClearAll;
+
+  /// No description provided for @pickHeldWithKey.
+  ///
+  /// In en, this message translates to:
+  /// **'Held on this device. Nothing is sent until you tap Read — then it goes to your AI provider to read.'**
+  String get pickHeldWithKey;
+
+  /// No description provided for @pickHeldNoKey.
+  ///
+  /// In en, this message translates to:
+  /// **'Held on this device. Reading needs AI set up first (free, ~30 seconds) — nothing is sent until then.'**
+  String get pickHeldNoKey;
+
+  /// No description provided for @pickReadWithAi.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Read this document with AI} other{Read {count} documents with AI}}'**
+  String pickReadWithAi(int count);
+
+  /// No description provided for @pickRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get pickRemove;
+
+  /// No description provided for @pickNoKeyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'AI isn\'t set up yet'**
+  String get pickNoKeyTitle;
+
+  /// No description provided for @pickNoKeyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You can see how snap-to-fill works below, but reading a real photo or PDF needs an AI key (Gemini\'s free tier takes about 30 seconds). You review every field before it lands in your form.'**
+  String get pickNoKeyBody;
+
+  /// No description provided for @pickTryAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get pickTryAgain;
+
+  /// No description provided for @pickDropTitleCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a photo of your document'**
+  String get pickDropTitleCamera;
+
+  /// No description provided for @pickDropTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Drop a photo, PDF, or screenshot'**
+  String get pickDropTitle;
+
+  /// No description provided for @pickFormatsPaste.
+  ///
+  /// In en, this message translates to:
+  /// **'JPG · PNG · HEIC · PDF · up to 10 MB — or paste with {shortcut}'**
+  String pickFormatsPaste(String shortcut);
+
+  /// No description provided for @pickFormats.
+  ///
+  /// In en, this message translates to:
+  /// **'JPG · PNG · HEIC · PDF · up to 10 MB'**
+  String get pickFormats;
+
+  /// No description provided for @pickBrowseFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse files'**
+  String get pickBrowseFiles;
+
+  /// No description provided for @pickTakePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a photo'**
+  String get pickTakePhoto;
+
+  /// No description provided for @pickSentToProvider.
+  ///
+  /// In en, this message translates to:
+  /// **'To autofill, your file — including any personal details in it — is sent to your AI provider to read. The app saves nothing (it\'s gone when this tab closes), but the provider may retain it (Gemini\'s free tier does). You review everything before it is added to your directive.'**
+  String get pickSentToProvider;
+
+  /// No description provided for @pickTargetId.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo of ID'**
+  String get pickTargetId;
+
+  /// No description provided for @pickTargetIdSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Name · DOB · address'**
+  String get pickTargetIdSub;
+
+  /// No description provided for @pickTargetRx.
+  ///
+  /// In en, this message translates to:
+  /// **'Rx bottle / label'**
+  String get pickTargetRx;
+
+  /// No description provided for @pickTargetRxSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Drug · dose · schedule'**
+  String get pickTargetRxSub;
+
+  /// No description provided for @pickTargetConditions.
+  ///
+  /// In en, this message translates to:
+  /// **'Conditions list'**
+  String get pickTargetConditions;
+
+  /// No description provided for @pickTargetConditionsSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Diagnoses · allergies'**
+  String get pickTargetConditionsSub;
+
+  /// No description provided for @pickTargetOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Anything else'**
+  String get pickTargetOther;
+
+  /// No description provided for @pickTargetOtherSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Notes, old directive…'**
+  String get pickTargetOtherSub;
+
+  /// No description provided for @pickTargetOtherSubMobile.
+  ///
+  /// In en, this message translates to:
+  /// **'Old directive, notes…'**
+  String get pickTargetOtherSubMobile;
+
+  /// No description provided for @pickWhatYouCanAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'What you can add'**
+  String get pickWhatYouCanAdd;
+
+  /// No description provided for @pickWhatYouCanDrop.
+  ///
+  /// In en, this message translates to:
+  /// **'What you can drop here'**
+  String get pickWhatYouCanDrop;
+
+  /// No description provided for @pickOnAPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'On a phone instead?'**
+  String get pickOnAPhone;
+
+  /// No description provided for @pickOnAPhoneBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Open this page on your phone to snap a page directly with its camera.'**
+  String get pickOnAPhoneBody;
+
+  /// No description provided for @pickTakePhotoSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Opens your camera. Snap your ID, Rx label, anything.'**
+  String get pickTakePhotoSub;
+
+  /// No description provided for @pickPickFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a file'**
+  String get pickPickFile;
+
+  /// No description provided for @pickPickFileSub.
+  ///
+  /// In en, this message translates to:
+  /// **'From your photos or files. JPG, PNG, HEIC, PDF.'**
+  String get pickPickFileSub;
+
+  /// No description provided for @pickWhatHelpsMost.
+  ///
+  /// In en, this message translates to:
+  /// **'What helps most'**
+  String get pickWhatHelpsMost;
+
+  /// No description provided for @pickFastest.
+  ///
+  /// In en, this message translates to:
+  /// **'FASTEST'**
+  String get pickFastest;
+
+  /// No description provided for @pickSentToProviderShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Your file (including any personal details) is sent to your AI provider to read it. The app saves nothing; the provider may retain it (Gemini\'s free tier does). You review before anything is added.'**
+  String get pickSentToProviderShort;
+
+  /// No description provided for @pickReadingDocs.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Reading 1 document:} other{Reading {count} documents:}}'**
+  String pickReadingDocs(int count);
+
+  /// No description provided for @pickReadByAi.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Read by Google\'s AI to autofill.} other{{count} files read by Google\'s AI to autofill.}}'**
+  String pickReadByAi(int count);
+
+  /// No description provided for @reviewLabelMedPrefer.
+  ///
+  /// In en, this message translates to:
+  /// **'Preferred Medication'**
+  String get reviewLabelMedPrefer;
+
+  /// No description provided for @reviewLabelMedAvoid.
+  ///
+  /// In en, this message translates to:
+  /// **'Medication to Avoid'**
+  String get reviewLabelMedAvoid;
+
+  /// No description provided for @reviewLabelMedCurrent.
+  ///
+  /// In en, this message translates to:
+  /// **'Currently Taking'**
+  String get reviewLabelMedCurrent;
+
+  /// No description provided for @reviewLabelMedLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'Restricted-Use Medication'**
+  String get reviewLabelMedLimit;
+
+  /// No description provided for @reviewLabelCond.
+  ///
+  /// In en, this message translates to:
+  /// **'Condition'**
+  String get reviewLabelCond;
+
+  /// No description provided for @reviewLabelDiag.
+  ///
+  /// In en, this message translates to:
+  /// **'Diagnosis'**
+  String get reviewLabelDiag;
+
+  /// No description provided for @reviewLabelAllergy.
+  ///
+  /// In en, this message translates to:
+  /// **'Allergy'**
+  String get reviewLabelAllergy;
+
+  /// No description provided for @reviewLabelHh.
+  ///
+  /// In en, this message translates to:
+  /// **'Health History'**
+  String get reviewLabelHh;
+
+  /// No description provided for @reviewLabelEffectiveCondition.
+  ///
+  /// In en, this message translates to:
+  /// **'When this kicks in (your words)'**
+  String get reviewLabelEffectiveCondition;
+
+  /// No description provided for @reviewLabelFacilityPrefer.
+  ///
+  /// In en, this message translates to:
+  /// **'Preferred Facility'**
+  String get reviewLabelFacilityPrefer;
+
+  /// No description provided for @reviewLabelFacilityAvoid.
+  ///
+  /// In en, this message translates to:
+  /// **'Facility to Avoid'**
+  String get reviewLabelFacilityAvoid;
+
+  /// No description provided for @reviewLabelDietary.
+  ///
+  /// In en, this message translates to:
+  /// **'Dietary'**
+  String get reviewLabelDietary;
+
+  /// No description provided for @reviewLabelReligious.
+  ///
+  /// In en, this message translates to:
+  /// **'Religious/Cultural'**
+  String get reviewLabelReligious;
+
+  /// No description provided for @reviewLabelActivities.
+  ///
+  /// In en, this message translates to:
+  /// **'Activities'**
+  String get reviewLabelActivities;
+
+  /// No description provided for @reviewLabelCrisis.
+  ///
+  /// In en, this message translates to:
+  /// **'Crisis Intervention'**
+  String get reviewLabelCrisis;
+
+  /// No description provided for @reviewLabelCrisisPlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Crisis plan'**
+  String get reviewLabelCrisisPlan;
+
+  /// No description provided for @reviewLabelAgentAuthorityLimitations.
+  ///
+  /// In en, this message translates to:
+  /// **'Agent authority limits'**
+  String get reviewLabelAgentAuthorityLimitations;
+
+  /// No description provided for @reviewLabelEctConsent.
+  ///
+  /// In en, this message translates to:
+  /// **'ECT consent'**
+  String get reviewLabelEctConsent;
+
+  /// No description provided for @reviewLabelExperimentalConsent.
+  ///
+  /// In en, this message translates to:
+  /// **'Experimental treatment consent'**
+  String get reviewLabelExperimentalConsent;
+
+  /// No description provided for @reviewLabelDrugTrialConsent.
+  ///
+  /// In en, this message translates to:
+  /// **'Drug trial consent'**
+  String get reviewLabelDrugTrialConsent;
+
+  /// No description provided for @reviewLabelMedicationConsent.
+  ///
+  /// In en, this message translates to:
+  /// **'Medication consent'**
+  String get reviewLabelMedicationConsent;
+
+  /// No description provided for @reviewLabelTriggerTwoProfessionals.
+  ///
+  /// In en, this message translates to:
+  /// **'Trigger: professionals'**
+  String get reviewLabelTriggerTwoProfessionals;
+
+  /// No description provided for @reviewLabelTriggerCourtOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Trigger: court order'**
+  String get reviewLabelTriggerCourtOrder;
+
+  /// No description provided for @reviewLabelTriggerInvoluntaryCommitment.
+  ///
+  /// In en, this message translates to:
+  /// **'Trigger: involuntary commitment'**
+  String get reviewLabelTriggerInvoluntaryCommitment;
+
+  /// No description provided for @reviewLabelRoomPrefsNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Room preferences'**
+  String get reviewLabelRoomPrefsNote;
+
+  /// No description provided for @reviewLabelRoomPrefChips.
+  ///
+  /// In en, this message translates to:
+  /// **'Room options'**
+  String get reviewLabelRoomPrefChips;
+
+  /// No description provided for @reviewLabelRoommateSameGender.
+  ///
+  /// In en, this message translates to:
+  /// **'Same-gender roommate'**
+  String get reviewLabelRoommateSameGender;
+
+  /// No description provided for @reviewLabelGuardianCanRevoke.
+  ///
+  /// In en, this message translates to:
+  /// **'Guardian: override'**
+  String get reviewLabelGuardianCanRevoke;
+
+  /// No description provided for @reviewLabelGuardianCanChangeAgent.
+  ///
+  /// In en, this message translates to:
+  /// **'Guardian: replace agent'**
+  String get reviewLabelGuardianCanChangeAgent;
+
+  /// No description provided for @reviewLabelGuardianMustConsultAgent.
+  ///
+  /// In en, this message translates to:
+  /// **'Guardian: consult agent'**
+  String get reviewLabelGuardianMustConsultAgent;
+
+  /// No description provided for @reviewLabelAuthorityHospitalization.
+  ///
+  /// In en, this message translates to:
+  /// **'Agent: hospitalization'**
+  String get reviewLabelAuthorityHospitalization;
+
+  /// No description provided for @reviewLabelAuthorityMedication.
+  ///
+  /// In en, this message translates to:
+  /// **'Agent: medications'**
+  String get reviewLabelAuthorityMedication;
+
+  /// No description provided for @reviewLabelUlyssesOptin.
+  ///
+  /// In en, this message translates to:
+  /// **'Self-binding (Ulysses)'**
+  String get reviewLabelUlyssesOptin;
+
+  /// No description provided for @reviewLabelPetCustody.
+  ///
+  /// In en, this message translates to:
+  /// **'Pet care'**
+  String get reviewLabelPetCustody;
+
+  /// No description provided for @reviewLabelChildrenCustody.
+  ///
+  /// In en, this message translates to:
+  /// **'Children / dependents'**
+  String get reviewLabelChildrenCustody;
+
+  /// No description provided for @reviewLabelFamilyNotification.
+  ///
+  /// In en, this message translates to:
+  /// **'Who to notify'**
+  String get reviewLabelFamilyNotification;
+
+  /// No description provided for @reviewLabelRecordsDisclosure.
+  ///
+  /// In en, this message translates to:
+  /// **'Records disclosure'**
+  String get reviewLabelRecordsDisclosure;
+
+  /// No description provided for @reviewLabelOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get reviewLabelOther;
+
+  /// No description provided for @reviewLabelPersonName.
+  ///
+  /// In en, this message translates to:
+  /// **'Your full name'**
+  String get reviewLabelPersonName;
+
+  /// No description provided for @reviewLabelPersonDob.
+  ///
+  /// In en, this message translates to:
+  /// **'Date of birth'**
+  String get reviewLabelPersonDob;
+
+  /// No description provided for @reviewLabelPersonAddress1.
+  ///
+  /// In en, this message translates to:
+  /// **'Street address'**
+  String get reviewLabelPersonAddress1;
+
+  /// No description provided for @reviewLabelPersonAddress2.
+  ///
+  /// In en, this message translates to:
+  /// **'Apt / suite / unit'**
+  String get reviewLabelPersonAddress2;
+
+  /// No description provided for @reviewLabelPersonCity.
+  ///
+  /// In en, this message translates to:
+  /// **'City'**
+  String get reviewLabelPersonCity;
+
+  /// No description provided for @reviewLabelPersonCounty.
+  ///
+  /// In en, this message translates to:
+  /// **'County'**
+  String get reviewLabelPersonCounty;
+
+  /// No description provided for @reviewLabelPersonState.
+  ///
+  /// In en, this message translates to:
+  /// **'State'**
+  String get reviewLabelPersonState;
+
+  /// No description provided for @reviewLabelPersonZip.
+  ///
+  /// In en, this message translates to:
+  /// **'ZIP code'**
+  String get reviewLabelPersonZip;
+
+  /// No description provided for @reviewLabelPersonPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Your phone'**
+  String get reviewLabelPersonPhone;
+
+  /// No description provided for @reviewLabelPersonDoctorName.
+  ///
+  /// In en, this message translates to:
+  /// **'Primary doctor'**
+  String get reviewLabelPersonDoctorName;
+
+  /// No description provided for @reviewLabelPersonDoctorSpecialty.
+  ///
+  /// In en, this message translates to:
+  /// **'Doctor specialty'**
+  String get reviewLabelPersonDoctorSpecialty;
+
+  /// No description provided for @reviewLabelPersonDoctorPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Doctor\'s phone'**
+  String get reviewLabelPersonDoctorPhone;
+
+  /// No description provided for @reviewLabelPersonEvalDoctorName.
+  ///
+  /// In en, this message translates to:
+  /// **'Preferred evaluating doctor'**
+  String get reviewLabelPersonEvalDoctorName;
+
+  /// No description provided for @reviewLabelPersonEvalDoctorContact.
+  ///
+  /// In en, this message translates to:
+  /// **'Evaluating doctor contact'**
+  String get reviewLabelPersonEvalDoctorContact;
+
+  /// No description provided for @reviewLabelAgentName.
+  ///
+  /// In en, this message translates to:
+  /// **'Agent name'**
+  String get reviewLabelAgentName;
+
+  /// No description provided for @reviewLabelAgentRelationship.
+  ///
+  /// In en, this message translates to:
+  /// **'Agent relationship'**
+  String get reviewLabelAgentRelationship;
+
+  /// No description provided for @reviewLabelAgentAddress1.
+  ///
+  /// In en, this message translates to:
+  /// **'Agent street address'**
+  String get reviewLabelAgentAddress1;
+
+  /// No description provided for @reviewLabelAgentAddress2.
+  ///
+  /// In en, this message translates to:
+  /// **'Agent apt / suite'**
+  String get reviewLabelAgentAddress2;
+
+  /// No description provided for @reviewLabelAgentCity.
+  ///
+  /// In en, this message translates to:
+  /// **'Agent city'**
+  String get reviewLabelAgentCity;
+
+  /// No description provided for @reviewLabelAgentState.
+  ///
+  /// In en, this message translates to:
+  /// **'Agent state'**
+  String get reviewLabelAgentState;
+
+  /// No description provided for @reviewLabelAgentZip.
+  ///
+  /// In en, this message translates to:
+  /// **'Agent ZIP'**
+  String get reviewLabelAgentZip;
+
+  /// No description provided for @reviewLabelAgentPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Agent phone'**
+  String get reviewLabelAgentPhone;
+
+  /// No description provided for @reviewLabelAltAgentName.
+  ///
+  /// In en, this message translates to:
+  /// **'Alternate agent name'**
+  String get reviewLabelAltAgentName;
+
+  /// No description provided for @reviewLabelAltAgentRelationship.
+  ///
+  /// In en, this message translates to:
+  /// **'Alternate agent relationship'**
+  String get reviewLabelAltAgentRelationship;
+
+  /// No description provided for @reviewLabelAltAgentAddress1.
+  ///
+  /// In en, this message translates to:
+  /// **'Alt agent street address'**
+  String get reviewLabelAltAgentAddress1;
+
+  /// No description provided for @reviewLabelAltAgentAddress2.
+  ///
+  /// In en, this message translates to:
+  /// **'Alt agent apt / suite'**
+  String get reviewLabelAltAgentAddress2;
+
+  /// No description provided for @reviewLabelAltAgentCity.
+  ///
+  /// In en, this message translates to:
+  /// **'Alt agent city'**
+  String get reviewLabelAltAgentCity;
+
+  /// No description provided for @reviewLabelAltAgentState.
+  ///
+  /// In en, this message translates to:
+  /// **'Alt agent state'**
+  String get reviewLabelAltAgentState;
+
+  /// No description provided for @reviewLabelAltAgentZip.
+  ///
+  /// In en, this message translates to:
+  /// **'Alt agent ZIP'**
+  String get reviewLabelAltAgentZip;
+
+  /// No description provided for @reviewLabelAltAgentPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Alternate agent phone'**
+  String get reviewLabelAltAgentPhone;
+
+  /// No description provided for @reviewLabelGuardianName.
+  ///
+  /// In en, this message translates to:
+  /// **'Guardian nominee'**
+  String get reviewLabelGuardianName;
+
+  /// No description provided for @reviewLabelGuardianRelationship.
+  ///
+  /// In en, this message translates to:
+  /// **'Guardian relationship'**
+  String get reviewLabelGuardianRelationship;
+
+  /// No description provided for @reviewLabelGuardianAddress1.
+  ///
+  /// In en, this message translates to:
+  /// **'Guardian street address'**
+  String get reviewLabelGuardianAddress1;
+
+  /// No description provided for @reviewLabelGuardianAddress2.
+  ///
+  /// In en, this message translates to:
+  /// **'Guardian apt / suite'**
+  String get reviewLabelGuardianAddress2;
+
+  /// No description provided for @reviewLabelGuardianCity.
+  ///
+  /// In en, this message translates to:
+  /// **'Guardian city'**
+  String get reviewLabelGuardianCity;
+
+  /// No description provided for @reviewLabelGuardianState.
+  ///
+  /// In en, this message translates to:
+  /// **'Guardian state'**
+  String get reviewLabelGuardianState;
+
+  /// No description provided for @reviewLabelGuardianZip.
+  ///
+  /// In en, this message translates to:
+  /// **'Guardian ZIP'**
+  String get reviewLabelGuardianZip;
+
+  /// No description provided for @reviewLabelGuardianPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Guardian phone'**
+  String get reviewLabelGuardianPhone;
+
+  /// No description provided for @reviewSectionMedPrefer.
+  ///
+  /// In en, this message translates to:
+  /// **'Preferred Meds'**
+  String get reviewSectionMedPrefer;
+
+  /// No description provided for @reviewSectionMedAvoid.
+  ///
+  /// In en, this message translates to:
+  /// **'Meds to Avoid'**
+  String get reviewSectionMedAvoid;
+
+  /// No description provided for @reviewSectionMedCurrent.
+  ///
+  /// In en, this message translates to:
+  /// **'Currently Taking'**
+  String get reviewSectionMedCurrent;
+
+  /// No description provided for @reviewSectionMedLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'Restricted-Use Meds'**
+  String get reviewSectionMedLimit;
+
+  /// No description provided for @reviewSectionCond.
+  ///
+  /// In en, this message translates to:
+  /// **'Conditions'**
+  String get reviewSectionCond;
+
+  /// No description provided for @reviewSectionDiag.
+  ///
+  /// In en, this message translates to:
+  /// **'Diagnoses'**
+  String get reviewSectionDiag;
+
+  /// No description provided for @reviewSectionAllergy.
+  ///
+  /// In en, this message translates to:
+  /// **'Allergies'**
+  String get reviewSectionAllergy;
+
+  /// No description provided for @reviewSectionHh.
+  ///
+  /// In en, this message translates to:
+  /// **'Health History'**
+  String get reviewSectionHh;
+
+  /// No description provided for @reviewSectionEffectiveCondition.
+  ///
+  /// In en, this message translates to:
+  /// **'When this kicks in'**
+  String get reviewSectionEffectiveCondition;
+
+  /// No description provided for @reviewSectionPerson.
+  ///
+  /// In en, this message translates to:
+  /// **'Your details'**
+  String get reviewSectionPerson;
+
+  /// No description provided for @reviewSectionAgent.
+  ///
+  /// In en, this message translates to:
+  /// **'Your agent'**
+  String get reviewSectionAgent;
+
+  /// No description provided for @reviewSectionAgentAuthority.
+  ///
+  /// In en, this message translates to:
+  /// **'Agent Authority'**
+  String get reviewSectionAgentAuthority;
+
+  /// No description provided for @reviewSectionUlyssesOptin.
+  ///
+  /// In en, this message translates to:
+  /// **'Self-binding'**
+  String get reviewSectionUlyssesOptin;
+
+  /// No description provided for @reviewSectionCrisisPlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Crisis Plan'**
+  String get reviewSectionCrisisPlan;
+
+  /// No description provided for @reviewSectionConsent.
+  ///
+  /// In en, this message translates to:
+  /// **'Consent'**
+  String get reviewSectionConsent;
+
+  /// No description provided for @reviewSectionRoomPreferences.
+  ///
+  /// In en, this message translates to:
+  /// **'Room Preferences'**
+  String get reviewSectionRoomPreferences;
+
+  /// No description provided for @reviewSectionAltAgent.
+  ///
+  /// In en, this message translates to:
+  /// **'Alternate agent'**
+  String get reviewSectionAltAgent;
+
+  /// No description provided for @reviewSectionGuardian.
+  ///
+  /// In en, this message translates to:
+  /// **'Guardian'**
+  String get reviewSectionGuardian;
+
+  /// No description provided for @reviewSectionOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get reviewSectionOther;
+
+  /// No description provided for @reviewStepGroupWhenKicksIn.
+  ///
+  /// In en, this message translates to:
+  /// **'When this kicks in'**
+  String get reviewStepGroupWhenKicksIn;
+
+  /// No description provided for @reviewStepGroupDiagnoses.
+  ///
+  /// In en, this message translates to:
+  /// **'Diagnoses'**
+  String get reviewStepGroupDiagnoses;
+
+  /// No description provided for @reviewStepGroupAboutYou.
+  ///
+  /// In en, this message translates to:
+  /// **'About you'**
+  String get reviewStepGroupAboutYou;
+
+  /// No description provided for @reviewStepGroupPeopleITrust.
+  ///
+  /// In en, this message translates to:
+  /// **'People I trust'**
+  String get reviewStepGroupPeopleITrust;
+
+  /// No description provided for @reviewStepGroupGuardian.
+  ///
+  /// In en, this message translates to:
+  /// **'If a court appoints a guardian'**
+  String get reviewStepGroupGuardian;
+
+  /// No description provided for @reviewStepGroupWhereIWantCare.
+  ///
+  /// In en, this message translates to:
+  /// **'Where I want care'**
+  String get reviewStepGroupWhereIWantCare;
+
+  /// No description provided for @reviewStepGroupMedications.
+  ///
+  /// In en, this message translates to:
+  /// **'Medications'**
+  String get reviewStepGroupMedications;
+
+  /// No description provided for @reviewStepGroupAllergies.
+  ///
+  /// In en, this message translates to:
+  /// **'Allergies & reactions'**
+  String get reviewStepGroupAllergies;
+
+  /// No description provided for @reviewStepGroupProceduresResearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Procedures & research'**
+  String get reviewStepGroupProceduresResearch;
+
+  /// No description provided for @reviewStepGroupAnythingElse.
+  ///
+  /// In en, this message translates to:
+  /// **'Anything else'**
+  String get reviewStepGroupAnythingElse;
+
+  /// No description provided for @reviewAiReadThisPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'AI READ THIS PHOTO'**
+  String get reviewAiReadThisPhoto;
+
+  /// No description provided for @reviewHeresWhatWeRead.
+  ///
+  /// In en, this message translates to:
+  /// **'Here\'s what we read.'**
+  String get reviewHeresWhatWeRead;
+
+  /// No description provided for @reviewHowToIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'These are the details the AI pulled from your document. Here\'s how to use this page:'**
+  String get reviewHowToIntro;
+
+  /// No description provided for @reviewHowToChecked.
+  ///
+  /// In en, this message translates to:
+  /// **'A checked box means it will be added to your form. Uncheck anything you don\'t want.'**
+  String get reviewHowToChecked;
+
+  /// No description provided for @reviewHowToEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap any field to edit its wording before it\'s added.'**
+  String get reviewHowToEdit;
+
+  /// No description provided for @reviewHowToGrouped.
+  ///
+  /// In en, this message translates to:
+  /// **'Results are grouped by form section (the same steps you\'ll see next). A \"Replaces what you have\" note means it would overwrite something you already entered — those start unchecked.'**
+  String get reviewHowToGrouped;
+
+  /// No description provided for @reviewHowToFinish.
+  ///
+  /// In en, this message translates to:
+  /// **'When you\'re ready, tap \"{buttonLabel}\" at the bottom to fill these into your form and continue — you\'ll land in the form to review everything.'**
+  String reviewHowToFinish(String buttonLabel);
+
+  /// No description provided for @reviewPiiRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'PII was detected and removed before analysis: {items}'**
+  String reviewPiiRemoved(String items);
+
+  /// No description provided for @reviewAddToDirective.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to your directive'**
+  String get reviewAddToDirective;
+
+  /// No description provided for @reviewPhotoDiscarded.
+  ///
+  /// In en, this message translates to:
+  /// **'Your photo was sent to the AI to read, then discarded. Nothing is stored after you confirm or discard.'**
+  String get reviewPhotoDiscarded;
+
+  /// No description provided for @reviewFieldsReady.
+  ///
+  /// In en, this message translates to:
+  /// **'{checked} of {total} fields ready to add'**
+  String reviewFieldsReady(int checked, int total);
+
+  /// No description provided for @reviewYouEntered.
+  ///
+  /// In en, this message translates to:
+  /// **'You entered'**
+  String get reviewYouEntered;
+
+  /// No description provided for @reviewAutofillFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Autofill found'**
+  String get reviewAutofillFound;
+
+  /// No description provided for @reviewKeepMine.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep mine'**
+  String get reviewKeepMine;
+
+  /// No description provided for @reviewUseNew.
+  ///
+  /// In en, this message translates to:
+  /// **'Use new'**
+  String get reviewUseNew;
+
+  /// No description provided for @reviewAddBoth.
+  ///
+  /// In en, this message translates to:
+  /// **'Add both'**
+  String get reviewAddBoth;
+
+  /// No description provided for @reviewConsolidateAi.
+  ///
+  /// In en, this message translates to:
+  /// **'Consolidate (AI)'**
+  String get reviewConsolidateAi;
+
+  /// No description provided for @reviewIdentityNotMerged.
+  ///
+  /// In en, this message translates to:
+  /// **'Identity fields aren\'t merged by the AI — double-check this one yourself.'**
+  String get reviewIdentityNotMerged;
+
+  /// No description provided for @reviewWillSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Will save:'**
+  String get reviewWillSave;
+
+  /// No description provided for @reviewSetupAiToConsolidate.
+  ///
+  /// In en, this message translates to:
+  /// **'Set up the AI assistant first to consolidate.'**
+  String get reviewSetupAiToConsolidate;
+
+  /// No description provided for @reviewAgentInitialsNote.
+  ///
+  /// In en, this message translates to:
+  /// **'This lets your agent decide. Under PA law (§5836(c)) it only takes effect if you physically initial this authorization on the printed form — confirm this is what you want.'**
+  String get reviewAgentInitialsNote;
+
+  /// No description provided for @reviewSmartIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'The AI generated these additional suggestions based on your validated conditions and medications. Tap to edit, uncheck to skip. This is not medical or legal advice.'**
+  String get reviewSmartIntro;
+
+  /// No description provided for @reviewGuidanceOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Guidance to read — not saved to your form. Set your choice in Procedures & research.'**
+  String get reviewGuidanceOnly;
+
+  /// No description provided for @reviewAutofillInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'Autofill Information'**
+  String get reviewAutofillInformation;
+
+  /// No description provided for @reviewApplyAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply All'**
+  String get reviewApplyAll;
+
+  /// No description provided for @reviewDiscardAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard all'**
+  String get reviewDiscardAll;
+
+  /// No description provided for @reviewGenerateMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Generate more'**
+  String get reviewGenerateMore;
+
+  /// No description provided for @reviewIncludeField.
+  ///
+  /// In en, this message translates to:
+  /// **'Include this field'**
+  String get reviewIncludeField;
+
+  /// No description provided for @reviewNotAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Not added'**
+  String get reviewNotAdded;
+
+  /// No description provided for @reviewEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get reviewEdit;
 }
 
 class _AppLocalizationsDelegate

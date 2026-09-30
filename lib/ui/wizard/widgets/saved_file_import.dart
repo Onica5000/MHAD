@@ -1,5 +1,6 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/providers/app_providers.dart';
@@ -16,6 +17,7 @@ Future<void> importSavedDirectiveFile(
   // App-level messenger captured before any await so the post-import notice
   // survives both the file-picker gap and the navigation below.
   final messenger = ScaffoldMessenger.of(context);
+  final l10n = context.l10n;
   final result = await FilePicker.platform.pickFiles(
     type: FileType.custom,
     allowedExtensions: ['mhad', 'json', 'txt'],
@@ -26,7 +28,7 @@ Future<void> importSavedDirectiveFile(
   if (bytes == null) {
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Could not read that file.')),
+        SnackBar(content: Text(l10n.savedImportCouldNotRead)),
       );
     }
     return;
@@ -40,13 +42,9 @@ Future<void> importSavedDirectiveFile(
       // DirectiveRepository.restoreFromSnapshot) — make the re-sign step clear
       // so the user doesn't assume the old signature still makes it valid.
       messenger.showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Imported as an editable draft. After reviewing, re-sign and '
-            're-witness it to make it valid again — the previous signature '
-            'does not carry over.',
-          ),
-          duration: Duration(seconds: 7),
+        SnackBar(
+          content: Text(l10n.savedImportImportedAsDraft),
+          duration: const Duration(seconds: 7),
         ),
       );
     }

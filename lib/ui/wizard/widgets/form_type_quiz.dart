@@ -1,6 +1,7 @@
 ﻿import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
@@ -40,7 +41,7 @@ class _QuizDialogState extends State<_QuizDialog> {
   /// Pending auto-advance after an option tap (artboard `WebQuiz` behaviour).
   Timer? _advanceTimer;
 
-  static const _questions = _QuizQuestions.all;
+  List<_QuizQuestion> get _questions => _QuizQuestions.all(context.l10n);
 
   @override
   void dispose() {
@@ -168,13 +169,13 @@ class _QuestionBody extends StatelessWidget {
             children: [
               IconButton(
                 icon: const Icon(Icons.arrow_back, size: 20),
-                tooltip: step == 0 ? 'Cancel' : 'Back',
+                tooltip: step == 0 ? context.l10n.cancel : context.l10n.back,
                 onPressed: onBack,
               ),
               Expanded(
                 child: Center(
                   child: Text(
-                    'Help me choose · question ${step + 1} of $total',
+                    context.l10n.quizQuestionEyebrow(step + 1, total),
                     style: TextStyle(
                       fontFamily: kMonoFamily,
                       fontFamilyFallback: const [
@@ -204,7 +205,7 @@ class _QuestionBody extends StatelessWidget {
           child: ListView(
             padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
             children: [
-              const SectionLabel('In your words'),
+              SectionLabel(context.l10n.quizInYourWords),
               const SizedBox(height: 8),
               EditorialHeading(
                 textSpan: _editorialFor(question.headline, p.primary),
@@ -377,13 +378,13 @@ class _ResultBody extends StatelessWidget {
             children: [
               IconButton(
                 icon: const Icon(Icons.close, size: 20),
-                tooltip: 'Cancel',
+                tooltip: context.l10n.cancel,
                 onPressed: () => Navigator.pop(context),
               ),
               Expanded(
                 child: Center(
                   child: Text(
-                    'Help me choose · result',
+                    context.l10n.quizResultEyebrow,
                     style: TextStyle(
                       fontFamily: kMonoFamily,
                       fontFamilyFallback: const [
@@ -407,14 +408,14 @@ class _ResultBody extends StatelessWidget {
           child: ListView(
             padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
             children: [
-              const SectionLabel('Recommended for you'),
+              SectionLabel(context.l10n.quizRecommendedForYou),
               const SizedBox(height: 8),
               EditorialHeading(
                 textSpan: TextSpan(
                   children: [
-                    const TextSpan(text: 'You probably want\n'),
+                    TextSpan(text: context.l10n.quizYouProbablyWant),
                     TextSpan(
-                      text: _formName(leader),
+                      text: _formName(context, leader),
                       style: TextStyle(color: p.primary),
                     ),
                     const TextSpan(text: '.'),
@@ -425,7 +426,7 @@ class _ResultBody extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                _explanation(leader),
+                _explanation(context, leader),
                 style: TextStyle(
                   fontFamily: kSansFamily,
                   fontSize: 14,
@@ -461,19 +462,19 @@ class _ResultBody extends StatelessWidget {
               const SizedBox(height: 10),
               _LegendRow(
                 color: p.primary,
-                label: 'Combined',
+                label: context.l10n.quizLegendCombined,
                 pct: pctFor(FormType.combined),
                 emphasized: leader == FormType.combined,
               ),
               _LegendRow(
                 color: p.primaryMid,
-                label: 'Declaration only',
+                label: context.l10n.quizLegendDeclaration,
                 pct: pctFor(FormType.declaration),
                 emphasized: leader == FormType.declaration,
               ),
               _LegendRow(
                 color: p.primaryLight,
-                label: 'Power of Attorney only',
+                label: context.l10n.quizLegendPoa,
                 pct: pctFor(FormType.poa),
                 emphasized: leader == FormType.poa,
               ),
@@ -491,13 +492,13 @@ class _ResultBody extends StatelessWidget {
               TextButton.icon(
                 onPressed: onRetake,
                 icon: const Icon(Icons.refresh, size: 18),
-                label: const Text('Retake'),
+                label: Text(context.l10n.quizRetake),
               ),
               const Spacer(),
               FilledButton.icon(
                 onPressed: onUse,
                 icon: const Icon(Icons.arrow_forward, size: 18),
-                label: Text('Use ${_formName(leader)}'),
+                label: Text(context.l10n.quizUseForm(_formName(context, leader))),
                 style: FilledButton.styleFrom(
                   iconAlignment: IconAlignment.end,
                   padding: const EdgeInsets.symmetric(horizontal: 18),
@@ -510,23 +511,16 @@ class _ResultBody extends StatelessWidget {
     );
   }
 
-  String _formName(FormType t) => switch (t) {
-        FormType.combined => 'Combined',
-        FormType.declaration => 'Declaration',
-        FormType.poa => 'POA',
+  String _formName(BuildContext context, FormType t) => switch (t) {
+        FormType.combined => context.l10n.quizFormNameCombined,
+        FormType.declaration => context.l10n.quizFormNameDeclaration,
+        FormType.poa => context.l10n.quizFormNamePoa,
       };
 
-  String _explanation(FormType type) => switch (type) {
-        FormType.combined =>
-          'Includes both your treatment preferences AND an agent designation. '
-              'The most comprehensive option — and what most people choose.',
-        FormType.poa =>
-          'Designates an agent to make decisions for you, without locking in '
-              'specific treatment preferences. Best when you trust someone '
-              'completely and want them to decide in the moment.',
-        FormType.declaration =>
-          'Documents your treatment preferences without naming an agent. '
-              'Your treatment team will follow your written wishes directly.',
+  String _explanation(BuildContext context, FormType type) => switch (type) {
+        FormType.combined => context.l10n.quizExplainCombined,
+        FormType.poa => context.l10n.quizExplainPoa,
+        FormType.declaration => context.l10n.quizExplainDeclaration,
       };
 }
 
@@ -616,111 +610,107 @@ class _QuizQuestion {
 }
 
 class _QuizQuestions {
-  static const all = <_QuizQuestion>[
+  static List<_QuizQuestion> all(AppLocalizations l) => [
     _QuizQuestion(
-      headline: "Do you have someone in mind to **speak for you**?",
-      sub: 'A family member, partner, or close friend who could make '
-          "treatment decisions if you can't.",
+      headline: l.quizQ1Headline,
+      sub: l.quizQ1Sub,
       options: [
         _QuizOption(
-          label: 'Yes — and I trust them completely',
-          hint: 'You probably want a Combined or POA-only form.',
+          label: l.quizQ1O1Label,
+          hint: l.quizQ1O1Hint,
           weights: {FormType.combined: 2, FormType.poa: 2},
         ),
         _QuizOption(
-          label: 'Yes, but I want to set firm limits',
-          hint: 'Combined gives you both an agent and a binding declaration.',
+          label: l.quizQ1O2Label,
+          hint: l.quizQ1O2Hint,
           weights: {FormType.combined: 3},
         ),
         _QuizOption(
-          label: 'No — I want providers to follow my written wishes',
-          hint: 'Declaration-only is for you.',
+          label: l.quizQ1O3Label,
+          hint: l.quizQ1O3Hint,
           weights: {FormType.declaration: 3},
         ),
         _QuizOption(
-          label: "I'm not sure yet",
-          hint: "No problem — we can come back to this.",
+          label: l.quizQ1O4Label,
+          hint: l.quizQ1O4Hint,
           weights: {FormType.combined: 1},
         ),
       ],
     ),
     _QuizQuestion(
-      headline:
-          "Do you want to **write down** specific treatment preferences?",
-      sub: 'Medications, facilities, ECT, experimental studies, drug trials.',
+      headline: l.quizQ2Headline,
+      sub: l.quizQ2Sub,
       options: [
         _QuizOption(
-          label: 'Yes — I have specific things I want or refuse',
-          hint: 'You probably want a Combined or Declaration form.',
+          label: l.quizQ2O1Label,
+          hint: l.quizQ2O1Hint,
           weights: {FormType.combined: 3, FormType.declaration: 2},
         ),
         _QuizOption(
-          label: "Some preferences, but I'd rather my agent decide",
-          hint: 'Combined still works — agent decides where you didn\'t write.',
+          label: l.quizQ2O2Label,
+          hint: l.quizQ2O2Hint,
           weights: {FormType.combined: 2, FormType.poa: 1},
         ),
         _QuizOption(
-          label: "No — let my agent or doctors decide everything",
-          hint: 'Power of Attorney only is the lightest path.',
+          label: l.quizQ2O3Label,
+          hint: l.quizQ2O3Hint,
           weights: {FormType.poa: 3},
         ),
         _QuizOption(
-          label: "I'm not sure yet",
-          hint: "No problem — Combined leaves both doors open.",
+          label: l.quizQ2O4Label,
+          hint: l.quizQ2O4Hint,
           weights: {FormType.combined: 1},
         ),
       ],
     ),
     _QuizQuestion(
-      headline:
-          "If you can't decide, **whose voice** should reach the doctors first?",
-      sub: 'The directive you write today, or the person you trust?',
+      headline: l.quizQ3Headline,
+      sub: l.quizQ3Sub,
       options: [
         _QuizOption(
-          label: "What I wrote — even over what someone says in the moment",
-          hint: 'Declaration-only or Combined with strong written preferences.',
+          label: l.quizQ3O1Label,
+          hint: l.quizQ3O1Hint,
           weights: {FormType.declaration: 3, FormType.combined: 1},
         ),
         _QuizOption(
-          label: 'My agent — they can read the situation in real time',
-          hint: 'POA-only or Combined where the agent has broad authority.',
+          label: l.quizQ3O2Label,
+          hint: l.quizQ3O2Hint,
           weights: {FormType.poa: 3, FormType.combined: 1},
         ),
         _QuizOption(
-          label: 'Both — what I wrote, with my agent filling gaps',
-          hint: 'Combined is the strongest fit.',
+          label: l.quizQ3O3Label,
+          hint: l.quizQ3O3Hint,
           weights: {FormType.combined: 3},
         ),
         _QuizOption(
-          label: "I'm not sure yet",
-          hint: "No problem — Combined supports both pathways.",
+          label: l.quizQ3O4Label,
+          hint: l.quizQ3O4Hint,
           weights: {FormType.combined: 1},
         ),
       ],
     ),
     _QuizQuestion(
-      headline:
-          "What's the **most important** thing this document does for you?",
-      sub: 'There\'s no wrong answer — this just confirms what we\'re seeing.',
+      headline: l.quizQ4Headline,
+      sub: l.quizQ4Sub,
       options: [
         _QuizOption(
-          label: 'Names who I trust to speak for me',
-          hint: 'Combined or POA-only.',
+          label: l.quizQ4O1Label,
+          hint: l.quizQ4O1Hint,
           weights: {FormType.combined: 2, FormType.poa: 2},
         ),
         _QuizOption(
-          label: 'Locks in specific treatments I want — or refuse',
-          hint: 'Combined or Declaration-only.',
+          label: l.quizQ4O2Label,
+          hint: l.quizQ4O2Hint,
           weights: {FormType.combined: 2, FormType.declaration: 2},
         ),
         _QuizOption(
-          label: 'Both — equally',
-          hint: 'Combined.',
+          label: l.quizQ4O3Label,
+          hint: l.quizQ4O3Hint,
           weights: {FormType.combined: 3},
         ),
         _QuizOption(
-          label: "Just having something on file",
-          hint: 'Any form works. Combined gives the broadest coverage.',
+          label: l.quizQ4O4Label,
+          hint: l.quizQ4O4Hint,
           weights: {FormType.combined: 1},
         ),
       ],

@@ -6,6 +6,7 @@ import 'package:cross_file/cross_file.dart';
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/ai/document_extraction_result.dart';
 import 'package:mhad/constants.dart';
@@ -115,8 +116,8 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
     announce(
         context,
         appliedCount > 0
-            ? 'Autofill applied $appliedCount fields to your directive'
-            : 'Autofill finished — no new fields were added');
+            ? context.l10n.pipelineAppliedA11y(appliedCount)
+            : context.l10n.pipelineAppliedNoneA11y);
     if (_standalone) {
       _toWizard();
     } else {
@@ -158,17 +159,18 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
   }
 
   String _docName(PickedDocument d) {
-    if (d.path == 'pasted-image') return 'Pasted image';
+    if (d.path == 'pasted-image') return context.l10n.pipelinePastedImage;
     final base = d.path.replaceAll('\\', '/').split('/').last;
-    return base.isNotEmpty ? base : 'Document';
+    return base.isNotEmpty ? base : context.l10n.pipelineDocument;
   }
 
   String _docKind(PickedDocument d) {
-    if (d.mimeType == 'application/pdf') return 'PDF';
-    if (d.mimeType.startsWith('image/')) return 'Photo';
-    if (d.mimeType.startsWith('text/')) return 'Text';
-    if (d.mimeType.startsWith('audio/')) return 'Audio';
-    return 'File';
+    final l10n = context.l10n;
+    if (d.mimeType == 'application/pdf') return l10n.pipelineKindPdf;
+    if (d.mimeType.startsWith('image/')) return l10n.pipelineKindPhoto;
+    if (d.mimeType.startsWith('text/')) return l10n.pipelineKindText;
+    if (d.mimeType.startsWith('audio/')) return l10n.pipelineKindAudio;
+    return l10n.pipelineKindFile;
   }
   _PipelineStep _step = _PipelineStep.pick;
   String _statusMessage = '';
@@ -191,7 +193,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
       _error = null;
     });
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Processing cancelled — nothing was applied.')),
+      SnackBar(content: Text(context.l10n.pipelineCancelled)),
     );
   }
 
@@ -265,22 +267,16 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         icon: const Icon(Icons.auto_awesome, size: 36),
-        title: const Text('Set up AI to read documents'),
-        content: const Text(
-          'Snap-to-fill uses AI to read your uploaded document (photo, PDF, or '
-          'text) and pull out details to fill your form — medications, '
-          'conditions, care preferences, and your contact details. It needs an '
-          "AI key — Gemini's free tier takes about 30 seconds to set up. You "
-          'review every field before anything lands in your form.',
-        ),
+        title: Text(ctx.l10n.pipelineSetupAiTitle),
+        content: Text(ctx.l10n.pipelineSetupAiBody),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Not now'),
+            child: Text(ctx.l10n.neverWantCrossAddNotNow),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Set up AI'),
+            child: Text(ctx.l10n.pipelineSetupAi),
           ),
         ],
       ),
@@ -320,6 +316,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
       _error = null;
     });
     if (files.isEmpty) return;
+    final droppedLabel = context.l10n.pipelineDroppedFile;
     final docs = <PickedDocument>[];
     for (final f in files) {
       final mime = _mimeForName(f.name);
@@ -330,7 +327,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
         // a blob: URL in `path`, which would show as gibberish in the tray;
         // `name` is the real filename and the bytes are already loaded, so the
         // path isn't needed for reading.
-        path: f.name.isNotEmpty ? f.name : 'Dropped file',
+        path: f.name.isNotEmpty ? f.name : droppedLabel,
         mimeType: mime,
         bytes: bytes,
       ));
@@ -338,8 +335,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
     if (!mounted) return;
     if (docs.isEmpty) {
       setState(() => _error =
-          'That file type isn\'t supported. Use a JPG, PNG, HEIC, PDF, or '
-          'text file.');
+          context.l10n.pipelineUnsupportedType);
       return;
     }
     _addPending(docs);
@@ -413,10 +409,8 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              'Processing $pagesNeeded pages requires $pagesNeeded requests, '
-              'but only ${tracker.remainingRpm} requests are available this '
-              'minute. Please wait ${tracker.secondsUntilRpmSlot} seconds '
-              'or select fewer pages.',
+              context.l10n.pipelineRpmLimit(pagesNeeded,
+                  tracker.remainingRpm, tracker.secondsUntilRpmSlot),
             ),
             duration: const Duration(seconds: 6),
           ),
@@ -429,9 +423,8 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              'Processing $pagesNeeded pages requires $pagesNeeded requests, '
-              'but only ${tracker.remainingRpd} requests remain today '
-              '(daily limit: ${GeminiRateTracker.maxRpd}).',
+              context.l10n.pipelineRpdLimit(pagesNeeded,
+                  tracker.remainingRpd, GeminiRateTracker.maxRpd),
             ),
             duration: const Duration(seconds: 6),
           ),
@@ -448,9 +441,8 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
-                'File "${doc.path.split('/').last}" is too large '
-                '(${(doc.bytes!.length / 1024 / 1024).toStringAsFixed(1)} MB). '
-                'Maximum file size is 10 MB per document.',
+                context.l10n.pipelineFileTooLarge(doc.path.split('/').last,
+                    (doc.bytes!.length / 1024 / 1024).toStringAsFixed(1)),
               ),
               duration: const Duration(seconds: 5),
             ),
@@ -466,7 +458,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
     bool cancelled() => !mounted || runId != _processingRunId;
     setState(() {
       _step = _PipelineStep.extracting;
-      _statusMessage = 'Extracting page 1 of ${docs.length}...';
+      _statusMessage = context.l10n.pipelineExtractingPage(1, docs.length);
     });
 
     DocumentExtractor? extractor;
@@ -488,8 +480,8 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
         if (cancelled()) return;
         setState(() {
           _statusMessage = docs.length > 1
-              ? 'Extracting page ${i + 1} of ${docs.length}...'
-              : 'Extracting medical data from document...';
+              ? context.l10n.pipelineExtractingPage(i + 1, docs.length)
+              : context.l10n.pipelineExtractingSingle;
         });
 
         // Read bytes from PickedDocument (pre-loaded on web, may need file read on native)
@@ -542,14 +534,11 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
       if (!anyRelevant) {
         setState(() {
           final kind = (irrelevantKind != null && irrelevantKind.isNotEmpty)
-              ? ' (it looks like a $irrelevantKind)'
+              ? context.l10n.pipelineLooksLikeKind(irrelevantKind)
               : '';
           _error = docs.length == 1
-              ? "This doesn't look like a health or medical document$kind, so "
-                  'nothing was used. Upload a medical record, medication or '
-                  'allergy list, or an existing advance directive.'
-              : "These don't look like health or medical documents$kind, so "
-                  'nothing was used.';
+              ? context.l10n.pipelineNotMedicalSingle(kind)
+              : context.l10n.pipelineNotMedicalMulti(kind);
           _step = _PipelineStep.pick;
         });
         return;
@@ -557,8 +546,9 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
 
       if (merged == null || merged.isEmpty) {
         setState(() {
-          _error = 'No medical information found in '
-              '${docs.length == 1 ? 'this document' : 'these ${docs.length} pages'}.';
+          _error = docs.length == 1
+              ? context.l10n.pipelineNoMedicalInfoSingle
+              : context.l10n.pipelineNoMedicalInfoMulti(docs.length);
           _step = _PipelineStep.pick;
         });
         return;
@@ -567,7 +557,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
       // ── Step 2: Validate against NIH APIs ───────────────────────
       setState(() {
         _step = _PipelineStep.validating;
-        _statusMessage = 'Validating medications and conditions...';
+        _statusMessage = context.l10n.pipelineValidating;
       });
 
       final validated = await ClinicalDataValidator.validate(merged);
@@ -614,7 +604,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
         if (!didPop && isProcessing) {
           if (_step == _PipelineStep.generating) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Please wait while processing...')),
+              SnackBar(content: Text(context.l10n.pipelinePleaseWait)),
             );
           } else {
             // Back during extract/validate = cancel back to the pick step
@@ -633,7 +623,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
               title: Text(_title),
               leading: IconButton(
                 icon: const Icon(Icons.close),
-                tooltip: 'Close',
+                tooltip: context.l10n.close,
                 onPressed: isProcessing ? null : _exit,
               ),
             ),
@@ -699,7 +689,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
         padding: const EdgeInsets.fromLTRB(20, 14, 20, 0),
         child: Row(
           children: [
-            backLink('Wizard', _toWizard),
+            backLink(context.l10n.pipelineBackWizard, _toWizard),
             const Spacer(),
           ],
         ),
@@ -709,10 +699,13 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
     // Processing / review / results: a back affordance (disabled mid-process).
     final (label, onBack) = switch (_step) {
       _PipelineStep.results => (
-          'Review',
+          context.l10n.pipelineBackReview,
           isProcessing ? null : () => setState(() => _step = _PipelineStep.review)
         ),
-      _ => ('Snap to fill', isProcessing ? null : _discardExtraction),
+      _ => (
+          context.l10n.pipelineTitleSnapToFill,
+          isProcessing ? null : _discardExtraction
+        ),
     };
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 14, 20, 0),
@@ -726,11 +719,13 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
   }
 
   String get _title => switch (_step) {
-        _PipelineStep.pick => 'Snap to fill',
-        _PipelineStep.extracting || _PipelineStep.validating => 'Processing',
-        _PipelineStep.review => 'Review Extracted Data',
-        _PipelineStep.generating => 'Generating Suggestions',
-        _PipelineStep.results => 'AI Suggestions',
+        _PipelineStep.pick => context.l10n.pipelineTitleSnapToFill,
+        _PipelineStep.extracting ||
+        _PipelineStep.validating =>
+          context.l10n.pipelineTitleProcessing,
+        _PipelineStep.review => context.l10n.pipelineTitleReview,
+        _PipelineStep.generating => context.l10n.pipelineTitleGenerating,
+        _PipelineStep.results => context.l10n.pipelineTitleResults,
       };
 
   Widget _buildBody() {
@@ -759,8 +754,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
       // of leaving the Browse button feeling dead.
       if (mounted) {
         setState(() => _error =
-            'Couldn\'t open the file picker ($e). Try dragging the file onto '
-            'the box above instead.');
+            context.l10n.pipelinePickerFailed('$e'));
       }
       return;
     }
@@ -768,8 +762,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
     if (docs.isEmpty) {
       // Files were chosen but none could be read — never fail silently.
       setState(() => _error =
-          'We couldn\'t read that file. Please use a PDF, JPG, PNG, WEBP, '
-          'HEIC, or plain-text file under 10 MB.');
+          context.l10n.pipelineCouldNotRead);
       return;
     }
     _addPending(docs);
@@ -825,32 +818,27 @@ class _FormTypeChooserState extends State<_FormTypeChooser> {
   FormType _selected = FormType.combined;
 
   String _title(FormType ft) => switch (ft) {
-        FormType.combined => 'Combined',
-        FormType.declaration => 'Declaration only',
-        FormType.poa => 'Power of Attorney only',
+        FormType.combined => context.l10n.pipelineFormCombined,
+        FormType.declaration => context.l10n.pipelineFormDeclaration,
+        FormType.poa => context.l10n.pipelineFormPoa,
       };
 
   String _subtitle(FormType ft) => switch (ft) {
-        FormType.combined =>
-          'Treatment preferences AND a decision-maker (broadest).',
-        FormType.declaration =>
-          'Treatment preferences, without naming an agent.',
-        FormType.poa => 'Name a decision-maker, without listing preferences.',
+        FormType.combined => context.l10n.pipelineFormCombinedSub,
+        FormType.declaration => context.l10n.pipelineFormDeclarationSub,
+        FormType.poa => context.l10n.pipelineFormPoaSub,
       };
 
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
     return AlertDialog(
-      title: const Text('Which form do you want to fill?'),
+      title: Text(context.l10n.pipelineWhichForm),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Choose your form first — the AI will then read only the parts that '
-            'form needs. Combined is the broadest; you can change this later.',
-          ),
+          Text(context.l10n.pipelineWhichFormBody),
           const SizedBox(height: 8),
           for (final ft in FormType.values)
             InkWell(
@@ -890,11 +878,11 @@ class _FormTypeChooserState extends State<_FormTypeChooser> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Cancel'),
+          child: Text(context.l10n.cancel),
         ),
         FilledButton(
           onPressed: () => Navigator.pop(context, _selected),
-          child: const Text('Continue'),
+          child: Text(context.l10n.wizardContinue),
         ),
       ],
     );

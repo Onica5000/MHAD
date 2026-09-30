@@ -17,7 +17,7 @@ extension _PipelineApplyLogic on _PipelineScreenState {
 
     setState(() {
       _step = _PipelineStep.generating;
-      _statusMessage = 'AI is generating personalized suggestions...';
+      _statusMessage = context.l10n.pipelineGeneratingSuggestions;
     });
 
     SmartFillService? service;
@@ -42,7 +42,7 @@ extension _PipelineApplyLogic on _PipelineScreenState {
 
       if (result.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('AI could not generate additional suggestions.')),
+          SnackBar(content: Text(context.l10n.pipelineNoAdditionalSuggestions)),
         );
         // Fall through to apply just the extracted data
         await _applyAll();
@@ -58,7 +58,9 @@ extension _PipelineApplyLogic on _PipelineScreenState {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Autofill hit a problem. ${FriendlyError.from(e)}')),
+          SnackBar(
+              content: Text(
+                  context.l10n.pipelineAutofillProblem(FriendlyError.from(e)))),
         );
         // Still apply extracted data
         await _applyAll();
@@ -857,11 +859,11 @@ extension _PipelineApplyLogic on _PipelineScreenState {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel'),
+            child: Text(ctx.l10n.cancel),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(ctx, controller.text),
-            child: const Text('Save'),
+            child: Text(ctx.l10n.save),
           ),
         ],
       ),
@@ -891,11 +893,11 @@ extension _PipelineApplyLogic on _PipelineScreenState {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel'),
+            child: Text(ctx.l10n.cancel),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(ctx, controller.text),
-            child: const Text('Save'),
+            child: Text(ctx.l10n.save),
           ),
         ],
       ),

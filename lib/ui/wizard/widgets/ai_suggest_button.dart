@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -196,7 +197,10 @@ Return only the draft text — no explanation, no quotes, no preamble.''';
           title: Row(children: [
             const Icon(Icons.auto_awesome, size: 20),
             const SizedBox(width: 8),
-            Expanded(child: Text(isDraft ? 'AI Draft' : 'AI Suggestion')),
+            Expanded(
+                child: Text(isDraft
+                    ? ctx.l10n.aiSuggestDraftTitle
+                    : ctx.l10n.aiSuggestSuggestionTitle)),
           ]),
           content: SingleChildScrollView(
             child: Column(
@@ -204,7 +208,7 @@ Return only the draft text — no explanation, no quotes, no preamble.''';
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (!isDraft) ...[
-                  Text('Your text:', style: labelStyle),
+                  Text(ctx.l10n.aiSuggestYourText, style: labelStyle),
                   const SizedBox(height: 4),
                   Container(
                     width: double.infinity,
@@ -224,7 +228,11 @@ Return only the draft text — no explanation, no quotes, no preamble.''';
                   ),
                   const SizedBox(height: 12),
                 ],
-                Text(isDraft ? 'AI draft:' : 'AI suggestion:', style: labelStyle),
+                Text(
+                    isDraft
+                        ? ctx.l10n.aiSuggestDraftLabel
+                        : ctx.l10n.aiSuggestSuggestionLabel,
+                    style: labelStyle),
                 const SizedBox(height: 4),
                 Container(
                   width: double.infinity,
@@ -241,7 +249,7 @@ Return only the draft text — no explanation, no quotes, no preamble.''';
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  '$aiNotAdvice Review carefully.',
+                  ctx.l10n.aiSuggestReviewCarefully(aiNotAdvice),
                   style: Theme.of(ctx).textTheme.bodySmall?.copyWith(
                       color: cs.onSurfaceVariant,
                       fontStyle: FontStyle.italic),
@@ -252,17 +260,19 @@ Return only the draft text — no explanation, no quotes, no preamble.''';
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx),
-              child: const Text('Dismiss'),
+              child: Text(ctx.l10n.aiSuggestDismiss),
             ),
             // Nothing to merge into when drafting from a blank field.
             if (!isDraft)
               OutlinedButton(
                 onPressed: () => Navigator.pop(ctx, 'merge'),
-                child: const Text('Add to mine'),
+                child: Text(ctx.l10n.aiSuggestAddToMine),
               ),
             FilledButton(
               onPressed: () => Navigator.pop(ctx, 'replace'),
-              child: Text(isDraft ? 'Use this draft' : 'Use instead'),
+              child: Text(isDraft
+                  ? ctx.l10n.aiSuggestUseDraft
+                  : ctx.l10n.aiSuggestUseInstead),
             ),
           ],
         );
@@ -287,14 +297,14 @@ Return only the draft text — no explanation, no quotes, no preamble.''';
   void _showUndo(String previous) {
     if (!mounted) return;
     // Snackbars aren't reliably read by web screen readers (UX audit A4).
-    announce(context, 'AI suggestion applied. Undo available.');
+    announce(context, context.l10n.aiSuggestAppliedA11y);
     final messenger = ScaffoldMessenger.of(context)..clearSnackBars();
     messenger.showSnackBar(
       SnackBar(
-        content: const Text('AI suggestion applied.'),
+        content: Text(context.l10n.aiSuggestApplied),
         duration: const Duration(seconds: 6),
         action: SnackBarAction(
-          label: 'Undo',
+          label: context.l10n.aiSuggestUndo,
           onPressed: () {
             widget.controller.text = previous;
             widget.controller.selection =
@@ -317,14 +327,14 @@ Return only the draft text — no explanation, no quotes, no preamble.''';
     return Semantics(
       button: true,
       label: _loading
-          ? 'AI Suggest, loading suggestion for ${widget.fieldName}'
+          ? context.l10n.aiSuggestLoadingA11y(widget.fieldName)
           : hasAssistant
-              ? 'AI Suggest for ${widget.fieldName}'
-              : 'Set up AI Assistant to use suggestions',
+              ? context.l10n.aiSuggestForFieldA11y(widget.fieldName)
+              : context.l10n.aiSuggestSetupA11y,
       child: Tooltip(
         message: hasAssistant
-            ? 'Get an AI suggestion for this field'
-            : 'Set up AI Assistant to use this feature',
+            ? context.l10n.aiSuggestTooltip
+            : context.l10n.aiSuggestSetupTooltip,
         child: _loading
             ? SizedBox(
                 width: 48,
@@ -332,7 +342,7 @@ Return only the draft text — no explanation, no quotes, no preamble.''';
                 child: Padding(
                   padding: const EdgeInsets.all(12),
                   child: Semantics(
-                    label: 'Loading',
+                    label: context.l10n.wizardLoading,
                     child: const CircularProgressIndicator(strokeWidth: 2),
                   ),
                 ),
@@ -343,7 +353,7 @@ Return only the draft text — no explanation, no quotes, no preamble.''';
                   size: 20,
                   color: hasAssistant ? cs.primary : cs.onSurfaceVariant,
                 ),
-                tooltip: 'AI suggestion',
+                tooltip: context.l10n.aiSuggestIconTooltip,
                 onPressed: _suggest,
                 style: IconButton.styleFrom(
                   minimumSize: const Size(48, 48),

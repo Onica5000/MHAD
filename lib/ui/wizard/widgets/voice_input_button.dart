@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/ui/wizard/widgets/voice_record_overlay.dart';
 import 'package:mhad/utils/platform_utils.dart';
 
@@ -44,9 +45,9 @@ class VoiceInputButton extends StatelessWidget {
     final cs = Theme.of(context).colorScheme;
     return Semantics(
       button: true,
-      label: 'Open voice dictation',
+      label: context.l10n.voiceInputOpenDictation,
       child: Tooltip(
-        message: 'Dictate text',
+        message: context.l10n.voiceInputDictateText,
         child: IconButton(
           icon: Icon(
             Icons.mic_none,

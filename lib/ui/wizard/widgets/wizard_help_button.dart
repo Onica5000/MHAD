@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/data/educational_content.dart';
@@ -27,7 +28,7 @@ class WizardHelpButton extends StatelessWidget {
       alignment: Alignment.centerLeft,
       child: Semantics(
         button: true,
-        label: 'Help for this step. Opens help sheet.',
+        label: context.l10n.wizardHelpA11y,
         child: TextButton.icon(
           onPressed: () => showModalBottomSheet(
             context: context,
@@ -35,7 +36,7 @@ class WizardHelpButton extends StatelessWidget {
             builder: (_) => _HelpSheet(helpText: helpText, stepId: stepId),
           ),
           icon: const Icon(Icons.help_outline, size: 16),
-          label: const Text('Help'),
+          label: Text(context.l10n.wizardHelpButton),
           style: TextButton.styleFrom(
             foregroundColor: Theme.of(context).colorScheme.primary,
             textStyle: const TextStyle(fontSize: 13),
@@ -71,14 +72,14 @@ class _HelpSheet extends StatelessWidget {
             children: [
               Icon(Icons.help, color: Theme.of(context).colorScheme.primary),
               const SizedBox(width: 8),
-              Text('Help',
+              Text(context.l10n.wizardHelpButton,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                       )),
               const Spacer(),
               IconButton(
                 icon: const Icon(Icons.close),
-                tooltip: 'Close',
+                tooltip: context.l10n.close,
                 onPressed: () => Navigator.pop(context),
               ),
             ],
@@ -94,12 +95,13 @@ class _HelpSheet extends StatelessWidget {
                 context.push(AppRoutes.education, extra: filterIds);
               },
               icon: const Icon(Icons.menu_book, size: 18),
-              label: const Text('Learn More'),
+              label: Text(context.l10n.wizardHelpLearnMore),
             ),
           ],
           const SizedBox(height: 8),
           Text(
-            'Questions? Contact PA Protection & Advocacy: ${appData.phoneOf('paProtectionAdvocacy')}',
+            context.l10n.wizardHelpQuestionsContact(
+                appData.phoneOf('paProtectionAdvocacy')),
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   fontStyle: FontStyle.italic,
                 ),

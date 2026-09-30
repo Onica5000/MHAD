@@ -482,167 +482,170 @@ extension _PipelineReviewUi on _PipelineScreenState {
     }
   }
 
-  String _displayLabel(String key) {
-    if (key.startsWith('med_prefer_')) return 'Preferred Medication';
-    if (key.startsWith('med_avoid_')) return 'Medication to Avoid';
-    if (key.startsWith('med_current_')) return 'Currently Taking';
-    if (key.startsWith('med_limit_')) return 'Restricted-Use Medication';
-    if (key.startsWith('cond_')) return 'Condition';
-    if (key.startsWith('diag_')) return 'Diagnosis';
-    if (key.startsWith('allergy_')) return 'Allergy';
-    if (key.startsWith('hh_')) return 'Health History';
-    if (key == 'effective_condition') return 'When this kicks in (your words)';
-    if (key == 'facility_prefer') return 'Preferred Facility';
-    if (key == 'facility_avoid') return 'Facility to Avoid';
-    if (key == 'dietary') return 'Dietary';
-    if (key == 'religious') return 'Religious/Cultural';
-    if (key == 'activities') return 'Activities';
-    if (key == 'crisis') return 'Crisis Intervention';
-    if (key == 'crisis_plan') return 'Crisis plan';
-    if (key == 'agent_authority_limitations') return 'Agent authority limits';
-    if (key == 'ect_consent') return 'ECT consent';
-    if (key == 'experimental_consent') return 'Experimental treatment consent';
-    if (key == 'drug_trial_consent') return 'Drug trial consent';
-    if (key == 'medication_consent') return 'Medication consent';
-    if (key == 'trigger_two_professionals') return 'Trigger: professionals';
-    if (key == 'trigger_court_order') return 'Trigger: court order';
+  String _displayLabel(String key, [AppLocalizations? l10n]) {
+    final l = l10n ?? context.l10n;
+    if (key.startsWith('med_prefer_')) return l.reviewLabelMedPrefer;
+    if (key.startsWith('med_avoid_')) return l.reviewLabelMedAvoid;
+    if (key.startsWith('med_current_')) return l.reviewLabelMedCurrent;
+    if (key.startsWith('med_limit_')) return l.reviewLabelMedLimit;
+    if (key.startsWith('cond_')) return l.reviewLabelCond;
+    if (key.startsWith('diag_')) return l.reviewLabelDiag;
+    if (key.startsWith('allergy_')) return l.reviewLabelAllergy;
+    if (key.startsWith('hh_')) return l.reviewLabelHh;
+    if (key == 'effective_condition') return l.reviewLabelEffectiveCondition;
+    if (key == 'facility_prefer') return l.reviewLabelFacilityPrefer;
+    if (key == 'facility_avoid') return l.reviewLabelFacilityAvoid;
+    if (key == 'dietary') return l.reviewLabelDietary;
+    if (key == 'religious') return l.reviewLabelReligious;
+    if (key == 'activities') return l.reviewLabelActivities;
+    if (key == 'crisis') return l.reviewLabelCrisis;
+    if (key == 'crisis_plan') return l.reviewLabelCrisisPlan;
+    if (key == 'agent_authority_limitations') return l.reviewLabelAgentAuthorityLimitations;
+    if (key == 'ect_consent') return l.reviewLabelEctConsent;
+    if (key == 'experimental_consent') return l.reviewLabelExperimentalConsent;
+    if (key == 'drug_trial_consent') return l.reviewLabelDrugTrialConsent;
+    if (key == 'medication_consent') return l.reviewLabelMedicationConsent;
+    if (key == 'trigger_two_professionals') return l.reviewLabelTriggerTwoProfessionals;
+    if (key == 'trigger_court_order') return l.reviewLabelTriggerCourtOrder;
     if (key == 'trigger_involuntary_commitment') {
-      return 'Trigger: involuntary commitment';
+      return l.reviewLabelTriggerInvoluntaryCommitment;
     }
-    if (key == 'room_prefs_note') return 'Room preferences';
-    if (key == 'room_pref_chips') return 'Room options';
-    if (key == 'roommate_same_gender') return 'Same-gender roommate';
-    if (key == 'guardian_can_revoke') return 'Guardian: override';
-    if (key == 'guardian_can_change_agent') return 'Guardian: replace agent';
-    if (key == 'guardian_must_consult_agent') return 'Guardian: consult agent';
-    if (key == 'authority_hospitalization') return 'Agent: hospitalization';
-    if (key == 'authority_medication') return 'Agent: medications';
-    if (key == 'ulysses_optin') return 'Self-binding (Ulysses)';
-    if (key == 'pet_custody') return 'Pet care';
-    if (key == 'children_custody') return 'Children / dependents';
-    if (key == 'family_notification') return 'Who to notify';
-    if (key == 'records_disclosure') return 'Records disclosure';
-    if (key == 'other') return 'Other';
+    if (key == 'room_prefs_note') return l.reviewLabelRoomPrefsNote;
+    if (key == 'room_pref_chips') return l.reviewLabelRoomPrefChips;
+    if (key == 'roommate_same_gender') return l.reviewLabelRoommateSameGender;
+    if (key == 'guardian_can_revoke') return l.reviewLabelGuardianCanRevoke;
+    if (key == 'guardian_can_change_agent') return l.reviewLabelGuardianCanChangeAgent;
+    if (key == 'guardian_must_consult_agent') return l.reviewLabelGuardianMustConsultAgent;
+    if (key == 'authority_hospitalization') return l.reviewLabelAuthorityHospitalization;
+    if (key == 'authority_medication') return l.reviewLabelAuthorityMedication;
+    if (key == 'ulysses_optin') return l.reviewLabelUlyssesOptin;
+    if (key == 'pet_custody') return l.reviewLabelPetCustody;
+    if (key == 'children_custody') return l.reviewLabelChildrenCustody;
+    if (key == 'family_notification') return l.reviewLabelFamilyNotification;
+    if (key == 'records_disclosure') return l.reviewLabelRecordsDisclosure;
+    if (key == 'other') return l.reviewLabelOther;
     // Personal info (PII) — declarant
-    if (key == 'person_name') return 'Your full name';
-    if (key == 'person_dob') return 'Date of birth';
-    if (key == 'person_address1') return 'Street address';
-    if (key == 'person_address2') return 'Apt / suite / unit';
-    if (key == 'person_city') return 'City';
-    if (key == 'person_county') return 'County';
-    if (key == 'person_state') return 'State';
-    if (key == 'person_zip') return 'ZIP code';
-    if (key == 'person_phone') return 'Your phone';
-    if (key == 'person_doctor_name') return 'Primary doctor';
-    if (key == 'person_doctor_specialty') return 'Doctor specialty';
-    if (key == 'person_doctor_phone') return "Doctor's phone";
-    if (key == 'person_eval_doctor_name') return 'Preferred evaluating doctor';
-    if (key == 'person_eval_doctor_contact') return 'Evaluating doctor contact';
+    if (key == 'person_name') return l.reviewLabelPersonName;
+    if (key == 'person_dob') return l.reviewLabelPersonDob;
+    if (key == 'person_address1') return l.reviewLabelPersonAddress1;
+    if (key == 'person_address2') return l.reviewLabelPersonAddress2;
+    if (key == 'person_city') return l.reviewLabelPersonCity;
+    if (key == 'person_county') return l.reviewLabelPersonCounty;
+    if (key == 'person_state') return l.reviewLabelPersonState;
+    if (key == 'person_zip') return l.reviewLabelPersonZip;
+    if (key == 'person_phone') return l.reviewLabelPersonPhone;
+    if (key == 'person_doctor_name') return l.reviewLabelPersonDoctorName;
+    if (key == 'person_doctor_specialty') return l.reviewLabelPersonDoctorSpecialty;
+    if (key == 'person_doctor_phone') return l.reviewLabelPersonDoctorPhone;
+    if (key == 'person_eval_doctor_name') return l.reviewLabelPersonEvalDoctorName;
+    if (key == 'person_eval_doctor_contact') return l.reviewLabelPersonEvalDoctorContact;
     // Primary agent
-    if (key == 'agent_name') return 'Agent name';
-    if (key == 'agent_relationship') return 'Agent relationship';
-    if (key == 'agent_address1') return 'Agent street address';
-    if (key == 'agent_address2') return 'Agent apt / suite';
-    if (key == 'agent_city') return 'Agent city';
-    if (key == 'agent_state') return 'Agent state';
-    if (key == 'agent_zip') return 'Agent ZIP';
-    if (key == 'agent_phone') return 'Agent phone';
+    if (key == 'agent_name') return l.reviewLabelAgentName;
+    if (key == 'agent_relationship') return l.reviewLabelAgentRelationship;
+    if (key == 'agent_address1') return l.reviewLabelAgentAddress1;
+    if (key == 'agent_address2') return l.reviewLabelAgentAddress2;
+    if (key == 'agent_city') return l.reviewLabelAgentCity;
+    if (key == 'agent_state') return l.reviewLabelAgentState;
+    if (key == 'agent_zip') return l.reviewLabelAgentZip;
+    if (key == 'agent_phone') return l.reviewLabelAgentPhone;
     // Alternate agent
-    if (key == 'alt_agent_name') return 'Alternate agent name';
-    if (key == 'alt_agent_relationship') return 'Alternate agent relationship';
-    if (key == 'alt_agent_address1') return 'Alt agent street address';
-    if (key == 'alt_agent_address2') return 'Alt agent apt / suite';
-    if (key == 'alt_agent_city') return 'Alt agent city';
-    if (key == 'alt_agent_state') return 'Alt agent state';
-    if (key == 'alt_agent_zip') return 'Alt agent ZIP';
-    if (key == 'alt_agent_phone') return 'Alternate agent phone';
+    if (key == 'alt_agent_name') return l.reviewLabelAltAgentName;
+    if (key == 'alt_agent_relationship') return l.reviewLabelAltAgentRelationship;
+    if (key == 'alt_agent_address1') return l.reviewLabelAltAgentAddress1;
+    if (key == 'alt_agent_address2') return l.reviewLabelAltAgentAddress2;
+    if (key == 'alt_agent_city') return l.reviewLabelAltAgentCity;
+    if (key == 'alt_agent_state') return l.reviewLabelAltAgentState;
+    if (key == 'alt_agent_zip') return l.reviewLabelAltAgentZip;
+    if (key == 'alt_agent_phone') return l.reviewLabelAltAgentPhone;
     // Guardian
-    if (key == 'guardian_name') return 'Guardian nominee';
-    if (key == 'guardian_relationship') return 'Guardian relationship';
-    if (key == 'guardian_address1') return 'Guardian street address';
-    if (key == 'guardian_address2') return 'Guardian apt / suite';
-    if (key == 'guardian_city') return 'Guardian city';
-    if (key == 'guardian_state') return 'Guardian state';
-    if (key == 'guardian_zip') return 'Guardian ZIP';
-    if (key == 'guardian_phone') return 'Guardian phone';
+    if (key == 'guardian_name') return l.reviewLabelGuardianName;
+    if (key == 'guardian_relationship') return l.reviewLabelGuardianRelationship;
+    if (key == 'guardian_address1') return l.reviewLabelGuardianAddress1;
+    if (key == 'guardian_address2') return l.reviewLabelGuardianAddress2;
+    if (key == 'guardian_city') return l.reviewLabelGuardianCity;
+    if (key == 'guardian_state') return l.reviewLabelGuardianState;
+    if (key == 'guardian_zip') return l.reviewLabelGuardianZip;
+    if (key == 'guardian_phone') return l.reviewLabelGuardianPhone;
     return key;
   }
 
   String _sectionLabel(String key) {
-    if (key.startsWith('med_prefer_')) return 'Preferred Meds';
-    if (key.startsWith('med_avoid_')) return 'Meds to Avoid';
-    if (key.startsWith('med_current_')) return 'Currently Taking';
-    if (key.startsWith('med_limit_')) return 'Restricted-Use Meds';
-    if (key.startsWith('cond_')) return 'Conditions';
-    if (key.startsWith('diag_')) return 'Diagnoses';
-    if (key.startsWith('allergy_')) return 'Allergies';
-    if (key.startsWith('hh_')) return 'Health History';
-    if (key == 'effective_condition') return 'When this kicks in';
-    if (key.startsWith('person_')) return 'Your details';
+    final l = context.l10n;
+    if (key.startsWith('med_prefer_')) return l.reviewSectionMedPrefer;
+    if (key.startsWith('med_avoid_')) return l.reviewSectionMedAvoid;
+    if (key.startsWith('med_current_')) return l.reviewSectionMedCurrent;
+    if (key.startsWith('med_limit_')) return l.reviewSectionMedLimit;
+    if (key.startsWith('cond_')) return l.reviewSectionCond;
+    if (key.startsWith('diag_')) return l.reviewSectionDiag;
+    if (key.startsWith('allergy_')) return l.reviewSectionAllergy;
+    if (key.startsWith('hh_')) return l.reviewSectionHh;
+    if (key == 'effective_condition') return l.reviewSectionEffectiveCondition;
+    if (key.startsWith('person_')) return l.reviewSectionPerson;
     if (key.startsWith('agent_') && !key.startsWith('agent_authority')) {
-      return 'Your agent';
+      return l.reviewSectionAgent;
     }
     if (key == 'agent_authority_limitations' ||
         key == 'authority_hospitalization' ||
         key == 'authority_medication') {
-      return 'Agent Authority';
+      return l.reviewSectionAgentAuthority;
     }
-    if (key == 'ulysses_optin') return 'Self-binding';
-    if (key == 'crisis_plan') return 'Crisis Plan';
+    if (key == 'ulysses_optin') return l.reviewSectionUlyssesOptin;
+    if (key == 'crisis_plan') return l.reviewSectionCrisisPlan;
     if (key == 'ect_consent' ||
         key == 'experimental_consent' ||
         key == 'drug_trial_consent' ||
         key == 'medication_consent') {
-      return 'Consent';
+      return l.reviewSectionConsent;
     }
-    if (key.startsWith('trigger_')) return 'When this kicks in';
+    if (key.startsWith('trigger_')) return l.reviewSectionEffectiveCondition;
     if (key == 'room_prefs_note' ||
         key == 'room_pref_chips' ||
         key == 'roommate_same_gender') {
-      return 'Room Preferences';
+      return l.reviewSectionRoomPreferences;
     }
-    if (key.startsWith('alt_agent_')) return 'Alternate agent';
-    if (key.startsWith('guardian_')) return 'Guardian';
-    return 'Other';
+    if (key.startsWith('alt_agent_')) return l.reviewSectionAltAgent;
+    if (key.startsWith('guardian_')) return l.reviewSectionGuardian;
+    return l.reviewSectionOther;
   }
 
   /// Maps a review key to the wizard STEP it belongs to, as (order, title), so
   /// the review can group results into the same sections the user will see in
   /// the wizard instead of one long list. Order mirrors the wizard step order.
   (int, String) _wizardSection(String key) {
-    if (key.startsWith('person_eval_doctor')) return (2, 'When this kicks in');
-    if (key == 'effective_condition') return (2, 'When this kicks in');
-    if (key.startsWith('trigger_')) return (2, 'When this kicks in');
-    if (key.startsWith('person_doctor')) return (6, 'Diagnoses');
-    if (key.startsWith('person_')) return (1, 'About you');
+    final l = context.l10n;
+    if (key.startsWith('person_eval_doctor')) return (2, l.reviewStepGroupWhenKicksIn);
+    if (key == 'effective_condition') return (2, l.reviewStepGroupWhenKicksIn);
+    if (key.startsWith('trigger_')) return (2, l.reviewStepGroupWhenKicksIn);
+    if (key.startsWith('person_doctor')) return (6, l.reviewStepGroupDiagnoses);
+    if (key.startsWith('person_')) return (1, l.reviewStepGroupAboutYou);
     if (key == 'authority_hospitalization' ||
         key == 'authority_medication' ||
         key == 'agent_authority_limitations' ||
         key.startsWith('alt_agent_') ||
         (key.startsWith('agent_') && !key.startsWith('agent_authority'))) {
-      return (3, 'People I trust');
+      return (3, l.reviewStepGroupPeopleITrust);
     }
-    if (key.startsWith('guardian_')) return (4, 'If a court appoints a guardian');
+    if (key.startsWith('guardian_')) return (4, l.reviewStepGroupGuardian);
     if (key == 'facility_prefer' ||
         key == 'facility_avoid' ||
         key == 'room_prefs_note' ||
         key == 'room_pref_chips' ||
         key == 'roommate_same_gender') {
-      return (5, 'Where I want care');
+      return (5, l.reviewStepGroupWhereIWantCare);
     }
     if (key.startsWith('diag_') || key.startsWith('cond_')) {
-      return (6, 'Diagnoses');
+      return (6, l.reviewStepGroupDiagnoses);
     }
-    if (key.startsWith('med_')) return (7, 'Medications');
-    if (key.startsWith('allergy_')) return (8, 'Allergies & reactions');
+    if (key.startsWith('med_')) return (7, l.reviewStepGroupMedications);
+    if (key.startsWith('allergy_')) return (8, l.reviewStepGroupAllergies);
     if (key == 'ect_consent' ||
         key == 'experimental_consent' ||
         key == 'drug_trial_consent' ||
         key == 'medication_consent' ||
         key == 'ulysses_optin') {
-      return (9, 'Procedures & research');
+      return (9, l.reviewStepGroupProceduresResearch);
     }
-    return (10, 'Anything else');
+    return (10, l.reviewStepGroupAnythingElse);
   }
 
   Widget _buildReviewStep() {
@@ -674,7 +677,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
                 Icon(Icons.auto_awesome, size: 11, color: p.primary),
                 const SizedBox(width: 5),
                 Text(
-                  'AI READ THIS PHOTO',
+                  context.l10n.reviewAiReadThisPhoto,
                   style: TextStyle(
                     fontFamily: kMonoFamily,
                     fontFamilyFallback: const [
@@ -696,7 +699,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
       ),
       const SizedBox(height: 12),
       Text(
-        "Here's what we read.",
+        context.l10n.reviewHeresWhatWeRead,
         style: TextStyle(
           fontFamily: 'Instrument Serif',
           fontFamilyFallback: const ['Georgia', 'serif'],
@@ -710,8 +713,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
       ),
       const SizedBox(height: 6),
       Text(
-        'These are the details the AI pulled from your document. Here\'s how '
-        'to use this page:',
+        context.l10n.reviewHowToIntro,
         style: TextStyle(
           fontFamily: kSansFamily,
           fontSize: 13,
@@ -722,18 +724,13 @@ extension _PipelineReviewUi on _PipelineScreenState {
       ),
       const SizedBox(height: 6),
       _howToLine(p, Icons.check_box_outlined,
-          'A checked box means it will be added to your form. Uncheck '
-          'anything you don\'t want.'),
+          context.l10n.reviewHowToChecked),
       _howToLine(p, Icons.edit_outlined,
-          'Tap any field to edit its wording before it\'s added.'),
+          context.l10n.reviewHowToEdit),
       _howToLine(p, Icons.rule,
-          'Results are grouped by form section (the same steps you\'ll see '
-          'next). A "Replaces what you have" note means it would overwrite '
-          'something you already entered — those start unchecked.'),
+          context.l10n.reviewHowToGrouped),
       _howToLine(p, Icons.arrow_forward,
-          'When you\'re ready, tap "Autofill Information" at the bottom to '
-          'fill these into your form and continue — you\'ll land in the form '
-          'to review everything.'),
+          context.l10n.reviewHowToFinish(context.l10n.reviewAutofillInformation)),
     ];
 
     return LayoutBuilder(
@@ -797,8 +794,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    'PII was detected and removed before analysis: '
-                    '${_piiStripped.toSet().join(", ")}',
+                    context.l10n.reviewPiiRemoved(_piiStripped.toSet().join(', ')),
                     style: TextStyle(
                       fontFamily: kSansFamily,
                       fontSize: 12,
@@ -813,7 +809,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
           const SizedBox(height: 16),
         ],
         Text(
-          'Add to your directive',
+          context.l10n.reviewAddToDirective,
           style: TextStyle(
             fontFamily: kMonoFamily,
             fontFamilyFallback: const [
@@ -846,9 +842,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  'Your photo was sent to the AI to read, then '
-                  'discarded. Nothing is stored after you confirm or '
-                  'discard.',
+                  context.l10n.reviewPhotoDiscarded,
                   style: TextStyle(
                     fontFamily: kSansFamily,
                     fontSize: 12,
@@ -862,7 +856,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
         ),
         const SizedBox(height: 8),
         Text(
-          '$checkedCount of ${keys.length} fields ready to add',
+          context.l10n.reviewFieldsReady(checkedCount, keys.length),
           textAlign: TextAlign.center,
           style: TextStyle(
             fontFamily: kMonoFamily,
@@ -1033,22 +1027,22 @@ extension _PipelineReviewUi on _PipelineScreenState {
               color: p.text,
             ),
           ),
-          valLine('You entered', existing),
-          valLine('Autofill found', extracted),
+          valLine(context.l10n.reviewYouEntered, existing),
+          valLine(context.l10n.reviewAutofillFound, extracted),
           const SizedBox(height: 8),
           Wrap(
             spacing: 8,
             runSpacing: 6,
             children: [
-              _conflictChip(p, 'Keep mine', action == 'keep',
+              _conflictChip(p, context.l10n.reviewKeepMine, action == 'keep',
                   () => setState(() => _reviewChecked[it.key] = false)),
-              _conflictChip(p, 'Use new', action == 'replace', () {
+              _conflictChip(p, context.l10n.reviewUseNew, action == 'replace', () {
                 setState(() {
                   _reviewChecked[it.key] = true;
                   _reviewEdited[it.key] = extracted;
                 });
               }),
-              _conflictChip(p, 'Add both', action == 'add', () {
+              _conflictChip(p, context.l10n.reviewAddBoth, action == 'add', () {
                 setState(() {
                   _reviewChecked[it.key] = true;
                   _reviewEdited[it.key] = addValue;
@@ -1065,7 +1059,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
                           child: CircularProgressIndicator(strokeWidth: 2),
                         ),
                       )
-                    : _conflictChip(p, 'Consolidate (AI)',
+                    : _conflictChip(p, context.l10n.reviewConsolidateAi,
                         action == 'consolidate', () => _consolidateField(it)),
             ],
           ),
@@ -1073,8 +1067,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
             Padding(
               padding: const EdgeInsets.only(top: 6),
               child: Text(
-                'Identity fields aren\'t merged by the AI — double-check this '
-                'one yourself.',
+                context.l10n.reviewIdentityNotMerged,
                 style: TextStyle(
                   fontFamily: kSansFamily,
                   fontSize: 12,
@@ -1086,7 +1079,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
           if (checked && action != 'keep') ...[
             const SizedBox(height: 8),
             Text(
-              'Will save:',
+              context.l10n.reviewWillSave,
               style: TextStyle(
                 fontFamily: kSansFamily,
                 fontSize: 11,
@@ -1135,8 +1128,8 @@ extension _PipelineReviewUi on _PipelineScreenState {
   Future<void> _consolidateField(ReconItem it) async {
     final aiCfg = ref.read(aiConfigProvider);
     if (aiCfg == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Set up the AI assistant first to consolidate.'),
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(context.l10n.reviewSetupAiToConsolidate),
       ));
       return;
     }
@@ -1149,7 +1142,9 @@ extension _PipelineReviewUi on _PipelineScreenState {
     final String merged;
     try {
       merged = await extractor.consolidate(
-        fieldLabel: _displayLabel(it.key),
+        // AI prompt text stays English (see the l10n convention).
+        fieldLabel:
+            _displayLabel(it.key, lookupAppLocalizations(const Locale('en'))),
         existing: it.existing!.trim(),
         extracted: it.extracted.trim(),
       );
@@ -1185,9 +1180,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
           const SizedBox(width: 6),
           Expanded(
             child: Text(
-              'This lets your agent decide. Under PA law (§5836(c)) it only '
-              'takes effect if you physically initial this authorization on the '
-              'printed form — confirm this is what you want.',
+              context.l10n.reviewAgentInitialsNote,
               style: TextStyle(
                 fontFamily: kSansFamily,
                 fontSize: 12,
@@ -1235,9 +1228,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
             borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
           ),
           child: Text(
-            'The AI generated these additional suggestions based on your '
-            'validated conditions and medications. Tap to edit, uncheck '
-            'to skip. This is not medical or legal advice.',
+            context.l10n.reviewSmartIntro,
             style: TextStyle(
                 fontSize: 12,
                 color: cs.onTertiaryContainer,
@@ -1293,8 +1284,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
                             if (guidanceOnly) ...[
                               const SizedBox(height: 2),
                               Text(
-                                'Guidance to read — not saved to your form. '
-                                'Set your choice in Procedures & research.',
+                                context.l10n.reviewGuidanceOnly,
                                 style: Theme.of(context)
                                     .textTheme
                                     .labelSmall
@@ -1349,7 +1339,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
     // navigates there; the modal pops back to the wizard it was opened over),
     // so the user can verify the autofill. The "N of M fields ready to add"
     // line in the fields pane already communicates the count.
-    const addLabel = 'Autofill Information';
+    final addLabel = context.l10n.reviewAutofillInformation;
 
     return SafeArea(
       child: Padding(
@@ -1364,13 +1354,13 @@ extension _PipelineReviewUi on _PipelineScreenState {
                   OutlinedButton(
                     onPressed: () =>
                         setState(() => _step = _PipelineStep.review),
-                    child: const Text('Back'),
+                    child: Text(context.l10n.back),
                   ),
                   const Spacer(),
                   FilledButton.icon(
                     onPressed: _applyAll,
                     icon: const Icon(Icons.check),
-                    label: const Text('Apply All'),
+                    label: Text(context.l10n.reviewApplyAll),
                   ),
                 ],
               )
@@ -1382,14 +1372,14 @@ extension _PipelineReviewUi on _PipelineScreenState {
                     children: [
                       OutlinedButton(
                         onPressed: _discardExtraction,
-                        child: const Text('Discard all'),
+                        child: Text(context.l10n.reviewDiscardAll),
                       ),
                       const Spacer(),
                       if (canSmartFill)
                         TextButton.icon(
                           onPressed: _runSmartFill,
                           icon: const Icon(Icons.auto_awesome, size: 16),
-                          label: const Text('Generate more'),
+                          label: Text(context.l10n.reviewGenerateMore),
                         ),
                     ],
                   ),
@@ -1400,7 +1390,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
                     width: double.infinity,
                     child: FilledButton(
                       onPressed: _applyAll,
-                      child: const Row(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         mainAxisSize: MainAxisSize.max,
                         children: [
@@ -1408,8 +1398,8 @@ extension _PipelineReviewUi on _PipelineScreenState {
                             child: Text(addLabel,
                                 overflow: TextOverflow.ellipsis),
                           ),
-                          SizedBox(width: 8),
-                          Icon(Icons.arrow_forward, size: 18),
+                          const SizedBox(width: 8),
+                          const Icon(Icons.arrow_forward, size: 18),
                         ],
                       ),
                     ),
@@ -1458,7 +1448,7 @@ class _SnapReviewRow extends StatelessWidget {
           // GestureDetector — UX audit A2).
           Semantics(
             checked: ok,
-            label: 'Include this field',
+            label: context.l10n.reviewIncludeField,
             child: InkWell(
               onTap: onToggle,
               borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
@@ -1508,7 +1498,7 @@ class _SnapReviewRow extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      ok ? '→ $target' : 'Not added',
+                      ok ? '→ $target' : context.l10n.reviewNotAdded,
                       style: TextStyle(
                         fontFamily: kMonoFamily,
                         fontFamilyFallback: const [
@@ -1544,7 +1534,7 @@ class _SnapReviewRow extends StatelessWidget {
           // Focusable edit affordance (was a bare GestureDetector — A2).
           IconButton(
             onPressed: onEdit,
-            tooltip: 'Edit',
+            tooltip: context.l10n.reviewEdit,
             visualDensity: VisualDensity.compact,
             padding: EdgeInsets.zero,
             constraints:

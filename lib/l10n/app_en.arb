@@ -662,5 +662,562 @@
   "consentChoiceConditionsLabel": "Conditions",
   "consentChoiceNoConsentTitle": "I do not consent",
   "consentChoiceAgentDecidesTitle": "My agent will decide",
-  "consentChoiceAgentDecidesDescription": "Authorize your agent to consent or refuse on your behalf."
+  "consentChoiceAgentDecidesDescription": "Authorize your agent to consent or refuse on your behalf.",
+  "voiceInputOpenDictation": "Open voice dictation",
+  "voiceInputDictateText": "Dictate text",
+  "savedImportCouldNotRead": "Could not read that file.",
+  "savedImportImportedAsDraft": "Imported as an editable draft. After reviewing, re-sign and re-witness it to make it valid again — the previous signature does not carry over.",
+  "contactPickerBtnMissingName": "name",
+  "contactPickerBtnMissingAddress": "address",
+  "contactPickerBtnMissingPhone": "phone number",
+  "contactPickerBtnMissingFields": "Contact is missing: {fields}. Please fill in the missing fields manually.",
+  "@contactPickerBtnMissingFields": {
+    "placeholders": {
+      "fields": {"type": "String"}
+    }
+  },
+  "contactPickerBtnImportA11y": "Import from contacts",
+  "contactPickerBtnImport": "Import from Contacts",
+  "medAutoSelectA11y": "Select medication {name}",
+  "@medAutoSelectA11y": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "medAutoSelectNtiA11y": "Select medication {name}, narrow therapeutic index drug",
+  "@medAutoSelectNtiA11y": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "medAutoNtiTooltip": "Narrow Therapeutic Index (NTI) drug — no generic substitution in PA",
+  "medAutoNtiBadge": "NTI",
+  "medAutoSelectStrengthA11y": "Select {medication}",
+  "@medAutoSelectStrengthA11y": {
+    "placeholders": {
+      "medication": {"type": "String"}
+    }
+  },
+  "medAutoFieldLabel": "Medication name",
+  "medAutoSearchingA11y": "Searching medications",
+  "wizardHelpA11y": "Help for this step. Opens help sheet.",
+  "wizardHelpButton": "Help",
+  "wizardHelpLearnMore": "Learn More",
+  "wizardHelpQuestionsContact": "Questions? Contact PA Protection & Advocacy: {phone}",
+  "@wizardHelpQuestionsContact": {
+    "placeholders": {
+      "phone": {"type": "String"}
+    }
+  },
+  "neverWantCrossAddTitle": "Add to “Medications I never want”?",
+  "neverWantCrossAddBodySingle": "You listed a drug allergy. Do you also want to refuse it as a medication, adding it to your “Medications I never want” list?",
+  "neverWantCrossAddBodyMulti": "You listed these drug allergies. Choose any you also want to refuse as medications — they’ll be added to your “Medications I never want” list.",
+  "neverWantCrossAddNotNow": "Not now",
+  "neverWantCrossAddConfirmSingle": "Add to never-want",
+  "neverWantCrossAddConfirmMulti": "Add selected",
+  "exampleTextSeeExamples": "See examples",
+  "exampleTextTitle": "Example: {fieldName}",
+  "@exampleTextTitle": {
+    "placeholders": {
+      "fieldName": {"type": "String"}
+    }
+  },
+  "exampleTextIntro": "Here are some examples of what others have written. Use your own words to describe your specific preferences.",
+  "exampleTextNumbered": "Example {number}",
+  "@exampleTextNumbered": {
+    "placeholders": {
+      "number": {"type": "int"}
+    }
+  },
+  "exampleTextDisclaimer": "These are samples only. Your directive should reflect your own wishes and circumstances.",
+  "exampleTextGotIt": "Got it",
+  "quizQ1Headline": "Do you have someone in mind to **speak for you**?",
+  "quizQ1Sub": "A family member, partner, or close friend who could make treatment decisions if you can't.",
+  "quizQ1O1Label": "Yes — and I trust them completely",
+  "quizQ1O1Hint": "You probably want a Combined or POA-only form.",
+  "quizQ1O2Label": "Yes, but I want to set firm limits",
+  "quizQ1O2Hint": "Combined gives you both an agent and a binding declaration.",
+  "quizQ1O3Label": "No — I want providers to follow my written wishes",
+  "quizQ1O3Hint": "Declaration-only is for you.",
+  "quizQ1O4Label": "I'm not sure yet",
+  "quizQ1O4Hint": "No problem — we can come back to this.",
+  "quizQ2Headline": "Do you want to **write down** specific treatment preferences?",
+  "quizQ2Sub": "Medications, facilities, ECT, experimental studies, drug trials.",
+  "quizQ2O1Label": "Yes — I have specific things I want or refuse",
+  "quizQ2O1Hint": "You probably want a Combined or Declaration form.",
+  "quizQ2O2Label": "Some preferences, but I'd rather my agent decide",
+  "quizQ2O2Hint": "Combined still works — agent decides where you didn't write.",
+  "quizQ2O3Label": "No — let my agent or doctors decide everything",
+  "quizQ2O3Hint": "Power of Attorney only is the lightest path.",
+  "quizQ2O4Label": "I'm not sure yet",
+  "quizQ2O4Hint": "No problem — Combined leaves both doors open.",
+  "quizQ3Headline": "If you can't decide, **whose voice** should reach the doctors first?",
+  "quizQ3Sub": "The directive you write today, or the person you trust?",
+  "quizQ3O1Label": "What I wrote — even over what someone says in the moment",
+  "quizQ3O1Hint": "Declaration-only or Combined with strong written preferences.",
+  "quizQ3O2Label": "My agent — they can read the situation in real time",
+  "quizQ3O2Hint": "POA-only or Combined where the agent has broad authority.",
+  "quizQ3O3Label": "Both — what I wrote, with my agent filling gaps",
+  "quizQ3O3Hint": "Combined is the strongest fit.",
+  "quizQ3O4Label": "I'm not sure yet",
+  "quizQ3O4Hint": "No problem — Combined supports both pathways.",
+  "quizQ4Headline": "What's the **most important** thing this document does for you?",
+  "quizQ4Sub": "There's no wrong answer — this just confirms what we're seeing.",
+  "quizQ4O1Label": "Names who I trust to speak for me",
+  "quizQ4O1Hint": "Combined or POA-only.",
+  "quizQ4O2Label": "Locks in specific treatments I want — or refuse",
+  "quizQ4O2Hint": "Combined or Declaration-only.",
+  "quizQ4O3Label": "Both — equally",
+  "quizQ4O3Hint": "Combined.",
+  "quizQ4O4Label": "Just having something on file",
+  "quizQ4O4Hint": "Any form works. Combined gives the broadest coverage.",
+  "quizQuestionEyebrow": "Help me choose · question {current} of {total}",
+  "@quizQuestionEyebrow": {
+    "placeholders": {
+      "current": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "quizInYourWords": "In your words",
+  "quizResultEyebrow": "Help me choose · result",
+  "quizRecommendedForYou": "Recommended for you",
+  "quizYouProbablyWant": "You probably want\n",
+  "quizLegendCombined": "Combined",
+  "quizLegendDeclaration": "Declaration only",
+  "quizLegendPoa": "Power of Attorney only",
+  "quizRetake": "Retake",
+  "quizUseForm": "Use {formName}",
+  "@quizUseForm": {
+    "placeholders": {
+      "formName": {"type": "String"}
+    }
+  },
+  "quizFormNameCombined": "Combined",
+  "quizFormNameDeclaration": "Declaration",
+  "quizFormNamePoa": "POA",
+  "quizExplainCombined": "Includes both your treatment preferences AND an agent designation. The most comprehensive option — and what most people choose.",
+  "quizExplainPoa": "Designates an agent to make decisions for you, without locking in specific treatment preferences. Best when you trust someone completely and want them to decide in the moment.",
+  "quizExplainDeclaration": "Documents your treatment preferences without naming an agent. Your treatment team will follow your written wishes directly.",
+  "aiSuggestDraftTitle": "AI Draft",
+  "aiSuggestSuggestionTitle": "AI Suggestion",
+  "aiSuggestYourText": "Your text:",
+  "aiSuggestDraftLabel": "AI draft:",
+  "aiSuggestSuggestionLabel": "AI suggestion:",
+  "aiSuggestReviewCarefully": "{notAdvice} Review carefully.",
+  "@aiSuggestReviewCarefully": {
+    "placeholders": {
+      "notAdvice": {"type": "String"}
+    }
+  },
+  "aiSuggestDismiss": "Dismiss",
+  "aiSuggestAddToMine": "Add to mine",
+  "aiSuggestUseDraft": "Use this draft",
+  "aiSuggestUseInstead": "Use instead",
+  "aiSuggestAppliedA11y": "AI suggestion applied. Undo available.",
+  "aiSuggestApplied": "AI suggestion applied.",
+  "aiSuggestUndo": "Undo",
+  "aiSuggestLoadingA11y": "AI Suggest, loading suggestion for {fieldName}",
+  "@aiSuggestLoadingA11y": {
+    "placeholders": {
+      "fieldName": {"type": "String"}
+    }
+  },
+  "aiSuggestForFieldA11y": "AI Suggest for {fieldName}",
+  "@aiSuggestForFieldA11y": {
+    "placeholders": {
+      "fieldName": {"type": "String"}
+    }
+  },
+  "aiSuggestSetupA11y": "Set up AI Assistant to use suggestions",
+  "aiSuggestTooltip": "Get an AI suggestion for this field",
+  "aiSuggestSetupTooltip": "Set up AI Assistant to use this feature",
+  "aiSuggestIconTooltip": "AI suggestion",
+  "contactSheetPermissionRequired": "Contact permission is required to import.",
+  "contactSheetRolePrimaryAgent": "primary agent",
+  "contactSheetPickYour": "Pick your ",
+  "contactSheetLocalOnly": "From your phone's contacts. We never upload them — search runs locally.",
+  "contactSheetSearchHint": "Search by name or number",
+  "contactSheetClearSearch": "Clear search",
+  "contactSheetContactsCount": "Contacts · {count}",
+  "@contactSheetContactsCount": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "contactSheetPickAContact": "Pick a contact",
+  "contactSheetUseName": "Use {name}",
+  "@contactSheetUseName": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "contactSheetThisContact": "this contact",
+  "contactSheetLooksLikeProvider": "Looks like a provider",
+  "contactSheetUnder18": "Under 18",
+  "contactSheetWarnConfirm": "⚠ {note} — confirm they're not treating you",
+  "@contactSheetWarnConfirm": {
+    "placeholders": {
+      "note": {"type": "String"}
+    }
+  },
+  "contactSheetEligible": "✓ Eligible · 18+",
+  "contactSheetEnterManually": "Enter someone manually",
+  "contactSheetHardBlock": "hard block",
+  "contactSheetSoftWarn": "soft warn",
+  "contactSheetRuleProvider": "Your current treating provider or their employee",
+  "contactSheetRuleFacilityOwner": "An owner/operator of a facility where you receive care",
+  "contactSheetWhoCantBeAgent": "Who can't be your agent",
+  "contactSheetRulesFootnote": "Under-18 is blocked automatically from the contact's birthday. We can't tell who your providers are, so anything that looks like a provider is a soft warning you can override — confirm only if they truly aren't treating you.",
+  "voiceMicPermission": "Microphone permission is needed.",
+  "voiceTranscribeFailed": "Couldn't transcribe. Try again, or type it instead.",
+  "voiceSpeechError": "Speech recognition error.",
+  "voiceNeedsBrowser": "Voice needs Chrome, Edge, or Safari.",
+  "voiceNotAvailable": "Speech recognition is not available on this device.",
+  "voiceStatusTranscribing": "● Transcribing",
+  "voiceStatusRecording": "● Recording",
+  "voiceStatusPaused": "● Paused",
+  "voiceSayItYourWay": "Say it your way.",
+  "voiceExplainAi": "For better accuracy on medication names and conditions, your recording goes to Google's AI to transcribe. Review the text before saving.",
+  "voiceExplainBrowser": "To transcribe, your browser sends the audio to its speech service (often Google). We don't keep the audio or text — edit it before saving.",
+  "voiceExplainDevice": "Your device turns speech into text. We never store the audio — you can edit before saving.",
+  "voiceEmptyHintAi": "Tap the red button, speak, then tap stop to transcribe…",
+  "voiceEmptyHintLive": "Tap the red record button and start speaking…",
+  "voiceCancelA11y": "Cancel voice recording",
+  "voiceConfirmA11y": "Confirm and use transcript",
+  "voiceFooterAi": "WE STORE NOTHING · GOOGLE'S AI TRANSCRIBES THE RECORDING",
+  "voiceFooterBrowser": "WE STORE NOTHING · YOUR BROWSER'S SPEECH SERVICE TRANSCRIBES THE AUDIO",
+  "voiceFooterDevice": "AUDIO ISN'T SAVED · TRANSCRIPT STAYS IN THIS SESSION",
+  "voiceTranscribingCard": "Transcribing your recording…",
+  "voiceStopRecording": "Stop recording",
+  "voiceStartRecording": "Start recording",
+  "pipelineGeneratingSuggestions": "AI is generating personalized suggestions...",
+  "pipelineNoAdditionalSuggestions": "AI could not generate additional suggestions.",
+  "pipelineAutofillProblem": "Autofill hit a problem. {error}",
+  "@pipelineAutofillProblem": {
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  },
+  "pipelineAppliedA11y": "Autofill applied {count} fields to your directive",
+  "@pipelineAppliedA11y": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "pipelineAppliedNoneA11y": "Autofill finished — no new fields were added",
+  "pipelinePastedImage": "Pasted image",
+  "pipelineDocument": "Document",
+  "pipelineKindPdf": "PDF",
+  "pipelineKindPhoto": "Photo",
+  "pipelineKindText": "Text",
+  "pipelineKindAudio": "Audio",
+  "pipelineKindFile": "File",
+  "pipelineCancelled": "Processing cancelled — nothing was applied.",
+  "pipelineSetupAiTitle": "Set up AI to read documents",
+  "pipelineSetupAiBody": "Snap-to-fill uses AI to read your uploaded document (photo, PDF, or text) and pull out details to fill your form — medications, conditions, care preferences, and your contact details. It needs an AI key — Gemini's free tier takes about 30 seconds to set up. You review every field before anything lands in your form.",
+  "pipelineSetupAi": "Set up AI",
+  "pipelineDroppedFile": "Dropped file",
+  "pipelineUnsupportedType": "That file type isn't supported. Use a JPG, PNG, HEIC, PDF, or text file.",
+  "pipelineRpmLimit": "Processing {pages} pages requires {pages} requests, but only {remaining} requests are available this minute. Please wait {seconds} seconds or select fewer pages.",
+  "@pipelineRpmLimit": {
+    "placeholders": {
+      "pages": {"type": "int"},
+      "remaining": {"type": "int"},
+      "seconds": {"type": "int"}
+    }
+  },
+  "pipelineRpdLimit": "Processing {pages} pages requires {pages} requests, but only {remaining} requests remain today (daily limit: {limit}).",
+  "@pipelineRpdLimit": {
+    "placeholders": {
+      "pages": {"type": "int"},
+      "remaining": {"type": "int"},
+      "limit": {"type": "int"}
+    }
+  },
+  "pipelineFileTooLarge": "File \"{name}\" is too large ({sizeMb} MB). Maximum file size is 10 MB per document.",
+  "@pipelineFileTooLarge": {
+    "placeholders": {
+      "name": {"type": "String"},
+      "sizeMb": {"type": "String"}
+    }
+  },
+  "pipelineExtractingPage": "Extracting page {current} of {total}...",
+  "@pipelineExtractingPage": {
+    "placeholders": {
+      "current": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "pipelineExtractingSingle": "Extracting medical data from document...",
+  "pipelineLooksLikeKind": " (it looks like a {kind})",
+  "@pipelineLooksLikeKind": {
+    "placeholders": {
+      "kind": {"type": "String"}
+    }
+  },
+  "pipelineNotMedicalSingle": "This doesn't look like a health or medical document{kind}, so nothing was used. Upload a medical record, medication or allergy list, or an existing advance directive.",
+  "@pipelineNotMedicalSingle": {
+    "placeholders": {
+      "kind": {"type": "String"}
+    }
+  },
+  "pipelineNotMedicalMulti": "These don't look like health or medical documents{kind}, so nothing was used.",
+  "@pipelineNotMedicalMulti": {
+    "placeholders": {
+      "kind": {"type": "String"}
+    }
+  },
+  "pipelineNoMedicalInfoSingle": "No medical information found in this document.",
+  "pipelineNoMedicalInfoMulti": "No medical information found in these {count} pages.",
+  "@pipelineNoMedicalInfoMulti": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "pipelineValidating": "Validating medications and conditions...",
+  "pipelinePleaseWait": "Please wait while processing...",
+  "pipelineBackWizard": "Wizard",
+  "pipelineBackReview": "Review",
+  "pipelineTitleSnapToFill": "Snap to fill",
+  "pipelineTitleProcessing": "Processing",
+  "pipelineTitleReview": "Review Extracted Data",
+  "pipelineTitleGenerating": "Generating Suggestions",
+  "pipelineTitleResults": "AI Suggestions",
+  "pipelinePickerFailed": "Couldn't open the file picker ({error}). Try dragging the file onto the box above instead.",
+  "@pipelinePickerFailed": {
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  },
+  "pipelineCouldNotRead": "We couldn't read that file. Please use a PDF, JPG, PNG, WEBP, HEIC, or plain-text file under 10 MB.",
+  "pipelineFormCombined": "Combined",
+  "pipelineFormDeclaration": "Declaration only",
+  "pipelineFormPoa": "Power of Attorney only",
+  "pipelineFormCombinedSub": "Treatment preferences AND a decision-maker (broadest).",
+  "pipelineFormDeclarationSub": "Treatment preferences, without naming an agent.",
+  "pipelineFormPoaSub": "Name a decision-maker, without listing preferences.",
+  "pipelineWhichForm": "Which form do you want to fill?",
+  "pipelineWhichFormBody": "Choose your form first — the AI will then read only the parts that form needs. Combined is the broadest; you can change this later.",
+  "pickSnapOptional": "Snap to fill · optional",
+  "pickHeadlineLead": "Have a photo handy? ",
+  "pickHeadlineAccent": "We'll read it.",
+  "pickIntro": "Drop a photo, PDF, or audio recording — ID, medication list, prescription label, an old directive, or just describe your wishes out loud — and the AI will extract what it can. You review every field before it lands in the form. Or skip and type it all yourself.",
+  "pickPrivacyNote": "Your privacy: black out anything sensitive before uploading. You never have to upload personal details at all — any field can be typed in by hand to keep it confidential.",
+  "pickVoiceGuideLink": "Recording a voice file? See the questionnaire & how-to",
+  "pickSkipTypeAll": "Skip — I'll type it all",
+  "pickContinueStep2": "Continue to step 2",
+  "pickYourDocuments": "Your documents",
+  "pickFilesKeptInMemory": "{count, plural, =1{1 FILE · KEPT IN MEMORY} other{{count} FILES · KEPT IN MEMORY}}",
+  "@pickFilesKeptInMemory": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "pickClearAll": "Clear all",
+  "pickHeldWithKey": "Held on this device. Nothing is sent until you tap Read — then it goes to your AI provider to read.",
+  "pickHeldNoKey": "Held on this device. Reading needs AI set up first (free, ~30 seconds) — nothing is sent until then.",
+  "pickReadWithAi": "{count, plural, =1{Read this document with AI} other{Read {count} documents with AI}}",
+  "@pickReadWithAi": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "pickRemove": "Remove",
+  "pickNoKeyTitle": "AI isn't set up yet",
+  "pickNoKeyBody": "You can see how snap-to-fill works below, but reading a real photo or PDF needs an AI key (Gemini's free tier takes about 30 seconds). You review every field before it lands in your form.",
+  "pickTryAgain": "Try again",
+  "pickDropTitleCamera": "Add a photo of your document",
+  "pickDropTitle": "Drop a photo, PDF, or screenshot",
+  "pickFormatsPaste": "JPG · PNG · HEIC · PDF · up to 10 MB — or paste with {shortcut}",
+  "@pickFormatsPaste": {
+    "placeholders": {
+      "shortcut": {"type": "String"}
+    }
+  },
+  "pickFormats": "JPG · PNG · HEIC · PDF · up to 10 MB",
+  "pickBrowseFiles": "Browse files",
+  "pickTakePhoto": "Take a photo",
+  "pickSentToProvider": "To autofill, your file — including any personal details in it — is sent to your AI provider to read. The app saves nothing (it's gone when this tab closes), but the provider may retain it (Gemini's free tier does). You review everything before it is added to your directive.",
+  "pickTargetId": "Photo of ID",
+  "pickTargetIdSub": "Name · DOB · address",
+  "pickTargetRx": "Rx bottle / label",
+  "pickTargetRxSub": "Drug · dose · schedule",
+  "pickTargetConditions": "Conditions list",
+  "pickTargetConditionsSub": "Diagnoses · allergies",
+  "pickTargetOther": "Anything else",
+  "pickTargetOtherSub": "Notes, old directive…",
+  "pickTargetOtherSubMobile": "Old directive, notes…",
+  "pickWhatYouCanAdd": "What you can add",
+  "pickWhatYouCanDrop": "What you can drop here",
+  "pickOnAPhone": "On a phone instead?",
+  "pickOnAPhoneBody": "Open this page on your phone to snap a page directly with its camera.",
+  "pickTakePhotoSub": "Opens your camera. Snap your ID, Rx label, anything.",
+  "pickPickFile": "Pick a file",
+  "pickPickFileSub": "From your photos or files. JPG, PNG, HEIC, PDF.",
+  "pickWhatHelpsMost": "What helps most",
+  "pickFastest": "FASTEST",
+  "pickSentToProviderShort": "Your file (including any personal details) is sent to your AI provider to read it. The app saves nothing; the provider may retain it (Gemini's free tier does). You review before anything is added.",
+  "pickReadingDocs": "{count, plural, =1{Reading 1 document:} other{Reading {count} documents:}}",
+  "@pickReadingDocs": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "pickReadByAi": "{count, plural, =1{Read by Google's AI to autofill.} other{{count} files read by Google's AI to autofill.}}",
+  "@pickReadByAi": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "reviewLabelMedPrefer": "Preferred Medication",
+  "reviewLabelMedAvoid": "Medication to Avoid",
+  "reviewLabelMedCurrent": "Currently Taking",
+  "reviewLabelMedLimit": "Restricted-Use Medication",
+  "reviewLabelCond": "Condition",
+  "reviewLabelDiag": "Diagnosis",
+  "reviewLabelAllergy": "Allergy",
+  "reviewLabelHh": "Health History",
+  "reviewLabelEffectiveCondition": "When this kicks in (your words)",
+  "reviewLabelFacilityPrefer": "Preferred Facility",
+  "reviewLabelFacilityAvoid": "Facility to Avoid",
+  "reviewLabelDietary": "Dietary",
+  "reviewLabelReligious": "Religious/Cultural",
+  "reviewLabelActivities": "Activities",
+  "reviewLabelCrisis": "Crisis Intervention",
+  "reviewLabelCrisisPlan": "Crisis plan",
+  "reviewLabelAgentAuthorityLimitations": "Agent authority limits",
+  "reviewLabelEctConsent": "ECT consent",
+  "reviewLabelExperimentalConsent": "Experimental treatment consent",
+  "reviewLabelDrugTrialConsent": "Drug trial consent",
+  "reviewLabelMedicationConsent": "Medication consent",
+  "reviewLabelTriggerTwoProfessionals": "Trigger: professionals",
+  "reviewLabelTriggerCourtOrder": "Trigger: court order",
+  "reviewLabelTriggerInvoluntaryCommitment": "Trigger: involuntary commitment",
+  "reviewLabelRoomPrefsNote": "Room preferences",
+  "reviewLabelRoomPrefChips": "Room options",
+  "reviewLabelRoommateSameGender": "Same-gender roommate",
+  "reviewLabelGuardianCanRevoke": "Guardian: override",
+  "reviewLabelGuardianCanChangeAgent": "Guardian: replace agent",
+  "reviewLabelGuardianMustConsultAgent": "Guardian: consult agent",
+  "reviewLabelAuthorityHospitalization": "Agent: hospitalization",
+  "reviewLabelAuthorityMedication": "Agent: medications",
+  "reviewLabelUlyssesOptin": "Self-binding (Ulysses)",
+  "reviewLabelPetCustody": "Pet care",
+  "reviewLabelChildrenCustody": "Children / dependents",
+  "reviewLabelFamilyNotification": "Who to notify",
+  "reviewLabelRecordsDisclosure": "Records disclosure",
+  "reviewLabelOther": "Other",
+  "reviewLabelPersonName": "Your full name",
+  "reviewLabelPersonDob": "Date of birth",
+  "reviewLabelPersonAddress1": "Street address",
+  "reviewLabelPersonAddress2": "Apt / suite / unit",
+  "reviewLabelPersonCity": "City",
+  "reviewLabelPersonCounty": "County",
+  "reviewLabelPersonState": "State",
+  "reviewLabelPersonZip": "ZIP code",
+  "reviewLabelPersonPhone": "Your phone",
+  "reviewLabelPersonDoctorName": "Primary doctor",
+  "reviewLabelPersonDoctorSpecialty": "Doctor specialty",
+  "reviewLabelPersonDoctorPhone": "Doctor's phone",
+  "reviewLabelPersonEvalDoctorName": "Preferred evaluating doctor",
+  "reviewLabelPersonEvalDoctorContact": "Evaluating doctor contact",
+  "reviewLabelAgentName": "Agent name",
+  "reviewLabelAgentRelationship": "Agent relationship",
+  "reviewLabelAgentAddress1": "Agent street address",
+  "reviewLabelAgentAddress2": "Agent apt / suite",
+  "reviewLabelAgentCity": "Agent city",
+  "reviewLabelAgentState": "Agent state",
+  "reviewLabelAgentZip": "Agent ZIP",
+  "reviewLabelAgentPhone": "Agent phone",
+  "reviewLabelAltAgentName": "Alternate agent name",
+  "reviewLabelAltAgentRelationship": "Alternate agent relationship",
+  "reviewLabelAltAgentAddress1": "Alt agent street address",
+  "reviewLabelAltAgentAddress2": "Alt agent apt / suite",
+  "reviewLabelAltAgentCity": "Alt agent city",
+  "reviewLabelAltAgentState": "Alt agent state",
+  "reviewLabelAltAgentZip": "Alt agent ZIP",
+  "reviewLabelAltAgentPhone": "Alternate agent phone",
+  "reviewLabelGuardianName": "Guardian nominee",
+  "reviewLabelGuardianRelationship": "Guardian relationship",
+  "reviewLabelGuardianAddress1": "Guardian street address",
+  "reviewLabelGuardianAddress2": "Guardian apt / suite",
+  "reviewLabelGuardianCity": "Guardian city",
+  "reviewLabelGuardianState": "Guardian state",
+  "reviewLabelGuardianZip": "Guardian ZIP",
+  "reviewLabelGuardianPhone": "Guardian phone",
+  "reviewSectionMedPrefer": "Preferred Meds",
+  "reviewSectionMedAvoid": "Meds to Avoid",
+  "reviewSectionMedCurrent": "Currently Taking",
+  "reviewSectionMedLimit": "Restricted-Use Meds",
+  "reviewSectionCond": "Conditions",
+  "reviewSectionDiag": "Diagnoses",
+  "reviewSectionAllergy": "Allergies",
+  "reviewSectionHh": "Health History",
+  "reviewSectionEffectiveCondition": "When this kicks in",
+  "reviewSectionPerson": "Your details",
+  "reviewSectionAgent": "Your agent",
+  "reviewSectionAgentAuthority": "Agent Authority",
+  "reviewSectionUlyssesOptin": "Self-binding",
+  "reviewSectionCrisisPlan": "Crisis Plan",
+  "reviewSectionConsent": "Consent",
+  "reviewSectionRoomPreferences": "Room Preferences",
+  "reviewSectionAltAgent": "Alternate agent",
+  "reviewSectionGuardian": "Guardian",
+  "reviewSectionOther": "Other",
+  "reviewStepGroupWhenKicksIn": "When this kicks in",
+  "reviewStepGroupDiagnoses": "Diagnoses",
+  "reviewStepGroupAboutYou": "About you",
+  "reviewStepGroupPeopleITrust": "People I trust",
+  "reviewStepGroupGuardian": "If a court appoints a guardian",
+  "reviewStepGroupWhereIWantCare": "Where I want care",
+  "reviewStepGroupMedications": "Medications",
+  "reviewStepGroupAllergies": "Allergies & reactions",
+  "reviewStepGroupProceduresResearch": "Procedures & research",
+  "reviewStepGroupAnythingElse": "Anything else",
+  "reviewAiReadThisPhoto": "AI READ THIS PHOTO",
+  "reviewHeresWhatWeRead": "Here's what we read.",
+  "reviewHowToIntro": "These are the details the AI pulled from your document. Here's how to use this page:",
+  "reviewHowToChecked": "A checked box means it will be added to your form. Uncheck anything you don't want.",
+  "reviewHowToEdit": "Tap any field to edit its wording before it's added.",
+  "reviewHowToGrouped": "Results are grouped by form section (the same steps you'll see next). A \"Replaces what you have\" note means it would overwrite something you already entered — those start unchecked.",
+  "reviewHowToFinish": "When you're ready, tap \"{buttonLabel}\" at the bottom to fill these into your form and continue — you'll land in the form to review everything.",
+  "@reviewHowToFinish": {
+    "placeholders": {
+      "buttonLabel": {"type": "String"}
+    }
+  },
+  "reviewPiiRemoved": "PII was detected and removed before analysis: {items}",
+  "@reviewPiiRemoved": {
+    "placeholders": {
+      "items": {"type": "String"}
+    }
+  },
+  "reviewAddToDirective": "Add to your directive",
+  "reviewPhotoDiscarded": "Your photo was sent to the AI to read, then discarded. Nothing is stored after you confirm or discard.",
+  "reviewFieldsReady": "{checked} of {total} fields ready to add",
+  "@reviewFieldsReady": {
+    "placeholders": {
+      "checked": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "reviewYouEntered": "You entered",
+  "reviewAutofillFound": "Autofill found",
+  "reviewKeepMine": "Keep mine",
+  "reviewUseNew": "Use new",
+  "reviewAddBoth": "Add both",
+  "reviewConsolidateAi": "Consolidate (AI)",
+  "reviewIdentityNotMerged": "Identity fields aren't merged by the AI — double-check this one yourself.",
+  "reviewWillSave": "Will save:",
+  "reviewSetupAiToConsolidate": "Set up the AI assistant first to consolidate.",
+  "reviewAgentInitialsNote": "This lets your agent decide. Under PA law (§5836(c)) it only takes effect if you physically initial this authorization on the printed form — confirm this is what you want.",
+  "reviewSmartIntro": "The AI generated these additional suggestions based on your validated conditions and medications. Tap to edit, uncheck to skip. This is not medical or legal advice.",
+  "reviewGuidanceOnly": "Guidance to read — not saved to your form. Set your choice in Procedures & research.",
+  "reviewAutofillInformation": "Autofill Information",
+  "reviewApplyAll": "Apply All",
+  "reviewDiscardAll": "Discard all",
+  "reviewGenerateMore": "Generate more",
+  "reviewIncludeField": "Include this field",
+  "reviewNotAdded": "Not added",
+  "reviewEdit": "Edit"
 }

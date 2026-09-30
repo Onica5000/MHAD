@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/ui/wizard/widgets/contact_picker_sheet.dart';
 import 'package:mhad/utils/platform_utils.dart';
 
@@ -38,6 +39,7 @@ class ContactPickerButton extends StatelessWidget {
   const ContactPickerButton({required this.onContactPicked, super.key});
 
   Future<void> _pick(BuildContext context) async {
+    final l10n = context.l10n;
     final data = await showContactPickerSheet(context);
     if (data == null) return;
 
@@ -46,12 +48,12 @@ class ContactPickerButton extends StatelessWidget {
     // an empty PickedContactData; in that case all fields are empty and
     // we don't warn (the user explicitly chose manual entry).
     final missing = <String>[];
-    if (data.fullName.isEmpty) missing.add('name');
-    if (data.address.isEmpty) missing.add('address');
+    if (data.fullName.isEmpty) missing.add(l10n.contactPickerBtnMissingName);
+    if (data.address.isEmpty) missing.add(l10n.contactPickerBtnMissingAddress);
     if (data.homePhone.isEmpty &&
         data.workPhone.isEmpty &&
         data.cellPhone.isEmpty) {
-      missing.add('phone number');
+      missing.add(l10n.contactPickerBtnMissingPhone);
     }
     final isManualEntry = data.fullName.isEmpty &&
         data.address.isEmpty &&
@@ -62,8 +64,7 @@ class ContactPickerButton extends StatelessWidget {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-              'Contact is missing: ${missing.join(", ")}. '
-              'Please fill in the missing fields manually.'),
+              l10n.contactPickerBtnMissingFields(missing.join(', '))),
           duration: const Duration(seconds: 4),
         ),
       );
@@ -79,11 +80,11 @@ class ContactPickerButton extends StatelessWidget {
 
     return Semantics(
       button: true,
-      label: 'Import from contacts',
+      label: context.l10n.contactPickerBtnImportA11y,
       child: OutlinedButton.icon(
         onPressed: () => _pick(context),
         icon: const Icon(Icons.contacts, size: 18),
-        label: const Text('Import from Contacts'),
+        label: Text(context.l10n.contactPickerBtnImport),
       ),
     );
   }

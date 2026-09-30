@@ -1768,4 +1768,1309 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get consentChoiceAgentDecidesDescription =>
       'Authorize your agent to consent or refuse on your behalf.';
+
+  @override
+  String get voiceInputOpenDictation => 'Open voice dictation';
+
+  @override
+  String get voiceInputDictateText => 'Dictate text';
+
+  @override
+  String get savedImportCouldNotRead => 'Could not read that file.';
+
+  @override
+  String get savedImportImportedAsDraft =>
+      'Imported as an editable draft. After reviewing, re-sign and re-witness it to make it valid again — the previous signature does not carry over.';
+
+  @override
+  String get contactPickerBtnMissingName => 'name';
+
+  @override
+  String get contactPickerBtnMissingAddress => 'address';
+
+  @override
+  String get contactPickerBtnMissingPhone => 'phone number';
+
+  @override
+  String contactPickerBtnMissingFields(String fields) {
+    return 'Contact is missing: $fields. Please fill in the missing fields manually.';
+  }
+
+  @override
+  String get contactPickerBtnImportA11y => 'Import from contacts';
+
+  @override
+  String get contactPickerBtnImport => 'Import from Contacts';
+
+  @override
+  String medAutoSelectA11y(String name) {
+    return 'Select medication $name';
+  }
+
+  @override
+  String medAutoSelectNtiA11y(String name) {
+    return 'Select medication $name, narrow therapeutic index drug';
+  }
+
+  @override
+  String get medAutoNtiTooltip =>
+      'Narrow Therapeutic Index (NTI) drug — no generic substitution in PA';
+
+  @override
+  String get medAutoNtiBadge => 'NTI';
+
+  @override
+  String medAutoSelectStrengthA11y(String medication) {
+    return 'Select $medication';
+  }
+
+  @override
+  String get medAutoFieldLabel => 'Medication name';
+
+  @override
+  String get medAutoSearchingA11y => 'Searching medications';
+
+  @override
+  String get wizardHelpA11y => 'Help for this step. Opens help sheet.';
+
+  @override
+  String get wizardHelpButton => 'Help';
+
+  @override
+  String get wizardHelpLearnMore => 'Learn More';
+
+  @override
+  String wizardHelpQuestionsContact(String phone) {
+    return 'Questions? Contact PA Protection & Advocacy: $phone';
+  }
+
+  @override
+  String get neverWantCrossAddTitle => 'Add to “Medications I never want”?';
+
+  @override
+  String get neverWantCrossAddBodySingle =>
+      'You listed a drug allergy. Do you also want to refuse it as a medication, adding it to your “Medications I never want” list?';
+
+  @override
+  String get neverWantCrossAddBodyMulti =>
+      'You listed these drug allergies. Choose any you also want to refuse as medications — they’ll be added to your “Medications I never want” list.';
+
+  @override
+  String get neverWantCrossAddNotNow => 'Not now';
+
+  @override
+  String get neverWantCrossAddConfirmSingle => 'Add to never-want';
+
+  @override
+  String get neverWantCrossAddConfirmMulti => 'Add selected';
+
+  @override
+  String get exampleTextSeeExamples => 'See examples';
+
+  @override
+  String exampleTextTitle(String fieldName) {
+    return 'Example: $fieldName';
+  }
+
+  @override
+  String get exampleTextIntro =>
+      'Here are some examples of what others have written. Use your own words to describe your specific preferences.';
+
+  @override
+  String exampleTextNumbered(int number) {
+    return 'Example $number';
+  }
+
+  @override
+  String get exampleTextDisclaimer =>
+      'These are samples only. Your directive should reflect your own wishes and circumstances.';
+
+  @override
+  String get exampleTextGotIt => 'Got it';
+
+  @override
+  String get quizQ1Headline =>
+      'Do you have someone in mind to **speak for you**?';
+
+  @override
+  String get quizQ1Sub =>
+      'A family member, partner, or close friend who could make treatment decisions if you can\'t.';
+
+  @override
+  String get quizQ1O1Label => 'Yes — and I trust them completely';
+
+  @override
+  String get quizQ1O1Hint => 'You probably want a Combined or POA-only form.';
+
+  @override
+  String get quizQ1O2Label => 'Yes, but I want to set firm limits';
+
+  @override
+  String get quizQ1O2Hint =>
+      'Combined gives you both an agent and a binding declaration.';
+
+  @override
+  String get quizQ1O3Label =>
+      'No — I want providers to follow my written wishes';
+
+  @override
+  String get quizQ1O3Hint => 'Declaration-only is for you.';
+
+  @override
+  String get quizQ1O4Label => 'I\'m not sure yet';
+
+  @override
+  String get quizQ1O4Hint => 'No problem — we can come back to this.';
+
+  @override
+  String get quizQ2Headline =>
+      'Do you want to **write down** specific treatment preferences?';
+
+  @override
+  String get quizQ2Sub =>
+      'Medications, facilities, ECT, experimental studies, drug trials.';
+
+  @override
+  String get quizQ2O1Label => 'Yes — I have specific things I want or refuse';
+
+  @override
+  String get quizQ2O1Hint =>
+      'You probably want a Combined or Declaration form.';
+
+  @override
+  String get quizQ2O2Label =>
+      'Some preferences, but I\'d rather my agent decide';
+
+  @override
+  String get quizQ2O2Hint =>
+      'Combined still works — agent decides where you didn\'t write.';
+
+  @override
+  String get quizQ2O3Label => 'No — let my agent or doctors decide everything';
+
+  @override
+  String get quizQ2O3Hint => 'Power of Attorney only is the lightest path.';
+
+  @override
+  String get quizQ2O4Label => 'I\'m not sure yet';
+
+  @override
+  String get quizQ2O4Hint => 'No problem — Combined leaves both doors open.';
+
+  @override
+  String get quizQ3Headline =>
+      'If you can\'t decide, **whose voice** should reach the doctors first?';
+
+  @override
+  String get quizQ3Sub =>
+      'The directive you write today, or the person you trust?';
+
+  @override
+  String get quizQ3O1Label =>
+      'What I wrote — even over what someone says in the moment';
+
+  @override
+  String get quizQ3O1Hint =>
+      'Declaration-only or Combined with strong written preferences.';
+
+  @override
+  String get quizQ3O2Label =>
+      'My agent — they can read the situation in real time';
+
+  @override
+  String get quizQ3O2Hint =>
+      'POA-only or Combined where the agent has broad authority.';
+
+  @override
+  String get quizQ3O3Label => 'Both — what I wrote, with my agent filling gaps';
+
+  @override
+  String get quizQ3O3Hint => 'Combined is the strongest fit.';
+
+  @override
+  String get quizQ3O4Label => 'I\'m not sure yet';
+
+  @override
+  String get quizQ3O4Hint => 'No problem — Combined supports both pathways.';
+
+  @override
+  String get quizQ4Headline =>
+      'What\'s the **most important** thing this document does for you?';
+
+  @override
+  String get quizQ4Sub =>
+      'There\'s no wrong answer — this just confirms what we\'re seeing.';
+
+  @override
+  String get quizQ4O1Label => 'Names who I trust to speak for me';
+
+  @override
+  String get quizQ4O1Hint => 'Combined or POA-only.';
+
+  @override
+  String get quizQ4O2Label => 'Locks in specific treatments I want — or refuse';
+
+  @override
+  String get quizQ4O2Hint => 'Combined or Declaration-only.';
+
+  @override
+  String get quizQ4O3Label => 'Both — equally';
+
+  @override
+  String get quizQ4O3Hint => 'Combined.';
+
+  @override
+  String get quizQ4O4Label => 'Just having something on file';
+
+  @override
+  String get quizQ4O4Hint =>
+      'Any form works. Combined gives the broadest coverage.';
+
+  @override
+  String quizQuestionEyebrow(int current, int total) {
+    return 'Help me choose · question $current of $total';
+  }
+
+  @override
+  String get quizInYourWords => 'In your words';
+
+  @override
+  String get quizResultEyebrow => 'Help me choose · result';
+
+  @override
+  String get quizRecommendedForYou => 'Recommended for you';
+
+  @override
+  String get quizYouProbablyWant => 'You probably want\n';
+
+  @override
+  String get quizLegendCombined => 'Combined';
+
+  @override
+  String get quizLegendDeclaration => 'Declaration only';
+
+  @override
+  String get quizLegendPoa => 'Power of Attorney only';
+
+  @override
+  String get quizRetake => 'Retake';
+
+  @override
+  String quizUseForm(String formName) {
+    return 'Use $formName';
+  }
+
+  @override
+  String get quizFormNameCombined => 'Combined';
+
+  @override
+  String get quizFormNameDeclaration => 'Declaration';
+
+  @override
+  String get quizFormNamePoa => 'POA';
+
+  @override
+  String get quizExplainCombined =>
+      'Includes both your treatment preferences AND an agent designation. The most comprehensive option — and what most people choose.';
+
+  @override
+  String get quizExplainPoa =>
+      'Designates an agent to make decisions for you, without locking in specific treatment preferences. Best when you trust someone completely and want them to decide in the moment.';
+
+  @override
+  String get quizExplainDeclaration =>
+      'Documents your treatment preferences without naming an agent. Your treatment team will follow your written wishes directly.';
+
+  @override
+  String get aiSuggestDraftTitle => 'AI Draft';
+
+  @override
+  String get aiSuggestSuggestionTitle => 'AI Suggestion';
+
+  @override
+  String get aiSuggestYourText => 'Your text:';
+
+  @override
+  String get aiSuggestDraftLabel => 'AI draft:';
+
+  @override
+  String get aiSuggestSuggestionLabel => 'AI suggestion:';
+
+  @override
+  String aiSuggestReviewCarefully(String notAdvice) {
+    return '$notAdvice Review carefully.';
+  }
+
+  @override
+  String get aiSuggestDismiss => 'Dismiss';
+
+  @override
+  String get aiSuggestAddToMine => 'Add to mine';
+
+  @override
+  String get aiSuggestUseDraft => 'Use this draft';
+
+  @override
+  String get aiSuggestUseInstead => 'Use instead';
+
+  @override
+  String get aiSuggestAppliedA11y => 'AI suggestion applied. Undo available.';
+
+  @override
+  String get aiSuggestApplied => 'AI suggestion applied.';
+
+  @override
+  String get aiSuggestUndo => 'Undo';
+
+  @override
+  String aiSuggestLoadingA11y(String fieldName) {
+    return 'AI Suggest, loading suggestion for $fieldName';
+  }
+
+  @override
+  String aiSuggestForFieldA11y(String fieldName) {
+    return 'AI Suggest for $fieldName';
+  }
+
+  @override
+  String get aiSuggestSetupA11y => 'Set up AI Assistant to use suggestions';
+
+  @override
+  String get aiSuggestTooltip => 'Get an AI suggestion for this field';
+
+  @override
+  String get aiSuggestSetupTooltip => 'Set up AI Assistant to use this feature';
+
+  @override
+  String get aiSuggestIconTooltip => 'AI suggestion';
+
+  @override
+  String get contactSheetPermissionRequired =>
+      'Contact permission is required to import.';
+
+  @override
+  String get contactSheetRolePrimaryAgent => 'primary agent';
+
+  @override
+  String get contactSheetPickYour => 'Pick your ';
+
+  @override
+  String get contactSheetLocalOnly =>
+      'From your phone\'s contacts. We never upload them — search runs locally.';
+
+  @override
+  String get contactSheetSearchHint => 'Search by name or number';
+
+  @override
+  String get contactSheetClearSearch => 'Clear search';
+
+  @override
+  String contactSheetContactsCount(int count) {
+    return 'Contacts · $count';
+  }
+
+  @override
+  String get contactSheetPickAContact => 'Pick a contact';
+
+  @override
+  String contactSheetUseName(String name) {
+    return 'Use $name';
+  }
+
+  @override
+  String get contactSheetThisContact => 'this contact';
+
+  @override
+  String get contactSheetLooksLikeProvider => 'Looks like a provider';
+
+  @override
+  String get contactSheetUnder18 => 'Under 18';
+
+  @override
+  String contactSheetWarnConfirm(String note) {
+    return '⚠ $note — confirm they\'re not treating you';
+  }
+
+  @override
+  String get contactSheetEligible => '✓ Eligible · 18+';
+
+  @override
+  String get contactSheetEnterManually => 'Enter someone manually';
+
+  @override
+  String get contactSheetHardBlock => 'hard block';
+
+  @override
+  String get contactSheetSoftWarn => 'soft warn';
+
+  @override
+  String get contactSheetRuleProvider =>
+      'Your current treating provider or their employee';
+
+  @override
+  String get contactSheetRuleFacilityOwner =>
+      'An owner/operator of a facility where you receive care';
+
+  @override
+  String get contactSheetWhoCantBeAgent => 'Who can\'t be your agent';
+
+  @override
+  String get contactSheetRulesFootnote =>
+      'Under-18 is blocked automatically from the contact\'s birthday. We can\'t tell who your providers are, so anything that looks like a provider is a soft warning you can override — confirm only if they truly aren\'t treating you.';
+
+  @override
+  String get voiceMicPermission => 'Microphone permission is needed.';
+
+  @override
+  String get voiceTranscribeFailed =>
+      'Couldn\'t transcribe. Try again, or type it instead.';
+
+  @override
+  String get voiceSpeechError => 'Speech recognition error.';
+
+  @override
+  String get voiceNeedsBrowser => 'Voice needs Chrome, Edge, or Safari.';
+
+  @override
+  String get voiceNotAvailable =>
+      'Speech recognition is not available on this device.';
+
+  @override
+  String get voiceStatusTranscribing => '● Transcribing';
+
+  @override
+  String get voiceStatusRecording => '● Recording';
+
+  @override
+  String get voiceStatusPaused => '● Paused';
+
+  @override
+  String get voiceSayItYourWay => 'Say it your way.';
+
+  @override
+  String get voiceExplainAi =>
+      'For better accuracy on medication names and conditions, your recording goes to Google\'s AI to transcribe. Review the text before saving.';
+
+  @override
+  String get voiceExplainBrowser =>
+      'To transcribe, your browser sends the audio to its speech service (often Google). We don\'t keep the audio or text — edit it before saving.';
+
+  @override
+  String get voiceExplainDevice =>
+      'Your device turns speech into text. We never store the audio — you can edit before saving.';
+
+  @override
+  String get voiceEmptyHintAi =>
+      'Tap the red button, speak, then tap stop to transcribe…';
+
+  @override
+  String get voiceEmptyHintLive =>
+      'Tap the red record button and start speaking…';
+
+  @override
+  String get voiceCancelA11y => 'Cancel voice recording';
+
+  @override
+  String get voiceConfirmA11y => 'Confirm and use transcript';
+
+  @override
+  String get voiceFooterAi =>
+      'WE STORE NOTHING · GOOGLE\'S AI TRANSCRIBES THE RECORDING';
+
+  @override
+  String get voiceFooterBrowser =>
+      'WE STORE NOTHING · YOUR BROWSER\'S SPEECH SERVICE TRANSCRIBES THE AUDIO';
+
+  @override
+  String get voiceFooterDevice =>
+      'AUDIO ISN\'T SAVED · TRANSCRIPT STAYS IN THIS SESSION';
+
+  @override
+  String get voiceTranscribingCard => 'Transcribing your recording…';
+
+  @override
+  String get voiceStopRecording => 'Stop recording';
+
+  @override
+  String get voiceStartRecording => 'Start recording';
+
+  @override
+  String get pipelineGeneratingSuggestions =>
+      'AI is generating personalized suggestions...';
+
+  @override
+  String get pipelineNoAdditionalSuggestions =>
+      'AI could not generate additional suggestions.';
+
+  @override
+  String pipelineAutofillProblem(String error) {
+    return 'Autofill hit a problem. $error';
+  }
+
+  @override
+  String pipelineAppliedA11y(int count) {
+    return 'Autofill applied $count fields to your directive';
+  }
+
+  @override
+  String get pipelineAppliedNoneA11y =>
+      'Autofill finished — no new fields were added';
+
+  @override
+  String get pipelinePastedImage => 'Pasted image';
+
+  @override
+  String get pipelineDocument => 'Document';
+
+  @override
+  String get pipelineKindPdf => 'PDF';
+
+  @override
+  String get pipelineKindPhoto => 'Photo';
+
+  @override
+  String get pipelineKindText => 'Text';
+
+  @override
+  String get pipelineKindAudio => 'Audio';
+
+  @override
+  String get pipelineKindFile => 'File';
+
+  @override
+  String get pipelineCancelled => 'Processing cancelled — nothing was applied.';
+
+  @override
+  String get pipelineSetupAiTitle => 'Set up AI to read documents';
+
+  @override
+  String get pipelineSetupAiBody =>
+      'Snap-to-fill uses AI to read your uploaded document (photo, PDF, or text) and pull out details to fill your form — medications, conditions, care preferences, and your contact details. It needs an AI key — Gemini\'s free tier takes about 30 seconds to set up. You review every field before anything lands in your form.';
+
+  @override
+  String get pipelineSetupAi => 'Set up AI';
+
+  @override
+  String get pipelineDroppedFile => 'Dropped file';
+
+  @override
+  String get pipelineUnsupportedType =>
+      'That file type isn\'t supported. Use a JPG, PNG, HEIC, PDF, or text file.';
+
+  @override
+  String pipelineRpmLimit(int pages, int remaining, int seconds) {
+    return 'Processing $pages pages requires $pages requests, but only $remaining requests are available this minute. Please wait $seconds seconds or select fewer pages.';
+  }
+
+  @override
+  String pipelineRpdLimit(int pages, int remaining, int limit) {
+    return 'Processing $pages pages requires $pages requests, but only $remaining requests remain today (daily limit: $limit).';
+  }
+
+  @override
+  String pipelineFileTooLarge(String name, String sizeMb) {
+    return 'File \"$name\" is too large ($sizeMb MB). Maximum file size is 10 MB per document.';
+  }
+
+  @override
+  String pipelineExtractingPage(int current, int total) {
+    return 'Extracting page $current of $total...';
+  }
+
+  @override
+  String get pipelineExtractingSingle =>
+      'Extracting medical data from document...';
+
+  @override
+  String pipelineLooksLikeKind(String kind) {
+    return ' (it looks like a $kind)';
+  }
+
+  @override
+  String pipelineNotMedicalSingle(String kind) {
+    return 'This doesn\'t look like a health or medical document$kind, so nothing was used. Upload a medical record, medication or allergy list, or an existing advance directive.';
+  }
+
+  @override
+  String pipelineNotMedicalMulti(String kind) {
+    return 'These don\'t look like health or medical documents$kind, so nothing was used.';
+  }
+
+  @override
+  String get pipelineNoMedicalInfoSingle =>
+      'No medical information found in this document.';
+
+  @override
+  String pipelineNoMedicalInfoMulti(int count) {
+    return 'No medical information found in these $count pages.';
+  }
+
+  @override
+  String get pipelineValidating => 'Validating medications and conditions...';
+
+  @override
+  String get pipelinePleaseWait => 'Please wait while processing...';
+
+  @override
+  String get pipelineBackWizard => 'Wizard';
+
+  @override
+  String get pipelineBackReview => 'Review';
+
+  @override
+  String get pipelineTitleSnapToFill => 'Snap to fill';
+
+  @override
+  String get pipelineTitleProcessing => 'Processing';
+
+  @override
+  String get pipelineTitleReview => 'Review Extracted Data';
+
+  @override
+  String get pipelineTitleGenerating => 'Generating Suggestions';
+
+  @override
+  String get pipelineTitleResults => 'AI Suggestions';
+
+  @override
+  String pipelinePickerFailed(String error) {
+    return 'Couldn\'t open the file picker ($error). Try dragging the file onto the box above instead.';
+  }
+
+  @override
+  String get pipelineCouldNotRead =>
+      'We couldn\'t read that file. Please use a PDF, JPG, PNG, WEBP, HEIC, or plain-text file under 10 MB.';
+
+  @override
+  String get pipelineFormCombined => 'Combined';
+
+  @override
+  String get pipelineFormDeclaration => 'Declaration only';
+
+  @override
+  String get pipelineFormPoa => 'Power of Attorney only';
+
+  @override
+  String get pipelineFormCombinedSub =>
+      'Treatment preferences AND a decision-maker (broadest).';
+
+  @override
+  String get pipelineFormDeclarationSub =>
+      'Treatment preferences, without naming an agent.';
+
+  @override
+  String get pipelineFormPoaSub =>
+      'Name a decision-maker, without listing preferences.';
+
+  @override
+  String get pipelineWhichForm => 'Which form do you want to fill?';
+
+  @override
+  String get pipelineWhichFormBody =>
+      'Choose your form first — the AI will then read only the parts that form needs. Combined is the broadest; you can change this later.';
+
+  @override
+  String get pickSnapOptional => 'Snap to fill · optional';
+
+  @override
+  String get pickHeadlineLead => 'Have a photo handy? ';
+
+  @override
+  String get pickHeadlineAccent => 'We\'ll read it.';
+
+  @override
+  String get pickIntro =>
+      'Drop a photo, PDF, or audio recording — ID, medication list, prescription label, an old directive, or just describe your wishes out loud — and the AI will extract what it can. You review every field before it lands in the form. Or skip and type it all yourself.';
+
+  @override
+  String get pickPrivacyNote =>
+      'Your privacy: black out anything sensitive before uploading. You never have to upload personal details at all — any field can be typed in by hand to keep it confidential.';
+
+  @override
+  String get pickVoiceGuideLink =>
+      'Recording a voice file? See the questionnaire & how-to';
+
+  @override
+  String get pickSkipTypeAll => 'Skip — I\'ll type it all';
+
+  @override
+  String get pickContinueStep2 => 'Continue to step 2';
+
+  @override
+  String get pickYourDocuments => 'Your documents';
+
+  @override
+  String pickFilesKeptInMemory(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count FILES · KEPT IN MEMORY',
+      one: '1 FILE · KEPT IN MEMORY',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get pickClearAll => 'Clear all';
+
+  @override
+  String get pickHeldWithKey =>
+      'Held on this device. Nothing is sent until you tap Read — then it goes to your AI provider to read.';
+
+  @override
+  String get pickHeldNoKey =>
+      'Held on this device. Reading needs AI set up first (free, ~30 seconds) — nothing is sent until then.';
+
+  @override
+  String pickReadWithAi(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Read $count documents with AI',
+      one: 'Read this document with AI',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get pickRemove => 'Remove';
+
+  @override
+  String get pickNoKeyTitle => 'AI isn\'t set up yet';
+
+  @override
+  String get pickNoKeyBody =>
+      'You can see how snap-to-fill works below, but reading a real photo or PDF needs an AI key (Gemini\'s free tier takes about 30 seconds). You review every field before it lands in your form.';
+
+  @override
+  String get pickTryAgain => 'Try again';
+
+  @override
+  String get pickDropTitleCamera => 'Add a photo of your document';
+
+  @override
+  String get pickDropTitle => 'Drop a photo, PDF, or screenshot';
+
+  @override
+  String pickFormatsPaste(String shortcut) {
+    return 'JPG · PNG · HEIC · PDF · up to 10 MB — or paste with $shortcut';
+  }
+
+  @override
+  String get pickFormats => 'JPG · PNG · HEIC · PDF · up to 10 MB';
+
+  @override
+  String get pickBrowseFiles => 'Browse files';
+
+  @override
+  String get pickTakePhoto => 'Take a photo';
+
+  @override
+  String get pickSentToProvider =>
+      'To autofill, your file — including any personal details in it — is sent to your AI provider to read. The app saves nothing (it\'s gone when this tab closes), but the provider may retain it (Gemini\'s free tier does). You review everything before it is added to your directive.';
+
+  @override
+  String get pickTargetId => 'Photo of ID';
+
+  @override
+  String get pickTargetIdSub => 'Name · DOB · address';
+
+  @override
+  String get pickTargetRx => 'Rx bottle / label';
+
+  @override
+  String get pickTargetRxSub => 'Drug · dose · schedule';
+
+  @override
+  String get pickTargetConditions => 'Conditions list';
+
+  @override
+  String get pickTargetConditionsSub => 'Diagnoses · allergies';
+
+  @override
+  String get pickTargetOther => 'Anything else';
+
+  @override
+  String get pickTargetOtherSub => 'Notes, old directive…';
+
+  @override
+  String get pickTargetOtherSubMobile => 'Old directive, notes…';
+
+  @override
+  String get pickWhatYouCanAdd => 'What you can add';
+
+  @override
+  String get pickWhatYouCanDrop => 'What you can drop here';
+
+  @override
+  String get pickOnAPhone => 'On a phone instead?';
+
+  @override
+  String get pickOnAPhoneBody =>
+      'Open this page on your phone to snap a page directly with its camera.';
+
+  @override
+  String get pickTakePhotoSub =>
+      'Opens your camera. Snap your ID, Rx label, anything.';
+
+  @override
+  String get pickPickFile => 'Pick a file';
+
+  @override
+  String get pickPickFileSub =>
+      'From your photos or files. JPG, PNG, HEIC, PDF.';
+
+  @override
+  String get pickWhatHelpsMost => 'What helps most';
+
+  @override
+  String get pickFastest => 'FASTEST';
+
+  @override
+  String get pickSentToProviderShort =>
+      'Your file (including any personal details) is sent to your AI provider to read it. The app saves nothing; the provider may retain it (Gemini\'s free tier does). You review before anything is added.';
+
+  @override
+  String pickReadingDocs(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Reading $count documents:',
+      one: 'Reading 1 document:',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String pickReadByAi(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count files read by Google\'s AI to autofill.',
+      one: 'Read by Google\'s AI to autofill.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get reviewLabelMedPrefer => 'Preferred Medication';
+
+  @override
+  String get reviewLabelMedAvoid => 'Medication to Avoid';
+
+  @override
+  String get reviewLabelMedCurrent => 'Currently Taking';
+
+  @override
+  String get reviewLabelMedLimit => 'Restricted-Use Medication';
+
+  @override
+  String get reviewLabelCond => 'Condition';
+
+  @override
+  String get reviewLabelDiag => 'Diagnosis';
+
+  @override
+  String get reviewLabelAllergy => 'Allergy';
+
+  @override
+  String get reviewLabelHh => 'Health History';
+
+  @override
+  String get reviewLabelEffectiveCondition => 'When this kicks in (your words)';
+
+  @override
+  String get reviewLabelFacilityPrefer => 'Preferred Facility';
+
+  @override
+  String get reviewLabelFacilityAvoid => 'Facility to Avoid';
+
+  @override
+  String get reviewLabelDietary => 'Dietary';
+
+  @override
+  String get reviewLabelReligious => 'Religious/Cultural';
+
+  @override
+  String get reviewLabelActivities => 'Activities';
+
+  @override
+  String get reviewLabelCrisis => 'Crisis Intervention';
+
+  @override
+  String get reviewLabelCrisisPlan => 'Crisis plan';
+
+  @override
+  String get reviewLabelAgentAuthorityLimitations => 'Agent authority limits';
+
+  @override
+  String get reviewLabelEctConsent => 'ECT consent';
+
+  @override
+  String get reviewLabelExperimentalConsent => 'Experimental treatment consent';
+
+  @override
+  String get reviewLabelDrugTrialConsent => 'Drug trial consent';
+
+  @override
+  String get reviewLabelMedicationConsent => 'Medication consent';
+
+  @override
+  String get reviewLabelTriggerTwoProfessionals => 'Trigger: professionals';
+
+  @override
+  String get reviewLabelTriggerCourtOrder => 'Trigger: court order';
+
+  @override
+  String get reviewLabelTriggerInvoluntaryCommitment =>
+      'Trigger: involuntary commitment';
+
+  @override
+  String get reviewLabelRoomPrefsNote => 'Room preferences';
+
+  @override
+  String get reviewLabelRoomPrefChips => 'Room options';
+
+  @override
+  String get reviewLabelRoommateSameGender => 'Same-gender roommate';
+
+  @override
+  String get reviewLabelGuardianCanRevoke => 'Guardian: override';
+
+  @override
+  String get reviewLabelGuardianCanChangeAgent => 'Guardian: replace agent';
+
+  @override
+  String get reviewLabelGuardianMustConsultAgent => 'Guardian: consult agent';
+
+  @override
+  String get reviewLabelAuthorityHospitalization => 'Agent: hospitalization';
+
+  @override
+  String get reviewLabelAuthorityMedication => 'Agent: medications';
+
+  @override
+  String get reviewLabelUlyssesOptin => 'Self-binding (Ulysses)';
+
+  @override
+  String get reviewLabelPetCustody => 'Pet care';
+
+  @override
+  String get reviewLabelChildrenCustody => 'Children / dependents';
+
+  @override
+  String get reviewLabelFamilyNotification => 'Who to notify';
+
+  @override
+  String get reviewLabelRecordsDisclosure => 'Records disclosure';
+
+  @override
+  String get reviewLabelOther => 'Other';
+
+  @override
+  String get reviewLabelPersonName => 'Your full name';
+
+  @override
+  String get reviewLabelPersonDob => 'Date of birth';
+
+  @override
+  String get reviewLabelPersonAddress1 => 'Street address';
+
+  @override
+  String get reviewLabelPersonAddress2 => 'Apt / suite / unit';
+
+  @override
+  String get reviewLabelPersonCity => 'City';
+
+  @override
+  String get reviewLabelPersonCounty => 'County';
+
+  @override
+  String get reviewLabelPersonState => 'State';
+
+  @override
+  String get reviewLabelPersonZip => 'ZIP code';
+
+  @override
+  String get reviewLabelPersonPhone => 'Your phone';
+
+  @override
+  String get reviewLabelPersonDoctorName => 'Primary doctor';
+
+  @override
+  String get reviewLabelPersonDoctorSpecialty => 'Doctor specialty';
+
+  @override
+  String get reviewLabelPersonDoctorPhone => 'Doctor\'s phone';
+
+  @override
+  String get reviewLabelPersonEvalDoctorName => 'Preferred evaluating doctor';
+
+  @override
+  String get reviewLabelPersonEvalDoctorContact => 'Evaluating doctor contact';
+
+  @override
+  String get reviewLabelAgentName => 'Agent name';
+
+  @override
+  String get reviewLabelAgentRelationship => 'Agent relationship';
+
+  @override
+  String get reviewLabelAgentAddress1 => 'Agent street address';
+
+  @override
+  String get reviewLabelAgentAddress2 => 'Agent apt / suite';
+
+  @override
+  String get reviewLabelAgentCity => 'Agent city';
+
+  @override
+  String get reviewLabelAgentState => 'Agent state';
+
+  @override
+  String get reviewLabelAgentZip => 'Agent ZIP';
+
+  @override
+  String get reviewLabelAgentPhone => 'Agent phone';
+
+  @override
+  String get reviewLabelAltAgentName => 'Alternate agent name';
+
+  @override
+  String get reviewLabelAltAgentRelationship => 'Alternate agent relationship';
+
+  @override
+  String get reviewLabelAltAgentAddress1 => 'Alt agent street address';
+
+  @override
+  String get reviewLabelAltAgentAddress2 => 'Alt agent apt / suite';
+
+  @override
+  String get reviewLabelAltAgentCity => 'Alt agent city';
+
+  @override
+  String get reviewLabelAltAgentState => 'Alt agent state';
+
+  @override
+  String get reviewLabelAltAgentZip => 'Alt agent ZIP';
+
+  @override
+  String get reviewLabelAltAgentPhone => 'Alternate agent phone';
+
+  @override
+  String get reviewLabelGuardianName => 'Guardian nominee';
+
+  @override
+  String get reviewLabelGuardianRelationship => 'Guardian relationship';
+
+  @override
+  String get reviewLabelGuardianAddress1 => 'Guardian street address';
+
+  @override
+  String get reviewLabelGuardianAddress2 => 'Guardian apt / suite';
+
+  @override
+  String get reviewLabelGuardianCity => 'Guardian city';
+
+  @override
+  String get reviewLabelGuardianState => 'Guardian state';
+
+  @override
+  String get reviewLabelGuardianZip => 'Guardian ZIP';
+
+  @override
+  String get reviewLabelGuardianPhone => 'Guardian phone';
+
+  @override
+  String get reviewSectionMedPrefer => 'Preferred Meds';
+
+  @override
+  String get reviewSectionMedAvoid => 'Meds to Avoid';
+
+  @override
+  String get reviewSectionMedCurrent => 'Currently Taking';
+
+  @override
+  String get reviewSectionMedLimit => 'Restricted-Use Meds';
+
+  @override
+  String get reviewSectionCond => 'Conditions';
+
+  @override
+  String get reviewSectionDiag => 'Diagnoses';
+
+  @override
+  String get reviewSectionAllergy => 'Allergies';
+
+  @override
+  String get reviewSectionHh => 'Health History';
+
+  @override
+  String get reviewSectionEffectiveCondition => 'When this kicks in';
+
+  @override
+  String get reviewSectionPerson => 'Your details';
+
+  @override
+  String get reviewSectionAgent => 'Your agent';
+
+  @override
+  String get reviewSectionAgentAuthority => 'Agent Authority';
+
+  @override
+  String get reviewSectionUlyssesOptin => 'Self-binding';
+
+  @override
+  String get reviewSectionCrisisPlan => 'Crisis Plan';
+
+  @override
+  String get reviewSectionConsent => 'Consent';
+
+  @override
+  String get reviewSectionRoomPreferences => 'Room Preferences';
+
+  @override
+  String get reviewSectionAltAgent => 'Alternate agent';
+
+  @override
+  String get reviewSectionGuardian => 'Guardian';
+
+  @override
+  String get reviewSectionOther => 'Other';
+
+  @override
+  String get reviewStepGroupWhenKicksIn => 'When this kicks in';
+
+  @override
+  String get reviewStepGroupDiagnoses => 'Diagnoses';
+
+  @override
+  String get reviewStepGroupAboutYou => 'About you';
+
+  @override
+  String get reviewStepGroupPeopleITrust => 'People I trust';
+
+  @override
+  String get reviewStepGroupGuardian => 'If a court appoints a guardian';
+
+  @override
+  String get reviewStepGroupWhereIWantCare => 'Where I want care';
+
+  @override
+  String get reviewStepGroupMedications => 'Medications';
+
+  @override
+  String get reviewStepGroupAllergies => 'Allergies & reactions';
+
+  @override
+  String get reviewStepGroupProceduresResearch => 'Procedures & research';
+
+  @override
+  String get reviewStepGroupAnythingElse => 'Anything else';
+
+  @override
+  String get reviewAiReadThisPhoto => 'AI READ THIS PHOTO';
+
+  @override
+  String get reviewHeresWhatWeRead => 'Here\'s what we read.';
+
+  @override
+  String get reviewHowToIntro =>
+      'These are the details the AI pulled from your document. Here\'s how to use this page:';
+
+  @override
+  String get reviewHowToChecked =>
+      'A checked box means it will be added to your form. Uncheck anything you don\'t want.';
+
+  @override
+  String get reviewHowToEdit =>
+      'Tap any field to edit its wording before it\'s added.';
+
+  @override
+  String get reviewHowToGrouped =>
+      'Results are grouped by form section (the same steps you\'ll see next). A \"Replaces what you have\" note means it would overwrite something you already entered — those start unchecked.';
+
+  @override
+  String reviewHowToFinish(String buttonLabel) {
+    return 'When you\'re ready, tap \"$buttonLabel\" at the bottom to fill these into your form and continue — you\'ll land in the form to review everything.';
+  }
+
+  @override
+  String reviewPiiRemoved(String items) {
+    return 'PII was detected and removed before analysis: $items';
+  }
+
+  @override
+  String get reviewAddToDirective => 'Add to your directive';
+
+  @override
+  String get reviewPhotoDiscarded =>
+      'Your photo was sent to the AI to read, then discarded. Nothing is stored after you confirm or discard.';
+
+  @override
+  String reviewFieldsReady(int checked, int total) {
+    return '$checked of $total fields ready to add';
+  }
+
+  @override
+  String get reviewYouEntered => 'You entered';
+
+  @override
+  String get reviewAutofillFound => 'Autofill found';
+
+  @override
+  String get reviewKeepMine => 'Keep mine';
+
+  @override
+  String get reviewUseNew => 'Use new';
+
+  @override
+  String get reviewAddBoth => 'Add both';
+
+  @override
+  String get reviewConsolidateAi => 'Consolidate (AI)';
+
+  @override
+  String get reviewIdentityNotMerged =>
+      'Identity fields aren\'t merged by the AI — double-check this one yourself.';
+
+  @override
+  String get reviewWillSave => 'Will save:';
+
+  @override
+  String get reviewSetupAiToConsolidate =>
+      'Set up the AI assistant first to consolidate.';
+
+  @override
+  String get reviewAgentInitialsNote =>
+      'This lets your agent decide. Under PA law (§5836(c)) it only takes effect if you physically initial this authorization on the printed form — confirm this is what you want.';
+
+  @override
+  String get reviewSmartIntro =>
+      'The AI generated these additional suggestions based on your validated conditions and medications. Tap to edit, uncheck to skip. This is not medical or legal advice.';
+
+  @override
+  String get reviewGuidanceOnly =>
+      'Guidance to read — not saved to your form. Set your choice in Procedures & research.';
+
+  @override
+  String get reviewAutofillInformation => 'Autofill Information';
+
+  @override
+  String get reviewApplyAll => 'Apply All';
+
+  @override
+  String get reviewDiscardAll => 'Discard all';
+
+  @override
+  String get reviewGenerateMore => 'Generate more';
+
+  @override
+  String get reviewIncludeField => 'Include this field';
+
+  @override
+  String get reviewNotAdded => 'Not added';
+
+  @override
+  String get reviewEdit => 'Edit';
 }

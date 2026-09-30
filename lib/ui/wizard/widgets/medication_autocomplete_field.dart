@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:flutter/services.dart';
 import 'package:mhad/services/clinical_data_service.dart';
@@ -172,8 +173,9 @@ class _MedicationAutocompleteFieldState
                         // Main medication name — tappable to select without strength
                         Semantics(
                           button: true,
-                          label: 'Select medication ${med.name}'
-                              '${isNti ? ', narrow therapeutic index drug' : ''}',
+                          label: isNti
+                              ? context.l10n.medAutoSelectNtiA11y(med.name)
+                              : context.l10n.medAutoSelectA11y(med.name),
                           child: InkWell(
                             onTap: () => _selectMedication(med.name),
                             child: Container(
@@ -193,8 +195,7 @@ class _MedicationAutocompleteFieldState
                                   ),
                                   if (isNti)
                                     Tooltip(
-                                      message: 'Narrow Therapeutic Index (NTI) '
-                                          'drug — no generic substitution in PA',
+                                      message: context.l10n.medAutoNtiTooltip,
                                       child: Container(
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 5, vertical: 1),
@@ -203,7 +204,7 @@ class _MedicationAutocompleteFieldState
                                           borderRadius:
                                               BorderRadius.circular(DesignTokens.radiusXs),
                                         ),
-                                        child: Text('NTI',
+                                        child: Text(context.l10n.medAutoNtiBadge,
                                             style: TextStyle(
                                               fontSize: 11,
                                               fontWeight: FontWeight.w700,
@@ -229,7 +230,7 @@ class _MedicationAutocompleteFieldState
                                     '${med.name.split(' (').first} $s';
                                 return Semantics(
                                   button: true,
-                                  label: 'Select $display',
+                                  label: context.l10n.medAutoSelectStrengthA11y(display),
                                   child: InkWell(
                                     borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
                                     onTap: () => _selectMedication(display),
@@ -284,7 +285,7 @@ class _MedicationAutocompleteFieldState
         autocorrect: false,
         enableSuggestions: false,
         decoration: InputDecoration(
-          labelText: widget.labelText ?? 'Medication name',
+          labelText: widget.labelText ?? context.l10n.medAutoFieldLabel,
           border: const OutlineInputBorder(),
           isDense: true,
           suffixIcon: _loading
@@ -294,7 +295,7 @@ class _MedicationAutocompleteFieldState
                       width: 16,
                       height: 16,
                       child: Semantics(
-                          label: 'Searching medications',
+                          label: context.l10n.medAutoSearchingA11y,
                           child:
                               const CircularProgressIndicator(strokeWidth: 2))),
                 )

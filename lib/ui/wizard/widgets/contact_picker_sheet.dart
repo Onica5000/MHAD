@@ -1,4 +1,5 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
@@ -21,10 +22,19 @@ enum _Eligibility {
   eligible,
 }
 
+/// Why a candidate was flagged; rendered through l10n at build time.
+enum _EligibilityNote { provider, under18 }
+
+String _noteText(BuildContext context, _EligibilityNote note) =>
+    switch (note) {
+      _EligibilityNote.provider => context.l10n.contactSheetLooksLikeProvider,
+      _EligibilityNote.under18 => context.l10n.contactSheetUnder18,
+    };
+
 class _Candidate {
   final Contact contact;
   final _Eligibility eligibility;
-  final String? eligibilityNote;
+  final _EligibilityNote? eligibilityNote;
   const _Candidate({
     required this.contact,
     required this.eligibility,
@@ -56,7 +66,7 @@ class _Candidate {
 /// the user cancels.
 Future<PickedContactData?> showContactPickerSheet(
   BuildContext context, {
-  String role = 'primary agent',
+  String? role,
 }) async {
   // Request read permission first — without it the sheet has nothing
   // to show. The caller surfaces the "permission denied" snackbar.
@@ -66,8 +76,8 @@ Future<PickedContactData?> showContactPickerSheet(
   if (status != PermissionStatus.granted &&
       status != PermissionStatus.limited) {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Contact permission is required to import.'),
+      SnackBar(
+        content: Text(context.l10n.contactSheetPermissionRequired),
       ),
     );
     return null;
@@ -94,7 +104,9 @@ Future<PickedContactData?> showContactPickerSheet(
     barrierColor: Colors.black54,
     isDismissible: true,
     enableDrag: true,
-    builder: (_) => _ContactPickerSheet(role: role, contacts: contacts),
+    builder: (_) => _ContactPickerSheet(
+        role: role ?? context.l10n.contactSheetRolePrimaryAgent,
+        contacts: contacts),
   );
 }
 
@@ -165,20 +177,20 @@ class _ContactPickerSheetState extends State<_ContactPickerSheet> {
     return _Eligibility.eligible;
   }
 
-  static String? _eligibilityNote(Contact c) {
+  static _EligibilityNote? _eligibilityNote(Contact c) {
     final n = (c.displayName ?? '').toLowerCase();
     if (n.startsWith('dr.') || n.startsWith('dr ')) {
-      return 'Looks like a provider';
+      return _EligibilityNote.provider;
     }
     if (RegExp(r'\b(md|do|phd|np|pa-c|rn|lcsw|psyd|crnp|arnp)\b')
         .hasMatch(n)) {
-      return 'Looks like a provider';
+      return _EligibilityNote.provider;
     }
     for (final ev in c.events) {
       if (ev.label.label != EventLabel.birthday) continue;
       if (ev.year == null) continue;
       final dob = DateTime(ev.year!, ev.month, ev.day);
-      if (!isAdult(dob)) return 'Under 18';
+      if (!isAdult(dob)) return _EligibilityNote.under18;
     }
     return null;
   }
@@ -310,7 +322,7 @@ class _ContactPickerSheetState extends State<_ContactPickerSheet> {
                   Text.rich(
                     TextSpan(
                       children: [
-                        const TextSpan(text: 'Pick your '),
+                        TextSpan(text: context.l10n.contactSheetPickYour),
                         TextSpan(
                           text: '${widget.role}.',
                           style: TextStyle(color: p.primary),
@@ -329,8 +341,7 @@ class _ContactPickerSheetState extends State<_ContactPickerSheet> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    "From your phone's contacts. We never upload them — "
-                    'search runs locally.',
+                    context.l10n.contactSheetLocalOnly,
                     style: TextStyle(
                       fontFamily: kSansFamily,
                       fontSize: 13,
@@ -358,12 +369,12 @@ class _ContactPickerSheetState extends State<_ContactPickerSheet> {
                             // searching is the primary action here.
                             autofocus: true,
                             onChanged: (_) => setState(() {}),
-                            decoration: const InputDecoration(
-                              hintText: 'Search by name or number',
+                            decoration: InputDecoration(
+                              hintText: context.l10n.contactSheetSearchHint,
                               border: InputBorder.none,
                               isDense: true,
                               contentPadding:
-                                  EdgeInsets.symmetric(vertical: 10),
+                                  const EdgeInsets.symmetric(vertical: 10),
                             ),
                             style: TextStyle(
                               fontFamily: kSansFamily,
@@ -378,7 +389,7 @@ class _ContactPickerSheetState extends State<_ContactPickerSheet> {
                           IconButton(
                             onPressed: () =>
                                 setState(() => _searchCtrl.clear()),
-                            tooltip: 'Clear search',
+                            tooltip: context.l10n.contactSheetClearSearch,
                             iconSize: 14,
                             visualDensity: VisualDensity.compact,
                             padding: EdgeInsets.zero,
@@ -399,7 +410,7 @@ class _ContactPickerSheetState extends State<_ContactPickerSheet> {
                 controller: scrollController,
                 padding: const EdgeInsets.fromLTRB(20, 6, 20, 12),
                 children: [
-                  SectionLabel('Contacts · ${others.length}'),
+                  SectionLabel(context.l10n.contactSheetContactsCount(others.length)),
                   for (final c in others)
                     _PersonTile(
                       cand: c,
@@ -436,7 +447,7 @@ class _ContactPickerSheetState extends State<_ContactPickerSheet> {
                         minimumSize: const Size.fromHeight(48),
                       ),
                       child: Text(
-                        'Cancel',
+                        context.l10n.cancel,
                         style: TextStyle(color: p.textMuted),
                       ),
                     ),
@@ -448,8 +459,9 @@ class _ContactPickerSheetState extends State<_ContactPickerSheet> {
                       onPressed: canUse ? _confirmSelection : null,
                       icon: const Icon(Icons.arrow_forward, size: 16),
                       label: Text(_selected == null
-                          ? 'Pick a contact'
-                          : 'Use ${_firstName(_selected!.displayName ?? '')}'),
+                          ? context.l10n.contactSheetPickAContact
+                          : context.l10n.contactSheetUseName(_firstName(
+                              context, _selected!.displayName ?? ''))),
                       style: FilledButton.styleFrom(
                         iconAlignment: IconAlignment.end,
                         minimumSize: const Size.fromHeight(48),
@@ -465,9 +477,9 @@ class _ContactPickerSheetState extends State<_ContactPickerSheet> {
     );
   }
 
-  static String _firstName(String name) {
+  static String _firstName(BuildContext context, String name) {
     final t = name.trim();
-    if (t.isEmpty) return 'this contact';
+    if (t.isEmpty) return context.l10n.contactSheetThisContact;
     return t.split(RegExp(r'\s+')).first;
   }
 }
@@ -587,8 +599,10 @@ class _PersonTile extends StatelessWidget {
                             padding: const EdgeInsets.only(top: 2),
                             child: Text(
                               blocked
-                                  ? '⚠ ${cand.eligibilityNote!}'
-                                  : '⚠ ${cand.eligibilityNote!} — confirm they\'re not treating you',
+                                  ? '⚠ ${_noteText(context, cand.eligibilityNote!)}'
+                                  : context.l10n.contactSheetWarnConfirm(
+                                      _noteText(
+                                          context, cand.eligibilityNote!)),
                               style: TextStyle(
                                 fontFamily: kSansFamily,
                                 fontSize: 11,
@@ -600,7 +614,7 @@ class _PersonTile extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.only(top: 2),
                             child: Text(
-                              '✓ Eligible · 18+',
+                              context.l10n.contactSheetEligible,
                               style: TextStyle(
                                 fontFamily: kSansFamily,
                                 fontSize: 11,
@@ -678,7 +692,7 @@ class _ManualEntryTile extends StatelessWidget {
               Icon(Icons.edit_outlined, size: 16, color: p.primary),
               const SizedBox(width: 8),
               Text(
-                'Enter someone manually',
+                context.l10n.contactSheetEnterManually,
                 style: TextStyle(
                   fontFamily: kSansFamily,
                   fontSize: 13,
@@ -704,12 +718,13 @@ class _EligibilityRulesCard extends StatelessWidget {
     final warnColor =
         dark ? SemanticColors.warningTextDark : SemanticColors.warningTextLight;
 
+    final l10n = context.l10n;
     final rules = <(String, _Eligibility, String)>[
-      ('Under 18', _Eligibility.blocked, 'hard block'),
-      ('Your current treating provider or their employee',
-          _Eligibility.warn, 'soft warn'),
-      ('An owner/operator of a facility where you receive care',
-          _Eligibility.warn, 'soft warn'),
+      (l10n.contactSheetUnder18, _Eligibility.blocked, l10n.contactSheetHardBlock),
+      (l10n.contactSheetRuleProvider, _Eligibility.warn,
+          l10n.contactSheetSoftWarn),
+      (l10n.contactSheetRuleFacilityOwner, _Eligibility.warn,
+          l10n.contactSheetSoftWarn),
     ];
 
     return Container(
@@ -722,7 +737,7 @@ class _EligibilityRulesCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SectionLabel("Who can't be your agent"),
+          SectionLabel(l10n.contactSheetWhoCantBeAgent),
           const SizedBox(height: 6),
           for (final (rule, kind, label) in rules)
             Padding(
@@ -775,10 +790,7 @@ class _EligibilityRulesCard extends StatelessWidget {
             ),
           const SizedBox(height: 6),
           Text(
-            "Under-18 is blocked automatically from the contact's "
-            "birthday. We can't tell who your providers are, so anything "
-            "that looks like a provider is a soft warning you can "
-            'override — confirm only if they truly aren\'t treating you.',
+            l10n.contactSheetRulesFootnote,
             style: TextStyle(
               fontFamily: kSansFamily,
               fontSize: 11,

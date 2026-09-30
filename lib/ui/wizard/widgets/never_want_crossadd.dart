@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/data/repository/directive_repository.dart';
 import 'package:mhad/domain/model/directive.dart';
@@ -81,19 +82,15 @@ class _NeverWantCrossAddDialogState extends State<_NeverWantCrossAddDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       icon: const Icon(Icons.medication_outlined),
-      title: const Text('Add to “Medications I never want”?'),
+      title: Text(context.l10n.neverWantCrossAddTitle),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             _single
-                ? 'You listed a drug allergy. Do you also want to refuse it as '
-                    'a medication, adding it to your “Medications I never want” '
-                    'list?'
-                : 'You listed these drug allergies. Choose any you also want to '
-                    'refuse as medications — they’ll be added to your '
-                    '“Medications I never want” list.',
+                ? context.l10n.neverWantCrossAddBodySingle
+                : context.l10n.neverWantCrossAddBodyMulti,
           ),
           const SizedBox(height: 8),
           if (_single)
@@ -121,7 +118,7 @@ class _NeverWantCrossAddDialogState extends State<_NeverWantCrossAddDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context, const <String>[]),
-          child: const Text('Not now'),
+          child: Text(context.l10n.neverWantCrossAddNotNow),
         ),
         FilledButton(
           onPressed: () {
@@ -130,7 +127,9 @@ class _NeverWantCrossAddDialogState extends State<_NeverWantCrossAddDialog> {
                 : widget.candidates.where((s) => _checked[s] == true).toList();
             Navigator.pop(context, result);
           },
-          child: Text(_single ? 'Add to never-want' : 'Add selected'),
+          child: Text(_single
+              ? context.l10n.neverWantCrossAddConfirmSingle
+              : context.l10n.neverWantCrossAddConfirmMulti),
         ),
       ],
     );

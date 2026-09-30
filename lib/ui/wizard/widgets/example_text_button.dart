@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 
 /// A small "See examples" button that shows sample responses in a dialog.
@@ -20,7 +21,7 @@ class ExampleTextButton extends StatelessWidget {
       child: TextButton.icon(
         onPressed: () => _showExamples(context),
         icon: const Icon(Icons.lightbulb_outline, size: 16),
-        label: const Text('See examples'),
+        label: Text(context.l10n.exampleTextSeeExamples),
         style: TextButton.styleFrom(
           padding: const EdgeInsets.symmetric(horizontal: 8),
           visualDensity: VisualDensity.compact,
@@ -34,15 +35,14 @@ class ExampleTextButton extends StatelessWidget {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text('Example: $fieldName'),
+        title: Text(ctx.l10n.exampleTextTitle(fieldName)),
         content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Here are some examples of what others have written. '
-                'Use your own words to describe your specific preferences.',
+                ctx.l10n.exampleTextIntro,
                 style: Theme.of(ctx).textTheme.bodySmall?.copyWith(
                       color: cs.onSurfaceVariant,
                     ),
@@ -61,7 +61,7 @@ class ExampleTextButton extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Example ${entry.key + 1}',
+                            ctx.l10n.exampleTextNumbered(entry.key + 1),
                             style: Theme.of(ctx)
                                 .textTheme
                                 .labelSmall
@@ -82,8 +82,7 @@ class ExampleTextButton extends StatelessWidget {
                   borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
                 ),
                 child: Text(
-                  'These are samples only. Your directive should reflect '
-                  'your own wishes and circumstances.',
+                  ctx.l10n.exampleTextDisclaimer,
                   style: Theme.of(ctx).textTheme.bodySmall?.copyWith(
                         color: cs.onTertiaryContainer,
                         fontStyle: FontStyle.italic,
@@ -96,7 +95,7 @@ class ExampleTextButton extends StatelessWidget {
         actions: [
           FilledButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Got it'),
+            child: Text(ctx.l10n.exampleTextGotIt),
           ),
         ],
       ),

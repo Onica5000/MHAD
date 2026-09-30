@@ -24,13 +24,13 @@ extension _PipelinePickUi on _PipelineScreenState {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SectionLabel('Snap to fill · optional'),
+              SectionLabel(context.l10n.pickSnapOptional),
               const SizedBox(height: 6),
               Text.rich(
                 TextSpan(children: [
-                  const TextSpan(text: 'Have a photo handy? '),
+                  TextSpan(text: context.l10n.pickHeadlineLead),
                   TextSpan(
-                    text: "We'll read it.",
+                    text: context.l10n.pickHeadlineAccent,
                     style: TextStyle(color: p.primary),
                   ),
                 ]),
@@ -46,11 +46,7 @@ extension _PipelinePickUi on _PipelineScreenState {
               ),
               const SizedBox(height: 8),
               Text(
-                'Drop a photo, PDF, or audio recording — ID, medication list, '
-                'prescription label, an old directive, or just describe your '
-                'wishes out loud — and the AI will extract what it can. You '
-                'review every field before it lands in the form. Or skip and '
-                'type it all yourself.',
+                context.l10n.pickIntro,
                 style: TextStyle(
                   fontFamily: kSansFamily,
                   fontSize: 14,
@@ -66,10 +62,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                   const SizedBox(width: 7),
                   Expanded(
                     child: Text(
-                      'Your privacy: black out anything sensitive before '
-                      'uploading. You never have to upload personal details at '
-                      'all — any field can be typed in by hand to keep it '
-                      'confidential.',
+                      context.l10n.pickPrivacyNote,
                       style: TextStyle(
                         fontFamily: kSansFamily,
                         fontSize: 13,
@@ -87,9 +80,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                 child: TextButton.icon(
                   onPressed: () => appRouter.push(AppRoutes.audioGuide),
                   icon: const Icon(Icons.mic_none, size: 16),
-                  label: const Text(
-                    'Recording a voice file? See the questionnaire & how-to',
-                  ),
+                  label: Text(context.l10n.pickVoiceGuideLink),
                   style: TextButton.styleFrom(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     minimumSize: const Size(0, 36),
@@ -165,17 +156,17 @@ extension _PipelinePickUi on _PipelineScreenState {
                   children: [
                     TextButton(
                       onPressed: _toWizard,
-                      child: const Text("Skip — I'll type it all"),
+                      child: Text(context.l10n.pickSkipTypeAll),
                     ),
                     const Spacer(),
                     FilledButton(
                       onPressed: _toWizard,
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
-                        children: const [
-                          Text('Continue to step 2'),
-                          SizedBox(width: 6),
-                          Icon(Icons.arrow_forward, size: 16),
+                        children: [
+                          Text(context.l10n.pickContinueStep2),
+                          const SizedBox(width: 6),
+                          const Icon(Icons.arrow_forward, size: 16),
                         ],
                       ),
                     ),
@@ -224,11 +215,11 @@ extension _PipelinePickUi on _PipelineScreenState {
         children: [
           Row(
             children: [
-              const SectionLabel('Your documents'),
+              SectionLabel(context.l10n.pickYourDocuments),
               const SizedBox(width: 8),
               Flexible(
                 child: Text(
-                  '$n FILE${n == 1 ? '' : 'S'} · KEPT IN MEMORY',
+                  context.l10n.pickFilesKeptInMemory(n),
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontFamily: kMonoFamily,
@@ -252,7 +243,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                   minimumSize: const Size(0, 32),
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
-                child: const Text('Clear all'),
+                child: Text(context.l10n.pickClearAll),
               ),
             ],
           ),
@@ -267,10 +258,8 @@ extension _PipelinePickUi on _PipelineScreenState {
               Expanded(
                 child: Text(
                   hasKey
-                      ? 'Held on this device. Nothing is sent until you tap '
-                          'Read — then it goes to your AI provider to read.'
-                      : 'Held on this device. Reading needs AI set up first '
-                          '(free, ~30 seconds) — nothing is sent until then.',
+                      ? context.l10n.pickHeldWithKey
+                      : context.l10n.pickHeldNoKey,
                   style: TextStyle(
                     fontFamily: kSansFamily,
                     fontSize: 12,
@@ -288,7 +277,7 @@ extension _PipelinePickUi on _PipelineScreenState {
               onPressed: _readPendingDocs,
               icon: const Icon(Icons.auto_awesome, size: 16),
               label: Text(
-                n == 1 ? 'Read this document with AI' : 'Read $n documents with AI',
+                context.l10n.pickReadWithAi(n),
               ),
             ),
           ),
@@ -344,7 +333,7 @@ extension _PipelinePickUi on _PipelineScreenState {
           ),
           IconButton(
             icon: const Icon(Icons.close, size: 16),
-            tooltip: 'Remove',
+            tooltip: context.l10n.pickRemove,
             visualDensity: VisualDensity.compact,
             color: p.textMuted,
             onPressed: () => _removePending(d),
@@ -375,7 +364,7 @@ extension _PipelinePickUi on _PipelineScreenState {
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  "AI isn't set up yet",
+                  context.l10n.pickNoKeyTitle,
                   style: TextStyle(
                     fontFamily: kSansFamily,
                     fontSize: 14,
@@ -388,9 +377,7 @@ extension _PipelinePickUi on _PipelineScreenState {
           ),
           const SizedBox(height: 6),
           Text(
-            'You can see how snap-to-fill works below, but reading a real photo '
-            "or PDF needs an AI key (Gemini's free tier takes about 30 "
-            'seconds). You review every field before it lands in your form.',
+            context.l10n.pickNoKeyBody,
             style: TextStyle(
               fontFamily: kSansFamily,
               fontSize: 13,
@@ -402,7 +389,7 @@ extension _PipelinePickUi on _PipelineScreenState {
           FilledButton.icon(
             onPressed: _goAiSetup,
             icon: const Icon(Icons.auto_awesome, size: 16),
-            label: const Text('Set up AI'),
+            label: Text(context.l10n.pipelineSetupAi),
           ),
         ],
       ),
@@ -426,7 +413,7 @@ extension _PipelinePickUi on _PipelineScreenState {
           TextButton.icon(
             onPressed: _browseFiles,
             icon: const Icon(Icons.refresh),
-            label: const Text('Try again'),
+            label: Text(context.l10n.pickTryAgain),
           ),
         ],
       ),
@@ -467,8 +454,8 @@ extension _PipelinePickUi on _PipelineScreenState {
             Text(
               // Phones can't drag-and-drop files; desktop / PC web can.
               deviceHasCamera
-                  ? 'Add a photo of your document'
-                  : 'Drop a photo, PDF, or screenshot',
+                  ? context.l10n.pickDropTitleCamera
+                  : context.l10n.pickDropTitle,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontFamily: kSansFamily,
@@ -482,9 +469,8 @@ extension _PipelinePickUi on _PipelineScreenState {
               // Clipboard paste is a desktop-web affordance only; the shortcut
               // label matches the OS (⌘V on Apple, Ctrl+V on Windows/Linux).
               kIsWeb && !deviceHasCamera
-                  ? 'JPG · PNG · HEIC · PDF · up to 10 MB — or paste with '
-                      '$pasteShortcutLabel'
-                  : 'JPG · PNG · HEIC · PDF · up to 10 MB',
+                  ? context.l10n.pickFormatsPaste(pasteShortcutLabel)
+                  : context.l10n.pickFormats,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontFamily: kSansFamily,
@@ -501,13 +487,13 @@ extension _PipelinePickUi on _PipelineScreenState {
                 FilledButton.icon(
                   onPressed: _browseFiles,
                   icon: const Icon(Icons.folder_open, size: 16),
-                  label: const Text('Browse files'),
+                  label: Text(context.l10n.pickBrowseFiles),
                 ),
                 if (deviceHasCamera)
                   OutlinedButton.icon(
                     onPressed: _useWebcam,
                     icon: const Icon(Icons.photo_camera_outlined, size: 16),
-                    label: const Text('Take a photo'),
+                    label: Text(context.l10n.pickTakePhoto),
                   ),
               ],
             ),
@@ -525,11 +511,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      'To autofill, your file — including any personal details '
-                      'in it — is sent to your AI provider to read. The app saves '
-                      "nothing (it's gone when this tab closes), but the provider "
-                      "may retain it (Gemini's free tier does). You review "
-                      'everything before it is added to your directive.',
+                      context.l10n.pickSentToProvider,
                       style: TextStyle(
                         fontFamily: kSansFamily,
                         fontSize: 12,
@@ -549,11 +531,14 @@ extension _PipelinePickUi on _PipelineScreenState {
   }
 
   Widget _targetsPanel(MhadPalette p) {
-    const targets = <(IconData, String, String)>[
-      (Icons.badge_outlined, 'Photo of ID', 'Name · DOB · address'),
-      (Icons.medication_outlined, 'Rx bottle / label', 'Drug · dose · schedule'),
-      (Icons.coronavirus_outlined, 'Conditions list', 'Diagnoses · allergies'),
-      (Icons.description_outlined, 'Anything else', 'Notes, old directive…'),
+    final l10n = context.l10n;
+    final targets = <(IconData, String, String)>[
+      (Icons.badge_outlined, l10n.pickTargetId, l10n.pickTargetIdSub),
+      (Icons.medication_outlined, l10n.pickTargetRx, l10n.pickTargetRxSub),
+      (Icons.coronavirus_outlined, l10n.pickTargetConditions,
+          l10n.pickTargetConditionsSub),
+      (Icons.description_outlined, l10n.pickTargetOther,
+          l10n.pickTargetOtherSub),
     ];
     Widget tile((IconData, String, String) t) => Expanded(
           child: InkWell(
@@ -608,7 +593,7 @@ extension _PipelinePickUi on _PipelineScreenState {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SectionLabel(
-            deviceHasCamera ? 'What you can add' : 'What you can drop here'),
+            deviceHasCamera ? l10n.pickWhatYouCanAdd : l10n.pickWhatYouCanDrop),
         const SizedBox(height: 8),
         IntrinsicHeight(
           child: Row(
@@ -644,7 +629,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'On a phone instead?',
+                        l10n.pickOnAPhone,
                         style: TextStyle(
                           fontFamily: kSansFamily,
                           fontSize: 13,
@@ -654,8 +639,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        'Open this page on your phone to snap a page directly '
-                        'with its camera.',
+                        l10n.pickOnAPhoneBody,
                         style: TextStyle(
                           fontFamily: kSansFamily,
                           fontSize: 12,
@@ -690,8 +674,8 @@ extension _PipelinePickUi on _PipelineScreenState {
               fg: p.onPrimary,
               icon: Icons.photo_camera_outlined,
               iconBg: p.onPrimary.withValues(alpha: 0.20),
-              title: 'Take a photo',
-              subtitle: 'Opens your camera. Snap your ID, Rx label, anything.',
+              title: context.l10n.pickTakePhoto,
+              subtitle: context.l10n.pickTakePhotoSub,
               subtitleColor: p.onPrimary.withValues(alpha: 0.85),
             ),
           ),
@@ -705,8 +689,8 @@ extension _PipelinePickUi on _PipelineScreenState {
               icon: Icons.image_outlined,
               iconBg: p.primaryTint,
               iconFg: p.primary,
-              title: 'Pick a file',
-              subtitle: 'From your photos or files. JPG, PNG, HEIC, PDF.',
+              title: context.l10n.pickPickFile,
+              subtitle: context.l10n.pickPickFileSub,
               subtitleColor: p.textMuted,
             ),
           ),
@@ -781,19 +765,20 @@ extension _PipelinePickUi on _PipelineScreenState {
   // each row is an icon tile + label (+ FASTEST tag on ID) + what it fills +
   // a trailing chevron. Tapping any row opens the file picker.
   Widget _mobileTargets(MhadPalette p) {
-    const targets = <(IconData, String, String, bool)>[
-      (Icons.badge_outlined, 'Photo of ID', 'Name · DOB · address', true),
-      (Icons.medication_outlined, 'Rx bottle / label', 'Drug · dose · schedule',
+    final l10n = context.l10n;
+    final targets = <(IconData, String, String, bool)>[
+      (Icons.badge_outlined, l10n.pickTargetId, l10n.pickTargetIdSub, true),
+      (Icons.medication_outlined, l10n.pickTargetRx, l10n.pickTargetRxSub,
           false),
-      (Icons.coronavirus_outlined, 'Conditions list', 'Diagnoses · allergies',
-          false),
-      (Icons.description_outlined, 'Anything else', 'Old directive, notes…',
-          false),
+      (Icons.coronavirus_outlined, l10n.pickTargetConditions,
+          l10n.pickTargetConditionsSub, false),
+      (Icons.description_outlined, l10n.pickTargetOther,
+          l10n.pickTargetOtherSubMobile, false),
     ];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SectionLabel('What helps most'),
+        SectionLabel(l10n.pickWhatHelpsMost),
         const SizedBox(height: 8),
         for (final t in targets) ...[
           InkWell(
@@ -846,7 +831,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                                   borderRadius: BorderRadius.circular(DesignTokens.radiusXs),
                                 ),
                                 child: Text(
-                                  'FASTEST',
+                                  l10n.pickFastest,
                                   style: TextStyle(
                                     fontFamily: kMonoFamily,
                                     fontFamilyFallback: const [
@@ -905,10 +890,7 @@ extension _PipelinePickUi on _PipelineScreenState {
           const SizedBox(width: 8),
           Expanded(
             child: Text(
-              'Your file (including any personal details) is sent to your AI '
-              'provider to read it. The app saves nothing; the provider may '
-              "retain it (Gemini's free tier does). You review before anything "
-              'is added.',
+              context.l10n.pickSentToProviderShort,
               style: TextStyle(
                 fontFamily: kSansFamily,
                 fontSize: 11,
@@ -941,7 +923,7 @@ extension _PipelinePickUi on _PipelineScreenState {
             TextButton.icon(
               onPressed: _cancelProcessing,
               icon: const Icon(Icons.close, size: 18),
-              label: const Text('Cancel'),
+              label: Text(context.l10n.cancel),
             ),
           ],
           // Keep the document list visible while the AI reads — initiating
@@ -961,8 +943,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Reading ${_sourceDocs.length} '
-                    'document${_sourceDocs.length == 1 ? '' : 's'}:',
+                    context.l10n.pickReadingDocs(_sourceDocs.length),
                     style: TextStyle(
                       fontFamily: kSansFamily,
                       fontSize: 12,
@@ -1070,9 +1051,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  n == 1
-                      ? "Read by Google's AI to autofill."
-                      : "$n files read by Google's AI to autofill.",
+                  context.l10n.pickReadByAi(n),
                   style: TextStyle(
                     fontFamily: kSansFamily,
                     fontSize: 12,
