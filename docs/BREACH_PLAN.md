@@ -88,7 +88,12 @@ All breach notifications must include:
 
 Because the app is local-first and stores no contact information server-side, the
 **primary channel is in-app notice** (a full-screen blocker banner shown on next
-launch). The other channels are used to the extent we have addresses for affected
+launch). It is implemented: fill the `breachNotice` block in
+`assets/data/app_data.json` (id, what happened, information involved, third parties,
+what we're doing, what you can do, contact methods) and push to `main`. The web
+deploy publishes it, and every user sees it on their next page load until they
+acknowledge that notice id (`BreachNoticeGate`, `lib/ui/widgets/breach_notice_gate.dart`).
+Leave `id` empty when there is no active notice. The other channels are used to the extent we have addresses for affected
 users (e.g., people who voluntarily contacted us, or via Google for the Gemini path).
 
 **Individuals (fewer than 500 affected):**
@@ -96,10 +101,9 @@ users (e.g., people who voluntarily contacted us, or via Google for the Gemini p
 - Email to the individual's last known email address (if available), OR
 - First-class mail to the individual's last known postal address.
 - If contact info is insufficient for 10 or more individuals: conspicuous posting
-  on the privacy-policy URL (`PRIVACY_POLICY.md` hosted page) for 90 days.
-  > ⚠️ **Pre-release TODO:** no hosted privacy-policy URL exists yet (the policy is in-app
-  > + `PRIVACY_POLICY.md` in-repo only). The GitHub Pages web deploy makes hosting it
-  > trivial — publish it and fill the **Contact** section below before any real release.
+  on the hosted privacy-policy page, <https://onica5000.github.io/MHAD/privacy.html>
+  (`web/privacy.html`, generated from the in-app policy screen and deployed with the
+  web app), for 90 days.
 
 **Individuals (500 or more affected):**
 - All of the above, PLUS
@@ -189,3 +193,4 @@ This plan should be reviewed:
 | 1.0     | 2026-03-16 | Initial breach notification plan |
 | 1.1     | 2026-05-19 | Updated to amended 16 CFR Part 318 (eff. 2024-07-29): concurrent FTC notice for ≥500, third-party-identity content field, ≥2 contact methods incl. in-app, "protecting affected individuals" content strengthened. (V4-H3.) |
 | 1.2     | 2026-06-28 | Generalized the third-party AI references from Gemini-only to the user-chosen provider (Gemini default; Anthropic/OpenAI/xAI optional) after the multi-provider AI change. (Gap-audit H2.) |
+| 1.3     | 2026-09-30 | In-app notice channel implemented (`breachNotice` in `app_data.json` → `BreachNoticeGate`); privacy policy now hosted at `/MHAD/privacy.html`, resolving the hosted-URL TODO. Developer contact block below is still unfilled. (V4-H3.) |

@@ -1768,4 +1768,28 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get consentChoiceAgentDecidesDescription =>
       'Authorize your agent to consent or refuse on your behalf.';
+
+  @override
+  String get breachNoticeDefaultTitle => 'Notice of a data security incident';
+
+  @override
+  String get breachNoticeWhatHappened => 'What happened';
+
+  @override
+  String get breachNoticeInformationInvolved => 'What information was involved';
+
+  @override
+  String get breachNoticeThirdParties => 'Who obtained the information';
+
+  @override
+  String get breachNoticeWhatWeAreDoing => 'What we are doing';
+
+  @override
+  String get breachNoticeWhatYouCanDo => 'What you can do';
+
+  @override
+  String get breachNoticeContactUs => 'How to contact us';
+
+  @override
+  String get breachNoticeAcknowledge => 'I have read this notice';
 }

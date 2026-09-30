@@ -2,6 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart' show rootBundle;
 
+import 'package:mhad/data/app_data/breach_notice.dart';
+
+export 'package:mhad/data/app_data/breach_notice.dart';
+
 /// A single contact / resource entry (crisis line, advocacy org, etc.).
 class ContactEntry {
   final String name;
@@ -327,6 +331,10 @@ class AppData {
   final Map<String, String> dated;
   final Map<String, String> facts;
 
+  /// Active FTC HBNR breach notice, or null (the normal state). See
+  /// [BreachNotice] and `docs/BREACH_PLAN.md`.
+  final BreachNotice? breachNotice;
+
   const AppData({
     required this.contacts,
     required this.referralPartners,
@@ -336,6 +344,7 @@ class AppData {
     this.config = const AppConfig(),
     this.dated = const {},
     this.facts = const {},
+    this.breachNotice,
   });
 
   /// Public privacy-policy URL (must match the Play Console + developer site).
@@ -397,6 +406,7 @@ class AppData {
           (json['config'] as Map?)?.cast<String, dynamic>() ?? const {}),
       dated: _stringMap(json['dated']),
       facts: _stringMap(json['facts']),
+      breachNotice: BreachNotice.fromJson(json['breachNotice']),
     );
   }
 

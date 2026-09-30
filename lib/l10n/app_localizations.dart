@@ -3163,6 +3163,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Authorize your agent to consent or refuse on your behalf.'**
   String get consentChoiceAgentDecidesDescription;
+
+  /// Fallback title of the FTC Health Breach Notification Rule in-app notice (legal copy: human review before translating).
+  ///
+  /// In en, this message translates to:
+  /// **'Notice of a data security incident'**
+  String get breachNoticeDefaultTitle;
+
+  /// No description provided for @breachNoticeWhatHappened.
+  ///
+  /// In en, this message translates to:
+  /// **'What happened'**
+  String get breachNoticeWhatHappened;
+
+  /// No description provided for @breachNoticeInformationInvolved.
+  ///
+  /// In en, this message translates to:
+  /// **'What information was involved'**
+  String get breachNoticeInformationInvolved;
+
+  /// No description provided for @breachNoticeThirdParties.
+  ///
+  /// In en, this message translates to:
+  /// **'Who obtained the information'**
+  String get breachNoticeThirdParties;
+
+  /// No description provided for @breachNoticeWhatWeAreDoing.
+  ///
+  /// In en, this message translates to:
+  /// **'What we are doing'**
+  String get breachNoticeWhatWeAreDoing;
+
+  /// No description provided for @breachNoticeWhatYouCanDo.
+  ///
+  /// In en, this message translates to:
+  /// **'What you can do'**
+  String get breachNoticeWhatYouCanDo;
+
+  /// No description provided for @breachNoticeContactUs.
+  ///
+  /// In en, this message translates to:
+  /// **'How to contact us'**
+  String get breachNoticeContactUs;
+
+  /// No description provided for @breachNoticeAcknowledge.
+  ///
+  /// In en, this message translates to:
+  /// **'I have read this notice'**
+  String get breachNoticeAcknowledge;
 }
 
 class _AppLocalizationsDelegate

@@ -662,5 +662,16 @@
   "consentChoiceConditionsLabel": "Conditions",
   "consentChoiceNoConsentTitle": "I do not consent",
   "consentChoiceAgentDecidesTitle": "My agent will decide",
-  "consentChoiceAgentDecidesDescription": "Authorize your agent to consent or refuse on your behalf."
+  "consentChoiceAgentDecidesDescription": "Authorize your agent to consent or refuse on your behalf.",
+  "breachNoticeDefaultTitle": "Notice of a data security incident",
+  "@breachNoticeDefaultTitle": {
+    "description": "Fallback title of the FTC Health Breach Notification Rule in-app notice (legal copy: human review before translating)."
+  },
+  "breachNoticeWhatHappened": "What happened",
+  "breachNoticeInformationInvolved": "What information was involved",
+  "breachNoticeThirdParties": "Who obtained the information",
+  "breachNoticeWhatWeAreDoing": "What we are doing",
+  "breachNoticeWhatYouCanDo": "What you can do",
+  "breachNoticeContactUs": "How to contact us",
+  "breachNoticeAcknowledge": "I have read this notice"
 }
