@@ -48,6 +48,11 @@ jobs:
       - name: Test
         run: flutter test
 
+      # web/privacy.html (the hosted privacy policy, V4-H3/H4) is generated
+      # from the in-app PrivacyPolicyScreen; fail if someone edited one side.
+      - name: Hosted privacy policy is in sync
+        run: python3 tool/gen_privacy_html.py --check
+
       - name: Build web
         # `--pwa-strategy=none` makes Flutter generate a flutter_bootstrap.js
         # that registers NO service worker (verified honored on 3.41.4: the

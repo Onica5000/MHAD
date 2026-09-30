@@ -4268,7 +4268,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get privacyPolicyInAccordanceWithTheFtc =>
-      'In accordance with the FTC Health Breach Notification Rule, if any unauthorized disclosure of your health information occurs through a security breach, we will notify affected users within 60 calendar days of discovering the breach.\n\nBecause this app stores data locally on your device and does not maintain a server-side database, breach risk is limited to the optional AI features. If your chosen AI provider notifies us of a breach affecting data sent through the app, we will pass that notification along through app store updates and in-app notices.';
+      'In accordance with the FTC Health Breach Notification Rule, if any unauthorized disclosure of your health information occurs through a security breach, we will notify affected users within 60 calendar days of discovering the breach.\n\nBecause this app stores data locally on your device and does not maintain a server-side database, breach risk is limited to the optional AI features. If your chosen AI provider notifies us of a breach affecting data sent through the app, we will pass that notification along through an in-app notice and a posting on the hosted privacy policy page.';
 
   @override
   String get privacyPolicyContact => 'Contact';
@@ -5725,7 +5725,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String privacyPolicyYouCanReachTheDeveloper(Object privacyPolicyUrl) {
-    return 'You can reach the developer through any of the following (the FTC Health Breach Notification Rule requires at least two contact methods — we provide three):\n\n  - In-app: an in-app breach notice will be shown on next launch if a breach affects you.\n  - Online: $privacyPolicyUrl (also used for breach postings if direct contact information is insufficient).\n  - App store listing: the developer support address shown on the Google Play / App Store product page.';
+    return 'The FTC Health Breach Notification Rule requires at least two contact methods. We provide:\n\n  - In-app: an in-app breach notice will be shown the next time you open the app if a breach affects you.\n  - Online: $privacyPolicyUrl (also used for breach postings if direct contact information is insufficient).';
   }
 
   @override
@@ -6895,4 +6895,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get importNoDirectiveData => 'The file contains no directive data.';
+
+  @override
+  String get breachNoticeDefaultTitle => 'Notice of a data security incident';
+
+  @override
+  String get breachNoticeWhatHappened => 'What happened';
+
+  @override
+  String get breachNoticeInformationInvolved => 'What information was involved';
+
+  @override
+  String get breachNoticeThirdParties => 'Who obtained the information';
+
+  @override
+  String get breachNoticeWhatWeAreDoing => 'What we are doing';
+
+  @override
+  String get breachNoticeWhatYouCanDo => 'What you can do';
+
+  @override
+  String get breachNoticeContactUs => 'How to contact us';
+
+  @override
+  String get breachNoticeAcknowledge => 'I have read this notice';
 }

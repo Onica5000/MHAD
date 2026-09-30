@@ -1601,7 +1601,7 @@
   "privacyPolicyHipaaCompliance": "HIPAA & Compliance",
   "privacyPolicyThisAppIsNotHipaa": "This app is NOT HIPAA-compliant. It is not a covered entity or business associate under HIPAA. The app is intended for personal use by individuals preparing their own mental health advance directives.\n\nWhile this app implements privacy measures aligned with GDPR, CCPA, and MHMDA principles (as described above), it has not been independently audited or certified for compliance with these regulations. If you require verified regulatory compliance, consult with a privacy professional before use.",
   "privacyPolicyBreachNotification": "Breach Notification",
-  "privacyPolicyInAccordanceWithTheFtc": "In accordance with the FTC Health Breach Notification Rule, if any unauthorized disclosure of your health information occurs through a security breach, we will notify affected users within 60 calendar days of discovering the breach.\n\nBecause this app stores data locally on your device and does not maintain a server-side database, breach risk is limited to the optional AI features. If your chosen AI provider notifies us of a breach affecting data sent through the app, we will pass that notification along through app store updates and in-app notices.",
+  "privacyPolicyInAccordanceWithTheFtc": "In accordance with the FTC Health Breach Notification Rule, if any unauthorized disclosure of your health information occurs through a security breach, we will notify affected users within 60 calendar days of discovering the breach.\n\nBecause this app stores data locally on your device and does not maintain a server-side database, breach risk is limited to the optional AI features. If your chosen AI provider notifies us of a breach affecting data sent through the app, we will pass that notification along through an in-app notice and a posting on the hosted privacy policy page.",
   "privacyPolicyContact": "Contact",
   "settingsBrightness": "Brightness",
   "settingsScreenshotProtection": "Screenshot Protection",
@@ -2249,7 +2249,7 @@
       "privacyPolicyVersion": {"type": "Object"}
     }
   },
-  "privacyPolicyYouCanReachTheDeveloper": "You can reach the developer through any of the following (the FTC Health Breach Notification Rule requires at least two contact methods — we provide three):\n\n  - In-app: an in-app breach notice will be shown on next launch if a breach affects you.\n  - Online: {privacyPolicyUrl} (also used for breach postings if direct contact information is insufficient).\n  - App store listing: the developer support address shown on the Google Play / App Store product page.",
+  "privacyPolicyYouCanReachTheDeveloper": "The FTC Health Breach Notification Rule requires at least two contact methods. We provide:\n\n  - In-app: an in-app breach notice will be shown the next time you open the app if a breach affects you.\n  - Online: {privacyPolicyUrl} (also used for breach postings if direct contact information is insufficient).",
   "@privacyPolicyYouCanReachTheDeveloper": {
     "placeholders": {
       "privacyPolicyUrl": {"type": "Object"}
@@ -2868,5 +2868,16 @@
   "importNotDirectiveFile": "This is not a directive file.",
   "importNotMhadFile": "This is not an MHAD directive file.",
   "importNewerVersion": "This file was made by a newer version of the app. Please update to open it.",
-  "importNoDirectiveData": "The file contains no directive data."
+  "importNoDirectiveData": "The file contains no directive data.",
+  "breachNoticeDefaultTitle": "Notice of a data security incident",
+  "@breachNoticeDefaultTitle": {
+    "description": "Fallback title of the FTC Health Breach Notification Rule in-app notice (legal copy: human review before translating)."
+  },
+  "breachNoticeWhatHappened": "What happened",
+  "breachNoticeInformationInvolved": "What information was involved",
+  "breachNoticeThirdParties": "Who obtained the information",
+  "breachNoticeWhatWeAreDoing": "What we are doing",
+  "breachNoticeWhatYouCanDo": "What you can do",
+  "breachNoticeContactUs": "How to contact us",
+  "breachNoticeAcknowledge": "I have read this notice"
 }

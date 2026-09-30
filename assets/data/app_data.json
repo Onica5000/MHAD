@@ -23,7 +23,7 @@
     }
   },
   "urls": {
-    "privacyPolicy": "https://onica5000.github.io/mhad/privacy",
+    "privacyPolicy": "https://onica5000.github.io/MHAD/privacy.html",
     "geminiApiKeyManagement": "https://aistudio.google.com/apikey"
   },
   "config": {
@@ -70,8 +70,8 @@
   "dated": {
     "_note": "Date/version-stamped facts shown to users that go stale. VERIFY tier — confirm before changing.",
     "autonomy": "verify",
-    "privacyPolicyVersion": "v1.1",
-    "privacyPolicyUpdated": "May 2026",
+    "privacyPolicyVersion": "v1.2",
+    "privacyPolicyUpdated": "September 2026",
     "playStoreRulesAsOf": "Jan 2026"
   },
   "facts": {
@@ -219,5 +219,18 @@
       "contact": "nrcPad",
       "sub": "State-specific PAD information"
     }
-  ]
+  ],
+  "breachNotice": {
+    "_note": "FTC Health Breach Notification Rule (16 CFR 318) in-app notice; see docs/BREACH_PLAN.md. Leave 'id' EMPTY when there is no active notice (the normal state); an empty id is never shown. To publish: fill every field, set a new unique id (e.g. '2026-10-01-ai-provider'), list at least one contact method besides this in-app notice, and push to main (deploys to web). Each user sees it until they acknowledge that id.",
+    "autonomy": "verify",
+    "id": "",
+    "date": "",
+    "title": "",
+    "whatHappened": "",
+    "informationInvolved": "",
+    "thirdParties": "",
+    "whatWeAreDoing": "",
+    "whatYouCanDo": "",
+    "contactMethods": []
+  }
 }

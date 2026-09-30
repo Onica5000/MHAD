@@ -7499,7 +7499,7 @@ abstract class AppLocalizations {
   /// No description provided for @privacyPolicyInAccordanceWithTheFtc.
   ///
   /// In en, this message translates to:
-  /// **'In accordance with the FTC Health Breach Notification Rule, if any unauthorized disclosure of your health information occurs through a security breach, we will notify affected users within 60 calendar days of discovering the breach.\n\nBecause this app stores data locally on your device and does not maintain a server-side database, breach risk is limited to the optional AI features. If your chosen AI provider notifies us of a breach affecting data sent through the app, we will pass that notification along through app store updates and in-app notices.'**
+  /// **'In accordance with the FTC Health Breach Notification Rule, if any unauthorized disclosure of your health information occurs through a security breach, we will notify affected users within 60 calendar days of discovering the breach.\n\nBecause this app stores data locally on your device and does not maintain a server-side database, breach risk is limited to the optional AI features. If your chosen AI provider notifies us of a breach affecting data sent through the app, we will pass that notification along through an in-app notice and a posting on the hosted privacy policy page.'**
   String get privacyPolicyInAccordanceWithTheFtc;
 
   /// No description provided for @privacyPolicyContact.
@@ -9868,7 +9868,7 @@ abstract class AppLocalizations {
   /// No description provided for @privacyPolicyYouCanReachTheDeveloper.
   ///
   /// In en, this message translates to:
-  /// **'You can reach the developer through any of the following (the FTC Health Breach Notification Rule requires at least two contact methods — we provide three):\n\n  - In-app: an in-app breach notice will be shown on next launch if a breach affects you.\n  - Online: {privacyPolicyUrl} (also used for breach postings if direct contact information is insufficient).\n  - App store listing: the developer support address shown on the Google Play / App Store product page.'**
+  /// **'The FTC Health Breach Notification Rule requires at least two contact methods. We provide:\n\n  - In-app: an in-app breach notice will be shown the next time you open the app if a breach affects you.\n  - Online: {privacyPolicyUrl} (also used for breach postings if direct contact information is insufficient).'**
   String privacyPolicyYouCanReachTheDeveloper(Object privacyPolicyUrl);
 
   /// No description provided for @settingsScreenshotsAreBlocked.
@@ -11658,6 +11658,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The file contains no directive data.'**
   String get importNoDirectiveData;
+
+  /// Fallback title of the FTC Health Breach Notification Rule in-app notice (legal copy: human review before translating).
+  ///
+  /// In en, this message translates to:
+  /// **'Notice of a data security incident'**
+  String get breachNoticeDefaultTitle;
+
+  /// No description provided for @breachNoticeWhatHappened.
+  ///
+  /// In en, this message translates to:
+  /// **'What happened'**
+  String get breachNoticeWhatHappened;
+
+  /// No description provided for @breachNoticeInformationInvolved.
+  ///
+  /// In en, this message translates to:
+  /// **'What information was involved'**
+  String get breachNoticeInformationInvolved;
+
+  /// No description provided for @breachNoticeThirdParties.
+  ///
+  /// In en, this message translates to:
+  /// **'Who obtained the information'**
+  String get breachNoticeThirdParties;
+
+  /// No description provided for @breachNoticeWhatWeAreDoing.
+  ///
+  /// In en, this message translates to:
+  /// **'What we are doing'**
+  String get breachNoticeWhatWeAreDoing;
+
+  /// No description provided for @breachNoticeWhatYouCanDo.
+  ///
+  /// In en, this message translates to:
+  /// **'What you can do'**
+  String get breachNoticeWhatYouCanDo;
+
+  /// No description provided for @breachNoticeContactUs.
+  ///
+  /// In en, this message translates to:
+  /// **'How to contact us'**
+  String get breachNoticeContactUs;
+
+  /// No description provided for @breachNoticeAcknowledge.
+  ///
+  /// In en, this message translates to:
+  /// **'I have read this notice'**
+  String get breachNoticeAcknowledge;
 }
 
 class _AppLocalizationsDelegate

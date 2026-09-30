@@ -18,6 +18,7 @@ import 'package:mhad/services/privacy_mode_service.dart';
 import 'package:mhad/services/public_session_cache.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/breach_notice_gate.dart';
 import 'package:mhad/ui/widgets/design/responsive_shell.dart';
 import 'package:mhad/utils/platform_utils.dart';
 import 'package:mhad/utils/unsaved_guard.dart';
@@ -32,21 +33,24 @@ void main() {
   // Catch async errors not handled by Flutter.
   // ensureInitialized and runApp must be called in the SAME zone to avoid
   // the "Zone mismatch" fatal error.
-  runZonedGuarded(() async {
-    WidgetsFlutterBinding.ensureInitialized();
+  runZonedGuarded(
+    () async {
+      WidgetsFlutterBinding.ensureInitialized();
 
-    try {
-      await _bootstrap();
-    } catch (error, stack) {
-      // A required startup load failed (asset, storage, secure keystore).
-      // Show an explanation + retry instead of stranding the user on a
-      // blank frame.
-      debugPrint('Startup failed: $error\n$stack');
-      runApp(_BootErrorApp(error));
-    }
-  }, (error, stack) {
-    debugPrint('Unhandled async error: $error\n$stack');
-  });
+      try {
+        await _bootstrap();
+      } catch (error, stack) {
+        // A required startup load failed (asset, storage, secure keystore).
+        // Show an explanation + retry instead of stranding the user on a
+        // blank frame.
+        debugPrint('Startup failed: $error\n$stack');
+        runApp(_BootErrorApp(error));
+      }
+    },
+    (error, stack) {
+      debugPrint('Unhandled async error: $error\n$stack');
+    },
+  );
 }
 
 /// Runs every pre-frame load and calls [runApp]. All loads below must
@@ -82,12 +86,20 @@ Future<void> _bootstrap() async {
     ]);
   }
 
-  await Future.wait<void>(
-      [appDataLoad, educationalLoad, disclaimerLoad, onboardingLoad]);
+  await Future.wait<void>([
+    appDataLoad,
+    educationalLoad,
+    disclaimerLoad,
+    onboardingLoad,
+  ]);
   final disclaimerNotifier = await disclaimerLoad;
   final onboardingNotifier = await onboardingLoad;
   final dbEncryptionKey = await dbKeyLoad;
   final cachedAiPrefs = await cachedAiPrefsLoad;
+  // FTC HBNR in-app breach notice (V4-H3): needs AppData loaded first.
+  final breachNoticeAcknowledged = await BreachNoticeGate.loadAcknowledged(
+    AppData.instance.breachNotice,
+  );
 
   // Privacy mode starts fresh every launch (not persisted)
   final privacyModeNotifier = PrivacyModeNotifier();
@@ -98,21 +110,23 @@ Future<void> _bootstrap() async {
   // Non-fatal background init
   await NotificationService.instance.initialize();
 
-  runApp(ProviderScope(
-    overrides: [
-      // Expose the same PrivacyModeNotifier instance to Riverpod so that
-      // appDatabaseProvider can watch its mode changes.
-      privacyModeNotifierProvider.overrideWith((_) => privacyModeNotifier),
-      // Inject the database encryption key so appDatabaseProvider can use it
-      // to open the SQLCipher-encrypted database in private mode.
-      dbEncryptionKeyProvider.overrideWithValue(dbEncryptionKey),
-      // Pre-loaded AI prefs from SharedPreferences cache (avoids async race
-      // on web page reload).
-      if (cachedAiPrefs != null)
-        preloadedAiPrefsProvider.overrideWith((_) => cachedAiPrefs),
-    ],
-    child: const MhadApp(),
-  ));
+  runApp(
+    ProviderScope(
+      overrides: [
+        // Expose the same PrivacyModeNotifier instance to Riverpod so that
+        // appDatabaseProvider can watch its mode changes.
+        privacyModeNotifierProvider.overrideWith((_) => privacyModeNotifier),
+        // Inject the database encryption key so appDatabaseProvider can use it
+        // to open the SQLCipher-encrypted database in private mode.
+        dbEncryptionKeyProvider.overrideWithValue(dbEncryptionKey),
+        // Pre-loaded AI prefs from SharedPreferences cache (avoids async race
+        // on web page reload).
+        if (cachedAiPrefs != null)
+          preloadedAiPrefsProvider.overrideWith((_) => cachedAiPrefs),
+      ],
+      child: MhadApp(breachNoticeAcknowledged: breachNoticeAcknowledged),
+    ),
+  );
 }
 
 /// Fallback UI when a required startup load throws — explains the failure
@@ -140,8 +154,7 @@ class _BootErrorApp extends StatelessWidget {
                   const SizedBox(height: 16),
                   const Text(
                     "The app couldn't start",
-                    style: TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.w600),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 8),
@@ -151,10 +164,7 @@ class _BootErrorApp extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 24),
-                  FilledButton(
-                    onPressed: main,
-                    child: const Text('Try again'),
-                  ),
+                  FilledButton(onPressed: main, child: const Text('Try again')),
                 ],
               ),
             ),
@@ -166,7 +176,10 @@ class _BootErrorApp extends StatelessWidget {
 }
 
 class MhadApp extends ConsumerWidget {
-  const MhadApp({super.key});
+  /// Whether the active breach notice (if any) was already acknowledged.
+  final bool breachNoticeAcknowledged;
+
+  const MhadApp({super.key, this.breachNoticeAcknowledged = false});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -182,8 +195,9 @@ class MhadApp extends ConsumerWidget {
     // armed it. `select` keeps this from rebuilding the app on every save.
     if (kIsWeb) {
       ref.listen(
-        allDirectivesProvider.select((av) =>
-            av.maybeWhen(data: (l) => l.isNotEmpty, orElse: () => false)),
+        allDirectivesProvider.select(
+          (av) => av.maybeWhen(data: (l) => l.isNotEmpty, orElse: () => false),
+        ),
         (_, hasData) => setUnsavedGuard(hasData),
       );
     }
@@ -218,8 +232,10 @@ class MhadApp extends ConsumerWidget {
       // Honor the user's chosen language from accessibility settings — but
       // fall back to system locale if the chosen one isn't in the supported
       // list (avoids breaking on legacy codes).
-      locale: AppLocalizations.supportedLocales
-              .any((l) => l.languageCode == locale.languageCode)
+      locale:
+          AppLocalizations.supportedLocales.any(
+            (l) => l.languageCode == locale.languageCode,
+          )
           ? locale
           : null,
       builder: (context, child) {
@@ -262,8 +278,9 @@ class MhadApp extends ConsumerWidget {
               // Crisis access on wide screens is the sidebar's crisis card; on
               // mobile it lives in the "More" sheet. (The floating
               // GlobalCrisisButton was removed 2026-06-22.)
-              child: ResponsiveShell(
-                child: child ?? const SizedBox.shrink(),
+              child: BreachNoticeGate(
+                initiallyAcknowledged: breachNoticeAcknowledged,
+                child: ResponsiveShell(child: child ?? const SizedBox.shrink()),
               ),
             ),
           ),
