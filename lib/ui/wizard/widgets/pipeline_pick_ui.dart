@@ -12,7 +12,7 @@ part of 'document_pipeline_flow.dart';
 extension _PipelinePickUi on _PipelineScreenState {
   Widget _buildPickStep() {
     final p = Theme.of(context).mhadPalette;
-    final hasKey = ref.watch(apiKeyProvider).valueOrNull?.isNotEmpty == true;
+    final hasKey = ref.watch(apiKeyProvider).value?.isNotEmpty == true;
     // Watch (not read) so the kept-documents tray rebuilds as docs are added/
     // removed and stays in sync across navigation back to this page.
     final kept = ref.watch(keptDocumentsProvider);

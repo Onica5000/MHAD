@@ -88,7 +88,7 @@ class _LearnAiPanelState extends ConsumerState<LearnAiPanel> {
     final p = Theme.of(context).mhadPalette;
     final messages = ref.watch(conversationProvider);
     final isSending = ref.watch(isSendingProvider);
-    final hasKey = ref.watch(apiKeyProvider).valueOrNull?.isNotEmpty ?? false;
+    final hasKey = ref.watch(apiKeyProvider).value?.isNotEmpty ?? false;
 
     return Container(
       width: 340,

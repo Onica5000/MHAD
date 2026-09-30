@@ -60,14 +60,14 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
   /// Pre-fill the key field with the stored key for [p] (private mode only; in
   /// ephemeral mode the key isn't surfaced back into the field).
   void _prefillKeyFor(AiProvider p) {
-    final existing = ref.read(aiPrefsProvider).valueOrNull?.keys[p];
+    final existing = ref.read(aiPrefsProvider).value?.keys[p];
     _keyCtrl.text = (!_isEphemeral && existing != null) ? existing : '';
   }
 
   void _onProviderChanged(AiProvider p) {
     setState(() {
       _provider = p;
-      _model = ref.read(aiPrefsProvider).valueOrNull?.modelFor(p) ??
+      _model = ref.read(aiPrefsProvider).value?.modelFor(p) ??
           p.defaultModel;
       _prefillKeyFor(p);
       _obscure = true;
@@ -247,7 +247,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
     final cs = Theme.of(context).colorScheme;
     // Whether the SELECTED provider (not necessarily the active one) has a key.
     final hasKey =
-        ref.watch(aiPrefsProvider).valueOrNull?.keys[_provider]?.isNotEmpty ??
+        ref.watch(aiPrefsProvider).value?.keys[_provider]?.isNotEmpty ??
             false;
 
     return Scaffold(

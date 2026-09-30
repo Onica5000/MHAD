@@ -19,7 +19,7 @@ class ToolsGrid extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final p = Theme.of(context).mhadPalette;
     final aiReady =
-        ref.watch(apiKeyProvider).valueOrNull?.isNotEmpty ?? false;
+        ref.watch(apiKeyProvider).value?.isNotEmpty ?? false;
     final directivesAsync = ref.watch(allDirectivesProvider);
     final mostRecentDirective = directivesAsync.maybeWhen(
       data: (ds) {

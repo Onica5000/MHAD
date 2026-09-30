@@ -38,7 +38,7 @@ void main() {
 
     await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
 
-    await db.close();
+    await closeDb(tester, db);
   });
 
   testWidgets('Home screen meets labeled tap target guideline',
@@ -49,7 +49,7 @@ void main() {
 
     await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
 
-    await db.close();
+    await closeDb(tester, db);
   });
 
   testWidgets('Home screen meets text contrast guideline', (tester) async {
@@ -59,7 +59,7 @@ void main() {
 
     await expectLater(tester, meetsGuideline(textContrastGuideline));
 
-    await db.close();
+    await closeDb(tester, db);
   });
 
   // V4-H6/M9 — extend a11y coverage beyond home. The disclaimer is the
@@ -77,7 +77,7 @@ void main() {
 
     await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
 
-    await db.close();
+    await closeDb(tester, db);
   });
 
   testWidgets('Disclaimer (gate) meets text contrast guideline',
@@ -93,7 +93,7 @@ void main() {
 
     await expectLater(tester, meetsGuideline(textContrastGuideline));
 
-    await db.close();
+    await closeDb(tester, db);
   });
 
   testWidgets('Disclaimer (gate) meets labeled tap target guideline',
@@ -109,7 +109,7 @@ void main() {
 
     await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
 
-    await db.close();
+    await closeDb(tester, db);
   });
 
   // Sweep the rest of the top-level destinations against the three a11y
@@ -128,7 +128,7 @@ void main() {
 
     await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
 
-    await db.close();
+    await closeDb(tester, db);
   }
 
   Future<void> testScreenAndroid(
@@ -143,7 +143,7 @@ void main() {
 
     await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
 
-    await db.close();
+    await closeDb(tester, db);
   }
 
   Future<void> testScreenContrast(
@@ -158,7 +158,7 @@ void main() {
 
     await expectLater(tester, meetsGuideline(textContrastGuideline));
 
-    await db.close();
+    await closeDb(tester, db);
   }
 
   testWidgets('Settings meets labeled tap target guideline', (tester) async {
@@ -191,7 +191,7 @@ void main() {
     await tester.pumpWidget(buildApp(db));
     await tester.pumpAndSettle();
     await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
-    await db.close();
+    await closeDb(tester, db);
   });
 
   testWidgets('Assistant screen meets labeled tap target guideline',
@@ -202,7 +202,7 @@ void main() {
     appRouter.go(AppRoutes.assistant);
     await tester.pumpAndSettle();
     await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
-    await db.close();
+    await closeDb(tester, db);
   });
 
   // Android tap-target sweep — every top-level destination must have all
@@ -256,7 +256,7 @@ void main() {
     await tester.pumpWidget(buildApp(db));
     await tester.pumpAndSettle();
     await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
-    await db.close();
+    await closeDb(tester, db);
   });
   testWidgets('Mode selection meets text contrast guideline',
       (tester) async {
@@ -269,7 +269,7 @@ void main() {
     await tester.pumpWidget(buildApp(db));
     await tester.pumpAndSettle();
     await expectLater(tester, meetsGuideline(textContrastGuideline));
-    await db.close();
+    await closeDb(tester, db);
   });
 
   // Note on the wizard / wizard-complete / export screens:
@@ -285,4 +285,13 @@ void main() {
   //   carries a `tooltip:` parameter. The labeled-tap-target sweep above
   //   covers every other top-level destination on which a end user actually
   //   spends the majority of their time.
+}
+
+/// Unmount before closing. Under Riverpod 3, providers behind the visible
+/// route are paused, so a Drift watch stream they hold never finishes
+/// cancelling and close() would wait forever.
+Future<void> closeDb(WidgetTester tester, AppDatabase db) async {
+  await tester.pumpWidget(const SizedBox());
+  await tester.pump(const Duration(seconds: 1));
+  await db.close();
 }

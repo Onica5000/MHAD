@@ -44,7 +44,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(currentPath(), '/disclaimer');
-    await db.close();
+    await closeDb(tester, db);
   });
 
   testWidgets('accepted disclaimer + no mode redirects to /mode (mobile)',
@@ -61,7 +61,7 @@ void main() {
     // kIsWeb is false in this VM test — the router only auto-selects
     // public mode on web. On non-web with no mode selected, expect /mode.
     expect(currentPath(), '/mode');
-    await db.close();
+    await closeDb(tester, db);
   });
 
   testWidgets('accepted disclaimer + public mode lands on /', (tester) async {
@@ -75,7 +75,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(currentPath(), '/');
-    await db.close();
+    await closeDb(tester, db);
   });
 
   testWidgets('bottom nav "Learn" tab navigates to /education',
@@ -100,6 +100,15 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(currentPath(), '/education');
-    await db.close();
+    await closeDb(tester, db);
   });
+}
+
+/// Unmount before closing. Under Riverpod 3, providers behind the visible
+/// route are paused, so a Drift watch stream they hold never finishes
+/// cancelling and close() would wait forever.
+Future<void> closeDb(WidgetTester tester, AppDatabase db) async {
+  await tester.pumpWidget(const SizedBox());
+  await tester.pump(const Duration(seconds: 1));
+  await db.close();
 }

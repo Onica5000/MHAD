@@ -45,7 +45,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get badgeAiReady => 'LISTO';
 
   @override
-  String get badgeAiSetUp => 'CONFIGURAR';
+  String get badgeAiSetUp => 'ACTIVAR';
 
   @override
   String get newDirective => 'Nueva Directiva';

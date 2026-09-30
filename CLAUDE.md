@@ -60,7 +60,7 @@ lib/
 ```
 
 ## Key Packages
-- **State**: flutter_riverpod + riverpod_annotation (code gen with riverpod_generator)
+- **State**: flutter_riverpod 3 (hand-written providers; `StateProvider`/`StateNotifierProvider`/`ChangeNotifierProvider` come from `package:flutter_riverpod/legacy.dart`). Auto-retry is disabled at the root `ProviderScope` (`retry: (_, _) => null`).
 - **Database**: drift + sqlcipher_flutter_libs (encrypted SQLite; code gen — run build_runner after schema changes)
 - **Navigation**: go_router
 - **AI**: multi-provider (BYO key) via `LlmClient` — Google Gemini (default, `google_generative_ai`), Anthropic Claude, OpenAI, xAI Grok (REST)

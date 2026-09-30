@@ -153,7 +153,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
-    final hasKey = ref.watch(apiKeyProvider).valueOrNull?.isNotEmpty == true;
+    final hasKey = ref.watch(apiKeyProvider).value?.isNotEmpty == true;
 
     return Scaffold(
       backgroundColor: p.scaffoldBackground,

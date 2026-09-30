@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mhad/ai/ai_assistant.dart';
 import 'package:mhad/ai/ai_context_builder.dart';
@@ -33,7 +34,7 @@ class _PrivateAiNotifier extends StateNotifier<AsyncValue<AiPrefs>> {
     _load();
   }
 
-  AiPrefs get _current => state.valueOrNull ?? AiPrefs.initial;
+  AiPrefs get _current => state.value ?? AiPrefs.initial;
 
   Future<void> _load() async {
     try {
@@ -147,11 +148,11 @@ final aiPrefsProvider = Provider<AsyncValue<AiPrefs>>((ref) {
 
 /// The currently-selected provider (defaults to Gemini).
 final activeProviderProvider = Provider<AiProvider>((ref) =>
-    ref.watch(aiPrefsProvider).valueOrNull?.provider ?? AiProvider.gemini);
+    ref.watch(aiPrefsProvider).value?.provider ?? AiProvider.gemini);
 
 /// The model id for the active provider.
 final activeModelProvider = Provider<String>((ref) =>
-    ref.watch(aiPrefsProvider).valueOrNull?.activeModel ?? appData.ai.model);
+    ref.watch(aiPrefsProvider).value?.activeModel ?? appData.ai.model);
 
 /// The API key for the active provider (kept as the historical "do we have a
 /// key?" signal across the app).
@@ -164,7 +165,7 @@ final apiKeyProvider = Provider<AsyncValue<String?>>(
 typedef AiConfig = ({AiProvider provider, String model, String key});
 
 final aiConfigProvider = Provider<AiConfig?>((ref) {
-  final prefs = ref.watch(aiPrefsProvider).valueOrNull;
+  final prefs = ref.watch(aiPrefsProvider).value;
   final key = prefs?.activeKey;
   if (prefs == null || key == null || key.isEmpty) return null;
   return (provider: prefs.provider, model: prefs.activeModel, key: key);

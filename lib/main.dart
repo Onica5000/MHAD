@@ -113,6 +113,10 @@ Future<void> _bootstrap() async {
 
   runApp(
     ProviderScope(
+      // Riverpod 3 retries failed providers with backoff by default. Keep the
+      // v2 behavior: a failure surfaces once, so AI / network lookups are
+      // never re-fired behind the user's back (the UI offers explicit retry).
+      retry: (_, _) => null,
       overrides: [
         // Expose the same PrivacyModeNotifier instance to Riverpod so that
         // appDatabaseProvider can watch its mode changes.
@@ -239,17 +243,13 @@ class MhadApp extends ConsumerWidget {
           )
           ? locale
           : null,
-      // Keep package:intl (DateFormat in lib/utils/date_format.dart) in step
-      // with the resolved UI language so dates are localized too.
-      localeResolutionCallback: (requested, supported) {
-        final resolved = supported.firstWhere(
-          (l) => l.languageCode == requested?.languageCode,
-          orElse: () => supported.first,
-        );
-        Intl.defaultLocale = resolved.languageCode;
-        return resolved;
-      },
       builder: (context, child) {
+        // Keep package:intl (DateFormat in lib/utils/date_format.dart) in step
+        // with the UI language. Set here, below Localizations: that subtree
+        // only builds once the delegates have loaded intl's date symbols.
+        // Setting it earlier (e.g. in localeResolutionCallback) made the first
+        // DateFormat on web throw "Incorrect locale information provided".
+        Intl.defaultLocale = Localizations.localeOf(context).languageCode;
         final mq = MediaQuery.of(context);
         return MediaQuery(
           // Apply the accessibility text-scale on top of the platform's own

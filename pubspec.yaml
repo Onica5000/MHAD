@@ -13,8 +13,7 @@ dependencies:
     sdk: flutter
 
   # State management
-  flutter_riverpod: ^2.6.1
-  riverpod_annotation: ^2.6.1
+  flutter_riverpod: ^3.3.1
 
   # Navigation
   go_router: ^17.5.0
@@ -22,7 +21,7 @@ dependencies:
   # Database (Drift = type-safe SQLite with code generation)
   # sqlcipher_flutter_libs replaces sqlite3_flutter_libs + adds encryption support.
   # We do NOT use drift_flutter (it pulls in sqlite3_flutter_libs causing DEX conflict).
-  drift: ^2.22.0
+  drift: ^2.31.0
   sqlite3: ^2.4.0
   sqlcipher_flutter_libs: ^0.6.8
   path_provider: ^2.1.5
@@ -107,9 +106,8 @@ dev_dependencies:
   flutter_lints: ^6.0.0
 
   # Code generation
-  build_runner: ^2.4.13
-  drift_dev: ^2.22.0
-  riverpod_generator: ^2.6.1
+  build_runner: ^2.15.0
+  drift_dev: ^2.31.0
 
   # App icon generation
   flutter_launcher_icons: ^0.14.1

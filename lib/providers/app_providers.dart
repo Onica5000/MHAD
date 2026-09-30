@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/data/repository/directive_repository.dart';
 import 'package:mhad/services/privacy_mode_service.dart';

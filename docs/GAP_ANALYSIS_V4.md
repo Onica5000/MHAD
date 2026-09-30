@@ -173,6 +173,15 @@ were superseded by regulations that changed *after* they were written.
 - **Status:** `[x]` **DONE** — `lib/ui/strings.dart` / `AppStrings` deleted; the generated
   `AppLocalizations`/ARB is the single mechanism (see CLAUDE.md "Localization"). Per-screen
   ARB migration + `es` coverage continue as ordinary work, but the dead-code drift is gone.
+  **Update 2026-09-30:** every user-facing UI string is in `app_en.arb` (two sweeps, the
+  second a literal-by-literal scan of `lib/`), and `app_es.arb` covers **all** keys.
+  Dates follow the app language (`Intl.defaultLocale`). Intentionally English: the
+  generated PDF / FHIR / CSV content, AI prompts, statute citations, hotline/partner names,
+  the NLM attribution, the admin tool, and the Learn **articles** (the official booklet
+  text in `assets/data/educational_content.json`; Spanish mode says so on the Learn screen).
+  The Spanish is machine-assisted and flagged in-app as awaiting native-speaker review —
+  get that review before promoting Spanish. `test/spanish_smoke_test.dart` renders every
+  screen in Spanish at phone + desktop widths (real fonts) and fails on overflow.
 
 ---
 
@@ -366,13 +375,20 @@ Re-scoped for the web-first pivot (2026-06-20):
 | Priority (web app) | Count | Theme |
 |---|---|---|
 | Critical | 0 | (Both prior Criticals were Play-submission blockers → `deferred — native`.) |
-| High | 2 live | **V4-H6 test coverage** + HBNR/multi-state health-data alignment (H3/H4, largely addressed in privacy copy). H5 → deferred-native. |
-| Medium | 3 | PDF-protection (encrypted-export now exists, [~]), crisis availability (M10), stale docs (M11, in progress). M9 mooted. |
-| Low | 2 live | Facilitation framing, AI consent cadence. (MASVS-R doc + safe_device test noise → DONE 2026-06-30.) |
+| High | 0 live | H6 test coverage, H3/H4 HBNR + state health-data laws → DONE 2026-09-30 (BREACH_PLAN needs the owner's contact details). H5 → deferred-native. |
+| Medium | 0 live | M8 (PDF protection), M10, M11 → DONE. M9 mooted. |
+| Low | 0 live | L12 facilitation / guided sessions → DONE 2026-09-30. |
 | Deferred — native | 3 | V4-C1 (privacy URL), V4-C2 (Play org account), V4-H5 (Apple AI rule) |
 | Closed since V4 | 2 | V4-H7 (orphan `AppStrings` deleted), V4-M9 (draw-to-sign pad dropped) |
 
-**Highest-leverage now:** **V4-H6** (wizard/router widget tests — protects the core asset
+**Update 2026-09-30:** all live items above are closed. Remaining work is outside this
+backlog: a native-speaker review of the Spanish copy, the owner's contact details in
+`BREACH_PLAN.md`, and (optionally) translating the Learn articles. Dependencies were brought
+current on 2026-09-30 (Riverpod 3, go_router 17, drift 2.31, file_picker 13, share_plus 13,
+flutter_secure_storage 11, local_auth 3, notifications 22); `sqlite3` stays on 2.x to match
+`web/sqlite3.wasm`, and `sqlcipher_flutter_libs` (EOL, native-only) is unchanged.
+
+*Historical (2026-06-20):* **Highest-leverage now:** **V4-H6** (wizard/router widget tests — protects the core asset
 and remains the biggest real gap), then **V4-M10** (crisis-time findability — the
 evidence-based #1 failure mode). With native submission deferred, the prior "unblock
 release" Criticals no longer drive priority; doc accuracy (this pass) and test coverage do.

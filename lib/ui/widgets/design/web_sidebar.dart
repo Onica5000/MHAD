@@ -67,7 +67,7 @@ class WebSidebar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final p = Theme.of(context).mhadPalette;
     final aiReady =
-        ref.watch(apiKeyProvider).valueOrNull?.isNotEmpty ?? false;
+        ref.watch(apiKeyProvider).value?.isNotEmpty ?? false;
     // Most-recently-edited directive — the "Download & print" destination
     // (export is a per-directive route).
     final recentId = ref.watch(allDirectivesProvider).maybeWhen(

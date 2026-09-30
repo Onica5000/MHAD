@@ -84,7 +84,7 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
     final key = typedKey.isNotEmpty
         ? typedKey
         : (_provider == AdminAiProvider.gemini
-            ? (ref.read(apiKeyProvider).valueOrNull ?? '')
+            ? (ref.read(apiKeyProvider).value ?? '')
             : '');
     if (key.isEmpty) {
       setState(() => _error =
@@ -146,7 +146,7 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
   Future<void> _refreshModels() async {
     final p = _provider;
     final savedKey =
-        (ref.read(aiPrefsProvider).valueOrNull?.keys[p] ?? '').trim();
+        (ref.read(aiPrefsProvider).value?.keys[p] ?? '').trim();
     final key = savedKey.isNotEmpty ? savedKey : _keyCtrl.text.trim();
     if (key.isEmpty) {
       setState(() => _error =
@@ -191,7 +191,7 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
     // Gemini-specific key (NOT the active provider's) — these call Google's
     // ListModels, so an Anthropic/OpenAI key must never be sent here.
     final savedKey =
-        (ref.read(aiPrefsProvider).valueOrNull?.keys[AdminAiProvider.gemini] ??
+        (ref.read(aiPrefsProvider).value?.keys[AdminAiProvider.gemini] ??
                 '')
             .trim();
     final key = savedKey.isNotEmpty ? savedKey : _keyCtrl.text.trim();

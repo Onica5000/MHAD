@@ -30,7 +30,7 @@ class MhadBottomNav extends ConsumerWidget {
     final p = Theme.of(context).mhadPalette;
     final loc = activeRoute;
     final aiReady =
-        ref.watch(apiKeyProvider).valueOrNull?.isNotEmpty ?? false;
+        ref.watch(apiKeyProvider).value?.isNotEmpty ?? false;
 
     final items = <_NavItem>[
       _NavItem(
