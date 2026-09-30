@@ -23,7 +23,6 @@ import 'package:mhad/ui/widgets/nlm_attribution.dart';
 import 'package:mhad/ui/wizard/widgets/wizard_help_button.dart';
 import 'package:mhad/ui/wizard/wizard_mixins.dart';
 
-
 class DiagnosesStep extends ConsumerStatefulWidget {
   const DiagnosesStep({
     required this.directiveId,
@@ -52,6 +51,8 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
   final _docNameCtrl = TextEditingController();
   final _docSpecialtyCtrl = TextEditingController();
   final _docPhoneCtrl = TextEditingController();
+
+  Stream<List<DiagnosisEntry>>? _diagnosesStream;
 
   // NPI provider lookup for the doctor-name field.
   final _docDebouncer = Debouncer(delay: const Duration(milliseconds: 400));
@@ -137,8 +138,10 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
     }
     // Per-session AI consent gate.
     if (!ref.read(aiConsentGivenProvider)) {
-      final ok = await showAiConsentDialog(context,
-          provider: ref.read(activeProviderProvider));
+      final ok = await showAiConsentDialog(
+        context,
+        provider: ref.read(activeProviderProvider),
+      );
       if (!ok || !mounted) return;
       ref.read(aiConsentGivenProvider.notifier).state = true;
     }
@@ -167,8 +170,11 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
     final assistant = ref.read(aiAssistantProvider);
     if (assistant is! GeminiApiAssistant) return const [];
     final names = await assistant.suggestConditionTerms(description);
-    ref.read(geminiRateTrackerProvider).recordRequest(
-        estimatedTokens: GeminiRateTracker.estimateTokens(description.length));
+    ref
+        .read(geminiRateTrackerProvider)
+        .recordRequest(
+          estimatedTokens: GeminiRateTracker.estimateTokens(description.length),
+        );
     if (names.isEmpty) return const [];
     final out = <IcdCondition>[];
     final seen = <String>{};
@@ -191,12 +197,14 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
     final repo = ref.read(directiveRepositoryProvider);
     final current = await repo.getDiagnoses(widget.directiveId);
     if (current.any((d) => d.icdCode == c.code)) return false;
-    await repo.insertDiagnosis(DiagnosisEntriesCompanion.insert(
-      directiveId: widget.directiveId,
-      icdCode: Value(c.code),
-      name: Value(c.name),
-      sortOrder: Value(current.length),
-    ));
+    await repo.insertDiagnosis(
+      DiagnosisEntriesCompanion.insert(
+        directiveId: widget.directiveId,
+        icdCode: Value(c.code),
+        name: Value(c.name),
+        sortOrder: Value(current.length),
+      ),
+    );
     return true;
   }
 
@@ -205,7 +213,9 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
     if (!isLoaded) return true; // don't wipe the doctor fields before load
     // Diagnosis entries save on each add/remove; persist the primary-care
     // doctor here on step change.
-    await ref.read(directiveRepositoryProvider).updatePrimaryDoctor(
+    await ref
+        .read(directiveRepositoryProvider)
+        .updatePrimaryDoctor(
           widget.directiveId,
           name: _docNameCtrl.text.trim(),
           specialty: _docSpecialtyCtrl.text.trim(),
@@ -234,17 +244,22 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
   }
 
   Future<void> _addDiagnosis(
-      IcdCondition condition, List<DiagnosisEntry> current) async {
+    IcdCondition condition,
+    List<DiagnosisEntry> current,
+  ) async {
     // Skip if already added
     if (current.any((d) => d.icdCode == condition.code)) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-            content: Text(context.l10n.diagnosesAlreadyAdded(condition.name))),
+          content: Text(context.l10n.diagnosesAlreadyAdded(condition.name)),
+        ),
       );
       return;
     }
 
-    await ref.read(directiveRepositoryProvider).insertDiagnosis(
+    await ref
+        .read(directiveRepositoryProvider)
+        .insertDiagnosis(
           DiagnosisEntriesCompanion.insert(
             directiveId: widget.directiveId,
             icdCode: Value(condition.code),
@@ -266,10 +281,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
     return Container(
       decoration: BoxDecoration(
         color: p.card,
-        border: Border.all(
-          color: active ? p.primary : p.border,
-          width: 1.5,
-        ),
+        border: Border.all(color: active ? p.primary : p.border, width: 1.5),
         borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
@@ -334,8 +346,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
           else
             // ICD-10 mono badge pill
             Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
               decoration: BoxDecoration(
                 color: p.primaryTint,
                 borderRadius: BorderRadius.circular(DesignTokens.radiusXs),
@@ -359,7 +370,11 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
 
   // ─── A result row in the autocomplete dropdown ──────────────────────────
   Widget _buildResultTile(
-      IcdCondition c, bool alreadyAdded, List<DiagnosisEntry> current, MhadPalette p) {
+    IcdCondition c,
+    bool alreadyAdded,
+    List<DiagnosisEntry> current,
+    MhadPalette p,
+  ) {
     return InkWell(
       onTap: alreadyAdded ? null : () => _addDiagnosis(c, current),
       borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
@@ -370,8 +385,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
           children: [
             Container(
               margin: const EdgeInsets.only(top: 1),
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
               decoration: BoxDecoration(
                 color: p.card,
                 border: Border.all(color: p.primaryLight),
@@ -435,8 +449,10 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
-    final diagnosesStream = ref
-        .watch(directiveRepositoryProvider)
+    // Created once per step (not per build): a new watch() on every rebuild
+    // re-ran the query and re-subscribed both StreamBuilders each time.
+    final diagnosesStream = _diagnosesStream ??= ref
+        .read(directiveRepositoryProvider)
         .watchDiagnoses(widget.directiveId);
 
     final l10n = context.l10n;
@@ -462,10 +478,12 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
             stream: diagnosesStream,
             builder: (context, snap) {
               final current = snap.data ?? [];
-              final psych =
-                  _searchResults.where((c) => c.code.startsWith('F')).toList();
-              final med =
-                  _searchResults.where((c) => !c.code.startsWith('F')).toList();
+              final psych = _searchResults
+                  .where((c) => c.code.startsWith('F'))
+                  .toList();
+              final med = _searchResults
+                  .where((c) => !c.code.startsWith('F'))
+                  .toList();
 
               return Container(
                 decoration: p.dropdownDecoration,
@@ -478,21 +496,25 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                     children: [
                       if (psych.isNotEmpty) ...[
                         _resultSectionHeader(l10n.diagnosesPsychiatric, p),
-                        ...psych.map((c) => _buildResultTile(
-                              c,
-                              current.any((d) => d.icdCode == c.code),
-                              current,
-                              p,
-                            )),
+                        ...psych.map(
+                          (c) => _buildResultTile(
+                            c,
+                            current.any((d) => d.icdCode == c.code),
+                            current,
+                            p,
+                          ),
+                        ),
                       ],
                       if (med.isNotEmpty) ...[
                         _resultSectionHeader(l10n.diagnosesMedical, p),
-                        ...med.map((c) => _buildResultTile(
-                              c,
-                              current.any((d) => d.icdCode == c.code),
-                              current,
-                              p,
-                            )),
+                        ...med.map(
+                          (c) => _buildResultTile(
+                            c,
+                            current.any((d) => d.icdCode == c.code),
+                            current,
+                            p,
+                          ),
+                        ),
                       ],
                     ],
                   ),
@@ -507,10 +529,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
             child: Text(
               _searching ? '' : l10n.diagnosesNoResults,
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontFamily: kSansFamily,
-                color: p.textMuted,
-              ),
+              style: TextStyle(fontFamily: kSansFamily, color: p.textMuted),
             ),
           ),
 
@@ -527,13 +546,18 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                   decoration: BoxDecoration(
                     color: p.surface,
                     border: Border.all(color: p.border),
-                    borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
+                    borderRadius: BorderRadius.circular(
+                      DesignTokens.inputRadius,
+                    ),
                   ),
                   padding: const EdgeInsets.all(24),
                   child: Column(
                     children: [
-                      Icon(Icons.medical_information_outlined,
-                          size: 36, color: p.textMuted),
+                      Icon(
+                        Icons.medical_information_outlined,
+                        size: 36,
+                        color: p.textMuted,
+                      ),
                       const SizedBox(height: 8),
                       Text(
                         l10n.diagnosesEmptyTitle,
@@ -559,38 +583,44 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
               );
             }
 
-            final psychiatric =
-                diagnoses.where((d) => d.icdCode.startsWith('F')).toList();
-            final medical =
-                diagnoses.where((d) => !d.icdCode.startsWith('F')).toList();
+            final psychiatric = diagnoses
+                .where((d) => d.icdCode.startsWith('F'))
+                .toList();
+            final medical = diagnoses
+                .where((d) => !d.icdCode.startsWith('F'))
+                .toList();
 
             HealthChip chip(DiagnosisEntry d) => HealthChip(
-                  code: d.icdCode,
-                  label: d.name,
-                  sourceTag: 'ICD-10',
-                  tone: HealthChipTone.primary,
-                  onInfo: d.icdCode.isNotEmpty
-                      ? () => _showConditionInfo(d.icdCode, d.name)
-                      : null,
-                  onRemove: () => _removeDiagnosis(d.id),
-                );
+              code: d.icdCode,
+              label: d.name,
+              sourceTag: 'ICD-10',
+              tone: HealthChipTone.primary,
+              onInfo: d.icdCode.isNotEmpty
+                  ? () => _showConditionInfo(d.icdCode, d.name)
+                  : null,
+              onRemove: () => _removeDiagnosis(d.id),
+            );
 
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SectionLabel(diagnoses.length == 1
-                    ? l10n.diagnosesAddedOne(diagnoses.length)
-                    : l10n.diagnosesAddedMany(diagnoses.length)),
+                SectionLabel(
+                  diagnoses.length == 1
+                      ? l10n.diagnosesAddedOne(diagnoses.length)
+                      : l10n.diagnosesAddedMany(diagnoses.length),
+                ),
                 if (psychiatric.isNotEmpty) ...[
                   SectionLabel(
                     l10n.diagnosesPsychiatricCount(psychiatric.length),
                     padding: const EdgeInsets.fromLTRB(0, 4, 0, 8),
                     style: TextStyle(color: p.primary),
                   ),
-                  ...psychiatric.map((d) => Padding(
-                        padding: const EdgeInsets.only(bottom: 8),
-                        child: chip(d),
-                      )),
+                  ...psychiatric.map(
+                    (d) => Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: chip(d),
+                    ),
+                  ),
                 ],
                 if (medical.isNotEmpty) ...[
                   SectionLabel(
@@ -598,10 +628,12 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                     padding: const EdgeInsets.fromLTRB(0, 4, 0, 8),
                     style: TextStyle(color: p.primary),
                   ),
-                  ...medical.map((d) => Padding(
-                        padding: const EdgeInsets.only(bottom: 8),
-                        child: chip(d),
-                      )),
+                  ...medical.map(
+                    (d) => Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: chip(d),
+                    ),
+                  ),
                 ],
               ],
             );
@@ -648,7 +680,9 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                   for (final r in _docResults)
                     InkWell(
                       onTap: () => _pickProvider(r),
-                      borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
+                      borderRadius: BorderRadius.circular(
+                        DesignTokens.radiusSm,
+                      ),
                       child: Padding(
                         padding: const EdgeInsets.all(8),
                         child: Column(
@@ -667,9 +701,10 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                               Padding(
                                 padding: const EdgeInsets.only(top: 2),
                                 child: Text(
-                                  [r.specialty, r.address]
-                                      .where((s) => s.isNotEmpty)
-                                      .join(' · '),
+                                  [
+                                    r.specialty,
+                                    r.address,
+                                  ].where((s) => s.isNotEmpty).join(' · '),
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
@@ -817,7 +852,10 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
 class _DescribeConditionDialog extends StatefulWidget {
   final Future<List<IcdCondition>> Function(String description) onSuggest;
   final Future<bool> Function(IcdCondition condition) onAdd;
-  const _DescribeConditionDialog({required this.onSuggest, required this.onAdd});
+  const _DescribeConditionDialog({
+    required this.onSuggest,
+    required this.onAdd,
+  });
 
   @override
   State<_DescribeConditionDialog> createState() =>
@@ -857,13 +895,16 @@ class _DescribeConditionDialogState extends State<_DescribeConditionDialog> {
     final added = await widget.onAdd(c);
     if (!mounted) return;
     setState(() => _added.add(c.code));
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content:
-          Text(added
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          added
               ? context.l10n.diagnosesAddedName(c.name)
-              : context.l10n.diagnosesAlreadyAddedQuoted(c.name)),
-      duration: const Duration(seconds: 2),
-    ));
+              : context.l10n.diagnosesAlreadyAddedQuoted(c.name),
+        ),
+        duration: const Duration(seconds: 2),
+      ),
+    );
   }
 
   @override
@@ -881,7 +922,10 @@ class _DescribeConditionDialogState extends State<_DescribeConditionDialog> {
             Text(
               l10n.diagnosesDescribeIntro,
               style: TextStyle(
-                  fontSize: 13, height: 1.4, color: cs.onSurfaceVariant),
+                fontSize: 13,
+                height: 1.4,
+                color: cs.onSurfaceVariant,
+              ),
             ),
             const SizedBox(height: 12),
             TextField(
@@ -905,9 +949,12 @@ class _DescribeConditionDialogState extends State<_DescribeConditionDialog> {
                     ? const SizedBox(
                         width: 16,
                         height: 16,
-                        child: CircularProgressIndicator(strokeWidth: 2))
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
                     : const Icon(Icons.auto_awesome, size: 16),
-                label: Text(_loading ? l10n.diagnosesFinding : l10n.diagnosesFindMatches),
+                label: Text(
+                  _loading ? l10n.diagnosesFinding : l10n.diagnosesFindMatches,
+                ),
               ),
             ),
             if (_searched && !_loading) ...[
@@ -929,9 +976,10 @@ class _DescribeConditionDialogState extends State<_DescribeConditionDialog> {
               Text(
                 l10n.diagnosesSuggestionsNote,
                 style: TextStyle(
-                    fontSize: 11,
-                    fontStyle: FontStyle.italic,
-                    color: cs.onSurfaceVariant),
+                  fontSize: 11,
+                  fontStyle: FontStyle.italic,
+                  color: cs.onSurfaceVariant,
+                ),
               ),
             ],
           ],
@@ -963,21 +1011,31 @@ class _DescribeConditionDialogState extends State<_DescribeConditionDialog> {
                 color: cs.surfaceContainerHighest,
                 borderRadius: BorderRadius.circular(DesignTokens.radiusXs),
               ),
-              child: Text(c.code,
-                  style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w700,
-                      color: cs.primary)),
+              child: Text(
+                c.code,
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w700,
+                  color: cs.primary,
+                ),
+              ),
             ),
             const SizedBox(width: 10),
             Expanded(
-              child: Text(c.name,
-                  style: const TextStyle(
-                      fontSize: 13, fontWeight: FontWeight.w600)),
+              child: Text(
+                c.name,
+                style: const TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
             ),
             const SizedBox(width: 8),
-            Icon(added ? Icons.check_circle : Icons.add_circle_outline,
-                color: cs.primary, size: 20),
+            Icon(
+              added ? Icons.check_circle : Icons.add_circle_outline,
+              color: cs.primary,
+              size: 20,
+            ),
           ],
         ),
       ),

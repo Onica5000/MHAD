@@ -32,7 +32,7 @@ Future<int> promptAddDrugAllergiesToNeverWant({
   if (names.isEmpty) return 0;
 
   // Drop any already on the "never want" list so we never offer a duplicate.
-  final existing = await repo.watchMedications(directiveId).first;
+  final existing = await repo.getMedications(directiveId);
   final existingAvoid = existing
       .where((m) => m.entryType == MedicationEntryType.exception.name)
       .map((m) => m.medicationName.trim().toLowerCase())

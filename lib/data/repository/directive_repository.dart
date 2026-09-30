@@ -40,17 +40,21 @@ class DirectiveRepository {
   Future<List<Directive>> getAllDirectives() =>
       _db.select(_db.directives).get();
 
-  Future<Directive?> getDirectiveById(int id) =>
-      (_db.select(_db.directives)..where((t) => t.id.equals(id)))
-          .getSingleOrNull();
+  Future<Directive?> getDirectiveById(int id) => (_db.select(
+    _db.directives,
+  )..where((t) => t.id.equals(id))).getSingleOrNull();
 
   Future<int> createDirective(FormType formType) {
     final now = DateTime.now().millisecondsSinceEpoch;
-    return _db.into(_db.directives).insert(DirectivesCompanion.insert(
-          formType: formType.name,
-          createdAt: now,
-          updatedAt: now,
-        ));
+    return _db
+        .into(_db.directives)
+        .insert(
+          DirectivesCompanion.insert(
+            formType: formType.name,
+            createdAt: now,
+            updatedAt: now,
+          ),
+        );
   }
 
   /// Change an existing directive's form type (e.g. after autofill, when the
@@ -63,7 +67,8 @@ class DirectiveRepository {
         ),
       );
 
-  Future<void> updatePersonalInfo(int id, {
+  Future<void> updatePersonalInfo(
+    int id, {
     required String fullName,
     required String dateOfBirth,
     required String address,
@@ -73,21 +78,20 @@ class DirectiveRepository {
     required String state,
     required String zip,
     required String phone,
-  }) =>
-      (_db.update(_db.directives)..where((t) => t.id.equals(id))).write(
-        DirectivesCompanion(
-          fullName: Value(fullName),
-          dateOfBirth: Value(dateOfBirth),
-          address: Value(address),
-          address2: Value(address2),
-          city: Value(city),
-          county: Value(county),
-          state: Value(state),
-          zip: Value(zip),
-          phone: Value(phone),
-          updatedAt: Value(DateTime.now().millisecondsSinceEpoch),
-        ),
-      );
+  }) => (_db.update(_db.directives)..where((t) => t.id.equals(id))).write(
+    DirectivesCompanion(
+      fullName: Value(fullName),
+      dateOfBirth: Value(dateOfBirth),
+      address: Value(address),
+      address2: Value(address2),
+      city: Value(city),
+      county: Value(county),
+      state: Value(state),
+      zip: Value(zip),
+      phone: Value(phone),
+      updatedAt: Value(DateTime.now().millisecondsSinceEpoch),
+    ),
+  );
 
   /// User-chosen Home display label (UX audit B11). Empty = fall back to
   /// fullName. App-side organizational label only — never printed.
@@ -113,47 +117,47 @@ class DirectiveRepository {
     bool? twoProfessionals,
     bool? courtOrder,
     bool? involuntaryCommitment,
-  }) =>
-      (_db.update(_db.directives)..where((t) => t.id.equals(id))).write(
-        DirectivesCompanion(
-          effectiveCondition: Value(condition),
-          triggerTwoProfessionals: twoProfessionals == null
-              ? const Value.absent()
-              : Value(twoProfessionals),
-          triggerCourtOrder:
-              courtOrder == null ? const Value.absent() : Value(courtOrder),
-          triggerInvoluntaryCommitment: involuntaryCommitment == null
-              ? const Value.absent()
-              : Value(involuntaryCommitment),
-          updatedAt: Value(DateTime.now().millisecondsSinceEpoch),
-        ),
-      );
+  }) => (_db.update(_db.directives)..where((t) => t.id.equals(id))).write(
+    DirectivesCompanion(
+      effectiveCondition: Value(condition),
+      triggerTwoProfessionals: twoProfessionals == null
+          ? const Value.absent()
+          : Value(twoProfessionals),
+      triggerCourtOrder: courtOrder == null
+          ? const Value.absent()
+          : Value(courtOrder),
+      triggerInvoluntaryCommitment: involuntaryCommitment == null
+          ? const Value.absent()
+          : Value(involuntaryCommitment),
+      updatedAt: Value(DateTime.now().millisecondsSinceEpoch),
+    ),
+  );
 
-  Future<void> updatePreferredDoctor(int id, {
+  Future<void> updatePreferredDoctor(
+    int id, {
     required String name,
     required String contact,
-  }) =>
-      (_db.update(_db.directives)..where((t) => t.id.equals(id))).write(
-        DirectivesCompanion(
-          preferredDoctorName: Value(name),
-          preferredDoctorContact: Value(contact),
-          updatedAt: Value(DateTime.now().millisecondsSinceEpoch),
-        ),
-      );
+  }) => (_db.update(_db.directives)..where((t) => t.id.equals(id))).write(
+    DirectivesCompanion(
+      preferredDoctorName: Value(name),
+      preferredDoctorContact: Value(contact),
+      updatedAt: Value(DateTime.now().millisecondsSinceEpoch),
+    ),
+  );
 
-  Future<void> updatePrimaryDoctor(int id, {
+  Future<void> updatePrimaryDoctor(
+    int id, {
     required String name,
     required String specialty,
     required String phone,
-  }) =>
-      (_db.update(_db.directives)..where((t) => t.id.equals(id))).write(
-        DirectivesCompanion(
-          primaryDoctorName: Value(name),
-          primaryDoctorSpecialty: Value(specialty),
-          primaryDoctorPhone: Value(phone),
-          updatedAt: Value(DateTime.now().millisecondsSinceEpoch),
-        ),
-      );
+  }) => (_db.update(_db.directives)..where((t) => t.id.equals(id))).write(
+    DirectivesCompanion(
+      primaryDoctorName: Value(name),
+      primaryDoctorSpecialty: Value(specialty),
+      primaryDoctorPhone: Value(phone),
+      updatedAt: Value(DateTime.now().millisecondsSinceEpoch),
+    ),
+  );
 
   /// Stamps the directive's `executionDate` to [now] (millis-since-epoch).
   /// Called by the wet-ink sign step when the user advances past the
@@ -214,10 +218,9 @@ class DirectiveRepository {
 
   // ── Agents ────────────────────────────────────────────────────────────────
 
-  Future<List<Agent>> getAgents(int directiveId) =>
-      (_db.select(_db.agents)
-            ..where((t) => t.directiveId.equals(directiveId)))
-          .get();
+  Future<List<Agent>> getAgents(int directiveId) => (_db.select(
+    _db.agents,
+  )..where((t) => t.directiveId.equals(directiveId))).get();
 
   Future<int> upsertAgent(AgentsCompanion agent) =>
       _db.into(_db.agents).insertOnConflictUpdate(agent);
@@ -230,13 +233,25 @@ class DirectiveRepository {
             ..orderBy([(t) => OrderingTerm.asc(t.sortOrder)]))
           .watch();
 
+  /// One-shot read. Prefer this over `watchMedications(...).first`, which
+  /// opens a live query stream just to take one value.
+  Future<List<MedicationEntry>> getMedications(int directiveId) =>
+      (_db.select(_db.medicationEntries)
+            ..where((t) => t.directiveId.equals(directiveId))
+            ..orderBy([(t) => OrderingTerm.asc(t.sortOrder)]))
+          .get();
+
   Future<int> insertMedication(MedicationEntriesCompanion entry) =>
       _db.into(_db.medicationEntries).insert(entry);
 
-  Future<void> replaceMedications(int directiveId, List<MedicationEntriesCompanion> newEntries) async {
+  Future<void> replaceMedications(
+    int directiveId,
+    List<MedicationEntriesCompanion> newEntries,
+  ) async {
     await _db.transaction(() async {
-      await (_db.delete(_db.medicationEntries)
-          ..where((t) => t.directiveId.equals(directiveId))).go();
+      await (_db.delete(
+        _db.medicationEntries,
+      )..where((t) => t.directiveId.equals(directiveId))).go();
       for (final entry in newEntries) {
         await _db.into(_db.medicationEntries).insert(entry);
       }
@@ -245,16 +260,15 @@ class DirectiveRepository {
 
   // ── Preferences ───────────────────────────────────────────────────────────
 
-  Future<DirectivePref?> getPreferences(int directiveId) =>
-      (_db.select(_db.directivePrefs)
-            ..where((t) => t.directiveId.equals(directiveId)))
-          .getSingleOrNull();
+  Future<DirectivePref?> getPreferences(int directiveId) => (_db.select(
+    _db.directivePrefs,
+  )..where((t) => t.directiveId.equals(directiveId))).getSingleOrNull();
 
   Future<void> upsertPreferences(DirectivePrefsCompanion prefs) async {
     final directiveId = prefs.directiveId.value;
-    final updated = await (_db.update(_db.directivePrefs)
-            ..where((t) => t.directiveId.equals(directiveId)))
-        .write(prefs);
+    final updated = await (_db.update(
+      _db.directivePrefs,
+    )..where((t) => t.directiveId.equals(directiveId))).write(prefs);
     if (updated == 0) {
       await _db.into(_db.directivePrefs).insert(prefs);
     }
@@ -262,10 +276,11 @@ class DirectiveRepository {
 
   // ── Additional Instructions ───────────────────────────────────────────────
 
-  Future<AdditionalInstructionsTableData?> getAdditionalInstructions(int directiveId) =>
-      (_db.select(_db.additionalInstructionsTable)
-            ..where((t) => t.directiveId.equals(directiveId)))
-          .getSingleOrNull();
+  Future<AdditionalInstructionsTableData?> getAdditionalInstructions(
+    int directiveId,
+  ) => (_db.select(
+    _db.additionalInstructionsTable,
+  )..where((t) => t.directiveId.equals(directiveId))).getSingleOrNull();
 
   // Upsert keyed on the unique `directiveId` (NOT the autoincrement `id` PK).
   // `insertOnConflictUpdate` targets the primary key, so on a second save for
@@ -274,11 +289,12 @@ class DirectiveRepository {
   // the Additional Instructions step is passed through again. Mirror the
   // update-then-insert pattern used by [upsertPreferences].
   Future<void> upsertAdditionalInstructions(
-      AdditionalInstructionsTableCompanion data) async {
+    AdditionalInstructionsTableCompanion data,
+  ) async {
     final directiveId = data.directiveId.value;
-    final updated = await (_db.update(_db.additionalInstructionsTable)
-          ..where((t) => t.directiveId.equals(directiveId)))
-        .write(data);
+    final updated = await (_db.update(
+      _db.additionalInstructionsTable,
+    )..where((t) => t.directiveId.equals(directiveId))).write(data);
     if (updated == 0) {
       await _db.into(_db.additionalInstructionsTable).insert(data);
     }
@@ -298,20 +314,21 @@ class DirectiveRepository {
   // ── Guardian Nomination ───────────────────────────────────────────────────
 
   Future<GuardianNomination?> getGuardianNomination(int directiveId) =>
-      (_db.select(_db.guardianNominations)
-            ..where((t) => t.directiveId.equals(directiveId)))
-          .getSingleOrNull();
+      (_db.select(
+        _db.guardianNominations,
+      )..where((t) => t.directiveId.equals(directiveId))).getSingleOrNull();
 
   // Upsert keyed on the unique `directiveId` (not the autoincrement `id` PK) —
   // same fix as [upsertAdditionalInstructions]: `insertOnConflictUpdate` targets
   // the PK and would crash on a second save for the same directive (re-editing a
   // saved draft) by violating `UNIQUE(directiveId)`.
   Future<void> upsertGuardianNomination(
-      GuardianNominationsCompanion data) async {
+    GuardianNominationsCompanion data,
+  ) async {
     final directiveId = data.directiveId.value;
-    final updated = await (_db.update(_db.guardianNominations)
-          ..where((t) => t.directiveId.equals(directiveId)))
-        .write(data);
+    final updated = await (_db.update(
+      _db.guardianNominations,
+    )..where((t) => t.directiveId.equals(directiveId))).write(data);
     if (updated == 0) {
       await _db.into(_db.guardianNominations).insert(data);
     }
@@ -362,7 +379,7 @@ class DirectiveRepository {
       prefs: await getPreferences(directiveId),
       additional: await getAdditionalInstructions(directiveId),
       guardian: await getGuardianNomination(directiveId),
-      medications: await watchMedications(directiveId).first,
+      medications: await getMedications(directiveId),
       witnesses: await getWitnesses(directiveId),
       diagnoses: await getDiagnoses(directiveId),
       allergies: await getAllergies(directiveId),
@@ -377,36 +394,41 @@ class DirectiveRepository {
   /// ENCRYPTED export file (portable, the user holds it). The default
   /// (PII-stripped) form is used for the unencrypted web-reload cache, which
   /// must not persist identity. Round-trips with [restoreFromSnapshot].
-  Future<Map<String, dynamic>> snapshotDirective(int directiveId,
-      {bool full = false}) async {
+  Future<Map<String, dynamic>> snapshotDirective(
+    int directiveId, {
+    bool full = false,
+  }) async {
     final d = await getDirectiveById(directiveId);
     if (d == null) return {};
 
     final prefs = await getPreferences(directiveId);
     final instr = await getAdditionalInstructions(directiveId);
-    final meds = await watchMedications(directiveId).first;
+    final meds = await getMedications(directiveId);
     final diags = await getDiagnoses(directiveId);
     final allergies = await getAllergies(directiveId);
     final guardian = await getGuardianNomination(directiveId);
     final agents = full ? await getAgents(directiveId) : const <Agent>[];
 
     return {
-      if (full) 'personal': {
-        'fullName': d.fullName,
-        'dateOfBirth': d.dateOfBirth,
-        'address': d.address,
-        'address2': d.address2,
-        'city': d.city,
-        'county': d.county,
-        'state': d.state,
-        'zip': d.zip,
-        'phone': d.phone,
-        // User-chosen Home label (schema 21). Gated with `personal` because
-        // it's free text the user may have made identifying.
-        'displayLabel': d.displayLabel,
-      },
-      if (full && agents.isNotEmpty) 'agents': agents
-          .map((a) => {
+      if (full)
+        'personal': {
+          'fullName': d.fullName,
+          'dateOfBirth': d.dateOfBirth,
+          'address': d.address,
+          'address2': d.address2,
+          'city': d.city,
+          'county': d.county,
+          'state': d.state,
+          'zip': d.zip,
+          'phone': d.phone,
+          // User-chosen Home label (schema 21). Gated with `personal` because
+          // it's free text the user may have made identifying.
+          'displayLabel': d.displayLabel,
+        },
+      if (full && agents.isNotEmpty)
+        'agents': agents
+            .map(
+              (a) => {
                 'agentType': a.agentType,
                 'fullName': a.fullName,
                 'relationship': a.relationship,
@@ -420,8 +442,9 @@ class DirectiveRepository {
                 'cellPhone': a.cellPhone,
                 'acceptedAt': a.acceptedAt,
                 'acceptanceNotes': a.acceptanceNotes,
-              })
-          .toList(),
+              },
+            )
+            .toList(),
       'formType': d.formType,
       'lastStepIndex': d.lastStepIndex,
       'effectiveCondition': d.effectiveCondition,
@@ -433,85 +456,104 @@ class DirectiveRepository {
       'primaryDoctorName': d.primaryDoctorName,
       'primaryDoctorSpecialty': d.primaryDoctorSpecialty,
       'primaryDoctorPhone': d.primaryDoctorPhone,
-      if (prefs != null) 'prefs': {
-        'treatmentFacilityPref': prefs.treatmentFacilityPref,
-        'preferredFacilityName': prefs.preferredFacilityName,
-        'avoidFacilityName': prefs.avoidFacilityName,
-        'medicationConsent': prefs.medicationConsent,
-        'ectConsent': prefs.ectConsent,
-        'experimentalConsent': prefs.experimentalConsent,
-        'drugTrialConsent': prefs.drugTrialConsent,
-        'agentCanConsentHospitalization': prefs.agentCanConsentHospitalization,
-        'agentCanConsentMedication': prefs.agentCanConsentMedication,
-        'agentAuthorityLimitations': prefs.agentAuthorityLimitations,
-        // Phase 2 + Phase 4 additions — without these the web-reload
-        // recovery silently drops room chips, crisis-plan JSON and the
-        // Ulysses acknowledgment flag.
-        'roomPreferences': prefs.roomPreferences,
-        // Schema v16 room fields — without these the snapshot round-trip
-        // (web-reload recovery + encrypted export/import) silently drops the
-        // free-text room note and the same-gender-roommate choice.
-        'roomPreferencesNote': prefs.roomPreferencesNote,
-        'roommateGenderMatch': prefs.roommateGenderMatch,
-        'crisisPlanJson': prefs.crisisPlanJson,
-        'selfBindingEnabled': prefs.selfBindingEnabled,
-        'sideEffectsJson': prefs.sideEffectsJson,
-      },
+      if (prefs != null)
+        'prefs': {
+          'treatmentFacilityPref': prefs.treatmentFacilityPref,
+          'preferredFacilityName': prefs.preferredFacilityName,
+          'avoidFacilityName': prefs.avoidFacilityName,
+          'medicationConsent': prefs.medicationConsent,
+          'ectConsent': prefs.ectConsent,
+          'experimentalConsent': prefs.experimentalConsent,
+          'drugTrialConsent': prefs.drugTrialConsent,
+          'agentCanConsentHospitalization':
+              prefs.agentCanConsentHospitalization,
+          'agentCanConsentMedication': prefs.agentCanConsentMedication,
+          'agentAuthorityLimitations': prefs.agentAuthorityLimitations,
+          // Phase 2 + Phase 4 additions — without these the web-reload
+          // recovery silently drops room chips, crisis-plan JSON and the
+          // Ulysses acknowledgment flag.
+          'roomPreferences': prefs.roomPreferences,
+          // Schema v16 room fields — without these the snapshot round-trip
+          // (web-reload recovery + encrypted export/import) silently drops the
+          // free-text room note and the same-gender-roommate choice.
+          'roomPreferencesNote': prefs.roomPreferencesNote,
+          'roommateGenderMatch': prefs.roommateGenderMatch,
+          'crisisPlanJson': prefs.crisisPlanJson,
+          'selfBindingEnabled': prefs.selfBindingEnabled,
+          'sideEffectsJson': prefs.sideEffectsJson,
+        },
       // Gated on `full` (like `personal`/`agents`): the guardian nominee's
       // name/address/phone are third-party identity PII and must not land in
       // the unencrypted web-reload cache. Recovered only from a full snapshot
       // (encrypted export/import).
-      if (full && guardian != null) 'guardian': {
-        'nomineeFullName': guardian.nomineeFullName,
-        'nomineeAddress': guardian.nomineeAddress,
-        'nomineeAddress2': guardian.nomineeAddress2,
-        'nomineeCity': guardian.nomineeCity,
-        'nomineeState': guardian.nomineeState,
-        'nomineeZip': guardian.nomineeZip,
-        'nomineePhone': guardian.nomineePhone,
-        'nomineeRelationship': guardian.nomineeRelationship,
-        'guardianCanRevoke': guardian.guardianCanRevoke,
-        'guardianCanChangeAgent': guardian.guardianCanChangeAgent,
-        'guardianMustConsultAgent': guardian.guardianMustConsultAgent,
-        'guardianCanRevokeNote': guardian.guardianCanRevokeNote,
-        'guardianCanChangeAgentNote': guardian.guardianCanChangeAgentNote,
-        'guardianMustConsultAgentNote': guardian.guardianMustConsultAgentNote,
-        'guardianRelation': guardian.guardianRelation,
-      },
-      if (instr != null) 'instructions': {
-        'activities': instr.activities,
-        'crisisIntervention': instr.crisisIntervention,
-        'healthHistory': instr.healthHistory,
-        'dietary': instr.dietary,
-        'religious': instr.religious,
-        'childrenCustody': instr.childrenCustody,
-        'familyNotification': instr.familyNotification,
-        'recordsDisclosure': instr.recordsDisclosure,
-        'petCustody': instr.petCustody,
-        'other': instr.other,
-      },
-      if (meds.isNotEmpty) 'medications': meds.map((m) => {
-        'entryType': m.entryType,
-        'medicationName': m.medicationName,
-        'reason': m.reason,
-        'dosage': m.dosage,
-        'sortOrder': m.sortOrder,
-      }).toList(),
-      if (diags.isNotEmpty) 'diagnoses': diags.map((d) => {
-        'icdCode': d.icdCode,
-        'name': d.name,
-        'sortOrder': d.sortOrder,
-      }).toList(),
-      if (allergies.isNotEmpty) 'allergies': allergies.map((a) => {
-        'kind': a.kind,
-        'substance': a.substance,
-        'code': a.code,
-        'codeSource': a.codeSource,
-        'severity': a.severity,
-        'reactions': a.reactions,
-        'notes': a.notes,
-        'sortOrder': a.sortOrder,
-      }).toList(),
+      if (full && guardian != null)
+        'guardian': {
+          'nomineeFullName': guardian.nomineeFullName,
+          'nomineeAddress': guardian.nomineeAddress,
+          'nomineeAddress2': guardian.nomineeAddress2,
+          'nomineeCity': guardian.nomineeCity,
+          'nomineeState': guardian.nomineeState,
+          'nomineeZip': guardian.nomineeZip,
+          'nomineePhone': guardian.nomineePhone,
+          'nomineeRelationship': guardian.nomineeRelationship,
+          'guardianCanRevoke': guardian.guardianCanRevoke,
+          'guardianCanChangeAgent': guardian.guardianCanChangeAgent,
+          'guardianMustConsultAgent': guardian.guardianMustConsultAgent,
+          'guardianCanRevokeNote': guardian.guardianCanRevokeNote,
+          'guardianCanChangeAgentNote': guardian.guardianCanChangeAgentNote,
+          'guardianMustConsultAgentNote': guardian.guardianMustConsultAgentNote,
+          'guardianRelation': guardian.guardianRelation,
+        },
+      if (instr != null)
+        'instructions': {
+          'activities': instr.activities,
+          'crisisIntervention': instr.crisisIntervention,
+          'healthHistory': instr.healthHistory,
+          'dietary': instr.dietary,
+          'religious': instr.religious,
+          'childrenCustody': instr.childrenCustody,
+          'familyNotification': instr.familyNotification,
+          'recordsDisclosure': instr.recordsDisclosure,
+          'petCustody': instr.petCustody,
+          'other': instr.other,
+        },
+      if (meds.isNotEmpty)
+        'medications': meds
+            .map(
+              (m) => {
+                'entryType': m.entryType,
+                'medicationName': m.medicationName,
+                'reason': m.reason,
+                'dosage': m.dosage,
+                'sortOrder': m.sortOrder,
+              },
+            )
+            .toList(),
+      if (diags.isNotEmpty)
+        'diagnoses': diags
+            .map(
+              (d) => {
+                'icdCode': d.icdCode,
+                'name': d.name,
+                'sortOrder': d.sortOrder,
+              },
+            )
+            .toList(),
+      if (allergies.isNotEmpty)
+        'allergies': allergies
+            .map(
+              (a) => {
+                'kind': a.kind,
+                'substance': a.substance,
+                'code': a.code,
+                'codeSource': a.codeSource,
+                'severity': a.severity,
+                'reactions': a.reactions,
+                'notes': a.notes,
+                'sortOrder': a.sortOrder,
+              },
+            )
+            .toList(),
     };
   }
 
@@ -554,8 +596,12 @@ class DirectiveRepository {
     final pcpSpec = snap['primaryDoctorSpecialty']?.toString() ?? '';
     final pcpPhone = snap['primaryDoctorPhone']?.toString() ?? '';
     if (pcpName.isNotEmpty || pcpSpec.isNotEmpty || pcpPhone.isNotEmpty) {
-      await updatePrimaryDoctor(id,
-          name: pcpName, specialty: pcpSpec, phone: pcpPhone);
+      await updatePrimaryDoctor(
+        id,
+        name: pcpName,
+        specialty: pcpSpec,
+        phone: pcpPhone,
+      );
     }
     final step = snap['lastStepIndex'];
     if (step is int && step > 0) await updateLastStepIndex(id, step);
@@ -563,26 +609,30 @@ class DirectiveRepository {
     // Preferences
     final p = snap['prefs'];
     if (p is Map<String, dynamic>) {
-      await upsertPreferences(DirectivePrefsCompanion(
-        directiveId: Value(id),
-        treatmentFacilityPref: _v(p['treatmentFacilityPref']),
-        preferredFacilityName: _v(p['preferredFacilityName']),
-        avoidFacilityName: _v(p['avoidFacilityName']),
-        medicationConsent: _v(p['medicationConsent']),
-        ectConsent: _v(p['ectConsent']),
-        experimentalConsent: _v(p['experimentalConsent']),
-        drugTrialConsent: _v(p['drugTrialConsent']),
-        agentAuthorityLimitations: _v(p['agentAuthorityLimitations']),
-        agentCanConsentHospitalization: _vBool(p['agentCanConsentHospitalization']),
-        agentCanConsentMedication: _vBool(p['agentCanConsentMedication']),
-        // Phase 2 + Phase 4 additions — round-trip pair to snapshotDirective.
-        roomPreferences: _v(p['roomPreferences']),
-        roomPreferencesNote: _v(p['roomPreferencesNote']),
-        roommateGenderMatch: _v(p['roommateGenderMatch']),
-        crisisPlanJson: _v(p['crisisPlanJson']),
-        selfBindingEnabled: _vBool(p['selfBindingEnabled']),
-        sideEffectsJson: _v(p['sideEffectsJson']),
-      ));
+      await upsertPreferences(
+        DirectivePrefsCompanion(
+          directiveId: Value(id),
+          treatmentFacilityPref: _v(p['treatmentFacilityPref']),
+          preferredFacilityName: _v(p['preferredFacilityName']),
+          avoidFacilityName: _v(p['avoidFacilityName']),
+          medicationConsent: _v(p['medicationConsent']),
+          ectConsent: _v(p['ectConsent']),
+          experimentalConsent: _v(p['experimentalConsent']),
+          drugTrialConsent: _v(p['drugTrialConsent']),
+          agentAuthorityLimitations: _v(p['agentAuthorityLimitations']),
+          agentCanConsentHospitalization: _vBool(
+            p['agentCanConsentHospitalization'],
+          ),
+          agentCanConsentMedication: _vBool(p['agentCanConsentMedication']),
+          // Phase 2 + Phase 4 additions — round-trip pair to snapshotDirective.
+          roomPreferences: _v(p['roomPreferences']),
+          roomPreferencesNote: _v(p['roomPreferencesNote']),
+          roommateGenderMatch: _v(p['roommateGenderMatch']),
+          crisisPlanJson: _v(p['crisisPlanJson']),
+          selfBindingEnabled: _vBool(p['selfBindingEnabled']),
+          sideEffectsJson: _v(p['sideEffectsJson']),
+        ),
+      );
     }
 
     // Personal identity (only present in a `full` / encrypted-export snapshot).
@@ -610,66 +660,72 @@ class DirectiveRepository {
       for (final raw in agents) {
         if (raw is! Map) continue;
         final a = raw.cast<String, dynamic>();
-        await upsertAgent(AgentsCompanion(
-          directiveId: Value(id),
-          agentType: Value(a['agentType']?.toString() ?? 'primary'),
-          fullName: _v(a['fullName']),
-          relationship: _v(a['relationship']),
-          address: _v(a['address']),
-          address2: _v(a['address2']),
-          city: _v(a['city']),
-          state: _v(a['state']),
-          zip: _v(a['zip']),
-          homePhone: _v(a['homePhone']),
-          workPhone: _v(a['workPhone']),
-          cellPhone: _v(a['cellPhone']),
-          acceptedAt: a['acceptedAt'] is int
-              ? Value(a['acceptedAt'] as int)
-              : const Value.absent(),
-          acceptanceNotes: _v(a['acceptanceNotes']),
-        ));
+        await upsertAgent(
+          AgentsCompanion(
+            directiveId: Value(id),
+            agentType: Value(a['agentType']?.toString() ?? 'primary'),
+            fullName: _v(a['fullName']),
+            relationship: _v(a['relationship']),
+            address: _v(a['address']),
+            address2: _v(a['address2']),
+            city: _v(a['city']),
+            state: _v(a['state']),
+            zip: _v(a['zip']),
+            homePhone: _v(a['homePhone']),
+            workPhone: _v(a['workPhone']),
+            cellPhone: _v(a['cellPhone']),
+            acceptedAt: a['acceptedAt'] is int
+                ? Value(a['acceptedAt'] as int)
+                : const Value.absent(),
+            acceptanceNotes: _v(a['acceptanceNotes']),
+          ),
+        );
       }
     }
 
     // Guardian (Phase 2 — includes the new `guardianRelation` enum).
     final g = snap['guardian'];
     if (g is Map<String, dynamic>) {
-      await upsertGuardianNomination(GuardianNominationsCompanion(
-        directiveId: Value(id),
-        nomineeFullName: _v(g['nomineeFullName']),
-        nomineeAddress: _v(g['nomineeAddress']),
-        nomineeAddress2: _v(g['nomineeAddress2']),
-        nomineeCity: _v(g['nomineeCity']),
-        nomineeState: _v(g['nomineeState']),
-        nomineeZip: _v(g['nomineeZip']),
-        nomineePhone: _v(g['nomineePhone']),
-        nomineeRelationship: _v(g['nomineeRelationship']),
-        guardianCanRevoke: _vBool(g['guardianCanRevoke']),
-        guardianCanChangeAgent: _vBool(g['guardianCanChangeAgent']),
-        guardianMustConsultAgent: _vBool(g['guardianMustConsultAgent']),
-        guardianCanRevokeNote: _v(g['guardianCanRevokeNote']),
-        guardianCanChangeAgentNote: _v(g['guardianCanChangeAgentNote']),
-        guardianMustConsultAgentNote: _v(g['guardianMustConsultAgentNote']),
-        guardianRelation: _v(g['guardianRelation']),
-      ));
+      await upsertGuardianNomination(
+        GuardianNominationsCompanion(
+          directiveId: Value(id),
+          nomineeFullName: _v(g['nomineeFullName']),
+          nomineeAddress: _v(g['nomineeAddress']),
+          nomineeAddress2: _v(g['nomineeAddress2']),
+          nomineeCity: _v(g['nomineeCity']),
+          nomineeState: _v(g['nomineeState']),
+          nomineeZip: _v(g['nomineeZip']),
+          nomineePhone: _v(g['nomineePhone']),
+          nomineeRelationship: _v(g['nomineeRelationship']),
+          guardianCanRevoke: _vBool(g['guardianCanRevoke']),
+          guardianCanChangeAgent: _vBool(g['guardianCanChangeAgent']),
+          guardianMustConsultAgent: _vBool(g['guardianMustConsultAgent']),
+          guardianCanRevokeNote: _v(g['guardianCanRevokeNote']),
+          guardianCanChangeAgentNote: _v(g['guardianCanChangeAgentNote']),
+          guardianMustConsultAgentNote: _v(g['guardianMustConsultAgentNote']),
+          guardianRelation: _v(g['guardianRelation']),
+        ),
+      );
     }
 
     // Additional instructions
     final i = snap['instructions'];
     if (i is Map<String, dynamic>) {
-      await upsertAdditionalInstructions(AdditionalInstructionsTableCompanion(
-        directiveId: Value(id),
-        activities: _v(i['activities']),
-        crisisIntervention: _v(i['crisisIntervention']),
-        healthHistory: _v(i['healthHistory']),
-        dietary: _v(i['dietary']),
-        religious: _v(i['religious']),
-        childrenCustody: _v(i['childrenCustody']),
-        familyNotification: _v(i['familyNotification']),
-        recordsDisclosure: _v(i['recordsDisclosure']),
-        petCustody: _v(i['petCustody']),
-        other: _v(i['other']),
-      ));
+      await upsertAdditionalInstructions(
+        AdditionalInstructionsTableCompanion(
+          directiveId: Value(id),
+          activities: _v(i['activities']),
+          crisisIntervention: _v(i['crisisIntervention']),
+          healthHistory: _v(i['healthHistory']),
+          dietary: _v(i['dietary']),
+          religious: _v(i['religious']),
+          childrenCustody: _v(i['childrenCustody']),
+          familyNotification: _v(i['familyNotification']),
+          recordsDisclosure: _v(i['recordsDisclosure']),
+          petCustody: _v(i['petCustody']),
+          other: _v(i['other']),
+        ),
+      );
     }
 
     // Medications
@@ -677,15 +733,18 @@ class DirectiveRepository {
     if (meds is List) {
       for (final m in meds) {
         if (m is Map<String, dynamic>) {
-          await insertMedication(MedicationEntriesCompanion.insert(
-            directiveId: id,
-            entryType:
-                m['entryType']?.toString() ?? MedicationEntryType.preferred.name,
-            medicationName: Value(m['medicationName']?.toString() ?? ''),
-            reason: Value(m['reason']?.toString() ?? ''),
-            dosage: Value(m['dosage']?.toString() ?? ''),
-            sortOrder: Value(m['sortOrder'] as int? ?? 0),
-          ));
+          await insertMedication(
+            MedicationEntriesCompanion.insert(
+              directiveId: id,
+              entryType:
+                  m['entryType']?.toString() ??
+                  MedicationEntryType.preferred.name,
+              medicationName: Value(m['medicationName']?.toString() ?? ''),
+              reason: Value(m['reason']?.toString() ?? ''),
+              dosage: Value(m['dosage']?.toString() ?? ''),
+              sortOrder: Value(m['sortOrder'] as int? ?? 0),
+            ),
+          );
         }
       }
     }
@@ -695,12 +754,14 @@ class DirectiveRepository {
     if (diags is List) {
       for (final d in diags) {
         if (d is Map<String, dynamic>) {
-          await insertDiagnosis(DiagnosisEntriesCompanion.insert(
-            directiveId: id,
-            icdCode: Value(d['icdCode']?.toString() ?? ''),
-            name: Value(d['name']?.toString() ?? ''),
-            sortOrder: Value(d['sortOrder'] as int? ?? 0),
-          ));
+          await insertDiagnosis(
+            DiagnosisEntriesCompanion.insert(
+              directiveId: id,
+              icdCode: Value(d['icdCode']?.toString() ?? ''),
+              name: Value(d['name']?.toString() ?? ''),
+              sortOrder: Value(d['sortOrder'] as int? ?? 0),
+            ),
+          );
         }
       }
     }
@@ -710,17 +771,19 @@ class DirectiveRepository {
     if (aller is List) {
       for (final a in aller) {
         if (a is Map<String, dynamic>) {
-          await addAllergy(DirectiveAllergiesCompanion.insert(
-            directiveId: id,
-            kind: Value(a['kind']?.toString() ?? 'drug'),
-            substance: Value(a['substance']?.toString() ?? ''),
-            code: Value(a['code']?.toString() ?? ''),
-            codeSource: Value(a['codeSource']?.toString() ?? 'manual'),
-            severity: Value(a['severity']?.toString() ?? 'moderate'),
-            reactions: Value(a['reactions']?.toString() ?? ''),
-            notes: Value(a['notes']?.toString() ?? ''),
-            sortOrder: Value(a['sortOrder'] as int? ?? 0),
-          ));
+          await addAllergy(
+            DirectiveAllergiesCompanion.insert(
+              directiveId: id,
+              kind: Value(a['kind']?.toString() ?? 'drug'),
+              substance: Value(a['substance']?.toString() ?? ''),
+              code: Value(a['code']?.toString() ?? ''),
+              codeSource: Value(a['codeSource']?.toString() ?? 'manual'),
+              severity: Value(a['severity']?.toString() ?? 'moderate'),
+              reactions: Value(a['reactions']?.toString() ?? ''),
+              notes: Value(a['notes']?.toString() ?? ''),
+              sortOrder: Value(a['sortOrder'] as int? ?? 0),
+            ),
+          );
         }
       }
     }

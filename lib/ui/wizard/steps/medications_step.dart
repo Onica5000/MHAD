@@ -65,7 +65,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
 
   Future<void> _loadData() async {
     final repo = ref.read(directiveRepositoryProvider);
-    final meds = await repo.watchMedications(widget.directiveId).first;
+    final meds = await repo.getMedications(widget.directiveId);
     final prefs = await repo.getPreferences(widget.directiveId);
     markLoaded();
 

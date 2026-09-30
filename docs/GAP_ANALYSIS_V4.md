@@ -131,7 +131,8 @@ were superseded by regulations that changed *after* they were written.
   each consolidated wizard step (validate/save/restore); a router redirect test
   (disclaimer→mode→home gating); a `FormType.steps` ↔ `_buildStep` exhaustiveness test;
   a bottom-nav/route-highlight test. Target the wizard + router first (highest risk).
-- **Status:** [~] — Progress 2026-06-28: router-redirect gating (`router_test.dart`) and
+- **Status:** `[x]` **DONE 2026-09-30** — the last two steps now have widget-level save/restore tests (`test/wizard/medications_diagnoses_step_test.dart`). They were blocked by real code issues, now fixed: Medications read its data via `watchMedications(...).first` (a live stream for a one-shot read — replaced app-wide by `getMedications`), and Diagnoses re-created its Drift watch stream on every build. The harness pattern for watch-streams is documented in the test (advance the fake clock after unmount before closing the DB). History below.
+  Previously: [~] — Progress 2026-06-28: router-redirect gating (`router_test.dart`) and
   `FormType.steps` composition (`form_type_test.dart`) are covered; added the first
   wizard-step validate/save/restore widget test
   (`test/wizard/people_i_trust_step_test.dart`, locking the agents-step collapse
@@ -186,7 +187,7 @@ were superseded by regulations that changed *after* they were written.
 - **Fix:** Either (a) integrate a PDF encryption path (native plugin or a maintained Dart
   lib), or (b) explicitly warn the user at export time that the file is unprotected and
   recommend secure handling.
-- **Status:** [~] — An **encrypted export** path now exists (`ExportEncryptionService`,
+- **Status:** `[x]` **DONE** (verified 2026-09-30) — encrypted data-file export exists, and the printable PDF (necessarily plaintext: it's printed and wet-signed) is gated by a one-time-per-session "this file is unprotected" acknowledgement in `export_screen.dart`. History: [~] — An **encrypted export** path now exists (`ExportEncryptionService`,
   encrypt-then-MAC / HMAC-authenticated; `export_encryption_test.dart`) producing a
   protected *data file* for re-upload. The **printable PDF** is still plaintext by
   necessity (it has to be printed and wet-signed); keep the at-export "handle securely"

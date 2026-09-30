@@ -56,7 +56,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
   Future<void> _load() async {
     final repo = ref.read(directiveRepositoryProvider);
     final pref = await repo.getPreferences(widget.directiveId);
-    final meds = await repo.watchMedications(widget.directiveId).first;
+    final meds = await repo.getMedications(widget.directiveId);
     if (!mounted) return;
     // "Currently taking" = the medications the user is currently on
     // (entryType 'current'). Preferred meds are ones they'd want IF treated,

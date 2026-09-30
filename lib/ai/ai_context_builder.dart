@@ -25,7 +25,7 @@ Future<Map<String, String>> buildAiFilledFields(
     final diagNames =
         diags.map((x) => x.name.trim()).where((x) => x.isNotEmpty).toList();
     if (diagNames.isNotEmpty) map['Diagnoses listed'] = diagNames.join(', ');
-    final meds = await repo.watchMedications(directiveId).first;
+    final meds = await repo.getMedications(directiveId);
     final preferred = meds
         .where((m) => m.entryType == MedicationEntryType.preferred.name)
         .map((m) => m.medicationName.trim())

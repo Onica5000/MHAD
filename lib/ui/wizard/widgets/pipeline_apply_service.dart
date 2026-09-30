@@ -90,7 +90,7 @@ extension _PipelineApplyLogic on _PipelineScreenState {
     final id = widget.directiveId;
 
     // ── Apply extracted + validated data ─────────────────────────────
-    final existingMeds = await repo.watchMedications(id).first;
+    final existingMeds = await repo.getMedications(id);
     int medOrder = existingMeds.length;
     // Count only what's actually written so the "N fields added" message is
     // honest (skips duplicates and already-set fields).

@@ -21,8 +21,8 @@ import 'package:mhad/ui/wizard/wizard_mixins.dart';
 ///   - Procedures & research (ECT / experimental / drug-trial consent)
 ///   - Allergies          (add-on-tap persistence + restore)
 ///
-/// Diagnoses / Medications stay at the repository level (see the scope note in
-/// `wizard_steps_persistence_test.dart`); Review & sign is read-only.
+/// Diagnoses / Medications: `medications_diagnoses_step_test.dart`. Review &
+/// sign is read-only.
 void main() {
   late AppDatabase db;
   late DirectiveRepository repo;

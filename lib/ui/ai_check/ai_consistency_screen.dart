@@ -287,7 +287,7 @@ class _AiConsistencyScreenState extends ConsumerState<AiConsistencyScreen> {
       b.writeln('Diagnoses listed: '
           '${diagNames.isEmpty ? "(none)" : diagNames.join(", ")}');
 
-      final meds = await repo.watchMedications(widget.directiveId).first;
+      final meds = await repo.getMedications(widget.directiveId);
       String medList(String type) {
         final names = meds
             .where((m) => m.entryType == type)
