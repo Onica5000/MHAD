@@ -8096,6 +8096,12 @@ abstract class AppLocalizations {
   /// **'This app helps Pennsylvania residents document their treatment preferences under '**
   String get legalSheetThisAppHelpsPennsylvaniaResidents;
 
+  /// No description provided for @legalSheetPaAct194Of2004.
+  ///
+  /// In en, this message translates to:
+  /// **'PA Act 194 of 2004'**
+  String get legalSheetPaAct194Of2004;
+
   /// No description provided for @legalSheetTheInformationIsForInformational.
   ///
   /// In en, this message translates to:

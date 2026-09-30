@@ -12,40 +12,40 @@ class AppLocalizationsEs extends AppLocalizations {
   String get appTitle => 'Directiva Anticipada de\nSalud Mental de PA';
 
   @override
-  String get navHome => 'Home';
+  String get navHome => 'Inicio';
 
   @override
-  String get navLearn => 'Learn';
+  String get navLearn => 'Aprender';
 
   @override
-  String get navAsk => 'Ask';
+  String get navAsk => 'Preguntar';
 
   @override
-  String get navSettings => 'Settings';
+  String get navSettings => 'Ajustes';
 
   @override
-  String get navMore => 'More';
+  String get navMore => 'Más';
 
   @override
-  String get navStart => 'Start';
+  String get navStart => 'Comenzar';
 
   @override
-  String get navAutofill => 'Autofill';
+  String get navAutofill => 'Autocompletar';
 
   @override
-  String get navAiAssistant => 'AI assistant';
+  String get navAiAssistant => 'Asistente de IA';
 
   @override
-  String get navDownloadPrint => 'Download & print';
+  String get navDownloadPrint => 'Descargar e imprimir';
 
   @override
-  String get navResetForm => 'Reset Form';
+  String get navResetForm => 'Reiniciar formulario';
 
   @override
-  String get badgeAiReady => 'READY';
+  String get badgeAiReady => 'LISTO';
 
   @override
-  String get badgeAiSetUp => 'SET UP';
+  String get badgeAiSetUp => 'CONFIGURAR';
 
   @override
   String get newDirective => 'Nueva Directiva';
@@ -234,2409 +234,2454 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get procResearchEctLabel => 'Electroconvulsive therapy (ECT)';
+  String get procResearchEctLabel => 'Terapia electroconvulsiva (TEC)';
 
   @override
-  String get procResearchExperimentalLabel => 'Experimental studies';
+  String get procResearchExperimentalLabel => 'Estudios experimentales';
 
   @override
-  String get procResearchDrugTrialsLabel => 'Drug trials';
+  String get procResearchDrugTrialsLabel => 'Ensayos de medicamentos';
 
   @override
   String get procResearchWhyTheseThree =>
-      'Why these three? PA Act 194 specifically calls out ECT, experimental studies, and drug trials as requiring documented consent. Other treatments fall under your general preferences.';
+      '¿Por qué estos tres? La Ley 194 de PA exige específicamente un consentimiento documentado para la TEC, los estudios experimentales y los ensayos de medicamentos. Los demás tratamientos se rigen por sus preferencias generales.';
 
   @override
   String get procResearchAgentAuthority =>
-      'Agent authority for these three: your agent cannot consent to ECT, experimental studies, or drug trials on your behalf unless you expressly grant that power below. Without an express grant, only you can consent — or these will not be available during incapacity.';
+      'Autoridad del agente sobre estos tres: su agente no puede consentir en su nombre a la TEC, a estudios experimentales ni a ensayos de medicamentos, a menos que usted le otorgue expresamente esa facultad más abajo. Sin una autorización expresa, solo usted puede consentir; de lo contrario, no estarán disponibles mientras usted esté incapacitado.';
 
   @override
   String get procResearchNeverAuthorizedTitle =>
-      'Never authorized under PA Act 194';
+      'Nunca autorizado según la Ley 194 de PA';
 
   @override
   String get procResearchNeverAuthorizedBody =>
-      'By statute (20 Pa.C.S. § 5836(b)), this directive can never convey the power to consent to the following — no clause in this document and no decision by your agent can authorize them:';
+      'Por ley (20 Pa.C.S. § 5836(b)), esta directiva nunca puede otorgar la facultad de consentir a lo siguiente; ninguna cláusula de este documento ni ninguna decisión de su agente puede autorizarlo:';
 
   @override
   String get procResearchPsychosurgery =>
-      'Psychosurgery (brain surgery meant to change mood or behavior)';
+      'Psicocirugía (cirugía cerebral destinada a cambiar el estado de ánimo o la conducta)';
 
   @override
-  String get procResearchParentalRights => 'Termination of parental rights';
+  String get procResearchParentalRights => 'Terminación de la patria potestad';
 
   @override
-  String get signScreenPreparing => 'Preparing signing packet';
+  String get signScreenPreparing => 'Preparando el paquete para firmar';
 
   @override
-  String get signScreenBackToReview => 'Back to review';
+  String get signScreenBackToReview => 'Volver a revisar';
 
   @override
   String get executionHelpText =>
-      'Per 20 Pa.C.S. § 5822 / § 5832, a Mental Health Advance Directive must be signed on paper by you and two adult witnesses, all present at the same time. The app cannot witness it for you — this step walks you through what to do.';
+      'Según 20 Pa.C.S. § 5822 / § 5832, una Directiva Anticipada de Salud Mental debe firmarse en papel por usted y dos testigos adultos, todos presentes al mismo tiempo. La aplicación no puede actuar como testigo; este paso le explica qué hacer.';
 
   @override
-  String get executionFinalStepLabel => 'Final step · on paper';
+  String get executionFinalStepLabel => 'Último paso · en papel';
 
   @override
-  String get executionHeading => 'Make it legal — with a pen.';
+  String get executionHeading => 'Hágalo legal, con bolígrafo.';
 
   @override
   String get executionIntro =>
-      'Pennsylvania law requires a real signature on paper. We can\'t witness it for you — but here\'s exactly what to do.';
+      'La ley de Pensilvania exige una firma real en papel. No podemos ser testigos por usted, pero aquí tiene exactamente lo que debe hacer.';
 
   @override
-  String get executionWhyNotAppLead => 'Why not sign in the app? ';
+  String get executionWhyNotAppLead => '¿Por qué no firmar en la aplicación? ';
 
   @override
   String get executionWhyNotAppBody =>
-      'Under Act 194 the directive is only valid when you and two adult witnesses sign the ';
+      'Según la Ley 194, la directiva solo es válida cuando usted y dos testigos adultos firman el ';
 
   @override
-  String get executionSamePaperDocument => 'same paper document';
+  String get executionSamePaperDocument => 'mismo documento en papel';
 
   @override
   String get executionWhyNotAppTail =>
-      ', together. A tap-to-sign wouldn\'t hold up.';
+      ', juntos. Una firma con un toque en la pantalla no sería válida.';
 
   @override
   String get executionAnyFormValid =>
-      'You don’t have to use a specific form. Pennsylvania’s official forms are recommended, not required — what makes your directive valid is its content and being signed and witnessed correctly. If a facility hands you a different form, this one still counts.';
+      'No tiene que usar un formulario específico. Los formularios oficiales de Pensilvania se recomiendan, pero no son obligatorios: lo que hace válida su directiva es su contenido y que se firme y atestigüe correctamente. Si un centro le da otro formulario, este sigue siendo válido.';
 
   @override
-  String get executionStep1Title => 'Print the packet';
+  String get executionStep1Title => 'Imprima el paquete';
 
   @override
   String get executionStep1Body =>
-      'Print the PDF we just made. It already has signature lines for you and two witnesses.';
+      'Imprima el PDF que acabamos de crear. Ya incluye líneas de firma para usted y dos testigos.';
 
   @override
-  String get executionStep2Title => 'Gather two adult witnesses';
+  String get executionStep2Title => 'Reúna a dos testigos adultos';
 
   @override
   String get executionStep2Body =>
-      'Both must be 18 or older and in the room with you when you sign. (Who can’t witness is below.)';
+      'Ambos deben tener 18 años o más y estar en la misma sala que usted cuando firme. (Más abajo se indica quién no puede ser testigo).';
 
   @override
-  String get executionStep3Title => 'Everyone signs, same place, same time';
+  String get executionStep3Title =>
+      'Todos firman en el mismo lugar y al mismo tiempo';
 
   @override
   String get executionStep3Body =>
-      'Sign and date the witness page in front of both witnesses. They sign right after you, while you watch.';
+      'Firme y feche la página de testigos delante de ambos testigos. Ellos firman justo después de usted, mientras usted observa.';
 
   @override
-  String get executionWitnessLead => 'A witness ';
+  String get executionWitnessLead => 'Un testigo ';
 
   @override
-  String get executionWitnessCannot => 'cannot';
+  String get executionWitnessCannot => 'no puede';
 
   @override
   String get executionWitnessRest =>
-      ' be your agent or alternate agent, your mental health care provider, or an employee of the facility where you receive treatment — unless they are related to you by blood, marriage, or adoption.';
+      ' ser su agente ni su agente alternativo, su proveedor de atención de salud mental ni un empleado del centro donde recibe tratamiento, a menos que tenga con usted parentesco por consanguinidad, matrimonio o adopción.';
 
   @override
-  String get executionInYourPacket => 'In your packet';
+  String get executionInYourPacket => 'En su paquete';
 
   @override
-  String get executionPacketMhadTitle => 'Your completed MHAD';
+  String get executionPacketMhadTitle => 'Su MHAD completada';
 
   @override
-  String get executionPacketMhadSub => 'PDF · PA Act 194 format';
+  String get executionPacketMhadSub => 'PDF · formato de la Ley 194 de PA';
 
   @override
-  String get executionPacketSignatureTitle => 'Signature & witness page';
+  String get executionPacketSignatureTitle => 'Página de firma y testigos';
 
   @override
   String get executionPacketSignatureSub =>
-      'Pre-filled with your name and the date lines';
+      'Con su nombre y las líneas de fecha ya completados';
 
   @override
-  String get executionPacketWitnessTitle => 'Witness eligibility guide';
+  String get executionPacketWitnessTitle => 'Guía de requisitos para testigos';
 
   @override
-  String get executionPacketWitnessSub => 'One page — who can and can\'t sign';
+  String get executionPacketWitnessSub =>
+      'Una página: quién puede y quién no puede firmar';
 
   @override
-  String get executionPacketAfterTitle => 'What to do after signing';
+  String get executionPacketAfterTitle => 'Qué hacer después de firmar';
 
   @override
   String get executionPacketAfterSub =>
-      'Who to give copies to, how to distribute';
+      'A quién darle copias y cómo distribuirlas';
 
   @override
-  String get executionPreviewPacket => 'Preview & open packet';
+  String get executionPreviewPacket => 'Ver y abrir el paquete';
 
   @override
   String get executionNotYetValid =>
-      'NOT YET VALID · BECOMES LEGAL ONCE SIGNED ON PAPER BY YOU + 2 WITNESSES';
+      'AÚN NO ES VÁLIDA · SERÁ LEGAL CUANDO USTED Y 2 TESTIGOS LA FIRMEN EN PAPEL';
 
   @override
-  String get reviewStepNotProvidedYet => 'Not provided yet';
+  String get reviewStepNotProvidedYet => 'Aún no se ha indicado';
 
   @override
-  String get reviewStepNoInfoEntered => 'No information entered';
+  String get reviewStepNoInfoEntered => 'No se ingresó información';
 
   @override
   String reviewStepA11yNoInfo(String label) {
-    return '$label. No information entered.';
+    return '$label. No se ingresó información.';
   }
 
   @override
-  String get reviewStepPrimaryAgent => 'Primary Agent';
+  String get reviewStepPrimaryAgent => 'Agente principal';
 
   @override
-  String get reviewStepWhereIWantCare => 'Where I want care';
+  String get reviewStepWhereIWantCare => 'Dónde quiero recibir atención';
 
   @override
-  String get reviewStepMedicalDiagnoses => 'Medical Diagnoses';
+  String get reviewStepMedicalDiagnoses => 'Diagnósticos médicos';
 
   @override
-  String get reviewStepAllergiesReactions => 'Allergies & reactions';
+  String get reviewStepAllergiesReactions => 'Alergias y reacciones';
 
   @override
-  String get reviewStepProceduresResearch => 'Procedures & research';
+  String get reviewStepProceduresResearch => 'Procedimientos e investigación';
 
   @override
-  String get reviewStepName => 'Name';
+  String get reviewStepName => 'Nombre';
 
   @override
-  String get reviewStepPhone => 'Phone';
+  String get reviewStepPhone => 'Teléfono';
 
   @override
-  String get reviewStepCondition => 'Condition';
+  String get reviewStepCondition => 'Condición';
 
   @override
-  String get reviewStepRelationship => 'Relationship';
+  String get reviewStepRelationship => 'Parentesco';
 
   @override
-  String get reviewStepTreatmentFacility => 'Treatment facility';
+  String get reviewStepTreatmentFacility => 'Centro de tratamiento';
 
   @override
-  String get reviewStepMedicationConsent => 'Medication consent';
+  String get reviewStepMedicationConsent => 'Consentimiento sobre medicamentos';
 
   @override
-  String get reviewStepAllergies => 'Allergies';
+  String get reviewStepAllergies => 'Alergias';
 
   @override
-  String get reviewStepNeverGive => 'Never give';
+  String get reviewStepNeverGive => 'Nunca administrar';
 
   @override
-  String get reviewStepWithLimits => 'With limits';
+  String get reviewStepWithLimits => 'Con límites';
 
   @override
-  String get reviewStepPreferred => 'Preferred';
+  String get reviewStepPreferred => 'Preferidos';
 
   @override
-  String get reviewStepEctConsent => 'ECT consent';
+  String get reviewStepEctConsent => 'Consentimiento para TEC';
 
   @override
-  String get reviewStepDrugTrials => 'Drug trials';
+  String get reviewStepDrugTrials => 'Ensayos de medicamentos';
 
   @override
-  String get reviewStepActivities => 'Activities';
+  String get reviewStepActivities => 'Actividades';
 
   @override
-  String get reviewStepCrisisIntervention => 'Crisis intervention';
+  String get reviewStepCrisisIntervention => 'Intervención en crisis';
 
   @override
-  String get reviewStepHealthHistory => 'Health history';
+  String get reviewStepHealthHistory => 'Antecedentes de salud';
 
   @override
-  String get reviewStepDietary => 'Dietary';
+  String get reviewStepDietary => 'Alimentación';
 
   @override
-  String get reviewStepReligious => 'Religious';
+  String get reviewStepReligious => 'Religión';
 
   @override
-  String get reviewStepChildren => 'Children';
+  String get reviewStepChildren => 'Hijos';
 
   @override
-  String get reviewStepFamilyNotification => 'Family notification';
+  String get reviewStepFamilyNotification => 'Aviso a la familia';
 
   @override
-  String get reviewStepRecordsDisclosure => 'Records disclosure';
+  String get reviewStepRecordsDisclosure => 'Divulgación de registros';
 
   @override
-  String get reviewStepPetCare => 'Pet care';
+  String get reviewStepPetCare => 'Cuidado de mascotas';
 
   @override
-  String get reviewStepOther => 'Other';
+  String get reviewStepOther => 'Otro';
 
   @override
   String reviewStepWhoPhone(String who) {
-    return '$who\'s phone number';
+    return 'Número de teléfono de $who';
   }
 
   @override
   String reviewStepWhoAddress(String who) {
-    return '$who\'s address';
+    return 'Dirección de $who';
   }
 
   @override
-  String get reviewStepYourPrimaryAgent => 'your primary agent';
+  String get reviewStepYourPrimaryAgent => 'su agente principal';
 
   @override
-  String get reviewStepYourAlternateAgent => 'your alternate agent';
+  String get reviewStepYourAlternateAgent => 'su agente alternativo';
 
   @override
-  String get reviewStepYourGuardianNominee => 'your guardian nominee';
+  String get reviewStepYourGuardianNominee =>
+      'la persona que usted propone como tutor';
 
   @override
-  String get reviewStepLoading => 'Loading';
+  String get reviewStepLoading => 'Cargando';
 
   @override
   String get reviewStepOneLastLook =>
-      'One last look, then we\'ll make your signing packet.';
+      'Una última revisión y luego prepararemos su paquete para firmar.';
 
   @override
   String get reviewStepOneSectionNeedsAttention =>
-      '1 section still needs your attention before signing.';
+      'Todavía hay 1 sección que requiere su atención antes de firmar.';
 
   @override
   String reviewStepSectionsNeedAttention(int count) {
-    return '$count sections still need your attention before signing.';
+    return 'Todavía hay $count secciones que requieren su atención antes de firmar.';
   }
 
   @override
   String get reviewStepAllGood =>
-      'Everything looks good. All sections reviewed.';
+      'Todo se ve bien. Se revisaron todas las secciones.';
 
   @override
   String reviewStepOptionalGather(String items) {
-    return 'Optional, but worth gathering before you sign: $items. They help your care team reach the people you named — you can still sign without them.';
+    return 'Opcional, pero conviene reunirlo antes de firmar: $items. Ayuda a su equipo de atención a comunicarse con las personas que usted nombró; aun así, puede firmar sin estos datos.';
   }
 
   @override
-  String get reviewStepAtAGlance => 'Your directive at a glance';
+  String get reviewStepAtAGlance => 'Su directiva de un vistazo';
 
   @override
-  String get reviewStepOptionalCheck => 'Optional check';
+  String get reviewStepOptionalCheck => 'Revisión opcional';
 
   @override
-  String get reviewStepRunConsistencyCheck => 'Run a consistency check';
+  String get reviewStepRunConsistencyCheck =>
+      'Hacer una revisión de coherencia';
 
   @override
   String get reviewStepConsistencyCheckHelp =>
-      'Scans your answers for cross-step contradictions (e.g. an agent-consent that conflicts with an avoid list), and — if the AI is set up — adds an optional AI review of gaps to double-check. Optional; you can sign without it.';
+      'Revisa sus respuestas en busca de contradicciones entre pasos (por ejemplo, un consentimiento del agente que contradice una lista de cosas a evitar) y, si la IA está configurada, añade una revisión opcional de la IA para verificar vacíos. Es opcional; puede firmar sin hacerla.';
 
   @override
-  String get reviewStepReadyToSign => 'Ready to sign?';
+  String get reviewStepReadyToSign => '¿Listo para firmar?';
 
   @override
   String get reviewStepReadyToSignBody =>
-      'Review all sections above. When satisfied, tap Preview to continue to signing and dating the directive.';
+      'Revise todas las secciones anteriores. Cuando esté conforme, toque Vista previa para continuar con la firma y la fecha de la directiva.';
 
   @override
-  String get reviewStepProvidersMustComply => 'Providers must comply ';
+  String get reviewStepProvidersMustComply => 'Los proveedores deben cumplir ';
 
   @override
   String get reviewStepProvidersMustComplyBody =>
-      'with your directive under PA Act 194 (20 Pa.C.S. §§ 5804, 5842). A provider may decline specific instructions only if they conflict with accepted medical practice, or when the provider is not physically available.';
+      'su directiva según la Ley 194 de PA (20 Pa.C.S. §§ 5804, 5842). Un proveedor solo puede negarse a seguir instrucciones específicas si contradicen la práctica médica aceptada o si el proveedor no está físicamente disponible.';
 
   @override
-  String get reviewStepExperimentalStudies => 'Experimental studies';
+  String get reviewStepExperimentalStudies => 'Estudios experimentales';
 
   @override
-  String get wizardProgressSaved => 'Progress saved';
+  String get wizardProgressSaved => 'Progreso guardado';
 
   @override
-  String get wizardLoading => 'Loading';
+  String get wizardLoading => 'Cargando';
 
   @override
   String get wizardError => 'Error';
 
   @override
-  String get wizardUnableToLoad => 'Unable to load this directive.';
+  String get wizardUnableToLoad => 'No se pudo cargar esta directiva.';
 
   @override
-  String get wizardBackToHome => 'Back to home';
+  String get wizardBackToHome => 'Volver al inicio';
 
   @override
-  String get wizardNotFound => 'Not found';
+  String get wizardNotFound => 'No encontrado';
 
   @override
-  String get wizardDirectiveNotFound => 'Directive not found.';
+  String get wizardDirectiveNotFound => 'No se encontró la directiva.';
 
   @override
-  String get wizardPreview => 'Preview';
+  String get wizardPreview => 'Vista previa';
 
   @override
-  String get wizardContinue => 'Continue';
+  String get wizardContinue => 'Continuar';
 
   @override
-  String get wizardSaved => 'Saved';
+  String get wizardSaved => 'Guardado';
 
   @override
   String get wizardIncompletePrivate =>
-      'Some fields are incomplete — you can come back to finish later.';
+      'Algunos campos están incompletos; puede volver más tarde para terminarlos.';
 
   @override
   String get wizardIncompletePublic =>
-      'Some fields are incomplete — you can fill them in before you finish.';
+      'Algunos campos están incompletos; puede completarlos antes de terminar.';
 
   @override
-  String get wizardExitWithoutSaving => 'Exit Without Saving?';
+  String get wizardExitWithoutSaving => '¿Salir sin guardar?';
 
   @override
   String get wizardExitWebBody =>
-      'The web app does not save your progress permanently.\n\nIf you leave, close the tab, or the app crashes, your work is kept on this device for 10 minutes so you can reopen and recover it — then it’s erased. Export or print your document to keep a copy.';
+      'La aplicación web no guarda su progreso de forma permanente.\n\nSi sale, cierra la pestaña o la aplicación falla, su trabajo se conserva en este dispositivo durante 10 minutos para que pueda volver a abrirlo y recuperarlo; después se borra. Exporte o imprima su documento para conservar una copia.';
 
   @override
   String get wizardExitPublicBody =>
-      'You are in Public Mode — your data is stored in memory only and will be lost when the app closes.\n\nExport or print your document before leaving. To save across sessions, use Private Mode instead.';
+      'Está en Modo Público: sus datos solo se guardan en la memoria y se perderán cuando se cierre la aplicación.\n\nExporte o imprima su documento antes de salir. Para guardarlo entre sesiones, use el Modo Privado.';
 
   @override
-  String get wizardStay => 'Stay';
+  String get wizardStay => 'Quedarme';
 
   @override
-  String get wizardExit => 'Exit';
+  String get wizardExit => 'Salir';
 
   @override
   String get wizardSaveExitBody =>
-      'Your progress on this step will be saved. You can return to continue later.';
+      'Se guardará su progreso en este paso. Puede volver más tarde para continuar.';
 
   @override
-  String get wizardYourDirective => 'YOUR DIRECTIVE';
+  String get wizardYourDirective => 'SU DIRECTIVA';
 
   @override
   String personalInfoStepReuseDetails(String name) {
-    return 'Reuse your details from $name?';
+    return '¿Usar sus datos de $name?';
   }
 
   @override
-  String get personalInfoStepCopy => 'Copy';
+  String get personalInfoStepCopy => 'Copiar';
 
   @override
-  String get personalInfoStepZipFirst => 'Enter a 5-digit ZIP first.';
+  String get personalInfoStepZipFirst =>
+      'Primero ingrese un código postal de 5 dígitos.';
 
   @override
   String get personalInfoStepZipLookupFailed =>
-      'Couldn\'t look up that ZIP — you can type it in.';
+      'No se pudo buscar ese código postal; puede escribirlo usted.';
 
   @override
   String personalInfoStepCountyName(String county) {
-    return '$county County';
+    return 'Condado de $county';
   }
 
   @override
   String personalInfoStepFilled(String filled) {
-    return 'Filled: $filled';
+    return 'Completado: $filled';
   }
 
   @override
-  String get personalInfoStepDateFormat => 'Use MM/DD/YYYY format';
+  String get personalInfoStepDateFormat =>
+      'Use el formato MM/DD/AAAA (mes/día/año)';
 
   @override
-  String get personalInfoStepInvalidDate => 'Invalid date';
+  String get personalInfoStepInvalidDate => 'Fecha no válida';
 
   @override
   String get personalInfoStepDobFuture =>
-      'Date of birth can\'t be in the future';
+      'La fecha de nacimiento no puede ser futura';
 
   @override
   String get personalInfoStepMustBeAdult =>
-      'Must be 18 or older (or an emancipated minor) to create a directive';
+      'Debe tener 18 años o más (o ser un menor emancipado) para crear una directiva';
 
   @override
-  String get personalInfoStepSelectDob => 'Select your date of birth';
+  String get personalInfoStepSelectDob => 'Seleccione su fecha de nacimiento';
 
   @override
   String get personalInfoStepHelp =>
-      'Provide your legal name as it appears on official documents. You must be 18 years of age or older, or an emancipated minor, to create a Mental Health Advance Directive under PA Act 194 of 2004.';
+      'Indique su nombre legal tal como aparece en sus documentos oficiales. Debe tener 18 años o más, o ser un menor emancipado, para crear una Directiva Anticipada de Salud Mental según la Ley 194 de 2004 de PA.';
 
   @override
-  String get personalInfoStepFullLegalName => 'Full legal name *';
+  String get personalInfoStepFullLegalName => 'Nombre legal completo *';
 
   @override
   String get personalInfoStepFullLegalNameHelper =>
-      'Use your full legal name as it appears on official ID';
+      'Use su nombre legal completo tal como aparece en su identificación oficial';
 
   @override
-  String get personalInfoStepDobLabel => 'Date of birth (MM/DD/YYYY) *';
+  String get personalInfoStepDobLabel => 'Fecha de nacimiento (MM/DD/AAAA) *';
 
   @override
   String get personalInfoStepDobHelper =>
-      'Used to verify your identity on the directive';
+      'Se usa para verificar su identidad en la directiva';
 
   @override
-  String get personalInfoStepPickDate => 'Pick date';
+  String get personalInfoStepPickDate => 'Elegir fecha';
 
   @override
-  String get personalInfoStepStreetAddress => 'Street address';
+  String get personalInfoStepStreetAddress => 'Dirección';
 
   @override
   String get personalInfoStepStreetAddressHelper =>
-      'Your current residential address';
+      'Su dirección residencial actual';
 
   @override
-  String get personalInfoStepAddress2 => 'Apt, suite, unit, etc.';
+  String get personalInfoStepAddress2 => 'Apto., suite, unidad, etc.';
 
   @override
-  String get personalInfoStepCounty => 'County';
+  String get personalInfoStepCounty => 'Condado';
 
   @override
-  String get personalInfoStepZip => 'ZIP';
+  String get personalInfoStepZip => 'Código postal';
 
   @override
-  String get personalInfoStepZipHint => '12345 or 12345-6789';
+  String get personalInfoStepZipHint => '12345 o 12345-6789';
 
   @override
   String get personalInfoStepZipHelper =>
-      'Tap the icon to fill city, county & state';
+      'Toque el ícono para completar ciudad, condado y estado';
 
   @override
-  String get personalInfoStepZipTooltip => 'Fill city, county & state from ZIP';
+  String get personalInfoStepZipTooltip =>
+      'Completar ciudad, condado y estado a partir del código postal';
 
   @override
-  String get personalInfoStepZipInvalid => 'Enter 5-digit or 5+4-digit ZIP';
+  String get personalInfoStepZipInvalid =>
+      'Ingrese un código postal de 5 o de 5+4 dígitos';
 
   @override
   String get personalInfoStepPhoneInvalid =>
-      'Enter a valid 10-digit phone number';
+      'Ingrese un número de teléfono válido de 10 dígitos';
 
   @override
-  String get peopleTrustPrimaryAgent => 'PRIMARY AGENT';
+  String get peopleTrustPrimaryAgent => 'AGENTE PRINCIPAL';
 
   @override
-  String get peopleTrustAlternateAgent => 'ALTERNATE AGENT';
+  String get peopleTrustAlternateAgent => 'AGENTE ALTERNATIVO';
 
   @override
-  String get peopleTrustWhatCanTheyDecide => 'What can they decide?';
+  String get peopleTrustWhatCanTheyDecide => '¿Qué pueden decidir?';
 
   @override
   String get peopleTrustAuthorityIntro =>
-      'Limit or expand your agent’s authority. Default is broad authority.';
+      'Limite o amplíe la autoridad de su agente. Por defecto, la autoridad es amplia.';
 
   @override
-  String get peopleTrustLegendAgentDecides => '\"Agent decides\"';
+  String get peopleTrustLegendAgentDecides => '\"Decide el agente\"';
 
   @override
-  String get peopleTrustLegendGrants => ' grants the power; ';
+  String get peopleTrustLegendGrants => ' otorga la facultad; ';
 
   @override
   String get peopleTrustLegendNo => '\"No\"';
 
   @override
-  String get peopleTrustLegendWithholds => ' withholds it entirely; ';
+  String get peopleTrustLegendWithholds => ' la niega por completo; ';
 
   @override
-  String get peopleTrustLegendIf => '\"If…\"';
+  String get peopleTrustLegendIf => '\"Si…\"';
 
   @override
   String get peopleTrustLegendCondition =>
-      ' lets you add a condition in your own words.';
+      ' le permite añadir una condición con sus propias palabras.';
 
   @override
-  String get peopleTrustPrimaryBadge => 'Primary';
+  String get peopleTrustPrimaryBadge => 'Principal';
 
   @override
-  String get peopleTrustAddSomeone => 'Add someone';
+  String get peopleTrustAddSomeone => 'Añadir a alguien';
 
   @override
-  String get peopleTrustOptional => 'Optional';
+  String get peopleTrustOptional => 'Opcional';
 
   @override
-  String get peopleTrustContactPicker => 'Contact picker';
+  String get peopleTrustContactPicker => 'Selector de contactos';
 
   @override
-  String get peopleTrustPhoneOnFile => 'Phone on file';
+  String get peopleTrustPhoneOnFile => 'Teléfono registrado';
 
   @override
   String get agentDesigHelp =>
-      'Your agent must be 18 or older. Under PA Act 194, they cannot be your mental health care provider or an employee of a mental health care facility or residential facility where you receive care — unless they are related to you. Choose someone you trust to honor your wishes.';
+      'Su agente debe tener 18 años o más. Según la Ley 194 de PA, no puede ser su proveedor de atención de salud mental ni un empleado de un centro de salud mental o centro residencial donde usted reciba atención, a menos que sea su pariente. Elija a alguien de confianza que respete sus deseos.';
 
   @override
-  String get agentDesigTitle => 'Primary Agent Designation';
+  String get agentDesigTitle => 'Designación del agente principal';
 
   @override
   String get agentDesigAgentDefinition =>
-      'An agent (healthcare proxy) is someone you choose to make mental health care decisions on your behalf when you cannot.';
+      'Un agente (apoderado de atención médica) es la persona que usted elige para tomar decisiones sobre su atención de salud mental en su nombre cuando usted no pueda hacerlo.';
 
   @override
-  String get agentDesigRelationship => 'Relationship';
+  String get agentDesigRelationship => 'Parentesco';
 
   @override
   String get agentDesigSpouseNote =>
-      'Note: Under PA Act 194 §5838, if you designate your spouse as your agent, that designation is automatically revoked if either spouse files for divorce, unless you state otherwise in this directive.';
+      'Nota: Según la Ley 194 de PA §5838, si designa a su cónyuge como agente, esa designación se revoca automáticamente si cualquiera de los cónyuges solicita el divorcio, a menos que usted indique lo contrario en esta directiva.';
 
   @override
   String get altAgentHelp =>
-      'Your agent must be 18 or older. They cannot be your treating physician, an employee of your treatment facility (unless a relative), or someone with financial interest in your estate. Choose someone you trust to honor your wishes.';
+      'Su agente debe tener 18 años o más. No puede ser su médico tratante, un empleado de su centro de tratamiento (salvo que sea pariente) ni alguien con un interés económico en su patrimonio. Elija a alguien de confianza que respete sus deseos.';
 
   @override
-  String get altAgentTitle => 'Alternate Agent Designation';
+  String get altAgentTitle => 'Designación del agente alternativo';
 
   @override
   String get altAgentActsIf =>
-      'Your alternate agent acts if your primary agent is unable or unwilling to serve.';
+      'Su agente alternativo actúa si su agente principal no puede o no quiere hacerlo.';
 
   @override
   String get altAgentSameAuthority =>
-      'The alternate agent has the same authority as the primary agent but only steps in when the primary agent cannot act.';
+      'El agente alternativo tiene la misma autoridad que el agente principal, pero solo interviene cuando el agente principal no puede actuar.';
 
   @override
   String get altAgentNotRequired =>
-      'You are not required to designate an alternate agent.';
+      'No está obligado a designar un agente alternativo.';
 
   @override
-  String get altAgentRelationship => 'Relationship';
+  String get altAgentRelationship => 'Parentesco';
 
   @override
   String get agentAuthHelp =>
-      'Consider carefully before restricting your agent\'s authority. Broad authority gives your agent flexibility to respond to situations you may not anticipate.';
+      'Piénselo con cuidado antes de restringir la autoridad de su agente. Una autoridad amplia le da a su agente flexibilidad para responder a situaciones que usted quizá no prevea.';
 
   @override
   String get agentAuthIntro =>
-      'By default your agent has broad authority to make mental health treatment decisions. You may restrict this authority here.';
+      'Por defecto, su agente tiene amplia autoridad para tomar decisiones sobre su tratamiento de salud mental. Aquí puede restringir esa autoridad.';
 
   @override
   String get agentAuthScopeTitle =>
-      'Important: Scope of Authority (20 Pa.C.S. § 5836)';
+      'Importante: alcance de la autoridad (20 Pa.C.S. § 5836)';
 
   @override
   String get agentAuthScopeBody =>
-      'The checkboxes below apply ONLY to:\n  • Voluntary hospitalization (admission to a treatment facility)\n  • General psychiatric medications\n\nThey do NOT cover:\n  • Electroconvulsive therapy (ECT)\n  • Experimental studies or procedures\n  • Clinical drug trials\n\nYour consent choices for ECT, experimental studies, and drug trials are set on their dedicated pages earlier in this form. Under PA Act 194, your agent CANNOT override those decisions — they are binding regardless of agent authority.';
+      'Las casillas de abajo se aplican SOLO a:\n  • Hospitalización voluntaria (ingreso a un centro de tratamiento)\n  • Medicamentos psiquiátricos en general\n\nNO incluyen:\n  • Terapia electroconvulsiva (TEC)\n  • Estudios o procedimientos experimentales\n  • Ensayos clínicos de medicamentos\n\nSus decisiones de consentimiento sobre la TEC, los estudios experimentales y los ensayos de medicamentos se indican en sus propias páginas, antes en este formulario. Según la Ley 194 de PA, su agente NO PUEDE anular esas decisiones: son obligatorias independientemente de la autoridad del agente.';
 
   @override
-  String get agentAuthStandardLead => 'The standard your agent must follow: ';
+  String get agentAuthStandardLead => 'La norma que su agente debe seguir: ';
 
   @override
   String get agentAuthStandardBody =>
-      'under § 5836(d), your agent is legally bound to make the decision you would make if you were competent, guided by what you write in this directive and any clear prior instructions, after consulting with providers. The more you fill in, the closer their decisions can match yours.';
+      'según el § 5836(d), su agente está legalmente obligado a tomar la decisión que usted tomaría si fuera competente, guiándose por lo que escriba en esta directiva y por cualquier instrucción previa clara, después de consultar con los proveedores. Cuanto más complete, más podrán sus decisiones parecerse a las suyas.';
 
   @override
   String get agentAuthHospitalization =>
-      'Agent may consent to voluntary hospitalization';
+      'El agente puede consentir a una hospitalización voluntaria';
 
   @override
   String get agentAuthHospitalizationSub =>
-      'Admission to a psychiatric treatment facility only';
+      'Solo el ingreso a un centro de tratamiento psiquiátrico';
 
   @override
-  String get agentAuthMedication => 'Agent may consent to medication';
+  String get agentAuthMedication => 'El agente puede consentir a medicamentos';
 
   @override
   String get agentAuthMedicationSub =>
-      'General psychiatric medications only — does not include ECT';
+      'Solo medicamentos psiquiátricos en general; no incluye la TEC';
 
   @override
-  String get agentAuthExamplesField => 'Agent Limitations';
+  String get agentAuthExamplesField => 'Limitaciones del agente';
 
   @override
   String get agentAuthExample1 =>
-      'My agent may not consent to electroconvulsive therapy (ECT) under any circumstances.';
+      'Mi agente no puede consentir a la terapia electroconvulsiva (TEC) bajo ninguna circunstancia.';
 
   @override
   String get agentAuthExample2 =>
-      'My agent should consult with my therapist, Dr. Smith, before agreeing to any changes in my medication regimen.';
+      'Mi agente debe consultar con mi terapeuta, el Dr. Smith, antes de aceptar cualquier cambio en mi régimen de medicamentos.';
 
   @override
   String get agentAuthExample3 =>
-      'My agent may consent to voluntary inpatient admission for up to 72 hours, but may not consent to longer stays without consulting my family.';
+      'Mi agente puede consentir a un ingreso hospitalario voluntario de hasta 72 horas, pero no puede consentir a estancias más largas sin consultar a mi familia.';
 
   @override
   String get agentAuthLimitationsLabel =>
-      'Additional limitations or instructions (optional)';
+      'Limitaciones o instrucciones adicionales (opcional)';
 
   @override
-  String get guardianNomNoPreference => 'No preference';
+  String get guardianNomNoPreference => 'Sin preferencia';
 
   @override
   String get guardianNomNoPreferenceHint =>
-      'Let the court decide. They will usually appoint a family member or county guardianship office.';
+      'Que decida el tribunal. Por lo general, nombrará a un familiar o a la oficina de tutela del condado.';
 
   @override
-  String get guardianNomSameAsPrimary => 'Same as my primary agent';
+  String get guardianNomSameAsPrimary =>
+      'La misma persona que mi agente principal';
 
   @override
   String get guardianNomSameAsPrimaryHint =>
-      'The simplest path. The court is not required to follow this, but it is strong guidance.';
+      'La opción más sencilla. El tribunal no está obligado a seguirla, pero es una orientación de peso.';
 
   @override
-  String get guardianNomSameAsAlternate => 'Same as my alternate agent';
+  String get guardianNomSameAsAlternate =>
+      'La misma persona que mi agente alternativo';
 
   @override
   String get guardianNomSameAsAlternateHint =>
-      'Use this if your alternate would be a better fit for a longer-term guardianship role.';
+      'Use esta opción si su agente alternativo sería más adecuado para una tutela de largo plazo.';
 
   @override
-  String get guardianNomDifferent => 'Someone different';
+  String get guardianNomDifferent => 'Otra persona';
 
   @override
   String get guardianNomDifferentHint =>
-      'Choose another person — e.g. an attorney, sibling, or close friend not already named.';
+      'Elija a otra persona; por ejemplo, un abogado, un hermano o un amigo cercano que aún no haya nombrado.';
 
   @override
   String get guardianNomHelp =>
-      'Your nomination is not binding — the court will consider it but makes the final decision on who to appoint.';
+      'Su propuesta no es obligatoria: el tribunal la tendrá en cuenta, pero toma la decisión final sobre a quién nombrar.';
 
   @override
   String get guardianNomOptionalIntro =>
-      'This section is optional. You may nominate a guardian in case a court ever needs to appoint one for you.';
+      'Esta sección es opcional. Puede proponer un tutor por si algún día un tribunal necesita nombrarle uno.';
 
   @override
   String get guardianNomGuardianVsAgent =>
-      'A guardian is different from your agent. A guardian is appointed by a court during formal incapacity proceedings. This nomination tells the court who you prefer.';
+      'Un tutor no es lo mismo que su agente. Un tutor lo nombra un tribunal en un proceso formal de incapacidad. Esta propuesta le indica al tribunal a quién prefiere usted.';
 
   @override
-  String get guardianNomPreferredGuardian => 'Preferred guardian';
+  String get guardianNomPreferredGuardian => 'Tutor preferido';
 
   @override
   String get guardianNomPickWhatFits =>
-      'Pick what fits — your nomination is guidance for the court, not a binding instruction.';
+      'Elija lo que mejor le convenga: su propuesta es una orientación para el tribunal, no una instrucción obligatoria.';
 
   @override
-  String get guardianNomNomineeFullName => 'Nominee full name';
+  String get guardianNomNomineeFullName =>
+      'Nombre completo de la persona propuesta';
 
   @override
-  String get guardianNomRelationshipToYou => 'Relationship to you';
+  String get guardianNomRelationshipToYou => 'Parentesco o relación con usted';
 
   @override
-  String get guardianNomConditionsTitle => 'Conditions on the guardianship';
+  String get guardianNomConditionsTitle => 'Condiciones de la tutela';
 
   @override
   String get guardianNomConditionsIntro =>
-      'If a court appoints a guardian, set the limits you want it to honor. These are guidance for the court, not binding.';
+      'Si un tribunal nombra a un tutor, indique los límites que desea que respete. Son una orientación para el tribunal, no son obligatorios.';
 
   @override
-  String get guardianNomCanChangeAgent => 'Can change my agent';
+  String get guardianNomCanChangeAgent => 'Puede cambiar a mi agente';
 
   @override
   String get guardianNomCanChangeAgentHint =>
-      'When or how may the guardian change my agent? (optional)';
+      '¿Cuándo o cómo puede el tutor cambiar a mi agente? (opcional)';
 
   @override
-  String get guardianNomCanOverride => 'Can override this directive';
+  String get guardianNomCanOverride => 'Puede anular esta directiva';
 
   @override
-  String get guardianNomCanOverrideSub => 'Revoke, suspend, or terminate it.';
+  String get guardianNomCanOverrideSub =>
+      'Revocarla, suspenderla o darla por terminada.';
 
   @override
   String get guardianNomCanOverrideHint =>
-      'Any limits on overriding this directive? (optional)';
+      '¿Algún límite para anular esta directiva? (opcional)';
 
   @override
-  String get guardianNomMustConsult => 'Must consult my agent first';
+  String get guardianNomMustConsult => 'Debe consultar primero con mi agente';
 
   @override
   String get guardianNomMustConsultHint =>
-      'What should the guardian consult my agent about? (optional)';
+      '¿Sobre qué debe el tutor consultar a mi agente? (opcional)';
 
   @override
   String diagnosesAlreadyAdded(String name) {
-    return '$name is already added';
+    return '$name ya está agregado';
   }
 
   @override
   String get diagnosesSearchHint =>
-      'Search a condition (e.g. depression, ADHD)…';
+      'Busque una condición (p. ej., depresión, TDAH)…';
 
   @override
-  String get diagnosesClearSearch => 'Clear search';
+  String get diagnosesClearSearch => 'Borrar búsqueda';
 
   @override
   String get diagnosesHelpText =>
-      'Search for your psychiatric and medical diagnoses using ICD-10 codes. These are the official medical classification codes used by healthcare providers. Adding your diagnoses helps your care team and agent understand your conditions.\n\nPsychiatric diagnoses (F-codes) and medical diagnoses are shown in separate sections.\n\nThis lookup is free and uses the NIH Clinical Tables Service — no AI tokens are used.';
+      'Busque sus diagnósticos psiquiátricos y médicos mediante los códigos CIE-10 (ICD-10). Son los códigos oficiales de clasificación médica que usan los proveedores de salud. Añadir sus diagnósticos ayuda a su equipo de atención y a su agente a entender sus condiciones.\n\nLos diagnósticos psiquiátricos (códigos F) y los médicos se muestran en secciones separadas.\n\nEsta búsqueda es gratuita y usa el NIH Clinical Tables Service; no consume tokens de IA.';
 
   @override
-  String get diagnosesPsychiatric => 'Psychiatric';
+  String get diagnosesPsychiatric => 'Psiquiátricos';
 
   @override
-  String get diagnosesMedical => 'Medical';
+  String get diagnosesMedical => 'Médicos';
 
   @override
-  String get diagnosesNoResults => 'No results found.';
+  String get diagnosesNoResults => 'No se encontraron resultados.';
 
   @override
-  String get diagnosesEmptyTitle => 'No diagnoses added yet';
+  String get diagnosesEmptyTitle => 'Aún no se han añadido diagnósticos';
 
   @override
   String get diagnosesEmptyBody =>
-      'Use the search above to find and add your diagnoses.';
+      'Use la búsqueda de arriba para encontrar y añadir sus diagnósticos.';
 
   @override
   String diagnosesAddedOne(int count) {
-    return 'Added · $count condition';
+    return 'Añadida · $count condición';
   }
 
   @override
   String diagnosesAddedMany(int count) {
-    return 'Added · $count conditions';
+    return 'Añadidas · $count condiciones';
   }
 
   @override
   String diagnosesPsychiatricCount(int count) {
-    return 'Psychiatric ($count)';
+    return 'Psiquiátricos ($count)';
   }
 
   @override
   String diagnosesMedicalCount(int count) {
-    return 'Medical ($count)';
+    return 'Médicos ($count)';
   }
 
   @override
-  String get diagnosesDoctorSection => 'Primary care doctor · optional';
+  String get diagnosesDoctorSection => 'Médico de atención primaria · opcional';
 
   @override
-  String get diagnosesDoctorName => 'Doctor name';
+  String get diagnosesDoctorName => 'Nombre del médico';
 
   @override
   String get diagnosesDoctorNameHint =>
-      'Type a name to search the provider registry';
+      'Escriba un nombre para buscar en el registro de proveedores';
 
   @override
   String get diagnosesNpiNote =>
-      'Provider names from the NPI registry (NIH Clinical Tables). Verify details before relying on them.';
+      'Nombres de proveedores del registro NPI (NIH Clinical Tables). Verifique los datos antes de confiar en ellos.';
 
   @override
-  String get diagnosesSpecialty => 'Specialty';
+  String get diagnosesSpecialty => 'Especialidad';
 
   @override
-  String get diagnosesPhone => 'Phone';
+  String get diagnosesPhone => 'Teléfono';
 
   @override
   String get diagnosesDescribeSemantics =>
-      'Describe a condition to find its official name';
+      'Describa una condición para encontrar su nombre oficial';
 
   @override
-  String get diagnosesDescribeLead => 'Don\'t know the official name? ';
+  String get diagnosesDescribeLead => '¿No sabe el nombre oficial? ';
 
   @override
-  String get diagnosesDescribeBold => 'Describe how it shows up for you';
+  String get diagnosesDescribeBold => 'Describa cómo se manifiesta en usted';
 
   @override
   String get diagnosesDescribeTail =>
-      ' and I\'ll suggest the closest ICD-10 code for you to confirm.';
+      ' y le sugeriré el código CIE-10 más cercano para que usted lo confirme.';
 
   @override
-  String get diagnosesTry => 'Try →';
+  String get diagnosesTry => 'Probar →';
 
   @override
   String get diagnosesFooter =>
-      'You\'re not required to list anything. Anything you do list is shared only with the people your directive names.';
+      'No está obligado a indicar nada. Lo que indique solo se comparte con las personas que nombra en su directiva.';
 
   @override
   String diagnosesAddedName(String name) {
-    return 'Added “$name”';
+    return 'Se añadió “$name”';
   }
 
   @override
   String diagnosesAlreadyAddedQuoted(String name) {
-    return '“$name” is already added';
+    return '“$name” ya está añadido';
   }
 
   @override
-  String get diagnosesDescribeTitle => 'Describe what you experience';
+  String get diagnosesDescribeTitle => 'Describa lo que le pasa';
 
   @override
   String get diagnosesDescribeIntro =>
-      'In your own words — symptoms, how it affects you, when it happens. We\'ll suggest possible conditions and confirm each against the ICD-10 registry. These are suggestions to review, not a diagnosis.';
+      'Con sus propias palabras: los síntomas, cómo le afectan y cuándo ocurren. Le sugeriremos posibles condiciones y confirmaremos cada una con el registro CIE-10. Son sugerencias para revisar, no un diagnóstico.';
 
   @override
   String get diagnosesDescribeHint =>
-      'e.g. long stretches where I feel hopeless and can\'t get out of bed';
+      'p. ej., largos periodos en los que me siento sin esperanza y no puedo levantarme de la cama';
 
   @override
-  String get diagnosesFinding => 'Finding…';
+  String get diagnosesFinding => 'Buscando…';
 
   @override
-  String get diagnosesFindMatches => 'Find matches';
+  String get diagnosesFindMatches => 'Buscar coincidencias';
 
   @override
   String get diagnosesNoMatches =>
-      'No close matches. Try adding more detail, or use the search box on the page if you know part of the name.';
+      'No hay coincidencias cercanas. Añada más detalles o use el cuadro de búsqueda de la página si conoce parte del nombre.';
 
   @override
   String get diagnosesSuggestionsNote =>
-      'Suggestions only — confirm with your records or your doctor. Codes from NIH Clinical Tables (ICD-10-CM).';
+      'Solo son sugerencias: confírmelas con sus registros o con su médico. Códigos de NIH Clinical Tables (ICD-10-CM).';
 
   @override
-  String get diagnosesDone => 'Done';
+  String get diagnosesDone => 'Listo';
 
   @override
-  String get allergiesKindDrug => 'Drug';
+  String get allergiesKindDrug => 'Medicamento';
 
   @override
-  String get allergiesKindFood => 'Food';
+  String get allergiesKindFood => 'Alimento';
 
   @override
   String get allergiesKindMaterial => 'Material';
 
   @override
-  String get allergiesKindOther => 'Other';
+  String get allergiesKindOther => 'Otro';
 
   @override
-  String get allergiesSearchDrugHint => 'Search a drug or class…';
+  String get allergiesSearchDrugHint => 'Busque un medicamento o una clase…';
 
   @override
-  String get allergiesSearchFoodHint => 'Search food allergens…';
+  String get allergiesSearchFoodHint => 'Busque alérgenos alimentarios…';
 
   @override
-  String get allergiesSearchMaterialHint => 'Search material allergens…';
+  String get allergiesSearchMaterialHint => 'Busque alérgenos de materiales…';
 
   @override
-  String get allergiesSearchOtherHint => 'Search other allergens…';
+  String get allergiesSearchOtherHint => 'Busque otros alérgenos…';
 
   @override
   String allergiesAddedToNeverWant(String name) {
-    return 'Added $name to “Medications I never want”.';
+    return 'Se añadió $name a “Medicamentos que nunca quiero”.';
   }
 
   @override
-  String get allergiesCodeSevere => 'SEVERE';
+  String get allergiesCodeSevere => 'GRAVE';
 
   @override
   String get allergiesCodeModerate => 'MOD';
 
   @override
-  String get allergiesCodeMild => 'MILD';
+  String get allergiesCodeMild => 'LEVE';
 
   @override
   String get allergiesHelpText =>
-      'List drug allergies, sensitivities, and past adverse reactions. ER staff check this section first. Severity = Mild / Moderate / Severe. Allergies and the \"Medications I never want\" list are separate sections — add a medication you refuse there yourself.';
+      'Indique sus alergias a medicamentos, sensibilidades y reacciones adversas previas. El personal de urgencias revisa esta sección primero. Gravedad = Leve / Moderada / Grave. Las alergias y la lista \"Medicamentos que nunca quiero\" son secciones separadas: añada allí usted mismo cualquier medicamento que rechace.';
 
   @override
-  String get allergiesAddSection => 'Add an allergy';
+  String get allergiesAddSection => 'Añadir una alergia';
 
   @override
-  String get allergiesSourceRxTerms => 'RxTerms · NLM clinical tables';
+  String get allergiesSourceRxTerms => 'RxTerms · tablas clínicas de la NLM';
 
   @override
-  String get allergiesSourceIcd => 'ICD-10-CM · NLM clinical tables';
+  String get allergiesSourceIcd => 'ICD-10-CM · tablas clínicas de la NLM';
 
   @override
-  String get allergiesNoResults => 'No results found.';
+  String get allergiesNoResults => 'No se encontraron resultados.';
 
   @override
   String get allergiesSourceNote =>
-      'Drug allergies search RxTerms. Food, material & other allergies search ICD-10 (e.g. Z91.01 food allergy, T78.4 unspecified allergy).';
+      'Las alergias a medicamentos se buscan en RxTerms. Las alergias a alimentos, materiales y otras se buscan en CIE-10 (p. ej., Z91.01 alergia alimentaria, T78.4 alergia no especificada).';
 
   @override
-  String get allergiesSeveritySection => 'Severity & reaction';
+  String get allergiesSeveritySection => 'Gravedad y reacción';
 
   @override
-  String get allergiesHowSerious => 'How serious is it?';
+  String get allergiesHowSerious => '¿Qué tan grave es?';
 
   @override
-  String get allergiesWhatHappens => 'What happens';
+  String get allergiesWhatHappens => 'Qué ocurre';
 
   @override
-  String get allergiesReactionsHint => 'e.g. Hives, Swelling, Throat closing';
+  String get allergiesReactionsHint =>
+      'p. ej., urticaria, hinchazón, cierre de garganta';
 
   @override
-  String get allergiesAddButton => 'Add allergy';
+  String get allergiesAddButton => 'Añadir alergia';
 
   @override
   String allergiesAddedOne(int count) {
-    return 'Added · $count allergy';
+    return 'Añadida · $count alergia';
   }
 
   @override
   String allergiesAddedMany(int count) {
-    return 'Added · $count allergies';
+    return 'Añadidas · $count alergias';
   }
 
   @override
   String get allergiesFooter =>
-      'You\'re not required to list anything. Anything you do list is shared only with the people your directive names.';
+      'No está obligado a indicar nada. Lo que indique solo se comparte con las personas que nombra en su directiva.';
 
   @override
-  String get allergiesClearSearch => 'Clear search';
+  String get allergiesClearSearch => 'Borrar búsqueda';
 
   @override
   String allergiesMatches(int count) {
-    return '$count matches';
+    return '$count coincidencias';
   }
 
   @override
-  String get allergiesSeverityMild => 'Mild';
+  String get allergiesSeverityMild => 'Leve';
 
   @override
-  String get allergiesSeverityMildDesc => 'rash, mild GI';
+  String get allergiesSeverityMildDesc =>
+      'sarpullido, molestias digestivas leves';
 
   @override
-  String get allergiesSeverityModerate => 'Moderate';
+  String get allergiesSeverityModerate => 'Moderada';
 
   @override
-  String get allergiesSeverityModerateDesc => 'hives, swelling';
+  String get allergiesSeverityModerateDesc => 'urticaria, hinchazón';
 
   @override
-  String get allergiesSeveritySevere => 'Severe';
+  String get allergiesSeveritySevere => 'Grave';
 
   @override
-  String get allergiesSeveritySevereDesc => 'anaphylaxis · ER';
+  String get allergiesSeveritySevereDesc => 'anafilaxia · urgencias';
 
   @override
   String allergiesSeveritySemantics(String label) {
-    return '$label severity';
+    return 'Gravedad: $label';
   }
 
   @override
   String medsStepMaxPerCategory(int max) {
-    return 'Maximum $max medications per category';
+    return 'Máximo $max medicamentos por categoría';
   }
 
   @override
   String get medsStepHelpText =>
-      'List medications by name. Your preferences apply to generic, brand name, and trade name equivalents unless you specify otherwise in the notes — to request brand-name only, note it in the reason field.\n\nNarrow Therapeutic Index (NTI) drugs — ones with only a small safety margin between a helpful dose and a harmful one, like lithium, carbamazepine, and valproic acid — cannot have generics substituted under PA law (35 P.S. §960.3). These are marked with an \"NTI\" badge when you search.';
+      'Indique los medicamentos por su nombre. Sus preferencias se aplican a los equivalentes genéricos, de marca y comerciales, salvo que indique lo contrario en las notas; para pedir solo la versión de marca, anótelo en el campo de motivo.\n\nLos medicamentos de índice terapéutico estrecho (NTI), que tienen un margen de seguridad pequeño entre una dosis útil y una dañina, como el litio, la carbamazepina y el ácido valproico, no pueden sustituirse por genéricos según la ley de PA (35 P.S. §960.3). Aparecen con la etiqueta \"NTI\" al buscarlos.';
 
   @override
-  String get medsStepHeadsUpLead => 'Heads up — ';
+  String get medsStepHeadsUpLead => 'Atención: ';
 
   @override
   String get medsStepHeadsUpBody =>
-      'your refusal of a medication and any limits you set on its use are binding under PA Act 194, but ';
+      'su rechazo de un medicamento y los límites que ponga a su uso son obligatorios según la Ley 194 de PA, pero ';
 
   @override
   String get medsStepHeadsUpBold =>
-      'specific dosage instructions are not binding';
+      'las instrucciones de dosis específicas no son obligatorias';
 
   @override
-  String get medsStepHeadsUpTail => ' on the physician — they choose the dose.';
+  String get medsStepHeadsUpTail =>
+      ' para el médico: es él quien elige la dosis.';
 
   @override
   String get medsStepAgentDecides =>
-      'I have designated an agent to make decisions about my medications';
+      'He designado a un agente para que tome decisiones sobre mis medicamentos';
 
   @override
-  String get medsStepCurrentTitle => 'Medications I am currently taking';
+  String get medsStepCurrentTitle => 'Medicamentos que tomo actualmente';
 
   @override
   String get medsStepCurrentSubtitle =>
-      'For your care team’s reference — not a preference';
+      'Como referencia para su equipo de atención, no es una preferencia';
 
   @override
-  String get medsStepNeverTitle => 'Medications I NEVER want';
+  String get medsStepNeverTitle => 'Medicamentos que NUNCA quiero';
 
   @override
   String get medsStepNeverSubtitle =>
-      'These medications should not be administered';
+      'Estos medicamentos no deben administrarse';
 
   @override
-  String get medsStepLimitTitle => 'Medications with limitations';
+  String get medsStepLimitTitle => 'Medicamentos con limitaciones';
 
   @override
-  String get medsStepLimitSubtitle => 'May be given but with restrictions';
+  String get medsStepLimitSubtitle =>
+      'Pueden administrarse, pero con restricciones';
 
   @override
-  String get medsStepPreferredTitle => 'Preferred medications';
+  String get medsStepPreferredTitle => 'Medicamentos preferidos';
 
   @override
   String get medsStepPreferredSubtitle =>
-      'Medications that have worked well for you';
+      'Medicamentos que le han funcionado bien';
 
   @override
-  String get medsStepSideEffectsTitle => 'Side effects you may be experiencing';
+  String get medsStepSideEffectsTitle =>
+      'Efectos secundarios que podría estar teniendo';
 
   @override
   String get medsStepSideEffectsBody =>
-      'For the medications you take now, check common side effects — especially any that affect your daily activities — so your care team knows. Needs AI set up. Not medical advice.';
+      'Para los medicamentos que toma ahora, revise los efectos secundarios comunes, sobre todo los que afectan sus actividades diarias, para que su equipo de atención lo sepa. Requiere tener la IA configurada. No es consejo médico.';
 
   @override
   String medsStepNtiNote(String note) {
-    return 'Narrow therapeutic index drug — $note. Pennsylvania law bars generic substitution for these; note any monitoring needs below. (Informational, not medical advice.)';
+    return 'Medicamento de índice terapéutico estrecho: $note. La ley de Pensilvania prohíbe sustituirlo por un genérico; indique abajo cualquier necesidad de control. (Informativo, no es consejo médico).';
   }
 
   @override
-  String get medsStepDosageLabel => 'Dosage (e.g. 20 mg twice daily)';
+  String get medsStepDosageLabel => 'Dosis (p. ej., 20 mg dos veces al día)';
 
   @override
-  String get medsStepReasonLabel => 'Reason / notes (optional)';
+  String get medsStepReasonLabel => 'Motivo / notas (opcional)';
 
   @override
   String medsStepLearnAbout(String name) {
-    return 'Learn about $name';
+    return 'Información sobre $name';
   }
 
   @override
-  String get medsStepMedlineInfo => 'Plain-language info (MedlinePlus)';
+  String get medsStepMedlineInfo =>
+      'Información en lenguaje sencillo (MedlinePlus)';
 
   @override
   String get medsStepFdaInfo =>
-      'Official FDA label (side effects & interactions)';
+      'Etiqueta oficial de la FDA (efectos secundarios e interacciones)';
 
   @override
-  String get medsStepRemoveDefault => 'Remove medication';
+  String get medsStepRemoveDefault => 'Quitar medicamento';
 
   @override
   String medsStepRemoveNamed(String name) {
-    return 'Remove $name';
+    return 'Quitar $name';
   }
 
   @override
   String medsStepAddToList(String title) {
-    return 'Add medication to $title list';
+    return 'Añadir un medicamento a la lista $title';
   }
 
   @override
-  String get medsStepAddButton => 'Add medication';
+  String get medsStepAddButton => 'Añadir medicamento';
 
   @override
-  String get facilityRoommateWomen => 'Women';
+  String get facilityRoommateWomen => 'Mujeres';
 
   @override
-  String get facilityRoommateMen => 'Men';
+  String get facilityRoommateMen => 'Hombres';
 
   @override
-  String get facilityRoommateSameAsIdentity => 'Same as my gender identity';
+  String get facilityRoommateSameAsIdentity =>
+      'Del mismo género con el que me identifico';
 
   @override
-  String get facilityRoommateSpecify => 'Let me specify';
+  String get facilityRoommateSpecify => 'Quiero especificarlo';
 
   @override
   String get facilityHelpText =>
-      'You may specify treatment facilities you prefer or want to avoid. These preferences guide your agent and treatment providers but may not always be possible to honor. Both sections are optional.';
+      'Puede indicar los centros de tratamiento que prefiere o que quiere evitar. Estas preferencias orientan a su agente y a sus proveedores de tratamiento, pero no siempre será posible respetarlas. Ambas secciones son opcionales.';
 
   @override
   String get facilityNoPreferenceBanner =>
-      'Leave both sections empty if you have no preference. Your directive will indicate \"No Preference\" for treatment facilities.';
+      'Deje ambas secciones vacías si no tiene preferencia. Su directiva indicará \"Sin preferencia\" en cuanto a centros de tratamiento.';
 
   @override
-  String get facilityPreferredTitle => 'Preferred Facilities';
+  String get facilityPreferredTitle => 'Centros preferidos';
 
   @override
   String get facilityPreferredSubtitle =>
-      'Facilities where you would prefer to be treated';
+      'Centros donde preferiría recibir tratamiento';
 
   @override
-  String get facilityAvoidTitle => 'Facilities to Avoid';
+  String get facilityAvoidTitle => 'Centros que prefiero evitar';
 
   @override
   String get facilityAvoidSubtitle =>
-      'Facilities where you do not want to be treated';
+      'Centros donde no quiere recibir tratamiento';
 
   @override
-  String get facilityOtherRoomPrefsLabel => 'Other room preferences';
+  String get facilityOtherRoomPrefsLabel => 'Otras preferencias de habitación';
 
   @override
   String get facilityOtherRoomPrefsHint =>
-      'Anything else about your room or surroundings — e.g. low lighting, near a window, away from loud areas…';
+      'Cualquier otra cosa sobre su habitación o entorno; p. ej., poca luz, cerca de una ventana, lejos de zonas ruidosas…';
 
   @override
-  String get facilityRoomSingle => 'Single room';
+  String get facilityRoomSingle => 'Habitación individual';
 
   @override
-  String get facilityRoomWindow => 'Window if possible';
+  String get facilityRoomWindow => 'Con ventana si es posible';
 
   @override
-  String get facilityRoomQuietFloor => 'Quiet floor';
+  String get facilityRoomQuietFloor => 'Piso tranquilo';
 
   @override
-  String get facilityRoomSameGender => 'Same-gender roommate';
+  String get facilityRoomSameGender =>
+      'Compañero de habitación del mismo género';
 
   @override
-  String get facilityRoomNoRoommate => 'No roommate';
+  String get facilityRoomNoRoommate => 'Sin compañero de habitación';
 
   @override
-  String get facilityRoomTransAffirming => 'Trans-affirming staff';
+  String get facilityRoomTransAffirming =>
+      'Personal que respete a las personas trans';
 
   @override
-  String get facilityRoomLowStimulation => 'Low-stimulation unit';
+  String get facilityRoomLowStimulation => 'Unidad de baja estimulación';
 
   @override
-  String get facilityRoomPrefsTitle => 'Room preferences';
+  String get facilityRoomPrefsTitle => 'Preferencias de habitación';
 
   @override
   String get facilityRoomPrefsSubtitle =>
-      'Optional — guides staff if a choice is available.';
+      'Opcional: orienta al personal si hay opciones disponibles.';
 
   @override
   String get facilityRoommateMatchPrompt =>
-      'For \"same-gender roommate\", match me with:';
+      'Para \"compañero de habitación del mismo género\", asígnenme con:';
 
   @override
-  String get facilityMatchMeWithLabel => 'Match me with';
+  String get facilityMatchMeWithLabel => 'Asígnenme con';
 
   @override
   String get facilityMatchMeWithHint =>
-      'Describe your roommate-matching preference';
+      'Describa su preferencia sobre el compañero de habitación';
 
   @override
-  String get facilityNameLabel => 'Facility name';
+  String get facilityNameLabel => 'Nombre del centro';
 
   @override
-  String get facilityNameHint => 'Type to search facilities';
+  String get facilityNameHint => 'Escriba para buscar centros';
 
   @override
-  String get facilityLocationLabel => 'Location (optional)';
+  String get facilityLocationLabel => 'Ubicación (opcional)';
 
   @override
-  String get facilityLocationHint => 'e.g., 123 Main St, Philadelphia, PA';
+  String get facilityLocationHint => 'p. ej., 123 Main St, Philadelphia, PA';
 
   @override
-  String get facilityRemoveTooltip => 'Remove facility';
+  String get facilityRemoveTooltip => 'Quitar centro';
 
   @override
   String facilityAddToSemantics(String title) {
-    return 'Add facility to $title';
+    return 'Añadir un centro a $title';
   }
 
   @override
-  String get facilityAddButton => 'Add facility';
+  String get facilityAddButton => 'Añadir centro';
 
   @override
   String get facilityNpiAttribution =>
-      'Facility names from the NPI registry (NIH Clinical Tables). Verify details before relying on them.';
+      'Nombres de centros del registro NPI (NIH Clinical Tables). Verifique los datos antes de confiar en ellos.';
 
   @override
   String get addlInstrHelpText =>
-      'These sections are all optional. Use them to give guidance to your agent and treatment team beyond the basic preferences above.';
+      'Todas estas secciones son opcionales. Úselas para orientar a su agente y a su equipo de tratamiento más allá de las preferencias básicas anteriores.';
 
   @override
-  String get addlInstrExampleFieldName => 'Additional Instructions';
+  String get addlInstrExampleFieldName => 'Instrucciones adicionales';
 
   @override
   String get addlInstrExample1 =>
-      'I find listening to calming music and going for walks helpful during periods of distress. Please allow me access to my personal music player.';
+      'Escuchar música tranquila y salir a caminar me ayuda en momentos de angustia. Por favor, permítanme usar mi reproductor de música personal.';
 
   @override
   String get addlInstrExample2 =>
-      'I am vegetarian for religious reasons. Please ensure my dietary needs are respected during any inpatient stay. I would also like access to a chaplain or spiritual advisor.';
+      'Soy vegetariano por motivos religiosos. Por favor, asegúrense de respetar mis necesidades alimentarias durante cualquier hospitalización. También me gustaría tener acceso a un capellán o consejero espiritual.';
 
   @override
   String get addlInstrExample3 =>
-      'Please notify my sister, Jane Doe, if I am admitted. Do not contact my ex-spouse under any circumstances. My therapist, Dr. Smith, should be informed of any treatment changes.';
+      'Por favor, avisen a mi hermana, Jane Doe, si me ingresan. No contacten a mi excónyuge bajo ninguna circunstancia. Mi terapeuta, el Dr. Smith, debe ser informado de cualquier cambio en el tratamiento.';
 
   @override
-  String get addlInstrActivitiesTitle => 'Activities & Environment';
+  String get addlInstrActivitiesTitle => 'Actividades y entorno';
 
   @override
   String get addlInstrActivitiesHint =>
-      'Preferences about daily activities, environment, restraints, seclusion';
+      'Preferencias sobre actividades diarias, entorno, sujeción y aislamiento';
 
   @override
   String get addlInstrActivitiesDescription =>
-      'Describe activities that help you feel better (e.g., walking, reading, music) and your preferences about your physical environment during treatment. You can also state whether you consent to or refuse the use of restraints (being physically held or strapped down, or given medication to restrict your movement or behavior — a \"chemical restraint\") or seclusion (being confined alone in a room).';
+      'Describa las actividades que le ayudan a sentirse mejor (p. ej., caminar, leer, música) y sus preferencias sobre el entorno físico durante el tratamiento. También puede indicar si consiente o rechaza el uso de sujeción (ser inmovilizado físicamente o atado, o recibir medicamentos para restringir su movimiento o conducta, lo que se llama \"sujeción química\") o de aislamiento (ser confinado solo en una habitación).';
 
   @override
-  String get addlInstrCrisisTitle => 'Crisis Intervention';
+  String get addlInstrCrisisTitle => 'Intervención en crisis';
 
   @override
   String get addlInstrCrisisHint =>
-      'What helps or doesn\'t help during a crisis';
+      'Qué ayuda y qué no ayuda durante una crisis';
 
   @override
   String get addlInstrCrisisDescription =>
-      'Based on your past experience, describe what helps you during a mental health crisis and what makes things worse. This helps your treatment team respond in the way that works best for you.';
+      'Según su experiencia, describa qué le ayuda durante una crisis de salud mental y qué empeora las cosas. Esto ayuda a su equipo de tratamiento a responder de la manera que mejor funcione para usted.';
 
   @override
-  String get addlInstrDeescTitle => 'De-escalation Techniques';
+  String get addlInstrDeescTitle => 'Técnicas para calmarse';
 
   @override
   String get addlInstrDeescHint =>
-      'e.g., music, deep breathing, quiet room, weighted blanket';
+      'p. ej., música, respiración profunda, habitación tranquila, manta con peso';
 
   @override
   String get addlInstrDeescDescription =>
-      'List specific techniques or strategies that help calm you when you are distressed. Examples include listening to music, deep breathing, being in a quiet room, using a weighted blanket, speaking with a specific person, or going for a walk.';
+      'Indique técnicas o estrategias específicas que le ayudan a calmarse cuando está angustiado. Por ejemplo: escuchar música, respirar profundamente, estar en una habitación tranquila, usar una manta con peso, hablar con una persona en particular o salir a caminar.';
 
   @override
-  String get addlInstrTriggersTitle => 'Potential Crisis Triggers';
+  String get addlInstrTriggersTitle => 'Posibles desencadenantes de crisis';
 
   @override
   String get addlInstrTriggersHint =>
-      'e.g., loud environments, specific topics, being alone';
+      'p. ej., lugares ruidosos, ciertos temas, estar solo';
 
   @override
   String get addlInstrTriggersDescription =>
-      'Identify situations, environments, or topics that may trigger or worsen a crisis for you. This helps your treatment team avoid these triggers. Examples: loud environments, being touched without permission, certain conversation topics, being left alone, or specific people.';
+      'Identifique situaciones, entornos o temas que puedan desencadenar o empeorar una crisis. Esto ayuda a su equipo de tratamiento a evitarlos. Por ejemplo: lugares ruidosos, que lo toquen sin permiso, ciertos temas de conversación, quedarse solo o personas específicas.';
 
   @override
-  String get addlInstrHealthHistoryTitle => 'Health History';
+  String get addlInstrHealthHistoryTitle => 'Antecedentes de salud';
 
   @override
   String get addlInstrHealthHistoryHint =>
-      'Relevant mental health history, diagnoses, hospitalizations';
+      'Antecedentes de salud mental relevantes, diagnósticos, hospitalizaciones';
 
   @override
   String get addlInstrHealthHistoryDescription =>
-      'Summarize your relevant mental health history, including past diagnoses, hospitalizations, and treatments that worked well or did not work. This gives your treatment team context about your care history.';
+      'Resuma sus antecedentes de salud mental relevantes, incluidos diagnósticos previos, hospitalizaciones y tratamientos que funcionaron bien o que no funcionaron. Esto le da contexto a su equipo de tratamiento sobre su historial de atención.';
 
   @override
-  String get addlInstrDietaryTitle => 'Dietary Preferences';
+  String get addlInstrDietaryTitle => 'Preferencias alimentarias';
 
   @override
   String get addlInstrDietaryHint =>
-      'Food restrictions, preferences, religious dietary laws';
+      'Restricciones y preferencias alimentarias, normas religiosas sobre la alimentación';
 
   @override
   String get addlInstrDietaryDescription =>
-      'List any food allergies, dietary restrictions, or preferences your treatment team should know about. This includes religious dietary laws (e.g., kosher, halal, vegetarian), food intolerances, and any foods to avoid due to medication interactions.';
+      'Indique cualquier alergia alimentaria, restricción o preferencia que su equipo de tratamiento deba conocer. Esto incluye normas religiosas sobre la alimentación (p. ej., kosher, halal, vegetariana), intolerancias alimentarias y alimentos que deba evitar por interacciones con medicamentos.';
 
   @override
-  String get addlInstrReligiousTitle => 'Religious & Spiritual';
+  String get addlInstrReligiousTitle => 'Religión y espiritualidad';
 
   @override
   String get addlInstrReligiousHint =>
-      'Religious practices, spiritual needs, clergy contact';
+      'Prácticas religiosas, necesidades espirituales, contacto con un religioso';
 
   @override
   String get addlInstrReligiousDescription =>
-      'Describe any religious or spiritual practices that are important to you during treatment. This may include prayer times, clergy or chaplain visits, religious texts or items you would like to have access to, fasting observances, or faith-based coping practices.';
+      'Describa las prácticas religiosas o espirituales que son importantes para usted durante el tratamiento. Puede incluir horarios de oración, visitas de un religioso o capellán, textos u objetos religiosos a los que quiera tener acceso, ayunos o prácticas de afrontamiento basadas en la fe.';
 
   @override
-  String get addlInstrChildrenTitle => 'Children & Custody';
+  String get addlInstrChildrenTitle => 'Hijos y custodia';
 
   @override
   String get addlInstrChildrenHint =>
-      'Instructions regarding care of your minor children';
+      'Instrucciones sobre el cuidado de sus hijos menores';
 
   @override
   String get addlInstrChildrenDescription =>
-      'If you have minor children or dependents, describe who should care for them if you are hospitalized. Include contact information for caregivers, school details, and any custody arrangements your treatment team should be aware of.';
+      'Si tiene hijos menores o dependientes, describa quién debe cuidarlos si usted es hospitalizado. Incluya los datos de contacto de los cuidadores, información de la escuela y cualquier acuerdo de custodia que su equipo de tratamiento deba conocer.';
 
   @override
-  String get addlInstrFamilyNotifyTitle => 'Family Notification';
+  String get addlInstrFamilyNotifyTitle => 'Aviso a la familia';
 
   @override
-  String get addlInstrFamilyNotifyHint => 'Who should be notified and how';
+  String get addlInstrFamilyNotifyHint => 'A quién se debe avisar y cómo';
 
   @override
   String get addlInstrFamilyNotifyDescription =>
-      'Specify who should be notified if you are hospitalized or if your treatment changes. Include how to reach them and what information may be shared. You can also specify people who should NOT be contacted.';
+      'Indique a quién se debe avisar si usted es hospitalizado o si cambia su tratamiento. Incluya cómo comunicarse con esas personas y qué información se puede compartir. También puede indicar a quién NO se debe contactar.';
 
   @override
-  String get addlInstrPetCareTitle => 'Pet Care';
+  String get addlInstrPetCareTitle => 'Cuidado de mascotas';
 
   @override
-  String get addlInstrPetCareHint => 'Instructions for care of your pets';
+  String get addlInstrPetCareHint =>
+      'Instrucciones para el cuidado de sus mascotas';
 
   @override
   String get addlInstrPetCareDescription =>
-      'If you have pets, describe who should care for them if you are hospitalized. Include the caregiver\'s contact information, feeding and medication schedules, veterinary contacts, and any special care instructions.';
+      'Si tiene mascotas, describa quién debe cuidarlas si usted es hospitalizado. Incluya los datos de contacto del cuidador, los horarios de alimentación y medicamentos, los contactos del veterinario y cualquier instrucción especial.';
 
   @override
-  String get addlInstrReproTitle => 'Reproductive Health Care';
+  String get addlInstrReproTitle => 'Atención de salud reproductiva';
 
   @override
-  String get addlInstrReproHint => 'Pregnancy testing, contraception, etc.';
+  String get addlInstrReproHint => 'Pruebas de embarazo, anticoncepción, etc.';
 
   @override
   String get addlInstrReproDescription =>
-      'Describe any reproductive health care preferences your treatment team should know about. This may include whether you want pregnancy testing before medication changes, contraception preferences, or reproductive health conditions that could affect your treatment.';
+      'Describa cualquier preferencia de atención de salud reproductiva que su equipo de tratamiento deba conocer. Puede incluir si desea una prueba de embarazo antes de cambios en los medicamentos, preferencias de anticoncepción o condiciones de salud reproductiva que podrían afectar su tratamiento.';
 
   @override
-  String get addlInstrOtherTitle => 'Other Instructions';
+  String get addlInstrOtherTitle => 'Otras instrucciones';
 
   @override
-  String get addlInstrOtherHint => 'Any other instructions not covered above';
+  String get addlInstrOtherHint =>
+      'Cualquier otra instrucción no incluida arriba';
 
   @override
   String get addlInstrOtherDescription =>
-      'Use this section for any instructions to your treatment team or agent that are not covered by the sections above. This is a catch-all for anything else you want to communicate about your care preferences.';
+      'Use esta sección para cualquier instrucción para su equipo de tratamiento o su agente que no esté incluida en las secciones anteriores. Sirve para todo lo demás que quiera comunicar sobre sus preferencias de atención.';
 
   @override
-  String get addlInstrRecordsTitle => 'Records Disclosure & Limitations';
+  String get addlInstrRecordsTitle => 'Divulgación de registros y limitaciones';
 
   @override
   String get addlInstrRecordsDescription =>
-      'Choose who may — and may not — receive copies of your mental health records. Under 20 Pa.C.S. § 5836(e), the disclosure authority you grant here can override certain confidentiality protections (including drug & alcohol, mental-health-procedures, and HIV confidentiality laws), so be specific.';
+      'Elija quién puede recibir copias de sus registros de salud mental y quién no. Según 20 Pa.C.S. § 5836(e), la autorización de divulgación que otorgue aquí puede prevalecer sobre ciertas protecciones de confidencialidad (incluidas las leyes de confidencialidad sobre drogas y alcohol, procedimientos de salud mental y VIH), así que sea específico.';
 
   @override
-  String get addlInstrRecordsReleaseLabel => 'Who may receive my records';
+  String get addlInstrRecordsReleaseLabel =>
+      'Quién puede recibir mis registros';
 
   @override
   String get addlInstrRecordsReleaseHint =>
-      'e.g. my agent Jane Doe; my treatment team; Dr. Smith';
+      'p. ej., mi agente Jane Doe; mi equipo de tratamiento; el Dr. Smith';
 
   @override
-  String get addlInstrRecordsWithholdLabel => 'Who must NOT receive my records';
+  String get addlInstrRecordsWithholdLabel =>
+      'Quién NO debe recibir mis registros';
 
   @override
   String get addlInstrRecordsWithholdHint =>
-      'e.g. my ex-spouse; specific family members';
+      'p. ej., mi excónyuge; ciertos familiares';
 
   @override
-  String get addlInstrRecordsOtherLabel => 'Other limitations on disclosure';
+  String get addlInstrRecordsOtherLabel =>
+      'Otras limitaciones a la divulgación';
 
   @override
   String get addlInstrRecordsOtherHint =>
-      'e.g. release only records from the last 12 months';
+      'p. ej., divulgar solo los registros de los últimos 12 meses';
 
   @override
-  String get addlInstrOptionalAddOns => 'Optional add-ons';
+  String get addlInstrOptionalAddOns => 'Complementos opcionales';
 
   @override
-  String get addlInstrCrisisPlanTitle => 'Crisis plan';
+  String get addlInstrCrisisPlanTitle => 'Plan de crisis';
 
   @override
   String get addlInstrCrisisPlanSubtitle =>
-      'Your early-warning signs, triggers, what genuinely helps, and what not to do. Not required by Act 194 — but it\'s the part agents and ER staff read first.';
+      'Sus señales de alerta temprana, desencadenantes, lo que realmente ayuda y lo que no se debe hacer. La Ley 194 no lo exige, pero es lo primero que leen los agentes y el personal de urgencias.';
 
   @override
-  String get addlInstrUlyssesTitle => 'Self-binding (Ulysses) clause';
+  String get addlInstrUlyssesTitle =>
+      'Cláusula de autovinculación (cláusula Ulises)';
 
   @override
   String get addlInstrUlyssesSubtitle =>
-      'Acknowledge that, once two professionals find you incapable, what you wrote stands even over your in-the-moment protest, until capacity returns (20 Pa.C.S. §§ 5824, 5834).';
+      'Reconozca que, una vez que dos profesionales determinen que usted no tiene capacidad, lo que escribió se mantiene incluso si usted protesta en ese momento, hasta que recupere la capacidad (20 Pa.C.S. §§ 5824, 5834).';
 
   @override
   String get effCondHelpText =>
-      'Describe the circumstances under which you want this directive to take effect — for example, \"when two qualified professionals certify that I lack capacity to make treatment decisions.\" Under PA Act 194, the declaration becomes operative when a psychiatrist and one of the following certify you lack capacity: another psychiatrist, a licensed psychologist, your family physician, your attending physician, or another mental health treatment professional.';
+      'Describa las circunstancias en las que quiere que esta directiva entre en vigor; por ejemplo, \"cuando dos profesionales calificados certifiquen que no tengo capacidad para tomar decisiones sobre mi tratamiento\". Según la Ley 194 de PA, la declaración entra en vigor cuando un psiquiatra y uno de los siguientes certifican que usted no tiene capacidad: otro psiquiatra, un psicólogo con licencia, su médico de familia, su médico tratante u otro profesional de tratamiento de salud mental.';
 
   @override
-  String get effCondTakeEffectWhen => 'This directive should take effect when…';
+  String get effCondTakeEffectWhen =>
+      'Esta directiva debe entrar en vigor cuando…';
 
   @override
   String get effCondTriggerTwoTitle =>
-      'A psychiatrist + one other professional find I lack capacity';
+      'Un psiquiatra y otro profesional determinen que no tengo capacidad';
 
   @override
   String get effCondTriggerTwoSubtitle =>
-      'The standard PA Act 194 trigger — two qualified professionals certify you can\'t make mental-health treatment decisions.';
+      'El criterio habitual de la Ley 194 de PA: dos profesionales calificados certifican que usted no puede tomar decisiones sobre su tratamiento de salud mental.';
 
   @override
-  String get effCondTriggerCourtTitle => 'A court determines I lack capacity';
+  String get effCondTriggerCourtTitle =>
+      'Un tribunal determine que no tengo capacidad';
 
   @override
-  String get effCondTriggerCommitTitle => 'I am involuntarily committed';
+  String get effCondTriggerCommitTitle => 'Me internen de forma involuntaria';
 
   @override
   String get effCondAnythingElseTitle =>
-      'Anything else about timing (optional)';
+      'Algo más sobre cuándo entra en vigor (opcional)';
 
   @override
   String get effCondAnythingElseSubtitle =>
-      'Add your own words, or pick an example to start from.';
+      'Escriba con sus propias palabras o elija un ejemplo para empezar.';
 
   @override
-  String get effCondExampleFieldName => 'Effective Condition';
+  String get effCondExampleFieldName => 'Condición de vigencia';
 
   @override
   String get effCondExample1 =>
-      'This directive takes effect when I am unable to make mental health treatment decisions for myself, as determined by two qualified professionals.';
+      'Esta directiva entra en vigor cuando yo no pueda tomar por mí mismo decisiones sobre mi tratamiento de salud mental, según lo determinen dos profesionales calificados.';
 
   @override
   String get effCondExample2 =>
-      'This directive becomes effective any time I am admitted to a psychiatric facility or crisis unit, whether voluntary or involuntary, and I am unable to clearly communicate my wishes.';
+      'Esta directiva entra en vigor siempre que me ingresen en un centro psiquiátrico o una unidad de crisis, ya sea de forma voluntaria o involuntaria, y yo no pueda comunicar claramente mis deseos.';
 
   @override
   String get effCondExample3 =>
-      'This directive takes effect when I am experiencing a severe episode of psychosis, mania, or dissociation that prevents me from understanding my treatment options or communicating my preferences.';
+      'Esta directiva entra en vigor cuando esté atravesando un episodio grave de psicosis, manía o disociación que me impida entender mis opciones de tratamiento o comunicar mis preferencias.';
 
   @override
   String get effCondExample4 =>
-      'This directive becomes effective when I tell my agent or treatment provider that I want it activated, or when I am unable to make consistent and informed decisions about my mental health care.';
+      'Esta directiva entra en vigor cuando le diga a mi agente o a mi proveedor de tratamiento que quiero activarla, o cuando no pueda tomar decisiones coherentes e informadas sobre mi atención de salud mental.';
 
   @override
   String get effCondExample5 =>
-      'This directive is effective when my designated agent, in consultation with any treating professional, determines that I would benefit from having my pre-stated treatment preferences followed.';
+      'Esta directiva entra en vigor cuando mi agente designado, en consulta con cualquier profesional tratante, determine que me beneficiaría que se sigan las preferencias de tratamiento que dejé indicadas.';
 
   @override
-  String get effCondOwnWordsLabel => 'In your own words (optional)';
+  String get effCondOwnWordsLabel => 'Con sus propias palabras (opcional)';
 
   @override
-  String get effCondDoctorTitle => 'Preferred evaluating doctor (optional)';
+  String get effCondDoctorTitle =>
+      'Médico preferido para la evaluación (opcional)';
 
   @override
   String get effCondDoctorSubtitle =>
-      'If you have a preferred doctor to evaluate your capacity, enter their information below.';
+      'Si tiene un médico preferido para evaluar su capacidad, ingrese sus datos abajo.';
 
   @override
-  String get effCondDoctorNameLabel => 'Name of Doctor';
+  String get effCondDoctorNameLabel => 'Nombre del médico';
 
   @override
-  String get effCondDoctorContactLabel => 'Address / Phone Number';
+  String get effCondDoctorContactLabel => 'Dirección / número de teléfono';
 
   @override
-  String get consentChoiceEctSectionLabel => 'TREATMENT CONSENT';
+  String get consentChoiceEctSectionLabel => 'CONSENTIMIENTO PARA TRATAMIENTO';
 
   @override
-  String get consentChoiceEctTitle => 'Electroconvulsive Therapy (ECT)';
+  String get consentChoiceEctTitle => 'Terapia electroconvulsiva (TEC)';
 
   @override
   String get consentChoiceEctSubtitle =>
-      'ECT is a psychiatric treatment in which seizures are electrically induced. State your preferences below.';
+      'La TEC es un tratamiento psiquiátrico en el que se inducen convulsiones mediante electricidad. Indique sus preferencias abajo.';
 
   @override
   String get consentChoiceEctHelpText =>
-      'ECT can be an effective treatment for severe depression and other conditions. Under PA law, you can consent in advance, refuse in advance, or set conditions.';
+      'La TEC puede ser un tratamiento eficaz para la depresión grave y otras condiciones. Según la ley de PA, usted puede consentir por adelantado, rechazarla por adelantado o establecer condiciones.';
 
   @override
   String get consentChoiceEctInfoBannerText =>
-      'Under PA Act 194, your agent cannot consent to ECT unless you explicitly authorize it here.';
+      'Según la Ley 194 de PA, su agente no puede consentir a la TEC a menos que usted lo autorice expresamente aquí.';
 
   @override
-  String get consentChoiceEctNoTitle => 'I do not consent to ECT';
+  String get consentChoiceEctNoTitle => 'No consiento a la TEC';
 
   @override
-  String get consentChoiceEctNoDescription =>
-      'ECT must not be performed on me.';
+  String get consentChoiceEctNoDescription => 'No se me debe aplicar la TEC.';
 
   @override
-  String get consentChoiceEctYesTitle => 'I consent to ECT';
+  String get consentChoiceEctYesTitle => 'Consiento a la TEC';
 
   @override
   String get consentChoiceEctYesDescription =>
-      'My provider may perform ECT if indicated.';
+      'Mi proveedor puede aplicar la TEC si está indicada.';
 
   @override
-  String get consentChoiceEctAgentTitle => 'My agent will decide about ECT';
+  String get consentChoiceEctAgentTitle => 'Mi agente decidirá sobre la TEC';
 
   @override
   String get consentChoiceEctAgentDescription =>
-      'Authorize your agent to consent to or refuse ECT on your behalf.';
+      'Autorice a su agente a consentir o rechazar la TEC en su nombre.';
 
   @override
   String get consentChoiceEctConditionalHint =>
-      'e.g., only if other treatments have failed and my agent agrees';
+      'p. ej., solo si otros tratamientos no han funcionado y mi agente está de acuerdo';
 
   @override
-  String get consentChoiceExperimentalSectionLabel => 'RESEARCH CONSENT';
+  String get consentChoiceExperimentalSectionLabel =>
+      'CONSENTIMIENTO PARA INVESTIGACIÓN';
 
   @override
-  String get consentChoiceExperimentalTitle => 'Experimental Studies';
+  String get consentChoiceExperimentalTitle => 'Estudios experimentales';
 
   @override
   String get consentChoiceExperimentalSubtitle =>
-      'State your preferences regarding participation in experimental research during mental health treatment.';
+      'Indique sus preferencias sobre participar en investigaciones experimentales durante el tratamiento de salud mental.';
 
   @override
   String get consentChoiceExperimentalHelpText =>
-      'You have the right to consent to or refuse participation in experimental research. Your preferences here will guide your care team and agent.';
+      'Usted tiene derecho a consentir o a negarse a participar en investigaciones experimentales. Sus preferencias aquí orientarán a su equipo de atención y a su agente.';
 
   @override
   String get consentChoiceExperimentalInfoBannerText =>
-      'Under PA Act 194, your agent cannot consent to experimental research unless you explicitly authorize it here.';
+      'Según la Ley 194 de PA, su agente no puede consentir a investigaciones experimentales a menos que usted lo autorice expresamente aquí.';
 
   @override
   String get consentChoiceExperimentalNoDescription =>
-      'I refuse participation in experimental studies.';
+      'Me niego a participar en estudios experimentales.';
 
   @override
   String get consentChoiceExperimentalYesTitle =>
-      'I consent to experimental studies';
+      'Consiento a participar en estudios experimentales';
 
   @override
   String get consentChoiceExperimentalYesDescription =>
-      'I am willing to participate in research studies during treatment.';
+      'Estoy dispuesto a participar en estudios de investigación durante el tratamiento.';
 
   @override
   String get consentChoiceExperimentalConditionalHint =>
-      'e.g., only non-invasive studies approved by my agent';
+      'p. ej., solo estudios no invasivos aprobados por mi agente';
 
   @override
-  String get consentChoiceDrugTrialsSectionLabel => 'CLINICAL TRIALS';
+  String get consentChoiceDrugTrialsSectionLabel => 'ENSAYOS CLÍNICOS';
 
   @override
-  String get consentChoiceDrugTrialsTitle => 'Drug Trials';
+  String get consentChoiceDrugTrialsTitle => 'Ensayos de medicamentos';
 
   @override
   String get consentChoiceDrugTrialsSubtitle =>
-      'State your preferences regarding participation in clinical drug trials during mental health treatment.';
+      'Indique sus preferencias sobre participar en ensayos clínicos de medicamentos durante el tratamiento de salud mental.';
 
   @override
   String get consentChoiceDrugTrialsHelpText =>
-      'Clinical drug trials test new medications. You can consent, refuse, or set conditions for your participation.';
+      'Los ensayos clínicos de medicamentos prueban medicamentos nuevos. Puede consentir, negarse o establecer condiciones para su participación.';
 
   @override
   String get consentChoiceDrugTrialsInfoBannerText =>
-      'Under PA Act 194, your agent cannot consent to drug trials unless you explicitly authorize it here.';
+      'Según la Ley 194 de PA, su agente no puede consentir a ensayos de medicamentos a menos que usted lo autorice expresamente aquí.';
 
   @override
   String get consentChoiceDrugTrialsNoDescription =>
-      'I refuse participation in drug trials.';
+      'Me niego a participar en ensayos de medicamentos.';
 
   @override
-  String get consentChoiceDrugTrialsYesTitle => 'I consent to drug trials';
+  String get consentChoiceDrugTrialsYesTitle =>
+      'Consiento a participar en ensayos de medicamentos';
 
   @override
   String get consentChoiceDrugTrialsYesDescription =>
-      'I am willing to participate in clinical drug trials.';
+      'Estoy dispuesto a participar en ensayos clínicos de medicamentos.';
 
   @override
   String get consentChoiceDrugTrialsConditionalHint =>
-      'e.g., only trials with an independent safety monitor';
+      'p. ej., solo ensayos con un supervisor de seguridad independiente';
 
   @override
   String get consentChoiceConditionalTitle =>
-      'I consent under specific conditions';
+      'Consiento bajo condiciones específicas';
 
   @override
   String get consentChoiceConditionalDescription =>
-      'Describe the conditions in the box below.';
+      'Describa las condiciones en el cuadro de abajo.';
 
   @override
-  String get consentChoiceConditionsLabel => 'Conditions';
+  String get consentChoiceConditionsLabel => 'Condiciones';
 
   @override
-  String get consentChoiceNoConsentTitle => 'I do not consent';
+  String get consentChoiceNoConsentTitle => 'No consiento';
 
   @override
-  String get consentChoiceAgentDecidesTitle => 'My agent will decide';
+  String get consentChoiceAgentDecidesTitle => 'Mi agente decidirá';
 
   @override
   String get consentChoiceAgentDecidesDescription =>
-      'Authorize your agent to consent or refuse on your behalf.';
+      'Autorice a su agente a consentir o rechazar en su nombre.';
 
   @override
-  String get voiceInputOpenDictation => 'Open voice dictation';
+  String get voiceInputOpenDictation => 'Abrir dictado por voz';
 
   @override
-  String get voiceInputDictateText => 'Dictate text';
+  String get voiceInputDictateText => 'Dictar texto';
 
   @override
-  String get savedImportCouldNotRead => 'Could not read that file.';
+  String get savedImportCouldNotRead => 'No se pudo leer ese archivo.';
 
   @override
   String get savedImportImportedAsDraft =>
-      'Imported as an editable draft. After reviewing, re-sign and re-witness it to make it valid again — the previous signature does not carry over.';
+      'Se importó como borrador editable. Después de revisarlo, vuelva a firmarlo y a reunir testigos para que sea válido de nuevo; la firma anterior no se conserva.';
 
   @override
-  String get contactPickerBtnMissingName => 'name';
+  String get contactPickerBtnMissingName => 'nombre';
 
   @override
-  String get contactPickerBtnMissingAddress => 'address';
+  String get contactPickerBtnMissingAddress => 'dirección';
 
   @override
-  String get contactPickerBtnMissingPhone => 'phone number';
+  String get contactPickerBtnMissingPhone => 'número de teléfono';
 
   @override
   String contactPickerBtnMissingFields(String fields) {
-    return 'Contact is missing: $fields. Please fill in the missing fields manually.';
+    return 'Al contacto le falta: $fields. Complete manualmente los campos que faltan.';
   }
 
   @override
-  String get contactPickerBtnImportA11y => 'Import from contacts';
+  String get contactPickerBtnImportA11y => 'Importar de contactos';
 
   @override
-  String get contactPickerBtnImport => 'Import from Contacts';
+  String get contactPickerBtnImport => 'Importar de Contactos';
 
   @override
   String medAutoSelectA11y(String name) {
-    return 'Select medication $name';
+    return 'Seleccionar el medicamento $name';
   }
 
   @override
   String medAutoSelectNtiA11y(String name) {
-    return 'Select medication $name, narrow therapeutic index drug';
+    return 'Seleccionar el medicamento $name, medicamento de índice terapéutico estrecho';
   }
 
   @override
   String get medAutoNtiTooltip =>
-      'Narrow Therapeutic Index (NTI) drug — no generic substitution in PA';
+      'Medicamento de índice terapéutico estrecho (NTI): no se permite sustituirlo por un genérico en PA';
 
   @override
   String get medAutoNtiBadge => 'NTI';
 
   @override
   String medAutoSelectStrengthA11y(String medication) {
-    return 'Select $medication';
+    return 'Seleccionar $medication';
   }
 
   @override
-  String get medAutoFieldLabel => 'Medication name';
+  String get medAutoFieldLabel => 'Nombre del medicamento';
 
   @override
-  String get medAutoSearchingA11y => 'Searching medications';
+  String get medAutoSearchingA11y => 'Buscando medicamentos';
 
   @override
-  String get wizardHelpA11y => 'Help for this step. Opens help sheet.';
+  String get wizardHelpA11y => 'Ayuda para este paso. Abre la hoja de ayuda.';
 
   @override
-  String get wizardHelpButton => 'Help';
+  String get wizardHelpButton => 'Ayuda';
 
   @override
-  String get wizardHelpLearnMore => 'Learn More';
+  String get wizardHelpLearnMore => 'Más información';
 
   @override
   String wizardHelpQuestionsContact(String phone) {
-    return 'Questions? Contact PA Protection & Advocacy: $phone';
+    return '¿Preguntas? Comuníquese con PA Protection & Advocacy: $phone';
   }
 
   @override
-  String get neverWantCrossAddTitle => 'Add to “Medications I never want”?';
+  String get neverWantCrossAddTitle =>
+      '¿Añadir a “Medicamentos que nunca quiero”?';
 
   @override
   String get neverWantCrossAddBodySingle =>
-      'You listed a drug allergy. Do you also want to refuse it as a medication, adding it to your “Medications I never want” list?';
+      'Indicó una alergia a un medicamento. ¿También quiere rechazarlo como medicamento y añadirlo a su lista “Medicamentos que nunca quiero”?';
 
   @override
   String get neverWantCrossAddBodyMulti =>
-      'You listed these drug allergies. Choose any you also want to refuse as medications — they’ll be added to your “Medications I never want” list.';
+      'Indicó estas alergias a medicamentos. Elija las que también quiera rechazar como medicamentos; se añadirán a su lista “Medicamentos que nunca quiero”.';
 
   @override
-  String get neverWantCrossAddNotNow => 'Not now';
+  String get neverWantCrossAddNotNow => 'Ahora no';
 
   @override
-  String get neverWantCrossAddConfirmSingle => 'Add to never-want';
+  String get neverWantCrossAddConfirmSingle => 'Añadir a la lista';
 
   @override
-  String get neverWantCrossAddConfirmMulti => 'Add selected';
+  String get neverWantCrossAddConfirmMulti => 'Añadir los seleccionados';
 
   @override
-  String get exampleTextSeeExamples => 'See examples';
+  String get exampleTextSeeExamples => 'Ver ejemplos';
 
   @override
   String exampleTextTitle(String fieldName) {
-    return 'Example: $fieldName';
+    return 'Ejemplo: $fieldName';
   }
 
   @override
   String get exampleTextIntro =>
-      'Here are some examples of what others have written. Use your own words to describe your specific preferences.';
+      'Estos son algunos ejemplos de lo que otras personas han escrito. Use sus propias palabras para describir sus preferencias.';
 
   @override
   String exampleTextNumbered(int number) {
-    return 'Example $number';
+    return 'Ejemplo $number';
   }
 
   @override
   String get exampleTextDisclaimer =>
-      'These are samples only. Your directive should reflect your own wishes and circumstances.';
+      'Son solo ejemplos. Su directiva debe reflejar sus propios deseos y circunstancias.';
 
   @override
-  String get exampleTextGotIt => 'Got it';
+  String get exampleTextGotIt => 'Entendido';
 
   @override
   String get quizQ1Headline =>
-      'Do you have someone in mind to **speak for you**?';
+      '¿Tiene a alguien en mente que **hable por usted**?';
 
   @override
   String get quizQ1Sub =>
-      'A family member, partner, or close friend who could make treatment decisions if you can\'t.';
+      'Un familiar, pareja o amigo cercano que pueda tomar decisiones sobre su tratamiento si usted no puede.';
 
   @override
-  String get quizQ1O1Label => 'Yes — and I trust them completely';
+  String get quizQ1O1Label => 'Sí, y confío plenamente en esa persona';
 
   @override
-  String get quizQ1O1Hint => 'You probably want a Combined or POA-only form.';
+  String get quizQ1O1Hint =>
+      'Probablemente le convenga un formulario Combinado o solo de Poder Notarial.';
 
   @override
-  String get quizQ1O2Label => 'Yes, but I want to set firm limits';
+  String get quizQ1O2Label => 'Sí, pero quiero poner límites firmes';
 
   @override
   String get quizQ1O2Hint =>
-      'Combined gives you both an agent and a binding declaration.';
+      'El Combinado le da tanto un agente como una declaración obligatoria.';
 
   @override
   String get quizQ1O3Label =>
-      'No — I want providers to follow my written wishes';
+      'No, quiero que los proveedores sigan mis deseos por escrito';
 
   @override
-  String get quizQ1O3Hint => 'Declaration-only is for you.';
+  String get quizQ1O3Hint => 'Solo Declaración es para usted.';
 
   @override
-  String get quizQ1O4Label => 'I\'m not sure yet';
+  String get quizQ1O4Label => 'Todavía no estoy seguro';
 
   @override
-  String get quizQ1O4Hint => 'No problem — we can come back to this.';
+  String get quizQ1O4Hint => 'No hay problema; podemos volver a esto.';
 
   @override
   String get quizQ2Headline =>
-      'Do you want to **write down** specific treatment preferences?';
+      '¿Quiere **dejar por escrito** preferencias de tratamiento específicas?';
 
   @override
   String get quizQ2Sub =>
-      'Medications, facilities, ECT, experimental studies, drug trials.';
+      'Medicamentos, centros, TEC, estudios experimentales, ensayos de medicamentos.';
 
   @override
-  String get quizQ2O1Label => 'Yes — I have specific things I want or refuse';
+  String get quizQ2O1Label =>
+      'Sí, hay cosas concretas que quiero o que rechazo';
 
   @override
   String get quizQ2O1Hint =>
-      'You probably want a Combined or Declaration form.';
+      'Probablemente le convenga un formulario Combinado o de Declaración.';
 
   @override
   String get quizQ2O2Label =>
-      'Some preferences, but I\'d rather my agent decide';
+      'Algunas preferencias, pero prefiero que decida mi agente';
 
   @override
   String get quizQ2O2Hint =>
-      'Combined still works — agent decides where you didn\'t write.';
+      'El Combinado también sirve: el agente decide en lo que usted no escribió.';
 
   @override
-  String get quizQ2O3Label => 'No — let my agent or doctors decide everything';
+  String get quizQ2O3Label => 'No, que mi agente o los médicos decidan todo';
 
   @override
-  String get quizQ2O3Hint => 'Power of Attorney only is the lightest path.';
+  String get quizQ2O3Hint => 'Solo Poder Notarial es la opción más sencilla.';
 
   @override
-  String get quizQ2O4Label => 'I\'m not sure yet';
+  String get quizQ2O4Label => 'Todavía no estoy seguro';
 
   @override
-  String get quizQ2O4Hint => 'No problem — Combined leaves both doors open.';
+  String get quizQ2O4Hint =>
+      'No hay problema; el Combinado deja ambas opciones abiertas.';
 
   @override
   String get quizQ3Headline =>
-      'If you can\'t decide, **whose voice** should reach the doctors first?';
+      'Si usted no puede decidir, ¿**qué voz** debe llegar primero a los médicos?';
 
   @override
   String get quizQ3Sub =>
-      'The directive you write today, or the person you trust?';
+      '¿La directiva que escribe hoy o la persona en quien confía?';
 
   @override
   String get quizQ3O1Label =>
-      'What I wrote — even over what someone says in the moment';
+      'Lo que escribí, incluso por encima de lo que alguien diga en ese momento';
 
   @override
   String get quizQ3O1Hint =>
-      'Declaration-only or Combined with strong written preferences.';
+      'Solo Declaración, o Combinado con preferencias escritas sólidas.';
 
   @override
   String get quizQ3O2Label =>
-      'My agent — they can read the situation in real time';
+      'Mi agente, que puede evaluar la situación en el momento';
 
   @override
   String get quizQ3O2Hint =>
-      'POA-only or Combined where the agent has broad authority.';
+      'Solo Poder Notarial, o Combinado con amplia autoridad para el agente.';
 
   @override
-  String get quizQ3O3Label => 'Both — what I wrote, with my agent filling gaps';
+  String get quizQ3O3Label =>
+      'Ambos: lo que escribí, y mi agente completa lo que falte';
 
   @override
-  String get quizQ3O3Hint => 'Combined is the strongest fit.';
+  String get quizQ3O3Hint => 'El Combinado es la opción que mejor encaja.';
 
   @override
-  String get quizQ3O4Label => 'I\'m not sure yet';
+  String get quizQ3O4Label => 'Todavía no estoy seguro';
 
   @override
-  String get quizQ3O4Hint => 'No problem — Combined supports both pathways.';
+  String get quizQ3O4Hint =>
+      'No hay problema; el Combinado admite ambos caminos.';
 
   @override
   String get quizQ4Headline =>
-      'What\'s the **most important** thing this document does for you?';
+      '¿Qué es lo **más importante** que este documento hace por usted?';
 
   @override
   String get quizQ4Sub =>
-      'There\'s no wrong answer — this just confirms what we\'re seeing.';
+      'No hay respuestas incorrectas; esto solo confirma lo que vemos.';
 
   @override
-  String get quizQ4O1Label => 'Names who I trust to speak for me';
+  String get quizQ4O1Label =>
+      'Nombra a las personas en quienes confío para hablar por mí';
 
   @override
-  String get quizQ4O1Hint => 'Combined or POA-only.';
+  String get quizQ4O1Hint => 'Combinado o solo Poder Notarial.';
 
   @override
-  String get quizQ4O2Label => 'Locks in specific treatments I want — or refuse';
+  String get quizQ4O2Label =>
+      'Deja fijados los tratamientos concretos que quiero o que rechazo';
 
   @override
-  String get quizQ4O2Hint => 'Combined or Declaration-only.';
+  String get quizQ4O2Hint => 'Combinado o solo Declaración.';
 
   @override
-  String get quizQ4O3Label => 'Both — equally';
+  String get quizQ4O3Label => 'Ambas cosas, por igual';
 
   @override
-  String get quizQ4O3Hint => 'Combined.';
+  String get quizQ4O3Hint => 'Combinado.';
 
   @override
-  String get quizQ4O4Label => 'Just having something on file';
+  String get quizQ4O4Label => 'Simplemente tener algo registrado';
 
   @override
   String get quizQ4O4Hint =>
-      'Any form works. Combined gives the broadest coverage.';
+      'Cualquier formulario sirve. El Combinado ofrece la cobertura más amplia.';
 
   @override
   String quizQuestionEyebrow(int current, int total) {
-    return 'Help me choose · question $current of $total';
+    return 'Ayúdeme a elegir · pregunta $current de $total';
   }
 
   @override
-  String get quizInYourWords => 'In your words';
+  String get quizInYourWords => 'Con sus palabras';
 
   @override
-  String get quizResultEyebrow => 'Help me choose · result';
+  String get quizResultEyebrow => 'Ayúdeme a elegir · resultado';
 
   @override
-  String get quizRecommendedForYou => 'Recommended for you';
+  String get quizRecommendedForYou => 'Recomendado para usted';
 
   @override
-  String get quizYouProbablyWant => 'You probably want\n';
+  String get quizYouProbablyWant => 'Probablemente le convenga\n';
 
   @override
-  String get quizLegendCombined => 'Combined';
+  String get quizLegendCombined => 'Combinado';
 
   @override
-  String get quizLegendDeclaration => 'Declaration only';
+  String get quizLegendDeclaration => 'Solo Declaración';
 
   @override
-  String get quizLegendPoa => 'Power of Attorney only';
+  String get quizLegendPoa => 'Solo Poder Notarial';
 
   @override
-  String get quizRetake => 'Retake';
+  String get quizRetake => 'Repetir';
 
   @override
   String quizUseForm(String formName) {
-    return 'Use $formName';
+    return 'Usar $formName';
   }
 
   @override
-  String get quizFormNameCombined => 'Combined';
+  String get quizFormNameCombined => 'Combinado';
 
   @override
-  String get quizFormNameDeclaration => 'Declaration';
+  String get quizFormNameDeclaration => 'Declaración';
 
   @override
-  String get quizFormNamePoa => 'POA';
+  String get quizFormNamePoa => 'Poder Notarial';
 
   @override
   String get quizExplainCombined =>
-      'Includes both your treatment preferences AND an agent designation. The most comprehensive option — and what most people choose.';
+      'Incluye sus preferencias de tratamiento Y la designación de un agente. Es la opción más completa y la que elige la mayoría de las personas.';
 
   @override
   String get quizExplainPoa =>
-      'Designates an agent to make decisions for you, without locking in specific treatment preferences. Best when you trust someone completely and want them to decide in the moment.';
+      'Designa a un agente para que tome decisiones por usted, sin fijar preferencias de tratamiento específicas. Es mejor cuando confía plenamente en alguien y quiere que esa persona decida en el momento.';
 
   @override
   String get quizExplainDeclaration =>
-      'Documents your treatment preferences without naming an agent. Your treatment team will follow your written wishes directly.';
+      'Documenta sus preferencias de tratamiento sin nombrar a un agente. Su equipo de tratamiento seguirá directamente sus deseos por escrito.';
 
   @override
-  String get aiSuggestDraftTitle => 'AI Draft';
+  String get aiSuggestDraftTitle => 'Borrador de la IA';
 
   @override
-  String get aiSuggestSuggestionTitle => 'AI Suggestion';
+  String get aiSuggestSuggestionTitle => 'Sugerencia de la IA';
 
   @override
-  String get aiSuggestYourText => 'Your text:';
+  String get aiSuggestYourText => 'Su texto:';
 
   @override
-  String get aiSuggestDraftLabel => 'AI draft:';
+  String get aiSuggestDraftLabel => 'Borrador de la IA:';
 
   @override
-  String get aiSuggestSuggestionLabel => 'AI suggestion:';
+  String get aiSuggestSuggestionLabel => 'Sugerencia de la IA:';
 
   @override
   String aiSuggestReviewCarefully(String notAdvice) {
-    return '$notAdvice Review carefully.';
+    return '$notAdvice Revíselo con cuidado.';
   }
 
   @override
-  String get aiSuggestDismiss => 'Dismiss';
+  String get aiSuggestDismiss => 'Descartar';
 
   @override
-  String get aiSuggestAddToMine => 'Add to mine';
+  String get aiSuggestAddToMine => 'Añadir a lo mío';
 
   @override
-  String get aiSuggestUseDraft => 'Use this draft';
+  String get aiSuggestUseDraft => 'Usar este borrador';
 
   @override
-  String get aiSuggestUseInstead => 'Use instead';
+  String get aiSuggestUseInstead => 'Usar en su lugar';
 
   @override
-  String get aiSuggestAppliedA11y => 'AI suggestion applied. Undo available.';
+  String get aiSuggestAppliedA11y =>
+      'Se aplicó la sugerencia de la IA. Puede deshacerla.';
 
   @override
-  String get aiSuggestApplied => 'AI suggestion applied.';
+  String get aiSuggestApplied => 'Se aplicó la sugerencia de la IA.';
 
   @override
-  String get aiSuggestUndo => 'Undo';
+  String get aiSuggestUndo => 'Deshacer';
 
   @override
   String aiSuggestLoadingA11y(String fieldName) {
-    return 'AI Suggest, loading suggestion for $fieldName';
+    return 'Sugerencia de IA, cargando una sugerencia para $fieldName';
   }
 
   @override
   String aiSuggestForFieldA11y(String fieldName) {
-    return 'AI Suggest for $fieldName';
+    return 'Sugerencia de IA para $fieldName';
   }
 
   @override
-  String get aiSuggestSetupA11y => 'Set up AI Assistant to use suggestions';
+  String get aiSuggestSetupA11y =>
+      'Configure el Asistente de IA para usar sugerencias';
 
   @override
-  String get aiSuggestTooltip => 'Get an AI suggestion for this field';
+  String get aiSuggestTooltip =>
+      'Obtener una sugerencia de la IA para este campo';
 
   @override
-  String get aiSuggestSetupTooltip => 'Set up AI Assistant to use this feature';
+  String get aiSuggestSetupTooltip =>
+      'Configure el Asistente de IA para usar esta función';
 
   @override
-  String get aiSuggestIconTooltip => 'AI suggestion';
+  String get aiSuggestIconTooltip => 'Sugerencia de la IA';
 
   @override
   String get contactSheetPermissionRequired =>
-      'Contact permission is required to import.';
+      'Se necesita permiso para acceder a los contactos para importar.';
 
   @override
-  String get contactSheetRolePrimaryAgent => 'primary agent';
+  String get contactSheetRolePrimaryAgent => 'agente principal';
 
   @override
-  String get contactSheetPickYour => 'Pick your ';
+  String get contactSheetPickYour => 'Elija a su ';
 
   @override
   String get contactSheetLocalOnly =>
-      'From your phone\'s contacts. We never upload them — search runs locally.';
+      'De los contactos de su teléfono. Nunca los subimos; la búsqueda se hace en su dispositivo.';
 
   @override
-  String get contactSheetSearchHint => 'Search by name or number';
+  String get contactSheetSearchHint => 'Buscar por nombre o número';
 
   @override
-  String get contactSheetClearSearch => 'Clear search';
+  String get contactSheetClearSearch => 'Borrar búsqueda';
 
   @override
   String contactSheetContactsCount(int count) {
-    return 'Contacts · $count';
+    return 'Contactos · $count';
   }
 
   @override
-  String get contactSheetPickAContact => 'Pick a contact';
+  String get contactSheetPickAContact => 'Elija un contacto';
 
   @override
   String contactSheetUseName(String name) {
-    return 'Use $name';
+    return 'Usar a $name';
   }
 
   @override
-  String get contactSheetThisContact => 'this contact';
+  String get contactSheetThisContact => 'este contacto';
 
   @override
-  String get contactSheetLooksLikeProvider => 'Looks like a provider';
+  String get contactSheetLooksLikeProvider => 'Parece un proveedor';
 
   @override
-  String get contactSheetUnder18 => 'Under 18';
+  String get contactSheetUnder18 => 'Menor de 18';
 
   @override
   String contactSheetWarnConfirm(String note) {
-    return '⚠ $note — confirm they\'re not treating you';
+    return '⚠ $note: confirme que no le está dando tratamiento';
   }
 
   @override
-  String get contactSheetEligible => '✓ Eligible · 18+';
+  String get contactSheetEligible => '✓ Cumple los requisitos · 18+';
 
   @override
-  String get contactSheetEnterManually => 'Enter someone manually';
+  String get contactSheetEnterManually => 'Ingresar a alguien manualmente';
 
   @override
-  String get contactSheetHardBlock => 'hard block';
+  String get contactSheetHardBlock => 'bloqueo';
 
   @override
-  String get contactSheetSoftWarn => 'soft warn';
+  String get contactSheetSoftWarn => 'advertencia';
 
   @override
   String get contactSheetRuleProvider =>
-      'Your current treating provider or their employee';
+      'Su proveedor tratante actual o un empleado suyo';
 
   @override
   String get contactSheetRuleFacilityOwner =>
-      'An owner/operator of a facility where you receive care';
+      'El propietario u operador de un centro donde usted recibe atención';
 
   @override
-  String get contactSheetWhoCantBeAgent => 'Who can\'t be your agent';
+  String get contactSheetWhoCantBeAgent => 'Quién no puede ser su agente';
 
   @override
   String get contactSheetRulesFootnote =>
-      'Under-18 is blocked automatically from the contact\'s birthday. We can\'t tell who your providers are, so anything that looks like a provider is a soft warning you can override — confirm only if they truly aren\'t treating you.';
+      'Los menores de 18 se bloquean automáticamente según la fecha de nacimiento del contacto. No podemos saber quiénes son sus proveedores, así que todo lo que parezca un proveedor es una advertencia que puede ignorar; confírmelo solo si realmente no le está dando tratamiento.';
 
   @override
-  String get voiceMicPermission => 'Microphone permission is needed.';
+  String get voiceMicPermission =>
+      'Se necesita permiso para usar el micrófono.';
 
   @override
   String get voiceTranscribeFailed =>
-      'Couldn\'t transcribe. Try again, or type it instead.';
+      'No se pudo transcribir. Inténtelo de nuevo o escríbalo.';
 
   @override
-  String get voiceSpeechError => 'Speech recognition error.';
+  String get voiceSpeechError => 'Error del reconocimiento de voz.';
 
   @override
-  String get voiceNeedsBrowser => 'Voice needs Chrome, Edge, or Safari.';
+  String get voiceNeedsBrowser => 'La voz requiere Chrome, Edge o Safari.';
 
   @override
   String get voiceNotAvailable =>
-      'Speech recognition is not available on this device.';
+      'El reconocimiento de voz no está disponible en este dispositivo.';
 
   @override
-  String get voiceStatusTranscribing => '● Transcribing';
+  String get voiceStatusTranscribing => '● Transcribiendo';
 
   @override
-  String get voiceStatusRecording => '● Recording';
+  String get voiceStatusRecording => '● Grabando';
 
   @override
-  String get voiceStatusPaused => '● Paused';
+  String get voiceStatusPaused => '● En pausa';
 
   @override
-  String get voiceSayItYourWay => 'Say it your way.';
+  String get voiceSayItYourWay => 'Dígalo a su manera.';
 
   @override
   String get voiceExplainAi =>
-      'For better accuracy on medication names and conditions, your recording goes to Google\'s AI to transcribe. Review the text before saving.';
+      'Para mayor precisión con nombres de medicamentos y condiciones, su grabación se envía a la IA de Google para transcribirla. Revise el texto antes de guardarlo.';
 
   @override
   String get voiceExplainBrowser =>
-      'To transcribe, your browser sends the audio to its speech service (often Google). We don\'t keep the audio or text — edit it before saving.';
+      'Para transcribir, su navegador envía el audio a su servicio de voz (a menudo, Google). No guardamos el audio ni el texto; edítelo antes de guardarlo.';
 
   @override
   String get voiceExplainDevice =>
-      'Your device turns speech into text. We never store the audio — you can edit before saving.';
+      'Su dispositivo convierte la voz en texto. Nunca guardamos el audio; puede editar el texto antes de guardarlo.';
 
   @override
   String get voiceEmptyHintAi =>
-      'Tap the red button, speak, then tap stop to transcribe…';
+      'Toque el botón rojo, hable y luego toque detener para transcribir…';
 
   @override
   String get voiceEmptyHintLive =>
-      'Tap the red record button and start speaking…';
+      'Toque el botón rojo de grabar y empiece a hablar…';
 
   @override
-  String get voiceCancelA11y => 'Cancel voice recording';
+  String get voiceCancelA11y => 'Cancelar la grabación de voz';
 
   @override
-  String get voiceConfirmA11y => 'Confirm and use transcript';
+  String get voiceConfirmA11y => 'Confirmar y usar la transcripción';
 
   @override
   String get voiceFooterAi =>
-      'WE STORE NOTHING · GOOGLE\'S AI TRANSCRIBES THE RECORDING';
+      'NO GUARDAMOS NADA · LA IA DE GOOGLE TRANSCRIBE LA GRABACIÓN';
 
   @override
   String get voiceFooterBrowser =>
-      'WE STORE NOTHING · YOUR BROWSER\'S SPEECH SERVICE TRANSCRIBES THE AUDIO';
+      'NO GUARDAMOS NADA · EL SERVICIO DE VOZ DE SU NAVEGADOR TRANSCRIBE EL AUDIO';
 
   @override
   String get voiceFooterDevice =>
-      'AUDIO ISN\'T SAVED · TRANSCRIPT STAYS IN THIS SESSION';
+      'EL AUDIO NO SE GUARDA · LA TRANSCRIPCIÓN SE QUEDA EN ESTA SESIÓN';
 
   @override
-  String get voiceTranscribingCard => 'Transcribing your recording…';
+  String get voiceTranscribingCard => 'Transcribiendo su grabación…';
 
   @override
-  String get voiceStopRecording => 'Stop recording';
+  String get voiceStopRecording => 'Detener la grabación';
 
   @override
-  String get voiceStartRecording => 'Start recording';
+  String get voiceStartRecording => 'Empezar a grabar';
 
   @override
   String get pipelineGeneratingSuggestions =>
-      'AI is generating personalized suggestions...';
+      'La IA está generando sugerencias personalizadas...';
 
   @override
   String get pipelineNoAdditionalSuggestions =>
-      'AI could not generate additional suggestions.';
+      'La IA no pudo generar sugerencias adicionales.';
 
   @override
   String pipelineAutofillProblem(String error) {
-    return 'Autofill hit a problem. $error';
+    return 'El autocompletado tuvo un problema. $error';
   }
 
   @override
   String pipelineAppliedA11y(int count) {
-    return 'Autofill applied $count fields to your directive';
+    return 'El autocompletado aplicó $count campos a su directiva';
   }
 
   @override
   String get pipelineAppliedNoneA11y =>
-      'Autofill finished — no new fields were added';
+      'El autocompletado terminó; no se añadieron campos nuevos';
 
   @override
-  String get pipelinePastedImage => 'Pasted image';
+  String get pipelinePastedImage => 'Imagen pegada';
 
   @override
-  String get pipelineDocument => 'Document';
+  String get pipelineDocument => 'Documento';
 
   @override
   String get pipelineKindPdf => 'PDF';
 
   @override
-  String get pipelineKindPhoto => 'Photo';
+  String get pipelineKindPhoto => 'Foto';
 
   @override
-  String get pipelineKindText => 'Text';
+  String get pipelineKindText => 'Texto';
 
   @override
   String get pipelineKindAudio => 'Audio';
 
   @override
-  String get pipelineKindFile => 'File';
+  String get pipelineKindFile => 'Archivo';
 
   @override
-  String get pipelineCancelled => 'Processing cancelled — nothing was applied.';
+  String get pipelineCancelled =>
+      'Se canceló el procesamiento; no se aplicó nada.';
 
   @override
-  String get pipelineSetupAiTitle => 'Set up AI to read documents';
+  String get pipelineSetupAiTitle => 'Configure la IA para leer documentos';
 
   @override
   String get pipelineSetupAiBody =>
-      'Snap-to-fill uses AI to read your uploaded document (photo, PDF, or text) and pull out details to fill your form — medications, conditions, care preferences, and your contact details. It needs an AI key — Gemini\'s free tier takes about 30 seconds to set up. You review every field before anything lands in your form.';
+      'Autocompletar con una foto usa la IA para leer el documento que usted sube (foto, PDF o texto) y extraer datos para completar su formulario: medicamentos, condiciones, preferencias de atención y sus datos de contacto. Necesita una clave de IA; configurar el nivel gratuito de Gemini toma unos 30 segundos. Usted revisa cada campo antes de que se añada a su formulario.';
 
   @override
-  String get pipelineSetupAi => 'Set up AI';
+  String get pipelineSetupAi => 'Configurar la IA';
 
   @override
-  String get pipelineDroppedFile => 'Dropped file';
+  String get pipelineDroppedFile => 'Archivo soltado';
 
   @override
   String get pipelineUnsupportedType =>
-      'That file type isn\'t supported. Use a JPG, PNG, HEIC, PDF, or text file.';
+      'Ese tipo de archivo no es compatible. Use un archivo JPG, PNG, HEIC, PDF o de texto.';
 
   @override
   String pipelineRpmLimit(int pages, int remaining, int seconds) {
-    return 'Processing $pages pages requires $pages requests, but only $remaining requests are available this minute. Please wait $seconds seconds or select fewer pages.';
+    return 'Procesar $pages páginas requiere $pages solicitudes, pero solo quedan $remaining solicitudes disponibles en este minuto. Espere $seconds segundos o seleccione menos páginas.';
   }
 
   @override
   String pipelineRpdLimit(int pages, int remaining, int limit) {
-    return 'Processing $pages pages requires $pages requests, but only $remaining requests remain today (daily limit: $limit).';
+    return 'Procesar $pages páginas requiere $pages solicitudes, pero solo quedan $remaining solicitudes hoy (límite diario: $limit).';
   }
 
   @override
   String pipelineFileTooLarge(String name, String sizeMb) {
-    return 'File \"$name\" is too large ($sizeMb MB). Maximum file size is 10 MB per document.';
+    return 'El archivo \"$name\" es demasiado grande ($sizeMb MB). El tamaño máximo es de 10 MB por documento.';
   }
 
   @override
   String pipelineExtractingPage(int current, int total) {
-    return 'Extracting page $current of $total...';
+    return 'Extrayendo la página $current de $total...';
   }
 
   @override
   String get pipelineExtractingSingle =>
-      'Extracting medical data from document...';
+      'Extrayendo datos médicos del documento...';
 
   @override
   String pipelineLooksLikeKind(String kind) {
-    return ' (it looks like a $kind)';
+    return ' (parece ser: $kind)';
   }
 
   @override
   String pipelineNotMedicalSingle(String kind) {
-    return 'This doesn\'t look like a health or medical document$kind, so nothing was used. Upload a medical record, medication or allergy list, or an existing advance directive.';
+    return 'Esto no parece un documento de salud o médico$kind, así que no se usó nada. Suba un registro médico, una lista de medicamentos o de alergias, o una directiva anticipada existente.';
   }
 
   @override
   String pipelineNotMedicalMulti(String kind) {
-    return 'These don\'t look like health or medical documents$kind, so nothing was used.';
+    return 'Estos no parecen documentos de salud o médicos$kind, así que no se usó nada.';
   }
 
   @override
   String get pipelineNoMedicalInfoSingle =>
-      'No medical information found in this document.';
+      'No se encontró información médica en este documento.';
 
   @override
   String pipelineNoMedicalInfoMulti(int count) {
-    return 'No medical information found in these $count pages.';
+    return 'No se encontró información médica en estas $count páginas.';
   }
 
   @override
-  String get pipelineValidating => 'Validating medications and conditions...';
+  String get pipelineValidating => 'Validando medicamentos y condiciones...';
 
   @override
-  String get pipelinePleaseWait => 'Please wait while processing...';
+  String get pipelinePleaseWait => 'Espere mientras se procesa...';
 
   @override
-  String get pipelineBackWizard => 'Wizard';
+  String get pipelineBackWizard => 'Asistente';
 
   @override
-  String get pipelineBackReview => 'Review';
+  String get pipelineBackReview => 'Revisión';
 
   @override
-  String get pipelineTitleSnapToFill => 'Snap to fill';
+  String get pipelineTitleSnapToFill => 'Autocompletar con una foto';
 
   @override
-  String get pipelineTitleProcessing => 'Processing';
+  String get pipelineTitleProcessing => 'Procesando';
 
   @override
-  String get pipelineTitleReview => 'Review Extracted Data';
+  String get pipelineTitleReview => 'Revisar los datos extraídos';
 
   @override
-  String get pipelineTitleGenerating => 'Generating Suggestions';
+  String get pipelineTitleGenerating => 'Generando sugerencias';
 
   @override
-  String get pipelineTitleResults => 'AI Suggestions';
+  String get pipelineTitleResults => 'Sugerencias de la IA';
 
   @override
   String pipelinePickerFailed(String error) {
-    return 'Couldn\'t open the file picker ($error). Try dragging the file onto the box above instead.';
+    return 'No se pudo abrir el selector de archivos ($error). Pruebe a arrastrar el archivo al cuadro de arriba.';
   }
 
   @override
   String get pipelineCouldNotRead =>
-      'We couldn\'t read that file. Please use a PDF, JPG, PNG, WEBP, HEIC, or plain-text file under 10 MB.';
+      'No pudimos leer ese archivo. Use un archivo PDF, JPG, PNG, WEBP, HEIC o de texto sin formato de menos de 10 MB.';
 
   @override
-  String get pipelineFormCombined => 'Combined';
+  String get pipelineFormCombined => 'Combinado';
 
   @override
-  String get pipelineFormDeclaration => 'Declaration only';
+  String get pipelineFormDeclaration => 'Solo Declaración';
 
   @override
-  String get pipelineFormPoa => 'Power of Attorney only';
+  String get pipelineFormPoa => 'Solo Poder Notarial';
 
   @override
   String get pipelineFormCombinedSub =>
-      'Treatment preferences AND a decision-maker (broadest).';
+      'Preferencias de tratamiento Y una persona que decida (lo más amplio).';
 
   @override
   String get pipelineFormDeclarationSub =>
-      'Treatment preferences, without naming an agent.';
+      'Preferencias de tratamiento, sin nombrar a un agente.';
 
   @override
   String get pipelineFormPoaSub =>
-      'Name a decision-maker, without listing preferences.';
+      'Nombrar a una persona que decida, sin indicar preferencias.';
 
   @override
-  String get pipelineWhichForm => 'Which form do you want to fill?';
+  String get pipelineWhichForm => '¿Qué formulario quiere completar?';
 
   @override
   String get pipelineWhichFormBody =>
-      'Choose your form first — the AI will then read only the parts that form needs. Combined is the broadest; you can change this later.';
+      'Elija primero su formulario; la IA leerá solo las partes que ese formulario necesita. El Combinado es el más amplio; puede cambiarlo después.';
 
   @override
-  String get pickSnapOptional => 'Snap to fill · optional';
+  String get pickSnapOptional => 'Autocompletar con una foto · opcional';
 
   @override
-  String get pickHeadlineLead => 'Have a photo handy? ';
+  String get pickHeadlineLead => '¿Tiene una foto a mano? ';
 
   @override
-  String get pickHeadlineAccent => 'We\'ll read it.';
+  String get pickHeadlineAccent => 'La leeremos.';
 
   @override
   String get pickIntro =>
-      'Drop a photo, PDF, or audio recording — ID, medication list, prescription label, an old directive, or just describe your wishes out loud — and the AI will extract what it can. You review every field before it lands in the form. Or skip and type it all yourself.';
+      'Suelte una foto, un PDF o una grabación de audio (identificación, lista de medicamentos, etiqueta de una receta, una directiva anterior o simplemente sus deseos dichos en voz alta) y la IA extraerá lo que pueda. Usted revisa cada campo antes de que se añada al formulario. O sáltese este paso y escríbalo todo usted.';
 
   @override
   String get pickPrivacyNote =>
-      'Your privacy: black out anything sensitive before uploading. You never have to upload personal details at all — any field can be typed in by hand to keep it confidential.';
+      'Su privacidad: tache cualquier dato sensible antes de subir el archivo. Nunca tiene que subir datos personales: cualquier campo se puede escribir a mano para mantenerlo confidencial.';
 
   @override
   String get pickVoiceGuideLink =>
-      'Recording a voice file? See the questionnaire & how-to';
+      '¿Va a grabar un archivo de voz? Vea el cuestionario y las instrucciones';
 
   @override
-  String get pickSkipTypeAll => 'Skip — I\'ll type it all';
+  String get pickSkipTypeAll => 'Omitir: lo escribiré todo';
 
   @override
-  String get pickContinueStep2 => 'Continue to step 2';
+  String get pickContinueStep2 => 'Continuar al paso 2';
 
   @override
-  String get pickYourDocuments => 'Your documents';
+  String get pickYourDocuments => 'Sus documentos';
 
   @override
   String pickFilesKeptInMemory(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count FILES · KEPT IN MEMORY',
-      one: '1 FILE · KEPT IN MEMORY',
+      other: '$count ARCHIVOS · GUARDADOS EN MEMORIA',
+      one: '1 ARCHIVO · GUARDADO EN MEMORIA',
     );
     return '$_temp0';
   }
 
   @override
-  String get pickClearAll => 'Clear all';
+  String get pickClearAll => 'Borrar todo';
 
   @override
   String get pickHeldWithKey =>
-      'Held on this device. Nothing is sent until you tap Read — then it goes to your AI provider to read.';
+      'Se guarda en este dispositivo. No se envía nada hasta que toque Leer; entonces se envía a su proveedor de IA para leerlo.';
 
   @override
   String get pickHeldNoKey =>
-      'Held on this device. Reading needs AI set up first (free, ~30 seconds) — nothing is sent until then.';
+      'Se guarda en este dispositivo. Para leerlo, primero hay que configurar la IA (gratis, unos 30 segundos); hasta entonces no se envía nada.';
 
   @override
   String pickReadWithAi(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Read $count documents with AI',
-      one: 'Read this document with AI',
+      other: 'Leer $count documentos con IA',
+      one: 'Leer este documento con IA',
     );
     return '$_temp0';
   }
 
   @override
-  String get pickRemove => 'Remove';
+  String get pickRemove => 'Quitar';
 
   @override
-  String get pickNoKeyTitle => 'AI isn\'t set up yet';
+  String get pickNoKeyTitle => 'La IA aún no está configurada';
 
   @override
   String get pickNoKeyBody =>
-      'You can see how snap-to-fill works below, but reading a real photo or PDF needs an AI key (Gemini\'s free tier takes about 30 seconds). You review every field before it lands in your form.';
+      'Abajo puede ver cómo funciona el autocompletado con una foto, pero leer una foto o un PDF real requiere una clave de IA (configurar el nivel gratuito de Gemini toma unos 30 segundos). Usted revisa cada campo antes de que se añada a su formulario.';
 
   @override
-  String get pickTryAgain => 'Try again';
+  String get pickTryAgain => 'Intentar de nuevo';
 
   @override
-  String get pickDropTitleCamera => 'Add a photo of your document';
+  String get pickDropTitleCamera => 'Añada una foto de su documento';
 
   @override
-  String get pickDropTitle => 'Drop a photo, PDF, or screenshot';
+  String get pickDropTitle =>
+      'Suelte una foto, un PDF o una captura de pantalla';
 
   @override
   String pickFormatsPaste(String shortcut) {
-    return 'JPG · PNG · HEIC · PDF · up to 10 MB — or paste with $shortcut';
+    return 'JPG · PNG · HEIC · PDF · hasta 10 MB, o pegue con $shortcut';
   }
 
   @override
-  String get pickFormats => 'JPG · PNG · HEIC · PDF · up to 10 MB';
+  String get pickFormats => 'JPG · PNG · HEIC · PDF · hasta 10 MB';
 
   @override
-  String get pickBrowseFiles => 'Browse files';
+  String get pickBrowseFiles => 'Buscar archivos';
 
   @override
-  String get pickTakePhoto => 'Take a photo';
+  String get pickTakePhoto => 'Tomar una foto';
 
   @override
   String get pickSentToProvider =>
-      'To autofill, your file — including any personal details in it — is sent to your AI provider to read. The app saves nothing (it\'s gone when this tab closes), but the provider may retain it (Gemini\'s free tier does). You review everything before it is added to your directive.';
+      'Para autocompletar, su archivo, incluidos los datos personales que contenga, se envía a su proveedor de IA para leerlo. La aplicación no guarda nada (se borra al cerrar esta pestaña), pero el proveedor podría conservarlo (el nivel gratuito de Gemini lo hace). Usted revisa todo antes de que se añada a su directiva.';
 
   @override
-  String get pickTargetId => 'Photo of ID';
+  String get pickTargetId => 'Foto de identificación';
 
   @override
-  String get pickTargetIdSub => 'Name · DOB · address';
+  String get pickTargetIdSub => 'Nombre · fecha de nacimiento · dirección';
 
   @override
-  String get pickTargetRx => 'Rx bottle / label';
+  String get pickTargetRx => 'Frasco o etiqueta de receta';
 
   @override
-  String get pickTargetRxSub => 'Drug · dose · schedule';
+  String get pickTargetRxSub => 'Medicamento · dosis · horario';
 
   @override
-  String get pickTargetConditions => 'Conditions list';
+  String get pickTargetConditions => 'Lista de condiciones';
 
   @override
-  String get pickTargetConditionsSub => 'Diagnoses · allergies';
+  String get pickTargetConditionsSub => 'Diagnósticos · alergias';
 
   @override
-  String get pickTargetOther => 'Anything else';
+  String get pickTargetOther => 'Cualquier otra cosa';
 
   @override
-  String get pickTargetOtherSub => 'Notes, old directive…';
+  String get pickTargetOtherSub => 'Notas, directiva anterior…';
 
   @override
-  String get pickTargetOtherSubMobile => 'Old directive, notes…';
+  String get pickTargetOtherSubMobile => 'Directiva anterior, notas…';
 
   @override
-  String get pickWhatYouCanAdd => 'What you can add';
+  String get pickWhatYouCanAdd => 'Qué puede añadir';
 
   @override
-  String get pickWhatYouCanDrop => 'What you can drop here';
+  String get pickWhatYouCanDrop => 'Qué puede soltar aquí';
 
   @override
-  String get pickOnAPhone => 'On a phone instead?';
+  String get pickOnAPhone => '¿Prefiere usar un teléfono?';
 
   @override
   String get pickOnAPhoneBody =>
-      'Open this page on your phone to snap a page directly with its camera.';
+      'Abra esta página en su teléfono para fotografiar una página directamente con la cámara.';
 
   @override
   String get pickTakePhotoSub =>
-      'Opens your camera. Snap your ID, Rx label, anything.';
+      'Abre su cámara. Fotografíe su identificación, la etiqueta de una receta o lo que sea.';
 
   @override
-  String get pickPickFile => 'Pick a file';
+  String get pickPickFile => 'Elegir un archivo';
 
   @override
-  String get pickPickFileSub =>
-      'From your photos or files. JPG, PNG, HEIC, PDF.';
+  String get pickPickFileSub => 'De sus fotos o archivos. JPG, PNG, HEIC, PDF.';
 
   @override
-  String get pickWhatHelpsMost => 'What helps most';
+  String get pickWhatHelpsMost => 'Lo que más ayuda';
 
   @override
-  String get pickFastest => 'FASTEST';
+  String get pickFastest => 'LO MÁS RÁPIDO';
 
   @override
   String get pickSentToProviderShort =>
-      'Your file (including any personal details) is sent to your AI provider to read it. The app saves nothing; the provider may retain it (Gemini\'s free tier does). You review before anything is added.';
+      'Su archivo (incluidos los datos personales) se envía a su proveedor de IA para leerlo. La aplicación no guarda nada; el proveedor podría conservarlo (el nivel gratuito de Gemini lo hace). Usted lo revisa antes de que se añada nada.';
 
   @override
   String pickReadingDocs(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Reading $count documents:',
-      one: 'Reading 1 document:',
+      other: 'Leyendo $count documentos:',
+      one: 'Leyendo 1 documento:',
     );
     return '$_temp0';
   }
@@ -2646,1275 +2691,1304 @@ class AppLocalizationsEs extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count files read by Google\'s AI to autofill.',
-      one: 'Read by Google\'s AI to autofill.',
+      other: '$count archivos leídos por la IA de Google para autocompletar.',
+      one: 'Leído por la IA de Google para autocompletar.',
     );
     return '$_temp0';
   }
 
   @override
-  String get reviewLabelMedPrefer => 'Preferred Medication';
+  String get reviewLabelMedPrefer => 'Medicamento preferido';
 
   @override
-  String get reviewLabelMedAvoid => 'Medication to Avoid';
+  String get reviewLabelMedAvoid => 'Medicamento que se debe evitar';
 
   @override
-  String get reviewLabelMedCurrent => 'Currently Taking';
+  String get reviewLabelMedCurrent => 'Lo toma actualmente';
 
   @override
-  String get reviewLabelMedLimit => 'Restricted-Use Medication';
+  String get reviewLabelMedLimit => 'Medicamento de uso restringido';
 
   @override
-  String get reviewLabelCond => 'Condition';
+  String get reviewLabelCond => 'Condición';
 
   @override
-  String get reviewLabelDiag => 'Diagnosis';
+  String get reviewLabelDiag => 'Diagnóstico';
 
   @override
-  String get reviewLabelAllergy => 'Allergy';
+  String get reviewLabelAllergy => 'Alergia';
 
   @override
-  String get reviewLabelHh => 'Health History';
+  String get reviewLabelHh => 'Antecedentes de salud';
 
   @override
-  String get reviewLabelEffectiveCondition => 'When this kicks in (your words)';
+  String get reviewLabelEffectiveCondition =>
+      'Cuándo entra en vigor (con sus palabras)';
 
   @override
-  String get reviewLabelFacilityPrefer => 'Preferred Facility';
+  String get reviewLabelFacilityPrefer => 'Centro preferido';
 
   @override
-  String get reviewLabelFacilityAvoid => 'Facility to Avoid';
+  String get reviewLabelFacilityAvoid => 'Centro que se debe evitar';
 
   @override
-  String get reviewLabelDietary => 'Dietary';
+  String get reviewLabelDietary => 'Alimentación';
 
   @override
-  String get reviewLabelReligious => 'Religious/Cultural';
+  String get reviewLabelReligious => 'Religión / cultura';
 
   @override
-  String get reviewLabelActivities => 'Activities';
+  String get reviewLabelActivities => 'Actividades';
 
   @override
-  String get reviewLabelCrisis => 'Crisis Intervention';
+  String get reviewLabelCrisis => 'Intervención en crisis';
 
   @override
-  String get reviewLabelCrisisPlan => 'Crisis plan';
+  String get reviewLabelCrisisPlan => 'Plan de crisis';
 
   @override
-  String get reviewLabelAgentAuthorityLimitations => 'Agent authority limits';
+  String get reviewLabelAgentAuthorityLimitations =>
+      'Límites a la autoridad del agente';
 
   @override
-  String get reviewLabelEctConsent => 'ECT consent';
+  String get reviewLabelEctConsent => 'Consentimiento para TEC';
 
   @override
-  String get reviewLabelExperimentalConsent => 'Experimental treatment consent';
+  String get reviewLabelExperimentalConsent =>
+      'Consentimiento para tratamiento experimental';
 
   @override
-  String get reviewLabelDrugTrialConsent => 'Drug trial consent';
+  String get reviewLabelDrugTrialConsent =>
+      'Consentimiento para ensayos de medicamentos';
 
   @override
-  String get reviewLabelMedicationConsent => 'Medication consent';
+  String get reviewLabelMedicationConsent =>
+      'Consentimiento sobre medicamentos';
 
   @override
-  String get reviewLabelTriggerTwoProfessionals => 'Trigger: professionals';
+  String get reviewLabelTriggerTwoProfessionals => 'Activación: profesionales';
 
   @override
-  String get reviewLabelTriggerCourtOrder => 'Trigger: court order';
+  String get reviewLabelTriggerCourtOrder => 'Activación: orden judicial';
 
   @override
   String get reviewLabelTriggerInvoluntaryCommitment =>
-      'Trigger: involuntary commitment';
+      'Activación: internamiento involuntario';
 
   @override
-  String get reviewLabelRoomPrefsNote => 'Room preferences';
+  String get reviewLabelRoomPrefsNote => 'Preferencias de habitación';
 
   @override
-  String get reviewLabelRoomPrefChips => 'Room options';
+  String get reviewLabelRoomPrefChips => 'Opciones de habitación';
 
   @override
-  String get reviewLabelRoommateSameGender => 'Same-gender roommate';
+  String get reviewLabelRoommateSameGender =>
+      'Compañero de habitación del mismo género';
 
   @override
-  String get reviewLabelGuardianCanRevoke => 'Guardian: override';
+  String get reviewLabelGuardianCanRevoke => 'Tutor: anular';
 
   @override
-  String get reviewLabelGuardianCanChangeAgent => 'Guardian: replace agent';
+  String get reviewLabelGuardianCanChangeAgent => 'Tutor: reemplazar al agente';
 
   @override
-  String get reviewLabelGuardianMustConsultAgent => 'Guardian: consult agent';
+  String get reviewLabelGuardianMustConsultAgent =>
+      'Tutor: consultar al agente';
 
   @override
-  String get reviewLabelAuthorityHospitalization => 'Agent: hospitalization';
+  String get reviewLabelAuthorityHospitalization => 'Agente: hospitalización';
 
   @override
-  String get reviewLabelAuthorityMedication => 'Agent: medications';
+  String get reviewLabelAuthorityMedication => 'Agente: medicamentos';
 
   @override
-  String get reviewLabelUlyssesOptin => 'Self-binding (Ulysses)';
+  String get reviewLabelUlyssesOptin => 'Autovinculación (Ulises)';
 
   @override
-  String get reviewLabelPetCustody => 'Pet care';
+  String get reviewLabelPetCustody => 'Cuidado de mascotas';
 
   @override
-  String get reviewLabelChildrenCustody => 'Children / dependents';
+  String get reviewLabelChildrenCustody => 'Hijos / dependientes';
 
   @override
-  String get reviewLabelFamilyNotification => 'Who to notify';
+  String get reviewLabelFamilyNotification => 'A quién avisar';
 
   @override
-  String get reviewLabelRecordsDisclosure => 'Records disclosure';
+  String get reviewLabelRecordsDisclosure => 'Divulgación de registros';
 
   @override
-  String get reviewLabelOther => 'Other';
+  String get reviewLabelOther => 'Otro';
 
   @override
-  String get reviewLabelPersonName => 'Your full name';
+  String get reviewLabelPersonName => 'Su nombre completo';
 
   @override
-  String get reviewLabelPersonDob => 'Date of birth';
+  String get reviewLabelPersonDob => 'Fecha de nacimiento';
 
   @override
-  String get reviewLabelPersonAddress1 => 'Street address';
+  String get reviewLabelPersonAddress1 => 'Dirección';
 
   @override
-  String get reviewLabelPersonAddress2 => 'Apt / suite / unit';
+  String get reviewLabelPersonAddress2 => 'Apto. / suite / unidad';
 
   @override
-  String get reviewLabelPersonCity => 'City';
+  String get reviewLabelPersonCity => 'Ciudad';
 
   @override
-  String get reviewLabelPersonCounty => 'County';
+  String get reviewLabelPersonCounty => 'Condado';
 
   @override
-  String get reviewLabelPersonState => 'State';
+  String get reviewLabelPersonState => 'Estado';
 
   @override
-  String get reviewLabelPersonZip => 'ZIP code';
+  String get reviewLabelPersonZip => 'Código postal';
 
   @override
-  String get reviewLabelPersonPhone => 'Your phone';
+  String get reviewLabelPersonPhone => 'Su teléfono';
 
   @override
-  String get reviewLabelPersonDoctorName => 'Primary doctor';
+  String get reviewLabelPersonDoctorName => 'Médico principal';
 
   @override
-  String get reviewLabelPersonDoctorSpecialty => 'Doctor specialty';
+  String get reviewLabelPersonDoctorSpecialty => 'Especialidad del médico';
 
   @override
-  String get reviewLabelPersonDoctorPhone => 'Doctor\'s phone';
+  String get reviewLabelPersonDoctorPhone => 'Teléfono del médico';
 
   @override
-  String get reviewLabelPersonEvalDoctorName => 'Preferred evaluating doctor';
+  String get reviewLabelPersonEvalDoctorName =>
+      'Médico preferido para la evaluación';
 
   @override
-  String get reviewLabelPersonEvalDoctorContact => 'Evaluating doctor contact';
+  String get reviewLabelPersonEvalDoctorContact =>
+      'Contacto del médico evaluador';
 
   @override
-  String get reviewLabelAgentName => 'Agent name';
+  String get reviewLabelAgentName => 'Nombre del agente';
 
   @override
-  String get reviewLabelAgentRelationship => 'Agent relationship';
+  String get reviewLabelAgentRelationship => 'Parentesco del agente';
 
   @override
-  String get reviewLabelAgentAddress1 => 'Agent street address';
+  String get reviewLabelAgentAddress1 => 'Dirección del agente';
 
   @override
-  String get reviewLabelAgentAddress2 => 'Agent apt / suite';
+  String get reviewLabelAgentAddress2 => 'Apto. / suite del agente';
 
   @override
-  String get reviewLabelAgentCity => 'Agent city';
+  String get reviewLabelAgentCity => 'Ciudad del agente';
 
   @override
-  String get reviewLabelAgentState => 'Agent state';
+  String get reviewLabelAgentState => 'Estado del agente';
 
   @override
-  String get reviewLabelAgentZip => 'Agent ZIP';
+  String get reviewLabelAgentZip => 'Código postal del agente';
 
   @override
-  String get reviewLabelAgentPhone => 'Agent phone';
+  String get reviewLabelAgentPhone => 'Teléfono del agente';
 
   @override
-  String get reviewLabelAltAgentName => 'Alternate agent name';
+  String get reviewLabelAltAgentName => 'Nombre del agente alternativo';
 
   @override
-  String get reviewLabelAltAgentRelationship => 'Alternate agent relationship';
+  String get reviewLabelAltAgentRelationship =>
+      'Parentesco del agente alternativo';
 
   @override
-  String get reviewLabelAltAgentAddress1 => 'Alt agent street address';
+  String get reviewLabelAltAgentAddress1 => 'Dirección del agente alternativo';
 
   @override
-  String get reviewLabelAltAgentAddress2 => 'Alt agent apt / suite';
+  String get reviewLabelAltAgentAddress2 =>
+      'Apto. / suite del agente alternativo';
 
   @override
-  String get reviewLabelAltAgentCity => 'Alt agent city';
+  String get reviewLabelAltAgentCity => 'Ciudad del agente alternativo';
 
   @override
-  String get reviewLabelAltAgentState => 'Alt agent state';
+  String get reviewLabelAltAgentState => 'Estado del agente alternativo';
 
   @override
-  String get reviewLabelAltAgentZip => 'Alt agent ZIP';
+  String get reviewLabelAltAgentZip => 'Código postal del agente alternativo';
 
   @override
-  String get reviewLabelAltAgentPhone => 'Alternate agent phone';
+  String get reviewLabelAltAgentPhone => 'Teléfono del agente alternativo';
 
   @override
-  String get reviewLabelGuardianName => 'Guardian nominee';
+  String get reviewLabelGuardianName => 'Tutor propuesto';
 
   @override
-  String get reviewLabelGuardianRelationship => 'Guardian relationship';
+  String get reviewLabelGuardianRelationship => 'Parentesco del tutor';
 
   @override
-  String get reviewLabelGuardianAddress1 => 'Guardian street address';
+  String get reviewLabelGuardianAddress1 => 'Dirección del tutor';
 
   @override
-  String get reviewLabelGuardianAddress2 => 'Guardian apt / suite';
+  String get reviewLabelGuardianAddress2 => 'Apto. / suite del tutor';
 
   @override
-  String get reviewLabelGuardianCity => 'Guardian city';
+  String get reviewLabelGuardianCity => 'Ciudad del tutor';
 
   @override
-  String get reviewLabelGuardianState => 'Guardian state';
+  String get reviewLabelGuardianState => 'Estado del tutor';
 
   @override
-  String get reviewLabelGuardianZip => 'Guardian ZIP';
+  String get reviewLabelGuardianZip => 'Código postal del tutor';
 
   @override
-  String get reviewLabelGuardianPhone => 'Guardian phone';
+  String get reviewLabelGuardianPhone => 'Teléfono del tutor';
 
   @override
-  String get reviewSectionMedPrefer => 'Preferred Meds';
+  String get reviewSectionMedPrefer => 'Medicamentos preferidos';
 
   @override
-  String get reviewSectionMedAvoid => 'Meds to Avoid';
+  String get reviewSectionMedAvoid => 'Medicamentos que se deben evitar';
 
   @override
-  String get reviewSectionMedCurrent => 'Currently Taking';
+  String get reviewSectionMedCurrent => 'Los toma actualmente';
 
   @override
-  String get reviewSectionMedLimit => 'Restricted-Use Meds';
+  String get reviewSectionMedLimit => 'Medicamentos de uso restringido';
 
   @override
-  String get reviewSectionCond => 'Conditions';
+  String get reviewSectionCond => 'Condiciones';
 
   @override
-  String get reviewSectionDiag => 'Diagnoses';
+  String get reviewSectionDiag => 'Diagnósticos';
 
   @override
-  String get reviewSectionAllergy => 'Allergies';
+  String get reviewSectionAllergy => 'Alergias';
 
   @override
-  String get reviewSectionHh => 'Health History';
+  String get reviewSectionHh => 'Antecedentes de salud';
 
   @override
-  String get reviewSectionEffectiveCondition => 'When this kicks in';
+  String get reviewSectionEffectiveCondition => 'Cuándo entra en vigor';
 
   @override
-  String get reviewSectionPerson => 'Your details';
+  String get reviewSectionPerson => 'Sus datos';
 
   @override
-  String get reviewSectionAgent => 'Your agent';
+  String get reviewSectionAgent => 'Su agente';
 
   @override
-  String get reviewSectionAgentAuthority => 'Agent Authority';
+  String get reviewSectionAgentAuthority => 'Autoridad del agente';
 
   @override
-  String get reviewSectionUlyssesOptin => 'Self-binding';
+  String get reviewSectionUlyssesOptin => 'Autovinculación';
 
   @override
-  String get reviewSectionCrisisPlan => 'Crisis Plan';
+  String get reviewSectionCrisisPlan => 'Plan de crisis';
 
   @override
-  String get reviewSectionConsent => 'Consent';
+  String get reviewSectionConsent => 'Consentimiento';
 
   @override
-  String get reviewSectionRoomPreferences => 'Room Preferences';
+  String get reviewSectionRoomPreferences => 'Preferencias de habitación';
 
   @override
-  String get reviewSectionAltAgent => 'Alternate agent';
+  String get reviewSectionAltAgent => 'Agente alternativo';
 
   @override
-  String get reviewSectionGuardian => 'Guardian';
+  String get reviewSectionGuardian => 'Tutor';
 
   @override
-  String get reviewSectionOther => 'Other';
+  String get reviewSectionOther => 'Otro';
 
   @override
-  String get reviewStepGroupWhenKicksIn => 'When this kicks in';
+  String get reviewStepGroupWhenKicksIn => 'Cuándo entra en vigor';
 
   @override
-  String get reviewStepGroupDiagnoses => 'Diagnoses';
+  String get reviewStepGroupDiagnoses => 'Diagnósticos';
 
   @override
-  String get reviewStepGroupAboutYou => 'About you';
+  String get reviewStepGroupAboutYou => 'Sobre usted';
 
   @override
-  String get reviewStepGroupPeopleITrust => 'People I trust';
+  String get reviewStepGroupPeopleITrust => 'Personas de confianza';
 
   @override
-  String get reviewStepGroupGuardian => 'If a court appoints a guardian';
+  String get reviewStepGroupGuardian => 'Si un tribunal nombra a un tutor';
 
   @override
-  String get reviewStepGroupWhereIWantCare => 'Where I want care';
+  String get reviewStepGroupWhereIWantCare => 'Dónde quiero recibir atención';
 
   @override
-  String get reviewStepGroupMedications => 'Medications';
+  String get reviewStepGroupMedications => 'Medicamentos';
 
   @override
-  String get reviewStepGroupAllergies => 'Allergies & reactions';
+  String get reviewStepGroupAllergies => 'Alergias y reacciones';
 
   @override
-  String get reviewStepGroupProceduresResearch => 'Procedures & research';
+  String get reviewStepGroupProceduresResearch =>
+      'Procedimientos e investigación';
 
   @override
-  String get reviewStepGroupAnythingElse => 'Anything else';
+  String get reviewStepGroupAnythingElse => 'Algo más';
 
   @override
-  String get reviewAiReadThisPhoto => 'AI READ THIS PHOTO';
+  String get reviewAiReadThisPhoto => 'LA IA LEYÓ ESTA FOTO';
 
   @override
-  String get reviewHeresWhatWeRead => 'Here\'s what we read.';
+  String get reviewHeresWhatWeRead => 'Esto es lo que leímos.';
 
   @override
   String get reviewHowToIntro =>
-      'These are the details the AI pulled from your document. Here\'s how to use this page:';
+      'Estos son los datos que la IA extrajo de su documento. Así se usa esta página:';
 
   @override
   String get reviewHowToChecked =>
-      'A checked box means it will be added to your form. Uncheck anything you don\'t want.';
+      'Una casilla marcada significa que se añadirá a su formulario. Desmarque lo que no quiera.';
 
   @override
   String get reviewHowToEdit =>
-      'Tap any field to edit its wording before it\'s added.';
+      'Toque cualquier campo para cambiar su redacción antes de añadirlo.';
 
   @override
   String get reviewHowToGrouped =>
-      'Results are grouped by form section (the same steps you\'ll see next). A \"Replaces what you have\" note means it would overwrite something you already entered — those start unchecked.';
+      'Los resultados se agrupan por sección del formulario (los mismos pasos que verá después). Una nota \"Reemplaza lo que tiene\" significa que sobrescribiría algo que ya ingresó; esos empiezan desmarcados.';
 
   @override
   String reviewHowToFinish(String buttonLabel) {
-    return 'When you\'re ready, tap \"$buttonLabel\" at the bottom to fill these into your form and continue — you\'ll land in the form to review everything.';
+    return 'Cuando esté listo, toque \"$buttonLabel\" abajo para completar su formulario con estos datos y continuar; llegará al formulario para revisarlo todo.';
   }
 
   @override
   String reviewPiiRemoved(String items) {
-    return 'PII was detected and removed before analysis: $items';
+    return 'Se detectaron y eliminaron datos personales antes del análisis: $items';
   }
 
   @override
-  String get reviewAddToDirective => 'Add to your directive';
+  String get reviewAddToDirective => 'Añadir a su directiva';
 
   @override
   String get reviewPhotoDiscarded =>
-      'Your photo was sent to the AI to read, then discarded. Nothing is stored after you confirm or discard.';
+      'Su foto se envió a la IA para leerla y luego se descartó. No se guarda nada después de confirmar o descartar.';
 
   @override
   String reviewFieldsReady(int checked, int total) {
-    return '$checked of $total fields ready to add';
+    return '$checked de $total campos listos para añadir';
   }
 
   @override
-  String get reviewYouEntered => 'You entered';
+  String get reviewYouEntered => 'Usted ingresó';
 
   @override
-  String get reviewAutofillFound => 'Autofill found';
+  String get reviewAutofillFound => 'El autocompletado encontró';
 
   @override
-  String get reviewKeepMine => 'Keep mine';
+  String get reviewKeepMine => 'Conservar lo mío';
 
   @override
-  String get reviewUseNew => 'Use new';
+  String get reviewUseNew => 'Usar lo nuevo';
 
   @override
-  String get reviewAddBoth => 'Add both';
+  String get reviewAddBoth => 'Añadir ambos';
 
   @override
-  String get reviewConsolidateAi => 'Consolidate (AI)';
+  String get reviewConsolidateAi => 'Unificar (IA)';
 
   @override
   String get reviewIdentityNotMerged =>
-      'Identity fields aren\'t merged by the AI — double-check this one yourself.';
+      'La IA no unifica los campos de identidad; revise este usted mismo.';
 
   @override
-  String get reviewWillSave => 'Will save:';
+  String get reviewWillSave => 'Se guardará:';
 
   @override
   String get reviewSetupAiToConsolidate =>
-      'Set up the AI assistant first to consolidate.';
+      'Primero configure el asistente de IA para poder unificar.';
 
   @override
   String get reviewAgentInitialsNote =>
-      'This lets your agent decide. Under PA law (§5836(c)) it only takes effect if you physically initial this authorization on the printed form — confirm this is what you want.';
+      'Esto permite que su agente decida. Según la ley de PA (§5836(c)), solo tiene efecto si usted pone sus iniciales a mano en esta autorización en el formulario impreso; confirme que esto es lo que quiere.';
 
   @override
   String get reviewSmartIntro =>
-      'The AI generated these additional suggestions based on your validated conditions and medications. Tap to edit, uncheck to skip. This is not medical or legal advice.';
+      'La IA generó estas sugerencias adicionales a partir de sus condiciones y medicamentos validados. Toque para editar y desmarque para omitir. No es consejo médico ni legal.';
 
   @override
   String get reviewGuidanceOnly =>
-      'Guidance to read — not saved to your form. Set your choice in Procedures & research.';
+      'Orientación para leer; no se guarda en su formulario. Indique su decisión en Procedimientos e investigación.';
 
   @override
-  String get reviewAutofillInformation => 'Autofill Information';
+  String get reviewAutofillInformation => 'Información de autocompletado';
 
   @override
-  String get reviewApplyAll => 'Apply All';
+  String get reviewApplyAll => 'Aplicar todo';
 
   @override
-  String get reviewDiscardAll => 'Discard all';
+  String get reviewDiscardAll => 'Descartar todo';
 
   @override
-  String get reviewGenerateMore => 'Generate more';
+  String get reviewGenerateMore => 'Generar más';
 
   @override
-  String get reviewIncludeField => 'Include this field';
+  String get reviewIncludeField => 'Incluir este campo';
 
   @override
-  String get reviewNotAdded => 'Not added';
+  String get reviewNotAdded => 'No añadido';
 
   @override
-  String get reviewEdit => 'Edit';
+  String get reviewEdit => 'Editar';
 
   @override
-  String get homeMakeItFindableInA => 'Make it findable in a crisis';
+  String get homeMakeItFindableInA => 'Que la encuentren en una crisis';
 
   @override
   String get homeShareCopiesCarryTheWallet =>
-      'Share copies, carry the wallet card, tell your people where it is';
+      'Comparta copias, lleve la tarjeta de billetera y diga a sus personas dónde está';
 
   @override
   String get homeSessionRestoredPersonalInfoMust =>
-      'Session restored. Personal info must be re-entered.';
+      'Sesión restaurada. Debe volver a ingresar su información personal.';
 
   @override
-  String get homeDeleteDirective => 'Delete directive?';
+  String get homeDeleteDirective => '¿Eliminar la directiva?';
 
   @override
   String get homeAllDataForThisDirective =>
-      'All data for this directive will be permanently deleted.';
+      'Todos los datos de esta directiva se eliminarán de forma permanente.';
 
   @override
-  String get homeDirectiveDeleted => 'Directive deleted.';
+  String get homeDirectiveDeleted => 'Directiva eliminada.';
 
   @override
-  String get homeRenameDirective => 'Rename directive';
+  String get homeRenameDirective => 'Cambiar el nombre de la directiva';
 
   @override
-  String get homeRenewDirective => 'Renew Directive?';
+  String get homeRenewDirective => '¿Renovar la directiva?';
 
   @override
   String get homeThisWillCreateANew =>
-      'This will create a new directive with the same treatment preferences and agent designations. Personal information, witnesses, and signatures will need to be re-entered.\n\nThe original directive will remain unchanged.';
+      'Esto creará una nueva directiva con las mismas preferencias de tratamiento y designaciones de agente. Tendrá que volver a ingresar la información personal, los testigos y las firmas.\n\nLa directiva original no cambiará.';
 
   @override
-  String get homeRenew => 'Renew';
+  String get homeRenew => 'Renovar';
 
   @override
-  String get homeAmendThisDirective => 'Amend this directive?';
+  String get homeAmendThisDirective => '¿Modificar esta directiva?';
 
   @override
   String get homeAmendingOpensThisDirectiveSo =>
-      'Amending opens this directive so you can change it — your existing answers stay in place.\n\nImportant: an amendment is only valid once you re-sign it on paper with two adult witnesses, the same way as the original (PA Act 194). Until you re-sign, this directive will show as an unsigned draft, and any printed copies of the old version stay in effect until you replace them.\n\nPrefer to keep the signed original untouched? Use “Renew (copy to new)” instead.';
+      'Modificarla abre esta directiva para que pueda cambiarla; sus respuestas actuales se mantienen.\n\nImportante: una modificación solo es válida cuando usted la vuelve a firmar en papel con dos testigos adultos, igual que la original (Ley 194 de PA). Hasta que la vuelva a firmar, esta directiva aparecerá como un borrador sin firmar, y las copias impresas de la versión anterior seguirán vigentes hasta que las reemplace.\n\n¿Prefiere no tocar el original firmado? Use “Renovar (copiar a una nueva)”.';
 
   @override
-  String get homeAmend => 'Amend';
+  String get homeAmend => 'Modificar';
 
   @override
-  String get homePrivateByDesign => 'Private by design';
+  String get homePrivateByDesign => 'Privada por diseño';
 
   @override
-  String get homeLetSGetStarted => 'Let\'s get started.';
+  String get homeLetSGetStarted => 'Empecemos.';
 
   @override
-  String get homeRename => 'Rename';
+  String get homeRename => 'Cambiar nombre';
 
   @override
   String get homeLabelShownInThisList =>
-      'Label shown in this list only — never printed';
+      'Etiqueta que solo se muestra en esta lista; nunca se imprime';
 
   @override
-  String get homeRenewCopyToNew => 'Renew (copy to new)';
+  String get homeRenewCopyToNew => 'Renovar (copiar a una nueva)';
 
   @override
-  String get homeAmendEditThisOne => 'Amend (edit this one)';
+  String get homeAmendEditThisOne => 'Modificar (editar esta)';
 
   @override
   String get homeRequiresReSigningReWitnessing =>
-      'Requires re-signing & re-witnessing';
+      'Requiere volver a firmar y a reunir testigos';
 
   @override
-  String get homeRevoke => 'Revoke';
+  String get homeRevoke => 'Revocar';
 
   @override
-  String get homeTools => 'Tools';
+  String get homeTools => 'Herramientas';
 
   @override
-  String get homePastDirectives => 'Past directives';
+  String get homePastDirectives => 'Directivas anteriores';
 
   @override
-  String get homeStartANewDirective => 'Start a new directive';
+  String get homeStartANewDirective => 'Empezar una nueva directiva';
 
   @override
-  String get homeLoadingYourDirectives => 'Loading your directives';
+  String get homeLoadingYourDirectives => 'Cargando sus directivas';
 
   @override
-  String get homeDisplayLabel => 'Display label';
+  String get homeDisplayLabel => 'Etiqueta visible';
 
   @override
   String get homeShownOnlyInThisList =>
-      'Shown only in this list — never printed on the form. Leave empty to use the name on the directive.';
+      'Solo se muestra en esta lista; nunca se imprime en el formulario. Déjela vacía para usar el nombre que figura en la directiva.';
 
   @override
-  String get homeCouldnTLoadYourDirectives => 'Couldn\'t load your directives.';
+  String get homeCouldnTLoadYourDirectives =>
+      'No se pudieron cargar sus directivas.';
 
   @override
   String get homeNothingWasLostThisIs =>
-      'Nothing was lost — this is a display problem, not a data one.';
+      'No se perdió nada: es un problema de visualización, no de datos.';
 
   @override
-  String get homeYourVoice => 'Your voice,\n';
+  String get homeYourVoice => 'Su voz,\n';
 
   @override
-  String get homeInYourWords => 'in your words.';
+  String get homeInYourWords => 'con sus palabras.';
 
   @override
-  String get homeLetSKeepYourVoice => 'Let\'s keep your voice clear.';
+  String get homeLetSKeepYourVoice =>
+      'Hagamos que su voz se escuche con claridad.';
 
   @override
-  String get homeStartYourDirective => 'Start your directive';
+  String get homeStartYourDirective => 'Empezar su directiva';
 
   @override
   String get homePrivateBodyWeb =>
-      'Your directive never leaves this browser — no server, no account, no tracking. It lives only in this session, and only you choose who to share it with.';
+      'Su directiva nunca sale de este navegador: sin servidor, sin cuenta y sin rastreo. Solo existe en esta sesión, y solo usted decide con quién compartirla.';
 
   @override
   String get homePrivateBodyDevice =>
-      'Your directive stays on your device. No ads, no tracking, no selling your data — only you choose who to share it with.';
+      'Su directiva se queda en su dispositivo. Sin anuncios, sin rastreo y sin vender sus datos; solo usted decide con quién compartirla.';
 
   @override
   String homeHiName(String name) {
-    return 'Hi, $name.\n';
+    return 'Hola, $name.\n';
   }
 
   @override
   String homeProfileA11y(String name) {
-    return 'Profile $name';
+    return 'Perfil de $name';
   }
 
   @override
   String homeCardDraft(int step, int total, String date) {
-    return 'Draft · step $step of $total · $date';
+    return 'Borrador · paso $step de $total · $date';
   }
 
   @override
   String homeCardPrepared(String date) {
-    return 'Prepared · $date';
+    return 'Preparada · $date';
   }
 
   @override
-  String get homeCardExpired => 'Expired · revoke or copy to new';
+  String get homeCardExpired => 'Vencida · revóquela o cópiela a una nueva';
 
   @override
   String homeCardRevoked(String date) {
-    return 'Revoked · $date';
+    return 'Revocada · $date';
   }
 
   @override
   String homeCardDirectiveYear(int year) {
-    return 'Directive · $year';
+    return 'Directiva · $year';
   }
 
   @override
   String homeCardA11y(String name, String status) {
-    return '$name. $status. Tap to open.';
+    return '$name. $status. Toque para abrir.';
   }
 
   @override
   String get crisisPlanHelpThePeopleAroundYou =>
-      'Help the people around you spot trouble early — and know what actually helps you when they do.';
+      'Ayude a las personas cercanas a detectar problemas a tiempo y a saber qué le ayuda de verdad cuando ocurren.';
 
   @override
-  String get crisisPlanAdd => 'Add';
+  String get crisisPlanAdd => 'Añadir';
 
   @override
-  String get crisisPlanAdd2 => '+ Add';
+  String get crisisPlanAdd2 => '+ Añadir';
 
   @override
   String get crisisPlanOptionalAddOnCrisisPlan =>
-      'Optional add-on · Crisis plan';
+      'Complemento opcional · Plan de crisis';
 
   @override
-  String get crisisPlanEarlyWarningSigns => 'Early warning signs';
+  String get crisisPlanEarlyWarningSigns => 'Señales de alerta temprana';
 
   @override
-  String get crisisPlanTriggersToWatchFor => 'Triggers to watch for';
+  String get crisisPlanTriggersToWatchFor =>
+      'Desencadenantes a tener en cuenta';
 
   @override
-  String get crisisPlanThingsThatGenuinelyHelp => 'Things that genuinely help';
+  String get crisisPlanThingsThatGenuinelyHelp => 'Cosas que realmente ayudan';
 
   @override
-  String get crisisPlanThingsToSayToMe => 'Things to say to me';
+  String get crisisPlanThingsToSayToMe => 'Cosas que me pueden decir';
 
   @override
-  String get crisisPlanDonTDoThese => 'Don\'t do these';
+  String get crisisPlanDonTDoThese => 'No hagan esto';
 
   @override
-  String get crisisPlanTypeAShortNote => 'Type a short note';
+  String get crisisPlanTypeAShortNote => 'Escriba una nota breve';
 
   @override
   String get permissionsOverviewPaMhadRequestsSystemPermissions =>
-      'PA MHAD requests system permissions only for features you actively use. Nothing is collected in the background. Each section below explains exactly what a permission unlocks, what the app does with the result, and what it never does.';
+      'PA MHAD solicita permisos del sistema solo para las funciones que usted usa activamente. No se recopila nada en segundo plano. Cada sección de abajo explica exactamente qué permite cada permiso, qué hace la aplicación con el resultado y qué nunca hace.';
 
   @override
   String get permissionsOverviewWhatThisAppMayAsk =>
-      'What this app may ask for';
+      'Qué puede solicitar esta aplicación';
 
   @override
-  String get permissionsOverviewBiometricsPasscode => 'Biometrics / passcode';
+  String get permissionsOverviewBiometricsPasscode =>
+      'Biometría / código de acceso';
 
   @override
-  String get permissionsOverviewNotifications => 'Notifications';
+  String get permissionsOverviewNotifications => 'Notificaciones';
 
   @override
-  String get permissionsOverviewCamera => 'Camera';
+  String get permissionsOverviewCamera => 'Cámara';
 
   @override
-  String get permissionsOverviewMicrophone => 'Microphone';
+  String get permissionsOverviewMicrophone => 'Micrófono';
 
   @override
-  String get permissionsOverviewContacts => 'Contacts';
+  String get permissionsOverviewContacts => 'Contactos';
 
   @override
   String get makeItFindableADirectiveOnlyHelpsIf =>
-      'A directive only helps if the people treating you can find it when you cannot speak for yourself. Take a few minutes now to put copies where they will be looked for.';
+      'Una directiva solo ayuda si las personas que le atienden pueden encontrarla cuando usted no puede hablar por sí mismo. Tómese unos minutos ahora para dejar copias donde las buscarán.';
 
   @override
   String get makeItFindableThisIsGeneralInformationAbout =>
-      'This is general information about keeping your directive accessible, not legal advice.';
+      'Esta es información general sobre cómo mantener su directiva accesible, no es asesoría legal.';
 
   @override
-  String get makeItFindableCrisisReadiness => 'Crisis readiness';
+  String get makeItFindableCrisisReadiness => 'Preparación para una crisis';
 
   @override
-  String get makeItFindableDoTheseNow => 'Do these now';
+  String get makeItFindableDoTheseNow => 'Haga esto ahora';
 
   @override
   String get makeItFindableShareItWithYourAgent =>
-      'Share it with your agent and a trusted person';
+      'Compártala con su agente y con una persona de confianza';
 
   @override
   String get makeItFindableTheyShouldEachHaveA =>
-      'They should each have a copy before any crisis — not only you.';
+      'Cada uno debe tener una copia antes de cualquier crisis, no solo usted.';
 
   @override
-  String get makeItFindableGiveACopyToYour => 'Give a copy to your care team';
+  String get makeItFindableGiveACopyToYour =>
+      'Dé una copia a su equipo de atención';
 
   @override
   String get makeItFindableAskYourPsychiatristTherapistPrimary =>
-      'Ask your psychiatrist, therapist, primary-care doctor, and any facility to add it to your medical record.';
+      'Pida a su psiquiatra, terapeuta, médico de atención primaria y a cualquier centro que la añadan a su expediente médico.';
 
   @override
   String get makeItFindablePrintAndCarryTheWallet =>
-      'Print and carry the wallet card';
+      'Imprima y lleve la tarjeta de billetera';
 
   @override
   String get makeItFindableAPocketCardThatTells =>
-      'A pocket card that tells responders you have a directive and how to reach your agent.';
+      'Una tarjeta de bolsillo que les indica a quienes le atiendan que usted tiene una directiva y cómo comunicarse con su agente.';
 
   @override
   String get adminUpdateFederalRegisterRelevantFederalRules =>
-      'Federal Register — relevant federal rules';
+      'Federal Register: normas federales pertinentes';
 
   @override
   String get adminUpdateFederalRulesTheAppReferences =>
-      'Federal rules the app references. Use a link as the SOURCE for a verify-tier legal/dated change. State law (PA Act 194) is not covered here.';
+      'Normas federales que la aplicación cita. Use un enlace como FUENTE para un cambio legal o con fecha que requiera verificación. La ley estatal (Ley 194 de PA) no se incluye aquí.';
 
   @override
-  String get adminUpdateOpen => 'Open';
+  String get adminUpdateOpen => 'Abrir';
 
   @override
-  String get adminUpdateSourceLinkCopied => 'Source link copied';
+  String get adminUpdateSourceLinkCopied => 'Enlace de la fuente copiado';
 
   @override
-  String get adminUpdateCopyLink => 'Copy link';
+  String get adminUpdateCopyLink => 'Copiar enlace';
 
   @override
-  String get adminUpdateRestoreFromWhichBackup => 'Restore from which backup?';
+  String get adminUpdateRestoreFromWhichBackup =>
+      '¿Restaurar desde qué copia de seguridad?';
 
   @override
-  String get adminUpdateAdminDataUpdate => 'Admin · data update';
+  String get adminUpdateAdminDataUpdate =>
+      'Administración · actualización de datos';
 
   @override
   String get adminUpdateEnterTheAdminPassphrase =>
-      'Enter the admin passphrase.';
+      'Ingrese la frase de acceso de administración.';
 
   @override
-  String get adminUpdateUnlock => 'Unlock';
+  String get adminUpdateUnlock => 'Desbloquear';
 
   @override
   String get adminUpdateDescribeTheUpdateTheAi =>
-      'Describe the update. The AI drafts changes to the selected file with sources; you review and approve before anything is emitted. Legal/statutory and educational changes always need your explicit sign-off.';
+      'Describa la actualización. La IA redacta cambios al archivo seleccionado con sus fuentes; usted los revisa y aprueba antes de que se genere nada. Los cambios legales, normativos y educativos siempre requieren su aprobación explícita.';
 
   @override
-  String get adminUpdateRevert => 'Revert';
+  String get adminUpdateRevert => 'Revertir';
 
   @override
-  String get adminUpdateCheckBestGeminiModel => 'Check best Gemini model';
+  String get adminUpdateCheckBestGeminiModel =>
+      'Buscar el mejor modelo de Gemini';
 
   @override
-  String get adminUpdateCheckFederalRegister => 'Check Federal Register';
+  String get adminUpdateCheckFederalRegister => 'Consultar el Federal Register';
 
   @override
-  String get adminUpdateCopiedUpdatedJson => 'Copied updated JSON';
+  String get adminUpdateCopiedUpdatedJson => 'JSON actualizado copiado';
 
   @override
-  String get adminUpdateCopyJson => 'Copy JSON';
+  String get adminUpdateCopyJson => 'Copiar JSON';
 
   @override
-  String get adminUpdateAnotherUpdate => 'Another update';
+  String get adminUpdateAnotherUpdate => 'Otra actualización';
 
   @override
-  String get adminUpdatePassphrase => 'Passphrase';
+  String get adminUpdatePassphrase => 'Frase de acceso';
 
   @override
-  String get adminUpdateWhatToUpdate => 'What to update';
+  String get adminUpdateWhatToUpdate => 'Qué actualizar';
 
   @override
-  String get adminUpdateAiProvider => 'AI provider';
+  String get adminUpdateAiProvider => 'Proveedor de IA';
 
   @override
-  String get adminUpdateModel => 'Model';
+  String get adminUpdateModel => 'Modelo';
 
   @override
-  String get adminUpdateDescribeTheUpdate => 'Describe the update *';
+  String get adminUpdateDescribeTheUpdate => 'Describa la actualización *';
 
   @override
   String get adminUpdateEGTheTrevorProject =>
-      'e.g. \"The Trevor Project number changed to ...\" or \"Check Gemini\'s current free-tier rate limits\"';
+      'p. ej., \"El número de The Trevor Project cambió a ...\" o \"Revisa los límites actuales del nivel gratuito de Gemini\"';
 
   @override
   String get adminUpdateRequiredWhatShouldTheAi =>
-      'Required — what should the AI draft a change to?';
+      'Obligatorio: ¿sobre qué debe redactar la IA un cambio?';
 
   @override
-  String get adminUpdateFocusAreaPathOptional => 'Focus area / path (optional)';
+  String get adminUpdateFocusAreaPathOptional =>
+      'Área de enfoque / ruta (opcional)';
 
   @override
   String get adminUpdateRestrictTheAiToOne =>
-      'Restrict the AI to one spot, e.g. \"config.timeoutsSeconds\" or \"sections.faq_valid\".';
+      'Limite la IA a un solo lugar; p. ej., \"config.timeoutsSeconds\" o \"sections.faq_valid\".';
 
   @override
-  String get reminderSheetsQuickRenew5Min => 'Quick renew · ~5 min';
+  String get reminderSheetsQuickRenew5Min => 'Renovación rápida · ~5 min';
 
   @override
   String get reminderSheetsMostPeopleKeepTheSame =>
-      'Most people keep the same answers. We\'ll pre-fill all 11 sections from your current directive — tap any card to change it, then print and sign the new copy in ink with two witnesses.';
+      'La mayoría de las personas mantiene las mismas respuestas. Completaremos las 11 secciones con los datos de su directiva actual; toque cualquier tarjeta para cambiarla y luego imprima y firme la nueva copia con bolígrafo ante dos testigos.';
 
   @override
-  String get reminderSheetsStartQuickRenew => 'Start quick renew';
+  String get reminderSheetsStartQuickRenew => 'Empezar la renovación rápida';
 
   @override
-  String get reminderSheetsRemindMeNextWeek => 'Remind me next week';
+  String get reminderSheetsRemindMeNextWeek => 'Recordármelo la próxima semana';
 
   @override
   String get reminderSheetsWeLlRemindYouAgain =>
-      'We\'ll remind you again 7 days before expiration.';
+      'Se lo recordaremos de nuevo 7 días antes del vencimiento.';
 
   @override
-  String get reminderSheetsAnythingChanged => 'Anything changed?';
+  String get reminderSheetsAnythingChanged => '¿Cambió algo?';
 
   @override
-  String get reminderSheetsStillAccurateAllGood => 'Still accurate — all good';
+  String get reminderSheetsStillAccurateAllGood =>
+      'Sigue siendo correcta; todo bien';
 
   @override
-  String get reminderSheetsEditMyDirective => 'Edit my directive';
+  String get reminderSheetsEditMyDirective => 'Editar mi directiva';
 
   @override
   String get reminderSheetsIfYouEditAnythingYou =>
-      'If you edit anything, you\'ll re-print and sign that updated copy in ink. Small changes can wait for your 2-year renewal.';
+      'Si edita algo, tendrá que volver a imprimir y firmar con bolígrafo la copia actualizada. Los cambios pequeños pueden esperar a la renovación de los 2 años.';
 
   @override
-  String get reminderSheets3MonthCheckIn => '● 3-month check-in';
+  String get reminderSheets3MonthCheckIn => '● Revisión de los 3 meses';
 
   @override
-  String get reminderSheetsCommonThingsThatChange =>
-      'Common things that change';
+  String get reminderSheetsCommonThingsThatChange => 'Cosas que suelen cambiar';
 
   @override
-  String get reminderSheetsStillTheRightPeople => 'Still the right people?';
+  String get reminderSheetsStillTheRightPeople =>
+      '¿Siguen siendo las personas adecuadas?';
 
   @override
-  String get reminderSheetsMedicationsUpToDate => 'Medications up to date?';
+  String get reminderSheetsMedicationsUpToDate =>
+      '¿Están al día los medicamentos?';
 
   @override
   String get reminderSheetsCarePreferencesStillRight =>
-      'Care preferences still right?';
+      '¿Siguen siendo correctas sus preferencias de atención?';
 
   @override
   String get reminderSheetsPaDirectivesExpireAfter2 =>
-      'PA directives expire after 2 years. Yours runs out on ';
+      'Las directivas de PA vencen a los 2 años. La suya vence el ';
 
   @override
   String get reminderSheetsIfYouAreIncapableOf =>
-      '. (If you are incapable of making mental health decisions when it would expire, it stays in effect until your capacity returns.)';
+      '. (Si en la fecha de vencimiento usted no tiene capacidad para tomar decisiones de salud mental, sigue vigente hasta que recupere la capacidad).';
 
   @override
   String get reminderSheetsYourDirectiveIsStillValid =>
-      'Your directive is still valid through ';
+      'Su directiva sigue siendo válida hasta el ';
 
   @override
   String get reminderSheetsNoSigningNeededJustA =>
-      ' — no signing needed. Just a quick gut-check that it still fits your life.';
+      '; no hace falta firmar nada. Solo una revisión rápida para confirmar que sigue ajustándose a su vida.';
 
   @override
   String get revocationMarkedRevokedOnThisDevice =>
-      'Marked revoked on this device';
+      'Marcada como revocada en este dispositivo';
 
   @override
   String get revocationPer20PaCS =>
-      'Per 20 Pa.C.S. §§ 5825 and 5839, revocation is effective only when communicated to your attending physician or provider. Marking this directive revoked here does not communicate it — you still need to tell each recipient.';
+      'Según 20 Pa.C.S. §§ 5825 y 5839, la revocación solo tiene efecto cuando se comunica a su médico o proveedor tratante. Marcar aquí esta directiva como revocada no la comunica; todavía tiene que avisar a cada destinatario.';
 
   @override
   String get revocationYouPickedTheseRecipientsTo =>
-      'You picked these recipients to notify:';
+      'Eligió avisar a estos destinatarios:';
 
   @override
   String get revocationContactEachRecipientYourselfCall =>
-      'Contact each recipient yourself — call or email them — and ask the receiving provider to record the revocation in your chart. Revocation takes effect once your provider has been told.';
+      'Comuníquese usted mismo con cada destinatario, por teléfono o correo electrónico, y pida al proveedor que registre la revocación en su expediente. La revocación tiene efecto una vez que su proveedor ha sido informado.';
 
   @override
   String get revocationYourDirectiveWillNoLonger =>
-      'Your directive will no longer be legally binding once you communicate the revocation to your attending physician or provider (20 Pa.C.S. §§ 5825, 5839). This app marks the directive revoked locally and helps you generate a revocation letter.';
+      'Su directiva dejará de ser legalmente obligatoria cuando usted comunique la revocación a su médico o proveedor tratante (20 Pa.C.S. §§ 5825, 5839). Esta aplicación marca la directiva como revocada en el dispositivo y le ayuda a generar una carta de revocación.';
 
   @override
   String get revocationThisDeclarationMayBeRevoked =>
-      'This declaration may be revoked in whole or in part at any time, either orally or in writing, as long as I have not been found to be incapable of making mental health decisions. My revocation will be effective upon communication to my attending physician or other mental health care provider, either by me or a witness to my revocation, of the intent to revoke.';
+      'Esta declaración puede revocarse total o parcialmente en cualquier momento, de forma oral o por escrito, siempre que no se haya determinado que no tengo capacidad para tomar decisiones de salud mental. Mi revocación tendrá efecto cuando yo, o un testigo de mi revocación, comunique la intención de revocar a mi médico tratante u otro proveedor de atención de salud mental.';
 
   @override
   String get revocationNoBatchSendsPickEach =>
-      'No batch sends — pick each recipient. The app keeps your choices in front of you as a checklist; you contact each recipient yourself (call, email, or in person).';
+      'No se hacen envíos masivos: elija a cada destinatario. La aplicación mantiene sus elecciones a la vista como una lista de verificación; usted se comunica con cada destinatario (por teléfono, correo electrónico o en persona).';
 
   @override
-  String get revocationTypeRevokeToConfirm => 'Type REVOKE to confirm';
+  String get revocationTypeRevokeToConfirm => 'Escriba REVOCAR para confirmar';
 
   @override
-  String get revocationHowRevocationWorksInPa => 'How revocation works in PA';
+  String get revocationHowRevocationWorksInPa =>
+      'Cómo funciona la revocación en PA';
 
   @override
   String get revocationStatutoryRevocationStatement =>
-      'Statutory revocation statement';
+      'Declaración legal de revocación';
 
   @override
   String get revocationWhoToNotifyOptIn =>
-      'Who to notify (opt-in per recipient)';
+      'A quién avisar (elija cada destinatario)';
 
   @override
-  String get revocationPermanentAction => 'Permanent action';
+  String get revocationPermanentAction => 'Acción permanente';
 
   @override
-  String get revocationRevoke => 'REVOKE';
+  String get revocationRevoke => 'REVOCAR';
 
   @override
   String get pastDirectiveDetailDeleteFromThisDevice =>
-      'Delete from this device?';
+      '¿Eliminar de este dispositivo?';
 
   @override
   String get pastDirectiveDetailThisRemovesTheSavedDirective =>
-      'This removes the saved directive from this device. The legal effect of any previously-signed paper copy is unchanged. This cannot be undone.';
+      'Esto elimina la directiva guardada de este dispositivo. El efecto legal de cualquier copia en papel firmada anteriormente no cambia. No se puede deshacer.';
 
   @override
   String get pastDirectiveDetailDirectiveDeletedFromThisDevice =>
-      'Directive deleted from this device.';
+      'Directiva eliminada de este dispositivo.';
 
   @override
   String get pastDirectiveDetailNoShareLogEntriesYet =>
-      'No share log entries yet.';
+      'Aún no hay entradas en el registro de copias compartidas.';
 
   @override
   String get pastDirectiveDetailWeDonTTrackDelivery =>
-      'We don\'t track delivery or receipt confirmation (that would need a server). Add entries manually as you distribute copies.';
+      'No registramos la entrega ni la confirmación de recepción (eso requeriría un servidor). Añada entradas manualmente a medida que distribuya copias.';
 
   @override
   String get pastDirectiveDetailGeneratedOnDemand6Pages =>
-      'Generated on demand · ~6 pages';
+      'Se genera cuando la pide · ~6 páginas';
 
   @override
-  String get pastDirectiveDetailWhoHadACopy => 'Who had a copy';
+  String get pastDirectiveDetailWhoHadACopy => 'Quién tenía una copia';
 
   @override
-  String get pastDirectiveDetailActions => 'Actions';
+  String get pastDirectiveDetailActions => 'Acciones';
 
   @override
   String get pastDirectiveDetailLoadingThisDirective =>
-      'Loading this directive';
+      'Cargando esta directiva';
 
   @override
   String get pastDirectiveDetailCopyToANewDirective =>
-      'Copy to a new directive';
+      'Copiar a una nueva directiva';
 
   @override
   String get pastDirectiveDetailStartWithTheseAnswersComing =>
-      'Start with these answers — coming with the renewal flow';
+      'Empezar con estas respuestas; llegará con el flujo de renovación';
 
   @override
-  String get pastDirectiveDetailOpenThePdf => 'Open the PDF';
+  String get pastDirectiveDetailOpenThePdf => 'Abrir el PDF';
 
   @override
   String get pastDirectiveDetailPrintOrSaveForYour =>
-      'Print or save for your records';
+      'Imprimir o guardar para sus registros';
 
   @override
   String get pastDirectiveDetailDeleteFromThisDevice2 =>
-      'Delete from this device';
+      'Eliminar de este dispositivo';
 
   @override
-  String get pastDirectiveDetailSignedBy => 'SIGNED BY';
+  String get pastDirectiveDetailSignedBy => 'FIRMADA POR';
 
   @override
-  String get pastDirectiveDetailWitness1 => 'WITNESS 1';
+  String get pastDirectiveDetailWitness1 => 'TESTIGO 1';
 
   @override
-  String get pastDirectiveDetailWitness2 => 'WITNESS 2';
+  String get pastDirectiveDetailWitness2 => 'TESTIGO 2';
 
   @override
-  String get pastDirectiveDetailDirective => 'Directive · ';
+  String get pastDirectiveDetailDirective => 'Directiva · ';
 
   @override
-  String get pinDialogCreatePasscode => 'Create Passcode';
+  String get pinDialogCreatePasscode => 'Crear código de acceso';
 
   @override
   String get pinDialogBiometricAuthenticationIsNotAvailable =>
-      'Biometric authentication is not available on this device. Create a passcode to protect your private data.';
+      'La autenticación biométrica no está disponible en este dispositivo. Cree un código de acceso para proteger sus datos privados.';
 
   @override
-  String get pinDialogCreate => 'Create';
+  String get pinDialogCreate => 'Crear';
 
   @override
   String get pinDialogPaMhad => 'PA MHAD';
 
   @override
-  String get pinDialogPrivateModeLocked => 'PRIVATE MODE · LOCKED';
+  String get pinDialogPrivateModeLocked => 'MODO PRIVADO · BLOQUEADO';
 
   @override
   String get pinDialogEnterYourPasscodeToUnlock =>
-      'Enter your passcode to unlock private mode.';
+      'Ingrese su código de acceso para desbloquear el modo privado.';
 
   @override
-  String get pinDialogSwitchToPublicMode => 'Switch to public mode';
+  String get pinDialogSwitchToPublicMode => 'Cambiar al modo público';
 
   @override
-  String get pinDialogPasscode => 'Passcode';
+  String get pinDialogPasscode => 'Código de acceso';
 
   @override
-  String get pinDialogAtLeast4Characters => 'At least 4 characters';
+  String get pinDialogAtLeast4Characters => 'Al menos 4 caracteres';
 
   @override
-  String get pinDialogConfirmPasscode => 'Confirm Passcode';
+  String get pinDialogConfirmPasscode => 'Confirmar código de acceso';
 
   @override
-  String get pinDialogUseYour => 'Use your ';
+  String get pinDialogUseYour => 'Use su ';
 
   @override
-  String get pinDialogPasscode2 => 'passcode.';
+  String get pinDialogPasscode2 => 'código de acceso.';
 
   @override
   String get modeSelectionAuthenticationFailedOrWasCancelled =>
-      'Authentication failed or was cancelled. Please try again.';
+      'La autenticación falló o se canceló. Inténtelo de nuevo.';
 
   @override
   String get modeSelectionHowShouldWeHandleYour =>
-      'How should we handle your data?';
+      '¿Cómo debemos manejar sus datos?';
 
   @override
   String get modeSelectionYouCanChangeThisAnytime =>
-      'You can change this anytime in Settings.';
+      'Puede cambiarlo en cualquier momento en Ajustes.';
 
   @override
-  String get modeSelectionRecommended => 'RECOMMENDED';
+  String get modeSelectionRecommended => 'RECOMENDADO';
 
   @override
-  String get modeSelectionPrivacySetup => 'Privacy · setup';
+  String get modeSelectionPrivacySetup => 'Privacidad · configuración';
 
   @override
-  String get modeSelectionPrivateMode => 'Private mode';
+  String get modeSelectionPrivateMode => 'Modo privado';
 
   @override
   String get modeSelectionYourDataStaysOnThis =>
-      'Your data stays on this device, encrypted. Unlock with biometrics or a passcode. You can come back to your draft anytime.';
+      'Sus datos se quedan en este dispositivo, cifrados. Desbloquee con biometría o un código de acceso. Puede volver a su borrador cuando quiera.';
 
   @override
-  String get modeSelectionPublicMode => 'Public mode';
+  String get modeSelectionPublicMode => 'Modo público';
 
   @override
   String get modeSelectionNoDataIsSavedAfter =>
-      'No data is saved after you close the app. Best for shared devices, or one-time use without leaving a trace.';
+      'No se guarda ningún dato después de cerrar la aplicación. Ideal para dispositivos compartidos o para un solo uso sin dejar rastro.';
 
   @override
   String get sideEffectsForTheMedicationsYouRe =>
-      'For the medications you\'re currently taking, here are common side effects — check the ones you actually have. Noting them (especially any that affect your daily activities) helps your care team. This is common-side-effect information, not medical advice.';
+      'Para los medicamentos que toma actualmente, estos son los efectos secundarios comunes; marque los que realmente tenga. Anotarlos (sobre todo los que afectan sus actividades diarias) ayuda a su equipo de atención. Es información sobre efectos secundarios comunes, no es consejo médico.';
 
   @override
-  String get sideEffectsSetUpAiToCheck => 'Set up AI to check side effects';
+  String get sideEffectsSetUpAiToCheck =>
+      'Configure la IA para revisar efectos secundarios';
 
   @override
   String get sideEffectsThisUsesYourAiAssistant =>
-      'This uses your AI assistant to list common side effects of your current medications for you to review.';
+      'Esto usa su asistente de IA para mostrarle los efectos secundarios comunes de sus medicamentos actuales para que los revise.';
 
   @override
   String get sideEffectsWorthDiscussingWithYourDoctor =>
-      'Worth discussing with your doctor';
+      'Vale la pena hablarlo con su médico';
 
   @override
-  String get sideEffectsOptionalAddOn => 'Optional add-on';
+  String get sideEffectsOptionalAddOn => 'Complemento opcional';
 
   @override
   String get sideEffectsAskYourDoctorOrPharmacist =>
-      'Ask your doctor or pharmacist';
+      'Pregunte a su médico o farmacéutico';
 
   @override
   String get educationCategoryBrowserNoSectionsInThisCategory =>
-      'No sections in this category yet.';
+      'Todavía no hay secciones en esta categoría.';
 
   @override
   String get educationMostOfThisComesStraight =>
-      'Most of this comes straight from the official PA MHAD booklet, plus a few plain-language explainers. No marketing, no opinions — just the rules and what they mean.';
+      'La mayor parte proviene directamente del folleto oficial de la MHAD de PA, más algunas explicaciones en lenguaje sencillo. Sin publicidad ni opiniones: solo las normas y lo que significan.';
 
   @override
   String get educationSearchArticlesGlossaryFaqs =>
-      'Search articles, glossary, FAQs…';
+      'Buscar artículos, glosario, preguntas frecuentes…';
 
   @override
   String get educationYourDirectiveIsYourVoice =>
-      '\"Your directive is your voice — written in advance, kept safe, honored when you can\'t speak for yourself.\"';
+      '\"Su directiva es su voz: escrita por adelantado, guardada en un lugar seguro y respetada cuando usted no pueda hablar por sí mismo.\"';
 
   @override
   String get educationPaOfficeOfMentalHealth =>
-      '— PA OFFICE OF MENTAL HEALTH & SUBSTANCE ABUSE SERVICES · BOOKLET P.3';
+      '— PA OFFICE OF MENTAL HEALTH & SUBSTANCE ABUSE SERVICES · FOLLETO, P. 3';
 
   @override
   String get educationTypeToSearchEducationalContent =>
-      'Type to search educational content...';
+      'Escriba para buscar contenido educativo...';
 
   @override
-  String get educationBrowseAllTopics => 'Browse all topics';
+  String get educationBrowseAllTopics => 'Ver todos los temas';
 
   @override
-  String get educationUnderstand => 'Understand ';
+  String get educationUnderstand => 'Entienda ';
 
   @override
-  String get educationYouSign => ' you sign.';
+  String get educationYouSign => ' de firmar.';
 
   @override
-  String get learnAiPanelAskTheAi => 'Ask the AI';
+  String get learnAiPanelAskTheAi => 'Preguntar a la IA';
 
   @override
-  String get learnAiPanelSetUpAiAssistant => 'Set up AI assistant';
+  String get learnAiPanelSetUpAiAssistant => 'Configurar el asistente de IA';
 
   @override
   String get learnAiPanelNotLegalOrMedicalAdvice =>
-      'Not legal or medical advice.';
+      'No es asesoría legal ni médica.';
 
   @override
-  String get learnAiPanelAskAQuestion => 'Ask a question…';
+  String get learnAiPanelAskAQuestion => 'Haga una pregunta…';
 
   @override
-  String get educationArticleDetailTryIt => 'TRY IT';
+  String get educationArticleDetailTryIt => 'PRUÉBELO';
 
   @override
-  String get educationArticleDetailReadyToWriteYours => 'Ready to write yours?';
+  String get educationArticleDetailReadyToWriteYours =>
+      '¿Listo para escribir la suya?';
 
   @override
   String get educationArticleDetailTheGuidedWizardTakesAbout =>
-      'The guided wizard takes about 20 minutes and works anonymously.';
+      'El asistente guiado toma unos 20 minutos y funciona de forma anónima.';
 
   @override
-  String get educationArticleDetailStartMyDirective => 'Start my directive';
+  String get educationArticleDetailStartMyDirective => 'Empezar mi directiva';
 
   @override
   String get audioGuideCouldnTOpenTheQuestionnaire =>
-      'Couldn\'t open the questionnaire to print. Please try again.';
+      'No se pudo abrir el cuestionario para imprimirlo. Inténtelo de nuevo.';
 
   @override
-  String get audioGuideRecordYourWishesByVoice => 'Record your wishes by voice';
+  String get audioGuideRecordYourWishesByVoice => 'Grabe sus deseos con su voz';
 
   @override
   String get audioGuideDescribeYourWishesOutLoud =>
-      'Describe your wishes out loud, upload the recording on the Snap-to-fill screen, and the AI fills your directive — you review every field before anything is saved.';
+      'Describa sus deseos en voz alta, suba la grabación en la pantalla Autocompletar con una foto y la IA completará su directiva; usted revisa cada campo antes de que se guarde nada.';
 
   @override
-  String get audioGuidePrintTheQuestionnaire => 'Print the questionnaire';
+  String get audioGuidePrintTheQuestionnaire => 'Imprimir el cuestionario';
 
   @override
   String get audioGuidePrintItToReadAloud =>
-      'Print it to read aloud while you record, or to fill in by hand first.';
+      'Imprímalo para leerlo en voz alta mientras graba, o para completarlo a mano primero.';
 
   @override
-  String get audioGuidePrint => 'Print';
+  String get audioGuidePrint => 'Imprimir';
 
   @override
-  String get audioGuideSetTheseInTheApp => 'Set these in the app:';
+  String get audioGuideSetTheseInTheApp => 'Indique esto en la aplicación:';
 
   @override
   String get audioGuideWorthSayingOutLoudAutofill =>
-      'Worth saying out loud — autofill now captures these:';
+      'Vale la pena decirlo en voz alta; el autocompletado ahora recoge esto:';
 
   @override
-  String get audioGuideHowToRecord => 'How to record';
+  String get audioGuideHowToRecord => 'Cómo grabar';
 
   @override
-  String get audioGuideWhatTheRecordingCanT => 'What the recording can\'t fill';
+  String get audioGuideWhatTheRecordingCanT =>
+      'Lo que la grabación no puede completar';
 
   @override
-  String get ulyssesClauseBeforeYouAcknowledge => 'Before you acknowledge';
+  String get ulyssesClauseBeforeYouAcknowledge => 'Antes de aceptarlo';
 
   @override
   String get ulyssesClauseThisIsASignificantDecision =>
-      'This is a significant decision. Once you are found incapable, the directive cannot be revoked by you until capacity returns. We strongly recommend talking it through with a peer specialist or your clinician before saving.';
+      'Esta es una decisión importante. Una vez que se determine que usted no tiene capacidad, no podrá revocar la directiva hasta que la recupere. Le recomendamos encarecidamente hablarlo con un especialista de apoyo entre pares o con su médico antes de guardarlo.';
 
   @override
-  String get ulyssesClauseIUnderstand => 'I understand';
+  String get ulyssesClauseIUnderstand => 'Entiendo';
 
   @override
   String get ulyssesClauseSometimesDuringACrisisPeople =>
-      'Sometimes during a crisis, people refuse treatment that they\'d want when well. PA law honors what you wrote today, even if you protest in the moment.';
+      'A veces, durante una crisis, las personas rechazan tratamientos que querrían recibir cuando están bien. La ley de PA respeta lo que usted escribió hoy, aunque proteste en ese momento.';
 
   @override
-  String get ulyssesClauseSelfBindingUlysses => 'SELF-BINDING (\"Ulysses\")';
+  String get ulyssesClauseSelfBindingUlysses => 'AUTOVINCULACIÓN (\"Ulises\")';
 
   @override
-  String get ulyssesClauseTieMyselfToTheMast => 'Tie myself to the mast.';
+  String get ulyssesClauseTieMyselfToTheMast => 'Atarme al mástil.';
 
   @override
   String get ulyssesClausePerPaAct19420 =>
-      'Per PA Act 194 (20 Pa.C.S. §§ 5825, 5839), this directive may be revoked only while I have capacity. Once I\'m found incapable, what I wrote here stands — even over my in-the-moment protest — until capacity returns.';
+      'Según la Ley 194 de PA (20 Pa.C.S. §§ 5825, 5839), esta directiva solo puede revocarse mientras yo tenga capacidad. Una vez que se determine que no tengo capacidad, lo que escribí aquí se mantiene, incluso por encima de mi protesta en ese momento, hasta que recupere la capacidad.';
 
   @override
-  String get ulyssesClauseIAcknowledgeThis => 'I acknowledge this';
+  String get ulyssesClauseIAcknowledgeThis => 'Lo acepto';
 
   @override
   String get ulyssesClauseRecordedInYourDirectivePdf =>
-      'Recorded in your directive PDF.';
+      'Queda registrado en el PDF de su directiva.';
 
   @override
-  String get ulyssesClauseBoundariesOnThisClause => 'Boundaries on this clause';
+  String get ulyssesClauseBoundariesOnThisClause => 'Límites de esta cláusula';
 
   @override
   String get exportCardsBeforeSharingEnsureThisDirective =>
-      'Before sharing: ensure this directive has been signed, dated, and witnessed by two adults (18+) as required by PA Act 194. Give copies to your agent, physician, and support people.';
+      'Antes de compartirla: asegúrese de que esta directiva esté firmada, fechada y atestiguada por dos adultos (18+), como exige la Ley 194 de PA. Dé copias a su agente, a su médico y a sus personas de apoyo.';
 
   @override
-  String get exportCardsPrincipal => 'Principal';
+  String get exportCardsPrincipal => 'Declarante';
 
   @override
   String get exportCardsTheExportedPdfIsNot =>
-      'The exported PDF is not encrypted. Share only via channels you trust.';
+      'El PDF exportado no está cifrado. Compártalo solo por medios de confianza.';
 
   @override
   String get exportCardsImportantBeforeSharingEnsureThis =>
-      'Important: Before sharing, ensure this directive has been signed, dated, and witnessed by two adults as required by PA Act 194. Give copies to your agent, physician, and support people.';
+      'Importante: antes de compartirla, asegúrese de que esta directiva esté firmada, fechada y atestiguada por dos adultos, como exige la Ley 194 de PA. Dé copias a su agente, a su médico y a sus personas de apoyo.';
 
   @override
-  String get pdfPreviewUsLetter8511 => 'US LETTER · 8.5×11\"';
+  String get pdfPreviewUsLetter8511 => 'CARTA EE. UU. · 8.5×11\"';
 
   @override
-  String get pdfPreviewShare => 'Share';
+  String get pdfPreviewShare => 'Compartir';
 
   @override
   String get pdfPreviewSizedForUsLetter8 =>
-      'Sized for US Letter (8.5 × 11″) with 1-inch margins. The preview fills the width — use − / + to zoom.';
+      'Tamaño carta de EE. UU. (8.5 × 11″) con márgenes de 1 pulgada. La vista previa ocupa todo el ancho; use − / + para acercar o alejar.';
 
   @override
-  String get pdfPreviewPages => 'PAGES';
+  String get pdfPreviewPages => 'PÁGINAS';
 
   @override
-  String get pdfPreviewExportShare => 'Export & share';
+  String get pdfPreviewExportShare => 'Exportar y compartir';
 
   @override
-  String get pdfPreviewClosePreview => 'Close preview';
+  String get pdfPreviewClosePreview => 'Cerrar la vista previa';
 
   @override
-  String get pdfPreviewRenderingPdfPreview => 'Rendering PDF preview';
+  String get pdfPreviewRenderingPdfPreview =>
+      'Generando la vista previa del PDF';
 
   @override
-  String get pdfPreviewFitPageToWindow => 'Fit page to window';
+  String get pdfPreviewFitPageToWindow => 'Ajustar la página a la ventana';
 
   @override
-  String get pdfPreviewYourDirective => 'Your directive, ';
+  String get pdfPreviewYourDirective => 'Su directiva, ';
 
   @override
-  String get pdfPreviewOnPaper => 'on paper.';
+  String get pdfPreviewOnPaper => 'en papel.';
 
   @override
   String get exportSelectAtLeastOneSection =>
-      'Select at least one section to include.';
+      'Seleccione al menos una sección para incluir.';
 
   @override
-  String get exportIncompleteDirective => 'Incomplete Directive';
+  String get exportIncompleteDirective => 'Directiva incompleta';
 
   @override
-  String get exportGoBack => 'Go Back';
+  String get exportGoBack => 'Volver';
 
   @override
-  String get exportEditDirective => 'Edit Directive';
+  String get exportEditDirective => 'Editar la directiva';
 
   @override
-  String get exportExportAnyway => 'Export Anyway';
+  String get exportExportAnyway => 'Exportar de todos modos';
 
   @override
   String get exportExportedFileIsNotEncrypted =>
-      'Exported file is not encrypted';
+      'El archivo exportado no está cifrado';
 
   @override
   String get exportThePdfYouAreAbout =>
-      'The PDF you are about to share contains your full mental-health directive (names, agents, medications, signatures). It is generated unencrypted because the underlying PDF library does not support password protection.\n\nShare only via channels you trust (e.g., direct hand-off, a secure email to a specific provider). Avoid public uploads, cloud links, or untrusted messaging apps.';
+      'El PDF que va a compartir contiene su directiva de salud mental completa (nombres, agentes, medicamentos, firmas). Se genera sin cifrar porque la biblioteca de PDF que usamos no admite protección con contraseña.\n\nCompártalo solo por medios de confianza (p. ej., entregándolo en mano o por un correo seguro a un proveedor específico). Evite subirlo a sitios públicos, enlaces en la nube o aplicaciones de mensajería no confiables.';
 
   @override
-  String get exportIUnderstandContinue => 'I understand, continue';
+  String get exportIUnderstandContinue => 'Entiendo, continuar';
 
   @override
-  String get exportCouldnTGenerateThePdf => 'Couldn\'t generate the PDF.';
+  String get exportCouldnTGenerateThePdf => 'No se pudo generar el PDF.';
 
   @override
   String get exportSelectAtLeastOneSection2 =>
-      'Select at least one section to preview.';
+      'Seleccione al menos una sección para la vista previa.';
 
   @override
-  String get exportNothingToDownloadYet => 'Nothing to download yet';
+  String get exportNothingToDownloadYet => 'Todavía no hay nada para descargar';
 
   @override
   String get exportStartADirectiveFirstThen =>
-      'Start a directive first — then come back here to preview, download, and print it.';
+      'Primero empiece una directiva; luego vuelva aquí para verla, descargarla e imprimirla.';
 
   @override
-  String get exportSelectFormsToInclude => 'Select forms to include:';
+  String get exportSelectFormsToInclude =>
+      'Seleccione los formularios que desea incluir:';
 
   @override
-  String get exportAdditionalPages => 'Additional Pages:';
+  String get exportAdditionalPages => 'Páginas adicionales:';
 
   @override
   String get exportPrintABlankFormFill =>
-      'Print a blank form (fill in by hand)';
+      'Imprimir un formulario en blanco (para completar a mano)';
 
   @override
-  String get exportPlainSignable => 'Plain (signable)';
+  String get exportPlainSignable => 'Sencillo (para firmar)';
 
   @override
-  String get exportLegalInfoOnly => 'Legal (info only)';
+  String get exportLegalInfoOnly => 'Legal (solo informativo)';
 
   @override
   String get exportHeadsUpTheLegalLanguage =>
-      'Heads up: the legal-language version is for reference only. Sign and use the plain-language official form.';
+      'Atención: la versión en lenguaje legal es solo de referencia. Firme y use el formulario oficial en lenguaje sencillo.';
 
   @override
-  String get exportOpenPdf => 'Open PDF';
+  String get exportOpenPdf => 'Abrir el PDF';
 
   @override
-  String get exportOpenWalletCardPdf => 'Open wallet card (PDF)';
+  String get exportOpenWalletCardPdf => 'Abrir la tarjeta de billetera (PDF)';
 
   @override
-  String get exportEncryptTheFile => 'Encrypt the file';
+  String get exportEncryptTheFile => 'Cifrar el archivo';
 
   @override
-  String get exportDownload => 'Download';
+  String get exportDownload => 'Descargar';
 
   @override
   String get exportFhirJson => 'FHIR JSON';
@@ -3926,201 +4000,204 @@ class AppLocalizationsEs extends AppLocalizations {
   String get exportCsv => 'CSV';
 
   @override
-  String get exportZipBundle => '.zip bundle';
+  String get exportZipBundle => 'paquete .zip';
 
   @override
-  String get exportDoneBackToHome => 'Done — back to home';
+  String get exportDoneBackToHome => 'Listo, volver al inicio';
 
   @override
-  String get exportCopiedToClipboard => 'Copied to clipboard.';
+  String get exportCopiedToClipboard => 'Copiado al portapapeles.';
 
   @override
   String get exportCouldnTSaveTheFile =>
-      'Couldn\'t save the file. Please try again.';
+      'No se pudo guardar el archivo. Inténtelo de nuevo.';
 
   @override
   String get exportExportedYourDirectiveBundlePdf =>
-      'Exported your directive bundle — PDF, JSON, XML and CSV.';
+      'Se exportó el paquete de su directiva: PDF, JSON, XML y CSV.';
 
   @override
-  String get exportCouldNotBuildTheZip => 'Could not build the .zip bundle.';
+  String get exportCouldNotBuildTheZip => 'No se pudo crear el paquete .zip.';
 
   @override
   String get exportCouldnTGenerateTheWallet =>
-      'Couldn\'t generate the wallet card. Please try again.';
+      'No se pudo generar la tarjeta de billetera. Inténtelo de nuevo.';
 
   @override
-  String get exportYourOfficialDirective => 'Your official directive';
+  String get exportYourOfficialDirective => 'Su directiva oficial';
 
   @override
-  String get exportKeepACopy => 'Keep a copy';
+  String get exportKeepACopy => 'Guardar una copia';
 
   @override
-  String get exportAdvancedDataExports => 'Advanced · data exports';
+  String get exportAdvancedDataExports => 'Avanzado · exportación de datos';
 
   @override
   String get exportDeclarationPowerOfAttorneyMost =>
-      'Declaration + Power of Attorney (most complete)';
+      'Declaración + Poder Notarial (lo más completo)';
 
   @override
   String get exportTreatmentPreferencesOnlyNoAgent =>
-      'Treatment preferences only (no agent)';
+      'Solo preferencias de tratamiento (sin agente)';
 
   @override
   String get exportAgentAuthorityOnlyNoPersonal =>
-      'Agent authority only (no personal preferences)';
+      'Solo la autoridad del agente (sin preferencias personales)';
 
   @override
   String get exportSupplementaryLegalInformation =>
-      'Supplementary Legal Information';
+      'Información legal complementaria';
 
   @override
   String get exportAdditionalLegalReferenceInformation =>
-      'Additional legal reference information';
+      'Información legal adicional de referencia';
 
   @override
   String get exportDistributionChecklistNotes =>
-      'Distribution Checklist & Notes';
+      'Lista de distribución y notas';
 
   @override
   String get exportBlankPagesForHandwrittenNotes =>
-      'Blank pages for handwritten notes';
+      'Páginas en blanco para notas escritas a mano';
 
   @override
   String get exportOpenThePdfDirectiveIn =>
-      'Open the PDF directive in your viewer to print or save it';
+      'Abra la directiva en PDF en su visor para imprimirla o guardarla';
 
   @override
   String get exportDownloadAnEditableCopyOf =>
-      'Download an editable copy of your directive';
+      'Descargue una copia editable de su directiva';
 
   @override
   String get exportExportAsFhirJsonFor =>
-      'Export as FHIR JSON for electronic health records';
+      'Exportar como FHIR JSON para expedientes médicos electrónicos';
 
   @override
   String get exportExportAsFhirXmlFor =>
-      'Export as FHIR XML for electronic health records';
+      'Exportar como FHIR XML para expedientes médicos electrónicos';
 
   @override
-  String get exportExportAsCsvSpreadsheet => 'Export as CSV spreadsheet';
+  String get exportExportAsCsvSpreadsheet =>
+      'Exportar como hoja de cálculo CSV';
 
   @override
   String get exportDownloadEverythingPdfJsonXml =>
-      'Download everything (PDF, JSON, XML, CSV) as a zip bundle';
+      'Descargar todo (PDF, JSON, XML, CSV) en un paquete zip';
 
   @override
-  String get exportYourDirective => 'Your directive,\n';
+  String get exportYourDirective => 'Su directiva,\n';
 
   @override
-  String get appThemeWarmTeal => 'Warm Teal';
+  String get appThemeWarmTeal => 'Verde azulado cálido';
 
   @override
   String get appThemeBalancedCalmProfessional =>
-      'Balanced, calm, professional.';
+      'Equilibrado, tranquilo, profesional.';
 
   @override
-  String get appThemeDeepNavy => 'Deep Navy';
+  String get appThemeDeepNavy => 'Azul marino';
 
   @override
   String get appThemeFormalSteadyHighContrast =>
-      'Formal, steady, high-contrast.';
+      'Formal, estable, de alto contraste.';
 
   @override
-  String get appThemeSageGreen => 'Sage Green';
+  String get appThemeSageGreen => 'Verde salvia';
 
   @override
-  String get appThemeSoftNaturalApproachable => 'Soft, natural, approachable.';
+  String get appThemeSoftNaturalApproachable => 'Suave, natural, cercano.';
 
   @override
   String get aiSetupReplyWithTheSingleWord => 'Reply with the single word: ok';
 
   @override
-  String get aiSetupRemoveApiKey => 'Remove API Key?';
+  String get aiSetupRemoveApiKey => '¿Quitar la clave de API?';
 
   @override
   String get aiSetupAiFeaturesWillBeDisabled =>
-      'AI features will be disabled until a new key is added.';
+      'Las funciones de IA se desactivarán hasta que añada una clave nueva.';
 
   @override
-  String get aiSetupApiKeyRemoved => 'API key removed';
+  String get aiSetupApiKeyRemoved => 'Clave de API eliminada';
 
   @override
-  String get aiSetupAiAssistantSetup => 'AI assistant setup';
+  String get aiSetupAiAssistantSetup => 'Configuración del asistente de IA';
 
   @override
   String get aiSetupYourApiKeyWillNot =>
-      'Your API key will not be saved permanently. It is kept in memory for this session, with a temporary copy for up to 10 minutes so you can recover it if the app reloads — then discarded when you close the app or clear your data.';
+      'Su clave de API no se guardará de forma permanente. Se mantiene en memoria durante esta sesión, con una copia temporal de hasta 10 minutos para que pueda recuperarla si la aplicación se recarga; luego se descarta al cerrar la aplicación o borrar sus datos.';
 
   @override
   String get aiSetupStep1OpenAPrivate =>
-      'Step 1: Open a Private/Incognito Window';
+      'Paso 1: abra una ventana privada o de incógnito';
 
   @override
   String get aiSetupYouLlNeedToSign =>
-      'You\'ll need to sign into your Google account to get an API key. To protect your login on shared or public devices, open a private browsing window first:';
+      'Tendrá que iniciar sesión en su cuenta de Google para obtener una clave de API. Para proteger su sesión en dispositivos compartidos o públicos, primero abra una ventana de navegación privada:';
 
   @override
   String get aiSetupOnAPhoneTapThe =>
-      'On a phone: tap the menu (⋮ or ⋯) and select \"New Incognito Tab\" or \"New Private Tab\".';
+      'En un teléfono: toque el menú (⋮ o ⋯) y seleccione \"Nueva pestaña de incógnito\" o \"Nueva pestaña privada\".';
 
   @override
   String get aiSetupYourGoogleLoginWillBe =>
-      'Your Google login will be automatically forgotten when you close the private window.';
+      'Su sesión de Google se olvidará automáticamente al cerrar la ventana privada.';
 
   @override
-  String get aiSetupPrivacyNotice => 'Privacy Notice';
+  String get aiSetupPrivacyNotice => 'Aviso de privacidad';
 
   @override
-  String get aiSetupHowYourDataIsHandled => 'How Your Data Is Handled';
+  String get aiSetupHowYourDataIsHandled => 'Cómo se manejan sus datos';
 
   @override
   String get aiSetupYourDirectiveDataIsHeld =>
-      '- Your directive data is held in memory only; on close or crash it is kept ~10 minutes for recovery, then wiped — never written to disk or a server\n- AI features are optional and the app works without them\n- Only text you explicitly send via AI chat or AI Suggest leaves your device\n- This app is not a medical or legal service\n- This app is not HIPAA-compliant';
+      '- Los datos de su directiva solo se guardan en memoria; si la aplicación se cierra o falla, se conservan unos 10 minutos para recuperarlos y luego se borran; nunca se escriben en el disco ni en un servidor\n- Las funciones de IA son opcionales y la aplicación funciona sin ellas\n- Solo sale de su dispositivo el texto que usted envía expresamente por el chat de IA o Sugerencia de IA\n- Esta aplicación no es un servicio médico ni legal\n- Esta aplicación no cumple con HIPAA';
 
   @override
-  String get aiSetupCommonQuestions => 'Common Questions';
+  String get aiSetupCommonQuestions => 'Preguntas frecuentes';
 
   @override
-  String get aiSetupRemoveApiKey2 => 'Remove API key';
+  String get aiSetupRemoveApiKey2 => 'Quitar la clave de API';
 
   @override
-  String get aiSetupCreateAnApiKey => 'Create an API key';
+  String get aiSetupCreateAnApiKey => 'Crear una clave de API';
 
   @override
   String get aiSetupCreateANewApiKey =>
-      'Create a new API key on the API keys page; the defaults are fine.';
+      'Cree una clave de API nueva en la página de claves de API; los valores predeterminados sirven.';
 
   @override
-  String get aiSetupCopyAndPasteBelow => 'Copy and paste below';
+  String get aiSetupCopyAndPasteBelow => 'Cópiela y péguela abajo';
 
   @override
-  String get aiSetupPasteFromClipboard => 'Paste from clipboard';
+  String get aiSetupPasteFromClipboard => 'Pegar desde el portapapeles';
 
   @override
-  String get aiSetupTestingConnection => 'Testing connection';
+  String get aiSetupTestingConnection => 'Probando la conexión';
 
   @override
   String get accessibilitySettingsAdjustHowTheAppFeels =>
-      'Adjust how the app feels for you. Changes apply everywhere instantly.';
+      'Ajuste la aplicación a su gusto. Los cambios se aplican en todas partes al instante.';
 
   @override
-  String get accessibilitySettingsHowToUseReadAloud => 'How to use read-aloud';
+  String get accessibilitySettingsHowToUseReadAloud =>
+      'Cómo usar la lectura en voz alta';
 
   @override
   String get accessibilitySettingsResetAccessibilitySettings =>
-      'Reset accessibility settings';
+      'Restablecer los ajustes de accesibilidad';
 
   @override
-  String get accessibilitySettingsReadThisPageAloud => 'Read this page aloud';
+  String get accessibilitySettingsReadThisPageAloud =>
+      'Leer esta página en voz alta';
 
   @override
   String get accessibilitySettingsYourBrowserAndDeviceAlready =>
-      'Your browser and device already have read-aloud built in — they work better than an in-app reader, so use one of these:';
+      'Su navegador y su dispositivo ya incluyen lectura en voz alta y funcionan mejor que un lector dentro de la aplicación; use una de estas opciones:';
 
   @override
   String get accessibilitySettingsPeopleWhoITrustWill =>
-      'People who I trust will make my decisions if I can\'t.';
+      'Las personas en quienes confío tomarán mis decisiones si yo no puedo.';
 
   @override
   String get accessibilitySettingsEnglish => 'English';
@@ -4129,462 +4206,469 @@ class AppLocalizationsEs extends AppLocalizations {
   String get accessibilitySettingsEspaOl => 'Español';
 
   @override
-  String get accessibilitySettingsAccessibility => 'Accessibility';
+  String get accessibilitySettingsAccessibility => 'Accesibilidad';
 
   @override
-  String get accessibilitySettingsTextSize => 'Text size';
+  String get accessibilitySettingsTextSize => 'Tamaño del texto';
 
   @override
   String get accessibilitySettingsDyslexiaFriendlyFont =>
-      'Dyslexia-friendly font';
+      'Fuente adaptada para dislexia';
 
   @override
-  String get accessibilitySettingsBoldText => 'Bold text';
+  String get accessibilitySettingsBoldText => 'Texto en negrita';
 
   @override
-  String get accessibilitySettingsReduceMotion => 'Reduce motion';
+  String get accessibilitySettingsReduceMotion => 'Reducir el movimiento';
 
   @override
-  String get accessibilitySettingsHighContrast => 'High contrast';
+  String get accessibilitySettingsHighContrast => 'Alto contraste';
 
   @override
-  String get accessibilitySettingsReadAloud => 'Read aloud';
+  String get accessibilitySettingsReadAloud => 'Lectura en voz alta';
 
   @override
   String get accessibilitySettingsRightClickThePageRead =>
-      'Right-click the page → “Read aloud” (Edge), or use the Reading mode / an extension in Chrome. Edge: Ctrl+Shift+U.';
+      'Haga clic derecho en la página → “Leer en voz alta” (Edge), o use el Modo de lectura o una extensión en Chrome. Edge: Ctrl+Shift+U.';
 
   @override
   String get accessibilitySettingsSelectTextTapListenOr =>
-      'Select text → tap “Listen”, or turn on Settings → Accessibility → Select to Speak / TalkBack.';
+      'Seleccione el texto → toque “Escuchar”, o active Ajustes → Accesibilidad → Seleccionar para pronunciar / TalkBack.';
 
   @override
   String get accessibilitySettingsSettingsAccessibilitySpokenContentTurn =>
-      'Settings → Accessibility → Spoken Content → turn on “Speak Screen”, then swipe down with two fingers.';
+      'Ajustes → Accesibilidad → Contenido leído → active “Leer pantalla” y luego deslice hacia abajo con dos dedos.';
 
   @override
   String get accessibilitySettingsNarratorCtrlWinEnterOr =>
-      'Narrator: Ctrl+Win+Enter. Or use Edge’s Read aloud above.';
+      'Narrador: Ctrl+Win+Enter. O use “Leer en voz alta” de Edge, descrito arriba.';
 
   @override
   String get accessibilitySettingsSystemSettingsAccessibilitySpokenContent =>
-      'System Settings → Accessibility → Spoken Content → “Speak selection”, then press Option+Esc.';
+      'Ajustes del Sistema → Accesibilidad → Contenido leído → “Leer selección” y luego pulse Opción+Esc.';
 
   @override
-  String get privacyPolicyPrivacyPolicy => 'Privacy Policy';
+  String get privacyPolicyPrivacyPolicy => 'Política de privacidad';
 
   @override
   String get privacyPolicyPaMhadAppPrivacyPolicy =>
-      'PA MHAD App Privacy Policy';
+      'Política de privacidad de la aplicación PA MHAD';
 
   @override
-  String get privacyPolicyReviewLegalDisclaimer => 'Review Legal Disclaimer';
+  String get privacyPolicyReviewLegalDisclaimer => 'Revisar el aviso legal';
 
   @override
-  String get privacyPolicyDataWeCollect => 'Data We Collect';
+  String get privacyPolicyDataWeCollect => 'Datos que recopilamos';
 
   @override
   String get privacyPolicyThisAppCollectsOnlyThe =>
-      'This app collects only the information you enter into your Mental Health Advance Directive forms, including:\n  - Personal information (name, address, phone, date of birth)\n  - Agent and witness information\n  - Treatment preferences and medication lists\n  - Digital signatures\n  - Additional instructions\n\nWe do not collect analytics, crash reports, device identifiers, or location data.';
+      'Esta aplicación solo recopila la información que usted ingresa en los formularios de su Directiva Anticipada de Salud Mental, que incluye:\n  - Información personal (nombre, dirección, teléfono, fecha de nacimiento)\n  - Información del agente y de los testigos\n  - Preferencias de tratamiento y listas de medicamentos\n  - Firmas digitales\n  - Instrucciones adicionales\n\nNo recopilamos datos de análisis, informes de fallos, identificadores del dispositivo ni datos de ubicación.';
 
   @override
   String get privacyPolicyHowDataIsStoredProtected =>
-      'How Data Is Stored & Protected';
+      'Cómo se guardan y protegen los datos';
 
   @override
   String get privacyPolicyYourDirectiveDataIsNot =>
-      'Your directive data is NOT transmitted to the app developer or any third party for storage.\n\nThis is a web app: your data is held in an in-memory database in your browser tab. If you close the tab or the app crashes, your work is kept on this device for about 10 minutes so you can reopen and recover it — then it is wiped. Nothing is written to a server. Export or print your directive to keep a permanent copy.';
+      'Los datos de su directiva NO se transmiten al desarrollador de la aplicación ni a ningún tercero para su almacenamiento.\n\nEsta es una aplicación web: sus datos se guardan en una base de datos en memoria dentro de la pestaña de su navegador. Si cierra la pestaña o la aplicación falla, su trabajo se conserva en este dispositivo durante unos 10 minutos para que pueda volver a abrirlo y recuperarlo; luego se borra. No se escribe nada en un servidor. Exporte o imprima su directiva para conservar una copia permanente.';
 
   @override
   String get privacyPolicyAiFeaturesThirdPartyData =>
-      'AI Features & Third-Party Data Sharing';
+      'Funciones de IA y datos compartidos con terceros';
 
   @override
   String get privacyPolicyIfYouChooseToUse =>
-      'If you choose to use the optional AI features (AI Assistant chat or AI Suggest), text you submit is sent to the AI provider you select — Google Gemini by default, or Anthropic Claude, OpenAI, or xAI Grok if you choose one and add your own key — for processing.\n\nOn Google\'s Gemini free tier, Google may:\n  - Use your input/output data to improve their products\n  - Allow human reviewers to read your inputs and outputs\n  - Retain data indefinitely (no automatic expiration)\nOther providers handle your data under their own API data policies — review the policy of whichever provider you use.\n\nThe app strips common personally identifiable information (SSNs, phone numbers, emails, dates of birth, addresses, names, and facility names) before sending your text to any provider, but this is a best-effort filter and cannot guarantee complete removal.\n\nAI features are entirely optional. The app is fully functional without them.';
+      'Si decide usar las funciones opcionales de IA (el chat del Asistente de IA o Sugerencia de IA), el texto que envíe se manda para su procesamiento al proveedor de IA que usted elija: Google Gemini de forma predeterminada, o Anthropic Claude, OpenAI o xAI Grok si elige uno de ellos y añade su propia clave.\n\nEn el nivel gratuito de Gemini de Google, Google puede:\n  - Usar sus datos de entrada y salida para mejorar sus productos\n  - Permitir que revisores humanos lean sus entradas y salidas\n  - Conservar los datos indefinidamente (sin vencimiento automático)\nLos demás proveedores tratan sus datos según sus propias políticas de datos de API; revise la política del proveedor que use.\n\nLa aplicación elimina la información de identificación personal más común (números de seguro social, números de teléfono, correos electrónicos, fechas de nacimiento, direcciones, nombres y nombres de centros) antes de enviar su texto a cualquier proveedor, pero es un filtro de mejor esfuerzo y no puede garantizar una eliminación completa.\n\nLas funciones de IA son totalmente opcionales. La aplicación funciona por completo sin ellas.';
 
   @override
   String get privacyPolicyGeminiFreeTierDataPractices =>
-      'Gemini Free Tier Data Practices';
+      'Prácticas de datos del nivel gratuito de Gemini';
 
   @override
   String get privacyPolicyIfYouUseTheAi =>
-      'If you use the AI features with Google\'s free Gemini tier, be aware of the following:\n\n1. Google retains AI conversation data indefinitely on the free tier. There is no automatic expiration.\n\n2. Human reviewers at Google may read your inputs and outputs as part of their quality and safety processes.\n\n3. Data sent to Gemini cannot be recalled or deleted by you or by this app. Once submitted, it is under Google\'s control.\n\n4. If you are concerned about data privacy, consider upgrading to the paid Gemini tier, which offers stronger data protection policies and does not use your data for model training.\n\nIf you select a different provider (Anthropic, OpenAI, or xAI) instead of Gemini, that provider\'s own data and retention policy applies — review it before sending sensitive content.\n\nYou can avoid all third-party data sharing by not using the AI features.';
+      'Si usa las funciones de IA con el nivel gratuito de Gemini de Google, tenga en cuenta lo siguiente:\n\n1. Google conserva indefinidamente los datos de las conversaciones con la IA en el nivel gratuito. No hay vencimiento automático.\n\n2. Revisores humanos de Google pueden leer sus entradas y salidas como parte de sus procesos de calidad y seguridad.\n\n3. Ni usted ni esta aplicación pueden recuperar ni borrar los datos enviados a Gemini. Una vez enviados, quedan bajo el control de Google.\n\n4. Si le preocupa la privacidad de sus datos, considere pasar al nivel de pago de Gemini, que ofrece políticas de protección de datos más sólidas y no usa sus datos para entrenar modelos.\n\nSi elige otro proveedor (Anthropic, OpenAI o xAI) en lugar de Gemini, se aplica la política de datos y de conservación de ese proveedor; revísela antes de enviar contenido sensible.\n\nPuede evitar compartir cualquier dato con terceros si no usa las funciones de IA.';
 
   @override
   String get privacyPolicyInternationalUsersGdpr =>
-      'International Users (GDPR)';
+      'Usuarios internacionales (RGPD)';
 
   @override
   String get privacyPolicyIfYouAreLocatedIn =>
-      'If you are located in the European Economic Area (EEA), the UK, or Switzerland, the General Data Protection Regulation (GDPR) applies to your use of this app.\n\nLegal basis for processing: Your explicit consent, given through the in-app disclaimer and AI consent dialogs.\n\nYour rights under GDPR:\n  - Right to access: All your data is stored locally on your device — you have direct access at all times.\n  - Right to erasure: Use \"Delete All Data\" in the app menu to permanently erase all local data.\n  - Right to data portability: Export your directives as PDF or FHIR JSON (a standard health-records format) at any time.\n  - Right to withdraw consent: Stop using AI features at any time; remove your API key to prevent further data transmission.\n  - Right to restriction: You may use the app in Public Mode without any data persistence.\n\nData sent to your chosen AI provider is processed under that provider\'s own privacy policy and data processing terms. We cannot control or delete data once it has been sent.';
+      'Si se encuentra en el Espacio Económico Europeo (EEE), el Reino Unido o Suiza, el Reglamento General de Protección de Datos (RGPD) se aplica a su uso de esta aplicación.\n\nBase legal del tratamiento: su consentimiento explícito, otorgado mediante el aviso legal de la aplicación y los diálogos de consentimiento de IA.\n\nSus derechos según el RGPD:\n  - Derecho de acceso: todos sus datos se guardan localmente en su dispositivo; usted tiene acceso directo en todo momento.\n  - Derecho de supresión: use \"Eliminar todos los datos\" en el menú de la aplicación para borrar de forma permanente todos los datos locales.\n  - Derecho a la portabilidad de los datos: exporte sus directivas como PDF o FHIR JSON (un formato estándar de expedientes médicos) en cualquier momento.\n  - Derecho a retirar el consentimiento: deje de usar las funciones de IA cuando quiera; quite su clave de API para evitar más transmisiones de datos.\n  - Derecho a la limitación: puede usar la aplicación en Modo Público sin que se conserven datos.\n\nLos datos enviados al proveedor de IA que elija se procesan según la política de privacidad y las condiciones de tratamiento de datos de ese proveedor. No podemos controlar ni borrar los datos una vez enviados.';
 
   @override
   String get privacyPolicyUsStateConsumerHealthData =>
-      'US State Consumer Health Data Laws (CA, WA, CT, NV, NY)';
+      'Leyes estatales de EE. UU. sobre datos de salud del consumidor (CA, WA, CT, NV, NY)';
 
   @override
   String get privacyPolicyThisAppMayBeSubject =>
-      'This app may be subject to state consumer-health-data privacy laws including California (CCPA/CPRA), Washington (My Health My Data Act / MHMDA), Connecticut (CTDPA health provisions), Nevada (SB 370), and New York (Health Information Privacy Act).\n\nMental-health-directive content is \"consumer health data\" under each of these laws. Under all of them: (1) We collect mental-health treatment-preference data **solely** to help you create your advance directive. (2) We **do not sell** your health data — there is no commercial recipient. (3) The only third party that may receive any of your text is the AI provider you choose (Google Gemini by default, or Anthropic, OpenAI, or xAI), and **only** if you affirmatively opt in to AI features each session. (4) We use no third-party SDKs, no analytics, no advertising frameworks, no tracking pixels or cookies. (5) You may delete all locally stored data at any time via \"Delete All Data\" in the app menu.\n\nWashington MHMDA includes a **private right of action**; we have designed the app to require explicit, per-session consent before any third-party transfer of consumer health data, and we treat written consent as conditional on the specific terms shown in the AI consent dialog.\n\nFor questions about your privacy rights, contact the developer using the channels listed in the Contact section below (multiple methods are provided per the FTC Health Breach Notification Rule).';
+      'Esta aplicación puede estar sujeta a leyes estatales de privacidad de datos de salud del consumidor, como las de California (CCPA/CPRA), Washington (My Health My Data Act / MHMDA), Connecticut (disposiciones de salud de la CTDPA), Nevada (SB 370) y Nueva York (Health Information Privacy Act).\n\nEl contenido de una directiva de salud mental se considera \"datos de salud del consumidor\" según cada una de estas leyes. Según todas ellas: (1) Recopilamos datos sobre preferencias de tratamiento de salud mental **únicamente** para ayudarle a crear su directiva anticipada. (2) **No vendemos** sus datos de salud; no hay ningún destinatario comercial. (3) El único tercero que puede recibir parte de su texto es el proveedor de IA que usted elija (Google Gemini de forma predeterminada, o Anthropic, OpenAI o xAI), y **solo** si usted acepta expresamente las funciones de IA en cada sesión. (4) No usamos SDK de terceros, herramientas de análisis, plataformas de publicidad, píxeles de seguimiento ni cookies. (5) Puede eliminar todos los datos guardados localmente en cualquier momento con \"Eliminar todos los datos\" en el menú de la aplicación.\n\nLa MHMDA de Washington incluye un **derecho privado de acción**; hemos diseñado la aplicación para exigir un consentimiento explícito en cada sesión antes de cualquier transferencia de datos de salud del consumidor a terceros, y consideramos que el consentimiento por escrito está condicionado a los términos específicos que se muestran en el diálogo de consentimiento de IA.\n\nSi tiene preguntas sobre sus derechos de privacidad, comuníquese con el desarrollador por los medios indicados en la sección Contacto más abajo (se ofrecen varios medios, según la Norma de Notificación de Violaciones de Datos de Salud de la FTC).';
 
   @override
   String get privacyPolicyMedicalReferenceLookupsUS =>
-      'Medical Reference Lookups (U.S. government data)';
+      'Consultas de referencia médica (datos del gobierno de EE. UU.)';
 
   @override
   String get privacyPolicyToHelpYouFillIn =>
-      'To help you fill in and understand your directive, the app looks things up in free, public U.S. government databases. These lookups use ONLY the single term or code needed for that lookup. They never receive your identity (your name, date of birth, address, or phone), the people you name (agents, witnesses, guardian), or your saved directive.\n\nWhat is sent, and to whom:\n  - Medication name you type → NLM RxTerms (autocomplete).\n  - Condition name you type → NLM ICD-10-CM (diagnosis lookup).\n  - A doctor / provider name you type into the optional doctor search → NLM NPI registry, used only to look that provider up in the public registry of healthcare providers.\n  - A condition (by its ICD-10 code) or a medication (by name, resolved to a code via NLM RxNav) → NLM MedlinePlus Connect, to fetch a plain-language explanation.\n  - A medication name → openFDA (U.S. Food & Drug Administration), to fetch that drug\'s official FDA label, which is used to ground the side-effects list.\n\nNo personal or identifying information is included in any of these requests — only the medical term, code, or provider name being looked up.\n\nNLM, NIH, and the FDA are not responsible for this product and do not endorse or recommend it. These services are for information only and are not medical advice — consult a qualified professional. The NLM Clinical Table services are rate-limited to 20 requests/second.\n\nSources: U.S. National Library of Medicine (RxTerms, ICD-10-CM, NPI registry, RxNav, MedlinePlus Connect); U.S. Food & Drug Administration (openFDA).';
+      'Para ayudarle a completar y entender su directiva, la aplicación consulta bases de datos públicas y gratuitas del gobierno de EE. UU. Estas consultas usan ÚNICAMENTE el término o código necesario para cada búsqueda. Nunca reciben su identidad (su nombre, fecha de nacimiento, dirección o teléfono), las personas que usted nombra (agentes, testigos, tutor) ni su directiva guardada.\n\nQué se envía y a quién:\n  - El nombre del medicamento que escribe → NLM RxTerms (autocompletado).\n  - El nombre de la condición que escribe → NLM ICD-10-CM (búsqueda de diagnósticos).\n  - El nombre de un médico o proveedor que escribe en la búsqueda opcional de médicos → registro NPI de la NLM, que se usa solo para buscar a ese proveedor en el registro público de proveedores de salud.\n  - Una condición (por su código CIE-10) o un medicamento (por su nombre, convertido en un código mediante NLM RxNav) → NLM MedlinePlus Connect, para obtener una explicación en lenguaje sencillo.\n  - El nombre de un medicamento → openFDA (Administración de Alimentos y Medicamentos de EE. UU.), para obtener la etiqueta oficial de la FDA de ese medicamento, que se usa como base para la lista de efectos secundarios.\n\nNinguna de estas solicitudes incluye información personal ni que permita identificarle; solo el término médico, el código o el nombre del proveedor que se busca.\n\nLa NLM, los NIH y la FDA no son responsables de este producto ni lo respaldan o recomiendan. Estos servicios son solo informativos y no constituyen consejo médico; consulte a un profesional calificado. Los servicios Clinical Table de la NLM tienen un límite de 20 solicitudes por segundo.\n\nFuentes: Biblioteca Nacional de Medicina de EE. UU. (RxTerms, ICD-10-CM, registro NPI, RxNav, MedlinePlus Connect); Administración de Alimentos y Medicamentos de EE. UU. (openFDA).';
 
   @override
-  String get privacyPolicyPdfExportSharing => 'PDF Export & Sharing';
+  String get privacyPolicyPdfExportSharing => 'Exportación y envío del PDF';
 
   @override
   String get privacyPolicyWhenYouExportAPdf =>
-      'When you export a PDF of your directive, it is generated locally on your device. Sharing the PDF (via email, messaging, etc.) sends it through your device\'s standard sharing mechanism. The app cannot control where the PDF is stored once shared.';
+      'Cuando exporta un PDF de su directiva, se genera localmente en su dispositivo. Compartir el PDF (por correo electrónico, mensajería, etc.) lo envía a través del mecanismo habitual para compartir de su dispositivo. La aplicación no puede controlar dónde se guarda el PDF una vez compartido.';
 
   @override
-  String get privacyPolicyYourRights => 'Your Rights';
+  String get privacyPolicyYourRights => 'Sus derechos';
 
   @override
   String get privacyPolicyYouCanDeleteAnyDirective =>
-      'You can delete any directive at any time from the home screen. Deleting a directive removes all associated data (personal info, agents, medications, witnesses, signatures) from the local database.\n\nYou can remove your AI provider API key(s) at any time from the AI Setup screen.\n\nUninstalling the app removes all locally stored data.';
+      'Puede eliminar cualquier directiva en cualquier momento desde la pantalla de inicio. Al eliminar una directiva se borran de la base de datos local todos los datos asociados (información personal, agentes, medicamentos, testigos, firmas).\n\nPuede quitar las claves de API de sus proveedores de IA en cualquier momento desde la pantalla de configuración de la IA.\n\nDesinstalar la aplicación elimina todos los datos guardados localmente.';
 
   @override
-  String get privacyPolicyNoThirdPartyTracking => 'No Third-Party Tracking';
+  String get privacyPolicyNoThirdPartyTracking => 'Sin rastreo de terceros';
 
   @override
   String get privacyPolicyThisAppDoesNotInclude =>
-      'This app does not include any third-party analytics SDKs, advertising frameworks, crash reporting services (such as Firebase, Crashlytics, or Sentry), or tracking pixels.\n\nThe only external network connections this app makes are:\n  - Your chosen AI provider — Google Gemini (default), Anthropic, OpenAI, or xAI — only when you use AI features\n  - NIH/NLM Clinical Table Search Service — medication, condition, and provider (doctor) lookups\n  - NLM MedlinePlus Connect & RxNav — plain-language condition and medication explanations (sends only an ICD-10 code or a medication name)\n  - openFDA / U.S. FDA — official drug labels used to ground the side-effects list (sends only a medication name)\n\nEach of these receives only the term or code being looked up — never your identity or your directive. No data is sent to the app developer at any time.';
+      'Esta aplicación no incluye SDK de análisis de terceros, plataformas de publicidad, servicios de informes de fallos (como Firebase, Crashlytics o Sentry) ni píxeles de seguimiento.\n\nLas únicas conexiones de red externas que realiza esta aplicación son:\n  - El proveedor de IA que elija (Google Gemini de forma predeterminada, Anthropic, OpenAI o xAI), solo cuando usa funciones de IA\n  - NIH/NLM Clinical Table Search Service: búsquedas de medicamentos, condiciones y proveedores (médicos)\n  - NLM MedlinePlus Connect y RxNav: explicaciones en lenguaje sencillo sobre condiciones y medicamentos (solo envía un código CIE-10 o el nombre de un medicamento)\n  - openFDA / FDA de EE. UU.: etiquetas oficiales de medicamentos que sirven de base para la lista de efectos secundarios (solo envía el nombre de un medicamento)\n\nCada uno recibe solo el término o código que se busca, nunca su identidad ni su directiva. En ningún momento se envían datos al desarrollador de la aplicación.';
 
   @override
-  String get privacyPolicyHipaaCompliance => 'HIPAA & Compliance';
+  String get privacyPolicyHipaaCompliance => 'HIPAA y cumplimiento normativo';
 
   @override
   String get privacyPolicyThisAppIsNotHipaa =>
-      'This app is NOT HIPAA-compliant. It is not a covered entity or business associate under HIPAA. The app is intended for personal use by individuals preparing their own mental health advance directives.\n\nWhile this app implements privacy measures aligned with GDPR, CCPA, and MHMDA principles (as described above), it has not been independently audited or certified for compliance with these regulations. If you require verified regulatory compliance, consult with a privacy professional before use.';
+      'Esta aplicación NO cumple con HIPAA. No es una entidad cubierta ni un socio comercial según HIPAA. La aplicación está pensada para el uso personal de quienes preparan su propia directiva anticipada de salud mental.\n\nAunque esta aplicación aplica medidas de privacidad alineadas con los principios del RGPD, la CCPA y la MHMDA (como se describe arriba), no ha sido auditada ni certificada de forma independiente en cuanto al cumplimiento de estas normas. Si necesita un cumplimiento normativo verificado, consulte con un profesional de privacidad antes de usarla.';
 
   @override
-  String get privacyPolicyBreachNotification => 'Breach Notification';
+  String get privacyPolicyBreachNotification =>
+      'Notificación de violaciones de datos';
 
   @override
   String get privacyPolicyInAccordanceWithTheFtc =>
-      'In accordance with the FTC Health Breach Notification Rule, if any unauthorized disclosure of your health information occurs through a security breach, we will notify affected users within 60 calendar days of discovering the breach.\n\nBecause this app stores data locally on your device and does not maintain a server-side database, breach risk is limited to the optional AI features. If your chosen AI provider notifies us of a breach affecting data sent through the app, we will pass that notification along through an in-app notice and a posting on the hosted privacy policy page.';
+      'De acuerdo con la Norma de Notificación de Violaciones de Datos de Salud de la FTC, si se produce una divulgación no autorizada de su información de salud debido a una violación de seguridad, avisaremos a los usuarios afectados dentro de los 60 días calendario siguientes a su descubrimiento.\n\nComo esta aplicación guarda los datos localmente en su dispositivo y no mantiene una base de datos en un servidor, el riesgo de violación se limita a las funciones opcionales de IA. Si el proveedor de IA que usted eligió nos avisa de una violación que afecte a datos enviados a través de la aplicación, transmitiremos ese aviso mediante una notificación dentro de la aplicación y una publicación en la página de la política de privacidad.';
 
   @override
-  String get privacyPolicyContact => 'Contact';
+  String get privacyPolicyContact => 'Contacto';
 
   @override
-  String get settingsBrightness => 'Brightness';
+  String get settingsBrightness => 'Brillo';
 
   @override
-  String get settingsScreenshotProtection => 'Screenshot Protection';
+  String get settingsScreenshotProtection =>
+      'Protección contra capturas de pantalla';
 
   @override
-  String get settingsAbout => 'About';
+  String get settingsAbout => 'Acerca de';
 
   @override
   String get settingsPaMentalHealthAdvanceDirective =>
-      'PA Mental Health Advance Directive\nUnder Pennsylvania Act 194 of 2004 (effective January 29, 2005)\n\nThis app helps you document your mental health treatment preferences. It is not legal or medical advice, and not a substitute for a licensed attorney or clinician. See the full Legal Disclaimer above for details.\n\nYour directive is valid for two years from the date you sign it — unless you are found incapable of making mental health decisions at the time it would expire, in which case it stays in effect until your capacity returns.\n\nForm content based on the official PA MHAD booklet published by the Disabilities Law Project (2005).';
+      'Directiva Anticipada de Salud Mental de PA\nSegún la Ley 194 de 2004 de Pensilvania (vigente desde el 29 de enero de 2005)\n\nEsta aplicación le ayuda a documentar sus preferencias de tratamiento de salud mental. No es asesoría legal ni médica, y no sustituye a un abogado o profesional clínico con licencia. Consulte el aviso legal completo más arriba para ver los detalles.\n\nSu directiva es válida durante dos años a partir de la fecha en que la firma, salvo que en la fecha de vencimiento se determine que usted no tiene capacidad para tomar decisiones de salud mental; en ese caso, sigue vigente hasta que recupere la capacidad.\n\nEl contenido del formulario se basa en el folleto oficial de la MHAD de PA publicado por el Disabilities Law Project (2005).';
 
   @override
-  String get settingsAccount => 'Account';
+  String get settingsAccount => 'Cuenta';
 
   @override
-  String get settingsAppearance => 'Appearance';
+  String get settingsAppearance => 'Apariencia';
 
   @override
-  String get settingsLegalPrivacy => 'Legal & privacy';
+  String get settingsLegalPrivacy => 'Legal y privacidad';
 
   @override
   String get settingsChooseAProviderAndAdd =>
-      'Choose a provider and add your API key';
+      'Elija un proveedor y añada su clave de API';
 
   @override
   String get settingsTextSizeDyslexiaFontBold =>
-      'Text size, dyslexia font, bold text, contrast, language';
+      'Tamaño del texto, fuente para dislexia, negrita, contraste, idioma';
 
   @override
   String get settingsHowYourDataIsStored =>
-      'How your data is stored and protected';
+      'Cómo se guardan y protegen sus datos';
 
   @override
-  String get settingsPrivacyPermissions => 'Privacy & permissions';
+  String get settingsPrivacyPermissions => 'Privacidad y permisos';
 
   @override
   String get settingsWhatPermissionsTheAppUses =>
-      'What permissions the app uses, and what we promise about each';
+      'Qué permisos usa la aplicación y qué prometemos sobre cada uno';
 
   @override
-  String get settingsLegalDisclaimer => 'Legal Disclaimer';
+  String get settingsLegalDisclaimer => 'Aviso legal';
 
   @override
   String get settingsTermsLimitationsAndYourLegal =>
-      'Terms, limitations, and your legal rights';
+      'Condiciones, limitaciones y sus derechos legales';
 
   @override
   String get assistantMessageWidgetsVerifiedWithWebSearch =>
-      'Verified with web search';
+      'Verificado con búsqueda web';
 
   @override
-  String get assistantMessageWidgetsSources => 'Sources';
+  String get assistantMessageWidgetsSources => 'Fuentes';
 
   @override
-  String get assistantMessageWidgetsVerifyOnTheWeb => 'Verify on the web';
+  String get assistantMessageWidgetsVerifyOnTheWeb => 'Verificar en la web';
 
   @override
-  String get assistantMessageWidgetsAiIsTyping => 'AI is typing';
+  String get assistantMessageWidgetsAiIsTyping => 'La IA está escribiendo';
 
   @override
   String get assistantContextPanelAskAboutFormTypesAgents =>
-      'Ask about form types, agents, treatment preferences, or anything in the PA MHAD booklet. Try one of these:';
+      'Pregunte sobre los tipos de formulario, los agentes, las preferencias de tratamiento o cualquier tema del folleto de la MHAD de PA. Pruebe con una de estas:';
 
   @override
-  String get assistantContextPanelPiiRedactionOn => 'PII REDACTION ON';
+  String get assistantContextPanelPiiRedactionOn =>
+      'OCULTACIÓN DE DATOS PERSONALES ACTIVADA';
 
   @override
   String get assistantContextPanelNamesAddressesPhoneNumbersAnd =>
-      'Names, addresses, phone numbers, and dates are replaced with placeholders before sending to Gemini. Suggestions come back with placeholders filled in locally.';
+      'Los nombres, direcciones, números de teléfono y fechas se reemplazan por marcadores antes de enviarlos a Gemini. Las sugerencias vuelven con los marcadores completados en su dispositivo.';
 
   @override
-  String get assistantContextPanelContextTheAiSees => 'Context the AI sees';
+  String get assistantContextPanelContextTheAiSees => 'Contexto que ve la IA';
 
   @override
-  String get assistantContextPanelSuggestedPrompts => 'Suggested prompts';
+  String get assistantContextPanelSuggestedPrompts => 'Preguntas sugeridas';
 
   @override
-  String get assistantContextPanelWhatICanHelpWith => 'What I can help with';
+  String get assistantContextPanelWhatICanHelpWith => 'En qué puedo ayudar';
 
   @override
-  String get assistantContextPanelPrivacy => 'Privacy';
+  String get assistantContextPanelPrivacy => 'Privacidad';
 
   @override
-  String get assistantContextPanelFormType => 'Form type';
+  String get assistantContextPanelFormType => 'Tipo de formulario';
 
   @override
-  String get assistantContextPanelCurrentStep => 'Current step';
+  String get assistantContextPanelCurrentStep => 'Paso actual';
 
   @override
-  String get assistantContextPanelFilledFields => 'Filled fields';
+  String get assistantContextPanelFilledFields => 'Campos completados';
 
   @override
-  String get assistantContextPanelPii => 'PII';
+  String get assistantContextPanelPii => 'Datos personales';
 
   @override
-  String get assistantTheReplyFailed => 'The reply failed.';
+  String get assistantTheReplyFailed => 'No se pudo obtener la respuesta.';
 
   @override
   String get assistantStillFailingCheckYourConnection =>
-      'Still failing — check your connection or key.';
+      'Sigue fallando: revise su conexión o su clave.';
 
   @override
-  String get assistantClearConversation => 'Clear conversation?';
+  String get assistantClearConversation => '¿Borrar la conversación?';
 
   @override
   String get assistantThisWillEraseAllMessages =>
-      'This will erase all messages. This cannot be undone.';
+      'Esto borrará todos los mensajes. No se puede deshacer.';
 
   @override
-  String get assistantClear => 'Clear';
+  String get assistantClear => 'Borrar';
 
   @override
   String get assistantToUseTheAiAssistant =>
-      'To use the AI assistant, set up an AI key — Gemini\'s free tier works.';
+      'Para usar el asistente de IA, configure una clave de IA; el nivel gratuito de Gemini funciona.';
 
   @override
-  String get assistantSetUpFree => 'Set Up (Free)';
+  String get assistantSetUpFree => 'Configurar (gratis)';
 
   @override
-  String get assistantPersonalInfoRemoved => 'Personal info removed';
+  String get assistantPersonalInfoRemoved => 'Información personal eliminada';
 
   @override
   String get assistantAskMeAnythingAboutYour =>
-      'Ask me anything about your\nPA Mental Health Advance Directive';
+      'Pregúnteme lo que quiera sobre su\nDirectiva Anticipada de Salud Mental de PA';
 
   @override
-  String get assistantSuggestedQuestions => 'Suggested questions:';
+  String get assistantSuggestedQuestions => 'Preguntas sugeridas:';
 
   @override
-  String get assistantClearConversation2 => 'Clear conversation';
+  String get assistantClearConversation2 => 'Borrar conversación';
 
   @override
-  String get assistantApiKeySettings => 'API key settings';
+  String get assistantApiKeySettings => 'Configuración de la clave de API';
 
   @override
   String assistantDisclaimerNotLegalOrMedical(String phone) {
-    return 'Disclaimer: Not legal or medical advice. For legal questions contact PA Protection and Advocacy: $phone ';
+    return 'Aviso: no es asesoramiento legal ni médico. Para preguntas legales, comuníquese con PA Protection and Advocacy: $phone ';
   }
 
   @override
   String get assistantAskAQuestionAboutYour =>
-      'Ask a question about your directive...';
+      'Haga una pregunta sobre su directiva...';
 
   @override
-  String get assistantSend => 'Send';
+  String get assistantSend => 'Enviar';
 
   @override
   String get directiveFormChoiceWithAPoaOnlyForm =>
-      'With a POA-only form, your agent will have authority to make mental health care decisions on your behalf, but the document will not include your personal treatment preferences.\n\nConsider using the Combined form instead to document both your preferences AND appoint an agent. This gives your care team the most guidance.';
+      'Con un formulario de solo Poder Notarial, su agente tendrá autoridad para tomar decisiones de atención de salud mental en su nombre, pero el documento no incluirá sus preferencias personales de tratamiento.\n\nConsidere usar el formulario Combinado para documentar sus preferencias Y nombrar a un agente. Así su equipo de atención tendrá la mayor orientación posible.';
 
   @override
-  String get directiveFormChoiceContinueWithPoa => 'Continue with POA';
+  String get directiveFormChoiceContinueWithPoa =>
+      'Continuar con Poder Notarial';
 
   @override
   String get directiveFormChoiceYouCanSwitchFormTypes =>
-      'You can switch form types later if you change your mind — Combined is the broadest.';
+      'Puede cambiar de tipo de formulario más adelante si cambia de opinión; el Combinado es el más completo.';
 
   @override
-  String get directiveFormChoiceCombinedDirective => 'Combined directive';
+  String get directiveFormChoiceCombinedDirective => 'Directiva combinada';
 
   @override
   String get directiveFormChoiceTreatmentPreferencesAndATrusted =>
-      'Treatment preferences and a trusted decision-maker, in one document. 11 short steps · about 20 minutes.';
+      'Preferencias de tratamiento y una persona de confianza que decida, en un solo documento. 11 pasos cortos · unos 20 minutos.';
 
   @override
-  String get directiveFormChoiceStartNow => 'Start now';
+  String get directiveFormChoiceStartNow => 'Empezar ahora';
 
   @override
   String get directiveFormChoiceNotSureWhichFormFits =>
-      'Not sure which form fits? Take the 4-question quiz.';
+      '¿No sabe qué formulario le conviene? Responda el cuestionario de 4 preguntas.';
 
   @override
-  String get directiveFormChoiceHelpMeChoose => 'Help me choose →';
+  String get directiveFormChoiceHelpMeChoose => 'Ayúdeme a elegir →';
 
   @override
-  String get directiveFormChoicePowerOfAttorneyOnly => 'Power of attorney only';
+  String get directiveFormChoicePowerOfAttorneyOnly => 'Solo Poder Notarial';
 
   @override
   String get directiveFormChoiceTakeThe4QuestionQuiz =>
-      'Take the 4-question quiz to choose a form';
+      'Responda el cuestionario de 4 preguntas para elegir un formulario';
 
   @override
   String get webLandingALegalDocumentThatTells =>
-      'A legal document that tells doctors, family, and a person you trust how to care for you if you can’t speak for yourself. Free, anonymous, and takes about 20 minutes.';
+      'Un documento legal que indica a los médicos, a su familia y a una persona de confianza cómo cuidarle si usted no puede hablar por sí mismo. Gratis, anónimo y toma unos 20 minutos.';
 
   @override
   String get webLandingYouReWorkingAnonymouslyNothing =>
-      'You’re working anonymously. Nothing is saved.';
+      'Está trabajando de forma anónima. No se guarda nada.';
 
   @override
   String get webLandingNoAccountNoCloudIf =>
-      'No account, no cloud. If you close the tab or the app crashes, your work is kept on this device for 10 minutes so you can reopen and recover it — then it’s erased for good. Open your PDF and save it to keep a copy.';
+      'Sin cuenta ni nube. Si cierra la pestaña o la aplicación falla, su trabajo se conserva en este dispositivo durante 10 minutos para que pueda volver a abrirlo y recuperarlo; después se borra para siempre. Abra su PDF y guárdelo para conservar una copia.';
 
   @override
-  String get webLandingHowThisWorks => 'HOW THIS WORKS →';
+  String get webLandingHowThisWorks => 'CÓMO FUNCIONA →';
 
   @override
   String get webLandingAnMhadIsYourVoice =>
-      '“An MHAD is your voice when you can’t speak for yourself.”';
+      '“Una DASM es su voz cuando usted no puede hablar por sí mismo.”';
 
   @override
   String get webLandingPaMhadBookletOfficeOf =>
-      '— PA MHAD booklet · Office of Mental Health';
+      '— Folleto de la DASM de PA · Oficina de Salud Mental';
 
   @override
-  String get webLandingReadTheBasics => 'Read the basics →';
+  String get webLandingReadTheBasics => 'Lea lo básico →';
 
   @override
   String get webLandingPennsylvaniaAct194Of2004 =>
-      'Pennsylvania · Act 194 of 2004';
+      'Pensilvania · Ley 194 de 2004';
 
   @override
-  String get webLandingOurPrivacyPromise => 'Our privacy promise';
+  String get webLandingOurPrivacyPromise => 'Nuestro compromiso de privacidad';
 
   @override
-  String get webLandingFromTheBooklet => 'From the booklet';
+  String get webLandingFromTheBooklet => 'Del folleto';
 
   @override
-  String get webLandingPrintABlankForm => 'Print a blank form';
+  String get webLandingPrintABlankForm => 'Imprimir un formulario en blanco';
 
   @override
-  String get webLandingPrintBlankForm => 'Print blank form';
+  String get webLandingPrintBlankForm => 'Imprimir formulario en blanco';
 
   @override
-  String get webLandingTheBasics => 'The basics';
+  String get webLandingTheBasics => 'Lo básico';
 
   @override
-  String get webLandingMakeAMentalHealth => 'Make a mental health ';
+  String get webLandingMakeAMentalHealth => 'Cree su ';
 
   @override
-  String get webLandingAdvanceDirective => 'advance directive.';
+  String get webLandingAdvanceDirective =>
+      'directiva anticipada de salud mental.';
 
   @override
-  String get homeToolsGridMakeItFindable => 'Make it findable';
+  String get homeToolsGridMakeItFindable => 'Hágala fácil de encontrar';
 
   @override
-  String get homeToolsGridCrisisHelp => 'Crisis help';
+  String get homeToolsGridCrisisHelp => 'Ayuda en crisis';
 
   @override
-  String get homeDirectiveHeroDraft => '● Draft';
+  String get homeDirectiveHeroDraft => '● Borrador';
 
   @override
   String get homeDirectiveHeroContinueWhereYouLeftOff =>
-      'Continue where you left off';
+      'Continúe donde lo dejó';
 
   @override
-  String get facilitatorGetHelpEvidenceBased => 'Get help · evidence-based';
+  String get facilitatorGetHelpEvidenceBased =>
+      'Obtenga ayuda · basada en evidencia';
 
   @override
-  String get facilitatorTalkToSomeoneTrained => 'Talk to someone trained';
+  String get facilitatorTalkToSomeoneTrained => 'Hable con alguien capacitado';
 
   @override
   String get facilitatorPennsylvaniaPeerSpecialistsAndRights =>
-      'Pennsylvania peer specialists and rights advocates help walk you through the form. Free; no booking system inside this app — call or visit a partner below.';
+      'Los especialistas de apoyo entre pares y los defensores de derechos de Pensilvania le ayudan a completar el formulario. Es gratis; esta aplicación no tiene sistema de citas: llame o visite a una de las organizaciones a continuación.';
 
   @override
-  String get facilitatorPrintReviewItTogether => 'Print + review it together';
+  String get facilitatorPrintReviewItTogether => 'Imprímala y revísenla juntos';
 
   @override
   String get facilitatorPrintOrScreenShareYour =>
-      'Print or screen-share your draft and walk through it with a friend, family member, or peer. They can\'t change anything in your app — that stays in your hands.';
+      'Imprima o comparta en pantalla su borrador y revíselo con un amigo, un familiar o un par. No pueden cambiar nada en su aplicación; eso queda en sus manos.';
 
   @override
-  String get facilitatorEmailADraftToMy => 'Email a draft to my clinician';
+  String get facilitatorEmailADraftToMy => 'Enviar un borrador a mi médico';
 
   @override
   String get facilitatorGenerateThePdfInExport =>
-      'Generate the PDF in Export, then send it via your phone\'s email app. Ask your therapist or psychiatrist for comments. You\'ll transcribe their suggestions back into the form yourself — this app doesn\'t connect to their EHR.';
+      'Genere el PDF en Exportar y luego envíelo con la aplicación de correo de su teléfono. Pida comentarios a su terapeuta o psiquiatra. Usted mismo pasará sus sugerencias al formulario; esta aplicación no se conecta con su historia clínica electrónica.';
 
   @override
-  String get facilitatorCall => 'Call';
+  String get facilitatorCall => 'Llamar';
 
   @override
-  String get facilitatorOpenWebsite => 'Open website';
+  String get facilitatorOpenWebsite => 'Abrir sitio web';
 
   @override
-  String get legalSheetFullLegalDisclosure => 'Full legal disclosure';
+  String get legalSheetFullLegalDisclosure => 'Aviso legal completo';
 
   @override
   String get legalSheetTheEightSectionsBelowWere =>
-      'The eight sections below were accepted at first launch. Tap to expand.';
+      'Las ocho secciones siguientes se aceptaron al abrir la aplicación por primera vez. Toque para ampliar.';
 
   @override
-  String get legalSheetFullLegalSections => 'Full legal sections';
+  String get legalSheetFullLegalSections => 'Secciones legales completas';
 
   @override
-  String get legalSheetNotLegalOrMedicalAdvice => 'Not legal or medical advice';
+  String get legalSheetNotLegalOrMedicalAdvice =>
+      'No es asesoramiento legal ni médico';
 
   @override
   String get legalSheetNoProfessionalRelationship =>
-      'No professional relationship';
+      'Ninguna relación profesional';
 
   @override
-  String get legalSheetUseAtYourOwnRisk => 'Use at your own risk';
+  String get legalSheetUseAtYourOwnRisk => 'Uso bajo su propio riesgo';
 
   @override
   String get legalSheetRequirementsForAValidDirective =>
-      'Requirements for a valid directive';
+      'Requisitos para una directiva válida';
 
   @override
-  String get legalSheetTwoYearValidity => 'Two-year validity';
+  String get legalSheetTwoYearValidity => 'Validez de dos años';
 
   @override
-  String get legalSheetRevocation => 'Revocation';
+  String get legalSheetRevocation => 'Revocación';
 
   @override
-  String get legalSheetPrivacyAiFeatures => 'Privacy & AI features';
+  String get legalSheetPrivacyAiFeatures => 'Privacidad y funciones de IA';
 
   @override
-  String get legalSheetResourcesAssistance => 'Resources & assistance';
+  String get legalSheetResourcesAssistance => 'Recursos y asistencia';
 
   @override
   String get legalSheetPaProtectionAdvocacy => 'PA Protection & Advocacy';
@@ -4599,541 +4683,554 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get legalSheet988SuicideCrisisLifeline =>
-      '988 Suicide & Crisis Lifeline';
+      '988 Línea de Prevención del Suicidio y Crisis';
 
   @override
   String get legalSheetThisAppHelpsPennsylvaniaResidents =>
-      'This app helps Pennsylvania residents document their treatment preferences under ';
+      'Esta aplicación ayuda a los residentes de Pensilvania a documentar sus preferencias de tratamiento conforme a la ';
+
+  @override
+  String get legalSheetPaAct194Of2004 => 'Ley 194 de PA de 2004';
 
   @override
   String get legalSheetTheInformationIsForInformational =>
-      '. The information is for informational purposes only and does ';
+      '. La información tiene fines exclusivamente informativos y ';
 
   @override
   String get legalSheetConstituteLegalOrMedicalAdvice =>
-      ' constitute legal or medical advice.';
+      ' constituye asesoramiento legal ni médico.';
 
   @override
   String get legalSheetItIsNotAMedical =>
-      'It is not a medical device. It does not diagnose, treat, cure, or prevent any condition. For treatment decisions, consult a qualified mental health professional. For legal questions, consult a licensed PA attorney.';
+      'No es un dispositivo médico. No diagnostica, trata, cura ni previene ninguna afección. Para decisiones de tratamiento, consulte a un profesional de salud mental calificado. Para preguntas legales, consulte a un abogado autorizado en PA.';
 
   @override
-  String get legalSheetUseOfThisAppDoes => 'Use of this app does ';
+  String get legalSheetUseOfThisAppDoes => 'El uso de esta aplicación ';
 
   @override
   String get legalSheetCreateAnAttorneyClientRelationship =>
-      ' create an attorney–client relationship, a provider–patient relationship, or any other professional relationship between you and the developer.';
+      ' crea una relación abogado–cliente, proveedor–paciente ni ninguna otra relación profesional entre usted y el desarrollador.';
 
   @override
   String get legalSheetYouAreSolelyResponsibleFor =>
-      'You are solely responsible for making sure your directive meets all legal requirements under PA law, including proper execution with witnesses.';
+      'Usted es el único responsable de asegurarse de que su directiva cumpla todos los requisitos legales de la ley de PA, incluida la firma correcta ante testigos.';
 
   @override
   String get legalSheetInPlainTermsThisApp =>
-      'In plain terms: this app helps you put your own wishes into a directive, and you use it at your own risk. Please review the finished document for accuracy — mistakes can happen, and details you entered may be out of date or incomplete. If you are ever unsure whether something is legally right for your situation, feel free to talk with an attorney. The formal version:';
+      'En palabras sencillas: esta aplicación le ayuda a plasmar sus propios deseos en una directiva, y usted la usa bajo su propio riesgo. Revise el documento final para verificar que sea correcto; pueden ocurrir errores y los datos que ingresó pueden estar desactualizados o incompletos. Si alguna vez no está seguro de si algo es legalmente adecuado para su situación, no dude en consultar a un abogado. La versión formal:';
 
   @override
-  String get legalSheetThisAppIsProvided => 'This app is provided ';
+  String get legalSheetThisAppIsProvided => 'Esta aplicación se proporciona ';
 
   @override
-  String get legalSheetAsIs => '\"as is\"';
+  String get legalSheetAsIs => '\"tal cual\"';
 
   @override
   String get legalSheetWithoutWarrantiesOfAnyKind =>
-      ', without warranties of any kind, and you use it at your own risk. To the fullest extent permitted by law, the developer is not liable for any damages arising from use of the app or any document created with it. You are responsible for reviewing your directive for accuracy and completeness; for legal questions specific to your situation, consult a licensed Pennsylvania attorney.';
+      ', sin garantías de ningún tipo, y usted la usa bajo su propio riesgo. En la máxima medida permitida por la ley, el desarrollador no es responsable de ningún daño derivado del uso de la aplicación o de cualquier documento creado con ella. Usted es responsable de revisar que su directiva sea correcta y completa; para preguntas legales específicas de su situación, consulte a un abogado autorizado en Pensilvania.';
 
   @override
   String get legalSheetAPaMentalHealthAdvance =>
-      'A PA Mental Health Advance Directive is legally valid ';
+      'Una Directiva Anticipada de Salud Mental de PA es legalmente válida ';
 
   @override
-  String get legalSheetWhen => ' when:';
+  String get legalSheetWhen => ' cuando:';
 
   @override
   String get legalSheetYouThePrincipalHaveLegal =>
-      'You (the principal) have legal capacity at the time of signing';
+      'Usted (el declarante) tiene capacidad legal en el momento de firmar';
 
   @override
-  String get legalSheetItIsSignedInThe => 'It is signed in the presence of ';
+  String get legalSheetItIsSignedInThe => 'Se firma en presencia de ';
 
   @override
   String get legalSheetBothWitnessesMeetEligibilityRequirements =>
-      'Both witnesses meet eligibility requirements under Act 194';
+      'Ambos testigos cumplen los requisitos de elegibilidad de la Ley 194';
 
   @override
   String get legalSheetYourDesignatedAgentOrAlternate =>
-      'your designated agent or alternate agent, your mental health care provider, or an employee of the facility where you receive treatment — unless they are related to you by blood, marriage, or adoption.';
+      'su agente designado o agente alternativo, su proveedor de atención de salud mental ni un empleado del centro donde recibe tratamiento, a menos que sean parientes suyos por consanguinidad, matrimonio o adopción.';
 
   @override
   String get legalSheetThisAppCapturesTouchDrawn =>
-      'This app captures touch-drawn signatures for convenience during preparation. The ';
+      'Esta aplicación captura firmas dibujadas en la pantalla para su comodidad durante la preparación. La directiva ';
 
   @override
   String get legalSheetDirectiveMustBeSignedIn =>
-      ' directive must be signed in original ink, in the presence of your two witnesses, to be legally valid.';
+      ' debe firmarse con tinta original, en presencia de sus dos testigos, para ser legalmente válida.';
 
   @override
   String get legalSheetOnceSignedProvidersAndYour =>
-      'Once signed, providers and your agent ';
+      'Una vez firmada, los proveedores y su agente ';
 
   @override
   String get legalSheetWithYourDirective20Pa =>
-      ' with your directive (20 Pa.C.S. §§ 5804, 5842). However, a provider may decline to follow specific instructions that are against accepted medical practice, or when the provider is not physically available.';
+      ' con su directiva (20 Pa.C.S. §§ 5804, 5842). Sin embargo, un proveedor puede negarse a seguir instrucciones específicas que vayan en contra de la práctica médica aceptada, o cuando el proveedor no esté físicamente disponible.';
 
   @override
   String get legalSheetUnderPaAct194An =>
-      'Under PA Act 194, an MHAD is valid for ';
+      'Según la Ley 194 de PA, una DASM es válida durante ';
 
   @override
   String get legalSheetFromTheDateOfExecution =>
-      ' from the date of execution unless revoked earlier — ';
+      ' a partir de la fecha de firma, salvo que se revoque antes, ';
 
   @override
   String get legalSheetOfMakingMentalHealthDecisions =>
-      ' of making mental health decisions at the time it would expire, in which case it remains in effect until capacity returns. This app will remind you when your directive is approaching expiration.';
+      ' de tomar decisiones de salud mental en el momento en que vencería, en cuyo caso sigue vigente hasta que recupere la capacidad. Esta aplicación le avisará cuando su directiva se acerque a su vencimiento.';
 
   @override
   String get legalSheetYouMayRevokeThisDirective =>
-      'You may revoke this directive at any time while you have legal capacity by:';
+      'Puede revocar esta directiva en cualquier momento mientras tenga capacidad legal:';
 
   @override
   String get legalSheetNotifyingYourHealthcareProviderOr =>
-      'Notifying your healthcare provider or agent in writing';
+      'Notificando por escrito a su proveedor de atención médica o a su agente';
 
   @override
-  String get legalSheetDestroyingTheDirective => 'Destroying the directive';
+  String get legalSheetDestroyingTheDirective => 'Destruyendo la directiva';
 
   @override
-  String get legalSheetExecutingANewDirective => 'Executing a new directive';
+  String get legalSheetExecutingANewDirective => 'Firmando una nueva directiva';
 
   @override
   String get legalSheetNotifyEveryoneWhoHasCopies =>
-      'Notify everyone who has copies of the revocation.';
+      'Avise de la revocación a todas las personas que tengan copias.';
 
   @override
   String get legalSheetThisIsAWebApp =>
-      'This is a web app: your directive is held in memory in your browser only and is ';
+      'Esta es una aplicación web: su directiva se mantiene solo en la memoria de su navegador y ';
 
   @override
   String get legalSheetIfYouCloseTheTab =>
-      ' — if you close the tab or it crashes, your work is kept on this device for about 10 minutes for recovery, then wiped; it is never sent to a server. Export or print to keep a copy. This app is ';
+      '; si cierra la pestaña o esta falla, su trabajo se conserva en este dispositivo durante unos 10 minutos para poder recuperarlo y luego se borra; nunca se envía a un servidor. Exporte o imprima para conservar una copia. Esta aplicación ';
 
   @override
-  String get legalSheetHipaaCompliant => ' HIPAA-compliant.';
+  String get legalSheetHipaaCompliant => ' cumple con HIPAA.';
 
   @override
   String get legalSheetIfYouUseTheOptional =>
-      'If you use the optional AI Assistant, text you send is transmitted to the AI provider you choose (Google Gemini by default; or Anthropic, OpenAI, or xAI). On Gemini\'s free tier, Google may use this data to improve their products and human reviewers may read inputs; other providers handle your data under their own API policies.';
+      'Si usa el Asistente de IA opcional, el texto que envíe se transmite al proveedor de IA que elija (Google Gemini de forma predeterminada; o Anthropic, OpenAI o xAI). En el nivel gratuito de Gemini, Google puede usar estos datos para mejorar sus productos y revisores humanos pueden leer lo que se envía; los demás proveedores tratan sus datos según sus propias políticas de API.';
 
   @override
-  String get legalSheetToProtectYouTheApp => 'To protect you, the app ';
+  String get legalSheetToProtectYouTheApp => 'Para protegerle, la aplicación ';
 
   @override
   String get legalSheetYourNameDateOfBirth =>
-      ' — your name, date of birth, address, and the names and contact details of your agents and guardian are never included. Only non-identifying context (such as conditions, medications, and care preferences) is shared, and only if you choose to use the assistant. (Uploading a document for autofill is the one exception, described next.)';
+      ': nunca se incluyen su nombre, fecha de nacimiento, dirección ni los nombres y datos de contacto de sus agentes y tutor. Solo se comparte contexto que no le identifica (como afecciones, medicamentos y preferencias de atención), y solo si decide usar el asistente. (Subir un documento para autocompletar es la única excepción, descrita a continuación.)';
 
   @override
   String get legalSheetDocumentsYouUploadForAutofill =>
-      'Documents you upload for autofill are different: the whole file is sent to your chosen AI provider as-is, and to fill in your directive the AI reads the personal details in it (your name, date of birth, address, and your agent\'s or guardian\'s details). You review everything before it is saved. ';
+      'Los documentos que sube para autocompletar son distintos: el archivo completo se envía tal cual al proveedor de IA que haya elegido, y para completar su directiva la IA lee los datos personales que contiene (su nombre, fecha de nacimiento, dirección y los datos de su agente o tutor). Usted revisa todo antes de que se guarde. ';
 
   @override
   String get legalSheetBlackOutAnythingYouDon =>
-      ' — black out anything you don\'t want sent, or simply type any field by hand to keep it private. Also avoid typing personal identifiers (full name, SSN, date of birth, address) directly into chat messages.';
+      ': tache lo que no quiera enviar, o simplemente escriba cualquier campo a mano para mantenerlo privado. Evite también escribir identificadores personales (nombre completo, número de Seguro Social, fecha de nacimiento, dirección) directamente en los mensajes del chat.';
 
   @override
   String get legalSheetSeparatelyToHelpYouFill =>
-      'Separately, to help you fill in and understand your directive, the app looks up medications, conditions, and (optionally) your doctor in free, public U.S. government databases — the NIH/NLM Clinical Tables, MedlinePlus, and the FDA\'s openFDA. ';
+      'Por otra parte, para ayudarle a completar y entender su directiva, la aplicación consulta medicamentos, afecciones y (opcionalmente) a su médico en bases de datos públicas y gratuitas del gobierno de EE. UU.: NIH/NLM Clinical Tables, MedlinePlus y openFDA de la FDA. ';
 
   @override
   String get legalSheetNeverYourIdentityThePeople =>
-      ' — never your identity, the people you name, or your saved directive. They are reference information, not medical advice.';
+      ', nunca su identidad, las personas que nombra ni su directiva guardada. Es información de referencia, no asesoramiento médico.';
 
   @override
   String get legalSheetAiSuggestionsAreNotLegal =>
-      'AI suggestions are not legal or medical advice — review carefully before accepting.';
+      'Las sugerencias de la IA no son asesoramiento legal ni médico; revíselas con atención antes de aceptarlas.';
 
   @override
-  String get disclaimerAFewThingsToUnderstand => 'A few things to understand.';
+  String get disclaimerAFewThingsToUnderstand =>
+      'Algunas cosas que debe saber.';
 
   @override
   String get disclaimerThisToolHelpsYouWrite =>
-      'This tool helps you write a Pennsylvania Mental Health Advance Directive under Act 194. Please read these before continuing.';
+      'Esta herramienta le ayuda a redactar una Directiva Anticipada de Salud Mental de Pensilvania conforme a la Ley 194. Lea lo siguiente antes de continuar.';
 
   @override
-  String get disclaimerReadFullDisclaimer => 'Read full disclaimer';
+  String get disclaimerReadFullDisclaimer => 'Leer el aviso completo';
 
   @override
-  String get disclaimerGetStarted => 'Get started';
+  String get disclaimerGetStarted => 'Comenzar';
 
   @override
   String get disclaimerIM18OrOlder =>
-      'I\'m 18 or older, and I understand and want to continue.';
+      'Tengo 18 años o más, lo entiendo y quiero continuar.';
 
   @override
-  String get disclaimerBeforeYouBegin => 'Before you begin';
+  String get disclaimerBeforeYouBegin => 'Antes de empezar';
 
   @override
-  String get disclaimerThisIsNotLegalAdvice => 'This is not legal advice';
+  String get disclaimerThisIsNotLegalAdvice => 'Esto no es asesoramiento legal';
 
   @override
   String get disclaimerWeGivePlainLanguageHelp =>
-      'We give plain-language help, not legal counsel. For complex situations, talk to an attorney or advocate.';
+      'Ofrecemos ayuda en lenguaje sencillo, no asesoría legal. Para situaciones complejas, hable con un abogado o un defensor.';
 
   @override
   String get disclaimerItBecomesValidOnlyWhen =>
-      'It becomes valid only when signed on paper';
+      'Solo es válida cuando se firma en papel';
 
   @override
   String get disclaimerPaLawRequiresYourSignature =>
-      'PA law requires your signature plus two adult witnesses, in ink, in person. The app cannot sign for you.';
+      'La ley de PA exige su firma y la de dos testigos adultos, con tinta y en persona. La aplicación no puede firmar por usted.';
 
   @override
-  String get disclaimerNothingIsSavedOrSent => 'Nothing is saved or sent to us';
+  String get disclaimerNothingIsSavedOrSent =>
+      'No se guarda ni se nos envía nada';
 
   @override
   String get disclaimerYouCanStopOrChange =>
-      'You can stop or change anything, anytime';
+      'Puede detenerse o cambiar cualquier cosa en cualquier momento';
 
   @override
   String get disclaimerSkipQuestionsGoBackOr =>
-      'Skip questions, go back, or revoke later. This is your voice — you stay in control.';
+      'Omita preguntas, vuelva atrás o revoque más adelante. Es su voz: usted mantiene el control.';
 
   @override
   String get onboardingWeLlWalkYouThrough =>
-      'We\'ll walk you through it, step by step and in plain language: how you want to be treated during a mental health crisis — so your wishes are honored even when you can\'t speak for yourself.';
+      'Le guiaremos paso a paso y en lenguaje sencillo: cómo quiere que le traten durante una crisis de salud mental, para que se respeten sus deseos incluso cuando no pueda hablar por sí mismo.';
 
   @override
   String get onboardingValidTwoYearsFromSigning =>
-      'Valid two years from signing — unless you are incapable when it would expire, when it stays in effect until your capacity returns. (PA Act 194, effective 2005.)';
+      'Válida por dos años desde la firma, a menos que usted esté incapacitado cuando vencería; en ese caso sigue vigente hasta que recupere la capacidad. (Ley 194 de PA, vigente desde 2005.)';
 
   @override
   String get onboardingUploadADocumentToAutofill =>
-      'Upload a document to autofill';
+      'Subir un documento para autocompletar';
 
   @override
-  String get onboardingContinueFromASavedFile => 'Continue from a saved file';
+  String get onboardingContinueFromASavedFile =>
+      'Continuar desde un archivo guardado';
 
   @override
   String get onboardingFreeNoAccountNoTracking =>
-      'Free · no account · no tracking · open source';
+      'Gratis · sin cuenta · sin rastreo · código abierto';
 
   @override
-  String get onboardingPaMhadAct194 => 'PA MHAD · Act 194';
+  String get onboardingPaMhadAct194 => 'DASM de PA · Ley 194';
 
   @override
-  String get onboardingInYour => 'In your\n';
+  String get onboardingInYour => 'Con sus\n';
 
   @override
-  String get onboardingWords => 'words.';
+  String get onboardingWords => 'propias palabras.';
 
   @override
   String get onboardingMakingThisChangesNothingToday =>
-      'Making this changes nothing today. ';
+      'Hacer esto no cambia nada hoy. ';
 
   @override
-  String get onboardingYouKeepEveryDecision => 'You keep every decision';
+  String get onboardingYouKeepEveryDecision =>
+      'Usted conserva todas sus decisiones';
 
   @override
   String get onboardingUntilTwoProfessionalsFindYou =>
-      ' until two professionals find you unable to decide for yourself.';
+      ' hasta que dos profesionales determinen que usted no puede decidir por sí mismo.';
 
   @override
   String get aiConsistencyTheAiIsReviewingYour =>
-      'The AI is reviewing your directive…';
+      'La IA está revisando su directiva…';
 
   @override
   String get aiConsistencyAiReviewSkippedYouCan =>
-      'AI review skipped — you can re-run it any time.';
+      'Se omitió la revisión de la IA; puede volver a ejecutarla en cualquier momento.';
 
   @override
-  String get aiConsistencyRunAiReview => 'Run AI review';
+  String get aiConsistencyRunAiReview => 'Ejecutar revisión de la IA';
 
   @override
-  String get aiConsistencyIgnoreContinue => 'Ignore & continue';
+  String get aiConsistencyIgnoreContinue => 'Ignorar y continuar';
 
   @override
-  String get aiConsistencyResolveInWizard => 'Resolve in wizard';
+  String get aiConsistencyResolveInWizard => 'Resolver en el asistente';
 
   @override
-  String get aiConsistencyLooksGoodContinue => 'Looks good — continue';
+  String get aiConsistencyLooksGoodContinue => 'Todo bien: continuar';
 
   @override
-  String get aiConsistencyKeepBoth => 'Keep both';
+  String get aiConsistencyKeepBoth => 'Conservar ambos';
 
   @override
-  String get aiConsistencyAiReview => 'AI review';
+  String get aiConsistencyAiReview => 'Revisión de la IA';
 
   @override
   String get aiConsistencyConsistencyCheckCheckedAtReview =>
-      'Consistency check · checked at Review';
+      'Verificación de coherencia · revisada en Revisión';
 
   @override
-  String get aiConsistencyCheckingYourDirective => 'Checking your directive';
+  String get aiConsistencyCheckingYourDirective => 'Revisando su directiva';
 
   @override
   String get aiConsistencyYouSaidYourAgentDecides =>
-      'You said your agent decides your medications, but the form says your agent is NOT authorized to consent to medications.';
+      'Usted indicó que su agente decide sobre sus medicamentos, pero el formulario dice que su agente NO está autorizado para dar consentimiento a medicamentos.';
 
   @override
   String get aiConsistencyTheseCancelEachOtherOut =>
-      'These cancel each other out. The official form lets you set your own medication preferences and your agent’s authority separately — both are allowed — but as entered they oppose each other. Authorize your agent to consent to medications, or change the medication choice so they agree.';
+      'Estas opciones se anulan entre sí. El formulario oficial le permite establecer por separado sus propias preferencias de medicamentos y la autoridad de su agente (ambas son válidas), pero tal como están ingresadas se contradicen. Autorice a su agente a dar consentimiento a medicamentos, o cambie la opción de medicamentos para que coincidan.';
 
   @override
   String get aiConsistencyYouDonTConsentTo =>
-      'You don’t consent to any medications, but your agent is authorized to consent to them.';
+      'Usted no da su consentimiento a ningún medicamento, pero su agente está autorizado para dar consentimiento a ellos.';
 
   @override
   String get aiConsistencyTheOfficialFormLetsYou =>
-      'The official form lets you set your own preference and your agent’s authority separately — both are valid — but as entered they oppose each other: your refusal of all medications versus your agent’s power to consent to any. Decide which should control and adjust the other.';
+      'El formulario oficial le permite establecer por separado su propia preferencia y la autoridad de su agente (ambas son válidas), pero tal como están ingresadas se contradicen: su rechazo a todos los medicamentos frente a la facultad de su agente de dar consentimiento a cualquiera. Decida cuál debe prevalecer y ajuste la otra.';
 
   @override
-  String get aiConsistencyINoticed => 'I noticed ';
+  String get aiConsistencyINoticed => 'Noté ';
 
   @override
-  String get draftRecoveryDialogRecoverUnsavedWork => 'Recover Unsaved Work?';
+  String get draftRecoveryDialogRecoverUnsavedWork =>
+      '¿Recuperar el trabajo sin guardar?';
 
   @override
-  String get draftRecoveryDialogDiscard => 'Discard';
+  String get draftRecoveryDialogDiscard => 'Descartar';
 
   @override
-  String get draftRecoveryDialogRestore => 'Restore';
+  String get draftRecoveryDialogRestore => 'Restaurar';
 
   @override
   String get draftRecoveryDialogDraftRestoredPersonalInformationWill =>
-      'Draft restored. Personal information will need to be re-entered.';
+      'Borrador restaurado. Tendrá que volver a ingresar la información personal.';
 
   @override
   String get draftRecoveryDialogCouldnTRestoreTheDraft =>
-      'Couldn\'t restore the draft.';
+      'No se pudo restaurar el borrador.';
 
   @override
-  String get moreSheetResetAndStartFresh => 'Reset and start fresh?';
+  String get moreSheetResetAndStartFresh => '¿Restablecer y empezar de nuevo?';
 
   @override
   String get moreSheetThisPermanentlyErasesEverythingIn =>
-      'This permanently erases everything in this session — all directives, your AI key, and chat history — and returns you to a blank start.\n\nExport or print anything you want to keep first. This cannot be undone.';
+      'Esto borra de forma permanente todo lo de esta sesión (todas las directivas, su clave de IA y el historial del chat) y le devuelve a un inicio en blanco.\n\nExporte o imprima primero lo que quiera conservar. No se puede deshacer.';
 
   @override
-  String get moreSheetResetEverything => 'Reset everything';
+  String get moreSheetResetEverything => 'Restablecer todo';
 
   @override
   String get moreSheetEverythingElseYouCanDo =>
-      'Everything else you can do here.';
+      'Todo lo demás que puede hacer aquí.';
 
   @override
-  String get moreSheetGetHelp => 'Get help';
+  String get moreSheetGetHelp => 'Obtener ayuda';
 
   @override
-  String get moreSheetReset => 'Reset';
+  String get moreSheetReset => 'Restablecer';
 
   @override
-  String get crisisSheet247FreeConfidential => '24/7 FREE, CONFIDENTIAL';
+  String get crisisSheet247FreeConfidential => '24/7 GRATIS Y CONFIDENCIAL';
 
   @override
   String get crisisSheetRealPeopleAreStandingBy =>
-      'Real people are standing by — phone, text, or chat.';
+      'Hay personas reales listas para ayudarle: por teléfono, mensaje de texto o chat.';
 
   @override
   String get crisisSheetCalling988ConnectsYouTo =>
-      'Calling 988 connects you to a trained counselor in your area. It is free, confidential, and available 24 hours a day. Calling will not result in police being dispatched in most cases.';
+      'Llamar al 988 le conecta con un consejero capacitado de su zona. Es gratis, confidencial y está disponible las 24 horas del día. En la mayoría de los casos, llamar no hace que se envíe a la policía.';
 
   @override
-  String get crisisSheetWhyTheseNumbers => 'Why these numbers?';
+  String get crisisSheetWhyTheseNumbers => '¿Por qué estos números?';
 
   @override
   String get crisisSheetIfYouOrSomeoneElse =>
-      'If you or someone else is in immediate danger, call ';
+      'Si usted u otra persona está en peligro inmediato, llame al ';
 
   @override
-  String get walletCardMh => 'MH';
+  String get walletCardMh => 'SM';
 
   @override
-  String get walletCardPaMhadAct194 => 'PA MHAD · ACT 194';
+  String get walletCardPaMhadAct194 => 'DASM DE PA · LEY 194';
 
   @override
   String get walletCardHasAnActiveDirectiveOn =>
-      'Has an active directive on file';
+      'Tiene una directiva vigente registrada';
 
   @override
-  String get walletCardAgent => 'AGENT';
+  String get walletCardAgent => 'AGENTE';
 
   @override
-  String get walletCardExp => 'EXP';
+  String get walletCardExp => 'VENCE';
 
   @override
-  String get webSidebarAct1942004 => 'ACT 194 · 2004';
+  String get webSidebarAct1942004 => 'LEY 194 · 2004';
 
   @override
-  String get webSidebar247Lifeline => '24/7 LIFELINE';
+  String get webSidebar247Lifeline => 'LÍNEA 24/7';
 
   @override
-  String get webSidebar988CrisisHelp => '988 · Crisis help';
+  String get webSidebar988CrisisHelp => '988 · Ayuda en crisis';
 
   @override
-  String get webSidebarClickForMoreInformation => 'Click for more information';
+  String get webSidebarClickForMoreInformation =>
+      'Haga clic para más información';
 
   @override
   String get webSidebarPeerSupportAdvocatesReferrals =>
-      'Peer support · advocates · referrals';
+      'Apoyo entre pares · defensores · derivaciones';
 
   @override
   String get medlinePlusDialogNoPlainLanguageSummaryIs =>
-      'No plain-language summary is available for this right now. You can search it on MedlinePlus.';
+      'En este momento no hay un resumen en lenguaje sencillo disponible. Puede buscarlo en MedlinePlus.';
 
   @override
   String get medlinePlusDialogPlainLanguageInformationFromThe =>
-      'Plain-language information from the U.S. National Library of Medicine (MedlinePlus). Educational only — not medical advice.';
+      'Información en lenguaje sencillo de la Biblioteca Nacional de Medicina de EE. UU. (MedlinePlus). Solo con fines educativos; no es asesoramiento médico.';
 
   @override
   String get medlinePlusDialogReadMoreOnMedlineplus =>
-      'Read more on MedlinePlus';
+      'Leer más en MedlinePlus';
 
   @override
   String get fdaLabelDialogNoFdaLabelInformationIs =>
-      'No FDA label information is available for this medication right now. Brand and generic spellings can differ — try the other one, or ask your pharmacist.';
+      'En este momento no hay información de la etiqueta de la FDA para este medicamento. Los nombres de marca y genéricos pueden escribirse de forma distinta: pruebe con el otro o pregunte a su farmacéutico.';
 
   @override
   String get fdaLabelDialogOfficialUSFdaDrug =>
-      'Official U.S. FDA drug-label text (openFDA). Reference only — not medical advice, and not personalized to you. Discuss anything here with your doctor or pharmacist.';
+      'Texto oficial de la etiqueta del medicamento de la FDA de EE. UU. (openFDA). Solo como referencia; no es asesoramiento médico ni está personalizado para usted. Hable de cualquier cosa de aquí con su médico o farmacéutico.';
 
   @override
-  String get aiConsentDialogBeforeYouUpload => 'Before you upload';
+  String get aiConsentDialogBeforeYouUpload => 'Antes de subir';
 
   @override
   String get aiConsentDialogNothingIsSavedToYour =>
-      'Nothing is saved to your directive automatically — you review every field the AI fills in before it is applied.';
+      'Nada se guarda en su directiva automáticamente: usted revisa cada campo que completa la IA antes de aplicarlo.';
 
   @override
   String get aiConsentDialogUploadingIsOnlyAShortcut =>
-      'Uploading is only a shortcut, never required:\n• Black out anything you don\'t want sent (ID or card numbers, other people\'s details) before uploading.\n• Or skip the upload and type any field by hand — typed fields stay on your device and are never sent to the AI.';
+      'Subir un documento es solo un atajo, nunca es obligatorio:\n• Tache lo que no quiera enviar (números de identificación o de tarjetas, datos de otras personas) antes de subirlo.\n• O no suba nada y escriba cualquier campo a mano: los campos escritos se quedan en su dispositivo y nunca se envían a la IA.';
 
   @override
-  String get aiConsentDialogSendToTheAi => 'Send to the AI';
+  String get aiConsentDialogSendToTheAi => 'Enviar a la IA';
 
   @override
-  String get aiConsentDialogTranscribeWithAi => 'Transcribe with AI';
+  String get aiConsentDialogTranscribeWithAi => 'Transcribir con IA';
 
   @override
   String get aiConsentDialogYouReviewTheTextBefore =>
-      'You review the text before it goes into your form. Prefer not to? Tap Cancel to use your device\'s built-in dictation instead, or just type — neither sends audio to the AI.';
+      'Usted revisa el texto antes de que pase a su formulario. ¿Prefiere no hacerlo? Toque Cancelar para usar el dictado integrado de su dispositivo, o simplemente escriba; ninguna de las dos opciones envía audio a la IA.';
 
   @override
-  String get aiConsentDialogUseAi => 'Use AI';
+  String get aiConsentDialogUseAi => 'Usar IA';
 
   @override
-  String get aiConsentDialogAiDataNotice => 'AI Data Notice';
+  String get aiConsentDialogAiDataNotice => 'Aviso sobre datos e IA';
 
   @override
   String get aiConsentDialogImportantPleaseReadBeforeContinuing =>
-      'Important: Please read before continuing.\n';
+      'Importante: lea esto antes de continuar.\n';
 
   @override
   String get aiConsentDialogThisAiAssistantIsNot =>
-      '• This AI assistant is NOT a therapist, doctor, or lawyer. It provides general information about PA Mental Health Advance Directives only.\n';
+      '• Este asistente de IA NO es un terapeuta, médico ni abogado. Solo ofrece información general sobre las Directivas Anticipadas de Salud Mental de PA.\n';
 
   @override
   String get aiConsentDialogNeverEnterPersonalInformationFull =>
-      'NEVER enter personal information (full name, date of birth, Social Security number, address, phone number, email) into the AI chat or AI-powered features.\n\nThe app automatically strips common personal data, but this is not guaranteed. Personal information fields must be filled in manually — they are stored on your device only and never sent to the AI.';
+      'NUNCA ingrese información personal (nombre completo, fecha de nacimiento, número de Seguro Social, dirección, teléfono, correo electrónico) en el chat de IA ni en las funciones con IA.\n\nLa aplicación elimina automáticamente los datos personales comunes, pero esto no está garantizado. Los campos de información personal deben completarse a mano: se guardan solo en su dispositivo y nunca se envían a la IA.';
 
   @override
-  String get aiConsentDialogNotNow => 'Not Now';
+  String get aiConsentDialogNotNow => 'Ahora no';
 
   @override
-  String get aiConsentDialogIAuthorize => 'I Authorize';
+  String get aiConsentDialogIAuthorize => 'Autorizo';
 
   @override
   String get addressFieldsTapTheIconToFill =>
-      'Tap the icon to fill city & state';
+      'Toque el ícono para completar ciudad y estado';
 
   @override
-  String get addressFieldsFillCityStateFromZip => 'Fill city & state from ZIP';
+  String get addressFieldsFillCityStateFromZip =>
+      'Completar ciudad y estado a partir del código postal';
 
   @override
-  String get mainTheAppCouldnTStart => 'The app couldn\'t start';
+  String get mainTheAppCouldnTStart => 'La aplicación no pudo iniciarse';
 
   @override
   String get mainPaMentalHealthAdvanceDirective =>
-      'PA Mental Health Advance Directive';
+      'Directiva Anticipada de Salud Mental de PA';
 
   @override
-  String get mainAppTitle => 'PA Mental Health Advance Directive';
+  String get mainAppTitle => 'Directiva Anticipada de Salud Mental de PA';
 
   @override
-  String get aiConsistencyStepsProcedures => 'Procedures + Agent authority';
+  String get aiConsistencyStepsProcedures =>
+      'Procedimientos + autoridad del agente';
 
   @override
-  String get aiConsistencyStepsMeds => 'Medications + Agent authority';
+  String get aiConsistencyStepsMeds => 'Medicamentos + autoridad del agente';
 
   @override
   String aiConsistencyProcTitle(String name) {
-    return 'You consented to $name yourself — the printed form will also state your agent is NOT authorized to consent to $name.';
+    return 'Usted dio su propio consentimiento para $name; el formulario impreso también indicará que su agente NO está autorizado para dar consentimiento para $name.';
   }
 
   @override
   String aiConsistencyProcBody(String name) {
-    return 'Pennsylvania’s form lets you do both: give your own consent AND authorize your agent to consent on your behalf (that agent authorization needs your physical initials, §5836(c)). As entered, only your own consent is recorded, so the document says your agent may not consent to $name. That is allowed and may be exactly what you intend — keep both if so. If you also want your agent able to consent (e.g. if you later can’t decide), choose “My agent will decide” for $name.';
+    return 'El formulario de Pensilvania le permite hacer ambas cosas: dar su propio consentimiento Y autorizar a su agente a dar consentimiento en su nombre (esa autorización al agente requiere sus iniciales a mano, §5836(c)). Tal como está ingresado, solo se registra su propio consentimiento, por lo que el documento indica que su agente no puede dar consentimiento para $name. Eso está permitido y puede ser exactamente lo que desea; si es así, conserve ambos. Si también quiere que su agente pueda dar consentimiento (por ejemplo, si más adelante usted no puede decidir), elija “Mi agente decidirá” para $name.';
   }
 
   @override
   String aiConsistencyProcA(String name) {
-    return 'You consent to $name';
+    return 'Usted da su consentimiento para $name';
   }
 
   @override
   String aiConsistencyProcB(String name) {
-    return 'Agent not authorized: $name';
+    return 'Agente no autorizado: $name';
   }
 
   @override
   String aiConsistencyProcAction(String name) {
-    return 'Review $name choice';
+    return 'Revisar la opción de $name';
   }
 
   @override
-  String get aiConsistencyProcEct => 'ECT';
+  String get aiConsistencyProcEct => 'TEC';
 
   @override
-  String get aiConsistencyProcExperimental => 'experimental studies';
+  String get aiConsistencyProcExperimental => 'estudios experimentales';
 
   @override
-  String get aiConsistencyProcDrugTrials => 'drug trials';
+  String get aiConsistencyProcDrugTrials => 'ensayos de medicamentos';
 
   @override
-  String get aiConsistencyAgentDecidesMeds => 'Agent decides medications';
+  String get aiConsistencyAgentDecidesMeds =>
+      'El agente decide los medicamentos';
 
   @override
   String get aiConsistencyAgentNotAuthorizedMeds =>
-      'Agent not authorized: medications';
+      'Agente no autorizado: medicamentos';
 
   @override
-  String get aiConsistencyEditMedications => 'Edit Medications';
+  String get aiConsistencyEditMedications => 'Editar medicamentos';
 
   @override
-  String get aiConsistencyEditAgentAuthority => 'Edit Agent authority';
+  String get aiConsistencyEditAgentAuthority =>
+      'Editar la autoridad del agente';
 
   @override
-  String get aiConsistencyNoMedsYou => 'No medications (you)';
+  String get aiConsistencyNoMedsYou => 'Ningún medicamento (usted)';
 
   @override
   String get aiConsistencyAgentMayConsentMeds =>
-      'Agent may consent: medications';
+      'El agente puede dar consentimiento: medicamentos';
 
   @override
   String get aiConsistencySetupAiInvite =>
-      'Set up the free AI assistant for an additional AI-powered review that suggests gaps and things to double-check. Optional — the rule-based check above always runs without it.';
+      'Configure el asistente de IA gratuito para obtener una revisión adicional con IA que sugiere vacíos y cosas por verificar. Es opcional: la verificación basada en reglas de arriba siempre se ejecuta sin ella.';
 
   @override
   String get aiConsistencyNoSuggestions =>
-      'The AI did not return any suggestions.';
+      'La IA no devolvió ninguna sugerencia.';
 
   @override
   String aiConsistencyNotAdviceOptional(String notAdvice) {
-    return '$notAdvice Optional suggestions based only on what you entered.';
+    return '$notAdvice Sugerencias opcionales basadas solo en lo que usted ingresó.';
   }
 
   @override
   String aiConsistencyCheckFailed(String error) {
-    return 'Couldn\'t run the consistency check.\n$error';
+    return 'No se pudo ejecutar la verificación de coherencia.\n$error';
   }
 
   @override
@@ -5141,390 +5238,396 @@ class AppLocalizationsEs extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count things',
-      one: '1 thing',
+      other: '$count cosas',
+      one: '1 cosa',
     );
     return '$_temp0';
   }
 
   @override
-  String get aiConsistencyAllConsistent =>
-      'Everything looks internally consistent.';
+  String get aiConsistencyAllConsistent => 'Todo parece coherente.';
 
   @override
   String get aiConsistencyWarningsOnly =>
-      'These won\'t block you from generating the PDF — they are warnings you can fix or ignore.';
+      'Esto no le impedirá generar el PDF: son advertencias que puede corregir o ignorar.';
 
   @override
   String get aiConsistencyNoContradictions =>
-      'No cross-step contradictions detected.';
+      'No se detectaron contradicciones entre pasos.';
 
   @override
   String get aiConsistencyRulesExplainer =>
-      'The contradiction check above is built-in rules. When the AI assistant is set up, an additional AI review adds optional suggestions. Review anything before accepting — this screen warns; it doesn\'t block PDF generation.';
+      'La verificación de contradicciones de arriba usa reglas integradas. Cuando el asistente de IA está configurado, una revisión adicional con IA agrega sugerencias opcionales. Revise todo antes de aceptar; esta pantalla advierte, pero no bloquea la generación del PDF.';
 
   @override
   String aiConsistencyConflictHeader(int number, String steps) {
-    return 'CONFLICT · $number · $steps';
+    return 'CONFLICTO · $number · $steps';
   }
 
   @override
-  String get aiConsistencyVs => 'vs';
+  String get aiConsistencyVs => 'frente a';
 
   @override
-  String get crisisPlanHowIKnowIM => 'How I know I\'m not okay';
+  String get crisisPlanHowIKnowIM => 'Cómo sé que no estoy bien';
 
   @override
   String get crisisPlanHeadsUpThisSectionIs =>
-      'Heads up: this section is yours alone — it isn\'t required by PA Act 194, but in practice it\'s the part agents and ER staff read first.';
+      'Aviso: esta sección es solo suya; la Ley 194 de PA no la exige, pero en la práctica es lo primero que leen los agentes y el personal de urgencias.';
 
   @override
-  String get permissionsOverviewOnlyWhatWeNeed => 'Only what we need.';
+  String get permissionsOverviewOnlyWhatWeNeed => 'Solo lo que necesitamos.';
 
   @override
   String get permissionsOverviewPermissionsAreManagedByYour =>
-      'Permissions are managed by your device, not by this app. Open your device\'s Settings → PA MHAD to grant, revoke, or review any of the above at any time.';
+      'Los permisos los administra su dispositivo, no esta aplicación. Abra Configuración de su dispositivo → PA MHAD para conceder, revocar o revisar cualquiera de los anteriores en cualquier momento.';
 
   @override
   String get permissionsOverviewNoAnalyticsNoTrackingPixels =>
-      'No analytics. No tracking pixels. No cookies. No third-party SDKs for advertising or measurement. The only outbound flows are the opt-in AI features (your chosen AI provider) and NLM medical-reference lookups, both with PII stripping at a single chokepoint.';
+      'Sin analíticas. Sin píxeles de rastreo. Sin cookies. Sin SDK de terceros para publicidad o medición. Los únicos datos que salen son los de las funciones de IA opcionales (el proveedor de IA que usted elija) y las consultas de referencia médica de la NLM, ambos con eliminación de datos personales en un único punto de control.';
 
   @override
-  String get makeItFindableMakeItFindableInA => 'Make it findable in a crisis.';
+  String get makeItFindableMakeItFindableInA =>
+      'Haga que la encuentren en una crisis.';
 
   @override
   String get makeItFindablePennsylvaniaHasNoStatewideDirective =>
-      'Pennsylvania has no statewide directive registry, so the people in your life are the registry: make sure your agent, a trusted person, and your providers all know you have a directive and where to find it.';
+      'Pensilvania no tiene un registro estatal de directivas, así que las personas de su vida son el registro: asegúrese de que su agente, una persona de confianza y sus proveedores sepan que tiene una directiva y dónde encontrarla.';
 
   @override
   String get makeItFindableUnderPaAct194A =>
-      'Under PA Act 194, a valid directive your care team can find is meant to be followed. Findability is what makes it work.';
+      'Según la Ley 194 de PA, una directiva válida que su equipo de atención pueda encontrar debe seguirse. Que se pueda encontrar es lo que hace que funcione.';
 
   @override
-  String get revocationAreYouSure => 'Are you sure?';
+  String get revocationAreYouSure => '¿Está seguro?';
 
   @override
   String get revocationPutItInWritingSign =>
-      'Put it in writing — sign and date a short statement that you are revoking this directive.';
+      'Póngalo por escrito: firme y feche una breve declaración de que revoca esta directiva.';
 
   @override
   String get revocationTellYourAgentYourProviders =>
-      'Tell your agent, your providers, and anyone holding a copy.';
+      'Avise a su agente, a sus proveedores y a cualquier persona que tenga una copia.';
 
   @override
   String get revocationDestroyOldCopiesOrClearly =>
-      'Destroy old copies, or clearly mark them “REVOKED”.';
+      'Destruya las copias antiguas o márquelas claramente como “REVOCADA”.';
 
   @override
   String get revocationIfYouHaveAnyFurther =>
-      'If you have any further questions about how revocation applies to you, it is wise to consult an attorney for clarification.';
+      'Si tiene más preguntas sobre cómo se le aplica la revocación, es prudente consultar a un abogado.';
 
   @override
   String get pastDirectiveDetailNoShareHistoryIsKept =>
-      'No share history is kept — nothing is saved after you close the app, so this list is empty by design.';
+      'No se guarda historial de envíos: nada se conserva al cerrar la aplicación, así que esta lista está vacía a propósito.';
 
   @override
-  String get wizardAiRailFullView => 'Full view';
+  String get wizardAiRailFullView => 'Vista completa';
 
   @override
   String get wizardAiRailYourApiKeyStaysOn =>
-      'Your API key stays on this device and is only used to answer your questions. You can fill out the whole wizard without it.';
+      'Su clave de API se queda en este dispositivo y solo se usa para responder sus preguntas. Puede completar todo el asistente sin ella.';
 
   @override
-  String get wizardAiRailReadingThisStep => 'Reading this step…';
+  String get wizardAiRailReadingThisStep => 'Leyendo este paso…';
 
   @override
-  String get wizardAiRailSuggestedForThisStep => 'SUGGESTED FOR THIS STEP';
+  String get wizardAiRailSuggestedForThisStep => 'SUGERIDO PARA ESTE PASO';
 
   @override
   String get wizardAiRailAskAnythingAboutThisStep =>
-      'Ask anything about this step — answers appear here, and in the full assistant.';
+      'Pregunte lo que quiera sobre este paso; las respuestas aparecen aquí y en el asistente completo.';
 
   @override
   String get wizardAiRailNeedHelpWithThisStep =>
-      'Need help with this step? Ask the AI';
+      '¿Necesita ayuda con este paso? Pregunte a la IA';
 
   @override
   String get wizardAiRailAiHelpIsOffThe =>
-      'AI help is off. The step heads-up, suggested questions, photo auto-fill, and the chat below aren\'t available until you set up AI.';
+      'La ayuda de IA está desactivada. El aviso del paso, las preguntas sugeridas, el autocompletado con fotos y el chat de abajo no estarán disponibles hasta que configure la IA.';
 
   @override
-  String get wizardAiRailCheckingThisStep => 'Checking this step';
+  String get wizardAiRailCheckingThisStep => 'Revisando este paso';
 
   @override
   String get wizardAiRailFindAPaFacilityBy =>
-      'Find a PA facility by name or county…';
+      'Busque un centro de PA por nombre o condado…';
 
   @override
-  String get wizardAiRailThinking => 'Thinking…';
+  String get wizardAiRailThinking => 'Pensando…';
 
   @override
-  String get wizardAiRailAskAboutThisStep => 'Ask about this step…';
+  String get wizardAiRailAskAboutThisStep => 'Pregunte sobre este paso…';
 
   @override
-  String get wizardAiRailSending => 'Sending';
+  String get wizardAiRailSending => 'Enviando';
 
   @override
   String get sideEffectsBringAnythingYouCheckAnd =>
-      'Bring anything you check — and especially anything marked \"discuss with your doctor\" — to your doctor or pharmacist. This list never tells you to start, stop, or change a medication.';
+      'Lleve todo lo que marque, y especialmente lo marcado como \"hablar con su médico\", a su médico o farmacéutico. Esta lista nunca le indica que empiece, suspenda o cambie un medicamento.';
 
   @override
   String get sideEffectsTheseArePossibleInteractionsDrawn =>
-      'These are possible interactions drawn from the medications’ FDA labels, written as questions to ask. They are not a warning to stop or change anything yourself — only your doctor or pharmacist can advise on your specific case.';
+      'Estas son posibles interacciones tomadas de las etiquetas de la FDA de los medicamentos, redactadas como preguntas para hacer. No son un aviso para que usted suspenda o cambie nada por su cuenta; solo su médico o farmacéutico puede aconsejarle sobre su caso.';
 
   @override
   String get sideEffectsAddTheMedicationsYouRe =>
-      'Add the medications you\'re currently taking on the Medications step first, then come back here to check their common side effects.';
+      'Primero agregue los medicamentos que toma actualmente en el paso Medicamentos y luego vuelva aquí para revisar sus efectos secundarios comunes.';
 
   @override
   String get audioGuideToTranscribeYourRecordingIncluding =>
-      'To transcribe, your recording — including any personal details you speak — is sent to Google\'s AI. On the free tier it may be retained and reviewed, and can\'t be recalled. Don\'t say anything you\'re not comfortable sending; you can always type sensitive fields by hand instead.';
+      'Para transcribirla, su grabación (incluidos los datos personales que diga) se envía a la IA de Google. En el nivel gratuito puede conservarse y revisarse, y no se puede recuperar. No diga nada que no quiera enviar; siempre puede escribir a mano los campos sensibles.';
 
   @override
-  String get ulyssesClauseIfFutureMeRefuses => 'If future-me refuses…';
+  String get ulyssesClauseIfFutureMeRefuses => 'Si mi yo futuro se niega…';
 
   @override
   String get ulyssesClauseStronglyRecommendedTalkWithA =>
-      'Strongly recommended: talk with a peer specialist or clinician before saving. See \"Get help\" in Settings.';
+      'Muy recomendable: hable con un especialista de apoyo entre pares o un profesional clínico antes de guardar. Vea \"Obtener ayuda\" en Configuración.';
 
   @override
-  String get aiSetupIsTheApiKeyReally => 'Is the API key really free?';
+  String get aiSetupIsTheApiKeyReally =>
+      '¿La clave de API es realmente gratis?';
 
   @override
   String get aiSetupYesGoogleOffersAGenerous =>
-      'Yes. Google offers a generous free tier for Gemini. There is no credit card required and no charge for typical personal use.';
+      'Sí. Google ofrece un nivel gratuito generoso para Gemini. No se necesita tarjeta de crédito y no hay cargos por el uso personal típico.';
 
   @override
   String get aiSetupWhatGoogleAccountShouldI =>
-      'What Google account should I use?';
+      '¿Qué cuenta de Google debo usar?';
 
   @override
   String get aiSetupAnyGoogleAccountWorksA =>
-      'Any Google account works — a personal Gmail is fine. You do not need a Google Cloud billing account.';
+      'Cualquier cuenta de Google sirve; una cuenta personal de Gmail está bien. No necesita una cuenta de facturación de Google Cloud.';
 
   @override
-  String get aiSetupCanIRevokeTheKey => 'Can I revoke the key later?';
+  String get aiSetupCanIRevokeTheKey => '¿Puedo revocar la clave más adelante?';
 
   @override
   String get aiSetupYesVisitAistudioGoogleCom =>
-      'Yes. Visit aistudio.google.com/apikey at any time to delete or regenerate your key. You can also remove it from this app using the trash icon in the top-right.';
+      'Sí. Visite aistudio.google.com/apikey en cualquier momento para eliminar o regenerar su clave. También puede quitarla de esta aplicación con el ícono de papelera en la esquina superior derecha.';
 
   @override
-  String get aiSetupWhatIfIDonT => 'What if I don\'t add a key?';
+  String get aiSetupWhatIfIDonT => '¿Y si no agrego una clave?';
 
   @override
   String get aiSetupTheAppWorksFullyWithout =>
-      'The app works fully without AI. The form wizard, PDF generation, educational content, and all other features do not require an API key. AI is purely optional.';
+      'La aplicación funciona por completo sin IA. El asistente del formulario, la generación del PDF, el contenido educativo y todas las demás funciones no requieren una clave de API. La IA es totalmente opcional.';
 
   @override
-  String get accessibilitySettingsMakeItReadable => 'Make it readable.';
+  String get accessibilitySettingsMakeItReadable => 'Hágalo legible.';
 
   @override
   String get accessibilitySettingsLegalTextIsAlwaysRendered =>
-      'Legal text is always rendered in English to preserve PA Act 194 wording.';
+      'El texto legal siempre se muestra en inglés para conservar la redacción de la Ley 194 de PA.';
 
   @override
-  String get facilitatorYouDonTHaveTo => 'You don\'t have to do this alone.';
+  String get facilitatorYouDonTHaveTo => 'No tiene que hacerlo solo.';
 
   @override
   String get facilitatorPeerSpecialistAdvocateReferral =>
-      '♥ Peer specialist / advocate referral';
+      '♥ Derivación a especialista de apoyo entre pares / defensor';
 
   @override
-  String get facilitatorSomeoneIAlreadyTrust => '👥 Someone I already trust';
+  String get facilitatorSomeoneIAlreadyTrust => '👥 Alguien en quien ya confío';
 
   @override
-  String get facilitatorMyCareTeam => '🧠 My care team';
+  String get facilitatorMyCareTeam => '🧠 Mi equipo de atención';
 
   @override
   String get facilitatorPreferToDoItYourself =>
-      'Prefer to do it yourself? That\'s fine — keep going from where you left off.';
+      '¿Prefiere hacerlo por su cuenta? Está bien: siga desde donde lo dejó.';
 
   @override
-  String get moreSheetCallOrText98824 => 'Call or text 988 · 24/7 support';
+  String get moreSheetCallOrText98824 =>
+      'Llame o envíe un mensaje al 988 · apoyo 24/7';
 
   @override
   String get moreSheetUploadADocumentPhotoOr =>
-      'Upload a document, photo, or recording';
+      'Subir un documento, una foto o una grabación';
 
   @override
   String get moreSheetPreviewAndExportYourDirective =>
-      'Preview and export your directive packet';
+      'Ver y exportar el paquete de su directiva';
 
   @override
   String get moreSheetEraseThisSessionAndStart =>
-      'Erase this session and start fresh';
+      'Borrar esta sesión y empezar de nuevo';
 
   @override
-  String get crisisSheetYouAreNotAlone => 'You are not alone.';
+  String get crisisSheetYouAreNotAlone => 'No está solo.';
 
   @override
-  String get crisisSheetCallOrText988 => 'Call or text 988';
+  String get crisisSheetCallOrText988 => 'Llame o envíe un mensaje al 988';
 
   @override
-  String get crisisSheetCall988Press1 => 'Call 988, press 1';
+  String get crisisSheetCall988Press1 => 'Llame al 988 y marque 1';
 
   @override
-  String get crisisSheetCallTextChat => 'Call · text · chat';
+  String get crisisSheetCallTextChat => 'Llamada · texto · chat';
 
   @override
-  String get assistantSenderYou => 'You';
+  String get assistantSenderYou => 'Usted';
 
   @override
-  String get assistantSenderAi => 'AI Assistant';
+  String get assistantSenderAi => 'Asistente de IA';
 
   @override
-  String get aiSetupApiKeySetForThis => 'API key set for this session';
+  String get aiSetupApiKeySetForThis =>
+      'Clave de API configurada para esta sesión';
 
   @override
-  String get aiSetupApiKeySaved => 'API key saved';
+  String get aiSetupApiKeySaved => 'Clave de API guardada';
 
   @override
-  String get aiSetupGetYourFreeGeminiApi => 'Get Your Free Gemini API Key';
+  String get aiSetupGetYourFreeGeminiApi =>
+      'Obtenga su clave de API gratuita de Gemini';
 
   @override
   String aiSetupAddYourApiKey(Object label) {
-    return 'Add Your $label API Key';
+    return 'Agregue su clave de API de $label';
   }
 
   @override
   String get aiSetupTheAssistantUsesGoogleS =>
-      'The assistant uses Google\'s Gemini model. You need a free API key from Google AI Studio — it takes about 30 seconds.';
+      'El asistente usa el modelo Gemini de Google. Necesita una clave de API gratuita de Google AI Studio; toma unos 30 segundos.';
 
   @override
   String aiSetupYouBringYourOwnApi(Object label) {
-    return 'You bring your own $label API key. Your provider\'s usage limits and billing apply — this app never sees or charges for your usage. Gemini stays the free default if you\'d rather not pay.';
+    return 'Usted usa su propia clave de API de $label. Se aplican los límites de uso y la facturación de su proveedor; esta aplicación nunca ve ni cobra su uso. Gemini sigue siendo la opción gratuita predeterminada si prefiere no pagar.';
   }
 
   @override
   String get aiSetupOpenGoogleAiStudioIn =>
-      'Open Google AI Studio (in your private window)';
+      'Abrir Google AI Studio (en su ventana privada)';
 
   @override
   String aiSetupOpenInYourPrivateWindow(Object label) {
-    return 'Open $label (in your private window)';
+    return 'Abrir $label (en su ventana privada)';
   }
 
   @override
   String get aiSetupUseAnyGoogleAccountPersonal =>
-      'Use any Google account (personal Gmail works fine)';
+      'Use cualquier cuenta de Google (una cuenta personal de Gmail sirve)';
 
   @override
-  String get aiSetupSignInThenOpenThe => 'Sign in, then open the API keys page';
+  String get aiSetupSignInThenOpenThe =>
+      'Inicie sesión y luego abra la página de claves de API';
 
   @override
-  String get aiSetupOpenAiStudio => 'Open AI Studio';
+  String get aiSetupOpenAiStudio => 'Abrir AI Studio';
 
   @override
   String aiSetupOpen(Object label) {
-    return 'Open $label';
+    return 'Abrir $label';
   }
 
   @override
-  String get aiSetupSignInWithGoogle => 'Sign in with Google';
+  String get aiSetupSignInWithGoogle => 'Iniciar sesión con Google';
 
   @override
   String aiSetupSignInTo(Object label) {
-    return 'Sign in to $label';
+    return 'Iniciar sesión en $label';
   }
 
   @override
   String get aiSetupNoCreditCardOrPayment =>
-      'No credit card or payment is needed. The free tier is generous and sufficient for this app.';
+      'No se necesita tarjeta de crédito ni pago. El nivel gratuito es generoso y suficiente para esta aplicación.';
 
   @override
   String get aiSetupMostProvidersRequireAPaid =>
-      'Most providers require a paid account with credits to use the API. Your provider bills you directly.';
+      'La mayoría de los proveedores exigen una cuenta de pago con créditos para usar la API. Su proveedor le factura directamente.';
 
   @override
-  String get aiSetupKeySetForThisSession => 'Key set for this session';
+  String get aiSetupKeySetForThisSession =>
+      'Clave configurada para esta sesión';
 
   @override
-  String get aiSetupKeySaved => 'Key saved';
+  String get aiSetupKeySaved => 'Clave guardada';
 
   @override
-  String get aiSetupShowApiKey => 'Show API key';
+  String get aiSetupShowApiKey => 'Mostrar clave de API';
 
   @override
-  String get aiSetupHideApiKey => 'Hide API key';
+  String get aiSetupHideApiKey => 'Ocultar clave de API';
 
   @override
-  String get aiSetupUseKeyForThisSession => 'Use Key for This Session';
+  String get aiSetupUseKeyForThisSession => 'Usar la clave en esta sesión';
 
   @override
-  String get aiSetupSaveApiKey => 'Save API Key';
+  String get aiSetupSaveApiKey => 'Guardar clave de API';
 
   @override
-  String get aiSetupTesting => 'Testing…';
+  String get aiSetupTesting => 'Probando…';
 
   @override
-  String get aiSetupTestConnection => 'Test connection';
+  String get aiSetupTestConnection => 'Probar conexión';
 
   @override
   String aiSetupThatDoesnTLookLike(Object label, Object keyHint) {
-    return 'That doesn\'t look like a valid $label key ($keyHint).';
+    return 'No parece una clave válida de $label ($keyHint).';
   }
 
   @override
   String aiSetupCouldNotPasteTryPasting(Object pasteShortcutLabel) {
-    return 'Could not paste. Try pasting manually ($pasteShortcutLabel).';
+    return 'No se pudo pegar. Intente pegarla manualmente ($pasteShortcutLabel).';
   }
 
   @override
   String aiSetupMayBeBlockedByYour(Object label) {
-    return '$label may be blocked by your browser\'s security (CORS) on the web. If it doesn\'t respond, pick Gemini or Claude — both work in the browser.';
+    return 'Es posible que la seguridad de su navegador (CORS) bloquee $label en la web. Si no responde, elija Gemini o Claude; ambos funcionan en el navegador.';
   }
 
   @override
   String aiSetupTheKeyLooksLikeCopy(Object keyHint) {
-    return 'The key looks like \"$keyHint\" — copy it, then use the paste button or paste it manually.';
+    return 'La clave se parece a \"$keyHint\": cópiela y luego use el botón de pegar o péguela manualmente.';
   }
 
   @override
   String aiSetupApiKey(Object label) {
-    return '$label API Key';
+    return 'Clave de API de $label';
   }
 
   @override
   String get adminUpdateBlankUseTheAppS =>
-      'Blank = use the app\'s saved Gemini key. Not stored.';
+      'En blanco = usar la clave de Gemini guardada en la aplicación. No se almacena.';
 
   @override
   String get adminUpdateEnteredForThisSessionOnly =>
-      'Entered for this session only — not stored.';
+      'Ingresada solo para esta sesión; no se almacena.';
 
   @override
-  String get adminUpdateDrafting => 'Drafting…';
+  String get adminUpdateDrafting => 'Redactando…';
 
   @override
-  String get adminUpdateStartUpdateWithAi => 'Start update with AI';
+  String get adminUpdateStartUpdateWithAi => 'Iniciar actualización con IA';
 
   @override
   String adminUpdateRestoreFromBackupFieldS(
     Object changesLength,
     Object assetPath,
   ) {
-    return 'Restore from backup: $changesLength field(s) differ from the previous version of $assetPath. Tick the part(s) to roll back (all pre-ticked = full revert).';
+    return 'Restaurar desde copia de seguridad: $changesLength campo(s) difieren de la versión anterior de $assetPath. Marque la(s) parte(s) que desea revertir (todo marcado = reversión completa).';
   }
 
   @override
   String adminUpdateProposedChangeSReviewEach(Object changesLength) {
-    return '$changesLength proposed change(s). Review each — tick VERIFY items only if you have confirmed them.';
+    return '$changesLength cambio(s) propuesto(s). Revise cada uno; marque los elementos VERIFICAR solo si los ha confirmado.';
   }
 
   @override
   String adminUpdateVerifyTierChangeSNot(Object verifyCount) {
-    return '$verifyCount verify-tier change(s) not yet approved';
+    return '$verifyCount cambio(s) de nivel verificar aún sin aprobar';
   }
 
   @override
-  String get adminUpdateReady => 'Ready';
+  String get adminUpdateReady => 'Listo';
 
   @override
-  String get adminUpdateBuildRestoredJson => 'Build restored JSON';
+  String get adminUpdateBuildRestoredJson => 'Generar JSON restaurado';
 
   @override
-  String get adminUpdateBuildUpdatedJson => 'Build updated JSON';
+  String get adminUpdateBuildUpdatedJson => 'Generar JSON actualizado';
 
   @override
   String adminUpdateContextInOut(
@@ -5533,113 +5636,113 @@ class AppLocalizationsEs extends AppLocalizations {
     Object inputTokenLimit,
     Object outputTokenLimit,
   ) {
-    return '$displayName\n$note\ncontext $inputTokenLimit in / $outputTokenLimit out';
+    return '$displayName\n$note\ncontexto $inputTokenLimit entrada / $outputTokenLimit salida';
   }
 
   @override
   String adminUpdateBestGeminiModelNow(Object currentModel) {
-    return 'Best Gemini model (now: $currentModel)';
+    return 'Mejor modelo de Gemini (actual: $currentModel)';
   }
 
   @override
   String adminUpdateCheckTheNewestModelsLive(Object label) {
-    return 'Check the newest $label models (live API)';
+    return 'Consultar los modelos más recientes de $label (API en vivo)';
   }
 
   @override
   String adminUpdateApiKey(Object label) {
-    return '$label API key';
+    return 'Clave de API de $label';
   }
 
   @override
   String adminUpdateSource(Object source) {
-    return 'Source: $source';
+    return 'Fuente: $source';
   }
 
   @override
   String adminUpdateRestoredTheSelectedFieldS(Object assetPath) {
-    return 'RESTORED — the selected field(s) have been rolled back to the backup. Commit this over $assetPath to apply the roll-back.';
+    return 'RESTAURADO: los campos seleccionados se revirtieron a la copia de seguridad. Confirme esto sobre $assetPath para aplicar la reversión.';
   }
 
   @override
   String adminUpdateUpdatedReplaceThatFileWith(Object assetPath) {
-    return 'Updated $assetPath. Replace that file with this and commit — the release makes it live for everyone.';
+    return '$assetPath actualizado. Reemplace ese archivo con este y confírmelo; la versión lo publica para todos.';
   }
 
   @override
-  String get reminderSheetsTimeToRenew => 'Time to renew.';
+  String get reminderSheetsTimeToRenew => 'Es hora de renovar.';
 
   @override
   String reminderSheetsTimeToRenew2(Object firstName) {
-    return 'Time to renew, $firstName.';
+    return 'Es hora de renovar, $firstName.';
   }
 
   @override
   String reminderSheetsExpires(Object dayLabel) {
-    return '● Expires $dayLabel';
+    return '● Vence $dayLabel';
   }
 
   @override
   String get revocationWillBeReferencedInYour =>
-      'Will be referenced in your revocation letter';
+      'Se mencionará en su carta de revocación';
 
   @override
-  String get revocationTapToInclude => 'Tap to include';
+  String get revocationTapToInclude => 'Toque para incluir';
 
   @override
-  String get revocationRevoking => 'Revoking…';
+  String get revocationRevoking => 'Revocando…';
 
   @override
-  String get revocationRevokeNow => 'Revoke now';
+  String get revocationRevokeNow => 'Revocar ahora';
 
   @override
   String pastDirectiveDetailUnableToLoad(Object error) {
-    return 'Unable to load: $error';
+    return 'No se pudo cargar: $error';
   }
 
   @override
   String pastDirectiveDetailTheDirectiveRemainsRegardless(Object status) {
-    return 'The directive remains $status regardless';
+    return 'La directiva sigue $status de todos modos';
   }
 
   @override
-  String get pinDialogShowPasscode => 'Show passcode';
+  String get pinDialogShowPasscode => 'Mostrar código';
 
   @override
-  String get pinDialogHidePasscode => 'Hide passcode';
+  String get pinDialogHidePasscode => 'Ocultar código';
 
   @override
   String get modeSelectionOnTheWebYourData =>
-      'On the web your data is kept in memory only and is never sent to a server, so encrypted on-device (Private mode) storage is not available here.';
+      'En la web, sus datos se mantienen solo en la memoria y nunca se envían a un servidor, por lo que el almacenamiento cifrado en el dispositivo (modo Privado) no está disponible aquí.';
 
   @override
   String get modeSelectionThisAppIsNotHipaa =>
-      'This app is not HIPAA-compliant. Nothing is sent to a server for storage.';
+      'Esta aplicación no cumple con HIPAA. No se envía nada a un servidor para almacenarlo.';
 
   @override
   String modeSelectionSelect(Object title, Object recommended) {
-    return 'Select $title$recommended';
+    return 'Seleccionar $title$recommended';
   }
 
   @override
   String sideEffectsCheckingCovers(Object currentMedsJoin) {
-    return 'Checking covers: $currentMedsJoin';
+    return 'La revisión incluye: $currentMedsJoin';
   }
 
   @override
   String sideEffectsReCheckFor(Object currentMedsJoin) {
-    return 'Re-check for: $currentMedsJoin';
+    return 'Volver a revisar: $currentMedsJoin';
   }
 
   @override
-  String get sideEffectsCheckSideEffects => 'Check side effects';
+  String get sideEffectsCheckSideEffects => 'Revisar efectos secundarios';
 
   @override
-  String get sideEffectsReCheck => 'Re-check';
+  String get sideEffectsReCheck => 'Volver a revisar';
 
   @override
   String sideEffectsMayAffect(Object adlImpact) {
-    return 'May affect: $adlImpact';
+    return 'Puede afectar: $adlImpact';
   }
 
   @override
@@ -5648,71 +5751,71 @@ class AppLocalizationsEs extends AppLocalizations {
     Object count,
     Object sub,
   ) {
-    return '$title, $count sections. $sub';
+    return '$title, $count secciones. $sub';
   }
 
   @override
   String get learnAiPanelAskAQuestionToGet =>
-      'Ask a question to get started — e.g. \"What\'s the difference between a declaration and a power of attorney?\"';
+      'Haga una pregunta para empezar; por ejemplo: \"¿Cuál es la diferencia entre una declaración y un poder notarial?\"';
 
   @override
   String get learnAiPanelSetUpTheFreeAi =>
-      'Set up the free AI assistant to ask questions while you read.';
+      'Configure el asistente de IA gratuito para hacer preguntas mientras lee.';
 
   @override
   String learnAiPanelPiiStripped(Object nameToUpperCase) {
-    return '● $nameToUpperCase · PII STRIPPED';
+    return '● $nameToUpperCase · SIN DATOS PERSONALES';
   }
 
   @override
   String educationArticleDetailQuestionsContactPaProtectionAdvocacy(
     Object paProtectionAdvocacy,
   ) {
-    return 'Questions? Contact PA Protection & Advocacy: $paProtectionAdvocacy';
+    return '¿Preguntas? Comuníquese con PA Protection & Advocacy: $paProtectionAdvocacy';
   }
 
   @override
   String audioGuideExample(Object example) {
-    return 'Example: $example';
+    return 'Ejemplo: $example';
   }
 
   @override
   String exportCardsExecuted(Object executionDate) {
-    return 'Executed: $executionDate';
+    return 'Firmada: $executionDate';
   }
 
   @override
   String exportCardsExpires(Object expirationDate) {
-    return 'Expires: $expirationDate';
+    return 'Vence: $expirationDate';
   }
 
   @override
-  String get pdfPreviewFit => 'FIT';
+  String get pdfPreviewFit => 'AJUSTAR';
 
   @override
   String pdfPreviewPageOf(Object current, Object pageCount) {
-    return 'Page $current of $pageCount';
+    return 'Página $current de $pageCount';
   }
 
   @override
   String pdfPreviewGoToPage(Object i) {
-    return 'Go to page $i';
+    return 'Ir a la página $i';
   }
 
   @override
   String pdfPreviewPage(Object i) {
-    return 'Page $i';
+    return 'Página $i';
   }
 
   @override
-  String get exportGeneratingPdfPreview => 'Generating PDF preview';
+  String get exportGeneratingPdfPreview => 'Generando la vista previa del PDF';
 
   @override
-  String get exportPreviewPdfBeforeSharing => 'Preview PDF before sharing';
+  String get exportPreviewPdfBeforeSharing => 'Ver el PDF antes de compartirlo';
 
   @override
   String exportTheFollowingFieldsAreEmpty(Object n) {
-    return 'The following fields are empty or missing:\n\n$n\n\nAn incomplete directive may not be legally valid under PA Act 194. Export anyway?';
+    return 'Los siguientes campos están vacíos o faltan:\n\n$n\n\nUna directiva incompleta podría no ser legalmente válida según la Ley 194 de PA. ¿Exportar de todos modos?';
   }
 
   @override
@@ -5720,19 +5823,21 @@ class AppLocalizationsEs extends AppLocalizations {
     Object privacyPolicyUpdated,
     Object privacyPolicyVersion,
   ) {
-    return 'Last updated: $privacyPolicyUpdated ($privacyPolicyVersion)';
+    return 'Última actualización: $privacyPolicyUpdated ($privacyPolicyVersion)';
   }
 
   @override
   String privacyPolicyYouCanReachTheDeveloper(Object privacyPolicyUrl) {
-    return 'The FTC Health Breach Notification Rule requires at least two contact methods. We provide:\n\n  - In-app: an in-app breach notice will be shown the next time you open the app if a breach affects you.\n  - Online: $privacyPolicyUrl (also used for breach postings if direct contact information is insufficient).';
+    return 'La Norma de Notificación de Violaciones de Datos de Salud de la FTC exige al menos dos medios de contacto. Ofrecemos:\n\n  - En la aplicación: si una violación de datos le afecta, se mostrará un aviso la próxima vez que abra la aplicación.\n  - En línea: $privacyPolicyUrl (también se usa para publicar avisos de violaciones si la información de contacto directo no es suficiente).';
   }
 
   @override
-  String get settingsScreenshotsAreBlocked => 'Screenshots are blocked';
+  String get settingsScreenshotsAreBlocked =>
+      'Las capturas de pantalla están bloqueadas';
 
   @override
-  String get settingsScreenshotsAreAllowed => 'Screenshots are allowed';
+  String get settingsScreenshotsAreAllowed =>
+      'Las capturas de pantalla están permitidas';
 
   @override
   String assistantMessageWidgetsAt(
@@ -5740,25 +5845,26 @@ class AppLocalizationsEs extends AppLocalizations {
     Object timeStr,
     Object content,
   ) {
-    return '$sender at $timeStr: $content';
+    return '$sender a las $timeStr: $content';
   }
 
   @override
   String assistantActiveTextPiiStrippedBefore(Object model) {
-    return '● ACTIVE · $model · TEXT PII STRIPPED BEFORE SEND';
+    return '● ACTIVO · $model · SE QUITAN LOS DATOS PERSONALES DEL TEXTO ANTES DE ENVIAR';
   }
 
   @override
-  String get assistantNotSetUpAddA => '○ NOT SET UP · ADD A KEY TO USE THE AI';
+  String get assistantNotSetUpAddA =>
+      '○ NO CONFIGURADO · AGREGUE UNA CLAVE PARA USAR LA IA';
 
   @override
   String assistantOlderMessagesWereTrimmedTo(Object trimmedCount) {
-    return '$trimmedCount older messages were trimmed to fit within the AI\'s context limit. Recent messages are preserved.';
+    return 'Se recortaron $trimmedCount mensajes antiguos para ajustarse al límite de contexto de la IA. Los mensajes recientes se conservan.';
   }
 
   @override
   String assistantNotLegalOrMedicalAdvice(Object paProtectionAdvocacy) {
-    return 'Not legal or medical advice. For legal questions contact PA Protection & Advocacy: $paProtectionAdvocacy';
+    return 'No es asesoramiento legal ni médico. Para preguntas legales, comuníquese con PA Protection & Advocacy: $paProtectionAdvocacy';
   }
 
   @override
@@ -5769,17 +5875,17 @@ class AppLocalizationsEs extends AppLocalizations {
     Object tpmK,
     Object contextK,
   ) {
-    return '$model free tier:\n$maxRpm requests/min\n$maxRpd requests/day\n${tpmK}K tokens/min\n${contextK}K max context';
+    return 'Nivel gratuito de $model:\n$maxRpm solicitudes/min\n$maxRpd solicitudes/día\n${tpmK}K tokens/min\n${contextK}K de contexto máximo';
   }
 
   @override
-  String get homeToolsGridSuggestsChecks => 'Suggests + checks';
+  String get homeToolsGridSuggestsChecks => 'Sugiere + verifica';
 
   @override
-  String get homeToolsGridShareCarry => 'Share + carry';
+  String get homeToolsGridShareCarry => 'Compartir + llevar';
 
   @override
-  String get homeToolsGridNoDirectiveYet => 'No directive yet';
+  String get homeToolsGridNoDirectiveYet => 'Aún no hay directiva';
 
   @override
   String homeDirectiveHeroContinueYourLastEdited(
@@ -5787,213 +5893,214 @@ class AppLocalizationsEs extends AppLocalizations {
     Object pctLabel,
     Object lastEdited,
   ) {
-    return 'Continue your $formLabel — $pctLabel, last edited $lastEdited';
+    return 'Continúe su $formLabel: $pctLabel, última edición $lastEdited';
   }
 
   @override
   String homeDirectiveHeroStepOf(Object currentStep, Object totalSteps) {
-    return 'Step $currentStep of $totalSteps';
+    return 'Paso $currentStep de $totalSteps';
   }
 
   @override
   String homeDirectiveHeroLastEdited(Object formLabel, Object lastEdited) {
-    return '$formLabel · last edited $lastEdited';
+    return '$formLabel · última edición $lastEdited';
   }
 
   @override
   String facilitatorPickTheKindOfSupport(Object facilitatorCompletionStat) {
-    return '$facilitatorCompletionStat Pick the kind of support that fits today.';
+    return '$facilitatorCompletionStat Elija el tipo de apoyo que le convenga hoy.';
   }
 
   @override
   String get disclaimerYouWorkAnonymouslyInThis =>
-      'You work anonymously in this browser tab — no account, no cloud, no tracking. If you close the tab your work is kept on this device for about 10 minutes for recovery, then wiped — open and save your PDF to keep it.';
+      'Trabaja de forma anónima en esta pestaña del navegador: sin cuenta, sin nube, sin rastreo. Si cierra la pestaña, su trabajo se conserva en este dispositivo durante unos 10 minutos para poder recuperarlo y luego se borra; abra y guarde su PDF para conservarlo.';
 
   @override
   String get disclaimerNoAccountNoCloudNo =>
-      'No account, no cloud, no tracking — nothing goes to our servers. Anything you save stays encrypted on this device, where only you can open it.';
+      'Sin cuenta, sin nube, sin rastreo: nada llega a nuestros servidores. Todo lo que guarde se queda cifrado en este dispositivo, donde solo usted puede abrirlo.';
 
   @override
   String draftRecoveryDialogItLooksLikeTheApp(Object ageDescription) {
-    return 'It looks like the app closed unexpectedly. An auto-saved draft was found from $ageDescription.\n\nThis draft contains your treatment preferences and medical data (no personal information was saved).\n\nWould you like to restore it?';
+    return 'Parece que la aplicación se cerró de forma inesperada. Se encontró un borrador guardado automáticamente de $ageDescription.\n\nEste borrador contiene sus preferencias de tratamiento y datos médicos (no se guardó información personal).\n\n¿Desea restaurarlo?';
   }
 
   @override
   String stepDotsStepOf(Object current, Object total) {
-    return 'Step $current of $total';
+    return 'Paso $current de $total';
   }
 
   @override
   String stepDotsGoToStepOf(Object i, Object total) {
-    return 'Go to step $i of $total';
+    return 'Ir al paso $i de $total';
   }
 
   @override
   String healthChipLearnAbout(Object label) {
-    return 'Learn about $label';
+    return 'Más información sobre $label';
   }
 
   @override
   String healthChipRemove(Object label) {
-    return 'Remove $label';
+    return 'Quitar $label';
   }
 
   @override
   String crisisSheetTextHomeTo(Object crisisTextLine) {
-    return 'Text HOME to $crisisTextLine';
+    return 'Envíe HOME al $crisisTextLine';
   }
 
   @override
   String crisisSheetTreatmentReferrals(Object samhsa) {
-    return '$samhsa · treatment referrals';
+    return '$samhsa · derivaciones a tratamiento';
   }
 
   @override
   String crisisSheetKnowYourRights(Object paProtectionAdvocacy) {
-    return '$paProtectionAdvocacy · know your rights';
+    return '$paProtectionAdvocacy · conozca sus derechos';
   }
 
   @override
   String fdaLabelDialogFdaLabel(Object medName) {
-    return '$medName — FDA label';
+    return '$medName: etiqueta de la FDA';
   }
 
   @override
   String nlmAttributionSourceUSNationalLibrary(Object medicalDisclaimer) {
-    return 'Source: U.S. National Library of Medicine. $medicalDisclaimer';
+    return 'Fuente: Biblioteca Nacional de Medicina de EE. UU. $medicalDisclaimer';
   }
 
   @override
   String aiConsentDialogToAutofillYourDirectiveThe(Object label) {
-    return 'To autofill your directive, the whole document — including any personal details on it (names, dates of birth, addresses, phone numbers) — is sent to $label so it can read it and fill in your fields.';
+    return 'Para autocompletar su directiva, el documento completo, incluidos los datos personales que contenga (nombres, fechas de nacimiento, direcciones, números de teléfono), se envía a $label para que pueda leerlo y completar sus campos.';
   }
 
   @override
   String aiConsentDialogForMoreAccurateTranscriptionEspecially(Object label) {
-    return 'For more accurate transcription (especially medication names and conditions), your voice recording — including any personal details you say — is sent to $label to turn into text.';
+    return 'Para una transcripción más precisa (especialmente de nombres de medicamentos y afecciones), su grabación de voz, incluidos los datos personales que diga, se envía a $label para convertirla en texto.';
   }
 
   @override
   String aiConsentDialogTextYouEnterWillBe(Object label, Object provider) {
-    return '• Text you enter will be sent to $label for AI processing. $provider\n';
+    return '• El texto que ingrese se enviará a $label para procesarlo con IA. $provider\n';
   }
 
   @override
   String aiConsentDialogByTappingIAuthorizeYou(Object label) {
-    return '\nBy tapping \"I Authorize,\" you consent to sending your text to $label for AI processing under these terms.\n\nThis notice appears once per session.';
+    return '\nAl tocar \"Autorizo\", usted acepta enviar su texto a $label para procesarlo con IA según estos términos.\n\nEste aviso aparece una vez por sesión.';
   }
 
   @override
-  String get exportDraftModeFinal => 'Final copy';
+  String get exportDraftModeFinal => 'Copia final';
 
   @override
-  String get exportDraftModeDraft => 'Draft';
+  String get exportDraftModeDraft => 'Borrador';
 
   @override
-  String get exportDraftModeSignedExists => 'Draft · signed copy exists';
+  String get exportDraftModeSignedExists =>
+      'Borrador · existe una copia firmada';
 
   @override
   String exportOpenedManyPdfs(int count) {
-    return 'Opened $count PDFs in new tabs — print or save each from your PDF viewer.';
+    return 'Se abrieron $count PDF en pestañas nuevas; imprima o guarde cada uno desde su visor de PDF.';
   }
 
   @override
   String get exportOpenedOnePdf =>
-      'Opened in a new tab — use Print or Download in your PDF viewer.';
+      'Se abrió en una pestaña nueva; use Imprimir o Descargar en su visor de PDF.';
 
   @override
   String get exportNoAgentDesignated =>
-      'No agent designated — agent sections will be blank';
+      'No hay agente designado; las secciones del agente quedarán en blanco';
 
   @override
-  String get exportWalletYourName => 'Your name';
+  String get exportWalletYourName => 'Su nombre';
 
   @override
-  String get exportWalletSignToActivate => 'sign to activate';
+  String get exportWalletSignToActivate => 'firme para activar';
 
   @override
-  String get exportEffectiveCondition => 'Effective condition';
+  String get exportEffectiveCondition => 'Condición de entrada en vigor';
 
   @override
-  String get exportWitnessSignatures => 'Witness signatures';
+  String get exportWitnessSignatures => 'Firmas de los testigos';
 
   @override
-  String get exportPrintedCopyType => 'Printed copy type';
+  String get exportPrintedCopyType => 'Tipo de copia impresa';
 
   @override
   String get exportADraftPrintsALight =>
-      'A draft prints a light “DRAFT” watermark on every page — for sending a copy while you keep the signed paper original. Tick as many as you like — Download gives you one PDF of each.';
+      'Un borrador imprime una marca de agua clara de “BORRADOR” en cada página, para enviar una copia mientras usted conserva el original firmado en papel. Marque todos los que quiera; Descargar le da un PDF de cada uno.';
 
   @override
-  String get exportDocumentLanguage => 'Document language';
+  String get exportDocumentLanguage => 'Idioma del documento';
 
   @override
   String get exportThePlainLanguageOfficialForm =>
-      'The plain-language official form is the one you sign and use — it is the legally valid directive. The legal-language version restates it in formal statutory wording for reference only and is not the document you sign.';
+      'El formulario oficial en lenguaje sencillo es el que usted firma y usa: es la directiva legalmente válida. La versión en lenguaje jurídico lo reformula con la redacción formal de la ley solo como referencia y no es el documento que usted firma.';
 
   @override
   String get exportThisOpensYourDirectiveIn =>
-      'This opens your directive in your PDF viewer (a new browser tab), where you can Print it or save/Download it — it will NOT download automatically.';
+      'Esto abre su directiva en su visor de PDF (una nueva pestaña del navegador), donde puede imprimirla o guardarla/descargarla; NO se descargará automáticamente.';
 
   @override
-  String get exportWalletCard => 'Wallet card';
+  String get exportWalletCard => 'Tarjeta de bolsillo';
 
   @override
   String get exportACreditCardSizedSummary =>
-      'A credit-card-sized summary you can print and carry.';
+      'Un resumen del tamaño de una tarjeta de crédito que puede imprimir y llevar consigo.';
 
   @override
-  String get exportSaveAnEditableCopy => 'Save an editable copy';
+  String get exportSaveAnEditableCopy => 'Guardar una copia editable';
 
   @override
   String get exportNotAFinishedDocumentThis =>
-      'Not a finished document — this is how you save your progress. The web app can’t store your work on this device, so download this file to keep it, then re-upload it later (here or on another device) to keep editing. Nothing is stored online.';
+      'No es un documento terminado: así es como guarda su progreso. La aplicación web no puede almacenar su trabajo en este dispositivo, así que descargue este archivo para conservarlo y luego vuelva a subirlo (aquí o en otro dispositivo) para seguir editando. No se almacena nada en línea.';
 
   @override
   String get exportEncryptingHindersOthersFromReading =>
-      'Encrypting hinders others from reading it; the app still opens it with no passphrase.';
+      'El cifrado dificulta que otros lo lean; la aplicación lo sigue abriendo sin frase de contraseña.';
 
   @override
-  String get exportMachineReadableFormats => 'Machine-readable formats';
+  String get exportMachineReadableFormats => 'Formatos legibles por máquina';
 
   @override
   String get exportYourPdfAboveIsThe =>
-      'Your PDF above is the document you sign — these are data exports for your records, a spreadsheet, or a health system. FHIR is the standard format hospitals use to exchange medical records; CSV is a spreadsheet file (opens in Excel or Google Sheets).';
+      'El PDF de arriba es el documento que usted firma; estas son exportaciones de datos para sus registros, una hoja de cálculo o un sistema de salud. FHIR es el formato estándar que usan los hospitales para intercambiar historias clínicas; CSV es un archivo de hoja de cálculo (se abre en Excel o Google Sheets).';
 
   @override
   String aiSetupTestOk(String provider) {
-    return '$provider responded. This key and model work.';
+    return '$provider respondió. Esta clave y este modelo funcionan.';
   }
 
   @override
   String get aiSetupPrivacyLeadGemini =>
-      'On the Gemini free tier, Google may use data you send to improve their AI products, and human reviewers may read your inputs.';
+      'En el nivel gratuito de Gemini, Google puede usar los datos que envíe para mejorar sus productos de IA, y revisores humanos pueden leer lo que envía.';
 
   @override
   String aiSetupPrivacyLeadOther(String provider) {
-    return 'Your $provider key sends data to $provider; their data-use and retention policy applies.';
+    return 'Su clave de $provider envía datos a $provider; se aplica su política de uso y conservación de datos.';
   }
 
   @override
   String get aiSetupPrivacyKeyEphemeral =>
-      'Your API key is kept in memory for this session, with a temporary copy for up to 10 minutes (for crash recovery); it is discarded when the session ends.';
+      'Su clave de API se mantiene en memoria durante esta sesión, con una copia temporal de hasta 10 minutos (para recuperarse de fallos); se descarta cuando termina la sesión.';
 
   @override
   String get aiSetupPrivacyKeyStored =>
-      'Your API key is stored securely on this device only and is never shared with anyone other than your AI provider.';
+      'Su clave de API se guarda de forma segura solo en este dispositivo y nunca se comparte con nadie más que su proveedor de IA.';
 
   @override
   String aiSetupPrivacyNoticeBody(String lead, String keyLine) {
-    return '$lead\n\nThe AI features in this app send text you enter in form fields and chat messages to your AI provider\'s servers. Do not include personally identifying details (full legal name, Social Security number, date of birth, etc.) in AI chat or when using AI Suggest.\n\n$keyLine';
+    return '$lead\n\nLas funciones de IA de esta aplicación envían a los servidores de su proveedor de IA el texto que usted ingresa en los campos del formulario y en los mensajes del chat. No incluya datos de identificación personal (nombre legal completo, número de Seguro Social, fecha de nacimiento, etc.) en el chat de IA ni al usar Sugerencias de IA.\n\n$keyLine';
   }
 
   @override
   String get aiSetupDuckDuckGoNote =>
-      'All browsing is private (Fire Button clears)';
+      'Toda la navegación es privada (el botón Fire la borra)';
 
   @override
   String aiSetupProviderFree(String provider) {
-    return '$provider (free)';
+    return '$provider (gratis)';
   }
 
   @override
@@ -6007,428 +6114,431 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String aiSetupShortcutMacOnly(String browser, String macShortcut) {
-    return '$browser:  $macShortcut  (Mac only)';
+    return '$browser:  $macShortcut  (solo Mac)';
   }
 
   @override
   String get feAiUnreachable =>
-      'Couldn\'t reach the AI service. Check your internet connection. If you are using the web app, this provider may also be blocked by your browser\'s security policy — Gemini and Claude both work in the browser.';
+      'No se pudo conectar con el servicio de IA. Revise su conexión a internet. Si usa la aplicación web, es posible que la política de seguridad de su navegador también bloquee a este proveedor; Gemini y Claude funcionan en el navegador.';
 
   @override
   String get feNoInternet =>
-      'No internet connection. Please check your network and try again.';
+      'No hay conexión a internet. Revise su red e intente de nuevo.';
 
   @override
   String get feTimeout =>
-      'The request timed out. Please check your connection and try again.';
+      'Se agotó el tiempo de espera de la solicitud. Revise su conexión e intente de nuevo.';
 
   @override
   String get feBlocked =>
-      'Couldn\'t reach the AI service — the request was blocked or the connection failed. Check your internet connection, and if you are on the web app try Gemini or Claude, which work in the browser.';
+      'No se pudo conectar con el servicio de IA: la solicitud se bloqueó o la conexión falló. Revise su conexión a internet y, si usa la aplicación web, pruebe Gemini o Claude, que funcionan en el navegador.';
 
   @override
   String get feRateLimited =>
-      'Too many requests. Please wait a moment and try again.';
+      'Demasiadas solicitudes. Espere un momento e intente de nuevo.';
 
   @override
   String get feKeyRejected =>
-      'Your API key was rejected. Open AI setup and check the key is correct, still active, and belongs to the selected provider.';
+      'Su clave de API fue rechazada. Abra la configuración de IA y verifique que la clave sea correcta, siga activa y pertenezca al proveedor seleccionado.';
 
   @override
   String get feModelUnavailable =>
-      'The selected AI model isn\'t available — it may have been retired. Pick a different model in AI setup.';
+      'El modelo de IA seleccionado no está disponible; es posible que se haya retirado. Elija otro modelo en la configuración de IA.';
 
   @override
   String get feEmptyResponse =>
-      'The AI returned no results. Try again or enter the information manually.';
+      'La IA no devolvió resultados. Intente de nuevo o ingrese la información manualmente.';
 
   @override
   String get feBadFormat =>
-      'The AI response was not in the expected format. Please try again.';
+      'La respuesta de la IA no tenía el formato esperado. Intente de nuevo.';
 
   @override
   String get feServiceError =>
-      'The AI service encountered an error. Please try again later.';
+      'El servicio de IA tuvo un error. Intente de nuevo más tarde.';
 
   @override
   String get fePermission =>
-      'Permission was not granted. Please check your device settings.';
+      'No se concedió el permiso. Revise la configuración de su dispositivo.';
 
   @override
-  String get feGeneric => 'Something went wrong. Please try again.';
+  String get feGeneric => 'Algo salió mal. Intente de nuevo.';
 
   @override
   String assistantSendError(String error) {
-    return 'Sorry, I encountered an error: $error';
+    return 'Lo siento, ocurrió un error: $error';
   }
 
   @override
   String assistantVerifyError(String error) {
-    return 'Sorry, I couldn\'t verify that on the web: $error';
+    return 'Lo siento, no pude verificarlo en la web: $error';
   }
 
   @override
   String get permissionsOverviewUnlockingEncryptedOnDeviceStorage =>
-      'Unlocking encrypted on-device storage (native app only; not used by the web app).';
+      'Desbloquear el almacenamiento cifrado en el dispositivo (solo en la aplicación nativa; la aplicación web no lo usa).';
 
   @override
   String get permissionsOverviewUsedOnlyToVerifyYour =>
-      'Used only to verify your identity on unlock';
+      'Se usa solo para verificar su identidad al desbloquear';
 
   @override
   String get permissionsOverviewBiometricDataNeverLeavesThe =>
-      'Biometric data never leaves the OS keystore';
+      'Los datos biométricos nunca salen del almacén de claves del sistema operativo';
 
   @override
   String get permissionsOverviewNoBiometricDataIsSent =>
-      'No biometric data is sent to any server';
+      'No se envían datos biométricos a ningún servidor';
 
   @override
   String get permissionsOverviewFallsBackToAPasscode =>
-      'Falls back to a passcode you choose if biometrics fail';
+      'Si la biometría falla, se usa un código que usted elige';
 
   @override
   String get permissionsOverviewNotApplicableOnThisPlatform =>
-      'Not applicable on this platform';
+      'No aplica en esta plataforma';
 
   @override
   String get permissionsOverviewRemindingYouAboutWitnessSigning =>
-      'Reminding you about witness signing, renewals, and check-ins.';
+      'Recordatorios sobre la firma de testigos, renovaciones y revisiones periódicas.';
 
   @override
   String get permissionsOverviewYouChooseWhichRemindersTo =>
-      'You choose which reminders to enable';
+      'Usted elige qué recordatorios activar';
 
   @override
   String get permissionsOverviewNotificationsAreScheduledLocallyOn =>
-      'Notifications are scheduled locally on this device';
+      'Las notificaciones se programan localmente en este dispositivo';
 
   @override
   String get permissionsOverviewNoContentPiiDirectiveText =>
-      'No content (PII, directive text) is in any notification body';
+      'Ninguna notificación incluye contenido (datos personales ni texto de la directiva)';
 
   @override
   String get permissionsOverviewDisablePerCategoryInDevice =>
-      'Disable per-category in device Settings → Notifications';
+      'Desactívelas por categoría en Configuración del dispositivo → Notificaciones';
 
   @override
   String get permissionsOverviewSnappingAPhotoOfYour =>
-      'Snapping a photo of your ID, medication labels, or condition lists for AI-assisted field extraction. Coming in a later release.';
+      'Tomar una foto de su identificación, etiquetas de medicamentos o listas de afecciones para extraer campos con ayuda de la IA. Disponible en una versión futura.';
 
   @override
   String get permissionsOverviewPhotoIsSentToAi =>
-      'Photo is sent to AI only to read it';
+      'La foto se envía a la IA solo para leerla';
 
   @override
   String get permissionsOverviewPhotoIsDiscardedRightAfter =>
-      'Photo is discarded right after extraction';
+      'La foto se descarta justo después de la extracción';
 
   @override
   String get permissionsOverviewNothingIsSavedToYour =>
-      'Nothing is saved to your device\'s photo library by default';
+      'De forma predeterminada, no se guarda nada en la galería de fotos de su dispositivo';
 
   @override
   String get permissionsOverviewYouReviewEveryFieldBefore =>
-      'You review every field before it\'s used';
+      'Usted revisa cada campo antes de que se use';
 
   @override
   String get permissionsOverviewNotYetWiredFeatureIn =>
-      'Not yet wired — feature in a future release';
+      'Aún no conectado: función de una versión futura';
 
   @override
   String get permissionsOverviewSpeakingLongFormAnswersE =>
-      'Speaking long-form answers (e.g. \"anything else\") instead of typing. Coming in a later release.';
+      'Dictar respuestas largas (por ejemplo, \"algo más\") en lugar de escribirlas. Disponible en una versión futura.';
 
   @override
   String get permissionsOverviewAudioIsProcessedOnDevice =>
-      'Audio is processed on-device when possible';
+      'El audio se procesa en el dispositivo cuando es posible';
 
   @override
   String get permissionsOverviewIfSentToAiFor =>
-      'If sent to AI for transcription, it isn\'t stored';
+      'Si se envía a la IA para transcribirlo, no se almacena';
 
   @override
   String get permissionsOverviewTranscriptStaysInYourSession =>
-      'Transcript stays in your session — never uploaded';
+      'La transcripción se queda en su sesión; nunca se sube';
 
   @override
   String get permissionsOverviewToggleOffAtAnyTime =>
-      'Toggle off at any time in Settings';
+      'Desactívelo en cualquier momento en Configuración';
 
   @override
   String get permissionsOverviewPickingAnAgentOrWitness =>
-      'Picking an agent or witness from your address book instead of typing their details. Coming in a later release.';
+      'Elegir un agente o testigo de su libreta de direcciones en lugar de escribir sus datos. Disponible en una versión futura.';
 
   @override
   String get permissionsOverviewWeNeverUploadYourContacts =>
-      'We never upload your contacts';
+      'Nunca subimos sus contactos';
 
   @override
   String get permissionsOverviewSearchRunsLocallyOnThis =>
-      'Search runs locally on this device';
+      'La búsqueda se hace localmente en este dispositivo';
 
   @override
   String get permissionsOverviewOnlyTheContactYouPick =>
-      'Only the contact you pick is brought into the directive';
+      'Solo el contacto que elija se agrega a la directiva';
 
   @override
   String get permissionsOverviewYouCanRevokeAccessIn =>
-      'You can revoke access in Settings any time';
+      'Puede revocar el acceso en Configuración en cualquier momento';
 
   @override
-  String get permissionsOverviewAvailableOsManaged => 'Available · OS-managed';
+  String get permissionsOverviewAvailableOsManaged =>
+      'Disponible · administrado por el sistema';
 
   @override
-  String get eduBrowseIntroduction => 'Introduction';
+  String get eduBrowseIntroduction => 'Introducción';
 
   @override
   String get eduBrowseWhatAnMhadIsAnd =>
-      'What an MHAD is and who should sign one';
+      'Qué es una DASM y quién debería firmarla';
 
   @override
-  String get eduBrowseCombinedForm => 'Combined Form';
+  String get eduBrowseCombinedForm => 'Formulario combinado';
 
   @override
   String get eduBrowseBothAnAgentAndTreatment =>
-      'Both an agent and treatment preferences';
+      'Un agente y preferencias de tratamiento';
 
   @override
   String get eduBrowseTreatmentPreferencesWithoutAnAgent =>
-      'Treatment preferences without an agent';
+      'Preferencias de tratamiento sin agente';
 
   @override
-  String get eduBrowsePowerOfAttorney => 'Power of Attorney';
+  String get eduBrowsePowerOfAttorney => 'Poder Notarial';
 
   @override
   String get eduBrowseAgentDesignationWithoutPreferences =>
-      'Agent designation without preferences';
+      'Designación de agente sin preferencias';
 
   @override
-  String get eduBrowseFrequentlyAsked => 'Frequently Asked';
+  String get eduBrowseFrequentlyAsked => 'Preguntas frecuentes';
 
   @override
   String get eduBrowseCommonQuestionsAboutMhads =>
-      'Common questions about MHADs';
+      'Preguntas comunes sobre las DASM';
 
   @override
-  String get eduBrowseGlossary => 'Glossary';
+  String get eduBrowseGlossary => 'Glosario';
 
   @override
-  String get eduBrowseEveryLegalTermDefined => 'Every legal term, defined';
+  String get eduBrowseEveryLegalTermDefined =>
+      'Todos los términos legales, definidos';
 
   @override
-  String get eduBrowseBeyondTheBooklet => 'Beyond the Booklet';
+  String get eduBrowseBeyondTheBooklet => 'Más allá del folleto';
 
   @override
   String get eduBrowseTopicsNotCoveredInThe =>
-      'Topics not covered in the official PA booklet';
+      'Temas que no trata el folleto oficial de PA';
 
   @override
-  String get eduBrowseYourChecklist => 'Your Checklist';
+  String get eduBrowseYourChecklist => 'Su lista de verificación';
 
   @override
   String get eduBrowseStepByStepDistributionRevocation =>
-      'Step-by-step distribution + revocation guides';
+      'Guías paso a paso de distribución y revocación';
 
   @override
   String get webLandingPreferPaperOpenAnyOf =>
-      'Prefer paper? Open any of the three empty official forms to print and fill in by hand — no account or wizard needed.';
+      '¿Prefiere papel? Abra cualquiera de los tres formularios oficiales en blanco para imprimirlo y completarlo a mano; no necesita cuenta ni asistente.';
 
   @override
-  String get webLandingNoAccountRequired => 'No account required';
+  String get webLandingNoAccountRequired => 'No necesita cuenta';
 
   @override
   String get webLandingNoEmailNoPasswordNo =>
-      'No email, no password, no sign-up.';
+      'Sin correo, sin contraseña, sin registro.';
 
   @override
-  String get webLandingNothingLeavesYourBrowser =>
-      'Nothing leaves your browser';
+  String get webLandingNothingLeavesYourBrowser => 'Nada sale de su navegador';
 
   @override
   String get webLandingYourAnswersLiveInThis =>
-      'Your answers live in this tab. We never see them.';
+      'Sus respuestas viven en esta pestaña. Nunca las vemos.';
 
   @override
-  String get webLandingNoCookiesNoTracking => 'No cookies, no tracking';
+  String get webLandingNoCookiesNoTracking => 'Sin cookies, sin rastreo';
 
   @override
   String get webLandingNoAnalyticsNoThirdParty =>
-      'No analytics, no third-party scripts.';
+      'Sin analíticas ni scripts de terceros.';
 
   @override
-  String get webLandingYouKeepTheFile => 'You keep the file';
+  String get webLandingYouKeepTheFile => 'Usted conserva el archivo';
 
   @override
   String get webLandingSaveThePdfFromYour =>
-      'Save the PDF from your viewer — that’s the only copy.';
+      'Guarde el PDF desde su visor: es la única copia.';
 
   @override
   String get pinDialogPasscodeTooShort =>
-      'Passcode must be at least 4 characters.';
+      'El código debe tener al menos 4 caracteres.';
 
   @override
-  String get pinDialogPasscodesDontMatch => 'Passcodes do not match.';
+  String get pinDialogPasscodesDontMatch => 'Los códigos no coinciden.';
 
   @override
-  String get pinDialogUnlockPrivateMode => 'Unlock private mode';
+  String get pinDialogUnlockPrivateMode => 'Desbloquear el modo privado';
 
   @override
-  String get pinDialogEnterPasscode => 'Please enter your passcode.';
+  String get pinDialogEnterPasscode => 'Ingrese su código.';
 
   @override
   String get pinDialogTooManyAttempts =>
-      'Too many attempts. Please wait 30 seconds.';
+      'Demasiados intentos. Espere 30 segundos.';
 
   @override
   String get pinDialogIncorrectPasscode =>
-      'Incorrect passcode. Please try again.';
+      'Código incorrecto. Intente de nuevo.';
 
   @override
-  String get deviceSecurityWarningTitle => 'Device Security Warning';
+  String get deviceSecurityWarningTitle =>
+      'Advertencia de seguridad del dispositivo';
 
   @override
   String get deviceSecurityWarningBody =>
-      'Your device appears to be rooted/jailbroken. This may put your sensitive health data at risk. Consider using a non-modified device for storing advance directives.';
+      'Parece que su dispositivo tiene acceso root o jailbreak. Esto puede poner en riesgo sus datos de salud sensibles. Considere usar un dispositivo sin modificar para guardar directivas anticipadas.';
 
   @override
-  String get deviceSecurityIUnderstand => 'I Understand';
+  String get deviceSecurityIUnderstand => 'Entiendo';
 
   @override
-  String get blankFormPrintTitle => 'Print a blank form';
+  String get blankFormPrintTitle => 'Imprimir un formulario en blanco';
 
   @override
   String blankFormPrintError(String error) {
-    return 'Could not open the blank form to print: $error';
+    return 'No se pudo abrir el formulario en blanco para imprimir: $error';
   }
 
   @override
   String launchCopiedToClipboard(String value) {
-    return '$value copied to clipboard';
+    return '$value copiado al portapapeles';
   }
 
   @override
-  String get reminderRenewMetricSections => 'sections';
+  String get reminderRenewMetricSections => 'secciones';
 
   @override
-  String get reminderRenewMetricWetInk => 'wet-ink';
+  String get reminderRenewMetricWetInk => 'con tinta';
 
   @override
-  String get reminderRenewMetricSigning => 'signing';
+  String get reminderRenewMetricSigning => 'firma';
 
   @override
   String get reminderRenewMetricMin => 'min';
 
   @override
-  String get educationBefore => 'before';
+  String get educationBefore => 'antes';
 
   @override
-  String get assistantGeneralQuestion => 'General question';
+  String get assistantGeneralQuestion => 'Pregunta general';
 
   @override
-  String get assistantContextPanelStrippedBeforeSend => 'Stripped before send';
+  String get assistantContextPanelStrippedBeforeSend =>
+      'Se quita antes de enviar';
 
   @override
   String get assistantSuggestWalkMeThroughFillingOut =>
-      'Walk me through filling out my directive step by step';
+      'Guíeme paso a paso para completar mi directiva';
 
   @override
   String get assistantSuggestWhatIsAMentalHealth =>
-      'What is a Mental Health Advance Directive?';
+      '¿Qué es una Directiva Anticipada de Salud Mental?';
 
   @override
   String get assistantSuggestWhatSTheDifferenceBetween =>
-      'What\'s the difference between Combined, Declaration, and POA?';
+      '¿Cuál es la diferencia entre Combinado, Declaración y Poder Notarial?';
 
   @override
-  String get assistantSuggestWhoCanBeMyAgent => 'Who can be my agent?';
+  String get assistantSuggestWhoCanBeMyAgent => '¿Quién puede ser mi agente?';
 
   @override
   String get assistantSuggestWhatMedicationsShouldIList =>
-      'What medications should I list?';
+      '¿Qué medicamentos debo anotar?';
 
   @override
-  String get assistantSuggestWhatDoesEctMean => 'What does ECT mean?';
+  String get assistantSuggestWhatDoesEctMean => '¿Qué significa TEC?';
 
   @override
   String get assistantSuggestHowLongIsTheDirective =>
-      'How long is the directive valid?';
+      '¿Por cuánto tiempo es válida la directiva?';
 
   @override
   String get assistantSuggestCanIChangeMyDirective =>
-      'Can I change my directive later?';
+      '¿Puedo cambiar mi directiva más adelante?';
 
   @override
   String get ulyssesOnlyAppliesOnceIHave =>
-      'Only applies once I have been formally found to lack capacity';
+      'Solo se aplica una vez que se haya determinado formalmente que no tengo capacidad';
 
   @override
   String get ulyssesOnlyForTreatmentsIExplicitly =>
-      'Only for treatments I explicitly named (medications, ECT, facility)';
+      'Solo para los tratamientos que nombré explícitamente (medicamentos, TEC, centro)';
 
   @override
   String get ulyssesDoesNotAuthorizePhysicalRestraint =>
-      'Does not authorize physical restraint';
+      'No autoriza la sujeción física';
 
   @override
   String get ulyssesACourtAppointedGuardianNot =>
-      'A court-appointed guardian (not the agent) may revoke, suspend, or terminate';
+      'Un tutor designado por un tribunal (no el agente) puede revocarla, suspenderla o darla por terminada';
 
   @override
   String get ulyssesMyDirectiveStillTerminatesAt =>
-      'My directive still terminates at 2 years — unless I am incapable when it would expire, in which case it remains in effect (§§ 5824(e), 5834(c))';
+      'Mi directiva sigue terminando a los 2 años, a menos que yo esté incapacitado cuando vencería; en ese caso sigue vigente (§§ 5824(e), 5834(c))';
 
   @override
   String homeHeroPercentComplete(int percent) {
-    return '$percent% complete';
+    return '$percent% completado';
   }
 
   @override
-  String get homeHeroReadyToReviewSign => 'Ready to review & sign';
+  String get homeHeroReadyToReviewSign => 'Lista para revisar y firmar';
 
   @override
   String homeHeroMoreSteps(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '~ $count more steps',
-      one: '~ 1 more step',
+      other: '~ $count pasos más',
+      one: '~ 1 paso más',
     );
     return '$_temp0';
   }
 
   @override
-  String get homeHeroCombinedForm => 'Combined form';
+  String get homeHeroCombinedForm => 'Formulario combinado';
 
   @override
-  String get homeHeroDeclarationOnly => 'Declaration only';
+  String get homeHeroDeclarationOnly => 'Solo Declaración';
 
   @override
   String homeHeroNamedMhad(String name) {
-    return '$name’s MHAD';
+    return 'DASM de $name';
   }
 
   @override
-  String get homeHeroYourMhad => 'Your MHAD';
+  String get homeHeroYourMhad => 'Su DASM';
 
   @override
-  String get educationNoResultsFound => 'No results found.';
+  String get educationNoResultsFound => 'No se encontraron resultados.';
 
   @override
   String educationNoResultsFor(String query) {
-    return 'No results for \"$query\"';
+    return 'No hay resultados para \"$query\"';
   }
 
   @override
-  String get relativeJustNow => 'just now';
+  String get relativeJustNow => 'justo ahora';
 
   @override
   String relativeMinsAgo(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count mins ago',
-      one: '1 min ago',
+      other: 'hace $count min',
+      one: 'hace 1 min',
     );
     return '$_temp0';
   }
@@ -6438,8 +6548,8 @@ class AppLocalizationsEs extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count hours ago',
-      one: '1 hour ago',
+      other: 'hace $count horas',
+      one: 'hace 1 hora',
     );
     return '$_temp0';
   }
@@ -6449,515 +6559,522 @@ class AppLocalizationsEs extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count days ago',
-      one: '1 day ago',
+      other: 'hace $count días',
+      one: 'hace 1 día',
     );
     return '$_temp0';
   }
 
   @override
-  String get revocationNotifyPrimaryCareDoctor => 'Primary care doctor';
+  String get revocationNotifyPrimaryCareDoctor => 'Médico de atención primaria';
 
   @override
-  String get revocationNotifyPsychiatristTherapist =>
-      'Psychiatrist / therapist';
+  String get revocationNotifyPsychiatristTherapist => 'Psiquiatra / terapeuta';
 
   @override
-  String get revocationNotifyNearestHospitalEr => 'Nearest hospital ER';
+  String get revocationNotifyNearestHospitalEr =>
+      'Sala de urgencias del hospital más cercano';
 
   @override
-  String get revocationNotifyPharmacy => 'Pharmacy';
+  String get revocationNotifyPharmacy => 'Farmacia';
 
   @override
-  String get revocationNotifyLocalRightsAdvocate => 'Local rights advocate';
+  String get revocationNotifyLocalRightsAdvocate =>
+      'Defensor de derechos local';
 
   @override
-  String get legalSheetBoldNot => 'not';
+  String get legalSheetBoldNot => 'no';
 
   @override
-  String get legalSheetBoldOnly => 'only';
+  String get legalSheetBoldOnly => 'solo';
 
   @override
-  String get legalSheetBoldTwoAdultWitnesses => 'two adult witnesses';
+  String get legalSheetBoldTwoAdultWitnesses => 'dos testigos adultos';
 
   @override
-  String get legalSheetBoldWitnessesCannotBe => 'Witnesses cannot be: ';
+  String get legalSheetBoldWitnessesCannotBe => 'Los testigos no pueden ser: ';
 
   @override
-  String get legalSheetBoldPrinted => 'printed';
+  String get legalSheetBoldPrinted => 'impresa';
 
   @override
-  String get legalSheetBoldMustComply => 'must comply';
+  String get legalSheetBoldMustComply => 'deben cumplir';
 
   @override
-  String get legalSheetBoldTwoYears => 'two years';
+  String get legalSheetBoldTwoYears => 'dos años';
 
   @override
   String get legalSheetBoldUnlessYouAreFoundIncapable =>
-      'unless you are found incapable';
+      'a menos que se determine que usted es incapaz';
 
   @override
-  String get legalSheetBoldNotSavedPermanently => 'not saved permanently';
+  String get legalSheetBoldNotSavedPermanently =>
+      'no se guarda de forma permanente';
 
   @override
   String get legalSheetBoldAutomaticallyKeepsIdentifyingDetailsOut =>
-      'automatically keeps identifying details out of what it sends to the AI assistant and its suggestions';
+      'excluye automáticamente los datos identificativos de lo que envía al asistente de IA y de sus sugerencias';
 
   @override
   String get legalSheetBoldUploadingIsNeverRequired =>
-      'Uploading is never required';
+      'Subir documentos nunca es obligatorio';
 
   @override
   String get legalSheetBoldTheseLookupsSendOnlyThe =>
-      'These lookups send only the medical term, code, or provider name being searched';
+      'Estas consultas solo envían el término médico, el código o el nombre del proveedor que se busca';
 
   @override
-  String get legalSheetYourRightsUnderAct194 => 'Your rights under Act 194';
+  String get legalSheetYourRightsUnderAct194 => 'Sus derechos según la Ley 194';
 
   @override
-  String get legalSheet247FreeConfidential => '24/7, free, confidential';
+  String get legalSheet247FreeConfidential => '24/7, gratis y confidencial';
 
   @override
-  String get legalSheetCallOrText988 => 'Call or text 988';
+  String get legalSheetCallOrText988 => 'Llame o envíe un mensaje al 988';
 
   @override
   String get crisisPlanTheFirstThingsINotice =>
-      'The first things I notice when my mood shifts.';
+      'Lo primero que noto cuando cambia mi estado de ánimo.';
 
   @override
   String get crisisPlanExternalThingsThatHaveSet =>
-      'External things that have set off episodes before.';
+      'Cosas externas que antes han desencadenado episodios.';
 
   @override
   String get crisisPlanSpecificConcreteNotSelfCare =>
-      'Specific, concrete. Not \'self-care\' — what actually works.';
+      'Específico y concreto. No \'autocuidado\': lo que de verdad funciona.';
 
   @override
   String get crisisPlanWordsThatGroundMeUseful =>
-      'Words that ground me. Useful for staff, EMS, family.';
+      'Palabras que me ayudan a centrarme. Útiles para el personal, los paramédicos y la familia.';
 
   @override
   String get crisisPlanApproachesThatEscalateMeBe =>
-      'Approaches that escalate me. Be specific.';
+      'Formas de trato que me alteran más. Sea específico.';
 
   @override
   String get reminderSheetsAgentsPrimaryAndAlternate =>
-      'Agents — primary and alternate';
+      'Agentes: principal y alternativo';
 
   @override
   String get reminderSheetsCurrentMedsOnesYouDon =>
-      'Current meds, ones you don\'t want, allergies';
+      'Medicamentos actuales, los que no quiere, alergias';
 
   @override
   String get reminderSheetsPreferredFacilityRoomEnvironment =>
-      'Preferred facility, room environment';
+      'Centro preferido, ambiente de la habitación';
 
   @override
   String get accessibilitySettingsAtkinsonHyperlegibleClearerEasierLetter =>
-      'Atkinson Hyperlegible — clearer, easier letter shapes';
+      'Atkinson Hyperlegible: letras más claras y fáciles de leer';
 
   @override
   String get accessibilitySettingsHeavierTextWeightEverywhere =>
-      'Heavier text weight everywhere';
+      'Texto más grueso en todas partes';
 
   @override
   String get accessibilitySettingsRemovesScreenTransitionsAndAnimations =>
-      'Removes screen transitions and animations';
+      'Quita las transiciones y animaciones de pantalla';
 
   @override
   String get accessibilitySettingsMaximizesSeparationBetweenTextAnd =>
-      'Maximizes separation between text and background';
+      'Maximiza el contraste entre el texto y el fondo';
 
   @override
   String get accessibilitySettingsUseYourBrowserOrDevice =>
-      'Use your browser or device read-aloud — see the guide below';
+      'Use la lectura en voz alta de su navegador o dispositivo; vea la guía de abajo';
 
   @override
   String get accessibilitySettingsChromeEdgeDesktop =>
-      'Chrome / Edge (desktop)';
+      'Chrome / Edge (computadora)';
 
   @override
   String get directiveFormChoiceTreatmentPreferencesWithoutNamingAn =>
-      'Treatment preferences without naming an agent.';
+      'Preferencias de tratamiento sin nombrar a un agente.';
 
   @override
   String get directiveFormChoiceNameADecisionMakerWithout =>
-      'Name a decision-maker without listing preferences.';
+      'Nombre a una persona que decida sin anotar preferencias.';
 
   @override
-  String get homeToolsGridFaqGlossary => 'FAQ, glossary';
+  String get homeToolsGridFaqGlossary => 'Preguntas frecuentes, glosario';
 
   @override
-  String get homeToolsGrid988More => '988 + more';
+  String get homeToolsGrid988More => '988 y más';
 
   @override
   String get facilitator45Min => '~45 min';
 
   @override
-  String get facilitatorFree => 'Free';
+  String get facilitatorFree => 'Gratis';
 
   @override
-  String get facilitatorPaBased => 'PA-based';
+  String get facilitatorPaBased => 'En PA';
 
   @override
-  String get facilitatorInPerson => 'In person';
+  String get facilitatorInPerson => 'En persona';
 
   @override
-  String get facilitatorYouStayInControl => 'You stay in control';
+  String get facilitatorYouStayInControl => 'Usted mantiene el control';
 
   @override
-  String get facilitatorEmailComposer => 'Email composer';
+  String get facilitatorEmailComposer => 'Redactor de correo';
 
   @override
-  String get facilitatorManualTranscribeBack => 'Manual transcribe back';
+  String get facilitatorManualTranscribeBack =>
+      'Transcripción manual de vuelta';
 
   @override
-  String get modeSelectionBiometrics => 'Biometrics';
+  String get modeSelectionBiometrics => 'Biometría';
 
   @override
   String get modeSelectionAes256 => 'AES-256';
 
   @override
-  String get modeSelectionSaveDrafts => 'Save drafts';
+  String get modeSelectionSaveDrafts => 'Guarda borradores';
 
   @override
-  String get modeSelectionAcrossSessions => 'Across sessions';
+  String get modeSelectionAcrossSessions => 'Entre sesiones';
 
   @override
-  String get modeSelectionNothingSaved => 'Nothing saved';
+  String get modeSelectionNothingSaved => 'No guarda nada';
 
   @override
-  String get modeSelectionInMemoryOnly => 'In-memory only';
+  String get modeSelectionInMemoryOnly => 'Solo en memoria';
 
   @override
-  String get modeSelectionSingleSession => 'Single session';
+  String get modeSelectionSingleSession => 'Una sola sesión';
 
   @override
-  String get pdfPreviewLoading => 'Loading…';
+  String get pdfPreviewLoading => 'Cargando…';
 
   @override
   String get pdfPreviewSelectASectionToPreview =>
-      'Select a section to preview.';
+      'Seleccione una sección para ver la vista previa.';
 
   @override
   String get pdfPreviewCouldNotRenderThePreview =>
-      'Could not render the preview.';
+      'No se pudo mostrar la vista previa.';
 
   @override
   String reminderSheetsStepN(int n) {
-    return 'Step $n';
+    return 'Paso $n';
   }
 
   @override
   String get sideEffectsNoneFound =>
-      'We couldn\'t find common side effects to list right now. You can add anything you\'re experiencing in the Anything-else step, and always raise side-effect concerns with your doctor.';
+      'En este momento no encontramos efectos secundarios comunes para mostrar. Puede agregar lo que esté experimentando en el paso Algo más y consulte siempre sus inquietudes sobre efectos secundarios con su médico.';
 
   @override
   String get sideEffectsGenerateError =>
-      'Something went wrong generating the list. Please try again, or note side effects yourself.';
+      'Algo salió mal al generar la lista. Intente de nuevo o anote usted mismo los efectos secundarios.';
 
   @override
-  String get inputPhoneInvalid => 'Enter a valid 10-digit phone number';
+  String get inputPhoneInvalid =>
+      'Ingrese un número de teléfono válido de 10 dígitos';
 
   @override
-  String get inputZipInvalid => 'Enter a 5-digit or 5+4-digit ZIP';
+  String get inputZipInvalid =>
+      'Ingrese un código postal de 5 dígitos o de 5+4 dígitos';
 
   @override
   String get audioGuideTipQualityDoesnTMatterAny =>
-      'Quality doesn\'t matter. Any phone voice memo works — the AI downsamples audio anyway, so a small low-quality file transcribes just as well as a large one.';
+      'La calidad no importa. Cualquier nota de voz del teléfono sirve: la IA reduce la calidad del audio de todos modos, así que un archivo pequeño de baja calidad se transcribe igual de bien que uno grande.';
 
   @override
   String get audioGuideTipKeepEachClipShortUnder =>
-      'Keep each clip short — under about 2 minutes. Record one clip per section below and upload them together; the app merges them. Long clips can time out.';
+      'Haga cada grabación corta, de menos de unos 2 minutos. Grabe una por cada sección de abajo y súbalas juntas; la aplicación las combina. Las grabaciones largas pueden agotar el tiempo de espera.';
 
   @override
   String get audioGuideTipSayMedicationAndDoctorNames =>
-      'Say medication and doctor names slowly and spell them. The AI won\'t guess a drug or condition it didn\'t clearly hear.';
+      'Diga los nombres de medicamentos y médicos despacio y deletréelos. La IA no adivinará un medicamento o afección que no haya oído con claridad.';
 
   @override
   String get stepSubtitleAboutYou =>
-      'Just the basics so this document is uniquely yours. Drop a photo of your ID and we\'ll read these for you.';
+      'Solo lo básico para que este documento sea exclusivamente suyo. Suba una foto de su identificación y los leeremos por usted.';
 
   @override
   String get stepSubtitleWhenItKicksIn =>
-      'The conditions under which your directive becomes active. You can pick more than one.';
+      'Las condiciones en las que su directiva entra en vigor. Puede elegir más de una.';
 
   @override
   String get stepSubtitlePeopleITrust =>
-      'They speak for you if you can\'t. You can name a primary, an alternate, and set limits on what they decide.';
+      'Hablan por usted si usted no puede. Puede nombrar a un agente principal y a uno alternativo, y poner límites a lo que deciden.';
 
   @override
   String get stepSubtitleGuardianNomination =>
-      'Rare, but worth planning for. A guardian is named by a court — not by you — and has broader authority than an agent.';
+      'Es poco común, pero conviene planificarlo. Un tutor lo nombra un tribunal, no usted, y tiene una autoridad más amplia que un agente.';
 
   @override
   String get stepSubtitleWhereIWantCare =>
-      'Facilities you prefer — and any you specifically want to avoid — plus room and environment preferences.';
+      'Los centros que prefiere, y los que quiere evitar específicamente, además de sus preferencias de habitación y ambiente.';
 
   @override
   String get stepSubtitleDiagnoses =>
-      'Help your care team see the whole picture in a crisis. Search by name — we attach the ICD-10 code your doctors use.';
+      'Ayude a su equipo de atención a ver el panorama completo en una crisis. Busque por nombre: adjuntamos el código CIE-10 que usan sus médicos.';
 
   @override
   String get stepSubtitleMedications =>
-      'What you take now (for your care team) plus the medications you refuse, limit, or prefer. Your refusals and limits are binding under Act 194.';
+      'Lo que toma ahora (para su equipo de atención) y los medicamentos que rechaza, limita o prefiere. Sus rechazos y límites son vinculantes según la Ley 194.';
 
   @override
   String get stepSubtitleAllergies =>
-      'Drug allergies, sensitivities, past adverse reactions. This is the most-checked section by ER staff.';
+      'Alergias a medicamentos, sensibilidades y reacciones adversas anteriores. Es la sección que más revisa el personal de urgencias.';
 
   @override
   String get stepSubtitleProceduresResearch =>
-      'Three treatments under PA law need your explicit consent. Set each one — your agent fills any gaps.';
+      'Según la ley de PA, tres tratamientos requieren su consentimiento explícito. Defina cada uno; su agente completa lo que falte.';
 
   @override
   String get stepSubtitleAnythingElse =>
-      'Free-form preferences not covered above. This is your voice — write it how you\'d say it.';
+      'Preferencias libres que no se trataron arriba. Es su voz: escríbalo como lo diría.';
 
   @override
   String get stepSubtitleReviewAndSign =>
-      'One last look, then we\'ll make your signing packet. Tap any section to edit.';
+      'Un último vistazo y luego prepararemos su paquete para firmar. Toque cualquier sección para editarla.';
 
   @override
-  String get formTypeNameCombined => 'Combined Declaration & Power of Attorney';
+  String get formTypeNameCombined => 'Declaración y Poder Notarial combinados';
 
   @override
-  String get formTypeNameDeclaration => 'Declaration Only';
+  String get formTypeNameDeclaration => 'Solo Declaración';
 
   @override
-  String get formTypeNamePoa => 'Power of Attorney Only';
+  String get formTypeNamePoa => 'Solo Poder Notarial';
 
   @override
-  String get formTypeShortCombined => 'Combined';
+  String get formTypeShortCombined => 'Combinado';
 
   @override
-  String get formTypeShortDeclaration => 'Declaration';
+  String get formTypeShortDeclaration => 'Declaración';
 
   @override
-  String get formTypeShortPoa => 'Power of Attorney';
+  String get formTypeShortPoa => 'Poder Notarial';
 
   @override
-  String get stepTitleAboutYou => 'About you';
+  String get stepTitleAboutYou => 'Sobre usted';
 
   @override
-  String get stepTitleWhenItKicksIn => 'When this kicks in';
+  String get stepTitleWhenItKicksIn => 'Cuándo entra en vigor';
 
   @override
-  String get stepTitlePeopleITrust => 'People I trust';
+  String get stepTitlePeopleITrust => 'Personas de confianza';
 
   @override
-  String get stepTitleGuardianNomination => 'If a court appoints a guardian';
+  String get stepTitleGuardianNomination => 'Si un tribunal nombra un tutor';
 
   @override
-  String get stepTitleWhereIWantCare => 'Where I want care';
+  String get stepTitleWhereIWantCare => 'Dónde quiero recibir atención';
 
   @override
-  String get stepTitleDiagnoses => 'Diagnoses';
+  String get stepTitleDiagnoses => 'Diagnósticos';
 
   @override
-  String get stepTitleMedications => 'Medications';
+  String get stepTitleMedications => 'Medicamentos';
 
   @override
-  String get stepTitleAllergies => 'Allergies & reactions';
+  String get stepTitleAllergies => 'Alergias y reacciones';
 
   @override
-  String get stepTitleProceduresResearch => 'Procedures & research';
+  String get stepTitleProceduresResearch => 'Procedimientos e investigación';
 
   @override
-  String get stepTitleAnythingElse => 'Anything else';
+  String get stepTitleAnythingElse => 'Algo más';
 
   @override
-  String get stepTitleReviewAndSign => 'Review';
+  String get stepTitleReviewAndSign => 'Revisión';
 
   @override
-  String get directiveStatusRevoked => 'Revoked';
+  String get directiveStatusRevoked => 'Revocada';
 
   @override
-  String get directiveStatusExpired => 'Expired';
+  String get directiveStatusExpired => 'Vencida';
 
   @override
-  String get directiveStatusActive => 'Active';
+  String get directiveStatusActive => 'Vigente';
 
   @override
-  String get directiveStatusDraft => 'Draft';
+  String get directiveStatusDraft => 'Borrador';
 
   @override
   String pastDirectiveSignedOn(String date) {
-    return 'signed $date';
+    return 'firmada el $date';
   }
 
   @override
   String pastDirectiveExpiredOn(String date) {
-    return 'expired $date';
+    return 'venció el $date';
   }
 
   @override
   String pastDirectiveExpiresOn(String date) {
-    return 'expires $date';
+    return 'vence el $date';
   }
 
   @override
-  String get settingsDefaultUserName => 'PA MHAD user';
+  String get settingsDefaultUserName => 'Usuario de DASM de PA';
 
   @override
   String rateDailyLimitUsed(int max) {
-    return 'You\'ve used all $max free requests for today. The limit resets at midnight. Consider upgrading to a paid API key for higher limits.';
+    return 'Ha usado las $max solicitudes gratuitas de hoy. El límite se restablece a medianoche. Considere pasar a una clave de API de pago para tener límites más altos.';
   }
 
   @override
   String rateTooManyThisMinute(int max, int seconds) {
-    return 'Too many requests this minute (limit: $max/min). Please wait $seconds seconds.';
+    return 'Demasiadas solicitudes en este minuto (límite: $max/min). Espere $seconds segundos.';
   }
 
   @override
   String rateTokenLimitThisMinute(int thousands) {
-    return 'Token limit reached this minute (${thousands}K/min). Please wait a moment before sending another request.';
+    return 'Se alcanzó el límite de tokens de este minuto (${thousands}K/min). Espere un momento antes de enviar otra solicitud.';
   }
 
   @override
-  String get rateDailyLimitReached => 'Daily limit reached';
+  String get rateDailyLimitReached => 'Se alcanzó el límite diario';
 
   @override
   String rateWaitStatus(int seconds, int remaining) {
-    return 'Wait ${seconds}s • $remaining requests left today';
+    return 'Espere $seconds s • quedan $remaining solicitudes hoy';
   }
 
   @override
   String rateRemainingStatus(int remainingToday, int remainingMinute) {
-    return '$remainingToday requests left today • $remainingMinute this minute';
+    return 'Quedan $remainingToday solicitudes hoy • $remainingMinute en este minuto';
   }
 
   @override
   String llmHeicUnsupported(String provider) {
-    return '$provider can\'t read HEIC/HEIF photos (the iPhone default). Switch to Gemini, or re-save the photo as JPEG or PNG first.';
+    return '$provider no puede leer fotos HEIC/HEIF (el formato predeterminado del iPhone). Cambie a Gemini o vuelva a guardar la foto como JPEG o PNG.';
   }
 
   @override
   String llmPdfUnsupported(String provider) {
-    return '$provider can\'t read PDFs here — switch to Gemini or Claude, or paste the document text instead.';
+    return '$provider no puede leer PDF aquí; cambie a Gemini o Claude, o pegue el texto del documento.';
   }
 
   @override
   String llmFileTypeUnsupported(String provider, String mimeType) {
-    return '$provider can\'t read $mimeType files here — switch to Gemini, or paste the text instead.';
+    return '$provider no puede leer archivos $mimeType aquí; cambie a Gemini o pegue el texto.';
   }
 
   @override
   String llmRateLimited(String provider) {
-    return 'Too many requests to $provider. Please wait a minute and try again.';
+    return 'Demasiadas solicitudes a $provider. Espere un minuto e intente de nuevo.';
   }
 
   @override
   String llmGeminiKeyRejected(String provider) {
-    return '$provider rejected your API key. Open AI setup and check the key is correct, still active, and has the Generative Language API enabled.';
+    return '$provider rechazó su clave de API. Abra la configuración de IA y verifique que la clave sea correcta, siga activa y tenga habilitada la Generative Language API.';
   }
 
   @override
   String llmGeminiModelNotFound(String provider, String model) {
-    return '$provider doesn\'t recognise the model \"$model\" — it may have been retired. Pick a different model in AI setup.';
+    return '$provider no reconoce el modelo \"$model\"; es posible que se haya retirado. Elija otro modelo en la configuración de IA.';
   }
 
   @override
   String llmNetworkError(String provider, String detail) {
-    return 'Couldn\'t reach $provider ($detail). Check your internet connection. If you are on the web app, this provider may also be blocked by your browser\'s CORS policy — Gemini and Claude both work in the browser.';
+    return 'No se pudo conectar con $provider ($detail). Revise su conexión a internet. Si usa la aplicación web, es posible que la política CORS de su navegador también bloquee a este proveedor; Gemini y Claude funcionan en el navegador.';
   }
 
   @override
   String llmKeyRejected(String provider) {
-    return '$provider rejected your API key. Open AI setup and check the key is correct, still active, and belongs to $provider.';
+    return '$provider rechazó su clave de API. Abra la configuración de IA y verifique que la clave sea correcta, siga activa y pertenezca a $provider.';
   }
 
   @override
   String llmModelNotFound(String provider, String model) {
-    return '$provider doesn\'t recognise the model \"$model\". Pick a different model in AI setup.';
+    return '$provider no reconoce el modelo \"$model\". Elija otro modelo en la configuración de IA.';
   }
 
   @override
   String get importFileUnreadable =>
-      'Could not read the file — it is corrupted or not an MHAD directive file.';
+      'No se pudo leer el archivo: está dañado o no es un archivo de directiva de DASM.';
 
   @override
   String get importFileUnrecognized =>
-      'This file is not a recognized directive file.';
+      'Este archivo no es un archivo de directiva reconocido.';
 
   @override
-  String get importFileCorrupted => 'The file is corrupted.';
+  String get importFileCorrupted => 'El archivo está dañado.';
 
   @override
-  String get importNotDirectiveFile => 'This is not a directive file.';
+  String get importNotDirectiveFile => 'Este no es un archivo de directiva.';
 
   @override
-  String get importNotMhadFile => 'This is not an MHAD directive file.';
+  String get importNotMhadFile => 'Este no es un archivo de directiva de DASM.';
 
   @override
   String get importNewerVersion =>
-      'This file was made by a newer version of the app. Please update to open it.';
+      'Este archivo se creó con una versión más reciente de la aplicación. Actualícela para abrirlo.';
 
   @override
-  String get importNoDirectiveData => 'The file contains no directive data.';
+  String get importNoDirectiveData =>
+      'El archivo no contiene datos de directiva.';
 
   @override
-  String get breachNoticeDefaultTitle => 'Notice of a data security incident';
+  String get breachNoticeDefaultTitle =>
+      'Aviso de un incidente de seguridad de datos';
 
   @override
-  String get breachNoticeWhatHappened => 'What happened';
+  String get breachNoticeWhatHappened => 'Qué pasó';
 
   @override
-  String get breachNoticeInformationInvolved => 'What information was involved';
+  String get breachNoticeInformationInvolved =>
+      'Qué información estuvo involucrada';
 
   @override
-  String get breachNoticeThirdParties => 'Who obtained the information';
+  String get breachNoticeThirdParties => 'Quién obtuvo la información';
 
   @override
-  String get breachNoticeWhatWeAreDoing => 'What we are doing';
+  String get breachNoticeWhatWeAreDoing => 'Qué estamos haciendo';
 
   @override
-  String get breachNoticeWhatYouCanDo => 'What you can do';
+  String get breachNoticeWhatYouCanDo => 'Qué puede hacer usted';
 
   @override
-  String get breachNoticeContactUs => 'How to contact us';
+  String get breachNoticeContactUs => 'Cómo comunicarse con nosotros';
 
   @override
-  String get breachNoticeAcknowledge => 'I have read this notice';
+  String get breachNoticeAcknowledge => 'He leído este aviso';
 
   @override
-  String get dateInputHint => 'MM/DD/YYYY';
+  String get dateInputHint => 'MM/DD/AAAA';
 
   @override
-  String get facilitatorGuidedTag => 'GUIDED SESSION · IN THE APP';
+  String get facilitatorGuidedTag => 'SESIÓN GUIADA · EN LA APLICACIÓN';
 
   @override
-  String get facilitatorGuidedTitle =>
-      'Talk it through, one question at a time';
+  String get facilitatorGuidedTitle => 'Háblelo, una pregunta a la vez';
 
   @override
   String get facilitatorGuidedBody =>
-      'The AI assistant asks the questions a trained facilitator would, in the same order: what a crisis looks like for you, what has helped or made things worse, who you trust, and then your choices. You fill in the form yourself — the assistant explains, it doesn\'t decide.';
+      'El asistente de IA hace las preguntas que haría un facilitador capacitado, en el mismo orden: cómo es una crisis para usted, qué le ha ayudado o empeorado las cosas, en quién confía y luego sus decisiones. Usted mismo completa el formulario; el asistente explica, no decide.';
 
   @override
-  String get facilitatorGuidedMetaPace => 'Stop any time';
+  String get facilitatorGuidedMetaPace => 'Deténgase cuando quiera';
 
   @override
-  String get facilitatorGuidedMetaAi => 'Uses your AI key';
+  String get facilitatorGuidedMetaAi => 'Usa su clave de IA';
 
   @override
-  String get facilitatorGuidedStart => 'Start a guided session';
+  String get facilitatorGuidedStart => 'Iniciar una sesión guiada';
 
   @override
-  String get facilitatorHelperStart => 'I\'m helping someone';
+  String get facilitatorHelperStart => 'Estoy ayudando a alguien';
 
   @override
   String get facilitatorGuidedOpeningPrompt =>
-      'I\'d like a guided session. Please walk me through my advance directive one question at a time, starting with what a crisis looks like for me.';
+      'Quisiera una sesión guiada. Por favor, guíeme por mi directiva anticipada una pregunta a la vez, empezando por cómo es una crisis para mí.';
 
   @override
   String get facilitatorHelperOpeningPrompt =>
-      'I\'m helping someone complete their advance directive. Please guide us through it one question at a time, starting with what a crisis looks like for them.';
+      'Estoy ayudando a alguien a completar su directiva anticipada. Por favor, guíenos una pregunta a la vez, empezando por cómo es una crisis para esa persona.';
 
   @override
-  String get assistantContextGuidedSession => 'Guided session';
+  String get assistantContextGuidedSession => 'Sesión guiada';
 
   @override
   String get assistantContextHelperSession =>
-      'Guided session · helping someone';
+      'Sesión guiada · ayudando a alguien';
 }

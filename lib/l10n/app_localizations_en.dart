@@ -4606,6 +4606,9 @@ class AppLocalizationsEn extends AppLocalizations {
       'This app helps Pennsylvania residents document their treatment preferences under ';
 
   @override
+  String get legalSheetPaAct194Of2004 => 'PA Act 194 of 2004';
+
+  @override
   String get legalSheetTheInformationIsForInformational =>
       '. The information is for informational purposes only and does ';
 

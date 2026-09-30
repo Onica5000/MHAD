@@ -52,8 +52,17 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
     super.dispose();
   }
 
+  /// The typed confirmation word: the localized one shown in the prompt
+  /// (e.g. REVOCAR in Spanish), or REVOKE. Checking only the English literal
+  /// made revocation impossible in any other language.
+  bool _confirmed() {
+    final typed = _confirmCtrl.text.trim().toUpperCase();
+    return typed == 'REVOKE' ||
+        typed == context.l10n.revocationRevoke.toUpperCase();
+  }
+
   Future<void> _revoke() async {
-    if (_confirmCtrl.text.trim().toUpperCase() != 'REVOKE') return;
+    if (!_confirmed()) return;
     setState(() => _busy = true);
     final repo = ref.read(directiveRepositoryProvider);
     await repo.updateStatus(widget.directiveId, DirectiveStatus.revoked);
@@ -262,9 +271,7 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
                   ),
                   const SizedBox(height: 12),
                   FilledButton.icon(
-                    onPressed: _confirmCtrl.text.trim().toUpperCase() ==
-                                'REVOKE' &&
-                            !_busy
+                    onPressed: _confirmed() && !_busy
                         ? _revoke
                         : null,
                     icon: const Icon(Icons.delete_forever_outlined),

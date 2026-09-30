@@ -171,7 +171,7 @@ List<_SectionData> _buildSections(BuildContext context, MhadPalette p) {
           TextSpan(
               text:
                   context.l10n.legalSheetThisAppHelpsPennsylvaniaResidents),
-          _bold('PA Act 194 of 2004'),
+          _bold(context.l10n.legalSheetPaAct194Of2004),
           TextSpan(
               text:
                   context.l10n.legalSheetTheInformationIsForInformational),
