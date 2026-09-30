@@ -171,12 +171,24 @@ The MHAD app includes the following security measures that reduce breach risk:
 
 ## Contact
 
-[App developer contact info to be filled in before release]
+The developer publishes no personal email, phone or postal address (owner
+decision, 2026-09-30). The HBNR "at least two contact methods" requirement is met
+by these channels:
 
-- Name: _______________
-- Email: _______________
-- Phone: _______________
-- Website: _______________
+- **In-app notice** (primary): a `breachNotice` entry in `assets/data/app_data.json`
+  shows the full-screen `BreachNoticeGate` to every user on next launch.
+- **Website**: the hosted privacy policy at
+  <https://onica5000.github.io/MHAD/privacy.html>, which also carries the
+  substitute (conspicuous) posting when individual contact is insufficient.
+- **Inquiries**: GitHub Issues at <https://github.com/Onica5000/MHAD/issues>.
+  Issues are public, so every notice must tell people **not** to post health or
+  identifying details there; the maintainer replies there and moves anything
+  sensitive off the public thread.
+
+If the substitute-notice rule is ever triggered (10+ individuals with
+insufficient contact information), the FTC rule also calls for a toll-free
+number active for at least 90 days. Set one up at that point; it is not
+required for day-to-day operation.
 
 ## Review Schedule
 
@@ -193,4 +205,5 @@ This plan should be reviewed:
 | 1.0     | 2026-03-16 | Initial breach notification plan |
 | 1.1     | 2026-05-19 | Updated to amended 16 CFR Part 318 (eff. 2024-07-29): concurrent FTC notice for ≥500, third-party-identity content field, ≥2 contact methods incl. in-app, "protecting affected individuals" content strengthened. (V4-H3.) |
 | 1.2     | 2026-06-28 | Generalized the third-party AI references from Gemini-only to the user-chosen provider (Gemini default; Anthropic/OpenAI/xAI optional) after the multi-provider AI change. (Gap-audit H2.) |
-| 1.3     | 2026-09-30 | In-app notice channel implemented (`breachNotice` in `app_data.json` → `BreachNoticeGate`); privacy policy now hosted at `/MHAD/privacy.html`, resolving the hosted-URL TODO. Developer contact block below is still unfilled. (V4-H3.) |
+| 1.3     | 2026-09-30 | In-app notice channel implemented (`breachNotice` in `app_data.json` → `BreachNoticeGate`); privacy policy now hosted at `/MHAD/privacy.html`, resolving the hosted-URL TODO. (V4-H3.) |
+| 1.4     | 2026-09-30 | Contact section completed: in-app notice + hosted policy page + GitHub Issues (no personal email/phone, per the owner). Toll-free number only if substitute notice is triggered. |

@@ -72,7 +72,7 @@ were superseded by regulations that changed *after* they were written.
 - **Fix:** Revise `BREACH_PLAN.md` to the amended content/timing; add an in-app breach
   notice surface as one of the two contact channels (the app is local-first, so an
   in-app banner is the realistic primary channel).
-- **Status:** `[x]` **DONE 2026-09-30** (one owner-side input left) — `BREACH_PLAN.md` was
+- **Status:** `[x]` **DONE 2026-09-30** (contact section completed; no personal email by owner choice) — `BREACH_PLAN.md` was
   already on the amended content/timing (v1.1). Now the in-app channel exists: a
   `breachNotice` block in `app_data.json` → full-screen `BreachNoticeGate` shown until the
   user acknowledges that notice id (`test/unit/breach_notice_test.dart`; the bundled JSON
@@ -375,15 +375,14 @@ Re-scoped for the web-first pivot (2026-06-20):
 | Priority (web app) | Count | Theme |
 |---|---|---|
 | Critical | 0 | (Both prior Criticals were Play-submission blockers → `deferred — native`.) |
-| High | 0 live | H6 test coverage, H3/H4 HBNR + state health-data laws → DONE 2026-09-30 (BREACH_PLAN needs the owner's contact details). H5 → deferred-native. |
+| High | 0 live | H6 test coverage, H3/H4 HBNR + state health-data laws → DONE 2026-09-30. H5 → deferred-native. |
 | Medium | 0 live | M8 (PDF protection), M10, M11 → DONE. M9 mooted. |
 | Low | 0 live | L12 facilitation / guided sessions → DONE 2026-09-30. |
 | Deferred — native | 3 | V4-C1 (privacy URL), V4-C2 (Play org account), V4-H5 (Apple AI rule) |
 | Closed since V4 | 2 | V4-H7 (orphan `AppStrings` deleted), V4-M9 (draw-to-sign pad dropped) |
 
 **Update 2026-09-30:** all live items above are closed. Remaining work is outside this
-backlog: a native-speaker review of the Spanish copy, the owner's contact details in
-`BREACH_PLAN.md`, and (optionally) translating the Learn articles. Dependencies were brought
+backlog: a native-speaker review of the Spanish copy and (optionally) translating the Learn articles. Dependencies were brought
 current on 2026-09-30 (Riverpod 3, go_router 17, drift 2.31, file_picker 13, share_plus 13,
 flutter_secure_storage 11, local_auth 3, notifications 22); `sqlite3` stays on 2.x to match
 `web/sqlite3.wasm`, and `sqlcipher_flutter_libs` (EOL, native-only) is unchanged.
