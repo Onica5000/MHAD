@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/illustrated_intro.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/data/educational_content.dart';
 import 'package:mhad/ui/education/education_article_detail.dart';
@@ -46,8 +47,7 @@ class _EducationScreenState extends State<EducationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isFiltered =
-        widget.filterIds != null && widget.filterIds!.isNotEmpty;
+    final isFiltered = widget.filterIds != null && widget.filterIds!.isNotEmpty;
 
     // Filtered view (deep-link from wizard Help) keeps the Material
     // AppBar with a back arrow — it's a narrow utility view, not the
@@ -57,7 +57,8 @@ class _EducationScreenState extends State<EducationScreen> {
     if (isFiltered) {
       return Scaffold(
         appBar: AppBar(
-            title: Text(widget.filterTitle ?? context.l10n.educationHelpTitle)),
+          title: Text(widget.filterTitle ?? context.l10n.educationHelpTitle),
+        ),
         body: _filteredSections.isEmpty
             ? _emptyArt(SpotArt.search, context.l10n.educationNoResultsFound)
             : ListView.builder(
@@ -149,34 +150,46 @@ class _EditorialLearnHub extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SectionLabel(context.l10n.navLearn),
-              Text.rich(
-                TextSpan(
+              IllustratedIntro(
+                art: SpotArt.book,
+                wideSize: 104,
+                narrowSize: 52,
+                label: SectionLabel(context.l10n.navLearn),
+                body: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TextSpan(text: context.l10n.educationUnderstand),
-                    TextSpan(
-                        text: context.l10n.educationBefore, style: TextStyle(color: p.primary)),
-                    TextSpan(text: context.l10n.educationYouSign),
+                    Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(text: context.l10n.educationUnderstand),
+                          TextSpan(
+                            text: context.l10n.educationBefore,
+                            style: TextStyle(color: p.primary),
+                          ),
+                          TextSpan(text: context.l10n.educationYouSign),
+                        ],
+                      ),
+                      style: const TextStyle(
+                        fontFamily: 'Instrument Serif',
+                        fontFamilyFallback: ['Georgia', 'serif'],
+                        fontStyle: FontStyle.italic,
+                        fontSize: 42,
+                        height: 1,
+                        letterSpacing: -0.8,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      context.l10n.educationMostOfThisComesStraight,
+                      style: TextStyle(
+                        fontFamily: kSansFamily,
+                        fontSize: 14,
+                        height: 1.5,
+                        color: p.textMuted,
+                      ),
+                    ),
                   ],
-                ),
-                style: const TextStyle(
-                  fontFamily: 'Instrument Serif',
-                  fontFamilyFallback: ['Georgia', 'serif'],
-                  fontStyle: FontStyle.italic,
-                  fontSize: 42,
-                  height: 1,
-                  letterSpacing: -0.8,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-              const SizedBox(height: 6),
-              Text(
-                context.l10n.educationMostOfThisComesStraight,
-                style: TextStyle(
-                  fontFamily: kSansFamily,
-                  fontSize: 14,
-                  height: 1.5,
-                  color: p.textMuted,
                 ),
               ),
             ],
@@ -207,10 +220,13 @@ class _EditorialLearnHub extends StatelessWidget {
                   delegate: _EducationSearchDelegate(),
                 );
                 if (result != null && ctx.mounted) {
-                  unawaited(Navigator.of(ctx).push(MaterialPageRoute(
-                    builder: (_) =>
-                        ArticleDetailScreen(section: result),
-                  )));
+                  unawaited(
+                    Navigator.of(ctx).push(
+                      MaterialPageRoute(
+                        builder: (_) => ArticleDetailScreen(section: result),
+                      ),
+                    ),
+                  );
                 }
               },
               child: Container(
@@ -218,7 +234,9 @@ class _EditorialLearnHub extends StatelessWidget {
                 // floor it; padding adds breathing room beyond).
                 constraints: const BoxConstraints(minHeight: 48),
                 padding: const EdgeInsets.symmetric(
-                    horizontal: 14, vertical: 12),
+                  horizontal: 14,
+                  vertical: 12,
+                ),
                 decoration: BoxDecoration(
                   border: Border.all(color: p.border),
                   borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
@@ -281,8 +299,7 @@ class _EditorialLearnHub extends StatelessWidget {
             // narrow widths keep the existing 2-column arrangement untouched.
             final int columns;
             if (constraints.maxWidth >= 1000) {
-              columns =
-                  (constraints.maxWidth / 360).floor().clamp(2, 4);
+              columns = (constraints.maxWidth / 360).floor().clamp(2, 4);
             } else {
               columns = 2;
             }
@@ -293,7 +310,10 @@ class _EditorialLearnHub extends StatelessWidget {
               runSpacing: gap,
               children: [
                 for (final s in grid)
-                  SizedBox(width: cardW, child: _GridCard(section: s)),
+                  SizedBox(
+                    width: cardW,
+                    child: _GridCard(section: s),
+                  ),
               ],
             );
           },
@@ -356,7 +376,6 @@ class _EditorialLearnHub extends StatelessWidget {
       ],
     );
   }
-
 }
 
 class _CategoryPill extends StatelessWidget {
@@ -382,9 +401,7 @@ class _CategoryPill extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
           decoration: BoxDecoration(
-            border: Border.all(
-              color: active ? p.primary : p.border,
-            ),
+            border: Border.all(color: active ? p.primary : p.border),
             borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
           ),
           child: Text(
@@ -442,8 +459,7 @@ class _GridCard extends StatelessWidget {
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
             border: Border.all(color: p.border),
-            borderRadius:
-                BorderRadius.circular(DesignTokens.cardRadius),
+            borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -456,8 +472,11 @@ class _GridCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
                 ),
                 alignment: Alignment.center,
-                child: Icon(_iconFor(section.category),
-                    size: 16, color: p.primary),
+                child: Icon(
+                  _iconFor(section.category),
+                  size: 16,
+                  color: p.primary,
+                ),
               ),
               const SizedBox(height: 10),
               Text(
@@ -497,8 +516,7 @@ class _GridCard extends StatelessWidget {
 /// trimmed to keep grid cards visually consistent.
 String _previewOf(String content) {
   final firstPara = content.split('\n\n').first.trim();
-  final firstSentence =
-      firstPara.split(RegExp(r'(?<=[.!?])\s+')).first.trim();
+  final firstSentence = firstPara.split(RegExp(r'(?<=[.!?])\s+')).first.trim();
   if (firstSentence.length > 110) {
     return '${firstSentence.substring(0, 110)}…';
   }
@@ -508,19 +526,19 @@ String _previewOf(String content) {
 class _EducationSearchDelegate extends SearchDelegate<EducationSection?> {
   @override
   List<Widget> buildActions(BuildContext context) => [
-        IconButton(
-          icon: const Icon(Icons.clear),
-          tooltip: context.l10n.diagnosesClearSearch,
-          onPressed: () => query = '',
-        ),
-      ];
+    IconButton(
+      icon: const Icon(Icons.clear),
+      tooltip: context.l10n.diagnosesClearSearch,
+      onPressed: () => query = '',
+    ),
+  ];
 
   @override
   Widget buildLeading(BuildContext context) => IconButton(
-        icon: const Icon(Icons.arrow_back),
-        tooltip: context.l10n.back,
-        onPressed: () => close(context, null),
-      );
+    icon: const Icon(Icons.arrow_back),
+    tooltip: context.l10n.back,
+    onPressed: () => close(context, null),
+  );
 
   @override
   Widget buildResults(BuildContext context) => _buildList(context);
@@ -536,13 +554,18 @@ class _EducationSearchDelegate extends SearchDelegate<EducationSection?> {
     }
     final q = query.toLowerCase();
     final results = allEducationSections
-        .where((s) =>
-            s.title.toLowerCase().contains(q) ||
-            s.content.toLowerCase().contains(q))
+        .where(
+          (s) =>
+              s.title.toLowerCase().contains(q) ||
+              s.content.toLowerCase().contains(q),
+        )
         .toList();
 
     if (results.isEmpty) {
-      return _emptyArt(SpotArt.search, context.l10n.educationNoResultsFor(query));
+      return _emptyArt(
+        SpotArt.search,
+        context.l10n.educationNoResultsFor(query),
+      );
     }
     return ListView.builder(
       padding: const EdgeInsets.all(12),
@@ -558,19 +581,19 @@ class _EducationSearchDelegate extends SearchDelegate<EducationSection?> {
 /// Centered empty/no-results state with a themeable spot illustration above the
 /// message. Visual only — replaces the previous bare centered text.
 Widget _emptyArt(SpotArt art, String message) => Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SpotIllustration(art: art, size: 88),
-          const SizedBox(height: 14),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32),
-            child: Text(
-              message,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontStyle: FontStyle.italic),
-            ),
-          ),
-        ],
+  child: Column(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      SpotIllustration(art: art, size: 88),
+      const SizedBox(height: 14),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 32),
+        child: Text(
+          message,
+          textAlign: TextAlign.center,
+          style: const TextStyle(fontStyle: FontStyle.italic),
+        ),
       ),
-    );
+    ],
+  ),
+);

@@ -1,4 +1,6 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/spot_illustration.dart';
+import 'package:mhad/ui/widgets/design/illustrated_intro.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -31,41 +33,55 @@ class WebDashboardLanding extends ConsumerWidget {
     return ListView(
       padding: const EdgeInsets.fromLTRB(40, 32, 40, 60),
       children: [
-        if (isPublic) ...[
-          _AnonBanner(),
-          const SizedBox(height: 22),
-        ],
+        if (isPublic) ...[_AnonBanner(), const SizedBox(height: 22)],
 
         // ── Editorial hero ───────────────────────────────────────────────
-        SectionLabel(context.l10n.webLandingPennsylvaniaAct194Of2004),
-        const SizedBox(height: 4),
-        Text.rich(
-          TextSpan(children: [
-            TextSpan(text: context.l10n.webLandingMakeAMentalHealth),
-            TextSpan(
-                text: context.l10n.webLandingAdvanceDirective,
-                style: TextStyle(color: p.primary)),
-          ]),
-          style: const TextStyle(
-            fontFamily: 'Instrument Serif',
-            fontFamilyFallback: ['Georgia', 'serif'],
-            fontStyle: FontStyle.italic,
-            fontSize: 56, // artboard WebDashboard hero size
-            height: 1,
-            letterSpacing: -1,
-            fontWeight: FontWeight.w400,
-          ),
-        ),
-        const SizedBox(height: 14),
-        ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 620),
-          child: Text(
-            context.l10n.webLandingALegalDocumentThatTells,
-            style: TextStyle(
-                fontFamily: kSansFamily,
-                fontSize: 15,
-                height: 1.5,
-                color: p.textMuted),
+        // The welcome scene fills the empty space right of the headline on
+        // wide screens; on narrow ones it shrinks beside the section label.
+        // It sits above the form choice, never beside an input.
+        IllustratedIntro(
+          art: SpotArt.welcome,
+          wideSize: 200,
+          narrowSize: 64,
+          wideBreakpoint: 760,
+          label: SectionLabel(context.l10n.webLandingPennsylvaniaAct194Of2004),
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(text: context.l10n.webLandingMakeAMentalHealth),
+                    TextSpan(
+                      text: context.l10n.webLandingAdvanceDirective,
+                      style: TextStyle(color: p.primary),
+                    ),
+                  ],
+                ),
+                style: const TextStyle(
+                  fontFamily: 'Instrument Serif',
+                  fontFamilyFallback: ['Georgia', 'serif'],
+                  fontStyle: FontStyle.italic,
+                  fontSize: 56, // artboard WebDashboard hero size
+                  height: 1,
+                  letterSpacing: -1,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+              const SizedBox(height: 14),
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 620),
+                child: Text(
+                  context.l10n.webLandingALegalDocumentThatTells,
+                  style: TextStyle(
+                    fontFamily: kSansFamily,
+                    fontSize: 15,
+                    height: 1.5,
+                    color: p.textMuted,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
         const SizedBox(height: 24),
@@ -157,19 +173,21 @@ class _AnonBanner extends StatelessWidget {
                 Text(
                   context.l10n.webLandingYouReWorkingAnonymouslyNothing,
                   style: TextStyle(
-                      fontFamily: kSansFamily,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w700,
-                      color: p.text),
+                    fontFamily: kSansFamily,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                    color: p.text,
+                  ),
                 ),
                 const SizedBox(height: 1),
                 Text(
                   context.l10n.webLandingNoAccountNoCloudIf,
                   style: TextStyle(
-                      fontFamily: kSansFamily,
-                      fontSize: 12,
-                      height: 1.4,
-                      color: p.textMuted),
+                    fontFamily: kSansFamily,
+                    fontSize: 12,
+                    height: 1.4,
+                    color: p.textMuted,
+                  ),
                 ),
               ],
             ),
@@ -253,28 +271,31 @@ class _ToolCard extends StatelessWidget {
               Text(
                 title,
                 style: TextStyle(
-                    fontFamily: kSansFamily,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    color: p.text),
+                  fontFamily: kSansFamily,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: p.text,
+                ),
               ),
               const SizedBox(height: 3),
               Text(
                 sub,
                 style: TextStyle(
-                    fontFamily: kSansFamily,
-                    fontSize: 12,
-                    height: 1.4,
-                    color: p.textMuted),
+                  fontFamily: kSansFamily,
+                  fontSize: 12,
+                  height: 1.4,
+                  color: p.textMuted,
+                ),
               ),
               const SizedBox(height: 10),
               Text(
                 '$cta →',
                 style: TextStyle(
-                    fontFamily: kSansFamily,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
-                    color: p.primary),
+                  fontFamily: kSansFamily,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  color: p.primary,
+                ),
               ),
             ],
           ),
@@ -290,14 +311,26 @@ class _PrivacyPromiseCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
     final rows = <(IconData, String, String)>[
-      (Icons.lock_outline, context.l10n.webLandingNoAccountRequired,
-          context.l10n.webLandingNoEmailNoPasswordNo),
-      (Icons.shield_outlined, context.l10n.webLandingNothingLeavesYourBrowser,
-          context.l10n.webLandingYourAnswersLiveInThis),
-      (Icons.block, context.l10n.webLandingNoCookiesNoTracking,
-          context.l10n.webLandingNoAnalyticsNoThirdParty),
-      (Icons.download_outlined, context.l10n.webLandingYouKeepTheFile,
-          context.l10n.webLandingSaveThePdfFromYour),
+      (
+        Icons.lock_outline,
+        context.l10n.webLandingNoAccountRequired,
+        context.l10n.webLandingNoEmailNoPasswordNo,
+      ),
+      (
+        Icons.shield_outlined,
+        context.l10n.webLandingNothingLeavesYourBrowser,
+        context.l10n.webLandingYourAnswersLiveInThis,
+      ),
+      (
+        Icons.block,
+        context.l10n.webLandingNoCookiesNoTracking,
+        context.l10n.webLandingNoAnalyticsNoThirdParty,
+      ),
+      (
+        Icons.download_outlined,
+        context.l10n.webLandingYouKeepTheFile,
+        context.l10n.webLandingSaveThePdfFromYour,
+      ),
     ];
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 18, 20, 18),
@@ -365,19 +398,21 @@ class _PromiseItem extends StatelessWidget {
               Text(
                 title,
                 style: TextStyle(
-                    fontFamily: kSansFamily,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w700,
-                    color: p.text),
+                  fontFamily: kSansFamily,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w700,
+                  color: p.text,
+                ),
               ),
               const SizedBox(height: 1),
               Text(
                 sub,
                 style: TextStyle(
-                    fontFamily: kSansFamily,
-                    fontSize: 12,
-                    height: 1.4,
-                    color: p.textMuted),
+                  fontFamily: kSansFamily,
+                  fontSize: 12,
+                  height: 1.4,
+                  color: p.textMuted,
+                ),
               ),
             ],
           ),

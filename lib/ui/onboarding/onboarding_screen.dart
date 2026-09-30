@@ -2,6 +2,7 @@
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/spot_illustration.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -99,7 +100,20 @@ class OnboardingScreen extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SectionLabel(context.l10n.onboardingPaMhadAct194),
+                  // Voice motif beside the label on wide screens only; on
+                  // phones vertical space is reserved for the CTAs.
+                  if (box.maxWidth >= 600)
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Expanded(
+                          child: SectionLabel(context.l10n.onboardingPaMhadAct194),
+                        ),
+                        const SpotIllustration(art: SpotArt.voice, size: 88),
+                      ],
+                    )
+                  else
+                    SectionLabel(context.l10n.onboardingPaMhadAct194),
                   const SizedBox(height: 18),
                   // Editorial 68pt h1 "In your\nwords." — "words." is the
                   // primary-tinted accent (prototype L58-64).

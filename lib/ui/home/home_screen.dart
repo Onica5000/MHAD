@@ -2,6 +2,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/spot_illustration.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/ui/widgets/design/status_views.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -794,6 +795,9 @@ class _GreetingRow extends StatelessWidget {
     // brand-motif hero panel so the dashboard opens on a premium, on-brand
     // surface instead of a bare headline. Visual only.
     final Widget inner;
+    // The welcome scene joins the guest / unnamed greetings; the named
+    // variant already carries the avatar on the right.
+    var showArt = true;
     // Public mode: always show the guest greeting regardless of whether
     // session directives happen to carry a name. The "guest" framing is
     // the point — Public mode is anonymous by design.
@@ -821,6 +825,7 @@ class _GreetingRow extends StatelessWidget {
         );
       } else {
         final firstName = fullName.split(RegExp(r'\s+')).first;
+        showArt = false;
         inner = Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -878,7 +883,15 @@ class _GreetingRow extends StatelessWidget {
     return RevealOnMount(
       child: BrandMotif(
         padding: const EdgeInsets.fromLTRB(20, 22, 20, 24),
-        child: Align(alignment: Alignment.centerLeft, child: inner),
+        child: showArt
+            ? Row(
+                children: [
+                  Expanded(child: inner),
+                  const SizedBox(width: 12),
+                  const SpotIllustration(art: SpotArt.welcome, size: 84),
+                ],
+              )
+            : Align(alignment: Alignment.centerLeft, child: inner),
       ),
     );
   }

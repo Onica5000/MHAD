@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/spot_illustration.dart';
+import 'package:mhad/ui/widgets/design/illustrated_intro.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -40,20 +42,27 @@ class MakeItFindableScreen extends ConsumerWidget {
             child: ListView(
               padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
               children: [
-                SectionLabel(context.l10n.makeItFindableCrisisReadiness),
-                const SizedBox(height: 6),
-                EditorialHeading(
-                  text: context.l10n.makeItFindableMakeItFindableInA,
-                  size: 32,
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  context.l10n.makeItFindableADirectiveOnlyHelpsIf,
-                  style: TextStyle(
-                    fontFamily: kSansFamily,
-                    fontSize: 14,
-                    height: 1.5,
-                    color: p.textMuted,
+                IllustratedIntro(
+                  art: SpotArt.people,
+                  label: SectionLabel(context.l10n.makeItFindableCrisisReadiness),
+                  body: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      EditorialHeading(
+                        text: context.l10n.makeItFindableMakeItFindableInA,
+                        size: 32,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        context.l10n.makeItFindableADirectiveOnlyHelpsIf,
+                        style: TextStyle(
+                          fontFamily: kSansFamily,
+                          fontSize: 14,
+                          height: 1.5,
+                          color: p.textMuted,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(height: 18),
