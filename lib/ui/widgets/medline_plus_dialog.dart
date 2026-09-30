@@ -1,4 +1,5 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/services/medline_plus_service.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/utils/launch_utils.dart';
@@ -34,8 +35,7 @@ Future<void> showMedlinePlusDialog(
               final topic = snap.data;
               if (topic == null) {
                 return Text(
-                  'No plain-language summary is available for this right now. '
-                  'You can search it on MedlinePlus.',
+                  context.l10n.medlinePlusDialogNoPlainLanguageSummaryIs,
                   style: TextStyle(
                       fontFamily: kSans, fontSize: 13, color: p.textMuted),
                 );
@@ -56,9 +56,7 @@ Future<void> showMedlinePlusDialog(
                     ),
                     const SizedBox(height: 12),
                     Text(
-                      'Plain-language information from the U.S. National Library '
-                      'of Medicine (MedlinePlus). Educational only — not medical '
-                      'advice.',
+                      context.l10n.medlinePlusDialogPlainLanguageInformationFromThe,
                       style: TextStyle(
                         fontFamily: kSans,
                         fontSize: 11,
@@ -80,13 +78,13 @@ Future<void> showMedlinePlusDialog(
               if (url.isEmpty) return const SizedBox.shrink();
               return TextButton(
                 onPressed: () => launchOrCopy(context, url),
-                child: const Text('Read more on MedlinePlus'),
+                child: Text(context.l10n.medlinePlusDialogReadMoreOnMedlineplus),
               );
             },
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Close'),
+            child: Text(context.l10n.close),
           ),
         ],
       );

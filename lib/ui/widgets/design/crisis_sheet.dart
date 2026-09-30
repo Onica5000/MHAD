@@ -1,4 +1,5 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
@@ -78,7 +79,7 @@ class _CrisisSheet extends StatelessWidget {
                   ),
                   const SizedBox(width: 6),
                   Text(
-                    '24/7 FREE, CONFIDENTIAL',
+                    context.l10n.crisisSheet247FreeConfidential,
                     style: TextStyle(
                       fontFamily: kSansFamily,
                       fontSize: 11,
@@ -90,13 +91,13 @@ class _CrisisSheet extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 4),
-              const EditorialHeading(
-                text: 'You are not alone.',
+              EditorialHeading(
+                text: context.l10n.crisisSheetYouAreNotAlone,
                 size: 34,
               ),
               const SizedBox(height: 8),
               Text(
-                'Real people are standing by — phone, text, or chat.',
+                context.l10n.crisisSheetRealPeopleAreStandingBy,
                 style: TextStyle(
                   fontFamily: kSansFamily,
                   fontSize: 13,
@@ -107,7 +108,7 @@ class _CrisisSheet extends StatelessWidget {
               const SizedBox(height: 18),
               _CrisisRow(
                 name: '988 Suicide & Crisis Lifeline',
-                detail: 'Call or text 988',
+                detail: context.l10n.crisisSheetCallOrText988,
                 icon: Icons.phone_outlined,
                 accent: true,
                 // First action gets initial keyboard/screen-reader focus
@@ -141,14 +142,14 @@ class _CrisisSheet extends StatelessWidget {
               ),
               _CrisisRow(
                 name: 'Veterans Crisis Line',
-                detail: 'Call 988, press 1',
+                detail: context.l10n.crisisSheetCall988Press1,
                 icon: Icons.military_tech_outlined,
                 onTap: () => _launch(context, 'tel:${appData.phoneOf('veteransCrisis')}',
                     copyValue: appData.phoneOf('veteransCrisis')),
               ),
               _CrisisRow(
                 name: 'The Trevor Project (LGBTQ+ youth)',
-                detail: 'Call · text · chat',
+                detail: context.l10n.crisisSheetCallTextChat,
                 icon: Icons.diversity_1_outlined,
                 onTap: () => _launch(context, 'tel:${appData.phoneOf('trevorProject')}',
                     copyValue: appData.phoneOf('trevorProject')),
@@ -159,13 +160,10 @@ class _CrisisSheet extends StatelessWidget {
               // visually distinct from the 24/7 support lines above.
               const _Emergency911Callout(),
               const SizedBox(height: 10),
-              const SectionLabel('Why these numbers?'),
+              SectionLabel(context.l10n.crisisSheetWhyTheseNumbers),
               const SizedBox(height: 4),
               Text(
-                'Calling 988 connects you to a trained counselor in your '
-                'area. It is free, confidential, and available 24 hours a '
-                'day. Calling will not result in police being dispatched in '
-                'most cases.',
+                context.l10n.crisisSheetCalling988ConnectsYouTo,
                 style: TextStyle(
                   fontFamily: kSansFamily,
                   fontSize: 12,
@@ -178,7 +176,7 @@ class _CrisisSheet extends StatelessWidget {
                 width: double.infinity,
                 child: TextButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('Close'),
+                  child: Text(context.l10n.close),
                 ),
               ),
             ],
@@ -217,9 +215,8 @@ class _Emergency911Callout extends StatelessWidget {
                 child: Text.rich(
                   TextSpan(
                     children: [
-                      const TextSpan(
-                          text: 'If you or someone else is in immediate '
-                              'danger, call '),
+                      TextSpan(
+                          text: context.l10n.crisisSheetIfYouOrSomeoneElse),
                       TextSpan(
                         text: '911',
                         style: TextStyle(

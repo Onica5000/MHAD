@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/data/educational_content.dart';
 import 'package:mhad/ui/education/education_article_detail.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
@@ -210,9 +211,9 @@ class _CategoryListScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text(category.displayName)),
       body: sections.isEmpty
-          ? const Center(
+          ? Center(
               child: Text(
-                'No sections in this category yet.',
+                context.l10n.educationCategoryBrowserNoSectionsInThisCategory,
                 style: TextStyle(fontStyle: FontStyle.italic),
               ),
             )

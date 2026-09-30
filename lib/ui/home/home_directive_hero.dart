@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/model/directive.dart';
@@ -87,7 +88,7 @@ class ActiveDirectiveHero extends StatelessWidget {
                             borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
                           ),
                           child: Text(
-                            '● Draft',
+                            context.l10n.homeDirectiveHeroDraft,
                             style: TextStyle(
                               fontFamily: kSansFamily,
                               fontSize: 11,
@@ -180,7 +181,7 @@ class ActiveDirectiveHero extends StatelessWidget {
                         icon: Icon(Icons.arrow_forward,
                             size: 16, color: p.primaryDark),
                         label: Text(
-                          'Continue where you left off',
+                          context.l10n.homeDirectiveHeroContinueWhereYouLeftOff,
                           style: TextStyle(
                             fontFamily: kSansFamily,
                             fontWeight: FontWeight.w600,

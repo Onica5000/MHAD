@@ -1,6 +1,7 @@
 ﻿import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
@@ -67,29 +68,24 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
     await showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Marked revoked on this device'),
+        title: Text(context.l10n.revocationMarkedRevokedOnThisDevice),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Per 20 Pa.C.S. §§ 5825 and 5839, revocation is effective only '
-              'when communicated to your attending physician or provider. '
-              'Marking this directive revoked here does not communicate it — '
-              'you still need to tell each recipient.',
+            Text(
+              context.l10n.revocationPer20PaCS,
             ),
             if (picked.isNotEmpty) ...[
               const SizedBox(height: 12),
-              const Text('You picked these recipients to notify:',
+              Text(context.l10n.revocationYouPickedTheseRecipientsTo,
                   style: TextStyle(fontWeight: FontWeight.w700)),
               const SizedBox(height: 4),
               for (final cat in picked) Text('• $cat'),
             ],
             const SizedBox(height: 12),
-            const Text(
-              'Contact each recipient yourself — call or email them — and ask '
-              'the receiving provider to record the revocation in your chart. '
-              'Revocation takes effect once your provider has been told.',
+            Text(
+              context.l10n.revocationContactEachRecipientYourselfCall,
               style: TextStyle(fontStyle: FontStyle.italic),
             ),
           ],
@@ -97,7 +93,7 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Got it'),
+            child: Text(context.l10n.exampleTextGotIt),
           ),
         ],
       ),
@@ -118,7 +114,7 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
       // sure?' headline. No Material AppBar.
       body: Column(children: [
         WizardHeader(
-          backLabel: 'Back',
+          backLabel: context.l10n.back,
           onBack: () => Navigator.of(context).maybePop(),
           actionLabel: '',
         ),
@@ -129,20 +125,16 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
           // AppBar's title. The 38pt 'Are you sure?' headline below
           // matches the prototype L1568 wording exactly.
           MonoPill(
-            label: 'Permanent action',
+            label: context.l10n.revocationPermanentAction,
             foreground: cs.onErrorContainer,
             background: cs.errorContainer,
           ),
           const SizedBox(height: 12),
           // Headline bumped 30 -> 38pt to match prototype L1568.
-          const EditorialHeading(text: 'Are you sure?', size: 38),
+          EditorialHeading(text: context.l10n.revocationAreYouSure, size: 38),
           const SizedBox(height: 8),
           Text(
-            'Your directive will no longer be legally binding once you '
-            'communicate the revocation to your attending physician or '
-            'provider (20 Pa.C.S. §§ 5825, 5839). This app marks the '
-            'directive revoked locally and helps you generate a revocation '
-            'letter.',
+            context.l10n.revocationYourDirectiveWillNoLonger,
             style: TextStyle(
               fontFamily: kSansFamily,
               fontSize: 14,
@@ -159,23 +151,20 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
               padding: const EdgeInsets.all(14),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  SectionLabel('How revocation works in PA'),
+                children: [
+                  SectionLabel(context.l10n.revocationHowRevocationWorksInPa),
                   SizedBox(height: 10),
                   _RevokeStep(
                     n: 1,
-                    text: 'Put it in writing — sign and date a short '
-                        'statement that you are revoking this directive.',
+                    text: context.l10n.revocationPutItInWritingSign,
                   ),
                   _RevokeStep(
                     n: 2,
-                    text: 'Tell your agent, your providers, and anyone '
-                        'holding a copy.',
+                    text: context.l10n.revocationTellYourAgentYourProviders,
                   ),
                   _RevokeStep(
                     n: 3,
-                    text: 'Destroy old copies, or clearly mark them '
-                        '“REVOKED”.',
+                    text: context.l10n.revocationDestroyOldCopiesOrClearly,
                     last: true,
                   ),
                 ],
@@ -190,16 +179,10 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SectionLabel('Statutory revocation statement'),
+                  SectionLabel(context.l10n.revocationStatutoryRevocationStatement),
                   const SizedBox(height: 6),
                   Text(
-                    'This declaration may be revoked in whole or in part at '
-                    'any time, either orally or in writing, as long as I '
-                    'have not been found to be incapable of making mental '
-                    'health decisions. My revocation will be effective upon '
-                    'communication to my attending physician or other '
-                    'mental health care provider, either by me or a witness '
-                    'to my revocation, of the intent to revoke.',
+                    context.l10n.revocationThisDeclarationMayBeRevoked,
                     style: TextStyle(
                       fontFamily: 'Instrument Serif',
                       fontFamilyFallback: const [
@@ -218,12 +201,10 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
           ),
 
           const SizedBox(height: 14),
-          const SectionLabel('Who to notify (opt-in per recipient)'),
+          SectionLabel(context.l10n.revocationWhoToNotifyOptIn),
           const SizedBox(height: 4),
           Text(
-            'No batch sends — pick each recipient. The app keeps your '
-            'choices in front of you as a checklist; you contact each '
-            'recipient yourself (call, email, or in person).',
+            context.l10n.revocationNoBatchSendsPickEach,
             style: Theme.of(context).textTheme.bodySmall,
           ),
           const SizedBox(height: 8),
@@ -259,7 +240,7 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
-                    'Type REVOKE to confirm',
+                    context.l10n.revocationTypeRevokeToConfirm,
                     style: TextStyle(
                       fontFamily: kSansFamily,
                       fontWeight: FontWeight.w700,
@@ -271,7 +252,7 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
                   TextField(
                     controller: _confirmCtrl,
                     decoration: InputDecoration(
-                      hintText: 'REVOKE',
+                      hintText: context.l10n.revocationRevoke,
                       filled: true,
                       fillColor: cs.surface,
                       border: const OutlineInputBorder(),
@@ -299,13 +280,11 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
           ),
 
           const SizedBox(height: 14),
-          const InfoBanner(
+          InfoBanner(
             icon: Icons.info_outline,
             variant: InfoBannerVariant.info,
             text:
-                'If you have any further questions about how revocation '
-                'applies to you, it is wise to consult an attorney for '
-                'clarification.',
+                context.l10n.revocationIfYouHaveAnyFurther,
           ),
         ],
       )),

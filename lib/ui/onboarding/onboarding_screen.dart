@@ -1,5 +1,6 @@
 ﻿import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/domain/model/directive.dart';
@@ -95,16 +96,16 @@ class OnboardingScreen extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SectionLabel('PA MHAD · Act 194'),
+                  SectionLabel(context.l10n.onboardingPaMhadAct194),
                   const SizedBox(height: 18),
                   // Editorial 68pt h1 "In your\nwords." — "words." is the
                   // primary-tinted accent (prototype L58-64).
                   Text.rich(
                     TextSpan(
                       children: [
-                        const TextSpan(text: 'In your\n'),
+                        TextSpan(text: context.l10n.onboardingInYour),
                         TextSpan(
-                          text: 'words.',
+                          text: context.l10n.onboardingWords,
                           style: TextStyle(color: p.primary),
                         ),
                       ],
@@ -124,10 +125,7 @@ class OnboardingScreen extends ConsumerWidget {
                   ConstrainedBox(
                     constraints: const BoxConstraints(maxWidth: 320),
                     child: Text(
-                      "We'll walk you through it, step by step and in plain "
-                      'language: how you want to be treated during a mental '
-                      "health crisis — so your wishes are honored even when "
-                      "you can't speak for yourself.",
+                      context.l10n.onboardingWeLlWalkYouThrough,
                       style: TextStyle(
                         fontFamily: kSansFamily,
                         fontSize: 17,
@@ -151,18 +149,16 @@ class OnboardingScreen extends ConsumerWidget {
                     child: Text.rich(
                       TextSpan(
                         children: [
-                          const TextSpan(text: 'Making this changes nothing '
-                              'today. '),
+                          TextSpan(text: context.l10n.onboardingMakingThisChangesNothingToday),
                           TextSpan(
-                            text: 'You keep every decision',
+                            text: context.l10n.onboardingYouKeepEveryDecision,
                             style: TextStyle(
                               fontWeight: FontWeight.w700,
                               color: p.onPrimaryLight,
                             ),
                           ),
-                          const TextSpan(
-                              text: ' until two professionals find you '
-                                  'unable to decide for yourself.'),
+                          TextSpan(
+                              text: context.l10n.onboardingUntilTwoProfessionalsFindYou),
                         ],
                       ),
                       style: TextStyle(
@@ -179,9 +175,7 @@ class OnboardingScreen extends ConsumerWidget {
                   // C1: the "Valid 2 years" pill omits the statutory incapacity
                   // exception — clarify it in small print under the pills.
                   Text(
-                    'Valid two years from signing — unless you are incapable '
-                    'when it would expire, when it stays in effect until your '
-                    'capacity returns. (PA Act 194, effective 2005.)',
+                    context.l10n.onboardingValidTwoYearsFromSigning,
                     style: TextStyle(
                       fontFamily: kSansFamily,
                       fontSize: 12,
@@ -196,7 +190,7 @@ class OnboardingScreen extends ConsumerWidget {
                     child: FilledButton.icon(
                       onPressed: () => _getStarted(context),
                       icon: const Icon(Icons.arrow_forward, size: 18),
-                      label: const Text('Get started'),
+                      label: Text(context.l10n.disclaimerGetStarted),
                       style: FilledButton.styleFrom(
                         backgroundColor: p.primary,
                         foregroundColor: p.onPrimary,
@@ -228,7 +222,7 @@ class OnboardingScreen extends ConsumerWidget {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      child: const Text('Upload a document to autofill'),
+                      child: Text(context.l10n.onboardingUploadADocumentToAutofill),
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -248,14 +242,14 @@ class OnboardingScreen extends ConsumerWidget {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      child: const Text('Continue from a saved file'),
+                      child: Text(context.l10n.onboardingContinueFromASavedFile),
                     ),
                   ),
                   const SizedBox(height: 18),
                   // Footer reassurance (prototype L89-90).
                   Center(
                     child: Text(
-                      'Free · no account · no tracking · open source',
+                      context.l10n.onboardingFreeNoAccountNoTracking,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontFamily: kSansFamily,

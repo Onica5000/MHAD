@@ -1,4 +1,5 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -51,7 +52,7 @@ class WalletCard extends StatelessWidget {
               top: -30,
               child: IgnorePointer(
                 child: Text(
-                  'MH',
+                  context.l10n.walletCardMh,
                   style: TextStyle(
                     fontFamily: 'Instrument Serif',
                     fontFamilyFallback: const [
@@ -82,7 +83,7 @@ class WalletCard extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'PA MHAD · ACT 194',
+                              context.l10n.walletCardPaMhadAct194,
                               style: TextStyle(
                                 fontFamily: kMonoFamily,
                                 fontFamilyFallback: const [
@@ -112,7 +113,7 @@ class WalletCard extends StatelessWidget {
                             ),
                             const SizedBox(height: 2),
                             Text(
-                              'Has an active directive on file',
+                              context.l10n.walletCardHasAnActiveDirectiveOn,
                               style: TextStyle(
                                 fontFamily: kSansFamily,
                                 fontSize: 12,
@@ -155,7 +156,7 @@ class WalletCard extends StatelessWidget {
                       Expanded(
                         child: _walletKeyValue(
                           context,
-                          label: 'AGENT',
+                          label: context.l10n.walletCardAgent,
                           value: agentName == null
                               ? '—'
                               : agentPhone == null
@@ -167,7 +168,7 @@ class WalletCard extends StatelessWidget {
                       const SizedBox(width: 10),
                       _walletKeyValue(
                         context,
-                        label: 'EXP',
+                        label: context.l10n.walletCardExp,
                         value: validThrough,
                         align: CrossAxisAlignment.end,
                         color: p.onPrimary,

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/ai/ai_assistant.dart'
@@ -106,7 +107,7 @@ class _LearnAiPanelState extends ConsumerState<LearnAiPanel> {
                   Icon(Icons.auto_awesome, size: 18, color: p.primary),
                   const SizedBox(width: 8),
                   Text(
-                    'Ask the AI',
+                    context.l10n.learnAiPanelAskTheAi,
                     style: TextStyle(
                       fontFamily: kSansFamily,
                       fontSize: 15,
@@ -190,8 +191,8 @@ class _LearnAiPanelState extends ConsumerState<LearnAiPanel> {
                             maxLines: 4,
                             textInputAction: TextInputAction.send,
                             onSubmitted: isSending ? null : _send,
-                            decoration: const InputDecoration(
-                              hintText: 'Ask a question…',
+                            decoration: InputDecoration(
+                              hintText: context.l10n.learnAiPanelAskAQuestion,
                               border: OutlineInputBorder(),
                               isDense: true,
                             ),
@@ -210,7 +211,7 @@ class _LearnAiPanelState extends ConsumerState<LearnAiPanel> {
                       child: FilledButton.icon(
                         onPressed: () => context.push(AppRoutes.aiSetup),
                         icon: const Icon(Icons.auto_awesome, size: 18),
-                        label: const Text('Set up AI assistant'),
+                        label: Text(context.l10n.learnAiPanelSetUpAiAssistant),
                       ),
                     ),
             ),
@@ -218,7 +219,7 @@ class _LearnAiPanelState extends ConsumerState<LearnAiPanel> {
             Padding(
               padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
               child: Text(
-                'Not legal or medical advice.',
+                context.l10n.learnAiPanelNotLegalOrMedicalAdvice,
                 style: TextStyle(
                   fontFamily: kSansFamily,
                   fontSize: 11,

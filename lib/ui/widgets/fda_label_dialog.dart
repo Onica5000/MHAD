@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/services/openfda_service.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 
@@ -71,9 +72,7 @@ Future<void> showFdaLabelDialog(
               if ((side == null || side.isEmpty) &&
                   (inter == null || inter.isEmpty)) {
                 return Text(
-                  'No FDA label information is available for this medication '
-                  'right now. Brand and generic spellings can differ — try the '
-                  'other one, or ask your pharmacist.',
+                  context.l10n.fdaLabelDialogNoFdaLabelInformationIs,
                   style: TextStyle(
                       fontFamily: kSans, fontSize: 13, color: p.textMuted),
                 );
@@ -88,9 +87,7 @@ Future<void> showFdaLabelDialog(
                     if (inter != null && inter.isNotEmpty)
                       section('Drug interactions', inter),
                     Text(
-                      'Official U.S. FDA drug-label text (openFDA). Reference '
-                      'only — not medical advice, and not personalized to you. '
-                      'Discuss anything here with your doctor or pharmacist.',
+                      context.l10n.fdaLabelDialogOfficialUSFdaDrug,
                       style: TextStyle(
                         fontFamily: kSans,
                         fontSize: 11,
@@ -107,7 +104,7 @@ Future<void> showFdaLabelDialog(
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Close'),
+            child: Text(context.l10n.close),
           ),
         ],
       );

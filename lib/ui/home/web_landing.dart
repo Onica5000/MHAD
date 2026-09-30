@@ -1,4 +1,5 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/services/blank_form_service.dart';
@@ -36,13 +37,13 @@ class WebDashboardLanding extends ConsumerWidget {
         ],
 
         // ── Editorial hero ───────────────────────────────────────────────
-        const SectionLabel('Pennsylvania · Act 194 of 2004'),
+        SectionLabel(context.l10n.webLandingPennsylvaniaAct194Of2004),
         const SizedBox(height: 4),
         Text.rich(
           TextSpan(children: [
-            const TextSpan(text: 'Make a mental health '),
+            TextSpan(text: context.l10n.webLandingMakeAMentalHealth),
             TextSpan(
-                text: 'advance directive.',
+                text: context.l10n.webLandingAdvanceDirective,
                 style: TextStyle(color: p.primary)),
           ]),
           style: const TextStyle(
@@ -59,9 +60,7 @@ class WebDashboardLanding extends ConsumerWidget {
         ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 620),
           child: Text(
-            'A legal document that tells doctors, family, and a person you '
-            'trust how to care for you if you can’t speak for yourself. '
-            'Free, anonymous, and takes about 20 minutes.',
+            context.l10n.webLandingALegalDocumentThatTells,
             style: TextStyle(
                 fontFamily: kSansFamily,
                 fontSize: 15,
@@ -84,10 +83,10 @@ class WebDashboardLanding extends ConsumerWidget {
             constraints: const BoxConstraints(maxWidth: 380),
             child: _ToolCard(
               icon: Icons.print_outlined,
-              title: 'Print a blank form',
+              title: context.l10n.webLandingPrintABlankForm,
               sub: 'Prefer paper? Open any of the three empty official forms '
                   'to print and fill in by hand — no account or wizard needed.',
-              cta: 'Print blank form',
+              cta: context.l10n.webLandingPrintBlankForm,
               onTap: () => showBlankFormPicker(context),
             ),
           ),
@@ -116,7 +115,7 @@ class WebDashboardLanding extends ConsumerWidget {
                   AppRoutes.education,
                   extra: (
                     ids: const ['intro_overview', 'intro_why_take_your_time'],
-                    title: 'The basics',
+                    title: context.l10n.webLandingTheBasics,
                   ),
                 ),
               ),
@@ -157,7 +156,7 @@ class _AnonBanner extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'You’re working anonymously. Nothing is saved.',
+                  context.l10n.webLandingYouReWorkingAnonymouslyNothing,
                   style: TextStyle(
                       fontFamily: kSansFamily,
                       fontSize: 13,
@@ -166,10 +165,7 @@ class _AnonBanner extends StatelessWidget {
                 ),
                 const SizedBox(height: 1),
                 Text(
-                  'No account, no cloud. If you close the tab or the app '
-                  'crashes, your work is kept on this device for 10 minutes so '
-                  'you can reopen and recover it — then it’s erased for good. '
-                  'Open your PDF and save it to keep a copy.',
+                  context.l10n.webLandingNoAccountNoCloudIf,
                   style: TextStyle(
                       fontFamily: kSansFamily,
                       fontSize: 12,
@@ -189,7 +185,7 @@ class _AnonBanner extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
               child: Text(
-                'HOW THIS WORKS →',
+                context.l10n.webLandingHowThisWorks,
                 style: TextStyle(
                   fontFamily: kMonoFamily,
                   fontFamilyFallback: const [
@@ -315,7 +311,7 @@ class _PrivacyPromiseCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          const SectionLabel('Our privacy promise'),
+          SectionLabel(context.l10n.webLandingOurPrivacyPromise),
           const SizedBox(height: 12),
           // Fixed 2×2 grid via two plain Rows.
           Row(
@@ -404,7 +400,7 @@ class _BookletQuoteCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        const SectionLabel('From the booklet'),
+        SectionLabel(context.l10n.webLandingFromTheBooklet),
         const SizedBox(height: 8),
         Container(
           width: double.infinity,
@@ -418,8 +414,7 @@ class _BookletQuoteCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '“An MHAD is your voice when you can’t speak for '
-                'yourself.”',
+                context.l10n.webLandingAnMhadIsYourVoice,
                 style: TextStyle(
                   fontFamily: 'Instrument Serif',
                   fontFamilyFallback: const ['Georgia', 'serif'],
@@ -431,7 +426,7 @@ class _BookletQuoteCard extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                '— PA MHAD booklet · Office of Mental Health',
+                context.l10n.webLandingPaMhadBookletOfficeOf,
                 style: TextStyle(
                   fontFamily: kSansFamily,
                   fontSize: 12,
@@ -448,7 +443,7 @@ class _BookletQuoteCard extends StatelessWidget {
                   minimumSize: const Size(0, 36),
                   alignment: Alignment.centerLeft,
                 ),
-                child: const Text('Read the basics →'),
+                child: Text(context.l10n.webLandingReadTheBasics),
               ),
             ],
           ),

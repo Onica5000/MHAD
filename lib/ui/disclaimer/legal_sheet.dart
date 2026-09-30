@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 
@@ -25,16 +26,16 @@ class _ReadOnlyAccordionState extends State<ReadOnlyAccordion> {
   @override
   Widget build(BuildContext context) {
     final p = widget.palette;
-    final sections = _buildSections(p);
+    final sections = _buildSections(context, p);
     return Scaffold(
       backgroundColor: p.scaffoldBackground,
-      appBar: AppBar(title: const Text('Legal Disclaimer')),
+      appBar: AppBar(title: Text(context.l10n.settingsLegalDisclaimer)),
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
           children: [
             Text(
-              'Full legal disclosure',
+              context.l10n.legalSheetFullLegalDisclosure,
               style: TextStyle(
                 fontFamily: kSansFamily,
                 fontSize: 22,
@@ -44,8 +45,7 @@ class _ReadOnlyAccordionState extends State<ReadOnlyAccordion> {
             ),
             const SizedBox(height: 6),
             Text(
-              'The eight sections below were accepted at first launch. '
-              'Tap to expand.',
+              context.l10n.legalSheetTheEightSectionsBelowWere,
               style: TextStyle(
                 fontFamily: kSansFamily,
                 fontSize: 13,
@@ -88,7 +88,7 @@ class _FullLegalSheetState extends State<FullLegalSheet> {
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
-    final sections = _buildSections(p);
+    final sections = _buildSections(context, p);
     return Column(
       children: [
         // Drag handle
@@ -107,7 +107,7 @@ class _FullLegalSheetState extends State<FullLegalSheet> {
             children: [
               Expanded(
                 child: Text(
-                  'Full legal sections',
+                  context.l10n.legalSheetFullLegalSections,
                   style: TextStyle(
                     fontFamily: kSansFamily,
                     fontSize: 18,
@@ -119,7 +119,7 @@ class _FullLegalSheetState extends State<FullLegalSheet> {
               IconButton(
                 onPressed: () => Navigator.of(context).pop(),
                 icon: const Icon(Icons.close),
-                tooltip: 'Close',
+                tooltip: context.l10n.close,
               ),
             ],
           ),
@@ -161,267 +161,238 @@ class _SectionData {
   });
 }
 
-List<_SectionData> _buildSections(MhadPalette p) {
+List<_SectionData> _buildSections(BuildContext context, MhadPalette p) {
   return [
     _SectionData(
       number: '01',
-      title: 'Not legal or medical advice',
+      title: context.l10n.legalSheetNotLegalOrMedicalAdvice,
       body: [
         _Para(spans: [
-          const TextSpan(
-              text:
-                  'This app helps Pennsylvania residents document their treatment preferences under '),
-          _bold('PA Act 194 of 2004'),
-          const TextSpan(
-              text:
-                  '. The information is for informational purposes only and does '),
-          _bold('not'),
-          const TextSpan(text: ' constitute legal or medical advice.'),
-        ], palette: p),
-        _Para(spans: const [
           TextSpan(
               text:
-                  'It is not a medical device. It does not diagnose, treat, cure, or prevent any condition. For treatment decisions, consult a qualified mental health professional. For legal questions, consult a licensed PA attorney.'),
+                  context.l10n.legalSheetThisAppHelpsPennsylvaniaResidents),
+          _bold('PA Act 194 of 2004'),
+          TextSpan(
+              text:
+                  context.l10n.legalSheetTheInformationIsForInformational),
+          _bold('not'),
+          TextSpan(text: context.l10n.legalSheetConstituteLegalOrMedicalAdvice),
+        ], palette: p),
+        _Para(spans: [
+          TextSpan(
+              text:
+                  context.l10n.legalSheetItIsNotAMedical),
         ], palette: p),
       ],
     ),
     _SectionData(
       number: '02',
-      title: 'No professional relationship',
+      title: context.l10n.legalSheetNoProfessionalRelationship,
       body: [
         _Para(spans: [
-          const TextSpan(text: 'Use of this app does '),
+          TextSpan(text: context.l10n.legalSheetUseOfThisAppDoes),
           _bold('not'),
-          const TextSpan(
-              text:
-                  ' create an attorney–client relationship, a provider–patient relationship, or any other professional relationship between you and the developer.'),
-        ], palette: p),
-        _Para(spans: const [
           TextSpan(
               text:
-                  'You are solely responsible for making sure your directive meets all legal requirements under PA law, including proper execution with witnesses.'),
+                  context.l10n.legalSheetCreateAnAttorneyClientRelationship),
+        ], palette: p),
+        _Para(spans: [
+          TextSpan(
+              text:
+                  context.l10n.legalSheetYouAreSolelyResponsibleFor),
         ], palette: p),
       ],
     ),
     _SectionData(
       number: '03',
-      title: 'Use at your own risk',
+      title: context.l10n.legalSheetUseAtYourOwnRisk,
       body: [
-        _Para(spans: const [
+        _Para(spans: [
           TextSpan(
               text:
-                  'In plain terms: this app helps you put your own wishes into '
-                  'a directive, and you use it at your own risk. Please review '
-                  'the finished document for accuracy — mistakes can happen, '
-                  'and details you entered may be out of date or incomplete. '
-                  'If you are ever unsure whether something is legally right '
-                  'for your situation, feel free to talk with an attorney. '
-                  'The formal version:'),
+                  context.l10n.legalSheetInPlainTermsThisApp),
         ], palette: p),
-        _Para(spans: const [
-          TextSpan(text: 'This app is provided '),
+        _Para(spans: [
+          TextSpan(text: context.l10n.legalSheetThisAppIsProvided),
           TextSpan(
-            text: '"as is"',
+            text: context.l10n.legalSheetAsIs,
             style: TextStyle(fontStyle: FontStyle.italic),
           ),
           TextSpan(
               text:
-                  ', without warranties of any kind, and you use it at your own risk. To the fullest extent permitted by law, the developer is not liable for any damages arising from use of the app or any document created with it. You are responsible for reviewing your directive for accuracy and completeness; for legal questions specific to your situation, consult a licensed Pennsylvania attorney.'),
+                  context.l10n.legalSheetWithoutWarrantiesOfAnyKind),
         ], palette: p),
       ],
     ),
     _SectionData(
       number: '04',
-      title: 'Requirements for a valid directive',
+      title: context.l10n.legalSheetRequirementsForAValidDirective,
       body: [
         _Para(spans: [
-          const TextSpan(
-              text:
-                  'A PA Mental Health Advance Directive is legally valid '),
-          _bold('only'),
-          const TextSpan(text: ' when:'),
-        ], palette: p),
-        _Bullet(spans: const [
           TextSpan(
               text:
-                  'You (the principal) have legal capacity at the time of signing'),
+                  context.l10n.legalSheetAPaMentalHealthAdvance),
+          _bold('only'),
+          TextSpan(text: context.l10n.legalSheetWhen),
         ], palette: p),
         _Bullet(spans: [
-          const TextSpan(text: 'It is signed in the presence of '),
-          _bold('two adult witnesses'),
-        ], palette: p),
-        _Bullet(spans: const [
           TextSpan(
               text:
-                  'Both witnesses meet eligibility requirements under Act 194'),
+                  context.l10n.legalSheetYouThePrincipalHaveLegal),
+        ], palette: p),
+        _Bullet(spans: [
+          TextSpan(text: context.l10n.legalSheetItIsSignedInThe),
+          _bold('two adult witnesses'),
+        ], palette: p),
+        _Bullet(spans: [
+          TextSpan(
+              text:
+                  context.l10n.legalSheetBothWitnessesMeetEligibilityRequirements),
         ], palette: p),
         _Para(spans: [
           _bold('Witnesses cannot be: '),
-          const TextSpan(
+          TextSpan(
               text:
-                  'your designated agent or alternate agent, your mental health care provider, or an employee of the facility where you receive treatment — unless they are related to you by blood, marriage, or adoption.'),
+                  context.l10n.legalSheetYourDesignatedAgentOrAlternate),
         ], palette: p),
         _Para(spans: [
-          const TextSpan(
+          TextSpan(
               text:
-                  'This app captures touch-drawn signatures for convenience during preparation. The '),
+                  context.l10n.legalSheetThisAppCapturesTouchDrawn),
           _bold('printed'),
-          const TextSpan(
+          TextSpan(
               text:
-                  ' directive must be signed in original ink, in the presence of your two witnesses, to be legally valid.'),
+                  context.l10n.legalSheetDirectiveMustBeSignedIn),
         ], palette: p),
         _Para(spans: [
-          const TextSpan(text: 'Once signed, providers and your agent '),
+          TextSpan(text: context.l10n.legalSheetOnceSignedProvidersAndYour),
           _bold('must comply'),
-          const TextSpan(
+          TextSpan(
               text:
-                  ' with your directive (20 Pa.C.S. §§ 5804, 5842). However, a provider may decline to follow specific instructions that are against accepted medical practice, or when the provider is not physically available.'),
+                  context.l10n.legalSheetWithYourDirective20Pa),
         ], palette: p),
       ],
     ),
     _SectionData(
       number: '05',
-      title: 'Two-year validity',
+      title: context.l10n.legalSheetTwoYearValidity,
       body: [
         _Para(spans: [
-          const TextSpan(text: 'Under PA Act 194, an MHAD is valid for '),
+          TextSpan(text: context.l10n.legalSheetUnderPaAct194An),
           _bold('two years'),
-          const TextSpan(
+          TextSpan(
               text:
-                  ' from the date of execution unless revoked earlier — '),
+                  context.l10n.legalSheetFromTheDateOfExecution),
           _bold('unless you are found incapable'),
-          const TextSpan(
+          TextSpan(
               text:
-                  ' of making mental health decisions at the time it would expire, in which case it remains in effect until capacity returns. This app will remind you when your directive is approaching expiration.'),
+                  context.l10n.legalSheetOfMakingMentalHealthDecisions),
         ], palette: p),
       ],
     ),
     _SectionData(
       number: '06',
-      title: 'Revocation',
+      title: context.l10n.legalSheetRevocation,
       body: [
-        _Para(spans: const [
+        _Para(spans: [
           TextSpan(
               text:
-                  'You may revoke this directive at any time while you have legal capacity by:'),
+                  context.l10n.legalSheetYouMayRevokeThisDirective),
         ], palette: p),
-        _Bullet(spans: const [
+        _Bullet(spans: [
           TextSpan(
-              text: 'Notifying your healthcare provider or agent in writing'),
+              text: context.l10n.legalSheetNotifyingYourHealthcareProviderOr),
         ], palette: p),
-        _Bullet(spans: const [
-          TextSpan(text: 'Destroying the directive'),
+        _Bullet(spans: [
+          TextSpan(text: context.l10n.legalSheetDestroyingTheDirective),
         ], palette: p),
-        _Bullet(spans: const [
-          TextSpan(text: 'Executing a new directive'),
+        _Bullet(spans: [
+          TextSpan(text: context.l10n.legalSheetExecutingANewDirective),
         ], palette: p),
-        _Para(spans: const [
-          TextSpan(text: 'Notify everyone who has copies of the revocation.'),
+        _Para(spans: [
+          TextSpan(text: context.l10n.legalSheetNotifyEveryoneWhoHasCopies),
         ], palette: p),
       ],
     ),
     _SectionData(
       number: '07',
-      title: 'Privacy & AI features',
+      title: context.l10n.legalSheetPrivacyAiFeatures,
       body: [
         _Para(spans: [
-          const TextSpan(
-              text:
-                  'This is a web app: your directive is held in memory in your '
-                  'browser only and is '),
-          _bold('not saved permanently'),
-          const TextSpan(
-              text:
-                  ' — if you close the tab or it crashes, your work is kept on '
-                  'this device for about 10 minutes for recovery, then wiped; '
-                  'it is never sent to a server. Export or print to keep a '
-                  'copy. This app is '),
-          _bold('not'),
-          const TextSpan(text: ' HIPAA-compliant.'),
-        ], palette: p),
-        _Para(spans: const [
           TextSpan(
               text:
-                  "If you use the optional AI Assistant, text you send is transmitted to the AI provider you choose (Google Gemini by default; or Anthropic, OpenAI, or xAI). On Gemini's free tier, Google may use this data to improve their products and human reviewers may read inputs; other providers handle your data under their own API policies."),
+                  context.l10n.legalSheetThisIsAWebApp),
+          _bold('not saved permanently'),
+          TextSpan(
+              text:
+                  context.l10n.legalSheetIfYouCloseTheTab),
+          _bold('not'),
+          TextSpan(text: context.l10n.legalSheetHipaaCompliant),
         ], palette: p),
         _Para(spans: [
-          const TextSpan(text: 'To protect you, the app '),
+          TextSpan(
+              text:
+                  context.l10n.legalSheetIfYouUseTheOptional),
+        ], palette: p),
+        _Para(spans: [
+          TextSpan(text: context.l10n.legalSheetToProtectYouTheApp),
           _bold('automatically keeps identifying details out of what it sends '
               'to the AI assistant and its suggestions'),
-          const TextSpan(
-              text:
-                  ' — your name, date of birth, address, and the names and '
-                  'contact details of your agents and guardian are never '
-                  'included. Only non-identifying context (such as conditions, '
-                  'medications, and care preferences) is shared, and only if '
-                  'you choose to use the assistant. (Uploading a document for '
-                  'autofill is the one exception, described next.)'),
-        ], palette: p),
-        _Para(spans: [
-          const TextSpan(
-              text:
-                  'Documents you upload for autofill are different: the whole '
-                  'file is sent to your chosen AI provider as-is, and to fill '
-                  'in your directive the AI reads the personal details in it (your '
-                  'name, date of birth, address, and your agent\'s or '
-                  'guardian\'s details). You review everything before it is '
-                  'saved. '),
-          _bold('Uploading is never required'),
-          const TextSpan(
-              text:
-                  ' — black out anything you don\'t want sent, or simply type '
-                  'any field by hand to keep it private. Also avoid typing '
-                  'personal identifiers (full name, SSN, date of birth, '
-                  'address) directly into chat messages.'),
-        ], palette: p),
-        _Para(spans: [
-          const TextSpan(
-              text:
-                  'Separately, to help you fill in and understand your '
-                  'directive, the app looks up medications, conditions, and '
-                  '(optionally) your doctor in free, public U.S. government '
-                  'databases — the NIH/NLM Clinical Tables, MedlinePlus, and '
-                  'the FDA\'s openFDA. '),
-          _bold('These lookups send only the medical term, code, or provider '
-              'name being searched'),
-          const TextSpan(
-              text:
-                  ' — never your identity, the people you name, or your saved '
-                  'directive. They are reference information, not medical '
-                  'advice.'),
-        ], palette: p),
-        _Para(spans: const [
           TextSpan(
               text:
-                  'AI suggestions are not legal or medical advice — review carefully before accepting.'),
+                  context.l10n.legalSheetYourNameDateOfBirth),
+        ], palette: p),
+        _Para(spans: [
+          TextSpan(
+              text:
+                  context.l10n.legalSheetDocumentsYouUploadForAutofill),
+          _bold('Uploading is never required'),
+          TextSpan(
+              text:
+                  context.l10n.legalSheetBlackOutAnythingYouDon),
+        ], palette: p),
+        _Para(spans: [
+          TextSpan(
+              text:
+                  context.l10n.legalSheetSeparatelyToHelpYouFill),
+          _bold('These lookups send only the medical term, code, or provider '
+              'name being searched'),
+          TextSpan(
+              text:
+                  context.l10n.legalSheetNeverYourIdentityThePeople),
+        ], palette: p),
+        _Para(spans: [
+          TextSpan(
+              text:
+                  context.l10n.legalSheetAiSuggestionsAreNotLegal),
         ], palette: p),
       ],
     ),
     _SectionData(
       number: '08',
-      title: 'Resources & assistance',
+      title: context.l10n.legalSheetResourcesAssistance,
       body: [
         _Resource(
-            title: 'PA Protection & Advocacy',
+            title: context.l10n.legalSheetPaProtectionAdvocacy,
             sub: 'Your rights under Act 194',
             mono:
                 '${appData.phoneOf('paProtectionAdvocacy')} · TDD/TTY ${appData.contact('paProtectionAdvocacy').tdd ?? ''}',
             palette: p),
         const SizedBox(height: 10),
         _Resource(
-            title: "PA Mental Health Consumers' Association",
+            title: context.l10n.legalSheetPaMentalHealthConsumersAssociation,
             sub: null,
             mono: appData.phoneOf('pmhca'),
             palette: p),
         const SizedBox(height: 10),
         _Resource(
-            title: 'Mental Health Association in Pennsylvania',
+            title: context.l10n.legalSheetMentalHealthAssociationInPennsylvania,
             sub: null,
             mono: appData.phoneOf('mhapa'),
             palette: p),
         const SizedBox(height: 10),
         _Resource(
-            title: '988 Suicide & Crisis Lifeline',
+            title: context.l10n.legalSheet988SuicideCrisisLifeline,
             sub: '24/7, free, confidential',
             mono: 'Call or text 988',
             palette: p),

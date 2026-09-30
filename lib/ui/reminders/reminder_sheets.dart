@@ -1,4 +1,5 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
@@ -170,9 +171,9 @@ class _RenewSheet extends StatelessWidget {
                               color: p.textMuted,
                             ),
                             children: [
-                              const TextSpan(
+                              TextSpan(
                                   text:
-                                      'PA directives expire after 2 years. Yours runs out on '),
+                                      context.l10n.reminderSheetsPaDirectivesExpireAfter2),
                               TextSpan(
                                 text: expDateLabel,
                                 style: TextStyle(
@@ -180,12 +181,9 @@ class _RenewSheet extends StatelessWidget {
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
-                              const TextSpan(
+                              TextSpan(
                                   text:
-                                      '. (If you are incapable of making mental '
-                                      'health decisions when it would expire, it '
-                                      'stays in effect until your capacity '
-                                      'returns.)'),
+                                      context.l10n.reminderSheetsIfYouAreIncapableOf),
                             ],
                           ),
                         ),
@@ -211,7 +209,7 @@ class _RenewSheet extends StatelessWidget {
                         Icon(Icons.auto_awesome, size: 16, color: p.primary),
                         const SizedBox(width: 8),
                         Text(
-                          'Quick renew · ~5 min',
+                          context.l10n.reminderSheetsQuickRenew5Min,
                           style: TextStyle(
                             fontFamily: kSansFamily,
                             fontSize: 13,
@@ -223,10 +221,7 @@ class _RenewSheet extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      "Most people keep the same answers. We'll pre-fill all "
-                      '11 sections from your current directive — tap any card '
-                      'to change it, then print and sign the new copy in ink '
-                      'with two witnesses.',
+                      context.l10n.reminderSheetsMostPeopleKeepTheSame,
                       style: TextStyle(
                         fontFamily: kSansFamily,
                         fontSize: 13,
@@ -262,7 +257,7 @@ class _RenewSheet extends StatelessWidget {
                     onStartRenew();
                   },
                   icon: const Icon(Icons.arrow_forward, size: 18),
-                  label: const Text('Start quick renew'),
+                  label: Text(context.l10n.reminderSheetsStartQuickRenew),
                   style: FilledButton.styleFrom(
                     minimumSize: const Size.fromHeight(
                         DesignTokens.buttonHeightLg),
@@ -279,14 +274,14 @@ class _RenewSheet extends StatelessWidget {
                 child: TextButton(
                   onPressed: () => Navigator.pop(context),
                   child: Text(
-                    'Remind me next week',
+                    context.l10n.reminderSheetsRemindMeNextWeek,
                     style: TextStyle(color: p.textMuted),
                   ),
                 ),
               ),
               const SizedBox(height: 4),
               Text(
-                "We'll remind you again 7 days before expiration.",
+                context.l10n.reminderSheetsWeLlRemindYouAgain,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: kSansFamily,
@@ -365,23 +360,23 @@ class _CheckInSheet extends StatelessWidget {
 
     final rows = <_CheckInRow>[];
     if (formType.hasAgentSections) {
-      rows.add(const _CheckInRow(
+      rows.add(_CheckInRow(
         icon: Icons.people_alt_outlined,
-        title: 'Still the right people?',
+        title: context.l10n.reminderSheetsStillTheRightPeople,
         sub: 'Agents — primary and alternate',
         stepLabel: 'Step 3',
       ));
     }
     if (formType != FormType.poa) {
-      rows.add(const _CheckInRow(
+      rows.add(_CheckInRow(
         icon: Icons.medication_outlined,
-        title: 'Medications up to date?',
+        title: context.l10n.reminderSheetsMedicationsUpToDate,
         sub: "Current meds, ones you don't want, allergies",
         stepLabel: 'Step 7',
       ));
-      rows.add(const _CheckInRow(
+      rows.add(_CheckInRow(
         icon: Icons.location_on_outlined,
-        title: 'Care preferences still right?',
+        title: context.l10n.reminderSheetsCarePreferencesStillRight,
         sub: 'Preferred facility, room environment',
         stepLabel: 'Step 5',
       ));
@@ -435,12 +430,12 @@ class _CheckInSheet extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SectionLabel(
-                          '● 3-month check-in',
+                          context.l10n.reminderSheets3MonthCheckIn,
                           style: TextStyle(color: p.primary),
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          'Anything changed?',
+                          context.l10n.reminderSheetsAnythingChanged,
                           style: TextStyle(
                             fontFamily: 'Instrument Serif',
                             fontFamilyFallback: const ['Georgia', 'serif'],
@@ -462,9 +457,9 @@ class _CheckInSheet extends StatelessWidget {
                               color: p.textMuted,
                             ),
                             children: [
-                              const TextSpan(
+                              TextSpan(
                                   text:
-                                      'Your directive is still valid through '),
+                                      context.l10n.reminderSheetsYourDirectiveIsStillValid),
                               TextSpan(
                                 text: expLabel,
                                 style: TextStyle(
@@ -472,9 +467,8 @@ class _CheckInSheet extends StatelessWidget {
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
-                              const TextSpan(
-                                text: ' — no signing needed. Just a quick '
-                                    'gut-check that it still fits your life.',
+                              TextSpan(
+                                text: context.l10n.reminderSheetsNoSigningNeededJustA,
                               ),
                             ],
                           ),
@@ -486,7 +480,7 @@ class _CheckInSheet extends StatelessWidget {
               ),
               if (rows.isNotEmpty) ...[
                 const SizedBox(height: 16),
-                const SectionLabel('Common things that change'),
+                SectionLabel(context.l10n.reminderSheetsCommonThingsThatChange),
                 ...rows,
               ],
               const SizedBox(height: 14),
@@ -495,7 +489,7 @@ class _CheckInSheet extends StatelessWidget {
                 child: FilledButton.icon(
                   onPressed: () => Navigator.pop(context),
                   icon: const Icon(Icons.check, size: 17),
-                  label: const Text('Still accurate — all good'),
+                  label: Text(context.l10n.reminderSheetsStillAccurateAllGood),
                   style: FilledButton.styleFrom(
                     minimumSize: const Size.fromHeight(
                         DesignTokens.buttonHeightLg),
@@ -514,13 +508,12 @@ class _CheckInSheet extends StatelessWidget {
                     Navigator.pop(context);
                     onEdit();
                   },
-                  child: const Text('Edit my directive'),
+                  child: Text(context.l10n.reminderSheetsEditMyDirective),
                 ),
               ),
               const SizedBox(height: 4),
               Text(
-                "If you edit anything, you'll re-print and sign that updated "
-                'copy in ink. Small changes can wait for your 2-year renewal.',
+                context.l10n.reminderSheetsIfYouEditAnythingYou,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: kSansFamily,

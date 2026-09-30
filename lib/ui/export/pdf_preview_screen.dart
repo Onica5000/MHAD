@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
@@ -34,7 +35,7 @@ class PdfPreviewScreen extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.close),
-          tooltip: 'Close preview',
+          tooltip: context.l10n.pdfPreviewClosePreview,
           onPressed: () => Navigator.of(context).maybePop(),
         ),
         title: Column(
@@ -42,7 +43,7 @@ class PdfPreviewScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Preview',
+              context.l10n.wizardPreview,
               style: TextStyle(
                 fontFamily: kSansFamily,
                 fontSize: 15,
@@ -51,7 +52,7 @@ class PdfPreviewScreen extends StatelessWidget {
               ),
             ),
             Text(
-              'US LETTER · 8.5×11"',
+              context.l10n.pdfPreviewUsLetter8511,
               style: TextStyle(
                 fontFamily: kMonoFamily,
                 fontFamilyFallback: const [
@@ -70,7 +71,7 @@ class PdfPreviewScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.ios_share),
-            tooltip: 'Share',
+            tooltip: context.l10n.pdfPreviewShare,
             onPressed: () => _openOrPrintPdf(pdfBytes),
           ),
         ],
@@ -99,7 +100,7 @@ class PdfPreviewScreen extends StatelessWidget {
         ),
         loadingWidget: Center(
           child: Semantics(
-            label: 'Rendering PDF preview',
+            label: context.l10n.pdfPreviewRenderingPdfPreview,
             child: CircularProgressIndicator(color: p.primary),
           ),
         ),
@@ -120,7 +121,7 @@ class PdfPreviewScreen extends StatelessWidget {
                 child: OutlinedButton.icon(
                   onPressed: () => _openOrPrintPdf(pdfBytes),
                   icon: const Icon(Icons.download_outlined, size: 17),
-                  label: const Text('Save'),
+                  label: Text(context.l10n.save),
                 ),
               ),
               const SizedBox(width: 8),
@@ -131,7 +132,7 @@ class PdfPreviewScreen extends StatelessWidget {
                     name: 'PA_MHAD',
                   ),
                   icon: const Icon(Icons.print_outlined, size: 17),
-                  label: const Text('Print'),
+                  label: Text(context.l10n.audioGuidePrint),
                 ),
               ),
               const SizedBox(width: 8),
@@ -140,7 +141,7 @@ class PdfPreviewScreen extends StatelessWidget {
                 child: FilledButton.icon(
                   onPressed: () => _openOrPrintPdf(pdfBytes),
                   icon: const Icon(Icons.ios_share, size: 17),
-                  label: const Text('Share'),
+                  label: Text(context.l10n.pdfPreviewShare),
                 ),
               ),
             ],
@@ -331,7 +332,7 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
     if (_pages.isEmpty) {
       return Center(
         child: Semantics(
-          label: 'Rendering PDF preview',
+          label: context.l10n.pdfPreviewRenderingPdfPreview,
           child: CircularProgressIndicator(color: p.primary),
         ),
       );
@@ -425,11 +426,11 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
         // Title row — "Export & share" on the left, Back on the opposite right.
         Row(
           children: [
-            const Expanded(child: SectionLabel('Export & share')),
+            Expanded(child: SectionLabel(context.l10n.pdfPreviewExportShare)),
             TextButton.icon(
               onPressed: widget.onClose,
               icon: const Icon(Icons.arrow_back, size: 16),
-              label: const Text('Back'),
+              label: Text(context.l10n.back),
               style: TextButton.styleFrom(
                 foregroundColor: p.text,
                 padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -448,8 +449,8 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
         EditorialHeading(
           textSpan: TextSpan(
             children: [
-              const TextSpan(text: 'Your directive, '),
-              TextSpan(text: 'on paper.', style: TextStyle(color: p.primary)),
+              TextSpan(text: context.l10n.pdfPreviewYourDirective),
+              TextSpan(text: context.l10n.pdfPreviewOnPaper, style: TextStyle(color: p.primary)),
             ],
           ),
           size: 24,
@@ -458,8 +459,7 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
         ),
         const SizedBox(height: 6),
         Text(
-          'Sized for US Letter (8.5 × 11″) with 1-inch margins. The preview '
-          'fills the width — use − / + to zoom.',
+          context.l10n.pdfPreviewSizedForUsLetter8,
           style: TextStyle(
             fontFamily: kSansFamily,
             fontSize: 12,
@@ -494,7 +494,7 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
         if (hasPages && pageCount > 1) ...[
           const SizedBox(height: 18),
           Text(
-            'PAGES',
+            context.l10n.pdfPreviewPages,
             style: TextStyle(
               fontFamily: kMonoFamily,
               fontFamilyFallback: const ['Consolas', 'monospace'],
@@ -616,7 +616,7 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
     // InkWell so the toggle is keyboard-reachable on web (UX audit A2).
     return Semantics(
       button: true,
-      label: 'Fit page to window',
+      label: context.l10n.pdfPreviewFitPageToWindow,
       child: InkWell(
       onTap: () => _setZoom(1.0),
       borderRadius: BorderRadius.circular(DesignTokens.radiusSm),

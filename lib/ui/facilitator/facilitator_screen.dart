@@ -1,4 +1,5 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
@@ -45,7 +46,7 @@ class FacilitatorScreen extends StatelessWidget {
       // alone." 32pt headline owns the visual title.
       body: Column(children: [
         WizardHeader(
-          backLabel: 'Back',
+          backLabel: context.l10n.back,
           onBack: () => safeBack(context),
           actionLabel: '',
         ),
@@ -61,10 +62,10 @@ class FacilitatorScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SectionLabel('Get help · evidence-based'),
+                      SectionLabel(context.l10n.facilitatorGetHelpEvidenceBased),
                       const SizedBox(height: 6),
-                      const EditorialHeading(
-                        text: "You don't have to do this alone.",
+                      EditorialHeading(
+                        text: context.l10n.facilitatorYouDonTHaveTo,
                         size: 32,
                       ),
                       const SizedBox(height: 6),
@@ -91,12 +92,10 @@ class FacilitatorScreen extends StatelessWidget {
           // Pathway 1 — Referral to PA partners
           _PathwayCard(
             primary: true,
-            tag: '♥ Peer specialist / advocate referral',
-            title: 'Talk to someone trained',
+            tag: context.l10n.facilitatorPeerSpecialistAdvocateReferral,
+            title: context.l10n.facilitatorTalkToSomeoneTrained,
             body:
-                'Pennsylvania peer specialists and rights advocates help '
-                'walk you through the form. Free; no booking system inside '
-                'this app — call or visit a partner below.',
+                context.l10n.facilitatorPennsylvaniaPeerSpecialistsAndRights,
             meta: const ['~45 min', 'Free', 'PA-based'],
           ),
           const SizedBox(height: 8),
@@ -118,12 +117,10 @@ class FacilitatorScreen extends StatelessWidget {
 
           // Pathway 2 — print + review in person
           _PathwayCard(
-            tag: '👥 Someone I already trust',
-            title: 'Print + review it together',
+            tag: context.l10n.facilitatorSomeoneIAlreadyTrust,
+            title: context.l10n.facilitatorPrintReviewItTogether,
             body:
-                'Print or screen-share your draft and walk through it with a '
-                'friend, family member, or peer. They can\'t change anything '
-                'in your app — that stays in your hands.',
+                context.l10n.facilitatorPrintOrScreenShareYour,
             meta: const ['In person', 'You stay in control'],
           ),
 
@@ -131,23 +128,19 @@ class FacilitatorScreen extends StatelessWidget {
 
           // Pathway 3 — email draft to clinician
           _PathwayCard(
-            tag: '🧠 My care team',
-            title: 'Email a draft to my clinician',
+            tag: context.l10n.facilitatorMyCareTeam,
+            title: context.l10n.facilitatorEmailADraftToMy,
             body:
-                'Generate the PDF in Export, then send it via your phone\'s '
-                'email app. Ask your therapist or psychiatrist for comments. '
-                'You\'ll transcribe their suggestions back into the form '
-                'yourself — this app doesn\'t connect to their EHR.',
+                context.l10n.facilitatorGenerateThePdfInExport,
             meta: const ['Email composer', 'Manual transcribe back'],
           ),
 
           const SizedBox(height: 18),
-          const InfoBanner(
+          InfoBanner(
             icon: Icons.info_outline,
             variant: InfoBannerVariant.info,
             text:
-                'Prefer to do it yourself? That\'s fine — keep going from '
-                'where you left off.',
+                context.l10n.facilitatorPreferToDoItYourself,
           ),
         ],
       )),
@@ -290,13 +283,13 @@ class _ReferralRow extends StatelessWidget {
               if (onCall != null)
                 IconButton(
                   icon: const Icon(Icons.phone_outlined),
-                  tooltip: 'Call',
+                  tooltip: context.l10n.facilitatorCall,
                   onPressed: onCall,
                 ),
               if (onWeb != null)
                 IconButton(
                   icon: const Icon(Icons.open_in_new),
-                  tooltip: 'Open website',
+                  tooltip: context.l10n.facilitatorOpenWebsite,
                   onPressed: onWeb,
                 ),
             ],

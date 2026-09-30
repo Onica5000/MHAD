@@ -1,5 +1,6 @@
 ﻿import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/services/pin_auth_service.dart';
 import 'package:mhad/services/privacy_mode_service.dart';
 import 'package:mhad/ui/mode_selection/pin_dialog.dart';
@@ -49,9 +50,9 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
         break;
       case AuthResult.cancelled:
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             content: Text(
-              'Authentication failed or was cancelled. Please try again.',
+              context.l10n.modeSelectionAuthenticationFailedOrWasCancelled,
             ),
           ),
         );
@@ -109,10 +110,10 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                       // disclaimer gate before this nor the onboarding intro
                       // after it shows a step counter, so the "of 3" promised a
                       // numbered sequence that doesn't exist. Use a plain label.
-                      const SectionLabel('Privacy · setup'),
+                      SectionLabel(context.l10n.modeSelectionPrivacySetup),
                       const SizedBox(height: 6),
                       Text(
-                        'How should we handle your data?',
+                        context.l10n.modeSelectionHowShouldWeHandleYour,
                         style: TextStyle(
                           fontFamily: kSansFamily,
                           fontSize: 28,
@@ -124,7 +125,7 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        'You can change this anytime in Settings.',
+                        context.l10n.modeSelectionYouCanChangeThisAnytime,
                         style: TextStyle(
                           fontFamily: kSansFamily,
                           fontSize: 14,
@@ -141,11 +142,9 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                       if (!kIsWeb)
                         _Card2(
                           icon: Icons.lock_outline,
-                          title: 'Private mode',
+                          title: context.l10n.modeSelectionPrivateMode,
                           subtitle:
-                              'Your data stays on this device, encrypted. '
-                              'Unlock with biometrics or a passcode. You can '
-                              'come back to your draft anytime.',
+                              context.l10n.modeSelectionYourDataStaysOnThis,
                           badges: const [
                             'Biometrics',
                             'AES-256',
@@ -161,11 +160,9 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
 
                       _Card2(
                         icon: Icons.visibility_off_outlined,
-                        title: 'Public mode',
+                        title: context.l10n.modeSelectionPublicMode,
                         subtitle:
-                            'No data is saved after you close the app. Best '
-                            'for shared devices, or one-time use without '
-                            'leaving a trace.',
+                            context.l10n.modeSelectionNoDataIsSavedAfter,
                         badges: const [
                           'Nothing saved',
                           'In-memory only',
@@ -358,7 +355,7 @@ class _Card2 extends StatelessWidget {
                           borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
                         ),
                         child: Text(
-                          'RECOMMENDED',
+                          context.l10n.modeSelectionRecommended,
                           style: TextStyle(
                             fontFamily: kSansFamily,
                             fontSize: 11,

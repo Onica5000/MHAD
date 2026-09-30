@@ -3073,4 +3073,2297 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reviewEdit => 'Edit';
+
+  @override
+  String get homeMakeItFindableInA => 'Make it findable in a crisis';
+
+  @override
+  String get homeShareCopiesCarryTheWallet =>
+      'Share copies, carry the wallet card, tell your people where it is';
+
+  @override
+  String get homeSessionRestoredPersonalInfoMust =>
+      'Session restored. Personal info must be re-entered.';
+
+  @override
+  String get homeDeleteDirective => 'Delete directive?';
+
+  @override
+  String get homeAllDataForThisDirective =>
+      'All data for this directive will be permanently deleted.';
+
+  @override
+  String get homeDirectiveDeleted => 'Directive deleted.';
+
+  @override
+  String get homeRenameDirective => 'Rename directive';
+
+  @override
+  String get homeRenewDirective => 'Renew Directive?';
+
+  @override
+  String get homeThisWillCreateANew =>
+      'This will create a new directive with the same treatment preferences and agent designations. Personal information, witnesses, and signatures will need to be re-entered.\n\nThe original directive will remain unchanged.';
+
+  @override
+  String get homeRenew => 'Renew';
+
+  @override
+  String get homeAmendThisDirective => 'Amend this directive?';
+
+  @override
+  String get homeAmendingOpensThisDirectiveSo =>
+      'Amending opens this directive so you can change it — your existing answers stay in place.\n\nImportant: an amendment is only valid once you re-sign it on paper with two adult witnesses, the same way as the original (PA Act 194). Until you re-sign, this directive will show as an unsigned draft, and any printed copies of the old version stay in effect until you replace them.\n\nPrefer to keep the signed original untouched? Use “Renew (copy to new)” instead.';
+
+  @override
+  String get homeAmend => 'Amend';
+
+  @override
+  String get homePrivateByDesign => 'Private by design';
+
+  @override
+  String get homeLetSGetStarted => 'Let\'s get started.';
+
+  @override
+  String get homeRename => 'Rename';
+
+  @override
+  String get homeLabelShownInThisList =>
+      'Label shown in this list only — never printed';
+
+  @override
+  String get homeRenewCopyToNew => 'Renew (copy to new)';
+
+  @override
+  String get homeAmendEditThisOne => 'Amend (edit this one)';
+
+  @override
+  String get homeRequiresReSigningReWitnessing =>
+      'Requires re-signing & re-witnessing';
+
+  @override
+  String get homeRevoke => 'Revoke';
+
+  @override
+  String get homeTools => 'Tools';
+
+  @override
+  String get homePastDirectives => 'Past directives';
+
+  @override
+  String get homeStartANewDirective => 'Start a new directive';
+
+  @override
+  String get homeLoadingYourDirectives => 'Loading your directives';
+
+  @override
+  String get homeDisplayLabel => 'Display label';
+
+  @override
+  String get homeShownOnlyInThisList =>
+      'Shown only in this list — never printed on the form. Leave empty to use the name on the directive.';
+
+  @override
+  String get homeCouldnTLoadYourDirectives => 'Couldn\'t load your directives.';
+
+  @override
+  String get homeNothingWasLostThisIs =>
+      'Nothing was lost — this is a display problem, not a data one.';
+
+  @override
+  String get homeYourVoice => 'Your voice,\n';
+
+  @override
+  String get homeInYourWords => 'in your words.';
+
+  @override
+  String get homeLetSKeepYourVoice => 'Let\'s keep your voice clear.';
+
+  @override
+  String get homeStartYourDirective => 'Start your directive';
+
+  @override
+  String get homePrivateBodyWeb =>
+      'Your directive never leaves this browser — no server, no account, no tracking. It lives only in this session, and only you choose who to share it with.';
+
+  @override
+  String get homePrivateBodyDevice =>
+      'Your directive stays on your device. No ads, no tracking, no selling your data — only you choose who to share it with.';
+
+  @override
+  String homeHiName(String name) {
+    return 'Hi, $name.\n';
+  }
+
+  @override
+  String homeProfileA11y(String name) {
+    return 'Profile $name';
+  }
+
+  @override
+  String homeCardDraft(int step, int total, String date) {
+    return 'Draft · step $step of $total · $date';
+  }
+
+  @override
+  String homeCardPrepared(String date) {
+    return 'Prepared · $date';
+  }
+
+  @override
+  String get homeCardExpired => 'Expired · revoke or copy to new';
+
+  @override
+  String homeCardRevoked(String date) {
+    return 'Revoked · $date';
+  }
+
+  @override
+  String homeCardDirectiveYear(int year) {
+    return 'Directive · $year';
+  }
+
+  @override
+  String homeCardA11y(String name, String status) {
+    return '$name. $status. Tap to open.';
+  }
+
+  @override
+  String get crisisPlanHelpThePeopleAroundYou =>
+      'Help the people around you spot trouble early — and know what actually helps you when they do.';
+
+  @override
+  String get crisisPlanAdd => 'Add';
+
+  @override
+  String get crisisPlanAdd2 => '+ Add';
+
+  @override
+  String get crisisPlanOptionalAddOnCrisisPlan =>
+      'Optional add-on · Crisis plan';
+
+  @override
+  String get crisisPlanEarlyWarningSigns => 'Early warning signs';
+
+  @override
+  String get crisisPlanTriggersToWatchFor => 'Triggers to watch for';
+
+  @override
+  String get crisisPlanThingsThatGenuinelyHelp => 'Things that genuinely help';
+
+  @override
+  String get crisisPlanThingsToSayToMe => 'Things to say to me';
+
+  @override
+  String get crisisPlanDonTDoThese => 'Don\'t do these';
+
+  @override
+  String get crisisPlanTypeAShortNote => 'Type a short note';
+
+  @override
+  String get permissionsOverviewPaMhadRequestsSystemPermissions =>
+      'PA MHAD requests system permissions only for features you actively use. Nothing is collected in the background. Each section below explains exactly what a permission unlocks, what the app does with the result, and what it never does.';
+
+  @override
+  String get permissionsOverviewWhatThisAppMayAsk =>
+      'What this app may ask for';
+
+  @override
+  String get permissionsOverviewBiometricsPasscode => 'Biometrics / passcode';
+
+  @override
+  String get permissionsOverviewNotifications => 'Notifications';
+
+  @override
+  String get permissionsOverviewCamera => 'Camera';
+
+  @override
+  String get permissionsOverviewMicrophone => 'Microphone';
+
+  @override
+  String get permissionsOverviewContacts => 'Contacts';
+
+  @override
+  String get makeItFindableADirectiveOnlyHelpsIf =>
+      'A directive only helps if the people treating you can find it when you cannot speak for yourself. Take a few minutes now to put copies where they will be looked for.';
+
+  @override
+  String get makeItFindableThisIsGeneralInformationAbout =>
+      'This is general information about keeping your directive accessible, not legal advice.';
+
+  @override
+  String get makeItFindableCrisisReadiness => 'Crisis readiness';
+
+  @override
+  String get makeItFindableDoTheseNow => 'Do these now';
+
+  @override
+  String get makeItFindableShareItWithYourAgent =>
+      'Share it with your agent and a trusted person';
+
+  @override
+  String get makeItFindableTheyShouldEachHaveA =>
+      'They should each have a copy before any crisis — not only you.';
+
+  @override
+  String get makeItFindableGiveACopyToYour => 'Give a copy to your care team';
+
+  @override
+  String get makeItFindableAskYourPsychiatristTherapistPrimary =>
+      'Ask your psychiatrist, therapist, primary-care doctor, and any facility to add it to your medical record.';
+
+  @override
+  String get makeItFindablePrintAndCarryTheWallet =>
+      'Print and carry the wallet card';
+
+  @override
+  String get makeItFindableAPocketCardThatTells =>
+      'A pocket card that tells responders you have a directive and how to reach your agent.';
+
+  @override
+  String get adminUpdateFederalRegisterRelevantFederalRules =>
+      'Federal Register — relevant federal rules';
+
+  @override
+  String get adminUpdateFederalRulesTheAppReferences =>
+      'Federal rules the app references. Use a link as the SOURCE for a verify-tier legal/dated change. State law (PA Act 194) is not covered here.';
+
+  @override
+  String get adminUpdateOpen => 'Open';
+
+  @override
+  String get adminUpdateSourceLinkCopied => 'Source link copied';
+
+  @override
+  String get adminUpdateCopyLink => 'Copy link';
+
+  @override
+  String get adminUpdateRestoreFromWhichBackup => 'Restore from which backup?';
+
+  @override
+  String get adminUpdateAdminDataUpdate => 'Admin · data update';
+
+  @override
+  String get adminUpdateEnterTheAdminPassphrase =>
+      'Enter the admin passphrase.';
+
+  @override
+  String get adminUpdateUnlock => 'Unlock';
+
+  @override
+  String get adminUpdateDescribeTheUpdateTheAi =>
+      'Describe the update. The AI drafts changes to the selected file with sources; you review and approve before anything is emitted. Legal/statutory and educational changes always need your explicit sign-off.';
+
+  @override
+  String get adminUpdateRevert => 'Revert';
+
+  @override
+  String get adminUpdateCheckBestGeminiModel => 'Check best Gemini model';
+
+  @override
+  String get adminUpdateCheckFederalRegister => 'Check Federal Register';
+
+  @override
+  String get adminUpdateCopiedUpdatedJson => 'Copied updated JSON';
+
+  @override
+  String get adminUpdateCopyJson => 'Copy JSON';
+
+  @override
+  String get adminUpdateAnotherUpdate => 'Another update';
+
+  @override
+  String get adminUpdatePassphrase => 'Passphrase';
+
+  @override
+  String get adminUpdateWhatToUpdate => 'What to update';
+
+  @override
+  String get adminUpdateAiProvider => 'AI provider';
+
+  @override
+  String get adminUpdateModel => 'Model';
+
+  @override
+  String get adminUpdateDescribeTheUpdate => 'Describe the update *';
+
+  @override
+  String get adminUpdateEGTheTrevorProject =>
+      'e.g. \"The Trevor Project number changed to ...\" or \"Check Gemini\'s current free-tier rate limits\"';
+
+  @override
+  String get adminUpdateRequiredWhatShouldTheAi =>
+      'Required — what should the AI draft a change to?';
+
+  @override
+  String get adminUpdateFocusAreaPathOptional => 'Focus area / path (optional)';
+
+  @override
+  String get adminUpdateRestrictTheAiToOne =>
+      'Restrict the AI to one spot, e.g. \"config.timeoutsSeconds\" or \"sections.faq_valid\".';
+
+  @override
+  String get reminderSheetsQuickRenew5Min => 'Quick renew · ~5 min';
+
+  @override
+  String get reminderSheetsMostPeopleKeepTheSame =>
+      'Most people keep the same answers. We\'ll pre-fill all 11 sections from your current directive — tap any card to change it, then print and sign the new copy in ink with two witnesses.';
+
+  @override
+  String get reminderSheetsStartQuickRenew => 'Start quick renew';
+
+  @override
+  String get reminderSheetsRemindMeNextWeek => 'Remind me next week';
+
+  @override
+  String get reminderSheetsWeLlRemindYouAgain =>
+      'We\'ll remind you again 7 days before expiration.';
+
+  @override
+  String get reminderSheetsAnythingChanged => 'Anything changed?';
+
+  @override
+  String get reminderSheetsStillAccurateAllGood => 'Still accurate — all good';
+
+  @override
+  String get reminderSheetsEditMyDirective => 'Edit my directive';
+
+  @override
+  String get reminderSheetsIfYouEditAnythingYou =>
+      'If you edit anything, you\'ll re-print and sign that updated copy in ink. Small changes can wait for your 2-year renewal.';
+
+  @override
+  String get reminderSheets3MonthCheckIn => '● 3-month check-in';
+
+  @override
+  String get reminderSheetsCommonThingsThatChange =>
+      'Common things that change';
+
+  @override
+  String get reminderSheetsStillTheRightPeople => 'Still the right people?';
+
+  @override
+  String get reminderSheetsMedicationsUpToDate => 'Medications up to date?';
+
+  @override
+  String get reminderSheetsCarePreferencesStillRight =>
+      'Care preferences still right?';
+
+  @override
+  String get reminderSheetsPaDirectivesExpireAfter2 =>
+      'PA directives expire after 2 years. Yours runs out on ';
+
+  @override
+  String get reminderSheetsIfYouAreIncapableOf =>
+      '. (If you are incapable of making mental health decisions when it would expire, it stays in effect until your capacity returns.)';
+
+  @override
+  String get reminderSheetsYourDirectiveIsStillValid =>
+      'Your directive is still valid through ';
+
+  @override
+  String get reminderSheetsNoSigningNeededJustA =>
+      ' — no signing needed. Just a quick gut-check that it still fits your life.';
+
+  @override
+  String get revocationMarkedRevokedOnThisDevice =>
+      'Marked revoked on this device';
+
+  @override
+  String get revocationPer20PaCS =>
+      'Per 20 Pa.C.S. §§ 5825 and 5839, revocation is effective only when communicated to your attending physician or provider. Marking this directive revoked here does not communicate it — you still need to tell each recipient.';
+
+  @override
+  String get revocationYouPickedTheseRecipientsTo =>
+      'You picked these recipients to notify:';
+
+  @override
+  String get revocationContactEachRecipientYourselfCall =>
+      'Contact each recipient yourself — call or email them — and ask the receiving provider to record the revocation in your chart. Revocation takes effect once your provider has been told.';
+
+  @override
+  String get revocationYourDirectiveWillNoLonger =>
+      'Your directive will no longer be legally binding once you communicate the revocation to your attending physician or provider (20 Pa.C.S. §§ 5825, 5839). This app marks the directive revoked locally and helps you generate a revocation letter.';
+
+  @override
+  String get revocationThisDeclarationMayBeRevoked =>
+      'This declaration may be revoked in whole or in part at any time, either orally or in writing, as long as I have not been found to be incapable of making mental health decisions. My revocation will be effective upon communication to my attending physician or other mental health care provider, either by me or a witness to my revocation, of the intent to revoke.';
+
+  @override
+  String get revocationNoBatchSendsPickEach =>
+      'No batch sends — pick each recipient. The app keeps your choices in front of you as a checklist; you contact each recipient yourself (call, email, or in person).';
+
+  @override
+  String get revocationTypeRevokeToConfirm => 'Type REVOKE to confirm';
+
+  @override
+  String get revocationHowRevocationWorksInPa => 'How revocation works in PA';
+
+  @override
+  String get revocationStatutoryRevocationStatement =>
+      'Statutory revocation statement';
+
+  @override
+  String get revocationWhoToNotifyOptIn =>
+      'Who to notify (opt-in per recipient)';
+
+  @override
+  String get revocationPermanentAction => 'Permanent action';
+
+  @override
+  String get revocationRevoke => 'REVOKE';
+
+  @override
+  String get pastDirectiveDetailDeleteFromThisDevice =>
+      'Delete from this device?';
+
+  @override
+  String get pastDirectiveDetailThisRemovesTheSavedDirective =>
+      'This removes the saved directive from this device. The legal effect of any previously-signed paper copy is unchanged. This cannot be undone.';
+
+  @override
+  String get pastDirectiveDetailDirectiveDeletedFromThisDevice =>
+      'Directive deleted from this device.';
+
+  @override
+  String get pastDirectiveDetailNoShareLogEntriesYet =>
+      'No share log entries yet.';
+
+  @override
+  String get pastDirectiveDetailWeDonTTrackDelivery =>
+      'We don\'t track delivery or receipt confirmation (that would need a server). Add entries manually as you distribute copies.';
+
+  @override
+  String get pastDirectiveDetailGeneratedOnDemand6Pages =>
+      'Generated on demand · ~6 pages';
+
+  @override
+  String get pastDirectiveDetailWhoHadACopy => 'Who had a copy';
+
+  @override
+  String get pastDirectiveDetailActions => 'Actions';
+
+  @override
+  String get pastDirectiveDetailLoadingThisDirective =>
+      'Loading this directive';
+
+  @override
+  String get pastDirectiveDetailCopyToANewDirective =>
+      'Copy to a new directive';
+
+  @override
+  String get pastDirectiveDetailStartWithTheseAnswersComing =>
+      'Start with these answers — coming with the renewal flow';
+
+  @override
+  String get pastDirectiveDetailOpenThePdf => 'Open the PDF';
+
+  @override
+  String get pastDirectiveDetailPrintOrSaveForYour =>
+      'Print or save for your records';
+
+  @override
+  String get pastDirectiveDetailDeleteFromThisDevice2 =>
+      'Delete from this device';
+
+  @override
+  String get pastDirectiveDetailSignedBy => 'SIGNED BY';
+
+  @override
+  String get pastDirectiveDetailWitness1 => 'WITNESS 1';
+
+  @override
+  String get pastDirectiveDetailWitness2 => 'WITNESS 2';
+
+  @override
+  String get pastDirectiveDetailDirective => 'Directive · ';
+
+  @override
+  String get pinDialogCreatePasscode => 'Create Passcode';
+
+  @override
+  String get pinDialogBiometricAuthenticationIsNotAvailable =>
+      'Biometric authentication is not available on this device. Create a passcode to protect your private data.';
+
+  @override
+  String get pinDialogCreate => 'Create';
+
+  @override
+  String get pinDialogPaMhad => 'PA MHAD';
+
+  @override
+  String get pinDialogPrivateModeLocked => 'PRIVATE MODE · LOCKED';
+
+  @override
+  String get pinDialogEnterYourPasscodeToUnlock =>
+      'Enter your passcode to unlock private mode.';
+
+  @override
+  String get pinDialogSwitchToPublicMode => 'Switch to public mode';
+
+  @override
+  String get pinDialogPasscode => 'Passcode';
+
+  @override
+  String get pinDialogAtLeast4Characters => 'At least 4 characters';
+
+  @override
+  String get pinDialogConfirmPasscode => 'Confirm Passcode';
+
+  @override
+  String get pinDialogUseYour => 'Use your ';
+
+  @override
+  String get pinDialogPasscode2 => 'passcode.';
+
+  @override
+  String get modeSelectionAuthenticationFailedOrWasCancelled =>
+      'Authentication failed or was cancelled. Please try again.';
+
+  @override
+  String get modeSelectionHowShouldWeHandleYour =>
+      'How should we handle your data?';
+
+  @override
+  String get modeSelectionYouCanChangeThisAnytime =>
+      'You can change this anytime in Settings.';
+
+  @override
+  String get modeSelectionRecommended => 'RECOMMENDED';
+
+  @override
+  String get modeSelectionPrivacySetup => 'Privacy · setup';
+
+  @override
+  String get modeSelectionPrivateMode => 'Private mode';
+
+  @override
+  String get modeSelectionYourDataStaysOnThis =>
+      'Your data stays on this device, encrypted. Unlock with biometrics or a passcode. You can come back to your draft anytime.';
+
+  @override
+  String get modeSelectionPublicMode => 'Public mode';
+
+  @override
+  String get modeSelectionNoDataIsSavedAfter =>
+      'No data is saved after you close the app. Best for shared devices, or one-time use without leaving a trace.';
+
+  @override
+  String get sideEffectsForTheMedicationsYouRe =>
+      'For the medications you\'re currently taking, here are common side effects — check the ones you actually have. Noting them (especially any that affect your daily activities) helps your care team. This is common-side-effect information, not medical advice.';
+
+  @override
+  String get sideEffectsSetUpAiToCheck => 'Set up AI to check side effects';
+
+  @override
+  String get sideEffectsThisUsesYourAiAssistant =>
+      'This uses your AI assistant to list common side effects of your current medications for you to review.';
+
+  @override
+  String get sideEffectsWorthDiscussingWithYourDoctor =>
+      'Worth discussing with your doctor';
+
+  @override
+  String get sideEffectsOptionalAddOn => 'Optional add-on';
+
+  @override
+  String get sideEffectsAskYourDoctorOrPharmacist =>
+      'Ask your doctor or pharmacist';
+
+  @override
+  String get educationCategoryBrowserNoSectionsInThisCategory =>
+      'No sections in this category yet.';
+
+  @override
+  String get educationMostOfThisComesStraight =>
+      'Most of this comes straight from the official PA MHAD booklet, plus a few plain-language explainers. No marketing, no opinions — just the rules and what they mean.';
+
+  @override
+  String get educationSearchArticlesGlossaryFaqs =>
+      'Search articles, glossary, FAQs…';
+
+  @override
+  String get educationYourDirectiveIsYourVoice =>
+      '\"Your directive is your voice — written in advance, kept safe, honored when you can\'t speak for yourself.\"';
+
+  @override
+  String get educationPaOfficeOfMentalHealth =>
+      '— PA OFFICE OF MENTAL HEALTH & SUBSTANCE ABUSE SERVICES · BOOKLET P.3';
+
+  @override
+  String get educationTypeToSearchEducationalContent =>
+      'Type to search educational content...';
+
+  @override
+  String get educationBrowseAllTopics => 'Browse all topics';
+
+  @override
+  String get educationUnderstand => 'Understand ';
+
+  @override
+  String get educationYouSign => ' you sign.';
+
+  @override
+  String get learnAiPanelAskTheAi => 'Ask the AI';
+
+  @override
+  String get learnAiPanelSetUpAiAssistant => 'Set up AI assistant';
+
+  @override
+  String get learnAiPanelNotLegalOrMedicalAdvice =>
+      'Not legal or medical advice.';
+
+  @override
+  String get learnAiPanelAskAQuestion => 'Ask a question…';
+
+  @override
+  String get educationArticleDetailTryIt => 'TRY IT';
+
+  @override
+  String get educationArticleDetailReadyToWriteYours => 'Ready to write yours?';
+
+  @override
+  String get educationArticleDetailTheGuidedWizardTakesAbout =>
+      'The guided wizard takes about 20 minutes and works anonymously.';
+
+  @override
+  String get educationArticleDetailStartMyDirective => 'Start my directive';
+
+  @override
+  String get audioGuideCouldnTOpenTheQuestionnaire =>
+      'Couldn\'t open the questionnaire to print. Please try again.';
+
+  @override
+  String get audioGuideRecordYourWishesByVoice => 'Record your wishes by voice';
+
+  @override
+  String get audioGuideDescribeYourWishesOutLoud =>
+      'Describe your wishes out loud, upload the recording on the Snap-to-fill screen, and the AI fills your directive — you review every field before anything is saved.';
+
+  @override
+  String get audioGuidePrintTheQuestionnaire => 'Print the questionnaire';
+
+  @override
+  String get audioGuidePrintItToReadAloud =>
+      'Print it to read aloud while you record, or to fill in by hand first.';
+
+  @override
+  String get audioGuidePrint => 'Print';
+
+  @override
+  String get audioGuideSetTheseInTheApp => 'Set these in the app:';
+
+  @override
+  String get audioGuideWorthSayingOutLoudAutofill =>
+      'Worth saying out loud — autofill now captures these:';
+
+  @override
+  String get audioGuideHowToRecord => 'How to record';
+
+  @override
+  String get audioGuideWhatTheRecordingCanT => 'What the recording can\'t fill';
+
+  @override
+  String get ulyssesClauseBeforeYouAcknowledge => 'Before you acknowledge';
+
+  @override
+  String get ulyssesClauseThisIsASignificantDecision =>
+      'This is a significant decision. Once you are found incapable, the directive cannot be revoked by you until capacity returns. We strongly recommend talking it through with a peer specialist or your clinician before saving.';
+
+  @override
+  String get ulyssesClauseIUnderstand => 'I understand';
+
+  @override
+  String get ulyssesClauseSometimesDuringACrisisPeople =>
+      'Sometimes during a crisis, people refuse treatment that they\'d want when well. PA law honors what you wrote today, even if you protest in the moment.';
+
+  @override
+  String get ulyssesClauseSelfBindingUlysses => 'SELF-BINDING (\"Ulysses\")';
+
+  @override
+  String get ulyssesClauseTieMyselfToTheMast => 'Tie myself to the mast.';
+
+  @override
+  String get ulyssesClausePerPaAct19420 =>
+      'Per PA Act 194 (20 Pa.C.S. §§ 5825, 5839), this directive may be revoked only while I have capacity. Once I\'m found incapable, what I wrote here stands — even over my in-the-moment protest — until capacity returns.';
+
+  @override
+  String get ulyssesClauseIAcknowledgeThis => 'I acknowledge this';
+
+  @override
+  String get ulyssesClauseRecordedInYourDirectivePdf =>
+      'Recorded in your directive PDF.';
+
+  @override
+  String get ulyssesClauseBoundariesOnThisClause => 'Boundaries on this clause';
+
+  @override
+  String get exportCardsBeforeSharingEnsureThisDirective =>
+      'Before sharing: ensure this directive has been signed, dated, and witnessed by two adults (18+) as required by PA Act 194. Give copies to your agent, physician, and support people.';
+
+  @override
+  String get exportCardsPrincipal => 'Principal';
+
+  @override
+  String get exportCardsTheExportedPdfIsNot =>
+      'The exported PDF is not encrypted. Share only via channels you trust.';
+
+  @override
+  String get exportCardsImportantBeforeSharingEnsureThis =>
+      'Important: Before sharing, ensure this directive has been signed, dated, and witnessed by two adults as required by PA Act 194. Give copies to your agent, physician, and support people.';
+
+  @override
+  String get pdfPreviewUsLetter8511 => 'US LETTER · 8.5×11\"';
+
+  @override
+  String get pdfPreviewShare => 'Share';
+
+  @override
+  String get pdfPreviewSizedForUsLetter8 =>
+      'Sized for US Letter (8.5 × 11″) with 1-inch margins. The preview fills the width — use − / + to zoom.';
+
+  @override
+  String get pdfPreviewPages => 'PAGES';
+
+  @override
+  String get pdfPreviewExportShare => 'Export & share';
+
+  @override
+  String get pdfPreviewClosePreview => 'Close preview';
+
+  @override
+  String get pdfPreviewRenderingPdfPreview => 'Rendering PDF preview';
+
+  @override
+  String get pdfPreviewFitPageToWindow => 'Fit page to window';
+
+  @override
+  String get pdfPreviewYourDirective => 'Your directive, ';
+
+  @override
+  String get pdfPreviewOnPaper => 'on paper.';
+
+  @override
+  String get exportSelectAtLeastOneSection =>
+      'Select at least one section to include.';
+
+  @override
+  String get exportIncompleteDirective => 'Incomplete Directive';
+
+  @override
+  String get exportGoBack => 'Go Back';
+
+  @override
+  String get exportEditDirective => 'Edit Directive';
+
+  @override
+  String get exportExportAnyway => 'Export Anyway';
+
+  @override
+  String get exportExportedFileIsNotEncrypted =>
+      'Exported file is not encrypted';
+
+  @override
+  String get exportThePdfYouAreAbout =>
+      'The PDF you are about to share contains your full mental-health directive (names, agents, medications, signatures). It is generated unencrypted because the underlying PDF library does not support password protection.\n\nShare only via channels you trust (e.g., direct hand-off, a secure email to a specific provider). Avoid public uploads, cloud links, or untrusted messaging apps.';
+
+  @override
+  String get exportIUnderstandContinue => 'I understand, continue';
+
+  @override
+  String get exportCouldnTGenerateThePdf => 'Couldn\'t generate the PDF.';
+
+  @override
+  String get exportSelectAtLeastOneSection2 =>
+      'Select at least one section to preview.';
+
+  @override
+  String get exportNothingToDownloadYet => 'Nothing to download yet';
+
+  @override
+  String get exportStartADirectiveFirstThen =>
+      'Start a directive first — then come back here to preview, download, and print it.';
+
+  @override
+  String get exportSelectFormsToInclude => 'Select forms to include:';
+
+  @override
+  String get exportAdditionalPages => 'Additional Pages:';
+
+  @override
+  String get exportPrintABlankFormFill =>
+      'Print a blank form (fill in by hand)';
+
+  @override
+  String get exportPlainSignable => 'Plain (signable)';
+
+  @override
+  String get exportLegalInfoOnly => 'Legal (info only)';
+
+  @override
+  String get exportHeadsUpTheLegalLanguage =>
+      'Heads up: the legal-language version is for reference only. Sign and use the plain-language official form.';
+
+  @override
+  String get exportOpenPdf => 'Open PDF';
+
+  @override
+  String get exportOpenWalletCardPdf => 'Open wallet card (PDF)';
+
+  @override
+  String get exportEncryptTheFile => 'Encrypt the file';
+
+  @override
+  String get exportDownload => 'Download';
+
+  @override
+  String get exportFhirJson => 'FHIR JSON';
+
+  @override
+  String get exportFhirXml => 'FHIR XML';
+
+  @override
+  String get exportCsv => 'CSV';
+
+  @override
+  String get exportZipBundle => '.zip bundle';
+
+  @override
+  String get exportDoneBackToHome => 'Done — back to home';
+
+  @override
+  String get exportCopiedToClipboard => 'Copied to clipboard.';
+
+  @override
+  String get exportCouldnTSaveTheFile =>
+      'Couldn\'t save the file. Please try again.';
+
+  @override
+  String get exportExportedYourDirectiveBundlePdf =>
+      'Exported your directive bundle — PDF, JSON, XML and CSV.';
+
+  @override
+  String get exportCouldNotBuildTheZip => 'Could not build the .zip bundle.';
+
+  @override
+  String get exportCouldnTGenerateTheWallet =>
+      'Couldn\'t generate the wallet card. Please try again.';
+
+  @override
+  String get exportYourOfficialDirective => 'Your official directive';
+
+  @override
+  String get exportKeepACopy => 'Keep a copy';
+
+  @override
+  String get exportAdvancedDataExports => 'Advanced · data exports';
+
+  @override
+  String get exportDeclarationPowerOfAttorneyMost =>
+      'Declaration + Power of Attorney (most complete)';
+
+  @override
+  String get exportTreatmentPreferencesOnlyNoAgent =>
+      'Treatment preferences only (no agent)';
+
+  @override
+  String get exportAgentAuthorityOnlyNoPersonal =>
+      'Agent authority only (no personal preferences)';
+
+  @override
+  String get exportSupplementaryLegalInformation =>
+      'Supplementary Legal Information';
+
+  @override
+  String get exportAdditionalLegalReferenceInformation =>
+      'Additional legal reference information';
+
+  @override
+  String get exportDistributionChecklistNotes =>
+      'Distribution Checklist & Notes';
+
+  @override
+  String get exportBlankPagesForHandwrittenNotes =>
+      'Blank pages for handwritten notes';
+
+  @override
+  String get exportOpenThePdfDirectiveIn =>
+      'Open the PDF directive in your viewer to print or save it';
+
+  @override
+  String get exportDownloadAnEditableCopyOf =>
+      'Download an editable copy of your directive';
+
+  @override
+  String get exportExportAsFhirJsonFor =>
+      'Export as FHIR JSON for electronic health records';
+
+  @override
+  String get exportExportAsFhirXmlFor =>
+      'Export as FHIR XML for electronic health records';
+
+  @override
+  String get exportExportAsCsvSpreadsheet => 'Export as CSV spreadsheet';
+
+  @override
+  String get exportDownloadEverythingPdfJsonXml =>
+      'Download everything (PDF, JSON, XML, CSV) as a zip bundle';
+
+  @override
+  String get exportYourDirective => 'Your directive,\n';
+
+  @override
+  String get appThemeWarmTeal => 'Warm Teal';
+
+  @override
+  String get appThemeBalancedCalmProfessional =>
+      'Balanced, calm, professional.';
+
+  @override
+  String get appThemeDeepNavy => 'Deep Navy';
+
+  @override
+  String get appThemeFormalSteadyHighContrast =>
+      'Formal, steady, high-contrast.';
+
+  @override
+  String get appThemeSageGreen => 'Sage Green';
+
+  @override
+  String get appThemeSoftNaturalApproachable => 'Soft, natural, approachable.';
+
+  @override
+  String get aiSetupReplyWithTheSingleWord => 'Reply with the single word: ok';
+
+  @override
+  String get aiSetupRemoveApiKey => 'Remove API Key?';
+
+  @override
+  String get aiSetupAiFeaturesWillBeDisabled =>
+      'AI features will be disabled until a new key is added.';
+
+  @override
+  String get aiSetupApiKeyRemoved => 'API key removed';
+
+  @override
+  String get aiSetupAiAssistantSetup => 'AI assistant setup';
+
+  @override
+  String get aiSetupYourApiKeyWillNot =>
+      'Your API key will not be saved permanently. It is kept in memory for this session, with a temporary copy for up to 10 minutes so you can recover it if the app reloads — then discarded when you close the app or clear your data.';
+
+  @override
+  String get aiSetupStep1OpenAPrivate =>
+      'Step 1: Open a Private/Incognito Window';
+
+  @override
+  String get aiSetupYouLlNeedToSign =>
+      'You\'ll need to sign into your Google account to get an API key. To protect your login on shared or public devices, open a private browsing window first:';
+
+  @override
+  String get aiSetupOnAPhoneTapThe =>
+      'On a phone: tap the menu (⋮ or ⋯) and select \"New Incognito Tab\" or \"New Private Tab\".';
+
+  @override
+  String get aiSetupYourGoogleLoginWillBe =>
+      'Your Google login will be automatically forgotten when you close the private window.';
+
+  @override
+  String get aiSetupPrivacyNotice => 'Privacy Notice';
+
+  @override
+  String get aiSetupHowYourDataIsHandled => 'How Your Data Is Handled';
+
+  @override
+  String get aiSetupYourDirectiveDataIsHeld =>
+      '- Your directive data is held in memory only; on close or crash it is kept ~10 minutes for recovery, then wiped — never written to disk or a server\n- AI features are optional and the app works without them\n- Only text you explicitly send via AI chat or AI Suggest leaves your device\n- This app is not a medical or legal service\n- This app is not HIPAA-compliant';
+
+  @override
+  String get aiSetupCommonQuestions => 'Common Questions';
+
+  @override
+  String get aiSetupRemoveApiKey2 => 'Remove API key';
+
+  @override
+  String get aiSetupCreateAnApiKey => 'Create an API key';
+
+  @override
+  String get aiSetupCreateANewApiKey =>
+      'Create a new API key on the API keys page; the defaults are fine.';
+
+  @override
+  String get aiSetupCopyAndPasteBelow => 'Copy and paste below';
+
+  @override
+  String get aiSetupPasteFromClipboard => 'Paste from clipboard';
+
+  @override
+  String get aiSetupTestingConnection => 'Testing connection';
+
+  @override
+  String get accessibilitySettingsAdjustHowTheAppFeels =>
+      'Adjust how the app feels for you. Changes apply everywhere instantly.';
+
+  @override
+  String get accessibilitySettingsHowToUseReadAloud => 'How to use read-aloud';
+
+  @override
+  String get accessibilitySettingsResetAccessibilitySettings =>
+      'Reset accessibility settings';
+
+  @override
+  String get accessibilitySettingsReadThisPageAloud => 'Read this page aloud';
+
+  @override
+  String get accessibilitySettingsYourBrowserAndDeviceAlready =>
+      'Your browser and device already have read-aloud built in — they work better than an in-app reader, so use one of these:';
+
+  @override
+  String get accessibilitySettingsPeopleWhoITrustWill =>
+      'People who I trust will make my decisions if I can\'t.';
+
+  @override
+  String get accessibilitySettingsEnglish => 'English';
+
+  @override
+  String get accessibilitySettingsEspaOl => 'Español';
+
+  @override
+  String get accessibilitySettingsAccessibility => 'Accessibility';
+
+  @override
+  String get accessibilitySettingsTextSize => 'Text size';
+
+  @override
+  String get accessibilitySettingsDyslexiaFriendlyFont =>
+      'Dyslexia-friendly font';
+
+  @override
+  String get accessibilitySettingsBoldText => 'Bold text';
+
+  @override
+  String get accessibilitySettingsReduceMotion => 'Reduce motion';
+
+  @override
+  String get accessibilitySettingsHighContrast => 'High contrast';
+
+  @override
+  String get accessibilitySettingsReadAloud => 'Read aloud';
+
+  @override
+  String get accessibilitySettingsRightClickThePageRead =>
+      'Right-click the page → “Read aloud” (Edge), or use the Reading mode / an extension in Chrome. Edge: Ctrl+Shift+U.';
+
+  @override
+  String get accessibilitySettingsSelectTextTapListenOr =>
+      'Select text → tap “Listen”, or turn on Settings → Accessibility → Select to Speak / TalkBack.';
+
+  @override
+  String get accessibilitySettingsSettingsAccessibilitySpokenContentTurn =>
+      'Settings → Accessibility → Spoken Content → turn on “Speak Screen”, then swipe down with two fingers.';
+
+  @override
+  String get accessibilitySettingsNarratorCtrlWinEnterOr =>
+      'Narrator: Ctrl+Win+Enter. Or use Edge’s Read aloud above.';
+
+  @override
+  String get accessibilitySettingsSystemSettingsAccessibilitySpokenContent =>
+      'System Settings → Accessibility → Spoken Content → “Speak selection”, then press Option+Esc.';
+
+  @override
+  String get privacyPolicyPrivacyPolicy => 'Privacy Policy';
+
+  @override
+  String get privacyPolicyPaMhadAppPrivacyPolicy =>
+      'PA MHAD App Privacy Policy';
+
+  @override
+  String get privacyPolicyReviewLegalDisclaimer => 'Review Legal Disclaimer';
+
+  @override
+  String get privacyPolicyDataWeCollect => 'Data We Collect';
+
+  @override
+  String get privacyPolicyThisAppCollectsOnlyThe =>
+      'This app collects only the information you enter into your Mental Health Advance Directive forms, including:\n  - Personal information (name, address, phone, date of birth)\n  - Agent and witness information\n  - Treatment preferences and medication lists\n  - Digital signatures\n  - Additional instructions\n\nWe do not collect analytics, crash reports, device identifiers, or location data.';
+
+  @override
+  String get privacyPolicyHowDataIsStoredProtected =>
+      'How Data Is Stored & Protected';
+
+  @override
+  String get privacyPolicyYourDirectiveDataIsNot =>
+      'Your directive data is NOT transmitted to the app developer or any third party for storage.\n\nThis is a web app: your data is held in an in-memory database in your browser tab. If you close the tab or the app crashes, your work is kept on this device for about 10 minutes so you can reopen and recover it — then it is wiped. Nothing is written to a server. Export or print your directive to keep a permanent copy.';
+
+  @override
+  String get privacyPolicyAiFeaturesThirdPartyData =>
+      'AI Features & Third-Party Data Sharing';
+
+  @override
+  String get privacyPolicyIfYouChooseToUse =>
+      'If you choose to use the optional AI features (AI Assistant chat or AI Suggest), text you submit is sent to the AI provider you select — Google Gemini by default, or Anthropic Claude, OpenAI, or xAI Grok if you choose one and add your own key — for processing.\n\nOn Google\'s Gemini free tier, Google may:\n  - Use your input/output data to improve their products\n  - Allow human reviewers to read your inputs and outputs\n  - Retain data indefinitely (no automatic expiration)\nOther providers handle your data under their own API data policies — review the policy of whichever provider you use.\n\nThe app strips common personally identifiable information (SSNs, phone numbers, emails, dates of birth, addresses, names, and facility names) before sending your text to any provider, but this is a best-effort filter and cannot guarantee complete removal.\n\nAI features are entirely optional. The app is fully functional without them.';
+
+  @override
+  String get privacyPolicyGeminiFreeTierDataPractices =>
+      'Gemini Free Tier Data Practices';
+
+  @override
+  String get privacyPolicyIfYouUseTheAi =>
+      'If you use the AI features with Google\'s free Gemini tier, be aware of the following:\n\n1. Google retains AI conversation data indefinitely on the free tier. There is no automatic expiration.\n\n2. Human reviewers at Google may read your inputs and outputs as part of their quality and safety processes.\n\n3. Data sent to Gemini cannot be recalled or deleted by you or by this app. Once submitted, it is under Google\'s control.\n\n4. If you are concerned about data privacy, consider upgrading to the paid Gemini tier, which offers stronger data protection policies and does not use your data for model training.\n\nIf you select a different provider (Anthropic, OpenAI, or xAI) instead of Gemini, that provider\'s own data and retention policy applies — review it before sending sensitive content.\n\nYou can avoid all third-party data sharing by not using the AI features.';
+
+  @override
+  String get privacyPolicyInternationalUsersGdpr =>
+      'International Users (GDPR)';
+
+  @override
+  String get privacyPolicyIfYouAreLocatedIn =>
+      'If you are located in the European Economic Area (EEA), the UK, or Switzerland, the General Data Protection Regulation (GDPR) applies to your use of this app.\n\nLegal basis for processing: Your explicit consent, given through the in-app disclaimer and AI consent dialogs.\n\nYour rights under GDPR:\n  - Right to access: All your data is stored locally on your device — you have direct access at all times.\n  - Right to erasure: Use \"Delete All Data\" in the app menu to permanently erase all local data.\n  - Right to data portability: Export your directives as PDF or FHIR JSON (a standard health-records format) at any time.\n  - Right to withdraw consent: Stop using AI features at any time; remove your API key to prevent further data transmission.\n  - Right to restriction: You may use the app in Public Mode without any data persistence.\n\nData sent to your chosen AI provider is processed under that provider\'s own privacy policy and data processing terms. We cannot control or delete data once it has been sent.';
+
+  @override
+  String get privacyPolicyUsStateConsumerHealthData =>
+      'US State Consumer Health Data Laws (CA, WA, CT, NV, NY)';
+
+  @override
+  String get privacyPolicyThisAppMayBeSubject =>
+      'This app may be subject to state consumer-health-data privacy laws including California (CCPA/CPRA), Washington (My Health My Data Act / MHMDA), Connecticut (CTDPA health provisions), Nevada (SB 370), and New York (Health Information Privacy Act).\n\nMental-health-directive content is \"consumer health data\" under each of these laws. Under all of them: (1) We collect mental-health treatment-preference data **solely** to help you create your advance directive. (2) We **do not sell** your health data — there is no commercial recipient. (3) The only third party that may receive any of your text is the AI provider you choose (Google Gemini by default, or Anthropic, OpenAI, or xAI), and **only** if you affirmatively opt in to AI features each session. (4) We use no third-party SDKs, no analytics, no advertising frameworks, no tracking pixels or cookies. (5) You may delete all locally stored data at any time via \"Delete All Data\" in the app menu.\n\nWashington MHMDA includes a **private right of action**; we have designed the app to require explicit, per-session consent before any third-party transfer of consumer health data, and we treat written consent as conditional on the specific terms shown in the AI consent dialog.\n\nFor questions about your privacy rights, contact the developer using the channels listed in the Contact section below (multiple methods are provided per the FTC Health Breach Notification Rule).';
+
+  @override
+  String get privacyPolicyMedicalReferenceLookupsUS =>
+      'Medical Reference Lookups (U.S. government data)';
+
+  @override
+  String get privacyPolicyToHelpYouFillIn =>
+      'To help you fill in and understand your directive, the app looks things up in free, public U.S. government databases. These lookups use ONLY the single term or code needed for that lookup. They never receive your identity (your name, date of birth, address, or phone), the people you name (agents, witnesses, guardian), or your saved directive.\n\nWhat is sent, and to whom:\n  - Medication name you type → NLM RxTerms (autocomplete).\n  - Condition name you type → NLM ICD-10-CM (diagnosis lookup).\n  - A doctor / provider name you type into the optional doctor search → NLM NPI registry, used only to look that provider up in the public registry of healthcare providers.\n  - A condition (by its ICD-10 code) or a medication (by name, resolved to a code via NLM RxNav) → NLM MedlinePlus Connect, to fetch a plain-language explanation.\n  - A medication name → openFDA (U.S. Food & Drug Administration), to fetch that drug\'s official FDA label, which is used to ground the side-effects list.\n\nNo personal or identifying information is included in any of these requests — only the medical term, code, or provider name being looked up.\n\nNLM, NIH, and the FDA are not responsible for this product and do not endorse or recommend it. These services are for information only and are not medical advice — consult a qualified professional. The NLM Clinical Table services are rate-limited to 20 requests/second.\n\nSources: U.S. National Library of Medicine (RxTerms, ICD-10-CM, NPI registry, RxNav, MedlinePlus Connect); U.S. Food & Drug Administration (openFDA).';
+
+  @override
+  String get privacyPolicyPdfExportSharing => 'PDF Export & Sharing';
+
+  @override
+  String get privacyPolicyWhenYouExportAPdf =>
+      'When you export a PDF of your directive, it is generated locally on your device. Sharing the PDF (via email, messaging, etc.) sends it through your device\'s standard sharing mechanism. The app cannot control where the PDF is stored once shared.';
+
+  @override
+  String get privacyPolicyYourRights => 'Your Rights';
+
+  @override
+  String get privacyPolicyYouCanDeleteAnyDirective =>
+      'You can delete any directive at any time from the home screen. Deleting a directive removes all associated data (personal info, agents, medications, witnesses, signatures) from the local database.\n\nYou can remove your AI provider API key(s) at any time from the AI Setup screen.\n\nUninstalling the app removes all locally stored data.';
+
+  @override
+  String get privacyPolicyNoThirdPartyTracking => 'No Third-Party Tracking';
+
+  @override
+  String get privacyPolicyThisAppDoesNotInclude =>
+      'This app does not include any third-party analytics SDKs, advertising frameworks, crash reporting services (such as Firebase, Crashlytics, or Sentry), or tracking pixels.\n\nThe only external network connections this app makes are:\n  - Your chosen AI provider — Google Gemini (default), Anthropic, OpenAI, or xAI — only when you use AI features\n  - NIH/NLM Clinical Table Search Service — medication, condition, and provider (doctor) lookups\n  - NLM MedlinePlus Connect & RxNav — plain-language condition and medication explanations (sends only an ICD-10 code or a medication name)\n  - openFDA / U.S. FDA — official drug labels used to ground the side-effects list (sends only a medication name)\n\nEach of these receives only the term or code being looked up — never your identity or your directive. No data is sent to the app developer at any time.';
+
+  @override
+  String get privacyPolicyHipaaCompliance => 'HIPAA & Compliance';
+
+  @override
+  String get privacyPolicyThisAppIsNotHipaa =>
+      'This app is NOT HIPAA-compliant. It is not a covered entity or business associate under HIPAA. The app is intended for personal use by individuals preparing their own mental health advance directives.\n\nWhile this app implements privacy measures aligned with GDPR, CCPA, and MHMDA principles (as described above), it has not been independently audited or certified for compliance with these regulations. If you require verified regulatory compliance, consult with a privacy professional before use.';
+
+  @override
+  String get privacyPolicyBreachNotification => 'Breach Notification';
+
+  @override
+  String get privacyPolicyInAccordanceWithTheFtc =>
+      'In accordance with the FTC Health Breach Notification Rule, if any unauthorized disclosure of your health information occurs through a security breach, we will notify affected users within 60 calendar days of discovering the breach.\n\nBecause this app stores data locally on your device and does not maintain a server-side database, breach risk is limited to the optional AI features. If your chosen AI provider notifies us of a breach affecting data sent through the app, we will pass that notification along through app store updates and in-app notices.';
+
+  @override
+  String get privacyPolicyContact => 'Contact';
+
+  @override
+  String get settingsBrightness => 'Brightness';
+
+  @override
+  String get settingsScreenshotProtection => 'Screenshot Protection';
+
+  @override
+  String get settingsAbout => 'About';
+
+  @override
+  String get settingsPaMentalHealthAdvanceDirective =>
+      'PA Mental Health Advance Directive\nUnder Pennsylvania Act 194 of 2004 (effective January 29, 2005)\n\nThis app helps you document your mental health treatment preferences. It is not legal or medical advice, and not a substitute for a licensed attorney or clinician. See the full Legal Disclaimer above for details.\n\nYour directive is valid for two years from the date you sign it — unless you are found incapable of making mental health decisions at the time it would expire, in which case it stays in effect until your capacity returns.\n\nForm content based on the official PA MHAD booklet published by the Disabilities Law Project (2005).';
+
+  @override
+  String get settingsAccount => 'Account';
+
+  @override
+  String get settingsAppearance => 'Appearance';
+
+  @override
+  String get settingsLegalPrivacy => 'Legal & privacy';
+
+  @override
+  String get settingsChooseAProviderAndAdd =>
+      'Choose a provider and add your API key';
+
+  @override
+  String get settingsTextSizeDyslexiaFontBold =>
+      'Text size, dyslexia font, bold text, contrast, language';
+
+  @override
+  String get settingsHowYourDataIsStored =>
+      'How your data is stored and protected';
+
+  @override
+  String get settingsPrivacyPermissions => 'Privacy & permissions';
+
+  @override
+  String get settingsWhatPermissionsTheAppUses =>
+      'What permissions the app uses, and what we promise about each';
+
+  @override
+  String get settingsLegalDisclaimer => 'Legal Disclaimer';
+
+  @override
+  String get settingsTermsLimitationsAndYourLegal =>
+      'Terms, limitations, and your legal rights';
+
+  @override
+  String get assistantMessageWidgetsVerifiedWithWebSearch =>
+      'Verified with web search';
+
+  @override
+  String get assistantMessageWidgetsSources => 'Sources';
+
+  @override
+  String get assistantMessageWidgetsVerifyOnTheWeb => 'Verify on the web';
+
+  @override
+  String get assistantMessageWidgetsAiIsTyping => 'AI is typing';
+
+  @override
+  String get assistantContextPanelAskAboutFormTypesAgents =>
+      'Ask about form types, agents, treatment preferences, or anything in the PA MHAD booklet. Try one of these:';
+
+  @override
+  String get assistantContextPanelPiiRedactionOn => 'PII REDACTION ON';
+
+  @override
+  String get assistantContextPanelNamesAddressesPhoneNumbersAnd =>
+      'Names, addresses, phone numbers, and dates are replaced with placeholders before sending to Gemini. Suggestions come back with placeholders filled in locally.';
+
+  @override
+  String get assistantContextPanelContextTheAiSees => 'Context the AI sees';
+
+  @override
+  String get assistantContextPanelSuggestedPrompts => 'Suggested prompts';
+
+  @override
+  String get assistantContextPanelWhatICanHelpWith => 'What I can help with';
+
+  @override
+  String get assistantContextPanelPrivacy => 'Privacy';
+
+  @override
+  String get assistantContextPanelFormType => 'Form type';
+
+  @override
+  String get assistantContextPanelCurrentStep => 'Current step';
+
+  @override
+  String get assistantContextPanelFilledFields => 'Filled fields';
+
+  @override
+  String get assistantContextPanelPii => 'PII';
+
+  @override
+  String get assistantTheReplyFailed => 'The reply failed.';
+
+  @override
+  String get assistantStillFailingCheckYourConnection =>
+      'Still failing — check your connection or key.';
+
+  @override
+  String get assistantClearConversation => 'Clear conversation?';
+
+  @override
+  String get assistantThisWillEraseAllMessages =>
+      'This will erase all messages. This cannot be undone.';
+
+  @override
+  String get assistantClear => 'Clear';
+
+  @override
+  String get assistantToUseTheAiAssistant =>
+      'To use the AI assistant, set up an AI key — Gemini\'s free tier works.';
+
+  @override
+  String get assistantSetUpFree => 'Set Up (Free)';
+
+  @override
+  String get assistantPersonalInfoRemoved => 'Personal info removed';
+
+  @override
+  String get assistantAskMeAnythingAboutYour =>
+      'Ask me anything about your\nPA Mental Health Advance Directive';
+
+  @override
+  String get assistantSuggestedQuestions => 'Suggested questions:';
+
+  @override
+  String get assistantClearConversation2 => 'Clear conversation';
+
+  @override
+  String get assistantApiKeySettings => 'API key settings';
+
+  @override
+  String assistantDisclaimerNotLegalOrMedical(String phone) {
+    return 'Disclaimer: Not legal or medical advice. For legal questions contact PA Protection and Advocacy: $phone ';
+  }
+
+  @override
+  String get assistantAskAQuestionAboutYour =>
+      'Ask a question about your directive...';
+
+  @override
+  String get assistantSend => 'Send';
+
+  @override
+  String get directiveFormChoiceWithAPoaOnlyForm =>
+      'With a POA-only form, your agent will have authority to make mental health care decisions on your behalf, but the document will not include your personal treatment preferences.\n\nConsider using the Combined form instead to document both your preferences AND appoint an agent. This gives your care team the most guidance.';
+
+  @override
+  String get directiveFormChoiceContinueWithPoa => 'Continue with POA';
+
+  @override
+  String get directiveFormChoiceYouCanSwitchFormTypes =>
+      'You can switch form types later if you change your mind — Combined is the broadest.';
+
+  @override
+  String get directiveFormChoiceCombinedDirective => 'Combined directive';
+
+  @override
+  String get directiveFormChoiceTreatmentPreferencesAndATrusted =>
+      'Treatment preferences and a trusted decision-maker, in one document. 11 short steps · about 20 minutes.';
+
+  @override
+  String get directiveFormChoiceStartNow => 'Start now';
+
+  @override
+  String get directiveFormChoiceNotSureWhichFormFits =>
+      'Not sure which form fits? Take the 4-question quiz.';
+
+  @override
+  String get directiveFormChoiceHelpMeChoose => 'Help me choose →';
+
+  @override
+  String get directiveFormChoicePowerOfAttorneyOnly => 'Power of attorney only';
+
+  @override
+  String get directiveFormChoiceTakeThe4QuestionQuiz =>
+      'Take the 4-question quiz to choose a form';
+
+  @override
+  String get webLandingALegalDocumentThatTells =>
+      'A legal document that tells doctors, family, and a person you trust how to care for you if you can’t speak for yourself. Free, anonymous, and takes about 20 minutes.';
+
+  @override
+  String get webLandingYouReWorkingAnonymouslyNothing =>
+      'You’re working anonymously. Nothing is saved.';
+
+  @override
+  String get webLandingNoAccountNoCloudIf =>
+      'No account, no cloud. If you close the tab or the app crashes, your work is kept on this device for 10 minutes so you can reopen and recover it — then it’s erased for good. Open your PDF and save it to keep a copy.';
+
+  @override
+  String get webLandingHowThisWorks => 'HOW THIS WORKS →';
+
+  @override
+  String get webLandingAnMhadIsYourVoice =>
+      '“An MHAD is your voice when you can’t speak for yourself.”';
+
+  @override
+  String get webLandingPaMhadBookletOfficeOf =>
+      '— PA MHAD booklet · Office of Mental Health';
+
+  @override
+  String get webLandingReadTheBasics => 'Read the basics →';
+
+  @override
+  String get webLandingPennsylvaniaAct194Of2004 =>
+      'Pennsylvania · Act 194 of 2004';
+
+  @override
+  String get webLandingOurPrivacyPromise => 'Our privacy promise';
+
+  @override
+  String get webLandingFromTheBooklet => 'From the booklet';
+
+  @override
+  String get webLandingPrintABlankForm => 'Print a blank form';
+
+  @override
+  String get webLandingPrintBlankForm => 'Print blank form';
+
+  @override
+  String get webLandingTheBasics => 'The basics';
+
+  @override
+  String get webLandingMakeAMentalHealth => 'Make a mental health ';
+
+  @override
+  String get webLandingAdvanceDirective => 'advance directive.';
+
+  @override
+  String get homeToolsGridMakeItFindable => 'Make it findable';
+
+  @override
+  String get homeToolsGridCrisisHelp => 'Crisis help';
+
+  @override
+  String get homeDirectiveHeroDraft => '● Draft';
+
+  @override
+  String get homeDirectiveHeroContinueWhereYouLeftOff =>
+      'Continue where you left off';
+
+  @override
+  String get facilitatorGetHelpEvidenceBased => 'Get help · evidence-based';
+
+  @override
+  String get facilitatorTalkToSomeoneTrained => 'Talk to someone trained';
+
+  @override
+  String get facilitatorPennsylvaniaPeerSpecialistsAndRights =>
+      'Pennsylvania peer specialists and rights advocates help walk you through the form. Free; no booking system inside this app — call or visit a partner below.';
+
+  @override
+  String get facilitatorPrintReviewItTogether => 'Print + review it together';
+
+  @override
+  String get facilitatorPrintOrScreenShareYour =>
+      'Print or screen-share your draft and walk through it with a friend, family member, or peer. They can\'t change anything in your app — that stays in your hands.';
+
+  @override
+  String get facilitatorEmailADraftToMy => 'Email a draft to my clinician';
+
+  @override
+  String get facilitatorGenerateThePdfInExport =>
+      'Generate the PDF in Export, then send it via your phone\'s email app. Ask your therapist or psychiatrist for comments. You\'ll transcribe their suggestions back into the form yourself — this app doesn\'t connect to their EHR.';
+
+  @override
+  String get facilitatorCall => 'Call';
+
+  @override
+  String get facilitatorOpenWebsite => 'Open website';
+
+  @override
+  String get legalSheetFullLegalDisclosure => 'Full legal disclosure';
+
+  @override
+  String get legalSheetTheEightSectionsBelowWere =>
+      'The eight sections below were accepted at first launch. Tap to expand.';
+
+  @override
+  String get legalSheetFullLegalSections => 'Full legal sections';
+
+  @override
+  String get legalSheetNotLegalOrMedicalAdvice => 'Not legal or medical advice';
+
+  @override
+  String get legalSheetNoProfessionalRelationship =>
+      'No professional relationship';
+
+  @override
+  String get legalSheetUseAtYourOwnRisk => 'Use at your own risk';
+
+  @override
+  String get legalSheetRequirementsForAValidDirective =>
+      'Requirements for a valid directive';
+
+  @override
+  String get legalSheetTwoYearValidity => 'Two-year validity';
+
+  @override
+  String get legalSheetRevocation => 'Revocation';
+
+  @override
+  String get legalSheetPrivacyAiFeatures => 'Privacy & AI features';
+
+  @override
+  String get legalSheetResourcesAssistance => 'Resources & assistance';
+
+  @override
+  String get legalSheetPaProtectionAdvocacy => 'PA Protection & Advocacy';
+
+  @override
+  String get legalSheetPaMentalHealthConsumersAssociation =>
+      'PA Mental Health Consumers\' Association';
+
+  @override
+  String get legalSheetMentalHealthAssociationInPennsylvania =>
+      'Mental Health Association in Pennsylvania';
+
+  @override
+  String get legalSheet988SuicideCrisisLifeline =>
+      '988 Suicide & Crisis Lifeline';
+
+  @override
+  String get legalSheetThisAppHelpsPennsylvaniaResidents =>
+      'This app helps Pennsylvania residents document their treatment preferences under ';
+
+  @override
+  String get legalSheetTheInformationIsForInformational =>
+      '. The information is for informational purposes only and does ';
+
+  @override
+  String get legalSheetConstituteLegalOrMedicalAdvice =>
+      ' constitute legal or medical advice.';
+
+  @override
+  String get legalSheetItIsNotAMedical =>
+      'It is not a medical device. It does not diagnose, treat, cure, or prevent any condition. For treatment decisions, consult a qualified mental health professional. For legal questions, consult a licensed PA attorney.';
+
+  @override
+  String get legalSheetUseOfThisAppDoes => 'Use of this app does ';
+
+  @override
+  String get legalSheetCreateAnAttorneyClientRelationship =>
+      ' create an attorney–client relationship, a provider–patient relationship, or any other professional relationship between you and the developer.';
+
+  @override
+  String get legalSheetYouAreSolelyResponsibleFor =>
+      'You are solely responsible for making sure your directive meets all legal requirements under PA law, including proper execution with witnesses.';
+
+  @override
+  String get legalSheetInPlainTermsThisApp =>
+      'In plain terms: this app helps you put your own wishes into a directive, and you use it at your own risk. Please review the finished document for accuracy — mistakes can happen, and details you entered may be out of date or incomplete. If you are ever unsure whether something is legally right for your situation, feel free to talk with an attorney. The formal version:';
+
+  @override
+  String get legalSheetThisAppIsProvided => 'This app is provided ';
+
+  @override
+  String get legalSheetAsIs => '\"as is\"';
+
+  @override
+  String get legalSheetWithoutWarrantiesOfAnyKind =>
+      ', without warranties of any kind, and you use it at your own risk. To the fullest extent permitted by law, the developer is not liable for any damages arising from use of the app or any document created with it. You are responsible for reviewing your directive for accuracy and completeness; for legal questions specific to your situation, consult a licensed Pennsylvania attorney.';
+
+  @override
+  String get legalSheetAPaMentalHealthAdvance =>
+      'A PA Mental Health Advance Directive is legally valid ';
+
+  @override
+  String get legalSheetWhen => ' when:';
+
+  @override
+  String get legalSheetYouThePrincipalHaveLegal =>
+      'You (the principal) have legal capacity at the time of signing';
+
+  @override
+  String get legalSheetItIsSignedInThe => 'It is signed in the presence of ';
+
+  @override
+  String get legalSheetBothWitnessesMeetEligibilityRequirements =>
+      'Both witnesses meet eligibility requirements under Act 194';
+
+  @override
+  String get legalSheetYourDesignatedAgentOrAlternate =>
+      'your designated agent or alternate agent, your mental health care provider, or an employee of the facility where you receive treatment — unless they are related to you by blood, marriage, or adoption.';
+
+  @override
+  String get legalSheetThisAppCapturesTouchDrawn =>
+      'This app captures touch-drawn signatures for convenience during preparation. The ';
+
+  @override
+  String get legalSheetDirectiveMustBeSignedIn =>
+      ' directive must be signed in original ink, in the presence of your two witnesses, to be legally valid.';
+
+  @override
+  String get legalSheetOnceSignedProvidersAndYour =>
+      'Once signed, providers and your agent ';
+
+  @override
+  String get legalSheetWithYourDirective20Pa =>
+      ' with your directive (20 Pa.C.S. §§ 5804, 5842). However, a provider may decline to follow specific instructions that are against accepted medical practice, or when the provider is not physically available.';
+
+  @override
+  String get legalSheetUnderPaAct194An =>
+      'Under PA Act 194, an MHAD is valid for ';
+
+  @override
+  String get legalSheetFromTheDateOfExecution =>
+      ' from the date of execution unless revoked earlier — ';
+
+  @override
+  String get legalSheetOfMakingMentalHealthDecisions =>
+      ' of making mental health decisions at the time it would expire, in which case it remains in effect until capacity returns. This app will remind you when your directive is approaching expiration.';
+
+  @override
+  String get legalSheetYouMayRevokeThisDirective =>
+      'You may revoke this directive at any time while you have legal capacity by:';
+
+  @override
+  String get legalSheetNotifyingYourHealthcareProviderOr =>
+      'Notifying your healthcare provider or agent in writing';
+
+  @override
+  String get legalSheetDestroyingTheDirective => 'Destroying the directive';
+
+  @override
+  String get legalSheetExecutingANewDirective => 'Executing a new directive';
+
+  @override
+  String get legalSheetNotifyEveryoneWhoHasCopies =>
+      'Notify everyone who has copies of the revocation.';
+
+  @override
+  String get legalSheetThisIsAWebApp =>
+      'This is a web app: your directive is held in memory in your browser only and is ';
+
+  @override
+  String get legalSheetIfYouCloseTheTab =>
+      ' — if you close the tab or it crashes, your work is kept on this device for about 10 minutes for recovery, then wiped; it is never sent to a server. Export or print to keep a copy. This app is ';
+
+  @override
+  String get legalSheetHipaaCompliant => ' HIPAA-compliant.';
+
+  @override
+  String get legalSheetIfYouUseTheOptional =>
+      'If you use the optional AI Assistant, text you send is transmitted to the AI provider you choose (Google Gemini by default; or Anthropic, OpenAI, or xAI). On Gemini\'s free tier, Google may use this data to improve their products and human reviewers may read inputs; other providers handle your data under their own API policies.';
+
+  @override
+  String get legalSheetToProtectYouTheApp => 'To protect you, the app ';
+
+  @override
+  String get legalSheetYourNameDateOfBirth =>
+      ' — your name, date of birth, address, and the names and contact details of your agents and guardian are never included. Only non-identifying context (such as conditions, medications, and care preferences) is shared, and only if you choose to use the assistant. (Uploading a document for autofill is the one exception, described next.)';
+
+  @override
+  String get legalSheetDocumentsYouUploadForAutofill =>
+      'Documents you upload for autofill are different: the whole file is sent to your chosen AI provider as-is, and to fill in your directive the AI reads the personal details in it (your name, date of birth, address, and your agent\'s or guardian\'s details). You review everything before it is saved. ';
+
+  @override
+  String get legalSheetBlackOutAnythingYouDon =>
+      ' — black out anything you don\'t want sent, or simply type any field by hand to keep it private. Also avoid typing personal identifiers (full name, SSN, date of birth, address) directly into chat messages.';
+
+  @override
+  String get legalSheetSeparatelyToHelpYouFill =>
+      'Separately, to help you fill in and understand your directive, the app looks up medications, conditions, and (optionally) your doctor in free, public U.S. government databases — the NIH/NLM Clinical Tables, MedlinePlus, and the FDA\'s openFDA. ';
+
+  @override
+  String get legalSheetNeverYourIdentityThePeople =>
+      ' — never your identity, the people you name, or your saved directive. They are reference information, not medical advice.';
+
+  @override
+  String get legalSheetAiSuggestionsAreNotLegal =>
+      'AI suggestions are not legal or medical advice — review carefully before accepting.';
+
+  @override
+  String get disclaimerAFewThingsToUnderstand => 'A few things to understand.';
+
+  @override
+  String get disclaimerThisToolHelpsYouWrite =>
+      'This tool helps you write a Pennsylvania Mental Health Advance Directive under Act 194. Please read these before continuing.';
+
+  @override
+  String get disclaimerReadFullDisclaimer => 'Read full disclaimer';
+
+  @override
+  String get disclaimerGetStarted => 'Get started';
+
+  @override
+  String get disclaimerIM18OrOlder =>
+      'I\'m 18 or older, and I understand and want to continue.';
+
+  @override
+  String get disclaimerBeforeYouBegin => 'Before you begin';
+
+  @override
+  String get disclaimerThisIsNotLegalAdvice => 'This is not legal advice';
+
+  @override
+  String get disclaimerWeGivePlainLanguageHelp =>
+      'We give plain-language help, not legal counsel. For complex situations, talk to an attorney or advocate.';
+
+  @override
+  String get disclaimerItBecomesValidOnlyWhen =>
+      'It becomes valid only when signed on paper';
+
+  @override
+  String get disclaimerPaLawRequiresYourSignature =>
+      'PA law requires your signature plus two adult witnesses, in ink, in person. The app cannot sign for you.';
+
+  @override
+  String get disclaimerNothingIsSavedOrSent => 'Nothing is saved or sent to us';
+
+  @override
+  String get disclaimerYouCanStopOrChange =>
+      'You can stop or change anything, anytime';
+
+  @override
+  String get disclaimerSkipQuestionsGoBackOr =>
+      'Skip questions, go back, or revoke later. This is your voice — you stay in control.';
+
+  @override
+  String get onboardingWeLlWalkYouThrough =>
+      'We\'ll walk you through it, step by step and in plain language: how you want to be treated during a mental health crisis — so your wishes are honored even when you can\'t speak for yourself.';
+
+  @override
+  String get onboardingValidTwoYearsFromSigning =>
+      'Valid two years from signing — unless you are incapable when it would expire, when it stays in effect until your capacity returns. (PA Act 194, effective 2005.)';
+
+  @override
+  String get onboardingUploadADocumentToAutofill =>
+      'Upload a document to autofill';
+
+  @override
+  String get onboardingContinueFromASavedFile => 'Continue from a saved file';
+
+  @override
+  String get onboardingFreeNoAccountNoTracking =>
+      'Free · no account · no tracking · open source';
+
+  @override
+  String get onboardingPaMhadAct194 => 'PA MHAD · Act 194';
+
+  @override
+  String get onboardingInYour => 'In your\n';
+
+  @override
+  String get onboardingWords => 'words.';
+
+  @override
+  String get onboardingMakingThisChangesNothingToday =>
+      'Making this changes nothing today. ';
+
+  @override
+  String get onboardingYouKeepEveryDecision => 'You keep every decision';
+
+  @override
+  String get onboardingUntilTwoProfessionalsFindYou =>
+      ' until two professionals find you unable to decide for yourself.';
+
+  @override
+  String get aiConsistencyTheAiIsReviewingYour =>
+      'The AI is reviewing your directive…';
+
+  @override
+  String get aiConsistencyAiReviewSkippedYouCan =>
+      'AI review skipped — you can re-run it any time.';
+
+  @override
+  String get aiConsistencyRunAiReview => 'Run AI review';
+
+  @override
+  String get aiConsistencyIgnoreContinue => 'Ignore & continue';
+
+  @override
+  String get aiConsistencyResolveInWizard => 'Resolve in wizard';
+
+  @override
+  String get aiConsistencyLooksGoodContinue => 'Looks good — continue';
+
+  @override
+  String get aiConsistencyKeepBoth => 'Keep both';
+
+  @override
+  String get aiConsistencyAiReview => 'AI review';
+
+  @override
+  String get aiConsistencyConsistencyCheckCheckedAtReview =>
+      'Consistency check · checked at Review';
+
+  @override
+  String get aiConsistencyCheckingYourDirective => 'Checking your directive';
+
+  @override
+  String get aiConsistencyYouSaidYourAgentDecides =>
+      'You said your agent decides your medications, but the form says your agent is NOT authorized to consent to medications.';
+
+  @override
+  String get aiConsistencyTheseCancelEachOtherOut =>
+      'These cancel each other out. The official form lets you set your own medication preferences and your agent’s authority separately — both are allowed — but as entered they oppose each other. Authorize your agent to consent to medications, or change the medication choice so they agree.';
+
+  @override
+  String get aiConsistencyYouDonTConsentTo =>
+      'You don’t consent to any medications, but your agent is authorized to consent to them.';
+
+  @override
+  String get aiConsistencyTheOfficialFormLetsYou =>
+      'The official form lets you set your own preference and your agent’s authority separately — both are valid — but as entered they oppose each other: your refusal of all medications versus your agent’s power to consent to any. Decide which should control and adjust the other.';
+
+  @override
+  String get aiConsistencyINoticed => 'I noticed ';
+
+  @override
+  String get draftRecoveryDialogRecoverUnsavedWork => 'Recover Unsaved Work?';
+
+  @override
+  String get draftRecoveryDialogDiscard => 'Discard';
+
+  @override
+  String get draftRecoveryDialogRestore => 'Restore';
+
+  @override
+  String get draftRecoveryDialogDraftRestoredPersonalInformationWill =>
+      'Draft restored. Personal information will need to be re-entered.';
+
+  @override
+  String get draftRecoveryDialogCouldnTRestoreTheDraft =>
+      'Couldn\'t restore the draft.';
+
+  @override
+  String get moreSheetResetAndStartFresh => 'Reset and start fresh?';
+
+  @override
+  String get moreSheetThisPermanentlyErasesEverythingIn =>
+      'This permanently erases everything in this session — all directives, your AI key, and chat history — and returns you to a blank start.\n\nExport or print anything you want to keep first. This cannot be undone.';
+
+  @override
+  String get moreSheetResetEverything => 'Reset everything';
+
+  @override
+  String get moreSheetEverythingElseYouCanDo =>
+      'Everything else you can do here.';
+
+  @override
+  String get moreSheetGetHelp => 'Get help';
+
+  @override
+  String get moreSheetReset => 'Reset';
+
+  @override
+  String get crisisSheet247FreeConfidential => '24/7 FREE, CONFIDENTIAL';
+
+  @override
+  String get crisisSheetRealPeopleAreStandingBy =>
+      'Real people are standing by — phone, text, or chat.';
+
+  @override
+  String get crisisSheetCalling988ConnectsYouTo =>
+      'Calling 988 connects you to a trained counselor in your area. It is free, confidential, and available 24 hours a day. Calling will not result in police being dispatched in most cases.';
+
+  @override
+  String get crisisSheetWhyTheseNumbers => 'Why these numbers?';
+
+  @override
+  String get crisisSheetIfYouOrSomeoneElse =>
+      'If you or someone else is in immediate danger, call ';
+
+  @override
+  String get walletCardMh => 'MH';
+
+  @override
+  String get walletCardPaMhadAct194 => 'PA MHAD · ACT 194';
+
+  @override
+  String get walletCardHasAnActiveDirectiveOn =>
+      'Has an active directive on file';
+
+  @override
+  String get walletCardAgent => 'AGENT';
+
+  @override
+  String get walletCardExp => 'EXP';
+
+  @override
+  String get webSidebarAct1942004 => 'ACT 194 · 2004';
+
+  @override
+  String get webSidebar247Lifeline => '24/7 LIFELINE';
+
+  @override
+  String get webSidebar988CrisisHelp => '988 · Crisis help';
+
+  @override
+  String get webSidebarClickForMoreInformation => 'Click for more information';
+
+  @override
+  String get webSidebarPeerSupportAdvocatesReferrals =>
+      'Peer support · advocates · referrals';
+
+  @override
+  String get medlinePlusDialogNoPlainLanguageSummaryIs =>
+      'No plain-language summary is available for this right now. You can search it on MedlinePlus.';
+
+  @override
+  String get medlinePlusDialogPlainLanguageInformationFromThe =>
+      'Plain-language information from the U.S. National Library of Medicine (MedlinePlus). Educational only — not medical advice.';
+
+  @override
+  String get medlinePlusDialogReadMoreOnMedlineplus =>
+      'Read more on MedlinePlus';
+
+  @override
+  String get fdaLabelDialogNoFdaLabelInformationIs =>
+      'No FDA label information is available for this medication right now. Brand and generic spellings can differ — try the other one, or ask your pharmacist.';
+
+  @override
+  String get fdaLabelDialogOfficialUSFdaDrug =>
+      'Official U.S. FDA drug-label text (openFDA). Reference only — not medical advice, and not personalized to you. Discuss anything here with your doctor or pharmacist.';
+
+  @override
+  String get aiConsentDialogBeforeYouUpload => 'Before you upload';
+
+  @override
+  String get aiConsentDialogNothingIsSavedToYour =>
+      'Nothing is saved to your directive automatically — you review every field the AI fills in before it is applied.';
+
+  @override
+  String get aiConsentDialogUploadingIsOnlyAShortcut =>
+      'Uploading is only a shortcut, never required:\n• Black out anything you don\'t want sent (ID or card numbers, other people\'s details) before uploading.\n• Or skip the upload and type any field by hand — typed fields stay on your device and are never sent to the AI.';
+
+  @override
+  String get aiConsentDialogSendToTheAi => 'Send to the AI';
+
+  @override
+  String get aiConsentDialogTranscribeWithAi => 'Transcribe with AI';
+
+  @override
+  String get aiConsentDialogYouReviewTheTextBefore =>
+      'You review the text before it goes into your form. Prefer not to? Tap Cancel to use your device\'s built-in dictation instead, or just type — neither sends audio to the AI.';
+
+  @override
+  String get aiConsentDialogUseAi => 'Use AI';
+
+  @override
+  String get aiConsentDialogAiDataNotice => 'AI Data Notice';
+
+  @override
+  String get aiConsentDialogImportantPleaseReadBeforeContinuing =>
+      'Important: Please read before continuing.\n';
+
+  @override
+  String get aiConsentDialogThisAiAssistantIsNot =>
+      '• This AI assistant is NOT a therapist, doctor, or lawyer. It provides general information about PA Mental Health Advance Directives only.\n';
+
+  @override
+  String get aiConsentDialogNeverEnterPersonalInformationFull =>
+      'NEVER enter personal information (full name, date of birth, Social Security number, address, phone number, email) into the AI chat or AI-powered features.\n\nThe app automatically strips common personal data, but this is not guaranteed. Personal information fields must be filled in manually — they are stored on your device only and never sent to the AI.';
+
+  @override
+  String get aiConsentDialogNotNow => 'Not Now';
+
+  @override
+  String get aiConsentDialogIAuthorize => 'I Authorize';
+
+  @override
+  String get addressFieldsTapTheIconToFill =>
+      'Tap the icon to fill city & state';
+
+  @override
+  String get addressFieldsFillCityStateFromZip => 'Fill city & state from ZIP';
+
+  @override
+  String get mainTheAppCouldnTStart => 'The app couldn\'t start';
+
+  @override
+  String get mainPaMentalHealthAdvanceDirective =>
+      'PA Mental Health Advance Directive';
+
+  @override
+  String get mainAppTitle => 'PA Mental Health Advance Directive';
+
+  @override
+  String get aiConsistencyStepsProcedures => 'Procedures + Agent authority';
+
+  @override
+  String get aiConsistencyStepsMeds => 'Medications + Agent authority';
+
+  @override
+  String aiConsistencyProcTitle(String name) {
+    return 'You consented to $name yourself — the printed form will also state your agent is NOT authorized to consent to $name.';
+  }
+
+  @override
+  String aiConsistencyProcBody(String name) {
+    return 'Pennsylvania’s form lets you do both: give your own consent AND authorize your agent to consent on your behalf (that agent authorization needs your physical initials, §5836(c)). As entered, only your own consent is recorded, so the document says your agent may not consent to $name. That is allowed and may be exactly what you intend — keep both if so. If you also want your agent able to consent (e.g. if you later can’t decide), choose “My agent will decide” for $name.';
+  }
+
+  @override
+  String aiConsistencyProcA(String name) {
+    return 'You consent to $name';
+  }
+
+  @override
+  String aiConsistencyProcB(String name) {
+    return 'Agent not authorized: $name';
+  }
+
+  @override
+  String aiConsistencyProcAction(String name) {
+    return 'Review $name choice';
+  }
+
+  @override
+  String get aiConsistencyProcEct => 'ECT';
+
+  @override
+  String get aiConsistencyProcExperimental => 'experimental studies';
+
+  @override
+  String get aiConsistencyProcDrugTrials => 'drug trials';
+
+  @override
+  String get aiConsistencyAgentDecidesMeds => 'Agent decides medications';
+
+  @override
+  String get aiConsistencyAgentNotAuthorizedMeds =>
+      'Agent not authorized: medications';
+
+  @override
+  String get aiConsistencyEditMedications => 'Edit Medications';
+
+  @override
+  String get aiConsistencyEditAgentAuthority => 'Edit Agent authority';
+
+  @override
+  String get aiConsistencyNoMedsYou => 'No medications (you)';
+
+  @override
+  String get aiConsistencyAgentMayConsentMeds =>
+      'Agent may consent: medications';
+
+  @override
+  String get aiConsistencySetupAiInvite =>
+      'Set up the free AI assistant for an additional AI-powered review that suggests gaps and things to double-check. Optional — the rule-based check above always runs without it.';
+
+  @override
+  String get aiConsistencyNoSuggestions =>
+      'The AI did not return any suggestions.';
+
+  @override
+  String aiConsistencyNotAdviceOptional(String notAdvice) {
+    return '$notAdvice Optional suggestions based only on what you entered.';
+  }
+
+  @override
+  String aiConsistencyCheckFailed(String error) {
+    return 'Couldn\'t run the consistency check.\n$error';
+  }
+
+  @override
+  String aiConsistencyThingsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count things',
+      one: '1 thing',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get aiConsistencyAllConsistent =>
+      'Everything looks internally consistent.';
+
+  @override
+  String get aiConsistencyWarningsOnly =>
+      'These won\'t block you from generating the PDF — they are warnings you can fix or ignore.';
+
+  @override
+  String get aiConsistencyNoContradictions =>
+      'No cross-step contradictions detected.';
+
+  @override
+  String get aiConsistencyRulesExplainer =>
+      'The contradiction check above is built-in rules. When the AI assistant is set up, an additional AI review adds optional suggestions. Review anything before accepting — this screen warns; it doesn\'t block PDF generation.';
+
+  @override
+  String aiConsistencyConflictHeader(int number, String steps) {
+    return 'CONFLICT · $number · $steps';
+  }
+
+  @override
+  String get aiConsistencyVs => 'vs';
+
+  @override
+  String get crisisPlanHowIKnowIM => 'How I know I\'m not okay';
+
+  @override
+  String get crisisPlanHeadsUpThisSectionIs =>
+      'Heads up: this section is yours alone — it isn\'t required by PA Act 194, but in practice it\'s the part agents and ER staff read first.';
+
+  @override
+  String get permissionsOverviewOnlyWhatWeNeed => 'Only what we need.';
+
+  @override
+  String get permissionsOverviewPermissionsAreManagedByYour =>
+      'Permissions are managed by your device, not by this app. Open your device\'s Settings → PA MHAD to grant, revoke, or review any of the above at any time.';
+
+  @override
+  String get permissionsOverviewNoAnalyticsNoTrackingPixels =>
+      'No analytics. No tracking pixels. No cookies. No third-party SDKs for advertising or measurement. The only outbound flows are the opt-in AI features (your chosen AI provider) and NLM medical-reference lookups, both with PII stripping at a single chokepoint.';
+
+  @override
+  String get makeItFindableMakeItFindableInA => 'Make it findable in a crisis.';
+
+  @override
+  String get makeItFindablePennsylvaniaHasNoStatewideDirective =>
+      'Pennsylvania has no statewide directive registry, so the people in your life are the registry: make sure your agent, a trusted person, and your providers all know you have a directive and where to find it.';
+
+  @override
+  String get makeItFindableUnderPaAct194A =>
+      'Under PA Act 194, a valid directive your care team can find is meant to be followed. Findability is what makes it work.';
+
+  @override
+  String get revocationAreYouSure => 'Are you sure?';
+
+  @override
+  String get revocationPutItInWritingSign =>
+      'Put it in writing — sign and date a short statement that you are revoking this directive.';
+
+  @override
+  String get revocationTellYourAgentYourProviders =>
+      'Tell your agent, your providers, and anyone holding a copy.';
+
+  @override
+  String get revocationDestroyOldCopiesOrClearly =>
+      'Destroy old copies, or clearly mark them “REVOKED”.';
+
+  @override
+  String get revocationIfYouHaveAnyFurther =>
+      'If you have any further questions about how revocation applies to you, it is wise to consult an attorney for clarification.';
+
+  @override
+  String get pastDirectiveDetailNoShareHistoryIsKept =>
+      'No share history is kept — nothing is saved after you close the app, so this list is empty by design.';
+
+  @override
+  String get wizardAiRailFullView => 'Full view';
+
+  @override
+  String get wizardAiRailYourApiKeyStaysOn =>
+      'Your API key stays on this device and is only used to answer your questions. You can fill out the whole wizard without it.';
+
+  @override
+  String get wizardAiRailReadingThisStep => 'Reading this step…';
+
+  @override
+  String get wizardAiRailSuggestedForThisStep => 'SUGGESTED FOR THIS STEP';
+
+  @override
+  String get wizardAiRailAskAnythingAboutThisStep =>
+      'Ask anything about this step — answers appear here, and in the full assistant.';
+
+  @override
+  String get wizardAiRailNeedHelpWithThisStep =>
+      'Need help with this step? Ask the AI';
+
+  @override
+  String get wizardAiRailAiHelpIsOffThe =>
+      'AI help is off. The step heads-up, suggested questions, photo auto-fill, and the chat below aren\'t available until you set up AI.';
+
+  @override
+  String get wizardAiRailCheckingThisStep => 'Checking this step';
+
+  @override
+  String get wizardAiRailFindAPaFacilityBy =>
+      'Find a PA facility by name or county…';
+
+  @override
+  String get wizardAiRailThinking => 'Thinking…';
+
+  @override
+  String get wizardAiRailAskAboutThisStep => 'Ask about this step…';
+
+  @override
+  String get wizardAiRailSending => 'Sending';
+
+  @override
+  String get sideEffectsBringAnythingYouCheckAnd =>
+      'Bring anything you check — and especially anything marked \"discuss with your doctor\" — to your doctor or pharmacist. This list never tells you to start, stop, or change a medication.';
+
+  @override
+  String get sideEffectsTheseArePossibleInteractionsDrawn =>
+      'These are possible interactions drawn from the medications’ FDA labels, written as questions to ask. They are not a warning to stop or change anything yourself — only your doctor or pharmacist can advise on your specific case.';
+
+  @override
+  String get sideEffectsAddTheMedicationsYouRe =>
+      'Add the medications you\'re currently taking on the Medications step first, then come back here to check their common side effects.';
+
+  @override
+  String get audioGuideToTranscribeYourRecordingIncluding =>
+      'To transcribe, your recording — including any personal details you speak — is sent to Google\'s AI. On the free tier it may be retained and reviewed, and can\'t be recalled. Don\'t say anything you\'re not comfortable sending; you can always type sensitive fields by hand instead.';
+
+  @override
+  String get ulyssesClauseIfFutureMeRefuses => 'If future-me refuses…';
+
+  @override
+  String get ulyssesClauseStronglyRecommendedTalkWithA =>
+      'Strongly recommended: talk with a peer specialist or clinician before saving. See \"Get help\" in Settings.';
+
+  @override
+  String get aiSetupIsTheApiKeyReally => 'Is the API key really free?';
+
+  @override
+  String get aiSetupYesGoogleOffersAGenerous =>
+      'Yes. Google offers a generous free tier for Gemini. There is no credit card required and no charge for typical personal use.';
+
+  @override
+  String get aiSetupWhatGoogleAccountShouldI =>
+      'What Google account should I use?';
+
+  @override
+  String get aiSetupAnyGoogleAccountWorksA =>
+      'Any Google account works — a personal Gmail is fine. You do not need a Google Cloud billing account.';
+
+  @override
+  String get aiSetupCanIRevokeTheKey => 'Can I revoke the key later?';
+
+  @override
+  String get aiSetupYesVisitAistudioGoogleCom =>
+      'Yes. Visit aistudio.google.com/apikey at any time to delete or regenerate your key. You can also remove it from this app using the trash icon in the top-right.';
+
+  @override
+  String get aiSetupWhatIfIDonT => 'What if I don\'t add a key?';
+
+  @override
+  String get aiSetupTheAppWorksFullyWithout =>
+      'The app works fully without AI. The form wizard, PDF generation, educational content, and all other features do not require an API key. AI is purely optional.';
+
+  @override
+  String get accessibilitySettingsMakeItReadable => 'Make it readable.';
+
+  @override
+  String get accessibilitySettingsLegalTextIsAlwaysRendered =>
+      'Legal text is always rendered in English to preserve PA Act 194 wording.';
+
+  @override
+  String get facilitatorYouDonTHaveTo => 'You don\'t have to do this alone.';
+
+  @override
+  String get facilitatorPeerSpecialistAdvocateReferral =>
+      '♥ Peer specialist / advocate referral';
+
+  @override
+  String get facilitatorSomeoneIAlreadyTrust => '👥 Someone I already trust';
+
+  @override
+  String get facilitatorMyCareTeam => '🧠 My care team';
+
+  @override
+  String get facilitatorPreferToDoItYourself =>
+      'Prefer to do it yourself? That\'s fine — keep going from where you left off.';
+
+  @override
+  String get moreSheetCallOrText98824 => 'Call or text 988 · 24/7 support';
+
+  @override
+  String get moreSheetUploadADocumentPhotoOr =>
+      'Upload a document, photo, or recording';
+
+  @override
+  String get moreSheetPreviewAndExportYourDirective =>
+      'Preview and export your directive packet';
+
+  @override
+  String get moreSheetEraseThisSessionAndStart =>
+      'Erase this session and start fresh';
+
+  @override
+  String get crisisSheetYouAreNotAlone => 'You are not alone.';
+
+  @override
+  String get crisisSheetCallOrText988 => 'Call or text 988';
+
+  @override
+  String get crisisSheetCall988Press1 => 'Call 988, press 1';
+
+  @override
+  String get crisisSheetCallTextChat => 'Call · text · chat';
 }

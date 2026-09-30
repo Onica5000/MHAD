@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
@@ -82,22 +83,19 @@ class _MoreSheet extends StatelessWidget {
         final cs = Theme.of(dctx).colorScheme;
         return AlertDialog(
           icon: Icon(Icons.warning_amber_rounded, color: cs.error, size: 36),
-          title: const Text('Reset and start fresh?'),
-          content: const Text(
-            'This permanently erases everything in this session — all '
-            'directives, your AI key, and chat history — and returns you to a '
-            'blank start.\n\nExport or print anything you want to keep first. '
-            'This cannot be undone.',
+          title: Text(context.l10n.moreSheetResetAndStartFresh),
+          content: Text(
+            context.l10n.moreSheetThisPermanentlyErasesEverythingIn,
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(dctx, false),
-              child: const Text('Cancel'),
+              child: Text(context.l10n.cancel),
             ),
             FilledButton(
               onPressed: () => Navigator.pop(dctx, true),
               style: FilledButton.styleFrom(backgroundColor: cs.error),
-              child: const Text('Reset everything'),
+              child: Text(context.l10n.moreSheetResetEverything),
             ),
           ],
         );
@@ -144,10 +142,10 @@ class _MoreSheet extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 14),
-              const EditorialHeading(text: 'More', size: 30),
+              EditorialHeading(text: context.l10n.navMore, size: 30),
               const SizedBox(height: 4),
               Text(
-                'Everything else you can do here.',
+                context.l10n.moreSheetEverythingElseYouCanDo,
                 style: TextStyle(
                   fontFamily: kSansFamily,
                   fontSize: 13,
@@ -162,8 +160,8 @@ class _MoreSheet extends StatelessWidget {
               // sheet is dismissed first).
               _MoreRow(
                 icon: Icons.health_and_safety_outlined,
-                title: 'Crisis help',
-                detail: 'Call or text 988 · 24/7 support',
+                title: context.l10n.homeToolsGridCrisisHelp,
+                detail: context.l10n.moreSheetCallOrText98824,
                 // Keyboard/screen-reader users land on the first action when
                 // the sheet opens (UX audit A3).
                 autofocus: true,
@@ -175,20 +173,20 @@ class _MoreSheet extends StatelessWidget {
               ),
               _MoreRow(
                 icon: Icons.document_scanner_outlined,
-                title: 'Autofill',
-                detail: 'Upload a document, photo, or recording',
+                title: context.l10n.navAutofill,
+                detail: context.l10n.moreSheetUploadADocumentPhotoOr,
                 onTap: () => _openForDirective(context, AppRoutes.uploadRoute),
               ),
               _MoreRow(
                 icon: Icons.print_outlined,
-                title: 'Download & print',
-                detail: 'Preview and export your directive packet',
+                title: context.l10n.navDownloadPrint,
+                detail: context.l10n.moreSheetPreviewAndExportYourDirective,
                 onTap: () => _openForDirective(context, AppRoutes.exportRoute),
               ),
               _MoreRow(
                 icon: Icons.support_agent_outlined,
-                title: 'Get help',
-                detail: 'Peer support · advocates · referrals',
+                title: context.l10n.moreSheetGetHelp,
+                detail: context.l10n.webSidebarPeerSupportAdvocatesReferrals,
                 onTap: () {
                   Navigator.of(context).pop();
                   appRouter.push(AppRoutes.facilitator);
@@ -197,8 +195,8 @@ class _MoreSheet extends StatelessWidget {
               const SizedBox(height: 4),
               _MoreRow(
                 icon: Icons.delete_sweep_outlined,
-                title: 'Reset',
-                detail: 'Erase this session and start fresh',
+                title: context.l10n.moreSheetReset,
+                detail: context.l10n.moreSheetEraseThisSessionAndStart,
                 destructive: true,
                 onTap: () => _reset(context),
               ),
@@ -207,7 +205,7 @@ class _MoreSheet extends StatelessWidget {
                 width: double.infinity,
                 child: TextButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('Close'),
+                  child: Text(context.l10n.close),
                 ),
               ),
             ],

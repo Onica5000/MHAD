@@ -1,4 +1,5 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 
@@ -64,7 +65,7 @@ class StepHead extends StatelessWidget {
               if (onExit != null)
                 Semantics(
                   button: true,
-                  label: 'Exit',
+                  label: context.l10n.wizardExit,
                   child: InkWell(
                     onTap: onExit,
                     borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
@@ -76,7 +77,7 @@ class StepHead extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
-                              'Exit',
+                              context.l10n.wizardExit,
                               style: TextStyle(
                                 fontFamily: kSansFamily,
                                 fontSize: 13,

@@ -1,5 +1,6 @@
 ﻿import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -96,9 +97,9 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
     if (result.sendFailed) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text("The reply failed."),
+          content: Text(context.l10n.assistantTheReplyFailed),
           duration: const Duration(seconds: 6),
-          action: SnackBarAction(label: 'Retry', onPressed: _retrySend),
+          action: SnackBarAction(label: context.l10n.retry, onPressed: _retrySend),
         ),
       );
     }
@@ -137,9 +138,9 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
     if (result.sendFailed) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text("Still failing — check your connection or key."),
+          content: Text(context.l10n.assistantStillFailingCheckYourConnection),
           duration: const Duration(seconds: 6),
-          action: SnackBarAction(label: 'Retry', onPressed: _retrySend),
+          action: SnackBarAction(label: context.l10n.retry, onPressed: _retrySend),
         ),
       );
     }
@@ -218,7 +219,7 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'AI assistant',
+                    context.l10n.navAiAssistant,
                     style: TextStyle(
                       fontFamily: kSansFamily,
                       fontSize: 15,
@@ -252,24 +253,24 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.delete_outline),
-            tooltip: 'Clear conversation',
+            tooltip: context.l10n.assistantClearConversation2,
             onPressed: messages.isEmpty
                 ? null
                 : () async {
                     final confirmed = await showDialog<bool>(
                       context: context,
                       builder: (ctx) => AlertDialog(
-                        title: const Text('Clear conversation?'),
-                        content: const Text(
-                            'This will erase all messages. This cannot be undone.'),
+                        title: Text(context.l10n.assistantClearConversation),
+                        content: Text(
+                            context.l10n.assistantThisWillEraseAllMessages),
                         actions: [
                           TextButton(
                             onPressed: () => Navigator.pop(ctx, false),
-                            child: const Text('Cancel'),
+                            child: Text(context.l10n.cancel),
                           ),
                           FilledButton(
                             onPressed: () => Navigator.pop(ctx, true),
-                            child: const Text('Clear'),
+                            child: Text(context.l10n.assistantClear),
                           ),
                         ],
                       ),
@@ -281,7 +282,7 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
           ),
           IconButton(
             icon: const Icon(Icons.key_outlined),
-            tooltip: 'API key settings',
+            tooltip: context.l10n.assistantApiKeySettings,
             onPressed: _openSetup,
           ),
         ],
@@ -362,9 +363,8 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                   : SemanticColors.warningTextLight;
               return Semantics(
                 label:
-                    'Disclaimer: Not legal or medical advice. For legal '
-                    'questions contact PA Protection and Advocacy: '
-                    '${appData.phoneOf('paProtectionAdvocacy')} ',
+                    context.l10n.assistantDisclaimerNotLegalOrMedical(
+                        appData.phoneOf('paProtectionAdvocacy')),
                 container: true,
                 child: Container(
                   decoration: BoxDecoration(
@@ -434,15 +434,15 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                     children: [
                       const Icon(Icons.smart_toy_outlined, size: 32),
                       const SizedBox(height: 8),
-                      const Text(
-                        "To use the AI assistant, set up an AI key — Gemini's free tier works.",
+                      Text(
+                        context.l10n.assistantToUseTheAiAssistant,
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 13),
                       ),
                       const SizedBox(height: 8),
                       FilledButton.tonal(
                         onPressed: _openSetup,
-                        child: const Text('Set Up (Free)'),
+                        child: Text(context.l10n.assistantSetUpFree),
                       ),
                     ],
                   ),
@@ -498,7 +498,7 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                 alignment: Alignment.centerLeft,
                 child: Chip(
                   avatar: const Icon(Icons.shield_outlined, size: 14),
-                  label: const Text('Personal info removed',
+                  label: Text(context.l10n.assistantPersonalInfoRemoved,
                       style: TextStyle(fontSize: 11)),
                   padding: EdgeInsets.zero,
                   visualDensity: VisualDensity.compact,
@@ -615,7 +615,7 @@ class _InputBar extends StatelessWidget {
                 maxLines: 4,
                 minLines: 1,
                 decoration: InputDecoration(
-                  hintText: 'Ask a question about your directive...',
+                  hintText: context.l10n.assistantAskAQuestionAboutYour,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(DesignTokens.radiusLg),
                   ),
@@ -636,14 +636,14 @@ class _InputBar extends StatelessWidget {
                       width: 20,
                       height: 20,
                       child: Semantics(
-                        label: 'Loading',
+                        label: context.l10n.reviewStepLoading,
                         child: CircularProgressIndicator(
                             strokeWidth: 2,
                             color: Theme.of(context).colorScheme.onPrimary),
                       ),
                     )
                   : const Icon(Icons.send_rounded),
-              tooltip: 'Send',
+              tooltip: context.l10n.assistantSend,
             ),
           ],
         ),
@@ -679,13 +679,13 @@ class _EmptyState extends StatelessWidget {
         ),
         const SizedBox(height: 12),
         Text(
-          'Ask me anything about your\nPA Mental Health Advance Directive',
+          context.l10n.assistantAskMeAnythingAboutYour,
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.titleSmall,
         ),
         const SizedBox(height: 24),
         Text(
-          'Suggested questions:',
+          context.l10n.assistantSuggestedQuestions,
           style: TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w600,

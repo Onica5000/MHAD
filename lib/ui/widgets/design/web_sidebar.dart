@@ -33,22 +33,19 @@ class WebSidebar extends ConsumerWidget {
         final cs = Theme.of(dctx).colorScheme;
         return AlertDialog(
           icon: Icon(Icons.warning_amber_rounded, color: cs.error, size: 36),
-          title: const Text('Reset and start fresh?'),
-          content: const Text(
-            'This permanently erases everything in this session — all '
-            'directives, your AI key, and chat history — and returns you to a '
-            'blank start.\n\nExport or print anything you want to keep first. '
-            'This cannot be undone.',
+          title: Text(dctx.l10n.moreSheetResetAndStartFresh),
+          content: Text(
+            dctx.l10n.moreSheetThisPermanentlyErasesEverythingIn,
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(dctx, false),
-              child: const Text('Cancel'),
+              child: Text(dctx.l10n.cancel),
             ),
             FilledButton(
               onPressed: () => Navigator.pop(dctx, true),
               style: FilledButton.styleFrom(backgroundColor: cs.error),
-              child: const Text('Reset everything'),
+              child: Text(dctx.l10n.moreSheetResetEverything),
             ),
           ],
         );
@@ -232,7 +229,7 @@ class WebSidebar extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'PA MHAD',
+                          context.l10n.pinDialogPaMhad,
                           style: TextStyle(
                             fontFamily: kSansFamily,
                             fontSize: 13,
@@ -242,7 +239,7 @@ class WebSidebar extends ConsumerWidget {
                           ),
                         ),
                         Text(
-                          'ACT 194 · 2004',
+                          context.l10n.webSidebarAct1942004,
                           style: TextStyle(
                             fontFamily: kMonoFamily,
                             fontFamilyFallback: const [
@@ -454,12 +451,12 @@ class _CrisisCard extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Row(
-                children: const [
+                children: [
                   Icon(Icons.health_and_safety_outlined,
                       size: 14, color: SemanticColors.errorAccentLight),
                   SizedBox(width: 6),
                   Text(
-                    '24/7 LIFELINE',
+                    context.l10n.webSidebar247Lifeline,
                     style: TextStyle(
                       fontFamily: kMonoFamily,
                       fontFamilyFallback: ['Consolas', 'Courier New', 'monospace'],
@@ -472,8 +469,8 @@ class _CrisisCard extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 4),
-              const Text(
-                '988 · Crisis help',
+              Text(
+                context.l10n.webSidebar988CrisisHelp,
                 style: TextStyle(
                   fontFamily: kSansFamily,
                   fontSize: 13,
@@ -483,7 +480,7 @@ class _CrisisCard extends StatelessWidget {
               ),
               const SizedBox(height: 2),
               Text(
-                'Click for more information',
+                context.l10n.webSidebarClickForMoreInformation,
                 style: TextStyle(
                   fontFamily: kSansFamily,
                   fontSize: 11,
@@ -539,7 +536,7 @@ class _GetHelpCard extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'Get help',
+                      context.l10n.moreSheetGetHelp,
                       style: TextStyle(
                         fontFamily: kSansFamily,
                         fontSize: 13,
@@ -549,7 +546,7 @@ class _GetHelpCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 1),
                     Text(
-                      'Peer support · advocates · referrals',
+                      context.l10n.webSidebarPeerSupportAdvocatesReferrals,
                       style: TextStyle(
                         fontFamily: kSansFamily,
                         fontSize: 11,

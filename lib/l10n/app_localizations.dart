@@ -5437,6 +5437,3918 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Edit'**
   String get reviewEdit;
+
+  /// No description provided for @homeMakeItFindableInA.
+  ///
+  /// In en, this message translates to:
+  /// **'Make it findable in a crisis'**
+  String get homeMakeItFindableInA;
+
+  /// No description provided for @homeShareCopiesCarryTheWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Share copies, carry the wallet card, tell your people where it is'**
+  String get homeShareCopiesCarryTheWallet;
+
+  /// No description provided for @homeSessionRestoredPersonalInfoMust.
+  ///
+  /// In en, this message translates to:
+  /// **'Session restored. Personal info must be re-entered.'**
+  String get homeSessionRestoredPersonalInfoMust;
+
+  /// No description provided for @homeDeleteDirective.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete directive?'**
+  String get homeDeleteDirective;
+
+  /// No description provided for @homeAllDataForThisDirective.
+  ///
+  /// In en, this message translates to:
+  /// **'All data for this directive will be permanently deleted.'**
+  String get homeAllDataForThisDirective;
+
+  /// No description provided for @homeDirectiveDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Directive deleted.'**
+  String get homeDirectiveDeleted;
+
+  /// No description provided for @homeRenameDirective.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename directive'**
+  String get homeRenameDirective;
+
+  /// No description provided for @homeRenewDirective.
+  ///
+  /// In en, this message translates to:
+  /// **'Renew Directive?'**
+  String get homeRenewDirective;
+
+  /// No description provided for @homeThisWillCreateANew.
+  ///
+  /// In en, this message translates to:
+  /// **'This will create a new directive with the same treatment preferences and agent designations. Personal information, witnesses, and signatures will need to be re-entered.\n\nThe original directive will remain unchanged.'**
+  String get homeThisWillCreateANew;
+
+  /// No description provided for @homeRenew.
+  ///
+  /// In en, this message translates to:
+  /// **'Renew'**
+  String get homeRenew;
+
+  /// No description provided for @homeAmendThisDirective.
+  ///
+  /// In en, this message translates to:
+  /// **'Amend this directive?'**
+  String get homeAmendThisDirective;
+
+  /// No description provided for @homeAmendingOpensThisDirectiveSo.
+  ///
+  /// In en, this message translates to:
+  /// **'Amending opens this directive so you can change it — your existing answers stay in place.\n\nImportant: an amendment is only valid once you re-sign it on paper with two adult witnesses, the same way as the original (PA Act 194). Until you re-sign, this directive will show as an unsigned draft, and any printed copies of the old version stay in effect until you replace them.\n\nPrefer to keep the signed original untouched? Use “Renew (copy to new)” instead.'**
+  String get homeAmendingOpensThisDirectiveSo;
+
+  /// No description provided for @homeAmend.
+  ///
+  /// In en, this message translates to:
+  /// **'Amend'**
+  String get homeAmend;
+
+  /// No description provided for @homePrivateByDesign.
+  ///
+  /// In en, this message translates to:
+  /// **'Private by design'**
+  String get homePrivateByDesign;
+
+  /// No description provided for @homeLetSGetStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Let\'s get started.'**
+  String get homeLetSGetStarted;
+
+  /// No description provided for @homeRename.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename'**
+  String get homeRename;
+
+  /// No description provided for @homeLabelShownInThisList.
+  ///
+  /// In en, this message translates to:
+  /// **'Label shown in this list only — never printed'**
+  String get homeLabelShownInThisList;
+
+  /// No description provided for @homeRenewCopyToNew.
+  ///
+  /// In en, this message translates to:
+  /// **'Renew (copy to new)'**
+  String get homeRenewCopyToNew;
+
+  /// No description provided for @homeAmendEditThisOne.
+  ///
+  /// In en, this message translates to:
+  /// **'Amend (edit this one)'**
+  String get homeAmendEditThisOne;
+
+  /// No description provided for @homeRequiresReSigningReWitnessing.
+  ///
+  /// In en, this message translates to:
+  /// **'Requires re-signing & re-witnessing'**
+  String get homeRequiresReSigningReWitnessing;
+
+  /// No description provided for @homeRevoke.
+  ///
+  /// In en, this message translates to:
+  /// **'Revoke'**
+  String get homeRevoke;
+
+  /// No description provided for @homeTools.
+  ///
+  /// In en, this message translates to:
+  /// **'Tools'**
+  String get homeTools;
+
+  /// No description provided for @homePastDirectives.
+  ///
+  /// In en, this message translates to:
+  /// **'Past directives'**
+  String get homePastDirectives;
+
+  /// No description provided for @homeStartANewDirective.
+  ///
+  /// In en, this message translates to:
+  /// **'Start a new directive'**
+  String get homeStartANewDirective;
+
+  /// No description provided for @homeLoadingYourDirectives.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading your directives'**
+  String get homeLoadingYourDirectives;
+
+  /// No description provided for @homeDisplayLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Display label'**
+  String get homeDisplayLabel;
+
+  /// No description provided for @homeShownOnlyInThisList.
+  ///
+  /// In en, this message translates to:
+  /// **'Shown only in this list — never printed on the form. Leave empty to use the name on the directive.'**
+  String get homeShownOnlyInThisList;
+
+  /// No description provided for @homeCouldnTLoadYourDirectives.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load your directives.'**
+  String get homeCouldnTLoadYourDirectives;
+
+  /// No description provided for @homeNothingWasLostThisIs.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing was lost — this is a display problem, not a data one.'**
+  String get homeNothingWasLostThisIs;
+
+  /// No description provided for @homeYourVoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Your voice,\n'**
+  String get homeYourVoice;
+
+  /// No description provided for @homeInYourWords.
+  ///
+  /// In en, this message translates to:
+  /// **'in your words.'**
+  String get homeInYourWords;
+
+  /// No description provided for @homeLetSKeepYourVoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Let\'s keep your voice clear.'**
+  String get homeLetSKeepYourVoice;
+
+  /// No description provided for @homeStartYourDirective.
+  ///
+  /// In en, this message translates to:
+  /// **'Start your directive'**
+  String get homeStartYourDirective;
+
+  /// No description provided for @homePrivateBodyWeb.
+  ///
+  /// In en, this message translates to:
+  /// **'Your directive never leaves this browser — no server, no account, no tracking. It lives only in this session, and only you choose who to share it with.'**
+  String get homePrivateBodyWeb;
+
+  /// No description provided for @homePrivateBodyDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'Your directive stays on your device. No ads, no tracking, no selling your data — only you choose who to share it with.'**
+  String get homePrivateBodyDevice;
+
+  /// No description provided for @homeHiName.
+  ///
+  /// In en, this message translates to:
+  /// **'Hi, {name}.\n'**
+  String homeHiName(String name);
+
+  /// No description provided for @homeProfileA11y.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile {name}'**
+  String homeProfileA11y(String name);
+
+  /// No description provided for @homeCardDraft.
+  ///
+  /// In en, this message translates to:
+  /// **'Draft · step {step} of {total} · {date}'**
+  String homeCardDraft(int step, int total, String date);
+
+  /// No description provided for @homeCardPrepared.
+  ///
+  /// In en, this message translates to:
+  /// **'Prepared · {date}'**
+  String homeCardPrepared(String date);
+
+  /// No description provided for @homeCardExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Expired · revoke or copy to new'**
+  String get homeCardExpired;
+
+  /// No description provided for @homeCardRevoked.
+  ///
+  /// In en, this message translates to:
+  /// **'Revoked · {date}'**
+  String homeCardRevoked(String date);
+
+  /// No description provided for @homeCardDirectiveYear.
+  ///
+  /// In en, this message translates to:
+  /// **'Directive · {year}'**
+  String homeCardDirectiveYear(int year);
+
+  /// No description provided for @homeCardA11y.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}. {status}. Tap to open.'**
+  String homeCardA11y(String name, String status);
+
+  /// No description provided for @crisisPlanHelpThePeopleAroundYou.
+  ///
+  /// In en, this message translates to:
+  /// **'Help the people around you spot trouble early — and know what actually helps you when they do.'**
+  String get crisisPlanHelpThePeopleAroundYou;
+
+  /// No description provided for @crisisPlanAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get crisisPlanAdd;
+
+  /// No description provided for @crisisPlanAdd2.
+  ///
+  /// In en, this message translates to:
+  /// **'+ Add'**
+  String get crisisPlanAdd2;
+
+  /// No description provided for @crisisPlanOptionalAddOnCrisisPlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional add-on · Crisis plan'**
+  String get crisisPlanOptionalAddOnCrisisPlan;
+
+  /// No description provided for @crisisPlanEarlyWarningSigns.
+  ///
+  /// In en, this message translates to:
+  /// **'Early warning signs'**
+  String get crisisPlanEarlyWarningSigns;
+
+  /// No description provided for @crisisPlanTriggersToWatchFor.
+  ///
+  /// In en, this message translates to:
+  /// **'Triggers to watch for'**
+  String get crisisPlanTriggersToWatchFor;
+
+  /// No description provided for @crisisPlanThingsThatGenuinelyHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Things that genuinely help'**
+  String get crisisPlanThingsThatGenuinelyHelp;
+
+  /// No description provided for @crisisPlanThingsToSayToMe.
+  ///
+  /// In en, this message translates to:
+  /// **'Things to say to me'**
+  String get crisisPlanThingsToSayToMe;
+
+  /// No description provided for @crisisPlanDonTDoThese.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t do these'**
+  String get crisisPlanDonTDoThese;
+
+  /// No description provided for @crisisPlanTypeAShortNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Type a short note'**
+  String get crisisPlanTypeAShortNote;
+
+  /// No description provided for @permissionsOverviewPaMhadRequestsSystemPermissions.
+  ///
+  /// In en, this message translates to:
+  /// **'PA MHAD requests system permissions only for features you actively use. Nothing is collected in the background. Each section below explains exactly what a permission unlocks, what the app does with the result, and what it never does.'**
+  String get permissionsOverviewPaMhadRequestsSystemPermissions;
+
+  /// No description provided for @permissionsOverviewWhatThisAppMayAsk.
+  ///
+  /// In en, this message translates to:
+  /// **'What this app may ask for'**
+  String get permissionsOverviewWhatThisAppMayAsk;
+
+  /// No description provided for @permissionsOverviewBiometricsPasscode.
+  ///
+  /// In en, this message translates to:
+  /// **'Biometrics / passcode'**
+  String get permissionsOverviewBiometricsPasscode;
+
+  /// No description provided for @permissionsOverviewNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get permissionsOverviewNotifications;
+
+  /// No description provided for @permissionsOverviewCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera'**
+  String get permissionsOverviewCamera;
+
+  /// No description provided for @permissionsOverviewMicrophone.
+  ///
+  /// In en, this message translates to:
+  /// **'Microphone'**
+  String get permissionsOverviewMicrophone;
+
+  /// No description provided for @permissionsOverviewContacts.
+  ///
+  /// In en, this message translates to:
+  /// **'Contacts'**
+  String get permissionsOverviewContacts;
+
+  /// No description provided for @makeItFindableADirectiveOnlyHelpsIf.
+  ///
+  /// In en, this message translates to:
+  /// **'A directive only helps if the people treating you can find it when you cannot speak for yourself. Take a few minutes now to put copies where they will be looked for.'**
+  String get makeItFindableADirectiveOnlyHelpsIf;
+
+  /// No description provided for @makeItFindableThisIsGeneralInformationAbout.
+  ///
+  /// In en, this message translates to:
+  /// **'This is general information about keeping your directive accessible, not legal advice.'**
+  String get makeItFindableThisIsGeneralInformationAbout;
+
+  /// No description provided for @makeItFindableCrisisReadiness.
+  ///
+  /// In en, this message translates to:
+  /// **'Crisis readiness'**
+  String get makeItFindableCrisisReadiness;
+
+  /// No description provided for @makeItFindableDoTheseNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Do these now'**
+  String get makeItFindableDoTheseNow;
+
+  /// No description provided for @makeItFindableShareItWithYourAgent.
+  ///
+  /// In en, this message translates to:
+  /// **'Share it with your agent and a trusted person'**
+  String get makeItFindableShareItWithYourAgent;
+
+  /// No description provided for @makeItFindableTheyShouldEachHaveA.
+  ///
+  /// In en, this message translates to:
+  /// **'They should each have a copy before any crisis — not only you.'**
+  String get makeItFindableTheyShouldEachHaveA;
+
+  /// No description provided for @makeItFindableGiveACopyToYour.
+  ///
+  /// In en, this message translates to:
+  /// **'Give a copy to your care team'**
+  String get makeItFindableGiveACopyToYour;
+
+  /// No description provided for @makeItFindableAskYourPsychiatristTherapistPrimary.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask your psychiatrist, therapist, primary-care doctor, and any facility to add it to your medical record.'**
+  String get makeItFindableAskYourPsychiatristTherapistPrimary;
+
+  /// No description provided for @makeItFindablePrintAndCarryTheWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Print and carry the wallet card'**
+  String get makeItFindablePrintAndCarryTheWallet;
+
+  /// No description provided for @makeItFindableAPocketCardThatTells.
+  ///
+  /// In en, this message translates to:
+  /// **'A pocket card that tells responders you have a directive and how to reach your agent.'**
+  String get makeItFindableAPocketCardThatTells;
+
+  /// No description provided for @adminUpdateFederalRegisterRelevantFederalRules.
+  ///
+  /// In en, this message translates to:
+  /// **'Federal Register — relevant federal rules'**
+  String get adminUpdateFederalRegisterRelevantFederalRules;
+
+  /// No description provided for @adminUpdateFederalRulesTheAppReferences.
+  ///
+  /// In en, this message translates to:
+  /// **'Federal rules the app references. Use a link as the SOURCE for a verify-tier legal/dated change. State law (PA Act 194) is not covered here.'**
+  String get adminUpdateFederalRulesTheAppReferences;
+
+  /// No description provided for @adminUpdateOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Open'**
+  String get adminUpdateOpen;
+
+  /// No description provided for @adminUpdateSourceLinkCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Source link copied'**
+  String get adminUpdateSourceLinkCopied;
+
+  /// No description provided for @adminUpdateCopyLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy link'**
+  String get adminUpdateCopyLink;
+
+  /// No description provided for @adminUpdateRestoreFromWhichBackup.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore from which backup?'**
+  String get adminUpdateRestoreFromWhichBackup;
+
+  /// No description provided for @adminUpdateAdminDataUpdate.
+  ///
+  /// In en, this message translates to:
+  /// **'Admin · data update'**
+  String get adminUpdateAdminDataUpdate;
+
+  /// No description provided for @adminUpdateEnterTheAdminPassphrase.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the admin passphrase.'**
+  String get adminUpdateEnterTheAdminPassphrase;
+
+  /// No description provided for @adminUpdateUnlock.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock'**
+  String get adminUpdateUnlock;
+
+  /// No description provided for @adminUpdateDescribeTheUpdateTheAi.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe the update. The AI drafts changes to the selected file with sources; you review and approve before anything is emitted. Legal/statutory and educational changes always need your explicit sign-off.'**
+  String get adminUpdateDescribeTheUpdateTheAi;
+
+  /// No description provided for @adminUpdateRevert.
+  ///
+  /// In en, this message translates to:
+  /// **'Revert'**
+  String get adminUpdateRevert;
+
+  /// No description provided for @adminUpdateCheckBestGeminiModel.
+  ///
+  /// In en, this message translates to:
+  /// **'Check best Gemini model'**
+  String get adminUpdateCheckBestGeminiModel;
+
+  /// No description provided for @adminUpdateCheckFederalRegister.
+  ///
+  /// In en, this message translates to:
+  /// **'Check Federal Register'**
+  String get adminUpdateCheckFederalRegister;
+
+  /// No description provided for @adminUpdateCopiedUpdatedJson.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied updated JSON'**
+  String get adminUpdateCopiedUpdatedJson;
+
+  /// No description provided for @adminUpdateCopyJson.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy JSON'**
+  String get adminUpdateCopyJson;
+
+  /// No description provided for @adminUpdateAnotherUpdate.
+  ///
+  /// In en, this message translates to:
+  /// **'Another update'**
+  String get adminUpdateAnotherUpdate;
+
+  /// No description provided for @adminUpdatePassphrase.
+  ///
+  /// In en, this message translates to:
+  /// **'Passphrase'**
+  String get adminUpdatePassphrase;
+
+  /// No description provided for @adminUpdateWhatToUpdate.
+  ///
+  /// In en, this message translates to:
+  /// **'What to update'**
+  String get adminUpdateWhatToUpdate;
+
+  /// No description provided for @adminUpdateAiProvider.
+  ///
+  /// In en, this message translates to:
+  /// **'AI provider'**
+  String get adminUpdateAiProvider;
+
+  /// No description provided for @adminUpdateModel.
+  ///
+  /// In en, this message translates to:
+  /// **'Model'**
+  String get adminUpdateModel;
+
+  /// No description provided for @adminUpdateDescribeTheUpdate.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe the update *'**
+  String get adminUpdateDescribeTheUpdate;
+
+  /// No description provided for @adminUpdateEGTheTrevorProject.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. \"The Trevor Project number changed to ...\" or \"Check Gemini\'s current free-tier rate limits\"'**
+  String get adminUpdateEGTheTrevorProject;
+
+  /// No description provided for @adminUpdateRequiredWhatShouldTheAi.
+  ///
+  /// In en, this message translates to:
+  /// **'Required — what should the AI draft a change to?'**
+  String get adminUpdateRequiredWhatShouldTheAi;
+
+  /// No description provided for @adminUpdateFocusAreaPathOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'Focus area / path (optional)'**
+  String get adminUpdateFocusAreaPathOptional;
+
+  /// No description provided for @adminUpdateRestrictTheAiToOne.
+  ///
+  /// In en, this message translates to:
+  /// **'Restrict the AI to one spot, e.g. \"config.timeoutsSeconds\" or \"sections.faq_valid\".'**
+  String get adminUpdateRestrictTheAiToOne;
+
+  /// No description provided for @reminderSheetsQuickRenew5Min.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick renew · ~5 min'**
+  String get reminderSheetsQuickRenew5Min;
+
+  /// No description provided for @reminderSheetsMostPeopleKeepTheSame.
+  ///
+  /// In en, this message translates to:
+  /// **'Most people keep the same answers. We\'ll pre-fill all 11 sections from your current directive — tap any card to change it, then print and sign the new copy in ink with two witnesses.'**
+  String get reminderSheetsMostPeopleKeepTheSame;
+
+  /// No description provided for @reminderSheetsStartQuickRenew.
+  ///
+  /// In en, this message translates to:
+  /// **'Start quick renew'**
+  String get reminderSheetsStartQuickRenew;
+
+  /// No description provided for @reminderSheetsRemindMeNextWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'Remind me next week'**
+  String get reminderSheetsRemindMeNextWeek;
+
+  /// No description provided for @reminderSheetsWeLlRemindYouAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'ll remind you again 7 days before expiration.'**
+  String get reminderSheetsWeLlRemindYouAgain;
+
+  /// No description provided for @reminderSheetsAnythingChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Anything changed?'**
+  String get reminderSheetsAnythingChanged;
+
+  /// No description provided for @reminderSheetsStillAccurateAllGood.
+  ///
+  /// In en, this message translates to:
+  /// **'Still accurate — all good'**
+  String get reminderSheetsStillAccurateAllGood;
+
+  /// No description provided for @reminderSheetsEditMyDirective.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit my directive'**
+  String get reminderSheetsEditMyDirective;
+
+  /// No description provided for @reminderSheetsIfYouEditAnythingYou.
+  ///
+  /// In en, this message translates to:
+  /// **'If you edit anything, you\'ll re-print and sign that updated copy in ink. Small changes can wait for your 2-year renewal.'**
+  String get reminderSheetsIfYouEditAnythingYou;
+
+  /// No description provided for @reminderSheets3MonthCheckIn.
+  ///
+  /// In en, this message translates to:
+  /// **'● 3-month check-in'**
+  String get reminderSheets3MonthCheckIn;
+
+  /// No description provided for @reminderSheetsCommonThingsThatChange.
+  ///
+  /// In en, this message translates to:
+  /// **'Common things that change'**
+  String get reminderSheetsCommonThingsThatChange;
+
+  /// No description provided for @reminderSheetsStillTheRightPeople.
+  ///
+  /// In en, this message translates to:
+  /// **'Still the right people?'**
+  String get reminderSheetsStillTheRightPeople;
+
+  /// No description provided for @reminderSheetsMedicationsUpToDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Medications up to date?'**
+  String get reminderSheetsMedicationsUpToDate;
+
+  /// No description provided for @reminderSheetsCarePreferencesStillRight.
+  ///
+  /// In en, this message translates to:
+  /// **'Care preferences still right?'**
+  String get reminderSheetsCarePreferencesStillRight;
+
+  /// No description provided for @reminderSheetsPaDirectivesExpireAfter2.
+  ///
+  /// In en, this message translates to:
+  /// **'PA directives expire after 2 years. Yours runs out on '**
+  String get reminderSheetsPaDirectivesExpireAfter2;
+
+  /// No description provided for @reminderSheetsIfYouAreIncapableOf.
+  ///
+  /// In en, this message translates to:
+  /// **'. (If you are incapable of making mental health decisions when it would expire, it stays in effect until your capacity returns.)'**
+  String get reminderSheetsIfYouAreIncapableOf;
+
+  /// No description provided for @reminderSheetsYourDirectiveIsStillValid.
+  ///
+  /// In en, this message translates to:
+  /// **'Your directive is still valid through '**
+  String get reminderSheetsYourDirectiveIsStillValid;
+
+  /// No description provided for @reminderSheetsNoSigningNeededJustA.
+  ///
+  /// In en, this message translates to:
+  /// **' — no signing needed. Just a quick gut-check that it still fits your life.'**
+  String get reminderSheetsNoSigningNeededJustA;
+
+  /// No description provided for @revocationMarkedRevokedOnThisDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'Marked revoked on this device'**
+  String get revocationMarkedRevokedOnThisDevice;
+
+  /// No description provided for @revocationPer20PaCS.
+  ///
+  /// In en, this message translates to:
+  /// **'Per 20 Pa.C.S. §§ 5825 and 5839, revocation is effective only when communicated to your attending physician or provider. Marking this directive revoked here does not communicate it — you still need to tell each recipient.'**
+  String get revocationPer20PaCS;
+
+  /// No description provided for @revocationYouPickedTheseRecipientsTo.
+  ///
+  /// In en, this message translates to:
+  /// **'You picked these recipients to notify:'**
+  String get revocationYouPickedTheseRecipientsTo;
+
+  /// No description provided for @revocationContactEachRecipientYourselfCall.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact each recipient yourself — call or email them — and ask the receiving provider to record the revocation in your chart. Revocation takes effect once your provider has been told.'**
+  String get revocationContactEachRecipientYourselfCall;
+
+  /// No description provided for @revocationYourDirectiveWillNoLonger.
+  ///
+  /// In en, this message translates to:
+  /// **'Your directive will no longer be legally binding once you communicate the revocation to your attending physician or provider (20 Pa.C.S. §§ 5825, 5839). This app marks the directive revoked locally and helps you generate a revocation letter.'**
+  String get revocationYourDirectiveWillNoLonger;
+
+  /// No description provided for @revocationThisDeclarationMayBeRevoked.
+  ///
+  /// In en, this message translates to:
+  /// **'This declaration may be revoked in whole or in part at any time, either orally or in writing, as long as I have not been found to be incapable of making mental health decisions. My revocation will be effective upon communication to my attending physician or other mental health care provider, either by me or a witness to my revocation, of the intent to revoke.'**
+  String get revocationThisDeclarationMayBeRevoked;
+
+  /// No description provided for @revocationNoBatchSendsPickEach.
+  ///
+  /// In en, this message translates to:
+  /// **'No batch sends — pick each recipient. The app keeps your choices in front of you as a checklist; you contact each recipient yourself (call, email, or in person).'**
+  String get revocationNoBatchSendsPickEach;
+
+  /// No description provided for @revocationTypeRevokeToConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Type REVOKE to confirm'**
+  String get revocationTypeRevokeToConfirm;
+
+  /// No description provided for @revocationHowRevocationWorksInPa.
+  ///
+  /// In en, this message translates to:
+  /// **'How revocation works in PA'**
+  String get revocationHowRevocationWorksInPa;
+
+  /// No description provided for @revocationStatutoryRevocationStatement.
+  ///
+  /// In en, this message translates to:
+  /// **'Statutory revocation statement'**
+  String get revocationStatutoryRevocationStatement;
+
+  /// No description provided for @revocationWhoToNotifyOptIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Who to notify (opt-in per recipient)'**
+  String get revocationWhoToNotifyOptIn;
+
+  /// No description provided for @revocationPermanentAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Permanent action'**
+  String get revocationPermanentAction;
+
+  /// No description provided for @revocationRevoke.
+  ///
+  /// In en, this message translates to:
+  /// **'REVOKE'**
+  String get revocationRevoke;
+
+  /// No description provided for @pastDirectiveDetailDeleteFromThisDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete from this device?'**
+  String get pastDirectiveDetailDeleteFromThisDevice;
+
+  /// No description provided for @pastDirectiveDetailThisRemovesTheSavedDirective.
+  ///
+  /// In en, this message translates to:
+  /// **'This removes the saved directive from this device. The legal effect of any previously-signed paper copy is unchanged. This cannot be undone.'**
+  String get pastDirectiveDetailThisRemovesTheSavedDirective;
+
+  /// No description provided for @pastDirectiveDetailDirectiveDeletedFromThisDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'Directive deleted from this device.'**
+  String get pastDirectiveDetailDirectiveDeletedFromThisDevice;
+
+  /// No description provided for @pastDirectiveDetailNoShareLogEntriesYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No share log entries yet.'**
+  String get pastDirectiveDetailNoShareLogEntriesYet;
+
+  /// No description provided for @pastDirectiveDetailWeDonTTrackDelivery.
+  ///
+  /// In en, this message translates to:
+  /// **'We don\'t track delivery or receipt confirmation (that would need a server). Add entries manually as you distribute copies.'**
+  String get pastDirectiveDetailWeDonTTrackDelivery;
+
+  /// No description provided for @pastDirectiveDetailGeneratedOnDemand6Pages.
+  ///
+  /// In en, this message translates to:
+  /// **'Generated on demand · ~6 pages'**
+  String get pastDirectiveDetailGeneratedOnDemand6Pages;
+
+  /// No description provided for @pastDirectiveDetailWhoHadACopy.
+  ///
+  /// In en, this message translates to:
+  /// **'Who had a copy'**
+  String get pastDirectiveDetailWhoHadACopy;
+
+  /// No description provided for @pastDirectiveDetailActions.
+  ///
+  /// In en, this message translates to:
+  /// **'Actions'**
+  String get pastDirectiveDetailActions;
+
+  /// No description provided for @pastDirectiveDetailLoadingThisDirective.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading this directive'**
+  String get pastDirectiveDetailLoadingThisDirective;
+
+  /// No description provided for @pastDirectiveDetailCopyToANewDirective.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy to a new directive'**
+  String get pastDirectiveDetailCopyToANewDirective;
+
+  /// No description provided for @pastDirectiveDetailStartWithTheseAnswersComing.
+  ///
+  /// In en, this message translates to:
+  /// **'Start with these answers — coming with the renewal flow'**
+  String get pastDirectiveDetailStartWithTheseAnswersComing;
+
+  /// No description provided for @pastDirectiveDetailOpenThePdf.
+  ///
+  /// In en, this message translates to:
+  /// **'Open the PDF'**
+  String get pastDirectiveDetailOpenThePdf;
+
+  /// No description provided for @pastDirectiveDetailPrintOrSaveForYour.
+  ///
+  /// In en, this message translates to:
+  /// **'Print or save for your records'**
+  String get pastDirectiveDetailPrintOrSaveForYour;
+
+  /// No description provided for @pastDirectiveDetailDeleteFromThisDevice2.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete from this device'**
+  String get pastDirectiveDetailDeleteFromThisDevice2;
+
+  /// No description provided for @pastDirectiveDetailSignedBy.
+  ///
+  /// In en, this message translates to:
+  /// **'SIGNED BY'**
+  String get pastDirectiveDetailSignedBy;
+
+  /// No description provided for @pastDirectiveDetailWitness1.
+  ///
+  /// In en, this message translates to:
+  /// **'WITNESS 1'**
+  String get pastDirectiveDetailWitness1;
+
+  /// No description provided for @pastDirectiveDetailWitness2.
+  ///
+  /// In en, this message translates to:
+  /// **'WITNESS 2'**
+  String get pastDirectiveDetailWitness2;
+
+  /// No description provided for @pastDirectiveDetailDirective.
+  ///
+  /// In en, this message translates to:
+  /// **'Directive · '**
+  String get pastDirectiveDetailDirective;
+
+  /// No description provided for @pinDialogCreatePasscode.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Passcode'**
+  String get pinDialogCreatePasscode;
+
+  /// No description provided for @pinDialogBiometricAuthenticationIsNotAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Biometric authentication is not available on this device. Create a passcode to protect your private data.'**
+  String get pinDialogBiometricAuthenticationIsNotAvailable;
+
+  /// No description provided for @pinDialogCreate.
+  ///
+  /// In en, this message translates to:
+  /// **'Create'**
+  String get pinDialogCreate;
+
+  /// No description provided for @pinDialogPaMhad.
+  ///
+  /// In en, this message translates to:
+  /// **'PA MHAD'**
+  String get pinDialogPaMhad;
+
+  /// No description provided for @pinDialogPrivateModeLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'PRIVATE MODE · LOCKED'**
+  String get pinDialogPrivateModeLocked;
+
+  /// No description provided for @pinDialogEnterYourPasscodeToUnlock.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your passcode to unlock private mode.'**
+  String get pinDialogEnterYourPasscodeToUnlock;
+
+  /// No description provided for @pinDialogSwitchToPublicMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch to public mode'**
+  String get pinDialogSwitchToPublicMode;
+
+  /// No description provided for @pinDialogPasscode.
+  ///
+  /// In en, this message translates to:
+  /// **'Passcode'**
+  String get pinDialogPasscode;
+
+  /// No description provided for @pinDialogAtLeast4Characters.
+  ///
+  /// In en, this message translates to:
+  /// **'At least 4 characters'**
+  String get pinDialogAtLeast4Characters;
+
+  /// No description provided for @pinDialogConfirmPasscode.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Passcode'**
+  String get pinDialogConfirmPasscode;
+
+  /// No description provided for @pinDialogUseYour.
+  ///
+  /// In en, this message translates to:
+  /// **'Use your '**
+  String get pinDialogUseYour;
+
+  /// No description provided for @pinDialogPasscode2.
+  ///
+  /// In en, this message translates to:
+  /// **'passcode.'**
+  String get pinDialogPasscode2;
+
+  /// No description provided for @modeSelectionAuthenticationFailedOrWasCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Authentication failed or was cancelled. Please try again.'**
+  String get modeSelectionAuthenticationFailedOrWasCancelled;
+
+  /// No description provided for @modeSelectionHowShouldWeHandleYour.
+  ///
+  /// In en, this message translates to:
+  /// **'How should we handle your data?'**
+  String get modeSelectionHowShouldWeHandleYour;
+
+  /// No description provided for @modeSelectionYouCanChangeThisAnytime.
+  ///
+  /// In en, this message translates to:
+  /// **'You can change this anytime in Settings.'**
+  String get modeSelectionYouCanChangeThisAnytime;
+
+  /// No description provided for @modeSelectionRecommended.
+  ///
+  /// In en, this message translates to:
+  /// **'RECOMMENDED'**
+  String get modeSelectionRecommended;
+
+  /// No description provided for @modeSelectionPrivacySetup.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy · setup'**
+  String get modeSelectionPrivacySetup;
+
+  /// No description provided for @modeSelectionPrivateMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Private mode'**
+  String get modeSelectionPrivateMode;
+
+  /// No description provided for @modeSelectionYourDataStaysOnThis.
+  ///
+  /// In en, this message translates to:
+  /// **'Your data stays on this device, encrypted. Unlock with biometrics or a passcode. You can come back to your draft anytime.'**
+  String get modeSelectionYourDataStaysOnThis;
+
+  /// No description provided for @modeSelectionPublicMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Public mode'**
+  String get modeSelectionPublicMode;
+
+  /// No description provided for @modeSelectionNoDataIsSavedAfter.
+  ///
+  /// In en, this message translates to:
+  /// **'No data is saved after you close the app. Best for shared devices, or one-time use without leaving a trace.'**
+  String get modeSelectionNoDataIsSavedAfter;
+
+  /// No description provided for @sideEffectsForTheMedicationsYouRe.
+  ///
+  /// In en, this message translates to:
+  /// **'For the medications you\'re currently taking, here are common side effects — check the ones you actually have. Noting them (especially any that affect your daily activities) helps your care team. This is common-side-effect information, not medical advice.'**
+  String get sideEffectsForTheMedicationsYouRe;
+
+  /// No description provided for @sideEffectsSetUpAiToCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'Set up AI to check side effects'**
+  String get sideEffectsSetUpAiToCheck;
+
+  /// No description provided for @sideEffectsThisUsesYourAiAssistant.
+  ///
+  /// In en, this message translates to:
+  /// **'This uses your AI assistant to list common side effects of your current medications for you to review.'**
+  String get sideEffectsThisUsesYourAiAssistant;
+
+  /// No description provided for @sideEffectsWorthDiscussingWithYourDoctor.
+  ///
+  /// In en, this message translates to:
+  /// **'Worth discussing with your doctor'**
+  String get sideEffectsWorthDiscussingWithYourDoctor;
+
+  /// No description provided for @sideEffectsOptionalAddOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional add-on'**
+  String get sideEffectsOptionalAddOn;
+
+  /// No description provided for @sideEffectsAskYourDoctorOrPharmacist.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask your doctor or pharmacist'**
+  String get sideEffectsAskYourDoctorOrPharmacist;
+
+  /// No description provided for @educationCategoryBrowserNoSectionsInThisCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'No sections in this category yet.'**
+  String get educationCategoryBrowserNoSectionsInThisCategory;
+
+  /// No description provided for @educationMostOfThisComesStraight.
+  ///
+  /// In en, this message translates to:
+  /// **'Most of this comes straight from the official PA MHAD booklet, plus a few plain-language explainers. No marketing, no opinions — just the rules and what they mean.'**
+  String get educationMostOfThisComesStraight;
+
+  /// No description provided for @educationSearchArticlesGlossaryFaqs.
+  ///
+  /// In en, this message translates to:
+  /// **'Search articles, glossary, FAQs…'**
+  String get educationSearchArticlesGlossaryFaqs;
+
+  /// No description provided for @educationYourDirectiveIsYourVoice.
+  ///
+  /// In en, this message translates to:
+  /// **'\"Your directive is your voice — written in advance, kept safe, honored when you can\'t speak for yourself.\"'**
+  String get educationYourDirectiveIsYourVoice;
+
+  /// No description provided for @educationPaOfficeOfMentalHealth.
+  ///
+  /// In en, this message translates to:
+  /// **'— PA OFFICE OF MENTAL HEALTH & SUBSTANCE ABUSE SERVICES · BOOKLET P.3'**
+  String get educationPaOfficeOfMentalHealth;
+
+  /// No description provided for @educationTypeToSearchEducationalContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Type to search educational content...'**
+  String get educationTypeToSearchEducationalContent;
+
+  /// No description provided for @educationBrowseAllTopics.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse all topics'**
+  String get educationBrowseAllTopics;
+
+  /// No description provided for @educationUnderstand.
+  ///
+  /// In en, this message translates to:
+  /// **'Understand '**
+  String get educationUnderstand;
+
+  /// No description provided for @educationYouSign.
+  ///
+  /// In en, this message translates to:
+  /// **' you sign.'**
+  String get educationYouSign;
+
+  /// No description provided for @learnAiPanelAskTheAi.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask the AI'**
+  String get learnAiPanelAskTheAi;
+
+  /// No description provided for @learnAiPanelSetUpAiAssistant.
+  ///
+  /// In en, this message translates to:
+  /// **'Set up AI assistant'**
+  String get learnAiPanelSetUpAiAssistant;
+
+  /// No description provided for @learnAiPanelNotLegalOrMedicalAdvice.
+  ///
+  /// In en, this message translates to:
+  /// **'Not legal or medical advice.'**
+  String get learnAiPanelNotLegalOrMedicalAdvice;
+
+  /// No description provided for @learnAiPanelAskAQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask a question…'**
+  String get learnAiPanelAskAQuestion;
+
+  /// No description provided for @educationArticleDetailTryIt.
+  ///
+  /// In en, this message translates to:
+  /// **'TRY IT'**
+  String get educationArticleDetailTryIt;
+
+  /// No description provided for @educationArticleDetailReadyToWriteYours.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready to write yours?'**
+  String get educationArticleDetailReadyToWriteYours;
+
+  /// No description provided for @educationArticleDetailTheGuidedWizardTakesAbout.
+  ///
+  /// In en, this message translates to:
+  /// **'The guided wizard takes about 20 minutes and works anonymously.'**
+  String get educationArticleDetailTheGuidedWizardTakesAbout;
+
+  /// No description provided for @educationArticleDetailStartMyDirective.
+  ///
+  /// In en, this message translates to:
+  /// **'Start my directive'**
+  String get educationArticleDetailStartMyDirective;
+
+  /// No description provided for @audioGuideCouldnTOpenTheQuestionnaire.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t open the questionnaire to print. Please try again.'**
+  String get audioGuideCouldnTOpenTheQuestionnaire;
+
+  /// No description provided for @audioGuideRecordYourWishesByVoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Record your wishes by voice'**
+  String get audioGuideRecordYourWishesByVoice;
+
+  /// No description provided for @audioGuideDescribeYourWishesOutLoud.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe your wishes out loud, upload the recording on the Snap-to-fill screen, and the AI fills your directive — you review every field before anything is saved.'**
+  String get audioGuideDescribeYourWishesOutLoud;
+
+  /// No description provided for @audioGuidePrintTheQuestionnaire.
+  ///
+  /// In en, this message translates to:
+  /// **'Print the questionnaire'**
+  String get audioGuidePrintTheQuestionnaire;
+
+  /// No description provided for @audioGuidePrintItToReadAloud.
+  ///
+  /// In en, this message translates to:
+  /// **'Print it to read aloud while you record, or to fill in by hand first.'**
+  String get audioGuidePrintItToReadAloud;
+
+  /// No description provided for @audioGuidePrint.
+  ///
+  /// In en, this message translates to:
+  /// **'Print'**
+  String get audioGuidePrint;
+
+  /// No description provided for @audioGuideSetTheseInTheApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Set these in the app:'**
+  String get audioGuideSetTheseInTheApp;
+
+  /// No description provided for @audioGuideWorthSayingOutLoudAutofill.
+  ///
+  /// In en, this message translates to:
+  /// **'Worth saying out loud — autofill now captures these:'**
+  String get audioGuideWorthSayingOutLoudAutofill;
+
+  /// No description provided for @audioGuideHowToRecord.
+  ///
+  /// In en, this message translates to:
+  /// **'How to record'**
+  String get audioGuideHowToRecord;
+
+  /// No description provided for @audioGuideWhatTheRecordingCanT.
+  ///
+  /// In en, this message translates to:
+  /// **'What the recording can\'t fill'**
+  String get audioGuideWhatTheRecordingCanT;
+
+  /// No description provided for @ulyssesClauseBeforeYouAcknowledge.
+  ///
+  /// In en, this message translates to:
+  /// **'Before you acknowledge'**
+  String get ulyssesClauseBeforeYouAcknowledge;
+
+  /// No description provided for @ulyssesClauseThisIsASignificantDecision.
+  ///
+  /// In en, this message translates to:
+  /// **'This is a significant decision. Once you are found incapable, the directive cannot be revoked by you until capacity returns. We strongly recommend talking it through with a peer specialist or your clinician before saving.'**
+  String get ulyssesClauseThisIsASignificantDecision;
+
+  /// No description provided for @ulyssesClauseIUnderstand.
+  ///
+  /// In en, this message translates to:
+  /// **'I understand'**
+  String get ulyssesClauseIUnderstand;
+
+  /// No description provided for @ulyssesClauseSometimesDuringACrisisPeople.
+  ///
+  /// In en, this message translates to:
+  /// **'Sometimes during a crisis, people refuse treatment that they\'d want when well. PA law honors what you wrote today, even if you protest in the moment.'**
+  String get ulyssesClauseSometimesDuringACrisisPeople;
+
+  /// No description provided for @ulyssesClauseSelfBindingUlysses.
+  ///
+  /// In en, this message translates to:
+  /// **'SELF-BINDING (\"Ulysses\")'**
+  String get ulyssesClauseSelfBindingUlysses;
+
+  /// No description provided for @ulyssesClauseTieMyselfToTheMast.
+  ///
+  /// In en, this message translates to:
+  /// **'Tie myself to the mast.'**
+  String get ulyssesClauseTieMyselfToTheMast;
+
+  /// No description provided for @ulyssesClausePerPaAct19420.
+  ///
+  /// In en, this message translates to:
+  /// **'Per PA Act 194 (20 Pa.C.S. §§ 5825, 5839), this directive may be revoked only while I have capacity. Once I\'m found incapable, what I wrote here stands — even over my in-the-moment protest — until capacity returns.'**
+  String get ulyssesClausePerPaAct19420;
+
+  /// No description provided for @ulyssesClauseIAcknowledgeThis.
+  ///
+  /// In en, this message translates to:
+  /// **'I acknowledge this'**
+  String get ulyssesClauseIAcknowledgeThis;
+
+  /// No description provided for @ulyssesClauseRecordedInYourDirectivePdf.
+  ///
+  /// In en, this message translates to:
+  /// **'Recorded in your directive PDF.'**
+  String get ulyssesClauseRecordedInYourDirectivePdf;
+
+  /// No description provided for @ulyssesClauseBoundariesOnThisClause.
+  ///
+  /// In en, this message translates to:
+  /// **'Boundaries on this clause'**
+  String get ulyssesClauseBoundariesOnThisClause;
+
+  /// No description provided for @exportCardsBeforeSharingEnsureThisDirective.
+  ///
+  /// In en, this message translates to:
+  /// **'Before sharing: ensure this directive has been signed, dated, and witnessed by two adults (18+) as required by PA Act 194. Give copies to your agent, physician, and support people.'**
+  String get exportCardsBeforeSharingEnsureThisDirective;
+
+  /// No description provided for @exportCardsPrincipal.
+  ///
+  /// In en, this message translates to:
+  /// **'Principal'**
+  String get exportCardsPrincipal;
+
+  /// No description provided for @exportCardsTheExportedPdfIsNot.
+  ///
+  /// In en, this message translates to:
+  /// **'The exported PDF is not encrypted. Share only via channels you trust.'**
+  String get exportCardsTheExportedPdfIsNot;
+
+  /// No description provided for @exportCardsImportantBeforeSharingEnsureThis.
+  ///
+  /// In en, this message translates to:
+  /// **'Important: Before sharing, ensure this directive has been signed, dated, and witnessed by two adults as required by PA Act 194. Give copies to your agent, physician, and support people.'**
+  String get exportCardsImportantBeforeSharingEnsureThis;
+
+  /// No description provided for @pdfPreviewUsLetter8511.
+  ///
+  /// In en, this message translates to:
+  /// **'US LETTER · 8.5×11\"'**
+  String get pdfPreviewUsLetter8511;
+
+  /// No description provided for @pdfPreviewShare.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get pdfPreviewShare;
+
+  /// No description provided for @pdfPreviewSizedForUsLetter8.
+  ///
+  /// In en, this message translates to:
+  /// **'Sized for US Letter (8.5 × 11″) with 1-inch margins. The preview fills the width — use − / + to zoom.'**
+  String get pdfPreviewSizedForUsLetter8;
+
+  /// No description provided for @pdfPreviewPages.
+  ///
+  /// In en, this message translates to:
+  /// **'PAGES'**
+  String get pdfPreviewPages;
+
+  /// No description provided for @pdfPreviewExportShare.
+  ///
+  /// In en, this message translates to:
+  /// **'Export & share'**
+  String get pdfPreviewExportShare;
+
+  /// No description provided for @pdfPreviewClosePreview.
+  ///
+  /// In en, this message translates to:
+  /// **'Close preview'**
+  String get pdfPreviewClosePreview;
+
+  /// No description provided for @pdfPreviewRenderingPdfPreview.
+  ///
+  /// In en, this message translates to:
+  /// **'Rendering PDF preview'**
+  String get pdfPreviewRenderingPdfPreview;
+
+  /// No description provided for @pdfPreviewFitPageToWindow.
+  ///
+  /// In en, this message translates to:
+  /// **'Fit page to window'**
+  String get pdfPreviewFitPageToWindow;
+
+  /// No description provided for @pdfPreviewYourDirective.
+  ///
+  /// In en, this message translates to:
+  /// **'Your directive, '**
+  String get pdfPreviewYourDirective;
+
+  /// No description provided for @pdfPreviewOnPaper.
+  ///
+  /// In en, this message translates to:
+  /// **'on paper.'**
+  String get pdfPreviewOnPaper;
+
+  /// No description provided for @exportSelectAtLeastOneSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Select at least one section to include.'**
+  String get exportSelectAtLeastOneSection;
+
+  /// No description provided for @exportIncompleteDirective.
+  ///
+  /// In en, this message translates to:
+  /// **'Incomplete Directive'**
+  String get exportIncompleteDirective;
+
+  /// No description provided for @exportGoBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Go Back'**
+  String get exportGoBack;
+
+  /// No description provided for @exportEditDirective.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Directive'**
+  String get exportEditDirective;
+
+  /// No description provided for @exportExportAnyway.
+  ///
+  /// In en, this message translates to:
+  /// **'Export Anyway'**
+  String get exportExportAnyway;
+
+  /// No description provided for @exportExportedFileIsNotEncrypted.
+  ///
+  /// In en, this message translates to:
+  /// **'Exported file is not encrypted'**
+  String get exportExportedFileIsNotEncrypted;
+
+  /// No description provided for @exportThePdfYouAreAbout.
+  ///
+  /// In en, this message translates to:
+  /// **'The PDF you are about to share contains your full mental-health directive (names, agents, medications, signatures). It is generated unencrypted because the underlying PDF library does not support password protection.\n\nShare only via channels you trust (e.g., direct hand-off, a secure email to a specific provider). Avoid public uploads, cloud links, or untrusted messaging apps.'**
+  String get exportThePdfYouAreAbout;
+
+  /// No description provided for @exportIUnderstandContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'I understand, continue'**
+  String get exportIUnderstandContinue;
+
+  /// No description provided for @exportCouldnTGenerateThePdf.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t generate the PDF.'**
+  String get exportCouldnTGenerateThePdf;
+
+  /// No description provided for @exportSelectAtLeastOneSection2.
+  ///
+  /// In en, this message translates to:
+  /// **'Select at least one section to preview.'**
+  String get exportSelectAtLeastOneSection2;
+
+  /// No description provided for @exportNothingToDownloadYet.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing to download yet'**
+  String get exportNothingToDownloadYet;
+
+  /// No description provided for @exportStartADirectiveFirstThen.
+  ///
+  /// In en, this message translates to:
+  /// **'Start a directive first — then come back here to preview, download, and print it.'**
+  String get exportStartADirectiveFirstThen;
+
+  /// No description provided for @exportSelectFormsToInclude.
+  ///
+  /// In en, this message translates to:
+  /// **'Select forms to include:'**
+  String get exportSelectFormsToInclude;
+
+  /// No description provided for @exportAdditionalPages.
+  ///
+  /// In en, this message translates to:
+  /// **'Additional Pages:'**
+  String get exportAdditionalPages;
+
+  /// No description provided for @exportPrintABlankFormFill.
+  ///
+  /// In en, this message translates to:
+  /// **'Print a blank form (fill in by hand)'**
+  String get exportPrintABlankFormFill;
+
+  /// No description provided for @exportPlainSignable.
+  ///
+  /// In en, this message translates to:
+  /// **'Plain (signable)'**
+  String get exportPlainSignable;
+
+  /// No description provided for @exportLegalInfoOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Legal (info only)'**
+  String get exportLegalInfoOnly;
+
+  /// No description provided for @exportHeadsUpTheLegalLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Heads up: the legal-language version is for reference only. Sign and use the plain-language official form.'**
+  String get exportHeadsUpTheLegalLanguage;
+
+  /// No description provided for @exportOpenPdf.
+  ///
+  /// In en, this message translates to:
+  /// **'Open PDF'**
+  String get exportOpenPdf;
+
+  /// No description provided for @exportOpenWalletCardPdf.
+  ///
+  /// In en, this message translates to:
+  /// **'Open wallet card (PDF)'**
+  String get exportOpenWalletCardPdf;
+
+  /// No description provided for @exportEncryptTheFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Encrypt the file'**
+  String get exportEncryptTheFile;
+
+  /// No description provided for @exportDownload.
+  ///
+  /// In en, this message translates to:
+  /// **'Download'**
+  String get exportDownload;
+
+  /// No description provided for @exportFhirJson.
+  ///
+  /// In en, this message translates to:
+  /// **'FHIR JSON'**
+  String get exportFhirJson;
+
+  /// No description provided for @exportFhirXml.
+  ///
+  /// In en, this message translates to:
+  /// **'FHIR XML'**
+  String get exportFhirXml;
+
+  /// No description provided for @exportCsv.
+  ///
+  /// In en, this message translates to:
+  /// **'CSV'**
+  String get exportCsv;
+
+  /// No description provided for @exportZipBundle.
+  ///
+  /// In en, this message translates to:
+  /// **'.zip bundle'**
+  String get exportZipBundle;
+
+  /// No description provided for @exportDoneBackToHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Done — back to home'**
+  String get exportDoneBackToHome;
+
+  /// No description provided for @exportCopiedToClipboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied to clipboard.'**
+  String get exportCopiedToClipboard;
+
+  /// No description provided for @exportCouldnTSaveTheFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t save the file. Please try again.'**
+  String get exportCouldnTSaveTheFile;
+
+  /// No description provided for @exportExportedYourDirectiveBundlePdf.
+  ///
+  /// In en, this message translates to:
+  /// **'Exported your directive bundle — PDF, JSON, XML and CSV.'**
+  String get exportExportedYourDirectiveBundlePdf;
+
+  /// No description provided for @exportCouldNotBuildTheZip.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not build the .zip bundle.'**
+  String get exportCouldNotBuildTheZip;
+
+  /// No description provided for @exportCouldnTGenerateTheWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t generate the wallet card. Please try again.'**
+  String get exportCouldnTGenerateTheWallet;
+
+  /// No description provided for @exportYourOfficialDirective.
+  ///
+  /// In en, this message translates to:
+  /// **'Your official directive'**
+  String get exportYourOfficialDirective;
+
+  /// No description provided for @exportKeepACopy.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep a copy'**
+  String get exportKeepACopy;
+
+  /// No description provided for @exportAdvancedDataExports.
+  ///
+  /// In en, this message translates to:
+  /// **'Advanced · data exports'**
+  String get exportAdvancedDataExports;
+
+  /// No description provided for @exportDeclarationPowerOfAttorneyMost.
+  ///
+  /// In en, this message translates to:
+  /// **'Declaration + Power of Attorney (most complete)'**
+  String get exportDeclarationPowerOfAttorneyMost;
+
+  /// No description provided for @exportTreatmentPreferencesOnlyNoAgent.
+  ///
+  /// In en, this message translates to:
+  /// **'Treatment preferences only (no agent)'**
+  String get exportTreatmentPreferencesOnlyNoAgent;
+
+  /// No description provided for @exportAgentAuthorityOnlyNoPersonal.
+  ///
+  /// In en, this message translates to:
+  /// **'Agent authority only (no personal preferences)'**
+  String get exportAgentAuthorityOnlyNoPersonal;
+
+  /// No description provided for @exportSupplementaryLegalInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'Supplementary Legal Information'**
+  String get exportSupplementaryLegalInformation;
+
+  /// No description provided for @exportAdditionalLegalReferenceInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'Additional legal reference information'**
+  String get exportAdditionalLegalReferenceInformation;
+
+  /// No description provided for @exportDistributionChecklistNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'Distribution Checklist & Notes'**
+  String get exportDistributionChecklistNotes;
+
+  /// No description provided for @exportBlankPagesForHandwrittenNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'Blank pages for handwritten notes'**
+  String get exportBlankPagesForHandwrittenNotes;
+
+  /// No description provided for @exportOpenThePdfDirectiveIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Open the PDF directive in your viewer to print or save it'**
+  String get exportOpenThePdfDirectiveIn;
+
+  /// No description provided for @exportDownloadAnEditableCopyOf.
+  ///
+  /// In en, this message translates to:
+  /// **'Download an editable copy of your directive'**
+  String get exportDownloadAnEditableCopyOf;
+
+  /// No description provided for @exportExportAsFhirJsonFor.
+  ///
+  /// In en, this message translates to:
+  /// **'Export as FHIR JSON for electronic health records'**
+  String get exportExportAsFhirJsonFor;
+
+  /// No description provided for @exportExportAsFhirXmlFor.
+  ///
+  /// In en, this message translates to:
+  /// **'Export as FHIR XML for electronic health records'**
+  String get exportExportAsFhirXmlFor;
+
+  /// No description provided for @exportExportAsCsvSpreadsheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Export as CSV spreadsheet'**
+  String get exportExportAsCsvSpreadsheet;
+
+  /// No description provided for @exportDownloadEverythingPdfJsonXml.
+  ///
+  /// In en, this message translates to:
+  /// **'Download everything (PDF, JSON, XML, CSV) as a zip bundle'**
+  String get exportDownloadEverythingPdfJsonXml;
+
+  /// No description provided for @exportYourDirective.
+  ///
+  /// In en, this message translates to:
+  /// **'Your directive,\n'**
+  String get exportYourDirective;
+
+  /// No description provided for @appThemeWarmTeal.
+  ///
+  /// In en, this message translates to:
+  /// **'Warm Teal'**
+  String get appThemeWarmTeal;
+
+  /// No description provided for @appThemeBalancedCalmProfessional.
+  ///
+  /// In en, this message translates to:
+  /// **'Balanced, calm, professional.'**
+  String get appThemeBalancedCalmProfessional;
+
+  /// No description provided for @appThemeDeepNavy.
+  ///
+  /// In en, this message translates to:
+  /// **'Deep Navy'**
+  String get appThemeDeepNavy;
+
+  /// No description provided for @appThemeFormalSteadyHighContrast.
+  ///
+  /// In en, this message translates to:
+  /// **'Formal, steady, high-contrast.'**
+  String get appThemeFormalSteadyHighContrast;
+
+  /// No description provided for @appThemeSageGreen.
+  ///
+  /// In en, this message translates to:
+  /// **'Sage Green'**
+  String get appThemeSageGreen;
+
+  /// No description provided for @appThemeSoftNaturalApproachable.
+  ///
+  /// In en, this message translates to:
+  /// **'Soft, natural, approachable.'**
+  String get appThemeSoftNaturalApproachable;
+
+  /// No description provided for @aiSetupReplyWithTheSingleWord.
+  ///
+  /// In en, this message translates to:
+  /// **'Reply with the single word: ok'**
+  String get aiSetupReplyWithTheSingleWord;
+
+  /// No description provided for @aiSetupRemoveApiKey.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove API Key?'**
+  String get aiSetupRemoveApiKey;
+
+  /// No description provided for @aiSetupAiFeaturesWillBeDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'AI features will be disabled until a new key is added.'**
+  String get aiSetupAiFeaturesWillBeDisabled;
+
+  /// No description provided for @aiSetupApiKeyRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'API key removed'**
+  String get aiSetupApiKeyRemoved;
+
+  /// No description provided for @aiSetupAiAssistantSetup.
+  ///
+  /// In en, this message translates to:
+  /// **'AI assistant setup'**
+  String get aiSetupAiAssistantSetup;
+
+  /// No description provided for @aiSetupYourApiKeyWillNot.
+  ///
+  /// In en, this message translates to:
+  /// **'Your API key will not be saved permanently. It is kept in memory for this session, with a temporary copy for up to 10 minutes so you can recover it if the app reloads — then discarded when you close the app or clear your data.'**
+  String get aiSetupYourApiKeyWillNot;
+
+  /// No description provided for @aiSetupStep1OpenAPrivate.
+  ///
+  /// In en, this message translates to:
+  /// **'Step 1: Open a Private/Incognito Window'**
+  String get aiSetupStep1OpenAPrivate;
+
+  /// No description provided for @aiSetupYouLlNeedToSign.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ll need to sign into your Google account to get an API key. To protect your login on shared or public devices, open a private browsing window first:'**
+  String get aiSetupYouLlNeedToSign;
+
+  /// No description provided for @aiSetupOnAPhoneTapThe.
+  ///
+  /// In en, this message translates to:
+  /// **'On a phone: tap the menu (⋮ or ⋯) and select \"New Incognito Tab\" or \"New Private Tab\".'**
+  String get aiSetupOnAPhoneTapThe;
+
+  /// No description provided for @aiSetupYourGoogleLoginWillBe.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Google login will be automatically forgotten when you close the private window.'**
+  String get aiSetupYourGoogleLoginWillBe;
+
+  /// No description provided for @aiSetupPrivacyNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Notice'**
+  String get aiSetupPrivacyNotice;
+
+  /// No description provided for @aiSetupHowYourDataIsHandled.
+  ///
+  /// In en, this message translates to:
+  /// **'How Your Data Is Handled'**
+  String get aiSetupHowYourDataIsHandled;
+
+  /// No description provided for @aiSetupYourDirectiveDataIsHeld.
+  ///
+  /// In en, this message translates to:
+  /// **'- Your directive data is held in memory only; on close or crash it is kept ~10 minutes for recovery, then wiped — never written to disk or a server\n- AI features are optional and the app works without them\n- Only text you explicitly send via AI chat or AI Suggest leaves your device\n- This app is not a medical or legal service\n- This app is not HIPAA-compliant'**
+  String get aiSetupYourDirectiveDataIsHeld;
+
+  /// No description provided for @aiSetupCommonQuestions.
+  ///
+  /// In en, this message translates to:
+  /// **'Common Questions'**
+  String get aiSetupCommonQuestions;
+
+  /// No description provided for @aiSetupRemoveApiKey2.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove API key'**
+  String get aiSetupRemoveApiKey2;
+
+  /// No description provided for @aiSetupCreateAnApiKey.
+  ///
+  /// In en, this message translates to:
+  /// **'Create an API key'**
+  String get aiSetupCreateAnApiKey;
+
+  /// No description provided for @aiSetupCreateANewApiKey.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a new API key on the API keys page; the defaults are fine.'**
+  String get aiSetupCreateANewApiKey;
+
+  /// No description provided for @aiSetupCopyAndPasteBelow.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy and paste below'**
+  String get aiSetupCopyAndPasteBelow;
+
+  /// No description provided for @aiSetupPasteFromClipboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste from clipboard'**
+  String get aiSetupPasteFromClipboard;
+
+  /// No description provided for @aiSetupTestingConnection.
+  ///
+  /// In en, this message translates to:
+  /// **'Testing connection'**
+  String get aiSetupTestingConnection;
+
+  /// No description provided for @accessibilitySettingsAdjustHowTheAppFeels.
+  ///
+  /// In en, this message translates to:
+  /// **'Adjust how the app feels for you. Changes apply everywhere instantly.'**
+  String get accessibilitySettingsAdjustHowTheAppFeels;
+
+  /// No description provided for @accessibilitySettingsHowToUseReadAloud.
+  ///
+  /// In en, this message translates to:
+  /// **'How to use read-aloud'**
+  String get accessibilitySettingsHowToUseReadAloud;
+
+  /// No description provided for @accessibilitySettingsResetAccessibilitySettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset accessibility settings'**
+  String get accessibilitySettingsResetAccessibilitySettings;
+
+  /// No description provided for @accessibilitySettingsReadThisPageAloud.
+  ///
+  /// In en, this message translates to:
+  /// **'Read this page aloud'**
+  String get accessibilitySettingsReadThisPageAloud;
+
+  /// No description provided for @accessibilitySettingsYourBrowserAndDeviceAlready.
+  ///
+  /// In en, this message translates to:
+  /// **'Your browser and device already have read-aloud built in — they work better than an in-app reader, so use one of these:'**
+  String get accessibilitySettingsYourBrowserAndDeviceAlready;
+
+  /// No description provided for @accessibilitySettingsPeopleWhoITrustWill.
+  ///
+  /// In en, this message translates to:
+  /// **'People who I trust will make my decisions if I can\'t.'**
+  String get accessibilitySettingsPeopleWhoITrustWill;
+
+  /// No description provided for @accessibilitySettingsEnglish.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get accessibilitySettingsEnglish;
+
+  /// No description provided for @accessibilitySettingsEspaOl.
+  ///
+  /// In en, this message translates to:
+  /// **'Español'**
+  String get accessibilitySettingsEspaOl;
+
+  /// No description provided for @accessibilitySettingsAccessibility.
+  ///
+  /// In en, this message translates to:
+  /// **'Accessibility'**
+  String get accessibilitySettingsAccessibility;
+
+  /// No description provided for @accessibilitySettingsTextSize.
+  ///
+  /// In en, this message translates to:
+  /// **'Text size'**
+  String get accessibilitySettingsTextSize;
+
+  /// No description provided for @accessibilitySettingsDyslexiaFriendlyFont.
+  ///
+  /// In en, this message translates to:
+  /// **'Dyslexia-friendly font'**
+  String get accessibilitySettingsDyslexiaFriendlyFont;
+
+  /// No description provided for @accessibilitySettingsBoldText.
+  ///
+  /// In en, this message translates to:
+  /// **'Bold text'**
+  String get accessibilitySettingsBoldText;
+
+  /// No description provided for @accessibilitySettingsReduceMotion.
+  ///
+  /// In en, this message translates to:
+  /// **'Reduce motion'**
+  String get accessibilitySettingsReduceMotion;
+
+  /// No description provided for @accessibilitySettingsHighContrast.
+  ///
+  /// In en, this message translates to:
+  /// **'High contrast'**
+  String get accessibilitySettingsHighContrast;
+
+  /// No description provided for @accessibilitySettingsReadAloud.
+  ///
+  /// In en, this message translates to:
+  /// **'Read aloud'**
+  String get accessibilitySettingsReadAloud;
+
+  /// No description provided for @accessibilitySettingsRightClickThePageRead.
+  ///
+  /// In en, this message translates to:
+  /// **'Right-click the page → “Read aloud” (Edge), or use the Reading mode / an extension in Chrome. Edge: Ctrl+Shift+U.'**
+  String get accessibilitySettingsRightClickThePageRead;
+
+  /// No description provided for @accessibilitySettingsSelectTextTapListenOr.
+  ///
+  /// In en, this message translates to:
+  /// **'Select text → tap “Listen”, or turn on Settings → Accessibility → Select to Speak / TalkBack.'**
+  String get accessibilitySettingsSelectTextTapListenOr;
+
+  /// No description provided for @accessibilitySettingsSettingsAccessibilitySpokenContentTurn.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings → Accessibility → Spoken Content → turn on “Speak Screen”, then swipe down with two fingers.'**
+  String get accessibilitySettingsSettingsAccessibilitySpokenContentTurn;
+
+  /// No description provided for @accessibilitySettingsNarratorCtrlWinEnterOr.
+  ///
+  /// In en, this message translates to:
+  /// **'Narrator: Ctrl+Win+Enter. Or use Edge’s Read aloud above.'**
+  String get accessibilitySettingsNarratorCtrlWinEnterOr;
+
+  /// No description provided for @accessibilitySettingsSystemSettingsAccessibilitySpokenContent.
+  ///
+  /// In en, this message translates to:
+  /// **'System Settings → Accessibility → Spoken Content → “Speak selection”, then press Option+Esc.'**
+  String get accessibilitySettingsSystemSettingsAccessibilitySpokenContent;
+
+  /// No description provided for @privacyPolicyPrivacyPolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get privacyPolicyPrivacyPolicy;
+
+  /// No description provided for @privacyPolicyPaMhadAppPrivacyPolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'PA MHAD App Privacy Policy'**
+  String get privacyPolicyPaMhadAppPrivacyPolicy;
+
+  /// No description provided for @privacyPolicyReviewLegalDisclaimer.
+  ///
+  /// In en, this message translates to:
+  /// **'Review Legal Disclaimer'**
+  String get privacyPolicyReviewLegalDisclaimer;
+
+  /// No description provided for @privacyPolicyDataWeCollect.
+  ///
+  /// In en, this message translates to:
+  /// **'Data We Collect'**
+  String get privacyPolicyDataWeCollect;
+
+  /// No description provided for @privacyPolicyThisAppCollectsOnlyThe.
+  ///
+  /// In en, this message translates to:
+  /// **'This app collects only the information you enter into your Mental Health Advance Directive forms, including:\n  - Personal information (name, address, phone, date of birth)\n  - Agent and witness information\n  - Treatment preferences and medication lists\n  - Digital signatures\n  - Additional instructions\n\nWe do not collect analytics, crash reports, device identifiers, or location data.'**
+  String get privacyPolicyThisAppCollectsOnlyThe;
+
+  /// No description provided for @privacyPolicyHowDataIsStoredProtected.
+  ///
+  /// In en, this message translates to:
+  /// **'How Data Is Stored & Protected'**
+  String get privacyPolicyHowDataIsStoredProtected;
+
+  /// No description provided for @privacyPolicyYourDirectiveDataIsNot.
+  ///
+  /// In en, this message translates to:
+  /// **'Your directive data is NOT transmitted to the app developer or any third party for storage.\n\nThis is a web app: your data is held in an in-memory database in your browser tab. If you close the tab or the app crashes, your work is kept on this device for about 10 minutes so you can reopen and recover it — then it is wiped. Nothing is written to a server. Export or print your directive to keep a permanent copy.'**
+  String get privacyPolicyYourDirectiveDataIsNot;
+
+  /// No description provided for @privacyPolicyAiFeaturesThirdPartyData.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Features & Third-Party Data Sharing'**
+  String get privacyPolicyAiFeaturesThirdPartyData;
+
+  /// No description provided for @privacyPolicyIfYouChooseToUse.
+  ///
+  /// In en, this message translates to:
+  /// **'If you choose to use the optional AI features (AI Assistant chat or AI Suggest), text you submit is sent to the AI provider you select — Google Gemini by default, or Anthropic Claude, OpenAI, or xAI Grok if you choose one and add your own key — for processing.\n\nOn Google\'s Gemini free tier, Google may:\n  - Use your input/output data to improve their products\n  - Allow human reviewers to read your inputs and outputs\n  - Retain data indefinitely (no automatic expiration)\nOther providers handle your data under their own API data policies — review the policy of whichever provider you use.\n\nThe app strips common personally identifiable information (SSNs, phone numbers, emails, dates of birth, addresses, names, and facility names) before sending your text to any provider, but this is a best-effort filter and cannot guarantee complete removal.\n\nAI features are entirely optional. The app is fully functional without them.'**
+  String get privacyPolicyIfYouChooseToUse;
+
+  /// No description provided for @privacyPolicyGeminiFreeTierDataPractices.
+  ///
+  /// In en, this message translates to:
+  /// **'Gemini Free Tier Data Practices'**
+  String get privacyPolicyGeminiFreeTierDataPractices;
+
+  /// No description provided for @privacyPolicyIfYouUseTheAi.
+  ///
+  /// In en, this message translates to:
+  /// **'If you use the AI features with Google\'s free Gemini tier, be aware of the following:\n\n1. Google retains AI conversation data indefinitely on the free tier. There is no automatic expiration.\n\n2. Human reviewers at Google may read your inputs and outputs as part of their quality and safety processes.\n\n3. Data sent to Gemini cannot be recalled or deleted by you or by this app. Once submitted, it is under Google\'s control.\n\n4. If you are concerned about data privacy, consider upgrading to the paid Gemini tier, which offers stronger data protection policies and does not use your data for model training.\n\nIf you select a different provider (Anthropic, OpenAI, or xAI) instead of Gemini, that provider\'s own data and retention policy applies — review it before sending sensitive content.\n\nYou can avoid all third-party data sharing by not using the AI features.'**
+  String get privacyPolicyIfYouUseTheAi;
+
+  /// No description provided for @privacyPolicyInternationalUsersGdpr.
+  ///
+  /// In en, this message translates to:
+  /// **'International Users (GDPR)'**
+  String get privacyPolicyInternationalUsersGdpr;
+
+  /// No description provided for @privacyPolicyIfYouAreLocatedIn.
+  ///
+  /// In en, this message translates to:
+  /// **'If you are located in the European Economic Area (EEA), the UK, or Switzerland, the General Data Protection Regulation (GDPR) applies to your use of this app.\n\nLegal basis for processing: Your explicit consent, given through the in-app disclaimer and AI consent dialogs.\n\nYour rights under GDPR:\n  - Right to access: All your data is stored locally on your device — you have direct access at all times.\n  - Right to erasure: Use \"Delete All Data\" in the app menu to permanently erase all local data.\n  - Right to data portability: Export your directives as PDF or FHIR JSON (a standard health-records format) at any time.\n  - Right to withdraw consent: Stop using AI features at any time; remove your API key to prevent further data transmission.\n  - Right to restriction: You may use the app in Public Mode without any data persistence.\n\nData sent to your chosen AI provider is processed under that provider\'s own privacy policy and data processing terms. We cannot control or delete data once it has been sent.'**
+  String get privacyPolicyIfYouAreLocatedIn;
+
+  /// No description provided for @privacyPolicyUsStateConsumerHealthData.
+  ///
+  /// In en, this message translates to:
+  /// **'US State Consumer Health Data Laws (CA, WA, CT, NV, NY)'**
+  String get privacyPolicyUsStateConsumerHealthData;
+
+  /// No description provided for @privacyPolicyThisAppMayBeSubject.
+  ///
+  /// In en, this message translates to:
+  /// **'This app may be subject to state consumer-health-data privacy laws including California (CCPA/CPRA), Washington (My Health My Data Act / MHMDA), Connecticut (CTDPA health provisions), Nevada (SB 370), and New York (Health Information Privacy Act).\n\nMental-health-directive content is \"consumer health data\" under each of these laws. Under all of them: (1) We collect mental-health treatment-preference data **solely** to help you create your advance directive. (2) We **do not sell** your health data — there is no commercial recipient. (3) The only third party that may receive any of your text is the AI provider you choose (Google Gemini by default, or Anthropic, OpenAI, or xAI), and **only** if you affirmatively opt in to AI features each session. (4) We use no third-party SDKs, no analytics, no advertising frameworks, no tracking pixels or cookies. (5) You may delete all locally stored data at any time via \"Delete All Data\" in the app menu.\n\nWashington MHMDA includes a **private right of action**; we have designed the app to require explicit, per-session consent before any third-party transfer of consumer health data, and we treat written consent as conditional on the specific terms shown in the AI consent dialog.\n\nFor questions about your privacy rights, contact the developer using the channels listed in the Contact section below (multiple methods are provided per the FTC Health Breach Notification Rule).'**
+  String get privacyPolicyThisAppMayBeSubject;
+
+  /// No description provided for @privacyPolicyMedicalReferenceLookupsUS.
+  ///
+  /// In en, this message translates to:
+  /// **'Medical Reference Lookups (U.S. government data)'**
+  String get privacyPolicyMedicalReferenceLookupsUS;
+
+  /// No description provided for @privacyPolicyToHelpYouFillIn.
+  ///
+  /// In en, this message translates to:
+  /// **'To help you fill in and understand your directive, the app looks things up in free, public U.S. government databases. These lookups use ONLY the single term or code needed for that lookup. They never receive your identity (your name, date of birth, address, or phone), the people you name (agents, witnesses, guardian), or your saved directive.\n\nWhat is sent, and to whom:\n  - Medication name you type → NLM RxTerms (autocomplete).\n  - Condition name you type → NLM ICD-10-CM (diagnosis lookup).\n  - A doctor / provider name you type into the optional doctor search → NLM NPI registry, used only to look that provider up in the public registry of healthcare providers.\n  - A condition (by its ICD-10 code) or a medication (by name, resolved to a code via NLM RxNav) → NLM MedlinePlus Connect, to fetch a plain-language explanation.\n  - A medication name → openFDA (U.S. Food & Drug Administration), to fetch that drug\'s official FDA label, which is used to ground the side-effects list.\n\nNo personal or identifying information is included in any of these requests — only the medical term, code, or provider name being looked up.\n\nNLM, NIH, and the FDA are not responsible for this product and do not endorse or recommend it. These services are for information only and are not medical advice — consult a qualified professional. The NLM Clinical Table services are rate-limited to 20 requests/second.\n\nSources: U.S. National Library of Medicine (RxTerms, ICD-10-CM, NPI registry, RxNav, MedlinePlus Connect); U.S. Food & Drug Administration (openFDA).'**
+  String get privacyPolicyToHelpYouFillIn;
+
+  /// No description provided for @privacyPolicyPdfExportSharing.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF Export & Sharing'**
+  String get privacyPolicyPdfExportSharing;
+
+  /// No description provided for @privacyPolicyWhenYouExportAPdf.
+  ///
+  /// In en, this message translates to:
+  /// **'When you export a PDF of your directive, it is generated locally on your device. Sharing the PDF (via email, messaging, etc.) sends it through your device\'s standard sharing mechanism. The app cannot control where the PDF is stored once shared.'**
+  String get privacyPolicyWhenYouExportAPdf;
+
+  /// No description provided for @privacyPolicyYourRights.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Rights'**
+  String get privacyPolicyYourRights;
+
+  /// No description provided for @privacyPolicyYouCanDeleteAnyDirective.
+  ///
+  /// In en, this message translates to:
+  /// **'You can delete any directive at any time from the home screen. Deleting a directive removes all associated data (personal info, agents, medications, witnesses, signatures) from the local database.\n\nYou can remove your AI provider API key(s) at any time from the AI Setup screen.\n\nUninstalling the app removes all locally stored data.'**
+  String get privacyPolicyYouCanDeleteAnyDirective;
+
+  /// No description provided for @privacyPolicyNoThirdPartyTracking.
+  ///
+  /// In en, this message translates to:
+  /// **'No Third-Party Tracking'**
+  String get privacyPolicyNoThirdPartyTracking;
+
+  /// No description provided for @privacyPolicyThisAppDoesNotInclude.
+  ///
+  /// In en, this message translates to:
+  /// **'This app does not include any third-party analytics SDKs, advertising frameworks, crash reporting services (such as Firebase, Crashlytics, or Sentry), or tracking pixels.\n\nThe only external network connections this app makes are:\n  - Your chosen AI provider — Google Gemini (default), Anthropic, OpenAI, or xAI — only when you use AI features\n  - NIH/NLM Clinical Table Search Service — medication, condition, and provider (doctor) lookups\n  - NLM MedlinePlus Connect & RxNav — plain-language condition and medication explanations (sends only an ICD-10 code or a medication name)\n  - openFDA / U.S. FDA — official drug labels used to ground the side-effects list (sends only a medication name)\n\nEach of these receives only the term or code being looked up — never your identity or your directive. No data is sent to the app developer at any time.'**
+  String get privacyPolicyThisAppDoesNotInclude;
+
+  /// No description provided for @privacyPolicyHipaaCompliance.
+  ///
+  /// In en, this message translates to:
+  /// **'HIPAA & Compliance'**
+  String get privacyPolicyHipaaCompliance;
+
+  /// No description provided for @privacyPolicyThisAppIsNotHipaa.
+  ///
+  /// In en, this message translates to:
+  /// **'This app is NOT HIPAA-compliant. It is not a covered entity or business associate under HIPAA. The app is intended for personal use by individuals preparing their own mental health advance directives.\n\nWhile this app implements privacy measures aligned with GDPR, CCPA, and MHMDA principles (as described above), it has not been independently audited or certified for compliance with these regulations. If you require verified regulatory compliance, consult with a privacy professional before use.'**
+  String get privacyPolicyThisAppIsNotHipaa;
+
+  /// No description provided for @privacyPolicyBreachNotification.
+  ///
+  /// In en, this message translates to:
+  /// **'Breach Notification'**
+  String get privacyPolicyBreachNotification;
+
+  /// No description provided for @privacyPolicyInAccordanceWithTheFtc.
+  ///
+  /// In en, this message translates to:
+  /// **'In accordance with the FTC Health Breach Notification Rule, if any unauthorized disclosure of your health information occurs through a security breach, we will notify affected users within 60 calendar days of discovering the breach.\n\nBecause this app stores data locally on your device and does not maintain a server-side database, breach risk is limited to the optional AI features. If your chosen AI provider notifies us of a breach affecting data sent through the app, we will pass that notification along through app store updates and in-app notices.'**
+  String get privacyPolicyInAccordanceWithTheFtc;
+
+  /// No description provided for @privacyPolicyContact.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact'**
+  String get privacyPolicyContact;
+
+  /// No description provided for @settingsBrightness.
+  ///
+  /// In en, this message translates to:
+  /// **'Brightness'**
+  String get settingsBrightness;
+
+  /// No description provided for @settingsScreenshotProtection.
+  ///
+  /// In en, this message translates to:
+  /// **'Screenshot Protection'**
+  String get settingsScreenshotProtection;
+
+  /// No description provided for @settingsAbout.
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get settingsAbout;
+
+  /// No description provided for @settingsPaMentalHealthAdvanceDirective.
+  ///
+  /// In en, this message translates to:
+  /// **'PA Mental Health Advance Directive\nUnder Pennsylvania Act 194 of 2004 (effective January 29, 2005)\n\nThis app helps you document your mental health treatment preferences. It is not legal or medical advice, and not a substitute for a licensed attorney or clinician. See the full Legal Disclaimer above for details.\n\nYour directive is valid for two years from the date you sign it — unless you are found incapable of making mental health decisions at the time it would expire, in which case it stays in effect until your capacity returns.\n\nForm content based on the official PA MHAD booklet published by the Disabilities Law Project (2005).'**
+  String get settingsPaMentalHealthAdvanceDirective;
+
+  /// No description provided for @settingsAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get settingsAccount;
+
+  /// No description provided for @settingsAppearance.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get settingsAppearance;
+
+  /// No description provided for @settingsLegalPrivacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Legal & privacy'**
+  String get settingsLegalPrivacy;
+
+  /// No description provided for @settingsChooseAProviderAndAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a provider and add your API key'**
+  String get settingsChooseAProviderAndAdd;
+
+  /// No description provided for @settingsTextSizeDyslexiaFontBold.
+  ///
+  /// In en, this message translates to:
+  /// **'Text size, dyslexia font, bold text, contrast, language'**
+  String get settingsTextSizeDyslexiaFontBold;
+
+  /// No description provided for @settingsHowYourDataIsStored.
+  ///
+  /// In en, this message translates to:
+  /// **'How your data is stored and protected'**
+  String get settingsHowYourDataIsStored;
+
+  /// No description provided for @settingsPrivacyPermissions.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy & permissions'**
+  String get settingsPrivacyPermissions;
+
+  /// No description provided for @settingsWhatPermissionsTheAppUses.
+  ///
+  /// In en, this message translates to:
+  /// **'What permissions the app uses, and what we promise about each'**
+  String get settingsWhatPermissionsTheAppUses;
+
+  /// No description provided for @settingsLegalDisclaimer.
+  ///
+  /// In en, this message translates to:
+  /// **'Legal Disclaimer'**
+  String get settingsLegalDisclaimer;
+
+  /// No description provided for @settingsTermsLimitationsAndYourLegal.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms, limitations, and your legal rights'**
+  String get settingsTermsLimitationsAndYourLegal;
+
+  /// No description provided for @assistantMessageWidgetsVerifiedWithWebSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified with web search'**
+  String get assistantMessageWidgetsVerifiedWithWebSearch;
+
+  /// No description provided for @assistantMessageWidgetsSources.
+  ///
+  /// In en, this message translates to:
+  /// **'Sources'**
+  String get assistantMessageWidgetsSources;
+
+  /// No description provided for @assistantMessageWidgetsVerifyOnTheWeb.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify on the web'**
+  String get assistantMessageWidgetsVerifyOnTheWeb;
+
+  /// No description provided for @assistantMessageWidgetsAiIsTyping.
+  ///
+  /// In en, this message translates to:
+  /// **'AI is typing'**
+  String get assistantMessageWidgetsAiIsTyping;
+
+  /// No description provided for @assistantContextPanelAskAboutFormTypesAgents.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask about form types, agents, treatment preferences, or anything in the PA MHAD booklet. Try one of these:'**
+  String get assistantContextPanelAskAboutFormTypesAgents;
+
+  /// No description provided for @assistantContextPanelPiiRedactionOn.
+  ///
+  /// In en, this message translates to:
+  /// **'PII REDACTION ON'**
+  String get assistantContextPanelPiiRedactionOn;
+
+  /// No description provided for @assistantContextPanelNamesAddressesPhoneNumbersAnd.
+  ///
+  /// In en, this message translates to:
+  /// **'Names, addresses, phone numbers, and dates are replaced with placeholders before sending to Gemini. Suggestions come back with placeholders filled in locally.'**
+  String get assistantContextPanelNamesAddressesPhoneNumbersAnd;
+
+  /// No description provided for @assistantContextPanelContextTheAiSees.
+  ///
+  /// In en, this message translates to:
+  /// **'Context the AI sees'**
+  String get assistantContextPanelContextTheAiSees;
+
+  /// No description provided for @assistantContextPanelSuggestedPrompts.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggested prompts'**
+  String get assistantContextPanelSuggestedPrompts;
+
+  /// No description provided for @assistantContextPanelWhatICanHelpWith.
+  ///
+  /// In en, this message translates to:
+  /// **'What I can help with'**
+  String get assistantContextPanelWhatICanHelpWith;
+
+  /// No description provided for @assistantContextPanelPrivacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy'**
+  String get assistantContextPanelPrivacy;
+
+  /// No description provided for @assistantContextPanelFormType.
+  ///
+  /// In en, this message translates to:
+  /// **'Form type'**
+  String get assistantContextPanelFormType;
+
+  /// No description provided for @assistantContextPanelCurrentStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Current step'**
+  String get assistantContextPanelCurrentStep;
+
+  /// No description provided for @assistantContextPanelFilledFields.
+  ///
+  /// In en, this message translates to:
+  /// **'Filled fields'**
+  String get assistantContextPanelFilledFields;
+
+  /// No description provided for @assistantContextPanelPii.
+  ///
+  /// In en, this message translates to:
+  /// **'PII'**
+  String get assistantContextPanelPii;
+
+  /// No description provided for @assistantTheReplyFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The reply failed.'**
+  String get assistantTheReplyFailed;
+
+  /// No description provided for @assistantStillFailingCheckYourConnection.
+  ///
+  /// In en, this message translates to:
+  /// **'Still failing — check your connection or key.'**
+  String get assistantStillFailingCheckYourConnection;
+
+  /// No description provided for @assistantClearConversation.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear conversation?'**
+  String get assistantClearConversation;
+
+  /// No description provided for @assistantThisWillEraseAllMessages.
+  ///
+  /// In en, this message translates to:
+  /// **'This will erase all messages. This cannot be undone.'**
+  String get assistantThisWillEraseAllMessages;
+
+  /// No description provided for @assistantClear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get assistantClear;
+
+  /// No description provided for @assistantToUseTheAiAssistant.
+  ///
+  /// In en, this message translates to:
+  /// **'To use the AI assistant, set up an AI key — Gemini\'s free tier works.'**
+  String get assistantToUseTheAiAssistant;
+
+  /// No description provided for @assistantSetUpFree.
+  ///
+  /// In en, this message translates to:
+  /// **'Set Up (Free)'**
+  String get assistantSetUpFree;
+
+  /// No description provided for @assistantPersonalInfoRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal info removed'**
+  String get assistantPersonalInfoRemoved;
+
+  /// No description provided for @assistantAskMeAnythingAboutYour.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask me anything about your\nPA Mental Health Advance Directive'**
+  String get assistantAskMeAnythingAboutYour;
+
+  /// No description provided for @assistantSuggestedQuestions.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggested questions:'**
+  String get assistantSuggestedQuestions;
+
+  /// No description provided for @assistantClearConversation2.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear conversation'**
+  String get assistantClearConversation2;
+
+  /// No description provided for @assistantApiKeySettings.
+  ///
+  /// In en, this message translates to:
+  /// **'API key settings'**
+  String get assistantApiKeySettings;
+
+  /// No description provided for @assistantDisclaimerNotLegalOrMedical.
+  ///
+  /// In en, this message translates to:
+  /// **'Disclaimer: Not legal or medical advice. For legal questions contact PA Protection and Advocacy: {phone} '**
+  String assistantDisclaimerNotLegalOrMedical(String phone);
+
+  /// No description provided for @assistantAskAQuestionAboutYour.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask a question about your directive...'**
+  String get assistantAskAQuestionAboutYour;
+
+  /// No description provided for @assistantSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get assistantSend;
+
+  /// No description provided for @directiveFormChoiceWithAPoaOnlyForm.
+  ///
+  /// In en, this message translates to:
+  /// **'With a POA-only form, your agent will have authority to make mental health care decisions on your behalf, but the document will not include your personal treatment preferences.\n\nConsider using the Combined form instead to document both your preferences AND appoint an agent. This gives your care team the most guidance.'**
+  String get directiveFormChoiceWithAPoaOnlyForm;
+
+  /// No description provided for @directiveFormChoiceContinueWithPoa.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue with POA'**
+  String get directiveFormChoiceContinueWithPoa;
+
+  /// No description provided for @directiveFormChoiceYouCanSwitchFormTypes.
+  ///
+  /// In en, this message translates to:
+  /// **'You can switch form types later if you change your mind — Combined is the broadest.'**
+  String get directiveFormChoiceYouCanSwitchFormTypes;
+
+  /// No description provided for @directiveFormChoiceCombinedDirective.
+  ///
+  /// In en, this message translates to:
+  /// **'Combined directive'**
+  String get directiveFormChoiceCombinedDirective;
+
+  /// No description provided for @directiveFormChoiceTreatmentPreferencesAndATrusted.
+  ///
+  /// In en, this message translates to:
+  /// **'Treatment preferences and a trusted decision-maker, in one document. 11 short steps · about 20 minutes.'**
+  String get directiveFormChoiceTreatmentPreferencesAndATrusted;
+
+  /// No description provided for @directiveFormChoiceStartNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Start now'**
+  String get directiveFormChoiceStartNow;
+
+  /// No description provided for @directiveFormChoiceNotSureWhichFormFits.
+  ///
+  /// In en, this message translates to:
+  /// **'Not sure which form fits? Take the 4-question quiz.'**
+  String get directiveFormChoiceNotSureWhichFormFits;
+
+  /// No description provided for @directiveFormChoiceHelpMeChoose.
+  ///
+  /// In en, this message translates to:
+  /// **'Help me choose →'**
+  String get directiveFormChoiceHelpMeChoose;
+
+  /// No description provided for @directiveFormChoicePowerOfAttorneyOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Power of attorney only'**
+  String get directiveFormChoicePowerOfAttorneyOnly;
+
+  /// No description provided for @directiveFormChoiceTakeThe4QuestionQuiz.
+  ///
+  /// In en, this message translates to:
+  /// **'Take the 4-question quiz to choose a form'**
+  String get directiveFormChoiceTakeThe4QuestionQuiz;
+
+  /// No description provided for @webLandingALegalDocumentThatTells.
+  ///
+  /// In en, this message translates to:
+  /// **'A legal document that tells doctors, family, and a person you trust how to care for you if you can’t speak for yourself. Free, anonymous, and takes about 20 minutes.'**
+  String get webLandingALegalDocumentThatTells;
+
+  /// No description provided for @webLandingYouReWorkingAnonymouslyNothing.
+  ///
+  /// In en, this message translates to:
+  /// **'You’re working anonymously. Nothing is saved.'**
+  String get webLandingYouReWorkingAnonymouslyNothing;
+
+  /// No description provided for @webLandingNoAccountNoCloudIf.
+  ///
+  /// In en, this message translates to:
+  /// **'No account, no cloud. If you close the tab or the app crashes, your work is kept on this device for 10 minutes so you can reopen and recover it — then it’s erased for good. Open your PDF and save it to keep a copy.'**
+  String get webLandingNoAccountNoCloudIf;
+
+  /// No description provided for @webLandingHowThisWorks.
+  ///
+  /// In en, this message translates to:
+  /// **'HOW THIS WORKS →'**
+  String get webLandingHowThisWorks;
+
+  /// No description provided for @webLandingAnMhadIsYourVoice.
+  ///
+  /// In en, this message translates to:
+  /// **'“An MHAD is your voice when you can’t speak for yourself.”'**
+  String get webLandingAnMhadIsYourVoice;
+
+  /// No description provided for @webLandingPaMhadBookletOfficeOf.
+  ///
+  /// In en, this message translates to:
+  /// **'— PA MHAD booklet · Office of Mental Health'**
+  String get webLandingPaMhadBookletOfficeOf;
+
+  /// No description provided for @webLandingReadTheBasics.
+  ///
+  /// In en, this message translates to:
+  /// **'Read the basics →'**
+  String get webLandingReadTheBasics;
+
+  /// No description provided for @webLandingPennsylvaniaAct194Of2004.
+  ///
+  /// In en, this message translates to:
+  /// **'Pennsylvania · Act 194 of 2004'**
+  String get webLandingPennsylvaniaAct194Of2004;
+
+  /// No description provided for @webLandingOurPrivacyPromise.
+  ///
+  /// In en, this message translates to:
+  /// **'Our privacy promise'**
+  String get webLandingOurPrivacyPromise;
+
+  /// No description provided for @webLandingFromTheBooklet.
+  ///
+  /// In en, this message translates to:
+  /// **'From the booklet'**
+  String get webLandingFromTheBooklet;
+
+  /// No description provided for @webLandingPrintABlankForm.
+  ///
+  /// In en, this message translates to:
+  /// **'Print a blank form'**
+  String get webLandingPrintABlankForm;
+
+  /// No description provided for @webLandingPrintBlankForm.
+  ///
+  /// In en, this message translates to:
+  /// **'Print blank form'**
+  String get webLandingPrintBlankForm;
+
+  /// No description provided for @webLandingTheBasics.
+  ///
+  /// In en, this message translates to:
+  /// **'The basics'**
+  String get webLandingTheBasics;
+
+  /// No description provided for @webLandingMakeAMentalHealth.
+  ///
+  /// In en, this message translates to:
+  /// **'Make a mental health '**
+  String get webLandingMakeAMentalHealth;
+
+  /// No description provided for @webLandingAdvanceDirective.
+  ///
+  /// In en, this message translates to:
+  /// **'advance directive.'**
+  String get webLandingAdvanceDirective;
+
+  /// No description provided for @homeToolsGridMakeItFindable.
+  ///
+  /// In en, this message translates to:
+  /// **'Make it findable'**
+  String get homeToolsGridMakeItFindable;
+
+  /// No description provided for @homeToolsGridCrisisHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Crisis help'**
+  String get homeToolsGridCrisisHelp;
+
+  /// No description provided for @homeDirectiveHeroDraft.
+  ///
+  /// In en, this message translates to:
+  /// **'● Draft'**
+  String get homeDirectiveHeroDraft;
+
+  /// No description provided for @homeDirectiveHeroContinueWhereYouLeftOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue where you left off'**
+  String get homeDirectiveHeroContinueWhereYouLeftOff;
+
+  /// No description provided for @facilitatorGetHelpEvidenceBased.
+  ///
+  /// In en, this message translates to:
+  /// **'Get help · evidence-based'**
+  String get facilitatorGetHelpEvidenceBased;
+
+  /// No description provided for @facilitatorTalkToSomeoneTrained.
+  ///
+  /// In en, this message translates to:
+  /// **'Talk to someone trained'**
+  String get facilitatorTalkToSomeoneTrained;
+
+  /// No description provided for @facilitatorPennsylvaniaPeerSpecialistsAndRights.
+  ///
+  /// In en, this message translates to:
+  /// **'Pennsylvania peer specialists and rights advocates help walk you through the form. Free; no booking system inside this app — call or visit a partner below.'**
+  String get facilitatorPennsylvaniaPeerSpecialistsAndRights;
+
+  /// No description provided for @facilitatorPrintReviewItTogether.
+  ///
+  /// In en, this message translates to:
+  /// **'Print + review it together'**
+  String get facilitatorPrintReviewItTogether;
+
+  /// No description provided for @facilitatorPrintOrScreenShareYour.
+  ///
+  /// In en, this message translates to:
+  /// **'Print or screen-share your draft and walk through it with a friend, family member, or peer. They can\'t change anything in your app — that stays in your hands.'**
+  String get facilitatorPrintOrScreenShareYour;
+
+  /// No description provided for @facilitatorEmailADraftToMy.
+  ///
+  /// In en, this message translates to:
+  /// **'Email a draft to my clinician'**
+  String get facilitatorEmailADraftToMy;
+
+  /// No description provided for @facilitatorGenerateThePdfInExport.
+  ///
+  /// In en, this message translates to:
+  /// **'Generate the PDF in Export, then send it via your phone\'s email app. Ask your therapist or psychiatrist for comments. You\'ll transcribe their suggestions back into the form yourself — this app doesn\'t connect to their EHR.'**
+  String get facilitatorGenerateThePdfInExport;
+
+  /// No description provided for @facilitatorCall.
+  ///
+  /// In en, this message translates to:
+  /// **'Call'**
+  String get facilitatorCall;
+
+  /// No description provided for @facilitatorOpenWebsite.
+  ///
+  /// In en, this message translates to:
+  /// **'Open website'**
+  String get facilitatorOpenWebsite;
+
+  /// No description provided for @legalSheetFullLegalDisclosure.
+  ///
+  /// In en, this message translates to:
+  /// **'Full legal disclosure'**
+  String get legalSheetFullLegalDisclosure;
+
+  /// No description provided for @legalSheetTheEightSectionsBelowWere.
+  ///
+  /// In en, this message translates to:
+  /// **'The eight sections below were accepted at first launch. Tap to expand.'**
+  String get legalSheetTheEightSectionsBelowWere;
+
+  /// No description provided for @legalSheetFullLegalSections.
+  ///
+  /// In en, this message translates to:
+  /// **'Full legal sections'**
+  String get legalSheetFullLegalSections;
+
+  /// No description provided for @legalSheetNotLegalOrMedicalAdvice.
+  ///
+  /// In en, this message translates to:
+  /// **'Not legal or medical advice'**
+  String get legalSheetNotLegalOrMedicalAdvice;
+
+  /// No description provided for @legalSheetNoProfessionalRelationship.
+  ///
+  /// In en, this message translates to:
+  /// **'No professional relationship'**
+  String get legalSheetNoProfessionalRelationship;
+
+  /// No description provided for @legalSheetUseAtYourOwnRisk.
+  ///
+  /// In en, this message translates to:
+  /// **'Use at your own risk'**
+  String get legalSheetUseAtYourOwnRisk;
+
+  /// No description provided for @legalSheetRequirementsForAValidDirective.
+  ///
+  /// In en, this message translates to:
+  /// **'Requirements for a valid directive'**
+  String get legalSheetRequirementsForAValidDirective;
+
+  /// No description provided for @legalSheetTwoYearValidity.
+  ///
+  /// In en, this message translates to:
+  /// **'Two-year validity'**
+  String get legalSheetTwoYearValidity;
+
+  /// No description provided for @legalSheetRevocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Revocation'**
+  String get legalSheetRevocation;
+
+  /// No description provided for @legalSheetPrivacyAiFeatures.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy & AI features'**
+  String get legalSheetPrivacyAiFeatures;
+
+  /// No description provided for @legalSheetResourcesAssistance.
+  ///
+  /// In en, this message translates to:
+  /// **'Resources & assistance'**
+  String get legalSheetResourcesAssistance;
+
+  /// No description provided for @legalSheetPaProtectionAdvocacy.
+  ///
+  /// In en, this message translates to:
+  /// **'PA Protection & Advocacy'**
+  String get legalSheetPaProtectionAdvocacy;
+
+  /// No description provided for @legalSheetPaMentalHealthConsumersAssociation.
+  ///
+  /// In en, this message translates to:
+  /// **'PA Mental Health Consumers\' Association'**
+  String get legalSheetPaMentalHealthConsumersAssociation;
+
+  /// No description provided for @legalSheetMentalHealthAssociationInPennsylvania.
+  ///
+  /// In en, this message translates to:
+  /// **'Mental Health Association in Pennsylvania'**
+  String get legalSheetMentalHealthAssociationInPennsylvania;
+
+  /// No description provided for @legalSheet988SuicideCrisisLifeline.
+  ///
+  /// In en, this message translates to:
+  /// **'988 Suicide & Crisis Lifeline'**
+  String get legalSheet988SuicideCrisisLifeline;
+
+  /// No description provided for @legalSheetThisAppHelpsPennsylvaniaResidents.
+  ///
+  /// In en, this message translates to:
+  /// **'This app helps Pennsylvania residents document their treatment preferences under '**
+  String get legalSheetThisAppHelpsPennsylvaniaResidents;
+
+  /// No description provided for @legalSheetTheInformationIsForInformational.
+  ///
+  /// In en, this message translates to:
+  /// **'. The information is for informational purposes only and does '**
+  String get legalSheetTheInformationIsForInformational;
+
+  /// No description provided for @legalSheetConstituteLegalOrMedicalAdvice.
+  ///
+  /// In en, this message translates to:
+  /// **' constitute legal or medical advice.'**
+  String get legalSheetConstituteLegalOrMedicalAdvice;
+
+  /// No description provided for @legalSheetItIsNotAMedical.
+  ///
+  /// In en, this message translates to:
+  /// **'It is not a medical device. It does not diagnose, treat, cure, or prevent any condition. For treatment decisions, consult a qualified mental health professional. For legal questions, consult a licensed PA attorney.'**
+  String get legalSheetItIsNotAMedical;
+
+  /// No description provided for @legalSheetUseOfThisAppDoes.
+  ///
+  /// In en, this message translates to:
+  /// **'Use of this app does '**
+  String get legalSheetUseOfThisAppDoes;
+
+  /// No description provided for @legalSheetCreateAnAttorneyClientRelationship.
+  ///
+  /// In en, this message translates to:
+  /// **' create an attorney–client relationship, a provider–patient relationship, or any other professional relationship between you and the developer.'**
+  String get legalSheetCreateAnAttorneyClientRelationship;
+
+  /// No description provided for @legalSheetYouAreSolelyResponsibleFor.
+  ///
+  /// In en, this message translates to:
+  /// **'You are solely responsible for making sure your directive meets all legal requirements under PA law, including proper execution with witnesses.'**
+  String get legalSheetYouAreSolelyResponsibleFor;
+
+  /// No description provided for @legalSheetInPlainTermsThisApp.
+  ///
+  /// In en, this message translates to:
+  /// **'In plain terms: this app helps you put your own wishes into a directive, and you use it at your own risk. Please review the finished document for accuracy — mistakes can happen, and details you entered may be out of date or incomplete. If you are ever unsure whether something is legally right for your situation, feel free to talk with an attorney. The formal version:'**
+  String get legalSheetInPlainTermsThisApp;
+
+  /// No description provided for @legalSheetThisAppIsProvided.
+  ///
+  /// In en, this message translates to:
+  /// **'This app is provided '**
+  String get legalSheetThisAppIsProvided;
+
+  /// No description provided for @legalSheetAsIs.
+  ///
+  /// In en, this message translates to:
+  /// **'\"as is\"'**
+  String get legalSheetAsIs;
+
+  /// No description provided for @legalSheetWithoutWarrantiesOfAnyKind.
+  ///
+  /// In en, this message translates to:
+  /// **', without warranties of any kind, and you use it at your own risk. To the fullest extent permitted by law, the developer is not liable for any damages arising from use of the app or any document created with it. You are responsible for reviewing your directive for accuracy and completeness; for legal questions specific to your situation, consult a licensed Pennsylvania attorney.'**
+  String get legalSheetWithoutWarrantiesOfAnyKind;
+
+  /// No description provided for @legalSheetAPaMentalHealthAdvance.
+  ///
+  /// In en, this message translates to:
+  /// **'A PA Mental Health Advance Directive is legally valid '**
+  String get legalSheetAPaMentalHealthAdvance;
+
+  /// No description provided for @legalSheetWhen.
+  ///
+  /// In en, this message translates to:
+  /// **' when:'**
+  String get legalSheetWhen;
+
+  /// No description provided for @legalSheetYouThePrincipalHaveLegal.
+  ///
+  /// In en, this message translates to:
+  /// **'You (the principal) have legal capacity at the time of signing'**
+  String get legalSheetYouThePrincipalHaveLegal;
+
+  /// No description provided for @legalSheetItIsSignedInThe.
+  ///
+  /// In en, this message translates to:
+  /// **'It is signed in the presence of '**
+  String get legalSheetItIsSignedInThe;
+
+  /// No description provided for @legalSheetBothWitnessesMeetEligibilityRequirements.
+  ///
+  /// In en, this message translates to:
+  /// **'Both witnesses meet eligibility requirements under Act 194'**
+  String get legalSheetBothWitnessesMeetEligibilityRequirements;
+
+  /// No description provided for @legalSheetYourDesignatedAgentOrAlternate.
+  ///
+  /// In en, this message translates to:
+  /// **'your designated agent or alternate agent, your mental health care provider, or an employee of the facility where you receive treatment — unless they are related to you by blood, marriage, or adoption.'**
+  String get legalSheetYourDesignatedAgentOrAlternate;
+
+  /// No description provided for @legalSheetThisAppCapturesTouchDrawn.
+  ///
+  /// In en, this message translates to:
+  /// **'This app captures touch-drawn signatures for convenience during preparation. The '**
+  String get legalSheetThisAppCapturesTouchDrawn;
+
+  /// No description provided for @legalSheetDirectiveMustBeSignedIn.
+  ///
+  /// In en, this message translates to:
+  /// **' directive must be signed in original ink, in the presence of your two witnesses, to be legally valid.'**
+  String get legalSheetDirectiveMustBeSignedIn;
+
+  /// No description provided for @legalSheetOnceSignedProvidersAndYour.
+  ///
+  /// In en, this message translates to:
+  /// **'Once signed, providers and your agent '**
+  String get legalSheetOnceSignedProvidersAndYour;
+
+  /// No description provided for @legalSheetWithYourDirective20Pa.
+  ///
+  /// In en, this message translates to:
+  /// **' with your directive (20 Pa.C.S. §§ 5804, 5842). However, a provider may decline to follow specific instructions that are against accepted medical practice, or when the provider is not physically available.'**
+  String get legalSheetWithYourDirective20Pa;
+
+  /// No description provided for @legalSheetUnderPaAct194An.
+  ///
+  /// In en, this message translates to:
+  /// **'Under PA Act 194, an MHAD is valid for '**
+  String get legalSheetUnderPaAct194An;
+
+  /// No description provided for @legalSheetFromTheDateOfExecution.
+  ///
+  /// In en, this message translates to:
+  /// **' from the date of execution unless revoked earlier — '**
+  String get legalSheetFromTheDateOfExecution;
+
+  /// No description provided for @legalSheetOfMakingMentalHealthDecisions.
+  ///
+  /// In en, this message translates to:
+  /// **' of making mental health decisions at the time it would expire, in which case it remains in effect until capacity returns. This app will remind you when your directive is approaching expiration.'**
+  String get legalSheetOfMakingMentalHealthDecisions;
+
+  /// No description provided for @legalSheetYouMayRevokeThisDirective.
+  ///
+  /// In en, this message translates to:
+  /// **'You may revoke this directive at any time while you have legal capacity by:'**
+  String get legalSheetYouMayRevokeThisDirective;
+
+  /// No description provided for @legalSheetNotifyingYourHealthcareProviderOr.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifying your healthcare provider or agent in writing'**
+  String get legalSheetNotifyingYourHealthcareProviderOr;
+
+  /// No description provided for @legalSheetDestroyingTheDirective.
+  ///
+  /// In en, this message translates to:
+  /// **'Destroying the directive'**
+  String get legalSheetDestroyingTheDirective;
+
+  /// No description provided for @legalSheetExecutingANewDirective.
+  ///
+  /// In en, this message translates to:
+  /// **'Executing a new directive'**
+  String get legalSheetExecutingANewDirective;
+
+  /// No description provided for @legalSheetNotifyEveryoneWhoHasCopies.
+  ///
+  /// In en, this message translates to:
+  /// **'Notify everyone who has copies of the revocation.'**
+  String get legalSheetNotifyEveryoneWhoHasCopies;
+
+  /// No description provided for @legalSheetThisIsAWebApp.
+  ///
+  /// In en, this message translates to:
+  /// **'This is a web app: your directive is held in memory in your browser only and is '**
+  String get legalSheetThisIsAWebApp;
+
+  /// No description provided for @legalSheetIfYouCloseTheTab.
+  ///
+  /// In en, this message translates to:
+  /// **' — if you close the tab or it crashes, your work is kept on this device for about 10 minutes for recovery, then wiped; it is never sent to a server. Export or print to keep a copy. This app is '**
+  String get legalSheetIfYouCloseTheTab;
+
+  /// No description provided for @legalSheetHipaaCompliant.
+  ///
+  /// In en, this message translates to:
+  /// **' HIPAA-compliant.'**
+  String get legalSheetHipaaCompliant;
+
+  /// No description provided for @legalSheetIfYouUseTheOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'If you use the optional AI Assistant, text you send is transmitted to the AI provider you choose (Google Gemini by default; or Anthropic, OpenAI, or xAI). On Gemini\'s free tier, Google may use this data to improve their products and human reviewers may read inputs; other providers handle your data under their own API policies.'**
+  String get legalSheetIfYouUseTheOptional;
+
+  /// No description provided for @legalSheetToProtectYouTheApp.
+  ///
+  /// In en, this message translates to:
+  /// **'To protect you, the app '**
+  String get legalSheetToProtectYouTheApp;
+
+  /// No description provided for @legalSheetYourNameDateOfBirth.
+  ///
+  /// In en, this message translates to:
+  /// **' — your name, date of birth, address, and the names and contact details of your agents and guardian are never included. Only non-identifying context (such as conditions, medications, and care preferences) is shared, and only if you choose to use the assistant. (Uploading a document for autofill is the one exception, described next.)'**
+  String get legalSheetYourNameDateOfBirth;
+
+  /// No description provided for @legalSheetDocumentsYouUploadForAutofill.
+  ///
+  /// In en, this message translates to:
+  /// **'Documents you upload for autofill are different: the whole file is sent to your chosen AI provider as-is, and to fill in your directive the AI reads the personal details in it (your name, date of birth, address, and your agent\'s or guardian\'s details). You review everything before it is saved. '**
+  String get legalSheetDocumentsYouUploadForAutofill;
+
+  /// No description provided for @legalSheetBlackOutAnythingYouDon.
+  ///
+  /// In en, this message translates to:
+  /// **' — black out anything you don\'t want sent, or simply type any field by hand to keep it private. Also avoid typing personal identifiers (full name, SSN, date of birth, address) directly into chat messages.'**
+  String get legalSheetBlackOutAnythingYouDon;
+
+  /// No description provided for @legalSheetSeparatelyToHelpYouFill.
+  ///
+  /// In en, this message translates to:
+  /// **'Separately, to help you fill in and understand your directive, the app looks up medications, conditions, and (optionally) your doctor in free, public U.S. government databases — the NIH/NLM Clinical Tables, MedlinePlus, and the FDA\'s openFDA. '**
+  String get legalSheetSeparatelyToHelpYouFill;
+
+  /// No description provided for @legalSheetNeverYourIdentityThePeople.
+  ///
+  /// In en, this message translates to:
+  /// **' — never your identity, the people you name, or your saved directive. They are reference information, not medical advice.'**
+  String get legalSheetNeverYourIdentityThePeople;
+
+  /// No description provided for @legalSheetAiSuggestionsAreNotLegal.
+  ///
+  /// In en, this message translates to:
+  /// **'AI suggestions are not legal or medical advice — review carefully before accepting.'**
+  String get legalSheetAiSuggestionsAreNotLegal;
+
+  /// No description provided for @disclaimerAFewThingsToUnderstand.
+  ///
+  /// In en, this message translates to:
+  /// **'A few things to understand.'**
+  String get disclaimerAFewThingsToUnderstand;
+
+  /// No description provided for @disclaimerThisToolHelpsYouWrite.
+  ///
+  /// In en, this message translates to:
+  /// **'This tool helps you write a Pennsylvania Mental Health Advance Directive under Act 194. Please read these before continuing.'**
+  String get disclaimerThisToolHelpsYouWrite;
+
+  /// No description provided for @disclaimerReadFullDisclaimer.
+  ///
+  /// In en, this message translates to:
+  /// **'Read full disclaimer'**
+  String get disclaimerReadFullDisclaimer;
+
+  /// No description provided for @disclaimerGetStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Get started'**
+  String get disclaimerGetStarted;
+
+  /// No description provided for @disclaimerIM18OrOlder.
+  ///
+  /// In en, this message translates to:
+  /// **'I\'m 18 or older, and I understand and want to continue.'**
+  String get disclaimerIM18OrOlder;
+
+  /// No description provided for @disclaimerBeforeYouBegin.
+  ///
+  /// In en, this message translates to:
+  /// **'Before you begin'**
+  String get disclaimerBeforeYouBegin;
+
+  /// No description provided for @disclaimerThisIsNotLegalAdvice.
+  ///
+  /// In en, this message translates to:
+  /// **'This is not legal advice'**
+  String get disclaimerThisIsNotLegalAdvice;
+
+  /// No description provided for @disclaimerWeGivePlainLanguageHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'We give plain-language help, not legal counsel. For complex situations, talk to an attorney or advocate.'**
+  String get disclaimerWeGivePlainLanguageHelp;
+
+  /// No description provided for @disclaimerItBecomesValidOnlyWhen.
+  ///
+  /// In en, this message translates to:
+  /// **'It becomes valid only when signed on paper'**
+  String get disclaimerItBecomesValidOnlyWhen;
+
+  /// No description provided for @disclaimerPaLawRequiresYourSignature.
+  ///
+  /// In en, this message translates to:
+  /// **'PA law requires your signature plus two adult witnesses, in ink, in person. The app cannot sign for you.'**
+  String get disclaimerPaLawRequiresYourSignature;
+
+  /// No description provided for @disclaimerNothingIsSavedOrSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing is saved or sent to us'**
+  String get disclaimerNothingIsSavedOrSent;
+
+  /// No description provided for @disclaimerYouCanStopOrChange.
+  ///
+  /// In en, this message translates to:
+  /// **'You can stop or change anything, anytime'**
+  String get disclaimerYouCanStopOrChange;
+
+  /// No description provided for @disclaimerSkipQuestionsGoBackOr.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip questions, go back, or revoke later. This is your voice — you stay in control.'**
+  String get disclaimerSkipQuestionsGoBackOr;
+
+  /// No description provided for @onboardingWeLlWalkYouThrough.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'ll walk you through it, step by step and in plain language: how you want to be treated during a mental health crisis — so your wishes are honored even when you can\'t speak for yourself.'**
+  String get onboardingWeLlWalkYouThrough;
+
+  /// No description provided for @onboardingValidTwoYearsFromSigning.
+  ///
+  /// In en, this message translates to:
+  /// **'Valid two years from signing — unless you are incapable when it would expire, when it stays in effect until your capacity returns. (PA Act 194, effective 2005.)'**
+  String get onboardingValidTwoYearsFromSigning;
+
+  /// No description provided for @onboardingUploadADocumentToAutofill.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload a document to autofill'**
+  String get onboardingUploadADocumentToAutofill;
+
+  /// No description provided for @onboardingContinueFromASavedFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue from a saved file'**
+  String get onboardingContinueFromASavedFile;
+
+  /// No description provided for @onboardingFreeNoAccountNoTracking.
+  ///
+  /// In en, this message translates to:
+  /// **'Free · no account · no tracking · open source'**
+  String get onboardingFreeNoAccountNoTracking;
+
+  /// No description provided for @onboardingPaMhadAct194.
+  ///
+  /// In en, this message translates to:
+  /// **'PA MHAD · Act 194'**
+  String get onboardingPaMhadAct194;
+
+  /// No description provided for @onboardingInYour.
+  ///
+  /// In en, this message translates to:
+  /// **'In your\n'**
+  String get onboardingInYour;
+
+  /// No description provided for @onboardingWords.
+  ///
+  /// In en, this message translates to:
+  /// **'words.'**
+  String get onboardingWords;
+
+  /// No description provided for @onboardingMakingThisChangesNothingToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Making this changes nothing today. '**
+  String get onboardingMakingThisChangesNothingToday;
+
+  /// No description provided for @onboardingYouKeepEveryDecision.
+  ///
+  /// In en, this message translates to:
+  /// **'You keep every decision'**
+  String get onboardingYouKeepEveryDecision;
+
+  /// No description provided for @onboardingUntilTwoProfessionalsFindYou.
+  ///
+  /// In en, this message translates to:
+  /// **' until two professionals find you unable to decide for yourself.'**
+  String get onboardingUntilTwoProfessionalsFindYou;
+
+  /// No description provided for @aiConsistencyTheAiIsReviewingYour.
+  ///
+  /// In en, this message translates to:
+  /// **'The AI is reviewing your directive…'**
+  String get aiConsistencyTheAiIsReviewingYour;
+
+  /// No description provided for @aiConsistencyAiReviewSkippedYouCan.
+  ///
+  /// In en, this message translates to:
+  /// **'AI review skipped — you can re-run it any time.'**
+  String get aiConsistencyAiReviewSkippedYouCan;
+
+  /// No description provided for @aiConsistencyRunAiReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Run AI review'**
+  String get aiConsistencyRunAiReview;
+
+  /// No description provided for @aiConsistencyIgnoreContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Ignore & continue'**
+  String get aiConsistencyIgnoreContinue;
+
+  /// No description provided for @aiConsistencyResolveInWizard.
+  ///
+  /// In en, this message translates to:
+  /// **'Resolve in wizard'**
+  String get aiConsistencyResolveInWizard;
+
+  /// No description provided for @aiConsistencyLooksGoodContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Looks good — continue'**
+  String get aiConsistencyLooksGoodContinue;
+
+  /// No description provided for @aiConsistencyKeepBoth.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep both'**
+  String get aiConsistencyKeepBoth;
+
+  /// No description provided for @aiConsistencyAiReview.
+  ///
+  /// In en, this message translates to:
+  /// **'AI review'**
+  String get aiConsistencyAiReview;
+
+  /// No description provided for @aiConsistencyConsistencyCheckCheckedAtReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Consistency check · checked at Review'**
+  String get aiConsistencyConsistencyCheckCheckedAtReview;
+
+  /// No description provided for @aiConsistencyCheckingYourDirective.
+  ///
+  /// In en, this message translates to:
+  /// **'Checking your directive'**
+  String get aiConsistencyCheckingYourDirective;
+
+  /// No description provided for @aiConsistencyYouSaidYourAgentDecides.
+  ///
+  /// In en, this message translates to:
+  /// **'You said your agent decides your medications, but the form says your agent is NOT authorized to consent to medications.'**
+  String get aiConsistencyYouSaidYourAgentDecides;
+
+  /// No description provided for @aiConsistencyTheseCancelEachOtherOut.
+  ///
+  /// In en, this message translates to:
+  /// **'These cancel each other out. The official form lets you set your own medication preferences and your agent’s authority separately — both are allowed — but as entered they oppose each other. Authorize your agent to consent to medications, or change the medication choice so they agree.'**
+  String get aiConsistencyTheseCancelEachOtherOut;
+
+  /// No description provided for @aiConsistencyYouDonTConsentTo.
+  ///
+  /// In en, this message translates to:
+  /// **'You don’t consent to any medications, but your agent is authorized to consent to them.'**
+  String get aiConsistencyYouDonTConsentTo;
+
+  /// No description provided for @aiConsistencyTheOfficialFormLetsYou.
+  ///
+  /// In en, this message translates to:
+  /// **'The official form lets you set your own preference and your agent’s authority separately — both are valid — but as entered they oppose each other: your refusal of all medications versus your agent’s power to consent to any. Decide which should control and adjust the other.'**
+  String get aiConsistencyTheOfficialFormLetsYou;
+
+  /// No description provided for @aiConsistencyINoticed.
+  ///
+  /// In en, this message translates to:
+  /// **'I noticed '**
+  String get aiConsistencyINoticed;
+
+  /// No description provided for @draftRecoveryDialogRecoverUnsavedWork.
+  ///
+  /// In en, this message translates to:
+  /// **'Recover Unsaved Work?'**
+  String get draftRecoveryDialogRecoverUnsavedWork;
+
+  /// No description provided for @draftRecoveryDialogDiscard.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard'**
+  String get draftRecoveryDialogDiscard;
+
+  /// No description provided for @draftRecoveryDialogRestore.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore'**
+  String get draftRecoveryDialogRestore;
+
+  /// No description provided for @draftRecoveryDialogDraftRestoredPersonalInformationWill.
+  ///
+  /// In en, this message translates to:
+  /// **'Draft restored. Personal information will need to be re-entered.'**
+  String get draftRecoveryDialogDraftRestoredPersonalInformationWill;
+
+  /// No description provided for @draftRecoveryDialogCouldnTRestoreTheDraft.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t restore the draft.'**
+  String get draftRecoveryDialogCouldnTRestoreTheDraft;
+
+  /// No description provided for @moreSheetResetAndStartFresh.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset and start fresh?'**
+  String get moreSheetResetAndStartFresh;
+
+  /// No description provided for @moreSheetThisPermanentlyErasesEverythingIn.
+  ///
+  /// In en, this message translates to:
+  /// **'This permanently erases everything in this session — all directives, your AI key, and chat history — and returns you to a blank start.\n\nExport or print anything you want to keep first. This cannot be undone.'**
+  String get moreSheetThisPermanentlyErasesEverythingIn;
+
+  /// No description provided for @moreSheetResetEverything.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset everything'**
+  String get moreSheetResetEverything;
+
+  /// No description provided for @moreSheetEverythingElseYouCanDo.
+  ///
+  /// In en, this message translates to:
+  /// **'Everything else you can do here.'**
+  String get moreSheetEverythingElseYouCanDo;
+
+  /// No description provided for @moreSheetGetHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Get help'**
+  String get moreSheetGetHelp;
+
+  /// No description provided for @moreSheetReset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset'**
+  String get moreSheetReset;
+
+  /// No description provided for @crisisSheet247FreeConfidential.
+  ///
+  /// In en, this message translates to:
+  /// **'24/7 FREE, CONFIDENTIAL'**
+  String get crisisSheet247FreeConfidential;
+
+  /// No description provided for @crisisSheetRealPeopleAreStandingBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Real people are standing by — phone, text, or chat.'**
+  String get crisisSheetRealPeopleAreStandingBy;
+
+  /// No description provided for @crisisSheetCalling988ConnectsYouTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Calling 988 connects you to a trained counselor in your area. It is free, confidential, and available 24 hours a day. Calling will not result in police being dispatched in most cases.'**
+  String get crisisSheetCalling988ConnectsYouTo;
+
+  /// No description provided for @crisisSheetWhyTheseNumbers.
+  ///
+  /// In en, this message translates to:
+  /// **'Why these numbers?'**
+  String get crisisSheetWhyTheseNumbers;
+
+  /// No description provided for @crisisSheetIfYouOrSomeoneElse.
+  ///
+  /// In en, this message translates to:
+  /// **'If you or someone else is in immediate danger, call '**
+  String get crisisSheetIfYouOrSomeoneElse;
+
+  /// No description provided for @walletCardMh.
+  ///
+  /// In en, this message translates to:
+  /// **'MH'**
+  String get walletCardMh;
+
+  /// No description provided for @walletCardPaMhadAct194.
+  ///
+  /// In en, this message translates to:
+  /// **'PA MHAD · ACT 194'**
+  String get walletCardPaMhadAct194;
+
+  /// No description provided for @walletCardHasAnActiveDirectiveOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Has an active directive on file'**
+  String get walletCardHasAnActiveDirectiveOn;
+
+  /// No description provided for @walletCardAgent.
+  ///
+  /// In en, this message translates to:
+  /// **'AGENT'**
+  String get walletCardAgent;
+
+  /// No description provided for @walletCardExp.
+  ///
+  /// In en, this message translates to:
+  /// **'EXP'**
+  String get walletCardExp;
+
+  /// No description provided for @webSidebarAct1942004.
+  ///
+  /// In en, this message translates to:
+  /// **'ACT 194 · 2004'**
+  String get webSidebarAct1942004;
+
+  /// No description provided for @webSidebar247Lifeline.
+  ///
+  /// In en, this message translates to:
+  /// **'24/7 LIFELINE'**
+  String get webSidebar247Lifeline;
+
+  /// No description provided for @webSidebar988CrisisHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'988 · Crisis help'**
+  String get webSidebar988CrisisHelp;
+
+  /// No description provided for @webSidebarClickForMoreInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'Click for more information'**
+  String get webSidebarClickForMoreInformation;
+
+  /// No description provided for @webSidebarPeerSupportAdvocatesReferrals.
+  ///
+  /// In en, this message translates to:
+  /// **'Peer support · advocates · referrals'**
+  String get webSidebarPeerSupportAdvocatesReferrals;
+
+  /// No description provided for @medlinePlusDialogNoPlainLanguageSummaryIs.
+  ///
+  /// In en, this message translates to:
+  /// **'No plain-language summary is available for this right now. You can search it on MedlinePlus.'**
+  String get medlinePlusDialogNoPlainLanguageSummaryIs;
+
+  /// No description provided for @medlinePlusDialogPlainLanguageInformationFromThe.
+  ///
+  /// In en, this message translates to:
+  /// **'Plain-language information from the U.S. National Library of Medicine (MedlinePlus). Educational only — not medical advice.'**
+  String get medlinePlusDialogPlainLanguageInformationFromThe;
+
+  /// No description provided for @medlinePlusDialogReadMoreOnMedlineplus.
+  ///
+  /// In en, this message translates to:
+  /// **'Read more on MedlinePlus'**
+  String get medlinePlusDialogReadMoreOnMedlineplus;
+
+  /// No description provided for @fdaLabelDialogNoFdaLabelInformationIs.
+  ///
+  /// In en, this message translates to:
+  /// **'No FDA label information is available for this medication right now. Brand and generic spellings can differ — try the other one, or ask your pharmacist.'**
+  String get fdaLabelDialogNoFdaLabelInformationIs;
+
+  /// No description provided for @fdaLabelDialogOfficialUSFdaDrug.
+  ///
+  /// In en, this message translates to:
+  /// **'Official U.S. FDA drug-label text (openFDA). Reference only — not medical advice, and not personalized to you. Discuss anything here with your doctor or pharmacist.'**
+  String get fdaLabelDialogOfficialUSFdaDrug;
+
+  /// No description provided for @aiConsentDialogBeforeYouUpload.
+  ///
+  /// In en, this message translates to:
+  /// **'Before you upload'**
+  String get aiConsentDialogBeforeYouUpload;
+
+  /// No description provided for @aiConsentDialogNothingIsSavedToYour.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing is saved to your directive automatically — you review every field the AI fills in before it is applied.'**
+  String get aiConsentDialogNothingIsSavedToYour;
+
+  /// No description provided for @aiConsentDialogUploadingIsOnlyAShortcut.
+  ///
+  /// In en, this message translates to:
+  /// **'Uploading is only a shortcut, never required:\n• Black out anything you don\'t want sent (ID or card numbers, other people\'s details) before uploading.\n• Or skip the upload and type any field by hand — typed fields stay on your device and are never sent to the AI.'**
+  String get aiConsentDialogUploadingIsOnlyAShortcut;
+
+  /// No description provided for @aiConsentDialogSendToTheAi.
+  ///
+  /// In en, this message translates to:
+  /// **'Send to the AI'**
+  String get aiConsentDialogSendToTheAi;
+
+  /// No description provided for @aiConsentDialogTranscribeWithAi.
+  ///
+  /// In en, this message translates to:
+  /// **'Transcribe with AI'**
+  String get aiConsentDialogTranscribeWithAi;
+
+  /// No description provided for @aiConsentDialogYouReviewTheTextBefore.
+  ///
+  /// In en, this message translates to:
+  /// **'You review the text before it goes into your form. Prefer not to? Tap Cancel to use your device\'s built-in dictation instead, or just type — neither sends audio to the AI.'**
+  String get aiConsentDialogYouReviewTheTextBefore;
+
+  /// No description provided for @aiConsentDialogUseAi.
+  ///
+  /// In en, this message translates to:
+  /// **'Use AI'**
+  String get aiConsentDialogUseAi;
+
+  /// No description provided for @aiConsentDialogAiDataNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Data Notice'**
+  String get aiConsentDialogAiDataNotice;
+
+  /// No description provided for @aiConsentDialogImportantPleaseReadBeforeContinuing.
+  ///
+  /// In en, this message translates to:
+  /// **'Important: Please read before continuing.\n'**
+  String get aiConsentDialogImportantPleaseReadBeforeContinuing;
+
+  /// No description provided for @aiConsentDialogThisAiAssistantIsNot.
+  ///
+  /// In en, this message translates to:
+  /// **'• This AI assistant is NOT a therapist, doctor, or lawyer. It provides general information about PA Mental Health Advance Directives only.\n'**
+  String get aiConsentDialogThisAiAssistantIsNot;
+
+  /// No description provided for @aiConsentDialogNeverEnterPersonalInformationFull.
+  ///
+  /// In en, this message translates to:
+  /// **'NEVER enter personal information (full name, date of birth, Social Security number, address, phone number, email) into the AI chat or AI-powered features.\n\nThe app automatically strips common personal data, but this is not guaranteed. Personal information fields must be filled in manually — they are stored on your device only and never sent to the AI.'**
+  String get aiConsentDialogNeverEnterPersonalInformationFull;
+
+  /// No description provided for @aiConsentDialogNotNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Not Now'**
+  String get aiConsentDialogNotNow;
+
+  /// No description provided for @aiConsentDialogIAuthorize.
+  ///
+  /// In en, this message translates to:
+  /// **'I Authorize'**
+  String get aiConsentDialogIAuthorize;
+
+  /// No description provided for @addressFieldsTapTheIconToFill.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the icon to fill city & state'**
+  String get addressFieldsTapTheIconToFill;
+
+  /// No description provided for @addressFieldsFillCityStateFromZip.
+  ///
+  /// In en, this message translates to:
+  /// **'Fill city & state from ZIP'**
+  String get addressFieldsFillCityStateFromZip;
+
+  /// No description provided for @mainTheAppCouldnTStart.
+  ///
+  /// In en, this message translates to:
+  /// **'The app couldn\'t start'**
+  String get mainTheAppCouldnTStart;
+
+  /// No description provided for @mainPaMentalHealthAdvanceDirective.
+  ///
+  /// In en, this message translates to:
+  /// **'PA Mental Health Advance Directive'**
+  String get mainPaMentalHealthAdvanceDirective;
+
+  /// No description provided for @mainAppTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'PA Mental Health Advance Directive'**
+  String get mainAppTitle;
+
+  /// No description provided for @aiConsistencyStepsProcedures.
+  ///
+  /// In en, this message translates to:
+  /// **'Procedures + Agent authority'**
+  String get aiConsistencyStepsProcedures;
+
+  /// No description provided for @aiConsistencyStepsMeds.
+  ///
+  /// In en, this message translates to:
+  /// **'Medications + Agent authority'**
+  String get aiConsistencyStepsMeds;
+
+  /// No description provided for @aiConsistencyProcTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You consented to {name} yourself — the printed form will also state your agent is NOT authorized to consent to {name}.'**
+  String aiConsistencyProcTitle(String name);
+
+  /// No description provided for @aiConsistencyProcBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Pennsylvania’s form lets you do both: give your own consent AND authorize your agent to consent on your behalf (that agent authorization needs your physical initials, §5836(c)). As entered, only your own consent is recorded, so the document says your agent may not consent to {name}. That is allowed and may be exactly what you intend — keep both if so. If you also want your agent able to consent (e.g. if you later can’t decide), choose “My agent will decide” for {name}.'**
+  String aiConsistencyProcBody(String name);
+
+  /// No description provided for @aiConsistencyProcA.
+  ///
+  /// In en, this message translates to:
+  /// **'You consent to {name}'**
+  String aiConsistencyProcA(String name);
+
+  /// No description provided for @aiConsistencyProcB.
+  ///
+  /// In en, this message translates to:
+  /// **'Agent not authorized: {name}'**
+  String aiConsistencyProcB(String name);
+
+  /// No description provided for @aiConsistencyProcAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Review {name} choice'**
+  String aiConsistencyProcAction(String name);
+
+  /// No description provided for @aiConsistencyProcEct.
+  ///
+  /// In en, this message translates to:
+  /// **'ECT'**
+  String get aiConsistencyProcEct;
+
+  /// No description provided for @aiConsistencyProcExperimental.
+  ///
+  /// In en, this message translates to:
+  /// **'experimental studies'**
+  String get aiConsistencyProcExperimental;
+
+  /// No description provided for @aiConsistencyProcDrugTrials.
+  ///
+  /// In en, this message translates to:
+  /// **'drug trials'**
+  String get aiConsistencyProcDrugTrials;
+
+  /// No description provided for @aiConsistencyAgentDecidesMeds.
+  ///
+  /// In en, this message translates to:
+  /// **'Agent decides medications'**
+  String get aiConsistencyAgentDecidesMeds;
+
+  /// No description provided for @aiConsistencyAgentNotAuthorizedMeds.
+  ///
+  /// In en, this message translates to:
+  /// **'Agent not authorized: medications'**
+  String get aiConsistencyAgentNotAuthorizedMeds;
+
+  /// No description provided for @aiConsistencyEditMedications.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Medications'**
+  String get aiConsistencyEditMedications;
+
+  /// No description provided for @aiConsistencyEditAgentAuthority.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Agent authority'**
+  String get aiConsistencyEditAgentAuthority;
+
+  /// No description provided for @aiConsistencyNoMedsYou.
+  ///
+  /// In en, this message translates to:
+  /// **'No medications (you)'**
+  String get aiConsistencyNoMedsYou;
+
+  /// No description provided for @aiConsistencyAgentMayConsentMeds.
+  ///
+  /// In en, this message translates to:
+  /// **'Agent may consent: medications'**
+  String get aiConsistencyAgentMayConsentMeds;
+
+  /// No description provided for @aiConsistencySetupAiInvite.
+  ///
+  /// In en, this message translates to:
+  /// **'Set up the free AI assistant for an additional AI-powered review that suggests gaps and things to double-check. Optional — the rule-based check above always runs without it.'**
+  String get aiConsistencySetupAiInvite;
+
+  /// No description provided for @aiConsistencyNoSuggestions.
+  ///
+  /// In en, this message translates to:
+  /// **'The AI did not return any suggestions.'**
+  String get aiConsistencyNoSuggestions;
+
+  /// No description provided for @aiConsistencyNotAdviceOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'{notAdvice} Optional suggestions based only on what you entered.'**
+  String aiConsistencyNotAdviceOptional(String notAdvice);
+
+  /// No description provided for @aiConsistencyCheckFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t run the consistency check.\n{error}'**
+  String aiConsistencyCheckFailed(String error);
+
+  /// No description provided for @aiConsistencyThingsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 thing} other{{count} things}}'**
+  String aiConsistencyThingsCount(int count);
+
+  /// No description provided for @aiConsistencyAllConsistent.
+  ///
+  /// In en, this message translates to:
+  /// **'Everything looks internally consistent.'**
+  String get aiConsistencyAllConsistent;
+
+  /// No description provided for @aiConsistencyWarningsOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'These won\'t block you from generating the PDF — they are warnings you can fix or ignore.'**
+  String get aiConsistencyWarningsOnly;
+
+  /// No description provided for @aiConsistencyNoContradictions.
+  ///
+  /// In en, this message translates to:
+  /// **'No cross-step contradictions detected.'**
+  String get aiConsistencyNoContradictions;
+
+  /// No description provided for @aiConsistencyRulesExplainer.
+  ///
+  /// In en, this message translates to:
+  /// **'The contradiction check above is built-in rules. When the AI assistant is set up, an additional AI review adds optional suggestions. Review anything before accepting — this screen warns; it doesn\'t block PDF generation.'**
+  String get aiConsistencyRulesExplainer;
+
+  /// No description provided for @aiConsistencyConflictHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'CONFLICT · {number} · {steps}'**
+  String aiConsistencyConflictHeader(int number, String steps);
+
+  /// No description provided for @aiConsistencyVs.
+  ///
+  /// In en, this message translates to:
+  /// **'vs'**
+  String get aiConsistencyVs;
+
+  /// No description provided for @crisisPlanHowIKnowIM.
+  ///
+  /// In en, this message translates to:
+  /// **'How I know I\'m not okay'**
+  String get crisisPlanHowIKnowIM;
+
+  /// No description provided for @crisisPlanHeadsUpThisSectionIs.
+  ///
+  /// In en, this message translates to:
+  /// **'Heads up: this section is yours alone — it isn\'t required by PA Act 194, but in practice it\'s the part agents and ER staff read first.'**
+  String get crisisPlanHeadsUpThisSectionIs;
+
+  /// No description provided for @permissionsOverviewOnlyWhatWeNeed.
+  ///
+  /// In en, this message translates to:
+  /// **'Only what we need.'**
+  String get permissionsOverviewOnlyWhatWeNeed;
+
+  /// No description provided for @permissionsOverviewPermissionsAreManagedByYour.
+  ///
+  /// In en, this message translates to:
+  /// **'Permissions are managed by your device, not by this app. Open your device\'s Settings → PA MHAD to grant, revoke, or review any of the above at any time.'**
+  String get permissionsOverviewPermissionsAreManagedByYour;
+
+  /// No description provided for @permissionsOverviewNoAnalyticsNoTrackingPixels.
+  ///
+  /// In en, this message translates to:
+  /// **'No analytics. No tracking pixels. No cookies. No third-party SDKs for advertising or measurement. The only outbound flows are the opt-in AI features (your chosen AI provider) and NLM medical-reference lookups, both with PII stripping at a single chokepoint.'**
+  String get permissionsOverviewNoAnalyticsNoTrackingPixels;
+
+  /// No description provided for @makeItFindableMakeItFindableInA.
+  ///
+  /// In en, this message translates to:
+  /// **'Make it findable in a crisis.'**
+  String get makeItFindableMakeItFindableInA;
+
+  /// No description provided for @makeItFindablePennsylvaniaHasNoStatewideDirective.
+  ///
+  /// In en, this message translates to:
+  /// **'Pennsylvania has no statewide directive registry, so the people in your life are the registry: make sure your agent, a trusted person, and your providers all know you have a directive and where to find it.'**
+  String get makeItFindablePennsylvaniaHasNoStatewideDirective;
+
+  /// No description provided for @makeItFindableUnderPaAct194A.
+  ///
+  /// In en, this message translates to:
+  /// **'Under PA Act 194, a valid directive your care team can find is meant to be followed. Findability is what makes it work.'**
+  String get makeItFindableUnderPaAct194A;
+
+  /// No description provided for @revocationAreYouSure.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure?'**
+  String get revocationAreYouSure;
+
+  /// No description provided for @revocationPutItInWritingSign.
+  ///
+  /// In en, this message translates to:
+  /// **'Put it in writing — sign and date a short statement that you are revoking this directive.'**
+  String get revocationPutItInWritingSign;
+
+  /// No description provided for @revocationTellYourAgentYourProviders.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell your agent, your providers, and anyone holding a copy.'**
+  String get revocationTellYourAgentYourProviders;
+
+  /// No description provided for @revocationDestroyOldCopiesOrClearly.
+  ///
+  /// In en, this message translates to:
+  /// **'Destroy old copies, or clearly mark them “REVOKED”.'**
+  String get revocationDestroyOldCopiesOrClearly;
+
+  /// No description provided for @revocationIfYouHaveAnyFurther.
+  ///
+  /// In en, this message translates to:
+  /// **'If you have any further questions about how revocation applies to you, it is wise to consult an attorney for clarification.'**
+  String get revocationIfYouHaveAnyFurther;
+
+  /// No description provided for @pastDirectiveDetailNoShareHistoryIsKept.
+  ///
+  /// In en, this message translates to:
+  /// **'No share history is kept — nothing is saved after you close the app, so this list is empty by design.'**
+  String get pastDirectiveDetailNoShareHistoryIsKept;
+
+  /// No description provided for @wizardAiRailFullView.
+  ///
+  /// In en, this message translates to:
+  /// **'Full view'**
+  String get wizardAiRailFullView;
+
+  /// No description provided for @wizardAiRailYourApiKeyStaysOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Your API key stays on this device and is only used to answer your questions. You can fill out the whole wizard without it.'**
+  String get wizardAiRailYourApiKeyStaysOn;
+
+  /// No description provided for @wizardAiRailReadingThisStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Reading this step…'**
+  String get wizardAiRailReadingThisStep;
+
+  /// No description provided for @wizardAiRailSuggestedForThisStep.
+  ///
+  /// In en, this message translates to:
+  /// **'SUGGESTED FOR THIS STEP'**
+  String get wizardAiRailSuggestedForThisStep;
+
+  /// No description provided for @wizardAiRailAskAnythingAboutThisStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask anything about this step — answers appear here, and in the full assistant.'**
+  String get wizardAiRailAskAnythingAboutThisStep;
+
+  /// No description provided for @wizardAiRailNeedHelpWithThisStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Need help with this step? Ask the AI'**
+  String get wizardAiRailNeedHelpWithThisStep;
+
+  /// No description provided for @wizardAiRailAiHelpIsOffThe.
+  ///
+  /// In en, this message translates to:
+  /// **'AI help is off. The step heads-up, suggested questions, photo auto-fill, and the chat below aren\'t available until you set up AI.'**
+  String get wizardAiRailAiHelpIsOffThe;
+
+  /// No description provided for @wizardAiRailCheckingThisStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Checking this step'**
+  String get wizardAiRailCheckingThisStep;
+
+  /// No description provided for @wizardAiRailFindAPaFacilityBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Find a PA facility by name or county…'**
+  String get wizardAiRailFindAPaFacilityBy;
+
+  /// No description provided for @wizardAiRailThinking.
+  ///
+  /// In en, this message translates to:
+  /// **'Thinking…'**
+  String get wizardAiRailThinking;
+
+  /// No description provided for @wizardAiRailAskAboutThisStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask about this step…'**
+  String get wizardAiRailAskAboutThisStep;
+
+  /// No description provided for @wizardAiRailSending.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending'**
+  String get wizardAiRailSending;
+
+  /// No description provided for @sideEffectsBringAnythingYouCheckAnd.
+  ///
+  /// In en, this message translates to:
+  /// **'Bring anything you check — and especially anything marked \"discuss with your doctor\" — to your doctor or pharmacist. This list never tells you to start, stop, or change a medication.'**
+  String get sideEffectsBringAnythingYouCheckAnd;
+
+  /// No description provided for @sideEffectsTheseArePossibleInteractionsDrawn.
+  ///
+  /// In en, this message translates to:
+  /// **'These are possible interactions drawn from the medications’ FDA labels, written as questions to ask. They are not a warning to stop or change anything yourself — only your doctor or pharmacist can advise on your specific case.'**
+  String get sideEffectsTheseArePossibleInteractionsDrawn;
+
+  /// No description provided for @sideEffectsAddTheMedicationsYouRe.
+  ///
+  /// In en, this message translates to:
+  /// **'Add the medications you\'re currently taking on the Medications step first, then come back here to check their common side effects.'**
+  String get sideEffectsAddTheMedicationsYouRe;
+
+  /// No description provided for @audioGuideToTranscribeYourRecordingIncluding.
+  ///
+  /// In en, this message translates to:
+  /// **'To transcribe, your recording — including any personal details you speak — is sent to Google\'s AI. On the free tier it may be retained and reviewed, and can\'t be recalled. Don\'t say anything you\'re not comfortable sending; you can always type sensitive fields by hand instead.'**
+  String get audioGuideToTranscribeYourRecordingIncluding;
+
+  /// No description provided for @ulyssesClauseIfFutureMeRefuses.
+  ///
+  /// In en, this message translates to:
+  /// **'If future-me refuses…'**
+  String get ulyssesClauseIfFutureMeRefuses;
+
+  /// No description provided for @ulyssesClauseStronglyRecommendedTalkWithA.
+  ///
+  /// In en, this message translates to:
+  /// **'Strongly recommended: talk with a peer specialist or clinician before saving. See \"Get help\" in Settings.'**
+  String get ulyssesClauseStronglyRecommendedTalkWithA;
+
+  /// No description provided for @aiSetupIsTheApiKeyReally.
+  ///
+  /// In en, this message translates to:
+  /// **'Is the API key really free?'**
+  String get aiSetupIsTheApiKeyReally;
+
+  /// No description provided for @aiSetupYesGoogleOffersAGenerous.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes. Google offers a generous free tier for Gemini. There is no credit card required and no charge for typical personal use.'**
+  String get aiSetupYesGoogleOffersAGenerous;
+
+  /// No description provided for @aiSetupWhatGoogleAccountShouldI.
+  ///
+  /// In en, this message translates to:
+  /// **'What Google account should I use?'**
+  String get aiSetupWhatGoogleAccountShouldI;
+
+  /// No description provided for @aiSetupAnyGoogleAccountWorksA.
+  ///
+  /// In en, this message translates to:
+  /// **'Any Google account works — a personal Gmail is fine. You do not need a Google Cloud billing account.'**
+  String get aiSetupAnyGoogleAccountWorksA;
+
+  /// No description provided for @aiSetupCanIRevokeTheKey.
+  ///
+  /// In en, this message translates to:
+  /// **'Can I revoke the key later?'**
+  String get aiSetupCanIRevokeTheKey;
+
+  /// No description provided for @aiSetupYesVisitAistudioGoogleCom.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes. Visit aistudio.google.com/apikey at any time to delete or regenerate your key. You can also remove it from this app using the trash icon in the top-right.'**
+  String get aiSetupYesVisitAistudioGoogleCom;
+
+  /// No description provided for @aiSetupWhatIfIDonT.
+  ///
+  /// In en, this message translates to:
+  /// **'What if I don\'t add a key?'**
+  String get aiSetupWhatIfIDonT;
+
+  /// No description provided for @aiSetupTheAppWorksFullyWithout.
+  ///
+  /// In en, this message translates to:
+  /// **'The app works fully without AI. The form wizard, PDF generation, educational content, and all other features do not require an API key. AI is purely optional.'**
+  String get aiSetupTheAppWorksFullyWithout;
+
+  /// No description provided for @accessibilitySettingsMakeItReadable.
+  ///
+  /// In en, this message translates to:
+  /// **'Make it readable.'**
+  String get accessibilitySettingsMakeItReadable;
+
+  /// No description provided for @accessibilitySettingsLegalTextIsAlwaysRendered.
+  ///
+  /// In en, this message translates to:
+  /// **'Legal text is always rendered in English to preserve PA Act 194 wording.'**
+  String get accessibilitySettingsLegalTextIsAlwaysRendered;
+
+  /// No description provided for @facilitatorYouDonTHaveTo.
+  ///
+  /// In en, this message translates to:
+  /// **'You don\'t have to do this alone.'**
+  String get facilitatorYouDonTHaveTo;
+
+  /// No description provided for @facilitatorPeerSpecialistAdvocateReferral.
+  ///
+  /// In en, this message translates to:
+  /// **'♥ Peer specialist / advocate referral'**
+  String get facilitatorPeerSpecialistAdvocateReferral;
+
+  /// No description provided for @facilitatorSomeoneIAlreadyTrust.
+  ///
+  /// In en, this message translates to:
+  /// **'👥 Someone I already trust'**
+  String get facilitatorSomeoneIAlreadyTrust;
+
+  /// No description provided for @facilitatorMyCareTeam.
+  ///
+  /// In en, this message translates to:
+  /// **'🧠 My care team'**
+  String get facilitatorMyCareTeam;
+
+  /// No description provided for @facilitatorPreferToDoItYourself.
+  ///
+  /// In en, this message translates to:
+  /// **'Prefer to do it yourself? That\'s fine — keep going from where you left off.'**
+  String get facilitatorPreferToDoItYourself;
+
+  /// No description provided for @moreSheetCallOrText98824.
+  ///
+  /// In en, this message translates to:
+  /// **'Call or text 988 · 24/7 support'**
+  String get moreSheetCallOrText98824;
+
+  /// No description provided for @moreSheetUploadADocumentPhotoOr.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload a document, photo, or recording'**
+  String get moreSheetUploadADocumentPhotoOr;
+
+  /// No description provided for @moreSheetPreviewAndExportYourDirective.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview and export your directive packet'**
+  String get moreSheetPreviewAndExportYourDirective;
+
+  /// No description provided for @moreSheetEraseThisSessionAndStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Erase this session and start fresh'**
+  String get moreSheetEraseThisSessionAndStart;
+
+  /// No description provided for @crisisSheetYouAreNotAlone.
+  ///
+  /// In en, this message translates to:
+  /// **'You are not alone.'**
+  String get crisisSheetYouAreNotAlone;
+
+  /// No description provided for @crisisSheetCallOrText988.
+  ///
+  /// In en, this message translates to:
+  /// **'Call or text 988'**
+  String get crisisSheetCallOrText988;
+
+  /// No description provided for @crisisSheetCall988Press1.
+  ///
+  /// In en, this message translates to:
+  /// **'Call 988, press 1'**
+  String get crisisSheetCall988Press1;
+
+  /// No description provided for @crisisSheetCallTextChat.
+  ///
+  /// In en, this message translates to:
+  /// **'Call · text · chat'**
+  String get crisisSheetCallTextChat;
 }
 
 class _AppLocalizationsDelegate

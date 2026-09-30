@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ai/ai_provider.dart';
 
@@ -34,7 +35,7 @@ Future<bool> showAutofillConsentDialog(
         barrierDismissible: false,
         builder: (ctx) => AlertDialog(
           icon: const Icon(Icons.privacy_tip_outlined),
-          title: const Text('Before you upload'),
+          title: Text(context.l10n.aiConsentDialogBeforeYouUpload),
           content: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -72,17 +73,12 @@ Future<bool> showAutofillConsentDialog(
                   ),
                 ),
                 const SizedBox(height: 10),
-                const Text(
-                  'Nothing is saved to your directive automatically — you '
-                  'review every field the AI fills in before it is applied.',
+                Text(
+                  context.l10n.aiConsentDialogNothingIsSavedToYour,
                 ),
                 const SizedBox(height: 10),
-                const Text(
-                  'Uploading is only a shortcut, never required:\n'
-                  '• Black out anything you don\'t want sent (ID or card '
-                  'numbers, other people\'s details) before uploading.\n'
-                  '• Or skip the upload and type any field by hand — typed '
-                  'fields stay on your device and are never sent to the AI.',
+                Text(
+                  context.l10n.aiConsentDialogUploadingIsOnlyAShortcut,
                 ),
               ],
             ),
@@ -90,11 +86,11 @@ Future<bool> showAutofillConsentDialog(
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx, false),
-              child: const Text('Cancel'),
+              child: Text(context.l10n.cancel),
             ),
             FilledButton(
               onPressed: () => Navigator.pop(ctx, true),
-              child: const Text('Send to the AI'),
+              child: Text(context.l10n.aiConsentDialogSendToTheAi),
             ),
           ],
         ),
@@ -118,7 +114,7 @@ Future<bool> showAudioConsentDialog(
         barrierDismissible: false,
         builder: (ctx) => AlertDialog(
           icon: const Icon(Icons.mic_none),
-          title: const Text('Transcribe with AI'),
+          title: Text(context.l10n.aiConsentDialogTranscribeWithAi),
           content: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -155,10 +151,8 @@ Future<bool> showAudioConsentDialog(
                   ),
                 ),
                 const SizedBox(height: 10),
-                const Text(
-                  'You review the text before it goes into your form. Prefer not '
-                  'to? Tap Cancel to use your device\'s built-in dictation '
-                  'instead, or just type — neither sends audio to the AI.',
+                Text(
+                  context.l10n.aiConsentDialogYouReviewTheTextBefore,
                 ),
               ],
             ),
@@ -166,11 +160,11 @@ Future<bool> showAudioConsentDialog(
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx, false),
-              child: const Text('Cancel'),
+              child: Text(context.l10n.cancel),
             ),
             FilledButton(
               onPressed: () => Navigator.pop(ctx, true),
-              child: const Text('Use AI'),
+              child: Text(context.l10n.aiConsentDialogUseAi),
             ),
           ],
         ),
@@ -190,20 +184,18 @@ Future<bool> showAiConsentDialog(
     context: context,
     barrierDismissible: false,
     builder: (ctx) => AlertDialog(
-      title: const Text('AI Data Notice'),
+      title: Text(context.l10n.aiConsentDialogAiDataNotice),
       content: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
-              'Important: Please read before continuing.\n',
+            Text(
+              context.l10n.aiConsentDialogImportantPleaseReadBeforeContinuing,
               style: TextStyle(fontWeight: FontWeight.w600),
             ),
-            const Text(
-              '• This AI assistant is NOT a therapist, doctor, or lawyer. '
-              'It provides general information about PA Mental Health Advance '
-              'Directives only.\n',
+            Text(
+              context.l10n.aiConsentDialogThisAiAssistantIsNot,
             ),
             Text(
               '• Text you enter will be sent to ${provider.label} for AI '
@@ -222,13 +214,7 @@ Future<bool> showAiConsentDialog(
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      'NEVER enter personal information (full name, date of '
-                      'birth, Social Security number, address, phone number, '
-                      'email) into the AI chat or AI-powered features.\n\n'
-                      'The app automatically strips common personal data, but '
-                      'this is not guaranteed. Personal information fields '
-                      'must be filled in manually — they are stored on your '
-                      'device only and never sent to the AI.',
+                      context.l10n.aiConsentDialogNeverEnterPersonalInformationFull,
                       style: TextStyle(
                         color: cs.onErrorContainer,
                         fontSize: 13,
@@ -250,11 +236,11 @@ Future<bool> showAiConsentDialog(
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(ctx, false),
-          child: const Text('Not Now'),
+          child: Text(context.l10n.aiConsentDialogNotNow),
         ),
         FilledButton(
           onPressed: () => Navigator.pop(ctx, true),
-          child: const Text('I Authorize'),
+          child: Text(context.l10n.aiConsentDialogIAuthorize),
         ),
       ],
     ),

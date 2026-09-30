@@ -1,6 +1,7 @@
 ﻿import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/ui/widgets/design/design_card.dart';
 import 'package:mhad/ui/widgets/design/status_views.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -43,17 +44,17 @@ class PastDirectiveDetailScreen extends ConsumerWidget {
       body: Column(
         children: [
           WizardHeader(
-            backLabel: 'Past directives',
+            backLabel: context.l10n.homePastDirectives,
             onBack: () => Navigator.of(context).maybePop(),
             actionLabel: '',
           ),
           Expanded(
             child: directiveAsync.when(
-              loading: () => const PageLoading(label: 'Loading this directive'),
+              loading: () => PageLoading(label: context.l10n.pastDirectiveDetailLoadingThisDirective),
               error: (e, _) => Center(child: Text('Unable to load: $e')),
               data: (d) {
                 if (d == null) {
-                  return const Center(child: Text('Directive not found.'));
+                  return Center(child: Text(context.l10n.wizardDirectiveNotFound));
                 }
                 return _Body(directive: d, isPrivate: isPrivate);
               },
@@ -75,23 +76,21 @@ class _Body extends ConsumerWidget {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Delete from this device?'),
-        content: const Text(
-          'This removes the saved directive from this device. The legal '
-          'effect of any previously-signed paper copy is unchanged. This '
-          'cannot be undone.',
+        title: Text(context.l10n.pastDirectiveDetailDeleteFromThisDevice),
+        content: Text(
+          context.l10n.pastDirectiveDetailThisRemovesTheSavedDirective,
         ),
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(ctx, false),
-              child: const Text('Cancel')),
+              child: Text(context.l10n.cancel)),
           FilledButton(
             onPressed: () => Navigator.pop(ctx, true),
             style: FilledButton.styleFrom(
               backgroundColor: cs.error,
               foregroundColor: cs.onError,
             ),
-            child: const Text('Delete'),
+            child: Text(context.l10n.delete),
           ),
         ],
       ),
@@ -102,7 +101,7 @@ class _Body extends ConsumerWidget {
         .deleteDirective(directive.id);
     if (!context.mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Directive deleted from this device.')),
+      SnackBar(content: Text(context.l10n.pastDirectiveDetailDirectiveDeletedFromThisDevice)),
     );
     unawaited(Navigator.of(context).maybePop());
   }
@@ -160,15 +159,14 @@ class _Body extends ConsumerWidget {
         // em-dash to match the prototype's "no data" treatment.
         _DocPreviewCard(directive: directive),
         const SizedBox(height: 20),
-        const SectionLabel('Who had a copy'),
+        SectionLabel(context.l10n.pastDirectiveDetailWhoHadACopy),
         const SizedBox(height: 6),
         if (!isPrivate)
-          const InfoBanner(
+          InfoBanner(
             icon: Icons.privacy_tip_outlined,
             variant: InfoBannerVariant.info,
             text:
-                'No share history is kept — nothing is saved after you close '
-                'the app, so this list is empty by design.',
+                context.l10n.pastDirectiveDetailNoShareHistoryIsKept,
           )
         else
           Card(
@@ -178,14 +176,12 @@ class _Body extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'No share log entries yet.',
+                    context.l10n.pastDirectiveDetailNoShareLogEntriesYet,
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    "We don't track delivery or receipt confirmation (that "
-                    'would need a server). Add entries manually as you '
-                    'distribute copies.',
+                    context.l10n.pastDirectiveDetailWeDonTTrackDelivery,
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ],
@@ -194,25 +190,25 @@ class _Body extends ConsumerWidget {
           ),
 
         const SizedBox(height: 16),
-        const SectionLabel('Actions'),
+        SectionLabel(context.l10n.pastDirectiveDetailActions),
         const SizedBox(height: 6),
         // Editorial action rows — matches prototype ScrPastDetail L267-292.
         // Tone variants drive icon-tile color: primary for the recommended
         // "Copy to new directive" CTA, danger for "Delete from this
         // device", neutral for the rest.
-        const ActionRow(
+        ActionRow(
           tone: ActionRowTone.primary,
           icon: Icons.swap_vert,
-          title: 'Copy to a new directive',
+          title: context.l10n.pastDirectiveDetailCopyToANewDirective,
           subtitle:
-              'Start with these answers — coming with the renewal flow',
+              context.l10n.pastDirectiveDetailStartWithTheseAnswersComing,
           onTap: null,
         ),
         const SizedBox(height: 8),
         ActionRow(
           icon: Icons.open_in_new,
-          title: 'Open the PDF',
-          subtitle: 'Print or save for your records',
+          title: context.l10n.pastDirectiveDetailOpenThePdf,
+          subtitle: context.l10n.pastDirectiveDetailPrintOrSaveForYour,
           onTap: () =>
               context.push(AppRoutes.exportRoute(directive.id)),
         ),
@@ -220,7 +216,7 @@ class _Body extends ConsumerWidget {
         ActionRow(
           tone: ActionRowTone.danger,
           icon: Icons.delete_outline,
-          title: 'Delete from this device',
+          title: context.l10n.pastDirectiveDetailDeleteFromThisDevice2,
           subtitle: 'The directive remains $status regardless',
           onTap: () => _confirmDelete(context, ref),
         ),
@@ -244,7 +240,7 @@ class _PastDetailTitle extends StatelessWidget {
     return Text.rich(
       TextSpan(
         children: [
-          const TextSpan(text: 'Directive · '),
+          TextSpan(text: context.l10n.pastDirectiveDetailDirective),
           TextSpan(
             text: year,
             style: TextStyle(color: p.primary),
@@ -326,7 +322,7 @@ class _DocPreviewCard extends ConsumerWidget {
                           overflow: TextOverflow.ellipsis,
                         ),
                         Text(
-                          'Generated on demand · ~6 pages',
+                          context.l10n.pastDirectiveDetailGeneratedOnDemand6Pages,
                           style: TextStyle(
                             fontFamily: kSansFamily,
                             fontSize: 12,
@@ -340,7 +336,7 @@ class _DocPreviewCard extends ConsumerWidget {
                     onPressed: () => context
                         .push(AppRoutes.exportRoute(directive.id)),
                     icon: const Icon(Icons.visibility_outlined, size: 14),
-                    label: const Text('Preview'),
+                    label: Text(context.l10n.wizardPreview),
                     style: TextButton.styleFrom(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 4),
@@ -357,13 +353,13 @@ class _DocPreviewCard extends ConsumerWidget {
               const SizedBox(height: 10),
               Row(
                 children: [
-                  Expanded(child: _SigCol(label: 'SIGNED BY', value: principal)),
+                  Expanded(child: _SigCol(label: context.l10n.pastDirectiveDetailSignedBy, value: principal)),
                   Expanded(
                       child: _SigCol(
-                          label: 'WITNESS 1', value: witnessShort(1))),
+                          label: context.l10n.pastDirectiveDetailWitness1, value: witnessShort(1))),
                   Expanded(
                       child: _SigCol(
-                          label: 'WITNESS 2', value: witnessShort(2))),
+                          label: context.l10n.pastDirectiveDetailWitness2, value: witnessShort(2))),
                 ],
               ),
             ],

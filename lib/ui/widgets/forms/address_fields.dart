@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/services/geo_service.dart';
 import 'package:mhad/utils/input_formatters.dart';
 
@@ -89,8 +90,8 @@ class _AddressFieldsState extends State<AddressFields> {
         SizedBox(height: widget.gap),
         TextFormField(
           controller: widget.line2,
-          decoration: const InputDecoration(
-            labelText: 'Apt, suite, unit, etc.',
+          decoration: InputDecoration(
+            labelText: context.l10n.personalInfoStepAddress2,
             border: OutlineInputBorder(),
           ),
           textCapitalization: TextCapitalization.words,
@@ -99,8 +100,8 @@ class _AddressFieldsState extends State<AddressFields> {
         SizedBox(height: widget.gap),
         TextFormField(
           controller: widget.city,
-          decoration: const InputDecoration(
-            labelText: 'City',
+          decoration: InputDecoration(
+            labelText: context.l10n.city,
             border: OutlineInputBorder(),
           ),
           textCapitalization: TextCapitalization.words,
@@ -113,8 +114,8 @@ class _AddressFieldsState extends State<AddressFields> {
             Expanded(
               child: TextFormField(
                 controller: widget.state,
-                decoration: const InputDecoration(
-                  labelText: 'State',
+                decoration: InputDecoration(
+                  labelText: context.l10n.state,
                   border: OutlineInputBorder(),
                 ),
                 textCapitalization: TextCapitalization.characters,
@@ -133,9 +134,9 @@ class _AddressFieldsState extends State<AddressFields> {
               child: TextFormField(
                 controller: widget.zip,
                 decoration: InputDecoration(
-                  labelText: 'ZIP',
-                  hintText: '12345 or 12345-6789',
-                  helperText: 'Tap the icon to fill city & state',
+                  labelText: context.l10n.personalInfoStepZip,
+                  hintText: context.l10n.personalInfoStepZipHint,
+                  helperText: context.l10n.addressFieldsTapTheIconToFill,
                   border: const OutlineInputBorder(),
                   suffixIcon: _lookingUp
                       ? const Padding(
@@ -148,7 +149,7 @@ class _AddressFieldsState extends State<AddressFields> {
                         )
                       : IconButton(
                           icon: const Icon(Icons.travel_explore),
-                          tooltip: 'Fill city & state from ZIP',
+                          tooltip: context.l10n.addressFieldsFillCityStateFromZip,
                           onPressed: _lookupFromZip,
                         ),
                 ),

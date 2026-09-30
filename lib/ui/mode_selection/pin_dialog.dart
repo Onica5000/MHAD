@@ -1,4 +1,5 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/services/pin_auth_service.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 
@@ -57,15 +58,14 @@ class _PinSetupDialogState extends State<PinSetupDialog> {
     final cs = Theme.of(context).colorScheme;
 
     return AlertDialog(
-      title: const Text('Create Passcode'),
+      title: Text(context.l10n.pinDialogCreatePasscode),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Biometric authentication is not available on this device. '
-              'Create a passcode to protect your private data.',
+              context.l10n.pinDialogBiometricAuthenticationIsNotAvailable,
               style: TextStyle(color: cs.onSurfaceVariant, fontSize: 14),
             ),
             const SizedBox(height: 20),
@@ -74,8 +74,8 @@ class _PinSetupDialogState extends State<PinSetupDialog> {
               obscureText: _obscure,
               autofocus: true,
               decoration: InputDecoration(
-                labelText: 'Passcode',
-                hintText: 'At least 4 characters',
+                labelText: context.l10n.pinDialogPasscode,
+                hintText: context.l10n.pinDialogAtLeast4Characters,
                 border: const OutlineInputBorder(),
                 suffixIcon: IconButton(
                   icon: Icon(
@@ -92,8 +92,8 @@ class _PinSetupDialogState extends State<PinSetupDialog> {
               controller: _confirmController,
               focusNode: _confirmFocus,
               obscureText: _obscure,
-              decoration: const InputDecoration(
-                labelText: 'Confirm Passcode',
+              decoration: InputDecoration(
+                labelText: context.l10n.pinDialogConfirmPasscode,
                 border: OutlineInputBorder(),
               ),
               onSubmitted: (_) => _submit(),
@@ -109,11 +109,11 @@ class _PinSetupDialogState extends State<PinSetupDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancel'),
+          child: Text(context.l10n.cancel),
         ),
         FilledButton(
           onPressed: _submit,
-          child: const Text('Create'),
+          child: Text(context.l10n.pinDialogCreate),
         ),
       ],
     );
@@ -278,7 +278,7 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'PA MHAD',
+                        context.l10n.pinDialogPaMhad,
                         style: TextStyle(
                           fontFamily: kSansFamily,
                           fontSize: 13,
@@ -288,7 +288,7 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
                         ),
                       ),
                       Text(
-                        'PRIVATE MODE · LOCKED',
+                        context.l10n.pinDialogPrivateModeLocked,
                         style: TextStyle(
                           fontFamily: kMonoFamily,
                           fontFamilyFallback: const [
@@ -307,7 +307,7 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
                   const Spacer(),
                   IconButton(
                     icon: Icon(Icons.close, color: p.textMuted, size: 22),
-                    tooltip: 'Cancel',
+                    tooltip: context.l10n.cancel,
                     onPressed: _verifying
                         ? null
                         : () => Navigator.of(context)
@@ -360,9 +360,9 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
               Text.rich(
                 TextSpan(
                   children: [
-                    const TextSpan(text: 'Use your '),
+                    TextSpan(text: context.l10n.pinDialogUseYour),
                     TextSpan(
-                      text: 'passcode.',
+                      text: context.l10n.pinDialogPasscode2,
                       style: TextStyle(color: p.primary),
                     ),
                   ],
@@ -380,7 +380,7 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
               ),
               const SizedBox(height: 8),
               Text(
-                'Enter your passcode to unlock private mode.',
+                context.l10n.pinDialogEnterYourPasscodeToUnlock,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: kSansFamily,
@@ -522,7 +522,7 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
                           child: CircularProgressIndicator(
                               strokeWidth: 2),
                         )
-                      : const Text('Unlock'),
+                      : Text(context.l10n.adminUpdateUnlock),
                 ),
               ),
               const Spacer(),
@@ -532,7 +532,7 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
                     : () => Navigator.of(context)
                         .pop(PinUnlockResult.switchToPublic),
                 child: Text(
-                  'Switch to public mode',
+                  context.l10n.pinDialogSwitchToPublicMode,
                   style: TextStyle(color: p.textMuted, fontSize: 13),
                 ),
               ),

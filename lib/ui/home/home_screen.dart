@@ -2,6 +2,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/ui/widgets/design/status_views.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -159,8 +160,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     // Start-a-new-directive picker (the form-type page was
                     // retired — picking happens on the dashboard now).
                     SectionLabel(directives.isEmpty
-                        ? 'Start your directive'
-                        : 'Start a new directive'),
+                        ? context.l10n.homeStartYourDirective
+                        : context.l10n.homeStartANewDirective),
                     const SizedBox(height: 12),
                     const DirectiveFormChoice(),
                     if (drafts.isNotEmpty) ...[
@@ -190,7 +191,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             // Tools — inline on narrow; relocated to the right sidebar on wide.
             if (!isWide) ...[
               const SizedBox(height: 22),
-              const SectionLabel('Tools'),
+              SectionLabel(context.l10n.homeTools),
               const SizedBox(height: 8),
               const ToolsGrid(),
             ],
@@ -212,7 +213,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SectionLabel('Past directives'),
+                    SectionLabel(context.l10n.homePastDirectives),
                     const SizedBox(height: 8),
                     for (final d in past) ...[
                       _PastDirectiveRow(
@@ -240,7 +241,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 );
               },
               loading: () =>
-                  const PageLoading(label: 'Loading your directives'),
+                  PageLoading(label: context.l10n.homeLoadingYourDirectives),
               error: (e, _) {
                 debugPrint('Error loading directives: $e');
                 // Don't silently render the form picker — that reads as
@@ -279,17 +280,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }) {
     // Start-a-new-directive picker — the dashboard IS the form-type picker now
     // (the separate form-type page was retired and folded in here).
-    const newDirective = Column(
+    final newDirective = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SectionLabel('Start a new directive'),
+        SectionLabel(context.l10n.homeStartANewDirective),
         SizedBox(height: 12),
         DirectiveFormChoice(),
       ],
     );
 
     return directivesAsync.when(
-      loading: () => const PageLoading(label: 'Loading your directives'),
+      loading: () => PageLoading(label: context.l10n.homeLoadingYourDirectives),
       error: (e, _) {
         debugPrint('Error loading directives: $e');
         // Same as the narrow branch: surface the failure instead of
@@ -381,7 +382,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Make it findable in a crisis',
+                              context.l10n.homeMakeItFindableInA,
                               style: TextStyle(
                                 fontFamily: kSansFamily,
                                 fontSize: 14,
@@ -390,8 +391,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               ),
                             ),
                             Text(
-                              'Share copies, carry the wallet card, tell '
-                              'your people where it is',
+                              context.l10n.homeShareCopiesCarryTheWallet,
                               style: TextStyle(
                                 fontFamily: kSansFamily,
                                 fontSize: 12,
@@ -410,7 +410,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             // Past directives — 2-column grid filling the full width.
             if (past.isNotEmpty) ...[
               const SizedBox(height: 28),
-              const SectionLabel('Past directives'),
+              SectionLabel(context.l10n.homePastDirectives),
               const SizedBox(height: 10),
               LayoutBuilder(
                 builder: (context, c) {
@@ -463,11 +463,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       await WebSessionCache.clear();
 
       if (mounted && context.mounted) {
-        announce(context,
-            'Session restored. Personal info must be re-entered.');
+        announce(context, context.l10n.homeSessionRestoredPersonalInfoMust);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Session restored. Personal info must be re-entered.'),
+          SnackBar(
+            content: Text(context.l10n.homeSessionRestoredPersonalInfoMust),
             duration: Duration(seconds: 4),
           ),
         );
@@ -490,19 +489,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('Delete directive?'),
-        content: const Text(
-            'All data for this directive will be permanently deleted.'),
+        title: Text(context.l10n.homeDeleteDirective),
+        content: Text(
+            context.l10n.homeAllDataForThisDirective),
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: const Text('Cancel')),
+              child: Text(context.l10n.cancel)),
           TextButton(
               onPressed: () => Navigator.pop(context, true),
               style: TextButton.styleFrom(
                   foregroundColor:
                       Theme.of(context).colorScheme.error),
-              child: const Text('Delete')),
+              child: Text(context.l10n.delete)),
         ],
       ),
     );
@@ -518,10 +517,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     var undone = false;
     final controller = ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: const Text('Directive deleted.'),
+        content: Text(context.l10n.homeDirectiveDeleted),
         duration: const Duration(seconds: 6),
         action: SnackBarAction(
-          label: 'Undo',
+          label: context.l10n.aiSuggestUndo,
           onPressed: () {
             undone = true;
             notifier.update((s) => s.difference({id}));
@@ -547,16 +546,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final label = await showDialog<String>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Rename directive'),
+        title: Text(context.l10n.homeRenameDirective),
         content: TextField(
           controller: ctrl,
           autofocus: true,
           maxLength: 60,
-          decoration: const InputDecoration(
-            labelText: 'Display label',
+          decoration: InputDecoration(
+            labelText: context.l10n.homeDisplayLabel,
             helperText:
-                'Shown only in this list \u2014 never printed on the form. '
-                'Leave empty to use the name on the directive.',
+                context.l10n.homeShownOnlyInThisList,
             helperMaxLines: 3,
           ),
           onSubmitted: (v) => Navigator.pop(ctx, v),
@@ -564,11 +562,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel'),
+            child: Text(context.l10n.cancel),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(ctx, ctrl.text),
-            child: const Text('Save'),
+            child: Text(context.l10n.save),
           ),
         ],
       ),
@@ -586,21 +584,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('Renew Directive?'),
-        content: const Text(
-          'This will create a new directive with the same treatment '
-          'preferences and agent designations. Personal information, '
-          'witnesses, and signatures will need to be re-entered.\n\n'
-          'The original directive will remain unchanged.',
+        title: Text(context.l10n.homeRenewDirective),
+        content: Text(
+          context.l10n.homeThisWillCreateANew,
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(context.l10n.cancel),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Renew'),
+            child: Text(context.l10n.homeRenew),
           ),
         ],
       ),
@@ -632,26 +627,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('Amend this directive?'),
-        content: const Text(
-          'Amending opens this directive so you can change it — your existing '
-          'answers stay in place.\n\n'
-          'Important: an amendment is only valid once you re-sign it on paper '
-          'with two adult witnesses, the same way as the original (PA Act 194). '
-          'Until you re-sign, this directive will show as an unsigned draft, '
-          'and any printed copies of the old version stay in effect until you '
-          'replace them.\n\n'
-          'Prefer to keep the signed original untouched? Use “Renew (copy to '
-          'new)” instead.',
+        title: Text(context.l10n.homeAmendThisDirective),
+        content: Text(
+          context.l10n.homeAmendingOpensThisDirectiveSo,
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(context.l10n.cancel),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Amend'),
+            child: Text(context.l10n.homeAmend),
           ),
         ],
       ),
@@ -720,7 +707,7 @@ class _PrivacyByDesignCard extends StatelessWidget {
               Icon(Icons.lock_outline, size: 16, color: p.primary),
               const SizedBox(width: 8),
               Text(
-                'Private by design',
+                context.l10n.homePrivateByDesign,
                 style: TextStyle(
                   fontFamily: kSansFamily,
                   fontSize: 14,
@@ -737,12 +724,8 @@ class _PrivacyByDesignCard extends StatelessWidget {
             // "nothing is saved" messaging elsewhere. Native keeps the
             // on-device phrasing.
             kIsWeb
-                ? 'Your directive never leaves this browser — no server, no '
-                    'account, no tracking. It lives only in this session, and '
-                    'only you choose who to share it with.'
-                : 'Your directive stays on your device. No ads, no tracking, '
-                    'no selling your data — only you choose who to share it '
-                    'with.',
+                ? context.l10n.homePrivateBodyWeb
+                : context.l10n.homePrivateBodyDevice,
             style: TextStyle(
               fontFamily: kSansFamily,
               fontSize: 13,
@@ -824,9 +807,9 @@ class _GreetingRow extends StatelessWidget {
         inner = EditorialHeading(
           textSpan: TextSpan(
             children: [
-              const TextSpan(text: 'Your voice,\n'),
+              TextSpan(text: context.l10n.homeYourVoice),
               TextSpan(
-                text: 'in your words.',
+                text: context.l10n.homeInYourWords,
                 style: TextStyle(color: p.primary),
               ),
             ],
@@ -844,9 +827,9 @@ class _GreetingRow extends StatelessWidget {
               child: Text.rich(
                 TextSpan(
                   children: [
-                    TextSpan(text: 'Hi, $firstName.\n'),
+                    TextSpan(text: context.l10n.homeHiName(firstName)),
                     TextSpan(
-                      text: "Let's keep your voice clear.",
+                      text: context.l10n.homeLetSKeepYourVoice,
                       style: TextStyle(color: p.textMuted, fontSize: 22),
                     ),
                   ],
@@ -865,7 +848,7 @@ class _GreetingRow extends StatelessWidget {
             const SizedBox(width: 12),
             // Avatar pill — initials in primaryLight chip, matches prototype.
             Semantics(
-              label: 'Profile $firstName',
+              label: context.l10n.homeProfileA11y(firstName),
               child: Container(
                 width: 40,
                 height: 40,
@@ -907,8 +890,8 @@ class _PublicGuestGreeting extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Text(
-      "Let's get started.",
+    return Text(
+      context.l10n.homeLetSGetStarted,
       style: TextStyle(
         fontFamily: 'Instrument Serif',
         fontFamilyFallback: ['Georgia', 'serif'],
@@ -932,13 +915,13 @@ class _DirectivesLoadError extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return EmptyState(
       icon: Icons.cloud_off_outlined,
-      title: "Couldn't load your directives.",
-      message: 'Nothing was lost — this is a display problem, not a data one.',
+      title: context.l10n.homeCouldnTLoadYourDirectives,
+      message: context.l10n.homeNothingWasLostThisIs,
       announce: true,
       action: OutlinedButton.icon(
         onPressed: () => ref.invalidate(allDirectivesProvider),
         icon: const Icon(Icons.refresh),
-        label: const Text('Retry'),
+        label: Text(context.l10n.retry),
       ),
     );
   }
@@ -972,7 +955,7 @@ class _PastDirectiveRow extends StatelessWidget {
     this.onRename,
   });
 
-  String _subLine() {
+  String _subLine(AppLocalizations l) {
     final status = directive.status;
     final updated = DateTime.fromMillisecondsSinceEpoch(directive.updatedAt);
     final stamp = formatShortDate(updated);
@@ -982,27 +965,27 @@ class _PastDirectiveRow extends StatelessWidget {
           formTypeFromName(directive.formType) ?? FormType.combined;
       final total = formType.steps.length;
       final step = (directive.lastStepIndex + 1).clamp(1, total);
-      return 'Draft · step $step of $total · $stamp';
+      return l.homeCardDraft(step, total, stamp);
     }
     return switch (status) {
       // "Prepared", not "Complete": landing on Sign stamps executionDate
       // (sign_screen.dart), but the app cannot know a paper signature
       // actually happened — don't overclaim (2026-07-11 UX audit B6).
-      'complete' => 'Prepared · $stamp',
-      'expired' => 'Expired · revoke or copy to new',
-      'revoked' => 'Revoked · $stamp',
+      'complete' => l.homeCardPrepared(stamp),
+      'expired' => l.homeCardExpired,
+      'revoked' => l.homeCardRevoked(stamp),
       _ => stamp,
     };
   }
 
-  String _nameLine() {
+  String _nameLine(AppLocalizations l) {
     final year = DateTime.fromMillisecondsSinceEpoch(directive.updatedAt).year;
     // User-chosen label wins (Rename action, UX audit B11); fall back to
     // the principal's name.
     final label = directive.displayLabel.trim();
     if (label.isNotEmpty) return '$label · $year';
     final n = directive.fullName.trim();
-    return n.isEmpty ? 'Directive · $year' : '$n · $year';
+    return n.isEmpty ? l.homeCardDirectiveYear(year) : '$n · $year';
   }
 
   @override
@@ -1010,7 +993,8 @@ class _PastDirectiveRow extends StatelessWidget {
     final p = Theme.of(context).mhadPalette;
     return Semantics(
       button: true,
-      label: '${_nameLine()}. ${_subLine()}. Tap to open.',
+      label: context.l10n
+          .homeCardA11y(_nameLine(context.l10n), _subLine(context.l10n)),
       child: HoverLift(
         radius: 12,
         child: Material(
@@ -1036,7 +1020,7 @@ class _PastDirectiveRow extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        _nameLine(),
+                        _nameLine(context.l10n),
                         style: TextStyle(
                           fontFamily: kSansFamily,
                           fontSize: 14,
@@ -1045,7 +1029,7 @@ class _PastDirectiveRow extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        _subLine(),
+                        _subLine(context.l10n),
                         style: TextStyle(
                           fontFamily: kSansFamily,
                           fontSize: 12,
@@ -1065,7 +1049,7 @@ class _PastDirectiveRow extends StatelessWidget {
                   constraints:
                       const BoxConstraints(minWidth: 40, minHeight: 40),
                   icon: Icon(Icons.more_horiz, color: p.textMuted),
-                  tooltip: 'More',
+                  tooltip: context.l10n.navMore,
                   onPressed: () => _showActions(context),
                 ),
               ],
@@ -1094,9 +1078,9 @@ class _PastDirectiveRow extends StatelessWidget {
                 ListTile(
                   leading: Icon(Icons.drive_file_rename_outline,
                       color: p.primary),
-                  title: const Text('Rename'),
-                  subtitle: const Text(
-                      'Label shown in this list only — never printed'),
+                  title: Text(context.l10n.homeRename),
+                  subtitle: Text(
+                      context.l10n.homeLabelShownInThisList),
                   onTap: () {
                     Navigator.pop(sheetCtx);
                     onRename!();
@@ -1107,7 +1091,7 @@ class _PastDirectiveRow extends StatelessWidget {
                   leading: Icon(Icons.ios_share, color: p.primary),
                   // "Download & print" everywhere (sidebar, More sheet, and
                   // here) — one name per destination (UX audit C6).
-                  title: const Text('Download & print'),
+                  title: Text(context.l10n.navDownloadPrint),
                   onTap: () {
                     Navigator.pop(sheetCtx);
                     onExport!();
@@ -1116,7 +1100,7 @@ class _PastDirectiveRow extends StatelessWidget {
               if (onRenew != null)
                 ListTile(
                   leading: Icon(Icons.refresh, color: p.primary),
-                  title: const Text('Renew (copy to new)'),
+                  title: Text(context.l10n.homeRenewCopyToNew),
                   onTap: () {
                     Navigator.pop(sheetCtx);
                     onRenew!();
@@ -1125,8 +1109,8 @@ class _PastDirectiveRow extends StatelessWidget {
               if (onAmend != null)
                 ListTile(
                   leading: Icon(Icons.edit_note, color: p.primary),
-                  title: const Text('Amend (edit this one)'),
-                  subtitle: const Text('Requires re-signing & re-witnessing'),
+                  title: Text(context.l10n.homeAmendEditThisOne),
+                  subtitle: Text(context.l10n.homeRequiresReSigningReWitnessing),
                   onTap: () {
                     Navigator.pop(sheetCtx);
                     onAmend!();
@@ -1136,7 +1120,7 @@ class _PastDirectiveRow extends StatelessWidget {
                 ListTile(
                   leading: Icon(Icons.cancel_outlined,
                       color: Theme.of(sheetCtx).colorScheme.error),
-                  title: const Text('Revoke'),
+                  title: Text(context.l10n.homeRevoke),
                   onTap: () {
                     Navigator.pop(sheetCtx);
                     onRevoke!();
@@ -1145,7 +1129,7 @@ class _PastDirectiveRow extends StatelessWidget {
               ListTile(
                 leading: Icon(Icons.delete_outline,
                     color: Theme.of(sheetCtx).colorScheme.error),
-                title: const Text('Delete'),
+                title: Text(context.l10n.delete),
                 onTap: () {
                   Navigator.pop(sheetCtx);
                   onDelete();

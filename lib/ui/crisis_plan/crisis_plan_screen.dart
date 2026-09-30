@@ -2,6 +2,7 @@
 
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/providers/app_providers.dart';
@@ -112,7 +113,7 @@ class _CrisisPlanScreenState extends ConsumerState<CrisisPlanScreen> {
       // AppBar — the "How I know I'm not okay" headline owns the title.
       body: Column(children: [
         WizardHeader(
-          backLabel: 'Back',
+          backLabel: context.l10n.back,
           onBack: () => Navigator.of(context).maybePop(),
           actionLabel: '',
         ),
@@ -124,15 +125,14 @@ class _CrisisPlanScreenState extends ConsumerState<CrisisPlanScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SectionLabel('Optional add-on · Crisis plan'),
+                SectionLabel(context.l10n.crisisPlanOptionalAddOnCrisisPlan),
                 const SizedBox(height: 6),
                 // Headline bumped 30 -> 38pt to match prototype L446.
-                const EditorialHeading(
-                    text: "How I know I'm not okay", size: 38),
+                EditorialHeading(
+                    text: context.l10n.crisisPlanHowIKnowIM, size: 38),
                 const SizedBox(height: 6),
                 Text(
-                  'Help the people around you spot trouble early — and know '
-                  'what actually helps you when they do.',
+                  context.l10n.crisisPlanHelpThePeopleAroundYou,
                   style: TextStyle(
                     fontFamily: kSansFamily,
                     fontSize: 14,
@@ -145,7 +145,7 @@ class _CrisisPlanScreenState extends ConsumerState<CrisisPlanScreen> {
           ),
           const SizedBox(height: 18),
           _Section(
-            title: 'Early warning signs',
+            title: context.l10n.crisisPlanEarlyWarningSigns,
             sub: 'The first things I notice when my mood shifts.',
             icon: Icons.wb_sunny_outlined,
             items: _data['earlyWarning']!,
@@ -153,7 +153,7 @@ class _CrisisPlanScreenState extends ConsumerState<CrisisPlanScreen> {
             onRemove: (i) => _removeItem('earlyWarning', i),
           ),
           _Section(
-            title: 'Triggers to watch for',
+            title: context.l10n.crisisPlanTriggersToWatchFor,
             sub: 'External things that have set off episodes before.',
             icon: Icons.warning_amber_rounded,
             tone: _SecTone.crisis,
@@ -162,7 +162,7 @@ class _CrisisPlanScreenState extends ConsumerState<CrisisPlanScreen> {
             onRemove: (i) => _removeItem('triggers', i),
           ),
           _Section(
-            title: 'Things that genuinely help',
+            title: context.l10n.crisisPlanThingsThatGenuinelyHelp,
             sub: "Specific, concrete. Not 'self-care' — what actually works.",
             icon: Icons.favorite_outline,
             items: _data['helps']!,
@@ -170,7 +170,7 @@ class _CrisisPlanScreenState extends ConsumerState<CrisisPlanScreen> {
             onRemove: (i) => _removeItem('helps', i),
           ),
           _Section(
-            title: 'Things to say to me',
+            title: context.l10n.crisisPlanThingsToSayToMe,
             sub: 'Words that ground me. Useful for staff, EMS, family.',
             icon: Icons.chat_bubble_outline,
             items: _data['sayToMe']!,
@@ -178,7 +178,7 @@ class _CrisisPlanScreenState extends ConsumerState<CrisisPlanScreen> {
             onRemove: (i) => _removeItem('sayToMe', i),
           ),
           _Section(
-            title: "Don't do these",
+            title: context.l10n.crisisPlanDonTDoThese,
             sub: 'Approaches that escalate me. Be specific.',
             icon: Icons.do_not_disturb_outlined,
             tone: _SecTone.crisis,
@@ -187,13 +187,11 @@ class _CrisisPlanScreenState extends ConsumerState<CrisisPlanScreen> {
             onRemove: (i) => _removeItem('dontDo', i),
           ),
           const SizedBox(height: 14),
-          const InfoBanner(
+          InfoBanner(
             icon: Icons.auto_awesome,
             variant: InfoBannerVariant.info,
             text:
-                "Heads up: this section is yours alone — it isn't required by "
-                'PA Act 194, but in practice it\'s the part agents and ER '
-                'staff read first.',
+                context.l10n.crisisPlanHeadsUpThisSectionIs,
           ),
         ],
       )),
@@ -223,21 +221,21 @@ class _AddNoteDialogState extends State<_AddNoteDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Add'),
+      title: Text(context.l10n.crisisPlanAdd),
       content: TextField(
         controller: _c,
         autofocus: true,
-        decoration: const InputDecoration(hintText: 'Type a short note'),
+        decoration: InputDecoration(hintText: context.l10n.crisisPlanTypeAShortNote),
         onSubmitted: (_) => Navigator.pop(context, _c.text.trim()),
       ),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Cancel'),
+          child: Text(context.l10n.cancel),
         ),
         FilledButton(
           onPressed: () => Navigator.pop(context, _c.text.trim()),
-          child: const Text('Add'),
+          child: Text(context.l10n.crisisPlanAdd),
         ),
       ],
     );
@@ -315,7 +313,7 @@ class _Section extends StatelessWidget {
                       onDeleted: () => onRemove(i),
                     ),
                   ActionChip(
-                    label: const Text('+ Add'),
+                    label: Text(context.l10n.crisisPlanAdd2),
                     onPressed: onAdd,
                     side: BorderSide(color: cs.outline, style: BorderStyle.solid),
                     backgroundColor: Colors.transparent,

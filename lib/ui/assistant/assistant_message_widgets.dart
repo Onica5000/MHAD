@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ai/ai_assistant.dart';
 import 'package:mhad/constants.dart';
@@ -98,7 +99,7 @@ class MessageBubble extends StatelessWidget {
                               size: 12, color: cs.primary),
                           const SizedBox(width: 4),
                           Text(
-                            'Verified with web search',
+                            context.l10n.assistantMessageWidgetsVerifiedWithWebSearch,
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.w700,
@@ -112,7 +113,7 @@ class MessageBubble extends StatelessWidget {
                       message.sources!.isNotEmpty) ...[
                     const SizedBox(height: 4),
                     Text(
-                      'Sources',
+                      context.l10n.assistantMessageWidgetsSources,
                       style: TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.w700,
@@ -152,7 +153,7 @@ class MessageBubble extends StatelessWidget {
                                   size: 13, color: cs.primary),
                               const SizedBox(width: 4),
                               Text(
-                                'Verify on the web',
+                                context.l10n.assistantMessageWidgetsVerifyOnTheWeb,
                                 style: TextStyle(
                                   fontSize: 11,
                                   fontWeight: FontWeight.w700,
@@ -222,7 +223,7 @@ class _TypingIndicatorState extends State<TypingIndicator>
       _ctrl.repeat(reverse: true);
     }
     return Semantics(
-      label: 'AI is typing',
+      label: context.l10n.assistantMessageWidgetsAiIsTyping,
       liveRegion: true,
       child: Padding(
         padding: const EdgeInsets.only(bottom: 12),

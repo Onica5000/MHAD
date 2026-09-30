@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/data/database/app_database.dart';
@@ -30,7 +31,7 @@ Future<void> checkAndOfferDraftRecovery(
           children: [
             Icon(Icons.restore, color: cs.primary),
             const SizedBox(width: 8),
-            const Expanded(child: Text('Recover Unsaved Work?')),
+            Expanded(child: Text(context.l10n.draftRecoveryDialogRecoverUnsavedWork)),
           ],
         ),
         content: Text(
@@ -46,13 +47,13 @@ Future<void> checkAndOfferDraftRecovery(
               await DraftRecoveryService.clearDraft();
               if (ctx.mounted) Navigator.pop(ctx, false);
             },
-            child: const Text('Discard'),
+            child: Text(context.l10n.draftRecoveryDialogDiscard),
           ),
           FilledButton(
             // Initial focus on the primary action (UX audit A3).
             autofocus: true,
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Restore'),
+            child: Text(context.l10n.draftRecoveryDialogRestore),
           ),
         ],
       );
@@ -128,9 +129,9 @@ Future<void> checkAndOfferDraftRecovery(
 
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text(
-              'Draft restored. Personal information will need to be re-entered.'),
+              context.l10n.draftRecoveryDialogDraftRestoredPersonalInformationWill),
           duration: Duration(seconds: 4),
         ),
       );
@@ -141,7 +142,7 @@ Future<void> checkAndOfferDraftRecovery(
     await DraftRecoveryService.clearDraft();
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Couldn't restore the draft.")),
+        SnackBar(content: Text(context.l10n.draftRecoveryDialogCouldnTRestoreTheDraft)),
       );
     }
   }

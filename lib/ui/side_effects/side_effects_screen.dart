@@ -2,6 +2,7 @@
 
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/ui/widgets/design/design_card.dart';
 import 'package:mhad/ui/widgets/design/status_views.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -162,7 +163,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
       backgroundColor: p.scaffoldBackground,
       body: Column(children: [
         WizardHeader(
-          backLabel: 'Back',
+          backLabel: context.l10n.back,
           onBack: () => Navigator.of(context).maybePop(),
           actionLabel: '',
         ),
@@ -177,19 +178,14 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const SectionLabel('Optional add-on'),
+                          SectionLabel(context.l10n.sideEffectsOptionalAddOn),
                           const SizedBox(height: 6),
-                          const EditorialHeading(
-                              text: 'Side effects you may be experiencing',
+                          EditorialHeading(
+                              text: context.l10n.medsStepSideEffectsTitle,
                               size: 30),
                           const SizedBox(height: 6),
                           Text(
-                            'For the medications you\'re currently taking, here '
-                            'are common side effects — check the ones you '
-                            'actually have. Noting them (especially any that '
-                            'affect your daily activities) helps your care '
-                            'team. This is common-side-effect information, not '
-                            'medical advice.',
+                            context.l10n.sideEffectsForTheMedicationsYouRe,
                             style: TextStyle(
                               fontFamily: kSansFamily,
                               fontSize: 14,
@@ -217,31 +213,24 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
                         const SizedBox(height: 16),
                         ..._buildGroupedItems(p),
                         const SizedBox(height: 14),
-                        const InfoBanner(
+                        InfoBanner(
                           icon: Icons.medical_information_outlined,
                           variant: InfoBannerVariant.info,
                           text:
-                              'Bring anything you check — and especially '
-                              'anything marked "discuss with your doctor" — to '
-                              'your doctor or pharmacist. This list never tells '
-                              'you to start, stop, or change a medication.',
+                              context.l10n.sideEffectsBringAnythingYouCheckAnd,
                         ),
                       ],
                       if (_interactions.isNotEmpty) ...[
                         const SizedBox(height: 22),
-                        const SectionLabel('Ask your doctor or pharmacist'),
+                        SectionLabel(context.l10n.sideEffectsAskYourDoctorOrPharmacist),
                         const SizedBox(height: 8),
                         ..._interactions.map((n) => _interactionCard(p, n)),
                         const SizedBox(height: 6),
-                        const InfoBanner(
+                        InfoBanner(
                           icon: Icons.info_outline,
                           variant: InfoBannerVariant.info,
                           text:
-                              'These are possible interactions drawn from the '
-                              'medications’ FDA labels, written as questions '
-                              'to ask. They are not a warning to stop or change '
-                              'anything yourself — only your doctor or '
-                              'pharmacist can advise on your specific case.',
+                              context.l10n.sideEffectsTheseArePossibleInteractionsDrawn,
                         ),
                       ],
                     ],
@@ -257,8 +246,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
       icon: Icons.medication_outlined,
       variant: InfoBannerVariant.info,
       text:
-          'Add the medications you\'re currently taking on the Medications step '
-          'first, then come back here to check their common side effects.',
+          context.l10n.sideEffectsAddTheMedicationsYouRe,
     );
   }
 
@@ -275,7 +263,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Set up AI to check side effects',
+              context.l10n.sideEffectsSetUpAiToCheck,
               style: TextStyle(
                 fontFamily: kSansFamily,
                 fontSize: 14,
@@ -285,8 +273,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
             ),
             const SizedBox(height: 6),
             Text(
-              'This uses your AI assistant to list common side effects of '
-              'your current medications for you to review.',
+              context.l10n.sideEffectsThisUsesYourAiAssistant,
               style: TextStyle(
                 fontFamily: kSansFamily,
                 fontSize: 13,
@@ -298,7 +285,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
             FilledButton.icon(
               onPressed: () => context.push(AppRoutes.aiSetup),
               icon: const Icon(Icons.auto_awesome, size: 16),
-              label: const Text('Set up AI'),
+              label: Text(context.l10n.pipelineSetupAi),
             ),
           ],
         ),
@@ -470,7 +457,7 @@ class _SideEffectRow extends StatelessWidget {
                         const SizedBox(width: 4),
                         Flexible(
                           child: Text(
-                            'Worth discussing with your doctor',
+                            context.l10n.sideEffectsWorthDiscussingWithYourDoctor,
                             style: TextStyle(
                               fontFamily: kSansFamily,
                               fontSize: 12,

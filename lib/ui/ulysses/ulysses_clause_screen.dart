@@ -1,5 +1,6 @@
 ﻿import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/ui/widgets/design/status_views.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/data/database/app_database.dart';
@@ -71,21 +72,18 @@ class _UlyssesClauseScreenState extends ConsumerState<UlyssesClauseScreen> {
     final v = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Before you acknowledge'),
-        content: const Text(
-          'This is a significant decision. Once you are found incapable, the '
-          'directive cannot be revoked by you until capacity returns. We '
-          'strongly recommend talking it through with a peer specialist or '
-          'your clinician before saving.',
+        title: Text(context.l10n.ulyssesClauseBeforeYouAcknowledge),
+        content: Text(
+          context.l10n.ulyssesClauseThisIsASignificantDecision,
         ),
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(ctx, false),
-              child: const Text('Not now')),
+              child: Text(context.l10n.neverWantCrossAddNotNow)),
           FilledButton(
               onPressed: () => Navigator.pop(ctx, true),
               style: FilledButton.styleFrom(backgroundColor: cs.primary),
-              child: const Text('I understand')),
+              child: Text(context.l10n.ulyssesClauseIUnderstand)),
         ],
       ),
     );
@@ -104,7 +102,7 @@ class _UlyssesClauseScreenState extends ConsumerState<UlyssesClauseScreen> {
       // owns the visual title rather than a Material AppBar string.
       body: Column(children: [
         WizardHeader(
-          backLabel: 'Back',
+          backLabel: context.l10n.back,
           onBack: () => Navigator.of(context).maybePop(),
           actionLabel: '',
         ),
@@ -118,15 +116,13 @@ class _UlyssesClauseScreenState extends ConsumerState<UlyssesClauseScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SectionLabel('Optional add-on'),
+                      SectionLabel(context.l10n.sideEffectsOptionalAddOn),
                       const SizedBox(height: 6),
-                      const EditorialHeading(
-                          text: 'If future-me refuses…', size: 30),
+                      EditorialHeading(
+                          text: context.l10n.ulyssesClauseIfFutureMeRefuses, size: 30),
                       const SizedBox(height: 6),
                       Text(
-                        'Sometimes during a crisis, people refuse treatment '
-                        "that they'd want when well. PA law honors what you "
-                        'wrote today, even if you protest in the moment.',
+                        context.l10n.ulyssesClauseSometimesDuringACrisisPeople,
                         style: TextStyle(
                           fontFamily: kSansFamily,
                           fontSize: 14,
@@ -146,7 +142,7 @@ class _UlyssesClauseScreenState extends ConsumerState<UlyssesClauseScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'SELF-BINDING ("Ulysses")',
+                          context.l10n.ulyssesClauseSelfBindingUlysses,
                           style: TextStyle(
                             fontFamily: kMonoFamily,
                             fontFamilyFallback: const [
@@ -165,7 +161,7 @@ class _UlyssesClauseScreenState extends ConsumerState<UlyssesClauseScreen> {
                         ),
                         const SizedBox(height: 6),
                         Text(
-                          'Tie myself to the mast.',
+                          context.l10n.ulyssesClauseTieMyselfToTheMast,
                           style: TextStyle(
                             fontFamily: 'Instrument Serif',
                             fontFamilyFallback: const [
@@ -180,11 +176,7 @@ class _UlyssesClauseScreenState extends ConsumerState<UlyssesClauseScreen> {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'Per PA Act 194 (20 Pa.C.S. §§ 5825, 5839), this '
-                          'directive may be revoked only while I have '
-                          "capacity. Once I'm found incapable, what I wrote "
-                          'here stands — even over my in-the-moment protest — '
-                          'until capacity returns.',
+                          context.l10n.ulyssesClausePerPaAct19420,
                           style: TextStyle(
                             fontFamily: kSansFamily,
                             fontSize: 14,
@@ -200,7 +192,7 @@ class _UlyssesClauseScreenState extends ConsumerState<UlyssesClauseScreen> {
                           onChanged: _setAcknowledged,
                           activeThumbColor: cs.onPrimary,
                           title: Text(
-                            'I acknowledge this',
+                            context.l10n.ulyssesClauseIAcknowledgeThis,
                             style: TextStyle(
                               color: _acknowledged
                                   ? cs.onPrimary
@@ -208,7 +200,7 @@ class _UlyssesClauseScreenState extends ConsumerState<UlyssesClauseScreen> {
                             ),
                           ),
                           subtitle: Text(
-                            'Recorded in your directive PDF.',
+                            context.l10n.ulyssesClauseRecordedInYourDirectivePdf,
                             style: TextStyle(
                               color: _acknowledged
                                   ? cs.onPrimary.withValues(alpha: 0.8)
@@ -224,12 +216,11 @@ class _UlyssesClauseScreenState extends ConsumerState<UlyssesClauseScreen> {
                 const SizedBox(height: 14),
                 _BoundariesCard(),
                 const SizedBox(height: 14),
-                const InfoBanner(
+                InfoBanner(
                   icon: Icons.warning_amber_rounded,
                   variant: InfoBannerVariant.warning,
                   text:
-                      'Strongly recommended: talk with a peer specialist or '
-                      'clinician before saving. See "Get help" in Settings.',
+                      context.l10n.ulyssesClauseStronglyRecommendedTalkWithA,
                 ),
               ],
             )),
@@ -256,7 +247,7 @@ class _BoundariesCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SectionLabel('Boundaries on this clause'),
+            SectionLabel(context.l10n.ulyssesClauseBoundariesOnThisClause),
             const SizedBox(height: 8),
             for (final b in boundaries)
               Padding(

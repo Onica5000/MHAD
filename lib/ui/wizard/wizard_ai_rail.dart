@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/ai/ai_assistant.dart' show AssistantContext, MessageRole;
@@ -108,9 +109,9 @@ class _WizardAiRailState extends ConsumerState<WizardAiRail> {
     if (result.sendFailed) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text("The reply failed."),
+          content: Text(context.l10n.assistantTheReplyFailed),
           duration: const Duration(seconds: 6),
-          action: SnackBarAction(label: 'Retry', onPressed: _retrySend),
+          action: SnackBarAction(label: context.l10n.retry, onPressed: _retrySend),
         ),
       );
     }
@@ -137,9 +138,9 @@ class _WizardAiRailState extends ConsumerState<WizardAiRail> {
     if (result.sendFailed) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text("Still failing — check your connection or key."),
+          content: Text(context.l10n.assistantStillFailingCheckYourConnection),
           duration: const Duration(seconds: 6),
-          action: SnackBarAction(label: 'Retry', onPressed: _retrySend),
+          action: SnackBarAction(label: context.l10n.retry, onPressed: _retrySend),
         ),
       );
     }
@@ -174,7 +175,7 @@ class _WizardAiRailState extends ConsumerState<WizardAiRail> {
               Icon(Icons.auto_awesome, size: 18, color: p.primary),
               const SizedBox(width: 8),
               Text(
-                'AI assistant',
+                context.l10n.navAiAssistant,
                 style: TextStyle(
                   fontFamily: kSansFamily,
                   fontSize: 15,
@@ -191,7 +192,7 @@ class _WizardAiRailState extends ConsumerState<WizardAiRail> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                     child: Text(
-                      'Full view',
+                      context.l10n.wizardAiRailFullView,
                       style: TextStyle(
                         fontFamily: kSansFamily,
                         fontSize: 12,
@@ -249,7 +250,7 @@ class _WizardAiRailState extends ConsumerState<WizardAiRail> {
             ),
             const SizedBox(height: 6),
             Text(
-              'Not legal or medical advice.',
+              context.l10n.learnAiPanelNotLegalOrMedicalAdvice,
               style: TextStyle(
                 fontFamily: kSansFamily,
                 fontSize: 11,
@@ -276,12 +277,10 @@ class _RailNoAiCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const InfoBanner(
+        InfoBanner(
           icon: Icons.info_outline,
           variant: InfoBannerVariant.warning,
-          text: 'AI help is off. The step heads-up, suggested questions, '
-              'photo auto-fill, and the chat below aren\'t available until you '
-              'set up AI.',
+          text: context.l10n.wizardAiRailAiHelpIsOffThe,
         ),
         const SizedBox(height: 4),
         SizedBox(
@@ -289,13 +288,12 @@ class _RailNoAiCard extends StatelessWidget {
           child: FilledButton.icon(
             onPressed: onSetUp,
             icon: const Icon(Icons.auto_awesome, size: 16),
-            label: const Text('Set up AI'),
+            label: Text(context.l10n.pipelineSetupAi),
           ),
         ),
         const SizedBox(height: 10),
         Text(
-          'Your API key stays on this device and is only used to answer your '
-          'questions. You can fill out the whole wizard without it.',
+          context.l10n.wizardAiRailYourApiKeyStaysOn,
           style: TextStyle(
             fontFamily: kSansFamily,
             fontSize: 12,
@@ -345,14 +343,14 @@ class _RailHeadsUp extends ConsumerWidget {
       loading: () => card(Row(
         children: [
           LabeledSpinner(
-            label: 'Checking this step',
+            label: context.l10n.wizardAiRailCheckingThisStep,
             size: 12,
             strokeWidth: 2,
             color: p.primary,
           ),
           const SizedBox(width: 10),
           Text(
-            'Reading this step…',
+            context.l10n.wizardAiRailReadingThisStep,
             style: TextStyle(
               fontFamily: kSansFamily,
               fontSize: 12,
@@ -389,7 +387,7 @@ class _RailHeadsUp extends ConsumerWidget {
             if (s.chips.isNotEmpty) ...[
               const SizedBox(height: 10),
               Text(
-                'SUGGESTED FOR THIS STEP',
+                context.l10n.wizardAiRailSuggestedForThisStep,
                 style: TextStyle(
                   fontFamily: kMonoFamily,
                   fontFamilyFallback: const [
@@ -459,7 +457,7 @@ class _RailFacilitySearch extends StatelessWidget {
         style: const TextStyle(fontFamily: kSansFamily, fontSize: 13),
         decoration: InputDecoration(
           isDense: true,
-          hintText: 'Find a PA facility by name or county…',
+          hintText: context.l10n.wizardAiRailFindAPaFacilityBy,
           prefixIcon: Icon(Icons.search, size: 18, color: p.textMuted),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
@@ -487,8 +485,7 @@ class _RailChat extends ConsumerWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
           child: Text(
-            'Ask anything about this step — answers appear here, and in the '
-            'full assistant.',
+            context.l10n.wizardAiRailAskAnythingAboutThisStep,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontFamily: kSansFamily,
@@ -507,7 +504,7 @@ class _RailChat extends ConsumerWidget {
       itemCount: messages.length + (isSending ? 1 : 0),
       itemBuilder: (context, i) {
         if (i >= messages.length) {
-          return _RailBubble(text: 'Thinking…', isUser: false, muted: true);
+          return _RailBubble(text: context.l10n.wizardAiRailThinking, isUser: false, muted: true);
         }
         final m = messages[i];
         return _RailBubble(
@@ -584,20 +581,20 @@ class _RailInput extends ConsumerWidget {
               enabled: !isSending,
               onSubmitted: (_) => onSend(),
               style: const TextStyle(fontFamily: kSansFamily, fontSize: 13),
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 isCollapsed: true,
                 border: InputBorder.none,
-                hintText: 'Ask about this step…',
+                hintText: context.l10n.wizardAiRailAskAboutThisStep,
               ),
             ),
           ),
           IconButton(
             onPressed: isSending ? null : onSend,
             visualDensity: VisualDensity.compact,
-            tooltip: 'Send',
+            tooltip: context.l10n.assistantSend,
             icon: isSending
                 ? LabeledSpinner(
-                    label: 'Sending',
+                    label: context.l10n.wizardAiRailSending,
                     size: 16,
                     strokeWidth: 2,
                     color: p.primary,
@@ -635,7 +632,7 @@ class WizardAiBar extends StatelessWidget {
               const SizedBox(width: 10),
               Expanded(
                 child: Text(
-                  'Need help with this step? Ask the AI',
+                  context.l10n.wizardAiRailNeedHelpWithThisStep,
                   style: TextStyle(
                     fontFamily: kSansFamily,
                     fontSize: 13,

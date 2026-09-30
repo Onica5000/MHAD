@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/providers/app_providers.dart';
@@ -33,7 +34,7 @@ class ToolsGrid extends ConsumerWidget {
     final tiles = <_ToolTile>[
       _ToolTile(
         icon: Icons.auto_awesome,
-        label: 'AI assistant',
+        label: context.l10n.navAiAssistant,
         sub: aiReady ? 'Suggests + checks' : 'Set up AI',
         onTap: () => context.go(
           aiReady ? AppRoutes.assistant : AppRoutes.aiSetup,
@@ -41,13 +42,13 @@ class ToolsGrid extends ConsumerWidget {
       ),
       _ToolTile(
         icon: Icons.menu_book_outlined,
-        label: 'Learn',
+        label: context.l10n.navLearn,
         sub: 'FAQ, glossary',
         onTap: () => context.go(AppRoutes.education),
       ),
       _ToolTile(
         icon: Icons.health_and_safety_outlined,
-        label: 'Make it findable',
+        label: context.l10n.homeToolsGridMakeItFindable,
         sub: mostRecentDirective != null
             ? 'Share + carry'
             : 'No directive yet',
@@ -58,7 +59,7 @@ class ToolsGrid extends ConsumerWidget {
       ),
       _ToolTile(
         icon: Icons.favorite_outline,
-        label: 'Crisis help',
+        label: context.l10n.homeToolsGridCrisisHelp,
         sub: '988 + more',
         onTap: () => showCrisisSheet(context),
       ),

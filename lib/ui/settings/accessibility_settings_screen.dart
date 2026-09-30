@@ -1,4 +1,5 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
@@ -33,20 +34,19 @@ class AccessibilitySettingsScreen extends ConsumerWidget {
       // 'Make it readable.' heading owns the visual title.
       body: Column(children: [
         WizardHeader(
-          backLabel: 'Back',
+          backLabel: context.l10n.back,
           onBack: () => Navigator.of(context).maybePop(),
           actionLabel: '',
         ),
         Expanded(child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
         children: [
-          const SectionLabel('Accessibility'),
+          SectionLabel(context.l10n.accessibilitySettingsAccessibility),
           const SizedBox(height: 6),
-          const EditorialHeading(text: 'Make it readable.', size: 32),
+          EditorialHeading(text: context.l10n.accessibilitySettingsMakeItReadable, size: 32),
           const SizedBox(height: 6),
           Text(
-            'Adjust how the app feels for you. Changes apply everywhere '
-            'instantly.',
+            context.l10n.accessibilitySettingsAdjustHowTheAppFeels,
             style: TextStyle(
               fontFamily: kSansFamily,
               fontSize: 14,
@@ -66,7 +66,7 @@ class AccessibilitySettingsScreen extends ConsumerWidget {
 
           _SectionHeader('Reading'),
           _ToggleRow(
-            title: 'Dyslexia-friendly font',
+            title: context.l10n.accessibilitySettingsDyslexiaFriendlyFont,
             sub: 'Atkinson Hyperlegible — clearer, easier letter shapes',
             value: settings.dyslexiaFont,
             onChanged: (v) => ref
@@ -74,7 +74,7 @@ class AccessibilitySettingsScreen extends ConsumerWidget {
                 .setDyslexiaFont(v),
           ),
           _ToggleRow(
-            title: 'Bold text',
+            title: context.l10n.accessibilitySettingsBoldText,
             sub: 'Heavier text weight everywhere',
             value: settings.boldText,
             onChanged: (v) => ref
@@ -82,7 +82,7 @@ class AccessibilitySettingsScreen extends ConsumerWidget {
                 .setBoldText(v),
           ),
           _ToggleRow(
-            title: 'Reduce motion',
+            title: context.l10n.accessibilitySettingsReduceMotion,
             sub: 'Removes screen transitions and animations',
             value: settings.reduceMotion,
             onChanged: (v) => ref
@@ -90,7 +90,7 @@ class AccessibilitySettingsScreen extends ConsumerWidget {
                 .setReduceMotion(v),
           ),
           _ToggleRow(
-            title: 'High contrast',
+            title: context.l10n.accessibilitySettingsHighContrast,
             sub: 'Maximizes separation between text and background',
             value: settings.highContrast,
             onChanged: (v) => ref
@@ -107,18 +107,17 @@ class AccessibilitySettingsScreen extends ConsumerWidget {
                 .setLanguage(code),
           ),
           const SizedBox(height: 10),
-          const InfoBanner(
+          InfoBanner(
             icon: Icons.info_outline,
             variant: InfoBannerVariant.info,
             text:
-                'Legal text is always rendered in English to preserve PA Act '
-                '194 wording.',
+                context.l10n.accessibilitySettingsLegalTextIsAlwaysRendered,
           ),
 
           const SizedBox(height: 18),
           // Read it aloud with your browser or device — see the in-app guide.
           _ToggleRow(
-            title: 'Read aloud',
+            title: context.l10n.accessibilitySettingsReadAloud,
             sub: 'Use your browser or device read-aloud — see the guide below',
             handoff: true,
             value: false,
@@ -129,7 +128,7 @@ class AccessibilitySettingsScreen extends ConsumerWidget {
             child: TextButton.icon(
               onPressed: () => _showReadAloudGuide(context),
               icon: const Icon(Icons.volume_up_outlined, size: 18),
-              label: const Text('How to use read-aloud'),
+              label: Text(context.l10n.accessibilitySettingsHowToUseReadAloud),
             ),
           ),
 
@@ -139,7 +138,7 @@ class AccessibilitySettingsScreen extends ConsumerWidget {
                 .read(accessibilitySettingsProvider.notifier)
                 .resetToDefaults(),
             icon: const Icon(Icons.restart_alt),
-            label: const Text('Reset accessibility settings'),
+            label: Text(context.l10n.accessibilitySettingsResetAccessibilitySettings),
           ),
         ],
       )),
@@ -154,40 +153,35 @@ class AccessibilitySettingsScreen extends ConsumerWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         icon: const Icon(Icons.volume_up_outlined),
-        title: const Text('Read this page aloud'),
-        content: const SingleChildScrollView(
+        title: Text(context.l10n.accessibilitySettingsReadThisPageAloud),
+        content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Your browser and device already have read-aloud built in — '
-                'they work better than an in-app reader, so use one of these:',
+                context.l10n.accessibilitySettingsYourBrowserAndDeviceAlready,
               ),
               SizedBox(height: 12),
               _GuideItem(
                 head: 'Chrome / Edge (desktop)',
-                body: 'Right-click the page → “Read aloud” (Edge), or use the '
-                    'Reading mode / an extension in Chrome. Edge: Ctrl+Shift+U.',
+                body: context.l10n.accessibilitySettingsRightClickThePageRead,
               ),
               _GuideItem(
                 head: 'Android (Chrome)',
-                body: 'Select text → tap “Listen”, or turn on '
-                    'Settings → Accessibility → Select to Speak / TalkBack.',
+                body: context.l10n.accessibilitySettingsSelectTextTapListenOr,
               ),
               _GuideItem(
                 head: 'iPhone / iPad (Safari)',
-                body: 'Settings → Accessibility → Spoken Content → turn on '
-                    '“Speak Screen”, then swipe down with two fingers.',
+                body: context.l10n.accessibilitySettingsSettingsAccessibilitySpokenContentTurn,
               ),
               _GuideItem(
                 head: 'Windows',
-                body: 'Narrator: Ctrl+Win+Enter. Or use Edge’s Read aloud above.',
+                body: context.l10n.accessibilitySettingsNarratorCtrlWinEnterOr,
               ),
               _GuideItem(
                 head: 'macOS',
-                body: 'System Settings → Accessibility → Spoken Content → '
-                    '“Speak selection”, then press Option+Esc.',
+                body: context.l10n.accessibilitySettingsSystemSettingsAccessibilitySpokenContent,
               ),
             ],
           ),
@@ -195,7 +189,7 @@ class AccessibilitySettingsScreen extends ConsumerWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Got it'),
+            child: Text(context.l10n.exampleTextGotIt),
           ),
         ],
       ),
@@ -251,10 +245,10 @@ class _TextSizeCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SectionLabel('Text size'),
+            SectionLabel(context.l10n.accessibilitySettingsTextSize),
             const SizedBox(height: 10),
             Text(
-              'People who I trust will make my decisions if I can\'t.',
+              context.l10n.accessibilitySettingsPeopleWhoITrustWill,
               style: TextStyle(
                 fontFamily: kSansFamily,
                 fontSize: 13 + value * 4,
@@ -348,9 +342,9 @@ class _LanguagePicker extends StatelessWidget {
     // SegmentedButton asserts the selection is among its segments.
     final sel = _values.contains(selected) ? selected : 'en';
     return SegmentedButton<String>(
-      segments: const [
-        ButtonSegment(value: 'en', label: Text('English')),
-        ButtonSegment(value: 'es', label: Text('Español')),
+      segments: [
+        ButtonSegment(value: 'en', label: Text(context.l10n.accessibilitySettingsEnglish)),
+        ButtonSegment(value: 'es', label: Text(context.l10n.accessibilitySettingsEspaOl)),
       ],
       selected: {sel},
       onSelectionChanged: (s) => onChanged(s.first),

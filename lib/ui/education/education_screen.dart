@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/data/educational_content.dart';
 import 'package:mhad/ui/education/education_article_detail.dart';
 import 'package:mhad/ui/education/education_category_browser.dart';
@@ -145,14 +146,14 @@ class _EditorialLearnHub extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SectionLabel('Learn'),
+              SectionLabel(context.l10n.navLearn),
               Text.rich(
                 TextSpan(
                   children: [
-                    const TextSpan(text: 'Understand '),
+                    TextSpan(text: context.l10n.educationUnderstand),
                     TextSpan(
                         text: 'before', style: TextStyle(color: p.primary)),
-                    const TextSpan(text: ' you sign.'),
+                    TextSpan(text: context.l10n.educationYouSign),
                   ],
                 ),
                 style: const TextStyle(
@@ -167,9 +168,7 @@ class _EditorialLearnHub extends StatelessWidget {
               ),
               const SizedBox(height: 6),
               Text(
-                'Most of this comes straight from the official PA MHAD booklet, '
-                'plus a few plain-language explainers. No marketing, no '
-                'opinions — just the rules and what they mean.',
+                context.l10n.educationMostOfThisComesStraight,
                 style: TextStyle(
                   fontFamily: kSansFamily,
                   fontSize: 14,
@@ -215,7 +214,7 @@ class _EditorialLearnHub extends StatelessWidget {
                     Icon(Icons.search, size: 16, color: p.textMuted),
                     const SizedBox(width: 10),
                     Text(
-                      'Search articles, glossary, FAQs…',
+                      context.l10n.educationSearchArticlesGlossaryFaqs,
                       style: TextStyle(
                         fontFamily: kSansFamily,
                         fontSize: 14,
@@ -290,7 +289,7 @@ class _EditorialLearnHub extends StatelessWidget {
         // the pills are the hub's primary organizer for quick filtering;
         // this 8-way per-category index is the deep browse, so it no longer
         // competes with the pills at the top of the page.
-        const SectionLabel('Browse all topics'),
+        SectionLabel(context.l10n.educationBrowseAllTopics),
         const SizedBox(height: 8),
         const BrowseByTopic(),
         const SizedBox(height: 18),
@@ -309,8 +308,7 @@ class _EditorialLearnHub extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                '"Your directive is your voice — written in advance, '
-                "kept safe, honored when you can't speak for yourself.\"",
+                context.l10n.educationYourDirectiveIsYourVoice,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: 'Instrument Serif',
@@ -323,8 +321,7 @@ class _EditorialLearnHub extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                '— PA OFFICE OF MENTAL HEALTH & SUBSTANCE ABUSE '
-                'SERVICES · BOOKLET P.3',
+                context.l10n.educationPaOfficeOfMentalHealth,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: kMonoFamily,
@@ -499,7 +496,7 @@ class _EducationSearchDelegate extends SearchDelegate<EducationSection?> {
   List<Widget> buildActions(BuildContext context) => [
         IconButton(
           icon: const Icon(Icons.clear),
-          tooltip: 'Clear search',
+          tooltip: context.l10n.diagnosesClearSearch,
           onPressed: () => query = '',
         ),
       ];
@@ -507,7 +504,7 @@ class _EducationSearchDelegate extends SearchDelegate<EducationSection?> {
   @override
   Widget buildLeading(BuildContext context) => IconButton(
         icon: const Icon(Icons.arrow_back),
-        tooltip: 'Back',
+        tooltip: context.l10n.back,
         onPressed: () => close(context, null),
       );
 
@@ -519,8 +516,8 @@ class _EducationSearchDelegate extends SearchDelegate<EducationSection?> {
 
   Widget _buildList(BuildContext context) {
     if (query.isEmpty) {
-      return const Center(
-        child: Text('Type to search educational content...'),
+      return Center(
+        child: Text(context.l10n.educationTypeToSearchEducationalContent),
       );
     }
     final q = query.toLowerCase();

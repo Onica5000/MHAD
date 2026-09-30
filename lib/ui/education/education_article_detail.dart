@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/data/educational_content.dart';
 import 'package:mhad/ui/router.dart';
@@ -78,7 +79,7 @@ class ArticleDetailScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'TRY IT',
+                  context.l10n.educationArticleDetailTryIt,
                   style: TextStyle(
                     fontFamily: kMonoFamily,
                     fontFamilyFallback: const [
@@ -95,7 +96,7 @@ class ArticleDetailScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  'Ready to write yours?',
+                  context.l10n.educationArticleDetailReadyToWriteYours,
                   style: TextStyle(
                     fontFamily: kSansFamily,
                     fontSize: 14,
@@ -105,8 +106,7 @@ class ArticleDetailScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'The guided wizard takes about 20 minutes and works '
-                  'anonymously.',
+                  context.l10n.educationArticleDetailTheGuidedWizardTakesAbout,
                   style: TextStyle(
                     fontFamily: kSansFamily,
                     fontSize: 13,
@@ -124,7 +124,7 @@ class ArticleDetailScreen extends StatelessWidget {
                     appRouter.go(AppRoutes.home);
                   },
                   icon: const Icon(Icons.arrow_forward, size: 16),
-                  label: const Text('Start my directive'),
+                  label: Text(context.l10n.educationArticleDetailStartMyDirective),
                   style: FilledButton.styleFrom(
                     iconAlignment: IconAlignment.end,
                   ),

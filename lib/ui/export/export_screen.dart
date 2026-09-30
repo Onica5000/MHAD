@@ -3,6 +3,7 @@
 import 'package:archive/archive.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -158,7 +159,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
     if (!_includeCombined && !_includeDeclaration && !_includePoa &&
         !_includeSupplementary && !_includeNotes) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Select at least one section to include.')),
+        SnackBar(content: Text(context.l10n.exportSelectAtLeastOneSection)),
       );
       return;
     }
@@ -181,7 +182,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       final proceed = await showDialog<bool>(
         context: context,
         builder: (ctx) => AlertDialog(
-          title: const Text('Incomplete Directive'),
+          title: Text(context.l10n.exportIncompleteDirective),
           content: Text(
             'The following fields are empty or missing:\n\n'
             '${warnings.map((w) => '  \u2022 $w').join('\n')}\n\n'
@@ -191,18 +192,18 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx, false),
-              child: const Text('Go Back'),
+              child: Text(context.l10n.exportGoBack),
             ),
             OutlinedButton(
               onPressed: () {
                 Navigator.pop(ctx, false);
                 context.go(AppRoutes.wizardRoute(widget.directiveId));
               },
-              child: const Text('Edit Directive'),
+              child: Text(context.l10n.exportEditDirective),
             ),
             FilledButton(
               onPressed: () => Navigator.pop(ctx, true),
-              child: const Text('Export Anyway'),
+              child: Text(context.l10n.exportExportAnyway),
             ),
           ],
         ),
@@ -218,26 +219,20 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         context: context,
         builder: (ctx) => AlertDialog(
           icon: const Icon(Icons.lock_open_outlined, size: 32),
-          title: const Text('Exported file is not encrypted'),
-          content: const Text(
-            'The PDF you are about to share contains your full mental-health '
-            'directive (names, agents, medications, signatures). It is '
-            'generated unencrypted because the underlying PDF library does '
-            'not support password protection.\n\n'
-            'Share only via channels you trust (e.g., direct hand-off, a '
-            'secure email to a specific provider). Avoid public uploads, '
-            'cloud links, or untrusted messaging apps.',
+          title: Text(context.l10n.exportExportedFileIsNotEncrypted),
+          content: Text(
+            context.l10n.exportThePdfYouAreAbout,
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx, false),
-              child: const Text('Cancel'),
+              child: Text(context.l10n.cancel),
             ),
             FilledButton(
               // Initial focus on the primary action (UX audit A3).
               autofocus: true,
               onPressed: () => Navigator.pop(ctx, true),
-              child: const Text('I understand, continue'),
+              child: Text(context.l10n.exportIUnderstandContinue),
             ),
           ],
         ),
@@ -314,9 +309,9 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text("Couldn't generate the PDF."),
+            content: Text(context.l10n.exportCouldnTGenerateThePdf),
             action: SnackBarAction(
-                label: 'Retry', onPressed: _generateAndShare),
+                label: context.l10n.retry, onPressed: _generateAndShare),
           ),
         );
       }
@@ -365,7 +360,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
     if (!_includeCombined && !_includeDeclaration && !_includePoa &&
         !_includeSupplementary && !_includeNotes) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Select at least one section to preview.')),
+        SnackBar(content: Text(context.l10n.exportSelectAtLeastOneSection2)),
       );
       return;
     }
@@ -387,8 +382,8 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text("Couldn't generate the PDF."),
-            action: SnackBarAction(label: 'Retry', onPressed: _previewPdf),
+            content: Text(context.l10n.exportCouldnTGenerateThePdf),
+            action: SnackBarAction(label: context.l10n.retry, onPressed: _previewPdf),
           ),
         );
       }
@@ -404,7 +399,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
   Widget _loadingState() => Scaffold(
         body: Center(
           child: Semantics(
-            label: 'Loading',
+            label: context.l10n.reviewStepLoading,
             child: const CircularProgressIndicator(),
           ),
         ),
@@ -417,7 +412,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       body: Column(
         children: [
           WizardHeader(
-            backLabel: 'Back',
+            backLabel: context.l10n.back,
             onBack: () => safeBack(context),
             actionLabel: '',
           ),
@@ -432,7 +427,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
                         size: 48, color: p.textMuted),
                     const SizedBox(height: 16),
                     Text(
-                      'Nothing to download yet',
+                      context.l10n.exportNothingToDownloadYet,
                       style: TextStyle(
                         fontFamily: kSansFamily,
                         fontSize: 18,
@@ -442,8 +437,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Start a directive first — then come back here to '
-                      'preview, download, and print it.',
+                      context.l10n.exportStartADirectiveFirstThen,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontFamily: kSansFamily,
@@ -456,7 +450,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
                     FilledButton.icon(
                       onPressed: () => context.go(AppRoutes.home),
                       icon: const Icon(Icons.add),
-                      label: const Text('Start your directive'),
+                      label: Text(context.l10n.homeStartYourDirective),
                     ),
                   ],
                 ),
@@ -481,13 +475,13 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
   Widget _buildUnencryptedBanner() => const ExportUnencryptedBanner();
 
   List<Widget> _buildHeaderChildren(MhadPalette p) => [
-        const SectionLabel('Export & share'),
+        SectionLabel(context.l10n.pdfPreviewExportShare),
         EditorialHeading(
           textSpan: TextSpan(
             children: [
-              const TextSpan(text: 'Your directive,\n'),
+              TextSpan(text: context.l10n.exportYourDirective),
               TextSpan(
-                text: 'on paper.',
+                text: context.l10n.pdfPreviewOnPaper,
                 style: TextStyle(color: p.primary),
               ),
             ],
@@ -511,15 +505,15 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
   // Form/section pickers — shared by the narrow Document column and the wide
   // right-hand control rail.
   List<Widget> _buildSectionCheckboxChildren() => [
-        Text('Select forms to include:',
+        Text(context.l10n.exportSelectFormsToInclude,
             style: Theme.of(context)
                 .textTheme
                 .titleSmall
                 ?.copyWith(fontWeight: FontWeight.w600)),
         const SizedBox(height: 8),
         _FormCheckbox(
-          title: 'Combined Declaration & Power of Attorney',
-          subtitle: 'Declaration + Power of Attorney (most complete)',
+          title: context.l10n.combinedForm,
+          subtitle: context.l10n.exportDeclarationPowerOfAttorneyMost,
           value: _includeCombined,
           onChanged: (v) => setState(() => _includeCombined = v ?? false),
           warning: _includeCombined && _agents.isEmpty
@@ -527,14 +521,14 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
               : null,
         ),
         _FormCheckbox(
-          title: 'Declaration Only',
-          subtitle: 'Treatment preferences only (no agent)',
+          title: context.l10n.declarationOnly,
+          subtitle: context.l10n.exportTreatmentPreferencesOnlyNoAgent,
           value: _includeDeclaration,
           onChanged: (v) => setState(() => _includeDeclaration = v ?? false),
         ),
         _FormCheckbox(
-          title: 'Power of Attorney Only',
-          subtitle: 'Agent authority only (no personal preferences)',
+          title: context.l10n.poaOnly,
+          subtitle: context.l10n.exportAgentAuthorityOnlyNoPersonal,
           value: _includePoa,
           onChanged: (v) => setState(() => _includePoa = v ?? false),
           warning: _includePoa && _agents.isEmpty
@@ -542,21 +536,21 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
               : null,
         ),
         const SizedBox(height: 16),
-        Text('Additional Pages:',
+        Text(context.l10n.exportAdditionalPages,
             style: Theme.of(context)
                 .textTheme
                 .titleSmall
                 ?.copyWith(fontWeight: FontWeight.w600)),
         const SizedBox(height: 8),
         _FormCheckbox(
-          title: 'Supplementary Legal Information',
-          subtitle: 'Additional legal reference information',
+          title: context.l10n.exportSupplementaryLegalInformation,
+          subtitle: context.l10n.exportAdditionalLegalReferenceInformation,
           value: _includeSupplementary,
           onChanged: (v) => setState(() => _includeSupplementary = v ?? false),
         ),
         _FormCheckbox(
-          title: 'Distribution Checklist & Notes',
-          subtitle: 'Blank pages for handwritten notes',
+          title: context.l10n.exportDistributionChecklistNotes,
+          subtitle: context.l10n.exportBlankPagesForHandwrittenNotes,
           value: _includeNotes,
           onChanged: (v) => setState(() => _includeNotes = v ?? false),
         ),
@@ -565,7 +559,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         TextButton.icon(
           onPressed: () => showBlankFormPicker(context),
           icon: const Icon(Icons.print_outlined, size: 18),
-          label: const Text('Print a blank form (fill in by hand)'),
+          label: Text(context.l10n.exportPrintABlankFormFill),
         ),
       ];
 
@@ -586,12 +580,12 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
                     width: 16,
                     height: 16,
                     child: Semantics(
-                      label: 'Loading',
+                      label: context.l10n.reviewStepLoading,
                       child: const CircularProgressIndicator(strokeWidth: 2),
                     ),
                   )
                 : const Icon(Icons.preview),
-            label: const Text('Preview PDF'),
+            label: Text(context.l10n.previewPdf),
           ),
         ),
         const SizedBox(height: 8),
@@ -626,7 +620,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         // Group headers (UX audit C5): the narrow layout renders this list
         // as one long scroll, so the three groups get visible SectionLabel
         // landmarks (they read equally well in the wide rail).
-        const SectionLabel('Your official directive'),
+        SectionLabel(context.l10n.exportYourOfficialDirective),
         const SizedBox(height: 8),
         _railTitle('Printed copy type'),
         _railBody(
@@ -661,15 +655,15 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         ),
         const SizedBox(height: 8),
         SegmentedButton<bool>(
-          segments: const [
+          segments: [
             ButtonSegment(
               value: false,
-              label: Text('Plain (signable)'),
+              label: Text(context.l10n.exportPlainSignable),
               icon: Icon(Icons.verified_outlined),
             ),
             ButtonSegment(
               value: true,
-              label: Text('Legal (info only)'),
+              label: Text(context.l10n.exportLegalInfoOnly),
               icon: Icon(Icons.description_outlined),
             ),
           ],
@@ -679,8 +673,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         if (_legalLanguage) ...[
           const SizedBox(height: 8),
           Text(
-            'Heads up: the legal-language version is for reference only. '
-            'Sign and use the plain-language official form.',
+            context.l10n.exportHeadsUpTheLegalLanguage,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: Theme.of(context).colorScheme.error,
                 ),
@@ -697,13 +690,13 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         // PDF in a viewer rather than force-downloading (see _generateAndShare).
         Semantics(
           button: true,
-          label: 'Open the PDF directive in your viewer to print or save it',
+          label: context.l10n.exportOpenThePdfDirectiveIn,
           child: SizedBox(
             width: double.infinity,
             child: FilledButton.icon(
               onPressed: _isGenerating ? null : _generateAndShare,
               icon: const Icon(Icons.open_in_new),
-              label: const Text('Open PDF'),
+              label: Text(context.l10n.exportOpenPdf),
             ),
           ),
         ),
@@ -712,7 +705,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
           const Divider(),
           const SizedBox(height: 16),
           // ── 2. Keep a copy ─────────────────────────────────────────────
-          const SectionLabel('Keep a copy'),
+          SectionLabel(context.l10n.exportKeepACopy),
           const SizedBox(height: 8),
           _railTitle('Wallet card'),
           _railBody('A credit-card-sized summary you can print and carry.'),
@@ -732,7 +725,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
             child: OutlinedButton.icon(
               onPressed: _isGenerating ? null : _generateWalletCard,
               icon: const Icon(Icons.credit_card),
-              label: const Text('Open wallet card (PDF)'),
+              label: Text(context.l10n.exportOpenWalletCardPdf),
             ),
           ),
           const SizedBox(height: 16),
@@ -751,7 +744,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
                 onChanged: (v) =>
                     setState(() => _encryptEditableCopy = v ?? true),
               ),
-              const Expanded(child: Text('Encrypt the file')),
+              Expanded(child: Text(context.l10n.exportEncryptTheFile)),
             ],
           ),
           _railBody(
@@ -761,13 +754,13 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
           const SizedBox(height: 8),
           Semantics(
             button: true,
-            label: 'Download an editable copy of your directive',
+            label: context.l10n.exportDownloadAnEditableCopyOf,
             child: SizedBox(
               width: double.infinity,
               child: FilledButton.tonalIcon(
                 onPressed: _isGenerating ? null : _downloadEditableCopy,
                 icon: const Icon(Icons.download_outlined),
-                label: const Text('Download'),
+                label: Text(context.l10n.exportDownload),
               ),
             ),
           ),
@@ -775,7 +768,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
           const Divider(),
           const SizedBox(height: 16),
           // ── 3. Advanced: machine-readable data ─────────────────────────
-          const SectionLabel('Advanced · data exports'),
+          SectionLabel(context.l10n.exportAdvancedDataExports),
           const SizedBox(height: 8),
           _railTitle('Machine-readable formats'),
           _railBody(
@@ -791,39 +784,39 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
             children: [
               Semantics(
                 button: true,
-                label: 'Export as FHIR JSON for electronic health records',
+                label: context.l10n.exportExportAsFhirJsonFor,
                 child: OutlinedButton.icon(
                   onPressed: _exportFhir,
                   icon: const Icon(Icons.integration_instructions),
-                  label: const Text('FHIR JSON'),
+                  label: Text(context.l10n.exportFhirJson),
                 ),
               ),
               Semantics(
                 button: true,
-                label: 'Export as FHIR XML for electronic health records',
+                label: context.l10n.exportExportAsFhirXmlFor,
                 child: OutlinedButton.icon(
                   onPressed: _exportFhirXml,
                   icon: const Icon(Icons.code),
-                  label: const Text('FHIR XML'),
+                  label: Text(context.l10n.exportFhirXml),
                 ),
               ),
               Semantics(
                 button: true,
-                label: 'Export as CSV spreadsheet',
+                label: context.l10n.exportExportAsCsvSpreadsheet,
                 child: OutlinedButton.icon(
                   onPressed: _exportCsv,
                   icon: const Icon(Icons.table_chart_outlined),
-                  label: const Text('CSV'),
+                  label: Text(context.l10n.exportCsv),
                 ),
               ),
               Semantics(
                 button: true,
                 label:
-                    'Download everything (PDF, JSON, XML, CSV) as a zip bundle',
+                    context.l10n.exportDownloadEverythingPdfJsonXml,
                 child: OutlinedButton.icon(
                   onPressed: _isGenerating ? null : _exportZipBundle,
                   icon: const Icon(Icons.folder_zip_outlined),
-                  label: const Text('.zip bundle'),
+                  label: Text(context.l10n.exportZipBundle),
                 ),
               ),
             ],
@@ -835,11 +828,11 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         const SizedBox(height: 12),
         Semantics(
           button: true,
-          label: 'Done — back to home',
+          label: context.l10n.exportDoneBackToHome,
           child: FilledButton.icon(
             onPressed: () => context.go(AppRoutes.home),
             icon: const Icon(Icons.home_outlined),
-            label: const Text('Done — back to home'),
+            label: Text(context.l10n.exportDoneBackToHome),
             style: FilledButton.styleFrom(
               minimumSize: const Size.fromHeight(48),
             ),
@@ -938,7 +931,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         // Wide layout moves Back into the preview's left panel.
         if (!isWide)
           WizardHeader(
-            backLabel: 'Back',
+            backLabel: context.l10n.back,
             onBack: () => safeBack(context),
             actionLabel: '',
           ),
@@ -957,7 +950,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       await Clipboard.setData(ClipboardData(text: text));
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Copied to clipboard.')),
+          SnackBar(content: Text(context.l10n.exportCopiedToClipboard)),
         );
       }
     }
@@ -986,8 +979,8 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       debugPrint('Editable-file export failed: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text("Couldn't save the file. Please try again.")),
+          SnackBar(
+              content: Text(context.l10n.exportCouldnTSaveTheFile)),
         );
       }
     }
@@ -1118,16 +1111,16 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       );
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
               content: Text(
-                  'Exported your directive bundle — PDF, JSON, XML and CSV.')),
+                  context.l10n.exportExportedYourDirectiveBundlePdf)),
         );
       }
     } catch (e) {
       debugPrint('Zip bundle export failed: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Could not build the .zip bundle.')),
+          SnackBar(content: Text(context.l10n.exportCouldNotBuildTheZip)),
         );
       }
     } finally {
@@ -1158,9 +1151,9 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       debugPrint('Wallet-card export failed: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
               content:
-                  Text("Couldn't generate the wallet card. Please try again.")),
+                  Text(context.l10n.exportCouldnTGenerateTheWallet)),
         );
       }
     } finally {

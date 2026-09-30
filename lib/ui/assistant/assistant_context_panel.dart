@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/ai/ai_assistant.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
@@ -47,20 +48,20 @@ class AssistantContextPanel extends StatelessWidget {
           if (hasContext) ...[
             // "Context the AI sees" — structured key/value list mirroring the
             // Claude Design `WebAI` right panel.
-            const SectionLabel('Context the AI sees'),
+            SectionLabel(buildContext.l10n.assistantContextPanelContextTheAiSees),
             const SizedBox(height: 8),
-            _ContextKV(label: 'Form type', value: _ctxFormType(context!)),
+            _ContextKV(label: buildContext.l10n.assistantContextPanelFormType, value: _ctxFormType(context!)),
             _ContextKV(
-                label: 'Current step',
+                label: buildContext.l10n.assistantContextPanelCurrentStep,
                 value: context!.stepName ?? 'General question'),
             _ContextKV(
-                label: 'Filled fields',
+                label: buildContext.l10n.assistantContextPanelFilledFields,
                 value: '${context!.filledFields?.length ?? 0}'),
-            const _ContextKV(label: 'PII', value: 'Stripped before send'),
+            _ContextKV(label: buildContext.l10n.assistantContextPanelPii, value: 'Stripped before send'),
             const SizedBox(height: 16),
-            const SectionLabel('Suggested prompts'),
+            SectionLabel(buildContext.l10n.assistantContextPanelSuggestedPrompts),
           ] else ...[
-            const SectionLabel('What I can help with'),
+            SectionLabel(buildContext.l10n.assistantContextPanelWhatICanHelpWith),
             Container(
               padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
@@ -70,8 +71,7 @@ class AssistantContextPanel extends StatelessWidget {
                     BorderRadius.circular(DesignTokens.cardRadius),
               ),
               child: Text(
-                'Ask about form types, agents, treatment preferences, or '
-                'anything in the PA MHAD booklet. Try one of these:',
+                buildContext.l10n.assistantContextPanelAskAboutFormTypesAgents,
                 style: TextStyle(
                   fontFamily: kSansFamily,
                   fontSize: 13,
@@ -87,7 +87,7 @@ class AssistantContextPanel extends StatelessWidget {
             const SizedBox(height: 8),
           ],
           const SizedBox(height: 8),
-          const SectionLabel('Privacy'),
+          SectionLabel(buildContext.l10n.assistantContextPanelPrivacy),
           const SizedBox(height: 8),
           Container(
             padding: const EdgeInsets.all(12),
@@ -104,7 +104,7 @@ class AssistantContextPanel extends StatelessWidget {
                     Icon(Icons.shield_outlined, size: 14, color: p.primary),
                     const SizedBox(width: 6),
                     Text(
-                      'PII REDACTION ON',
+                      buildContext.l10n.assistantContextPanelPiiRedactionOn,
                       style: TextStyle(
                         fontFamily: kMonoFamily,
                         fontFamilyFallback: const ['Consolas', 'monospace'],
@@ -118,9 +118,7 @@ class AssistantContextPanel extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  'Names, addresses, phone numbers, and dates are replaced '
-                  'with placeholders before sending to Gemini. Suggestions '
-                  'come back with placeholders filled in locally.',
+                  buildContext.l10n.assistantContextPanelNamesAddressesPhoneNumbersAnd,
                   style: TextStyle(
                     fontFamily: kSansFamily,
                     fontSize: 12,

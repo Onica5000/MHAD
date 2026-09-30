@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mhad/l10n/app_localizations.dart';
 import 'package:mhad/ui/crisis_findability/make_it_findable_screen.dart';
 
 /// M1 — "Make it findable in a crisis" checklist renders its actionable steps
@@ -14,6 +15,8 @@ void main() {
     await tester.pumpWidget(
       const ProviderScope(
         child: MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           home: MakeItFindableScreen(directiveId: 1),
         ),
       ),

@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -150,7 +151,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
       // Minimal prompt + tiny output cap: enough to prove the key, model and
       // network path all work, without burning quota.
       await client.generateText(
-        'Reply with the single word: ok',
+        context.l10n.aiSetupReplyWithTheSingleWord,
         timeout: const Duration(seconds: 20),
         maxOutputTokens: 16,
       );
@@ -175,16 +176,16 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('Remove API Key?'),
-        content: const Text(
-            'AI features will be disabled until a new key is added.'),
+        title: Text(context.l10n.aiSetupRemoveApiKey),
+        content: Text(
+            context.l10n.aiSetupAiFeaturesWillBeDisabled),
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: const Text('Cancel')),
+              child: Text(context.l10n.cancel)),
           TextButton(
               onPressed: () => Navigator.pop(context, true),
-              child: const Text('Remove')),
+              child: Text(context.l10n.pickRemove)),
         ],
       ),
     );
@@ -193,7 +194,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
       _keyCtrl.clear();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('API key removed')),
+          SnackBar(content: Text(context.l10n.aiSetupApiKeyRemoved)),
         );
       }
     }
@@ -262,12 +263,12 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('AI assistant setup'),
+        title: Text(context.l10n.aiSetupAiAssistantSetup),
         actions: [
           if (hasKey)
             IconButton(
               icon: const Icon(Icons.delete_outline),
-              tooltip: 'Remove API key',
+              tooltip: context.l10n.aiSetupRemoveApiKey2,
               onPressed: _delete,
             ),
         ],
@@ -292,11 +293,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                     const SizedBox(width: 10),
                     Expanded(
                       child: Text(
-                        'Your API key will not be saved permanently. It is '
-                        'kept in memory for this session, with a temporary '
-                        'copy for up to 10 minutes so you can recover it if '
-                        'the app reloads — then discarded when you close the '
-                        'app or clear your data.',
+                        context.l10n.aiSetupYourApiKeyWillNot,
                         style: TextStyle(
                             fontSize: 13,
                             color: cs.onTertiaryContainer,
@@ -387,7 +384,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
-                          'Step 1: Open a Private/Incognito Window',
+                          context.l10n.aiSetupStep1OpenAPrivate,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 14,
@@ -399,9 +396,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'You\'ll need to sign into your Google account to get an '
-                    'API key. To protect your login on shared or public '
-                    'devices, open a private browsing window first:',
+                    context.l10n.aiSetupYouLlNeedToSign,
                     style: TextStyle(
                         fontSize: 13, color: cs.onErrorContainer,
                         height: 1.4),
@@ -446,16 +441,14 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'On a phone: tap the menu (\u22EE or \u22EF) and select '
-                    '"New Incognito Tab" or "New Private Tab".',
+                    context.l10n.aiSetupOnAPhoneTapThe,
                     style: TextStyle(
                         fontSize: 12, color: cs.onErrorContainer,
                         fontStyle: FontStyle.italic, height: 1.4),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Your Google login will be automatically forgotten when '
-                    'you close the private window.',
+                    context.l10n.aiSetupYourGoogleLoginWillBe,
                     style: TextStyle(
                         fontSize: 13, color: cs.onErrorContainer,
                         fontWeight: FontWeight.w600, height: 1.4),
@@ -495,15 +488,14 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                 : 'Most providers require a paid account with credits to use '
                     'the API. Your provider bills you directly.',
           ),
-          const _StepTile(
+          _StepTile(
             number: '4',
-            title: 'Create an API key',
-            subtitle: 'Create a new API key on the API keys page; the '
-                'defaults are fine.',
+            title: context.l10n.aiSetupCreateAnApiKey,
+            subtitle: context.l10n.aiSetupCreateANewApiKey,
           ),
           _StepTile(
             number: '5',
-            title: 'Copy and paste below',
+            title: context.l10n.aiSetupCopyAndPasteBelow,
             subtitle:
                 'The key looks like "${_provider.keyHint}" — copy it, then '
                 'use the paste button or paste it manually.',
@@ -544,7 +536,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                 children: [
                   IconButton(
                     icon: const Icon(Icons.content_paste, size: 20),
-                    tooltip: 'Paste from clipboard',
+                    tooltip: context.l10n.aiSetupPasteFromClipboard,
                     onPressed: _pasteFromClipboard,
                   ),
                   IconButton(
@@ -567,7 +559,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                     width: 16,
                     height: 16,
                     child: Semantics(
-                      label: 'Loading',
+                      label: context.l10n.reviewStepLoading,
                       child: const CircularProgressIndicator(strokeWidth: 2),
                     ),
                   )
@@ -584,11 +576,11 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
             onPressed:
                 _testing || _keyCtrl.text.trim().isEmpty ? null : _testConnection,
             icon: _testing
-                ? const SizedBox(
+                ? SizedBox(
                     width: 16,
                     height: 16,
                     child: LabeledSpinner(
-                        label: 'Testing connection', strokeWidth: 2),
+                        label: context.l10n.aiSetupTestingConnection, strokeWidth: 2),
                   )
                 : const Icon(Icons.wifi_tethering),
             label: Text(_testing ? 'Testing…' : 'Test connection'),
@@ -640,7 +632,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                       Icon(Icons.privacy_tip,
                           size: 18, color: cs.onErrorContainer),
                       const SizedBox(width: 8),
-                      Text('Privacy Notice',
+                      Text(context.l10n.aiSetupPrivacyNotice,
                           style: TextStyle(
                               fontWeight: FontWeight.w600,
                               fontSize: 13,
@@ -670,7 +662,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                     children: [
                       Icon(Icons.shield_outlined, size: 18, color: cs.primary),
                       const SizedBox(width: 8),
-                      Text('How Your Data Is Handled',
+                      Text(context.l10n.aiSetupHowYourDataIsHandled,
                           style: TextStyle(
                               fontWeight: FontWeight.w600,
                               fontSize: 13,
@@ -679,14 +671,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    '- Your directive data is held in memory only; on close or '
-                    'crash it is kept ~10 minutes for recovery, then wiped — '
-                    'never written to disk or a server\n'
-                    '- AI features are optional and the app works without them\n'
-                    '- Only text you explicitly send via AI chat or AI Suggest '
-                    'leaves your device\n'
-                    '- This app is not a medical or legal service\n'
-                    '- This app is not HIPAA-compliant',
+                    context.l10n.aiSetupYourDirectiveDataIsHeld,
                     style: TextStyle(fontSize: 12, color: cs.onSurface),
                   ),
                 ],
@@ -697,38 +682,31 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
           // ---- FAQ section (Gemini-specific) ----
           if (_provider == AiProvider.gemini) ...[
           const SizedBox(height: 24),
-          Text('Common Questions',
+          Text(context.l10n.aiSetupCommonQuestions,
               style: Theme.of(context)
                   .textTheme
                   .titleSmall
                   ?.copyWith(fontWeight: FontWeight.w600)),
           const SizedBox(height: 8),
-          const _FaqTile(
-            question: 'Is the API key really free?',
+          _FaqTile(
+            question: context.l10n.aiSetupIsTheApiKeyReally,
             answer:
-                'Yes. Google offers a generous free tier for Gemini. '
-                'There is no credit card required and no charge for '
-                'typical personal use.',
+                context.l10n.aiSetupYesGoogleOffersAGenerous,
           ),
-          const _FaqTile(
-            question: 'What Google account should I use?',
+          _FaqTile(
+            question: context.l10n.aiSetupWhatGoogleAccountShouldI,
             answer:
-                'Any Google account works — a personal Gmail is fine. '
-                'You do not need a Google Cloud billing account.',
+                context.l10n.aiSetupAnyGoogleAccountWorksA,
           ),
-          const _FaqTile(
-            question: 'Can I revoke the key later?',
+          _FaqTile(
+            question: context.l10n.aiSetupCanIRevokeTheKey,
             answer:
-                'Yes. Visit aistudio.google.com/apikey at any time to '
-                'delete or regenerate your key. You can also remove it '
-                'from this app using the trash icon in the top-right.',
+                context.l10n.aiSetupYesVisitAistudioGoogleCom,
           ),
-          const _FaqTile(
-            question: 'What if I don\'t add a key?',
+          _FaqTile(
+            question: context.l10n.aiSetupWhatIfIDonT,
             answer:
-                'The app works fully without AI. The form wizard, PDF '
-                'generation, educational content, and all other features '
-                'do not require an API key. AI is purely optional.',
+                context.l10n.aiSetupTheAppWorksFullyWithout,
           ),
           ],
           const SizedBox(height: 40),
@@ -777,9 +755,9 @@ class _ProviderModelPicker extends StatelessWidget {
             DropdownButtonFormField<AiProvider>(
               initialValue: provider,
               isExpanded: true,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                labelText: 'AI provider',
+                labelText: context.l10n.adminUpdateAiProvider,
               ),
               items: [
                 for (final p in AiProvider.values)
@@ -798,9 +776,9 @@ class _ProviderModelPicker extends StatelessWidget {
             DropdownButtonFormField<String>(
               initialValue: models.contains(model) ? model : models.first,
               isExpanded: true,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                labelText: 'Model',
+                labelText: context.l10n.adminUpdateModel,
               ),
               items: [
                 for (final m in models)

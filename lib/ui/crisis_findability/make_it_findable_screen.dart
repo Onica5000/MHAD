@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/ui/router.dart';
@@ -31,7 +32,7 @@ class MakeItFindableScreen extends ConsumerWidget {
       body: Column(
         children: [
           WizardHeader(
-            backLabel: 'Back',
+            backLabel: context.l10n.back,
             onBack: () => Navigator.of(context).maybePop(),
             actionLabel: '',
           ),
@@ -39,17 +40,15 @@ class MakeItFindableScreen extends ConsumerWidget {
             child: ListView(
               padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
               children: [
-                const SectionLabel('Crisis readiness'),
+                SectionLabel(context.l10n.makeItFindableCrisisReadiness),
                 const SizedBox(height: 6),
-                const EditorialHeading(
-                  text: 'Make it findable in a crisis.',
+                EditorialHeading(
+                  text: context.l10n.makeItFindableMakeItFindableInA,
                   size: 32,
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'A directive only helps if the people treating you can find it '
-                  'when you cannot speak for yourself. Take a few minutes now to '
-                  'put copies where they will be looked for.',
+                  context.l10n.makeItFindableADirectiveOnlyHelpsIf,
                   style: TextStyle(
                     fontFamily: kSansFamily,
                     fontSize: 14,
@@ -58,60 +57,51 @@ class MakeItFindableScreen extends ConsumerWidget {
                   ),
                 ),
                 const SizedBox(height: 18),
-                const SectionLabel('Do these now'),
+                SectionLabel(context.l10n.makeItFindableDoTheseNow),
                 const SizedBox(height: 8),
                 ActionRow(
                   icon: Icons.group_outlined,
                   tone: ActionRowTone.primary,
-                  title: 'Share it with your agent and a trusted person',
+                  title: context.l10n.makeItFindableShareItWithYourAgent,
                   subtitle:
-                      'They should each have a copy before any crisis — not '
-                      'only you.',
+                      context.l10n.makeItFindableTheyShouldEachHaveA,
                   onTap: toExport,
                 ),
                 const SizedBox(height: 10),
                 ActionRow(
                   icon: Icons.medical_services_outlined,
                   tone: ActionRowTone.primary,
-                  title: 'Give a copy to your care team',
+                  title: context.l10n.makeItFindableGiveACopyToYour,
                   subtitle:
-                      'Ask your psychiatrist, therapist, primary-care doctor, '
-                      'and any facility to add it to your medical record.',
+                      context.l10n.makeItFindableAskYourPsychiatristTherapistPrimary,
                   onTap: toExport,
                 ),
                 const SizedBox(height: 10),
                 ActionRow(
                   icon: Icons.account_balance_wallet_outlined,
                   tone: ActionRowTone.primary,
-                  title: 'Print and carry the wallet card',
+                  title: context.l10n.makeItFindablePrintAndCarryTheWallet,
                   subtitle:
-                      'A pocket card that tells responders you have a directive '
-                      'and how to reach your agent.',
+                      context.l10n.makeItFindableAPocketCardThatTells,
                   onTap: toExport,
                 ),
                 const SizedBox(height: 16),
-                const InfoBanner(
+                InfoBanner(
                   icon: Icons.place_outlined,
                   variant: InfoBannerVariant.info,
                   text:
-                      'Pennsylvania has no statewide directive registry, so the '
-                      'people in your life are the registry: make sure your '
-                      'agent, a trusted person, and your providers all know you '
-                      'have a directive and where to find it.',
+                      context.l10n.makeItFindablePennsylvaniaHasNoStatewideDirective,
                 ),
                 const SizedBox(height: 12),
-                const InfoBanner(
+                InfoBanner(
                   icon: Icons.verified_outlined,
                   variant: InfoBannerVariant.success,
                   text:
-                      'Under PA Act 194, a valid directive your care team can '
-                      'find is meant to be followed. Findability is what makes '
-                      'it work.',
+                      context.l10n.makeItFindableUnderPaAct194A,
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'This is general information about keeping your directive '
-                  'accessible, not legal advice.',
+                  context.l10n.makeItFindableThisIsGeneralInformationAbout,
                   style: TextStyle(
                     fontFamily: kSansFamily,
                     fontSize: 11,

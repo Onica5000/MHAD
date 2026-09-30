@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/ui/disclaimer/disclaimer_screen.dart';
 
@@ -19,7 +20,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
         ?.copyWith(fontWeight: FontWeight.w600);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Privacy Policy')),
+      appBar: AppBar(title: Text(context.l10n.privacyPolicyPrivacyPolicy)),
       body: Column(
         children: [
           Expanded(
@@ -28,7 +29,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('PA MHAD App Privacy Policy', style: headingStyle),
+            Text(context.l10n.privacyPolicyPaMhadAppPrivacyPolicy, style: headingStyle),
             const SizedBox(height: 4),
             Text(
               'Last updated: ${appData.dateFact('privacyPolicyUpdated')} '
@@ -38,272 +39,103 @@ class PrivacyPolicyScreen extends StatelessWidget {
             const SizedBox(height: 16),
 
             _PolicySection(
-              title: 'Data We Collect',
+              title: context.l10n.privacyPolicyDataWeCollect,
               body:
-                  'This app collects only the information you enter into your '
-                  'Mental Health Advance Directive forms, including:\n'
-                  '  - Personal information (name, address, phone, date of birth)\n'
-                  '  - Agent and witness information\n'
-                  '  - Treatment preferences and medication lists\n'
-                  '  - Digital signatures\n'
-                  '  - Additional instructions\n\n'
-                  'We do not collect analytics, crash reports, device identifiers, '
-                  'or location data.',
+                  context.l10n.privacyPolicyThisAppCollectsOnlyThe,
               headingStyle: headingStyle,
               bodyStyle: bodyStyle,
             ),
 
             _PolicySection(
-              title: 'How Data Is Stored & Protected',
+              title: context.l10n.privacyPolicyHowDataIsStoredProtected,
               body:
-                  'Your directive data is NOT transmitted to the app developer '
-                  'or any third party for storage.\n\n'
-                  'This is a web app: your data is held in an in-memory '
-                  'database in your browser tab. If you close the tab or the '
-                  'app crashes, your work is kept on this device for about 10 '
-                  'minutes so you can reopen and recover it — then it is wiped. '
-                  'Nothing is written to a server. Export or print your '
-                  'directive to keep a permanent copy.',
+                  context.l10n.privacyPolicyYourDirectiveDataIsNot,
               headingStyle: headingStyle,
               bodyStyle: bodyStyle,
             ),
 
             _PolicySection(
-              title: 'AI Features & Third-Party Data Sharing',
+              title: context.l10n.privacyPolicyAiFeaturesThirdPartyData,
               body:
-                  'If you choose to use the optional AI features (AI Assistant '
-                  'chat or AI Suggest), text you submit is sent to the AI '
-                  'provider you select — Google Gemini by default, or Anthropic '
-                  'Claude, OpenAI, or xAI Grok if you choose one and add your '
-                  'own key — for processing.\n\n'
-                  'On Google\'s Gemini free tier, Google may:\n'
-                  '  - Use your input/output data to improve their products\n'
-                  '  - Allow human reviewers to read your inputs and outputs\n'
-                  '  - Retain data indefinitely (no automatic expiration)\n'
-                  'Other providers handle your data under their own API data '
-                  'policies — review the policy of whichever provider you use.\n\n'
-                  'The app strips common personally identifiable information '
-                  '(SSNs, phone numbers, emails, dates of birth, addresses, '
-                  'names, and facility names) before sending your text to any '
-                  'provider, but this is a best-effort filter and cannot '
-                  'guarantee complete removal.\n\n'
-                  'AI features are entirely optional. The app is fully '
-                  'functional without them.',
+                  context.l10n.privacyPolicyIfYouChooseToUse,
               headingStyle: headingStyle,
               bodyStyle: bodyStyle,
             ),
 
             _PolicySection(
-              title: 'Gemini Free Tier Data Practices',
+              title: context.l10n.privacyPolicyGeminiFreeTierDataPractices,
               body:
-                  'If you use the AI features with Google\'s free Gemini tier, '
-                  'be aware of the following:\n\n'
-                  '1. Google retains AI conversation data indefinitely on the '
-                  'free tier. There is no automatic expiration.\n\n'
-                  '2. Human reviewers at Google may read your inputs and '
-                  'outputs as part of their quality and safety processes.\n\n'
-                  '3. Data sent to Gemini cannot be recalled or deleted by you '
-                  'or by this app. Once submitted, it is under Google\'s '
-                  'control.\n\n'
-                  '4. If you are concerned about data privacy, consider '
-                  'upgrading to the paid Gemini tier, which offers stronger '
-                  'data protection policies and does not use your data for '
-                  'model training.\n\n'
-                  'If you select a different provider (Anthropic, OpenAI, or '
-                  'xAI) instead of Gemini, that provider\'s own data and '
-                  'retention policy applies — review it before sending '
-                  'sensitive content.\n\n'
-                  'You can avoid all third-party data sharing by not using '
-                  'the AI features.',
+                  context.l10n.privacyPolicyIfYouUseTheAi,
               headingStyle: headingStyle,
               bodyStyle: bodyStyle,
             ),
 
             _PolicySection(
-              title: 'International Users (GDPR)',
+              title: context.l10n.privacyPolicyInternationalUsersGdpr,
               body:
-                  'If you are located in the European Economic Area (EEA), '
-                  'the UK, or Switzerland, the General Data Protection '
-                  'Regulation (GDPR) applies to your use of this app.\n\n'
-                  'Legal basis for processing: Your explicit consent, '
-                  'given through the in-app disclaimer and AI consent '
-                  'dialogs.\n\n'
-                  'Your rights under GDPR:\n'
-                  '  - Right to access: All your data is stored locally on '
-                  'your device — you have direct access at all times.\n'
-                  '  - Right to erasure: Use "Delete All Data" in the app '
-                  'menu to permanently erase all local data.\n'
-                  '  - Right to data portability: Export your directives as '
-                  'PDF or FHIR JSON (a standard health-records format) at any '
-                  'time.\n'
-                  '  - Right to withdraw consent: Stop using AI features at '
-                  'any time; remove your API key to prevent further data '
-                  'transmission.\n'
-                  '  - Right to restriction: You may use the app in Public '
-                  'Mode without any data persistence.\n\n'
-                  'Data sent to your chosen AI provider is processed under that '
-                  'provider\'s own privacy policy and data processing terms. '
-                  'We cannot control or delete data once it has been sent.',
+                  context.l10n.privacyPolicyIfYouAreLocatedIn,
               headingStyle: headingStyle,
               bodyStyle: bodyStyle,
             ),
 
             _PolicySection(
-              title: 'US State Consumer Health Data Laws (CA, WA, CT, NV, NY)',
+              title: context.l10n.privacyPolicyUsStateConsumerHealthData,
               body:
-                  'This app may be subject to state consumer-health-data '
-                  'privacy laws including California (CCPA/CPRA), Washington '
-                  '(My Health My Data Act / MHMDA), Connecticut (CTDPA health '
-                  'provisions), Nevada (SB 370), and New York (Health '
-                  'Information Privacy Act).\n\n'
-                  'Mental-health-directive content is "consumer health data" '
-                  'under each of these laws. Under all of them: (1) We collect '
-                  'mental-health treatment-preference data **solely** to help '
-                  'you create your advance directive. (2) We **do not sell** '
-                  'your health data — there is no commercial recipient. '
-                  '(3) The only third party that may receive any of your text '
-                  'is the AI provider you choose (Google Gemini by default, or '
-                  'Anthropic, OpenAI, or xAI), and **only** if you '
-                  'affirmatively opt in to AI features each session. (4) We use no '
-                  'third-party SDKs, no analytics, no advertising frameworks, '
-                  'no tracking pixels or cookies. (5) You may delete all '
-                  'locally stored data at any time via "Delete All Data" in '
-                  'the app menu.\n\n'
-                  'Washington MHMDA includes a **private right of action**; '
-                  'we have designed the app to require explicit, per-session '
-                  'consent before any third-party transfer of consumer health '
-                  'data, and we treat written consent as conditional on the '
-                  'specific terms shown in the AI consent dialog.\n\n'
-                  'For questions about your privacy rights, contact the '
-                  'developer using the channels listed in the Contact section '
-                  'below (multiple methods are provided per the FTC Health '
-                  'Breach Notification Rule).',
+                  context.l10n.privacyPolicyThisAppMayBeSubject,
               headingStyle: headingStyle,
               bodyStyle: bodyStyle,
             ),
 
             _PolicySection(
-              title: 'Medical Reference Lookups (U.S. government data)',
+              title: context.l10n.privacyPolicyMedicalReferenceLookupsUS,
               body:
-                  'To help you fill in and understand your directive, the app '
-                  'looks things up in free, public U.S. government databases. '
-                  'These lookups use ONLY the single term or code needed for '
-                  'that lookup. They never receive your identity (your name, '
-                  'date of birth, address, or phone), the people you name '
-                  '(agents, witnesses, guardian), or your saved directive.\n\n'
-                  'What is sent, and to whom:\n'
-                  '  - Medication name you type → NLM RxTerms (autocomplete).\n'
-                  '  - Condition name you type → NLM ICD-10-CM (diagnosis '
-                  'lookup).\n'
-                  '  - A doctor / provider name you type into the optional '
-                  'doctor search → NLM NPI registry, used only to look that '
-                  'provider up in the public registry of healthcare providers.\n'
-                  '  - A condition (by its ICD-10 code) or a medication (by '
-                  'name, resolved to a code via NLM RxNav) → NLM MedlinePlus '
-                  'Connect, to fetch a plain-language explanation.\n'
-                  '  - A medication name → openFDA (U.S. Food & Drug '
-                  'Administration), to fetch that drug\'s official FDA label, '
-                  'which is used to ground the side-effects list.\n\n'
-                  'No personal or identifying information is included in any of '
-                  'these requests — only the medical term, code, or provider '
-                  'name being looked up.\n\n'
-                  'NLM, NIH, and the FDA are not responsible for this product '
-                  'and do not endorse or recommend it. These services are for '
-                  'information only and are not medical advice — consult a '
-                  'qualified professional. The NLM Clinical Table services are '
-                  'rate-limited to 20 requests/second.\n\n'
-                  'Sources: U.S. National Library of Medicine (RxTerms, '
-                  'ICD-10-CM, NPI registry, RxNav, MedlinePlus Connect); U.S. '
-                  'Food & Drug Administration (openFDA).',
+                  context.l10n.privacyPolicyToHelpYouFillIn,
               headingStyle: headingStyle,
               bodyStyle: bodyStyle,
             ),
 
             _PolicySection(
-              title: 'PDF Export & Sharing',
+              title: context.l10n.privacyPolicyPdfExportSharing,
               body:
-                  'When you export a PDF of your directive, it is generated '
-                  'locally on your device. Sharing the PDF (via email, '
-                  'messaging, etc.) sends it through your device\'s standard '
-                  'sharing mechanism. The app cannot control where the PDF '
-                  'is stored once shared.',
+                  context.l10n.privacyPolicyWhenYouExportAPdf,
               headingStyle: headingStyle,
               bodyStyle: bodyStyle,
             ),
 
             _PolicySection(
-              title: 'Your Rights',
+              title: context.l10n.privacyPolicyYourRights,
               body:
-                  'You can delete any directive at any time from the home '
-                  'screen. Deleting a directive removes all associated data '
-                  '(personal info, agents, medications, witnesses, signatures) '
-                  'from the local database.\n\n'
-                  'You can remove your AI provider API key(s) at any time from '
-                  'the AI Setup screen.\n\n'
-                  'Uninstalling the app removes all locally stored data.',
+                  context.l10n.privacyPolicyYouCanDeleteAnyDirective,
               headingStyle: headingStyle,
               bodyStyle: bodyStyle,
             ),
 
             _PolicySection(
-              title: 'No Third-Party Tracking',
+              title: context.l10n.privacyPolicyNoThirdPartyTracking,
               body:
-                  'This app does not include any third-party analytics SDKs, '
-                  'advertising frameworks, crash reporting services (such as '
-                  'Firebase, Crashlytics, or Sentry), or tracking pixels.\n\n'
-                  'The only external network connections this app makes are:\n'
-                  '  - Your chosen AI provider — Google Gemini (default), '
-                  'Anthropic, OpenAI, or xAI — only when you use AI features\n'
-                  '  - NIH/NLM Clinical Table Search Service — medication, '
-                  'condition, and provider (doctor) lookups\n'
-                  '  - NLM MedlinePlus Connect & RxNav — plain-language '
-                  'condition and medication explanations (sends only an ICD-10 '
-                  'code or a medication name)\n'
-                  '  - openFDA / U.S. FDA — official drug labels used to ground '
-                  'the side-effects list (sends only a medication name)\n\n'
-                  'Each of these receives only the term or code being looked '
-                  'up — never your identity or your directive. No data is sent '
-                  'to the app developer at any time.',
+                  context.l10n.privacyPolicyThisAppDoesNotInclude,
               headingStyle: headingStyle,
               bodyStyle: bodyStyle,
             ),
 
             _PolicySection(
-              title: 'HIPAA & Compliance',
+              title: context.l10n.privacyPolicyHipaaCompliance,
               body:
-                  'This app is NOT HIPAA-compliant. It is not a covered entity '
-                  'or business associate under HIPAA. The app is intended for '
-                  'personal use by individuals preparing their own mental '
-                  'health advance directives.\n\n'
-                  'While this app implements privacy measures aligned with '
-                  'GDPR, CCPA, and MHMDA principles (as described above), it '
-                  'has not been independently audited or certified for '
-                  'compliance with these regulations. If you require verified '
-                  'regulatory compliance, consult with a privacy professional '
-                  'before use.',
+                  context.l10n.privacyPolicyThisAppIsNotHipaa,
               headingStyle: headingStyle,
               bodyStyle: bodyStyle,
             ),
 
             _PolicySection(
-              title: 'Breach Notification',
+              title: context.l10n.privacyPolicyBreachNotification,
               body:
-                  'In accordance with the FTC Health Breach Notification Rule, '
-                  'if any unauthorized disclosure of your health information '
-                  'occurs through a security breach, we will notify affected '
-                  'users within 60 calendar days of discovering the breach.\n\n'
-                  'Because this app stores data locally on your device and '
-                  'does not maintain a server-side database, breach risk is '
-                  'limited to the optional AI features. If your chosen AI '
-                  'provider notifies us of a breach affecting data sent through '
-                  'the app, we will pass that notification along through app '
-                  'store updates and in-app notices.',
+                  context.l10n.privacyPolicyInAccordanceWithTheFtc,
               headingStyle: headingStyle,
               bodyStyle: bodyStyle,
             ),
 
             _PolicySection(
-              title: 'Contact',
+              title: context.l10n.privacyPolicyContact,
               body:
                   'You can reach the developer through any of the following '
                   '(the FTC Health Breach Notification Rule requires at least '
@@ -322,7 +154,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
             const SizedBox(height: 8),
             TextButton.icon(
               icon: const Icon(Icons.description_outlined, size: 18),
-              label: const Text('Review Legal Disclaimer'),
+              label: Text(context.l10n.privacyPolicyReviewLegalDisclaimer),
               // Navigator.push (not GoRouter) so the redirect — which bounces
               // away from /disclaimer once it's accepted — doesn't intercept
               // this read-only review. Mirrors the Settings disclaimer entry.

@@ -1,5 +1,6 @@
 ﻿import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/ui/widgets/design/design_card.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
@@ -37,25 +38,22 @@ class PermissionsOverviewScreen extends StatelessWidget {
       // owns the header in the body.
       body: Column(children: [
         WizardHeader(
-          backLabel: 'Back',
+          backLabel: context.l10n.back,
           onBack: () => Navigator.of(context).maybePop(),
           actionLabel: '',
         ),
         Expanded(child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 14, 20, 32),
         children: [
-          const SectionLabel('What this app may ask for'),
+          SectionLabel(context.l10n.permissionsOverviewWhatThisAppMayAsk),
           const SizedBox(height: 6),
-          const EditorialHeading(
-            text: 'Only what we need.',
+          EditorialHeading(
+            text: context.l10n.permissionsOverviewOnlyWhatWeNeed,
             size: 30,
           ),
           const SizedBox(height: 6),
           Text(
-            'PA MHAD requests system permissions only for features you '
-            'actively use. Nothing is collected in the background. Each '
-            'section below explains exactly what a permission unlocks, '
-            'what the app does with the result, and what it never does.',
+            context.l10n.permissionsOverviewPaMhadRequestsSystemPermissions,
             style: TextStyle(
               fontFamily: kSansFamily,
               fontSize: 14,
@@ -66,7 +64,7 @@ class PermissionsOverviewScreen extends StatelessWidget {
           const SizedBox(height: 18),
           _PermissionCard(
             icon: Icons.fingerprint,
-            title: 'Biometrics / passcode',
+            title: context.l10n.permissionsOverviewBiometricsPasscode,
             usedFor: 'Unlocking encrypted on-device storage (native app only; '
                 'not used by the web app).',
             promises: const [
@@ -83,7 +81,7 @@ class PermissionsOverviewScreen extends StatelessWidget {
           const SizedBox(height: 12),
           _PermissionCard(
             icon: Icons.notifications_outlined,
-            title: 'Notifications',
+            title: context.l10n.permissionsOverviewNotifications,
             usedFor:
                 'Reminding you about witness signing, renewals, and check-ins.',
             promises: const [
@@ -100,7 +98,7 @@ class PermissionsOverviewScreen extends StatelessWidget {
           const SizedBox(height: 12),
           _PermissionCard(
             icon: Icons.camera_alt_outlined,
-            title: 'Camera',
+            title: context.l10n.permissionsOverviewCamera,
             usedFor:
                 'Snapping a photo of your ID, medication labels, or condition lists '
                 'for AI-assisted field extraction. Coming in a later release.',
@@ -116,7 +114,7 @@ class PermissionsOverviewScreen extends StatelessWidget {
           const SizedBox(height: 12),
           _PermissionCard(
             icon: Icons.mic_outlined,
-            title: 'Microphone',
+            title: context.l10n.permissionsOverviewMicrophone,
             usedFor:
                 'Speaking long-form answers (e.g. "anything else") instead of typing. '
                 'Coming in a later release.',
@@ -132,7 +130,7 @@ class PermissionsOverviewScreen extends StatelessWidget {
           const SizedBox(height: 12),
           _PermissionCard(
             icon: Icons.contacts_outlined,
-            title: 'Contacts',
+            title: context.l10n.permissionsOverviewContacts,
             usedFor:
                 'Picking an agent or witness from your address book instead of '
                 "typing their details. Coming in a later release.",
@@ -146,23 +144,17 @@ class PermissionsOverviewScreen extends StatelessWidget {
             statusOk: false,
           ),
           const SizedBox(height: 18),
-          const InfoBanner(
+          InfoBanner(
             icon: Icons.settings_outlined,
             variant: InfoBannerVariant.info,
-            text: 'Permissions are managed by your device, not by this app. '
-                "Open your device's Settings → PA MHAD to grant, revoke, "
-                'or review any of the above at any time.',
+            text: context.l10n.permissionsOverviewPermissionsAreManagedByYour,
           ),
           const SizedBox(height: 12),
-          const InfoBanner(
+          InfoBanner(
             icon: Icons.shield_outlined,
             variant: InfoBannerVariant.success,
             text:
-                'No analytics. No tracking pixels. No cookies. No third-party '
-                'SDKs for advertising or measurement. The only outbound flows '
-                'are the opt-in AI features (your chosen AI provider) and NLM '
-                'medical-reference lookups, both with PII stripping at a single '
-                'chokepoint.',
+                context.l10n.permissionsOverviewNoAnalyticsNoTrackingPixels,
           ),
         ],
       )),

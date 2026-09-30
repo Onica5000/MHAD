@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/utils/date_format.dart';
@@ -13,19 +14,14 @@ class ExportLegalDisclaimerCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Semantics(
-        label: 'Important: Before sharing, ensure this directive has been '
-            'signed, dated, and witnessed by two adults as required by '
-            'PA Act 194. Give copies to your agent, physician, and '
-            'support people.',
+        label: context.l10n.exportCardsImportantBeforeSharingEnsureThis,
         container: true,
         child: Card(
           color: Theme.of(context).colorScheme.errorContainer,
           child: Padding(
             padding: const EdgeInsets.all(12),
             child: Text(
-              'Before sharing: ensure this directive has been signed, dated, '
-              'and witnessed by two adults (18+) as required by PA Act 194. '
-              'Give copies to your agent, physician, and support people.',
+              context.l10n.exportCardsBeforeSharingEnsureThisDirective,
               style: TextStyle(
                 fontSize: 12,
                 color: Theme.of(context).colorScheme.onErrorContainer,
@@ -50,7 +46,7 @@ class ExportPrincipalCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Principal',
+            Text(context.l10n.exportCardsPrincipal,
                 style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
             const SizedBox(height: 4),
             Text(directive.fullName, style: const TextStyle(fontSize: 13)),
@@ -92,8 +88,7 @@ class ExportUnencryptedBanner extends StatelessWidget {
             const SizedBox(width: 8),
             Expanded(
               child: Text(
-                'The exported PDF is not encrypted. Share only via '
-                'channels you trust.',
+                context.l10n.exportCardsTheExportedPdfIsNot,
                 style: TextStyle(
                   fontSize: 13,
                   color: Theme.of(context).colorScheme.onErrorContainer,

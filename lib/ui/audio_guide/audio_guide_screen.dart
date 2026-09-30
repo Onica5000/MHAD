@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/ui/widgets/design/design_card.dart';
 import 'package:mhad/data/audio_questionnaire_content.dart';
 import 'package:mhad/ui/export/pdf/questionnaire_pdf.dart';
@@ -14,6 +15,7 @@ class AudioGuideScreen extends StatelessWidget {
 
   Future<void> _printQuestionnaire(BuildContext context) async {
     final messenger = ScaffoldMessenger.of(context);
+    final l10n = context.l10n;
     try {
       final bytes = await buildAudioQuestionnairePdf();
       await Printing.layoutPdf(
@@ -23,9 +25,8 @@ class AudioGuideScreen extends StatelessWidget {
     } catch (e) {
       debugPrint('Audio questionnaire print failed: $e');
       messenger.showSnackBar(
-        const SnackBar(
-            content: Text(
-                "Couldn't open the questionnaire to print. Please try again.")),
+        SnackBar(
+            content: Text(l10n.audioGuideCouldnTOpenTheQuestionnaire)),
       );
     }
   }
@@ -35,14 +36,12 @@ class AudioGuideScreen extends StatelessWidget {
     final p = Theme.of(context).mhadPalette;
     return Scaffold(
       backgroundColor: p.scaffoldBackground,
-      appBar: AppBar(title: const Text('Record your wishes by voice')),
+      appBar: AppBar(title: Text(context.l10n.audioGuideRecordYourWishesByVoice)),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(20, 16, 20, 40),
         children: [
           Text(
-            'Describe your wishes out loud, upload the recording on the '
-            'Snap-to-fill screen, and the AI fills your directive — you review '
-            'every field before anything is saved.',
+            context.l10n.audioGuideDescribeYourWishesOutLoud,
             style: TextStyle(
               fontFamily: kSansFamily,
               fontSize: 15,
@@ -56,13 +55,12 @@ class AudioGuideScreen extends StatelessWidget {
             child: FilledButton.icon(
               onPressed: () => _printQuestionnaire(context),
               icon: const Icon(Icons.print_outlined, size: 18),
-              label: const Text('Print the questionnaire'),
+              label: Text(context.l10n.audioGuidePrintTheQuestionnaire),
             ),
           ),
           const SizedBox(height: 6),
           Text(
-            'Print it to read aloud while you record, or to fill in by hand '
-            'first.',
+            context.l10n.audioGuidePrintItToReadAloud,
             style: TextStyle(
               fontFamily: kSansFamily,
               fontSize: 12,
@@ -72,7 +70,7 @@ class AudioGuideScreen extends StatelessWidget {
           const SizedBox(height: 20),
 
           // ── Recording tips & limits ──
-          const SectionLabel('How to record'),
+          SectionLabel(context.l10n.audioGuideHowToRecord),
           const SizedBox(height: 8),
           _tip(p, Icons.high_quality_outlined,
               'Quality doesn\'t matter. Any phone voice memo works — the AI '
@@ -86,14 +84,10 @@ class AudioGuideScreen extends StatelessWidget {
               'Say medication and doctor names slowly and spell them. The AI '
               'won\'t guess a drug or condition it didn\'t clearly hear.'),
           const SizedBox(height: 10),
-          const InfoBanner(
+          InfoBanner(
             icon: Icons.privacy_tip_outlined,
             variant: InfoBannerVariant.warning,
-            text: 'To transcribe, your recording — including any personal '
-                'details you speak — is sent to Google\'s AI. On the free tier '
-                'it may be retained and reviewed, and can\'t be recalled. Don\'t '
-                'say anything you\'re not comfortable sending; you can always '
-                'type sensitive fields by hand instead.',
+            text: context.l10n.audioGuideToTranscribeYourRecordingIncluding,
           ),
           const SizedBox(height: 24),
 
@@ -104,7 +98,7 @@ class AudioGuideScreen extends StatelessWidget {
               TextButton.icon(
                 onPressed: () => _printQuestionnaire(context),
                 icon: const Icon(Icons.print_outlined, size: 16),
-                label: const Text('Print'),
+                label: Text(context.l10n.audioGuidePrint),
                 style: TextButton.styleFrom(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   minimumSize: const Size(0, 32),
@@ -127,10 +121,10 @@ class AudioGuideScreen extends StatelessWidget {
           for (final s in audioQSections) _section(p, s),
 
           const SizedBox(height: 16),
-          const SectionLabel('What the recording can\'t fill'),
+          SectionLabel(context.l10n.audioGuideWhatTheRecordingCanT),
           const SizedBox(height: 4),
           Text(
-            'Set these in the app:',
+            context.l10n.audioGuideSetTheseInTheApp,
             style: TextStyle(
               fontFamily: kSansFamily,
               fontSize: 13,
@@ -141,7 +135,7 @@ class AudioGuideScreen extends StatelessWidget {
           for (final item in audioQCantDo) _bullet(p, item, muted: true),
           const SizedBox(height: 14),
           Text(
-            'Worth saying out loud — autofill now captures these:',
+            context.l10n.audioGuideWorthSayingOutLoudAutofill,
             style: TextStyle(
               fontFamily: kSansFamily,
               fontSize: 13,

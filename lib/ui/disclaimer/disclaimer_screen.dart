@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/ui/widgets/design/design_card.dart';
 import 'package:mhad/services/disclaimer_service.dart';
 import 'package:mhad/services/notification_service.dart';
@@ -131,10 +132,10 @@ class _GateLayout extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _SectionLabel('Before you begin', palette: palette),
+                  _SectionLabel(context.l10n.disclaimerBeforeYouBegin, palette: palette),
                   const SizedBox(height: 6),
                   Text(
-                    'A few things to understand.',
+                    context.l10n.disclaimerAFewThingsToUnderstand,
                     style: TextStyle(
                       fontFamily: 'Instrument Serif',
                       fontFamilyFallback: const ['Georgia', 'serif'],
@@ -148,9 +149,7 @@ class _GateLayout extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'This tool helps you write a Pennsylvania Mental Health '
-                    'Advance Directive under Act 194. Please read these '
-                    'before continuing.',
+                    context.l10n.disclaimerThisToolHelpsYouWrite,
                     style: TextStyle(
                       fontFamily: kSansFamily,
                       fontSize: 14,
@@ -169,28 +168,24 @@ class _GateLayout extends StatelessWidget {
                       // validity and the PA P&A / attorney resources live in
                       // the full legal sections ("Read full disclaimer").
                       children: [
-                        const _DisclaimerCard(
+                        _DisclaimerCard(
                           icon: Icons.shield_outlined,
-                          title: 'This is not legal advice',
+                          title: context.l10n.disclaimerThisIsNotLegalAdvice,
                           body:
-                              'We give plain-language help, not legal counsel. '
-                              'For complex situations, talk to an attorney or '
-                              'advocate.',
+                              context.l10n.disclaimerWeGivePlainLanguageHelp,
                         ),
                         const SizedBox(height: 10),
-                        const _DisclaimerCard(
+                        _DisclaimerCard(
                           icon: Icons.draw_outlined,
                           title:
-                              'It becomes valid only when signed on paper',
+                              context.l10n.disclaimerItBecomesValidOnlyWhen,
                           body:
-                              'PA law requires your signature plus two '
-                              'adult witnesses, in ink, in person. '
-                              'The app cannot sign for you.',
+                              context.l10n.disclaimerPaLawRequiresYourSignature,
                         ),
                         const SizedBox(height: 10),
                         _DisclaimerCard(
                           icon: Icons.lock_outline,
-                          title: 'Nothing is saved or sent to us',
+                          title: context.l10n.disclaimerNothingIsSavedOrSent,
                           // Accurate on each platform: web is in-memory only;
                           // native Private Mode stores encrypted on-device.
                           body: kIsWeb
@@ -205,12 +200,11 @@ class _GateLayout extends StatelessWidget {
                                   'you can open it.',
                         ),
                         const SizedBox(height: 10),
-                        const _DisclaimerCard(
+                        _DisclaimerCard(
                           icon: Icons.published_with_changes,
-                          title: 'You can stop or change anything, anytime',
+                          title: context.l10n.disclaimerYouCanStopOrChange,
                           body:
-                              'Skip questions, go back, or revoke later. This '
-                              'is your voice — you stay in control.',
+                              context.l10n.disclaimerSkipQuestionsGoBackOr,
                         ),
                       ],
                     ),
@@ -236,7 +230,7 @@ class _GateLayout extends StatelessWidget {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        child: const Text('Read full disclaimer'),
+                        child: Text(context.l10n.disclaimerReadFullDisclaimer),
                       ),
                       const Spacer(),
                       // NOTE: set the height via minimumSize, NOT a wrapping
@@ -248,7 +242,7 @@ class _GateLayout extends StatelessWidget {
                         onPressed: onContinue,
                         icon: const Icon(Icons.arrow_forward, size: 18),
                         iconAlignment: IconAlignment.end,
-                        label: const Text('Get started'),
+                        label: Text(context.l10n.disclaimerGetStarted),
                         style: FilledButton.styleFrom(
                           backgroundColor: palette.primary,
                           foregroundColor: palette.onPrimary,
@@ -426,7 +420,7 @@ class _AckRow extends StatelessWidget {
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    "I'm 18 or older, and I understand and want to continue.",
+                    context.l10n.disclaimerIM18OrOlder,
                     style: TextStyle(
                       fontFamily: kSansFamily,
                       fontSize: 14,

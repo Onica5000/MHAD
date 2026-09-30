@@ -1,6 +1,7 @@
 ﻿import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/ui/widgets/design/design_card.dart';
 import 'package:mhad/ui/widgets/design/status_views.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -111,66 +112,48 @@ class _AiConsistencyScreenState extends ConsumerState<AiConsistencyScreen> {
       // ECT / experimental / drug trials: a single field. When the principal
       // consents themselves, the form ALSO states the agent is not authorized —
       // valid, but easy to misread as a contradiction.
+      final l = context.l10n;
       void procedureNote(String name, String? consent) {
         if (!gaveOwnConsent(consent)) return;
         found.add(_Conflict(
-          steps: 'Procedures + Agent authority',
-          title: 'You consented to $name yourself — the printed form will also '
-              'state your agent is NOT authorized to consent to $name.',
-          body: 'Pennsylvania’s form lets you do both: give your own '
-              'consent AND authorize your agent to consent on your behalf (that '
-              'agent authorization needs your physical initials, '
-              '§5836(c)). As entered, only your own consent is recorded, '
-              'so the document says your agent may not consent to $name. That '
-              'is allowed and may be exactly what you intend — keep both if so. '
-              'If you also want your agent able to consent (e.g. if you later '
-              'can’t decide), choose “My agent will decide” for '
-              '$name.',
-          aStatement: 'You consent to $name',
-          bStatement: 'Agent not authorized: $name',
-          actionEditA: 'Review $name choice',
+          steps: l.aiConsistencyStepsProcedures,
+          title: l.aiConsistencyProcTitle(name),
+          body: l.aiConsistencyProcBody(name),
+          aStatement: l.aiConsistencyProcA(name),
+          bStatement: l.aiConsistencyProcB(name),
+          actionEditA: l.aiConsistencyProcAction(name),
         ));
       }
 
-      procedureNote('ECT', prefs.ectConsent);
-      procedureNote('experimental studies', prefs.experimentalConsent);
-      procedureNote('drug trials', prefs.drugTrialConsent);
+      procedureNote(l.aiConsistencyProcEct, prefs.ectConsent);
+      procedureNote(l.aiConsistencyProcExperimental, prefs.experimentalConsent);
+      procedureNote(l.aiConsistencyProcDrugTrials, prefs.drugTrialConsent);
 
       // Medications carry TWO independent fields — your consent (Medications
       // step) and the agent's authority (Agent-authority step) — so they can
       // directly oppose each other on the printed form.
       if (prefs.medicationConsent == consentAgentDecides &&
           !prefs.agentCanConsentMedication) {
-        found.add(const _Conflict(
-          steps: 'Medications + Agent authority',
-          title: 'You said your agent decides your medications, but the form '
-              'says your agent is NOT authorized to consent to medications.',
-          body: 'These cancel each other out. The official form lets you set '
-              'your own medication preferences and your agent’s authority '
-              'separately — both are allowed — but as entered they oppose each '
-              'other. Authorize your agent to consent to medications, or change '
-              'the medication choice so they agree.',
-          aStatement: 'Agent decides medications',
-          bStatement: 'Agent not authorized: medications',
-          actionEditA: 'Edit Medications',
-          actionEditB: 'Edit Agent authority',
+        found.add(_Conflict(
+          steps: l.aiConsistencyStepsMeds,
+          title: context.l10n.aiConsistencyYouSaidYourAgentDecides,
+          body: context.l10n.aiConsistencyTheseCancelEachOtherOut,
+          aStatement: l.aiConsistencyAgentDecidesMeds,
+          bStatement: l.aiConsistencyAgentNotAuthorizedMeds,
+          actionEditA: l.aiConsistencyEditMedications,
+          actionEditB: l.aiConsistencyEditAgentAuthority,
         ));
       }
       if (prefs.medicationConsent == consentNo &&
           prefs.agentCanConsentMedication) {
-        found.add(const _Conflict(
-          steps: 'Medications + Agent authority',
-          title: 'You don’t consent to any medications, but your agent is '
-              'authorized to consent to them.',
-          body: 'The official form lets you set your own preference and your '
-              'agent’s authority separately — both are valid — but as '
-              'entered they oppose each other: your refusal of all medications '
-              'versus your agent’s power to consent to any. Decide which '
-              'should control and adjust the other.',
-          aStatement: 'No medications (you)',
-          bStatement: 'Agent may consent: medications',
-          actionEditA: 'Edit Medications',
-          actionEditB: 'Edit Agent authority',
+        found.add(_Conflict(
+          steps: l.aiConsistencyStepsMeds,
+          title: context.l10n.aiConsistencyYouDonTConsentTo,
+          body: context.l10n.aiConsistencyTheOfficialFormLetsYou,
+          aStatement: l.aiConsistencyNoMedsYou,
+          bStatement: l.aiConsistencyAgentMayConsentMeds,
+          actionEditA: l.aiConsistencyEditMedications,
+          actionEditB: l.aiConsistencyEditAgentAuthority,
         ));
       }
     }
@@ -408,7 +391,7 @@ Return plain-text suggestions (short bullets are fine). No preamble.''';
           children: [
             Icon(Icons.auto_awesome, size: 16, color: p.primary),
             const SizedBox(width: 6),
-            const Expanded(child: SectionLabel('AI review')),
+            Expanded(child: SectionLabel(context.l10n.aiConsistencyAiReview)),
           ],
         );
 
@@ -418,9 +401,7 @@ Return plain-text suggestions (short bullets are fine). No preamble.''';
         InfoBanner(
           icon: Icons.auto_awesome,
           variant: InfoBannerVariant.info,
-          text: 'Set up the free AI assistant for an additional AI-powered '
-              'review that suggests gaps and things to double-check. Optional — '
-              'the rule-based check above always runs without it.',
+          text: context.l10n.aiConsistencySetupAiInvite,
         ),
         const SizedBox(height: 8),
         Align(
@@ -428,7 +409,7 @@ Return plain-text suggestions (short bullets are fine). No preamble.''';
           child: OutlinedButton.icon(
             onPressed: () => context.push(AppRoutes.aiSetup),
             icon: const Icon(Icons.auto_awesome, size: 16),
-            label: const Text('Set up AI'),
+            label: Text(context.l10n.pipelineSetupAi),
           ),
         ),
       ];
@@ -447,7 +428,7 @@ Return plain-text suggestions (short bullets are fine). No preamble.''';
             ),
             const SizedBox(width: 10),
             Text(
-              'The AI is reviewing your directive…',
+              context.l10n.aiConsistencyTheAiIsReviewingYour,
               style: TextStyle(
                 fontFamily: kSansFamily,
                 fontSize: 13,
@@ -477,7 +458,7 @@ Return plain-text suggestions (short bullets are fine). No preamble.''';
               _runAiPass();
             },
             icon: const Icon(Icons.refresh, size: 16),
-            label: const Text('Try again'),
+            label: Text(context.l10n.pickTryAgain),
           ),
         ),
       ];
@@ -488,7 +469,7 @@ Return plain-text suggestions (short bullets are fine). No preamble.''';
         label(),
         const SizedBox(height: 8),
         Text(
-          'AI review skipped — you can re-run it any time.',
+          context.l10n.aiConsistencyAiReviewSkippedYouCan,
           style: TextStyle(
             fontFamily: kSansFamily,
             fontSize: 13,
@@ -504,7 +485,7 @@ Return plain-text suggestions (short bullets are fine). No preamble.''';
               _runAiPass();
             },
             icon: const Icon(Icons.auto_awesome, size: 16),
-            label: const Text('Run AI review'),
+            label: Text(context.l10n.aiConsistencyRunAiReview),
           ),
         ),
       ];
@@ -524,7 +505,7 @@ Return plain-text suggestions (short bullets are fine). No preamble.''';
             child: SelectableText(
               _aiSuggestions!.isNotEmpty
                   ? _aiSuggestions!
-                  : 'The AI did not return any suggestions.',
+                  : context.l10n.aiConsistencyNoSuggestions,
               style: TextStyle(
                 fontFamily: kSansFamily,
                 fontSize: 14,
@@ -536,7 +517,7 @@ Return plain-text suggestions (short bullets are fine). No preamble.''';
         ),
         const SizedBox(height: 6),
         Text(
-          '$aiNotAdvice Optional suggestions based only on what you entered.',
+          context.l10n.aiConsistencyNotAdviceOptional(aiNotAdvice),
           style: TextStyle(
             fontFamily: kSansFamily,
             fontSize: 12,
@@ -567,13 +548,13 @@ Return plain-text suggestions (short bullets are fine). No preamble.''';
       // visual title (it duplicated the dropped AppBar title).
       body: Column(children: [
         WizardHeader(
-          backLabel: 'Back',
+          backLabel: context.l10n.back,
           onBack: () => Navigator.of(context).maybePop(),
           actionLabel: '',
         ),
         Expanded(
           child: _loading
-              ? const PageLoading(label: 'Checking your directive')
+              ? PageLoading(label: context.l10n.aiConsistencyCheckingYourDirective)
               : _error != null
               ? Center(
                   child: Padding(
@@ -584,14 +565,14 @@ Return plain-text suggestions (short bullets are fine). No preamble.''';
                         Icon(Icons.error_outline, color: p.primary, size: 40),
                         const SizedBox(height: 12),
                         Text(
-                          "Couldn't run the consistency check.\n$_error",
+                          context.l10n.aiConsistencyCheckFailed('$_error'),
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: 16),
                         FilledButton.icon(
                           onPressed: _check,
                           icon: const Icon(Icons.refresh),
-                          label: const Text('Try again'),
+                          label: Text(context.l10n.pickTryAgain),
                         ),
                       ],
                     ),
@@ -604,8 +585,8 @@ Return plain-text suggestions (short bullets are fine). No preamble.''';
                   children: [
                     Icon(Icons.auto_awesome, color: p.primary),
                     const SizedBox(width: 6),
-                    const Expanded(
-                      child: SectionLabel('Consistency check · checked at Review'),
+                    Expanded(
+                      child: SectionLabel(context.l10n.aiConsistencyConsistencyCheckCheckedAtReview),
                     ),
                   ],
                 ),
@@ -613,10 +594,10 @@ Return plain-text suggestions (short bullets are fine). No preamble.''';
                 EditorialHeading(
                   textSpan: TextSpan(
                     children: [
-                      const TextSpan(text: 'I noticed '),
+                      TextSpan(text: context.l10n.aiConsistencyINoticed),
                       TextSpan(
-                        text:
-                            '${_conflicts.length} thing${_conflicts.length == 1 ? "" : "s"}',
+                        text: context.l10n
+                            .aiConsistencyThingsCount(_conflicts.length),
                         style: TextStyle(
                           color: _conflicts.isEmpty ? okText : warnText,
                         ),
@@ -629,9 +610,8 @@ Return plain-text suggestions (short bullets are fine). No preamble.''';
                 const SizedBox(height: 6),
                 Text(
                   _conflicts.isEmpty
-                      ? 'Everything looks internally consistent.'
-                      : "These won't block you from generating the PDF — "
-                          'they are warnings you can fix or ignore.',
+                      ? context.l10n.aiConsistencyAllConsistent
+                      : context.l10n.aiConsistencyWarningsOnly,
                   style: TextStyle(
                     fontFamily: kSansFamily,
                     fontSize: 14,
@@ -648,10 +628,10 @@ Return plain-text suggestions (short bullets are fine). No preamble.''';
                     ),
                   ),
                   const SizedBox(height: 12),
-                  const InfoBanner(
+                  InfoBanner(
                     icon: Icons.check_circle_outline,
                     variant: InfoBannerVariant.success,
-                    text: 'No cross-step contradictions detected.',
+                    text: context.l10n.aiConsistencyNoContradictions,
                   ),
                 ]
                 else
@@ -667,11 +647,7 @@ Return plain-text suggestions (short bullets are fine). No preamble.''';
                 InfoBanner(
                   icon: Icons.auto_awesome,
                   variant: InfoBannerVariant.info,
-                  text:
-                      'The contradiction check above is built-in rules. When '
-                      'the AI assistant is set up, an additional AI review adds '
-                      'optional suggestions. Review anything before accepting — '
-                      "this screen warns; it doesn't block PDF generation.",
+                  text: context.l10n.aiConsistencyRulesExplainer,
                 ),
               ],
             ),
@@ -723,13 +699,13 @@ class _ConflictFooter extends StatelessWidget {
               children: [
                 TextButton(
                   onPressed: onContinue,
-                  child: const Text('Ignore & continue'),
+                  child: Text(context.l10n.aiConsistencyIgnoreContinue),
                 ),
                 const Spacer(),
                 FilledButton.icon(
                   onPressed: onResolve,
                   icon: const Icon(Icons.edit_outlined, size: 16),
-                  label: const Text('Resolve in wizard'),
+                  label: Text(context.l10n.aiConsistencyResolveInWizard),
                 ),
               ],
             )
@@ -738,7 +714,7 @@ class _ConflictFooter extends StatelessWidget {
               child: FilledButton.icon(
                 onPressed: onContinue,
                 icon: const Icon(Icons.check, size: 16),
-                label: const Text('Looks good — continue'),
+                label: Text(context.l10n.aiConsistencyLooksGoodContinue),
               ),
             ),
     );
@@ -831,7 +807,7 @@ class _ConflictCard extends StatelessWidget {
                 Icon(Icons.warning_amber_rounded, color: warnText),
                 const SizedBox(width: 6),
                 Text(
-                  'CONFLICT · ${index + 1} · ${conflict.steps}',
+                  context.l10n.aiConsistencyConflictHeader(index + 1, conflict.steps),
                   style: TextStyle(
                     fontFamily: kMonoFamily,
                     fontFamilyFallback: const [
@@ -858,7 +834,7 @@ class _ConflictCard extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: Text(
-                    'vs',
+                    context.l10n.aiConsistencyVs,
                     style: TextStyle(
                       fontFamily: kMonoFamily,
                       fontFamilyFallback: const [
@@ -919,7 +895,7 @@ class _ConflictCard extends StatelessWidget {
                   ),
                 TextButton(
                   onPressed: () => Navigator.pop(context, false),
-                  child: const Text('Keep both'),
+                  child: Text(context.l10n.aiConsistencyKeepBoth),
                 ),
               ],
             ),

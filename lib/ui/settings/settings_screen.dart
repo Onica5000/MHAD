@@ -1,5 +1,6 @@
 ﻿import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/providers/app_providers.dart';
@@ -41,9 +42,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             child: ListView(
               padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
               children: [
-                const SectionLabel('Account'),
-                const EditorialHeading(
-                  text: 'Settings',
+                SectionLabel(context.l10n.settingsAccount),
+                EditorialHeading(
+                  text: context.l10n.navSettings,
                   size: 38,
                   height: 1.0,
                   letterSpacing: -0.5,
@@ -55,7 +56,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 // greeting); status pill reflects current privacy mode.
                 const _ProfileChip(),
                 const SizedBox(height: 18),
-                const SectionLabel('Appearance'),
+                SectionLabel(context.l10n.settingsAppearance),
                 const SizedBox(height: 8),
           // Per user direction (2026-06-02): the app ships in the Deep Navy
           // palette only — no in-app palette picker. The teal/sage palettes
@@ -67,7 +68,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Brightness',
+                  context.l10n.settingsBrightness,
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
                 const SizedBox(height: 8),
@@ -84,14 +85,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           // mixed one functional item (AI setup) with three legal/
           // informational ones. AI assistant is now its own functional
           // section; the legal/privacy items live under "Legal & privacy".
-          const SectionLabel('AI assistant'),
+          SectionLabel(context.l10n.navAiAssistant),
           const SizedBox(height: 8),
           DesignCard(
             padding: EdgeInsets.zero,
             child: _SettingsRow(
               icon: Icons.auto_awesome,
-              title: 'AI assistant',
-              subtitle: 'Choose a provider and add your API key',
+              title: context.l10n.navAiAssistant,
+              subtitle: context.l10n.settingsChooseAProviderAndAdd,
               onTap: () => context.push(AppRoutes.aiSetup),
             ),
           ),
@@ -99,20 +100,20 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
           // "Get help" moved to the left sidebar (above the crisis card) for
           // prominence. Accessibility stays here.
-          const SectionLabel('Accessibility'),
+          SectionLabel(context.l10n.accessibilitySettingsAccessibility),
           const SizedBox(height: 8),
           DesignCard(
             padding: EdgeInsets.zero,
             child: _SettingsRow(
               icon: Icons.accessibility_new,
-              title: 'Accessibility',
-              subtitle: 'Text size, dyslexia font, bold text, contrast, language',
+              title: context.l10n.accessibilitySettingsAccessibility,
+              subtitle: context.l10n.settingsTextSizeDyslexiaFontBold,
               onTap: () => context.push(AppRoutes.accessibility),
             ),
           ),
           const SizedBox(height: 20),
 
-          const SectionLabel('Legal & privacy'),
+          SectionLabel(context.l10n.settingsLegalPrivacy),
           const SizedBox(height: 8),
           DesignCard(
             padding: EdgeInsets.zero,
@@ -120,24 +121,23 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               children: [
                 _SettingsRow(
                   icon: Icons.privacy_tip_outlined,
-                  title: 'Privacy Policy',
-                  subtitle: 'How your data is stored and protected',
+                  title: context.l10n.privacyPolicyPrivacyPolicy,
+                  subtitle: context.l10n.settingsHowYourDataIsStored,
                   onTap: () => context.push(AppRoutes.privacyPolicy),
                 ),
                 Divider(height: 1, color: p.border),
                 _SettingsRow(
                   icon: Icons.shield_outlined,
-                  title: 'Privacy & permissions',
+                  title: context.l10n.settingsPrivacyPermissions,
                   subtitle:
-                      'What permissions the app uses, and what we promise '
-                      'about each',
+                      context.l10n.settingsWhatPermissionsTheAppUses,
                   onTap: () => context.push(AppRoutes.permissions),
                 ),
                 Divider(height: 1, color: p.border),
                 _SettingsRow(
                   icon: Icons.gavel_rounded,
-                  title: 'Legal Disclaimer',
-                  subtitle: 'Terms, limitations, and your legal rights',
+                  title: context.l10n.settingsLegalDisclaimer,
+                  subtitle: context.l10n.settingsTermsLimitationsAndYourLegal,
                   onTap: () {
                     // Use Navigator.push (not GoRouter) so the GoRouter
                     // redirect logic — which would bounce away from
@@ -177,7 +177,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                           size: 20,
                         ),
                       ),
-                      title: const Text('Screenshot Protection'),
+                      title: Text(context.l10n.settingsScreenshotProtection),
                       subtitle: Text(
                         ScreenshotProtectionService.isEnabled
                             ? 'Screenshots are blocked'
@@ -218,7 +218,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 GestureDetector(
                   onLongPress: () => context.push(AppRoutes.admin),
                   child: Text(
-                    'About',
+                    context.l10n.settingsAbout,
                     style: Theme.of(context)
                         .textTheme
                         .titleSmall
@@ -227,19 +227,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'PA Mental Health Advance Directive\n'
-                  'Under Pennsylvania Act 194 of 2004 (effective January 29, '
-                  '2005)\n\n'
-                  'This app helps you document your mental health treatment '
-                  'preferences. It is not legal or medical advice, and not a '
-                  'substitute for a licensed attorney or clinician. See the '
-                  'full Legal Disclaimer above for details.\n\n'
-                  'Your directive is valid for two years from the date you sign '
-                  'it — unless you are found incapable of making mental health '
-                  'decisions at the time it would expire, in which case it '
-                  'stays in effect until your capacity returns.\n\n'
-                  'Form content based on the official PA MHAD booklet '
-                  'published by the Disabilities Law Project (2005).',
+                  context.l10n.settingsPaMentalHealthAdvanceDirective,
                   style: TextStyle(
                     fontFamily: kSansFamily,
                     fontSize: 12,

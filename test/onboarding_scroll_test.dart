@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mhad/l10n/app_localizations.dart';
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/services/onboarding_service.dart';
 import 'package:mhad/ui/onboarding/onboarding_screen.dart';
@@ -17,6 +18,8 @@ void main() {
 
     await tester.pumpWidget(ProviderScope(
       child: MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         theme: buildMhadTheme(ThemePalette.teal, Brightness.light),
         home:
             OnboardingScreen(notifier: OnboardingNotifier(initialValue: false)),

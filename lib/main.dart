@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:mhad/l10n/app_localizations.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/data/educational_content.dart';
@@ -188,7 +188,7 @@ class MhadApp extends ConsumerWidget {
       );
     }
     return MaterialApp.router(
-      title: 'PA Mental Health Advance Directive',
+      onGenerateTitle: (context) => context.l10n.mainAppTitle,
       theme: buildMhadTheme(
         themeSettings.palette,
         Brightness.light,

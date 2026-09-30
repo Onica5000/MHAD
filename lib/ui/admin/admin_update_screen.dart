@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/constants.dart';
@@ -305,7 +306,7 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
                 'tier). Pick only if Flash accuracy is insufficient.'),
           SimpleDialogOption(
             onPressed: () => Navigator.pop(ctx, null),
-            child: const Text('Cancel'),
+            child: Text(context.l10n.cancel),
           ),
         ],
       ),
@@ -353,17 +354,15 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
     return showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Federal Register — relevant federal rules'),
+        title: Text(context.l10n.adminUpdateFederalRegisterRelevantFederalRules),
         content: SizedBox(
           width: 520,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Federal rules the app references. Use a link as the SOURCE for a '
-                'verify-tier legal/dated change. State law (PA Act 194) is not '
-                'covered here.',
+              Text(
+                context.l10n.adminUpdateFederalRulesTheAppReferences,
                 style: TextStyle(fontSize: 12),
               ),
               const SizedBox(height: 8),
@@ -402,7 +401,7 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
                             TextButton.icon(
                               onPressed: () => launchOrCopy(ctx, d.url),
                               icon: const Icon(Icons.open_in_new, size: 14),
-                              label: const Text('Open'),
+                              label: Text(context.l10n.adminUpdateOpen),
                             ),
                             TextButton.icon(
                               onPressed: () async {
@@ -410,13 +409,13 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
                                     ClipboardData(text: d.url));
                                 if (ctx.mounted) {
                                   ScaffoldMessenger.of(ctx).showSnackBar(
-                                    const SnackBar(
-                                        content: Text('Source link copied')),
+                                    SnackBar(
+                                        content: Text(ctx.l10n.adminUpdateSourceLinkCopied)),
                                   );
                                 }
                               },
                               icon: const Icon(Icons.copy, size: 14),
-                              label: const Text('Copy link'),
+                              label: Text(context.l10n.adminUpdateCopyLink),
                             ),
                           ],
                         ),
@@ -431,7 +430,7 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Close'),
+            child: Text(context.l10n.close),
           ),
         ],
       ),
@@ -508,7 +507,7 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
     return showDialog<BackupEntry>(
       context: context,
       builder: (ctx) => SimpleDialog(
-        title: const Text('Restore from which backup?'),
+        title: Text(context.l10n.adminUpdateRestoreFromWhichBackup),
         children: [
           for (final b in backups)
             SimpleDialogOption(
@@ -532,7 +531,7 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Admin · data update')),
+      appBar: AppBar(title: Text(context.l10n.adminUpdateAdminDataUpdate)),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: switch (_stage) {
@@ -560,17 +559,17 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Enter the admin passphrase.'),
+        Text(context.l10n.adminUpdateEnterTheAdminPassphrase),
         const SizedBox(height: 12),
         TextField(
           controller: _passCtrl,
           obscureText: true,
-          decoration: const InputDecoration(
-              border: OutlineInputBorder(), labelText: 'Passphrase'),
+          decoration: InputDecoration(
+              border: OutlineInputBorder(), labelText: context.l10n.adminUpdatePassphrase),
           onSubmitted: (_) => _unlock(),
         ),
         const SizedBox(height: 12),
-        FilledButton(onPressed: _unlock, child: const Text('Unlock')),
+        FilledButton(onPressed: _unlock, child: Text(context.l10n.adminUpdateUnlock)),
         _error_(_error),
       ],
     );
@@ -581,18 +580,15 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-              'Describe the update. The AI drafts changes to the selected file '
-              'with sources; you review and approve before anything is emitted. '
-              'Legal/statutory and educational changes always need your explicit '
-              'sign-off.'),
+          Text(
+              context.l10n.adminUpdateDescribeTheUpdateTheAi),
           const SizedBox(height: 12),
           // Which dynamic-data file to edit.
           DropdownButtonFormField<AdminDataTarget>(
             initialValue: _target,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               border: OutlineInputBorder(),
-              labelText: 'What to update',
+              labelText: context.l10n.adminUpdateWhatToUpdate,
             ),
             items: [
               for (final t in AdminDataTarget.values)
@@ -606,9 +602,9 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
           // Admin-only; switching providers just changes which API is called.
           DropdownButtonFormField<AdminAiProvider>(
             initialValue: _provider,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               border: OutlineInputBorder(),
-              labelText: 'AI provider',
+              labelText: context.l10n.adminUpdateAiProvider,
             ),
             items: [
               for (final p in AdminAiProvider.values)
@@ -641,7 +637,7 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
                     initialValue: _model,
                     decoration: InputDecoration(
                       border: const OutlineInputBorder(),
-                      labelText: 'Model',
+                      labelText: context.l10n.adminUpdateModel,
                       helperText: live.isNotEmpty
                           ? 'Live ${_provider.label} models'
                               '${isGemini ? ' (free tier)' : ''} — from the API'
@@ -682,12 +678,11 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
           TextField(
             controller: _requestCtrl,
             maxLines: 4,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               border: OutlineInputBorder(),
-              labelText: 'Describe the update *',
-              hintText: 'e.g. "The Trevor Project number changed to ..." or '
-                  '"Check Gemini\'s current free-tier rate limits"',
-              helperText: 'Required — what should the AI draft a change to?',
+              labelText: context.l10n.adminUpdateDescribeTheUpdate,
+              hintText: context.l10n.adminUpdateEGTheTrevorProject,
+              helperText: context.l10n.adminUpdateRequiredWhatShouldTheAi,
             ),
           ),
           const SizedBox(height: 12),
@@ -695,11 +690,10 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
           // called out (the maintainer can scope the proposal themselves).
           TextField(
             controller: _focusCtrl,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               border: OutlineInputBorder(),
-              labelText: 'Focus area / path (optional)',
-              helperText: 'Restrict the AI to one spot, e.g. '
-                  '"config.timeoutsSeconds" or "sections.faq_valid".',
+              labelText: context.l10n.adminUpdateFocusAreaPathOptional,
+              helperText: context.l10n.adminUpdateRestrictTheAiToOne,
             ),
           ),
           const SizedBox(height: 16),
@@ -733,17 +727,17 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
               OutlinedButton.icon(
                 onPressed: _loading ? null : _revert,
                 icon: const Icon(Icons.history),
-                label: const Text('Revert'),
+                label: Text(context.l10n.adminUpdateRevert),
               ),
               OutlinedButton.icon(
                 onPressed: _loading ? null : _checkGeminiModel,
                 icon: const Icon(Icons.model_training),
-                label: const Text('Check best Gemini model'),
+                label: Text(context.l10n.adminUpdateCheckBestGeminiModel),
               ),
               OutlinedButton.icon(
                 onPressed: _loading ? null : _checkFederalRegister,
                 icon: const Icon(Icons.gavel),
-                label: const Text('Check Federal Register'),
+                label: Text(context.l10n.adminUpdateCheckFederalRegister),
               ),
             ],
           ),
@@ -887,17 +881,17 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
                 await Clipboard.setData(ClipboardData(text: _output));
                 if (mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Copied updated JSON')),
+                    SnackBar(content: Text(context.l10n.adminUpdateCopiedUpdatedJson)),
                   );
                 }
               },
               icon: const Icon(Icons.copy),
-              label: const Text('Copy JSON'),
+              label: Text(context.l10n.adminUpdateCopyJson),
             ),
             const SizedBox(width: 8),
             TextButton(
               onPressed: () => setState(() => _stage = _Stage.draft),
-              child: const Text('Another update'),
+              child: Text(context.l10n.adminUpdateAnotherUpdate),
             ),
           ],
         ),

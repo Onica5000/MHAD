@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/domain/model/directive.dart';
@@ -29,23 +30,18 @@ class DirectiveFormChoice extends ConsumerWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         icon: const Icon(Icons.info_outline, size: 36),
-        title: const Text('Power of Attorney Only'),
-        content: const Text(
-          'With a POA-only form, your agent will have authority to make '
-          'mental health care decisions on your behalf, but the document '
-          'will not include your personal treatment preferences.\n\n'
-          'Consider using the Combined form instead to document both your '
-          'preferences AND appoint an agent. This gives your care team the '
-          'most guidance.',
+        title: Text(context.l10n.poaOnly),
+        content: Text(
+          context.l10n.directiveFormChoiceWithAPoaOnlyForm,
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Go Back'),
+            child: Text(context.l10n.exportGoBack),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Continue with POA'),
+            child: Text(context.l10n.directiveFormChoiceContinueWithPoa),
           ),
         ],
       ),
@@ -69,13 +65,13 @@ class DirectiveFormChoice extends ConsumerWidget {
     );
     final declaration = _SingleFormCard(
       icon: Icons.description_outlined,
-      title: 'Declaration only',
+      title: context.l10n.quizLegendDeclaration,
       sub: 'Treatment preferences without naming an agent.',
       onTap: () => _start(context, ref, FormType.declaration),
     );
     final poa = _SingleFormCard(
       icon: Icons.people_alt_outlined,
-      title: 'Power of attorney only',
+      title: context.l10n.directiveFormChoicePowerOfAttorneyOnly,
       sub: 'Name a decision-maker without listing preferences.',
       onTap: () => _startPoa(context, ref),
     );
@@ -123,8 +119,7 @@ class DirectiveFormChoice extends ConsumerWidget {
         _HelpMeChooseBanner(onTap: () => _openQuiz(context, ref)),
         const SizedBox(height: 8),
         Text(
-          'You can switch form types later if you change your mind — '
-          'Combined is the broadest.',
+          context.l10n.directiveFormChoiceYouCanSwitchFormTypes,
           style: TextStyle(
             fontFamily: kSansFamily,
             fontSize: 13,
@@ -182,7 +177,7 @@ class _CombinedCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
                     ),
                     child: Text(
-                      'RECOMMENDED',
+                      context.l10n.modeSelectionRecommended,
                       style: TextStyle(
                         fontFamily: kSansFamily,
                         fontSize: 11,
@@ -194,7 +189,7 @@ class _CombinedCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    'Combined directive',
+                    context.l10n.directiveFormChoiceCombinedDirective,
                     style: TextStyle(
                       fontFamily: kSansFamily,
                       fontSize: 24,
@@ -205,8 +200,7 @@ class _CombinedCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Treatment preferences and a trusted decision-maker, in '
-                    'one document. 11 short steps · about 20 minutes.',
+                    context.l10n.directiveFormChoiceTreatmentPreferencesAndATrusted,
                     style: TextStyle(
                       fontFamily: kSansFamily,
                       fontSize: 14,
@@ -218,7 +212,7 @@ class _CombinedCard extends StatelessWidget {
                   FilledButton.icon(
                     onPressed: onStart,
                     icon: const Icon(Icons.arrow_forward, size: 16),
-                    label: const Text('Start now'),
+                    label: Text(context.l10n.directiveFormChoiceStartNow),
                     style: FilledButton.styleFrom(
                       backgroundColor: Colors.white,
                       foregroundColor: p.primaryDark,
@@ -327,7 +321,7 @@ class _HelpMeChooseBanner extends StatelessWidget {
     final p = Theme.of(context).mhadPalette;
     return Semantics(
       button: true,
-      label: 'Take the 4-question quiz to choose a form',
+      label: context.l10n.directiveFormChoiceTakeThe4QuestionQuiz,
       child: Material(
         color: p.primaryLight,
         borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
@@ -347,7 +341,7 @@ class _HelpMeChooseBanner extends StatelessWidget {
                 const SizedBox(width: 10),
                 Expanded(
                   child: Text(
-                    'Not sure which form fits? Take the 4-question quiz.',
+                    context.l10n.directiveFormChoiceNotSureWhichFormFits,
                     style: TextStyle(
                       fontFamily: kSansFamily,
                       fontSize: 13,
@@ -358,7 +352,7 @@ class _HelpMeChooseBanner extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  'Help me choose →',
+                  context.l10n.directiveFormChoiceHelpMeChoose,
                   style: TextStyle(
                     fontFamily: kSansFamily,
                     fontSize: 13,
