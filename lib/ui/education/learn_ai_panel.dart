@@ -107,13 +107,15 @@ class _LearnAiPanelState extends ConsumerState<LearnAiPanel> {
                 children: [
                   Icon(Icons.auto_awesome, size: 18, color: p.primary),
                   const SizedBox(width: 8),
-                  Text(
-                    context.l10n.learnAiPanelAskTheAi,
-                    style: TextStyle(
-                      fontFamily: kSansFamily,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
-                      color: p.text,
+                  Flexible(
+                    child: Text(
+                      context.l10n.learnAiPanelAskTheAi,
+                      style: TextStyle(
+                        fontFamily: kSansFamily,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                        color: p.text,
+                      ),
                     ),
                   ),
                 ],

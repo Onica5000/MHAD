@@ -351,13 +351,18 @@ class _HelpMeChooseBanner extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 8),
-                Text(
-                  context.l10n.directiveFormChoiceHelpMeChoose,
-                  style: TextStyle(
-                    fontFamily: kSansFamily,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w700,
-                    color: p.primary,
+                // Flexible so a longer translation wraps instead of starving
+                // the prompt text (Spanish overflowed at phone width).
+                Flexible(
+                  child: Text(
+                    context.l10n.directiveFormChoiceHelpMeChoose,
+                    textAlign: TextAlign.end,
+                    style: TextStyle(
+                      fontFamily: kSansFamily,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      color: p.primary,
+                    ),
                   ),
                 ),
               ],

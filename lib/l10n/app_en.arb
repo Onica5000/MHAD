@@ -2977,5 +2977,6 @@
   "exportShareSubjectFhirXml": "MHAD FHIR Consent Resource (XML)",
   "exportShareSubjectCsv": "MHAD directive (CSV)",
   "exportShareSubjectBundle": "PA MHAD directive bundle",
-  "assistantContextLearning": "Learning"
+  "assistantContextLearning": "Learning",
+  "educationArticlesInEnglishNotice": "The articles below reproduce the official Pennsylvania booklet and are available in English only for now."
 }

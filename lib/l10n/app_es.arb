@@ -1996,5 +1996,6 @@
   "exportShareSubjectFhirXml": "Recurso FHIR Consent de la DASM (XML)",
   "exportShareSubjectCsv": "Directiva DASM (CSV)",
   "exportShareSubjectBundle": "Paquete de la directiva DASM de PA",
-  "assistantContextLearning": "Aprendizaje"
+  "assistantContextLearning": "Aprendizaje",
+  "educationArticlesInEnglishNotice": "Los artículos a continuación reproducen el folleto oficial de Pensilvania y por ahora solo están disponibles en inglés."
 }

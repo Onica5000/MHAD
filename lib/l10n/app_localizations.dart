@@ -12114,6 +12114,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Learning'**
   String get assistantContextLearning;
+
+  /// No description provided for @educationArticlesInEnglishNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'The articles below reproduce the official Pennsylvania booklet and are available in English only for now.'**
+  String get educationArticlesInEnglishNotice;
 }
 
 class _AppLocalizationsDelegate

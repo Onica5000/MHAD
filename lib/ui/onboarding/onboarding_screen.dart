@@ -1,4 +1,6 @@
-﻿import 'package:flutter/foundation.dart' show kIsWeb;
+﻿import 'dart:math' as math;
+
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -87,7 +89,8 @@ class OnboardingScreen extends ConsumerWidget {
                 // SCROLL on short ones. Replaces an IntrinsicHeight hack that
                 // under-measured the wrapping text and, near the height boundary
                 // on mobile browsers, clipped the bottom CTAs with no scroll.
-                child: CustomScrollView(
+                child: LayoutBuilder(
+                  builder: (context, box) => CustomScrollView(
                   slivers: [
                     SliverFillRemaining(
                       hasScrollBody: false,
@@ -122,8 +125,15 @@ class OnboardingScreen extends ConsumerWidget {
                     ),
                   ),
                   const SizedBox(height: 22),
-                  ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 320),
+                  // Cap the measure at 320 via right padding, not a
+                  // ConstrainedBox: SliverFillRemaining sizes this column by
+                  // intrinsic height, and ConstrainedBox measures its child at
+                  // the full width (fewer lines), so the column came up short
+                  // and the CTAs overflowed (51 px at 1280x900).
+                  Padding(
+                    padding: EdgeInsets.only(
+                      right: math.max(0, box.maxWidth - 56 - 320),
+                    ),
                     child: Text(
                       context.l10n.onboardingWeLlWalkYouThrough,
                       style: TextStyle(
@@ -264,6 +274,7 @@ class OnboardingScreen extends ConsumerWidget {
             ),
                     ),
                   ],
+                ),
                 ),
               ),
             ),

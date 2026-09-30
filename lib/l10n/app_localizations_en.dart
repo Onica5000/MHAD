@@ -7148,4 +7148,8 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get assistantContextLearning => 'Learning';
+
+  @override
+  String get educationArticlesInEnglishNotice =>
+      'The articles below reproduce the official Pennsylvania booklet and are available in English only for now.';
 }

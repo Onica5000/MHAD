@@ -7266,4 +7266,8 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get assistantContextLearning => 'Aprendizaje';
+
+  @override
+  String get educationArticlesInEnglishNotice =>
+      'Los artículos a continuación reproducen el folleto oficial de Pensilvania y por ahora solo están disponibles en inglés.';
 }

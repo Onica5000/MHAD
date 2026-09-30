@@ -11,6 +11,7 @@ import 'package:mhad/ui/widgets/design/responsive_shell.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/design/spot_illustration.dart';
 import 'package:mhad/ui/widgets/design/brand_motif.dart';
+import 'package:mhad/ui/widgets/design/info_banner.dart';
 
 class EducationScreen extends StatefulWidget {
   /// If set, only show sections matching these IDs (deep-link from wizard Help,
@@ -181,6 +182,17 @@ class _EditorialLearnHub extends StatelessWidget {
             ],
           ),
         ),
+        // The articles are the official PA booklet text (English-only JSON);
+        // say so up front instead of letting Spanish mode silently switch
+        // language mid-screen.
+        if (Localizations.localeOf(context).languageCode != 'en') ...[
+          const SizedBox(height: 12),
+          InfoBanner(
+            icon: Icons.translate,
+            variant: InfoBannerVariant.info,
+            text: context.l10n.educationArticlesInEnglishNotice,
+          ),
+        ],
         const SizedBox(height: 16),
         // Inline search pill — opens the existing search delegate.
         Builder(
