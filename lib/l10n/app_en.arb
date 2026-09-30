@@ -2879,5 +2879,9 @@
   "breachNoticeWhatWeAreDoing": "What we are doing",
   "breachNoticeWhatYouCanDo": "What you can do",
   "breachNoticeContactUs": "How to contact us",
-  "breachNoticeAcknowledge": "I have read this notice"
+  "breachNoticeAcknowledge": "I have read this notice",
+  "dateInputHint": "MM/DD/YYYY",
+  "@dateInputHint": {
+    "description": "Placeholder for typed dates. The field parses US month/day/year order, so translations must keep that order (e.g. es: MM/DD/AAAA)."
+  }
 }

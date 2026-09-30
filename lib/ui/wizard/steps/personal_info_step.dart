@@ -270,7 +270,7 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
               decoration: InputDecoration(
                 labelText: context.l10n.personalInfoStepDobLabel,
                 border: const OutlineInputBorder(),
-                hintText: 'MM/DD/YYYY',
+                hintText: context.l10n.dateInputHint,
                 helperText: context.l10n.personalInfoStepDobHelper,
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.calendar_month),

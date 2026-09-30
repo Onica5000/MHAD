@@ -11706,6 +11706,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'I have read this notice'**
   String get breachNoticeAcknowledge;
+
+  /// Placeholder for typed dates. The field parses US month/day/year order, so translations must keep that order (e.g. es: MM/DD/AAAA).
+  ///
+  /// In en, this message translates to:
+  /// **'MM/DD/YYYY'**
+  String get dateInputHint;
 }
 
 class _AppLocalizationsDelegate

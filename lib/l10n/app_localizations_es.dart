@@ -6919,4 +6919,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get breachNoticeAcknowledge => 'I have read this notice';
+
+  @override
+  String get dateInputHint => 'MM/DD/YYYY';
 }
