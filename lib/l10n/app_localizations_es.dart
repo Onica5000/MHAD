@@ -1247,7 +1247,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get medsStepSideEffectsBody =>
-      'Para los medicamentos que toma ahora, revise los efectos secundarios comunes, sobre todo los que afectan sus actividades diarias, para que su equipo de atención lo sepa. Requiere tener la IA configurada. No es consejo médico.';
+      'Para los medicamentos que toma ahora, lea los efectos secundarios e interacciones oficiales de la FDA; no necesita IA. Con el asistente de IA opcional también obtiene una lista breve para marcar, para que su equipo de atención sepa qué afecta sus actividades diarias. No es consejo médico.';
 
   @override
   String medsStepNtiNote(String note) {
@@ -3720,14 +3720,6 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get sideEffectsForTheMedicationsYouRe =>
       'Para los medicamentos que toma actualmente, estos son los efectos secundarios comunes; marque los que realmente tenga. Anotarlos (sobre todo los que afectan sus actividades diarias) ayuda a su equipo de atención. Es información sobre efectos secundarios comunes, no es consejo médico.';
-
-  @override
-  String get sideEffectsSetUpAiToCheck =>
-      'Configure la IA para revisar efectos secundarios';
-
-  @override
-  String get sideEffectsThisUsesYourAiAssistant =>
-      'Esto usa su asistente de IA para mostrarle los efectos secundarios comunes de sus medicamentos actuales para que los revise.';
 
   @override
   String get sideEffectsWorthDiscussingWithYourDoctor =>
@@ -7270,4 +7262,20 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get educationArticlesInEnglishNotice =>
       'Los artículos a continuación reproducen el folleto oficial de Pensilvania y por ahora solo están disponibles en inglés.';
+
+  @override
+  String get sideEffectsOfficialLabelsHeading =>
+      'Etiquetas oficiales de la FDA';
+
+  @override
+  String get sideEffectsOfficialLabelsIntro =>
+      'Directamente de la etiqueta de la FDA de cada medicamento (openFDA). No necesita IA. Toque un medicamento para leer sus efectos secundarios e interacciones.';
+
+  @override
+  String get sideEffectsChecklistOptionalTitle =>
+      '¿Quiere una lista breve? (opcional)';
+
+  @override
+  String get sideEffectsChecklistOptionalBody =>
+      'Las etiquetas de la FDA de abajo funcionan sin IA. Si configura el asistente de IA gratuito, también puede convertirlas en una lista breve que puede marcar, con las posibles interacciones redactadas como preguntas para su médico.';
 }

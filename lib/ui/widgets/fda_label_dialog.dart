@@ -32,30 +32,36 @@ Future<void> showFdaLabelDialog(
       final p = Theme.of(ctx).mhadPalette;
 
       Widget section(String heading, String body) => Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(heading,
-                  style: const TextStyle(
-                      fontFamily: kSans,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w700)),
-              const SizedBox(height: 4),
-              Text(
-                body,
-                style: TextStyle(
-                    fontFamily: kSans,
-                    fontSize: 13,
-                    height: 1.45,
-                    color: p.text),
-              ),
-              const SizedBox(height: 14),
-            ],
-          );
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            heading,
+            style: const TextStyle(
+              fontFamily: kSans,
+              fontSize: 13,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            body,
+            style: TextStyle(
+              fontFamily: kSans,
+              fontSize: 13,
+              height: 1.45,
+              color: p.text,
+            ),
+          ),
+          const SizedBox(height: 14),
+        ],
+      );
 
       return AlertDialog(
-        title: Text(context.l10n.fdaLabelDialogFdaLabel(medName),
-            style: const TextStyle(fontFamily: kSans)),
+        title: Text(
+          context.l10n.fdaLabelDialogFdaLabel(medName),
+          style: const TextStyle(fontFamily: kSans),
+        ),
         content: SizedBox(
           width: 460,
           child: FutureBuilder<({String? sideEffects, String? interactions})>(
@@ -74,7 +80,10 @@ Future<void> showFdaLabelDialog(
                 return Text(
                   context.l10n.fdaLabelDialogNoFdaLabelInformationIs,
                   style: TextStyle(
-                      fontFamily: kSans, fontSize: 13, color: p.textMuted),
+                    fontFamily: kSans,
+                    fontSize: 13,
+                    color: p.textMuted,
+                  ),
                 );
               }
               return SingleChildScrollView(
@@ -83,9 +92,15 @@ Future<void> showFdaLabelDialog(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     if (side != null && side.isNotEmpty)
-                      section(context.l10n.fdaLabelDialogAdverseReactions, side),
+                      section(
+                        context.l10n.fdaLabelDialogAdverseReactions,
+                        side,
+                      ),
                     if (inter != null && inter.isNotEmpty)
-                      section(context.l10n.fdaLabelDialogDrugInteractions, inter),
+                      section(
+                        context.l10n.fdaLabelDialogDrugInteractions,
+                        inter,
+                      ),
                     Text(
                       context.l10n.fdaLabelDialogOfficialUSFdaDrug,
                       style: TextStyle(
@@ -110,4 +125,136 @@ Future<void> showFdaLabelDialog(
       );
     },
   );
+}
+
+/// Collapsible, AI-free card with [medName]'s official FDA label sections
+/// ("Adverse Reactions" + "Drug Interactions"). The lookup starts on first
+/// expand, so a long medication list doesn't fire every request up front.
+class FdaLabelCard extends StatefulWidget {
+  final String medName;
+  const FdaLabelCard({required this.medName, super.key});
+
+  @override
+  State<FdaLabelCard> createState() => _FdaLabelCardState();
+}
+
+class _FdaLabelCardState extends State<FdaLabelCard> {
+  Future<({String? sideEffects, String? interactions})>? _future;
+
+  Future<({String? sideEffects, String? interactions})> _load() async {
+    final results = await Future.wait([
+      OpenFdaService.adverseReactions(widget.medName),
+      OpenFdaService.drugInteractions(widget.medName),
+    ]);
+    return (sideEffects: results[0], interactions: results[1]);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
+    TextStyle body([Color? c]) => TextStyle(
+      fontFamily: kSansFamily,
+      fontSize: 13,
+      height: 1.45,
+      color: c ?? p.text,
+    );
+
+    Widget section(String heading, String text) => Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            heading,
+            style: const TextStyle(
+              fontFamily: kSansFamily,
+              fontSize: 13,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(text, style: body()),
+        ],
+      ),
+    );
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Material(
+        color: p.card,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
+          side: BorderSide(color: p.border),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: ExpansionTile(
+          leading: Icon(Icons.medication_outlined, color: p.primary),
+          title: Text(
+            context.l10n.fdaLabelDialogFdaLabel(widget.medName),
+            style: const TextStyle(
+              fontFamily: kSansFamily,
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          shape: const Border(),
+          collapsedShape: const Border(),
+          childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+          expandedCrossAxisAlignment: CrossAxisAlignment.start,
+          onExpansionChanged: (open) {
+            if (open && _future == null) setState(() => _future = _load());
+          },
+          children: [
+            FutureBuilder<({String? sideEffects, String? interactions})>(
+              future: _future,
+              builder: (context, snap) {
+                if (snap.connectionState != ConnectionState.done) {
+                  return const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 16),
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                }
+                final side = snap.data?.sideEffects;
+                final inter = snap.data?.interactions;
+                final hasSide = side != null && side.isNotEmpty;
+                final hasInter = inter != null && inter.isNotEmpty;
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (!hasSide && !hasInter)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: Text(
+                          context.l10n.fdaLabelDialogNoFdaLabelInformationIs,
+                          style: body(p.textMuted),
+                        ),
+                      ),
+                    if (hasSide)
+                      section(
+                        context.l10n.fdaLabelDialogAdverseReactions,
+                        side,
+                      ),
+                    if (hasInter)
+                      section(
+                        context.l10n.fdaLabelDialogDrugInteractions,
+                        inter,
+                      ),
+                    Text(
+                      context.l10n.fdaLabelDialogOfficialUSFdaDrug,
+                      style: TextStyle(
+                        fontFamily: kSansFamily,
+                        fontSize: 11,
+                        fontStyle: FontStyle.italic,
+                        color: p.textMuted,
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }

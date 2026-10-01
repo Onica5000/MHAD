@@ -486,7 +486,7 @@
   "medsStepPreferredTitle": "Preferred medications",
   "medsStepPreferredSubtitle": "Medications that have worked well for you",
   "medsStepSideEffectsTitle": "Side effects you may be experiencing",
-  "medsStepSideEffectsBody": "For the medications you take now, check common side effects — especially any that affect your daily activities — so your care team knows. Needs AI set up. Not medical advice.",
+  "medsStepSideEffectsBody": "For the medications you take now, read the official FDA side effects and interactions — no AI needed. With the optional AI assistant you also get a short checklist to tick, so your care team knows what affects your daily activities. Not medical advice.",
   "medsStepNtiNote": "Narrow therapeutic index drug — {note}. Pennsylvania law bars generic substitution for these; note any monitoring needs below. (Informational, not medical advice.)",
   "@medsStepNtiNote": {
     "placeholders": {
@@ -1424,8 +1424,6 @@
   "modeSelectionPublicMode": "Public mode",
   "modeSelectionNoDataIsSavedAfter": "No data is saved after you close the app. Best for shared devices, or one-time use without leaving a trace.",
   "sideEffectsForTheMedicationsYouRe": "For the medications you're currently taking, here are common side effects — check the ones you actually have. Noting them (especially any that affect your daily activities) helps your care team. This is common-side-effect information, not medical advice.",
-  "sideEffectsSetUpAiToCheck": "Set up AI to check side effects",
-  "sideEffectsThisUsesYourAiAssistant": "This uses your AI assistant to list common side effects of your current medications for you to review.",
   "sideEffectsWorthDiscussingWithYourDoctor": "Worth discussing with your doctor",
   "sideEffectsOptionalAddOn": "Optional add-on",
   "sideEffectsAskYourDoctorOrPharmacist": "Ask your doctor or pharmacist",
@@ -2978,5 +2976,9 @@
   "exportShareSubjectCsv": "MHAD directive (CSV)",
   "exportShareSubjectBundle": "PA MHAD directive bundle",
   "assistantContextLearning": "Learning",
-  "educationArticlesInEnglishNotice": "The articles below reproduce the official Pennsylvania booklet and are available in English only for now."
+  "educationArticlesInEnglishNotice": "The articles below reproduce the official Pennsylvania booklet and are available in English only for now.",
+  "sideEffectsOfficialLabelsHeading": "Official FDA labels",
+  "sideEffectsOfficialLabelsIntro": "Straight from each medication's FDA label (openFDA). No AI needed. Tap a medication to read its side effects and drug interactions.",
+  "sideEffectsChecklistOptionalTitle": "Want a short checklist? (optional)",
+  "sideEffectsChecklistOptionalBody": "The FDA labels below work without AI. If you set up the free AI assistant, it can also turn them into a short checklist you can tick, with possible interactions written as questions for your doctor."
 }

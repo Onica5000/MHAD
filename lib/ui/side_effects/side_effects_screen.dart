@@ -1,4 +1,4 @@
-﻿import 'dart:convert';
+import 'dart:convert';
 
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
@@ -21,6 +21,7 @@ import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/design/wizard_header.dart';
+import 'package:mhad/ui/widgets/fda_label_dialog.dart';
 
 /// "Are you experiencing these side effects?" — for the user's CURRENT
 /// medications the AI lists common, well-documented side effects; the user
@@ -82,7 +83,9 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
             .whereType<Map<String, dynamic>>()
             .map(InteractionNote.fromJson)
             .toList();
-      } catch (_) {/* ignore malformed */}
+      } catch (_) {
+        /* ignore malformed */
+      }
     }
     setState(() {
       _currentMeds = names;
@@ -98,7 +101,9 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
       'interactions': _interactions.map((i) => i.toJson()).toList(),
       'generatedForMeds': _currentMeds,
     });
-    await ref.read(directiveRepositoryProvider).upsertPreferences(
+    await ref
+        .read(directiveRepositoryProvider)
+        .upsertPreferences(
           DirectivePrefsCompanion(
             directiveId: Value(widget.directiveId),
             sideEffectsJson: Value(json),
@@ -130,7 +135,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
         // Preserve any previously-checked items that match.
         final priorChecked = {
           for (final p in _items.where((p) => p.experiencing))
-            '${p.med}|${p.effect}'
+            '${p.med}|${p.effect}',
         };
         for (final f in found) {
           if (priorChecked.contains('${f.med}|${f.effect}')) {
@@ -157,83 +162,110 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
 
     return Scaffold(
       backgroundColor: p.scaffoldBackground,
-      body: Column(children: [
-        WizardHeader(
-          backLabel: context.l10n.back,
-          onBack: () => Navigator.of(context).maybePop(),
-          actionLabel: '',
-        ),
-        Expanded(
-          child: _loading
-              ? const PageLoading()
-              : ListView(
-                  padding: const EdgeInsets.fromLTRB(20, 14, 20, 32),
-                  children: [
-                    BrandMotif(
-                      padding: const EdgeInsets.fromLTRB(20, 16, 20, 18),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SectionLabel(context.l10n.sideEffectsOptionalAddOn),
-                          const SizedBox(height: 6),
-                          EditorialHeading(
+      body: Column(
+        children: [
+          WizardHeader(
+            backLabel: context.l10n.back,
+            onBack: () => Navigator.of(context).maybePop(),
+            actionLabel: '',
+          ),
+          Expanded(
+            child: _loading
+                ? const PageLoading()
+                : ListView(
+                    padding: const EdgeInsets.fromLTRB(20, 14, 20, 32),
+                    children: [
+                      BrandMotif(
+                        padding: const EdgeInsets.fromLTRB(20, 16, 20, 18),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SectionLabel(context.l10n.sideEffectsOptionalAddOn),
+                            const SizedBox(height: 6),
+                            EditorialHeading(
                               text: context.l10n.medsStepSideEffectsTitle,
-                              size: 30),
-                          const SizedBox(height: 6),
-                          Text(
-                            context.l10n.sideEffectsForTheMedicationsYouRe,
-                            style: TextStyle(
-                              fontFamily: kSansFamily,
-                              fontSize: 14,
-                              height: 1.5,
-                              color: p.textMuted,
+                              size: 30,
                             ),
+                            const SizedBox(height: 6),
+                            Text(
+                              context.l10n.sideEffectsForTheMedicationsYouRe,
+                              style: TextStyle(
+                                fontFamily: kSansFamily,
+                                fontSize: 14,
+                                height: 1.5,
+                                color: p.textMuted,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      if (_currentMeds.isEmpty)
+                        _noMedsCard(p)
+                      else ...[
+                        _generateBar(p, hasKey),
+                        if (_error != null) ...[
+                          const SizedBox(height: 12),
+                          InfoBanner(
+                            icon: Icons.info_outline,
+                            variant: InfoBannerVariant.warning,
+                            text: _error!,
                           ),
                         ],
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    if (_currentMeds.isEmpty)
-                      _noMedsCard(p)
-                    else ...[
-                      _generateBar(p, hasKey),
-                      if (_error != null) ...[
-                        const SizedBox(height: 12),
-                        InfoBanner(
-                          icon: Icons.info_outline,
-                          variant: InfoBannerVariant.warning,
-                          text: _error!,
-                        ),
-                      ],
-                      if (_items.isNotEmpty) ...[
-                        const SizedBox(height: 16),
-                        ..._buildGroupedItems(p),
-                        const SizedBox(height: 14),
-                        InfoBanner(
-                          icon: Icons.medical_information_outlined,
-                          variant: InfoBannerVariant.info,
-                          text:
-                              context.l10n.sideEffectsBringAnythingYouCheckAnd,
-                        ),
-                      ],
-                      if (_interactions.isNotEmpty) ...[
+                        if (_items.isNotEmpty) ...[
+                          const SizedBox(height: 16),
+                          ..._buildGroupedItems(p),
+                          const SizedBox(height: 14),
+                          InfoBanner(
+                            icon: Icons.medical_information_outlined,
+                            variant: InfoBannerVariant.info,
+                            text: context
+                                .l10n
+                                .sideEffectsBringAnythingYouCheckAnd,
+                          ),
+                        ],
+                        if (_interactions.isNotEmpty) ...[
+                          const SizedBox(height: 22),
+                          SectionLabel(
+                            context.l10n.sideEffectsAskYourDoctorOrPharmacist,
+                          ),
+                          const SizedBox(height: 8),
+                          ..._interactions.map((n) => _interactionCard(p, n)),
+                          const SizedBox(height: 6),
+                          InfoBanner(
+                            icon: Icons.info_outline,
+                            variant: InfoBannerVariant.info,
+                            text: context
+                                .l10n
+                                .sideEffectsTheseArePossibleInteractionsDrawn,
+                          ),
+                        ],
+                        // AI-free: the official FDA label for every current
+                        // medication, with or without an AI key. The AI
+                        // checklist above is an optional summary of these.
                         const SizedBox(height: 22),
-                        SectionLabel(context.l10n.sideEffectsAskYourDoctorOrPharmacist),
-                        const SizedBox(height: 8),
-                        ..._interactions.map((n) => _interactionCard(p, n)),
-                        const SizedBox(height: 6),
-                        InfoBanner(
-                          icon: Icons.info_outline,
-                          variant: InfoBannerVariant.info,
-                          text:
-                              context.l10n.sideEffectsTheseArePossibleInteractionsDrawn,
+                        SectionLabel(
+                          context.l10n.sideEffectsOfficialLabelsHeading,
                         ),
+                        const SizedBox(height: 4),
+                        Text(
+                          context.l10n.sideEffectsOfficialLabelsIntro,
+                          style: TextStyle(
+                            fontFamily: kSansFamily,
+                            fontSize: 13,
+                            height: 1.45,
+                            color: p.textMuted,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        for (final med in _currentMeds)
+                          FdaLabelCard(medName: med),
                       ],
                     ],
-                  ],
-                ),
-        ),
-      ]),
+                  ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -241,8 +273,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
     return InfoBanner(
       icon: Icons.medication_outlined,
       variant: InfoBannerVariant.info,
-      text:
-          context.l10n.sideEffectsAddTheMedicationsYouRe,
+      text: context.l10n.sideEffectsAddTheMedicationsYouRe,
     );
   }
 
@@ -259,7 +290,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              context.l10n.sideEffectsSetUpAiToCheck,
+              context.l10n.sideEffectsChecklistOptionalTitle,
               style: TextStyle(
                 fontFamily: kSansFamily,
                 fontSize: 14,
@@ -269,7 +300,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
             ),
             const SizedBox(height: 6),
             Text(
-              context.l10n.sideEffectsThisUsesYourAiAssistant,
+              context.l10n.sideEffectsChecklistOptionalBody,
               style: TextStyle(
                 fontFamily: kSansFamily,
                 fontSize: 13,
@@ -315,7 +346,11 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
                   child: CircularProgressIndicator(strokeWidth: 2),
                 )
               : const Icon(Icons.auto_awesome, size: 16),
-          label: Text(_items.isEmpty ? context.l10n.sideEffectsCheckSideEffects : context.l10n.sideEffectsReCheck),
+          label: Text(
+            _items.isEmpty
+                ? context.l10n.sideEffectsCheckSideEffects
+                : context.l10n.sideEffectsReCheck,
+          ),
         ),
       ],
     );
@@ -328,26 +363,30 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
     }
     final widgets = <Widget>[];
     byMed.forEach((med, items) {
-      widgets.add(Padding(
-        padding: const EdgeInsets.only(top: 8, bottom: 4),
-        child: Text(
-          med,
-          style: TextStyle(
-            fontFamily: kSansFamily,
-            fontSize: 14,
-            fontWeight: FontWeight.w700,
-            color: p.text,
+      widgets.add(
+        Padding(
+          padding: const EdgeInsets.only(top: 8, bottom: 4),
+          child: Text(
+            med,
+            style: TextStyle(
+              fontFamily: kSansFamily,
+              fontSize: 14,
+              fontWeight: FontWeight.w700,
+              color: p.text,
+            ),
           ),
         ),
-      ));
+      );
       for (final item in items) {
-        widgets.add(_SideEffectRow(
-          item: item,
-          onChanged: (v) async {
-            setState(() => item.experiencing = v);
-            await _persist();
-          },
-        ));
+        widgets.add(
+          _SideEffectRow(
+            item: item,
+            onChanged: (v) async {
+              setState(() => item.experiencing = v);
+              await _persist();
+            },
+          ),
+        );
       }
     });
     return widgets;
@@ -397,15 +436,17 @@ class _SideEffectRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
     final dark = Theme.of(context).brightness == Brightness.dark;
-    final seriousColor =
-        dark ? SemanticColors.errorAccentDark : SemanticColors.errorAccentLight;
+    final seriousColor = dark
+        ? SemanticColors.errorAccentDark
+        : SemanticColors.errorAccentLight;
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
         color: p.card,
         border: Border.all(
-            color: item.serious ? seriousColor.withValues(alpha: 0.5) : p.border),
+          color: item.serious ? seriousColor.withValues(alpha: 0.5) : p.border,
+        ),
         borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
       ),
       child: Row(
@@ -449,11 +490,17 @@ class _SideEffectRow extends StatelessWidget {
                     padding: const EdgeInsets.only(top: 4),
                     child: Row(
                       children: [
-                        Icon(Icons.priority_high, size: 14, color: seriousColor),
+                        Icon(
+                          Icons.priority_high,
+                          size: 14,
+                          color: seriousColor,
+                        ),
                         const SizedBox(width: 4),
                         Flexible(
                           child: Text(
-                            context.l10n.sideEffectsWorthDiscussingWithYourDoctor,
+                            context
+                                .l10n
+                                .sideEffectsWorthDiscussingWithYourDoctor,
                             style: TextStyle(
                               fontFamily: kSansFamily,
                               fontSize: 12,

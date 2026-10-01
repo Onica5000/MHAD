@@ -359,7 +359,7 @@
   "medsStepPreferredTitle": "Medicamentos preferidos",
   "medsStepPreferredSubtitle": "Medicamentos que le han funcionado bien",
   "medsStepSideEffectsTitle": "Efectos secundarios que podría estar teniendo",
-  "medsStepSideEffectsBody": "Para los medicamentos que toma ahora, revise los efectos secundarios comunes, sobre todo los que afectan sus actividades diarias, para que su equipo de atención lo sepa. Requiere tener la IA configurada. No es consejo médico.",
+  "medsStepSideEffectsBody": "Para los medicamentos que toma ahora, lea los efectos secundarios e interacciones oficiales de la FDA; no necesita IA. Con el asistente de IA opcional también obtiene una lista breve para marcar, para que su equipo de atención sepa qué afecta sus actividades diarias. No es consejo médico.",
   "medsStepNtiNote": "Medicamento de índice terapéutico estrecho: {note}. La ley de Pensilvania prohíbe sustituirlo por un genérico; indique abajo cualquier necesidad de control. (Informativo, no es consejo médico).",
   "medsStepDosageLabel": "Dosis (p. ej., 20 mg dos veces al día)",
   "medsStepReasonLabel": "Motivo / notas (opcional)",
@@ -1056,8 +1056,6 @@
   "modeSelectionPublicMode": "Modo público",
   "modeSelectionNoDataIsSavedAfter": "No se guarda ningún dato después de cerrar la aplicación. Ideal para dispositivos compartidos o para un solo uso sin dejar rastro.",
   "sideEffectsForTheMedicationsYouRe": "Para los medicamentos que toma actualmente, estos son los efectos secundarios comunes; marque los que realmente tenga. Anotarlos (sobre todo los que afectan sus actividades diarias) ayuda a su equipo de atención. Es información sobre efectos secundarios comunes, no es consejo médico.",
-  "sideEffectsSetUpAiToCheck": "Configure la IA para revisar efectos secundarios",
-  "sideEffectsThisUsesYourAiAssistant": "Esto usa su asistente de IA para mostrarle los efectos secundarios comunes de sus medicamentos actuales para que los revise.",
   "sideEffectsWorthDiscussingWithYourDoctor": "Vale la pena hablarlo con su médico",
   "sideEffectsOptionalAddOn": "Complemento opcional",
   "sideEffectsAskYourDoctorOrPharmacist": "Pregunte a su médico o farmacéutico",
@@ -1997,5 +1995,9 @@
   "exportShareSubjectCsv": "Directiva DASM (CSV)",
   "exportShareSubjectBundle": "Paquete de la directiva DASM de PA",
   "assistantContextLearning": "Aprendizaje",
-  "educationArticlesInEnglishNotice": "Los artículos a continuación reproducen el folleto oficial de Pensilvania y por ahora solo están disponibles en inglés."
+  "educationArticlesInEnglishNotice": "Los artículos a continuación reproducen el folleto oficial de Pensilvania y por ahora solo están disponibles en inglés.",
+  "sideEffectsOfficialLabelsHeading": "Etiquetas oficiales de la FDA",
+  "sideEffectsOfficialLabelsIntro": "Directamente de la etiqueta de la FDA de cada medicamento (openFDA). No necesita IA. Toque un medicamento para leer sus efectos secundarios e interacciones.",
+  "sideEffectsChecklistOptionalTitle": "¿Quiere una lista breve? (opcional)",
+  "sideEffectsChecklistOptionalBody": "Las etiquetas de la FDA de abajo funcionan sin IA. Si configura el asistente de IA gratuito, también puede convertirlas en una lista breve que puede marcar, con las posibles interacciones redactadas como preguntas para su médico."
 }

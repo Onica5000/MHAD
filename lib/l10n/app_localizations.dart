@@ -2255,7 +2255,7 @@ abstract class AppLocalizations {
   /// No description provided for @medsStepSideEffectsBody.
   ///
   /// In en, this message translates to:
-  /// **'For the medications you take now, check common side effects — especially any that affect your daily activities — so your care team knows. Needs AI set up. Not medical advice.'**
+  /// **'For the medications you take now, read the official FDA side effects and interactions — no AI needed. With the optional AI assistant you also get a short checklist to tick, so your care team knows what affects your daily activities. Not medical advice.'**
   String get medsStepSideEffectsBody;
 
   /// No description provided for @medsStepNtiNote.
@@ -6433,18 +6433,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'For the medications you\'re currently taking, here are common side effects — check the ones you actually have. Noting them (especially any that affect your daily activities) helps your care team. This is common-side-effect information, not medical advice.'**
   String get sideEffectsForTheMedicationsYouRe;
-
-  /// No description provided for @sideEffectsSetUpAiToCheck.
-  ///
-  /// In en, this message translates to:
-  /// **'Set up AI to check side effects'**
-  String get sideEffectsSetUpAiToCheck;
-
-  /// No description provided for @sideEffectsThisUsesYourAiAssistant.
-  ///
-  /// In en, this message translates to:
-  /// **'This uses your AI assistant to list common side effects of your current medications for you to review.'**
-  String get sideEffectsThisUsesYourAiAssistant;
 
   /// No description provided for @sideEffectsWorthDiscussingWithYourDoctor.
   ///
@@ -12120,6 +12108,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The articles below reproduce the official Pennsylvania booklet and are available in English only for now.'**
   String get educationArticlesInEnglishNotice;
+
+  /// No description provided for @sideEffectsOfficialLabelsHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Official FDA labels'**
+  String get sideEffectsOfficialLabelsHeading;
+
+  /// No description provided for @sideEffectsOfficialLabelsIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Straight from each medication\'s FDA label (openFDA). No AI needed. Tap a medication to read its side effects and drug interactions.'**
+  String get sideEffectsOfficialLabelsIntro;
+
+  /// No description provided for @sideEffectsChecklistOptionalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Want a short checklist? (optional)'**
+  String get sideEffectsChecklistOptionalTitle;
+
+  /// No description provided for @sideEffectsChecklistOptionalBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The FDA labels below work without AI. If you set up the free AI assistant, it can also turn them into a short checklist you can tick, with possible interactions written as questions for your doctor.'**
+  String get sideEffectsChecklistOptionalBody;
 }
 
 class _AppLocalizationsDelegate

@@ -1230,7 +1230,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get medsStepSideEffectsBody =>
-      'For the medications you take now, check common side effects — especially any that affect your daily activities — so your care team knows. Needs AI set up. Not medical advice.';
+      'For the medications you take now, read the official FDA side effects and interactions — no AI needed. With the optional AI assistant you also get a short checklist to tick, so your care team knows what affects your daily activities. Not medical advice.';
 
   @override
   String medsStepNtiNote(String note) {
@@ -3651,13 +3651,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get sideEffectsForTheMedicationsYouRe =>
       'For the medications you\'re currently taking, here are common side effects — check the ones you actually have. Noting them (especially any that affect your daily activities) helps your care team. This is common-side-effect information, not medical advice.';
-
-  @override
-  String get sideEffectsSetUpAiToCheck => 'Set up AI to check side effects';
-
-  @override
-  String get sideEffectsThisUsesYourAiAssistant =>
-      'This uses your AI assistant to list common side effects of your current medications for you to review.';
 
   @override
   String get sideEffectsWorthDiscussingWithYourDoctor =>
@@ -7152,4 +7145,19 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get educationArticlesInEnglishNotice =>
       'The articles below reproduce the official Pennsylvania booklet and are available in English only for now.';
+
+  @override
+  String get sideEffectsOfficialLabelsHeading => 'Official FDA labels';
+
+  @override
+  String get sideEffectsOfficialLabelsIntro =>
+      'Straight from each medication\'s FDA label (openFDA). No AI needed. Tap a medication to read its side effects and drug interactions.';
+
+  @override
+  String get sideEffectsChecklistOptionalTitle =>
+      'Want a short checklist? (optional)';
+
+  @override
+  String get sideEffectsChecklistOptionalBody =>
+      'The FDA labels below work without AI. If you set up the free AI assistant, it can also turn them into a short checklist you can tick, with possible interactions written as questions for your doctor.';
 }
