@@ -5288,7 +5288,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aiSetupYesGoogleOffersAGenerous =>
-      'Yes. Google offers a generous free tier for Gemini. There is no credit card required and no charge for typical personal use.';
+      'Yes. Google\'s free tier for Gemini needs no credit card. It has daily limits: the app\'s default model (Gemini Flash-Lite) allows a few hundred requests a day, which covers normal use; the stronger Flash models allow far fewer (about 20 a day).';
 
   @override
   String get aiSetupWhatGoogleAccountShouldI =>
@@ -5426,7 +5426,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aiSetupNoCreditCardOrPayment =>
-      'No credit card or payment is needed. The free tier is generous and sufficient for this app.';
+      'No credit card or payment is needed. The free tier has daily limits; the app\'s default model (Flash-Lite) is chosen to fit normal use.';
 
   @override
   String get aiSetupMostProvidersRequireAPaid =>
@@ -7160,4 +7160,30 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get sideEffectsChecklistOptionalBody =>
       'The FDA labels below work without AI. If you set up the free AI assistant, it can also turn them into a short checklist you can tick, with possible interactions written as questions for your doctor.';
+
+  @override
+  String llmRefusal(String provider) {
+    return '$provider declined to answer this. If you\'re in crisis or thinking about harming yourself, call or text 988 now. Otherwise, try rephrasing, or choose a different model in AI setup.';
+  }
+
+  @override
+  String llmTruncated(String provider) {
+    return '$provider ran out of room before it could answer. Please try again; if it keeps happening, choose a different model in AI setup.';
+  }
+
+  @override
+  String get crisisBannerTitle => 'You don\'t have to wait for the AI';
+
+  @override
+  String get crisisBannerBody =>
+      'If you\'re thinking about suicide or hurting yourself, or you\'re in crisis, call or text 988 now — free, confidential, 24/7. If you\'re in immediate danger, call 911.';
+
+  @override
+  String get crisisBannerCall => 'Call 988';
+
+  @override
+  String get crisisBannerText => 'Text 988';
+
+  @override
+  String get crisisBannerMore => 'More help';
 }

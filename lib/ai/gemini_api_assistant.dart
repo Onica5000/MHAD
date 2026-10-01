@@ -66,7 +66,7 @@ class LlmAssistant implements AiAssistant {
       json: true,
       timeout: timeout,
     );
-    final text = stripLlmCodeFences(raw);
+    final text = cleanLlmJson(raw);
     return text.isEmpty ? null : text;
   }
 

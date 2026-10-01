@@ -25,6 +25,16 @@ void main() {
     test('empty fenced block cleans to empty string', () {
       expect(stripLlmCodeFences('```json\n```'), '');
     });
+    test('drops prose around an unfenced object', () {
+      expect(stripLlmCodeFences('Here is the result:\n{"a":{"b":1}}\nHope this helps!'),
+          '{"a":{"b":1}}');
+    });
+    test('finds a fenced block after leading prose', () {
+      expect(stripLlmCodeFences('Sure!\n```json\n{"a":1}\n```\nDone.'), '{"a":1}');
+    });
+    test('leaves non-JSON text alone', () {
+      expect(stripLlmCodeFences('No JSON here.'), 'No JSON here.');
+    });
   });
 
   group('ageInYears / isAdult', () {

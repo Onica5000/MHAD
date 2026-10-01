@@ -1,5 +1,6 @@
 ﻿import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/crisis_support_banner.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/l10n/model_labels.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
@@ -469,6 +470,9 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                 ),
               ),
             ),
+
+          // App-driven 988 banner (shown once crisis language is typed).
+          const CrisisSupportBanner(),
 
           // Messages list
           Expanded(

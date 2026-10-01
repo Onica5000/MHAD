@@ -106,6 +106,41 @@ class LlmModelNotFoundError implements Exception {
   String toString() => message;
 }
 
+/// Thrown when the provider's safety system declined the request (Claude's
+/// `stop_reason: "refusal"`, a Gemini SAFETY block). The HTTP call succeeded,
+/// so without this type a refusal surfaced as an empty or generic failure.
+/// Crisis-related wording can trip these filters in a mental-health app, so the
+/// message always points to 988.
+class LlmRefusalError implements Exception {
+  final String message;
+
+  /// Optional localized form of [message]; see [messageIn].
+  final LocalizedMessage? localized;
+  const LlmRefusalError(this.message, [this.localized]);
+
+  /// [message] in [l]'s locale when a localized form exists, else [message].
+  String messageIn(AppLocalizations? l) =>
+      l != null && localized != null ? localized!(l) : message;
+  @override
+  String toString() => message;
+}
+
+/// Thrown when the reply hit the output-token limit before any usable text
+/// was produced (e.g. a model that spent its budget thinking).
+class LlmTruncatedError implements Exception {
+  final String message;
+
+  /// Optional localized form of [message]; see [messageIn].
+  final LocalizedMessage? localized;
+  const LlmTruncatedError(this.message, [this.localized]);
+
+  /// [message] in [l]'s locale when a localized form exists, else [message].
+  String messageIn(AppLocalizations? l) =>
+      l != null && localized != null ? localized!(l) : message;
+  @override
+  String toString() => message;
+}
+
 /// Thrown when the request never reached the provider: no connectivity, DNS
 /// failure, or — on web — a CORS rejection.
 ///
@@ -467,6 +502,11 @@ class LlmClient {
       String m(AppLocalizations l) => l.llmGeminiKeyRejected(provider.label);
       return LlmAuthError(m(_en), m);
     }
+    // A SAFETY / prompt-feedback block: the SDK throws when the reply text is
+    // read ("Response was blocked due to SAFETY", "blocked by ...").
+    if (msg.contains('blocked') || msg.contains('safety')) {
+      return _refused();
+    }
     // "models/x is not found", "not supported for generateContent", 404.
     if (msg.contains('not found') ||
         msg.contains('not_found') ||
@@ -477,6 +517,27 @@ class LlmClient {
     }
     return e;
   }
+
+  LlmRefusalError _refused() {
+    String m(AppLocalizations l) => l.llmRefusal(provider.label);
+    return LlmRefusalError(m(_en), m);
+  }
+
+  LlmTruncatedError _truncated() {
+    String m(AppLocalizations l) => l.llmTruncated(provider.label);
+    return LlmTruncatedError(m(_en), m);
+  }
+
+  /// Claude models that accept `output_config.effort` (4.6 and later). Older
+  /// ones (e.g. Haiku 4.5) reject it, so it is only sent when matched.
+  static final _anthropicEffortModel =
+      RegExp(r'^claude-(opus|sonnet)-4-[6-9]|^claude-(opus|sonnet|fable)-5');
+
+  /// Claude models that accept server-side refusal fallbacks
+  /// (`fallbacks: "default"`): a safety decline is retried on Anthropic's
+  /// recommended model inside the same call instead of failing.
+  static final _anthropicFallbackModel = RegExp(
+      r'^claude-(fable-5-1|opus-5-5|opus-5|sonnet-5-5)$');
 
   LlmNetworkError _networkError(String detail) {
     String m(AppLocalizations l) => l.llmNetworkError(provider.label, detail);
@@ -506,9 +567,17 @@ class LlmClient {
             'no markdown code fences.'
             .trim()
         : system;
+    final fallbacks = _anthropicFallbackModel.hasMatch(model);
     final body = <String, dynamic>{
       'model': model,
-      'max_tokens': maxTokens ?? 4096,
+      // Current Claude models think by default and that thinking counts
+      // toward max_tokens, so a small cap truncated replies (and JSON).
+      'max_tokens': maxTokens ?? 16000,
+      // Medium effort: answers stay prompt for chat/autofill instead of the
+      // slower, costlier default ("high" on Sonnet) on the user's own key.
+      if (_anthropicEffortModel.hasMatch(model))
+        'output_config': {'effort': 'medium'},
+      if (fallbacks) 'fallbacks': 'default',
       if (effectiveSystem != null && effectiveSystem.isNotEmpty)
         'system': effectiveSystem,
       'messages': messages,
@@ -523,18 +592,25 @@ class LlmClient {
         // app is a BYO-key client, so the user's own key is used from their
         // own browser (same trust model as the Gemini path).
         'anthropic-dangerous-direct-browser-access': 'true',
+        if (fallbacks) 'anthropic-beta': 'server-side-fallback-2026-07-01',
       },
       body: jsonEncode(body),
       timeout: timeout,
     );
     if (resp.statusCode != 200) throw _httpError(resp);
     final data = jsonDecode(resp.body) as Map<String, dynamic>;
+    // A safety decline is HTTP 200 with stop_reason "refusal" (after any
+    // server-side fallback also declined) — check before reading content.
+    final stop = data['stop_reason'];
+    if (stop == 'refusal') throw _refused();
     final blocks = (data['content'] as List?) ?? const [];
     final buf = StringBuffer();
     for (final b in blocks) {
       if (b is Map && b['type'] == 'text') buf.write(b['text'] ?? '');
     }
-    return buf.toString();
+    final text = buf.toString();
+    if (stop == 'max_tokens' && text.trim().isEmpty) throw _truncated();
+    return text;
   }
 
   /// OpenAI-compatible Chat Completions (OpenAI + xAI Grok).
@@ -549,7 +625,13 @@ class LlmClient {
       'messages': messages,
       if (json) 'response_format': {'type': 'json_object'},
     };
-    if (maxTokens != null) body['max_tokens'] = maxTokens;
+    // OpenAI's reasoning models (GPT-5 and later) reject `max_tokens` and
+    // require `max_completion_tokens`; xAI still takes `max_tokens`.
+    if (maxTokens != null) {
+      body[provider == AiProvider.openai
+          ? 'max_completion_tokens'
+          : 'max_tokens'] = maxTokens;
+    }
     final resp = await _post(
       Uri.parse(provider.chatCompletionsUrl),
       headers: {
@@ -563,6 +645,13 @@ class LlmClient {
     final data = jsonDecode(resp.body) as Map<String, dynamic>;
     final choices = (data['choices'] as List?) ?? const [];
     if (choices.isEmpty) return '';
+    final first = choices.first as Map;
+    final finish = first['finish_reason'];
+    final refusal = (first['message'] as Map?)?['refusal'];
+    if (finish == 'content_filter' ||
+        (refusal is String && refusal.trim().isNotEmpty)) {
+      throw _refused();
+    }
     final content = ((choices.first as Map)['message'] as Map?)?['content'];
     if (content is String) return content;
     if (content is List) {

@@ -25,6 +25,8 @@ class FriendlyError {
     if (error is LlmAuthError) return error.messageIn(l10n);
     if (error is LlmModelNotFoundError) return error.messageIn(l10n);
     if (error is LlmNetworkError) return error.messageIn(l10n);
+    if (error is LlmRefusalError) return error.messageIn(l10n);
+    if (error is LlmTruncatedError) return error.messageIn(l10n);
 
     // Anything that reached the network layer but not a provider. On web this
     // is the ONLY network failure type — browsers never raise SocketException —

@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/ai/ai_assistant.dart';
+import 'package:mhad/ai/crisis_detector.dart';
 import 'package:mhad/ai/gemini_api_assistant.dart';
 import 'package:mhad/ai/pii_stripper.dart';
 import 'package:mhad/providers/assistant_providers.dart';
@@ -73,6 +74,12 @@ Future<AssistantSendResult> sendAssistantMessage(
   final trimmed = text.trim();
   if (trimmed.isEmpty) return const AssistantSendResult();
 
+  // Crisis safety net — before (and independent of) any AI gating: the 988
+  // banner must appear even with no key, declined consent, or a rate limit.
+  if (looksLikeCrisis(trimmed)) {
+    ref.read(crisisSupportShownProvider.notifier).state = true;
+  }
+
   final assistant = ref.read(aiAssistantProvider);
   if (assistant == null) return const AssistantSendResult(needsKey: true);
 
@@ -94,7 +101,7 @@ Future<AssistantSendResult> sendAssistantMessage(
     return AssistantSendResult(blockReason: blockReason);
   }
 
-  final history = ref.read(conversationProvider);
+  final history = historyForAi(ref.read(conversationProvider));
 
   // Strip PII from history before sending to the external API.
   var strippedHistory = history
@@ -265,4 +272,21 @@ Future<AssistantSendResult> verifyOnWeb(
   }
 
   return const AssistantSendResult(sent: true);
+}
+
+/// The conversation as it should be sent to the AI: the app's own error
+/// notices are dropped (the model never said them), along with the user turn
+/// that failed, so a failed exchange doesn't pollute the context or break
+/// providers that expect alternating user/assistant turns.
+@visibleForTesting
+List<ChatMessage> historyForAi(List<ChatMessage> convo) {
+  final out = <ChatMessage>[];
+  for (var i = 0; i < convo.length; i++) {
+    final m = convo[i];
+    if (m.isError) continue;
+    final next = i + 1 < convo.length ? convo[i + 1] : null;
+    if (m.role == MessageRole.user && next != null && next.isError) continue;
+    out.add(m);
+  }
+  return out;
 }

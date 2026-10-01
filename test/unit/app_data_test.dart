@@ -66,10 +66,11 @@ void main() {
 
     test('loads the AI config and privacy URL', () async {
       final data = await AppData.load();
-      expect(data.ai.model, 'gemini-3.5-flash');
+      expect(data.ai.model, 'gemini-3.5-flash-lite');
       expect(data.ai.maxContextTokens, 1048576);
       expect(data.ai.rpm, 15);
-      expect(data.ai.rpd, 1500);
+      expect(data.ai.rpd, 500);
+      expect(data.ai.rpdFor('gemini-3.5-flash'), 20);
       expect(data.ai.tpm, 1000000);
       expect(data.privacyPolicyUrl, startsWith('https://'));
     });
@@ -78,10 +79,11 @@ void main() {
   group('AiConfig.fromJson', () {
     test('falls back to sane defaults when fields are missing', () {
       final ai = AiConfig.fromJson(const {});
-      expect(ai.model, 'gemini-3.5-flash');
+      expect(ai.model, 'gemini-3.5-flash-lite');
       expect(ai.maxContextTokens, 1048576);
       expect(ai.rpm, 15);
-      expect(ai.rpd, 1500);
+      expect(ai.rpd, 500);
+      expect(ai.rpdFor('anything-unlisted'), 500);
     });
   });
 

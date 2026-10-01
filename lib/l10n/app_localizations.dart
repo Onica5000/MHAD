@@ -9215,7 +9215,7 @@ abstract class AppLocalizations {
   /// No description provided for @aiSetupYesGoogleOffersAGenerous.
   ///
   /// In en, this message translates to:
-  /// **'Yes. Google offers a generous free tier for Gemini. There is no credit card required and no charge for typical personal use.'**
+  /// **'Yes. Google\'s free tier for Gemini needs no credit card. It has daily limits: the app\'s default model (Gemini Flash-Lite) allows a few hundred requests a day, which covers normal use; the stronger Flash models allow far fewer (about 20 a day).'**
   String get aiSetupYesGoogleOffersAGenerous;
 
   /// No description provided for @aiSetupWhatGoogleAccountShouldI.
@@ -9443,7 +9443,7 @@ abstract class AppLocalizations {
   /// No description provided for @aiSetupNoCreditCardOrPayment.
   ///
   /// In en, this message translates to:
-  /// **'No credit card or payment is needed. The free tier is generous and sufficient for this app.'**
+  /// **'No credit card or payment is needed. The free tier has daily limits; the app\'s default model (Flash-Lite) is chosen to fit normal use.'**
   String get aiSetupNoCreditCardOrPayment;
 
   /// No description provided for @aiSetupMostProvidersRequireAPaid.
@@ -12132,6 +12132,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The FDA labels below work without AI. If you set up the free AI assistant, it can also turn them into a short checklist you can tick, with possible interactions written as questions for your doctor.'**
   String get sideEffectsChecklistOptionalBody;
+
+  /// No description provided for @llmRefusal.
+  ///
+  /// In en, this message translates to:
+  /// **'{provider} declined to answer this. If you\'re in crisis or thinking about harming yourself, call or text 988 now. Otherwise, try rephrasing, or choose a different model in AI setup.'**
+  String llmRefusal(String provider);
+
+  /// No description provided for @llmTruncated.
+  ///
+  /// In en, this message translates to:
+  /// **'{provider} ran out of room before it could answer. Please try again; if it keeps happening, choose a different model in AI setup.'**
+  String llmTruncated(String provider);
+
+  /// No description provided for @crisisBannerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You don\'t have to wait for the AI'**
+  String get crisisBannerTitle;
+
+  /// No description provided for @crisisBannerBody.
+  ///
+  /// In en, this message translates to:
+  /// **'If you\'re thinking about suicide or hurting yourself, or you\'re in crisis, call or text 988 now — free, confidential, 24/7. If you\'re in immediate danger, call 911.'**
+  String get crisisBannerBody;
+
+  /// No description provided for @crisisBannerCall.
+  ///
+  /// In en, this message translates to:
+  /// **'Call 988'**
+  String get crisisBannerCall;
+
+  /// No description provided for @crisisBannerText.
+  ///
+  /// In en, this message translates to:
+  /// **'Text 988'**
+  String get crisisBannerText;
+
+  /// No description provided for @crisisBannerMore.
+  ///
+  /// In en, this message translates to:
+  /// **'More help'**
+  String get crisisBannerMore;
 }
 
 class _AppLocalizationsDelegate

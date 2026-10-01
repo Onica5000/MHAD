@@ -1519,7 +1519,7 @@
   "ulyssesClauseIfFutureMeRefuses": "Si mi yo futuro se niega…",
   "ulyssesClauseStronglyRecommendedTalkWithA": "Muy recomendable: hable con un especialista de apoyo entre pares o un profesional clínico antes de guardar. Vea \"Obtener ayuda\" en Configuración.",
   "aiSetupIsTheApiKeyReally": "¿La clave de API es realmente gratis?",
-  "aiSetupYesGoogleOffersAGenerous": "Sí. Google ofrece un nivel gratuito generoso para Gemini. No se necesita tarjeta de crédito y no hay cargos por el uso personal típico.",
+  "aiSetupYesGoogleOffersAGenerous": "Sí. El nivel gratuito de Gemini de Google no requiere tarjeta de crédito. Tiene límites diarios: el modelo predeterminado de la aplicación (Gemini Flash-Lite) permite unos cientos de solicitudes al día, suficiente para un uso normal; los modelos Flash más potentes permiten muchas menos (unas 20 al día).",
   "aiSetupWhatGoogleAccountShouldI": "¿Qué cuenta de Google debo usar?",
   "aiSetupAnyGoogleAccountWorksA": "Cualquier cuenta de Google sirve; una cuenta personal de Gmail está bien. No necesita una cuenta de facturación de Google Cloud.",
   "aiSetupCanIRevokeTheKey": "¿Puedo revocar la clave más adelante?",
@@ -1557,7 +1557,7 @@
   "aiSetupOpen": "Abrir {label}",
   "aiSetupSignInWithGoogle": "Iniciar sesión con Google",
   "aiSetupSignInTo": "Iniciar sesión en {label}",
-  "aiSetupNoCreditCardOrPayment": "No se necesita tarjeta de crédito ni pago. El nivel gratuito es generoso y suficiente para esta aplicación.",
+  "aiSetupNoCreditCardOrPayment": "No se necesita tarjeta de crédito ni pago. El nivel gratuito tiene límites diarios; el modelo predeterminado de la aplicación (Flash-Lite) se eligió para que alcance en un uso normal.",
   "aiSetupMostProvidersRequireAPaid": "La mayoría de los proveedores exigen una cuenta de pago con créditos para usar la API. Su proveedor le factura directamente.",
   "aiSetupKeySetForThisSession": "Clave configurada para esta sesión",
   "aiSetupKeySaved": "Clave guardada",
@@ -1999,5 +1999,12 @@
   "sideEffectsOfficialLabelsHeading": "Etiquetas oficiales de la FDA",
   "sideEffectsOfficialLabelsIntro": "Directamente de la etiqueta de la FDA de cada medicamento (openFDA). No necesita IA. Toque un medicamento para leer sus efectos secundarios e interacciones.",
   "sideEffectsChecklistOptionalTitle": "¿Quiere una lista breve? (opcional)",
-  "sideEffectsChecklistOptionalBody": "Las etiquetas de la FDA de abajo funcionan sin IA. Si configura el asistente de IA gratuito, también puede convertirlas en una lista breve que puede marcar, con las posibles interacciones redactadas como preguntas para su médico."
+  "sideEffectsChecklistOptionalBody": "Las etiquetas de la FDA de abajo funcionan sin IA. Si configura el asistente de IA gratuito, también puede convertirlas en una lista breve que puede marcar, con las posibles interacciones redactadas como preguntas para su médico.",
+  "llmRefusal": "{provider} no quiso responder a esto. Si está en crisis o piensa en hacerse daño, llame o envíe un mensaje al 988 ahora. Si no, intente reformular la pregunta o elija otro modelo en la configuración de IA.",
+  "llmTruncated": "{provider} se quedó sin espacio antes de poder responder. Intente de nuevo; si sigue pasando, elija otro modelo en la configuración de IA.",
+  "crisisBannerTitle": "No tiene que esperar a la IA",
+  "crisisBannerBody": "Si está pensando en el suicidio o en hacerse daño, o está en crisis, llame o envíe un mensaje al 988 ahora: es gratis, confidencial y está disponible las 24 horas. Si está en peligro inmediato, llame al 911.",
+  "crisisBannerCall": "Llamar al 988",
+  "crisisBannerText": "Mensaje al 988",
+  "crisisBannerMore": "Más ayuda"
 }

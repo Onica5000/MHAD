@@ -5382,7 +5382,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get aiSetupYesGoogleOffersAGenerous =>
-      'Sí. Google ofrece un nivel gratuito generoso para Gemini. No se necesita tarjeta de crédito y no hay cargos por el uso personal típico.';
+      'Sí. El nivel gratuito de Gemini de Google no requiere tarjeta de crédito. Tiene límites diarios: el modelo predeterminado de la aplicación (Gemini Flash-Lite) permite unos cientos de solicitudes al día, suficiente para un uso normal; los modelos Flash más potentes permiten muchas menos (unas 20 al día).';
 
   @override
   String get aiSetupWhatGoogleAccountShouldI =>
@@ -5524,7 +5524,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get aiSetupNoCreditCardOrPayment =>
-      'No se necesita tarjeta de crédito ni pago. El nivel gratuito es generoso y suficiente para esta aplicación.';
+      'No se necesita tarjeta de crédito ni pago. El nivel gratuito tiene límites diarios; el modelo predeterminado de la aplicación (Flash-Lite) se eligió para que alcance en un uso normal.';
 
   @override
   String get aiSetupMostProvidersRequireAPaid =>
@@ -7278,4 +7278,30 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get sideEffectsChecklistOptionalBody =>
       'Las etiquetas de la FDA de abajo funcionan sin IA. Si configura el asistente de IA gratuito, también puede convertirlas en una lista breve que puede marcar, con las posibles interacciones redactadas como preguntas para su médico.';
+
+  @override
+  String llmRefusal(String provider) {
+    return '$provider no quiso responder a esto. Si está en crisis o piensa en hacerse daño, llame o envíe un mensaje al 988 ahora. Si no, intente reformular la pregunta o elija otro modelo en la configuración de IA.';
+  }
+
+  @override
+  String llmTruncated(String provider) {
+    return '$provider se quedó sin espacio antes de poder responder. Intente de nuevo; si sigue pasando, elija otro modelo en la configuración de IA.';
+  }
+
+  @override
+  String get crisisBannerTitle => 'No tiene que esperar a la IA';
+
+  @override
+  String get crisisBannerBody =>
+      'Si está pensando en el suicidio o en hacerse daño, o está en crisis, llame o envíe un mensaje al 988 ahora: es gratis, confidencial y está disponible las 24 horas. Si está en peligro inmediato, llame al 911.';
+
+  @override
+  String get crisisBannerCall => 'Llamar al 988';
+
+  @override
+  String get crisisBannerText => 'Mensaje al 988';
+
+  @override
+  String get crisisBannerMore => 'Más ayuda';
 }

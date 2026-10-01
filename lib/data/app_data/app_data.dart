@@ -56,6 +56,15 @@ class AiConfig {
   /// When the rate limits were last verified, e.g. "Dec 2025".
   final String rateLimitsAsOf;
 
+  /// Free-tier requests/day per Gemini model id (Google sets very different
+  /// quotas per model — e.g. Flash-Lite ~500 vs Flash ~20 in Oct 2026).
+  /// Models not listed use [rpd].
+  final Map<String, int> freeTierRpdByModel;
+
+  /// Daily free-tier request limit for [model] (falls back to [rpd]).
+  int rpdFor(String? model) =>
+      (model == null ? null : freeTierRpdByModel[model]) ?? rpd;
+
   /// Curated model-picker options per provider, keyed by provider name
   /// (`gemini`/`anthropic`/`openai`/`grok`). Externalized so the admin
   /// propose/approve flow can refresh the picker lists without a code edit;
@@ -63,14 +72,15 @@ class AiConfig {
   final Map<String, List<String>> providerModels;
 
   const AiConfig({
-    this.model = 'gemini-3.5-flash',
+    this.model = 'gemini-3.5-flash-lite',
     this.maxContextTokens = 1048576,
     this.rpm = 15,
-    this.rpd = 1500,
+    this.rpd = 500,
     this.tpm = 1000000,
     this.maxOutputTokens = 65536,
     this.rateLimitsAsOf = '',
     this.providerModels = const {},
+    this.freeTierRpdByModel = const {},
   });
 
   /// The curated picker list for [providerName], or null if not externalized.
@@ -80,14 +90,20 @@ class AiConfig {
   }
 
   factory AiConfig.fromJson(Map<String, dynamic> m) => AiConfig(
-        model: (m['model'] ?? 'gemini-3.5-flash').toString(),
+        model: (m['model'] ?? 'gemini-3.5-flash-lite').toString(),
         maxContextTokens: (m['maxContextTokens'] as num?)?.toInt() ?? 1048576,
         rpm: (m['rpm'] as num?)?.toInt() ?? 15,
-        rpd: (m['rpd'] as num?)?.toInt() ?? 1500,
+        rpd: (m['rpd'] as num?)?.toInt() ?? 500,
         tpm: (m['tpm'] as num?)?.toInt() ?? 1000000,
         maxOutputTokens: (m['maxOutputTokens'] as num?)?.toInt() ?? 65536,
         rateLimitsAsOf: (m['rateLimitsAsOf'] ?? '').toString(),
         providerModels: _parseProviderModels(m['providerModels']),
+        freeTierRpdByModel: {
+          if (m['freeTierRpdByModel'] is Map)
+            for (final e in (m['freeTierRpdByModel'] as Map).entries)
+              if (!e.key.toString().startsWith('_') && e.value is num)
+                e.key.toString(): (e.value as num).toInt(),
+        },
       );
 
   static Map<String, List<String>> _parseProviderModels(Object? raw) {

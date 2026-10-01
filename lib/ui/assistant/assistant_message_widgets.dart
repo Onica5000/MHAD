@@ -120,7 +120,10 @@ class MessageBubble extends StatelessWidget {
                         color: cs.onSurfaceVariant,
                       ),
                     ),
-                    for (final s in message.sources!)
+                    // Only web links: a source URI comes from the model's
+                    // grounding metadata, so anything but http(s) (e.g. a
+                    // `javascript:` or `intent:` URI) is never launched.
+                    for (final s in message.sources!.where((s) => isSafeWebLink(s.uri)))
                       InkWell(
                         onTap: () => launchUrl(Uri.parse(s.uri),
                             mode: LaunchMode.externalApplication),
@@ -284,4 +287,13 @@ class _Dot extends StatelessWidget {
       ),
     );
   }
+}
+
+/// True for absolute http(s) URLs with a host — the only links a
+/// model-supplied source may open.
+bool isSafeWebLink(String uri) {
+  final u = Uri.tryParse(uri.trim());
+  return u != null &&
+      (u.scheme == 'https' || u.scheme == 'http') &&
+      u.host.isNotEmpty;
 }

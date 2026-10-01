@@ -1938,7 +1938,7 @@
   "ulyssesClauseIfFutureMeRefuses": "If future-me refuses…",
   "ulyssesClauseStronglyRecommendedTalkWithA": "Strongly recommended: talk with a peer specialist or clinician before saving. See \"Get help\" in Settings.",
   "aiSetupIsTheApiKeyReally": "Is the API key really free?",
-  "aiSetupYesGoogleOffersAGenerous": "Yes. Google offers a generous free tier for Gemini. There is no credit card required and no charge for typical personal use.",
+  "aiSetupYesGoogleOffersAGenerous": "Yes. Google's free tier for Gemini needs no credit card. It has daily limits: the app's default model (Gemini Flash-Lite) allows a few hundred requests a day, which covers normal use; the stronger Flash models allow far fewer (about 20 a day).",
   "aiSetupWhatGoogleAccountShouldI": "What Google account should I use?",
   "aiSetupAnyGoogleAccountWorksA": "Any Google account works — a personal Gmail is fine. You do not need a Google Cloud billing account.",
   "aiSetupCanIRevokeTheKey": "Can I revoke the key later?",
@@ -2001,7 +2001,7 @@
       "label": {"type": "Object"}
     }
   },
-  "aiSetupNoCreditCardOrPayment": "No credit card or payment is needed. The free tier is generous and sufficient for this app.",
+  "aiSetupNoCreditCardOrPayment": "No credit card or payment is needed. The free tier has daily limits; the app's default model (Flash-Lite) is chosen to fit normal use.",
   "aiSetupMostProvidersRequireAPaid": "Most providers require a paid account with credits to use the API. Your provider bills you directly.",
   "aiSetupKeySetForThisSession": "Key set for this session",
   "aiSetupKeySaved": "Key saved",
@@ -2980,5 +2980,22 @@
   "sideEffectsOfficialLabelsHeading": "Official FDA labels",
   "sideEffectsOfficialLabelsIntro": "Straight from each medication's FDA label (openFDA). No AI needed. Tap a medication to read its side effects and drug interactions.",
   "sideEffectsChecklistOptionalTitle": "Want a short checklist? (optional)",
-  "sideEffectsChecklistOptionalBody": "The FDA labels below work without AI. If you set up the free AI assistant, it can also turn them into a short checklist you can tick, with possible interactions written as questions for your doctor."
+  "sideEffectsChecklistOptionalBody": "The FDA labels below work without AI. If you set up the free AI assistant, it can also turn them into a short checklist you can tick, with possible interactions written as questions for your doctor.",
+  "llmRefusal": "{provider} declined to answer this. If you're in crisis or thinking about harming yourself, call or text 988 now. Otherwise, try rephrasing, or choose a different model in AI setup.",
+  "@llmRefusal": {
+    "placeholders": {
+      "provider": {"type": "String"}
+    }
+  },
+  "llmTruncated": "{provider} ran out of room before it could answer. Please try again; if it keeps happening, choose a different model in AI setup.",
+  "@llmTruncated": {
+    "placeholders": {
+      "provider": {"type": "String"}
+    }
+  },
+  "crisisBannerTitle": "You don't have to wait for the AI",
+  "crisisBannerBody": "If you're thinking about suicide or hurting yourself, or you're in crisis, call or text 988 now — free, confidential, 24/7. If you're in immediate danger, call 911.",
+  "crisisBannerCall": "Call 988",
+  "crisisBannerText": "Text 988",
+  "crisisBannerMore": "More help"
 }

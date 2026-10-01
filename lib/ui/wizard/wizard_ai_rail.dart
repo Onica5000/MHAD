@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/crisis_support_banner.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -245,6 +246,7 @@ class _WizardAiRailState extends ConsumerState<WizardAiRail> {
               ),
             const SizedBox(height: 10),
             Divider(color: p.border, height: 1),
+            const CrisisSupportBanner(),
             Expanded(child: _RailChat(scrollController: _scrollCtrl)),
             _RailInput(
               controller: _inputCtrl,

@@ -268,6 +268,11 @@ final conversationProvider =
 
 final isSendingProvider = StateProvider<bool>((_) => false);
 
+/// Set once a message typed to the AI matches crisis language
+/// ([looksLikeCrisis]); shows the 988 banner on every chat surface for the
+/// rest of the session.
+final crisisSupportShownProvider = StateProvider<bool>((_) => false);
+
 // ---------------------------------------------------------------------------
 // Per-session AI consent. Resets on app restart.
 // ---------------------------------------------------------------------------
@@ -353,6 +358,11 @@ final geminiRateTrackerProvider =
   ref.listen<AiProvider>(
     activeProviderProvider,
     (_, next) => tracker.enforced = next == AiProvider.gemini,
+    fireImmediately: true,
+  );
+  ref.listen<String>(
+    activeModelProvider,
+    (_, next) => tracker.setActiveModel(next),
     fireImmediately: true,
   );
   return tracker;

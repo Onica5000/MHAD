@@ -5,21 +5,27 @@
     "note": "Source of truth for the app's dynamic/updatable facts. Edited via the admin propose/approve flow. 'autonomy': 'auto' = an AI may update without human sign-off; 'verify' = a human must approve the diff before it ships. Keep 'source' current so updates are checkable."
   },
   "ai": {
-    "model": "gemini-3.5-flash",
+    "model": "gemini-3.5-flash-lite",
     "maxContextTokens": 1048576,
     "rpm": 15,
-    "rpd": 1500,
+    "rpd": 500,
     "tpm": 1000000,
     "maxOutputTokens": 65536,
-    "rateLimitsAsOf": "May 2026",
+    "rateLimitsAsOf": "Oct 2026",
     "autonomy": "auto",
-    "source": "ai.google.dev/gemini-api/docs/rate-limits (verify exact numbers in AI Studio dashboard)",
+    "source": "ai.google.dev/gemini-api/docs/rate-limits (free tier; verify exact numbers in the AI Studio dashboard)",
     "providerModels": {
       "_note": "Curated model-picker options per provider (first = the suggested default). 'auto' tier — an AI may propose updates; the admin model-refresh button can populate these from each provider's live catalog. Empty/absent → falls back to AiProvider.models in code.",
-      "gemini": ["gemini-3.5-flash", "gemini-3.1-flash-lite", "gemini-2.5-flash", "gemini-2.5-pro"],
-      "anthropic": ["claude-sonnet-4-6", "claude-haiku-4-5", "claude-opus-4-8", "claude-fable-5"],
-      "openai": ["gpt-5.4-mini", "gpt-5.4-nano", "gpt-5.4", "gpt-5.5"],
-      "grok": ["grok-4.3", "grok-4.20-0309-non-reasoning", "grok-4.20-0309-reasoning", "grok-build-0.1"]
+      "gemini": ["gemini-3.5-flash-lite", "gemini-3.5-flash", "gemini-3.8-flash"],
+      "anthropic": ["claude-sonnet-5-5", "claude-haiku-4-5", "claude-opus-5-5", "claude-fable-5-1"],
+      "openai": ["gpt-5.4-mini", "gpt-5.4-nano", "gpt-6-luna", "gpt-6.1-sol"],
+      "grok": ["grok-4.7", "grok-4.3", "grok-4.20-0309-non-reasoning", "grok-build-0.1"]
+    },
+    "freeTierRpdByModel": {
+      "_note": "Free-tier requests/day per Gemini model (Oct 2026). Flash models were cut to ~20/day; Flash-Lite allows ~500. Unlisted models use 'rpd'.",
+      "gemini-3.5-flash-lite": 500,
+      "gemini-3.5-flash": 20,
+      "gemini-3.8-flash": 20
     }
   },
   "urls": {

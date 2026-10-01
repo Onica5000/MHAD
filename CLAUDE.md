@@ -89,9 +89,20 @@ This regenerates `app_database.g.dart`.
   (lib/ai/llm_client.dart) is the transport (Gemini via `google_generative_ai`; Anthropic
   Messages REST; OpenAI/Grok Chat Completions REST). The chat/extractor/smart-fill take
   `(provider, model, apiKey)`; `GeminiApiAssistant` is now a typedef onto `LlmAssistant`.
-- **Default = Gemini** (`appData.ai.model` = `gemini-3.5-flash`, admin-updatable). Other
-  providers' curated model lists live in `AiProvider.models` (current defaults: Claude
-  `claude-sonnet-4-6`, OpenAI `gpt-5.4-mini`, Grok `grok-4.3`).
+- **Default = Gemini Flash-Lite** (`appData.ai.model` = `gemini-3.5-flash-lite`,
+  admin-updatable) because the Gemini free tier allows ~500 requests/day on Flash-Lite vs
+  ~20 on Flash (Oct 2026); `appData.ai.freeTierRpdByModel` drives the per-model daily cap.
+  Other providers' curated lists live in `AiProvider.models` / `app_data.ai.providerModels`
+  (defaults: Claude `claude-sonnet-5-5`, OpenAI `gpt-5.4-mini`, Grok `grok-4.7`).
+- **Claude requests** (LlmClient): 16k `max_tokens` (current models think by default),
+  `output_config.effort: medium` on 4.6+ models, `fallbacks: "default"` + beta
+  `server-side-fallback-2026-07-01` on Fable 5.1 / Opus 5.5 / Opus 5 / Sonnet 5.5. Never
+  send `temperature`, `thinking: disabled`, or an assistant prefill (400 on current models).
+  `stop_reason: "refusal"` → `LlmRefusalError` (message points to 988).
+- **OpenAI** uses `max_completion_tokens` (GPT-5+ reject `max_tokens`); xAI keeps `max_tokens`.
+- **Crisis safety net:** `looksLikeCrisis` (lib/ai/crisis_detector.dart) runs on every
+  message before any AI gating and shows `CrisisSupportBanner` (988) on all chat surfaces —
+  independent of whether the AI answers.
 - **Per-provider keys** (`ai_key_<provider>`): private mode → flutter_secure_storage;
   public/web → in-memory + 10-min TTL crash-recovery cache. Active provider/model resolved
   via `aiConfigProvider` (lib/providers/assistant_providers.dart).

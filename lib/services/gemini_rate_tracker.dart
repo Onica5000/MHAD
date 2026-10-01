@@ -9,10 +9,12 @@ final _en = lookupAppLocalizations(const Locale('en'));
 
 /// Tracks Gemini API usage against the free tier limits.
 ///
-/// Gemini 3.5 Flash free tier (as of May 2026; the live numbers come from
-/// `assets/data/app_data.json` — these are just illustrative):
+/// Gemini free tier (the live numbers come from `assets/data/app_data.json`;
+/// these are illustrative). Daily quotas differ sharply by model — as of
+/// Oct 2026 about 500 requests/day on Flash-Lite vs ~20 on Flash — so the
+/// daily cap follows the active Gemini model ([activeModel]):
 ///   - 15 requests per minute (RPM)
-///   - 1,500 requests per day (RPD)
+///   - per-model requests per day (RPD)
 ///   - 1,000,000 tokens per minute (TPM)
 ///   - 1,048,576 token context window
 ///   - 65,536 max output tokens
@@ -24,7 +26,17 @@ final _en = lookupAppLocalizations(const Locale('en'));
 class GeminiRateTracker extends ChangeNotifier {
   // ── Free tier limits (from assets/data/app_data.json, updatable) ───────
   static int get maxRpm => appData.ai.rpm;
-  static int get maxRpd => appData.ai.rpd;
+  /// The Gemini model currently selected (set by the provider wiring), so
+  /// the daily cap matches that model's free-tier quota.
+  static String? activeModel;
+  static int get maxRpd => appData.ai.rpdFor(activeModel);
+
+  /// Switches the daily cap to [model]'s free-tier quota.
+  void setActiveModel(String model) {
+    if (activeModel == model) return;
+    activeModel = model;
+    notifyListeners();
+  }
   static int get maxTpm => appData.ai.tpm;
   static int get maxContextTokens => appData.ai.maxContextTokens;
 
