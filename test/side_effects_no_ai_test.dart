@@ -14,7 +14,7 @@ import 'package:mhad/ui/widgets/fda_label_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Side effects work without AI: every current medication gets its official
-/// FDA label card, and the AI checklist is presented as optional.
+/// FDA label card (current + limited), and the AI checklist is optional.
 void main() {
   setUpAll(() => AppData.instance = AppData.fromJson(const {}));
 
@@ -36,8 +36,11 @@ void main() {
       await repo.replaceMedications(id, [
         med(MedicationEntryType.current, 'Sertraline', 0),
         med(MedicationEntryType.current, 'Lithium', 1),
-        // Not currently taken: must not get a card.
-        med(MedicationEntryType.exception, 'Haloperidol', 2),
+        // Accepted with limits: gets a card too.
+        med(MedicationEntryType.limitation, 'Olanzapine', 2),
+        // Refused / preferred-if-treated: no card.
+        med(MedicationEntryType.exception, 'Haloperidol', 3),
+        med(MedicationEntryType.preferred, 'Quetiapine', 4),
       ]);
       return id;
     }))!;
@@ -67,9 +70,58 @@ void main() {
       isTrue,
     );
     final cards = tester.widgetList<FdaLabelCard>(find.byType(FdaLabelCard));
-    expect(cards.map((c) => c.medName), ['Sertraline', 'Lithium']);
+    expect(cards.map((c) => c.medName), [
+      'Sertraline',
+      'Lithium',
+      'Olanzapine',
+    ]);
     // The old "set up AI to check side effects" gate is gone.
     expect(find.textContaining('Set up AI to check'), findsNothing);
+
+    await tester.pumpWidget(const SizedBox());
+    await tester.pump(const Duration(seconds: 1));
+    await db.close();
+  });
+
+  testWidgets('only limited medications: label cards, no AI checklist box', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues({});
+    final db = AppDatabase(NativeDatabase.memory());
+    final repo = DirectiveRepository(db);
+    final id = (await tester.runAsync(() async {
+      final id = await repo.createDirective(FormType.combined);
+      await repo.replaceMedications(id, [
+        MedicationEntriesCompanion.insert(
+          directiveId: id,
+          entryType: MedicationEntryType.limitation.name,
+          medicationName: const Value('Olanzapine'),
+          sortOrder: const Value(0),
+        ),
+      ]);
+      return id;
+    }))!;
+    await tester.binding.setSurfaceSize(const Size(900, 2400));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [appDatabaseProvider.overrideWithValue(db)],
+        child: MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: SideEffectsScreen(directiveId: id),
+        ),
+      ),
+    );
+    await tester.runAsync(
+      () => Future<void>.delayed(const Duration(milliseconds: 200)),
+    );
+    await tester.pumpAndSettle();
+
+    final cards = tester.widgetList<FdaLabelCard>(find.byType(FdaLabelCard));
+    expect(cards.map((c) => c.medName), ['Olanzapine']);
+    expect(find.text('Want a short checklist? (optional)'), findsNothing);
+    expect(find.textContaining('Add the medications you'), findsNothing);
 
     await tester.pumpWidget(const SizedBox());
     await tester.pump(const Duration(seconds: 1));

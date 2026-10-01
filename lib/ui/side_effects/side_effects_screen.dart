@@ -44,6 +44,10 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
   List<SideEffectItem> _items = [];
   List<InteractionNote> _interactions = [];
   List<String> _currentMeds = [];
+
+  /// Medications that get an FDA label card: currently taken plus those
+  /// accepted with limits. (Refused and preferred-if-treated meds don't.)
+  List<String> _labelMeds = [];
   bool _loading = true;
   bool _generating = false;
   String? _error;
@@ -69,6 +73,13 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
         .where((n) => n.isNotEmpty)
         .toSet()
         .toList();
+    final labelNames = <String>{
+      ...names,
+      ...meds
+          .where((m) => m.entryType == MedicationEntryType.limitation.name)
+          .map((m) => m.medicationName.trim())
+          .where((n) => n.isNotEmpty),
+    }.toList();
     final raw = pref?.sideEffectsJson ?? '';
     var items = <SideEffectItem>[];
     var interactions = <InteractionNote>[];
@@ -89,6 +100,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
     }
     setState(() {
       _currentMeds = names;
+      _labelMeds = labelNames;
       _items = items;
       _interactions = interactions;
       _loading = false;
@@ -200,10 +212,12 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
                         ),
                       ),
                       const SizedBox(height: 16),
-                      if (_currentMeds.isEmpty)
+                      if (_labelMeds.isEmpty)
                         _noMedsCard(p)
                       else ...[
-                        _generateBar(p, hasKey),
+                        // The AI checklist covers medications taken now; a
+                        // list with only limited meds still gets the labels.
+                        if (_currentMeds.isNotEmpty) _generateBar(p, hasKey),
                         if (_error != null) ...[
                           const SizedBox(height: 12),
                           InfoBanner(
@@ -258,7 +272,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
                           ),
                         ),
                         const SizedBox(height: 8),
-                        for (final med in _currentMeds)
+                        for (final med in _labelMeds)
                           FdaLabelCard(medName: med),
                       ],
                     ],
