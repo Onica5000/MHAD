@@ -7,6 +7,7 @@ import 'package:mhad/services/notification_service.dart';
 import 'package:mhad/ui/disclaimer/legal_sheet.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/brand_motif.dart';
+import 'package:mhad/ui/widgets/design/language_toggle.dart';
 
 /// First-launch legal disclaimer + read-only Settings variant.
 ///
@@ -34,17 +35,15 @@ class DisclaimerScreen extends StatefulWidget {
 
   /// First-launch gate variant — user ticks one checkbox before
   /// they can tap Continue.
-  const DisclaimerScreen.gate({
-    required DisclaimerNotifier notifier,
-    super.key,
-  })  : _notifier = notifier,
-        _readOnly = false;
+  const DisclaimerScreen.gate({required DisclaimerNotifier notifier, super.key})
+    : _notifier = notifier,
+      _readOnly = false;
 
   /// Read-only variant — the 8-section accordion with an AppBar back
   /// button instead of the accept footer. Used from Settings → Legal.
   const DisclaimerScreen.readOnly({super.key})
-      : _notifier = null,
-        _readOnly = true;
+    : _notifier = null,
+      _readOnly = true;
 
   @override
   State<DisclaimerScreen> createState() => _DisclaimerScreenState();
@@ -132,7 +131,20 @@ class _GateLayout extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _SectionLabel(context.l10n.disclaimerBeforeYouBegin, palette: palette),
+                  // Language first: a Spanish reader can switch before
+                  // reading anything else. Same setting as Accessibility.
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _SectionLabel(
+                          context.l10n.disclaimerBeforeYouBegin,
+                          palette: palette,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      const LanguageToggle(compact: true),
+                    ],
+                  ),
                   const SizedBox(height: 6),
                   Text(
                     context.l10n.disclaimerAFewThingsToUnderstand,
@@ -171,14 +183,12 @@ class _GateLayout extends StatelessWidget {
                         _DisclaimerCard(
                           icon: Icons.shield_outlined,
                           title: context.l10n.disclaimerThisIsNotLegalAdvice,
-                          body:
-                              context.l10n.disclaimerWeGivePlainLanguageHelp,
+                          body: context.l10n.disclaimerWeGivePlainLanguageHelp,
                         ),
                         const SizedBox(height: 10),
                         _DisclaimerCard(
                           icon: Icons.draw_outlined,
-                          title:
-                              context.l10n.disclaimerItBecomesValidOnlyWhen,
+                          title: context.l10n.disclaimerItBecomesValidOnlyWhen,
                           body:
                               context.l10n.disclaimerPaLawRequiresYourSignature,
                         ),
@@ -196,8 +206,7 @@ class _GateLayout extends StatelessWidget {
                         _DisclaimerCard(
                           icon: Icons.published_with_changes,
                           title: context.l10n.disclaimerYouCanStopOrChange,
-                          body:
-                              context.l10n.disclaimerSkipQuestionsGoBackOr,
+                          body: context.l10n.disclaimerSkipQuestionsGoBackOr,
                         ),
                       ],
                     ),
@@ -243,13 +252,15 @@ class _GateLayout extends StatelessWidget {
                           // so users can see the CTA waiting for them.
                           disabledBackgroundColor: palette.primaryLight,
                           disabledForegroundColor: palette.primary,
-                          minimumSize:
-                              const Size(0, DesignTokens.buttonHeightLg),
-                          padding:
-                              const EdgeInsets.symmetric(horizontal: 22),
+                          minimumSize: const Size(
+                            0,
+                            DesignTokens.buttonHeightLg,
+                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 22),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(
-                                DesignTokens.buttonRadius),
+                              DesignTokens.buttonRadius,
+                            ),
                           ),
                           textStyle: const TextStyle(
                             fontFamily: kSansFamily,
@@ -288,7 +299,7 @@ class _SectionLabel extends StatelessWidget {
           'Consolas',
           'Menlo',
           'Courier New',
-          'monospace'
+          'monospace',
         ],
         fontSize: 11,
         fontWeight: FontWeight.w600,
@@ -388,8 +399,7 @@ class _AckRow extends StatelessWidget {
           borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
           child: Container(
             constraints: const BoxConstraints(minHeight: 48),
-            padding:
-                const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
               border: Border.all(color: palette.primaryLight),

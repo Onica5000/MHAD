@@ -5,6 +5,7 @@ import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
+import 'package:mhad/ui/widgets/design/language_toggle.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/design/wizard_header.dart';
 
@@ -100,12 +101,7 @@ class AccessibilitySettingsScreen extends ConsumerWidget {
 
           const SizedBox(height: 14),
           _SectionHeader(context.l10n.accessibilitySettingsSectionLanguage),
-          _LanguagePicker(
-            selected: settings.languageCode,
-            onChanged: (code) => ref
-                .read(accessibilitySettingsProvider.notifier)
-                .setLanguage(code),
-          ),
+          const LanguageToggle(),
           const SizedBox(height: 10),
           InfoBanner(
             icon: Icons.info_outline,
@@ -329,33 +325,6 @@ class _ToggleRow extends StatelessWidget {
       onChanged: onChanged,
       controlAffinity: ListTileControlAffinity.trailing,
       contentPadding: EdgeInsets.zero,
-    );
-  }
-}
-
-class _LanguagePicker extends StatelessWidget {
-  final String selected;
-  final ValueChanged<String> onChanged;
-  const _LanguagePicker({required this.selected, required this.onChanged});
-
-  // Only offer locales that are actually translated (have an ARB and are in
-  // AppLocalizations.supportedLocales). 中文 / العربية were offered before but
-  // had no translation and silently fell back to English — worse than omitting
-  // them. Re-add each once its ARB lands (Arabic also needs RTL).
-  static const _values = {'en', 'es'};
-
-  @override
-  Widget build(BuildContext context) {
-    // Guard against a previously-stored unsupported code (e.g. 'zh'/'ar'):
-    // SegmentedButton asserts the selection is among its segments.
-    final sel = _values.contains(selected) ? selected : 'en';
-    return SegmentedButton<String>(
-      segments: [
-        ButtonSegment(value: 'en', label: Text(context.l10n.accessibilitySettingsEnglish)),
-        ButtonSegment(value: 'es', label: Text(context.l10n.accessibilitySettingsEspaOl)),
-      ],
-      selected: {sel},
-      onSelectionChanged: (s) => onChanged(s.first),
     );
   }
 }
