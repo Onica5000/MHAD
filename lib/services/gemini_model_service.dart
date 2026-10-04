@@ -83,12 +83,17 @@ class GeminiModel {
 /// model (the app's default tier — fast, free-tier-friendly) and the most
 /// capable Pro alternative, so a human can choose Pro when accuracy demands it.
 class ModelRecommendation {
+  /// Best Flash-Lite: the RECOMMENDED app default since Oct 2026 — the free
+  /// tier allows ~500 requests/day on Flash-Lite vs ~20 on full Flash, and
+  /// nearly every user is on a free key.
+  final GeminiModel? bestLite;
   final GeminiModel? bestFlash;
   final GeminiModel? bestPro;
   final String currentModel;
   final List<GeminiModel> all;
 
   const ModelRecommendation({
+    this.bestLite,
     required this.bestFlash,
     required this.bestPro,
     required this.currentModel,
@@ -115,9 +120,10 @@ class ModelRecommendation {
 /// switch to the genuinely-best available model instead of relying on a
 /// hardcoded id or the drafting AI's (possibly stale) training knowledge.
 ///
-/// Selection policy (per product decision): Flash first — the app's tasks are
-/// tuned for the fast, free-tier Flash tier — with the best Pro surfaced as an
-/// accuracy alternative for a human to choose. A concrete version is always
+/// Selection policy (product decision, 2026-10-01): Flash-Lite first — its
+/// free-tier daily quota (~500) is the only one that fits a full session;
+/// full Flash (~20/day free) and Pro (paid) are surfaced as alternatives for a
+/// human to choose. A concrete version is always
 /// pinned (never a `-latest` alias). The winner is validated with a real
 /// generateContent ping before being proposed.
 class GeminiModelService {
@@ -200,8 +206,10 @@ class GeminiModelService {
         pick(candidates.where((m) => m.isFlash && !m.isLite)) ??
             pick(candidates.where((m) => m.isFlash)); // fall back to lite
     final bestPro = pick(candidates.where((m) => m.isPro));
+    final bestLite = pick(candidates.where((m) => m.isFlash && m.isLite));
 
     return ModelRecommendation(
+      bestLite: bestLite,
       bestFlash: bestFlash,
       bestPro: bestPro,
       currentModel: currentModel,
@@ -211,7 +219,8 @@ class GeminiModelService {
 
   /// The applicable free-tier text models, newest-first, deduped — the curated
   /// set to offer for selection (NOT the whole catalog). Excludes Pro (paid),
-  /// embeddings/vision/tts, aliases and previews; full Flash sorts above Lite.
+  /// embeddings/vision/tts, aliases and previews; Lite sorts above full Flash
+  /// within a version (it is the recommended default).
   /// Used to refresh the admin drafting dropdown from the live catalog.
   static List<String> curatedFreeModelIds(List<GeminiModel> models) {
     final free = models.where((m) => m.isCandidate && m.isLikelyFree).toList()
@@ -219,7 +228,7 @@ class GeminiModelService {
         if (a.versionScore != b.versionScore) {
           return b.versionScore - a.versionScore; // newest first
         }
-        if (a.isLite != b.isLite) return a.isLite ? 1 : -1; // full Flash first
+        if (a.isLite != b.isLite) return a.isLite ? -1 : 1; // Lite first
         return a.id.length - b.id.length; // canonical id first
       });
     final ids = <String>[];

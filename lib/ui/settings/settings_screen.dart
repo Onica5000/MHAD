@@ -1,5 +1,6 @@
 ﻿import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:mhad/constants.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -201,10 +202,21 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
           // (The "Data & privacy" and "Learn More" sections were removed —
           // Learn lives in the main nav, and session/end-session controls live
-          // on the public-mode notice. The visible "AI data update tool" card
-          // was removed 2026-07-11 (UX audit C3) — the maintainer tool is
-          // reached via the long-press on the "About" heading below, still
-          // passphrase-gated.)
+          // on the public-mode notice.) The maintainer data-update tool has a
+          // visible row here only while [kShowAdminEntry] is on (pre-launch);
+          // the long-press on "About" below always works. Passphrase-gated.
+          if (kShowAdminEntry) ...[
+            DesignCard(
+              padding: EdgeInsets.zero,
+              child: _SettingsRow(
+                icon: Icons.admin_panel_settings_outlined,
+                title: context.l10n.settingsAdminToolTitle,
+                subtitle: context.l10n.settingsAdminToolSubtitle,
+                onTap: () => context.push(AppRoutes.admin),
+              ),
+            ),
+            const SizedBox(height: 24),
+          ],
 
           DesignCard(
             variant: DesignCardVariant.surface,

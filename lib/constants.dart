@@ -60,3 +60,8 @@ const aiNotAdvice = 'AI-generated — not legal or medical advice.';
 // Google Play (Jan 2026 health-app rules) requires it to be a publicly
 // accessible web page identical across the Play Console, the app, and the
 // developer site; update it there before submission.
+
+/// Pre-launch convenience: show a visible "Admin: data update tool" row in
+/// Settings. Set to `false` at go-live — the tool then stays reachable only via
+/// a long-press on Settings → About (still passphrase-gated either way).
+const kShowAdminEntry = true;

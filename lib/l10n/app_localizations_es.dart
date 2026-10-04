@@ -4351,6 +4351,14 @@ class AppLocalizationsEs extends AppLocalizations {
       'Protección contra capturas de pantalla';
 
   @override
+  String get settingsAdminToolTitle =>
+      'Admin: herramienta de actualización de datos';
+
+  @override
+  String get settingsAdminToolSubtitle =>
+      'Solo para mantenimiento — requiere contraseña. Se ocultará al lanzar.';
+
+  @override
   String get settingsAbout => 'Acerca de';
 
   @override
@@ -5582,11 +5590,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get adminUpdateBlankUseTheAppS =>
-      'En blanco = usar la clave de Gemini guardada en la aplicación. No se almacena.';
-
-  @override
-  String get adminUpdateEnteredForThisSessionOnly =>
-      'Ingresada solo para esta sesión; no se almacena.';
+      'En blanco = usar la clave guardada en la aplicación para este proveedor. No se almacena.';
 
   @override
   String get adminUpdateDrafting => 'Redactando…';

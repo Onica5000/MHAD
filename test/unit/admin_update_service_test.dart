@@ -43,6 +43,52 @@ Sure! Here is the proposal:
       expect(legal.oldValue, '2');
     });
 
+    test('tier comes from the path, not the model label', () {
+      // A legal change mislabelled "auto" must NOT arrive pre-approved.
+      const model = '{"changes":[{"path":"legal.validityYears","newValue":"3",'
+          '"autonomy":"auto","source":"x","rationale":"y"}]}';
+      final c = AdminUpdateService.parseProposal(model, baseData()).single;
+      expect(c.autonomy, 'verify');
+      expect(c.approved, isFalse);
+      // Educational target: everything is verify-tier.
+      const edu = '{"changes":[{"path":"sections.a.title","newValue":"T",'
+          '"autonomy":"auto","source":"x","rationale":"y"}]}';
+      final e = AdminUpdateService.parseProposal(
+        edu,
+        {
+          'sections': {
+            'a': {'title': 'Old'},
+          },
+        },
+        target: AdminDataTarget.educational,
+      ).single;
+      expect(e.isVerify, isTrue);
+      expect(e.approved, isFalse);
+    });
+
+    test('drops unknown paths, metadata keys, and non-leaf paths', () {
+      final base = baseData()
+        ..['config'] = {'_note': 'n', 'autonomy': 'auto', 'maxChatMessages': 50};
+      const model = '{"changes":['
+          '{"path":"legal.brandNew","newValue":"1","autonomy":"verify","source":"s"},'
+          '{"path":"config._note","newValue":"x","autonomy":"auto","source":"s"},'
+          '{"path":"config.autonomy","newValue":"verify","autonomy":"auto","source":"s"},'
+          '{"path":"contacts.trevorProject","newValue":"x","autonomy":"auto","source":"s"},'
+          '{"path":"config.maxChatMessages","newValue":"60","autonomy":"auto","source":"s"}'
+          ']}';
+      final changes = AdminUpdateService.parseProposal(model, base);
+      expect(changes.map((c) => c.path), ['config.maxChatMessages']);
+    });
+
+    test('braces inside JSON strings do not truncate the proposal', () {
+      const model = 'Here you go: {"changes":[{"path":"ai.rpm","newValue":"12",'
+          '"autonomy":"auto","source":"docs","rationale":"limit is {rpm} \\"}\\" now"}]} '
+          'Hope that helps {not json}';
+      final changes = AdminUpdateService.parseProposal(model, baseData());
+      expect(changes.single.newValue, '12');
+      expect(changes.single.rationale, 'limit is {rpm} "}" now');
+    });
+
     test('returns nothing for non-JSON / empty proposals', () {
       expect(AdminUpdateService.parseProposal('no json here', baseData()),
           isEmpty);

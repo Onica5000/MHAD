@@ -4273,6 +4273,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsScreenshotProtection => 'Screenshot Protection';
 
   @override
+  String get settingsAdminToolTitle => 'Admin: data update tool';
+
+  @override
+  String get settingsAdminToolSubtitle =>
+      'Maintainer only — passphrase required. Hidden at launch.';
+
+  @override
   String get settingsAbout => 'About';
 
   @override
@@ -5483,11 +5490,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get adminUpdateBlankUseTheAppS =>
-      'Blank = use the app\'s saved Gemini key. Not stored.';
-
-  @override
-  String get adminUpdateEnteredForThisSessionOnly =>
-      'Entered for this session only — not stored.';
+      'Blank = use the app\'s saved key for this provider. Not stored.';
 
   @override
   String get adminUpdateDrafting => 'Drafting…';

@@ -7508,6 +7508,18 @@ abstract class AppLocalizations {
   /// **'Screenshot Protection'**
   String get settingsScreenshotProtection;
 
+  /// No description provided for @settingsAdminToolTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Admin: data update tool'**
+  String get settingsAdminToolTitle;
+
+  /// No description provided for @settingsAdminToolSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Maintainer only — passphrase required. Hidden at launch.'**
+  String get settingsAdminToolSubtitle;
+
   /// No description provided for @settingsAbout.
   ///
   /// In en, this message translates to:
@@ -9533,14 +9545,8 @@ abstract class AppLocalizations {
   /// No description provided for @adminUpdateBlankUseTheAppS.
   ///
   /// In en, this message translates to:
-  /// **'Blank = use the app\'s saved Gemini key. Not stored.'**
+  /// **'Blank = use the app\'s saved key for this provider. Not stored.'**
   String get adminUpdateBlankUseTheAppS;
-
-  /// No description provided for @adminUpdateEnteredForThisSessionOnly.
-  ///
-  /// In en, this message translates to:
-  /// **'Entered for this session only — not stored.'**
-  String get adminUpdateEnteredForThisSessionOnly;
 
   /// No description provided for @adminUpdateDrafting.
   ///

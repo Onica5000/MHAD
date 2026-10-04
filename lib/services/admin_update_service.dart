@@ -195,10 +195,14 @@ class AdminUpdateService {
         'content-type': 'application/json',
         'x-api-key': apiKey,
         'anthropic-version': '2023-06-01',
+        // Required for a browser (web is the ship surface) to call the API.
+        'anthropic-dangerous-direct-browser-access': 'true',
       },
       body: jsonEncode({
         'model': model,
-        'max_tokens': 4096,
+        // Current Claude models think by default and thinking counts toward
+        // max_tokens; 4096 could leave no room for the proposal itself.
+        'max_tokens': 16000,
         'messages': [
           {'role': 'user', 'content': prompt},
         ],
@@ -208,10 +212,18 @@ class AdminUpdateService {
       throw Exception('Anthropic API ${resp.statusCode}: ${resp.body}');
     }
     final data = jsonDecode(resp.body) as Map<String, dynamic>;
+    final stop = data['stop_reason'];
+    if (stop == 'refusal') {
+      throw Exception('Claude declined this request (stop_reason: refusal).');
+    }
     final blocks = (data['content'] as List?) ?? const [];
     final buf = StringBuffer();
     for (final b in blocks) {
       if (b is Map && b['type'] == 'text') buf.write(b['text'] ?? '');
+    }
+    if (stop == 'max_tokens' && _extractJsonObject(buf.toString()) == null) {
+      throw Exception('Claude ran out of output space before finishing the '
+          'proposal — narrow the request or set a Focus area.');
     }
     return buf.toString();
   }
@@ -288,8 +300,18 @@ $pretty
 
   /// Parse the model's JSON proposal into reviewable changes, attaching the
   /// current value at each path from [current]. Tolerant of fenced/extra text.
+  ///
+  /// Hardened against a careless or confused model:
+  /// - the autonomy tier is decided by the PATH ([tierForPath]), never by the
+  ///   model's own label — a `legal.*` change mislabelled "auto" would
+  ///   otherwise arrive pre-approved;
+  /// - paths that don't exist in [current] are dropped (they could never
+  ///   apply anyway), as are metadata keys (`_note`, `_meta`, `autonomy`).
   static List<ProposedChange> parseProposal(
-      String modelText, Map<String, dynamic> current) {
+    String modelText,
+    Map<String, dynamic> current, {
+    AdminDataTarget target = AdminDataTarget.appData,
+  }) {
     final jsonText = _extractJsonObject(modelText);
     if (jsonText == null) return const [];
     Map<String, dynamic> obj;
@@ -302,13 +324,17 @@ $pretty
     for (final raw in (obj['changes'] as List?) ?? const []) {
       if (raw is! Map) continue;
       final m = raw.cast<String, dynamic>();
-      final path = (m['path'] ?? '').toString();
-      if (path.isEmpty) continue;
+      final path = (m['path'] ?? '').toString().trim();
+      if (path.isEmpty || !_isEditablePath(current, path)) continue;
       final rawVal = m['newValue'];
       final newValue = (rawVal is Map || rawVal is List)
           ? jsonEncode(rawVal)
           : (rawVal ?? '').toString();
-      final autonomy = (m['autonomy'] ?? 'verify').toString();
+      // Stricter of the model's label and the path's real tier.
+      final claimed = (m['autonomy'] ?? 'verify').toString();
+      final autonomy = claimed == 'verify'
+          ? 'verify'
+          : tierForPath(target, path);
       changes.add(ProposedChange(
         path: path,
         oldValue: _readPath(current, path)?.toString(),
@@ -409,6 +435,23 @@ $pretty
     return copy;
   }
 
+  /// True when [path] names an existing leaf that isn't metadata.
+  static bool _isEditablePath(Map<String, dynamic> root, String path) {
+    final keys = path.split('.');
+    if (keys.any((k) => k.isEmpty || k.startsWith('_') || k == 'autonomy')) {
+      return false;
+    }
+    dynamic node = root;
+    for (final key in keys) {
+      if (node is Map && node.containsKey(key)) {
+        node = node[key];
+      } else {
+        return false;
+      }
+    }
+    return node is! Map;
+  }
+
   static String _displayValue(Object? v) =>
       (v is Map || v is List) ? jsonEncode(v) : (v?.toString() ?? '(none)');
 
@@ -468,13 +511,30 @@ $pretty
   }
 
   /// Pull the first balanced top-level `{...}` object out of [text] (handles
-  /// ```json fences and chatter around it).
+  /// ```json fences and chatter around it). Braces inside JSON strings (e.g. a
+  /// rationale quoting "{x}") are ignored so they can't end the object early.
   static String? _extractJsonObject(String text) {
     final start = text.indexOf('{');
     if (start < 0) return null;
     var depth = 0;
+    var inString = false;
+    var escaped = false;
     for (var i = start; i < text.length; i++) {
       final ch = text[i];
+      if (inString) {
+        if (escaped) {
+          escaped = false;
+        } else if (ch == '\\') {
+          escaped = true;
+        } else if (ch == '"') {
+          inString = false;
+        }
+        continue;
+      }
+      if (ch == '"') {
+        inString = true;
+        continue;
+      }
       if (ch == '{') depth++;
       if (ch == '}') {
         depth--;

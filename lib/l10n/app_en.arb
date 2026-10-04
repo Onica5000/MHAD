@@ -1603,6 +1603,8 @@
   "privacyPolicyContact": "Contact",
   "settingsBrightness": "Brightness",
   "settingsScreenshotProtection": "Screenshot Protection",
+  "settingsAdminToolTitle": "Admin: data update tool",
+  "settingsAdminToolSubtitle": "Maintainer only — passphrase required. Hidden at launch.",
   "settingsAbout": "About",
   "settingsPaMentalHealthAdvanceDirective": "PA Mental Health Advance Directive\nUnder Pennsylvania Act 194 of 2004 (effective January 29, 2005)\n\nThis app helps you document your mental health treatment preferences. It is not legal or medical advice, and not a substitute for a licensed attorney or clinician. See the full Legal Disclaimer above for details.\n\nYour directive is valid for two years from the date you sign it — unless you are found incapable of making mental health decisions at the time it would expire, in which case it stays in effect until your capacity returns.\n\nForm content based on the official PA MHAD booklet published by the Disabilities Law Project (2005).",
   "settingsAccount": "Account",
@@ -2042,8 +2044,7 @@
       "label": {"type": "Object"}
     }
   },
-  "adminUpdateBlankUseTheAppS": "Blank = use the app's saved Gemini key. Not stored.",
-  "adminUpdateEnteredForThisSessionOnly": "Entered for this session only — not stored.",
+  "adminUpdateBlankUseTheAppS": "Blank = use the app's saved key for this provider. Not stored.",
   "adminUpdateDrafting": "Drafting…",
   "adminUpdateStartUpdateWithAi": "Start update with AI",
   "adminUpdateRestoreFromBackupFieldS": "Restore from backup: {changesLength} field(s) differ from the previous version of {assetPath}. Tick the part(s) to roll back (all pre-ticked = full revert).",

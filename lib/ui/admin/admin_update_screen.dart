@@ -78,14 +78,13 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
   }
 
   Future<void> _draft() async {
-    // For Gemini, fall back to the app's stored key if the field is blank
-    // (preserves the prior behavior); other providers must supply a key here.
+    // A key typed here wins; otherwise use the app's saved key FOR THE
+    // SELECTED provider (never the active provider's key — that could send an
+    // Anthropic/OpenAI key to Google, or vice versa).
     final typedKey = _keyCtrl.text.trim();
     final key = typedKey.isNotEmpty
         ? typedKey
-        : (_provider == AdminAiProvider.gemini
-            ? (ref.read(apiKeyProvider).value ?? '')
-            : '');
+        : (ref.read(aiPrefsProvider).value?.keys[_provider] ?? '').trim();
     if (key.isEmpty) {
       setState(() => _error =
           'Enter the ${_provider.label} API key first (${_provider.keyHint}).');
@@ -94,6 +93,11 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
     if (_provider == AdminAiProvider.gemini && !isLikelyGeminiKey(key)) {
       setState(() => _error =
           'That doesn\'t look like a Gemini key — it should start with "AIza".');
+      return;
+    }
+    if (_provider != AdminAiProvider.gemini && !_provider.looksLikeKey(key)) {
+      setState(() => _error =
+          'That doesn\'t look like a ${_provider.label} key (${_provider.keyHint}).');
       return;
     }
     if (_requestCtrl.text.trim().isEmpty) {
@@ -120,16 +124,20 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
         target: _target,
         focusArea: _focusCtrl.text.trim(),
       );
-      final changes = AdminUpdateService.parseProposal(raw, _base);
+      final changes =
+          AdminUpdateService.parseProposal(raw, _base, target: _target);
+      if (!mounted) return;
       setState(() {
         _changes = changes;
         _loading = false;
         _stage = _Stage.review;
         if (changes.isEmpty) {
-          _error = 'The AI proposed no changes (it should refuse when unsure).';
+          _error = 'The AI proposed no usable changes (it should refuse when unsure; '
+              'proposals for fields that don\'t exist are dropped).';
         }
       });
     } catch (e) {
+      if (!mounted) return;
       setState(() {
         _loading = false;
         _error = 'Draft failed: $e';
@@ -212,7 +220,7 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
       final rec = await svc.recommend(current);
       if (!mounted) return;
       setState(() => _loading = false);
-      if (rec.bestFlash == null && rec.bestPro == null) {
+      if (rec.bestLite == null && rec.bestFlash == null && rec.bestPro == null) {
         setState(() => _error = 'No usable text models returned by the API.');
         return;
       }
@@ -261,16 +269,22 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
 
   /// Human-readable reasons for the proposed switch (shown for approval).
   String _modelReason(ModelRecommendation rec, GeminiModel chosen) {
-    final tier = chosen.isFlash ? 'Flash' : (chosen.isPro ? 'Pro' : 'model');
+    final tier = chosen.isLite
+        ? 'Flash-Lite'
+        : (chosen.isFlash ? 'Flash' : (chosen.isPro ? 'Pro' : 'model'));
     final tokens =
         'context ${chosen.inputTokenLimit} in / ${chosen.outputTokenLimit} out tokens';
-    final alt = chosen.isFlash && rec.bestPro != null
-        ? ' Pro alternative if Flash accuracy is insufficient (likely a PAID '
-            'plan — not free tier): ${rec.bestPro!.id}.'
-        : (chosen.isPro && rec.bestFlash != null
-            ? ' WARNING: Pro usually needs a paid plan — this breaks the '
-                'free-for-users model. Free Flash option: ${rec.bestFlash!.id}.'
-            : '');
+    final alt = chosen.isLite
+        ? ' Recommended default: highest free-tier daily quota (~500/day).'
+        : chosen.isFlash
+            ? ' WARNING: full Flash allows only ~20 free requests/day — free '
+                'users can run out within one session. Also update '
+                'ai.freeTierRpdByModel/ai.rpd.'
+                '${rec.bestLite != null ? ' Flash-Lite option: ${rec.bestLite!.id}.' : ''}'
+            : (chosen.isPro
+                ? ' WARNING: Pro usually needs a paid plan — this breaks the '
+                    'free-for-users model.'
+                : '');
     return 'Best available $tier model per the live catalog (was ${rec.currentModel}). '
         '$tokens.$alt';
   }
@@ -297,9 +311,12 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
       builder: (ctx) => SimpleDialog(
         title: Text(context.l10n.adminUpdateBestGeminiModelNow(rec.currentModel)),
         children: [
+          if (rec.bestLite != null)
+            option('RECOMMENDED · Flash-Lite', rec.bestLite!,
+                'Highest free-tier daily quota (~500/day) — fits a full session.'),
           if (rec.bestFlash != null)
-            option('RECOMMENDED · Flash', rec.bestFlash!,
-                'Fast, free-tier tier the app is tuned for.'),
+            option('Alternative · Flash', rec.bestFlash!,
+                'More capable, but only ~20 free requests/day.'),
           if (rec.bestPro != null)
             option('Alternative · Pro', rec.bestPro!,
                 'Most capable — but Pro usually needs a PAID plan (not free '
@@ -669,9 +686,7 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
               border: const OutlineInputBorder(),
               labelText: context.l10n.adminUpdateApiKey(_provider.label),
               hintText: _provider.keyHint,
-              helperText: _provider == AdminAiProvider.gemini
-                  ? context.l10n.adminUpdateBlankUseTheAppS
-                  : context.l10n.adminUpdateEnteredForThisSessionOnly,
+              helperText: context.l10n.adminUpdateBlankUseTheAppS,
             ),
           ),
           const SizedBox(height: 12),
@@ -780,6 +795,16 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
                             Theme.of(context).brightness)),
               ),
             ),
+            // Back to the draft form (keeps the request text) — otherwise an
+            // empty or unusable proposal strands the maintainer here.
+            TextButton(
+              onPressed: () => setState(() {
+                _error = null;
+                _stage = _Stage.draft;
+              }),
+              child: Text(context.l10n.back),
+            ),
+            const SizedBox(width: 8),
             FilledButton(
               onPressed: _changes.any((c) => c.approved) ? _build : null,
               child: Text(_isRevert ? context.l10n.adminUpdateBuildRestoredJson : context.l10n.adminUpdateBuildUpdatedJson),

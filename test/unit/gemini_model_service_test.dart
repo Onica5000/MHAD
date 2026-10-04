@@ -22,6 +22,8 @@ void main() {
       ];
       final rec = GeminiModelService.rank(models, 'gemini-2.5-flash');
       expect(rec.bestFlash!.id, 'gemini-3.5-flash');
+      // Flash-Lite is the recommended default (free-tier quota).
+      expect(rec.bestLite?.id, contains('lite'));
     });
 
     test('picks the newest Pro for the alternative', () {
@@ -73,7 +75,7 @@ void main() {
         _m('text-embedding-004', methods: ['embedContent']), // excluded
       ];
       final ids = GeminiModelService.curatedFreeModelIds(models);
-      expect(ids, ['gemini-3.5-flash', 'gemini-3.5-flash-lite', 'gemini-2.5-flash']);
+      expect(ids, ['gemini-3.5-flash-lite', 'gemini-3.5-flash', 'gemini-2.5-flash']);
       expect(ids.contains('gemini-2.5-pro'), isFalse);
     });
 
