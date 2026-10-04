@@ -100,6 +100,19 @@ enum AiProvider {
   /// [defaultModel] (the const first entry) as the canonical storage default.
   List<String> get availableModels => appData.ai.modelsFor(name) ?? models;
 
+  /// The default model the app uses RIGHT NOW: Gemini follows `appData.ai.model`;
+  /// the others follow the first entry of the admin-updatable list. So when the
+  /// admin model check retires a model, the app moves off it without a code
+  /// change.
+  String get currentDefault =>
+      this == AiProvider.gemini ? appData.ai.model : availableModels.first;
+
+  /// Whether [model] is still offered (a saved pick that was later retired from
+  /// the curated list is not — callers fall back to [currentDefault]).
+  bool isOffered(String model) =>
+      availableModels.contains(model) ||
+      (this == AiProvider.gemini && model == appData.ai.model);
+
   /// Resolves the effective model id for a request: an explicit non-blank
   /// [requested] wins; otherwise Gemini reads the admin-updatable
   /// `appData.ai.model` and every other provider uses its curated
@@ -107,7 +120,7 @@ enum AiProvider {
   String resolveModel(String? requested) {
     final trimmed = requested?.trim();
     if (trimmed != null && trimmed.isNotEmpty) return trimmed;
-    return this == AiProvider.gemini ? appData.ai.model : defaultModel;
+    return currentDefault;
   }
 
   /// Only Gemini supports Google-Search grounding ("Verify on the web"). Other

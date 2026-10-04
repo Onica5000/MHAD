@@ -68,7 +68,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
     setState(() {
       _provider = p;
       _model = ref.read(aiPrefsProvider).value?.modelFor(p) ??
-          p.defaultModel;
+          p.currentDefault;
       _prefillKeyFor(p);
       _obscure = true;
     });

@@ -3426,6 +3426,17 @@ class AppLocalizationsEs extends AppLocalizations {
       'Buscar el mejor modelo de Gemini';
 
   @override
+  String get adminUpdateCheckAllModels =>
+      'Revisar modelos — todos los proveedores';
+
+  @override
+  String get adminUpdateModelCheckTitle =>
+      'Revisión de modelos — todos los proveedores';
+
+  @override
+  String get adminUpdateModelCheckPropose => 'Proponer cambios';
+
+  @override
   String get adminUpdateCheckFederalRegister => 'Consultar el Federal Register';
 
   @override

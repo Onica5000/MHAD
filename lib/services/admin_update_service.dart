@@ -94,7 +94,7 @@ class AdminUpdateService {
     required this.apiKey,
     this.provider = AdminAiProvider.gemini,
     String model = '',
-  }) : model = model.trim().isEmpty ? provider.defaultModel : model.trim();
+  }) : model = provider.resolveModel(model);
 
   /// Reads the current bundled data as a JSON map (the base the AI edits) for
   /// [target] (defaults to the main app-data file).

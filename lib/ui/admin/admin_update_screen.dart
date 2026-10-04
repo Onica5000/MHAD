@@ -11,6 +11,8 @@ import 'package:mhad/services/admin_update_service.dart';
 import 'package:mhad/services/federal_register_service.dart';
 import 'package:mhad/services/ai_model_catalog_service.dart';
 import 'package:mhad/services/gemini_model_service.dart';
+import 'package:mhad/services/model_upkeep_service.dart';
+import 'package:mhad/ai/ai_provider.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/utils/launch_utils.dart';
 
@@ -42,7 +44,7 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
   // AI provider to draft with + its model and API key (admin-only; the key is
   // entered here, ephemeral to this screen, and never persisted).
   AdminAiProvider _provider = AdminAiProvider.gemini;
-  String _model = AdminAiProvider.gemini.defaultModel;
+  String _model = AdminAiProvider.gemini.currentDefault;
   // Live model ids for the SELECTED provider, fetched on demand to refresh the
   // dropdown from the real catalog (null = not fetched; falls back to the
   // curated enum list). Reset when the provider changes.
@@ -326,6 +328,176 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
             child: Text(context.l10n.cancel),
           ),
         ],
+      ),
+    );
+  }
+
+  /// Model upkeep for ALL providers: check every provider's curated list
+  /// (`ai.providerModels.<provider>`) against its live catalog, using the app's
+  /// saved key for that provider (or the key typed here, for the provider
+  /// selected above). Retired models are flagged for removal; new ones can be
+  /// ticked to add. The result goes through the normal review → build flow.
+  Future<void> _checkAllModels() async {
+    setState(() {
+      _loading = true;
+      _error = null;
+      _isRevert = false;
+    });
+    try {
+      final base = await AdminUpdateService.currentData(AdminDataTarget.appData);
+      final ai = (base['ai'] as Map?)?.cast<String, dynamic>() ?? const {};
+      final lists =
+          (ai['providerModels'] as Map?)?.cast<String, dynamic>() ?? const {};
+      final saved = ref.read(aiPrefsProvider).value?.keys ?? const {};
+      final typed = _keyCtrl.text.trim();
+      final svc = ModelUpkeepService();
+      final audits = await Future.wait([
+        for (final p in AiProvider.values)
+          svc.check(
+            p,
+            (p == _provider && typed.isNotEmpty) ? typed : (saved[p] ?? ''),
+            [
+              for (final m in (lists[p.name] as List?) ?? const [])
+                m.toString(),
+            ],
+          ),
+      ]);
+      if (!mounted) return;
+      setState(() => _loading = false);
+      final picks = await _showModelAudits(audits);
+      if (picks == null || !mounted) return;
+
+      final changes = <ProposedChange>[];
+      final today = DateTime.now().toIso8601String().substring(0, 10);
+      for (final a in audits) {
+        final next = ModelUpkeepService.proposedList(a, picks[a.provider] ?? {});
+        if (next == null || !lists.containsKey(a.provider.name)) continue;
+        final added = next.where((m) => !a.current.contains(m)).toList();
+        changes.add(ProposedChange(
+          path: 'ai.providerModels.${a.provider.name}',
+          oldValue: jsonEncode(a.current),
+          newValue: jsonEncode(next),
+          autonomy: 'auto',
+          source: '${a.provider.label} live model list (${a.provider.host}), '
+              'checked $today',
+          rationale: [
+            if (a.retired.isNotEmpty)
+              'Remove retired: ${a.retired.join(', ')}.',
+            if (added.isNotEmpty) 'Add: ${added.join(', ')}.',
+            if (a.retired.contains(a.current.first))
+              'Default was retired — new default: ${next.first}.',
+            if (a.provider == AiProvider.gemini && added.isNotEmpty)
+              'Add any new Gemini model to ai.freeTierRpdByModel (by hand) '
+                  'so its daily cap is right.',
+          ].join(' '),
+          approved: true,
+        ));
+        // The Gemini default lives in ai.model; keep it on a served model.
+        final geminiModel = (ai['model'] ?? '').toString();
+        if (a.provider == AiProvider.gemini &&
+            a.retired.contains(geminiModel)) {
+          changes.add(ProposedChange(
+            path: 'ai.model',
+            oldValue: geminiModel,
+            newValue: next.first,
+            autonomy: 'auto',
+            source: 'Gemini ListModels API, checked $today',
+            rationale: '$geminiModel is no longer served — switch the app '
+                'default to ${next.first}.',
+            approved: true,
+          ));
+        }
+      }
+      if (changes.isEmpty) {
+        setState(() => _error = 'Nothing to change — every checked list is '
+            'current (see the dialog for providers that could not be checked).');
+        return;
+      }
+      setState(() {
+        _target = AdminDataTarget.appData;
+        _base = base;
+        _changes = changes;
+        _stage = _Stage.review;
+      });
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _loading = false;
+          _error = 'Model check failed: $e';
+        });
+      }
+    }
+  }
+
+  /// Per-provider results with tick boxes for new models. Returns the picks
+  /// (provider → models to add), or null if cancelled.
+  Future<Map<AiProvider, Set<String>>?> _showModelAudits(
+      List<ModelAudit> audits) {
+    final picks = {for (final a in audits) a.provider: <String>{}};
+    final warn = SemanticColors.warningText(Theme.of(context).brightness);
+    return showDialog<Map<AiProvider, Set<String>>>(
+      context: context,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setLocal) => AlertDialog(
+          title: Text(context.l10n.adminUpdateModelCheckTitle),
+          content: SizedBox(
+            width: 560,
+            child: ListView(
+              shrinkWrap: true,
+              children: [
+                for (final a in audits) ...[
+                  Text(a.provider.label,
+                      style: const TextStyle(fontWeight: FontWeight.w700)),
+                  if (!a.checked)
+                    Text(a.problem!,
+                        style: TextStyle(fontSize: 12, color: warn))
+                  else ...[
+                    Text(
+                      a.retired.isEmpty
+                          ? 'All ${a.current.length} listed models are available.'
+                          : 'Retired (will be removed): ${a.retired.join(', ')}',
+                      style: TextStyle(
+                          fontSize: 12,
+                          color: a.retired.isEmpty ? null : warn),
+                    ),
+                    if (a.newcomers.isEmpty)
+                      const Text('No new models to add.',
+                          style: TextStyle(fontSize: 12))
+                    else
+                      for (final m in a.newcomers)
+                        CheckboxListTile(
+                          dense: true,
+                          contentPadding: EdgeInsets.zero,
+                          controlAffinity: ListTileControlAffinity.leading,
+                          title: Text('Add $m',
+                              style: const TextStyle(fontSize: 13)),
+                          value: picks[a.provider]!.contains(m),
+                          onChanged: (v) => setLocal(() => v == true
+                              ? picks[a.provider]!.add(m)
+                              : picks[a.provider]!.remove(m)),
+                        ),
+                  ],
+                  const Divider(),
+                ],
+                const Text(
+                  'Only models the provider lists for your key are shown. '
+                  'Newest first; nothing is added unless ticked.',
+                  style: TextStyle(fontSize: 11),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: Text(context.l10n.cancel),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(ctx, picks),
+              child: Text(context.l10n.adminUpdateModelCheckPropose),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -631,7 +803,7 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
               _provider = p ?? AdminAiProvider.gemini;
               // Reset to the new provider's default model; live list is
               // per-provider, so drop it until refreshed for the new one.
-              _model = _provider.defaultModel;
+              _model = _provider.currentDefault;
               _liveModels = null;
             }),
           ),
@@ -665,7 +837,7 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
                         DropdownMenuItem(value: m, child: Text(m)),
                     ],
                     onChanged: (m) =>
-                        setState(() => _model = m ?? _provider.defaultModel),
+                        setState(() => _model = m ?? _provider.currentDefault),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -743,6 +915,11 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
                 onPressed: _loading ? null : _revert,
                 icon: const Icon(Icons.history),
                 label: Text(context.l10n.adminUpdateRevert),
+              ),
+              OutlinedButton.icon(
+                onPressed: _loading ? null : _checkAllModels,
+                icon: const Icon(Icons.fact_check_outlined),
+                label: Text(context.l10n.adminUpdateCheckAllModels),
               ),
               OutlinedButton.icon(
                 onPressed: _loading ? null : _checkGeminiModel,

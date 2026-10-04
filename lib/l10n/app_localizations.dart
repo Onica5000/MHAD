@@ -5930,6 +5930,24 @@ abstract class AppLocalizations {
   /// **'Check best Gemini model'**
   String get adminUpdateCheckBestGeminiModel;
 
+  /// No description provided for @adminUpdateCheckAllModels.
+  ///
+  /// In en, this message translates to:
+  /// **'Check models — all providers'**
+  String get adminUpdateCheckAllModels;
+
+  /// No description provided for @adminUpdateModelCheckTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Model check — all providers'**
+  String get adminUpdateModelCheckTitle;
+
+  /// No description provided for @adminUpdateModelCheckPropose.
+  ///
+  /// In en, this message translates to:
+  /// **'Propose changes'**
+  String get adminUpdateModelCheckPropose;
+
   /// No description provided for @adminUpdateCheckFederalRegister.
   ///
   /// In en, this message translates to:

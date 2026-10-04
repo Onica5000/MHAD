@@ -1,5 +1,4 @@
 import 'package:mhad/ai/ai_provider.dart';
-import 'package:mhad/data/app_data/app_data.dart';
 
 /// The user's AI configuration: which provider is active, plus the bring-your-
 /// own key and chosen model for each provider (remembered per provider so
@@ -22,10 +21,13 @@ class AiPrefs {
   /// Key for the active provider (null/empty → AI is off).
   String? get activeKey => keys[provider];
 
-  /// Chosen model for [p]; the Gemini default tracks `appData.ai.model` (so the
-  /// admin update flow keeps controlling it), others use their first curated model.
-  String modelFor(AiProvider p) =>
-      models[p] ?? (p == AiProvider.gemini ? appData.ai.model : p.defaultModel);
+  /// Chosen model for [p], or the provider's [AiProvider.currentDefault] when
+  /// none was chosen OR the saved pick was retired from the admin-updatable
+  /// list (otherwise a user would stay pinned to a model the provider shut off).
+  String modelFor(AiProvider p) {
+    final saved = models[p];
+    return (saved != null && p.isOffered(saved)) ? saved : p.currentDefault;
+  }
 
   String get activeModel => modelFor(provider);
 

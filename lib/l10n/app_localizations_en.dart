@@ -3361,6 +3361,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get adminUpdateCheckBestGeminiModel => 'Check best Gemini model';
 
   @override
+  String get adminUpdateCheckAllModels => 'Check models — all providers';
+
+  @override
+  String get adminUpdateModelCheckTitle => 'Model check — all providers';
+
+  @override
+  String get adminUpdateModelCheckPropose => 'Propose changes';
+
+  @override
   String get adminUpdateCheckFederalRegister => 'Check Federal Register';
 
   @override

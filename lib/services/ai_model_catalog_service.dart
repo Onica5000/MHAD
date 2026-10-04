@@ -83,8 +83,26 @@ class AiModelCatalogService {
     return _idsFromDataArray(data);
   }
 
-  static List<String> _idsFromDataArray(Map<String, dynamic> data) => [
-        for (final m in (data['data'] as List?) ?? const [])
-          if (m is Map && m['id'] != null) m['id'].toString(),
-      ];
+  /// Ids from a `{ data: [{ id, created | created_at }] }` list, NEWEST first
+  /// (OpenAI/xAI give `created` as unix seconds, Anthropic `created_at` as
+  /// ISO-8601). Entries without a date keep their API order, after dated ones.
+  static List<String> _idsFromDataArray(Map<String, dynamic> data) {
+    final rows = <({String id, int created, int order})>[];
+    var i = 0;
+    for (final m in (data['data'] as List?) ?? const []) {
+      if (m is! Map || m['id'] == null) continue;
+      rows.add((id: m['id'].toString(), created: _createdOf(m), order: i++));
+    }
+    rows.sort((a, b) => a.created != b.created
+        ? b.created.compareTo(a.created)
+        : a.order.compareTo(b.order));
+    return [for (final r in rows) r.id];
+  }
+
+  static int _createdOf(Map<dynamic, dynamic> m) {
+    final c = m['created'];
+    if (c is num) return c.toInt();
+    final iso = DateTime.tryParse((m['created_at'] ?? '').toString());
+    return iso == null ? 0 : iso.millisecondsSinceEpoch ~/ 1000;
+  }
 }

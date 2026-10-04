@@ -94,6 +94,11 @@ This regenerates `app_database.g.dart`.
   ~20 on Flash (Oct 2026); `appData.ai.freeTierRpdByModel` drives the per-model daily cap.
   Other providers' curated lists live in `AiProvider.models` / `app_data.ai.providerModels`
   (defaults: Claude `claude-sonnet-5-5`, OpenAI `gpt-5.4-mini`, Grok `grok-4.7`).
+  The app follows those lists at runtime (`AiProvider.currentDefault` = first entry; a
+  saved pick that's no longer listed falls back to it). **Model upkeep:** the admin
+  page's "Check models — all providers" (`ModelUpkeepService`) compares every list with
+  the provider's live catalog, flags retired models and offers new ones → reviewed
+  `ai.providerModels.*` / `ai.model` changes.
 - **Claude requests** (LlmClient): 16k `max_tokens` (current models think by default),
   `output_config.effort: medium` on 4.6+ models, `fallbacks: "default"` + beta
   `server-side-fallback-2026-07-01` on Fable 5.1 / Opus 5.5 / Opus 5 / Sonnet 5.5. Never
