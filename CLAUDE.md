@@ -26,7 +26,7 @@ and was stale); do not reintroduce it or design against it.
 Source PDF: `PA MHAD.pdf`. Improvement backlog: `docs/GAP_ANALYSIS_V4.md`.
 
 ## Flutter / Dart
-- Flutter 3.41.4, Dart 3.11.1
+- Flutter 3.47.9, Dart 3.13.7 (CI pins the same version in `deploy-web.yml`; keep local and CI in step)
 - Run with: `D:\flutter\bin\flutter.bat run`
 - **Ship target (web — what actually deploys):** `D:\flutter\bin\flutter.bat build web --release`
   (CI uses `--pwa-strategy=none --source-maps --base-href "/MHAD/"`; auto-deploys to GitHub Pages on push to `main`).

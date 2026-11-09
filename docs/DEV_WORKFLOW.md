@@ -25,7 +25,7 @@ flowchart TD
 
   subgraph CI[GitHub Actions - deploy-web.yml]
     direction TD
-    C1[checkout] --> C2[subosito flutter-action\nFlutter 3.41.4 - pinned]
+    C1[checkout] --> C2[subosito flutter-action\nFlutter 3.47.9 - pinned]
     C2 --> CA[flutter analyze]
     CA -- fail --> CIfail[(deploy skipped)]
     CA -- pass --> CT[flutter test]
@@ -43,7 +43,7 @@ flowchart TD
   Verify -- "DB-backed screen" --> Manual[Manual: walk gates in a real browser]
 
   CInote{{CI now gates analyze + test before build/deploy - fixed 2026-06-15}}
-  SkewNote{{Local Flutter 3.44.1 != CI 3.41.4 - now caught by CI analyze/test}}
+  SkewNote{{Local and CI both on Flutter 3.47.9 - keep them in step}}
   WebBuild -. local build can pass code that breaks CI .-> SkewNote
 ```
 
@@ -55,7 +55,7 @@ flowchart TD
 |----|--------|-----------|
 | D1 | ✅ Fixed | `deploy-web.yml` now runs **Analyze + Test** before build/deploy — tests can no longer rot, and a failing test/analyze blocks the deploy |
 | C4 | ✅ Fixed | Same — analyze + test are now enforced in the pipeline, not just by habit |
-| C1 | ✅ Mitigated | Analyze + test now run on the pinned **3.41.4** in CI, so local-only (3.44.x) skew is caught; still watch CI per push |
+| C1 | ✅ Fixed (2026-11-08) | CI and the local toolchain are both on **Flutter 3.47.9**, so local and CI results agree; still watch CI per push |
 | C2 | ✓ Inherent | `analyze` ≠ dart2js — covered by the CI **build web** step (run local build before claiming web-safe) |
 | C3 | ✅ Already fixed | Service worker disabled via `--pwa-strategy=none`; verify via `curl -I` + Incognito |
 | U3 | ✓ Closed | A "regenerate + git diff" check would be flaky under 3.44↔3.41 codegen skew; the build already fails to compile if generated Drift code is stale |
@@ -79,7 +79,7 @@ Detailed analysis (as originally found) below.
 - **U3 — Two codegen triggers** (`build_runner` for Drift, `gen-l10n` for ARB) are easy to forget and aren't enforced anywhere; a missed regen surfaces only as a build/analyze error later. *Fix:* a pre-commit/CI check that generated files are up to date.
 
 ### Contradictions / traps
-- **C1 (verified) — "Local green" contradicts "CI green."** Local toolchain is **Flutter 3.44.1**, CI is pinned **3.41.4** (`local-flutter-version-skew`). Local `analyze`/`build` can pass code that uses 3.44-only APIs and **breaks the CI dart2js build** (real burn: `SizeTransition.alignment`). So a clean local run is *not* proof CI passes — you must watch CI every push. This is the workflow's sharpest trap.
+- **C1 (verified) — "Local green" contradicts "CI green."** Local toolchain is **Flutter 3.44.1**, CI is pinned **3.41.4** (`local-flutter-version-skew`). Local `analyze`/`build` can pass code that uses 3.44-only APIs and **breaks the CI dart2js build** (real burn: `SizeTransition.alignment`). So a clean local run is *not* proof CI passes — you must watch CI every push. This is the workflow's sharpest trap. **Resolved 2026-11-08:** CI moved to Flutter 3.47.9, the same as the local toolchain after `flutter upgrade`.
 - **C2 (verified) — "analyze passed" ≠ "web compiles."** `flutter analyze` can be clean while dart2js fails (e.g., a missing `kIsWeb` import). The mitigation (`web-build-dart2js-vs-analyze`) is to always run the real `build web` before claiming web-safe — i.e., analyze alone is misleading.
 - **C3 (verified) — "Deploy succeeded" ≠ "user sees it."** A stale Flutter **service worker** served old builds for ~2 sessions despite green deploys (`web-deploy-stale-service-worker`). Now SW is disabled (`--pwa-strategy=none`); verify via `curl -I` Last-Modified + Incognito, never a plain refresh. So "CI green" and "looks live" can still disagree.
 - **C4 (process) — The quality bar lives in habit, not in the pipeline.** analyze + test + web-build are disciplined *conventions*, but nothing in CI enforces analyze or tests. The contradiction: the project treats these as required, yet the automation treats only the web build as required.

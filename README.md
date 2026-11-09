@@ -72,7 +72,7 @@ For assistance with your rights under PA Act 194:
 
 ### Prerequisites
 
-- [Flutter](https://flutter.dev/docs/get-started/install) 3.41.4+ / Dart 3.11.1+
+- [Flutter](https://flutter.dev/docs/get-started/install) 3.47.9+ / Dart 3.13.7+
 - Android SDK (for Android builds)
 - Xcode (iOS/macOS builds — macOS only, or via Codemagic CI)
 - Visual Studio with C++ tools (Windows builds)
@@ -110,7 +110,7 @@ These are downloaded from the [sqlite3.dart](https://github.com/simolus3/sqlite3
 
 ## Tech stack
 
-- **Framework:** Flutter / Dart (3.41.4 / 3.11.1)
+- **Framework:** Flutter / Dart (3.47.9 / 3.13.7)
 - **State management:** Riverpod
 - **Database:** Drift + SQLCipher (encrypted SQLite)
 - **Navigation:** GoRouter (no Scaffold drawer; bottom nav on mobile, sidebar on wide)
