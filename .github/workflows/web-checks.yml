@@ -1,0 +1,53 @@
+name: Web checks (branches and PRs)
+
+# The same quality gates as deploy-web.yml (analyze, test, privacy-policy
+# sync, release web build, browser smoke test), run on every branch other
+# than main and on pull requests, so a change is proven before it reaches
+# main. Nothing here deploys.
+
+on:
+  push:
+    branches-ignore: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: web-checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.47.9'  # keep in step with deploy-web.yml
+          channel: 'stable'
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Analyze
+        run: flutter analyze
+
+      - name: Test
+        run: flutter test
+
+      - name: Hosted privacy policy is in sync
+        run: python3 tool/gen_privacy_html.py --check
+
+      - name: Build web
+        run: flutter build web --release --base-href "/MHAD/" --pwa-strategy=none --source-maps
+
+      - name: Browser smoke test
+        run: |
+          # venv: the runner's system Python refuses pip installs (PEP 668).
+          python3 -m venv "$RUNNER_TEMP/smoke-venv"
+          "$RUNNER_TEMP/smoke-venv/bin/pip" install --quiet playwright==1.64.1
+          "$RUNNER_TEMP/smoke-venv/bin/python" -m playwright install --with-deps chromium
+          "$RUNNER_TEMP/smoke-venv/bin/python" tool/web_smoke.py build/web

@@ -30,7 +30,7 @@ jobs:
 
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.41.4'
+          flutter-version: '3.47.9'
           channel: 'stable'
 
       - name: Get dependencies
@@ -40,8 +40,8 @@ jobs:
       # Previously CI only built+deployed web, so `flutter test` never ran in
       # CI and tests could rot without blocking a deploy. These steps make
       # analyze + the test suite a hard gate before the build/deploy. They run
-      # on the pinned 3.41.4 toolchain, so they also catch local↔CI skew that a
-      # local (3.44.x) run would miss.
+      # on the pinned toolchain, which should match the local one (both 3.47.9
+      # as of 2026-11-08) so a green local run means a green CI run.
       - name: Analyze
         run: flutter analyze
 
@@ -55,7 +55,7 @@ jobs:
 
       - name: Build web
         # `--pwa-strategy=none` makes Flutter generate a flutter_bootstrap.js
-        # that registers NO service worker (verified honored on 3.41.4: the
+        # that registers NO service worker (verified honored on 3.41.4 and 3.47.9: the
         # generated bootstrap calls `_flutter.loader.load()` with no
         # serviceWorkerSettings, and the app boots normally). This is the
         # supported way to disable the SW — do NOT hand-write a custom
@@ -74,6 +74,17 @@ jobs:
         # source is already visible). Helps debug production-only runtime crashes
         # that build/analyze/unit-tests can't catch.
         run: flutter build web --release --base-href "/MHAD/" --pwa-strategy=none --source-maps
+
+      # Load the release build in headless Chromium and fail the deploy if the
+      # app never reaches its first frame or throws an uncaught error. Catches
+      # browser-only crashes that analyze, test and the build itself miss.
+      - name: Browser smoke test
+        run: |
+          # venv: the runner's system Python refuses pip installs (PEP 668).
+          python3 -m venv "$RUNNER_TEMP/smoke-venv"
+          "$RUNNER_TEMP/smoke-venv/bin/pip" install --quiet playwright==1.64.1
+          "$RUNNER_TEMP/smoke-venv/bin/python" -m playwright install --with-deps chromium
+          "$RUNNER_TEMP/smoke-venv/bin/python" tool/web_smoke.py build/web
 
       - name: Setup Pages
         uses: actions/configure-pages@v6

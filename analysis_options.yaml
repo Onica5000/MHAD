@@ -14,6 +14,12 @@ analyzer:
     # Untracked local backup of pre-visual-polish screens (kept out of git;
     # the durable revert anchor is the `pre-visual-polish` tag). Don't lint it.
     - _visual_backup/**
+    - build/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
 
 linter:
   # The lint rules applied to this project can be customized in the

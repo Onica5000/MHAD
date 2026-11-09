@@ -23,9 +23,11 @@ enum AiProvider {
     // Default is Flash-Lite: on the free tier it allows ~500 requests/day vs
     // ~20 for the Flash models (Oct 2026), and nearly every user is on a free
     // key. The 2.5 models shut down Oct 16-17 2026 and were removed.
+    // gemini-3.5-flash was deprecated Oct 8 2026 (Google now routes it to
+    // gemini-3.6-flash), so it was dropped from the picker 2026-11-08; a saved
+    // selection keeps working through Google's redirect.
     models: [
       'gemini-3.5-flash-lite', // default (also app_data.ai.model)
-      'gemini-3.5-flash', // stronger; ~20 free requests/day
       'gemini-3.8-flash', // newest, most capable Flash; ~20 free/day
     ],
   ),
@@ -36,7 +38,7 @@ enum AiProvider {
     getKeyUrl: 'https://console.anthropic.com/settings/keys',
     models: [
       'claude-sonnet-5-5', // default — current Sonnet: speed + capability
-      'claude-haiku-4-5', // fastest + cheapest
+      'claude-haiku-5-5', // fastest + cheapest (current Haiku)
       'claude-opus-5-5', // current Opus
       'claude-fable-5-1', // most capable (premium pricing)
     ],

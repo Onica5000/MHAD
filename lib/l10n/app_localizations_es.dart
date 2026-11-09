@@ -7319,4 +7319,30 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get crisisBannerMore => 'Más ayuda';
+
+  @override
+  String get exportRenewalReminderTitle =>
+      'Añadir un recordatorio de renovación a su calendario';
+
+  @override
+  String exportRenewalReminderBody(String date, int days) {
+    return 'Su directiva vence el $date. Esto guarda un archivo de calendario con dos recordatorios: $days días antes del vencimiento y el mismo día. El archivo se crea en su dispositivo y solo contiene los títulos de los recordatorios, nunca su nombre ni su directiva.';
+  }
+
+  @override
+  String get exportAddToCalendar => 'Añadir al calendario';
+
+  @override
+  String get exportAddToCalendarSemantics =>
+      'Descargar un archivo de calendario con recordatorios para renovar su directiva';
+
+  @override
+  String get calendarRenewSoonTitle => 'Renueve su directiva anticipada';
+
+  @override
+  String get calendarExpiresTodayTitle => 'Su directiva anticipada vence hoy';
+
+  @override
+  String get calendarReminderDescription =>
+      'Su directiva anticipada de Pensilvania es válida por 2 años. Abra la aplicación MHAD para crear una nueva y firmarla ante dos testigos adultos.';
 }

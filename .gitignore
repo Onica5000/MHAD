@@ -55,3 +55,7 @@ app.*.map.json
 /android/app/release
 android/build/
 _visual_backup/
+
+# Gradle cache created by running Gradle at the repo root (android/.gitignore
+# only covers android/.gradle). Never commit it.
+/.gradle/

@@ -24,12 +24,15 @@ import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/design/wallet_card.dart';
 import 'package:mhad/ui/widgets/design/wizard_header.dart';
+import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/services/blank_form_service.dart';
+import 'package:mhad/services/calendar_reminder_service.dart';
 import 'package:mhad/services/directive_export_service.dart';
 import 'package:mhad/services/export_formats_service.dart';
 import 'package:mhad/services/fhir_export_service.dart';
 import 'package:mhad/utils/a11y_announce.dart';
 import 'package:mhad/utils/background_runner.dart';
+import 'package:mhad/utils/date_format.dart';
 import 'package:mhad/utils/open_pdf.dart';
 import 'package:printing/printing.dart';
 import 'package:share_plus/share_plus.dart';
@@ -749,6 +752,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
               ),
             ),
           ),
+          ..._renewalReminderSection(),
           const SizedBox(height: 20),
           const Divider(),
           const SizedBox(height: 16),
@@ -965,6 +969,72 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
               content: Text(context.l10n.exportCouldnTSaveTheFile)),
+        );
+      }
+    }
+  }
+
+  /// Expiry date of the directive, or null when it isn't signed yet.
+  DateTime? get _expiry {
+    final exp = _directive?.expirationDate;
+    if (exp == null || exp == 0) return null;
+    return DateTime.fromMillisecondsSinceEpoch(exp);
+  }
+
+  /// "Add to calendar": the in-app renewal nudge only fires when the app is
+  /// opened, and on the web the directive is gone once the tab closes, so
+  /// this hands the user a calendar file with the renewal dates instead.
+  List<Widget> _renewalReminderSection() {
+    final expiry = _expiry;
+    if (expiry == null) return const [];
+    final l = context.l10n;
+    return [
+      const SizedBox(height: 16),
+      _railTitle(l.exportRenewalReminderTitle),
+      _railBody(l.exportRenewalReminderBody(
+          formatLongDate(expiry), appData.config.renewalWindowDays)),
+      const SizedBox(height: 8),
+      Semantics(
+        button: true,
+        label: l.exportAddToCalendarSemantics,
+        child: SizedBox(
+          width: double.infinity,
+          child: OutlinedButton.icon(
+            onPressed: _downloadRenewalCalendar,
+            icon: const Icon(Icons.event_outlined),
+            label: Text(l.exportAddToCalendar),
+          ),
+        ),
+      ),
+    ];
+  }
+
+  Future<void> _downloadRenewalCalendar() async {
+    final expiry = _expiry;
+    if (expiry == null) return;
+    final l = context.l10n;
+    try {
+      final ics = CalendarReminderService.buildRenewalIcs(
+        expiration: expiry,
+        now: DateTime.now(),
+        uidSeed: '${widget.directiveId}',
+        renewWindowDays: appData.config.renewalWindowDays,
+        renewSoonTitle: l.calendarRenewSoonTitle,
+        expiresTodayTitle: l.calendarExpiresTodayTitle,
+        description: l.calendarReminderDescription,
+      );
+      await SharePlus.instance.share(ShareParams(
+        files: [
+          XFile.fromData(utf8.encode(ics),
+              mimeType: 'text/calendar', name: 'directive-renewal.ics')
+        ],
+        subject: l.exportRenewalReminderTitle,
+      ));
+    } catch (e) {
+      debugPrint('Calendar export failed: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l.exportCouldnTSaveTheFile)),
         );
       }
     }
