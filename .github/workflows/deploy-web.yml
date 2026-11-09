@@ -75,6 +75,17 @@ jobs:
         # that build/analyze/unit-tests can't catch.
         run: flutter build web --release --base-href "/MHAD/" --pwa-strategy=none --source-maps
 
+      # Load the release build in headless Chromium and fail the deploy if the
+      # app never reaches its first frame or throws an uncaught error. Catches
+      # browser-only crashes that analyze, test and the build itself miss.
+      - name: Browser smoke test
+        run: |
+          # venv: the runner's system Python refuses pip installs (PEP 668).
+          python3 -m venv "$RUNNER_TEMP/smoke-venv"
+          "$RUNNER_TEMP/smoke-venv/bin/pip" install --quiet playwright==1.64.1
+          "$RUNNER_TEMP/smoke-venv/bin/python" -m playwright install --with-deps chromium
+          "$RUNNER_TEMP/smoke-venv/bin/python" tool/web_smoke.py build/web
+
       - name: Setup Pages
         uses: actions/configure-pages@v6
 
