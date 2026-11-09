@@ -12198,6 +12198,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'More help'**
   String get crisisBannerMore;
+
+  /// No description provided for @exportRenewalReminderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a renewal reminder to your calendar'**
+  String get exportRenewalReminderTitle;
+
+  /// No description provided for @exportRenewalReminderBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your directive expires on {date}. This saves a calendar file with two reminders: {days} days before it expires, and on the day itself. The file is made on your device and holds only the reminder titles, never your name or your directive.'**
+  String exportRenewalReminderBody(String date, int days);
+
+  /// No description provided for @exportAddToCalendar.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to calendar'**
+  String get exportAddToCalendar;
+
+  /// No description provided for @exportAddToCalendarSemantics.
+  ///
+  /// In en, this message translates to:
+  /// **'Download a calendar file with reminders to renew your directive'**
+  String get exportAddToCalendarSemantics;
+
+  /// No description provided for @calendarRenewSoonTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Renew your advance directive'**
+  String get calendarRenewSoonTitle;
+
+  /// No description provided for @calendarExpiresTodayTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your advance directive expires today'**
+  String get calendarExpiresTodayTitle;
+
+  /// No description provided for @calendarReminderDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Pennsylvania advance directive is valid for 2 years. Open the MHAD app to make a new one and sign it with two adult witnesses.'**
+  String get calendarReminderDescription;
 }
 
 class _AppLocalizationsDelegate

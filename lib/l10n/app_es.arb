@@ -2010,5 +2010,12 @@
   "crisisBannerBody": "Si está pensando en el suicidio o en hacerse daño, o está en crisis, llame o envíe un mensaje al 988 ahora: es gratis, confidencial y está disponible las 24 horas. Si está en peligro inmediato, llame al 911.",
   "crisisBannerCall": "Llamar al 988",
   "crisisBannerText": "Mensaje al 988",
-  "crisisBannerMore": "Más ayuda"
+  "crisisBannerMore": "Más ayuda",
+  "exportRenewalReminderTitle": "Añadir un recordatorio de renovación a su calendario",
+  "exportRenewalReminderBody": "Su directiva vence el {date}. Esto guarda un archivo de calendario con dos recordatorios: {days} días antes del vencimiento y el mismo día. El archivo se crea en su dispositivo y solo contiene los títulos de los recordatorios, nunca su nombre ni su directiva.",
+  "exportAddToCalendar": "Añadir al calendario",
+  "exportAddToCalendarSemantics": "Descargar un archivo de calendario con recordatorios para renovar su directiva",
+  "calendarRenewSoonTitle": "Renueve su directiva anticipada",
+  "calendarExpiresTodayTitle": "Su directiva anticipada vence hoy",
+  "calendarReminderDescription": "Su directiva anticipada de Pensilvania es válida por 2 años. Abra la aplicación MHAD para crear una nueva y firmarla ante dos testigos adultos."
 }

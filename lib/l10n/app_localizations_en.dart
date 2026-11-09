@@ -7198,4 +7198,31 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get crisisBannerMore => 'More help';
+
+  @override
+  String get exportRenewalReminderTitle =>
+      'Add a renewal reminder to your calendar';
+
+  @override
+  String exportRenewalReminderBody(String date, int days) {
+    return 'Your directive expires on $date. This saves a calendar file with two reminders: $days days before it expires, and on the day itself. The file is made on your device and holds only the reminder titles, never your name or your directive.';
+  }
+
+  @override
+  String get exportAddToCalendar => 'Add to calendar';
+
+  @override
+  String get exportAddToCalendarSemantics =>
+      'Download a calendar file with reminders to renew your directive';
+
+  @override
+  String get calendarRenewSoonTitle => 'Renew your advance directive';
+
+  @override
+  String get calendarExpiresTodayTitle =>
+      'Your advance directive expires today';
+
+  @override
+  String get calendarReminderDescription =>
+      'Your Pennsylvania advance directive is valid for 2 years. Open the MHAD app to make a new one and sign it with two adult witnesses.';
 }
