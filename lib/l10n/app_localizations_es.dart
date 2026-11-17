@@ -5353,8 +5353,11 @@ class AppLocalizationsEs extends AppLocalizations {
       '¿Necesita ayuda con este paso? Pregunte a la IA';
 
   @override
-  String get wizardAiRailAiHelpIsOffThe =>
-      'La ayuda de IA está desactivada. El aviso del paso, las preguntas sugeridas, el autocompletado con fotos y el chat de abajo no estarán disponibles hasta que configure la IA.';
+  String get wizardAiRailOptionalHelpTitle => 'Ayuda de IA opcional';
+
+  @override
+  String get wizardAiRailOptionalHelpBody =>
+      'Configure la IA para recibir un aviso en cada paso, preguntas sugeridas, autocompletado con fotos y el chat de abajo.';
 
   @override
   String get wizardAiRailCheckingThisStep => 'Revisando este paso';
@@ -7417,4 +7420,7 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get aiSetupHeroLead =>
       'Opcional: conecte un proveedor de IA para recibir ayuda mientras completa su directiva. Todo lo demás funciona sin ella.';
+
+  @override
+  String get wizardKeptInThisTab => 'Se conserva en esta pestaña';
 }

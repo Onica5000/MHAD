@@ -9164,11 +9164,17 @@ abstract class AppLocalizations {
   /// **'Need help with this step? Ask the AI'**
   String get wizardAiRailNeedHelpWithThisStep;
 
-  /// No description provided for @wizardAiRailAiHelpIsOffThe.
+  /// No description provided for @wizardAiRailOptionalHelpTitle.
   ///
   /// In en, this message translates to:
-  /// **'AI help is off. The step heads-up, suggested questions, photo auto-fill, and the chat below aren\'t available until you set up AI.'**
-  String get wizardAiRailAiHelpIsOffThe;
+  /// **'Optional AI help'**
+  String get wizardAiRailOptionalHelpTitle;
+
+  /// No description provided for @wizardAiRailOptionalHelpBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Set up AI to get a heads-up on each step, suggested questions, photo auto-fill, and the chat below.'**
+  String get wizardAiRailOptionalHelpBody;
 
   /// No description provided for @wizardAiRailCheckingThisStep.
   ///
@@ -12378,6 +12384,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Optional: connect an AI provider to get help while you fill out your directive. Everything else works without it.'**
   String get aiSetupHeroLead;
+
+  /// No description provided for @wizardKeptInThisTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Kept in this tab'**
+  String get wizardKeptInThisTab;
 }
 
 class _AppLocalizationsDelegate

@@ -5257,8 +5257,11 @@ class AppLocalizationsEn extends AppLocalizations {
       'Need help with this step? Ask the AI';
 
   @override
-  String get wizardAiRailAiHelpIsOffThe =>
-      'AI help is off. The step heads-up, suggested questions, photo auto-fill, and the chat below aren\'t available until you set up AI.';
+  String get wizardAiRailOptionalHelpTitle => 'Optional AI help';
+
+  @override
+  String get wizardAiRailOptionalHelpBody =>
+      'Set up AI to get a heads-up on each step, suggested questions, photo auto-fill, and the chat below.';
 
   @override
   String get wizardAiRailCheckingThisStep => 'Checking this step';
@@ -7297,4 +7300,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get aiSetupHeroLead =>
       'Optional: connect an AI provider to get help while you fill out your directive. Everything else works without it.';
+
+  @override
+  String get wizardKeptInThisTab => 'Kept in this tab';
 }

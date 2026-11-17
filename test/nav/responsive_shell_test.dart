@@ -143,14 +143,27 @@ void main() {
       handle.dispose();
     });
 
-    testWidgets('focus mode: the wizard gets the 72px rail, others 232px',
+    testWidgets('focus mode: wizard + Export get the 72px rail, others 232px',
         (tester) async {
       await pumpShell(tester, size: desktop, initial: '/wizard/1');
       expect(tester.getSize(find.byType(WebSidebar)).width,
           WebSidebar.compactWidth);
       expect(sidebarWidthFor('/wizard/1'), WebSidebar.compactWidth);
+      expect(sidebarWidthFor('/export/1'), WebSidebar.compactWidth);
+      expect(sidebarWidthFor('/sign/1'), WebSidebar.width);
       expect(sidebarWidthFor(AppRoutes.settings), WebSidebar.width);
       expect(sidebarWidthFor(AppRoutes.disclaimer), 0);
+    });
+
+    testWidgets('narrow: the wizard hides the bottom nav, other pages keep it',
+        (tester) async {
+      expect(routeHidesBottomNav('/wizard/1'), isTrue);
+      expect(routeHidesBottomNav('/export/1'), isFalse);
+      await pumpShell(tester, size: phone, initial: '/wizard/1');
+      expect(find.byType(MhadBottomNav), findsNothing);
+      appRouter.go(AppRoutes.settings);
+      await tester.pumpAndSettle();
+      expect(find.byType(MhadBottomNav), findsOneWidget);
     });
 
     testWidgets('focus-mode rail still exposes every destination by name',

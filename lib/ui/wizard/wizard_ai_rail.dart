@@ -14,7 +14,6 @@ import 'package:mhad/ui/assistant/assistant_send.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/ai_consent_dialog.dart';
-import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/design/labeled_spinner.dart';
 
 /// Desktop right rail (prototype `w-wizard`, 320px): a per-step AI helper with
@@ -261,9 +260,11 @@ class _WizardAiRailState extends ConsumerState<WizardAiRail> {
   }
 }
 
-/// Shown in the rail when no API key is configured: a clear warning that the
-/// AI features (heads-up, suggested questions, photo auto-fill, chat) are
-/// unavailable until AI is set up, plus a one-tap setup CTA.
+/// Shown in the rail when no API key is configured: an encouraging
+/// "Optional AI help" card (2026-11 redesign; it was a yellow warning). Same
+/// facts: what AI adds on this screen (heads-up, suggested questions, photo
+/// auto-fill, chat), a one-tap setup CTA, and that the wizard works fully
+/// without it.
 class _RailNoAiCard extends StatelessWidget {
   final VoidCallback onSetUp;
   const _RailNoAiCard({required this.onSetUp});
@@ -271,34 +272,66 @@ class _RailNoAiCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        InfoBanner(
-          icon: Icons.info_outline,
-          variant: InfoBannerVariant.warning,
-          text: context.l10n.wizardAiRailAiHelpIsOffThe,
-        ),
-        const SizedBox(height: 4),
-        SizedBox(
-          width: double.infinity,
-          child: FilledButton.icon(
-            onPressed: onSetUp,
-            icon: const Icon(Icons.auto_awesome, size: 16),
-            label: Text(context.l10n.pipelineSetupAi),
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: p.primaryLight.withValues(alpha: 0.45),
+        border: Border.all(color: p.border),
+        borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(
+                  color: p.primaryLight,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(Icons.auto_awesome,
+                    size: 18, color: p.onPrimaryLight),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Semantics(
+                  header: true,
+                  child: Text(
+                    context.l10n.wizardAiRailOptionalHelpTitle,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: p.text,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ),
-        const SizedBox(height: 10),
-        Text(
-          context.l10n.wizardAiRailYourApiKeyStaysOn,
-          style: TextStyle(
-            fontFamily: kSansFamily,
-            fontSize: 12,
-            height: 1.4,
-            color: p.textMuted,
+          const SizedBox(height: 10),
+          Text(
+            context.l10n.wizardAiRailOptionalHelpBody,
+            style: TextStyle(fontSize: 14, height: 1.45, color: p.text),
           ),
-        ),
-      ],
+          const SizedBox(height: 14),
+          SizedBox(
+            width: double.infinity,
+            child: FilledButton.icon(
+              onPressed: onSetUp,
+              icon: const Icon(Icons.auto_awesome, size: 16),
+              label: Text(context.l10n.pipelineSetupAi),
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            context.l10n.wizardAiRailYourApiKeyStaysOn,
+            style: TextStyle(fontSize: 12, height: 1.4, color: p.textMuted),
+          ),
+        ],
+      ),
     );
   }
 }

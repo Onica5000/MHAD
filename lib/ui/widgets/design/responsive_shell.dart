@@ -84,6 +84,13 @@ bool _routeHidesSidebar(String route) =>
 bool routeUsesFocusMode(String route) =>
     route.startsWith('/wizard/') || route.startsWith('/export/');
 
+/// Phone routes that hide the bottom nav to give the form the room: the
+/// wizard (about 450px of form was left on a 390x844 phone with the nav, the
+/// sticky Back/Continue bar and the keyboard). The wizard's StepHead shows a
+/// "More" button instead, so every destination (incl. 988 crisis help) stays
+/// one tap away. ONE definition, read by the shell and its tests.
+bool routeHidesBottomNav(String route) => route.startsWith('/wizard/');
+
 /// Width the desktop shell gives the sidebar on [route]: 0 on the gates,
 /// [WebSidebar.compactWidth] in focus mode, [WebSidebar.width] otherwise.
 /// ONE definition for the shell and any screen needing its content width.
@@ -145,7 +152,9 @@ class ResponsiveShell extends StatelessWidget {
               // AND the routed Scaffold subtracts the full inset again, costing
               // the page the nav's height twice (review R4). Hide it then.
               final keyboardOpen = MediaQuery.viewInsetsOf(context).bottom > 0;
-              final hideNav = _routeHidesSidebar(route) || keyboardOpen;
+              final hideNav = _routeHidesSidebar(route) ||
+                  routeHidesBottomNav(route) ||
+                  keyboardOpen;
               return _titled(
                 context,
                 route,
