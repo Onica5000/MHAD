@@ -12390,6 +12390,264 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Kept in this tab'**
   String get wizardKeptInThisTab;
+
+  /// No description provided for @aiHandoffChooseAi.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your AI'**
+  String get aiHandoffChooseAi;
+
+  /// No description provided for @aiHandoffStepCopy.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy the instructions'**
+  String get aiHandoffStepCopy;
+
+  /// No description provided for @aiHandoffCopyButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy instructions'**
+  String get aiHandoffCopyButton;
+
+  /// No description provided for @aiHandoffOpenService.
+  ///
+  /// In en, this message translates to:
+  /// **'Open {service}'**
+  String aiHandoffOpenService(String service);
+
+  /// No description provided for @aiHandoffCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied. Paste them into {service} and send.'**
+  String aiHandoffCopied(String service);
+
+  /// No description provided for @aiHandoffAttachDocument.
+  ///
+  /// In en, this message translates to:
+  /// **'In {service}, attach your document (a photo, scan, or PDF) before you send.'**
+  String aiHandoffAttachDocument(String service);
+
+  /// No description provided for @aiHandoffAttachAudio.
+  ///
+  /// In en, this message translates to:
+  /// **'In {service}, attach your voice recording before you send.'**
+  String aiHandoffAttachAudio(String service);
+
+  /// No description provided for @aiHandoffSeeIncluded.
+  ///
+  /// In en, this message translates to:
+  /// **'See exactly what\'s included'**
+  String get aiHandoffSeeIncluded;
+
+  /// No description provided for @aiHandoffHideIncluded.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide what\'s included'**
+  String get aiHandoffHideIncluded;
+
+  /// No description provided for @aiHandoffStepPaste.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste the answer'**
+  String get aiHandoffStepPaste;
+
+  /// No description provided for @aiHandoffPasteButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste the answer'**
+  String get aiHandoffPasteButton;
+
+  /// No description provided for @aiHandoffPasteHint.
+  ///
+  /// In en, this message translates to:
+  /// **'…or paste the AI\'s answer here'**
+  String get aiHandoffPasteHint;
+
+  /// No description provided for @aiHandoffUseAnswer.
+  ///
+  /// In en, this message translates to:
+  /// **'Use this answer'**
+  String get aiHandoffUseAnswer;
+
+  /// No description provided for @aiHandoffReadThere.
+  ///
+  /// In en, this message translates to:
+  /// **'Read the answer in {service}.'**
+  String aiHandoffReadThere(String service);
+
+  /// No description provided for @aiHandoffWordingNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy the wording the AI suggests, then paste it into the field.'**
+  String get aiHandoffWordingNote;
+
+  /// No description provided for @aiHandoffWaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for your answer · {minutes} min left'**
+  String aiHandoffWaiting(int minutes);
+
+  /// No description provided for @aiHandoffExtend.
+  ///
+  /// In en, this message translates to:
+  /// **'Extend 30 min'**
+  String get aiHandoffExtend;
+
+  /// No description provided for @aiHandoffExpiring.
+  ///
+  /// In en, this message translates to:
+  /// **'Your work here will be cleared in {minutes} min. Extend to keep it while you\'re in your AI.'**
+  String aiHandoffExpiring(int minutes);
+
+  /// No description provided for @aiHandoffBackToPaste.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to paste your AI answer'**
+  String get aiHandoffBackToPaste;
+
+  /// No description provided for @aiHandoffDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done. Review what was filled in before you go on.'**
+  String get aiHandoffDone;
+
+  /// No description provided for @aiHandoffProblemEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing was pasted. Copy the AI\'s whole answer and try again.'**
+  String get aiHandoffProblemEmpty;
+
+  /// No description provided for @aiHandoffProblemPromptBack.
+  ///
+  /// In en, this message translates to:
+  /// **'That\'s the instructions, not the AI\'s answer. In your AI, copy its reply (the JSON block), then paste it here.'**
+  String get aiHandoffProblemPromptBack;
+
+  /// No description provided for @aiHandoffProblemNotJson.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t read that answer. Ask the AI to reply with only the JSON block.'**
+  String get aiHandoffProblemNotJson;
+
+  /// No description provided for @aiHandoffProblemTruncated.
+  ///
+  /// In en, this message translates to:
+  /// **'The answer looks cut off. Ask the AI to send the complete JSON.'**
+  String get aiHandoffProblemTruncated;
+
+  /// No description provided for @aiHandoffProblemWrongTask.
+  ///
+  /// In en, this message translates to:
+  /// **'That answer is for a different task. Copy the answer to these instructions.'**
+  String get aiHandoffProblemWrongTask;
+
+  /// No description provided for @aiHandoffProblemWrongRef.
+  ///
+  /// In en, this message translates to:
+  /// **'That answer is for a different directive. Start a fresh copy and paste from this page.'**
+  String get aiHandoffProblemWrongRef;
+
+  /// No description provided for @aiHandoffProblemNoAttachment.
+  ///
+  /// In en, this message translates to:
+  /// **'The AI says nothing was attached. Attach your document or recording in the AI and send again.'**
+  String get aiHandoffProblemNoAttachment;
+
+  /// No description provided for @aiHandoffFixItButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy a fix-it message'**
+  String get aiHandoffFixItButton;
+
+  /// No description provided for @aiHandoffFixItCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Fix-it message copied. Paste it into your AI.'**
+  String get aiHandoffFixItCopied;
+
+  /// No description provided for @aiHandoffFixItMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'PA MHAD couldn\'t read your last reply. Please reply again with ONLY one JSON code block that starts with \"mhad_task\": \"{task}\" and \"mhad_ref\": \"{ref}\", with no other text.'**
+  String aiHandoffFixItMessage(String task, String ref);
+
+  /// No description provided for @aiHandoffFreshAttempt.
+  ///
+  /// In en, this message translates to:
+  /// **'Still not working? Start a fresh attempt: copy the instructions again and paste them into a new chat. For your security, an old answer is never reused.'**
+  String get aiHandoffFreshAttempt;
+
+  /// No description provided for @aiHandoffAudioPaid.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio: paid plans'**
+  String get aiHandoffAudioPaid;
+
+  /// No description provided for @aiHandoffAudioNo.
+  ///
+  /// In en, this message translates to:
+  /// **'No audio'**
+  String get aiHandoffAudioNo;
+
+  /// No description provided for @aiHandoffAudioMaybe.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio: may not work'**
+  String get aiHandoffAudioMaybe;
+
+  /// No description provided for @aiHandoffChooseFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an AI first.'**
+  String get aiHandoffChooseFirst;
+
+  /// No description provided for @aiHandoffPrivacyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Before you use an outside AI'**
+  String get aiHandoffPrivacyTitle;
+
+  /// No description provided for @aiHandoffPrivacyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re about to copy instructions to paste into {service}, a separate service you choose. PA MHAD\'s privacy promise covers this app only: {service}\'s own privacy terms apply to anything you share there, and using it is your choice.'**
+  String aiHandoffPrivacyBody(String service);
+
+  /// No description provided for @aiHandoffPrivacyPrivateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'For more privacy, use a private chat'**
+  String get aiHandoffPrivacyPrivateTitle;
+
+  /// No description provided for @aiHandoffPrivacyPrivateModes.
+  ///
+  /// In en, this message translates to:
+  /// **'ChatGPT: Temporary Chat · Claude: Incognito chat · Gemini: Temporary chat · Grok: Private Chat'**
+  String get aiHandoffPrivacyPrivateModes;
+
+  /// No description provided for @aiHandoffPrivacyHowTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How it works'**
+  String get aiHandoffPrivacyHowTitle;
+
+  /// No description provided for @aiHandoffPrivacyHowSteps.
+  ///
+  /// In en, this message translates to:
+  /// **'1. Copy the instructions.\n2. Paste them into {service}, attach any document there, and send.\n3. Copy the AI\'s answer, come back, and paste it here.'**
+  String aiHandoffPrivacyHowSteps(String service);
+
+  /// No description provided for @aiHandoffPrivacyKept.
+  ///
+  /// In en, this message translates to:
+  /// **'While you\'re away, your work here is kept for 30 minutes. You can extend it.'**
+  String get aiHandoffPrivacyKept;
+
+  /// No description provided for @aiHandoffPrivacyContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'I understand, continue'**
+  String get aiHandoffPrivacyContinue;
 }
 
 class _AppLocalizationsDelegate

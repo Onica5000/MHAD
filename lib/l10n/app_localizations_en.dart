@@ -7303,4 +7303,167 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get wizardKeptInThisTab => 'Kept in this tab';
+
+  @override
+  String get aiHandoffChooseAi => 'Choose your AI';
+
+  @override
+  String get aiHandoffStepCopy => 'Copy the instructions';
+
+  @override
+  String get aiHandoffCopyButton => 'Copy instructions';
+
+  @override
+  String aiHandoffOpenService(String service) {
+    return 'Open $service';
+  }
+
+  @override
+  String aiHandoffCopied(String service) {
+    return 'Copied. Paste them into $service and send.';
+  }
+
+  @override
+  String aiHandoffAttachDocument(String service) {
+    return 'In $service, attach your document (a photo, scan, or PDF) before you send.';
+  }
+
+  @override
+  String aiHandoffAttachAudio(String service) {
+    return 'In $service, attach your voice recording before you send.';
+  }
+
+  @override
+  String get aiHandoffSeeIncluded => 'See exactly what\'s included';
+
+  @override
+  String get aiHandoffHideIncluded => 'Hide what\'s included';
+
+  @override
+  String get aiHandoffStepPaste => 'Paste the answer';
+
+  @override
+  String get aiHandoffPasteButton => 'Paste the answer';
+
+  @override
+  String get aiHandoffPasteHint => '…or paste the AI\'s answer here';
+
+  @override
+  String get aiHandoffUseAnswer => 'Use this answer';
+
+  @override
+  String aiHandoffReadThere(String service) {
+    return 'Read the answer in $service.';
+  }
+
+  @override
+  String get aiHandoffWordingNote =>
+      'Copy the wording the AI suggests, then paste it into the field.';
+
+  @override
+  String aiHandoffWaiting(int minutes) {
+    return 'Waiting for your answer · $minutes min left';
+  }
+
+  @override
+  String get aiHandoffExtend => 'Extend 30 min';
+
+  @override
+  String aiHandoffExpiring(int minutes) {
+    return 'Your work here will be cleared in $minutes min. Extend to keep it while you\'re in your AI.';
+  }
+
+  @override
+  String get aiHandoffBackToPaste => 'Back to paste your AI answer';
+
+  @override
+  String get aiHandoffDone =>
+      'Done. Review what was filled in before you go on.';
+
+  @override
+  String get aiHandoffProblemEmpty =>
+      'Nothing was pasted. Copy the AI\'s whole answer and try again.';
+
+  @override
+  String get aiHandoffProblemPromptBack =>
+      'That\'s the instructions, not the AI\'s answer. In your AI, copy its reply (the JSON block), then paste it here.';
+
+  @override
+  String get aiHandoffProblemNotJson =>
+      'We couldn\'t read that answer. Ask the AI to reply with only the JSON block.';
+
+  @override
+  String get aiHandoffProblemTruncated =>
+      'The answer looks cut off. Ask the AI to send the complete JSON.';
+
+  @override
+  String get aiHandoffProblemWrongTask =>
+      'That answer is for a different task. Copy the answer to these instructions.';
+
+  @override
+  String get aiHandoffProblemWrongRef =>
+      'That answer is for a different directive. Start a fresh copy and paste from this page.';
+
+  @override
+  String get aiHandoffProblemNoAttachment =>
+      'The AI says nothing was attached. Attach your document or recording in the AI and send again.';
+
+  @override
+  String get aiHandoffFixItButton => 'Copy a fix-it message';
+
+  @override
+  String get aiHandoffFixItCopied =>
+      'Fix-it message copied. Paste it into your AI.';
+
+  @override
+  String aiHandoffFixItMessage(String task, String ref) {
+    return 'PA MHAD couldn\'t read your last reply. Please reply again with ONLY one JSON code block that starts with \"mhad_task\": \"$task\" and \"mhad_ref\": \"$ref\", with no other text.';
+  }
+
+  @override
+  String get aiHandoffFreshAttempt =>
+      'Still not working? Start a fresh attempt: copy the instructions again and paste them into a new chat. For your security, an old answer is never reused.';
+
+  @override
+  String get aiHandoffAudioPaid => 'Audio: paid plans';
+
+  @override
+  String get aiHandoffAudioNo => 'No audio';
+
+  @override
+  String get aiHandoffAudioMaybe => 'Audio: may not work';
+
+  @override
+  String get aiHandoffChooseFirst => 'Choose an AI first.';
+
+  @override
+  String get aiHandoffPrivacyTitle => 'Before you use an outside AI';
+
+  @override
+  String aiHandoffPrivacyBody(String service) {
+    return 'You\'re about to copy instructions to paste into $service, a separate service you choose. PA MHAD\'s privacy promise covers this app only: $service\'s own privacy terms apply to anything you share there, and using it is your choice.';
+  }
+
+  @override
+  String get aiHandoffPrivacyPrivateTitle =>
+      'For more privacy, use a private chat';
+
+  @override
+  String get aiHandoffPrivacyPrivateModes =>
+      'ChatGPT: Temporary Chat · Claude: Incognito chat · Gemini: Temporary chat · Grok: Private Chat';
+
+  @override
+  String get aiHandoffPrivacyHowTitle => 'How it works';
+
+  @override
+  String aiHandoffPrivacyHowSteps(String service) {
+    return '1. Copy the instructions.\n2. Paste them into $service, attach any document there, and send.\n3. Copy the AI\'s answer, come back, and paste it here.';
+  }
+
+  @override
+  String get aiHandoffPrivacyKept =>
+      'While you\'re away, your work here is kept for 30 minutes. You can extend it.';
+
+  @override
+  String get aiHandoffPrivacyContinue => 'I understand, continue';
 }

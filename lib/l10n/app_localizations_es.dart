@@ -7423,4 +7423,167 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get wizardKeptInThisTab => 'Se conserva en esta pestaña';
+
+  @override
+  String get aiHandoffChooseAi => 'Elija su IA';
+
+  @override
+  String get aiHandoffStepCopy => 'Copie las instrucciones';
+
+  @override
+  String get aiHandoffCopyButton => 'Copiar instrucciones';
+
+  @override
+  String aiHandoffOpenService(String service) {
+    return 'Abrir $service';
+  }
+
+  @override
+  String aiHandoffCopied(String service) {
+    return 'Copiadas. Péguelas en $service y envíelas.';
+  }
+
+  @override
+  String aiHandoffAttachDocument(String service) {
+    return 'En $service, adjunte su documento (una foto, un escaneo o un PDF) antes de enviar.';
+  }
+
+  @override
+  String aiHandoffAttachAudio(String service) {
+    return 'En $service, adjunte su grabación de voz antes de enviar.';
+  }
+
+  @override
+  String get aiHandoffSeeIncluded => 'Ver exactamente lo que se incluye';
+
+  @override
+  String get aiHandoffHideIncluded => 'Ocultar lo que se incluye';
+
+  @override
+  String get aiHandoffStepPaste => 'Pegue la respuesta';
+
+  @override
+  String get aiHandoffPasteButton => 'Pegar la respuesta';
+
+  @override
+  String get aiHandoffPasteHint => '…o pegue aquí la respuesta de la IA';
+
+  @override
+  String get aiHandoffUseAnswer => 'Usar esta respuesta';
+
+  @override
+  String aiHandoffReadThere(String service) {
+    return 'Lea la respuesta en $service.';
+  }
+
+  @override
+  String get aiHandoffWordingNote =>
+      'Copie el texto que sugiera la IA y péguelo en el campo.';
+
+  @override
+  String aiHandoffWaiting(int minutes) {
+    return 'Esperando su respuesta · quedan $minutes min';
+  }
+
+  @override
+  String get aiHandoffExtend => 'Ampliar 30 min';
+
+  @override
+  String aiHandoffExpiring(int minutes) {
+    return 'Su trabajo aquí se borrará en $minutes min. Amplíe el tiempo para conservarlo mientras usa su IA.';
+  }
+
+  @override
+  String get aiHandoffBackToPaste => 'Volver a pegar la respuesta de su IA';
+
+  @override
+  String get aiHandoffDone =>
+      'Listo. Revise lo que se completó antes de continuar.';
+
+  @override
+  String get aiHandoffProblemEmpty =>
+      'No se pegó nada. Copie toda la respuesta de la IA e inténtelo de nuevo.';
+
+  @override
+  String get aiHandoffProblemPromptBack =>
+      'Eso son las instrucciones, no la respuesta de la IA. En su IA, copie su respuesta (el bloque JSON) y péguela aquí.';
+
+  @override
+  String get aiHandoffProblemNotJson =>
+      'No pudimos leer esa respuesta. Pida a la IA que responda solo con el bloque JSON.';
+
+  @override
+  String get aiHandoffProblemTruncated =>
+      'La respuesta parece cortada. Pida a la IA que envíe el JSON completo.';
+
+  @override
+  String get aiHandoffProblemWrongTask =>
+      'Esa respuesta es para otra tarea. Copie la respuesta a estas instrucciones.';
+
+  @override
+  String get aiHandoffProblemWrongRef =>
+      'Esa respuesta es para otra directiva. Empiece de nuevo copiando y pegando desde esta página.';
+
+  @override
+  String get aiHandoffProblemNoAttachment =>
+      'La IA indica que no se adjuntó nada. Adjunte su documento o grabación en la IA y vuelva a enviar.';
+
+  @override
+  String get aiHandoffFixItButton => 'Copiar un mensaje de corrección';
+
+  @override
+  String get aiHandoffFixItCopied =>
+      'Mensaje de corrección copiado. Péguelo en su IA.';
+
+  @override
+  String aiHandoffFixItMessage(String task, String ref) {
+    return 'PA MHAD no pudo leer tu última respuesta. Responde de nuevo SOLO con un bloque de código JSON que empiece con \"mhad_task\": \"$task\" y \"mhad_ref\": \"$ref\", sin ningún otro texto.';
+  }
+
+  @override
+  String get aiHandoffFreshAttempt =>
+      '¿Sigue sin funcionar? Empiece de nuevo: copie otra vez las instrucciones y péguelas en un chat nuevo. Por su seguridad, nunca se reutiliza una respuesta anterior.';
+
+  @override
+  String get aiHandoffAudioPaid => 'Audio: planes de pago';
+
+  @override
+  String get aiHandoffAudioNo => 'Sin audio';
+
+  @override
+  String get aiHandoffAudioMaybe => 'Audio: puede no funcionar';
+
+  @override
+  String get aiHandoffChooseFirst => 'Primero elija una IA.';
+
+  @override
+  String get aiHandoffPrivacyTitle => 'Antes de usar una IA externa';
+
+  @override
+  String aiHandoffPrivacyBody(String service) {
+    return 'Está a punto de copiar instrucciones para pegarlas en $service, un servicio aparte que usted elige. La promesa de privacidad de PA MHAD cubre solo esta aplicación: las condiciones de privacidad de $service se aplican a todo lo que comparta allí, y usarlo es su decisión.';
+  }
+
+  @override
+  String get aiHandoffPrivacyPrivateTitle =>
+      'Para más privacidad, use un chat privado';
+
+  @override
+  String get aiHandoffPrivacyPrivateModes =>
+      'ChatGPT: Chat temporal · Claude: chat de incógnito · Gemini: Chat temporal · Grok: Chat privado';
+
+  @override
+  String get aiHandoffPrivacyHowTitle => 'Cómo funciona';
+
+  @override
+  String aiHandoffPrivacyHowSteps(String service) {
+    return '1. Copie las instrucciones.\n2. Péguelas en $service, adjunte allí cualquier documento y envíelas.\n3. Copie la respuesta de la IA, vuelva y péguela aquí.';
+  }
+
+  @override
+  String get aiHandoffPrivacyKept =>
+      'Mientras no esté, su trabajo aquí se conserva durante 30 minutos. Puede ampliar ese tiempo.';
+
+  @override
+  String get aiHandoffPrivacyContinue => 'Entiendo, continuar';
 }
