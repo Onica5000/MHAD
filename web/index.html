@@ -27,6 +27,23 @@
   <meta name="description" content="Pennsylvania Mental Health Advance Directive - Create, manage, and export your mental health treatment preferences under PA Act 194.">
 
   <!--
+    Link previews (Open Graph / Twitter cards): shared links show a title,
+    description and image instead of a bare URL. Scrapers need ABSOLUTE URLs,
+    so these point at the GitHub Pages deploy. og-image.jpg is a 1200x630 crop
+    of the Home hero photo (tool/art; regenerate with magick if it changes).
+  -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="PA MHAD">
+  <meta property="og:title" content="PA Mental Health Advance Directive">
+  <meta property="og:description" content="Plan how you want to be treated in a mental health crisis, in plain language. Free, anonymous, nothing is saved.">
+  <meta property="og:url" content="https://onica5000.github.io/MHAD/">
+  <meta property="og:image" content="https://onica5000.github.io/MHAD/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Two people walking together along a path through green hills at sunrise">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!--
     PWA install metadata (Chrome/Edge — the design pivot 2026-06-04
     locked the web target to Chrome/Edge browsers, so iOS Safari /
     `apple-mobile-web-app-*` tags were dropped). The W3C
@@ -76,6 +93,28 @@
     flutter-first-frame event that hides the legal footer below.
   -->
   <style>
+    /* Colors mirror the navy palette in lib/ui/theme/app_theme.dart
+       (MhadPalette.navyLight / navyDark): scaffold background, primary and
+       muted text. The splash should look like the app's first frame, not a
+       separate beige page. */
+    :root {
+      --boot-bg: #F7F9FC;
+      --boot-primary: #1E3A8A;
+      --boot-on-primary: #FFFFFF;
+      --boot-text: #111A2E;
+      --boot-muted: #52607A;
+      --boot-track: rgba(30, 58, 138, 0.18);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --boot-bg: #0A0F1B;
+        --boot-primary: #8B9EE3;
+        --boot-on-primary: #0A0F1B;
+        --boot-text: #E5EAF5;
+        --boot-muted: #BDC6DD;
+        --boot-track: rgba(139, 158, 227, 0.25);
+      }
+    }
     #boot-splash {
       position: fixed;
       inset: 0;
@@ -83,47 +122,51 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 20px;
-      background: #FAF7F2;
+      gap: 18px;
+      background: var(--boot-bg);
       z-index: 9998;
-      font-family: sans-serif;
+      font-family: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+    }
+    #boot-splash .boot-mark {
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      background: var(--boot-primary);
+      color: var(--boot-on-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font: italic 34px/1 Georgia, "Times New Roman", serif;
+      box-shadow: 0 10px 30px rgba(30, 58, 138, 0.25);
     }
     #boot-splash .boot-title {
-      color: #1E3A8A;
-      font-size: 17px;
+      color: var(--boot-text);
+      font-size: 18px;
       font-weight: 600;
       text-align: center;
       padding: 0 24px;
     }
     #boot-splash .boot-sub {
-      color: #666;
-      font-size: 13px;
+      color: var(--boot-muted);
+      font-size: 14px;
     }
     #boot-splash .boot-spinner {
-      width: 36px;
-      height: 36px;
-      border: 3px solid rgba(30, 58, 138, 0.2);
-      border-top-color: #1E3A8A;
+      width: 28px;
+      height: 28px;
+      border: 3px solid var(--boot-track);
+      border-top-color: var(--boot-primary);
       border-radius: 50%;
       animation: boot-spin 0.9s linear infinite;
     }
     @keyframes boot-spin { to { transform: rotate(360deg); } }
-    @media (prefers-color-scheme: dark) {
-      #boot-splash { background: #121212; }
-      #boot-splash .boot-title { color: #A5B8E8; }
-      #boot-splash .boot-sub { color: #999; }
-      #boot-splash .boot-spinner {
-        border-color: rgba(165, 184, 232, 0.25);
-        border-top-color: #A5B8E8;
-      }
-    }
     @media (prefers-reduced-motion: reduce) {
       #boot-splash .boot-spinner { animation: none; }
     }
   </style>
   <div id="boot-splash">
-    <div class="boot-spinner" role="progressbar" aria-label="Loading"></div>
+    <div class="boot-mark" aria-hidden="true">m</div>
     <div class="boot-title">PA Mental Health Advance Directive</div>
+    <div class="boot-spinner" role="progressbar" aria-label="Loading"></div>
     <div class="boot-sub">Loading&hellip;</div>
   </div>
   <!--
@@ -141,10 +184,10 @@
       This app requires JavaScript to run.
     </p>
   </noscript>
-  <div id="legal-footer" style="position:fixed;bottom:0;width:100%;text-align:center;padding:8px;font-size:11px;font-family:sans-serif;color:#666;background:#f5f5f5;z-index:9999;">
+  <div id="legal-footer" style="position:fixed;bottom:0;width:100%;text-align:center;padding:8px;font-size:12px;font-family:system-ui,sans-serif;color:var(--boot-muted,#52607A);background:var(--boot-bg,#F7F9FC);border-top:1px solid rgba(30,58,138,0.12);z-index:9999;">
     Not a medical device. Not legal advice.
-    &bull; <a href="#/privacy-policy" style="color:#00827F;">Privacy Policy</a>
-    &bull; <a href="#/disclaimer" style="color:#00827F;">Legal Disclaimer</a>
+    &bull; <a href="#/privacy-policy" style="color:var(--boot-primary,#1E3A8A);">Privacy Policy</a>
+    &bull; <a href="#/disclaimer" style="color:var(--boot-primary,#1E3A8A);">Legal Disclaimer</a>
     &bull; This app does not use cookies or tracking.
   </div>
   <script>
