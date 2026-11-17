@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:mhad/constants.dart';
+import 'package:mhad/ai/handoff/pending_handoff.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Caches the current directive data to SharedPreferences on web so that
@@ -55,7 +56,13 @@ class WebSessionCache {
       if (savedAt == null) return null;
 
       final age = DateTime.now().difference(savedAt);
-      if (age > ttl) {
+      // While the person is in their AI chat waiting to paste an answer back
+      // (copy-and-paste handoff), the work is kept until that wait's deadline
+      // (30 min, extendable) — a phone may unload this tab meanwhile.
+      final handoffDeadline = await PendingHandoffStore.activeDeadline();
+      final keptForHandoff =
+          handoffDeadline != null && DateTime.now().isBefore(handoffDeadline);
+      if (age > ttl && !keptForHandoff) {
         await clear();
         return null;
       }
