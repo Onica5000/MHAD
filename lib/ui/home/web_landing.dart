@@ -90,39 +90,34 @@ class WebDashboardLanding extends ConsumerWidget {
         //    row empty) and brings the onboarding's upload and saved-file
         //    starts to Home too.
         SectionLabel(context.l10n.homeOtherWaysToStart),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        // Equal boxes, CTAs on one line (the user flagged uneven cards).
+        EqualHeightRow(
           children: [
-            Expanded(
-              child: PhotoActionCard(
+            PhotoActionCard(
+                fillHeight: true,
                 art: AppArt.startUpload,
                 title: context.l10n.onboardingUploadADocumentToAutofill,
                 body: context.l10n.homeStartUploadBody,
                 cta: context.l10n.homeStartUploadCta,
                 onTap: () => _startUpload(context, ref),
-              ),
             ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: PhotoActionCard(
+            PhotoActionCard(
+                fillHeight: true,
                 art: AppArt.startResume,
                 title: context.l10n.onboardingContinueFromASavedFile,
                 body: context.l10n.homeStartResumeBody,
                 cta: context.l10n.homeStartResumeCta,
                 onTap: () => importSavedDirectiveFile(context, ref),
-              ),
             ),
-            const SizedBox(width: 16),
             // Print a blank form — pick any of the three official forms and
             // open the print dialog directly; does NOT start a wizard draft.
-            Expanded(
-              child: PhotoActionCard(
+            PhotoActionCard(
+                fillHeight: true,
                 art: AppArt.startPrint,
                 title: context.l10n.webLandingPrintABlankForm,
                 body: context.l10n.webLandingPreferPaperOpenAnyOf,
                 cta: context.l10n.webLandingPrintBlankForm,
                 onTap: () => showBlankFormPicker(context),
-              ),
             ),
           ],
         ),
@@ -135,14 +130,12 @@ class WebDashboardLanding extends ConsumerWidget {
         // an infinite height ("BoxConstraints forces an infinite height") and
         // the whole section silently failed to paint — the bottom of the
         // dashboard went missing.
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        EqualHeightRow(
+          flex: const [14, 10],
+          gap: 18,
           children: [
-            Expanded(flex: 14, child: _PrivacyPromiseCard()),
-            const SizedBox(width: 18),
-            Expanded(
-              flex: 10,
-              child: _BookletQuoteCard(
+            _PrivacyPromiseCard(),
+            _BookletQuoteCard(
                 // Deep-link to the plain-language overview ("the basics") rather
                 // than the full Learn hub, so the button delivers the summary it
                 // promises. Back returns here.
@@ -153,7 +146,6 @@ class WebDashboardLanding extends ConsumerWidget {
                     title: context.l10n.webLandingTheBasics,
                   ),
                 ),
-              ),
             ),
           ],
         ),
@@ -271,7 +263,7 @@ class _PrivacyPromiseCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: p.card,
         border: Border.all(color: p.border),
-        borderRadius: BorderRadius.circular(DesignTokens.buttonRadius),
+        borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -364,23 +356,19 @@ class _BookletQuoteCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        SectionLabel(context.l10n.webLandingFromTheBooklet),
-        const SizedBox(height: 8),
-        Container(
+    return Container(
           width: double.infinity,
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.fromLTRB(20, 18, 20, 18),
           decoration: BoxDecoration(
             color: p.primaryTint,
             border: Border.all(color: p.primaryLight),
-            borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
+            borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
+              SectionLabel(context.l10n.webLandingFromTheBooklet),
               Text(
                 context.l10n.webLandingAnMhadIsYourVoice,
                 style: TextStyle(
@@ -415,8 +403,6 @@ class _BookletQuoteCard extends StatelessWidget {
               ),
             ],
           ),
-        ),
-      ],
     );
   }
 }

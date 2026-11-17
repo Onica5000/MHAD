@@ -187,9 +187,10 @@ void main() {
         tester.view.physicalSize = desktop;
         await tester.pumpAndSettle();
         expect(find.byType(WebSidebar), findsNothing);
-        // Centered in the reading column without a sidebar.
+        // Gates are capped at kGateMaxWidth (wide enough for SplitHero's
+        // photo panel beside the content) and get no sidebar.
         expect(tester.getSize(find.byKey(pageKey(gate))).width,
-            kReadingMaxWidth);
+            desktop.width < kGateMaxWidth ? desktop.width : kGateMaxWidth);
       });
     }
 

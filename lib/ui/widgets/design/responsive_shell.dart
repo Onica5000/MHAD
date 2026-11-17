@@ -44,6 +44,11 @@ const double kReadingMaxWidth = 760;
 /// a centered island with a left gutter.
 const double kFillMaxWidth = 1800;
 
+/// Width cap for the pre-app welcome gates (disclaimer, onboarding):
+/// wide enough for SplitHero's photo panel beside a 640px content
+/// column. On bigger windows the gate centers.
+const double kGateMaxWidth = 1280;
+
 /// Routes whose screens have purpose-built multi-column desktop layouts and
 /// should FILL the content area (prototype "sidebar + flex:1" pages):
 ///   - home (`/`)            — dashboard column + right "Tools" sidebar
@@ -188,9 +193,9 @@ class ResponsiveShell extends StatelessWidget {
               color: Theme.of(context).scaffoldBackgroundColor,
               child: LayoutBuilder(
                 builder: (context, constraints) {
-                  final w = constraints.maxWidth < kReadingMaxWidth
+                  final w = constraints.maxWidth < kGateMaxWidth
                       ? constraints.maxWidth
-                      : kReadingMaxWidth;
+                      : kGateMaxWidth;
                   return ClipRect(
                     child: Align(
                       alignment: Alignment.topCenter,

@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/split_hero.dart';
+import 'package:mhad/ui/theme/app_art.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/ui/widgets/design/design_card.dart';
 import 'package:mhad/services/disclaimer_service.dart';
@@ -126,7 +128,12 @@ class _GateLayout extends StatelessWidget {
             // Decorative brand backdrop behind the gate content (no input/
             // layout impact); uses the gate's threaded palette.
             BrandBackdrop(intensity: 0.6, palette: palette),
-            Padding(
+            // Desktop: photo panel beside the content; phone: photo
+            // banner above it. The consent row + CTA stay pinned.
+            SplitHero(
+              tallArt: AppArt.welcomeDisclaimerTall,
+              wideArt: AppArt.welcomeDisclaimerWide,
+              child: Padding(
               padding: const EdgeInsets.fromLTRB(20, 18, 20, 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -282,6 +289,7 @@ class _GateLayout extends StatelessWidget {
                   ),
                 ],
               ),
+            ),
             ),
             // No crisis chip on this first-run gate by design; crisis access
             // begins on the dashboard (Home tools / the mobile "More" sheet).

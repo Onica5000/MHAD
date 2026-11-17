@@ -2,7 +2,6 @@
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'package:mhad/ui/widgets/design/spot_illustration.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -15,6 +14,7 @@ import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/art_image.dart';
 import 'package:mhad/ui/widgets/design/responsive_shell.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
+import 'package:mhad/ui/widgets/design/split_hero.dart';
 import 'package:mhad/ui/widgets/design/brand_motif.dart';
 import 'package:mhad/ui/wizard/widgets/saved_file_import.dart';
 
@@ -106,9 +106,11 @@ class OnboardingScreen extends ConsumerWidget {
             // (fill-mode) Home route, so cap + centre the column at the
             // design's WebCenter measure (~640) — otherwise the banner and
             // CTAs stretch the full viewport width. No-op on mobile (422 px).
-            Center(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 640),
+            // Desktop: photo panel beside the intro (SplitHero caps the
+            // column at 640); phone: photo banner above it.
+            SplitHero(
+              tallArt: AppArt.welcomeOnboardingTall,
+              wideArt: AppArt.welcomeOnboardingWide,
                 // Fill-or-scroll: SliverFillRemaining(hasScrollBody: false) sizes
                 // the column to AT LEAST the viewport (so the Spacer still
                 // bottom-anchors the CTAs on tall screens) yet lets it grow and
@@ -121,24 +123,12 @@ class OnboardingScreen extends ConsumerWidget {
                     SliverFillRemaining(
                       hasScrollBody: false,
                       child: Padding(
-              padding: const EdgeInsets.fromLTRB(28, 64, 28, 24),
+              padding: const EdgeInsets.fromLTRB(28, 32, 28, 24),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Voice motif beside the label on wide screens only; on
-                  // phones vertical space is reserved for the CTAs.
-                  if (box.maxWidth >= 600)
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Expanded(
-                          child: SectionLabel(context.l10n.onboardingPaMhadAct194),
-                        ),
-                        const SpotIllustration(art: SpotArt.voice, size: 88),
-                      ],
-                    )
-                  else
-                    SectionLabel(context.l10n.onboardingPaMhadAct194),
+                  // The photo (SplitHero) replaced the small voice sketch.
+                  SectionLabel(context.l10n.onboardingPaMhadAct194),
                   const SizedBox(height: 18),
                   // Editorial 68pt h1 "In your\nwords." — "words." is the
                   // primary-tinted accent (prototype L58-64).
@@ -315,7 +305,6 @@ class OnboardingScreen extends ConsumerWidget {
                   ],
                 ),
                 ),
-              ),
             ),
           ],
         ),
