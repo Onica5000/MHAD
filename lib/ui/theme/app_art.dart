@@ -90,14 +90,43 @@ enum AppArt {
 
   String get assetPath => 'assets/images/$group/$id.webp';
 
-  /// Pixel width of the shipped WebP (matches the manifest's `widths`), the
-  /// ceiling for decode size.
+  /// Pixel width of the shipped WebP — the ceiling for decode size. The
+  /// generator caps each aspect at the manifest's `widths` but never
+  /// upscales, so Grok's native 1280px (16:9) and 832px (2:3) stay as-is.
+  /// `test/unit/app_art_test.dart` checks every file against this.
   int get maxPixelWidth => switch (aspectRatio) {
-        > 1.6 => 1600, // 16:9
+        > 1.6 => 1280, // 16:9
         > 1.2 => 1200, // 3:2
-        < 0.8 => 900, // 2:3
+        < 0.8 => 832, // 2:3
         _ => 800, // 1:1
       };
+
+  /// Fixed decode widths. Snapping to a few buckets (rounded UP, capped at
+  /// [maxPixelWidth]) means a photo shown at slightly different sizes —
+  /// window resize, the 232↔72px sidebar switch — reuses ONE ImageCache entry
+  /// instead of decoding again at every pixel width.
+  static const _decodeBuckets = [320, 480, 640, 960, 1280];
+
+  /// The decode width for a display needing [physicalPixels] of width.
+  int decodeWidthFor(double physicalPixels) {
+    for (final b in _decodeBuckets) {
+      if (physicalPixels <= b) return b < maxPixelWidth ? b : maxPixelWidth;
+    }
+    return maxPixelWidth;
+  }
+
+  /// THE image provider for this art at a bucket. [ArtImage] and any
+  /// precache call both go through here, so they share one cache key.
+  ImageProvider imageProvider(double physicalPixels) =>
+      ResizeImage(AssetImage(assetPath), width: decodeWidthFor(physicalPixels));
+
+  /// Warm the cache for an above-the-fold photo so it doesn't pop in.
+  /// [logicalWidth] is the width it will be shown at.
+  Future<void> precache(BuildContext context, double logicalWidth) =>
+      precacheImage(
+        imageProvider(logicalWidth * MediaQuery.devicePixelRatioOf(context)),
+        context,
+      );
 }
 
 /// The illustration for each wizard step — one definition, used by the step

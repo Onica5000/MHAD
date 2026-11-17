@@ -7,9 +7,10 @@ import 'package:mhad/ui/widgets/design/spot_illustration.dart';
 
 /// Shows an [AppArt] illustration the same way everywhere:
 ///
-/// - **decoded at display size** (`cacheWidth` from the laid-out size × device
-///   pixel ratio, covering `BoxFit.cover` crops), so a 1600px hero doesn't
-///   cost full-size memory on a phone;
+/// - **decoded near display size**: the laid-out size × device pixel ratio
+///   (covering `BoxFit.cover` crops) snapped to a few fixed widths
+///   ([AppArt.decodeWidthFor]), so a wide hero doesn't cost full-size memory
+///   on a phone and resizing the window doesn't decode it again and again;
 /// - a palette-tinted placeholder while it loads, then a short fade-in (none
 ///   under reduce-motion);
 /// - gently dimmed in dark mode so a light illustration doesn't glare;
@@ -61,14 +62,14 @@ class ArtImage extends StatelessWidget {
       // Cover-cropping a wide image into a tall box scales it by HEIGHT, so
       // the decoded width must cover h × aspect, not just the box width.
       final needed = math.max(w, h * art.aspectRatio) * dpr;
-      final cacheWidth = needed.clamp(64, art.maxPixelWidth.toDouble()).round();
-      return Image.asset(
-        art.assetPath,
+      // Bucketed decode width (AppArt.imageProvider): one cache entry per
+      // bucket instead of one per pixel width, and the same key precache uses.
+      return Image(
+        image: art.imageProvider(needed),
         width: double.infinity,
         height: double.infinity,
         fit: fit,
         alignment: alignment ?? art.focal,
-        cacheWidth: cacheWidth,
         filterQuality: FilterQuality.medium,
         frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
           if (wasSynchronouslyLoaded || reduceMotion) return child;
