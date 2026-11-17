@@ -88,9 +88,9 @@ void main() {
       await tester.tap(find.text(courtTrigger));
       await tester.tap(find.text(commitTrigger));
       await tester.enterText(
-          find.widgetWithText(TextFormField, 'Name of Doctor'), 'Dr. Rivera');
+          find.widgetWithText(TextFormField, 'Name of doctor'), 'Dr. Rivera');
       await tester.enterText(
-          find.widgetWithText(TextFormField, 'Address / Phone Number'),
+          find.widgetWithText(TextFormField, 'Address / phone number'),
           '215-555-0100');
       await tester.enterText(
           find.widgetWithText(TextFormField, 'In your own words (optional)'),

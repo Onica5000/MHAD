@@ -293,7 +293,7 @@ abstract class AppLocalizations {
   /// No description provided for @personalInfo.
   ///
   /// In en, this message translates to:
-  /// **'Personal Information'**
+  /// **'Personal information'**
   String get personalInfo;
 
   /// No description provided for @fullName.
@@ -341,7 +341,7 @@ abstract class AppLocalizations {
   /// No description provided for @effectiveCondition.
   ///
   /// In en, this message translates to:
-  /// **'Effective Condition'**
+  /// **'Effective condition'**
   String get effectiveCondition;
 
   /// No description provided for @treatmentFacility.
@@ -377,7 +377,7 @@ abstract class AppLocalizations {
   /// No description provided for @additionalInstructions.
   ///
   /// In en, this message translates to:
-  /// **'Additional Instructions'**
+  /// **'Additional instructions'**
   String get additionalInstructions;
 
   /// No description provided for @agentDesignation.
@@ -389,19 +389,19 @@ abstract class AppLocalizations {
   /// No description provided for @alternateAgent.
   ///
   /// In en, this message translates to:
-  /// **'Alternate Agent'**
+  /// **'Alternate agent'**
   String get alternateAgent;
 
   /// No description provided for @agentAuthority.
   ///
   /// In en, this message translates to:
-  /// **'Agent Authority & Limits'**
+  /// **'Agent authority & limits'**
   String get agentAuthority;
 
   /// No description provided for @guardianNomination.
   ///
   /// In en, this message translates to:
-  /// **'Guardian Nomination'**
+  /// **'Guardian nomination'**
   String get guardianNomination;
 
   /// No description provided for @review.
@@ -443,7 +443,7 @@ abstract class AppLocalizations {
   /// No description provided for @saveAndExit.
   ///
   /// In en, this message translates to:
-  /// **'Save & Exit'**
+  /// **'Save & exit'**
   String get saveAndExit;
 
   /// No description provided for @saveAndExitMessage.
@@ -779,7 +779,7 @@ abstract class AppLocalizations {
   /// No description provided for @reviewStepPrimaryAgent.
   ///
   /// In en, this message translates to:
-  /// **'Primary Agent'**
+  /// **'Primary agent'**
   String get reviewStepPrimaryAgent;
 
   /// No description provided for @reviewStepWhereIWantCare.
@@ -791,7 +791,7 @@ abstract class AppLocalizations {
   /// No description provided for @reviewStepMedicalDiagnoses.
   ///
   /// In en, this message translates to:
-  /// **'Medical Diagnoses'**
+  /// **'Medical diagnoses'**
   String get reviewStepMedicalDiagnoses;
 
   /// No description provided for @reviewStepAllergiesReactions.
@@ -1427,7 +1427,7 @@ abstract class AppLocalizations {
   /// No description provided for @agentDesigTitle.
   ///
   /// In en, this message translates to:
-  /// **'Primary Agent Designation'**
+  /// **'Primary agent designation'**
   String get agentDesigTitle;
 
   /// No description provided for @agentDesigAgentDefinition.
@@ -1457,7 +1457,7 @@ abstract class AppLocalizations {
   /// No description provided for @altAgentTitle.
   ///
   /// In en, this message translates to:
-  /// **'Alternate Agent Designation'**
+  /// **'Alternate agent designation'**
   String get altAgentTitle;
 
   /// No description provided for @altAgentActsIf.
@@ -1499,7 +1499,7 @@ abstract class AppLocalizations {
   /// No description provided for @agentAuthScopeTitle.
   ///
   /// In en, this message translates to:
-  /// **'Important: Scope of Authority (20 Pa.C.S. § 5836)'**
+  /// **'Important: scope of authority (20 Pa.C.S. § 5836)'**
   String get agentAuthScopeTitle;
 
   /// No description provided for @agentAuthScopeBody.
@@ -1547,7 +1547,7 @@ abstract class AppLocalizations {
   /// No description provided for @agentAuthExamplesField.
   ///
   /// In en, this message translates to:
-  /// **'Agent Limitations'**
+  /// **'Agent limitations'**
   String get agentAuthExamplesField;
 
   /// No description provided for @agentAuthExample1.
@@ -2339,7 +2339,7 @@ abstract class AppLocalizations {
   /// No description provided for @facilityPreferredTitle.
   ///
   /// In en, this message translates to:
-  /// **'Preferred Facilities'**
+  /// **'Preferred facilities'**
   String get facilityPreferredTitle;
 
   /// No description provided for @facilityPreferredSubtitle.
@@ -2351,7 +2351,7 @@ abstract class AppLocalizations {
   /// No description provided for @facilityAvoidTitle.
   ///
   /// In en, this message translates to:
-  /// **'Facilities to Avoid'**
+  /// **'Facilities to avoid'**
   String get facilityAvoidTitle;
 
   /// No description provided for @facilityAvoidSubtitle.
@@ -2501,7 +2501,7 @@ abstract class AppLocalizations {
   /// No description provided for @addlInstrExampleFieldName.
   ///
   /// In en, this message translates to:
-  /// **'Additional Instructions'**
+  /// **'Additional instructions'**
   String get addlInstrExampleFieldName;
 
   /// No description provided for @addlInstrExample1.
@@ -2525,7 +2525,7 @@ abstract class AppLocalizations {
   /// No description provided for @addlInstrActivitiesTitle.
   ///
   /// In en, this message translates to:
-  /// **'Activities & Environment'**
+  /// **'Activities & environment'**
   String get addlInstrActivitiesTitle;
 
   /// No description provided for @addlInstrActivitiesHint.
@@ -2543,7 +2543,7 @@ abstract class AppLocalizations {
   /// No description provided for @addlInstrCrisisTitle.
   ///
   /// In en, this message translates to:
-  /// **'Crisis Intervention'**
+  /// **'Crisis intervention'**
   String get addlInstrCrisisTitle;
 
   /// No description provided for @addlInstrCrisisHint.
@@ -2561,7 +2561,7 @@ abstract class AppLocalizations {
   /// No description provided for @addlInstrDeescTitle.
   ///
   /// In en, this message translates to:
-  /// **'De-escalation Techniques'**
+  /// **'De-escalation techniques'**
   String get addlInstrDeescTitle;
 
   /// No description provided for @addlInstrDeescHint.
@@ -2579,7 +2579,7 @@ abstract class AppLocalizations {
   /// No description provided for @addlInstrTriggersTitle.
   ///
   /// In en, this message translates to:
-  /// **'Potential Crisis Triggers'**
+  /// **'Potential crisis triggers'**
   String get addlInstrTriggersTitle;
 
   /// No description provided for @addlInstrTriggersHint.
@@ -2597,7 +2597,7 @@ abstract class AppLocalizations {
   /// No description provided for @addlInstrHealthHistoryTitle.
   ///
   /// In en, this message translates to:
-  /// **'Health History'**
+  /// **'Health history'**
   String get addlInstrHealthHistoryTitle;
 
   /// No description provided for @addlInstrHealthHistoryHint.
@@ -2615,7 +2615,7 @@ abstract class AppLocalizations {
   /// No description provided for @addlInstrDietaryTitle.
   ///
   /// In en, this message translates to:
-  /// **'Dietary Preferences'**
+  /// **'Dietary preferences'**
   String get addlInstrDietaryTitle;
 
   /// No description provided for @addlInstrDietaryHint.
@@ -2633,7 +2633,7 @@ abstract class AppLocalizations {
   /// No description provided for @addlInstrReligiousTitle.
   ///
   /// In en, this message translates to:
-  /// **'Religious & Spiritual'**
+  /// **'Religious & spiritual'**
   String get addlInstrReligiousTitle;
 
   /// No description provided for @addlInstrReligiousHint.
@@ -2651,7 +2651,7 @@ abstract class AppLocalizations {
   /// No description provided for @addlInstrChildrenTitle.
   ///
   /// In en, this message translates to:
-  /// **'Children & Custody'**
+  /// **'Children & custody'**
   String get addlInstrChildrenTitle;
 
   /// No description provided for @addlInstrChildrenHint.
@@ -2669,7 +2669,7 @@ abstract class AppLocalizations {
   /// No description provided for @addlInstrFamilyNotifyTitle.
   ///
   /// In en, this message translates to:
-  /// **'Family Notification'**
+  /// **'Family notification'**
   String get addlInstrFamilyNotifyTitle;
 
   /// No description provided for @addlInstrFamilyNotifyHint.
@@ -2687,7 +2687,7 @@ abstract class AppLocalizations {
   /// No description provided for @addlInstrPetCareTitle.
   ///
   /// In en, this message translates to:
-  /// **'Pet Care'**
+  /// **'Pet care'**
   String get addlInstrPetCareTitle;
 
   /// No description provided for @addlInstrPetCareHint.
@@ -2705,7 +2705,7 @@ abstract class AppLocalizations {
   /// No description provided for @addlInstrReproTitle.
   ///
   /// In en, this message translates to:
-  /// **'Reproductive Health Care'**
+  /// **'Reproductive health care'**
   String get addlInstrReproTitle;
 
   /// No description provided for @addlInstrReproHint.
@@ -2723,7 +2723,7 @@ abstract class AppLocalizations {
   /// No description provided for @addlInstrOtherTitle.
   ///
   /// In en, this message translates to:
-  /// **'Other Instructions'**
+  /// **'Other instructions'**
   String get addlInstrOtherTitle;
 
   /// No description provided for @addlInstrOtherHint.
@@ -2741,7 +2741,7 @@ abstract class AppLocalizations {
   /// No description provided for @addlInstrRecordsTitle.
   ///
   /// In en, this message translates to:
-  /// **'Records Disclosure & Limitations'**
+  /// **'Records disclosure & limitations'**
   String get addlInstrRecordsTitle;
 
   /// No description provided for @addlInstrRecordsDescription.
@@ -2867,7 +2867,7 @@ abstract class AppLocalizations {
   /// No description provided for @effCondExampleFieldName.
   ///
   /// In en, this message translates to:
-  /// **'Effective Condition'**
+  /// **'Effective condition'**
   String get effCondExampleFieldName;
 
   /// No description provided for @effCondExample1.
@@ -2921,13 +2921,13 @@ abstract class AppLocalizations {
   /// No description provided for @effCondDoctorNameLabel.
   ///
   /// In en, this message translates to:
-  /// **'Name of Doctor'**
+  /// **'Name of doctor'**
   String get effCondDoctorNameLabel;
 
   /// No description provided for @effCondDoctorContactLabel.
   ///
   /// In en, this message translates to:
-  /// **'Address / Phone Number'**
+  /// **'Address / phone number'**
   String get effCondDoctorContactLabel;
 
   /// No description provided for @consentChoiceEctSectionLabel.
@@ -3011,7 +3011,7 @@ abstract class AppLocalizations {
   /// No description provided for @consentChoiceExperimentalTitle.
   ///
   /// In en, this message translates to:
-  /// **'Experimental Studies'**
+  /// **'Experimental studies'**
   String get consentChoiceExperimentalTitle;
 
   /// No description provided for @consentChoiceExperimentalSubtitle.
@@ -3065,7 +3065,7 @@ abstract class AppLocalizations {
   /// No description provided for @consentChoiceDrugTrialsTitle.
   ///
   /// In en, this message translates to:
-  /// **'Drug Trials'**
+  /// **'Drug trials'**
   String get consentChoiceDrugTrialsTitle;
 
   /// No description provided for @consentChoiceDrugTrialsSubtitle.
@@ -3263,7 +3263,7 @@ abstract class AppLocalizations {
   /// No description provided for @wizardHelpLearnMore.
   ///
   /// In en, this message translates to:
-  /// **'Learn More'**
+  /// **'Learn more'**
   String get wizardHelpLearnMore;
 
   /// No description provided for @wizardHelpQuestionsContact.
@@ -3683,13 +3683,13 @@ abstract class AppLocalizations {
   /// No description provided for @aiSuggestDraftTitle.
   ///
   /// In en, this message translates to:
-  /// **'AI Draft'**
+  /// **'AI draft'**
   String get aiSuggestDraftTitle;
 
   /// No description provided for @aiSuggestSuggestionTitle.
   ///
   /// In en, this message translates to:
-  /// **'AI Suggestion'**
+  /// **'AI suggestion'**
   String get aiSuggestSuggestionTitle;
 
   /// No description provided for @aiSuggestYourText.
@@ -3767,7 +3767,7 @@ abstract class AppLocalizations {
   /// No description provided for @aiSuggestForFieldA11y.
   ///
   /// In en, this message translates to:
-  /// **'AI Suggest for {fieldName}'**
+  /// **'Wording help for {fieldName}'**
   String aiSuggestForFieldA11y(String fieldName);
 
   /// No description provided for @aiSuggestSetupA11y.
@@ -4259,19 +4259,19 @@ abstract class AppLocalizations {
   /// No description provided for @pipelineTitleReview.
   ///
   /// In en, this message translates to:
-  /// **'Review Extracted Data'**
+  /// **'Review extracted data'**
   String get pipelineTitleReview;
 
   /// No description provided for @pipelineTitleGenerating.
   ///
   /// In en, this message translates to:
-  /// **'Generating Suggestions'**
+  /// **'Generating suggestions'**
   String get pipelineTitleGenerating;
 
   /// No description provided for @pipelineTitleResults.
   ///
   /// In en, this message translates to:
-  /// **'AI Suggestions'**
+  /// **'AI suggestions'**
   String get pipelineTitleResults;
 
   /// No description provided for @pipelinePickerFailed.
@@ -4613,25 +4613,25 @@ abstract class AppLocalizations {
   /// No description provided for @reviewLabelMedPrefer.
   ///
   /// In en, this message translates to:
-  /// **'Preferred Medication'**
+  /// **'Preferred medication'**
   String get reviewLabelMedPrefer;
 
   /// No description provided for @reviewLabelMedAvoid.
   ///
   /// In en, this message translates to:
-  /// **'Medication to Avoid'**
+  /// **'Medication to avoid'**
   String get reviewLabelMedAvoid;
 
   /// No description provided for @reviewLabelMedCurrent.
   ///
   /// In en, this message translates to:
-  /// **'Currently Taking'**
+  /// **'Currently taking'**
   String get reviewLabelMedCurrent;
 
   /// No description provided for @reviewLabelMedLimit.
   ///
   /// In en, this message translates to:
-  /// **'Restricted-Use Medication'**
+  /// **'Restricted-use medication'**
   String get reviewLabelMedLimit;
 
   /// No description provided for @reviewLabelCond.
@@ -4655,7 +4655,7 @@ abstract class AppLocalizations {
   /// No description provided for @reviewLabelHh.
   ///
   /// In en, this message translates to:
-  /// **'Health History'**
+  /// **'Health history'**
   String get reviewLabelHh;
 
   /// No description provided for @reviewLabelEffectiveCondition.
@@ -4667,13 +4667,13 @@ abstract class AppLocalizations {
   /// No description provided for @reviewLabelFacilityPrefer.
   ///
   /// In en, this message translates to:
-  /// **'Preferred Facility'**
+  /// **'Preferred facility'**
   String get reviewLabelFacilityPrefer;
 
   /// No description provided for @reviewLabelFacilityAvoid.
   ///
   /// In en, this message translates to:
-  /// **'Facility to Avoid'**
+  /// **'Facility to avoid'**
   String get reviewLabelFacilityAvoid;
 
   /// No description provided for @reviewLabelDietary.
@@ -4685,7 +4685,7 @@ abstract class AppLocalizations {
   /// No description provided for @reviewLabelReligious.
   ///
   /// In en, this message translates to:
-  /// **'Religious/Cultural'**
+  /// **'Religious/cultural'**
   String get reviewLabelReligious;
 
   /// No description provided for @reviewLabelActivities.
@@ -4697,7 +4697,7 @@ abstract class AppLocalizations {
   /// No description provided for @reviewLabelCrisis.
   ///
   /// In en, this message translates to:
-  /// **'Crisis Intervention'**
+  /// **'Crisis intervention'**
   String get reviewLabelCrisis;
 
   /// No description provided for @reviewLabelCrisisPlan.
@@ -5069,25 +5069,25 @@ abstract class AppLocalizations {
   /// No description provided for @reviewSectionMedPrefer.
   ///
   /// In en, this message translates to:
-  /// **'Preferred Meds'**
+  /// **'Preferred meds'**
   String get reviewSectionMedPrefer;
 
   /// No description provided for @reviewSectionMedAvoid.
   ///
   /// In en, this message translates to:
-  /// **'Meds to Avoid'**
+  /// **'Meds to avoid'**
   String get reviewSectionMedAvoid;
 
   /// No description provided for @reviewSectionMedCurrent.
   ///
   /// In en, this message translates to:
-  /// **'Currently Taking'**
+  /// **'Currently taking'**
   String get reviewSectionMedCurrent;
 
   /// No description provided for @reviewSectionMedLimit.
   ///
   /// In en, this message translates to:
-  /// **'Restricted-Use Meds'**
+  /// **'Restricted-use meds'**
   String get reviewSectionMedLimit;
 
   /// No description provided for @reviewSectionCond.
@@ -5111,7 +5111,7 @@ abstract class AppLocalizations {
   /// No description provided for @reviewSectionHh.
   ///
   /// In en, this message translates to:
-  /// **'Health History'**
+  /// **'Health history'**
   String get reviewSectionHh;
 
   /// No description provided for @reviewSectionEffectiveCondition.
@@ -5135,7 +5135,7 @@ abstract class AppLocalizations {
   /// No description provided for @reviewSectionAgentAuthority.
   ///
   /// In en, this message translates to:
-  /// **'Agent Authority'**
+  /// **'Agent authority'**
   String get reviewSectionAgentAuthority;
 
   /// No description provided for @reviewSectionUlyssesOptin.
@@ -5147,7 +5147,7 @@ abstract class AppLocalizations {
   /// No description provided for @reviewSectionCrisisPlan.
   ///
   /// In en, this message translates to:
-  /// **'Crisis Plan'**
+  /// **'Crisis plan'**
   String get reviewSectionCrisisPlan;
 
   /// No description provided for @reviewSectionConsent.
@@ -5159,7 +5159,7 @@ abstract class AppLocalizations {
   /// No description provided for @reviewSectionRoomPreferences.
   ///
   /// In en, this message translates to:
-  /// **'Room Preferences'**
+  /// **'Room preferences'**
   String get reviewSectionRoomPreferences;
 
   /// No description provided for @reviewSectionAltAgent.
@@ -5381,13 +5381,13 @@ abstract class AppLocalizations {
   /// No description provided for @reviewAutofillInformation.
   ///
   /// In en, this message translates to:
-  /// **'Autofill Information'**
+  /// **'Autofill information'**
   String get reviewAutofillInformation;
 
   /// No description provided for @reviewApplyAll.
   ///
   /// In en, this message translates to:
-  /// **'Apply All'**
+  /// **'Apply all'**
   String get reviewApplyAll;
 
   /// No description provided for @reviewDiscardAll.
@@ -6305,7 +6305,7 @@ abstract class AppLocalizations {
   /// No description provided for @pinDialogCreatePasscode.
   ///
   /// In en, this message translates to:
-  /// **'Create Passcode'**
+  /// **'Create passcode'**
   String get pinDialogCreatePasscode;
 
   /// No description provided for @pinDialogBiometricAuthenticationIsNotAvailable.
@@ -6359,7 +6359,7 @@ abstract class AppLocalizations {
   /// No description provided for @pinDialogConfirmPasscode.
   ///
   /// In en, this message translates to:
-  /// **'Confirm Passcode'**
+  /// **'Confirm passcode'**
   String get pinDialogConfirmPasscode;
 
   /// No description provided for @pinDialogUseYour.
@@ -6761,25 +6761,25 @@ abstract class AppLocalizations {
   /// No description provided for @exportIncompleteDirective.
   ///
   /// In en, this message translates to:
-  /// **'Incomplete Directive'**
+  /// **'Incomplete directive'**
   String get exportIncompleteDirective;
 
   /// No description provided for @exportGoBack.
   ///
   /// In en, this message translates to:
-  /// **'Go Back'**
+  /// **'Go back'**
   String get exportGoBack;
 
   /// No description provided for @exportEditDirective.
   ///
   /// In en, this message translates to:
-  /// **'Edit Directive'**
+  /// **'Edit directive'**
   String get exportEditDirective;
 
   /// No description provided for @exportExportAnyway.
   ///
   /// In en, this message translates to:
-  /// **'Export Anyway'**
+  /// **'Export anyway'**
   String get exportExportAnyway;
 
   /// No description provided for @exportExportedFileIsNotEncrypted.
@@ -6833,7 +6833,7 @@ abstract class AppLocalizations {
   /// No description provided for @exportAdditionalPages.
   ///
   /// In en, this message translates to:
-  /// **'Additional Pages:'**
+  /// **'Additional pages:'**
   String get exportAdditionalPages;
 
   /// No description provided for @exportPrintABlankFormFill.
@@ -6983,7 +6983,7 @@ abstract class AppLocalizations {
   /// No description provided for @exportSupplementaryLegalInformation.
   ///
   /// In en, this message translates to:
-  /// **'Supplementary Legal Information'**
+  /// **'Supplementary legal information'**
   String get exportSupplementaryLegalInformation;
 
   /// No description provided for @exportAdditionalLegalReferenceInformation.
@@ -6995,7 +6995,7 @@ abstract class AppLocalizations {
   /// No description provided for @exportDistributionChecklistNotes.
   ///
   /// In en, this message translates to:
-  /// **'Distribution Checklist & Notes'**
+  /// **'Distribution checklist & notes'**
   String get exportDistributionChecklistNotes;
 
   /// No description provided for @exportBlankPagesForHandwrittenNotes.
@@ -7121,7 +7121,7 @@ abstract class AppLocalizations {
   /// No description provided for @aiSetupStep1OpenAPrivate.
   ///
   /// In en, this message translates to:
-  /// **'Step 1: Open a Private/Incognito Window'**
+  /// **'Step 1: Open a private/incognito window'**
   String get aiSetupStep1OpenAPrivate;
 
   /// No description provided for @aiSetupYouLlNeedToSign.
@@ -7145,13 +7145,13 @@ abstract class AppLocalizations {
   /// No description provided for @aiSetupPrivacyNotice.
   ///
   /// In en, this message translates to:
-  /// **'Privacy Notice'**
+  /// **'Privacy notice'**
   String get aiSetupPrivacyNotice;
 
   /// No description provided for @aiSetupHowYourDataIsHandled.
   ///
   /// In en, this message translates to:
-  /// **'How Your Data Is Handled'**
+  /// **'How your data is handled'**
   String get aiSetupHowYourDataIsHandled;
 
   /// No description provided for @aiSetupYourDirectiveDataIsHeld.
@@ -7163,7 +7163,7 @@ abstract class AppLocalizations {
   /// No description provided for @aiSetupCommonQuestions.
   ///
   /// In en, this message translates to:
-  /// **'Common Questions'**
+  /// **'Common questions'**
   String get aiSetupCommonQuestions;
 
   /// No description provided for @aiSetupRemoveApiKey2.
@@ -7325,25 +7325,25 @@ abstract class AppLocalizations {
   /// No description provided for @privacyPolicyPrivacyPolicy.
   ///
   /// In en, this message translates to:
-  /// **'Privacy Policy'**
+  /// **'Privacy policy'**
   String get privacyPolicyPrivacyPolicy;
 
   /// No description provided for @privacyPolicyPaMhadAppPrivacyPolicy.
   ///
   /// In en, this message translates to:
-  /// **'PA MHAD App Privacy Policy'**
+  /// **'PA MHAD privacy policy'**
   String get privacyPolicyPaMhadAppPrivacyPolicy;
 
   /// No description provided for @privacyPolicyReviewLegalDisclaimer.
   ///
   /// In en, this message translates to:
-  /// **'Review Legal Disclaimer'**
+  /// **'Review legal disclaimer'**
   String get privacyPolicyReviewLegalDisclaimer;
 
   /// No description provided for @privacyPolicyDataWeCollect.
   ///
   /// In en, this message translates to:
-  /// **'Data We Collect'**
+  /// **'Data we collect'**
   String get privacyPolicyDataWeCollect;
 
   /// No description provided for @privacyPolicyThisAppCollectsOnlyThe.
@@ -7355,7 +7355,7 @@ abstract class AppLocalizations {
   /// No description provided for @privacyPolicyHowDataIsStoredProtected.
   ///
   /// In en, this message translates to:
-  /// **'How Data Is Stored & Protected'**
+  /// **'How data is stored & protected'**
   String get privacyPolicyHowDataIsStoredProtected;
 
   /// No description provided for @privacyPolicyYourDirectiveDataIsNot.
@@ -7367,7 +7367,7 @@ abstract class AppLocalizations {
   /// No description provided for @privacyPolicyAiFeaturesThirdPartyData.
   ///
   /// In en, this message translates to:
-  /// **'AI Features & Third-Party Data Sharing'**
+  /// **'AI features & third-party data sharing'**
   String get privacyPolicyAiFeaturesThirdPartyData;
 
   /// No description provided for @privacyPolicyIfYouChooseToUse.
@@ -7379,7 +7379,7 @@ abstract class AppLocalizations {
   /// No description provided for @privacyPolicyGeminiFreeTierDataPractices.
   ///
   /// In en, this message translates to:
-  /// **'Gemini Free Tier Data Practices'**
+  /// **'Gemini free tier data practices'**
   String get privacyPolicyGeminiFreeTierDataPractices;
 
   /// No description provided for @privacyPolicyIfYouUseTheAi.
@@ -7427,7 +7427,7 @@ abstract class AppLocalizations {
   /// No description provided for @privacyPolicyPdfExportSharing.
   ///
   /// In en, this message translates to:
-  /// **'PDF Export & Sharing'**
+  /// **'PDF export & sharing'**
   String get privacyPolicyPdfExportSharing;
 
   /// No description provided for @privacyPolicyWhenYouExportAPdf.
@@ -7439,7 +7439,7 @@ abstract class AppLocalizations {
   /// No description provided for @privacyPolicyYourRights.
   ///
   /// In en, this message translates to:
-  /// **'Your Rights'**
+  /// **'Your rights'**
   String get privacyPolicyYourRights;
 
   /// No description provided for @privacyPolicyYouCanDeleteAnyDirective.
@@ -7451,7 +7451,7 @@ abstract class AppLocalizations {
   /// No description provided for @privacyPolicyNoThirdPartyTracking.
   ///
   /// In en, this message translates to:
-  /// **'No Third-Party Tracking'**
+  /// **'No third-party tracking'**
   String get privacyPolicyNoThirdPartyTracking;
 
   /// No description provided for @privacyPolicyThisAppDoesNotInclude.
@@ -7463,7 +7463,7 @@ abstract class AppLocalizations {
   /// No description provided for @privacyPolicyHipaaCompliance.
   ///
   /// In en, this message translates to:
-  /// **'HIPAA & Compliance'**
+  /// **'HIPAA & compliance'**
   String get privacyPolicyHipaaCompliance;
 
   /// No description provided for @privacyPolicyThisAppIsNotHipaa.
@@ -7475,7 +7475,7 @@ abstract class AppLocalizations {
   /// No description provided for @privacyPolicyBreachNotification.
   ///
   /// In en, this message translates to:
-  /// **'Breach Notification'**
+  /// **'Breach notification'**
   String get privacyPolicyBreachNotification;
 
   /// No description provided for @privacyPolicyInAccordanceWithTheFtc.
@@ -7499,7 +7499,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsScreenshotProtection.
   ///
   /// In en, this message translates to:
-  /// **'Screenshot Protection'**
+  /// **'Screenshot protection'**
   String get settingsScreenshotProtection;
 
   /// No description provided for @settingsAdminToolTitle.
@@ -7577,7 +7577,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsLegalDisclaimer.
   ///
   /// In en, this message translates to:
-  /// **'Legal Disclaimer'**
+  /// **'Legal disclaimer'**
   String get settingsLegalDisclaimer;
 
   /// No description provided for @settingsTermsLimitationsAndYourLegal.
@@ -8789,7 +8789,7 @@ abstract class AppLocalizations {
   /// No description provided for @aiConsentDialogAiDataNotice.
   ///
   /// In en, this message translates to:
-  /// **'AI Data Notice'**
+  /// **'AI data notice'**
   String get aiConsentDialogAiDataNotice;
 
   /// No description provided for @aiConsentDialogImportantPleaseReadBeforeContinuing.
@@ -8813,13 +8813,13 @@ abstract class AppLocalizations {
   /// No description provided for @aiConsentDialogNotNow.
   ///
   /// In en, this message translates to:
-  /// **'Not Now'**
+  /// **'Not now'**
   String get aiConsentDialogNotNow;
 
   /// No description provided for @aiConsentDialogIAuthorize.
   ///
   /// In en, this message translates to:
-  /// **'I Authorize'**
+  /// **'I authorize'**
   String get aiConsentDialogIAuthorize;
 
   /// No description provided for @addressFieldsTapTheIconToFill.
@@ -8927,7 +8927,7 @@ abstract class AppLocalizations {
   /// No description provided for @aiConsistencyEditMedications.
   ///
   /// In en, this message translates to:
-  /// **'Edit Medications'**
+  /// **'Edit medications'**
   String get aiConsistencyEditMedications;
 
   /// No description provided for @aiConsistencyEditAgentAuthority.
@@ -9359,7 +9359,7 @@ abstract class AppLocalizations {
   /// No description provided for @assistantSenderAi.
   ///
   /// In en, this message translates to:
-  /// **'AI Assistant'**
+  /// **'AI assistant'**
   String get assistantSenderAi;
 
   /// No description provided for @aiSetupApiKeySetForThis.
@@ -9377,13 +9377,13 @@ abstract class AppLocalizations {
   /// No description provided for @aiSetupGetYourFreeGeminiApi.
   ///
   /// In en, this message translates to:
-  /// **'Get Your Free Gemini API Key'**
+  /// **'Get your free Gemini API key'**
   String get aiSetupGetYourFreeGeminiApi;
 
   /// No description provided for @aiSetupAddYourApiKey.
   ///
   /// In en, this message translates to:
-  /// **'Add Your {label} API Key'**
+  /// **'Add your {label} API key'**
   String aiSetupAddYourApiKey(Object label);
 
   /// No description provided for @aiSetupTheAssistantUsesGoogleS.
@@ -9485,13 +9485,13 @@ abstract class AppLocalizations {
   /// No description provided for @aiSetupUseKeyForThisSession.
   ///
   /// In en, this message translates to:
-  /// **'Use Key for This Session'**
+  /// **'Use key for this session'**
   String get aiSetupUseKeyForThisSession;
 
   /// No description provided for @aiSetupSaveApiKey.
   ///
   /// In en, this message translates to:
-  /// **'Save API Key'**
+  /// **'Save API key'**
   String get aiSetupSaveApiKey;
 
   /// No description provided for @aiSetupTesting.
@@ -9533,7 +9533,7 @@ abstract class AppLocalizations {
   /// No description provided for @aiSetupApiKey.
   ///
   /// In en, this message translates to:
-  /// **'{label} API Key'**
+  /// **'{label} API key'**
   String aiSetupApiKey(Object label);
 
   /// No description provided for @adminUpdateBlankUseTheAppS.
@@ -10522,7 +10522,7 @@ abstract class AppLocalizations {
   /// No description provided for @eduBrowseCombinedForm.
   ///
   /// In en, this message translates to:
-  /// **'Combined Form'**
+  /// **'Combined form'**
   String get eduBrowseCombinedForm;
 
   /// No description provided for @eduBrowseBothAnAgentAndTreatment.
@@ -10552,7 +10552,7 @@ abstract class AppLocalizations {
   /// No description provided for @eduBrowseFrequentlyAsked.
   ///
   /// In en, this message translates to:
-  /// **'Frequently Asked'**
+  /// **'Frequently asked'**
   String get eduBrowseFrequentlyAsked;
 
   /// No description provided for @eduBrowseCommonQuestionsAboutMhads.
@@ -10576,7 +10576,7 @@ abstract class AppLocalizations {
   /// No description provided for @eduBrowseBeyondTheBooklet.
   ///
   /// In en, this message translates to:
-  /// **'Beyond the Booklet'**
+  /// **'Beyond the booklet'**
   String get eduBrowseBeyondTheBooklet;
 
   /// No description provided for @eduBrowseTopicsNotCoveredInThe.
@@ -10588,7 +10588,7 @@ abstract class AppLocalizations {
   /// No description provided for @eduBrowseYourChecklist.
   ///
   /// In en, this message translates to:
-  /// **'Your Checklist'**
+  /// **'Your checklist'**
   String get eduBrowseYourChecklist;
 
   /// No description provided for @eduBrowseStepByStepDistributionRevocation.
@@ -10690,7 +10690,7 @@ abstract class AppLocalizations {
   /// No description provided for @deviceSecurityWarningTitle.
   ///
   /// In en, this message translates to:
-  /// **'Device Security Warning'**
+  /// **'Device security warning'**
   String get deviceSecurityWarningTitle;
 
   /// No description provided for @deviceSecurityWarningBody.
@@ -10702,7 +10702,7 @@ abstract class AppLocalizations {
   /// No description provided for @deviceSecurityIUnderstand.
   ///
   /// In en, this message translates to:
-  /// **'I Understand'**
+  /// **'I understand'**
   String get deviceSecurityIUnderstand;
 
   /// No description provided for @blankFormPrintTitle.
@@ -10882,7 +10882,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeHeroYourMhad.
   ///
   /// In en, this message translates to:
-  /// **'Your MHAD'**
+  /// **'Your directive'**
   String get homeHeroYourMhad;
 
   /// No description provided for @educationNoResultsFound.
@@ -13054,7 +13054,7 @@ abstract class AppLocalizations {
   /// No description provided for @privacyPolicyOutsideAiServices.
   ///
   /// In en, this message translates to:
-  /// **'Outside AI Services'**
+  /// **'Outside AI services'**
   String get privacyPolicyOutsideAiServices;
 
   /// No description provided for @privacyPolicyIfYouUseTheAiHandoff.

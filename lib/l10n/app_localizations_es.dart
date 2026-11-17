@@ -105,7 +105,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get poaOnly => 'Solo Poder Notarial';
 
   @override
-  String get personalInfo => 'Información Personal';
+  String get personalInfo => 'Información personal';
 
   @override
   String get fullName => 'Nombre completo';
@@ -147,13 +147,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get drugTrials => 'Ensayos Clínicos';
 
   @override
-  String get additionalInstructions => 'Instrucciones Adicionales';
+  String get additionalInstructions => 'Instrucciones adicionales';
 
   @override
   String get agentDesignation => 'Designación de Agente';
 
   @override
-  String get alternateAgent => 'Agente Alternativo';
+  String get alternateAgent => 'Agente alternativo';
 
   @override
   String get agentAuthority => 'Autoridad y Límites del Agente';
@@ -6508,7 +6508,7 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get homeHeroYourMhad => 'Su DASM';
+  String get homeHeroYourMhad => 'Su directiva';
 
   @override
   String get educationNoResultsFound => 'No se encontraron resultados.';
