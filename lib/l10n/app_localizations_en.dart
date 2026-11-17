@@ -7276,4 +7276,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tabPagePast => 'Past directive';
+
+  @override
+  String get homeOtherWaysToStart => 'Other ways to start';
+
+  @override
+  String get homeStartUploadBody =>
+      'Have an earlier directive or form? Upload it to fill in matching answers, then review each one.';
+
+  @override
+  String get homeStartUploadCta => 'Upload a document';
+
+  @override
+  String get homeStartResumeBody =>
+      'Open a directive file you saved from this app earlier and pick up where you left off.';
+
+  @override
+  String get homeStartResumeCta => 'Open a file';
 }

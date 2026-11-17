@@ -7396,4 +7396,21 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get tabPagePast => 'Directiva anterior';
+
+  @override
+  String get homeOtherWaysToStart => 'Otras formas de comenzar';
+
+  @override
+  String get homeStartUploadBody =>
+      '¿Tiene una directiva o un formulario anterior? Súbalo para completar las respuestas que coincidan y luego revise cada una.';
+
+  @override
+  String get homeStartUploadCta => 'Subir un documento';
+
+  @override
+  String get homeStartResumeBody =>
+      'Abra un archivo de directiva que guardó antes desde esta aplicación y continúe donde lo dejó.';
+
+  @override
+  String get homeStartResumeCta => 'Abrir un archivo';
 }

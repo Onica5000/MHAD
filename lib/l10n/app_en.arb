@@ -3024,5 +3024,10 @@
   "tabPageRevoke": "Revoke a directive",
   "tabPageFindable": "Make it findable",
   "tabPageAiCheck": "AI consistency check",
-  "tabPagePast": "Past directive"
+  "tabPagePast": "Past directive",
+  "homeOtherWaysToStart": "Other ways to start",
+  "homeStartUploadBody": "Have an earlier directive or form? Upload it to fill in matching answers, then review each one.",
+  "homeStartUploadCta": "Upload a document",
+  "homeStartResumeBody": "Open a directive file you saved from this app earlier and pick up where you left off.",
+  "homeStartResumeCta": "Open a file"
 }

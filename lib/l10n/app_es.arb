@@ -2034,5 +2034,10 @@
   "tabPageRevoke": "Revocar una directiva",
   "tabPageFindable": "Hágala fácil de encontrar",
   "tabPageAiCheck": "Revisión de coherencia con IA",
-  "tabPagePast": "Directiva anterior"
+  "tabPagePast": "Directiva anterior",
+  "homeOtherWaysToStart": "Otras formas de comenzar",
+  "homeStartUploadBody": "¿Tiene una directiva o un formulario anterior? Súbalo para completar las respuestas que coincidan y luego revise cada una.",
+  "homeStartUploadCta": "Subir un documento",
+  "homeStartResumeBody": "Abra un archivo de directiva que guardó antes desde esta aplicación y continúe donde lo dejó.",
+  "homeStartResumeCta": "Abrir un archivo"
 }

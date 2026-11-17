@@ -59,7 +59,8 @@ class ArtImage extends StatelessWidget {
 
   /// Test hook: when true, ArtImage paints only its tinted placeholder and
   /// never decodes a real asset — widget tests stay fast and deterministic
-  /// (set globally in test/flutter_test_config.dart; review R12).
+  /// (set globally in test/flutter_test_config.dart; review R12). The widget
+  /// tree keeps its production shape, so layout bugs still show in tests.
   static bool debugUsePlaceholders = false;
 
   /// Width used when a caller puts an ArtImage with no [width] inside a
@@ -77,6 +78,10 @@ class ArtImage extends StatelessWidget {
     final dpr = MediaQuery.devicePixelRatioOf(context);
 
     final image = LayoutBuilder(builder: (context, box) {
+      // Tests: keep the SAME widget structure (this LayoutBuilder included,
+      // so IntrinsicHeight/unbounded-layout problems still surface) but skip
+      // the decode.
+      if (debugUsePlaceholders) return const SizedBox.expand();
       final w = box.hasBoundedWidth ? box.maxWidth : (width ?? 400);
       final h = box.hasBoundedHeight ? box.maxHeight : w / art.aspectRatio;
       // Cover-cropping a wide image into a tall box scales it by HEIGHT, so
@@ -116,7 +121,7 @@ class ArtImage extends StatelessWidget {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            if (!debugUsePlaceholders) image,
+            image,
             if (dark) const ColoredBox(color: _darkDim),
           ],
         ),

@@ -12342,6 +12342,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Past directive'**
   String get tabPagePast;
+
+  /// No description provided for @homeOtherWaysToStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Other ways to start'**
+  String get homeOtherWaysToStart;
+
+  /// No description provided for @homeStartUploadBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Have an earlier directive or form? Upload it to fill in matching answers, then review each one.'**
+  String get homeStartUploadBody;
+
+  /// No description provided for @homeStartUploadCta.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload a document'**
+  String get homeStartUploadCta;
+
+  /// No description provided for @homeStartResumeBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Open a directive file you saved from this app earlier and pick up where you left off.'**
+  String get homeStartResumeBody;
+
+  /// No description provided for @homeStartResumeCta.
+  ///
+  /// In en, this message translates to:
+  /// **'Open a file'**
+  String get homeStartResumeCta;
 }
 
 class _AppLocalizationsDelegate
