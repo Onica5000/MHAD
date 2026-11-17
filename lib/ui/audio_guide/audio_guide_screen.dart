@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/editorial_heading.dart';
+import 'package:mhad/ui/widgets/design/page_hero.dart';
+import 'package:mhad/ui/theme/app_art.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/ui/widgets/design/design_card.dart';
 import 'package:mhad/data/audio_questionnaire_content.dart';
@@ -36,18 +39,19 @@ class AudioGuideScreen extends StatelessWidget {
     final p = Theme.of(context).mhadPalette;
     return Scaffold(
       backgroundColor: p.scaffoldBackground,
-      appBar: AppBar(title: Text(context.l10n.audioGuideRecordYourWishesByVoice)),
+      // Slim app bar (back only): the photo header below carries the
+      // title once, large, instead of twice.
+      appBar: AppBar(),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(20, 16, 20, 40),
         children: [
-          Text(
-            context.l10n.audioGuideDescribeYourWishesOutLoud,
-            style: TextStyle(
-              fontFamily: kSansFamily,
-              fontSize: 16,
-              height: 1.5,
-              color: p.text,
+          PageHero(
+            art: AppArt.flowAudio,
+            title: EditorialHeading(
+              text: context.l10n.audioGuideRecordYourWishesByVoice,
+              size: 32,
             ),
+            lead: context.l10n.audioGuideDescribeYourWishesOutLoud,
           ),
           const SizedBox(height: 16),
           SizedBox(

@@ -1,4 +1,6 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/page_hero.dart';
+import 'package:mhad/ui/theme/app_art.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/domain/model/directive.dart';
@@ -79,30 +81,29 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
         ? SemanticColors.warningTextDark
         : SemanticColors.warningTextLight;
 
-    return ListView(
+    // Sign is a full-bleed route: centre a reading column (~760px) with
+    // padding so the instructions don't stretch across a wide monitor.
+    return LayoutBuilder(builder: (context, box) {
+      final side = box.maxWidth > 800 ? (box.maxWidth - 760) / 2 : 20.0;
+      return ListView(
       padding: widget.embedded
           ? const EdgeInsets.symmetric(horizontal: 4)
-          : const EdgeInsets.fromLTRB(20, 8, 20, 32),
+          : EdgeInsets.fromLTRB(side, 8, side, 32),
       children: [
         WizardHelpButton(
           helpText: context.l10n.executionHelpText,
           stepId: 'execution',
         ),
         const SizedBox(height: 8),
-        SectionLabel(context.l10n.executionFinalStepLabel),
-        EditorialHeading(
-          text: context.l10n.executionHeading,
-          size: 32,
-        ),
-        const SizedBox(height: 6),
-        Text(
-          context.l10n.executionIntro,
-          style: TextStyle(
-            fontFamily: kSansFamily,
-            fontSize: 14,
-            color: p.textMuted,
-            height: 1.5,
+        // Photo header: signing with two witnesses.
+        PageHero(
+          art: AppArt.flowSign,
+          eyebrow: context.l10n.executionFinalStepLabel,
+          title: EditorialHeading(
+            text: context.l10n.executionHeading,
+            size: 32,
           ),
+          lead: context.l10n.executionIntro,
         ),
         const SizedBox(height: 16),
         // Why not sign in the app — info pill.
@@ -285,6 +286,7 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
         ),
       ],
     );
+    });
   }
 }
 
