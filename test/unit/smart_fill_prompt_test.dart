@@ -58,7 +58,7 @@ void main() {
 
     test('always includes the BINDING consent block with all four consents',
         () {
-      final prompt = service.buildPrompt(input());
+      final prompt = SmartFillService.buildPrompt(input());
       expect(prompt,
           contains('=== CONSENT DECISIONS (BINDING — do NOT contradict) ==='));
       expect(prompt, contains('Medication consent:'));
@@ -69,7 +69,7 @@ void main() {
     });
 
     test('a conditional consent carries its restriction into the prompt', () {
-      final prompt = service.buildPrompt(input(
+      final prompt = SmartFillService.buildPrompt(input(
           ectConsent: '${consentConditionalPrefix}only after two opinions'));
       expect(prompt,
           contains('CONDITIONAL — user consents only if: only after two'));
@@ -77,11 +77,11 @@ void main() {
 
     test('agent-authority lines appear for combined/poa but not declaration',
         () {
-      final combined = service.buildPrompt(input(formType: 'combined'));
+      final combined = SmartFillService.buildPrompt(input(formType: 'combined'));
       expect(combined, contains('Agent consent to hospitalization:'));
       expect(combined, contains('"agent_guidance"'));
 
-      final declaration = service.buildPrompt(input(formType: 'declaration'));
+      final declaration = SmartFillService.buildPrompt(input(formType: 'declaration'));
       expect(declaration, isNot(contains('Agent consent to hospitalization:')));
       expect(declaration, isNot(contains('"agent_guidance"')),
           reason: 'a declaration has no agent, so the agent field must be '
@@ -89,7 +89,7 @@ void main() {
     });
 
     test('clinical inputs are carried through', () {
-      final prompt = service.buildPrompt(input());
+      final prompt = SmartFillService.buildPrompt(input());
       expect(prompt, contains('F31.9 Bipolar'));
       expect(prompt, contains('Current meds: Lamotrigine'));
       expect(prompt, contains('Avoid meds: Haloperidol'));
@@ -97,7 +97,7 @@ void main() {
 
     test('free-text wizard fields are PII-stripped before entering the prompt',
         () {
-      final prompt = service.buildPrompt(input(
+      final prompt = SmartFillService.buildPrompt(input(
           healthHistory: 'Hospitalized 2021. Contact Dr. Reyes at '
               '555-867-5309 or reyes@example.com.'));
       expect(prompt, contains('Health history:'));
@@ -108,7 +108,7 @@ void main() {
     });
 
     test('medication list entries are PII-stripped too', () {
-      final prompt = service.buildPrompt(SmartFillInput(
+      final prompt = SmartFillService.buildPrompt(SmartFillInput(
         conditions: const [IcdCondition(code: 'F31.9', name: 'Bipolar')],
         currentMedications: const [
           'Lamotrigine',

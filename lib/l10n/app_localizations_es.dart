@@ -7821,4 +7821,14 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get aiCheckHandoffSubtitle =>
       'Opcional. Su IA revisa un resumen de su directiva (sin datos de identificación) en busca de vacíos y cosas que conviene revisar. La revisión integrada de arriba siempre se hace.';
+
+  @override
+  String get smartFillHandoffTitle => 'Sugerencias de IA para sus preferencias';
+
+  @override
+  String get smartFillHandoffPanelTitle => 'Pida sugerencias a su IA';
+
+  @override
+  String get smartFillHandoffSubtitle =>
+      'Según las afecciones y los medicamentos encontrados (sin datos de identificación). Usted revisa cada sugerencia antes de que se agregue.';
 }

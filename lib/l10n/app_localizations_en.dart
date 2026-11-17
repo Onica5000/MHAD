@@ -7694,4 +7694,14 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get aiCheckHandoffSubtitle =>
       'Optional. Your AI reviews a summary of your directive (identifying details removed) for gaps and anything to double-check. The built-in check above always runs.';
+
+  @override
+  String get smartFillHandoffTitle => 'AI suggestions for your preferences';
+
+  @override
+  String get smartFillHandoffPanelTitle => 'Ask your AI for suggestions';
+
+  @override
+  String get smartFillHandoffSubtitle =>
+      'Based on the conditions and medications found (identifying details removed). You review every suggestion before it\'s added.';
 }

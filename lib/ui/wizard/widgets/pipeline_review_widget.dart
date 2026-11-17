@@ -1006,7 +1006,10 @@ extension _PipelineReviewUi on _PipelineScreenState {
                   _reviewEdited[it.key] = addValue;
                 });
               }),
-              if (!isIdentity)
+              // "Consolidate" asks the API-key AI to merge both values: an
+              // API-only extra, hidden with the API path (keep / replace / add
+              // both / edit still resolve every conflict).
+              if (!isIdentity && appData.ai.apiModeVisible)
                 busy
                     ? const Padding(
                         padding:

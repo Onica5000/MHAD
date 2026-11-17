@@ -13044,6 +13044,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Optional. Your AI reviews a summary of your directive (identifying details removed) for gaps and anything to double-check. The built-in check above always runs.'**
   String get aiCheckHandoffSubtitle;
+
+  /// No description provided for @smartFillHandoffTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'AI suggestions for your preferences'**
+  String get smartFillHandoffTitle;
+
+  /// No description provided for @smartFillHandoffPanelTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask your AI for suggestions'**
+  String get smartFillHandoffPanelTitle;
+
+  /// No description provided for @smartFillHandoffSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Based on the conditions and medications found (identifying details removed). You review every suggestion before it\'s added.'**
+  String get smartFillHandoffSubtitle;
 }
 
 class _AppLocalizationsDelegate
