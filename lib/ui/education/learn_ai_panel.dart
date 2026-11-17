@@ -204,6 +204,7 @@ class _LearnAiPanelState extends ConsumerState<LearnAiPanel> {
                         ),
                         const SizedBox(width: 8),
                         IconButton.filled(
+                          tooltip: context.l10n.assistantSend,
                           onPressed:
                               isSending ? null : () => _send(_inputCtrl.text),
                           icon: const Icon(Icons.send, size: 18),

@@ -7,9 +7,15 @@ import 'package:flutter_test/flutter_test.dart';
 ///
 /// "Has a label" means one of:
 ///   - the `IconButton` itself has a `tooltip:` parameter, OR
-///   - the `IconButton` is wrapped (anywhere in the same chunk of code) by a
-///     `Tooltip(message: ...)`, OR
-///   - the `IconButton` is wrapped by a `Semantics(label: ...)`.
+///   - it sits inside a `MergeSemantics(...)` together with a
+///     `Tooltip(message: ...)` or a `Semantics(label: ...)`.
+///
+/// A wrapper label WITHOUT MergeSemantics does not count (2026-11-17): the
+/// IconButton still makes its own button node, and that node is NAMELESS
+/// (the voice-dictation mic read as just "button"). The named constructors
+/// (`IconButton.filled(` / `.filledTonal(` / `.outlined(`) are audited too —
+/// the Learn panel's send button had no label at all and slipped past the
+/// old `IconButton(` match.
 ///
 /// We scan source text rather than the rendered widget tree because several
 /// screens (wizard, wizard-complete, export) mount native-only plugins
@@ -48,7 +54,11 @@ void main() {
         .where((f) => f.path.endsWith('.dart'))
         .toList(growable: false);
 
-    final iconButtonRegex = RegExp(r'\bIconButton\s*\(');
+    // The button constructors only — not static helpers like
+    // `IconButton.styleFrom(`.
+    final iconButtonRegex = RegExp(
+        r'\bIconButton(?:\.(?:filled|filledTonal|outlined))?\s*\(');
+    final mergeSemanticsRegex = RegExp(r'\bMergeSemantics\s*\(');
     final tooltipParamRegex = RegExp(r'\btooltip\s*:');
     final tooltipWidgetRegex = RegExp(r'\bTooltip\s*\(');
     final semanticsRegex = RegExp(r'\bSemantics\s*\(');
@@ -78,8 +88,12 @@ void main() {
         // 2) If not, look backwards a short distance for an enclosing
         //    Tooltip(...) widget or a Semantics(label: ...) ancestor in
         //    the same build expression.
-        if (!hasLabel) {
-          final start = (i - 12).clamp(0, lines.length);
+        final windowStart = (i - 12).clamp(0, lines.length);
+        final merged = [
+          for (var k = windowStart; k < i; k++) lines[k]
+        ].any(mergeSemanticsRegex.hasMatch);
+        if (!hasLabel && merged) {
+          final start = windowStart;
           for (var k = start; k < i; k++) {
             if (tooltipWidgetRegex.hasMatch(lines[k])) {
               hasLabel = true;
