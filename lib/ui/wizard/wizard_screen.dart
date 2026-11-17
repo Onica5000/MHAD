@@ -766,8 +766,6 @@ class _WideStepRail extends StatelessWidget {
             Text(
               context.l10n.wizardYourDirective,
               style: TextStyle(
-                fontFamily: kMonoFamily,
-                fontFamilyFallback: kMonoFallbacks,
                 fontSize: 11,
                 fontWeight: FontWeight.w700,
                 letterSpacing: 1.2,

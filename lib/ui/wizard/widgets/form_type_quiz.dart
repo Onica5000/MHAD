@@ -178,8 +178,6 @@ class _QuestionBody extends StatelessWidget {
                   child: Text(
                     context.l10n.quizQuestionEyebrow(step + 1, total),
                     style: TextStyle(
-                      fontFamily: kMonoFamily,
-                      fontFamilyFallback: kMonoFallbacks,
                       fontSize: 11,
                       letterSpacing: 1,
                       color: p.textMuted,
@@ -369,8 +367,6 @@ class _ResultBody extends StatelessWidget {
                   child: Text(
                     context.l10n.quizResultEyebrow,
                     style: TextStyle(
-                      fontFamily: kMonoFamily,
-                      fontFamilyFallback: kMonoFallbacks,
                       fontSize: 11,
                       letterSpacing: 1,
                       color: p.textMuted,

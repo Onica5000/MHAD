@@ -365,8 +365,6 @@ class _EditorialLearnHub extends StatelessWidget {
                 context.l10n.educationPaOfficeOfMentalHealth,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontFamily: kMonoFamily,
-                  fontFamilyFallback: kMonoFallbacks,
                   fontSize: 11,
                   letterSpacing: 0.6,
                   color: p.textMuted,

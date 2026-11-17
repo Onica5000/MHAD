@@ -246,8 +246,6 @@ class WebSidebar extends ConsumerWidget {
                         Text(
                           context.l10n.webSidebarAct1942004,
                           style: TextStyle(
-                            fontFamily: kMonoFamily,
-                            fontFamilyFallback: kMonoFallbacks,
                             fontSize: 11,
                             letterSpacing: 0.6,
                             color: p.textMuted,
@@ -409,8 +407,6 @@ class _Badge extends StatelessWidget {
       child: Text(
         label,
         style: TextStyle(
-          fontFamily: kMonoFamily,
-          fontFamilyFallback: kMonoFallbacks,
           fontSize: 11,
           fontWeight: FontWeight.w700,
           letterSpacing: 0.6,
@@ -454,8 +450,6 @@ class _CrisisCard extends StatelessWidget {
                   Text(
                     context.l10n.webSidebar247Lifeline,
                     style: TextStyle(
-                      fontFamily: kMonoFamily,
-                      fontFamilyFallback: kMonoFallbacks,
                       fontSize: 11,
                       fontWeight: FontWeight.w700,
                       letterSpacing: 0.7,

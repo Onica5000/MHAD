@@ -164,8 +164,6 @@ class HealthChip extends StatelessWidget {
                         child: Text(
                           sourceTag!,
                           style: TextStyle(
-                            fontFamily: kMonoFamily,
-                            fontFamilyFallback: kMonoFallbacks,
                             fontSize: 11,
                             fontWeight: FontWeight.w700,
                             letterSpacing: 0.4,

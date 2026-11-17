@@ -241,8 +241,6 @@ class _PermissionCard extends StatelessWidget {
                           child: Text(
                             statusLine,
                             style: TextStyle(
-                              fontFamily: kMonoFamily,
-                              fontFamilyFallback: kMonoFallbacks,
                               fontSize: 11,
                               letterSpacing: 0.5,
                               color: statusColor,

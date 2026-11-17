@@ -32,8 +32,6 @@ class ArticleDetailScreen extends StatelessWidget {
           Text(
             source,
             style: TextStyle(
-              fontFamily: kMonoFamily,
-              fontFamilyFallback: kMonoFallbacks,
               fontSize: 11,
               letterSpacing: 0.6,
               fontWeight: FontWeight.w700,
@@ -78,8 +76,6 @@ class ArticleDetailScreen extends StatelessWidget {
                 Text(
                   context.l10n.educationArticleDetailTryIt,
                   style: TextStyle(
-                    fontFamily: kMonoFamily,
-                    fontFamilyFallback: kMonoFallbacks,
                     fontSize: 11,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 0.6,

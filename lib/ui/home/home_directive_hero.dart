@@ -101,8 +101,6 @@ class ActiveDirectiveHero extends StatelessWidget {
                         Text(
                           context.l10n.homeDirectiveHeroStepOf(currentStep, totalSteps),
                           style: TextStyle(
-                            fontFamily: kMonoFamily,
-                            fontFamilyFallback: kMonoFallbacks,
                             fontSize: 12,
                             color: p.onPrimary.withValues(alpha: 0.85),
                           ),

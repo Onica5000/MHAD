@@ -294,8 +294,6 @@ class _SectionLabel extends StatelessWidget {
     return Text(
       text.toUpperCase(),
       style: TextStyle(
-        fontFamily: kMonoFamily,
-        fontFamilyFallback: kMonoFallbacks,
         fontSize: 11,
         fontWeight: FontWeight.w600,
         letterSpacing: 1.2,

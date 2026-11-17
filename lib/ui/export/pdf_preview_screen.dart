@@ -54,8 +54,6 @@ class PdfPreviewScreen extends StatelessWidget {
             Text(
               context.l10n.pdfPreviewUsLetter8511,
               style: TextStyle(
-                fontFamily: kMonoFamily,
-                fontFamilyFallback: kMonoFallbacks,
                 fontSize: 11,
                 letterSpacing: 0.5,
                 color: p.textMuted,
@@ -491,8 +489,6 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
           Text(
             context.l10n.pdfPreviewPages,
             style: TextStyle(
-              fontFamily: kMonoFamily,
-              fontFamilyFallback: kMonoFallbacks,
               fontSize: 11,
               letterSpacing: 1,
               fontWeight: FontWeight.w700,

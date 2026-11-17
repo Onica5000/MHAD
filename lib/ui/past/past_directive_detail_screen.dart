@@ -414,8 +414,6 @@ class _SigCol extends StatelessWidget {
         Text(
           label,
           style: TextStyle(
-            fontFamily: kMonoFamily,
-            fontFamilyFallback: kMonoFallbacks,
             fontSize: 11,
             letterSpacing: 0.4,
             color: p.textMuted,

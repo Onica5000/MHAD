@@ -144,8 +144,6 @@ class _UlyssesClauseScreenState extends ConsumerState<UlyssesClauseScreen> {
                         Text(
                           context.l10n.ulyssesClauseSelfBindingUlysses,
                           style: TextStyle(
-                            fontFamily: kMonoFamily,
-                            fontFamilyFallback: kMonoFallbacks,
                             fontSize: 11,
                             letterSpacing: 1,
                             fontWeight: FontWeight.w700,

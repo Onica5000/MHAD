@@ -355,8 +355,6 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
               child: Text(
                 'ICD-10',
                 style: TextStyle(
-                  fontFamily: kMonoFamily,
-                  fontFamilyFallback: kMonoFallbacks,
                   fontSize: 11,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 0.5,
@@ -436,8 +434,6 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
       child: Text(
         label.toUpperCase(),
         style: TextStyle(
-          fontFamily: kMonoFamily,
-          fontFamilyFallback: kMonoFallbacks,
           fontSize: 11,
           fontWeight: FontWeight.w700,
           letterSpacing: 0.6,

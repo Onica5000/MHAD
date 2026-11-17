@@ -410,8 +410,6 @@ class _MonoLabel extends StatelessWidget {
     return Text(
       text.toUpperCase(),
       style: TextStyle(
-        fontFamily: kMonoFamily,
-        fontFamilyFallback: kMonoFallbacks,
         fontSize: 11,
         fontWeight: FontWeight.w700,
         letterSpacing: 0.6,
@@ -507,8 +505,6 @@ class _KindSegment extends StatelessWidget {
                 kind.source,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontFamily: kMonoFamily,
-                  fontFamilyFallback: kMonoFallbacks,
                   fontSize: 11,
                   letterSpacing: 0.4,
                   color: active ? p.primary : p.textMuted,
@@ -614,8 +610,6 @@ class _SearchField extends StatelessWidget {
                   Text(
                     badge,
                     style: TextStyle(
-                      fontFamily: kMonoFamily,
-                      fontFamilyFallback: kMonoFallbacks,
                       fontSize: 11,
                       fontWeight: FontWeight.w700,
                       letterSpacing: 0.5,
@@ -666,8 +660,6 @@ class _AutoComplete extends StatelessWidget {
                   child: Text(
                     source.toUpperCase(),
                     style: TextStyle(
-                      fontFamily: kMonoFamily,
-                      fontFamilyFallback: kMonoFallbacks,
                       fontSize: 11,
                       fontWeight: FontWeight.w700,
                       letterSpacing: 0.6,
@@ -678,8 +670,6 @@ class _AutoComplete extends StatelessWidget {
                 Text(
                   context.l10n.allergiesMatches(items.length),
                   style: TextStyle(
-                    fontFamily: kMonoFamily,
-                    fontFamilyFallback: kMonoFallbacks,
                     fontSize: 11,
                     letterSpacing: 0.4,
                     color: p.textMuted,

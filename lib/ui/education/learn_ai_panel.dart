@@ -130,8 +130,6 @@ class _LearnAiPanelState extends ConsumerState<LearnAiPanel> {
               child: Text(
                 context.l10n.learnAiPanelPiiStripped(ref.watch(activeProviderProvider).name.toUpperCase()),
                 style: TextStyle(
-                  fontFamily: kMonoFamily,
-                  fontFamilyFallback: kMonoFallbacks,
                   fontSize: 11,
                   letterSpacing: 0.5,
                   color: hasKey ? p.primary : p.textMuted,

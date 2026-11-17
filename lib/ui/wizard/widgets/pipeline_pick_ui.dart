@@ -222,8 +222,6 @@ extension _PipelinePickUi on _PipelineScreenState {
                   context.l10n.pickFilesKeptInMemory(n),
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontFamily: kMonoFamily,
-                    fontFamilyFallback: kMonoFallbacks,
                     fontSize: 11,
                     letterSpacing: 0.4,
                     color: p.textMuted,
@@ -828,8 +826,6 @@ extension _PipelinePickUi on _PipelineScreenState {
                                 child: Text(
                                   l10n.pickFastest,
                                   style: TextStyle(
-                                    fontFamily: kMonoFamily,
-                                    fontFamilyFallback: kMonoFallbacks,
                                     fontSize: 11,
                                     fontWeight: FontWeight.w700,
                                     letterSpacing: 0.5,

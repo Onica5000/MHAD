@@ -679,8 +679,6 @@ extension _PipelineReviewUi on _PipelineScreenState {
                 Text(
                   context.l10n.reviewAiReadThisPhoto,
                   style: TextStyle(
-                    fontFamily: kMonoFamily,
-                    fontFamilyFallback: kMonoFallbacks,
                     fontSize: 11,
                     letterSpacing: 0.6,
                     fontWeight: FontWeight.w700,
@@ -806,8 +804,6 @@ extension _PipelineReviewUi on _PipelineScreenState {
         Text(
           context.l10n.reviewAddToDirective,
           style: TextStyle(
-            fontFamily: kMonoFamily,
-            fontFamilyFallback: kMonoFallbacks,
             fontSize: 11,
             fontWeight: FontWeight.w700,
             letterSpacing: 1.2,
@@ -849,8 +845,6 @@ extension _PipelineReviewUi on _PipelineScreenState {
           context.l10n.reviewFieldsReady(checkedCount, keys.length),
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontFamily: kMonoFamily,
-            fontFamilyFallback: kMonoFallbacks,
             fontSize: 11,
             letterSpacing: 0.6,
             color: checkedCount > 0 ? okText : p.textMuted,
@@ -1182,8 +1176,6 @@ extension _PipelineReviewUi on _PipelineScreenState {
   Widget _groupLabel(String text, MhadPalette p) => Text(
         text.toUpperCase(),
         style: TextStyle(
-          fontFamily: kMonoFamily,
-          fontFamilyFallback: kMonoFallbacks,
           fontSize: 11,
           fontWeight: FontWeight.w700,
           letterSpacing: 1.2,
@@ -1462,8 +1454,6 @@ class _SnapReviewRow extends StatelessWidget {
                       child: Text(
                         fieldLabel.toUpperCase(),
                         style: TextStyle(
-                          fontFamily: kMonoFamily,
-                          fontFamilyFallback: kMonoFallbacks,
                           fontSize: 11,
                           fontWeight: FontWeight.w600,
                           letterSpacing: 0.5,
@@ -1475,8 +1465,6 @@ class _SnapReviewRow extends StatelessWidget {
                     Text(
                       ok ? '→ $target' : context.l10n.reviewNotAdded,
                       style: TextStyle(
-                        fontFamily: kMonoFamily,
-                        fontFamilyFallback: kMonoFallbacks,
                         fontSize: 11,
                         fontWeight: FontWeight.w700,
                         letterSpacing: 0.4,

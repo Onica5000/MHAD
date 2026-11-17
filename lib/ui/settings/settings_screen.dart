@@ -500,8 +500,6 @@ class _ProfileChip extends ConsumerWidget {
                 Text(
                   _statusFor(context, mode),
                   style: TextStyle(
-                    fontFamily: kMonoFamily,
-                    fontFamilyFallback: kMonoFallbacks,
                     fontSize: 11,
                     letterSpacing: 0.4,
                     color: p.onPrimary.withValues(alpha: 0.85),

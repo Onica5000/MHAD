@@ -239,8 +239,6 @@ class _PathwayCard extends StatelessWidget {
             Text(
               tag,
               style: TextStyle(
-                fontFamily: kMonoFamily,
-                fontFamilyFallback: kMonoFallbacks,
                 fontSize: 11,
                 fontWeight: FontWeight.w700,
                 letterSpacing: 0.6,
@@ -289,8 +287,6 @@ class _PathwayCard extends StatelessWidget {
                     child: Text(
                       m,
                       style: TextStyle(
-                        fontFamily: kMonoFamily,
-                        fontFamilyFallback: kMonoFallbacks,
                         fontSize: 11,
                         letterSpacing: 0.4,
                         color: primary ? cs.onPrimary : cs.onSurfaceVariant,

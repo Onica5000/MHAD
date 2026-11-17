@@ -109,8 +109,6 @@ class AssistantContextPanel extends StatelessWidget {
                     Text(
                       buildContext.l10n.assistantContextPanelPiiRedactionOn,
                       style: TextStyle(
-                        fontFamily: kMonoFamily,
-                        fontFamilyFallback: kMonoFallbacks,
                         fontSize: 11,
                         fontWeight: FontWeight.w700,
                         letterSpacing: 0.6,

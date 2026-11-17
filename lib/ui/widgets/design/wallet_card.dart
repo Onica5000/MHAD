@@ -81,8 +81,6 @@ class WalletCard extends StatelessWidget {
                             Text(
                               context.l10n.walletCardPaMhadAct194,
                               style: TextStyle(
-                                fontFamily: kMonoFamily,
-                                fontFamilyFallback: kMonoFallbacks,
                                 fontSize: 10,
                                 fontWeight: FontWeight.w600,
                                 letterSpacing: 1.4,
@@ -189,8 +187,6 @@ class WalletCard extends StatelessWidget {
         Text(
           label,
           style: TextStyle(
-            fontFamily: kMonoFamily,
-            fontFamilyFallback: kMonoFallbacks,
             fontSize: 10,
             fontWeight: FontWeight.w600,
             letterSpacing: 1.0,

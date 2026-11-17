@@ -302,8 +302,6 @@ class _AgentCardState extends ConsumerState<_AgentCard> {
                               Text(
                                 widget.roleLabel,
                                 style: TextStyle(
-                                  fontFamily: kMonoFamily,
-                                  fontFamilyFallback: kMonoFallbacks,
                                   fontSize: 11,
                                   fontWeight: FontWeight.w600,
                                   letterSpacing: 1,

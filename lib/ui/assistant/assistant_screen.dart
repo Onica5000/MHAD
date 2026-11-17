@@ -256,8 +256,6 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                         ? context.l10n.assistantActiveTextPiiStrippedBefore(ref.watch(activeModelProvider).toUpperCase().replaceAll('-', ' '))
                         : context.l10n.assistantNotSetUpAddA,
                     style: TextStyle(
-                      fontFamily: kMonoFamily,
-                      fontFamilyFallback: kMonoFallbacks,
                       fontSize: 11,
                       letterSpacing: 0.5,
                       color: Theme.of(context).mhadPalette.textMuted,

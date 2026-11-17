@@ -466,8 +466,6 @@ class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
                         : context.l10n.voiceFooterDevice),
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontFamily: kMonoFamily,
-                  fontFamilyFallback: kMonoFallbacks,
                   fontSize: 11,
                   letterSpacing: 0.5,
                   color: p.textMuted,

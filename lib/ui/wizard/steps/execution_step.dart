@@ -276,8 +276,6 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
             context.l10n.executionNotYetValid,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontFamily: kMonoFamily,
-              fontFamilyFallback: kMonoFallbacks,
               fontSize: 11,
               letterSpacing: 0.6,
               height: 1.4,
