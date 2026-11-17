@@ -86,7 +86,7 @@ class MhadBottomNav extends ConsumerWidget {
         // Fixed, bounded height so the Scaffold body keeps its full
         // viewport — the bar never grows greedily.
         child: Container(
-          height: 60,
+          height: 64,
           decoration: BoxDecoration(
             color: p.card,
             border: Border.all(color: p.border),
@@ -141,35 +141,36 @@ class _NavPill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
-    final fg = item.active ? p.onPrimaryLight : p.textMuted;
 
-    // Visible pill matches the prototype (≈36px tall: icon 20 + 8px padding).
-    // The tap target is expanded to a 48px-minimum box around it so it meets
-    // the accessibility guideline without changing the prototype visual.
-    final pill = Container(
-      decoration: BoxDecoration(
-        color: item.active ? p.primaryLight : Colors.transparent,
-        borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(item.active ? item.activeIcon : item.icon, size: 20, color: fg),
-          if (item.active) ...[
-            const SizedBox(width: 6),
-            Text(
-              item.label,
-              style: TextStyle(
-                fontFamily: kSansFamily,
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: fg,
-              ),
-            ),
-          ],
-        ],
-      ),
+    // Every tab shows its icon AND a short label (2026-11 redesign): an
+    // icon-only tab was ambiguous (the sparkle for "Ask" especially). The
+    // active tab gets a tinted pill behind its icon and a bold label.
+    final content = Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 3),
+          decoration: BoxDecoration(
+            color: item.active ? p.primaryLight : Colors.transparent,
+            borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
+          ),
+          child: Icon(
+            item.active ? item.activeIcon : item.icon,
+            size: 22,
+            color: item.active ? p.onPrimaryLight : p.textMuted,
+          ),
+        ),
+        const SizedBox(height: 2),
+        Text(
+          item.label,
+          maxLines: 1,
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: item.active ? FontWeight.w700 : FontWeight.w500,
+            color: item.active ? p.primary : p.textMuted,
+          ),
+        ),
+      ],
     );
 
     return Semantics(
@@ -178,18 +179,19 @@ class _NavPill extends StatelessWidget {
       label: item.label,
       child: InkWell(
         onTap: item.active ? null : item.onTap,
-        borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
-        // 48px tall hit target (meets the accessibility guideline) with the
-        // ~36px visible pill centred inside it — matches the prototype look.
-        // FittedBox(scaleDown) lets the active item's icon+label shrink to fit
-        // its share of the bar instead of overflowing: with five pills the
-        // longest active label ("Settings") would otherwise exceed its ~1/5
-        // slot on narrow widths. It never scales UP, so wide layouts are
-        // unchanged; the InkWell above keeps the full 48px tap target.
+        borderRadius: BorderRadius.circular(DesignTokens.iconTileRadius),
+        // A 56px-tall hit target (above the 48px guideline). FittedBox
+        // (scaleDown) lets a long label (Spanish "Configuración") shrink to
+        // its ~1/5 slot instead of overflowing; it never scales up. The
+        // visual content is excluded from semantics: the Semantics label
+        // above already says it, once.
         child: SizedBox(
-          height: 48,
+          height: 56,
           child: Center(
-            child: FittedBox(fit: BoxFit.scaleDown, child: pill),
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: ExcludeSemantics(child: content),
+            ),
           ),
         ),
       ),

@@ -264,11 +264,20 @@ void main() {
   // ── Bottom nav highlight + navigation ────────────────────────────────────
 
   group('bottom nav', () {
-    // Only the active pill renders its text label; inactive pills are
-    // icon-only (label is in Semantics). So a visible Text with the label is
-    // the active-tab signal, scoped to the nav so page text can't match.
+    // Every tab shows its label (2026-11 redesign), so the active-tab signal
+    // is the tab's Semantics `selected` state — what a screen reader
+    // announces. navText finds a tab's visible label, scoped to the nav.
     Finder navText(String label) => find.descendant(
         of: find.byType(MhadBottomNav), matching: find.text(label));
+
+    bool tabSelected(WidgetTester tester, String label) => tester
+        .widgetList<Semantics>(find.descendant(
+            of: find.byType(MhadBottomNav), matching: find.byType(Semantics)))
+        .where((w) => w.properties.label == label)
+        .single
+        .properties
+        .selected ==
+        true;
 
     const tabs = {
       AppRoutes.home: 'Home',
@@ -283,8 +292,9 @@ void main() {
           (tester) async {
         await pumpShell(tester, size: phone, initial: entry.key);
         for (final label in const ['Home', 'Learn', 'Ask', 'Settings', 'More']) {
-          expect(navText(label),
-              label == entry.value ? findsOneWidget : findsNothing,
+          expect(navText(label), findsOneWidget,
+              reason: 'every tab shows its label');
+          expect(tabSelected(tester, label), label == entry.value,
               reason: '"$label" active state on ${entry.key}');
         }
       });
@@ -293,7 +303,7 @@ void main() {
     testWidgets('a secondary route highlights no tab', (tester) async {
       await pumpShell(tester, size: phone, initial: AppRoutes.privacyPolicy);
       for (final label in const ['Home', 'Learn', 'Ask', 'Settings', 'More']) {
-        expect(navText(label), findsNothing);
+        expect(tabSelected(tester, label), isFalse);
       }
     });
 
@@ -304,8 +314,8 @@ void main() {
       await tester.tap(find.bySemanticsLabel('Settings'));
       await tester.pumpAndSettle();
       expect(currentRoute(), AppRoutes.settings);
-      expect(navText('Settings'), findsOneWidget);
-      expect(navText('Home'), findsNothing);
+      expect(tabSelected(tester, 'Settings'), isTrue);
+      expect(tabSelected(tester, 'Home'), isFalse);
 
       await tester.tap(find.bySemanticsLabel('Home'));
       await tester.pumpAndSettle();
