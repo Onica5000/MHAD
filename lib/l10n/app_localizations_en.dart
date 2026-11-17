@@ -7673,4 +7673,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sideEffectsGettingLabels => 'Getting the official FDA label text…';
+
+  @override
+  String get diagnosesHandoffTitle => 'Find the official name with your AI';
 }

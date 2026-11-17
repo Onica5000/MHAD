@@ -13008,6 +13008,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Getting the official FDA label text…'**
   String get sideEffectsGettingLabels;
+
+  /// No description provided for @diagnosesHandoffTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Find the official name with your AI'**
+  String get diagnosesHandoffTitle;
 }
 
 class _AppLocalizationsDelegate

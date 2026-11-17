@@ -3145,5 +3145,6 @@
   "articleAskAiQ3": "What should I ask my doctor or agent about this?",
   "sideEffectsHandoffTitle": "Check side effects with your AI",
   "sideEffectsHandoffSubtitle": "PA MHAD adds the official FDA label text for your medications. Your AI turns it into a checklist you can tick.",
-  "sideEffectsGettingLabels": "Getting the official FDA label text…"
+  "sideEffectsGettingLabels": "Getting the official FDA label text…",
+  "diagnosesHandoffTitle": "Find the official name with your AI"
 }

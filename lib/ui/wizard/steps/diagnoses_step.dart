@@ -2,6 +2,10 @@ import 'dart:async';
 
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
+import 'package:mhad/data/app_data/app_data.dart' show appData;
+import 'package:mhad/ui/ai/ai_handoff_panel.dart';
+import 'package:mhad/ai/pii_stripper.dart';
+import 'package:mhad/ai/handoff/handoff_task.dart';
 import 'package:mhad/utils/input_formatters.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -131,6 +135,20 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
   //    candidate conditions and each is confirmed against the ICD-10 registry
   //    before the user adds it. ─────────────────────────────────────────────
   Future<void> _openDescribeDialog() async {
+    // Copy-and-paste (API path hidden): no key, consent or rate limit here —
+    // the person's own AI answers; names are still registry-confirmed.
+    if (!appData.ai.apiModeVisible) {
+      await showDialog<void>(
+        context: context,
+        builder: (_) => _DescribeConditionDialog(
+          onSuggest: _suggestFromDescription,
+          onAdd: _addSuggestedDiagnosis,
+          onConfirmNames: _confirmNames,
+          directiveId: widget.directiveId,
+        ),
+      );
+      return;
+    }
     final assistant = ref.read(aiAssistantProvider);
     if (assistant is! GeminiApiAssistant) {
       // No AI yet — send them to set it up (same as the AI Suggest button).
@@ -176,6 +194,13 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
         .recordRequest(
           estimatedTokens: GeminiRateTracker.estimateTokens(description.length),
         );
+    return _confirmNames(names);
+  }
+
+  /// Candidate condition NAMES (from the AI) → confirmed ICD-10 matches: the
+  /// codes come from the authoritative registry, never from the model.
+  /// Deduped by code. Shared by the API path and a pasted answer.
+  Future<List<IcdCondition>> _confirmNames(List<String> names) async {
     if (names.isEmpty) return const [];
     final out = <IcdCondition>[];
     final seen = <String>{};
@@ -833,9 +858,18 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
 class _DescribeConditionDialog extends StatefulWidget {
   final Future<List<IcdCondition>> Function(String description) onSuggest;
   final Future<bool> Function(IcdCondition condition) onAdd;
+
+  /// Copy-and-paste mode when set: the handoff card replaces "Find matches"
+  /// and the pasted names are confirmed through this.
+  final Future<List<IcdCondition>> Function(List<String> names)?
+      onConfirmNames;
+  final int? directiveId;
+
   const _DescribeConditionDialog({
     required this.onSuggest,
     required this.onAdd,
+    this.onConfirmNames,
+    this.directiveId,
   });
 
   @override
@@ -872,6 +906,22 @@ class _DescribeConditionDialogState extends State<_DescribeConditionDialog> {
     });
   }
 
+  /// A pasted answer → names → the same registry-confirmed results list.
+  Future<bool> _useHandoffAnswer(Map<String, dynamic> json) async {
+    final names = LlmAssistant.parseConditionTerms(json);
+    setState(() {
+      _loading = true;
+      _searched = true;
+    });
+    final r = await widget.onConfirmNames!(names);
+    if (!mounted) return false;
+    setState(() {
+      _results = r;
+      _loading = false;
+    });
+    return true;
+  }
+
   Future<void> _add(IcdCondition c) async {
     final added = await widget.onAdd(c);
     if (!mounted) return;
@@ -896,7 +946,8 @@ class _DescribeConditionDialogState extends State<_DescribeConditionDialog> {
       title: Text(l10n.diagnosesDescribeTitle),
       content: SizedBox(
         width: 440,
-        child: Column(
+        child: SingleChildScrollView(
+          child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -914,13 +965,30 @@ class _DescribeConditionDialogState extends State<_DescribeConditionDialog> {
               maxLines: 4,
               autofocus: true,
               textInputAction: TextInputAction.search,
-              onSubmitted: (_) => _find(),
+              onChanged: (_) => setState(() {}),
+              onSubmitted: (_) =>
+                  widget.onConfirmNames == null ? _find() : null,
               decoration: InputDecoration(
                 border: const OutlineInputBorder(),
                 hintText: l10n.diagnosesDescribeHint,
               ),
             ),
             const SizedBox(height: 12),
+            if (widget.onConfirmNames != null)
+              AiHandoffPanel(
+                kind: HandoffTaskKind.conditionTerms,
+                title: l10n.diagnosesHandoffTitle,
+                enabled: _ctrl.text.trim().length >= 3,
+                buildTask: (_) => HandoffTask(
+                  kind: HandoffTaskKind.conditionTerms,
+                  // The SAME prompt as the API path (shared builder).
+                  instructions: LlmAssistant.conditionTermsPrompt(
+                      PiiStripper.strip(_ctrl.text.trim())),
+                  ref: 'd${widget.directiveId}',
+                ),
+                onAnswer: _useHandoffAnswer,
+              )
+            else
             Align(
               alignment: Alignment.centerRight,
               child: FilledButton.icon(
@@ -963,6 +1031,7 @@ class _DescribeConditionDialogState extends State<_DescribeConditionDialog> {
               ),
             ],
           ],
+        ),
         ),
       ),
       actions: [

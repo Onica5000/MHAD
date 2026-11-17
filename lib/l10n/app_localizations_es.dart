@@ -7800,4 +7800,7 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get sideEffectsGettingLabels =>
       'Obteniendo el texto oficial de la etiqueta de la FDA…';
+
+  @override
+  String get diagnosesHandoffTitle => 'Encuentre el nombre oficial con su IA';
 }
