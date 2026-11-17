@@ -3155,5 +3155,6 @@
   "aiCheckHandoffSubtitle": "Optional. Your AI reviews a summary of your directive (identifying details removed) for gaps and anything to double-check. The built-in check above always runs.",
   "smartFillHandoffTitle": "AI suggestions for your preferences",
   "smartFillHandoffPanelTitle": "Ask your AI for suggestions",
-  "smartFillHandoffSubtitle": "Based on the conditions and medications found (identifying details removed). You review every suggestion before it's added."
+  "smartFillHandoffSubtitle": "Based on the conditions and medications found (identifying details removed). You review every suggestion before it's added.",
+  "homeToolsAskAiSub": "Ask questions with your own AI"
 }

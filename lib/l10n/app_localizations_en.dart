@@ -7704,4 +7704,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get smartFillHandoffSubtitle =>
       'Based on the conditions and medications found (identifying details removed). You review every suggestion before it\'s added.';
+
+  @override
+  String get homeToolsAskAiSub => 'Ask questions with your own AI';
 }

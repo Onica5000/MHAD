@@ -2154,5 +2154,6 @@
   "aiCheckHandoffSubtitle": "Opcional. Su IA revisa un resumen de su directiva (sin datos de identificación) en busca de vacíos y cosas que conviene revisar. La revisión integrada de arriba siempre se hace.",
   "smartFillHandoffTitle": "Sugerencias de IA para sus preferencias",
   "smartFillHandoffPanelTitle": "Pida sugerencias a su IA",
-  "smartFillHandoffSubtitle": "Según las afecciones y los medicamentos encontrados (sin datos de identificación). Usted revisa cada sugerencia antes de que se agregue."
+  "smartFillHandoffSubtitle": "Según las afecciones y los medicamentos encontrados (sin datos de identificación). Usted revisa cada sugerencia antes de que se agregue.",
+  "homeToolsAskAiSub": "Haga preguntas con su propia IA"
 }

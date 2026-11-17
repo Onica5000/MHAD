@@ -13062,6 +13062,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Based on the conditions and medications found (identifying details removed). You review every suggestion before it\'s added.'**
   String get smartFillHandoffSubtitle;
+
+  /// No description provided for @homeToolsAskAiSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask questions with your own AI'**
+  String get homeToolsAskAiSub;
 }
 
 class _AppLocalizationsDelegate
