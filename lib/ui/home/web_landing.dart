@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -67,15 +68,7 @@ class WebDashboardLanding extends ConsumerWidget {
                 ),
               ],
             ),
-            style: const TextStyle(
-              fontFamily: kSerifFamily,
-              fontFamilyFallback: kSerifFallbacks,
-              fontStyle: FontStyle.italic,
-              fontSize: 56, // artboard WebDashboard hero size
-              height: 1,
-              letterSpacing: -1,
-              fontWeight: FontWeight.w400,
-            ),
+            style: EditorialHeading.styleFor(context, HeadingLevel.display),
           ),
         ),
         const SizedBox(height: 32),
@@ -371,14 +364,7 @@ class _BookletQuoteCard extends StatelessWidget {
               SectionLabel(context.l10n.webLandingFromTheBooklet),
               Text(
                 context.l10n.webLandingAnMhadIsYourVoice,
-                style: TextStyle(
-                  fontFamily: kSerifFamily,
-                  fontFamilyFallback: kSerifFallbacks,
-                  fontStyle: FontStyle.italic,
-                  fontSize: 22,
-                  height: 1.2,
-                  color: p.primaryDark,
-                ),
+                style: MhadText.serifAccent(context, size: 22, color: p.primaryDark, height: 1.2),
               ),
               const SizedBox(height: 8),
               Text(

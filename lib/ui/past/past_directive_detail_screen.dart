@@ -1,6 +1,7 @@
 ﻿import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/page_hero.dart';
 import 'package:mhad/ui/theme/app_art.dart';
 import 'package:mhad/l10n/l10n.dart';
@@ -275,15 +276,7 @@ class _PastDetailTitle extends StatelessWidget {
           ),
         ],
       ),
-      style: const TextStyle(
-        fontFamily: kSerifFamily,
-        fontFamilyFallback: kSerifFallbacks,
-        fontStyle: FontStyle.italic,
-        fontSize: 38,
-        fontWeight: FontWeight.w400,
-        height: 1.05,
-        letterSpacing: -0.5,
-      ),
+      style: EditorialHeading.styleFor(context, HeadingLevel.page),
     );
   }
 }

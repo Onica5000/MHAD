@@ -115,7 +115,7 @@ class _UlyssesClauseScreenState extends ConsumerState<UlyssesClauseScreen> {
                 PageHero(
                   art: AppArt.flowUlysses,
                   eyebrow: context.l10n.sideEffectsOptionalAddOn,
-                  title: EditorialHeading(text: context.l10n.ulyssesClauseIfFutureMeRefuses, size: 30),
+                  title: EditorialHeading(text: context.l10n.ulyssesClauseIfFutureMeRefuses),
                   lead: context.l10n.ulyssesClauseSometimesDuringACrisisPeople,
                 ),
                 const SizedBox(height: 16),
@@ -140,13 +140,7 @@ class _UlyssesClauseScreenState extends ConsumerState<UlyssesClauseScreen> {
                         const SizedBox(height: 6),
                         Text(
                           context.l10n.ulyssesClauseTieMyselfToTheMast,
-                          style: TextStyle(
-                            fontFamily: kSerifFamily,
-                            fontFamilyFallback: kSerifFallbacks,
-                            fontStyle: FontStyle.italic,
-                            fontSize: 24,
-                            color: _acknowledged ? cs.onPrimary : cs.onSurface,
-                          ),
+                          style: EditorialHeading.styleFor(context, HeadingLevel.sub).copyWith(color: _acknowledged ? cs.onPrimary : cs.onSurface),
                         ),
                         const SizedBox(height: 8),
                         Text(

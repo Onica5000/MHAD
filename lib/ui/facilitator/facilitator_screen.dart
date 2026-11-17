@@ -60,7 +60,7 @@ class FacilitatorScreen extends StatelessWidget {
                 PageHero(
                   art: AppArt.flowFacilitator,
                   eyebrow: context.l10n.facilitatorGetHelpEvidenceBased,
-                  title: EditorialHeading(text: context.l10n.facilitatorYouDonTHaveTo, size: 32),
+                  title: EditorialHeading(text: context.l10n.facilitatorYouDonTHaveTo),
                   lead: context.l10n.facilitatorPickTheKindOfSupport(
                       appData.fact('facilitatorCompletionStat')),
                 ),

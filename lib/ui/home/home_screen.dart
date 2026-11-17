@@ -820,9 +820,6 @@ class _GreetingRow extends StatelessWidget {
               ),
             ],
           ),
-          size: 38,
-          height: 1.05,
-          letterSpacing: -0.6,
         );
       } else {
         final firstName = fullName.split(RegExp(r'\s+')).first;
@@ -841,15 +838,7 @@ class _GreetingRow extends StatelessWidget {
                     ),
                   ],
                 ),
-                style: const TextStyle(
-                  fontFamily: kSerifFamily,
-                  fontFamilyFallback: kSerifFallbacks,
-                  fontStyle: FontStyle.italic,
-                  fontSize: 38,
-                  height: 1.05,
-                  letterSpacing: -0.5,
-                  fontWeight: FontWeight.w400,
-                ),
+                style: EditorialHeading.styleFor(context, HeadingLevel.display),
               ),
             ),
             const SizedBox(width: 12),
@@ -918,15 +907,7 @@ class _PublicGuestGreeting extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       context.l10n.homeLetSGetStarted,
-      style: TextStyle(
-        fontFamily: kSerifFamily,
-        fontFamilyFallback: kSerifFallbacks,
-        fontStyle: FontStyle.italic,
-        fontSize: 38,
-        height: 1.05,
-        letterSpacing: -0.5,
-        fontWeight: FontWeight.w400,
-      ),
+      style: EditorialHeading.styleFor(context, HeadingLevel.display),
     );
   }
 }

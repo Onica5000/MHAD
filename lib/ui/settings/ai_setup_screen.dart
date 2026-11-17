@@ -276,7 +276,6 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
             art: AppArt.aiSetup,
             title: EditorialHeading(
               text: context.l10n.aiSetupAiAssistantSetup,
-              size: 32,
             ),
             lead: context.l10n.aiSetupHeroLead,
           ),

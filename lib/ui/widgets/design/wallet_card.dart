@@ -53,14 +53,7 @@ class WalletCard extends StatelessWidget {
               child: IgnorePointer(
                 child: Text(
                   context.l10n.walletCardMh,
-                  style: TextStyle(
-                    fontFamily: kSerifFamily,
-                    fontFamilyFallback: kSerifFallbacks,
-                    fontStyle: FontStyle.italic,
-                    fontSize: 140,
-                    height: 1,
-                    color: p.onPrimary.withValues(alpha: 0.08),
-                  ),
+                  style: MhadText.serifAccent(context, size: 140, color: p.onPrimary.withValues(alpha: 0.08), height: 1),
                 ),
               ),
             ),

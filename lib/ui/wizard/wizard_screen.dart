@@ -806,16 +806,7 @@ class _WideStepRail extends StatelessWidget {
             const SizedBox(height: 4),
             Text(
               '${currentIndex + 1} / ${steps.length}',
-              style: TextStyle(
-                fontFamily: kSerifFamily,
-                fontFamilyFallback: kSerifFallbacks,
-                fontStyle: FontStyle.italic,
-                fontSize: 36,
-                fontWeight: FontWeight.w400,
-                letterSpacing: -0.5,
-                height: 1,
-                color: p.primary,
-              ),
+              style: MhadText.serifAccent(context, size: 36, color: p.primary, height: 1),
             ),
             const SizedBox(height: 10),
             // Overall progress at a glance.

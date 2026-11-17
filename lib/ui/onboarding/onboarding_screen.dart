@@ -2,6 +2,7 @@
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -142,16 +143,7 @@ class OnboardingScreen extends ConsumerWidget {
                         ),
                       ],
                     ),
-                    style: TextStyle(
-                      fontFamily: kSerifFamily,
-                      fontFamilyFallback: kSerifFallbacks,
-                      fontStyle: FontStyle.italic,
-                      fontSize: 68,
-                      height: 0.95,
-                      letterSpacing: -1.5,
-                      fontWeight: FontWeight.w400,
-                      color: p.text,
-                    ),
+                    style: EditorialHeading.styleFor(context, HeadingLevel.display).copyWith(color: p.text),
                   ),
                   const SizedBox(height: 22),
                   // Cap the measure at 320 via right padding, not a

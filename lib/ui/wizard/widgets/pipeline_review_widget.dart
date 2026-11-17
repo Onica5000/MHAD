@@ -693,16 +693,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
       const SizedBox(height: 12),
       Text(
         context.l10n.reviewHeresWhatWeRead,
-        style: TextStyle(
-          fontFamily: kSerifFamily,
-          fontFamilyFallback: kSerifFallbacks,
-          fontStyle: FontStyle.italic,
-          fontSize: 32,
-          fontWeight: FontWeight.w400,
-          height: 1.05,
-          letterSpacing: -0.4,
-          color: p.text,
-        ),
+        style: EditorialHeading.styleFor(context, HeadingLevel.page).copyWith(color: p.text),
       ),
       const SizedBox(height: 6),
       Text(

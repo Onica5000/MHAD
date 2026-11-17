@@ -1,4 +1,5 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
@@ -329,15 +330,7 @@ class _ContactPickerSheetState extends State<_ContactPickerSheet> {
                         ),
                       ],
                     ),
-                    style: const TextStyle(
-                      fontFamily: kSerifFamily,
-                      fontFamilyFallback: kSerifFallbacks,
-                      fontStyle: FontStyle.italic,
-                      fontSize: 28,
-                      height: 1.05,
-                      letterSpacing: -0.5,
-                      fontWeight: FontWeight.w400,
-                    ),
+                    style: EditorialHeading.styleFor(context, HeadingLevel.sub),
                   ),
                   const SizedBox(height: 4),
                   Text(

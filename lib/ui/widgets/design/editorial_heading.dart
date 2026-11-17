@@ -1,53 +1,60 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 
-/// Editorial display heading rendered in italic serif.
+/// Which editorial display level a heading is (see [MhadType]).
+enum HeadingLevel {
+  /// Hub hero titles — Home, Learn (42).
+  display,
+
+  /// Page titles — every other page, gates, wizard steps (34).
+  page,
+
+  /// Sub-titles — sheets, dialogs, feature cards (28).
+  sub,
+}
+
+/// Editorial display heading — the serif headline voice of the app.
 ///
-/// Matches the prototype's `Editorial` atom — used for hero titles ("In your
-/// words.", "Almost there.", "You did it.") that should feel like a magazine
-/// pull-quote rather than UI chrome.
+/// ONE style per [level], read from the theme's display slots (2026-11
+/// overhaul: callers used to pass their own size, and page titles came in six
+/// sizes, 26–38). The theme makes it italic Instrument Serif normally, and the
+/// dyslexia-friendly font upright when that setting is on — the old widget
+/// hard-coded the serif and ignored the setting.
+///
+/// Either provide a single line via [text] or a TextSpan tree via [textSpan]
+/// for mixed coloring (e.g. "Understand [before] you sign.").
 class EditorialHeading extends StatelessWidget {
-  /// Either provide a single line via [text] or a TextSpan tree via [textSpan]
-  /// for mixed coloring (e.g. "Fewer screens, [same legal coverage.]").
   final String? text;
   final InlineSpan? textSpan;
-  final double size;
-  final double height;
-  final double letterSpacing;
+  final HeadingLevel level;
   final Color? color;
   final TextAlign align;
-  final FontStyle fontStyle;
 
   const EditorialHeading({
     this.text,
     this.textSpan,
-    this.size = 40,
-    // Tracking/line-height match the design-system `Editorial` atom
-    // (ds.jsx: lineHeight 1.02, letterSpacing -1). Callers set their own
-    // `size`, but inherit this pull-quote tracking unless they override it.
-    this.height = 1.02,
-    this.letterSpacing = -1,
+    this.level = HeadingLevel.page,
     this.color,
     this.align = TextAlign.start,
-    this.fontStyle = FontStyle.italic,
     super.key,
   }) : assert(text != null || textSpan != null,
             'EditorialHeading needs either text or textSpan');
 
+  /// The theme style for [level] — for the few headlines that are built as
+  /// rich text by hand but must match the heading levels.
+  static TextStyle styleFor(BuildContext context, HeadingLevel level) {
+    final t = Theme.of(context).textTheme;
+    return switch (level) {
+      HeadingLevel.display => t.displayLarge!,
+      HeadingLevel.page => t.displayMedium!,
+      HeadingLevel.sub => t.displaySmall!,
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
-    final style = TextStyle(
-      fontFamily: kSerifFamily,
-      fontFamilyFallback: kSerifFallbacks,
-      fontStyle: fontStyle,
-      fontSize: size,
-      fontWeight: FontWeight.w400,
-      height: height,
-      letterSpacing: letterSpacing,
-      color: color ?? p.text,
-    );
-
+    final style = styleFor(context, level).copyWith(color: color ?? p.text);
     if (textSpan != null) {
       return Text.rich(textSpan!, style: style, textAlign: align);
     }
@@ -55,34 +62,30 @@ class EditorialHeading extends StatelessWidget {
   }
 }
 
-/// A large italic serif numeral. Used inside [StepHead] and on hero cards.
+/// A large serif numeral (step counters on hero cards). Follows the theme's
+/// display face, so it turns upright with the dyslexia-friendly font.
 class SerifNumeral extends StatelessWidget {
   final int value;
   final double size;
   final Color? color;
-  final FontWeight weight;
 
   const SerifNumeral({
     required this.value,
     this.size = 54,
     this.color,
-    this.weight = FontWeight.w400,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
+    final display = Theme.of(context).textTheme.displayLarge!;
+    final editorial = display.fontFamily == kSerifFamily;
     return Text(
       value.toString().padLeft(2, '0'),
-      style: TextStyle(
-        fontFamily: kSerifFamily,
-        fontFamilyFallback: kSerifFallbacks,
-        fontStyle: FontStyle.italic,
-        fontSize: size,
-        fontWeight: weight,
+      style: display.copyWith(
+        fontSize: editorial ? size : (size * 0.82).roundToDouble(),
         height: 1,
-        letterSpacing: -1,
         color: color ?? p.primary,
       ),
     );
@@ -99,7 +102,7 @@ class CapsCaption extends StatelessWidget {
 
   const CapsCaption(
     this.text, {
-    this.size = 12,
+    this.size = MhadType.caption,
     this.color,
     super.key,
   });

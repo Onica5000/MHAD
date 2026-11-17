@@ -1,4 +1,5 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/model/directive.dart';
@@ -150,16 +151,7 @@ class _RenewSheet extends StatelessWidget {
                           firstName == null
                               ? context.l10n.reminderSheetsTimeToRenew
                               : context.l10n.reminderSheetsTimeToRenew2(firstName),
-                          style: TextStyle(
-                            fontFamily: kSerifFamily,
-                            fontFamilyFallback: kSerifFallbacks,
-                            fontStyle: FontStyle.italic,
-                            fontSize: 30,
-                            fontWeight: FontWeight.w400,
-                            letterSpacing: -0.5,
-                            height: 1.05,
-                            color: p.text,
-                          ),
+                          style: EditorialHeading.styleFor(context, HeadingLevel.page).copyWith(color: p.text),
                         ),
                         const SizedBox(height: 6),
                         Text.rich(
@@ -436,16 +428,7 @@ class _CheckInSheet extends StatelessWidget {
                         const SizedBox(height: 4),
                         Text(
                           context.l10n.reminderSheetsAnythingChanged,
-                          style: TextStyle(
-                            fontFamily: kSerifFamily,
-                            fontFamilyFallback: kSerifFallbacks,
-                            fontStyle: FontStyle.italic,
-                            fontSize: 30,
-                            fontWeight: FontWeight.w400,
-                            letterSpacing: -0.5,
-                            height: 1.05,
-                            color: p.text,
-                          ),
+                          style: EditorialHeading.styleFor(context, HeadingLevel.page).copyWith(color: p.text),
                         ),
                         const SizedBox(height: 6),
                         Text.rich(

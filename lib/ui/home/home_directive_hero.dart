@@ -62,15 +62,7 @@ class ActiveDirectiveHero extends StatelessWidget {
                 top: -28,
                 child: Text(
                   '$currentStep',
-                  style: TextStyle(
-                    fontFamily: kSerifFamily,
-                    fontFamilyFallback: kSerifFallbacks,
-                    fontStyle: FontStyle.italic,
-                    fontSize: 180,
-                    height: 1,
-                    fontWeight: FontWeight.w400,
-                    color: p.onPrimary.withValues(alpha: 0.10),
-                  ),
+                  style: MhadText.serifAccent(context, size: 180, color: p.onPrimary.withValues(alpha: 0.10), height: 1),
                 ),
               ),
               Padding(

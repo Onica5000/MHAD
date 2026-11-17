@@ -48,8 +48,7 @@ class AccessibilitySettingsScreen extends ConsumerWidget {
             art: AppArt.miscAccessibility,
             eyebrow: context.l10n.accessibilitySettingsAccessibility,
             title: EditorialHeading(
-                text: context.l10n.accessibilitySettingsMakeItReadable,
-                size: 32),
+                text: context.l10n.accessibilitySettingsMakeItReadable,),
             lead: context.l10n.accessibilitySettingsAdjustHowTheAppFeels,
           ),
 

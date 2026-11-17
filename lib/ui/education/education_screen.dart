@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/status_views.dart';
 import 'package:mhad/ui/widgets/design/photo_action_card.dart';
 import 'package:mhad/ui/widgets/design/page_hero.dart';
@@ -171,15 +172,7 @@ class _EditorialLearnHub extends StatelessWidget {
                 TextSpan(text: context.l10n.educationYouSign),
               ],
             ),
-            style: const TextStyle(
-              fontFamily: kSerifFamily,
-              fontFamilyFallback: kSerifFallbacks,
-              fontStyle: FontStyle.italic,
-              fontSize: 42,
-              height: 1,
-              letterSpacing: -0.8,
-              fontWeight: FontWeight.w400,
-            ),
+            style: EditorialHeading.styleFor(context, HeadingLevel.display),
           ),
         ),
         // The articles are the official PA booklet text (English-only JSON);
@@ -346,14 +339,7 @@ class _EditorialLearnHub extends StatelessWidget {
               Text(
                 context.l10n.educationYourDirectiveIsYourVoice,
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontFamily: kSerifFamily,
-                  fontFamilyFallback: kSerifFallbacks,
-                  fontStyle: FontStyle.italic,
-                  fontSize: 18,
-                  height: 1.3,
-                  color: p.primaryDark,
-                ),
+                style: MhadText.serifAccent(context, size: 18, color: p.primaryDark, height: 1.3),
               ),
               const SizedBox(height: 8),
               Text(

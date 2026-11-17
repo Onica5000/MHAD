@@ -49,7 +49,6 @@ class AudioGuideScreen extends StatelessWidget {
             art: AppArt.flowAudio,
             title: EditorialHeading(
               text: context.l10n.audioGuideRecordYourWishesByVoice,
-              size: 32,
             ),
             lead: context.l10n.audioGuideDescribeYourWishesOutLoud,
           ),

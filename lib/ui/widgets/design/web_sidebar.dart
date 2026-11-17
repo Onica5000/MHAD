@@ -615,13 +615,7 @@ class _BrandMark extends StatelessWidget {
       alignment: Alignment.center,
       child: Text(
         'm',
-        style: TextStyle(
-          fontFamily: kSerifFamily,
-          fontFamilyFallback: kSerifFallbacks,
-          fontStyle: FontStyle.italic,
-          fontSize: size * 0.56,
-          color: p.onPrimary,
-        ),
+        style: MhadText.serifAccent(context, size: size * 0.56, color: p.onPrimary),
       ),
     );
   }

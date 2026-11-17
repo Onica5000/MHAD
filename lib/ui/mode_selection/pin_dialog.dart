@@ -1,4 +1,5 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/services/pin_auth_service.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
@@ -263,14 +264,7 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
                     alignment: Alignment.center,
                     child: Text(
                       'm',
-                      style: TextStyle(
-                        fontFamily: kSerifFamily,
-                        fontFamilyFallback: kSerifFallbacks,
-                        fontStyle: FontStyle.italic,
-                        fontWeight: FontWeight.w400,
-                        fontSize: 20,
-                        color: p.onPrimary,
-                      ),
+                      style: MhadText.serifAccent(context, size: 20, color: p.onPrimary),
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -361,15 +355,7 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
                   ],
                 ),
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontFamily: kSerifFamily,
-                  fontFamilyFallback: kSerifFallbacks,
-                  fontStyle: FontStyle.italic,
-                  fontSize: 36,
-                  height: 1.05,
-                  letterSpacing: -0.5,
-                  fontWeight: FontWeight.w400,
-                ),
+                style: EditorialHeading.styleFor(context, HeadingLevel.page),
               ),
               const SizedBox(height: 8),
               Text(

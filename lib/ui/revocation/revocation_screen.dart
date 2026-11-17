@@ -146,7 +146,7 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
           PageHero(
             art: AppArt.flowRevocation,
             title: EditorialHeading(
-                text: context.l10n.revocationAreYouSure, size: 38),
+                text: context.l10n.revocationAreYouSure,),
             lead: context.l10n.revocationYourDirectiveWillNoLonger,
           ),
 
@@ -190,13 +190,7 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
                   const SizedBox(height: 6),
                   Text(
                     context.l10n.revocationThisDeclarationMayBeRevoked,
-                    style: TextStyle(
-                      fontFamily: kSerifFamily,
-                      fontFamilyFallback: kSerifFallbacks,
-                      fontSize: 14,
-                      height: 1.6,
-                      color: p.text,
-                    ),
+                    style: MhadText.serifAccent(context, size: 14, color: p.text, height: 1.6),
                   ),
                 ],
               ),

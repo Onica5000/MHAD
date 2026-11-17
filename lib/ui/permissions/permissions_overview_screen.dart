@@ -51,7 +51,6 @@ class PermissionsOverviewScreen extends StatelessWidget {
             eyebrow: context.l10n.permissionsOverviewWhatThisAppMayAsk,
             title: EditorialHeading(
               text: context.l10n.permissionsOverviewOnlyWhatWeNeed,
-              size: 30,
             ),
             lead: context.l10n.permissionsOverviewPaMhadRequestsSystemPermissions,
           ),

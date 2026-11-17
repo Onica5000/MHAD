@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/providers/assistant_providers.dart';
@@ -346,15 +347,7 @@ class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
                   ),
                   Text(
                     context.l10n.voiceSayItYourWay,
-                    style: TextStyle(
-                      fontFamily: kSerifFamily,
-                      fontFamilyFallback: kSerifFallbacks,
-                      fontStyle: FontStyle.italic,
-                      fontSize: 28,
-                      fontWeight: FontWeight.w400,
-                      letterSpacing: -0.5,
-                      color: p.text,
-                    ),
+                    style: EditorialHeading.styleFor(context, HeadingLevel.sub).copyWith(color: p.text),
                   ),
                   const SizedBox(height: 6),
                   Text(

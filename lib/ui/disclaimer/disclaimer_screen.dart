@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/split_hero.dart';
 import 'package:mhad/ui/theme/app_art.dart';
 import 'package:mhad/l10n/l10n.dart';
@@ -155,16 +156,7 @@ class _GateLayout extends StatelessWidget {
                   const SizedBox(height: 6),
                   Text(
                     context.l10n.disclaimerAFewThingsToUnderstand,
-                    style: TextStyle(
-                      fontFamily: kSerifFamily,
-                      fontFamilyFallback: kSerifFallbacks,
-                      fontStyle: FontStyle.italic,
-                      fontSize: 36,
-                      fontWeight: FontWeight.w400,
-                      height: 1.05,
-                      letterSpacing: -0.5,
-                      color: palette.text,
-                    ),
+                    style: EditorialHeading.styleFor(context, HeadingLevel.display).copyWith(color: palette.text),
                   ),
                   const SizedBox(height: 4),
                   Text(

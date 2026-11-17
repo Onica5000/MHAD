@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/rich_content_text.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/data/app_data/app_data.dart';
@@ -60,15 +61,7 @@ class ArticleDetailScreen extends StatelessWidget {
           const SizedBox(height: 10),
           Text(
             section.title,
-            style: const TextStyle(
-              fontFamily: kSerifFamily,
-              fontFamilyFallback: kSerifFallbacks,
-              fontStyle: FontStyle.italic,
-              fontSize: 30,
-              fontWeight: FontWeight.w400,
-              height: 1.05,
-              letterSpacing: -0.4,
-            ),
+            style: EditorialHeading.styleFor(context, HeadingLevel.page),
           ),
           const SizedBox(height: 12),
           // Real bold + indented lists instead of raw `**` markers.

@@ -191,7 +191,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
                       PageHero(
                         art: AppArt.flowSideEffects,
                         eyebrow: context.l10n.sideEffectsOptionalAddOn,
-                        title: EditorialHeading(text: context.l10n.medsStepSideEffectsTitle, size: 30),
+                        title: EditorialHeading(text: context.l10n.medsStepSideEffectsTitle),
                         lead: context.l10n.sideEffectsForTheMedicationsYouRe,
                       ),
                       const SizedBox(height: 16),

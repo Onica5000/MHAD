@@ -21,13 +21,68 @@ abstract final class MhadText {
   /// DM Sans small caps replaced the JetBrains Mono eyebrow in the 2026-11
   /// redesign: mono read as a developer tool rather than a calm, professional
   /// service.
-  static TextStyle eyebrow(Color color, {double size = 12}) => TextStyle(
+  static TextStyle eyebrow(Color color, {double size = MhadType.caption}) =>
+      TextStyle(
         fontSize: size,
         fontWeight: FontWeight.w700,
-        letterSpacing: 1.1,
+        letterSpacing: MhadType.trackingEyebrow,
         height: 1.3,
         color: color,
       );
+
+  /// The editorial serif voice at a free size, for ACCENTS that are not
+  /// headings: numerals, pull-quotes, the brand mark, the wallet-card
+  /// monogram, the statutory revocation text. (Headings use
+  /// [EditorialHeading] levels instead.) Follows the theme's display face, so
+  /// it turns upright with the dyslexia-friendly font like the headings do.
+  static TextStyle serifAccent(BuildContext context,
+      {required double size, Color? color, double? height}) {
+    final display = Theme.of(context).textTheme.displayLarge!;
+    final editorial = display.fontFamily == kSerifFamily;
+    return display.copyWith(
+      fontSize: editorial ? size : (size * 0.82).roundToDouble(),
+      color: color,
+      height: height ?? (size <= 18 ? MhadType.leadingParagraph : MhadType.leadingTitle),
+      letterSpacing: size >= 28 ? MhadType.trackingDisplay : 0,
+    );
+  }
+}
+
+/// The type ramp — ONE size per role (2026-11 overhaul: page titles had six
+/// sizes for the same job, 26–38). The theme's [TextTheme] is built from
+/// these; screens use `Theme.of(context).textTheme.<role>` (or
+/// [EditorialHeading] for the serif display levels), never a raw size.
+///
+/// | Role | Size | TextTheme slot |
+/// |---|---|---|
+/// | Hero title (Home, Learn, the two welcome screens) | 42 serif | displayLarge |
+/// | Page title (every other page) | 34 serif | displayMedium |
+/// | Sub-title (sheets, dialogs, cards) | 28 serif | displaySmall |
+/// | Section title | 20 bold | titleLarge |
+/// | Card / item title | 16 semibold | titleMedium |
+/// | Body text, leads, paragraphs | 16 | bodyLarge |
+/// | Secondary text, help, captions under fields | 14 | bodyMedium / bodySmall |
+/// | Labels, small meta, eyebrows | 12 | labelMedium / labelSmall |
+abstract final class MhadType {
+  static const double display = 42;
+  static const double pageTitle = 34;
+  static const double subTitle = 28;
+  static const double section = 20;
+  static const double cardTitle = 16;
+  static const double body = 16;
+  static const double secondary = 14;
+  static const double caption = 12;
+
+  /// Letter-spacing: four values instead of 23.
+  static const double trackingDisplay = -0.6;
+  static const double trackingTitle = -0.2;
+  static const double trackingLabel = 0.3;
+  static const double trackingEyebrow = 1.1;
+
+  /// Line heights: three values instead of 14.
+  static const double leadingTitle = 1.08;
+  static const double leadingUi = 1.35;
+  static const double leadingParagraph = 1.5;
 }
 
 /// Design tokens — single source of truth for radii, spacing, shadows used
@@ -884,37 +939,66 @@ ThemeData buildMhadTheme(
 
 TextTheme _buildTextTheme(Color text, Color muted,
     {String family = kSansFamily, bool bold = false}) {
+  // The three display slots are the editorial serif headlines — italic
+  // Instrument Serif normally; with the dyslexia-friendly font on, that font
+  // UPRIGHT and bold instead (italic serif is the hardest style for dyslexic
+  // readers, and the old EditorialHeading ignored the setting). It runs wide,
+  // so it is set a little smaller.
+  final editorial = family == kSansFamily;
+  TextStyle display(double size) => editorial
+      ? TextStyle(
+          fontFamily: kSerifFamily,
+          fontFamilyFallback: kSerifFallbacks,
+          fontStyle: FontStyle.italic,
+          fontWeight: FontWeight.w400,
+          fontSize: size,
+          height: MhadType.leadingTitle,
+          letterSpacing: MhadType.trackingDisplay,
+          color: text,
+        )
+      : TextStyle(
+          fontFamily: family,
+          fontWeight: FontWeight.w700,
+          fontSize: (size * 0.82).roundToDouble(),
+          height: MhadType.leadingTitle + 0.1,
+          letterSpacing: MhadType.trackingTitle,
+          color: text,
+        );
+  TextStyle sans(double size, FontWeight weight,
+          {Color? color, double? height, double? tracking}) =>
+      TextStyle(
+        fontFamily: family,
+        fontSize: size,
+        fontWeight: weight,
+        color: color ?? text,
+        height: height,
+        letterSpacing: tracking,
+      );
   final t = TextTheme(
-    displayLarge: TextStyle(
-        fontFamily: family, fontSize: 40, fontWeight: FontWeight.w700, color: text, letterSpacing: -0.5),
-    displayMedium: TextStyle(
-        fontFamily: family, fontSize: 32, fontWeight: FontWeight.w700, color: text, letterSpacing: -0.3),
-    displaySmall: TextStyle(
-        fontFamily: family, fontSize: 26, fontWeight: FontWeight.w700, color: text, letterSpacing: -0.3),
-    headlineLarge: TextStyle(
-        fontFamily: family, fontSize: 24, fontWeight: FontWeight.w700, color: text, letterSpacing: -0.3),
-    headlineMedium: TextStyle(
-        fontFamily: family, fontSize: 22, fontWeight: FontWeight.w700, color: text, letterSpacing: -0.3),
-    headlineSmall: TextStyle(
-        fontFamily: family, fontSize: 20, fontWeight: FontWeight.w700, color: text, letterSpacing: -0.2),
-    titleLarge: TextStyle(
-        fontFamily: family, fontSize: 18, fontWeight: FontWeight.w700, color: text),
-    titleMedium: TextStyle(
-        fontFamily: family, fontSize: 16, fontWeight: FontWeight.w600, color: text),
-    titleSmall: TextStyle(
-        fontFamily: family, fontSize: 14, fontWeight: FontWeight.w600, color: text),
-    bodyLarge: TextStyle(
-        fontFamily: family, fontSize: 16, fontWeight: FontWeight.w400, color: text, height: 1.5),
-    bodyMedium: TextStyle(
-        fontFamily: family, fontSize: 14, fontWeight: FontWeight.w400, color: text, height: 1.5),
-    bodySmall: TextStyle(
-        fontFamily: family, fontSize: 14, fontWeight: FontWeight.w400, color: muted, height: 1.45),
-    labelLarge: TextStyle(
-        fontFamily: family, fontSize: 14, fontWeight: FontWeight.w600, color: text),
-    labelMedium: TextStyle(
-        fontFamily: family, fontSize: 12, fontWeight: FontWeight.w600, color: text),
-    labelSmall: TextStyle(
-        fontFamily: family, fontSize: 14, fontWeight: FontWeight.w700, color: muted, letterSpacing: 1.0),
+    // See [MhadType] for the role of each slot.
+    displayLarge: display(MhadType.display),
+    displayMedium: display(MhadType.pageTitle),
+    displaySmall: display(MhadType.subTitle),
+    headlineLarge: sans(24, FontWeight.w700, tracking: MhadType.trackingTitle),
+    headlineMedium: sans(22, FontWeight.w700, tracking: MhadType.trackingTitle),
+    headlineSmall:
+        sans(MhadType.section, FontWeight.w700, tracking: MhadType.trackingTitle),
+    titleLarge: sans(MhadType.section, FontWeight.w700,
+        height: MhadType.leadingUi, tracking: MhadType.trackingTitle),
+    titleMedium: sans(MhadType.cardTitle, FontWeight.w600,
+        height: MhadType.leadingUi),
+    titleSmall: sans(MhadType.secondary, FontWeight.w600,
+        height: MhadType.leadingUi),
+    bodyLarge: sans(MhadType.body, FontWeight.w400,
+        height: MhadType.leadingParagraph),
+    bodyMedium: sans(MhadType.secondary, FontWeight.w400,
+        height: MhadType.leadingParagraph),
+    bodySmall: sans(MhadType.secondary, FontWeight.w400,
+        color: muted, height: MhadType.leadingParagraph),
+    labelLarge: sans(MhadType.secondary, FontWeight.w600),
+    labelMedium: sans(MhadType.caption, FontWeight.w600),
+    labelSmall: sans(MhadType.caption, FontWeight.w700,
+        color: muted, tracking: MhadType.trackingEyebrow),
   );
   // Bold-text accessibility: shift every weight up two steps (w400 → w600).
   // TextStyle.apply supports fontWeightDelta; TextTheme.apply does not, so map.

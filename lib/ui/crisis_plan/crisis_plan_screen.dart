@@ -123,7 +123,7 @@ class _CrisisPlanScreenState extends ConsumerState<CrisisPlanScreen> {
           PageHero(
             art: AppArt.flowCrisisPlan,
             eyebrow: context.l10n.crisisPlanOptionalAddOnCrisisPlan,
-            title: EditorialHeading(text: context.l10n.crisisPlanHowIKnowIM, size: 38),
+            title: EditorialHeading(text: context.l10n.crisisPlanHowIKnowIM),
             lead: context.l10n.crisisPlanHelpThePeopleAroundYou,
           ),
           const SizedBox(height: 18),

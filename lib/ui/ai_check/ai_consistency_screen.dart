@@ -601,7 +601,6 @@ Return plain-text suggestions (short bullets are fine). No preamble.''';
                         const TextSpan(text: '.'),
                       ],
                     ),
-                    size: 32,
                   ),
                   lead: _conflicts.isEmpty
                       ? context.l10n.aiConsistencyAllConsistent

@@ -204,8 +204,7 @@ class _QuestionBody extends StatelessWidget {
               EditorialHeading(
                 textSpan: inlineMarkdownSpan(question.headline,
                     emphasisStyle: TextStyle(color: p.primary)),
-                size: 26,
-                height: 1.15,
+                level: HeadingLevel.sub,
               ),
               const SizedBox(height: 6),
               Text(
@@ -395,8 +394,6 @@ class _ResultBody extends StatelessWidget {
                     const TextSpan(text: '.'),
                   ],
                 ),
-                size: 30,
-                height: 1.1,
               ),
               const SizedBox(height: 8),
               Text(

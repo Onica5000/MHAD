@@ -93,7 +93,6 @@ class _CrisisSheet extends StatelessWidget {
               const SizedBox(height: 4),
               EditorialHeading(
                 text: context.l10n.crisisSheetYouAreNotAlone,
-                size: 34,
               ),
               const SizedBox(height: 8),
               Text(

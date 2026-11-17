@@ -446,9 +446,7 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
               TextSpan(text: context.l10n.pdfPreviewOnPaper, style: TextStyle(color: p.primary)),
             ],
           ),
-          size: 24,
-          height: 1.05,
-          letterSpacing: -0.5,
+          level: HeadingLevel.sub,
         ),
         const SizedBox(height: 6),
         Text(

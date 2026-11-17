@@ -45,7 +45,7 @@ class MakeItFindableScreen extends ConsumerWidget {
                 PageHero(
                   art: AppArt.flowFindable,
                   eyebrow: context.l10n.makeItFindableCrisisReadiness,
-                  title: EditorialHeading(text: context.l10n.makeItFindableMakeItFindableInA, size: 32),
+                  title: EditorialHeading(text: context.l10n.makeItFindableMakeItFindableInA),
                   lead: context.l10n.makeItFindableADirectiveOnlyHelpsIf,
                 ),
                 const SizedBox(height: 18),

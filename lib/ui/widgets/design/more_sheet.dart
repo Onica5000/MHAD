@@ -151,7 +151,7 @@ class _MoreSheet extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 14),
-              EditorialHeading(text: context.l10n.navMore, size: 30),
+              EditorialHeading(text: context.l10n.navMore),
               const SizedBox(height: 4),
               Text(
                 context.l10n.moreSheetEverythingElseYouCanDo,

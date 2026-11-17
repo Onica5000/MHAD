@@ -52,9 +52,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   eyebrow: context.l10n.settingsAccount,
                   title: EditorialHeading(
                     text: context.l10n.navSettings,
-                    size: 38,
-                    height: 1.0,
-                    letterSpacing: -0.5,
                   ),
                 ),
                 const SizedBox(height: 16),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
@@ -591,16 +592,7 @@ class _AccordionSection extends StatelessWidget {
                         width: 30,
                         child: Text(
                           number,
-                          style: TextStyle(
-                            fontFamily: kSerifFamily,
-                            fontFamilyFallback: kSerifFallbacks,
-                            fontStyle: FontStyle.italic,
-                            fontSize: 24,
-                            fontWeight: FontWeight.w400,
-                            height: 1,
-                            letterSpacing: -0.5,
-                            color: p.primary,
-                          ),
+                          style: EditorialHeading.styleFor(context, HeadingLevel.sub).copyWith(color: p.primary),
                         ),
                       ),
                       const SizedBox(width: 12),

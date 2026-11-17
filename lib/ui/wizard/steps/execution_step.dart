@@ -101,7 +101,6 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
           eyebrow: context.l10n.executionFinalStepLabel,
           title: EditorialHeading(
             text: context.l10n.executionHeading,
-            size: 32,
           ),
           lead: context.l10n.executionIntro,
         ),
@@ -325,14 +324,7 @@ class _SignStep extends StatelessWidget {
                 alignment: Alignment.center,
                 child: Text(
                   '$n',
-                  style: TextStyle(
-                    fontFamily: kSerifFamily,
-                    fontFamilyFallback: kSerifFallbacks,
-                    fontStyle: FontStyle.italic,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                    color: p.onPrimary,
-                  ),
+                  style: MhadText.serifAccent(context, size: 16, color: p.onPrimary),
                 ),
               ),
               if (!last)
