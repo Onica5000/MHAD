@@ -1,13 +1,12 @@
 ﻿import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:mhad/ui/widgets/design/spot_illustration.dart';
-import 'package:mhad/ui/widgets/design/illustrated_intro.dart';
+import 'package:mhad/ui/widgets/design/page_hero.dart';
+import 'package:mhad/ui/theme/app_art.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/ui/widgets/design/design_card.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
-import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/design/wizard_header.dart';
 import 'package:mhad/utils/platform_utils.dart';
 
@@ -47,28 +46,14 @@ class PermissionsOverviewScreen extends StatelessWidget {
         Expanded(child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 14, 20, 32),
         children: [
-          IllustratedIntro(
-            art: SpotArt.shield,
-            label: SectionLabel(context.l10n.permissionsOverviewWhatThisAppMayAsk),
-            body: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                EditorialHeading(
-                  text: context.l10n.permissionsOverviewOnlyWhatWeNeed,
-                  size: 30,
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  context.l10n.permissionsOverviewPaMhadRequestsSystemPermissions,
-                  style: TextStyle(
-                    fontFamily: kSansFamily,
-                    fontSize: 14,
-                    color: p.textMuted,
-                    height: 1.5,
-                  ),
-                ),
-              ],
+          PageHero(
+            art: AppArt.miscPrivacy,
+            eyebrow: context.l10n.permissionsOverviewWhatThisAppMayAsk,
+            title: EditorialHeading(
+              text: context.l10n.permissionsOverviewOnlyWhatWeNeed,
+              size: 30,
             ),
+            lead: context.l10n.permissionsOverviewPaMhadRequestsSystemPermissions,
           ),
           const SizedBox(height: 18),
           _PermissionCard(
