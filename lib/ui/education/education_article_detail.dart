@@ -4,7 +4,9 @@ import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/data/educational_content.dart';
 import 'package:mhad/ui/router.dart';
+import 'package:mhad/ui/theme/app_art.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/design/art_image.dart';
 
 /// The ONE article-detail screen for [EducationSection]s (2026-07-11 UX
 /// audit C4). Previously the same content rendered through two different
@@ -25,9 +27,26 @@ class ArticleDetailScreen extends StatelessWidget {
         : context.l10n.educationSourceOfficialBooklet;
     return Scaffold(
       appBar: AppBar(title: Text(section.title)),
-      body: ListView(
-        padding: const EdgeInsets.all(20),
+      // A centered ~720px reading column (about 70 characters a line): the
+      // article is pushed over Learn's FILL layout, so on a wide monitor the
+      // text used to run the whole content width. The scrollbar stays at the
+      // window edge because the padding, not a box, centers the column.
+      body: LayoutBuilder(
+        builder: (context, box) {
+          final side = box.maxWidth > _readingWidth + 40
+              ? (box.maxWidth - _readingWidth) / 2
+              : 20.0;
+          return ListView(
+        padding: EdgeInsets.fromLTRB(side, 20, side, 28),
         children: [
+          // Category photo header (one definition: EducationCategoryArt).
+          ArtImage(
+            section.category.art,
+            height: 180,
+            expand: true,
+            radius: DesignTokens.radiusLg,
+          ),
+          const SizedBox(height: 18),
           // Source line (artboard WebArticle).
           Text(
             source,
@@ -134,7 +153,12 @@ class ArticleDetailScreen extends StatelessWidget {
           ),
           const SizedBox(height: 24),
         ],
+          );
+        },
       ),
     );
   }
+
+  /// Reading measure for the article column (~70 characters at 16px).
+  static const double _readingWidth = 720;
 }

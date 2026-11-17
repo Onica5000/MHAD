@@ -1,8 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/status_views.dart';
+import 'package:mhad/ui/widgets/design/photo_action_card.dart';
+import 'package:mhad/ui/widgets/design/page_hero.dart';
+import 'package:mhad/ui/theme/app_art.dart';
 import 'package:mhad/ui/widgets/rich_content_text.dart';
-import 'package:mhad/ui/widgets/design/illustrated_intro.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/data/educational_content.dart';
 import 'package:mhad/ui/education/education_article_detail.dart';
@@ -11,8 +14,6 @@ import 'package:mhad/ui/education/learn_ai_panel.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/responsive_shell.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
-import 'package:mhad/ui/widgets/design/spot_illustration.dart';
-import 'package:mhad/ui/widgets/design/brand_motif.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
 
 class EducationScreen extends StatefulWidget {
@@ -61,7 +62,7 @@ class _EducationScreenState extends State<EducationScreen> {
           title: Text(widget.filterTitle ?? context.l10n.educationHelpTitle),
         ),
         body: _filteredSections.isEmpty
-            ? _emptyArt(SpotArt.search, context.l10n.educationNoResultsFound)
+            ? _emptyArt(context.l10n.educationNoResultsFound)
             : ListView.builder(
                 padding: const EdgeInsets.all(12),
                 itemCount: _filteredSections.length,
@@ -71,7 +72,7 @@ class _EducationScreenState extends State<EducationScreen> {
       );
     }
     final hub = _filteredSections.isEmpty
-        ? _emptyArt(SpotArt.search, context.l10n.educationNoResultsFound)
+        ? _emptyArt(context.l10n.educationNoResultsFound)
         : _EditorialLearnHub(
             sections: _filteredSections,
             activeTab: _activeTab,
@@ -148,56 +149,33 @@ class _EditorialLearnHub extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 8, 20, 28),
       children: [
-        // Brand-motif hero header — decorative backdrop behind the Learn
-        // headline + intro (content unchanged).
-        BrandMotif(
-          padding: const EdgeInsets.fromLTRB(20, 18, 20, 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              IllustratedIntro(
-                art: SpotArt.book,
-                wideSize: 104,
-                narrowSize: 52,
-                label: SectionLabel(context.l10n.navLearn),
-                body: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text.rich(
-                      TextSpan(
-                        children: [
-                          TextSpan(text: context.l10n.educationUnderstand),
-                          TextSpan(
-                            text: context.l10n.educationBefore,
-                            style: TextStyle(color: p.primary),
-                          ),
-                          TextSpan(text: context.l10n.educationYouSign),
-                        ],
-                      ),
-                      style: const TextStyle(
-                        fontFamily: kSerifFamily,
-                        fontFamilyFallback: kSerifFallbacks,
-                        fontStyle: FontStyle.italic,
-                        fontSize: 42,
-                        height: 1,
-                        letterSpacing: -0.8,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      context.l10n.educationMostOfThisComesStraight,
-                      style: TextStyle(
-                        fontFamily: kSansFamily,
-                        fontSize: 14,
-                        height: 1.5,
-                        color: p.textMuted,
-                      ),
-                    ),
-                  ],
+        // Hero: the Learn photo (a reading nook) beside the headline on wide
+        // screens, a banner above it on phones.
+        PageHero(
+          art: AppArt.learnHero,
+          size: PageHeroSize.large,
+          eyebrow: context.l10n.navLearn,
+          lead: context.l10n.educationMostOfThisComesStraight,
+          title: Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(text: context.l10n.educationUnderstand),
+                TextSpan(
+                  text: context.l10n.educationBefore,
+                  style: TextStyle(color: p.primary),
                 ),
-              ),
-            ],
+                TextSpan(text: context.l10n.educationYouSign),
+              ],
+            ),
+            style: const TextStyle(
+              fontFamily: kSerifFamily,
+              fontFamilyFallback: kSerifFallbacks,
+              fontStyle: FontStyle.italic,
+              fontSize: 42,
+              height: 1,
+              letterSpacing: -0.8,
+              fontWeight: FontWeight.w400,
+            ),
           ),
         ),
         // The articles are the official PA booklet text (English-only JSON);
@@ -310,17 +288,24 @@ class _EditorialLearnHub extends StatelessWidget {
             } else {
               columns = 2;
             }
-            final cardW =
-                (constraints.maxWidth - gap * (columns - 1)) / columns;
-            return Wrap(
-              spacing: gap,
-              runSpacing: gap,
+            // Rows of EQUAL height (cards in a row match the tallest; a
+            // short last row is padded so card widths stay even).
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                for (final s in grid)
-                  SizedBox(
-                    width: cardW,
-                    child: _GridCard(section: s),
+                for (var i = 0; i < grid.length; i += columns) ...[
+                  if (i > 0) const SizedBox(height: gap),
+                  EqualHeightRow(
+                    gap: gap,
+                    children: [
+                      for (var j = i; j < i + columns; j++)
+                        if (j < grid.length)
+                          _GridCard(section: grid[j])
+                        else
+                          const SizedBox.shrink(),
+                    ],
                   ),
+                ],
               ],
             );
           },
@@ -551,9 +536,7 @@ class _EducationSearchDelegate extends SearchDelegate<EducationSection?> {
         .toList();
 
     if (results.isEmpty) {
-      return _emptyArt(
-        SpotArt.search,
-        context.l10n.educationNoResultsFor(query),
+      return _emptyArt(context.l10n.educationNoResultsFor(query),
       );
     }
     return ListView.builder(
@@ -567,22 +550,12 @@ class _EducationSearchDelegate extends SearchDelegate<EducationSection?> {
   }
 }
 
-/// Centered empty/no-results state with a themeable spot illustration above the
-/// message. Visual only — replaces the previous bare centered text.
-Widget _emptyArt(SpotArt art, String message) => Center(
-  child: Column(
-    mainAxisSize: MainAxisSize.min,
-    children: [
-      SpotIllustration(art: art, size: 88),
-      const SizedBox(height: 14),
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32),
-        child: Text(
-          message,
-          textAlign: TextAlign.center,
-          style: const TextStyle(fontStyle: FontStyle.italic),
-        ),
+/// Centered empty / no-results state: the shared EmptyState with the
+/// "nothing found" photo (one definition for every empty state).
+Widget _emptyArt(String message) => Center(
+      child: EmptyState(
+        icon: Icons.search,
+        art: AppArt.learnEmpty,
+        title: message,
       ),
-    ],
-  ),
-);
+    );

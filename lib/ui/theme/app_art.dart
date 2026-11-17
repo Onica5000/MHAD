@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:mhad/data/educational_content.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/ui/widgets/design/spot_illustration.dart';
 
@@ -144,5 +145,20 @@ extension WizardStepArt on WizardStep {
         WizardStep.proceduresResearch => AppArt.stepProceduresResearch,
         WizardStep.anythingElse => AppArt.stepAnythingElse,
         WizardStep.reviewAndSign => AppArt.stepReview,
+      };
+}
+
+/// The header photo for each Learn category — one definition, used by the
+/// article page. Form-specific sections reuse their form's photo.
+extension EducationCategoryArt on EducationCategory {
+  AppArt get art => switch (this) {
+        EducationCategory.glossary => AppArt.learnGlossary,
+        EducationCategory.faq => AppArt.learnFaq,
+        EducationCategory.checklist => AppArt.learnChecklists,
+        EducationCategory.combined => AppArt.formCombined,
+        EducationCategory.declaration => AppArt.formDeclaration,
+        EducationCategory.poa => AppArt.formPoa,
+        EducationCategory.supplementary => AppArt.learnArticles,
+        EducationCategory.intro => AppArt.learnArticles,
       };
 }
