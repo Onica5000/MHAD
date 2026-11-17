@@ -371,7 +371,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      context.l10n.medsStepSideEffectsBody,
+                      (appData.ai.apiModeVisible ? context.l10n.medsStepSideEffectsBody : context.l10n.medsStepSideEffectsBodyHandoff),
                       style: TextStyle(
                         fontSize: 12, height: MhadType.leadingParagraph,
                         color: p.textMuted,

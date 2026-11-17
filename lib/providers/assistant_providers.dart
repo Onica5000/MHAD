@@ -1,3 +1,4 @@
+import 'package:mhad/ai/handoff/pending_handoff.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -225,6 +226,10 @@ Future<void> endPublicSession(WidgetRef ref) async {
   ref.read(_ephemeralAiProvider.notifier).clear();
   ref.read(conversationProvider.notifier).clear();
   ref.read(aiConsentGivenProvider.notifier).state = false;
+  // Copy-and-paste handoff: the wait's directive is gone, and a new
+  // session shows the privacy notice again.
+  ref.read(pendingHandoffProvider.notifier).clear();
+  ref.read(handoffPrivacyAcknowledgedProvider.notifier).state = false;
   await DraftRecoveryService.clearDraft();
   await PublicSessionCache.clearAll();
 }

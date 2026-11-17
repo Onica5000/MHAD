@@ -7889,4 +7889,24 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get facilitatorGuidedMetaAiHandoff =>
       'Su propia IA, copiando y pegando';
+
+  @override
+  String get medsStepSideEffectsBodyHandoff =>
+      'Para los medicamentos que toma ahora, lea los efectos secundarios e interacciones oficiales de la FDA; no necesita IA. Con su propia IA (copiando y pegando) también puede obtener una lista breve para marcar, para que su equipo de atención sepa qué afecta sus actividades diarias. No es consejo médico.';
+
+  @override
+  String get moreSheetThisPermanentlyErasesEverythingInHandoff =>
+      'Esto borra de forma permanente todo lo de esta sesión (todas las directivas y cualquier respuesta de IA que esté esperando) y le devuelve a un inicio en blanco.\n\nExporte o imprima primero lo que quiera conservar. No se puede deshacer.';
+
+  @override
+  String get audioGuideDescribeYourWishesOutLoudHandoff =>
+      'Describa sus deseos en voz alta, adjunte la grabación en su propia IA desde la página Autocompletar y PA MHAD completará su directiva con la respuesta; usted revisa cada campo antes de que se agregue nada.';
+
+  @override
+  String get audioGuideToTranscribeYourRecordingIncludingHandoff =>
+      'Para transcribirla, usted adjunta su grabación (incluidos los datos personales que diga) en la IA que elija. Gemini acepta grabaciones en su plan gratuito (de hasta unos 10 minutos cada una) y ChatGPT en los planes de pago; la página Autocompletar muestra qué IA sirven. Se aplican las condiciones de ese servicio, y esta aplicación no puede recuperar lo que envíe. No diga nada que no quiera enviar; siempre puede escribir a mano los campos delicados.';
+
+  @override
+  String get audioGuideTipKeepEachClipShortUnderHandoff =>
+      'Haga cada grabación corta, de menos de unos 2 minutos. Grabe una por cada sección de abajo y adjúntelas juntas en su IA; algunas IA limitan la duración de las grabaciones.';
 }

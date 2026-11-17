@@ -1,3 +1,4 @@
+import 'package:mhad/data/app_data/app_data.dart' show appData;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/data/database/app_database.dart';
@@ -56,7 +57,7 @@ Future<void> confirmAndResetSession(WidgetRef ref) async {
       return AlertDialog(
         icon: Icon(Icons.warning_amber_rounded, color: cs.error, size: 36),
         title: Text(dctx.l10n.moreSheetResetAndStartFresh),
-        content: Text(dctx.l10n.moreSheetThisPermanentlyErasesEverythingIn),
+        content: Text((appData.ai.apiModeVisible ? dctx.l10n.moreSheetThisPermanentlyErasesEverythingIn : dctx.l10n.moreSheetThisPermanentlyErasesEverythingInHandoff)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dctx, false),

@@ -1,3 +1,4 @@
+import 'package:mhad/data/app_data/app_data.dart' show appData;
 import 'package:mhad/utils/file_names.dart';
 import 'package:flutter/material.dart';
 import 'package:mhad/ui/widgets/design/back_link.dart';
@@ -54,7 +55,7 @@ class AudioGuideScreen extends StatelessWidget {
             title: EditorialHeading(
               text: context.l10n.audioGuideRecordYourWishesByVoice,
             ),
-            lead: context.l10n.audioGuideDescribeYourWishesOutLoud,
+            lead: (appData.ai.apiModeVisible ? context.l10n.audioGuideDescribeYourWishesOutLoud : context.l10n.audioGuideDescribeYourWishesOutLoudHandoff),
           ),
           const SizedBox(height: 16),
           SizedBox(
@@ -81,14 +82,14 @@ class AudioGuideScreen extends StatelessWidget {
           _tip(p, Icons.high_quality_outlined,
               context.l10n.audioGuideTipQualityDoesnTMatterAny),
           _tip(p, Icons.timer_outlined,
-              context.l10n.audioGuideTipKeepEachClipShortUnder),
+              (appData.ai.apiModeVisible ? context.l10n.audioGuideTipKeepEachClipShortUnder : context.l10n.audioGuideTipKeepEachClipShortUnderHandoff)),
           _tip(p, Icons.spellcheck_outlined,
               context.l10n.audioGuideTipSayMedicationAndDoctorNames),
           const SizedBox(height: 12),
           InfoBanner(
             icon: Icons.privacy_tip_outlined,
             variant: InfoBannerVariant.warning,
-            text: context.l10n.audioGuideToTranscribeYourRecordingIncluding,
+            text: (appData.ai.apiModeVisible ? context.l10n.audioGuideToTranscribeYourRecordingIncluding : context.l10n.audioGuideToTranscribeYourRecordingIncludingHandoff),
           ),
           const SizedBox(height: 24),
 

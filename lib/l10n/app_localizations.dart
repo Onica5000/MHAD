@@ -13152,6 +13152,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your own AI, by copy and paste'**
   String get facilitatorGuidedMetaAiHandoff;
+
+  /// No description provided for @medsStepSideEffectsBodyHandoff.
+  ///
+  /// In en, this message translates to:
+  /// **'For the medications you take now, read the official FDA side effects and interactions — no AI needed. With your own AI (copy and paste), you can also get a short checklist to tick, so your care team knows what affects your daily activities. Not medical advice.'**
+  String get medsStepSideEffectsBodyHandoff;
+
+  /// No description provided for @moreSheetThisPermanentlyErasesEverythingInHandoff.
+  ///
+  /// In en, this message translates to:
+  /// **'This permanently erases everything in this session — all directives and any AI answer you\'re waiting for — and returns you to a blank start.\n\nExport or print anything you want to keep first. This cannot be undone.'**
+  String get moreSheetThisPermanentlyErasesEverythingInHandoff;
+
+  /// No description provided for @audioGuideDescribeYourWishesOutLoudHandoff.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe your wishes out loud, attach the recording in your own AI from the Autofill page, and PA MHAD fills in your directive from its answer — you review every field before anything is added.'**
+  String get audioGuideDescribeYourWishesOutLoudHandoff;
+
+  /// No description provided for @audioGuideToTranscribeYourRecordingIncludingHandoff.
+  ///
+  /// In en, this message translates to:
+  /// **'To transcribe it, you attach your recording — including any personal details you speak — in the AI you choose. Gemini takes recordings on its free plan (up to about 10 minutes each) and ChatGPT on paid plans; the Autofill page shows which AIs fit. That service\'s own terms apply, and this app can\'t recall what you send. Don\'t say anything you\'re not comfortable sending; you can always type sensitive fields by hand instead.'**
+  String get audioGuideToTranscribeYourRecordingIncludingHandoff;
+
+  /// No description provided for @audioGuideTipKeepEachClipShortUnderHandoff.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep each clip short — under about 2 minutes. Record one clip per section below and attach them together in your AI; some AIs limit how long a recording can be.'**
+  String get audioGuideTipKeepEachClipShortUnderHandoff;
 }
 
 class _AppLocalizationsDelegate
