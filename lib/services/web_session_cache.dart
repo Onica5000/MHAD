@@ -1,3 +1,4 @@
+import 'package:mhad/data/repository/directive_repository.dart';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
@@ -26,6 +27,26 @@ class WebSessionCache {
       await prefs.setString(_tsKey, DateTime.now().toIso8601String());
     } catch (e) {
       debugPrint('WebSessionCache: save failed: $e');
+    }
+  }
+
+  /// Snapshots directive [directiveId] for reload recovery (web only;
+  /// identity stays out — see `snapshotDirective`). Best-effort and bounded:
+  /// it must never block the caller (wizard navigation, a handoff copy), and a
+  /// try/catch alone doesn't rescue a hang — only a throw — so every async hop
+  /// has a timeout; on timeout the snapshot is simply skipped.
+  static Future<void> cacheDirective(
+      DirectiveRepository repo, int directiveId) async {
+    if (!kIsWeb) return;
+    try {
+      final snap = await repo
+          .snapshotDirective(directiveId)
+          .timeout(const Duration(seconds: 3));
+      if (snap.isNotEmpty) {
+        await saveDirective(snap).timeout(const Duration(seconds: 3));
+      }
+    } catch (e) {
+      debugPrint('Web cache save skipped (failed or timed out): $e');
     }
   }
 

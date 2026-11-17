@@ -415,7 +415,7 @@ Return plain-text suggestions (short bullets are fine). No preamble.''';
           buildTask: (_) => HandoffTask(
             kind: HandoffTaskKind.review,
             instructions: _reviewPrompt(_handoffSummary ?? ''),
-            ref: 'd${widget.directiveId}',
+            ref: directiveHandoffRef(widget.directiveId),
           ),
         ),
       ];
@@ -650,7 +650,9 @@ Return plain-text suggestions (short bullets are fine). No preamble.''';
                 InfoBanner(
                   icon: Icons.auto_awesome,
                   variant: InfoBannerVariant.info,
-                  text: context.l10n.aiConsistencyRulesExplainer,
+                  text: appData.ai.apiModeVisible
+                      ? context.l10n.aiConsistencyRulesExplainer
+                      : context.l10n.aiConsistencyRulesExplainerHandoff,
                 ),
               ],
             ),

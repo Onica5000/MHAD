@@ -94,12 +94,14 @@ extension _PipelineApplyLogic on _PipelineScreenState {
           child: SingleChildScrollView(
             child: AiHandoffPanel(
               kind: HandoffTaskKind.smartFill,
+              // The suggestions apply to this review, which leaving loses.
+              resumable: false,
               title: dctx.l10n.smartFillHandoffPanelTitle,
               subtitle: dctx.l10n.smartFillHandoffSubtitle,
               buildTask: (_) => HandoffTask(
                 kind: HandoffTaskKind.smartFill,
                 instructions: prompt,
-                ref: 'd${widget.directiveId}',
+                ref: directiveHandoffRef(widget.directiveId),
               ),
               onAnswer: (json) async {
                 final result = SmartFillResult.fromJson(json);

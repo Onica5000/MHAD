@@ -3,6 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mhad/services/web_session_cache.dart';
+import 'package:mhad/providers/app_providers.dart' show directiveRepositoryProvider;
+import 'package:flutter_riverpod/legacy.dart' show StateController;
 import 'package:mhad/ai/handoff/ai_handoff_data.dart';
 import 'package:mhad/ai/handoff/handoff_parser.dart';
 import 'package:mhad/ai/handoff/handoff_prompt.dart';
@@ -47,6 +50,14 @@ class AiHandoffPanel extends ConsumerStatefulWidget {
   /// The kind decides whether step 3 (paste) is shown.
   final HandoffTaskKind kind;
 
+  /// JSON tasks: whether the person can come back to paste after leaving
+  /// this page (the "Back to paste your AI answer" banner, the reload
+  /// restore). False when the answer needs state that leaving loses.
+  final bool resumable;
+
+  /// Where to come back to paste — the page on screen by default.
+  final String? resumeRoute;
+
   const AiHandoffPanel({
     required this.buildTask,
     required this.title,
@@ -55,6 +66,8 @@ class AiHandoffPanel extends ConsumerStatefulWidget {
     this.onAnswer,
     this.enabled = true,
     this.attachment = HandoffAttachment.none,
+    this.resumable = true,
+    this.resumeRoute,
     super.key,
   });
 
@@ -72,9 +85,30 @@ class _AiHandoffPanelState extends ConsumerState<AiHandoffPanel> {
   HandoffProblem? _problem;
   Timer? _tick;
 
+  /// Counts this card in [liveHandoffCardsProvider] while it's on screen
+  /// (JSON tasks). Changed in a microtask: never mid-build or mid-unmount.
+  StateController<Map<String, int>>? _live;
+  late final String _liveTag;
+
+  void _countLive(int by) {
+    final live = _live;
+    if (live == null) return;
+    try {
+      final n = (live.state[_liveTag] ?? 0) + by;
+      live.state = {...live.state, _liveTag: n < 0 ? 0 : n};
+    } catch (_) {
+      // The app is shutting down.
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    _liveTag = widget.kind.tag;
+    if (widget.kind.returnsJson) {
+      _live = ref.read(liveHandoffCardsProvider.notifier);
+      Future.microtask(() => _countLive(1));
+    }
     // Refresh the "N min left" line while waiting.
     _tick = Timer.periodic(const Duration(seconds: 30), (_) {
       if (mounted && ref.read(pendingHandoffProvider) != null) setState(() {});
@@ -83,6 +117,7 @@ class _AiHandoffPanelState extends ConsumerState<AiHandoffPanel> {
 
   @override
   void dispose() {
+    if (_live != null) Future.microtask(() => _countLive(-1));
     _tick?.cancel();
     _paste.dispose();
     super.dispose();
@@ -150,12 +185,20 @@ class _AiHandoffPanelState extends ConsumerState<AiHandoffPanel> {
     );
     await Clipboard.setData(ClipboardData(text: prompt));
     if (task.returnsJson) {
-      final cfg = appRouter.routerDelegate.currentConfiguration;
       ref.read(pendingHandoffProvider.notifier).start(
             taskTag: task.kind.tag,
             ref: task.ref,
-            route: cfg.uri.toString(),
+            route: !widget.resumable
+                ? ''
+                : widget.resumeRoute ?? currentAppLocation().toString(),
           );
+      // A phone may unload this tab while the person is in their AI app:
+      // keep the latest work for the reload restore (web only).
+      final id = directiveIdOfHandoffRef(task.ref);
+      if (widget.resumable && id != null) {
+        unawaited(WebSessionCache.cacheDirective(
+            ref.read(directiveRepositoryProvider), id));
+      }
     }
     if (!mounted) return;
     setState(() {
@@ -183,8 +226,20 @@ class _AiHandoffPanelState extends ConsumerState<AiHandoffPanel> {
 
   Future<void> _use() async {
     final task = _task ?? widget.buildTask(context);
-    final reply =
-        parseHandoffReply(_paste.text, taskTag: task.kind.tag, ref: task.ref);
+    // After a reload restored the work under a new id, the answer still
+    // carries the old one from the copied instructions.
+    final pending = ref.read(pendingHandoffProvider);
+    final reply = parseHandoffReply(
+      _paste.text,
+      taskTag: task.kind.tag,
+      ref: task.ref,
+      alsoAccept: {
+        if (pending != null &&
+            pending.taskTag == task.kind.tag &&
+            pending.ref == task.ref)
+          pending.promptRef,
+      },
+    );
     if (!reply.ok) {
       setState(() => _problem = reply.problem);
       return;

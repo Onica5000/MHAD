@@ -331,7 +331,7 @@ Return only the draft text — no explanation, no quotes, no preamble.''';
                   buildTask: (_) => HandoffTask(
                     kind: HandoffTaskKind.fieldWording,
                     instructions: prompt,
-                    ref: 'd${widget.directiveId}',
+                    ref: directiveHandoffRef(widget.directiveId),
                   ),
                 ),
                 const SizedBox(height: 16),

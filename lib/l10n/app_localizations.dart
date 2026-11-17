@@ -13068,6 +13068,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Ask questions with your own AI'**
   String get homeToolsAskAiSub;
+
+  /// No description provided for @wizardAiBarAskYourAi.
+  ///
+  /// In en, this message translates to:
+  /// **'Need help with this step? Ask your AI'**
+  String get wizardAiBarAskYourAi;
+
+  /// No description provided for @aiConsistencyRulesExplainerHandoff.
+  ///
+  /// In en, this message translates to:
+  /// **'The contradiction check above uses built-in rules. Anything your AI suggests is optional — review it before you change your directive. This screen warns; it doesn\'t block making the PDF.'**
+  String get aiConsistencyRulesExplainerHandoff;
 }
 
 class _AppLocalizationsDelegate

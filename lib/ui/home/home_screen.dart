@@ -1,4 +1,5 @@
-﻿import 'dart:async';
+﻿import 'package:mhad/ai/handoff/pending_handoff.dart';
+import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -457,11 +458,29 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Future<void> _tryWebSessionRestore() async {
     try {
       final snap = await WebSessionCache.getCachedDirective();
-      if (snap == null || !mounted) return;
+      if (snap == null || !mounted) {
+        // Nothing to restore: a wait for an AI answer about that work can't
+        // be finished (web data lives in the tab) — drop it and its banner.
+        if (mounted) ref.read(pendingHandoffProvider.notifier).clear();
+        return;
+      }
 
       final repo = ref.read(directiveRepositoryProvider);
       final newId = await repo.restoreFromSnapshot(snap);
-      await WebSessionCache.clear();
+      // Waiting for an AI answer (copy and paste)? Go back to that page under
+      // the restored directive's id, and keep the recovery copy until the
+      // answer is in (the tab may unload again).
+      final pending = await ref
+          .read(pendingHandoffProvider.notifier)
+          .remapDirective(newId);
+      final resume =
+          pending != null && pending.resumable ? pending.route : null;
+      if (resume == null) {
+        if (pending != null) ref.read(pendingHandoffProvider.notifier).clear();
+        await WebSessionCache.clear();
+      } else {
+        unawaited(WebSessionCache.cacheDirective(repo, newId));
+      }
 
       if (mounted && context.mounted) {
         announce(context, context.l10n.homeSessionRestoredPersonalInfoMust);
@@ -471,7 +490,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             duration: Duration(seconds: 4),
           ),
         );
-        unawaited(context.push(AppRoutes.wizardRoute(newId)));
+        unawaited(context.push(resume ?? AppRoutes.wizardRoute(newId)));
       }
     } catch (e) {
       debugPrint('Web session restore failed: $e');

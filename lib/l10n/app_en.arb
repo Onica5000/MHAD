@@ -3156,5 +3156,7 @@
   "smartFillHandoffTitle": "AI suggestions for your preferences",
   "smartFillHandoffPanelTitle": "Ask your AI for suggestions",
   "smartFillHandoffSubtitle": "Based on the conditions and medications found (identifying details removed). You review every suggestion before it's added.",
-  "homeToolsAskAiSub": "Ask questions with your own AI"
+  "homeToolsAskAiSub": "Ask questions with your own AI",
+  "wizardAiBarAskYourAi": "Need help with this step? Ask your AI",
+  "aiConsistencyRulesExplainerHandoff": "The contradiction check above uses built-in rules. Anything your AI suggests is optional — review it before you change your directive. This screen warns; it doesn't block making the PDF."
 }

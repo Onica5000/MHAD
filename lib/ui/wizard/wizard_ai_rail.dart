@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:mhad/data/app_data/app_data.dart' show appData;
 import 'package:mhad/ui/widgets/design/crisis_support_banner.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -642,7 +643,9 @@ class WizardAiBar extends StatelessWidget {
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  context.l10n.wizardAiRailNeedHelpWithThisStep,
+                  appData.ai.apiModeVisible
+                      ? context.l10n.wizardAiRailNeedHelpWithThisStep
+                      : context.l10n.wizardAiBarAskYourAi,
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,

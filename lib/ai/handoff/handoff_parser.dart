@@ -44,10 +44,13 @@ class HandoffReply {
 /// commentary before or after, trailing commas, curly quotes — but strict
 /// about WHAT it is: the answer must carry the right `mhad_task` and
 /// `mhad_ref`, so an answer for another task or directive is never applied.
+/// [alsoAccept]: other references that mean the same thing — after a reload
+/// restored the work under a new id, the answer still carries the old one.
 HandoffReply parseHandoffReply(
   String raw, {
   required String taskTag,
   required String ref,
+  Set<String> alsoAccept = const {},
 }) {
   final text = raw.trim();
   if (text.isEmpty) return const HandoffReply.fail(HandoffProblem.empty);
@@ -84,7 +87,8 @@ HandoffReply parseHandoffReply(
   if (decoded['mhad_task'] != taskTag) {
     return const HandoffReply.fail(HandoffProblem.wrongTask);
   }
-  if ('${decoded['mhad_ref']}' != ref) {
+  final answerRef = '${decoded['mhad_ref']}';
+  if (answerRef != ref && !alsoAccept.contains(answerRef)) {
     return const HandoffReply.fail(HandoffProblem.wrongRef);
   }
   return HandoffReply.ok(decoded);

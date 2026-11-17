@@ -178,6 +178,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
       builder: (_) => _DescribeConditionDialog(
         onSuggest: _suggestFromDescription,
         onAdd: _addSuggestedDiagnosis,
+        directiveId: widget.directiveId,
       ),
     );
   }
@@ -863,13 +864,13 @@ class _DescribeConditionDialog extends StatefulWidget {
   /// and the pasted names are confirmed through this.
   final Future<List<IcdCondition>> Function(List<String> names)?
       onConfirmNames;
-  final int? directiveId;
+  final int directiveId;
 
   const _DescribeConditionDialog({
     required this.onSuggest,
     required this.onAdd,
+    required this.directiveId,
     this.onConfirmNames,
-    this.directiveId,
   });
 
   @override
@@ -984,7 +985,7 @@ class _DescribeConditionDialogState extends State<_DescribeConditionDialog> {
                   // The SAME prompt as the API path (shared builder).
                   instructions: LlmAssistant.conditionTermsPrompt(
                       PiiStripper.strip(_ctrl.text.trim())),
-                  ref: 'd${widget.directiveId}',
+                  ref: directiveHandoffRef(widget.directiveId),
                 ),
                 onAnswer: _useHandoffAnswer,
               )

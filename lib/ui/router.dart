@@ -320,3 +320,12 @@ GoRouter _buildRouter(DisclaimerNotifier disclaimer,
       ],
       errorBuilder: (_, _) => const HomeScreen(),
     );
+
+/// The page actually on screen, path + query. `currentConfiguration.uri`
+/// reports the route UNDER a page opened with push() (see ResponsiveShell),
+/// so a pushed page's location comes from its own imperative match.
+Uri currentAppLocation() {
+  final cfg = appRouter.routerDelegate.currentConfiguration;
+  final top = cfg.lastOrNull;
+  return top is ImperativeRouteMatch ? top.matches.uri : cfg.uri;
+}

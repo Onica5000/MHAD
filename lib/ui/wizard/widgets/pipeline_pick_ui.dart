@@ -205,13 +205,18 @@ extension _PipelinePickUi on _PipelineScreenState {
         AiHandoffPanel(
           kind: HandoffTaskKind.autofill,
           attachment: _handoffAttachment,
+          // From the wizard's dialog, come back to the upload page: it holds
+          // the same card and survives a reload (the dialog doesn't).
+          resumeRoute: _standalone
+              ? null
+              : AppRoutes.uploadRoute(widget.directiveId),
           title: context.l10n.autofillHandoffTitle,
           subtitle: context.l10n.autofillHandoffSubtitle,
           buildTask: (_) => HandoffTask(
             kind: HandoffTaskKind.autofill,
             // The SAME instructions the API path sends (one definition).
             instructions: DocumentExtractor.promptFor(_activeFormType),
-            ref: 'd${widget.directiveId}',
+            ref: directiveHandoffRef(widget.directiveId),
             attachment: _handoffAttachment,
           ),
           onAnswer: _useHandoffAnswer,

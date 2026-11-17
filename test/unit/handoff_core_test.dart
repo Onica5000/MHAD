@@ -172,4 +172,56 @@ void main() {
       expect(back.deadline, p.deadline);
     });
   });
+
+  group('reload recovery', () {
+    test('directive refs: one format, read both ways', () {
+      expect(directiveHandoffRef(12), 'd12');
+      expect(directiveIdOfHandoffRef('d12'), 12);
+      expect(directiveIdOfHandoffRef('general'), isNull);
+      expect(directiveIdOfHandoffRef('d'), isNull);
+    });
+
+    test('a restored wait follows the new id and remembers the old ref', () {
+      final p = PendingHandoff(
+        taskTag: 'mhad-conditionTerms',
+        ref: 'd2',
+        route: '/wizard/2?step=5',
+        deadline: DateTime(2026, 11, 17, 12),
+      );
+      final m = p.remappedTo(1);
+      expect(m.ref, 'd1');
+      expect(m.promptRef, 'd2');
+      expect(m.route, '/wizard/1?step=5');
+      expect(p.remappedTo(2), same(p));
+      final back = PendingHandoff.fromJson(m.toJson())!;
+      expect(back.ref, 'd1');
+      expect(back.promptRef, 'd2');
+      expect(back.route, '/wizard/1?step=5');
+      // A wait stored before promptRef existed reads as its own ref.
+      final old = Map<String, dynamic>.of(p.toJson())..remove('promptRef');
+      expect(PendingHandoff.fromJson(old)!.promptRef, 'd2');
+      // A wait that can't be resumed keeps no route.
+      final fixed = PendingHandoff(
+        taskTag: 'mhad-smartFill',
+        ref: 'd2',
+        route: '',
+        deadline: DateTime(2026, 11, 17, 12),
+      );
+      expect(fixed.resumable, isFalse);
+      expect(fixed.remappedTo(1).route, '');
+    });
+
+    test('the parser takes the pre-reload ref only when asked', () {
+      const answer = '{"mhad_task": "mhad-autofill", "mhad_ref": "d2"}';
+      expect(
+          parseHandoffReply(answer, taskTag: 'mhad-autofill', ref: 'd1')
+              .problem,
+          HandoffProblem.wrongRef);
+      expect(
+          parseHandoffReply(answer,
+                  taskTag: 'mhad-autofill', ref: 'd1', alsoAccept: {'d2'})
+              .ok,
+          isTrue);
+    });
+  });
 }

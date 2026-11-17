@@ -132,28 +132,11 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
     unawaited(_persistStep(index));
   }
 
-  /// On web, snapshot the full directive to SharedPreferences so the user
-  /// can resume after a page reload within the TTL window.
-  Future<void> _cacheForWebReload() async {
-    if (!kIsWeb) return;
-    // Best-effort crash-recovery snapshot. It must NEVER block wizard
-    // navigation: callers `await` this before advancing the step, so a hung
-    // DB read / storage write here would freeze "Continue". Bound every async
-    // hop with a timeout — a try/catch alone does not rescue a hang, only a
-    // throw. On timeout we simply skip caching this step.
-    try {
-      final repo = ref.read(directiveRepositoryProvider);
-      final snap = await repo
-          .snapshotDirective(widget.directiveId)
-          .timeout(const Duration(seconds: 3));
-      if (snap.isNotEmpty) {
-        await WebSessionCache.saveDirective(snap)
-            .timeout(const Duration(seconds: 3));
-      }
-    } catch (e) {
-      debugPrint('Web cache save skipped (failed or timed out): $e');
-    }
-  }
+  /// On web, snapshot the directive so the user can resume after a page
+  /// reload within the TTL window. Never blocks navigation (callers await
+  /// this before advancing the step) — see [WebSessionCache.cacheDirective].
+  Future<void> _cacheForWebReload() => WebSessionCache.cacheDirective(
+      ref.read(directiveRepositoryProvider), widget.directiveId);
 
   @override
   Widget build(BuildContext context) {

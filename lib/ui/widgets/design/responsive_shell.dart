@@ -1,3 +1,4 @@
+import 'package:mhad/ui/ai/handoff_return_banner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:mhad/l10n/l10n.dart';
@@ -158,9 +159,19 @@ class ResponsiveShell extends StatelessWidget {
               return _titled(
                 context,
                 route,
-                hideNav
-                    ? const SizedBox.shrink()
-                    : MhadBottomNav(activeRoute: route),
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // "Back to paste your AI answer" (copy-and-paste
+                    // handoff) sits above the nav; never on the gates.
+                    if (!keyboardOpen && !_routeHidesSidebar(route))
+                      HandoffReturnBanner(current: currentAppLocation()),
+                    hideNav
+                        ? const SizedBox.shrink()
+                        : MhadBottomNav(activeRoute: route),
+                  ],
+                ),
               );
             },
           ),
@@ -265,6 +276,16 @@ class ResponsiveShell extends StatelessWidget {
             // width (~760px) and float centered with empty gutters on a wide
             // monitor — the bug we keep chasing. A direct child forces it to
             // fill the whole content area, flush from sidebar to window edge.
+            Expanded(
+              // "Back to paste your AI answer" (copy-and-paste handoff) sits
+              // above the page; `stretch` keeps the page's width TIGHT.
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  FocusTraversalOrder(
+                    order: const NumericFocusOrder(0.5),
+                    child: HandoffReturnBanner(current: currentAppLocation()),
+                  ),
             if (fullBleed)
               Expanded(
                 child: FocusTraversalOrder(
@@ -315,6 +336,9 @@ class ResponsiveShell extends StatelessWidget {
                   },
                 ),
               ),
+                ],
+              ),
+            ),
           ],
             ),
           ),

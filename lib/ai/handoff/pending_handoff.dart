@@ -1,3 +1,4 @@
+import 'package:mhad/ai/handoff/handoff_task.dart';
 import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,10 +18,15 @@ class PendingHandoff {
   /// The task tag the answer must carry.
   final String taskTag;
 
-  /// What it is for (e.g. `d12`).
+  /// What it is for, as this page builds it now (e.g. `d12`).
   final String ref;
 
-  /// Where to paste the answer (the page that started it).
+  /// The reference inside the copied instructions — what the answer carries.
+  /// The same as [ref] unless a reload restored the work under a new id.
+  final String promptRef;
+
+  /// Where to come back to paste the answer; empty when it can't be resumed
+  /// elsewhere (the answer needs state that leaving the page loses).
   final String route;
   final DateTime deadline;
 
@@ -29,22 +35,47 @@ class PendingHandoff {
     required this.ref,
     required this.route,
     required this.deadline,
-  });
+    String? promptRef,
+  }) : promptRef = promptRef ?? ref;
+
+  /// Whether the "Back to paste your AI answer" banner and the reload
+  /// restore can lead back to [route].
+  bool get resumable => route.isNotEmpty;
 
   Duration remaining([DateTime? now]) =>
       deadline.difference(now ?? DateTime.now());
   bool isExpired([DateTime? now]) => remaining(now) <= Duration.zero;
 
-  PendingHandoff copyWith({DateTime? deadline}) => PendingHandoff(
+  PendingHandoff copyWith({DateTime? deadline, String? ref, String? route}) =>
+      PendingHandoff(
         taskTag: taskTag,
-        ref: ref,
-        route: route,
+        ref: ref ?? this.ref,
+        route: route ?? this.route,
         deadline: deadline ?? this.deadline,
+        promptRef: promptRef,
       );
+
+  /// This wait, moved to directive [newId] after a reload restored the work
+  /// under a new id: [route] and [ref] follow the new id; [promptRef] keeps
+  /// the old one, which is what the answer carries.
+  PendingHandoff remappedTo(int newId) {
+    final oldId = directiveIdOfHandoffRef(ref);
+    if (oldId == null || oldId == newId) return this;
+    var moved = route;
+    if (route.startsWith('/')) {
+      final uri = Uri.parse(route);
+      final path = '/${[
+        for (final seg in uri.pathSegments) seg == '$oldId' ? '$newId' : seg,
+      ].join('/')}';
+      moved = uri.hasQuery ? '$path?${uri.query}' : path;
+    }
+    return copyWith(ref: directiveHandoffRef(newId), route: moved);
+  }
 
   Map<String, dynamic> toJson() => {
         'task': taskTag,
         'ref': ref,
+        'promptRef': promptRef,
         'route': route,
         'deadline': deadline.toIso8601String(),
       };
@@ -55,6 +86,7 @@ class PendingHandoff {
     return PendingHandoff(
       taskTag: '${m['task']}',
       ref: '${m['ref']}',
+      promptRef: m['promptRef'] == null ? null : '${m['promptRef']}',
       route: '${m['route']}',
       deadline: d,
     );
@@ -99,10 +131,14 @@ abstract final class PendingHandoffStore {
 
 /// The pending answer, if any (restored after a reload).
 class PendingHandoffNotifier extends Notifier<PendingHandoff?> {
+  /// Set once this session starts, extends, clears or moves a wait, so the
+  /// stored wait loaded at startup can't overwrite it.
+  bool _touched = false;
+
   @override
   PendingHandoff? build() {
     PendingHandoffStore.read().then((p) {
-      if (p != null && !p.isExpired() && state == null) state = p;
+      if (p != null && !p.isExpired() && !_touched) state = p;
     });
     return null;
   }
@@ -113,6 +149,7 @@ class PendingHandoffNotifier extends Notifier<PendingHandoff?> {
     required String ref,
     required String route,
   }) {
+    _touched = true;
     state = PendingHandoff(
       taskTag: taskTag,
       ref: ref,
@@ -126,6 +163,7 @@ class PendingHandoffNotifier extends Notifier<PendingHandoff?> {
   void extend() {
     final p = state;
     if (p == null) return;
+    _touched = true;
     final now = DateTime.now();
     final base = p.deadline.isAfter(now) ? p.deadline : now;
     state = p.copyWith(deadline: base.add(PendingHandoff.window));
@@ -133,14 +171,38 @@ class PendingHandoffNotifier extends Notifier<PendingHandoff?> {
   }
 
   void clear() {
+    _touched = true;
     state = null;
     PendingHandoffStore.write(null);
+  }
+
+  /// Moves the wait onto directive [newId] after a reload restored the work
+  /// under a new id ([PendingHandoff.remappedTo]). Reads browser storage
+  /// itself: the restore can run before this notifier's own load. Returns
+  /// the live wait, or null (an expired one is dropped).
+  Future<PendingHandoff?> remapDirective(int newId) async {
+    final p = state ?? await PendingHandoffStore.read();
+    _touched = true;
+    if (p == null || p.isExpired()) {
+      clear();
+      return null;
+    }
+    final moved = p.remappedTo(newId);
+    state = moved;
+    await PendingHandoffStore.write(moved);
+    return moved;
   }
 }
 
 final pendingHandoffProvider =
     NotifierProvider<PendingHandoffNotifier, PendingHandoff?>(
         PendingHandoffNotifier.new);
+
+/// JSON handoff cards on screen: task tag → how many. The "Back to paste your
+/// AI answer" banner hides while one that can take the pending answer is
+/// showing (e.g. Snap-to-fill's dialog over the wizard).
+final liveHandoffCardsProvider =
+    StateProvider<Map<String, int>>((ref) => const {});
 
 /// The privacy notice is shown once per session (user decision 2026-11-17).
 final handoffPrivacyAcknowledgedProvider = StateProvider<bool>((ref) => false);

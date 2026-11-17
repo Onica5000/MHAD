@@ -76,3 +76,14 @@ class HandoffTask {
 
   bool get returnsJson => kind.returnsJson;
 }
+
+/// The handoff reference for a directive: the ONE definition of the `d<id>`
+/// format that the AI echoes back as `mhad_ref`.
+String directiveHandoffRef(int directiveId) => 'd$directiveId';
+
+/// The directive id inside a [directiveHandoffRef]; null for other references
+/// (e.g. `general`).
+int? directiveIdOfHandoffRef(String ref) {
+  final m = RegExp(r'^d(\d+)$').firstMatch(ref);
+  return m == null ? null : int.tryParse(m.group(1)!);
+}

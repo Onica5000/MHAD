@@ -1,3 +1,4 @@
+import 'package:mhad/ai/handoff/handoff_task.dart' show directiveHandoffRef;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/ai/ai_assistant.dart' show AssistantContext;
@@ -120,7 +121,7 @@ class _AiStepHelperState extends ConsumerState<AiStepHelper> {
         const SizedBox(height: 16),
         AiQuestionHandoff(
           suggestions: stepQuestions(context.l10n, widget.step),
-          ref: 'd${widget.directiveId}',
+          ref: directiveHandoffRef(widget.directiveId),
           panelTitle: context.l10n.aiStepHelpPanelTitle,
           panelSubtitle: context.l10n.aiStepHelpPanelSubtitle,
           // The same instructions the in-app chat sends, with this step and

@@ -376,7 +376,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
           buildTask: (_) => HandoffTask(
             kind: HandoffTaskKind.sideEffects,
             instructions: _handoffInstructions ?? '',
-            ref: 'd${widget.directiveId}',
+            ref: directiveHandoffRef(widget.directiveId),
           ),
           onAnswer: _useHandoffAnswer,
         ),

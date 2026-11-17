@@ -7834,4 +7834,12 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get homeToolsAskAiSub => 'Haga preguntas con su propia IA';
+
+  @override
+  String get wizardAiBarAskYourAi =>
+      '¿Necesita ayuda con este paso? Pregunte a su IA';
+
+  @override
+  String get aiConsistencyRulesExplainerHandoff =>
+      'La verificación de contradicciones de arriba usa reglas integradas. Lo que sugiera su IA es opcional: revíselo antes de cambiar su directiva. Esta pantalla advierte, pero no impide crear el PDF.';
 }
