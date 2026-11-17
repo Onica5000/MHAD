@@ -63,8 +63,8 @@ class ActiveDirectiveHero extends StatelessWidget {
                 child: Text(
                   '$currentStep',
                   style: TextStyle(
-                    fontFamily: 'Instrument Serif',
-                    fontFamilyFallback: const ['Georgia', 'serif'],
+                    fontFamily: kSerifFamily,
+                    fontFamilyFallback: kSerifFallbacks,
                     fontStyle: FontStyle.italic,
                     fontSize: 180,
                     height: 1,

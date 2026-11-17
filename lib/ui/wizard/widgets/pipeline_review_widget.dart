@@ -701,8 +701,8 @@ extension _PipelineReviewUi on _PipelineScreenState {
       Text(
         context.l10n.reviewHeresWhatWeRead,
         style: TextStyle(
-          fontFamily: 'Instrument Serif',
-          fontFamilyFallback: const ['Georgia', 'serif'],
+          fontFamily: kSerifFamily,
+          fontFamilyFallback: kSerifFallbacks,
           fontStyle: FontStyle.italic,
           fontSize: 32,
           fontWeight: FontWeight.w400,

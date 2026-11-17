@@ -155,7 +155,7 @@ class _CombinedCard extends StatelessWidget {
               child: Text(
                 '★',
                 style: TextStyle(
-                  fontFamily: 'Instrument Serif',
+                  fontFamily: kSerifFamily,
                   fontStyle: FontStyle.italic,
                   fontSize: 240,
                   height: 1,

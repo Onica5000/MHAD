@@ -213,8 +213,8 @@ class WebSidebar extends ConsumerWidget {
                     child: Text(
                       'm',
                       style: TextStyle(
-                        fontFamily: 'Instrument Serif',
-                        fontFamilyFallback: const ['Georgia', 'serif'],
+                        fontFamily: kSerifFamily,
+                        fontFamilyFallback: kSerifFallbacks,
                         fontStyle: FontStyle.italic,
                         fontSize: 18,
                         color: p.onPrimary,

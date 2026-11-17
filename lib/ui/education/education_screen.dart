@@ -175,8 +175,8 @@ class _EditorialLearnHub extends StatelessWidget {
                         ],
                       ),
                       style: const TextStyle(
-                        fontFamily: 'Instrument Serif',
-                        fontFamilyFallback: ['Georgia', 'serif'],
+                        fontFamily: kSerifFamily,
+                        fontFamilyFallback: kSerifFallbacks,
                         fontStyle: FontStyle.italic,
                         fontSize: 42,
                         height: 1,
@@ -352,8 +352,8 @@ class _EditorialLearnHub extends StatelessWidget {
                 context.l10n.educationYourDirectiveIsYourVoice,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontFamily: 'Instrument Serif',
-                  fontFamilyFallback: const ['Georgia', 'serif'],
+                  fontFamily: kSerifFamily,
+                  fontFamilyFallback: kSerifFallbacks,
                   fontStyle: FontStyle.italic,
                   fontSize: 18,
                   height: 1.3,

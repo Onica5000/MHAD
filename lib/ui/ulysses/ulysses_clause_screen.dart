@@ -163,7 +163,7 @@ class _UlyssesClauseScreenState extends ConsumerState<UlyssesClauseScreen> {
                         Text(
                           context.l10n.ulyssesClauseTieMyselfToTheMast,
                           style: TextStyle(
-                            fontFamily: 'Instrument Serif',
+                            fontFamily: kSerifFamily,
                             fontFamilyFallback: const [
                               'Georgia',
                               'Times New Roman',

@@ -347,8 +347,8 @@ class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
                   Text(
                     context.l10n.voiceSayItYourWay,
                     style: TextStyle(
-                      fontFamily: 'Instrument Serif',
-                      fontFamilyFallback: const ['Georgia', 'serif'],
+                      fontFamily: kSerifFamily,
+                      fontFamilyFallback: kSerifFallbacks,
                       fontStyle: FontStyle.italic,
                       fontSize: 28,
                       fontWeight: FontWeight.w400,

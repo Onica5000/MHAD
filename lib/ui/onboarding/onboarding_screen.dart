@@ -128,8 +128,8 @@ class OnboardingScreen extends ConsumerWidget {
                       ],
                     ),
                     style: TextStyle(
-                      fontFamily: 'Instrument Serif',
-                      fontFamilyFallback: const ['Georgia', 'serif'],
+                      fontFamily: kSerifFamily,
+                      fontFamilyFallback: kSerifFallbacks,
                       fontStyle: FontStyle.italic,
                       fontSize: 68,
                       height: 0.95,

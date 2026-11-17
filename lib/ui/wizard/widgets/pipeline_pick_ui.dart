@@ -35,8 +35,8 @@ extension _PipelinePickUi on _PipelineScreenState {
                   ),
                 ]),
                 style: TextStyle(
-                  fontFamily: 'Instrument Serif',
-                  fontFamilyFallback: const ['Georgia', 'serif'],
+                  fontFamily: kSerifFamily,
+                  fontFamilyFallback: kSerifFallbacks,
                   fontStyle: FontStyle.italic,
                   fontSize: 32,
                   height: 1.05,

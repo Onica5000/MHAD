@@ -38,7 +38,7 @@ class EditorialHeading extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
     final style = TextStyle(
-      fontFamily: 'Instrument Serif',
+      fontFamily: kSerifFamily,
       fontFamilyFallback: const ['Georgia', 'Times New Roman', 'serif'],
       fontStyle: fontStyle,
       fontSize: size,
@@ -76,7 +76,7 @@ class SerifNumeral extends StatelessWidget {
     return Text(
       value.toString().padLeft(2, '0'),
       style: TextStyle(
-        fontFamily: 'Instrument Serif',
+        fontFamily: kSerifFamily,
         fontFamilyFallback: const ['Georgia', 'Times New Roman', 'serif'],
         fontStyle: FontStyle.italic,
         fontSize: size,

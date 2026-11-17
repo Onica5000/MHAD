@@ -149,8 +149,8 @@ class _GateLayout extends StatelessWidget {
                   Text(
                     context.l10n.disclaimerAFewThingsToUnderstand,
                     style: TextStyle(
-                      fontFamily: 'Instrument Serif',
-                      fontFamilyFallback: const ['Georgia', 'serif'],
+                      fontFamily: kSerifFamily,
+                      fontFamilyFallback: kSerifFallbacks,
                       fontStyle: FontStyle.italic,
                       fontSize: 36,
                       fontWeight: FontWeight.w400,

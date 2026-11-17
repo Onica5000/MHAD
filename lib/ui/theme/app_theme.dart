@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 /// App-wide font family constants.
 const kSansFamily = 'DM Sans';
 const kMonoFamily = 'JetBrains Mono';
+/// Display serif for editorial headlines (italic accents, big numerals).
+const kSerifFamily = 'Instrument Serif';
+const kSerifFallbacks = ['Georgia', 'serif'];
 // Dyslexia-friendly font, applied app-wide when the accessibility toggle is on.
 const kDyslexiaFamily = 'Atkinson Hyperlegible';
 const kMonoFallbacks = ['Consolas', 'Menlo', 'Courier New', 'monospace'];

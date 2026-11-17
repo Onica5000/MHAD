@@ -331,8 +331,8 @@ class _SignStep extends StatelessWidget {
                 child: Text(
                   '$n',
                   style: TextStyle(
-                    fontFamily: 'Instrument Serif',
-                    fontFamilyFallback: const ['Georgia', 'serif'],
+                    fontFamily: kSerifFamily,
+                    fontFamilyFallback: kSerifFallbacks,
                     fontStyle: FontStyle.italic,
                     fontSize: 16,
                     fontWeight: FontWeight.w400,

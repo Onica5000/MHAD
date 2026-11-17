@@ -54,7 +54,7 @@ class WalletCard extends StatelessWidget {
                 child: Text(
                   context.l10n.walletCardMh,
                   style: TextStyle(
-                    fontFamily: 'Instrument Serif',
+                    fontFamily: kSerifFamily,
                     fontFamilyFallback: const [
                       'Georgia',
                       'Times New Roman',

@@ -783,8 +783,8 @@ class _WideStepRail extends StatelessWidget {
             Text(
               '${currentIndex + 1} / ${steps.length}',
               style: TextStyle(
-                fontFamily: 'Instrument Serif',
-                fontFamilyFallback: const ['Georgia', 'serif'],
+                fontFamily: kSerifFamily,
+                fontFamilyFallback: kSerifFallbacks,
                 fontStyle: FontStyle.italic,
                 fontSize: 36,
                 fontWeight: FontWeight.w400,

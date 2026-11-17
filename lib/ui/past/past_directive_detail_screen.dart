@@ -278,8 +278,8 @@ class _PastDetailTitle extends StatelessWidget {
         ],
       ),
       style: const TextStyle(
-        fontFamily: 'Instrument Serif',
-        fontFamilyFallback: ['Georgia', 'serif'],
+        fontFamily: kSerifFamily,
+        fontFamilyFallback: kSerifFallbacks,
         fontStyle: FontStyle.italic,
         fontSize: 38,
         fontWeight: FontWeight.w400,

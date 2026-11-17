@@ -193,7 +193,7 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
                   Text(
                     context.l10n.revocationThisDeclarationMayBeRevoked,
                     style: TextStyle(
-                      fontFamily: 'Instrument Serif',
+                      fontFamily: kSerifFamily,
                       fontFamilyFallback: const [
                         'Georgia',
                         'Times New Roman',

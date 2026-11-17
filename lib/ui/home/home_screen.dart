@@ -841,8 +841,8 @@ class _GreetingRow extends StatelessWidget {
                   ],
                 ),
                 style: const TextStyle(
-                  fontFamily: 'Instrument Serif',
-                  fontFamilyFallback: ['Georgia', 'serif'],
+                  fontFamily: kSerifFamily,
+                  fontFamilyFallback: kSerifFallbacks,
                   fontStyle: FontStyle.italic,
                   fontSize: 38,
                   height: 1.05,
@@ -907,8 +907,8 @@ class _PublicGuestGreeting extends StatelessWidget {
     return Text(
       context.l10n.homeLetSGetStarted,
       style: TextStyle(
-        fontFamily: 'Instrument Serif',
-        fontFamilyFallback: ['Georgia', 'serif'],
+        fontFamily: kSerifFamily,
+        fontFamilyFallback: kSerifFallbacks,
         fontStyle: FontStyle.italic,
         fontSize: 38,
         height: 1.05,

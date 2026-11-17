@@ -151,8 +151,8 @@ class _RenewSheet extends StatelessWidget {
                               ? context.l10n.reminderSheetsTimeToRenew
                               : context.l10n.reminderSheetsTimeToRenew2(firstName),
                           style: TextStyle(
-                            fontFamily: 'Instrument Serif',
-                            fontFamilyFallback: const ['Georgia', 'serif'],
+                            fontFamily: kSerifFamily,
+                            fontFamilyFallback: kSerifFallbacks,
                             fontStyle: FontStyle.italic,
                             fontSize: 30,
                             fontWeight: FontWeight.w400,
@@ -437,8 +437,8 @@ class _CheckInSheet extends StatelessWidget {
                         Text(
                           context.l10n.reminderSheetsAnythingChanged,
                           style: TextStyle(
-                            fontFamily: 'Instrument Serif',
-                            fontFamilyFallback: const ['Georgia', 'serif'],
+                            fontFamily: kSerifFamily,
+                            fontFamilyFallback: kSerifFallbacks,
                             fontStyle: FontStyle.italic,
                             fontSize: 30,
                             fontWeight: FontWeight.w400,

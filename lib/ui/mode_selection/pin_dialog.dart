@@ -264,8 +264,8 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
                     child: Text(
                       'm',
                       style: TextStyle(
-                        fontFamily: 'Instrument Serif',
-                        fontFamilyFallback: const ['Georgia', 'serif'],
+                        fontFamily: kSerifFamily,
+                        fontFamilyFallback: kSerifFallbacks,
                         fontStyle: FontStyle.italic,
                         fontWeight: FontWeight.w400,
                         fontSize: 20,
@@ -369,8 +369,8 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
                 ),
                 textAlign: TextAlign.center,
                 style: const TextStyle(
-                  fontFamily: 'Instrument Serif',
-                  fontFamilyFallback: ['Georgia', 'serif'],
+                  fontFamily: kSerifFamily,
+                  fontFamilyFallback: kSerifFallbacks,
                   fontStyle: FontStyle.italic,
                   fontSize: 36,
                   height: 1.05,

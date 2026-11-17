@@ -59,8 +59,8 @@ class WebDashboardLanding extends ConsumerWidget {
                   ],
                 ),
                 style: const TextStyle(
-                  fontFamily: 'Instrument Serif',
-                  fontFamilyFallback: ['Georgia', 'serif'],
+                  fontFamily: kSerifFamily,
+                  fontFamilyFallback: kSerifFallbacks,
                   fontStyle: FontStyle.italic,
                   fontSize: 56, // artboard WebDashboard hero size
                   height: 1,
@@ -450,8 +450,8 @@ class _BookletQuoteCard extends StatelessWidget {
               Text(
                 context.l10n.webLandingAnMhadIsYourVoice,
                 style: TextStyle(
-                  fontFamily: 'Instrument Serif',
-                  fontFamilyFallback: const ['Georgia', 'serif'],
+                  fontFamily: kSerifFamily,
+                  fontFamilyFallback: kSerifFallbacks,
                   fontStyle: FontStyle.italic,
                   fontSize: 22,
                   height: 1.2,

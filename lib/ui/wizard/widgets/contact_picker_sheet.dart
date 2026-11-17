@@ -330,8 +330,8 @@ class _ContactPickerSheetState extends State<_ContactPickerSheet> {
                       ],
                     ),
                     style: const TextStyle(
-                      fontFamily: 'Instrument Serif',
-                      fontFamilyFallback: ['Georgia', 'serif'],
+                      fontFamily: kSerifFamily,
+                      fontFamilyFallback: kSerifFallbacks,
                       fontStyle: FontStyle.italic,
                       fontSize: 28,
                       height: 1.05,

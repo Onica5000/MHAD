@@ -597,8 +597,8 @@ class _AccordionSection extends StatelessWidget {
                         child: Text(
                           number,
                           style: TextStyle(
-                            fontFamily: 'Instrument Serif',
-                            fontFamilyFallback: const ['Georgia', 'serif'],
+                            fontFamily: kSerifFamily,
+                            fontFamilyFallback: kSerifFallbacks,
                             fontStyle: FontStyle.italic,
                             fontSize: 24,
                             fontWeight: FontWeight.w400,

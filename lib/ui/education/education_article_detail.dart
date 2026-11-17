@@ -49,8 +49,8 @@ class ArticleDetailScreen extends StatelessWidget {
           Text(
             section.title,
             style: const TextStyle(
-              fontFamily: 'Instrument Serif',
-              fontFamilyFallback: ['Georgia', 'serif'],
+              fontFamily: kSerifFamily,
+              fontFamilyFallback: kSerifFallbacks,
               fontStyle: FontStyle.italic,
               fontSize: 30,
               fontWeight: FontWeight.w400,
