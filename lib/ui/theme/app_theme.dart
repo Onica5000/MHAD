@@ -77,6 +77,22 @@ class DesignTokens {
   /// Smallest legible label — mono status strings, badge text.
   static const fontMicro = 11.0;
 
+  /// Rendered size of a text field's label. Every field keeps its label
+  /// floated (`FloatingLabelBehavior.always`), and Flutter draws a floated
+  /// label at [flutterFloatingLabelScale] of its style size — so the style
+  /// must be set to `fieldLabelSize / flutterFloatingLabelScale` to actually
+  /// render at this size. (A 13px style rendered at ~9.75px: the "tiny field
+  /// labels" older users struggled with.)
+  static const fieldLabelSize = 14.0;
+
+  /// Mirrors Flutter's private `_kFinalLabelScale` in
+  /// `material/input_decorator.dart` (0.75 as of Flutter 3.47).
+  static const flutterFloatingLabelScale = 0.75;
+
+  /// Helper and error text under a field wrap to this many lines instead of
+  /// being cut off with "…" (Flutter's default is a single line).
+  static const fieldMessageMaxLines = 3;
+
   /// Resting card depth — a soft two-layer shadow so cards read as objects, not
   /// just outlined rectangles. Subtle in light, lifted in dark.
   static List<BoxShadow> cardShadow(Brightness b) {
@@ -709,23 +725,46 @@ ThemeData buildMhadTheme(
         borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
         borderSide: BorderSide(color: colorScheme.error, width: 1.5),
       ),
+      // A field that is both focused AND invalid used to fall back to the
+      // plain focused border, hiding the error state while typing.
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
+        borderSide: BorderSide(color: colorScheme.error, width: 2),
+      ),
+      // Helper / error text wraps instead of being cut off with "…".
+      helperMaxLines: DesignTokens.fieldMessageMaxLines,
+      errorMaxLines: DesignTokens.fieldMessageMaxLines,
       contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
       labelStyle: TextStyle(
-        fontFamily: kSansFamily,
-        color: p.textMuted,
-        fontSize: 15,
+        fontFamily: family,
+        color: mutedColor,
+        fontSize: 16,
       ),
+      // Sized so the always-floated label RENDERS at fieldLabelSize (see
+      // DesignTokens.fieldLabelSize), in the text color for legibility.
       floatingLabelStyle: TextStyle(
-        fontFamily: kSansFamily,
-        color: p.textMuted,
-        fontSize: 13,
+        fontFamily: family,
+        color: textColor,
+        fontSize: DesignTokens.fieldLabelSize /
+            DesignTokens.flutterFloatingLabelScale,
         fontWeight: FontWeight.w600,
-        letterSpacing: 0.2,
       ),
       hintStyle: TextStyle(
-        fontFamily: kSansFamily,
-        color: p.textMuted,
-        fontSize: 15,
+        fontFamily: family,
+        color: mutedColor,
+        fontSize: 16,
+      ),
+      helperStyle: TextStyle(
+        fontFamily: family,
+        color: mutedColor,
+        fontSize: 14,
+        height: 1.35,
+      ),
+      errorStyle: TextStyle(
+        fontFamily: family,
+        color: colorScheme.error,
+        fontSize: 14,
+        height: 1.35,
       ),
     ),
 

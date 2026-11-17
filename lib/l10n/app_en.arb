@@ -2134,12 +2134,6 @@
   "revocationTapToInclude": "Tap to include",
   "revocationRevoking": "Revoking…",
   "revocationRevokeNow": "Revoke now",
-  "pastDirectiveDetailUnableToLoad": "Unable to load: {error}",
-  "@pastDirectiveDetailUnableToLoad": {
-    "placeholders": {
-      "error": {"type": "Object"}
-    }
-  },
   "pastDirectiveDetailTheDirectiveRemainsRegardless": "The directive remains {status} regardless",
   "@pastDirectiveDetailTheDirectiveRemainsRegardless": {
     "placeholders": {

@@ -1,6 +1,7 @@
 ﻿import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/rich_content_text.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
@@ -208,7 +209,8 @@ class _QuestionBody extends StatelessWidget {
               SectionLabel(context.l10n.quizInYourWords),
               const SizedBox(height: 8),
               EditorialHeading(
-                textSpan: _editorialFor(question.headline, p.primary),
+                textSpan: inlineMarkdownSpan(question.headline,
+                    emphasisStyle: TextStyle(color: p.primary)),
                 size: 26,
                 height: 1.15,
               ),
@@ -237,20 +239,6 @@ class _QuestionBody extends StatelessWidget {
         ),
       ],
     );
-  }
-
-  /// Build a text span that colors the keywords (wrapped in `**…**`) primary.
-  TextSpan _editorialFor(String headline, Color primary) {
-    final parts = headline.split('**');
-    final spans = <InlineSpan>[];
-    for (var i = 0; i < parts.length; i++) {
-      final isKeyword = i.isOdd;
-      spans.add(TextSpan(
-        text: parts[i],
-        style: isKeyword ? TextStyle(color: primary) : null,
-      ));
-    }
-    return TextSpan(children: spans);
   }
 }
 

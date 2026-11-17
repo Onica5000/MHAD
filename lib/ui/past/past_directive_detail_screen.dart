@@ -52,7 +52,36 @@ class PastDirectiveDetailScreen extends ConsumerWidget {
           Expanded(
             child: directiveAsync.when(
               loading: () => PageLoading(label: context.l10n.pastDirectiveDetailLoadingThisDirective),
-              error: (e, _) => Center(child: Text(context.l10n.pastDirectiveDetailUnableToLoad(e))),
+              // A plain-language failure with a way forward — never the raw
+              // exception text (it showed "Unable to load: <stack-ish dump>").
+              error: (e, _) {
+                debugPrint('Past directive $directiveId failed to load: $e');
+                return Center(
+                  child: EmptyState(
+                    icon: Icons.error_outline,
+                    title: context.l10n.wizardUnableToLoad,
+                    announce: true,
+                    action: Wrap(
+                      spacing: 12,
+                      runSpacing: 8,
+                      alignment: WrapAlignment.center,
+                      children: [
+                        OutlinedButton.icon(
+                          onPressed: () => ref
+                              .invalidate(directiveByIdProvider(directiveId)),
+                          icon: const Icon(Icons.refresh),
+                          label: Text(context.l10n.retry),
+                        ),
+                        FilledButton.icon(
+                          onPressed: () => context.go(AppRoutes.home),
+                          icon: const Icon(Icons.home_outlined),
+                          label: Text(context.l10n.wizardBackToHome),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
               data: (d) {
                 if (d == null) {
                   return Center(child: Text(context.l10n.wizardDirectiveNotFound));

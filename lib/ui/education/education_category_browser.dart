@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/rich_content_text.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/l10n/model_labels.dart';
 import 'package:mhad/data/educational_content.dart';
@@ -282,7 +283,7 @@ class SectionTile extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               Text(
-                section.content,
+                plainExcerpt(section.content),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(

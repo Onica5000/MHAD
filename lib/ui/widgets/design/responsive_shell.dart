@@ -133,12 +133,18 @@ class ResponsiveShell extends StatelessWidget {
         // reading content in the full window (no nav rail) until the user
         // reaches the dashboard.
         if (_routeHidesSidebar(route)) {
-          return ClipRect(
-            child: Align(
-              alignment: Alignment.topCenter,
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: kReadingMaxWidth),
-                child: child,
+          // Paint the gutters in the page background so the centered column
+          // doesn't read as a strip floating on a white canvas.
+          return ColoredBox(
+            color: Theme.of(context).scaffoldBackgroundColor,
+            child: ClipRect(
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: ConstrainedBox(
+                  constraints:
+                      const BoxConstraints(maxWidth: kReadingMaxWidth),
+                  child: child,
+                ),
               ),
             ),
           );
@@ -185,13 +191,19 @@ class ResponsiveShell extends StatelessWidget {
                     final w = constraints.maxWidth < cap
                         ? constraints.maxWidth
                         : cap;
-                    return ClipRect(
-                      child: Align(
-                        // FILL: flush to the sidebar (top-left).
-                        // READING: centered reading column.
-                        alignment:
-                            fills ? Alignment.topLeft : Alignment.topCenter,
-                        child: SizedBox(width: w, child: child),
+                    // The gutters beside a capped page take the page
+                    // background (they used to show the bare white canvas,
+                    // so reading routes looked like a floating strip).
+                    return ColoredBox(
+                      color: Theme.of(context).scaffoldBackgroundColor,
+                      child: ClipRect(
+                        child: Align(
+                          // FILL: flush to the sidebar (top-left).
+                          // READING: centered reading column.
+                          alignment:
+                              fills ? Alignment.topLeft : Alignment.topCenter,
+                          child: SizedBox(width: w, child: child),
+                        ),
                       ),
                     );
                   },

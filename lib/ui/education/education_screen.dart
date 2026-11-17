@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/rich_content_text.dart';
 import 'package:mhad/ui/widgets/design/illustrated_intro.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/data/educational_content.dart';
@@ -83,7 +84,11 @@ class _EducationScreenState extends State<EducationScreen> {
           // On wide (PC web) put the AI assistant in a right rail so users can
           // ask questions while reading. Narrow/mobile keeps the single column
           // (the floating crisis button / bottom nav own that space for now).
-          final wide = c.maxWidth >= kWideLayoutBreakpoint;
+          // Keyed off the TOTAL window width (the desktop-shell signal), like
+          // every other fill screen: the sidebar already takes 232px, so the
+          // old content-width check only showed the rail from ~1232px.
+          final wide =
+              MediaQuery.sizeOf(context).width >= kWideLayoutBreakpoint;
           if (!wide) return hub;
           return Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -298,7 +303,9 @@ class _EditorialLearnHub extends StatelessWidget {
             // Cap each tile at ~360px so wide windows read as a desktop grid;
             // narrow widths keep the existing 2-column arrangement untouched.
             final int columns;
-            if (constraints.maxWidth >= 1000) {
+            // Desktop shell active (total window width), then as many
+            // ~360px columns as the actual content width holds.
+            if (MediaQuery.sizeOf(context).width >= kWideLayoutBreakpoint) {
               columns = (constraints.maxWidth / 360).floor().clamp(2, 4);
             } else {
               columns = 2;
@@ -494,7 +501,7 @@ class _GridCard extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               Text(
-                _previewOf(section.content),
+                plainExcerpt(section.content),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
@@ -510,17 +517,6 @@ class _GridCard extends StatelessWidget {
       ),
     );
   }
-}
-
-/// Short preview taken from the first sentence of the first paragraph,
-/// trimmed to keep grid cards visually consistent.
-String _previewOf(String content) {
-  final firstPara = content.split('\n\n').first.trim();
-  final firstSentence = firstPara.split(RegExp(r'(?<=[.!?])\s+')).first.trim();
-  if (firstSentence.length > 110) {
-    return '${firstSentence.substring(0, 110)}…';
-  }
-  return firstSentence;
 }
 
 class _EducationSearchDelegate extends SearchDelegate<EducationSection?> {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:mhad/utils/input_formatters.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/l10n/l10n.dart';
@@ -280,7 +280,7 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
               ),
               keyboardType: TextInputType.datetime,
               textInputAction: TextInputAction.next,
-              inputFormatters: [_DateInputFormatter()],
+              inputFormatters: const [DateInputFormatter()],
               validator: _validateAge,
             ),
             const SizedBox(height: 24),
@@ -383,7 +383,7 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
                     autofillHints: const [],
                     keyboardType: TextInputType.number,
                     textInputAction: TextInputAction.next,
-                    inputFormatters: [_ZipInputFormatter()],
+                    inputFormatters: const [ZipInputFormatter()],
                     validator: (v) {
                       if (v == null || v.trim().isEmpty) return null;
                       final digits = v.replaceAll(RegExp(r'\D'), '');
@@ -407,7 +407,7 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
               autofillHints: const [],
               keyboardType: TextInputType.phone,
               textInputAction: TextInputAction.done,
-              inputFormatters: [_PhoneInputFormatter()],
+              inputFormatters: const [PhoneInputFormatter()],
               validator: (v) {
                 if (v == null || v.trim().isEmpty) return null;
                 final digits = v.replaceAll(RegExp(r'\D'), '');
@@ -423,63 +423,6 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
   }
 }
 
-/// Auto-formats date input as MM/DD/YYYY while typing.
-/// Inserts slashes automatically after month and day digits.
-class _DateInputFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
-    final digits = newValue.text.replaceAll(RegExp(r'\D'), '');
-    final buf = StringBuffer();
-    for (var i = 0; i < digits.length && i < 8; i++) {
-      if (i == 2 || i == 4) buf.write('/');
-      buf.write(digits[i]);
-    }
-    final formatted = buf.toString();
-    return TextEditingValue(
-      text: formatted,
-      selection: TextSelection.collapsed(offset: formatted.length),
-    );
-  }
-}
 
-/// Auto-formats phone input as (123) 456-7890 while typing.
-class _PhoneInputFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
-    final digits = newValue.text.replaceAll(RegExp(r'\D'), '');
-    final buf = StringBuffer();
-    for (var i = 0; i < digits.length && i < 10; i++) {
-      if (i == 0) buf.write('(');
-      buf.write(digits[i]);
-      if (i == 2) buf.write(') ');
-      if (i == 5) buf.write('-');
-    }
-    final formatted = buf.toString();
-    return TextEditingValue(
-      text: formatted,
-      selection: TextSelection.collapsed(offset: formatted.length),
-    );
-  }
-}
 
-/// Auto-formats ZIP input as 12345 or 12345-6789 while typing.
-class _ZipInputFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
-    final digits = newValue.text.replaceAll(RegExp(r'\D'), '');
-    final buf = StringBuffer();
-    for (var i = 0; i < digits.length && i < 9; i++) {
-      if (i == 5) buf.write('-');
-      buf.write(digits[i]);
-    }
-    final formatted = buf.toString();
-    return TextEditingValue(
-      text: formatted,
-      selection: TextSelection.collapsed(offset: formatted.length),
-    );
-  }
-}
 

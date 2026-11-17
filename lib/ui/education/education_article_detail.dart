@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/rich_content_text.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/data/educational_content.dart';
@@ -58,11 +59,12 @@ class ArticleDetailScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          Text(
+          // Real bold + indented lists instead of raw `**` markers.
+          RichContentText(
             section.content,
             style: const TextStyle(
               fontFamily: kSansFamily,
-              fontSize: 15,
+              fontSize: 16,
               height: 1.6,
             ),
           ),

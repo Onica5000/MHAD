@@ -1600,7 +1600,6 @@
   "revocationTapToInclude": "Toque para incluir",
   "revocationRevoking": "Revocando…",
   "revocationRevokeNow": "Revocar ahora",
-  "pastDirectiveDetailUnableToLoad": "No se pudo cargar: {error}",
   "pastDirectiveDetailTheDirectiveRemainsRegardless": "La directiva sigue {status} de todos modos",
   "pinDialogShowPasscode": "Mostrar código",
   "pinDialogHidePasscode": "Ocultar código",

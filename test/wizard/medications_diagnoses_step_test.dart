@@ -265,7 +265,9 @@ void main() {
 
       final d = await repo.getDirectiveById(id);
       expect(d!.primaryDoctorName, 'Dr. Rivera');
-      expect(d.primaryDoctorPhone, '717-555-0100');
+      // The doctor phone uses the shared PhoneInputFormatter like every other
+      // phone field, so typed digits are stored in the standard format.
+      expect(d.primaryDoctorPhone, '(717) 555-0100');
 
       // Remount: fields come back.
       await tester.pumpWidget(const SizedBox());

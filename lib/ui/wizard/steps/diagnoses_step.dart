@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
+import 'package:mhad/utils/input_formatters.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/ai/gemini_api_assistant.dart';
@@ -754,6 +755,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
               child: TextField(
                 controller: _docPhoneCtrl,
                 keyboardType: TextInputType.phone,
+                inputFormatters: const [PhoneInputFormatter()],
                 decoration: InputDecoration(
                   labelText: l10n.diagnosesPhone,
                   border: const OutlineInputBorder(),

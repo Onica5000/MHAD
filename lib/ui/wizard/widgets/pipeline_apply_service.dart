@@ -845,14 +845,18 @@ extension _PipelineApplyLogic on _PipelineScreenState {
 
   Future<void> _editField(String key) async {
     final controller = TextEditingController(text: _reviewEdited[key]);
+    // Number-only fields (ZIP, phone, birth date) get the number/phone pad and
+    // a single line; everything else keeps the multi-line text keyboard.
+    final numericKeyboard = reviewFieldKeyboard(key);
     final result = await showDialog<String>(
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(_displayLabel(key)),
         content: TextField(
           controller: controller,
-          maxLines: null,
-          minLines: 3,
+          keyboardType: numericKeyboard ?? TextInputType.multiline,
+          maxLines: numericKeyboard == null ? null : 1,
+          minLines: numericKeyboard == null ? 3 : 1,
           decoration: const InputDecoration(border: OutlineInputBorder()),
           autofocus: true,
         ),
@@ -910,4 +914,15 @@ extension _PipelineApplyLogic on _PipelineScreenState {
       });
     }
   }
+}
+
+/// The keyboard for an Autofill-review field that takes only a number, or
+/// null for free text. One definition for every review key, so a ZIP, phone
+/// or birth date edited here opens the number/phone pad (the standing
+/// number-pad rule) exactly like its field in the wizard does.
+TextInputType? reviewFieldKeyboard(String key) {
+  if (key.endsWith('_zip')) return TextInputType.number;
+  if (key.endsWith('_phone')) return TextInputType.phone;
+  if (key.endsWith('_dob')) return TextInputType.datetime;
+  return null;
 }
