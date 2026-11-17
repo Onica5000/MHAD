@@ -13014,6 +13014,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Find the official name with your AI'**
   String get diagnosesHandoffTitle;
+
+  /// No description provided for @aiWordingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Wording help: {field}'**
+  String aiWordingTitle(String field);
+
+  /// No description provided for @aiWordingPanelTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Get suggested wording from your AI'**
+  String get aiWordingPanelTitle;
+
+  /// No description provided for @aiWordingPasteButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste the wording into the field'**
+  String get aiWordingPasteButton;
 }
 
 class _AppLocalizationsDelegate

@@ -2146,5 +2146,8 @@
   "sideEffectsHandoffTitle": "Revise los efectos secundarios con su IA",
   "sideEffectsHandoffSubtitle": "PA MHAD agrega el texto oficial de la etiqueta de la FDA de sus medicamentos. Su IA lo convierte en una lista que usted puede marcar.",
   "sideEffectsGettingLabels": "Obteniendo el texto oficial de la etiqueta de la FDA…",
-  "diagnosesHandoffTitle": "Encuentre el nombre oficial con su IA"
+  "diagnosesHandoffTitle": "Encuentre el nombre oficial con su IA",
+  "aiWordingTitle": "Ayuda con la redacción: {field}",
+  "aiWordingPanelTitle": "Obtenga un texto sugerido de su IA",
+  "aiWordingPasteButton": "Pegar el texto en el campo"
 }

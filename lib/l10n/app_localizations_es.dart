@@ -7803,4 +7803,15 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get diagnosesHandoffTitle => 'Encuentre el nombre oficial con su IA';
+
+  @override
+  String aiWordingTitle(String field) {
+    return 'Ayuda con la redacción: $field';
+  }
+
+  @override
+  String get aiWordingPanelTitle => 'Obtenga un texto sugerido de su IA';
+
+  @override
+  String get aiWordingPasteButton => 'Pegar el texto en el campo';
 }

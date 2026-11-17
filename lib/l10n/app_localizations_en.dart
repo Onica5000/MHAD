@@ -7676,4 +7676,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get diagnosesHandoffTitle => 'Find the official name with your AI';
+
+  @override
+  String aiWordingTitle(String field) {
+    return 'Wording help: $field';
+  }
+
+  @override
+  String get aiWordingPanelTitle => 'Get suggested wording from your AI';
+
+  @override
+  String get aiWordingPasteButton => 'Paste the wording into the field';
 }
