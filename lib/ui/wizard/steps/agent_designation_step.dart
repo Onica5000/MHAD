@@ -135,11 +135,14 @@ class _AgentDesignationStepState
           children: [
             WizardHelpButton(helpText: helpText, stepId: 'agentDesignation'),
             const SizedBox(height: 8),
-            Text(
-              context.l10n.agentDesigTitle,
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            const SizedBox(height: 12),
+            // Inside the People step's card the card header names the role.
+            if (!widget.embedded) ...[
+              Text(
+                context.l10n.agentDesigTitle,
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              const SizedBox(height: 12),
+            ],
             // Definition of "agent" lives in the info card below (kept once).
             InfoBanner(
               icon: Icons.info_outline,

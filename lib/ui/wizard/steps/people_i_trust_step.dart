@@ -301,26 +301,9 @@ class _AgentCardState extends ConsumerState<_AgentCard> {
                                   color: p.textMuted,
                                 ),
                               ),
-                              if (widget.isPrimary) ...[
-                                const SizedBox(width: 6),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 6, vertical: 2),
-                                  decoration: BoxDecoration(
-                                    color: p.primaryLight,
-                                    borderRadius:
-                                        BorderRadius.circular(DesignTokens.radiusXs),
-                                  ),
-                                  child: Text(
-                                    context.l10n.peopleTrustPrimaryBadge,
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingLabel,
-                                      color: p.onPrimaryLight,
-                                    ),
-                                  ),
-                                ),
-                              ],
+                              // (No "Primary" badge: the role label above
+                              // already says it — it read "PRIMARY AGENT ·
+                              // Primary · Primary agent designation".)
                             ],
                           ),
                           const SizedBox(height: 1),
