@@ -245,7 +245,7 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                     context.l10n.navAiAssistant,
                     style: TextStyle(
                       fontFamily: kSansFamily,
-                      fontSize: 15,
+                      fontSize: 16,
                       fontWeight: FontWeight.w700,
                       letterSpacing: -0.2,
                       color: Theme.of(context).mhadPalette.text,
@@ -256,7 +256,7 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                         ? context.l10n.assistantActiveTextPiiStrippedBefore(ref.watch(activeModelProvider).toUpperCase().replaceAll('-', ' '))
                         : context.l10n.assistantNotSetUpAddA,
                     style: TextStyle(
-                      fontSize: 11,
+                      fontSize: 12,
                       letterSpacing: 0.5,
                       color: Theme.of(context).mhadPalette.textMuted,
                     ),
@@ -401,7 +401,7 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                           context.l10n.assistantNotLegalOrMedicalAdvice(appData.phoneOf('paProtectionAdvocacy')),
                           style: TextStyle(
                             fontFamily: kSansFamily,
-                            fontSize: 11,
+                            fontSize: 12,
                             fontWeight: FontWeight.w600,
                             color: fg,
                           ),
@@ -428,7 +428,7 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                   avatar: const Icon(Icons.edit_note, size: 16),
                   label: Text(
                     _contextLabel(widget.context!),
-                    style: const TextStyle(fontSize: 11),
+                    style: const TextStyle(fontSize: 12),
                   ),
                   padding: EdgeInsets.zero,
                   visualDensity: VisualDensity.compact,
@@ -451,7 +451,7 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                       Text(
                         context.l10n.assistantToUseTheAiAssistant,
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 13),
+                        style: TextStyle(fontSize: 14),
                       ),
                       const SizedBox(height: 8),
                       FilledButton.tonal(
@@ -516,7 +516,7 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                 child: Chip(
                   avatar: const Icon(Icons.shield_outlined, size: 14),
                   label: Text(context.l10n.assistantPersonalInfoRemoved,
-                      style: TextStyle(fontSize: 11)),
+                      style: TextStyle(fontSize: 12)),
                   padding: EdgeInsets.zero,
                   visualDensity: VisualDensity.compact,
                 ),
@@ -595,7 +595,7 @@ class _RateLimitBar extends ConsumerWidget {
             Expanded(
               child: Text(
                 tracker.statusTextFor(context.l10n),
-                style: TextStyle(fontSize: 11, color: fg),
+                style: TextStyle(fontSize: 12, color: fg),
               ),
             ),
             Tooltip(
@@ -748,7 +748,7 @@ class _SuggestionChip extends StatelessWidget {
             child: Row(
               children: [
                 Expanded(
-                  child: Text(text, style: const TextStyle(fontSize: 13)),
+                  child: Text(text, style: const TextStyle(fontSize: 14)),
                 ),
                 Icon(
                   Icons.arrow_forward_ios,

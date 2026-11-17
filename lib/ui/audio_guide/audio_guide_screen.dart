@@ -44,7 +44,7 @@ class AudioGuideScreen extends StatelessWidget {
             context.l10n.audioGuideDescribeYourWishesOutLoud,
             style: TextStyle(
               fontFamily: kSansFamily,
-              fontSize: 15,
+              fontSize: 16,
               height: 1.5,
               color: p.text,
             ),
@@ -122,7 +122,7 @@ class AudioGuideScreen extends StatelessWidget {
             context.l10n.audioGuideSetTheseInTheApp,
             style: TextStyle(
               fontFamily: kSansFamily,
-              fontSize: 13,
+              fontSize: 14,
               color: p.textMuted,
             ),
           ),
@@ -133,7 +133,7 @@ class AudioGuideScreen extends StatelessWidget {
             context.l10n.audioGuideWorthSayingOutLoudAutofill,
             style: TextStyle(
               fontFamily: kSansFamily,
-              fontSize: 13,
+              fontSize: 14,
               color: p.textMuted,
             ),
           ),
@@ -146,7 +146,7 @@ class AudioGuideScreen extends StatelessWidget {
             audioQClosing,
             style: TextStyle(
               fontFamily: kSansFamily,
-              fontSize: 13,
+              fontSize: 14,
               fontStyle: FontStyle.italic,
               height: 1.45,
               color: p.text,
@@ -169,7 +169,7 @@ class AudioGuideScreen extends StatelessWidget {
                 text,
                 style: TextStyle(
                   fontFamily: kSansFamily,
-                  fontSize: 13,
+                  fontSize: 14,
                   height: 1.45,
                   color: p.text,
                 ),
@@ -215,7 +215,7 @@ class AudioGuideScreen extends StatelessWidget {
               '${s.number}.  ${s.title}',
               style: TextStyle(
                 fontFamily: kSansFamily,
-                fontSize: 15,
+                fontSize: 16,
                 fontWeight: FontWeight.w700,
                 color: p.text,
               ),
@@ -247,7 +247,7 @@ class AudioGuideScreen extends StatelessWidget {
                   context.l10n.audioGuideExample(s.example!),
                   style: TextStyle(
                     fontFamily: kSansFamily,
-                    fontSize: 13,
+                    fontSize: 14,
                     fontStyle: FontStyle.italic,
                     height: 1.45,
                     color: p.textMuted,

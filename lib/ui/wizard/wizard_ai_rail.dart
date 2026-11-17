@@ -181,7 +181,7 @@ class _WizardAiRailState extends ConsumerState<WizardAiRail> {
                 context.l10n.navAiAssistant,
                 style: TextStyle(
                   fontFamily: kSansFamily,
-                  fontSize: 15,
+                  fontSize: 16,
                   fontWeight: FontWeight.w700,
                   color: p.text,
                 ),
@@ -211,7 +211,7 @@ class _WizardAiRailState extends ConsumerState<WizardAiRail> {
           Text(
             context.l10n.learnAiPanelPiiStripped(ref.watch(activeProviderProvider).name.toUpperCase()),
             style: TextStyle(
-              fontSize: 11,
+              fontSize: 12,
               letterSpacing: 0.5,
               color: hasKey ? p.primary : p.textMuted,
             ),
@@ -250,7 +250,7 @@ class _WizardAiRailState extends ConsumerState<WizardAiRail> {
               context.l10n.learnAiPanelNotLegalOrMedicalAdvice,
               style: TextStyle(
                 fontFamily: kSansFamily,
-                fontSize: 11,
+                fontSize: 12,
                 color: p.textMuted,
               ),
             ),
@@ -373,7 +373,7 @@ class _RailHeadsUp extends ConsumerWidget {
                       s.headsUp,
                       style: TextStyle(
                         fontFamily: kSansFamily,
-                        fontSize: 13,
+                        fontSize: 14,
                         height: 1.4,
                         color: p.onPrimaryLight,
                       ),
@@ -386,7 +386,7 @@ class _RailHeadsUp extends ConsumerWidget {
               Text(
                 context.l10n.wizardAiRailSuggestedForThisStep,
                 style: TextStyle(
-                  fontSize: 11,
+                  fontSize: 12,
                   letterSpacing: 0.6,
                   color: p.textMuted,
                 ),
@@ -444,7 +444,7 @@ class _RailFacilitySearch extends StatelessWidget {
       child: TextField(
         controller: controller,
         onSubmitted: (_) => onSubmit(),
-        style: const TextStyle(fontFamily: kSansFamily, fontSize: 13),
+        style: const TextStyle(fontFamily: kSansFamily, fontSize: 14),
         decoration: InputDecoration(
           isDense: true,
           hintText: context.l10n.wizardAiRailFindAPaFacilityBy,
@@ -534,7 +534,7 @@ class _RailBubble extends StatelessWidget {
           text,
           style: TextStyle(
             fontFamily: kSansFamily,
-            fontSize: 13,
+            fontSize: 14,
             height: 1.4,
             fontStyle: muted ? FontStyle.italic : FontStyle.normal,
             color: isUser
@@ -570,7 +570,7 @@ class _RailInput extends ConsumerWidget {
               controller: controller,
               enabled: !isSending,
               onSubmitted: (_) => onSend(),
-              style: const TextStyle(fontFamily: kSansFamily, fontSize: 13),
+              style: const TextStyle(fontFamily: kSansFamily, fontSize: 14),
               decoration: InputDecoration(
                 isCollapsed: true,
                 border: InputBorder.none,
@@ -625,7 +625,7 @@ class WizardAiBar extends StatelessWidget {
                   context.l10n.wizardAiRailNeedHelpWithThisStep,
                   style: TextStyle(
                     fontFamily: kSansFamily,
-                    fontSize: 13,
+                    fontSize: 14,
                     fontWeight: FontWeight.w600,
                     color: p.onPrimaryLight,
                   ),

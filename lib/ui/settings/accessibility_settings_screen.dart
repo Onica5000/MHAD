@@ -215,7 +215,7 @@ class _GuideItem extends StatelessWidget {
         children: [
           Text(head, style: const TextStyle(fontWeight: FontWeight.w700)),
           const SizedBox(height: 2),
-          Text(body, style: const TextStyle(fontSize: 13, height: 1.4)),
+          Text(body, style: const TextStyle(fontSize: 14, height: 1.4)),
         ],
       ),
     );
@@ -255,7 +255,7 @@ class _TextSizeCard extends StatelessWidget {
               context.l10n.accessibilitySettingsPeopleWhoITrustWill,
               style: TextStyle(
                 fontFamily: kSansFamily,
-                fontSize: 13 + value * 4,
+                fontSize: 14 + value * 4,
                 color: p.text,
                 height: 1.45,
               ),

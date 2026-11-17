@@ -730,7 +730,7 @@ class _PrivacyByDesignCard extends StatelessWidget {
                 : context.l10n.homePrivateBodyDevice,
             style: TextStyle(
               fontFamily: kSansFamily,
-              fontSize: 13,
+              fontSize: 14,
               height: 1.45,
               color: p.onPrimaryLight,
             ),

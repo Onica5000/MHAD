@@ -47,9 +47,9 @@ class ExportPrincipalCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(context.l10n.exportCardsPrincipal,
-                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
+                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
             const SizedBox(height: 4),
-            Text(directive.fullName, style: const TextStyle(fontSize: 13)),
+            Text(directive.fullName, style: const TextStyle(fontSize: 14)),
             if (directive.executionDate != null)
               Text(
                 context.l10n.exportCardsExecuted(formatShortDate(DateTime.fromMillisecondsSinceEpoch(directive.executionDate!))),
@@ -90,7 +90,7 @@ class ExportUnencryptedBanner extends StatelessWidget {
               child: Text(
                 context.l10n.exportCardsTheExportedPdfIsNot,
                 style: TextStyle(
-                  fontSize: 13,
+                  fontSize: 14,
                   color: Theme.of(context).colorScheme.onErrorContainer,
                 ),
               ),

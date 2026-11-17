@@ -369,7 +369,7 @@ class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontFamily: kSansFamily,
-                      fontSize: 13,
+                      fontSize: 14,
                       height: 1.5,
                       color: p.textMuted,
                     ),
@@ -466,7 +466,7 @@ class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
                         : context.l10n.voiceFooterDevice),
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 11,
+                  fontSize: 12,
                   letterSpacing: 0.5,
                   color: p.textMuted,
                 ),

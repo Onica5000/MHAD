@@ -440,7 +440,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontFamily: kSansFamily,
-                        fontSize: 13,
+                        fontSize: 14,
                         height: 1.4,
                         color: p.textMuted,
                       ),
@@ -1240,9 +1240,9 @@ class _FormCheckbox extends StatelessWidget {
         children: [
           CheckboxListTile(
             title: Text(title,
-                style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500)),
+                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
             subtitle: Text(subtitle,
-                style: TextStyle(fontSize: 11, color: cs.onSurfaceVariant)),
+                style: TextStyle(fontSize: 12, color: cs.onSurfaceVariant)),
             value: value,
             onChanged: onChanged,
             controlAffinity: ListTileControlAffinity.leading,
@@ -1260,7 +1260,7 @@ class _FormCheckbox extends StatelessWidget {
                     child: Text(
                       warning!,
                       style: TextStyle(
-                          fontSize: 11,
+                          fontSize: 12,
                           color: SemanticColors.warningText(cs.brightness)),
                     ),
                   ),

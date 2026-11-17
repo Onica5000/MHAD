@@ -226,7 +226,7 @@ class _ConsentChoiceStepState extends ConsumerState<ConsentChoiceStep>
             c.subtitle(l),
             style: TextStyle(
               fontFamily: kSansFamily,
-              fontSize: 13,
+              fontSize: 14,
               color: p.textMuted,
               height: 1.45,
             ),

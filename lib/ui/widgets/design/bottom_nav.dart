@@ -162,7 +162,7 @@ class _NavPill extends StatelessWidget {
               item.label,
               style: TextStyle(
                 fontFamily: kSansFamily,
-                fontSize: 13,
+                fontSize: 14,
                 fontWeight: FontWeight.w600,
                 color: fg,
               ),

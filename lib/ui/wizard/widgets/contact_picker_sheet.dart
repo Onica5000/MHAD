@@ -344,7 +344,7 @@ class _ContactPickerSheetState extends State<_ContactPickerSheet> {
                     context.l10n.contactSheetLocalOnly,
                     style: TextStyle(
                       fontFamily: kSansFamily,
-                      fontSize: 13,
+                      fontSize: 14,
                       height: 1.45,
                       color: p.textMuted,
                     ),
@@ -378,7 +378,7 @@ class _ContactPickerSheetState extends State<_ContactPickerSheet> {
                             ),
                             style: TextStyle(
                               fontFamily: kSansFamily,
-                              fontSize: 13,
+                              fontSize: 14,
                               color: p.text,
                             ),
                           ),
@@ -582,7 +582,7 @@ class _PersonTile extends StatelessWidget {
                           Text(
                             relLabel,
                             style: TextStyle(
-                              fontSize: 11,
+                              fontSize: 12,
                               letterSpacing: 0.3,
                               color: p.textMuted,
                             ),
@@ -598,7 +598,7 @@ class _PersonTile extends StatelessWidget {
                                           context, cand.eligibilityNote!)),
                               style: TextStyle(
                                 fontFamily: kSansFamily,
-                                fontSize: 11,
+                                fontSize: 12,
                                 color: blocked ? dangerColor : warnColor,
                               ),
                             ),
@@ -610,7 +610,7 @@ class _PersonTile extends StatelessWidget {
                               context.l10n.contactSheetEligible,
                               style: TextStyle(
                                 fontFamily: kSansFamily,
-                                fontSize: 11,
+                                fontSize: 12,
                                 color: p.textMuted,
                               ),
                             ),
@@ -688,7 +688,7 @@ class _ManualEntryTile extends StatelessWidget {
                 context.l10n.contactSheetEnterManually,
                 style: TextStyle(
                   fontFamily: kSansFamily,
-                  fontSize: 13,
+                  fontSize: 14,
                   fontWeight: FontWeight.w600,
                   color: p.primary,
                 ),
@@ -764,7 +764,7 @@ class _EligibilityRulesCard extends StatelessWidget {
                   Text(
                     label.toUpperCase(),
                     style: TextStyle(
-                      fontSize: 11,
+                      fontSize: 12,
                       fontWeight: FontWeight.w700,
                       letterSpacing: 0.4,
                       color:
@@ -779,7 +779,7 @@ class _EligibilityRulesCard extends StatelessWidget {
             l10n.contactSheetRulesFootnote,
             style: TextStyle(
               fontFamily: kSansFamily,
-              fontSize: 11,
+              fontSize: 12,
               color: p.textMuted,
               fontStyle: FontStyle.italic,
               height: 1.4,

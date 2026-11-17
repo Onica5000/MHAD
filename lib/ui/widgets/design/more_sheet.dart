@@ -148,7 +148,7 @@ class _MoreSheet extends StatelessWidget {
                 context.l10n.moreSheetEverythingElseYouCanDo,
                 style: TextStyle(
                   fontFamily: kSansFamily,
-                  fontSize: 13,
+                  fontSize: 14,
                   color: p.textMuted,
                   height: 1.5,
                 ),
@@ -293,7 +293,7 @@ class _MoreRow extends StatelessWidget {
                         title,
                         style: TextStyle(
                           fontFamily: kSansFamily,
-                          fontSize: 15,
+                          fontSize: 16,
                           fontWeight: FontWeight.w700,
                           color: titleColor,
                         ),

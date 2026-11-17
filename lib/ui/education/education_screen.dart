@@ -365,7 +365,7 @@ class _EditorialLearnHub extends StatelessWidget {
                 context.l10n.educationPaOfficeOfMentalHealth,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 11,
+                  fontSize: 12,
                   letterSpacing: 0.6,
                   color: p.textMuted,
                 ),
@@ -408,7 +408,7 @@ class _CategoryPill extends StatelessWidget {
             label,
             style: TextStyle(
               fontFamily: kSansFamily,
-              fontSize: 13,
+              fontSize: 14,
               fontWeight: FontWeight.w700,
               color: active ? p.onPrimary : p.textMuted,
             ),

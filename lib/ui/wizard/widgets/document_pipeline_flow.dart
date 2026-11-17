@@ -677,7 +677,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                 Text(label,
                     style: TextStyle(
                         fontFamily: kSansFamily,
-                        fontSize: 13,
+                        fontSize: 14,
                         color: p.textMuted)),
               ],
             ),

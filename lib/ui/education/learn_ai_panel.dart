@@ -113,7 +113,7 @@ class _LearnAiPanelState extends ConsumerState<LearnAiPanel> {
                       context.l10n.learnAiPanelAskTheAi,
                       style: TextStyle(
                         fontFamily: kSansFamily,
-                        fontSize: 15,
+                        fontSize: 16,
                         fontWeight: FontWeight.w700,
                         color: p.text,
                       ),
@@ -130,7 +130,7 @@ class _LearnAiPanelState extends ConsumerState<LearnAiPanel> {
               child: Text(
                 context.l10n.learnAiPanelPiiStripped(ref.watch(activeProviderProvider).name.toUpperCase()),
                 style: TextStyle(
-                  fontSize: 11,
+                  fontSize: 12,
                   letterSpacing: 0.5,
                   color: hasKey ? p.primary : p.textMuted,
                 ),
@@ -150,7 +150,7 @@ class _LearnAiPanelState extends ConsumerState<LearnAiPanel> {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontFamily: kSansFamily,
-                            fontSize: 13,
+                            fontSize: 14,
                             height: 1.5,
                             color: p.textMuted,
                           ),
@@ -217,7 +217,7 @@ class _LearnAiPanelState extends ConsumerState<LearnAiPanel> {
                 context.l10n.learnAiPanelNotLegalOrMedicalAdvice,
                 style: TextStyle(
                   fontFamily: kSansFamily,
-                  fontSize: 11,
+                  fontSize: 12,
                   color: p.textMuted,
                 ),
               ),
@@ -253,7 +253,7 @@ class _LearnChatBubble extends StatelessWidget {
           message.content,
           style: TextStyle(
             fontFamily: kSansFamily,
-            fontSize: 13,
+            fontSize: 14,
             height: 1.4,
             color: isUser ? p.onPrimary : p.text,
           ),

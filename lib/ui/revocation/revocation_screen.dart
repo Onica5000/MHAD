@@ -249,7 +249,7 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
                     style: TextStyle(
                       fontFamily: kSansFamily,
                       fontWeight: FontWeight.w700,
-                      fontSize: 13,
+                      fontSize: 14,
                       color: cs.onErrorContainer,
                     ),
                   ),
@@ -325,7 +325,7 @@ class _RevokeStep extends StatelessWidget {
               style: TextStyle(
                 fontFamily: kMonoFamily,
                 fontFamilyFallback: kMonoFallbacks,
-                fontSize: 11,
+                fontSize: 12,
                 fontWeight: FontWeight.w700,
                 color: p.primary,
               ),

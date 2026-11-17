@@ -37,7 +37,7 @@ Future<void> showMedlinePlusDialog(
                 return Text(
                   context.l10n.medlinePlusDialogNoPlainLanguageSummaryIs,
                   style: TextStyle(
-                      fontFamily: kSans, fontSize: 13, color: p.textMuted),
+                      fontFamily: kSans, fontSize: 14, color: p.textMuted),
                 );
               }
               return SingleChildScrollView(
@@ -49,7 +49,7 @@ Future<void> showMedlinePlusDialog(
                       topic.summary.isNotEmpty ? topic.summary : topic.title,
                       style: TextStyle(
                         fontFamily: kSans,
-                        fontSize: 13,
+                        fontSize: 14,
                         height: 1.5,
                         color: p.text,
                       ),
@@ -59,7 +59,7 @@ Future<void> showMedlinePlusDialog(
                       context.l10n.medlinePlusDialogPlainLanguageInformationFromThe,
                       style: TextStyle(
                         fontFamily: kSans,
-                        fontSize: 11,
+                        fontSize: 12,
                         fontStyle: FontStyle.italic,
                         color: p.textMuted,
                       ),

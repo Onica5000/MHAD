@@ -113,7 +113,7 @@ class HealthChip extends StatelessWidget {
                 style: TextStyle(
                   fontFamily: kMonoFamily,
                   fontFamilyFallback: kMonoFallbacks,
-                  fontSize: 11,
+                  fontSize: 12,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 0.4,
                   color: codeFg,
@@ -146,7 +146,7 @@ class HealthChip extends StatelessWidget {
                         style: TextStyle(
                           fontFamily: kMonoFamily,
                           fontFamilyFallback: kMonoFallbacks,
-                          fontSize: 11,
+                          fontSize: 12,
                           fontWeight: FontWeight.w600,
                           letterSpacing: 0.4,
                           color: text.withValues(alpha: 0.75),
@@ -164,7 +164,7 @@ class HealthChip extends StatelessWidget {
                         child: Text(
                           sourceTag!,
                           style: TextStyle(
-                            fontSize: 11,
+                            fontSize: 12,
                             fontWeight: FontWeight.w700,
                             letterSpacing: 0.4,
                             color: codeBg,

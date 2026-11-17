@@ -470,7 +470,7 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
                           contentPadding: EdgeInsets.zero,
                           controlAffinity: ListTileControlAffinity.leading,
                           title: Text('Add $m',
-                              style: const TextStyle(fontSize: 13)),
+                              style: const TextStyle(fontSize: 14)),
                           value: picks[a.provider]!.contains(m),
                           onChanged: (v) => setLocal(() => v == true
                               ? picks[a.provider]!.add(m)
@@ -482,7 +482,7 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
                 const Text(
                   'Only models the provider lists for your key are shown. '
                   'Newest first; nothing is added unless ticked.',
-                  style: TextStyle(fontSize: 11),
+                  style: TextStyle(fontSize: 12),
                 ),
               ],
             ),
@@ -574,7 +574,7 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
                         if (meta.isNotEmpty)
                           Text(meta,
                               style: const TextStyle(
-                                  fontSize: 11, color: Colors.grey)),
+                                  fontSize: 12, color: Colors.grey)),
                         if (d.abstract.isNotEmpty)
                           Padding(
                             padding: const EdgeInsets.only(top: 2),
@@ -708,7 +708,7 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
                   Expanded(child: Text(b.label)),
                   if (b.archived)
                     const Text('archived',
-                        style: TextStyle(fontSize: 11, color: Colors.grey)),
+                        style: TextStyle(fontSize: 12, color: Colors.grey)),
                 ],
               ),
             ),
@@ -1009,7 +1009,7 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
               ),
               child: Text(c.autonomy.toUpperCase(),
                   style: const TextStyle(
-                      fontSize: 11, fontWeight: FontWeight.w700)),
+                      fontSize: 12, fontWeight: FontWeight.w700)),
             ),
             const SizedBox(width: 8),
             Expanded(
@@ -1065,7 +1065,7 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
             decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
             child: SingleChildScrollView(
               child: SelectableText(_output,
-                  style: const TextStyle(fontFamily: 'monospace', fontSize: 11)),
+                  style: const TextStyle(fontFamily: 'monospace', fontSize: 12)),
             ),
           ),
         ),

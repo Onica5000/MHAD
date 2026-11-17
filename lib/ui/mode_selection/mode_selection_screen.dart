@@ -325,7 +325,7 @@ class _Card2 extends StatelessWidget {
                                     b,
                                     style: TextStyle(
                                       fontFamily: kSansFamily,
-                                      fontSize: 11,
+                                      fontSize: 12,
                                       fontWeight: FontWeight.w600,
                                       color: p.textMuted,
                                     ),
@@ -354,7 +354,7 @@ class _Card2 extends StatelessWidget {
                           context.l10n.modeSelectionRecommended,
                           style: TextStyle(
                             fontFamily: kSansFamily,
-                            fontSize: 11,
+                            fontSize: 12,
                             fontWeight: FontWeight.w700,
                             letterSpacing: 0.4,
                             color: p.onPrimary,

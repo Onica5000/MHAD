@@ -69,7 +69,7 @@ class InfoBanner extends StatelessWidget {
                   text,
                   style: TextStyle(
                     color: fg,
-                    fontSize: 13,
+                    fontSize: 14,
                     height: 1.45,
                   ),
                 ),

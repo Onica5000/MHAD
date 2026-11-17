@@ -242,7 +242,7 @@ class OnboardingScreen extends ConsumerWidget {
                             DesignTokens.buttonHeightMd),
                         textStyle: const TextStyle(
                           fontFamily: kSansFamily,
-                          fontSize: 15,
+                          fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -262,7 +262,7 @@ class OnboardingScreen extends ConsumerWidget {
                             const Size.fromHeight(DesignTokens.buttonHeightMd),
                         textStyle: const TextStyle(
                           fontFamily: kSansFamily,
-                          fontSize: 15,
+                          fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -277,7 +277,7 @@ class OnboardingScreen extends ConsumerWidget {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontFamily: kSansFamily,
-                        fontSize: 11,
+                        fontSize: 12,
                         height: 1.45,
                         color: p.textMuted,
                       ),

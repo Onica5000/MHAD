@@ -122,7 +122,7 @@ class DirectiveFormChoice extends ConsumerWidget {
           context.l10n.directiveFormChoiceYouCanSwitchFormTypes,
           style: TextStyle(
             fontFamily: kSansFamily,
-            fontSize: 13,
+            fontSize: 14,
             height: 1.4,
             color: p.textMuted,
           ),
@@ -180,7 +180,7 @@ class _CombinedCard extends StatelessWidget {
                       context.l10n.modeSelectionRecommended,
                       style: TextStyle(
                         fontFamily: kSansFamily,
-                        fontSize: 11,
+                        fontSize: 12,
                         fontWeight: FontWeight.w700,
                         letterSpacing: 0.4,
                         color: p.onPrimary,
@@ -344,7 +344,7 @@ class _HelpMeChooseBanner extends StatelessWidget {
                     context.l10n.directiveFormChoiceNotSureWhichFormFits,
                     style: TextStyle(
                       fontFamily: kSansFamily,
-                      fontSize: 13,
+                      fontSize: 14,
                       fontWeight: FontWeight.w500,
                       color: p.onPrimaryLight,
                     ),
@@ -359,7 +359,7 @@ class _HelpMeChooseBanner extends StatelessWidget {
                     textAlign: TextAlign.end,
                     style: TextStyle(
                       fontFamily: kSansFamily,
-                      fontSize: 13,
+                      fontSize: 14,
                       fontWeight: FontWeight.w700,
                       color: p.primary,
                     ),

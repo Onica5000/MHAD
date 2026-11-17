@@ -27,7 +27,7 @@ class NlmAttribution extends StatelessWidget {
         context.l10n.nlmAttributionSourceUSNationalLibrary(medicalDisclaimer),
         style: Theme.of(context).textTheme.bodySmall?.copyWith(
               color: cs.onSurfaceVariant,
-              fontSize: 11,
+              fontSize: 12,
             ),
       ),
     );

@@ -200,7 +200,7 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
                   TextSpan(
                     style: TextStyle(
                       fontFamily: kSansFamily,
-                      fontSize: 13,
+                      fontSize: 14,
                       color: warnText,
                       height: 1.45,
                     ),
@@ -276,7 +276,7 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
             context.l10n.executionNotYetValid,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 11,
+              fontSize: 12,
               letterSpacing: 0.6,
               height: 1.4,
               color: p.textMuted,
@@ -354,7 +354,7 @@ class _SignStep extends StatelessWidget {
                     title,
                     style: TextStyle(
                       fontFamily: kSansFamily,
-                      fontSize: 15,
+                      fontSize: 16,
                       fontWeight: FontWeight.w700,
                       color: p.text,
                     ),
@@ -364,7 +364,7 @@ class _SignStep extends StatelessWidget {
                     body,
                     style: TextStyle(
                       fontFamily: kSansFamily,
-                      fontSize: 13,
+                      fontSize: 14,
                       color: p.textMuted,
                       height: 1.45,
                     ),
@@ -411,7 +411,7 @@ class _PacketRow extends StatelessWidget {
                   title,
                   style: TextStyle(
                     fontFamily: kSansFamily,
-                    fontSize: 13,
+                    fontSize: 14,
                     fontWeight: FontWeight.w600,
                     color: p.text,
                   ),

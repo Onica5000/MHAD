@@ -304,7 +304,7 @@ class _SettingsRow extends StatelessWidget {
                     style: const TextStyle(
                       fontFamily: kSansFamily,
                       fontWeight: FontWeight.w600,
-                      fontSize: 15,
+                      fontSize: 16,
                     ),
                   ),
                   const SizedBox(height: 2),
@@ -475,7 +475,7 @@ class _ProfileChip extends ConsumerWidget {
               style: TextStyle(
                 fontFamily: kSansFamily,
                 fontWeight: FontWeight.w700,
-                fontSize: 15,
+                fontSize: 16,
                 color: p.onPrimary,
               ),
             ),
@@ -489,7 +489,7 @@ class _ProfileChip extends ConsumerWidget {
                   displayName,
                   style: TextStyle(
                     fontFamily: kSansFamily,
-                    fontSize: 15,
+                    fontSize: 16,
                     fontWeight: FontWeight.w700,
                     color: p.onPrimary,
                   ),
@@ -500,7 +500,7 @@ class _ProfileChip extends ConsumerWidget {
                 Text(
                   _statusFor(context, mode),
                   style: TextStyle(
-                    fontSize: 11,
+                    fontSize: 12,
                     letterSpacing: 0.4,
                     color: p.onPrimary.withValues(alpha: 0.85),
                   ),

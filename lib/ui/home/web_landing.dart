@@ -75,7 +75,7 @@ class WebDashboardLanding extends ConsumerWidget {
                   context.l10n.webLandingALegalDocumentThatTells,
                   style: TextStyle(
                     fontFamily: kSansFamily,
-                    fontSize: 15,
+                    fontSize: 16,
                     height: 1.5,
                     color: p.textMuted,
                   ),
@@ -174,7 +174,7 @@ class _AnonBanner extends StatelessWidget {
                   context.l10n.webLandingYouReWorkingAnonymouslyNothing,
                   style: TextStyle(
                     fontFamily: kSansFamily,
-                    fontSize: 13,
+                    fontSize: 14,
                     fontWeight: FontWeight.w700,
                     color: p.text,
                   ),
@@ -204,7 +204,7 @@ class _AnonBanner extends StatelessWidget {
               child: Text(
                 context.l10n.webLandingHowThisWorks,
                 style: TextStyle(
-                  fontSize: 11,
+                  fontSize: 12,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 0.6,
                   color: p.primary,
@@ -392,7 +392,7 @@ class _PromiseItem extends StatelessWidget {
                 title,
                 style: TextStyle(
                   fontFamily: kSansFamily,
-                  fontSize: 13,
+                  fontSize: 14,
                   fontWeight: FontWeight.w700,
                   color: p.text,
                 ),

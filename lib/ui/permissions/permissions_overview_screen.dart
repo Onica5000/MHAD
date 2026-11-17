@@ -220,7 +220,7 @@ class _PermissionCard extends StatelessWidget {
                       title,
                       style: TextStyle(
                         fontFamily: kSansFamily,
-                        fontSize: 15,
+                        fontSize: 16,
                         fontWeight: FontWeight.w700,
                         color: p.text,
                       ),
@@ -241,7 +241,7 @@ class _PermissionCard extends StatelessWidget {
                           child: Text(
                             statusLine,
                             style: TextStyle(
-                              fontSize: 11,
+                              fontSize: 12,
                               letterSpacing: 0.5,
                               color: statusColor,
                             ),
@@ -259,7 +259,7 @@ class _PermissionCard extends StatelessWidget {
             usedFor,
             style: TextStyle(
               fontFamily: kSansFamily,
-              fontSize: 13,
+              fontSize: 14,
               color: p.text,
               height: 1.5,
             ),

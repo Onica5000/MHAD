@@ -119,7 +119,7 @@ class _AgentAuthorityStepState
                             context.l10n.agentAuthScopeTitle,
                             style: TextStyle(
                                 fontWeight: FontWeight.w600,
-                                fontSize: 13,
+                                fontSize: 14,
                                 color: Theme.of(context).colorScheme.onTertiaryContainer)),
                       ),
                     ],
@@ -159,7 +159,7 @@ class _AgentAuthorityStepState
                     child: Text.rich(
                       TextSpan(
                         style: TextStyle(
-                          fontSize: 13,
+                          fontSize: 14,
                           height: 1.45,
                           color: Theme.of(context)
                               .colorScheme

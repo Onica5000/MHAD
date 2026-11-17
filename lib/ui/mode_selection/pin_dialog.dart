@@ -101,7 +101,7 @@ class _PinSetupDialogState extends State<PinSetupDialog> {
             if (_error != null) ...[
               const SizedBox(height: 12),
               Text(_error!,
-                  style: TextStyle(color: cs.error, fontSize: 13)),
+                  style: TextStyle(color: cs.error, fontSize: 14)),
             ],
           ],
         ),
@@ -281,7 +281,7 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
                         context.l10n.pinDialogPaMhad,
                         style: TextStyle(
                           fontFamily: kSansFamily,
-                          fontSize: 13,
+                          fontSize: 14,
                           fontWeight: FontWeight.w700,
                           letterSpacing: -0.2,
                           color: p.text,
@@ -290,7 +290,7 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
                       Text(
                         context.l10n.pinDialogPrivateModeLocked,
                         style: TextStyle(
-                          fontSize: 11,
+                          fontSize: 12,
                           letterSpacing: 0.6,
                           color: p.textMuted,
                         ),
@@ -422,7 +422,7 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
                                   ? context.l10n.pinDialogLockedWait
                                   : context.l10n.pinDialogAttempt(_failedAttempts, 5)),
                           style: TextStyle(
-                            fontSize: 11,
+                            fontSize: 12,
                             fontWeight: FontWeight.w700,
                             letterSpacing: 0.8,
                             color: _verifying
@@ -484,7 +484,7 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
                 Text(
                   _error!,
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: cs.error, fontSize: 13),
+                  style: TextStyle(color: cs.error, fontSize: 14),
                 ),
               ],
               const SizedBox(height: 18),
@@ -519,7 +519,7 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
                         .pop(PinUnlockResult.switchToPublic),
                 child: Text(
                   context.l10n.pinDialogSwitchToPublicMode,
-                  style: TextStyle(color: p.textMuted, fontSize: 13),
+                  style: TextStyle(color: p.textMuted, fontSize: 14),
                 ),
               ),
             ],

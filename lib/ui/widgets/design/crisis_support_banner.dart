@@ -45,7 +45,7 @@ class CrisisSupportBanner extends ConsumerWidget {
               context.l10n.crisisBannerBody,
               style: TextStyle(
                 fontFamily: kSansFamily,
-                fontSize: 13,
+                fontSize: 14,
                 height: 1.4,
                 color: cs.onErrorContainer,
               ),

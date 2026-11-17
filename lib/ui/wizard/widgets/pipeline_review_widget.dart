@@ -679,7 +679,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
                 Text(
                   context.l10n.reviewAiReadThisPhoto,
                   style: TextStyle(
-                    fontSize: 11,
+                    fontSize: 12,
                     letterSpacing: 0.6,
                     fontWeight: FontWeight.w700,
                     color: p.primary,
@@ -709,7 +709,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
         context.l10n.reviewHowToIntro,
         style: TextStyle(
           fontFamily: kSansFamily,
-          fontSize: 13,
+          fontSize: 14,
           fontWeight: FontWeight.w600,
           color: p.text,
           height: 1.5,
@@ -804,7 +804,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
         Text(
           context.l10n.reviewAddToDirective,
           style: TextStyle(
-            fontSize: 11,
+            fontSize: 12,
             fontWeight: FontWeight.w700,
             letterSpacing: 1.2,
             color: p.textMuted,
@@ -845,7 +845,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
           context.l10n.reviewFieldsReady(checkedCount, keys.length),
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: 11,
+            fontSize: 12,
             letterSpacing: 0.6,
             color: checkedCount > 0 ? okText : p.textMuted,
           ),
@@ -984,7 +984,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
                 text: value,
                 style: TextStyle(
                   fontFamily: kSansFamily,
-                  fontSize: 13,
+                  fontSize: 14,
                   color: p.text,
                 ),
               ),
@@ -1001,7 +1001,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
             _displayLabel(it.key),
             style: TextStyle(
               fontFamily: kSansFamily,
-              fontSize: 13,
+              fontSize: 14,
               fontWeight: FontWeight.w700,
               color: p.text,
             ),
@@ -1061,7 +1061,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
               context.l10n.reviewWillSave,
               style: TextStyle(
                 fontFamily: kSansFamily,
-                fontSize: 11,
+                fontSize: 12,
                 fontWeight: FontWeight.w700,
                 letterSpacing: 0.3,
                 color: p.textMuted,
@@ -1071,7 +1071,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
               _reviewEdited[it.key] ?? '',
               style: TextStyle(
                 fontFamily: kSansFamily,
-                fontSize: 13,
+                fontSize: 14,
                 color: p.text,
                 height: 1.4,
               ),
@@ -1176,7 +1176,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
   Widget _groupLabel(String text, MhadPalette p) => Text(
         text.toUpperCase(),
         style: TextStyle(
-          fontSize: 11,
+          fontSize: 12,
           fontWeight: FontWeight.w700,
           letterSpacing: 1.2,
           color: p.textMuted,
@@ -1454,7 +1454,7 @@ class _SnapReviewRow extends StatelessWidget {
                       child: Text(
                         fieldLabel.toUpperCase(),
                         style: TextStyle(
-                          fontSize: 11,
+                          fontSize: 12,
                           fontWeight: FontWeight.w600,
                           letterSpacing: 0.5,
                           color: p.textMuted,
@@ -1465,7 +1465,7 @@ class _SnapReviewRow extends StatelessWidget {
                     Text(
                       ok ? '→ $target' : context.l10n.reviewNotAdded,
                       style: TextStyle(
-                        fontSize: 11,
+                        fontSize: 12,
                         fontWeight: FontWeight.w700,
                         letterSpacing: 0.4,
                         color: ok ? p.primary : p.textMuted,

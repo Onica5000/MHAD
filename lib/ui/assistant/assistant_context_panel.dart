@@ -77,7 +77,7 @@ class AssistantContextPanel extends StatelessWidget {
                 buildContext.l10n.assistantContextPanelAskAboutFormTypesAgents,
                 style: TextStyle(
                   fontFamily: kSansFamily,
-                  fontSize: 13,
+                  fontSize: 14,
                   height: 1.45,
                   color: p.textMuted,
                 ),
@@ -109,7 +109,7 @@ class AssistantContextPanel extends StatelessWidget {
                     Text(
                       buildContext.l10n.assistantContextPanelPiiRedactionOn,
                       style: TextStyle(
-                        fontSize: 11,
+                        fontSize: 12,
                         fontWeight: FontWeight.w700,
                         letterSpacing: 0.6,
                         color: p.primary,
@@ -214,7 +214,7 @@ class _ContextPromptTile extends StatelessWidget {
                     text,
                     style: TextStyle(
                       fontFamily: kSansFamily,
-                      fontSize: 13,
+                      fontSize: 14,
                       height: 1.3,
                       color: p.text,
                     ),

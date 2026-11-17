@@ -82,7 +82,7 @@ class StepHead extends StatelessWidget {
                               context.l10n.wizardExit,
                               style: TextStyle(
                                 fontFamily: kSansFamily,
-                                fontSize: 13,
+                                fontSize: 14,
                                 fontWeight: FontWeight.w600,
                                 color: p.primary,
                               ),

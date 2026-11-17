@@ -48,7 +48,7 @@ class _ReadOnlyAccordionState extends State<ReadOnlyAccordion> {
               context.l10n.legalSheetTheEightSectionsBelowWere,
               style: TextStyle(
                 fontFamily: kSansFamily,
-                fontSize: 13,
+                fontSize: 14,
                 color: p.textMuted,
                 height: 1.5,
               ),
@@ -609,7 +609,7 @@ class _AccordionSection extends StatelessWidget {
                           title,
                           style: TextStyle(
                             fontFamily: kSansFamily,
-                            fontSize: 15,
+                            fontSize: 16,
                             fontWeight: FontWeight.w700,
                             letterSpacing: -0.1,
                             color: p.text,

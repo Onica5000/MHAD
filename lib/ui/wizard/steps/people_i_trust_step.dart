@@ -88,7 +88,7 @@ class _PeopleITrustStepState extends ConsumerState<PeopleITrustStep>
                 style: TextStyle(
                   fontFamily: kMonoFamily,
                   fontFamilyFallback: kMonoFallbacks,
-                  fontSize: 11,
+                  fontSize: 12,
                   color: p.textMuted,
                   letterSpacing: 0.4,
                 ),
@@ -100,7 +100,7 @@ class _PeopleITrustStepState extends ConsumerState<PeopleITrustStep>
           context.l10n.peopleTrustAuthorityIntro,
           style: TextStyle(
             fontFamily: kSansFamily,
-            fontSize: 13,
+            fontSize: 14,
             color: p.textMuted,
             height: 1.45,
           ),
@@ -283,7 +283,7 @@ class _AgentCardState extends ConsumerState<_AgentCard> {
                               style: TextStyle(
                                 fontFamily: kSansFamily,
                                 fontWeight: FontWeight.w700,
-                                fontSize: 13,
+                                fontSize: 14,
                                 color: widget.isPrimary
                                     ? p.onPrimary
                                     : p.onPrimaryLight,
@@ -302,7 +302,7 @@ class _AgentCardState extends ConsumerState<_AgentCard> {
                               Text(
                                 widget.roleLabel,
                                 style: TextStyle(
-                                  fontSize: 11,
+                                  fontSize: 12,
                                   fontWeight: FontWeight.w600,
                                   letterSpacing: 1,
                                   color: p.textMuted,
@@ -322,7 +322,7 @@ class _AgentCardState extends ConsumerState<_AgentCard> {
                                     context.l10n.peopleTrustPrimaryBadge,
                                     style: TextStyle(
                                       fontFamily: kSansFamily,
-                                      fontSize: 11,
+                                      fontSize: 12,
                                       fontWeight: FontWeight.w700,
                                       letterSpacing: 0.4,
                                       color: p.onPrimaryLight,
@@ -341,7 +341,7 @@ class _AgentCardState extends ConsumerState<_AgentCard> {
                                     : context.l10n.peopleTrustOptional),
                             style: TextStyle(
                               fontFamily: kSansFamily,
-                              fontSize: 15,
+                              fontSize: 16,
                               fontWeight: FontWeight.w700,
                               color: p.text,
                             ),
@@ -462,7 +462,7 @@ class _StatusChip extends StatelessWidget {
             label,
             style: TextStyle(
               fontFamily: kSansFamily,
-              fontSize: 11,
+              fontSize: 12,
               fontWeight: FontWeight.w600,
               color: fg,
             ),

@@ -266,7 +266,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
                           context.l10n.sideEffectsOfficialLabelsIntro,
                           style: TextStyle(
                             fontFamily: kSansFamily,
-                            fontSize: 13,
+                            fontSize: 14,
                             height: 1.45,
                             color: p.textMuted,
                           ),
@@ -317,7 +317,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
               context.l10n.sideEffectsChecklistOptionalBody,
               style: TextStyle(
                 fontFamily: kSansFamily,
-                fontSize: 13,
+                fontSize: 14,
                 height: 1.45,
                 color: p.textMuted,
               ),
@@ -346,7 +346,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
               : context.l10n.sideEffectsReCheckFor(_currentMeds.join(', ')),
           style: TextStyle(
             fontFamily: kSansFamily,
-            fontSize: 13,
+            fontSize: 14,
             color: p.textMuted,
           ),
         ),
@@ -420,7 +420,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
             note.meds.join(' + '),
             style: TextStyle(
               fontFamily: kSansFamily,
-              fontSize: 13,
+              fontSize: 14,
               fontWeight: FontWeight.w700,
               color: p.text,
             ),
@@ -430,7 +430,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
             note.note,
             style: TextStyle(
               fontFamily: kSansFamily,
-              fontSize: 13,
+              fontSize: 14,
               height: 1.4,
               color: p.textMuted,
             ),

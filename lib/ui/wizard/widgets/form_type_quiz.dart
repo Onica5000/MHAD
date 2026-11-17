@@ -178,7 +178,7 @@ class _QuestionBody extends StatelessWidget {
                   child: Text(
                     context.l10n.quizQuestionEyebrow(step + 1, total),
                     style: TextStyle(
-                      fontSize: 11,
+                      fontSize: 12,
                       letterSpacing: 1,
                       color: p.textMuted,
                     ),
@@ -300,7 +300,7 @@ class _OptCard extends StatelessWidget {
                     label,
                     style: TextStyle(
                       fontFamily: kSansFamily,
-                      fontSize: 15,
+                      fontSize: 16,
                       fontWeight: FontWeight.w600,
                       color: p.text,
                       height: 1.3,
@@ -312,7 +312,7 @@ class _OptCard extends StatelessWidget {
                       hint,
                       style: TextStyle(
                         fontFamily: kSansFamily,
-                        fontSize: 13,
+                        fontSize: 14,
                         color: p.textMuted,
                         height: 1.4,
                       ),
@@ -367,7 +367,7 @@ class _ResultBody extends StatelessWidget {
                   child: Text(
                     context.l10n.quizResultEyebrow,
                     style: TextStyle(
-                      fontSize: 11,
+                      fontSize: 12,
                       letterSpacing: 1,
                       color: p.textMuted,
                     ),
@@ -532,7 +532,7 @@ class _LegendRow extends StatelessWidget {
               label,
               style: TextStyle(
                 fontFamily: kSansFamily,
-                fontSize: 13,
+                fontSize: 14,
                 fontWeight: emphasized ? FontWeight.w700 : FontWeight.w500,
                 color: emphasized ? p.text : p.textMuted,
               ),

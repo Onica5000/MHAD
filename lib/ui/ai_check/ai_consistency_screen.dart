@@ -432,7 +432,7 @@ Return plain-text suggestions (short bullets are fine). No preamble.''';
               context.l10n.aiConsistencyTheAiIsReviewingYour,
               style: TextStyle(
                 fontFamily: kSansFamily,
-                fontSize: 13,
+                fontSize: 14,
                 color: p.textMuted,
               ),
             ),
@@ -473,7 +473,7 @@ Return plain-text suggestions (short bullets are fine). No preamble.''';
           context.l10n.aiConsistencyAiReviewSkippedYouCan,
           style: TextStyle(
             fontFamily: kSansFamily,
-            fontSize: 13,
+            fontSize: 14,
             color: p.textMuted,
           ),
         ),
@@ -771,7 +771,7 @@ class _ConflictCard extends StatelessWidget {
         text,
         style: TextStyle(
           fontFamily: kSansFamily,
-          fontSize: 13,
+          fontSize: 14,
           height: 1.3,
           fontWeight: FontWeight.w600,
           color: p.text,
@@ -810,7 +810,7 @@ class _ConflictCard extends StatelessWidget {
                 Text(
                   context.l10n.aiConsistencyConflictHeader(index + 1, conflict.steps),
                   style: TextStyle(
-                    fontSize: 11,
+                    fontSize: 12,
                     letterSpacing: 0.8,
                     fontWeight: FontWeight.w700,
                     color: warnText,
@@ -830,7 +830,7 @@ class _ConflictCard extends StatelessWidget {
                   child: Text(
                     context.l10n.aiConsistencyVs,
                     style: TextStyle(
-                      fontSize: 11,
+                      fontSize: 12,
                       fontWeight: FontWeight.w700,
                       color: warnText,
                     ),
@@ -844,7 +844,7 @@ class _ConflictCard extends StatelessWidget {
               conflict.title,
               style: TextStyle(
                 fontFamily: kSansFamily,
-                fontSize: 15,
+                fontSize: 16,
                 fontWeight: FontWeight.w700,
                 color: p.text,
               ),

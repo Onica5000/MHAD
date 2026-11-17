@@ -234,7 +234,7 @@ class WebSidebar extends ConsumerWidget {
                           context.l10n.pinDialogPaMhad,
                           style: TextStyle(
                             fontFamily: kSansFamily,
-                            fontSize: 13,
+                            fontSize: 14,
                             fontWeight: FontWeight.w700,
                             letterSpacing: -0.2,
                             color: p.text,
@@ -243,7 +243,7 @@ class WebSidebar extends ConsumerWidget {
                         Text(
                           context.l10n.webSidebarAct1942004,
                           style: TextStyle(
-                            fontSize: 11,
+                            fontSize: 12,
                             letterSpacing: 0.6,
                             color: p.textMuted,
                           ),
@@ -669,7 +669,7 @@ class _Badge extends StatelessWidget {
       child: Text(
         label,
         style: TextStyle(
-          fontSize: 11,
+          fontSize: 12,
           fontWeight: FontWeight.w700,
           letterSpacing: 0.6,
           color: fg,
@@ -710,13 +710,17 @@ class _CrisisCard extends StatelessWidget {
                   Icon(Icons.health_and_safety_outlined,
                       size: 14, color: SemanticColors.errorAccentLight),
                   SizedBox(width: 6),
-                  Text(
-                    context.l10n.webSidebar247Lifeline,
-                    style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 0.7,
-                      color: SemanticColors.errorTextLight,
+                  // Flexible: may wrap in Spanish or at large text sizes
+                  // instead of overflowing the fixed-width sidebar.
+                  Flexible(
+                    child: Text(
+                      context.l10n.webSidebar247Lifeline,
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 0.7,
+                        color: SemanticColors.errorTextLight,
+                      ),
                     ),
                   ),
                 ],
@@ -726,7 +730,7 @@ class _CrisisCard extends StatelessWidget {
                 context.l10n.webSidebar988CrisisHelp,
                 style: TextStyle(
                   fontFamily: kSansFamily,
-                  fontSize: 13,
+                  fontSize: 14,
                   fontWeight: FontWeight.w700,
                   color: SemanticColors.errorTextLight,
                 ),
@@ -736,7 +740,7 @@ class _CrisisCard extends StatelessWidget {
                 context.l10n.webSidebarClickForMoreInformation,
                 style: TextStyle(
                   fontFamily: kSansFamily,
-                  fontSize: 11,
+                  fontSize: 12,
                   color: SemanticColors.errorTextLight.withValues(alpha: 0.85),
                 ),
               ),
@@ -790,7 +794,7 @@ class _GetHelpCard extends StatelessWidget {
                       context.l10n.moreSheetGetHelp,
                       style: TextStyle(
                         fontFamily: kSansFamily,
-                        fontSize: 13,
+                        fontSize: 14,
                         fontWeight: FontWeight.w700,
                         color: p.text,
                       ),
@@ -800,7 +804,7 @@ class _GetHelpCard extends StatelessWidget {
                       context.l10n.webSidebarPeerSupportAdvocatesReferrals,
                       style: TextStyle(
                         fontFamily: kSansFamily,
-                        fontSize: 11,
+                        fontSize: 12,
                         color: p.textMuted,
                       ),
                     ),

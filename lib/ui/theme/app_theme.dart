@@ -98,7 +98,7 @@ class DesignTokens {
   /// Dense row title (list rows, compact tiles).
   static const fontRowTitle = 14.0;
   /// Smallest legible label — mono status strings, badge text.
-  static const fontMicro = 11.0;
+  static const fontMicro = 12.0;
 
   /// Rendered size of a text field's label. Every field keeps its label
   /// floated (`FloatingLabelBehavior.always`), and Flutter draws a floated
@@ -630,7 +630,7 @@ ThemeData buildMhadTheme(
         ),
         textStyle: const TextStyle(
           fontFamily: kSansFamily,
-          fontSize: 15,
+          fontSize: 16,
           fontWeight: FontWeight.w600,
         ),
       ).copyWith(
@@ -689,7 +689,7 @@ ThemeData buildMhadTheme(
         ),
         textStyle: const TextStyle(
           fontFamily: kSansFamily,
-          fontSize: 15,
+          fontSize: 16,
           fontWeight: FontWeight.w600,
         ),
       ).copyWith(
@@ -914,7 +914,7 @@ TextTheme _buildTextTheme(Color text, Color muted,
     labelMedium: TextStyle(
         fontFamily: family, fontSize: 12, fontWeight: FontWeight.w600, color: text),
     labelSmall: TextStyle(
-        fontFamily: family, fontSize: 13, fontWeight: FontWeight.w700, color: muted, letterSpacing: 1.0),
+        fontFamily: family, fontSize: 14, fontWeight: FontWeight.w700, color: muted, letterSpacing: 1.0),
   );
   // Bold-text accessibility: shift every weight up two steps (w400 → w600).
   // TextStyle.apply supports fontWeightDelta; TextTheme.apply does not, so map.

@@ -222,7 +222,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
                     child: Text.rich(
                       TextSpan(
                         style: TextStyle(
-                          fontSize: 13,
+                          fontSize: 14,
                           height: 1.45,
                           color: Theme.of(context)
                               .colorScheme
@@ -368,7 +368,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
                       style: const TextStyle(
                         fontFamily: kSansFamily,
                         fontWeight: FontWeight.w600,
-                        fontSize: 15,
+                        fontSize: 16,
                       ),
                     ),
                     const SizedBox(height: 2),

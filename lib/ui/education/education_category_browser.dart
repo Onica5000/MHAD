@@ -175,7 +175,7 @@ class _BrowseRow extends StatelessWidget {
                   style: TextStyle(
                     fontFamily: kMonoFamily,
                     fontFamilyFallback: kMonoFallbacks,
-                    fontSize: 11,
+                    fontSize: 12,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 0.4,
                     color: p.primary,
@@ -335,7 +335,7 @@ class _CategoryBadge extends StatelessWidget {
       ),
       child: Text(
         category.label(context.l10n),
-        style: TextStyle(fontSize: 11, color: color, fontWeight: FontWeight.w600),
+        style: TextStyle(fontSize: 12, color: color, fontWeight: FontWeight.w600),
       ),
     );
   }

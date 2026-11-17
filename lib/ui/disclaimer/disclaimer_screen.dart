@@ -222,19 +222,28 @@ class _GateLayout extends StatelessWidget {
                   // left and the primary "Get started" CTA on the right.
                   Row(
                     children: [
-                      TextButton(
-                        onPressed: onOpenFull,
-                        style: TextButton.styleFrom(
-                          foregroundColor: palette.text,
-                          textStyle: const TextStyle(
-                            fontFamily: kSansFamily,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
+                      // Takes the free space and may wrap (Spanish at 390px
+                      // overflowed with a fixed link + Spacer); the CTA stays
+                      // on the right.
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: TextButton(
+                            onPressed: onOpenFull,
+                            style: TextButton.styleFrom(
+                              foregroundColor: palette.text,
+                              textStyle: const TextStyle(
+                                fontFamily: kSansFamily,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            child: Text(
+                                context.l10n.disclaimerReadFullDisclaimer),
                           ),
                         ),
-                        child: Text(context.l10n.disclaimerReadFullDisclaimer),
                       ),
-                      const Spacer(),
+                      const SizedBox(width: 12),
                       // NOTE: set the height via minimumSize, NOT a wrapping
                       // SizedBox(height:). Inside a Row with a Spacer, a
                       // SizedBox(height:) lets the button be measured at
@@ -265,7 +274,7 @@ class _GateLayout extends StatelessWidget {
                           textStyle: const TextStyle(
                             fontFamily: kSansFamily,
                             fontWeight: FontWeight.w600,
-                            fontSize: 15,
+                            fontSize: 16,
                           ),
                         ),
                       ),
@@ -294,7 +303,7 @@ class _SectionLabel extends StatelessWidget {
     return Text(
       text.toUpperCase(),
       style: TextStyle(
-        fontSize: 11,
+        fontSize: 12,
         fontWeight: FontWeight.w600,
         letterSpacing: 1.2,
         color: palette.textMuted,
@@ -343,7 +352,7 @@ class _DisclaimerCard extends StatelessWidget {
                   title,
                   style: TextStyle(
                     fontFamily: kSansFamily,
-                    fontSize: 15,
+                    fontSize: 16,
                     fontWeight: FontWeight.w700,
                     color: p.text,
                   ),
@@ -353,7 +362,7 @@ class _DisclaimerCard extends StatelessWidget {
                   body,
                   style: TextStyle(
                     fontFamily: kSansFamily,
-                    fontSize: 13,
+                    fontSize: 14,
                     height: 1.5,
                     color: p.textMuted,
                   ),
