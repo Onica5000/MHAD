@@ -8,71 +8,412 @@
     "C": "Hand-painted gouache illustration: visible soft brush texture, warm natural light, gentle storybook feel, calm and hopeful mood, muted color palette of {palette}",
     "D": "Natural-light lifestyle photograph: soft window light, shallow depth of field, warm muted color grade, calm and hopeful mood, gentle color accents of {palette}"
   },
-  "rules": "Photorealistic, candid and natural, like a professional editorial photo. No text, letters, numbers, logos, signage, signatures or watermarks anywhere; any paper, card or screen shows only blank space or soft, out-of-focus lines that cannot be read. People are adults of diverse ages and skin tones with relaxed, natural expressions, often in profile, looking down at what they are doing, or partly turned away; natural hands. No distress, crying, hospital beds, needles, syringes, restraints or loose pills. Full-bleed frame with the main subject well inside the frame so it can be cropped.",
-  "widths": { "16:9": 1600, "3:2": 1200, "2:3": 900, "1:1": 800 },
-  "max_kb": { "16:9": 220, "2:3": 200, "3:2": 150, "1:1": 80 },
+  "rules": "Photorealistic, candid and natural, like a professional editorial photo. No text, letters, numbers, logos, signage, signatures or watermarks anywhere; any paper, card or screen shows only blank space or soft, out-of-focus lines that cannot be read. Show any people EXACTLY as described (ethnicity, age and gender), as adults with relaxed, natural expressions in dignified, everyday modern clothing (no stereotyped costume or props), often in profile, looking down at what they are doing, or partly turned away; natural hands. No distress, crying, hospital beds, needles, syringes, restraints or loose pills. Full-bleed frame with the main subject well inside the frame so it can be cropped.",
+  "widths": {
+    "16:9": 1600,
+    "3:2": 1200,
+    "2:3": 900,
+    "1:1": 800
+  },
+  "max_kb": {
+    "16:9": 220,
+    "2:3": 200,
+    "3:2": 150,
+    "1:1": 80
+  },
   "images": [
-    { "id": "board_a_scene", "set": "board", "style": "A", "aspect": "3:2", "group": "board", "subject": "a person sitting at a sunny kitchen table writing thoughtfully in a notebook, a mug of tea and a leafy potted plant beside them" },
-    { "id": "board_a_object", "set": "board", "style": "A", "aspect": "1:1", "group": "board", "subject": "a neatly folded document with a heart-shaped seal, a pen resting across it and a small sprig of leaves" },
-    { "id": "board_b_scene", "set": "board", "style": "B", "aspect": "3:2", "group": "board", "subject": "a person sitting at a sunny kitchen table writing thoughtfully in a notebook, a mug of tea and a leafy potted plant beside them" },
-    { "id": "board_b_object", "set": "board", "style": "B", "aspect": "1:1", "group": "board", "subject": "a neatly folded document with a heart-shaped seal, a pen resting across it and a small sprig of leaves" },
-    { "id": "board_c_scene", "set": "board", "style": "C", "aspect": "3:2", "group": "board", "subject": "a person sitting at a sunny kitchen table writing thoughtfully in a notebook, a mug of tea and a leafy potted plant beside them" },
-    { "id": "board_c_object", "set": "board", "style": "C", "aspect": "1:1", "group": "board", "subject": "a neatly folded document with a heart-shaped seal, a pen resting across it and a small sprig of leaves" },
-    { "id": "board_d_scene", "set": "board", "style": "D", "aspect": "3:2", "group": "board", "subject": "a person sitting at a sunny kitchen table writing thoughtfully in a notebook, a mug of tea and a leafy potted plant beside them" },
-    { "id": "board_d_object", "set": "board", "style": "D", "aspect": "1:1", "group": "board", "subject": "a neatly folded document with a heart-shaped seal, a pen resting across it and a small sprig of leaves" },
-
-    { "id": "welcome_disclaimer_tall", "group": "welcome", "aspect": "2:3", "use": "Disclaimer desktop photo panel", "subject": "a person relaxing in a comfortable armchair beside a tall sunlit window, calmly reading a few printed pages, a cup of tea on a side table and a leafy plant nearby" },
-    { "id": "welcome_disclaimer_wide", "group": "welcome", "aspect": "16:9", "use": "Disclaimer mobile banner", "subject": "a person relaxing in a comfortable armchair beside a tall sunlit window, calmly reading a few printed pages, a cup of tea and a leafy plant nearby, composed wide with the person right of center" },
-    { "id": "welcome_onboarding_tall", "group": "welcome", "aspect": "2:3", "use": "Onboarding desktop photo panel", "subject": "a person writing thoughtfully in a journal at a wooden desk by a window, warm morning light, a plant and a mug beside the journal" },
-    { "id": "welcome_onboarding_wide", "group": "welcome", "aspect": "16:9", "use": "Onboarding mobile banner", "subject": "a person writing thoughtfully in a journal at a wooden desk by a window, warm morning light, a plant and a mug nearby, composed wide with the person left of center" },
-
-    { "id": "home_hero", "group": "home", "aspect": "16:9", "use": "Home dashboard hero; cropped for the social share image", "subject": "a gentle winding footpath through soft green rolling hills at sunrise, two people walking together along it seen from behind in the middle distance" },
-    { "id": "form_combined", "group": "home", "aspect": "3:2", "use": "Combined directive card", "subject": "two adults sitting close together at a kitchen table looking over a folder of papers, one with a reassuring hand on the other's shoulder" },
-    { "id": "form_declaration", "group": "home", "aspect": "3:2", "use": "Declaration card", "subject": "a few printed pages and a pen resting on a wooden desk beside a small potted plant, soft window light" },
-    { "id": "form_poa", "group": "home", "aspect": "3:2", "use": "Power of attorney card", "subject": "two adults sitting side by side on a park bench in quiet, attentive conversation, trees in soft focus behind them" },
-    { "id": "start_upload", "group": "home", "aspect": "3:2", "use": "Upload a document to autofill (home + upload page)", "subject": "a hand holding a smartphone above a paper document on a table, taking a photo of the page, the phone screen softly glowing" },
-    { "id": "start_resume", "group": "home", "aspect": "3:2", "use": "Continue from a saved file", "subject": "a closed folder of papers on a desk next to a laptop and a mug, warm lamp light" },
-    { "id": "start_print", "group": "home", "aspect": "3:2", "use": "Print a blank form", "subject": "a home printer on a desk with a blank sheet of paper coming out of it, a pen and a clipboard nearby" },
-    { "id": "home_privacy", "group": "home", "aspect": "3:2", "use": "Privacy promise", "subject": "a small brass padlock resting on a closed laptop beside a sprig of eucalyptus, soft daylight" },
-    { "id": "home_quiz", "group": "home", "aspect": "1:1", "use": "Help me choose quiz", "subject": "a sunlit fork in a woodland footpath where two trails split gently" },
-
-    { "id": "learn_hero", "group": "learn", "aspect": "16:9", "use": "Learn hub hero", "subject": "a cozy reading nook with an armchair, stacked books, a warm floor lamp, a leafy plant and an open book resting on the armrest" },
-    { "id": "learn_articles", "group": "learn", "aspect": "1:1", "use": "Articles category", "subject": "an open book with a ribbon bookmark on a wooden table beside a small plant" },
-    { "id": "learn_glossary", "group": "learn", "aspect": "1:1", "use": "Glossary category", "subject": "a neat stack of blank index cards with a magnifying glass resting on top" },
-    { "id": "learn_faq", "group": "learn", "aspect": "1:1", "use": "FAQ category", "subject": "two people chatting over coffee at a small cafe table, seen from the side, candid" },
-    { "id": "learn_checklists", "group": "learn", "aspect": "1:1", "use": "Checklists category", "subject": "a clipboard holding a blank lined sheet with a pencil resting on it" },
-    { "id": "learn_empty", "group": "learn", "aspect": "1:1", "use": "No search results / empty states", "subject": "a magnifying glass resting on a blank sheet of paper beside a sprig of leaves" },
-
-    { "id": "ai_assistant", "group": "ai", "aspect": "1:1", "use": "AI assistant hero / empty state", "subject": "a smartphone lying on a wooden desk next to a cup of tea, its screen glowing softly and blurred so nothing on it can be read" },
-    { "id": "ai_setup", "group": "ai", "aspect": "3:2", "use": "AI setup", "subject": "a hand placing a house key on a desk beside an open laptop whose screen is softly blurred" },
-    { "id": "ai_check", "group": "ai", "aspect": "3:2", "use": "AI consistency check", "subject": "a magnifying glass resting on printed pages beside a pen, the pages softly out of focus" },
-
-    { "id": "step_about_you", "group": "steps", "aspect": "1:1", "use": "Wizard: About you", "subject": "the front porch of a small cozy house with potted plants and a welcome mat, warm morning light" },
-    { "id": "step_when_it_kicks_in", "group": "steps", "aspect": "1:1", "use": "Wizard: When this kicks in", "subject": "two clinicians in plain clothes talking calmly together over a clipboard in a bright, quiet office" },
-    { "id": "step_people_i_trust", "group": "steps", "aspect": "1:1", "use": "Wizard: People I trust", "subject": "two adults sitting together on a couch, one with a supportive hand on the other's shoulder, candid" },
-    { "id": "step_guardian", "group": "steps", "aspect": "1:1", "use": "Wizard: If a court appoints a guardian", "subject": "the classical stone facade of a courthouse with tall columns, framed by trees, soft daylight" },
-    { "id": "step_where_i_want_care", "group": "steps", "aspect": "1:1", "use": "Wizard: Where I want care", "subject": "the welcoming entrance of a small modern clinic with large windows, plants and a garden path leading to the door" },
-    { "id": "step_diagnoses", "group": "steps", "aspect": "1:1", "use": "Wizard: Diagnoses", "subject": "a stethoscope resting on a closed notebook on a wooden desk" },
-    { "id": "step_allergies", "group": "steps", "aspect": "1:1", "use": "Wizard: Allergies", "subject": "a few fresh green leaves and a single daisy on a light linen surface" },
-    { "id": "step_medications", "group": "steps", "aspect": "1:1", "use": "Wizard: Medications", "subject": "a weekly pill organizer with every lid closed, beside a glass of water on a kitchen counter" },
-    { "id": "step_procedures_research", "group": "steps", "aspect": "1:1", "use": "Wizard: Procedures & research", "subject": "a microscope beside a clipboard on a bright, tidy lab bench, soft focus" },
-    { "id": "step_anything_else", "group": "steps", "aspect": "1:1", "use": "Wizard: Anything else", "subject": "an open notebook with a pen and a cup of tea in warm lamp light" },
-    { "id": "step_review", "group": "steps", "aspect": "1:1", "use": "Wizard: Review", "subject": "reading glasses and a pen resting on printed pages on a desk, the pages softly out of focus" },
-
-    { "id": "flow_sign", "group": "flow", "aspect": "3:2", "use": "Sign on paper (two witnesses)", "subject": "three adults at a dining table, one signing a paper with a pen while the other two sit beside them as supportive witnesses, warm light, candid" },
-    { "id": "flow_export", "group": "flow", "aspect": "3:2", "use": "Export / Download & print", "subject": "a neat stack of printed pages and an envelope on a desk, soft window light" },
-    { "id": "flow_findable", "group": "flow", "aspect": "3:2", "use": "Make it findable in a crisis", "subject": "a sheet of paper held on a refrigerator door by a magnet, a bright kitchen in soft focus behind it" },
-    { "id": "flow_crisis_plan", "group": "flow", "aspect": "3:2", "use": "Crisis plan", "subject": "a lighthouse on a gentle shore at dusk, calm water, warm light glowing from the lamp" },
-    { "id": "flow_ulysses", "group": "flow", "aspect": "3:2", "use": "Ulysses clause", "subject": "a sailboat with a tall mast on calm water, sailing safely past distant rocky islands" },
-    { "id": "flow_side_effects", "group": "flow", "aspect": "3:2", "use": "Side effects", "subject": "a small brass balance scale beside a few green leaves on a white table, soft daylight" },
-    { "id": "flow_revocation", "group": "flow", "aspect": "3:2", "use": "Revoke a directive", "subject": "an open front door letting warm light into a calm, tidy hallway" },
-    { "id": "flow_past", "group": "flow", "aspect": "3:2", "use": "Past directive detail", "subject": "a tidy wooden shelf holding archive boxes and folders, soft light" },
-    { "id": "flow_facilitator", "group": "flow", "aspect": "3:2", "use": "Facilitator / helper mode", "subject": "two people at a table, one patiently helping the other fill out a paper form, candid, warm light" },
-    { "id": "flow_audio", "group": "flow", "aspect": "1:1", "use": "Audio guide", "subject": "over-ear headphones resting on a wooden desk beside a plant" },
-
-    { "id": "misc_settings", "group": "misc", "aspect": "3:2", "use": "Settings", "subject": "a tidy desk with a laptop, an adjustable lamp and a plant, soft daylight" },
-    { "id": "misc_accessibility", "group": "misc", "aspect": "1:1", "use": "Accessibility settings", "subject": "reading glasses resting on an open book beside a magnifying glass" },
-    { "id": "misc_privacy", "group": "misc", "aspect": "1:1", "use": "Privacy policy / permissions", "subject": "a small brass padlock on a linen surface beside a sprig of eucalyptus" },
-    { "id": "misc_error", "group": "misc", "aspect": "1:1", "use": "Friendly error / not found", "subject": "a winding garden path with a gentle bend leading out of view, soft light" }
+    {
+      "id": "board_a_scene",
+      "set": "board",
+      "style": "A",
+      "aspect": "3:2",
+      "group": "board",
+      "subject": "a person sitting at a sunny kitchen table writing thoughtfully in a notebook, a mug of tea and a leafy potted plant beside them"
+    },
+    {
+      "id": "board_a_object",
+      "set": "board",
+      "style": "A",
+      "aspect": "1:1",
+      "group": "board",
+      "subject": "a neatly folded document with a heart-shaped seal, a pen resting across it and a small sprig of leaves"
+    },
+    {
+      "id": "board_b_scene",
+      "set": "board",
+      "style": "B",
+      "aspect": "3:2",
+      "group": "board",
+      "subject": "a person sitting at a sunny kitchen table writing thoughtfully in a notebook, a mug of tea and a leafy potted plant beside them"
+    },
+    {
+      "id": "board_b_object",
+      "set": "board",
+      "style": "B",
+      "aspect": "1:1",
+      "group": "board",
+      "subject": "a neatly folded document with a heart-shaped seal, a pen resting across it and a small sprig of leaves"
+    },
+    {
+      "id": "board_c_scene",
+      "set": "board",
+      "style": "C",
+      "aspect": "3:2",
+      "group": "board",
+      "subject": "a person sitting at a sunny kitchen table writing thoughtfully in a notebook, a mug of tea and a leafy potted plant beside them"
+    },
+    {
+      "id": "board_c_object",
+      "set": "board",
+      "style": "C",
+      "aspect": "1:1",
+      "group": "board",
+      "subject": "a neatly folded document with a heart-shaped seal, a pen resting across it and a small sprig of leaves"
+    },
+    {
+      "id": "board_d_scene",
+      "set": "board",
+      "style": "D",
+      "aspect": "3:2",
+      "group": "board",
+      "subject": "a person sitting at a sunny kitchen table writing thoughtfully in a notebook, a mug of tea and a leafy potted plant beside them"
+    },
+    {
+      "id": "board_d_object",
+      "set": "board",
+      "style": "D",
+      "aspect": "1:1",
+      "group": "board",
+      "subject": "a neatly folded document with a heart-shaped seal, a pen resting across it and a small sprig of leaves"
+    },
+    {
+      "id": "welcome_disclaimer_tall",
+      "group": "welcome",
+      "aspect": "2:3",
+      "use": "Disclaimer desktop photo panel",
+      "subject": "a white woman in her sixties with short silver hair relaxing in a comfortable armchair beside a tall sunlit window, calmly reading a few printed pages, a cup of tea on a side table and a leafy plant nearby"
+    },
+    {
+      "id": "welcome_disclaimer_wide",
+      "group": "welcome",
+      "aspect": "16:9",
+      "use": "Disclaimer mobile banner",
+      "subject": "a white woman in her sixties with short silver hair relaxing in a comfortable armchair beside a tall sunlit window, calmly reading a few printed pages, a cup of tea and a leafy plant nearby, composed wide with the woman right of center"
+    },
+    {
+      "id": "welcome_onboarding_tall",
+      "group": "welcome",
+      "aspect": "2:3",
+      "use": "Onboarding desktop photo panel",
+      "subject": "an East Asian man in his thirties writing thoughtfully in a journal at a wooden desk by a window, warm morning light, a plant and a mug beside the journal"
+    },
+    {
+      "id": "welcome_onboarding_wide",
+      "group": "welcome",
+      "aspect": "16:9",
+      "use": "Onboarding mobile banner",
+      "subject": "an East Asian man in his thirties writing thoughtfully in a journal at a wooden desk by a window, warm morning light, a plant and a mug nearby, composed wide with the man left of center"
+    },
+    {
+      "id": "home_hero",
+      "group": "home",
+      "aspect": "16:9",
+      "use": "Home dashboard hero; cropped for the social share image",
+      "subject": "a gentle winding footpath through soft green rolling hills at sunrise, an older white man and a younger Black woman walking together along it, seen from behind in the middle distance"
+    },
+    {
+      "id": "form_combined",
+      "group": "home",
+      "aspect": "3:2",
+      "use": "Combined directive card",
+      "subject": "a South Asian woman in her forties and her adult son sitting close together at a kitchen table looking over a folder of papers, his hand resting reassuringly on her shoulder"
+    },
+    {
+      "id": "form_declaration",
+      "group": "home",
+      "aspect": "3:2",
+      "use": "Declaration card",
+      "subject": "a Latino man in his forties writing on a few printed pages at a wooden desk beside a small potted plant, soft window light, seen from the side"
+    },
+    {
+      "id": "form_poa",
+      "group": "home",
+      "aspect": "3:2",
+      "use": "Power of attorney card",
+      "subject": "two older friends, a white woman and a Black woman, sitting side by side on a park bench in quiet, attentive conversation, trees in soft focus behind them"
+    },
+    {
+      "id": "start_upload",
+      "group": "home",
+      "aspect": "3:2",
+      "use": "Upload a document to autofill (home + upload page)",
+      "subject": "a top-down view of the hands of a Black man holding a smartphone directly above a blank paper document lying flat on a wooden table, taking a photo of the page, only his hands and forearms in frame, no face, the phone screen softly glowing"
+    },
+    {
+      "id": "start_resume",
+      "group": "home",
+      "aspect": "3:2",
+      "use": "Continue from a saved file",
+      "subject": "a Middle Eastern woman in her thirties wearing a simple headscarf, at a desk with a closed folder of papers, a laptop and a mug, warm lamp light"
+    },
+    {
+      "id": "start_print",
+      "group": "home",
+      "aspect": "3:2",
+      "use": "Print a blank form",
+      "subject": "a white man in his thirties with glasses at a home desk where a printer is printing a blank sheet of paper, a pen and a clipboard nearby"
+    },
+    {
+      "id": "home_privacy",
+      "group": "home",
+      "aspect": "3:2",
+      "use": "Privacy promise",
+      "subject": "a small brass padlock resting on a closed laptop beside a sprig of eucalyptus, soft daylight"
+    },
+    {
+      "id": "home_quiz",
+      "group": "home",
+      "aspect": "1:1",
+      "use": "Help me choose quiz",
+      "subject": "a Black man in his fifties walking along a sunlit woodland footpath where two trails split gently, seen from behind"
+    },
+    {
+      "id": "learn_hero",
+      "group": "learn",
+      "aspect": "16:9",
+      "use": "Learn hub hero",
+      "subject": "an older East Asian woman reading an open book in an armchair in a cozy reading nook with stacked books, a warm floor lamp and a leafy plant"
+    },
+    {
+      "id": "learn_articles",
+      "group": "learn",
+      "aspect": "1:1",
+      "use": "Articles category",
+      "subject": "the hands of a young white woman holding an open book with a ribbon bookmark above a wooden table beside a small plant"
+    },
+    {
+      "id": "learn_glossary",
+      "group": "learn",
+      "aspect": "1:1",
+      "use": "Glossary category",
+      "subject": "a South Asian man in his twenties at a table with a neat stack of blank index cards and a magnifying glass resting on top"
+    },
+    {
+      "id": "learn_faq",
+      "group": "learn",
+      "aspect": "1:1",
+      "use": "FAQ category",
+      "subject": "two friends, a Latina woman and a white man, chatting over coffee at a small cafe table, seen from the side, candid"
+    },
+    {
+      "id": "learn_checklists",
+      "group": "learn",
+      "aspect": "1:1",
+      "use": "Checklists category",
+      "subject": "a clipboard holding a blank lined sheet with a pencil resting on it, with no people in the picture"
+    },
+    {
+      "id": "learn_empty",
+      "group": "learn",
+      "aspect": "1:1",
+      "use": "No search results / empty states",
+      "subject": "a magnifying glass resting on a blank sheet of paper beside a sprig of leaves, with no people in the picture"
+    },
+    {
+      "id": "ai_assistant",
+      "group": "ai",
+      "aspect": "1:1",
+      "use": "AI assistant hero / empty state",
+      "subject": "a white woman in her forties sitting at a wooden desk with a cup of tea, her smartphone lying beside it with its screen glowing softly and blurred so nothing on it can be read"
+    },
+    {
+      "id": "ai_setup",
+      "group": "ai",
+      "aspect": "3:2",
+      "use": "AI setup",
+      "subject": "the hand of a Latino man placing a house key on a desk beside an open laptop whose screen is softly blurred"
+    },
+    {
+      "id": "ai_check",
+      "group": "ai",
+      "aspect": "3:2",
+      "use": "AI consistency check",
+      "subject": "an East Asian woman in her fifties with reading glasses looking at printed pages through a magnifying glass, the pages softly out of focus"
+    },
+    {
+      "id": "step_about_you",
+      "group": "steps",
+      "aspect": "1:1",
+      "use": "Wizard: About you",
+      "subject": "a Black man in his sixties watering potted plants on the front porch of his small cozy house, warm morning light"
+    },
+    {
+      "id": "step_when_it_kicks_in",
+      "group": "steps",
+      "aspect": "1:1",
+      "use": "Wizard: When this kicks in",
+      "subject": "two clinicians in plain clothes, a white woman and a South Asian man, talking calmly together over a clipboard in a bright, quiet office"
+    },
+    {
+      "id": "step_people_i_trust",
+      "group": "steps",
+      "aspect": "1:1",
+      "use": "Wizard: People I trust",
+      "subject": "two friends, a Latino man and a Black man, sitting together on a couch, both smiling warmly and relaxed, one with a friendly hand on the other's shoulder, candid"
+    },
+    {
+      "id": "step_guardian",
+      "group": "steps",
+      "aspect": "1:1",
+      "use": "Wizard: If a court appoints a guardian",
+      "subject": "the classical stone facade of a courthouse with tall columns, framed by trees, soft daylight, a South Asian woman in her thirties walking calmly up the steps"
+    },
+    {
+      "id": "step_where_i_want_care",
+      "group": "steps",
+      "aspect": "1:1",
+      "use": "Wizard: Where I want care",
+      "subject": "an older white man with a walking cane at the welcoming entrance of a small modern clinic with large windows, plants and a garden path"
+    },
+    {
+      "id": "step_diagnoses",
+      "group": "steps",
+      "aspect": "1:1",
+      "use": "Wizard: Diagnoses",
+      "subject": "a stethoscope resting on a closed notebook on a wooden desk, with no people in the picture"
+    },
+    {
+      "id": "step_allergies",
+      "group": "steps",
+      "aspect": "1:1",
+      "use": "Wizard: Allergies",
+      "subject": "a few fresh green leaves and a single daisy on a light linen surface, with no people in the picture"
+    },
+    {
+      "id": "step_medications",
+      "group": "steps",
+      "aspect": "1:1",
+      "use": "Wizard: Medications",
+      "subject": "an Indigenous woman in her fifties at a kitchen counter with a weekly pill organizer with every lid closed and a glass of water"
+    },
+    {
+      "id": "step_procedures_research",
+      "group": "steps",
+      "aspect": "1:1",
+      "use": "Wizard: Procedures & research",
+      "subject": "a Black man in his thirties working at a microscope beside a clipboard on a bright, tidy lab bench"
+    },
+    {
+      "id": "step_anything_else",
+      "group": "steps",
+      "aspect": "1:1",
+      "use": "Wizard: Anything else",
+      "subject": "a Middle Eastern man in his forties writing in an open notebook with a pen and a cup of tea in warm lamp light"
+    },
+    {
+      "id": "step_review",
+      "group": "steps",
+      "aspect": "1:1",
+      "use": "Wizard: Review",
+      "subject": "reading glasses and a pen resting on printed pages on a desk, the pages softly out of focus, with no people in the picture"
+    },
+    {
+      "id": "flow_sign",
+      "group": "flow",
+      "aspect": "3:2",
+      "use": "Sign on paper (two witnesses)",
+      "subject": "three adults at a dining table: a South Asian woman signing a paper with a pen while an older white man and a young Black woman sit beside her as supportive witnesses, warm light, candid"
+    },
+    {
+      "id": "flow_export",
+      "group": "flow",
+      "aspect": "3:2",
+      "use": "Export / Download & print",
+      "subject": "a Latino man in his thirties at a desk with a neat stack of printed pages and an envelope, soft window light"
+    },
+    {
+      "id": "flow_findable",
+      "group": "flow",
+      "aspect": "3:2",
+      "use": "Make it findable in a crisis",
+      "subject": "an older Black man in his kitchen placing a sheet of paper on the refrigerator door with a magnet"
+    },
+    {
+      "id": "flow_crisis_plan",
+      "group": "flow",
+      "aspect": "3:2",
+      "use": "Crisis plan",
+      "subject": "a young white man sitting relaxed on a gentle grassy shore, head up, calmly looking out toward a lighthouse at dusk with a peaceful expression, calm water, warm light glowing from the lamp"
+    },
+    {
+      "id": "flow_ulysses",
+      "group": "flow",
+      "aspect": "3:2",
+      "use": "Ulysses clause",
+      "subject": "an East Asian woman in her thirties by a window looking out at a sailboat with a tall mast on calm water near distant rocky islands"
+    },
+    {
+      "id": "flow_side_effects",
+      "group": "flow",
+      "aspect": "3:2",
+      "use": "Side effects",
+      "subject": "a white man in his sixties at a white table with a small brass balance scale and a few green leaves, soft daylight"
+    },
+    {
+      "id": "flow_revocation",
+      "group": "flow",
+      "aspect": "3:2",
+      "use": "Revoke a directive",
+      "subject": "a Black woman in her thirties standing at an open front door letting warm light into a calm, tidy hallway"
+    },
+    {
+      "id": "flow_past",
+      "group": "flow",
+      "aspect": "3:2",
+      "use": "Past directive detail",
+      "subject": "a South Asian man in his fifties taking a folder from a tidy wooden shelf holding archive boxes, soft light"
+    },
+    {
+      "id": "flow_facilitator",
+      "group": "flow",
+      "aspect": "3:2",
+      "use": "Facilitator / helper mode",
+      "subject": "an Indigenous man patiently helping an older white woman fill out a paper form at a table, candid, warm light"
+    },
+    {
+      "id": "flow_audio",
+      "group": "flow",
+      "aspect": "1:1",
+      "use": "Audio guide",
+      "subject": "a young Latina woman at a wooden desk, over-ear headphones resting beside a plant in the foreground"
+    },
+    {
+      "id": "misc_settings",
+      "group": "misc",
+      "aspect": "3:2",
+      "use": "Settings",
+      "subject": "a white woman in her twenties at a tidy desk with a laptop, an adjustable lamp and a plant, soft daylight"
+    },
+    {
+      "id": "misc_accessibility",
+      "group": "misc",
+      "aspect": "1:1",
+      "use": "Accessibility settings",
+      "subject": "reading glasses resting on an open book beside a magnifying glass, with no people in the picture"
+    },
+    {
+      "id": "misc_privacy",
+      "group": "misc",
+      "aspect": "1:1",
+      "use": "Privacy policy / permissions",
+      "subject": "a small brass padlock on a linen surface beside a sprig of eucalyptus, with no people in the picture"
+    },
+    {
+      "id": "misc_error",
+      "group": "misc",
+      "aspect": "1:1",
+      "use": "Friendly error / not found",
+      "subject": "an older East Asian man walking a winding garden path with a gentle bend, soft light"
+    }
   ]
 }
