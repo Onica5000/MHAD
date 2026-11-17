@@ -118,6 +118,16 @@ flutter:
   assets:
     - assets/
     - assets/data/
+    # Photos (Grok Imagine, natural-light photography). One folder per group;
+    # lib/ui/theme/app_art.dart lists every file and test/unit/app_art_test.dart
+    # fails if a folder here, a file on disk, or the manifest falls out of step.
+    - assets/images/welcome/
+    - assets/images/home/
+    - assets/images/learn/
+    - assets/images/ai/
+    - assets/images/steps/
+    - assets/images/flow/
+    - assets/images/misc/
   fonts:
     - family: DM Sans
       fonts:
