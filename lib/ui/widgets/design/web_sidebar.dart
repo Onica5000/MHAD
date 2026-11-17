@@ -187,10 +187,15 @@ class WebSidebar extends ConsumerWidget {
       ),
     ];
 
-    return Container(
+    // Material root: the sidebar is built in MaterialApp.router's builder,
+    // ABOVE the routed Navigator, so without its own Material the brand text
+    // fell back to Flutter's no-Material text style (the yellow double
+    // underline seen under "PA MHAD · ACT 194 · 2004" on the live site).
+    return Material(
+      color: p.card,
+      child: Container(
       width: width,
       decoration: BoxDecoration(
-        color: p.card,
         border: Border(right: BorderSide(color: p.border)),
       ),
       child: SafeArea(
@@ -242,12 +247,7 @@ class WebSidebar extends ConsumerWidget {
                           context.l10n.webSidebarAct1942004,
                           style: TextStyle(
                             fontFamily: kMonoFamily,
-                            fontFamilyFallback: const [
-                              'Consolas',
-                              'Menlo',
-                              'Courier New',
-                              'monospace'
-                            ],
+                            fontFamilyFallback: kMonoFallbacks,
                             fontSize: 11,
                             letterSpacing: 0.6,
                             color: p.textMuted,
@@ -293,6 +293,7 @@ class WebSidebar extends ConsumerWidget {
             ),
           ],
         ),
+      ),
       ),
     );
   }
@@ -409,12 +410,7 @@ class _Badge extends StatelessWidget {
         label,
         style: TextStyle(
           fontFamily: kMonoFamily,
-          fontFamilyFallback: const [
-            'Consolas',
-            'Menlo',
-            'Courier New',
-            'monospace'
-          ],
+          fontFamilyFallback: kMonoFallbacks,
           fontSize: 11,
           fontWeight: FontWeight.w700,
           letterSpacing: 0.6,
@@ -459,7 +455,7 @@ class _CrisisCard extends StatelessWidget {
                     context.l10n.webSidebar247Lifeline,
                     style: TextStyle(
                       fontFamily: kMonoFamily,
-                      fontFamilyFallback: ['Consolas', 'Courier New', 'monospace'],
+                      fontFamilyFallback: kMonoFallbacks,
                       fontSize: 11,
                       fontWeight: FontWeight.w700,
                       letterSpacing: 0.7,

@@ -291,12 +291,7 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
                         context.l10n.pinDialogPrivateModeLocked,
                         style: TextStyle(
                           fontFamily: kMonoFamily,
-                          fontFamilyFallback: const [
-                            'Consolas',
-                            'Menlo',
-                            'Courier New',
-                            'monospace',
-                          ],
+                          fontFamilyFallback: kMonoFallbacks,
                           fontSize: 11,
                           letterSpacing: 0.6,
                           color: p.textMuted,
@@ -430,12 +425,7 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
                                   : context.l10n.pinDialogAttempt(_failedAttempts, 5)),
                           style: TextStyle(
                             fontFamily: kMonoFamily,
-                            fontFamilyFallback: const [
-                              'Consolas',
-                              'Menlo',
-                              'Courier New',
-                              'monospace',
-                            ],
+                            fontFamilyFallback: kMonoFallbacks,
                             fontSize: 11,
                             fontWeight: FontWeight.w700,
                             letterSpacing: 0.8,

@@ -39,7 +39,7 @@ class EditorialHeading extends StatelessWidget {
     final p = Theme.of(context).mhadPalette;
     final style = TextStyle(
       fontFamily: kSerifFamily,
-      fontFamilyFallback: const ['Georgia', 'Times New Roman', 'serif'],
+      fontFamilyFallback: kSerifFallbacks,
       fontStyle: fontStyle,
       fontSize: size,
       fontWeight: FontWeight.w400,
@@ -77,7 +77,7 @@ class SerifNumeral extends StatelessWidget {
       value.toString().padLeft(2, '0'),
       style: TextStyle(
         fontFamily: kSerifFamily,
-        fontFamilyFallback: const ['Georgia', 'Times New Roman', 'serif'],
+        fontFamilyFallback: kSerifFallbacks,
         fontStyle: FontStyle.italic,
         fontSize: size,
         fontWeight: weight,
@@ -89,21 +89,18 @@ class SerifNumeral extends StatelessWidget {
   }
 }
 
-/// Tight monospace caption used for wizard step counters etc.
-/// "Step 3 of 9" rendered in JetBrains Mono uppercase with tracking.
-class MonoCaption extends StatelessWidget {
+/// Small uppercase caption used for wizard step counters etc. ("STEP 3 OF 9"),
+/// in the shared eyebrow style ([MhadText.eyebrow]). Was `MonoCaption`
+/// (JetBrains Mono) before the 2026-11 redesign.
+class CapsCaption extends StatelessWidget {
   final String text;
   final double size;
-  final double letterSpacing;
   final Color? color;
-  final FontWeight weight;
 
-  const MonoCaption(
+  const CapsCaption(
     this.text, {
-    this.size = 11,
-    this.letterSpacing = 1.0,
+    this.size = 12,
     this.color,
-    this.weight = FontWeight.w600,
     super.key,
   });
 
@@ -112,14 +109,7 @@ class MonoCaption extends StatelessWidget {
     final p = Theme.of(context).mhadPalette;
     return Text(
       text.toUpperCase(),
-      style: TextStyle(
-        fontFamily: kMonoFamily,
-        fontFamilyFallback: const ['Consolas', 'Menlo', 'Courier New', 'monospace'],
-        fontSize: size,
-        fontWeight: weight,
-        letterSpacing: letterSpacing,
-        color: color ?? p.textMuted,
-      ),
+      style: MhadText.eyebrow(color ?? p.textMuted, size: size),
     );
   }
 }

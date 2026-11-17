@@ -223,12 +223,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontFamily: kMonoFamily,
-                    fontFamilyFallback: const [
-                      'Consolas',
-                      'Menlo',
-                      'Courier New',
-                      'monospace',
-                    ],
+                    fontFamilyFallback: kMonoFallbacks,
                     fontSize: 11,
                     letterSpacing: 0.4,
                     color: p.textMuted,
@@ -834,12 +829,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                                   l10n.pickFastest,
                                   style: TextStyle(
                                     fontFamily: kMonoFamily,
-                                    fontFamilyFallback: const [
-                                      'Consolas',
-                                      'Menlo',
-                                      'Courier New',
-                                      'monospace',
-                                    ],
+                                    fontFamilyFallback: kMonoFallbacks,
                                     fontSize: 11,
                                     fontWeight: FontWeight.w700,
                                     letterSpacing: 0.5,

@@ -767,12 +767,7 @@ class _WideStepRail extends StatelessWidget {
               context.l10n.wizardYourDirective,
               style: TextStyle(
                 fontFamily: kMonoFamily,
-                fontFamilyFallback: const [
-                  'Consolas',
-                  'Menlo',
-                  'Courier New',
-                  'monospace',
-                ],
+                fontFamilyFallback: kMonoFallbacks,
                 fontSize: 11,
                 fontWeight: FontWeight.w700,
                 letterSpacing: 1.2,
@@ -912,12 +907,7 @@ class _RailStepRow extends StatelessWidget {
                     '$index',
                     style: TextStyle(
                       fontFamily: kMonoFamily,
-                      fontFamilyFallback: const [
-                        'Consolas',
-                        'Menlo',
-                        'Courier New',
-                        'monospace',
-                      ],
+                      fontFamilyFallback: kMonoFallbacks,
                       fontSize: 11,
                       fontWeight: FontWeight.w700,
                       color: dotFg,

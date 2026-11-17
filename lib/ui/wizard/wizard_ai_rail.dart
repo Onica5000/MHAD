@@ -212,12 +212,7 @@ class _WizardAiRailState extends ConsumerState<WizardAiRail> {
             context.l10n.learnAiPanelPiiStripped(ref.watch(activeProviderProvider).name.toUpperCase()),
             style: TextStyle(
               fontFamily: kMonoFamily,
-              fontFamilyFallback: const [
-                'Consolas',
-                'Menlo',
-                'Courier New',
-                'monospace',
-              ],
+              fontFamilyFallback: kMonoFallbacks,
               fontSize: 11,
               letterSpacing: 0.5,
               color: hasKey ? p.primary : p.textMuted,
@@ -394,12 +389,7 @@ class _RailHeadsUp extends ConsumerWidget {
                 context.l10n.wizardAiRailSuggestedForThisStep,
                 style: TextStyle(
                   fontFamily: kMonoFamily,
-                  fontFamilyFallback: const [
-                    'Consolas',
-                    'Menlo',
-                    'Courier New',
-                    'monospace',
-                  ],
+                  fontFamilyFallback: kMonoFallbacks,
                   fontSize: 11,
                   letterSpacing: 0.6,
                   color: p.textMuted,

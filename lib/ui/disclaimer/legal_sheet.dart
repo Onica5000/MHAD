@@ -533,12 +533,7 @@ class _Resource extends StatelessWidget {
           mono,
           style: TextStyle(
             fontFamily: kMonoFamily,
-            fontFamilyFallback: const [
-              'Consolas',
-              'Menlo',
-              'Courier New',
-              'monospace'
-            ],
+            fontFamilyFallback: kMonoFallbacks,
             fontSize: 12,
             color: palette.text,
           ),

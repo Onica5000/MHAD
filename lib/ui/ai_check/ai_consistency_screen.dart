@@ -811,12 +811,7 @@ class _ConflictCard extends StatelessWidget {
                   context.l10n.aiConsistencyConflictHeader(index + 1, conflict.steps),
                   style: TextStyle(
                     fontFamily: kMonoFamily,
-                    fontFamilyFallback: const [
-                      'Consolas',
-                      'Menlo',
-                      'Courier New',
-                      'monospace',
-                    ],
+                    fontFamilyFallback: kMonoFallbacks,
                     fontSize: 11,
                     letterSpacing: 0.8,
                     fontWeight: FontWeight.w700,
@@ -838,12 +833,7 @@ class _ConflictCard extends StatelessWidget {
                     context.l10n.aiConsistencyVs,
                     style: TextStyle(
                       fontFamily: kMonoFamily,
-                      fontFamilyFallback: const [
-                        'Consolas',
-                        'Menlo',
-                        'Courier New',
-                        'monospace',
-                      ],
+                      fontFamilyFallback: kMonoFallbacks,
                       fontSize: 11,
                       fontWeight: FontWeight.w700,
                       color: warnText,

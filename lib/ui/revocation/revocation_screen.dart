@@ -194,11 +194,7 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
                     context.l10n.revocationThisDeclarationMayBeRevoked,
                     style: TextStyle(
                       fontFamily: kSerifFamily,
-                      fontFamilyFallback: const [
-                        'Georgia',
-                        'Times New Roman',
-                        'serif',
-                      ],
+                      fontFamilyFallback: kSerifFallbacks,
                       fontSize: 14,
                       height: 1.6,
                       color: p.text,
@@ -328,12 +324,7 @@ class _RevokeStep extends StatelessWidget {
               '$n',
               style: TextStyle(
                 fontFamily: kMonoFamily,
-                fontFamilyFallback: const [
-                  'Consolas',
-                  'Menlo',
-                  'Courier New',
-                  'monospace',
-                ],
+                fontFamilyFallback: kMonoFallbacks,
                 fontSize: 11,
                 fontWeight: FontWeight.w700,
                 color: p.primary,

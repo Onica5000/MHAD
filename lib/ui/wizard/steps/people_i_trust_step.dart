@@ -87,12 +87,7 @@ class _PeopleITrustStepState extends ConsumerState<PeopleITrustStep>
                 '20 Pa.C.S. § 5836',
                 style: TextStyle(
                   fontFamily: kMonoFamily,
-                  fontFamilyFallback: const [
-                    'Consolas',
-                    'Menlo',
-                    'Courier New',
-                    'monospace',
-                  ],
+                  fontFamilyFallback: kMonoFallbacks,
                   fontSize: 11,
                   color: p.textMuted,
                   letterSpacing: 0.4,
@@ -308,12 +303,7 @@ class _AgentCardState extends ConsumerState<_AgentCard> {
                                 widget.roleLabel,
                                 style: TextStyle(
                                   fontFamily: kMonoFamily,
-                                  fontFamilyFallback: const [
-                                    'Consolas',
-                                    'Menlo',
-                                    'Courier New',
-                                    'monospace',
-                                  ],
+                                  fontFamilyFallback: kMonoFallbacks,
                                   fontSize: 11,
                                   fontWeight: FontWeight.w600,
                                   letterSpacing: 1,

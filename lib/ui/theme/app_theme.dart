@@ -10,6 +10,26 @@ const kSerifFallbacks = ['Georgia', 'serif'];
 const kDyslexiaFamily = 'Atkinson Hyperlegible';
 const kMonoFallbacks = ['Consolas', 'Menlo', 'Courier New', 'monospace'];
 
+/// Shared styles for dense chrome that has no `textTheme` slot. One
+/// definition each, so a restyle happens in one place.
+///
+/// They set NO `fontFamily`: the text inherits the theme family, which keeps
+/// the dyslexia-font accessibility setting working (hand-typed DM Sans / mono
+/// styles silently ignored it).
+abstract final class MhadText {
+  /// Uppercase section / eyebrow label ("YOUR DIRECTIVE", "STEP 3 OF 11").
+  /// DM Sans small caps replaced the JetBrains Mono eyebrow in the 2026-11
+  /// redesign: mono read as a developer tool rather than a calm, professional
+  /// service.
+  static TextStyle eyebrow(Color color, {double size = 12}) => TextStyle(
+        fontSize: size,
+        fontWeight: FontWeight.w700,
+        letterSpacing: 1.1,
+        height: 1.3,
+        color: color,
+      );
+}
+
 /// Design tokens — single source of truth for radii, spacing, shadows used
 /// throughout the MHAD redesign. Keep in sync with the prototype.
 class DesignTokens {

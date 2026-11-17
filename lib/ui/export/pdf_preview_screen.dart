@@ -55,12 +55,7 @@ class PdfPreviewScreen extends StatelessWidget {
               context.l10n.pdfPreviewUsLetter8511,
               style: TextStyle(
                 fontFamily: kMonoFamily,
-                fontFamilyFallback: const [
-                  'Consolas',
-                  'Menlo',
-                  'Courier New',
-                  'monospace',
-                ],
+                fontFamilyFallback: kMonoFallbacks,
                 fontSize: 11,
                 letterSpacing: 0.5,
                 color: p.textMuted,
@@ -497,7 +492,7 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
             context.l10n.pdfPreviewPages,
             style: TextStyle(
               fontFamily: kMonoFamily,
-              fontFamilyFallback: const ['Consolas', 'monospace'],
+              fontFamilyFallback: kMonoFallbacks,
               fontSize: 11,
               letterSpacing: 1,
               fontWeight: FontWeight.w700,
@@ -635,7 +630,7 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
           isFit ? 'FIT' : '$pct%',
           style: TextStyle(
             fontFamily: kMonoFamily,
-            fontFamilyFallback: const ['Consolas', 'monospace'],
+            fontFamilyFallback: kMonoFallbacks,
             fontSize: 12,
             fontWeight: FontWeight.w700,
             letterSpacing: 0.4,

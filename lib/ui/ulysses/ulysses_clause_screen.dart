@@ -145,12 +145,7 @@ class _UlyssesClauseScreenState extends ConsumerState<UlyssesClauseScreen> {
                           context.l10n.ulyssesClauseSelfBindingUlysses,
                           style: TextStyle(
                             fontFamily: kMonoFamily,
-                            fontFamilyFallback: const [
-                              'Consolas',
-                              'Menlo',
-                              'Courier New',
-                              'monospace',
-                            ],
+                            fontFamilyFallback: kMonoFallbacks,
                             fontSize: 11,
                             letterSpacing: 1,
                             fontWeight: FontWeight.w700,
@@ -164,11 +159,7 @@ class _UlyssesClauseScreenState extends ConsumerState<UlyssesClauseScreen> {
                           context.l10n.ulyssesClauseTieMyselfToTheMast,
                           style: TextStyle(
                             fontFamily: kSerifFamily,
-                            fontFamilyFallback: const [
-                              'Georgia',
-                              'Times New Roman',
-                              'serif',
-                            ],
+                            fontFamilyFallback: kSerifFallbacks,
                             fontStyle: FontStyle.italic,
                             fontSize: 24,
                             color: _acknowledged ? cs.onPrimary : cs.onSurface,

@@ -389,12 +389,7 @@ class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
                     _timer(),
                     style: TextStyle(
                       fontFamily: kMonoFamily,
-                      fontFamilyFallback: const [
-                        'Consolas',
-                        'Menlo',
-                        'Courier New',
-                        'monospace',
-                      ],
+                      fontFamilyFallback: kMonoFallbacks,
                       fontSize: 22,
                       fontWeight: FontWeight.w600,
                       letterSpacing: 1.5,
@@ -472,12 +467,7 @@ class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: kMonoFamily,
-                  fontFamilyFallback: const [
-                    'Consolas',
-                    'Menlo',
-                    'Courier New',
-                    'monospace',
-                  ],
+                  fontFamilyFallback: kMonoFallbacks,
                   fontSize: 11,
                   letterSpacing: 0.5,
                   color: p.textMuted,

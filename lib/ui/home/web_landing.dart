@@ -205,12 +205,7 @@ class _AnonBanner extends StatelessWidget {
                 context.l10n.webLandingHowThisWorks,
                 style: TextStyle(
                   fontFamily: kMonoFamily,
-                  fontFamilyFallback: const [
-                    'Consolas',
-                    'Menlo',
-                    'Courier New',
-                    'monospace',
-                  ],
+                  fontFamilyFallback: kMonoFallbacks,
                   fontSize: 11,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 0.6,

@@ -295,12 +295,7 @@ class _SectionLabel extends StatelessWidget {
       text.toUpperCase(),
       style: TextStyle(
         fontFamily: kMonoFamily,
-        fontFamilyFallback: const [
-          'Consolas',
-          'Menlo',
-          'Courier New',
-          'monospace',
-        ],
+        fontFamilyFallback: kMonoFallbacks,
         fontSize: 11,
         fontWeight: FontWeight.w600,
         letterSpacing: 1.2,

@@ -57,7 +57,7 @@ class StepHead extends StatelessWidget {
                     const SizedBox(width: 14),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 8),
-                      child: MonoCaption(
+                      child: CapsCaption(
                           context.l10n.stepDotsStepOf(stepNumber, totalSteps)),
                     ),
                   ],

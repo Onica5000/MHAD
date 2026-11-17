@@ -501,12 +501,7 @@ class _ProfileChip extends ConsumerWidget {
                   _statusFor(context, mode),
                   style: TextStyle(
                     fontFamily: kMonoFamily,
-                    fontFamilyFallback: const [
-                      'Consolas',
-                      'Menlo',
-                      'Courier New',
-                      'monospace',
-                    ],
+                    fontFamilyFallback: kMonoFallbacks,
                     fontSize: 11,
                     letterSpacing: 0.4,
                     color: p.onPrimary.withValues(alpha: 0.85),

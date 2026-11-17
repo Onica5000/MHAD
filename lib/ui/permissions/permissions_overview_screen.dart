@@ -242,12 +242,7 @@ class _PermissionCard extends StatelessWidget {
                             statusLine,
                             style: TextStyle(
                               fontFamily: kMonoFamily,
-                              fontFamilyFallback: const [
-                                'Consolas',
-                                'Menlo',
-                                'Courier New',
-                                'monospace',
-                              ],
+                              fontFamilyFallback: kMonoFallbacks,
                               fontSize: 11,
                               letterSpacing: 0.5,
                               color: statusColor,

@@ -583,12 +583,7 @@ class _PersonTile extends StatelessWidget {
                             relLabel,
                             style: TextStyle(
                               fontFamily: kMonoFamily,
-                              fontFamilyFallback: const [
-                                'Consolas',
-                                'Menlo',
-                                'Courier New',
-                                'monospace',
-                              ],
+                              fontFamilyFallback: kMonoFallbacks,
                               fontSize: 11,
                               letterSpacing: 0.3,
                               color: p.textMuted,
@@ -772,12 +767,7 @@ class _EligibilityRulesCard extends StatelessWidget {
                     label.toUpperCase(),
                     style: TextStyle(
                       fontFamily: kMonoFamily,
-                      fontFamilyFallback: const [
-                        'Consolas',
-                        'Menlo',
-                        'Courier New',
-                        'monospace',
-                      ],
+                      fontFamilyFallback: kMonoFallbacks,
                       fontSize: 11,
                       fontWeight: FontWeight.w700,
                       letterSpacing: 0.4,

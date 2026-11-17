@@ -179,12 +179,7 @@ class _QuestionBody extends StatelessWidget {
                     context.l10n.quizQuestionEyebrow(step + 1, total),
                     style: TextStyle(
                       fontFamily: kMonoFamily,
-                      fontFamilyFallback: const [
-                        'Consolas',
-                        'Menlo',
-                        'Courier New',
-                        'monospace'
-                      ],
+                      fontFamilyFallback: kMonoFallbacks,
                       fontSize: 11,
                       letterSpacing: 1,
                       color: p.textMuted,
@@ -375,12 +370,7 @@ class _ResultBody extends StatelessWidget {
                     context.l10n.quizResultEyebrow,
                     style: TextStyle(
                       fontFamily: kMonoFamily,
-                      fontFamilyFallback: const [
-                        'Consolas',
-                        'Menlo',
-                        'Courier New',
-                        'monospace'
-                      ],
+                      fontFamilyFallback: kMonoFallbacks,
                       fontSize: 11,
                       letterSpacing: 1,
                       color: p.textMuted,
@@ -556,12 +546,7 @@ class _LegendRow extends StatelessWidget {
             '$pct%',
             style: TextStyle(
               fontFamily: kMonoFamily,
-              fontFamilyFallback: const [
-                'Consolas',
-                'Menlo',
-                'Courier New',
-                'monospace'
-              ],
+              fontFamilyFallback: kMonoFallbacks,
               fontSize: 12,
               fontWeight: emphasized ? FontWeight.w700 : FontWeight.w500,
               color: emphasized ? p.text : p.textMuted,
