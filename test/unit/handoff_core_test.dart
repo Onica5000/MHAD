@@ -36,7 +36,7 @@ void main() {
       for (final lang in ['en', 'es']) {
         for (final key in [
           'intro', 'replyLanguage', 'jsonOnly', 'attachmentGuard',
-          'askLead', 'questionLabel', 'wordingLead',
+          'askLead', 'questionLabel', 'wordingLead', 'articleContext',
         ]) {
           expect(data.text(lang, key), isNotEmpty, reason: '$lang.$key');
         }

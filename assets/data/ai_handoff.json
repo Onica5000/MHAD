@@ -2,10 +2,34 @@
   "_doc": "Copy-and-paste AI handoff (user decision 2026-11-17): the text MHAD wraps around each task's instructions before the person pastes them into their own AI chat. Versioned; change the wording here, not in code. The task instructions themselves are shared with the API path (lib/ai). Service capabilities change over time — re-verify (sources in the plan file, 2026-11-17). {placeholders} are filled in by lib/ai/handoff/handoff_prompt.dart.",
   "version": 1,
   "services": {
-    "chatgpt": { "label": "ChatGPT", "url": "https://chatgpt.com/", "image": "yes", "pdf": "yes", "audio": "paid" },
-    "claude": { "label": "Claude", "url": "https://claude.ai/new", "image": "yes", "pdf": "yes", "audio": "no" },
-    "gemini": { "label": "Gemini", "url": "https://gemini.google.com/app", "image": "yes", "pdf": "yes", "audio": "yes" },
-    "grok": { "label": "Grok", "url": "https://grok.com/", "image": "yes", "pdf": "yes", "audio": "unconfirmed" }
+    "chatgpt": {
+      "label": "ChatGPT",
+      "url": "https://chatgpt.com/",
+      "image": "yes",
+      "pdf": "yes",
+      "audio": "paid"
+    },
+    "claude": {
+      "label": "Claude",
+      "url": "https://claude.ai/new",
+      "image": "yes",
+      "pdf": "yes",
+      "audio": "no"
+    },
+    "gemini": {
+      "label": "Gemini",
+      "url": "https://gemini.google.com/app",
+      "image": "yes",
+      "pdf": "yes",
+      "audio": "yes"
+    },
+    "grok": {
+      "label": "Grok",
+      "url": "https://grok.com/",
+      "image": "yes",
+      "pdf": "yes",
+      "audio": "unconfirmed"
+    }
   },
   "legalFacts": [
     "Pennsylvania facts to rely on (Act 194 of 2004, 20 Pa.C.S. Chapter 58):",
@@ -28,7 +52,11 @@
       "askLead": "Answer the person's question below in plain, kind language. Keep it short and practical.",
       "questionLabel": "Their question:",
       "wordingLead": "Reply with ONLY the suggested wording — no introduction, no quotation marks — so the person can copy it straight into the form.",
-      "attachment": { "document": "document (a photo, scan, or PDF)", "audio": "voice recording" }
+      "attachment": {
+        "document": "document (a photo, scan, or PDF)",
+        "audio": "voice recording"
+      },
+      "articleContext": "The person is reading the article \"{title}\" in the app's Learn section (much of it is from the official PA MHAD booklet). Answer their question about it."
     },
     "es": {
       "intro": "Estás ayudando a una persona de Pensilvania con su Directiva Anticipada de Salud Mental, con la aplicación web gratuita PA MHAD. La persona copió estas instrucciones en este chat por su cuenta.",
@@ -38,7 +66,11 @@
       "askLead": "Responde la pregunta de la persona, abajo, con un lenguaje sencillo y amable. Sé breve y práctico.",
       "questionLabel": "Su pregunta:",
       "wordingLead": "Responde SOLO con el texto sugerido, sin introducción ni comillas, para que la persona pueda copiarlo directamente en el formulario.",
-      "attachment": { "document": "documento (una foto, un escaneo o un PDF)", "audio": "grabación de voz" }
+      "attachment": {
+        "document": "documento (una foto, un escaneo o un PDF)",
+        "audio": "grabación de voz"
+      },
+      "articleContext": "La persona está leyendo el artículo \"{title}\" en la sección Aprender de la aplicación (en gran parte tomado del folleto oficial de la MHAD de PA). Responde su pregunta sobre ese tema."
     }
   }
 }

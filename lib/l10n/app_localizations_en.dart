@@ -7643,4 +7643,24 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aiStepQReview3 => 'How do I change or revoke my directive later?';
+
+  @override
+  String get learnAskAiTitle => 'Ask AI about what you\'re reading';
+
+  @override
+  String get learnAskAiSubtitle =>
+      'Optional. Your own AI answers, with the Pennsylvania facts it needs.';
+
+  @override
+  String get articleAskAiButton => 'Ask AI about this article';
+
+  @override
+  String get articleAskAiQ1 => 'Explain this in simpler words.';
+
+  @override
+  String get articleAskAiQ2 => 'What does this mean for my directive?';
+
+  @override
+  String get articleAskAiQ3 =>
+      'What should I ask my doctor or agent about this?';
 }

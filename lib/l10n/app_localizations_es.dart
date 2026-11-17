@@ -7768,4 +7768,24 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get aiStepQReview3 =>
       '¿Cómo cambio o revoco mi directiva más adelante?';
+
+  @override
+  String get learnAskAiTitle => 'Pregunte a la IA sobre lo que lee';
+
+  @override
+  String get learnAskAiSubtitle =>
+      'Opcional. Responde su propia IA, con los datos de Pensilvania que hacen falta.';
+
+  @override
+  String get articleAskAiButton => 'Preguntar a la IA sobre este artículo';
+
+  @override
+  String get articleAskAiQ1 => 'Explíquelo con palabras más sencillas.';
+
+  @override
+  String get articleAskAiQ2 => '¿Qué significa esto para mi directiva?';
+
+  @override
+  String get articleAskAiQ3 =>
+      '¿Qué debería preguntarle a mi médico o a mi agente sobre esto?';
 }

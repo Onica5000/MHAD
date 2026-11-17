@@ -2,17 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/ai/ai_assistant.dart' show AssistantContext;
 import 'package:mhad/ai/ai_context_builder.dart';
-import 'package:mhad/ai/crisis_detector.dart';
 import 'package:mhad/ai/gemini_api_assistant.dart';
-import 'package:mhad/ai/handoff/handoff_task.dart';
-import 'package:mhad/ai/pii_stripper.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/providers/app_providers.dart';
-import 'package:mhad/providers/assistant_providers.dart';
-import 'package:mhad/ui/ai/ai_handoff_panel.dart';
+import 'package:mhad/ui/ai/ai_question_handoff.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
-import 'package:mhad/ui/widgets/design/crisis_support_banner.dart';
 
 /// Three suggested questions per wizard step — questions only, no legal
 /// claims (the AI answers them with the verified PA facts in the prompt).
@@ -80,44 +75,24 @@ class AiStepHelper extends ConsumerStatefulWidget {
 }
 
 class _AiStepHelperState extends ConsumerState<AiStepHelper> {
-  final _question = TextEditingController();
   Map<String, String>? _filled;
 
   @override
   void initState() {
     super.initState();
-    _question.addListener(_onChanged);
     _loadFilled();
   }
 
   @override
   void didUpdateWidget(AiStepHelper old) {
     super.didUpdateWidget(old);
-    if (old.step != widget.step) {
-      _question.clear();
-      _loadFilled();
-    }
+    if (old.step != widget.step) _loadFilled();
   }
 
   Future<void> _loadFilled() async {
     final filled = await buildAiFilledFields(
         ref.read(directiveRepositoryProvider), widget.directiveId);
     if (mounted) setState(() => _filled = filled);
-  }
-
-  @override
-  void dispose() {
-    _question.removeListener(_onChanged);
-    _question.dispose();
-    super.dispose();
-  }
-
-  void _onChanged() {
-    // The local crisis check still runs on anything typed into MHAD.
-    if (looksLikeCrisis(_question.text)) {
-      ref.read(crisisSupportShownProvider.notifier).state = true;
-    }
-    setState(() {});
   }
 
   @override
@@ -143,86 +118,20 @@ class _AiStepHelperState extends ConsumerState<AiStepHelper> {
         const SizedBox(height: 4),
         Text(context.l10n.aiStepHelpSubtitle, style: t.bodySmall),
         const SizedBox(height: 16),
-        for (final q in stepQuestions(context.l10n, widget.step))
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: _QuestionChip(
-              text: q,
-              selected: _question.text == q,
-              onTap: () => _question.text = q,
-            ),
-          ),
-        const SizedBox(height: 8),
-        TextField(
-          controller: _question,
-          minLines: 1,
-          maxLines: 4,
-          decoration:
-              InputDecoration(labelText: context.l10n.askAiQuestionLabel),
-        ),
-        const SizedBox(height: 12),
-        const CrisisSupportBanner(),
-        AiHandoffPanel(
-          kind: HandoffTaskKind.ask,
-          title: context.l10n.aiStepHelpPanelTitle,
-          subtitle: context.l10n.aiStepHelpPanelSubtitle,
-          enabled: _question.text.trim().isNotEmpty,
-          buildTask: (_) => HandoffTask(
-            kind: HandoffTaskKind.ask,
-            // The same instructions the in-app chat sends, with this step and
-            // what's filled so far (values PII-stripped by the builder).
-            instructions: LlmAssistant.systemPromptFor(AssistantContext(
-              formType: widget.formType,
-              stepName: widget.stepName,
-              filledFields: _filled,
-            )),
-            ref: 'd${widget.directiveId}',
-            question: PiiStripper.strip(_question.text),
-          ),
+        AiQuestionHandoff(
+          suggestions: stepQuestions(context.l10n, widget.step),
+          ref: 'd${widget.directiveId}',
+          panelTitle: context.l10n.aiStepHelpPanelTitle,
+          panelSubtitle: context.l10n.aiStepHelpPanelSubtitle,
+          // The same instructions the in-app chat sends, with this step and
+          // what's filled so far (values PII-stripped by the builder).
+          instructions: () => LlmAssistant.systemPromptFor(AssistantContext(
+            formType: widget.formType,
+            stepName: widget.stepName,
+            filledFields: _filled,
+          )),
         ),
       ],
-    );
-  }
-}
-
-/// A suggested question: full-width, tappable, fills the question box.
-class _QuestionChip extends StatelessWidget {
-  final String text;
-  final bool selected;
-  final VoidCallback onTap;
-  const _QuestionChip(
-      {required this.text, required this.selected, required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    final p = Theme.of(context).mhadPalette;
-    return Semantics(
-      button: true,
-      selected: selected,
-      child: Material(
-        color: selected ? p.primaryLight : p.surface,
-        shape: RoundedRectangleBorder(
-          side: BorderSide(color: selected ? p.primary : p.border),
-          borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
-        ),
-        clipBehavior: Clip.antiAlias,
-        child: InkWell(
-          onTap: onTap,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(text,
-                      style: Theme.of(context).textTheme.bodyMedium),
-                ),
-                const SizedBox(width: 8),
-                Icon(Icons.north_west, size: 16, color: p.textMuted),
-              ],
-            ),
-          ),
-        ),
-      ),
     );
   }
 }
@@ -236,6 +145,19 @@ Future<void> showAiStepHelperSheet(
   required String stepName,
   required int directiveId,
 }) {
+  return showAiSheet(
+    context,
+    child: AiStepHelper(
+      formType: formType,
+      step: step,
+      stepName: stepName,
+      directiveId: directiveId,
+    ),
+  );
+}
+
+/// The one bottom-sheet frame for AI help on phones (step help, Learn).
+Future<void> showAiSheet(BuildContext context, {required Widget child}) {
   return showModalBottomSheet<void>(
     context: context,
     isScrollControlled: true,
@@ -248,12 +170,7 @@ Future<void> showAiStepHelperSheet(
       builder: (_, controller) => SingleChildScrollView(
         controller: controller,
         padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
-        child: AiStepHelper(
-          formType: formType,
-          step: step,
-          stepName: stepName,
-          directiveId: directiveId,
-        ),
+        child: child,
       ),
     ),
   );

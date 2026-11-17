@@ -3136,5 +3136,11 @@
   "aiStepQAnythingElse3": "Can I include instructions about my children or pets?",
   "aiStepQReview1": "Who can be a witness when I sign?",
   "aiStepQReview2": "What should I do with copies after I sign?",
-  "aiStepQReview3": "How do I change or revoke my directive later?"
+  "aiStepQReview3": "How do I change or revoke my directive later?",
+  "learnAskAiTitle": "Ask AI about what you're reading",
+  "learnAskAiSubtitle": "Optional. Your own AI answers, with the Pennsylvania facts it needs.",
+  "articleAskAiButton": "Ask AI about this article",
+  "articleAskAiQ1": "Explain this in simpler words.",
+  "articleAskAiQ2": "What does this mean for my directive?",
+  "articleAskAiQ3": "What should I ask my doctor or agent about this?"
 }

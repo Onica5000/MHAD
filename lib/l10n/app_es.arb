@@ -2136,5 +2136,11 @@
   "aiStepQAnythingElse3": "¿Puedo incluir instrucciones sobre mis hijos o mascotas?",
   "aiStepQReview1": "¿Quién puede ser testigo cuando firme?",
   "aiStepQReview2": "¿Qué hago con las copias después de firmar?",
-  "aiStepQReview3": "¿Cómo cambio o revoco mi directiva más adelante?"
+  "aiStepQReview3": "¿Cómo cambio o revoco mi directiva más adelante?",
+  "learnAskAiTitle": "Pregunte a la IA sobre lo que lee",
+  "learnAskAiSubtitle": "Opcional. Responde su propia IA, con los datos de Pensilvania que hacen falta.",
+  "articleAskAiButton": "Preguntar a la IA sobre este artículo",
+  "articleAskAiQ1": "Explíquelo con palabras más sencillas.",
+  "articleAskAiQ2": "¿Qué significa esto para mi directiva?",
+  "articleAskAiQ3": "¿Qué debería preguntarle a mi médico o a mi agente sobre esto?"
 }

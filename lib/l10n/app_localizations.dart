@@ -12954,6 +12954,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'How do I change or revoke my directive later?'**
   String get aiStepQReview3;
+
+  /// No description provided for @learnAskAiTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask AI about what you\'re reading'**
+  String get learnAskAiTitle;
+
+  /// No description provided for @learnAskAiSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional. Your own AI answers, with the Pennsylvania facts it needs.'**
+  String get learnAskAiSubtitle;
+
+  /// No description provided for @articleAskAiButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask AI about this article'**
+  String get articleAskAiButton;
+
+  /// No description provided for @articleAskAiQ1.
+  ///
+  /// In en, this message translates to:
+  /// **'Explain this in simpler words.'**
+  String get articleAskAiQ1;
+
+  /// No description provided for @articleAskAiQ2.
+  ///
+  /// In en, this message translates to:
+  /// **'What does this mean for my directive?'**
+  String get articleAskAiQ2;
+
+  /// No description provided for @articleAskAiQ3.
+  ///
+  /// In en, this message translates to:
+  /// **'What should I ask my doctor or agent about this?'**
+  String get articleAskAiQ3;
 }
 
 class _AppLocalizationsDelegate

@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/ai/ai_step_helper.dart' show showAiSheet;
+import 'package:mhad/ui/ai/ai_question_handoff.dart';
+import 'package:mhad/ai/gemini_api_assistant.dart';
+import 'package:mhad/ai/handoff/ai_handoff_data.dart';
 import 'package:mhad/ui/widgets/design/back_link.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/rich_content_text.dart';
@@ -19,6 +23,41 @@ import 'package:mhad/ui/widgets/design/art_image.dart';
 /// Material variant carried.
 class ArticleDetailScreen extends StatelessWidget {
   final EducationSection section;
+
+  /// The article's AI help in a sheet: three questions about it, the
+  /// question box and the copy-and-paste card; the AI is told which article
+  /// the person is reading (ai_handoff.json "articleContext").
+  void _askAboutArticle(BuildContext context) {
+    final lang = Localizations.localeOf(context).languageCode;
+    final articleLine = AiHandoffData.instance
+        .text(lang, 'articleContext')
+        .replaceAll('{title}', section.title);
+    final t = Theme.of(context).textTheme;
+    showAiSheet(
+      context,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(context.l10n.learnAskAiTitle, style: t.titleMedium),
+          const SizedBox(height: 4),
+          Text(section.title, style: t.bodySmall),
+          const SizedBox(height: 16),
+          AiQuestionHandoff(
+            suggestions: [
+              context.l10n.articleAskAiQ1,
+              context.l10n.articleAskAiQ2,
+              context.l10n.articleAskAiQ3,
+            ],
+            ref: 'learn',
+            panelTitle: context.l10n.askAiPanelTitle,
+            panelSubtitle: context.l10n.askAiPanelSubtitle,
+            instructions: () =>
+                '${LlmAssistant.systemPromptFor(null)}\n$articleLine',
+          ),
+        ],
+      ),
+    );
+  }
   const ArticleDetailScreen({required this.section, super.key});
 
   @override
@@ -76,6 +115,20 @@ class ArticleDetailScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 24),
+          // Ask AI about this article (copy-and-paste handoff) — on phones
+          // too, where Learn had no AI entry before. API path hidden only;
+          // with it shown, Learn's chat panel covers this.
+          if (!appData.ai.apiModeVisible) ...[
+            Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: OutlinedButton.icon(
+                onPressed: () => _askAboutArticle(context),
+                icon: const Icon(Icons.auto_awesome, size: 18),
+                label: Text(context.l10n.articleAskAiButton),
+              ),
+            ),
+            const SizedBox(height: 24),
+          ],
           // "TRY IT — Ready to write yours?" inline CTA (artboard WebArticle).
           Container(
             padding: const EdgeInsets.all(16),

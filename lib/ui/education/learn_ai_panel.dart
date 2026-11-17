@@ -1,6 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:mhad/ai/gemini_api_assistant.dart';
+import 'package:mhad/ui/ai/ai_question_handoff.dart';
+import 'package:mhad/data/app_data/app_data.dart' show appData;
 import 'package:mhad/ui/widgets/design/crisis_support_banner.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -99,6 +102,47 @@ class _LearnAiPanelState extends ConsumerState<LearnAiPanel> {
     final messages = ref.watch(conversationProvider);
     final isSending = ref.watch(isSendingProvider);
     final hasKey = ref.watch(apiKeyProvider).value?.isNotEmpty ?? false;
+
+    // API path hidden (2026-11-17): the panel is the copy-and-paste ask —
+    // the same widget as the Ask AI page and the wizard's step helper.
+    if (!appData.ai.apiModeVisible) {
+      final t = Theme.of(context).textTheme;
+      return Container(
+        width: LearnAiPanel.width,
+        color: p.card,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(20, 24, 20, 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
+                children: [
+                  Icon(Icons.auto_awesome, size: 18, color: p.primary),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Semantics(
+                      header: true,
+                      child: Text(context.l10n.learnAskAiTitle,
+                          style: t.titleMedium),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 4),
+              Text(context.l10n.learnAskAiSubtitle, style: t.bodySmall),
+              const SizedBox(height: 16),
+              AiQuestionHandoff(
+                suggestions: generalAiQuestions(context.l10n),
+                ref: 'learn',
+                panelTitle: context.l10n.askAiPanelTitle,
+                panelSubtitle: context.l10n.askAiPanelSubtitle,
+                instructions: () => LlmAssistant.systemPromptFor(null),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
 
     return Container(
       width: LearnAiPanel.width,
