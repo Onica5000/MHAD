@@ -51,7 +51,7 @@ class WizardHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
     final backLabel = this.backLabel ?? context.l10n.back;
-    final actionLabel = this.actionLabel ?? context.l10n.wizardHeaderSaveAndExit;
+    final actionLabel = this.actionLabel ?? context.l10n.saveAndExit;
     return Padding(
       padding: padding,
       // Row sits 48dp tall so each side's InkWell renders a ≥48×48 tap target

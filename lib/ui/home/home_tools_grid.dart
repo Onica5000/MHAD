@@ -60,7 +60,7 @@ class ToolsGrid extends ConsumerWidget {
       ),
       _ToolTile(
         icon: Icons.health_and_safety_outlined,
-        label: context.l10n.homeToolsGridMakeItFindable,
+        label: context.l10n.tabPageFindable,
         sub: mostRecentDirective != null
             ? context.l10n.homeToolsGridShareCarry
             : context.l10n.homeToolsGridNoDirectiveYet,

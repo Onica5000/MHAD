@@ -39,7 +39,7 @@ class _AskAiScreenState extends ConsumerState<AskAiScreen> {
           PageHero(
             art: AppArt.aiAssistant,
             eyebrow: context.l10n.askAiEyebrow,
-            title: EditorialHeading(text: context.l10n.askAiTitle),
+            title: EditorialHeading(text: context.l10n.navAskAi),
             lead: context.l10n.askAiLead,
           ),
           const SizedBox(height: 24),

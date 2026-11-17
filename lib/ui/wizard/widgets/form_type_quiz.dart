@@ -423,7 +423,7 @@ class _ResultBody extends StatelessWidget {
               const SizedBox(height: 12),
               _LegendRow(
                 color: p.primary,
-                label: context.l10n.quizLegendCombined,
+                label: context.l10n.formTypeShortCombined,
                 pct: pctFor(FormType.combined),
                 emphasized: leader == FormType.combined,
               ),
@@ -473,8 +473,8 @@ class _ResultBody extends StatelessWidget {
   }
 
   String _formName(BuildContext context, FormType t) => switch (t) {
-        FormType.combined => context.l10n.quizFormNameCombined,
-        FormType.declaration => context.l10n.quizFormNameDeclaration,
+        FormType.combined => context.l10n.formTypeShortCombined,
+        FormType.declaration => context.l10n.formTypeShortDeclaration,
         FormType.poa => context.l10n.quizFormNamePoa,
       };
 
@@ -612,7 +612,7 @@ class _QuizQuestions {
           weights: {FormType.poa: 3},
         ),
         _QuizOption(
-          label: l.quizQ2O4Label,
+          label: l.quizQ1O4Label,
           hint: l.quizQ2O4Hint,
           weights: {FormType.combined: 1},
         ),
@@ -638,7 +638,7 @@ class _QuizQuestions {
           weights: {FormType.combined: 3},
         ),
         _QuizOption(
-          label: l.quizQ3O4Label,
+          label: l.quizQ1O4Label,
           hint: l.quizQ3O4Hint,
           weights: {FormType.combined: 1},
         ),

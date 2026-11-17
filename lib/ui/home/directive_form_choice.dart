@@ -32,7 +32,7 @@ class DirectiveFormChoice extends ConsumerWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         icon: const Icon(Icons.info_outline, size: 36),
-        title: Text(context.l10n.poaOnly),
+        title: Text(context.l10n.formTypeNamePoa),
         content: Text(
           context.l10n.directiveFormChoiceWithAPoaOnlyForm,
         ),

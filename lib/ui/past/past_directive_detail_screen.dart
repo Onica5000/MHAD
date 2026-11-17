@@ -293,7 +293,7 @@ class _DocPreviewCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final p = Theme.of(context).mhadPalette;
     final principal = directive.fullName.trim().isEmpty
-        ? context.l10n.pastDirectiveDetailPrincipalYou
+        ? context.l10n.assistantSenderYou
         : directive.fullName.trim().split(RegExp(r'\s+')).first;
     final filename = mhadFileName([
       kFileNamePrefix,

@@ -379,7 +379,7 @@ class _ContactPickerSheetState extends State<_ContactPickerSheet> {
                           IconButton(
                             onPressed: () =>
                                 setState(() => _searchCtrl.clear()),
-                            tooltip: context.l10n.contactSheetClearSearch,
+                            tooltip: context.l10n.diagnosesClearSearch,
                             iconSize: 14,
                             visualDensity: VisualDensity.compact,
                             padding: EdgeInsets.zero,

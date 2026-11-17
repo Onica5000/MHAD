@@ -548,7 +548,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                     width: 16,
                     height: 16,
                     child: Semantics(
-                      label: context.l10n.reviewStepLoading,
+                      label: context.l10n.commonLoading,
                       child: const CircularProgressIndicator(strokeWidth: 2),
                     ),
                   )

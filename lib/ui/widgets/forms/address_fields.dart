@@ -45,7 +45,7 @@ class _AddressFieldsState extends State<AddressFields> {
   Future<void> _lookupFromZip() async {
     final zip = widget.zip.text.replaceAll(RegExp(r'\D'), '');
     if (zip.length < 5) {
-      _toast(context.l10n.addressFieldsEnterZipFirst);
+      _toast(context.l10n.personalInfoStepZipFirst);
       return;
     }
     setState(() => _lookingUp = true);

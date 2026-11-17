@@ -131,7 +131,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               children: [
                 _SettingsRow(
                   icon: Icons.privacy_tip_outlined,
-                  title: context.l10n.privacyPolicyPrivacyPolicy,
+                  title: context.l10n.tabPagePrivacyPolicy,
                   subtitle: context.l10n.settingsHowYourDataIsStored,
                   onTap: () => context.push(AppRoutes.privacyPolicy),
                 ),

@@ -200,7 +200,7 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
 
         case WizardStep.whenItKicksIn:
           rows.add(row(step, l.effectiveCondition,
-              {l.reviewStepCondition: d.effectiveCondition}));
+              {l.reviewLabelCond: d.effectiveCondition}));
 
         case WizardStep.peopleITrust:
           rows.add(row(step, l.reviewStepPrimaryAgent, {
@@ -225,7 +225,7 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
           }));
 
         case WizardStep.whereIWantCare:
-          rows.add(row(step, l.reviewStepWhereIWantCare, {
+          rows.add(row(step, l.stepTitleWhereIWantCare, {
             l.reviewStepTreatmentFacility: prefs?.treatmentFacilityPref ?? '',
             l.reviewStepMedicationConsent: prefs?.medicationConsent ?? '',
           }));
@@ -236,7 +236,7 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
           }));
 
         case WizardStep.allergies:
-          rows.add(row(step, l.reviewStepAllergiesReactions, {
+          rows.add(row(step, l.stepTitleAllergies, {
             l.reviewStepAllergies: data.allergies
                 .map((a) => a.severity.isNotEmpty
                     ? '${a.substance} (${a.severity})'
@@ -256,22 +256,22 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
           }));
 
         case WizardStep.proceduresResearch:
-          rows.add(row(step, l.reviewStepProceduresResearch, {
+          rows.add(row(step, l.stepTitleProceduresResearch, {
             l.reviewStepEctConsent: prefs?.ectConsent ?? '',
-            l.reviewStepExperimentalStudies: prefs?.experimentalConsent ?? '',
+            l.procResearchExperimentalLabel: prefs?.experimentalConsent ?? '',
             l.reviewStepDrugTrials: prefs?.drugTrialConsent ?? '',
           }));
 
         case WizardStep.anythingElse:
           rows.add(row(step, l.additionalInstructions, {
             l.reviewStepActivities: additional?.activities ?? '',
-            l.reviewStepCrisisIntervention:
+            l.reviewLabelCrisis:
                 additional?.crisisIntervention ?? '',
-            l.reviewStepHealthHistory: additional?.healthHistory ?? '',
+            l.reviewLabelHh: additional?.healthHistory ?? '',
             l.reviewStepDietary: additional?.dietary ?? '',
             l.reviewStepReligious: additional?.religious ?? '',
             l.reviewStepChildren: additional?.childrenCustody ?? '',
-            l.reviewStepFamilyNotification:
+            l.addlInstrFamilyNotifyTitle:
                 additional?.familyNotification ?? '',
             l.reviewStepRecordsDisclosure: additional?.recordsDisclosure ?? '',
             l.reviewStepPetCare: additional?.petCustody ?? '',
@@ -321,7 +321,7 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
     if (_data == null) {
       return Center(
         child: Semantics(
-          label: context.l10n.reviewStepLoading,
+          label: context.l10n.commonLoading,
           child: const CircularProgressIndicator(),
         ),
       );

@@ -13,19 +13,19 @@ String? routePageName(AppLocalizations l, String location) {
   final segments = path.split('/').where((s) => s.isNotEmpty);
   final first = segments.isEmpty ? '/' : '/${segments.first}';
   return switch (first) {
-    AppRoutes.disclaimer => l.tabPageDisclaimer,
+    AppRoutes.disclaimer => l.disclaimerBeforeYouBegin,
     AppRoutes.onboarding => l.tabPageWelcome,
     AppRoutes.education => l.navLearn,
     AppRoutes.assistant => l.navAiAssistant,
     AppRoutes.aiSetup => l.tabPageAiSetup,
     AppRoutes.settings => l.navSettings,
-    AppRoutes.accessibility => l.tabPageAccessibility,
+    AppRoutes.accessibility => l.accessibilitySettingsAccessibility,
     AppRoutes.privacyPolicy => l.tabPagePrivacyPolicy,
     AppRoutes.permissions => l.settingsPrivacyPermissions,
-    AppRoutes.facilitator => l.tabPageGetHelp,
+    AppRoutes.facilitator => l.moreSheetGetHelp,
     AppRoutes.audioGuide => l.tabPageAudioGuide,
     AppRoutes.admin => l.tabPageAdmin,
-    '/wizard' => l.tabPageYourDirective,
+    '/wizard' => l.homeHeroYourMhad,
     '/sign' => l.tabPageSign,
     '/export' => l.navDownloadPrint,
     '/upload' => l.navAutofill,

@@ -107,7 +107,7 @@ class WebDashboardLanding extends ConsumerWidget {
             PhotoActionCard(
                 fillHeight: true,
                 art: AppArt.startPrint,
-                title: context.l10n.webLandingPrintABlankForm,
+                title: context.l10n.blankFormPrintTitle,
                 body: context.l10n.webLandingPreferPaperOpenAnyOf,
                 cta: context.l10n.webLandingPrintBlankForm,
                 onTap: () => showBlankFormPicker(context),

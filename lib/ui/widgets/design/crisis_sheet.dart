@@ -103,7 +103,7 @@ class _CrisisSheet extends StatelessWidget {
               const SizedBox(height: 20),
               _CrisisRow(
                 name: '988 Suicide & Crisis Lifeline',
-                detail: context.l10n.crisisSheetCallOrText988,
+                detail: context.l10n.legalSheetCallOrText988,
                 icon: Icons.phone_outlined,
                 accent: true,
                 // First action gets initial keyboard/screen-reader focus

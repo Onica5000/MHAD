@@ -29,7 +29,7 @@ extension _AllergyKindX on _AllergyKind {
         _AllergyKind.drug => l10n.allergiesKindDrug,
         _AllergyKind.food => l10n.allergiesKindFood,
         _AllergyKind.material => l10n.allergiesKindMaterial,
-        _AllergyKind.other => l10n.allergiesKindOther,
+        _AllergyKind.other => l10n.reviewStepOther,
       };
 
   /// Search-field hint for this kind.
@@ -293,7 +293,7 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 12),
             child: Text(
-              _searching ? '' : l10n.allergiesNoResults,
+              _searching ? '' : l10n.educationNoResultsFound,
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: p.textMuted,
@@ -380,7 +380,7 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
         const SizedBox(height: 4),
         // Footer reassurance, matching the prototype's tone.
         Text(
-          l10n.allergiesFooter,
+          l10n.diagnosesFooter,
           style: TextStyle(
             fontSize: 12,
             fontStyle: FontStyle.italic, height: MhadType.leadingParagraph,
@@ -576,7 +576,7 @@ class _SearchField extends StatelessWidget {
           else if (controller.text.isNotEmpty)
             Semantics(
               button: true,
-              label: context.l10n.allergiesClearSearch,
+              label: context.l10n.diagnosesClearSearch,
               child: InkWell(
                 onTap: onClear,
                 borderRadius: BorderRadius.circular(DesignTokens.radiusSm),

@@ -9,9 +9,6 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get navHome => 'Home';
-
-  @override
   String get navLearn => 'Learn';
 
   @override
@@ -84,15 +81,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get required => 'Required';
 
   @override
-  String get combinedForm => 'Combined Declaration & Power of Attorney';
-
-  @override
-  String get declarationOnly => 'Declaration Only';
-
-  @override
-  String get poaOnly => 'Power of Attorney Only';
-
-  @override
   String get personalInfo => 'Personal information';
 
   @override
@@ -159,9 +147,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get importFromDocument => 'Import from Document';
 
   @override
-  String get importFromContacts => 'Import from Contacts';
-
-  @override
   String stepNOfTotal(int current, int total) {
     return 'Step $current of $total';
   }
@@ -186,9 +171,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get procResearchExperimentalLabel => 'Experimental studies';
-
-  @override
-  String get procResearchDrugTrialsLabel => 'Drug trials';
 
   @override
   String get procResearchWhyTheseThree =>
@@ -333,25 +315,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reviewStepPrimaryAgent => 'Primary agent';
 
   @override
-  String get reviewStepWhereIWantCare => 'Where I want care';
-
-  @override
   String get reviewStepMedicalDiagnoses => 'Medical diagnoses';
-
-  @override
-  String get reviewStepAllergiesReactions => 'Allergies & reactions';
-
-  @override
-  String get reviewStepProceduresResearch => 'Procedures & research';
 
   @override
   String get reviewStepName => 'Name';
 
   @override
   String get reviewStepPhone => 'Phone';
-
-  @override
-  String get reviewStepCondition => 'Condition';
 
   @override
   String get reviewStepRelationship => 'Relationship';
@@ -384,12 +354,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reviewStepActivities => 'Activities';
 
   @override
-  String get reviewStepCrisisIntervention => 'Crisis intervention';
-
-  @override
-  String get reviewStepHealthHistory => 'Health history';
-
-  @override
   String get reviewStepDietary => 'Dietary';
 
   @override
@@ -397,9 +361,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reviewStepChildren => 'Children';
-
-  @override
-  String get reviewStepFamilyNotification => 'Family notification';
 
   @override
   String get reviewStepRecordsDisclosure => 'Records disclosure';
@@ -428,9 +389,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reviewStepYourGuardianNominee => 'your guardian nominee';
-
-  @override
-  String get reviewStepLoading => 'Loading';
 
   @override
   String get reviewStepOneSectionNeedsAttention =>
@@ -478,13 +436,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'with your directive under PA Act 194 (20 Pa.C.S. §§ 5804, 5842). A provider may decline specific instructions only if they conflict with accepted medical practice, or when the provider is not physically available.';
 
   @override
-  String get reviewStepExperimentalStudies => 'Experimental studies';
-
-  @override
   String get wizardProgressSaved => 'Progress saved';
-
-  @override
-  String get wizardLoading => 'Loading';
 
   @override
   String get wizardUnableToLoad => 'Unable to load this directive.';
@@ -546,10 +498,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get personalInfoStepZipFirst => 'Enter a 5-digit ZIP first.';
-
-  @override
-  String get personalInfoStepZipLookupFailed =>
-      'Couldn’t look up that ZIP — you can type it in.';
 
   @override
   String personalInfoStepCountyName(String county) {
@@ -688,9 +636,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'An agent (healthcare proxy) is someone you choose to make mental health care decisions on your behalf when you cannot.';
 
   @override
-  String get agentDesigRelationship => 'Relationship';
-
-  @override
   String get agentDesigSpouseNote =>
       'Note: Under PA Act 194 §5838, if you designate your spouse as your agent, that designation is automatically revoked if either spouse files for divorce, unless you state otherwise in this directive.';
 
@@ -712,9 +657,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get altAgentNotRequired =>
       'You are not required to designate an alternate agent.';
-
-  @override
-  String get altAgentRelationship => 'Relationship';
 
   @override
   String get agentAuthHelp =>
@@ -880,9 +822,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get diagnosesMedical => 'Medical';
 
   @override
-  String get diagnosesNoResults => 'No results found.';
-
-  @override
   String get diagnosesEmptyTitle => 'No diagnoses added yet';
 
   @override
@@ -925,9 +864,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get diagnosesSpecialty => 'Specialty';
-
-  @override
-  String get diagnosesPhone => 'Phone';
 
   @override
   String get diagnosesDescribeSemantics =>
@@ -986,9 +922,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'Suggestions only — confirm with your records or your doctor. Codes from NIH Clinical Tables (ICD-10-CM).';
 
   @override
-  String get diagnosesDone => 'Done';
-
-  @override
   String get allergiesKindDrug => 'Drug';
 
   @override
@@ -996,9 +929,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get allergiesKindMaterial => 'Material';
-
-  @override
-  String get allergiesKindOther => 'Other';
 
   @override
   String get allergiesSearchDrugHint => 'Search a drug or class…';
@@ -1040,9 +970,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get allergiesSourceIcd => 'ICD-10-CM · NLM clinical tables';
 
   @override
-  String get allergiesNoResults => 'No results found.';
-
-  @override
   String get allergiesSourceNote =>
       'Drug allergies search RxTerms. Food, material & other allergies search ICD-10 (e.g. Z91.01 food allergy, T78.4 unspecified allergy).';
 
@@ -1070,13 +997,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String allergiesAddedMany(int count) {
     return 'Added · $count allergies';
   }
-
-  @override
-  String get allergiesFooter =>
-      'You’re not required to list anything. Anything you do list is shared only with the people your directive names.';
-
-  @override
-  String get allergiesClearSearch => 'Clear search';
 
   @override
   String allergiesMatches(int count) {
@@ -1318,9 +1238,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'These sections are all optional. Use them to give guidance to your agent and treatment team beyond the basic preferences above.';
 
   @override
-  String get addlInstrExampleFieldName => 'Additional instructions';
-
-  @override
   String get addlInstrExample1 =>
       'I find listening to calming music and going for walks helpful during periods of distress. Please allow me access to my personal music player.';
 
@@ -1342,9 +1259,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get addlInstrActivitiesDescription =>
       'Describe activities that help you feel better (e.g., walking, reading, music) and your preferences about your physical environment during treatment. You can also state whether you consent to or refuse the use of restraints (being physically held or strapped down, or given medication to restrict your movement or behavior — a “chemical restraint”) or seclusion (being confined alone in a room).';
-
-  @override
-  String get addlInstrCrisisTitle => 'Crisis intervention';
 
   @override
   String get addlInstrCrisisHint =>
@@ -1375,9 +1289,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get addlInstrTriggersDescription =>
       'Identify situations, environments, or topics that may trigger or worsen a crisis for you. This helps your treatment team avoid these triggers. Examples: loud environments, being touched without permission, certain conversation topics, being left alone, or specific people.';
-
-  @override
-  String get addlInstrHealthHistoryTitle => 'Health history';
 
   @override
   String get addlInstrHealthHistoryHint =>
@@ -1429,9 +1340,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get addlInstrFamilyNotifyDescription =>
       'Specify who should be notified if you are hospitalized or if your treatment changes. Include how to reach them and what information may be shared. You can also specify people who should NOT be contacted.';
-
-  @override
-  String get addlInstrPetCareTitle => 'Pet care';
 
   @override
   String get addlInstrPetCareHint => 'Instructions for care of your pets';
@@ -1492,9 +1400,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addlInstrOptionalAddOns => 'Optional add-ons';
 
   @override
-  String get addlInstrCrisisPlanTitle => 'Crisis plan';
-
-  @override
   String get addlInstrCrisisPlanSubtitle =>
       'Your early-warning signs, triggers, what genuinely helps, and what not to do. Not required by Act 194 — but it’s the part agents and ER staff read first.';
 
@@ -1533,9 +1438,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get effCondAnythingElseSubtitle =>
       'Add your own words, or pick an example to start from.';
-
-  @override
-  String get effCondExampleFieldName => 'Effective condition';
 
   @override
   String get effCondExample1 =>
@@ -1620,9 +1522,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get consentChoiceExperimentalSectionLabel => 'RESEARCH CONSENT';
 
   @override
-  String get consentChoiceExperimentalTitle => 'Experimental studies';
-
-  @override
   String get consentChoiceExperimentalSubtitle =>
       'State your preferences regarding participation in experimental research during mental health treatment.';
 
@@ -1652,9 +1551,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get consentChoiceDrugTrialsSectionLabel => 'CLINICAL TRIALS';
-
-  @override
-  String get consentChoiceDrugTrialsTitle => 'Drug trials';
 
   @override
   String get consentChoiceDrugTrialsSubtitle =>
@@ -1690,9 +1586,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get consentChoiceConditionalDescription =>
       'Describe the conditions in the box below.';
-
-  @override
-  String get consentChoiceConditionsLabel => 'Conditions';
 
   @override
   String get consentChoiceNoConsentTitle => 'I do not consent';
@@ -1887,9 +1780,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get quizQ2O3Hint => 'Power of Attorney only is the lightest path.';
 
   @override
-  String get quizQ2O4Label => 'I’m not sure yet';
-
-  @override
   String get quizQ2O4Hint => 'No problem — Combined leaves both doors open.';
 
   @override
@@ -1921,9 +1811,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get quizQ3O3Hint => 'Combined is the strongest fit.';
-
-  @override
-  String get quizQ3O4Label => 'I’m not sure yet';
 
   @override
   String get quizQ3O4Hint => 'No problem — Combined supports both pathways.';
@@ -1979,9 +1866,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get quizYouProbablyWant => 'You probably want\n';
 
   @override
-  String get quizLegendCombined => 'Combined';
-
-  @override
   String get quizLegendDeclaration => 'Declaration only';
 
   @override
@@ -1994,12 +1878,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String quizUseForm(String formName) {
     return 'Use $formName';
   }
-
-  @override
-  String get quizFormNameCombined => 'Combined';
-
-  @override
-  String get quizFormNameDeclaration => 'Declaration';
 
   @override
   String get quizFormNamePoa => 'POA';
@@ -2018,9 +1896,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aiSuggestDraftTitle => 'AI draft';
-
-  @override
-  String get aiSuggestSuggestionTitle => 'AI suggestion';
 
   @override
   String get aiSuggestYourText => 'Your text:';
@@ -2095,9 +1970,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get contactSheetSearchHint => 'Search by name or number';
-
-  @override
-  String get contactSheetClearSearch => 'Clear search';
 
   @override
   String contactSheetContactsCount(int count) {
@@ -2347,12 +2219,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pipelinePleaseWait => 'Please wait while processing…';
 
   @override
-  String get pipelineBackReview => 'Review';
-
-  @override
-  String get pipelineTitleSnapToFill => 'Autofill';
-
-  @override
   String get pipelineTitleProcessing => 'Processing';
 
   @override
@@ -2372,15 +2238,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get pipelineCouldNotRead =>
       'We couldn’t read that file. Please use a PDF, JPG, PNG, WEBP, HEIC, or plain-text file under 10 MB.';
-
-  @override
-  String get pipelineFormCombined => 'Combined';
-
-  @override
-  String get pipelineFormDeclaration => 'Declaration only';
-
-  @override
-  String get pipelineFormPoa => 'Power of Attorney only';
 
   @override
   String get pipelineFormCombinedSub =>
@@ -2618,34 +2475,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reviewLabelFacilityAvoid => 'Facility to avoid';
 
   @override
-  String get reviewLabelDietary => 'Dietary';
-
-  @override
   String get reviewLabelReligious => 'Religious/cultural';
-
-  @override
-  String get reviewLabelActivities => 'Activities';
 
   @override
   String get reviewLabelCrisis => 'Crisis intervention';
 
   @override
-  String get reviewLabelCrisisPlan => 'Crisis plan';
-
-  @override
   String get reviewLabelAgentAuthorityLimitations => 'Agent authority limits';
-
-  @override
-  String get reviewLabelEctConsent => 'ECT consent';
 
   @override
   String get reviewLabelExperimentalConsent => 'Experimental treatment consent';
 
   @override
   String get reviewLabelDrugTrialConsent => 'Drug trial consent';
-
-  @override
-  String get reviewLabelMedicationConsent => 'Medication consent';
 
   @override
   String get reviewLabelTriggerTwoProfessionals => 'Trigger: professionals';
@@ -2658,13 +2500,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Trigger: involuntary commitment';
 
   @override
-  String get reviewLabelRoomPrefsNote => 'Room preferences';
-
-  @override
   String get reviewLabelRoomPrefChips => 'Room options';
-
-  @override
-  String get reviewLabelRoommateSameGender => 'Same-gender roommate';
 
   @override
   String get reviewLabelGuardianCanRevoke => 'Guardian: override';
@@ -2685,40 +2521,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reviewLabelUlyssesOptin => 'Self-binding (Ulysses)';
 
   @override
-  String get reviewLabelPetCustody => 'Pet care';
-
-  @override
   String get reviewLabelChildrenCustody => 'Children / dependents';
 
   @override
   String get reviewLabelFamilyNotification => 'Who to notify';
 
   @override
-  String get reviewLabelRecordsDisclosure => 'Records disclosure';
-
-  @override
-  String get reviewLabelOther => 'Other';
-
-  @override
   String get reviewLabelPersonName => 'Your full name';
 
   @override
-  String get reviewLabelPersonDob => 'Date of birth';
-
-  @override
-  String get reviewLabelPersonAddress1 => 'Street address';
-
-  @override
   String get reviewLabelPersonAddress2 => 'Apt / suite / unit';
-
-  @override
-  String get reviewLabelPersonCity => 'City';
-
-  @override
-  String get reviewLabelPersonCounty => 'County';
-
-  @override
-  String get reviewLabelPersonState => 'State';
 
   @override
   String get reviewLabelPersonZip => 'ZIP code';
@@ -2829,18 +2641,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reviewSectionCond => 'Conditions';
 
   @override
-  String get reviewSectionDiag => 'Diagnoses';
-
-  @override
-  String get reviewSectionAllergy => 'Allergies';
-
-  @override
-  String get reviewSectionHh => 'Health history';
-
-  @override
-  String get reviewSectionEffectiveCondition => 'When this kicks in';
-
-  @override
   String get reviewSectionPerson => 'Your details';
 
   @override
@@ -2853,52 +2653,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reviewSectionUlyssesOptin => 'Self-binding';
 
   @override
-  String get reviewSectionCrisisPlan => 'Crisis plan';
-
-  @override
   String get reviewSectionConsent => 'Consent';
 
   @override
-  String get reviewSectionRoomPreferences => 'Room preferences';
-
-  @override
-  String get reviewSectionAltAgent => 'Alternate agent';
-
-  @override
   String get reviewSectionGuardian => 'Guardian';
-
-  @override
-  String get reviewSectionOther => 'Other';
-
-  @override
-  String get reviewStepGroupWhenKicksIn => 'When this kicks in';
-
-  @override
-  String get reviewStepGroupDiagnoses => 'Diagnoses';
-
-  @override
-  String get reviewStepGroupAboutYou => 'About you';
-
-  @override
-  String get reviewStepGroupPeopleITrust => 'People I trust';
-
-  @override
-  String get reviewStepGroupGuardian => 'If a court appoints a guardian';
-
-  @override
-  String get reviewStepGroupWhereIWantCare => 'Where I want care';
-
-  @override
-  String get reviewStepGroupMedications => 'Medications';
-
-  @override
-  String get reviewStepGroupAllergies => 'Allergies & reactions';
-
-  @override
-  String get reviewStepGroupProceduresResearch => 'Procedures & research';
-
-  @override
-  String get reviewStepGroupAnythingElse => 'Anything else';
 
   @override
   String get reviewAiReadThisPhoto => 'AI READ THIS PHOTO';
@@ -3799,9 +3557,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'The PDF you are about to share contains your full mental-health directive (names, agents, medications, signatures). It is generated unencrypted because the underlying PDF library does not support password protection.\n\nShare only via channels you trust (e.g., direct hand-off, a secure email to a specific provider). Avoid public uploads, cloud links, or untrusted messaging apps.';
 
   @override
-  String get exportIUnderstandContinue => 'I understand, continue';
-
-  @override
   String get exportCouldnTGenerateThePdf => 'Couldn’t generate the PDF.';
 
   @override
@@ -4100,9 +3855,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get accessibilitySettingsSystemSettingsAccessibilitySpokenContent =>
       'System Settings → Accessibility → Spoken Content → “Speak selection”, then press Option+Esc.';
-
-  @override
-  String get privacyPolicyPrivacyPolicy => 'Privacy policy';
 
   @override
   String get privacyPolicyPaMhadAppPrivacyPolicy => 'PA MHAD privacy policy';
@@ -4430,9 +4182,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get webLandingFromTheBooklet => 'From the booklet';
 
   @override
-  String get webLandingPrintABlankForm => 'Print a blank form';
-
-  @override
   String get webLandingPrintBlankForm => 'Print blank form';
 
   @override
@@ -4443,9 +4192,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get webLandingAdvanceDirective => 'advance directive.';
-
-  @override
-  String get homeToolsGridMakeItFindable => 'Make it findable';
 
   @override
   String get homeToolsGridCrisisHelp => 'Crisis help';
@@ -4973,9 +4719,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'NEVER enter personal information (full name, date of birth, Social Security number, address, phone number, email) into the AI chat or AI-powered features.\n\nThe app automatically strips common personal data, but this is not guaranteed. Personal information fields must be filled in manually — they are stored on your device only and never sent to the AI.';
 
   @override
-  String get aiConsentDialogNotNow => 'Not now';
-
-  @override
   String get aiConsentDialogIAuthorize => 'I authorize';
 
   @override
@@ -5292,9 +5035,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get crisisSheetYouAreNotAlone => 'You are not alone.';
 
   @override
-  String get crisisSheetCallOrText988 => 'Call or text 988';
-
-  @override
   String get crisisSheetCall988Press1 => 'Call 988, press 1';
 
   @override
@@ -5302,9 +5042,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get assistantSenderYou => 'You';
-
-  @override
-  String get assistantSenderAi => 'AI assistant';
 
   @override
   String get aiSetupApiKeySetForThis => 'API key set for this session';
@@ -5808,9 +5545,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get exportDraftModeFinal => 'Final copy';
 
   @override
-  String get exportDraftModeDraft => 'Draft';
-
-  @override
   String get exportDraftModeSignedExists => 'Draft · signed copy exists';
 
   @override
@@ -5831,9 +5565,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get exportWalletSignToActivate => 'sign to activate';
-
-  @override
-  String get exportEffectiveCondition => 'Effective condition';
 
   @override
   String get exportWitnessSignatures => 'Witness signatures';
@@ -6118,9 +5849,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'Treatment preferences without an agent';
 
   @override
-  String get eduBrowsePowerOfAttorney => 'Power of Attorney';
-
-  @override
   String get eduBrowseAgentDesignationWithoutPreferences =>
       'Agent designation without preferences';
 
@@ -6211,9 +5939,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get deviceSecurityWarningBody =>
       'Your device appears to be rooted/jailbroken. This may put your sensitive health data at risk. Consider using a non-modified device for storing advance directives.';
-
-  @override
-  String get deviceSecurityIUnderstand => 'I understand';
 
   @override
   String get blankFormPrintTitle => 'Print a blank form';
@@ -6317,12 +6042,6 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0';
   }
-
-  @override
-  String get homeHeroCombinedForm => 'Combined form';
-
-  @override
-  String get homeHeroDeclarationOnly => 'Declaration only';
 
   @override
   String homeHeroNamedMhad(String name) {
@@ -6578,9 +6297,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'Something went wrong generating the list. Please try again, or note side effects yourself.';
 
   @override
-  String get inputPhoneInvalid => 'Enter a valid 10-digit phone number';
-
-  @override
   String get inputZipInvalid => 'Enter a 5-digit or 5+4-digit ZIP';
 
   @override
@@ -6676,9 +6392,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get stepTitleDiagnoses => 'Diagnoses';
 
   @override
-  String get stepTitleMedications => 'Medications';
-
-  @override
   String get stepTitleAllergies => 'Allergies & reactions';
 
   @override
@@ -6691,16 +6404,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get stepTitleReviewAndSign => 'Review';
 
   @override
-  String get directiveStatusRevoked => 'Revoked';
-
-  @override
-  String get directiveStatusExpired => 'Expired';
-
-  @override
   String get directiveStatusActive => 'Active';
-
-  @override
-  String get directiveStatusDraft => 'Draft';
 
   @override
   String pastDirectiveSignedOn(String date) {
@@ -6966,16 +6670,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onboardingPillStaysOnDevice => 'Stays on your device';
 
   @override
-  String get educationHelpTitle => 'Help';
-
-  @override
   String get educationTabAll => 'All';
 
   @override
   String get educationTabArticles => 'Articles';
-
-  @override
-  String get educationTabGlossary => 'Glossary';
 
   @override
   String get educationTabFaq => 'FAQ';
@@ -6996,17 +6694,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonLoading => 'Loading';
 
   @override
-  String get wizardHeaderSaveAndExit => 'Save & exit';
-
-  @override
   String get fdaLabelDialogAdverseReactions =>
       'Adverse reactions (side effects)';
 
   @override
   String get fdaLabelDialogDrugInteractions => 'Drug interactions';
-
-  @override
-  String get addressFieldsEnterZipFirst => 'Enter a 5-digit ZIP first.';
 
   @override
   String get addressFieldsZipLookupFailed =>
@@ -7045,9 +6737,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reminderSheetsYourRenewalDate => 'your renewal date';
-
-  @override
-  String get pastDirectiveDetailPrincipalYou => 'You';
 
   @override
   String get exportShareSubjectEditable => 'MHAD editable directive copy';
@@ -7145,16 +6834,10 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get tabPageDisclaimer => 'Before you begin';
-
-  @override
   String get tabPageWelcome => 'Welcome';
 
   @override
   String get tabPageAiSetup => 'AI setup';
-
-  @override
-  String get tabPageAccessibility => 'Accessibility';
 
   @override
   String get tabPagePrivacyPolicy => 'Privacy policy';
@@ -7164,9 +6847,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tabPageAdmin => 'Admin tool';
-
-  @override
-  String get tabPageYourDirective => 'Your directive';
 
   @override
   String get tabPageSign => 'Sign on paper';
@@ -7378,9 +7058,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aiHandoffPrivacyContinue => 'I understand, continue';
-
-  @override
-  String get askAiTitle => 'Ask AI';
 
   @override
   String get askAiEyebrow => 'AI help · optional';
@@ -7699,7 +7376,4 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get navStartOver => 'Start over';
-
-  @override
-  String get tabPageGetHelp => 'Find support';
 }

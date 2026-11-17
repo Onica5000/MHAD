@@ -40,7 +40,7 @@ List<PrimaryDestination> primaryDestinations(
       PrimaryDestination(
         icon: Icons.home_outlined,
         activeIcon: Icons.home,
-        label: context.l10n.navHome,
+        label: context.l10n.home,
         route: AppRoutes.home,
         activeOn: const {AppRoutes.home},
       ),

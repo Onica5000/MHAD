@@ -543,7 +543,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 12),
             child: Text(
-              _searching ? '' : l10n.diagnosesNoResults,
+              _searching ? '' : l10n.educationNoResultsFound,
               textAlign: TextAlign.center,
               style: TextStyle( color: p.textMuted),
             ),
@@ -767,7 +767,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                 keyboardType: TextInputType.phone,
                 inputFormatters: const [PhoneInputFormatter()],
                 decoration: InputDecoration(
-                  labelText: l10n.diagnosesPhone,
+                  labelText: l10n.reviewStepPhone,
                   border: const OutlineInputBorder(),
                 ),
               ),
@@ -1038,7 +1038,7 @@ class _DescribeConditionDialogState extends State<_DescribeConditionDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: Text(l10n.diagnosesDone),
+          child: Text(l10n.done),
         ),
       ],
     );

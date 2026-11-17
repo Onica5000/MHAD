@@ -175,7 +175,7 @@ class _AgentDesignationStepState
             TextFormField(
               controller: _relationshipCtrl,
               decoration: InputDecoration(
-                labelText: context.l10n.agentDesigRelationship,
+                labelText: context.l10n.reviewStepRelationship,
                 border: const OutlineInputBorder(),
               ),
               textInputAction: TextInputAction.next,

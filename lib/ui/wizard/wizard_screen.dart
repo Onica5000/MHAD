@@ -147,7 +147,7 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
       loading: () => Scaffold(
         body: Center(
           child: Semantics(
-            label: context.l10n.wizardLoading,
+            label: context.l10n.commonLoading,
             child: const CircularProgressIndicator(),
           ),
         ),

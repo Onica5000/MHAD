@@ -98,12 +98,6 @@ abstract class AppLocalizations {
     Locale('es'),
   ];
 
-  /// No description provided for @navHome.
-  ///
-  /// In en, this message translates to:
-  /// **'Home'**
-  String get navHome;
-
   /// No description provided for @navLearn.
   ///
   /// In en, this message translates to:
@@ -248,24 +242,6 @@ abstract class AppLocalizations {
   /// **'Required'**
   String get required;
 
-  /// No description provided for @combinedForm.
-  ///
-  /// In en, this message translates to:
-  /// **'Combined Declaration & Power of Attorney'**
-  String get combinedForm;
-
-  /// No description provided for @declarationOnly.
-  ///
-  /// In en, this message translates to:
-  /// **'Declaration Only'**
-  String get declarationOnly;
-
-  /// No description provided for @poaOnly.
-  ///
-  /// In en, this message translates to:
-  /// **'Power of Attorney Only'**
-  String get poaOnly;
-
   /// No description provided for @personalInfo.
   ///
   /// In en, this message translates to:
@@ -398,12 +374,6 @@ abstract class AppLocalizations {
   /// **'Import from Document'**
   String get importFromDocument;
 
-  /// No description provided for @importFromContacts.
-  ///
-  /// In en, this message translates to:
-  /// **'Import from Contacts'**
-  String get importFromContacts;
-
   /// No description provided for @stepNOfTotal.
   ///
   /// In en, this message translates to:
@@ -439,12 +409,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Experimental studies'**
   String get procResearchExperimentalLabel;
-
-  /// No description provided for @procResearchDrugTrialsLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Drug trials'**
-  String get procResearchDrugTrialsLabel;
 
   /// No description provided for @procResearchWhyTheseThree.
   ///
@@ -692,29 +656,11 @@ abstract class AppLocalizations {
   /// **'Primary agent'**
   String get reviewStepPrimaryAgent;
 
-  /// No description provided for @reviewStepWhereIWantCare.
-  ///
-  /// In en, this message translates to:
-  /// **'Where I want care'**
-  String get reviewStepWhereIWantCare;
-
   /// No description provided for @reviewStepMedicalDiagnoses.
   ///
   /// In en, this message translates to:
   /// **'Medical diagnoses'**
   String get reviewStepMedicalDiagnoses;
-
-  /// No description provided for @reviewStepAllergiesReactions.
-  ///
-  /// In en, this message translates to:
-  /// **'Allergies & reactions'**
-  String get reviewStepAllergiesReactions;
-
-  /// No description provided for @reviewStepProceduresResearch.
-  ///
-  /// In en, this message translates to:
-  /// **'Procedures & research'**
-  String get reviewStepProceduresResearch;
 
   /// No description provided for @reviewStepName.
   ///
@@ -727,12 +673,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Phone'**
   String get reviewStepPhone;
-
-  /// No description provided for @reviewStepCondition.
-  ///
-  /// In en, this message translates to:
-  /// **'Condition'**
-  String get reviewStepCondition;
 
   /// No description provided for @reviewStepRelationship.
   ///
@@ -794,18 +734,6 @@ abstract class AppLocalizations {
   /// **'Activities'**
   String get reviewStepActivities;
 
-  /// No description provided for @reviewStepCrisisIntervention.
-  ///
-  /// In en, this message translates to:
-  /// **'Crisis intervention'**
-  String get reviewStepCrisisIntervention;
-
-  /// No description provided for @reviewStepHealthHistory.
-  ///
-  /// In en, this message translates to:
-  /// **'Health history'**
-  String get reviewStepHealthHistory;
-
   /// No description provided for @reviewStepDietary.
   ///
   /// In en, this message translates to:
@@ -823,12 +751,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Children'**
   String get reviewStepChildren;
-
-  /// No description provided for @reviewStepFamilyNotification.
-  ///
-  /// In en, this message translates to:
-  /// **'Family notification'**
-  String get reviewStepFamilyNotification;
 
   /// No description provided for @reviewStepRecordsDisclosure.
   ///
@@ -877,12 +799,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'your guardian nominee'**
   String get reviewStepYourGuardianNominee;
-
-  /// No description provided for @reviewStepLoading.
-  ///
-  /// In en, this message translates to:
-  /// **'Loading'**
-  String get reviewStepLoading;
 
   /// No description provided for @reviewStepOneSectionNeedsAttention.
   ///
@@ -956,23 +872,11 @@ abstract class AppLocalizations {
   /// **'with your directive under PA Act 194 (20 Pa.C.S. §§ 5804, 5842). A provider may decline specific instructions only if they conflict with accepted medical practice, or when the provider is not physically available.'**
   String get reviewStepProvidersMustComplyBody;
 
-  /// No description provided for @reviewStepExperimentalStudies.
-  ///
-  /// In en, this message translates to:
-  /// **'Experimental studies'**
-  String get reviewStepExperimentalStudies;
-
   /// No description provided for @wizardProgressSaved.
   ///
   /// In en, this message translates to:
   /// **'Progress saved'**
   String get wizardProgressSaved;
-
-  /// No description provided for @wizardLoading.
-  ///
-  /// In en, this message translates to:
-  /// **'Loading'**
-  String get wizardLoading;
 
   /// No description provided for @wizardUnableToLoad.
   ///
@@ -1081,12 +985,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Enter a 5-digit ZIP first.'**
   String get personalInfoStepZipFirst;
-
-  /// No description provided for @personalInfoStepZipLookupFailed.
-  ///
-  /// In en, this message translates to:
-  /// **'Couldn’t look up that ZIP — you can type it in.'**
-  String get personalInfoStepZipLookupFailed;
 
   /// No description provided for @personalInfoStepCountyName.
   ///
@@ -1328,12 +1226,6 @@ abstract class AppLocalizations {
   /// **'An agent (healthcare proxy) is someone you choose to make mental health care decisions on your behalf when you cannot.'**
   String get agentDesigAgentDefinition;
 
-  /// No description provided for @agentDesigRelationship.
-  ///
-  /// In en, this message translates to:
-  /// **'Relationship'**
-  String get agentDesigRelationship;
-
   /// No description provided for @agentDesigSpouseNote.
   ///
   /// In en, this message translates to:
@@ -1369,12 +1261,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You are not required to designate an alternate agent.'**
   String get altAgentNotRequired;
-
-  /// No description provided for @altAgentRelationship.
-  ///
-  /// In en, this message translates to:
-  /// **'Relationship'**
-  String get altAgentRelationship;
 
   /// No description provided for @agentAuthHelp.
   ///
@@ -1646,12 +1532,6 @@ abstract class AppLocalizations {
   /// **'Medical'**
   String get diagnosesMedical;
 
-  /// No description provided for @diagnosesNoResults.
-  ///
-  /// In en, this message translates to:
-  /// **'No results found.'**
-  String get diagnosesNoResults;
-
   /// No description provided for @diagnosesEmptyTitle.
   ///
   /// In en, this message translates to:
@@ -1717,12 +1597,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Specialty'**
   String get diagnosesSpecialty;
-
-  /// No description provided for @diagnosesPhone.
-  ///
-  /// In en, this message translates to:
-  /// **'Phone'**
-  String get diagnosesPhone;
 
   /// No description provided for @diagnosesDescribeSemantics.
   ///
@@ -1814,12 +1688,6 @@ abstract class AppLocalizations {
   /// **'Suggestions only — confirm with your records or your doctor. Codes from NIH Clinical Tables (ICD-10-CM).'**
   String get diagnosesSuggestionsNote;
 
-  /// No description provided for @diagnosesDone.
-  ///
-  /// In en, this message translates to:
-  /// **'Done'**
-  String get diagnosesDone;
-
   /// No description provided for @allergiesKindDrug.
   ///
   /// In en, this message translates to:
@@ -1837,12 +1705,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Material'**
   String get allergiesKindMaterial;
-
-  /// No description provided for @allergiesKindOther.
-  ///
-  /// In en, this message translates to:
-  /// **'Other'**
-  String get allergiesKindOther;
 
   /// No description provided for @allergiesSearchDrugHint.
   ///
@@ -1916,12 +1778,6 @@ abstract class AppLocalizations {
   /// **'ICD-10-CM · NLM clinical tables'**
   String get allergiesSourceIcd;
 
-  /// No description provided for @allergiesNoResults.
-  ///
-  /// In en, this message translates to:
-  /// **'No results found.'**
-  String get allergiesNoResults;
-
   /// No description provided for @allergiesSourceNote.
   ///
   /// In en, this message translates to:
@@ -1969,18 +1825,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Added · {count} allergies'**
   String allergiesAddedMany(int count);
-
-  /// No description provided for @allergiesFooter.
-  ///
-  /// In en, this message translates to:
-  /// **'You’re not required to list anything. Anything you do list is shared only with the people your directive names.'**
-  String get allergiesFooter;
-
-  /// No description provided for @allergiesClearSearch.
-  ///
-  /// In en, this message translates to:
-  /// **'Clear search'**
-  String get allergiesClearSearch;
 
   /// No description provided for @allergiesMatches.
   ///
@@ -2390,12 +2234,6 @@ abstract class AppLocalizations {
   /// **'These sections are all optional. Use them to give guidance to your agent and treatment team beyond the basic preferences above.'**
   String get addlInstrHelpText;
 
-  /// No description provided for @addlInstrExampleFieldName.
-  ///
-  /// In en, this message translates to:
-  /// **'Additional instructions'**
-  String get addlInstrExampleFieldName;
-
   /// No description provided for @addlInstrExample1.
   ///
   /// In en, this message translates to:
@@ -2431,12 +2269,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Describe activities that help you feel better (e.g., walking, reading, music) and your preferences about your physical environment during treatment. You can also state whether you consent to or refuse the use of restraints (being physically held or strapped down, or given medication to restrict your movement or behavior — a “chemical restraint”) or seclusion (being confined alone in a room).'**
   String get addlInstrActivitiesDescription;
-
-  /// No description provided for @addlInstrCrisisTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Crisis intervention'**
-  String get addlInstrCrisisTitle;
 
   /// No description provided for @addlInstrCrisisHint.
   ///
@@ -2485,12 +2317,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Identify situations, environments, or topics that may trigger or worsen a crisis for you. This helps your treatment team avoid these triggers. Examples: loud environments, being touched without permission, certain conversation topics, being left alone, or specific people.'**
   String get addlInstrTriggersDescription;
-
-  /// No description provided for @addlInstrHealthHistoryTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Health history'**
-  String get addlInstrHealthHistoryTitle;
 
   /// No description provided for @addlInstrHealthHistoryHint.
   ///
@@ -2575,12 +2401,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Specify who should be notified if you are hospitalized or if your treatment changes. Include how to reach them and what information may be shared. You can also specify people who should NOT be contacted.'**
   String get addlInstrFamilyNotifyDescription;
-
-  /// No description provided for @addlInstrPetCareTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Pet care'**
-  String get addlInstrPetCareTitle;
 
   /// No description provided for @addlInstrPetCareHint.
   ///
@@ -2684,12 +2504,6 @@ abstract class AppLocalizations {
   /// **'Optional add-ons'**
   String get addlInstrOptionalAddOns;
 
-  /// No description provided for @addlInstrCrisisPlanTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Crisis plan'**
-  String get addlInstrCrisisPlanTitle;
-
   /// No description provided for @addlInstrCrisisPlanSubtitle.
   ///
   /// In en, this message translates to:
@@ -2755,12 +2569,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add your own words, or pick an example to start from.'**
   String get effCondAnythingElseSubtitle;
-
-  /// No description provided for @effCondExampleFieldName.
-  ///
-  /// In en, this message translates to:
-  /// **'Effective condition'**
-  String get effCondExampleFieldName;
 
   /// No description provided for @effCondExample1.
   ///
@@ -2900,12 +2708,6 @@ abstract class AppLocalizations {
   /// **'RESEARCH CONSENT'**
   String get consentChoiceExperimentalSectionLabel;
 
-  /// No description provided for @consentChoiceExperimentalTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Experimental studies'**
-  String get consentChoiceExperimentalTitle;
-
   /// No description provided for @consentChoiceExperimentalSubtitle.
   ///
   /// In en, this message translates to:
@@ -2953,12 +2755,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'CLINICAL TRIALS'**
   String get consentChoiceDrugTrialsSectionLabel;
-
-  /// No description provided for @consentChoiceDrugTrialsTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Drug trials'**
-  String get consentChoiceDrugTrialsTitle;
 
   /// No description provided for @consentChoiceDrugTrialsSubtitle.
   ///
@@ -3013,12 +2809,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Describe the conditions in the box below.'**
   String get consentChoiceConditionalDescription;
-
-  /// No description provided for @consentChoiceConditionsLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Conditions'**
-  String get consentChoiceConditionsLabel;
 
   /// No description provided for @consentChoiceNoConsentTitle.
   ///
@@ -3344,12 +3134,6 @@ abstract class AppLocalizations {
   /// **'Power of Attorney only is the lightest path.'**
   String get quizQ2O3Hint;
 
-  /// No description provided for @quizQ2O4Label.
-  ///
-  /// In en, this message translates to:
-  /// **'I’m not sure yet'**
-  String get quizQ2O4Label;
-
   /// No description provided for @quizQ2O4Hint.
   ///
   /// In en, this message translates to:
@@ -3403,12 +3187,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Combined is the strongest fit.'**
   String get quizQ3O3Hint;
-
-  /// No description provided for @quizQ3O4Label.
-  ///
-  /// In en, this message translates to:
-  /// **'I’m not sure yet'**
-  String get quizQ3O4Label;
 
   /// No description provided for @quizQ3O4Hint.
   ///
@@ -3506,12 +3284,6 @@ abstract class AppLocalizations {
   /// **'You probably want\n'**
   String get quizYouProbablyWant;
 
-  /// No description provided for @quizLegendCombined.
-  ///
-  /// In en, this message translates to:
-  /// **'Combined'**
-  String get quizLegendCombined;
-
   /// No description provided for @quizLegendDeclaration.
   ///
   /// In en, this message translates to:
@@ -3535,18 +3307,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Use {formName}'**
   String quizUseForm(String formName);
-
-  /// No description provided for @quizFormNameCombined.
-  ///
-  /// In en, this message translates to:
-  /// **'Combined'**
-  String get quizFormNameCombined;
-
-  /// No description provided for @quizFormNameDeclaration.
-  ///
-  /// In en, this message translates to:
-  /// **'Declaration'**
-  String get quizFormNameDeclaration;
 
   /// No description provided for @quizFormNamePoa.
   ///
@@ -3577,12 +3337,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'AI draft'**
   String get aiSuggestDraftTitle;
-
-  /// No description provided for @aiSuggestSuggestionTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'AI suggestion'**
-  String get aiSuggestSuggestionTitle;
 
   /// No description provided for @aiSuggestYourText.
   ///
@@ -3715,12 +3469,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Search by name or number'**
   String get contactSheetSearchHint;
-
-  /// No description provided for @contactSheetClearSearch.
-  ///
-  /// In en, this message translates to:
-  /// **'Clear search'**
-  String get contactSheetClearSearch;
 
   /// No description provided for @contactSheetContactsCount.
   ///
@@ -4124,18 +3872,6 @@ abstract class AppLocalizations {
   /// **'Please wait while processing…'**
   String get pipelinePleaseWait;
 
-  /// No description provided for @pipelineBackReview.
-  ///
-  /// In en, this message translates to:
-  /// **'Review'**
-  String get pipelineBackReview;
-
-  /// No description provided for @pipelineTitleSnapToFill.
-  ///
-  /// In en, this message translates to:
-  /// **'Autofill'**
-  String get pipelineTitleSnapToFill;
-
   /// No description provided for @pipelineTitleProcessing.
   ///
   /// In en, this message translates to:
@@ -4171,24 +3907,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'We couldn’t read that file. Please use a PDF, JPG, PNG, WEBP, HEIC, or plain-text file under 10 MB.'**
   String get pipelineCouldNotRead;
-
-  /// No description provided for @pipelineFormCombined.
-  ///
-  /// In en, this message translates to:
-  /// **'Combined'**
-  String get pipelineFormCombined;
-
-  /// No description provided for @pipelineFormDeclaration.
-  ///
-  /// In en, this message translates to:
-  /// **'Declaration only'**
-  String get pipelineFormDeclaration;
-
-  /// No description provided for @pipelineFormPoa.
-  ///
-  /// In en, this message translates to:
-  /// **'Power of Attorney only'**
-  String get pipelineFormPoa;
 
   /// No description provided for @pipelineFormCombinedSub.
   ///
@@ -4562,23 +4280,11 @@ abstract class AppLocalizations {
   /// **'Facility to avoid'**
   String get reviewLabelFacilityAvoid;
 
-  /// No description provided for @reviewLabelDietary.
-  ///
-  /// In en, this message translates to:
-  /// **'Dietary'**
-  String get reviewLabelDietary;
-
   /// No description provided for @reviewLabelReligious.
   ///
   /// In en, this message translates to:
   /// **'Religious/cultural'**
   String get reviewLabelReligious;
-
-  /// No description provided for @reviewLabelActivities.
-  ///
-  /// In en, this message translates to:
-  /// **'Activities'**
-  String get reviewLabelActivities;
 
   /// No description provided for @reviewLabelCrisis.
   ///
@@ -4586,23 +4292,11 @@ abstract class AppLocalizations {
   /// **'Crisis intervention'**
   String get reviewLabelCrisis;
 
-  /// No description provided for @reviewLabelCrisisPlan.
-  ///
-  /// In en, this message translates to:
-  /// **'Crisis plan'**
-  String get reviewLabelCrisisPlan;
-
   /// No description provided for @reviewLabelAgentAuthorityLimitations.
   ///
   /// In en, this message translates to:
   /// **'Agent authority limits'**
   String get reviewLabelAgentAuthorityLimitations;
-
-  /// No description provided for @reviewLabelEctConsent.
-  ///
-  /// In en, this message translates to:
-  /// **'ECT consent'**
-  String get reviewLabelEctConsent;
 
   /// No description provided for @reviewLabelExperimentalConsent.
   ///
@@ -4615,12 +4309,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Drug trial consent'**
   String get reviewLabelDrugTrialConsent;
-
-  /// No description provided for @reviewLabelMedicationConsent.
-  ///
-  /// In en, this message translates to:
-  /// **'Medication consent'**
-  String get reviewLabelMedicationConsent;
 
   /// No description provided for @reviewLabelTriggerTwoProfessionals.
   ///
@@ -4640,23 +4328,11 @@ abstract class AppLocalizations {
   /// **'Trigger: involuntary commitment'**
   String get reviewLabelTriggerInvoluntaryCommitment;
 
-  /// No description provided for @reviewLabelRoomPrefsNote.
-  ///
-  /// In en, this message translates to:
-  /// **'Room preferences'**
-  String get reviewLabelRoomPrefsNote;
-
   /// No description provided for @reviewLabelRoomPrefChips.
   ///
   /// In en, this message translates to:
   /// **'Room options'**
   String get reviewLabelRoomPrefChips;
-
-  /// No description provided for @reviewLabelRoommateSameGender.
-  ///
-  /// In en, this message translates to:
-  /// **'Same-gender roommate'**
-  String get reviewLabelRoommateSameGender;
 
   /// No description provided for @reviewLabelGuardianCanRevoke.
   ///
@@ -4694,12 +4370,6 @@ abstract class AppLocalizations {
   /// **'Self-binding (Ulysses)'**
   String get reviewLabelUlyssesOptin;
 
-  /// No description provided for @reviewLabelPetCustody.
-  ///
-  /// In en, this message translates to:
-  /// **'Pet care'**
-  String get reviewLabelPetCustody;
-
   /// No description provided for @reviewLabelChildrenCustody.
   ///
   /// In en, this message translates to:
@@ -4712,59 +4382,17 @@ abstract class AppLocalizations {
   /// **'Who to notify'**
   String get reviewLabelFamilyNotification;
 
-  /// No description provided for @reviewLabelRecordsDisclosure.
-  ///
-  /// In en, this message translates to:
-  /// **'Records disclosure'**
-  String get reviewLabelRecordsDisclosure;
-
-  /// No description provided for @reviewLabelOther.
-  ///
-  /// In en, this message translates to:
-  /// **'Other'**
-  String get reviewLabelOther;
-
   /// No description provided for @reviewLabelPersonName.
   ///
   /// In en, this message translates to:
   /// **'Your full name'**
   String get reviewLabelPersonName;
 
-  /// No description provided for @reviewLabelPersonDob.
-  ///
-  /// In en, this message translates to:
-  /// **'Date of birth'**
-  String get reviewLabelPersonDob;
-
-  /// No description provided for @reviewLabelPersonAddress1.
-  ///
-  /// In en, this message translates to:
-  /// **'Street address'**
-  String get reviewLabelPersonAddress1;
-
   /// No description provided for @reviewLabelPersonAddress2.
   ///
   /// In en, this message translates to:
   /// **'Apt / suite / unit'**
   String get reviewLabelPersonAddress2;
-
-  /// No description provided for @reviewLabelPersonCity.
-  ///
-  /// In en, this message translates to:
-  /// **'City'**
-  String get reviewLabelPersonCity;
-
-  /// No description provided for @reviewLabelPersonCounty.
-  ///
-  /// In en, this message translates to:
-  /// **'County'**
-  String get reviewLabelPersonCounty;
-
-  /// No description provided for @reviewLabelPersonState.
-  ///
-  /// In en, this message translates to:
-  /// **'State'**
-  String get reviewLabelPersonState;
 
   /// No description provided for @reviewLabelPersonZip.
   ///
@@ -4982,30 +4610,6 @@ abstract class AppLocalizations {
   /// **'Conditions'**
   String get reviewSectionCond;
 
-  /// No description provided for @reviewSectionDiag.
-  ///
-  /// In en, this message translates to:
-  /// **'Diagnoses'**
-  String get reviewSectionDiag;
-
-  /// No description provided for @reviewSectionAllergy.
-  ///
-  /// In en, this message translates to:
-  /// **'Allergies'**
-  String get reviewSectionAllergy;
-
-  /// No description provided for @reviewSectionHh.
-  ///
-  /// In en, this message translates to:
-  /// **'Health history'**
-  String get reviewSectionHh;
-
-  /// No description provided for @reviewSectionEffectiveCondition.
-  ///
-  /// In en, this message translates to:
-  /// **'When this kicks in'**
-  String get reviewSectionEffectiveCondition;
-
   /// No description provided for @reviewSectionPerson.
   ///
   /// In en, this message translates to:
@@ -5030,101 +4634,17 @@ abstract class AppLocalizations {
   /// **'Self-binding'**
   String get reviewSectionUlyssesOptin;
 
-  /// No description provided for @reviewSectionCrisisPlan.
-  ///
-  /// In en, this message translates to:
-  /// **'Crisis plan'**
-  String get reviewSectionCrisisPlan;
-
   /// No description provided for @reviewSectionConsent.
   ///
   /// In en, this message translates to:
   /// **'Consent'**
   String get reviewSectionConsent;
 
-  /// No description provided for @reviewSectionRoomPreferences.
-  ///
-  /// In en, this message translates to:
-  /// **'Room preferences'**
-  String get reviewSectionRoomPreferences;
-
-  /// No description provided for @reviewSectionAltAgent.
-  ///
-  /// In en, this message translates to:
-  /// **'Alternate agent'**
-  String get reviewSectionAltAgent;
-
   /// No description provided for @reviewSectionGuardian.
   ///
   /// In en, this message translates to:
   /// **'Guardian'**
   String get reviewSectionGuardian;
-
-  /// No description provided for @reviewSectionOther.
-  ///
-  /// In en, this message translates to:
-  /// **'Other'**
-  String get reviewSectionOther;
-
-  /// No description provided for @reviewStepGroupWhenKicksIn.
-  ///
-  /// In en, this message translates to:
-  /// **'When this kicks in'**
-  String get reviewStepGroupWhenKicksIn;
-
-  /// No description provided for @reviewStepGroupDiagnoses.
-  ///
-  /// In en, this message translates to:
-  /// **'Diagnoses'**
-  String get reviewStepGroupDiagnoses;
-
-  /// No description provided for @reviewStepGroupAboutYou.
-  ///
-  /// In en, this message translates to:
-  /// **'About you'**
-  String get reviewStepGroupAboutYou;
-
-  /// No description provided for @reviewStepGroupPeopleITrust.
-  ///
-  /// In en, this message translates to:
-  /// **'People I trust'**
-  String get reviewStepGroupPeopleITrust;
-
-  /// No description provided for @reviewStepGroupGuardian.
-  ///
-  /// In en, this message translates to:
-  /// **'If a court appoints a guardian'**
-  String get reviewStepGroupGuardian;
-
-  /// No description provided for @reviewStepGroupWhereIWantCare.
-  ///
-  /// In en, this message translates to:
-  /// **'Where I want care'**
-  String get reviewStepGroupWhereIWantCare;
-
-  /// No description provided for @reviewStepGroupMedications.
-  ///
-  /// In en, this message translates to:
-  /// **'Medications'**
-  String get reviewStepGroupMedications;
-
-  /// No description provided for @reviewStepGroupAllergies.
-  ///
-  /// In en, this message translates to:
-  /// **'Allergies & reactions'**
-  String get reviewStepGroupAllergies;
-
-  /// No description provided for @reviewStepGroupProceduresResearch.
-  ///
-  /// In en, this message translates to:
-  /// **'Procedures & research'**
-  String get reviewStepGroupProceduresResearch;
-
-  /// No description provided for @reviewStepGroupAnythingElse.
-  ///
-  /// In en, this message translates to:
-  /// **'Anything else'**
-  String get reviewStepGroupAnythingElse;
 
   /// No description provided for @reviewAiReadThisPhoto.
   ///
@@ -6680,12 +6200,6 @@ abstract class AppLocalizations {
   /// **'The PDF you are about to share contains your full mental-health directive (names, agents, medications, signatures). It is generated unencrypted because the underlying PDF library does not support password protection.\n\nShare only via channels you trust (e.g., direct hand-off, a secure email to a specific provider). Avoid public uploads, cloud links, or untrusted messaging apps.'**
   String get exportThePdfYouAreAbout;
 
-  /// No description provided for @exportIUnderstandContinue.
-  ///
-  /// In en, this message translates to:
-  /// **'I understand, continue'**
-  String get exportIUnderstandContinue;
-
   /// No description provided for @exportCouldnTGenerateThePdf.
   ///
   /// In en, this message translates to:
@@ -7207,12 +6721,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'System Settings → Accessibility → Spoken Content → “Speak selection”, then press Option+Esc.'**
   String get accessibilitySettingsSystemSettingsAccessibilitySpokenContent;
-
-  /// No description provided for @privacyPolicyPrivacyPolicy.
-  ///
-  /// In en, this message translates to:
-  /// **'Privacy policy'**
-  String get privacyPolicyPrivacyPolicy;
 
   /// No description provided for @privacyPolicyPaMhadAppPrivacyPolicy.
   ///
@@ -7772,12 +7280,6 @@ abstract class AppLocalizations {
   /// **'From the booklet'**
   String get webLandingFromTheBooklet;
 
-  /// No description provided for @webLandingPrintABlankForm.
-  ///
-  /// In en, this message translates to:
-  /// **'Print a blank form'**
-  String get webLandingPrintABlankForm;
-
   /// No description provided for @webLandingPrintBlankForm.
   ///
   /// In en, this message translates to:
@@ -7801,12 +7303,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'advance directive.'**
   String get webLandingAdvanceDirective;
-
-  /// No description provided for @homeToolsGridMakeItFindable.
-  ///
-  /// In en, this message translates to:
-  /// **'Make it findable'**
-  String get homeToolsGridMakeItFindable;
 
   /// No description provided for @homeToolsGridCrisisHelp.
   ///
@@ -8696,12 +8192,6 @@ abstract class AppLocalizations {
   /// **'NEVER enter personal information (full name, date of birth, Social Security number, address, phone number, email) into the AI chat or AI-powered features.\n\nThe app automatically strips common personal data, but this is not guaranteed. Personal information fields must be filled in manually — they are stored on your device only and never sent to the AI.'**
   String get aiConsentDialogNeverEnterPersonalInformationFull;
 
-  /// No description provided for @aiConsentDialogNotNow.
-  ///
-  /// In en, this message translates to:
-  /// **'Not now'**
-  String get aiConsentDialogNotNow;
-
   /// No description provided for @aiConsentDialogIAuthorize.
   ///
   /// In en, this message translates to:
@@ -9206,12 +8696,6 @@ abstract class AppLocalizations {
   /// **'You are not alone.'**
   String get crisisSheetYouAreNotAlone;
 
-  /// No description provided for @crisisSheetCallOrText988.
-  ///
-  /// In en, this message translates to:
-  /// **'Call or text 988'**
-  String get crisisSheetCallOrText988;
-
   /// No description provided for @crisisSheetCall988Press1.
   ///
   /// In en, this message translates to:
@@ -9229,12 +8713,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You'**
   String get assistantSenderYou;
-
-  /// No description provided for @assistantSenderAi.
-  ///
-  /// In en, this message translates to:
-  /// **'AI assistant'**
-  String get assistantSenderAi;
 
   /// No description provided for @aiSetupApiKeySetForThis.
   ///
@@ -9933,12 +9411,6 @@ abstract class AppLocalizations {
   /// **'Final copy'**
   String get exportDraftModeFinal;
 
-  /// No description provided for @exportDraftModeDraft.
-  ///
-  /// In en, this message translates to:
-  /// **'Draft'**
-  String get exportDraftModeDraft;
-
   /// No description provided for @exportDraftModeSignedExists.
   ///
   /// In en, this message translates to:
@@ -9974,12 +9446,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'sign to activate'**
   String get exportWalletSignToActivate;
-
-  /// No description provided for @exportEffectiveCondition.
-  ///
-  /// In en, this message translates to:
-  /// **'Effective condition'**
-  String get exportEffectiveCondition;
 
   /// No description provided for @exportWitnessSignatures.
   ///
@@ -10405,12 +9871,6 @@ abstract class AppLocalizations {
   /// **'Treatment preferences without an agent'**
   String get eduBrowseTreatmentPreferencesWithoutAnAgent;
 
-  /// No description provided for @eduBrowsePowerOfAttorney.
-  ///
-  /// In en, this message translates to:
-  /// **'Power of Attorney'**
-  String get eduBrowsePowerOfAttorney;
-
   /// No description provided for @eduBrowseAgentDesignationWithoutPreferences.
   ///
   /// In en, this message translates to:
@@ -10567,12 +10027,6 @@ abstract class AppLocalizations {
   /// **'Your device appears to be rooted/jailbroken. This may put your sensitive health data at risk. Consider using a non-modified device for storing advance directives.'**
   String get deviceSecurityWarningBody;
 
-  /// No description provided for @deviceSecurityIUnderstand.
-  ///
-  /// In en, this message translates to:
-  /// **'I understand'**
-  String get deviceSecurityIUnderstand;
-
   /// No description provided for @blankFormPrintTitle.
   ///
   /// In en, this message translates to:
@@ -10728,18 +10182,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, =1{~ 1 more step} other{~ {count} more steps}}'**
   String homeHeroMoreSteps(int count);
-
-  /// No description provided for @homeHeroCombinedForm.
-  ///
-  /// In en, this message translates to:
-  /// **'Combined form'**
-  String get homeHeroCombinedForm;
-
-  /// No description provided for @homeHeroDeclarationOnly.
-  ///
-  /// In en, this message translates to:
-  /// **'Declaration only'**
-  String get homeHeroDeclarationOnly;
 
   /// No description provided for @homeHeroNamedMhad.
   ///
@@ -11137,12 +10579,6 @@ abstract class AppLocalizations {
   /// **'Something went wrong generating the list. Please try again, or note side effects yourself.'**
   String get sideEffectsGenerateError;
 
-  /// No description provided for @inputPhoneInvalid.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter a valid 10-digit phone number'**
-  String get inputPhoneInvalid;
-
   /// No description provided for @inputZipInvalid.
   ///
   /// In en, this message translates to:
@@ -11305,12 +10741,6 @@ abstract class AppLocalizations {
   /// **'Diagnoses'**
   String get stepTitleDiagnoses;
 
-  /// No description provided for @stepTitleMedications.
-  ///
-  /// In en, this message translates to:
-  /// **'Medications'**
-  String get stepTitleMedications;
-
   /// No description provided for @stepTitleAllergies.
   ///
   /// In en, this message translates to:
@@ -11335,29 +10765,11 @@ abstract class AppLocalizations {
   /// **'Review'**
   String get stepTitleReviewAndSign;
 
-  /// No description provided for @directiveStatusRevoked.
-  ///
-  /// In en, this message translates to:
-  /// **'Revoked'**
-  String get directiveStatusRevoked;
-
-  /// No description provided for @directiveStatusExpired.
-  ///
-  /// In en, this message translates to:
-  /// **'Expired'**
-  String get directiveStatusExpired;
-
   /// No description provided for @directiveStatusActive.
   ///
   /// In en, this message translates to:
   /// **'Active'**
   String get directiveStatusActive;
-
-  /// No description provided for @directiveStatusDraft.
-  ///
-  /// In en, this message translates to:
-  /// **'Draft'**
-  String get directiveStatusDraft;
 
   /// No description provided for @pastDirectiveSignedOn.
   ///
@@ -11791,12 +11203,6 @@ abstract class AppLocalizations {
   /// **'Stays on your device'**
   String get onboardingPillStaysOnDevice;
 
-  /// No description provided for @educationHelpTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Help'**
-  String get educationHelpTitle;
-
   /// No description provided for @educationTabAll.
   ///
   /// In en, this message translates to:
@@ -11808,12 +11214,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Articles'**
   String get educationTabArticles;
-
-  /// No description provided for @educationTabGlossary.
-  ///
-  /// In en, this message translates to:
-  /// **'Glossary'**
-  String get educationTabGlossary;
 
   /// No description provided for @educationTabFaq.
   ///
@@ -11851,12 +11251,6 @@ abstract class AppLocalizations {
   /// **'Loading'**
   String get commonLoading;
 
-  /// No description provided for @wizardHeaderSaveAndExit.
-  ///
-  /// In en, this message translates to:
-  /// **'Save & exit'**
-  String get wizardHeaderSaveAndExit;
-
   /// No description provided for @fdaLabelDialogAdverseReactions.
   ///
   /// In en, this message translates to:
@@ -11868,12 +11262,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Drug interactions'**
   String get fdaLabelDialogDrugInteractions;
-
-  /// No description provided for @addressFieldsEnterZipFirst.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter a 5-digit ZIP first.'**
-  String get addressFieldsEnterZipFirst;
 
   /// No description provided for @addressFieldsZipLookupFailed.
   ///
@@ -11922,12 +11310,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'your renewal date'**
   String get reminderSheetsYourRenewalDate;
-
-  /// No description provided for @pastDirectiveDetailPrincipalYou.
-  ///
-  /// In en, this message translates to:
-  /// **'You'**
-  String get pastDirectiveDetailPrincipalYou;
 
   /// No description provided for @exportShareSubjectEditable.
   ///
@@ -12085,12 +11467,6 @@ abstract class AppLocalizations {
   /// **'{page} · PA MHAD'**
   String tabTitle(String page);
 
-  /// No description provided for @tabPageDisclaimer.
-  ///
-  /// In en, this message translates to:
-  /// **'Before you begin'**
-  String get tabPageDisclaimer;
-
   /// No description provided for @tabPageWelcome.
   ///
   /// In en, this message translates to:
@@ -12102,12 +11478,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'AI setup'**
   String get tabPageAiSetup;
-
-  /// No description provided for @tabPageAccessibility.
-  ///
-  /// In en, this message translates to:
-  /// **'Accessibility'**
-  String get tabPageAccessibility;
 
   /// No description provided for @tabPagePrivacyPolicy.
   ///
@@ -12126,12 +11496,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Admin tool'**
   String get tabPageAdmin;
-
-  /// No description provided for @tabPageYourDirective.
-  ///
-  /// In en, this message translates to:
-  /// **'Your directive'**
-  String get tabPageYourDirective;
 
   /// No description provided for @tabPageSign.
   ///
@@ -12480,12 +11844,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'I understand, continue'**
   String get aiHandoffPrivacyContinue;
-
-  /// No description provided for @askAiTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Ask AI'**
-  String get askAiTitle;
 
   /// No description provided for @askAiEyebrow.
   ///
@@ -13026,12 +12384,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Start over'**
   String get navStartOver;
-
-  /// No description provided for @tabPageGetHelp.
-  ///
-  /// In en, this message translates to:
-  /// **'Find support'**
-  String get tabPageGetHelp;
 }
 
 class _AppLocalizationsDelegate

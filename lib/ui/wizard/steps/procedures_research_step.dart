@@ -66,7 +66,7 @@ class _ProceduresResearchStepState
         const SizedBox(height: 16),
         const Divider(),
         const SizedBox(height: 8),
-        SectionLabel(context.l10n.procResearchDrugTrialsLabel),
+        SectionLabel(context.l10n.reviewStepDrugTrials),
         const SizedBox(height: 4),
         ConsentChoiceStep(
           key: _drugTrialsKey,

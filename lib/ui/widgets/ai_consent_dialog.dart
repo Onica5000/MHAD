@@ -225,7 +225,7 @@ Future<bool> showAiConsentDialog(
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(ctx, false),
-          child: Text(context.l10n.aiConsentDialogNotNow),
+          child: Text(context.l10n.neverWantCrossAddNotNow),
         ),
         FilledButton(
           onPressed: () => Navigator.pop(ctx, true),

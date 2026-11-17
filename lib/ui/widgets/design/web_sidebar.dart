@@ -56,7 +56,7 @@ class WebSidebar extends ConsumerWidget {
       _SidebarItem(
         icon: Icons.home_outlined,
         activeIcon: Icons.home,
-        label: context.l10n.navHome,
+        label: context.l10n.home,
         isActive: activeRoute == AppRoutes.home,
         onTap: () => appRouter.go(AppRoutes.home),
       ),

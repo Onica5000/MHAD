@@ -176,7 +176,7 @@ class _AlternateAgentStepState
             TextFormField(
               controller: _relationshipCtrl,
               decoration: InputDecoration(
-                labelText: context.l10n.altAgentRelationship,
+                labelText: context.l10n.reviewStepRelationship,
                 border: const OutlineInputBorder(),
               ),
               textInputAction: TextInputAction.next,

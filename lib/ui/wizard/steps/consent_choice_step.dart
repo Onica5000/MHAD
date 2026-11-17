@@ -77,7 +77,7 @@ class ConsentChoiceConfig {
 
   static final ConsentChoiceConfig experimental = ConsentChoiceConfig(
     sectionLabel: (l) => l.consentChoiceExperimentalSectionLabel,
-    title: (l) => l.consentChoiceExperimentalTitle,
+    title: (l) => l.procResearchExperimentalLabel,
     subtitle: (l) => l.consentChoiceExperimentalSubtitle,
     helpText: (l) => l.consentChoiceExperimentalHelpText,
     stepId: 'experimentalStudies',
@@ -96,7 +96,7 @@ class ConsentChoiceConfig {
 
   static final ConsentChoiceConfig drugTrials = ConsentChoiceConfig(
     sectionLabel: (l) => l.consentChoiceDrugTrialsSectionLabel,
-    title: (l) => l.consentChoiceDrugTrialsTitle,
+    title: (l) => l.reviewStepDrugTrials,
     subtitle: (l) => l.consentChoiceDrugTrialsSubtitle,
     helpText: (l) => l.consentChoiceDrugTrialsHelpText,
     stepId: 'drugTrials',
@@ -275,7 +275,7 @@ class _ConsentChoiceStepState extends ConsumerState<ConsentChoiceStep>
               controller: _conditionsCtrl,
               maxLines: 3,
               decoration: InputDecoration(
-                labelText: l.consentChoiceConditionsLabel,
+                labelText: l.reviewSectionCond,
                 hintText: c.conditionalHint(l),
               ),
               validator: (v) =>

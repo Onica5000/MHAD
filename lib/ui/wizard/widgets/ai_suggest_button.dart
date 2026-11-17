@@ -209,7 +209,7 @@ Return only the draft text — no explanation, no quotes, no preamble.''';
             Expanded(
                 child: Text(isDraft
                     ? ctx.l10n.aiSuggestDraftTitle
-                    : ctx.l10n.aiSuggestSuggestionTitle)),
+                    : ctx.l10n.aiSuggestIconTooltip)),
           ]),
           content: SingleChildScrollView(
             child: Column(
@@ -429,7 +429,7 @@ Return only the draft text — no explanation, no quotes, no preamble.''';
                 child: Padding(
                   padding: const EdgeInsets.all(12),
                   child: Semantics(
-                    label: context.l10n.wizardLoading,
+                    label: context.l10n.commonLoading,
                     child: const CircularProgressIndicator(strokeWidth: 2),
                   ),
                 ),

@@ -151,7 +151,7 @@ class _EffectiveConditionStepState
           ),
           const SizedBox(height: 8),
           ExampleTextButton(
-            fieldName: l10n.effCondExampleFieldName,
+            fieldName: l10n.effectiveCondition,
             examples: [
               // Standard — two professionals certify
               l10n.effCondExample1,

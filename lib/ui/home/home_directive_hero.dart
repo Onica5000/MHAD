@@ -35,9 +35,9 @@ class ActiveDirectiveHero extends StatelessWidget {
     final updated = DateTime.fromMillisecondsSinceEpoch(directive.updatedAt);
     final lastEdited = relativeTime(updated, l10n: context.l10n);
     final formLabel = switch (formType) {
-      FormType.combined => context.l10n.homeHeroCombinedForm,
-      FormType.declaration => context.l10n.homeHeroDeclarationOnly,
-      FormType.poa => context.l10n.eduBrowsePowerOfAttorney,
+      FormType.combined => context.l10n.eduBrowseCombinedForm,
+      FormType.declaration => context.l10n.quizLegendDeclaration,
+      FormType.poa => context.l10n.formTypeShortPoa,
     };
     final headline = directive.fullName.trim().isNotEmpty
         ? context.l10n.homeHeroNamedMhad(directive.fullName.split(' ').first)

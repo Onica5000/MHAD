@@ -152,7 +152,7 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
       }
     });
     if (z == null) {
-      _toast(context.l10n.personalInfoStepZipLookupFailed);
+      _toast(context.l10n.addressFieldsZipLookupFailed);
     } else {
       final filled = [
         z.city,

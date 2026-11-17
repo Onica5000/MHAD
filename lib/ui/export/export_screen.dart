@@ -81,7 +81,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
 
   String _draftModeLabel(DraftMode m) => switch (m) {
         DraftMode.finalCopy => context.l10n.exportDraftModeFinal,
-        DraftMode.draftGeneral => context.l10n.exportDraftModeDraft,
+        DraftMode.draftGeneral => context.l10n.draft,
         DraftMode.draftSignedAvailable =>
           context.l10n.exportDraftModeSignedExists,
       };
@@ -176,7 +176,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       if (_directive!.fullName.isEmpty) warnings.add(context.l10n.fullName);
       if (_directive!.dateOfBirth.isEmpty) warnings.add(context.l10n.dateOfBirth);
       if (_directive!.effectiveCondition.isEmpty) {
-        warnings.add(context.l10n.exportEffectiveCondition);
+        warnings.add(context.l10n.effectiveCondition);
       }
       if (_directive!.status == 'draft') {
         final hasSignatures = _witnesses.any(
@@ -235,7 +235,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
               // Initial focus on the primary action (UX audit A3).
               autofocus: true,
               onPressed: () => Navigator.pop(ctx, true),
-              child: Text(context.l10n.exportIUnderstandContinue),
+              child: Text(context.l10n.aiHandoffPrivacyContinue),
             ),
           ],
         ),
@@ -402,7 +402,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
   Widget _loadingState() => Scaffold(
         body: Center(
           child: Semantics(
-            label: context.l10n.reviewStepLoading,
+            label: context.l10n.commonLoading,
             child: const CircularProgressIndicator(),
           ),
         ),
@@ -510,7 +510,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
                 ?.copyWith(fontWeight: FontWeight.w600)),
         const SizedBox(height: 8),
         _FormCheckbox(
-          title: context.l10n.combinedForm,
+          title: context.l10n.formTypeNameCombined,
           subtitle: context.l10n.exportDeclarationPowerOfAttorneyMost,
           value: _includeCombined,
           onChanged: (v) => setState(() => _includeCombined = v ?? false),
@@ -519,13 +519,13 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
               : null,
         ),
         _FormCheckbox(
-          title: context.l10n.declarationOnly,
+          title: context.l10n.formTypeNameDeclaration,
           subtitle: context.l10n.exportTreatmentPreferencesOnlyNoAgent,
           value: _includeDeclaration,
           onChanged: (v) => setState(() => _includeDeclaration = v ?? false),
         ),
         _FormCheckbox(
-          title: context.l10n.poaOnly,
+          title: context.l10n.formTypeNamePoa,
           subtitle: context.l10n.exportAgentAuthorityOnlyNoPersonal,
           value: _includePoa,
           onChanged: (v) => setState(() => _includePoa = v ?? false),
@@ -578,7 +578,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
                     width: 16,
                     height: 16,
                     child: Semantics(
-                      label: context.l10n.reviewStepLoading,
+                      label: context.l10n.commonLoading,
                       child: const CircularProgressIndicator(strokeWidth: 2),
                     ),
                   )

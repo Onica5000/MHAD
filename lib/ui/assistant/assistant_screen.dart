@@ -654,7 +654,7 @@ class _InputBar extends StatelessWidget {
                       width: 20,
                       height: 20,
                       child: Semantics(
-                        label: context.l10n.reviewStepLoading,
+                        label: context.l10n.commonLoading,
                         child: CircularProgressIndicator(
                             strokeWidth: 2,
                             color: Theme.of(context).colorScheme.onPrimary),

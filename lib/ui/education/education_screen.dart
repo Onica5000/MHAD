@@ -68,7 +68,7 @@ class _EducationScreenState extends State<EducationScreen> {
               padding: const EdgeInsets.fromLTRB(20, 4, 20, 8),
               child: Align(
                 alignment: Alignment.centerLeft,
-                child: EditorialHeading(text: widget.filterTitle ?? context.l10n.educationHelpTitle),
+                child: EditorialHeading(text: widget.filterTitle ?? context.l10n.wizardHelpButton),
               ),
             ),
             Expanded(
@@ -150,7 +150,7 @@ class _EditorialLearnHub extends StatelessWidget {
   static List<(EducationTabKind, String)> _tabs(BuildContext context) => [
     (EducationTabKind.all, context.l10n.educationTabAll),
     (EducationTabKind.articles, context.l10n.educationTabArticles),
-    (EducationTabKind.glossary, context.l10n.educationTabGlossary),
+    (EducationTabKind.glossary, context.l10n.eduBrowseGlossary),
     (EducationTabKind.faq, context.l10n.educationTabFaq),
     (EducationTabKind.checklists, context.l10n.educationTabChecklists),
   ];

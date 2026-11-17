@@ -738,11 +738,11 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
     }
     final (label, onBack) = switch (_step) {
       _PipelineStep.results => (
-          context.l10n.pipelineBackReview,
+          context.l10n.stepTitleReviewAndSign,
           isProcessing ? null : () => setState(() => _step = _PipelineStep.review)
         ),
       _ => (
-          context.l10n.pipelineTitleSnapToFill,
+          context.l10n.navAutofill,
           isProcessing ? null : _discardExtraction
         ),
     };
@@ -751,7 +751,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
 
 
   String get _title => switch (_step) {
-        _PipelineStep.pick => context.l10n.pipelineTitleSnapToFill,
+        _PipelineStep.pick => context.l10n.navAutofill,
         _PipelineStep.extracting ||
         _PipelineStep.validating =>
           context.l10n.pipelineTitleProcessing,
@@ -850,9 +850,9 @@ class _FormTypeChooserState extends State<_FormTypeChooser> {
   FormType _selected = FormType.combined;
 
   String _title(FormType ft) => switch (ft) {
-        FormType.combined => context.l10n.pipelineFormCombined,
-        FormType.declaration => context.l10n.pipelineFormDeclaration,
-        FormType.poa => context.l10n.pipelineFormPoa,
+        FormType.combined => context.l10n.formTypeShortCombined,
+        FormType.declaration => context.l10n.quizLegendDeclaration,
+        FormType.poa => context.l10n.quizLegendPoa,
       };
 
   String _subtitle(FormType ft) => switch (ft) {

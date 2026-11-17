@@ -23,7 +23,7 @@ class MessageBubble extends StatelessWidget {
     final isError = !isUser && message.isError;
 
     return Semantics(
-      label: context.l10n.assistantMessageWidgetsAt(isUser ? context.l10n.assistantSenderYou : context.l10n.assistantSenderAi, timeStr, message.content),
+      label: context.l10n.assistantMessageWidgetsAt(isUser ? context.l10n.assistantSenderYou : context.l10n.navAiAssistant, timeStr, message.content),
       liveRegion: isError,
       child: Padding(
         padding: const EdgeInsets.only(bottom: 12),
