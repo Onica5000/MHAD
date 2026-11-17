@@ -706,19 +706,19 @@ class AppLocalizationsEs extends AppLocalizations {
       'Limite o amplíe la autoridad de su agente. Por defecto, la autoridad es amplia.';
 
   @override
-  String get peopleTrustLegendAgentDecides => '\"Decide el agente\"';
+  String get peopleTrustLegendAgentDecides => '“Decide el agente”';
 
   @override
   String get peopleTrustLegendGrants => ' otorga la facultad; ';
 
   @override
-  String get peopleTrustLegendNo => '\"No\"';
+  String get peopleTrustLegendNo => '“No”';
 
   @override
   String get peopleTrustLegendWithholds => ' la niega por completo; ';
 
   @override
-  String get peopleTrustLegendIf => '\"Si…\"';
+  String get peopleTrustLegendIf => '“Si…”';
 
   @override
   String get peopleTrustLegendCondition =>
@@ -1095,7 +1095,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get allergiesHelpText =>
-      'Indique sus alergias a medicamentos, sensibilidades y reacciones adversas previas. El personal de urgencias revisa esta sección primero. Gravedad = Leve / Moderada / Grave. Las alergias y la lista \"Medicamentos que nunca quiero\" son secciones separadas: añada allí usted mismo cualquier medicamento que rechace.';
+      'Indique sus alergias a medicamentos, sensibilidades y reacciones adversas previas. El personal de urgencias revisa esta sección primero. Gravedad = Leve / Moderada / Grave. Las alergias y la lista “Medicamentos que nunca quiero” son secciones separadas: añada allí usted mismo cualquier medicamento que rechace.';
 
   @override
   String get allergiesAddSection => 'Añadir una alergia';
@@ -1182,7 +1182,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get medsStepHelpText =>
-      'Indique los medicamentos por su nombre. Sus preferencias se aplican a los equivalentes genéricos, de marca y comerciales, salvo que indique lo contrario en las notas; para pedir solo la versión de marca, anótelo en el campo de motivo.\n\nLos medicamentos de índice terapéutico estrecho (NTI), que tienen un margen de seguridad pequeño entre una dosis útil y una dañina, como el litio, la carbamazepina y el ácido valproico, no pueden sustituirse por genéricos según la ley de PA (35 P.S. §960.3). Aparecen con la etiqueta \"NTI\" al buscarlos.';
+      'Indique los medicamentos por su nombre. Sus preferencias se aplican a los equivalentes genéricos, de marca y comerciales, salvo que indique lo contrario en las notas; para pedir solo la versión de marca, anótelo en el campo de motivo.\n\nLos medicamentos de índice terapéutico estrecho (NTI), que tienen un margen de seguridad pequeño entre una dosis útil y una dañina, como el litio, la carbamazepina y el ácido valproico, no pueden sustituirse por genéricos según la ley de PA (35 P.S. §960.3). Aparecen con la etiqueta “NTI” al buscarlos.';
 
   @override
   String get medsStepHeadsUpLead => 'Atención: ';
@@ -1298,7 +1298,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get facilityNoPreferenceBanner =>
-      'Deje ambas secciones vacías si no tiene preferencia. Su directiva indicará \"Sin preferencia\" en cuanto a centros de tratamiento.';
+      'Deje ambas secciones vacías si no tiene preferencia. Su directiva indicará “Sin preferencia” en cuanto a centros de tratamiento.';
 
   @override
   String get facilityPreferredTitle => 'Centros preferidos';
@@ -1353,7 +1353,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get facilityRoommateMatchPrompt =>
-      'Para \"compañero de habitación del mismo género\", asígnenme con:';
+      'Para “compañero de habitación del mismo género”, asígnenme con:';
 
   @override
   String get facilityMatchMeWithLabel => 'Asígnenme con';
@@ -1417,7 +1417,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get addlInstrActivitiesDescription =>
-      'Describa las actividades que le ayudan a sentirse mejor (p. ej., caminar, leer, música) y sus preferencias sobre el entorno físico durante el tratamiento. También puede indicar si consiente o rechaza el uso de sujeción (ser inmovilizado físicamente o atado, o recibir medicamentos para restringir su movimiento o conducta, lo que se llama \"sujeción química\") o de aislamiento (ser confinado solo en una habitación).';
+      'Describa las actividades que le ayudan a sentirse mejor (p. ej., caminar, leer, música) y sus preferencias sobre el entorno físico durante el tratamiento. También puede indicar si consiente o rechaza el uso de sujeción (ser inmovilizado físicamente o atado, o recibir medicamentos para restringir su movimiento o conducta, lo que se llama “sujeción química”) o de aislamiento (ser confinado solo en una habitación).';
 
   @override
   String get addlInstrCrisisTitle => 'Intervención en crisis';
@@ -1589,7 +1589,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get effCondHelpText =>
-      'Describa las circunstancias en las que quiere que esta directiva entre en vigor; por ejemplo, \"cuando dos profesionales calificados certifiquen que no tengo capacidad para tomar decisiones sobre mi tratamiento\". Según la Ley 194 de PA, la declaración entra en vigor cuando un psiquiatra y uno de los siguientes certifican que usted no tiene capacidad: otro psiquiatra, un psicólogo con licencia, su médico de familia, su médico tratante u otro profesional de tratamiento de salud mental.';
+      'Describa las circunstancias en las que quiere que esta directiva entre en vigor; por ejemplo, “cuando dos profesionales calificados certifiquen que no tengo capacidad para tomar decisiones sobre mi tratamiento”. Según la Ley 194 de PA, la declaración entra en vigor cuando un psiquiatra y uno de los siguientes certifican que usted no tiene capacidad: otro psiquiatra, un psicólogo con licencia, su médico de familia, su médico tratante u otro profesional de tratamiento de salud mental.';
 
   @override
   String get effCondTakeEffectWhen =>
@@ -2330,7 +2330,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get pipelineGeneratingSuggestions =>
-      'La IA está generando sugerencias personalizadas...';
+      'La IA está generando sugerencias personalizadas…';
 
   @override
   String get pipelineNoAdditionalSuggestions =>
@@ -2404,17 +2404,17 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String pipelineFileTooLarge(String name, String sizeMb) {
-    return 'El archivo \"$name\" es demasiado grande ($sizeMb MB). El tamaño máximo es de 10 MB por documento.';
+    return 'El archivo “$name” es demasiado grande ($sizeMb MB). El tamaño máximo es de 10 MB por documento.';
   }
 
   @override
   String pipelineExtractingPage(int current, int total) {
-    return 'Extrayendo la página $current de $total...';
+    return 'Extrayendo la página $current de $total…';
   }
 
   @override
   String get pipelineExtractingSingle =>
-      'Extrayendo datos médicos del documento...';
+      'Extrayendo datos médicos del documento…';
 
   @override
   String pipelineLooksLikeKind(String kind) {
@@ -2441,10 +2441,10 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get pipelineValidating => 'Validando medicamentos y condiciones...';
+  String get pipelineValidating => 'Validando medicamentos y condiciones…';
 
   @override
-  String get pipelinePleaseWait => 'Espere mientras se procesa...';
+  String get pipelinePleaseWait => 'Espere mientras se procesa…';
 
   @override
   String get pipelineBackWizard => 'Asistente';
@@ -3035,11 +3035,11 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get reviewHowToGrouped =>
-      'Los resultados se agrupan por sección del formulario (los mismos pasos que verá después). Una nota \"Reemplaza lo que tiene\" significa que sobrescribiría algo que ya ingresó; esos empiezan desmarcados.';
+      'Los resultados se agrupan por sección del formulario (los mismos pasos que verá después). Una nota “Reemplaza lo que tiene” significa que sobrescribiría algo que ya ingresó; esos empiezan desmarcados.';
 
   @override
   String reviewHowToFinish(String buttonLabel) {
-    return 'Cuando esté listo, toque \"$buttonLabel\" abajo para completar su formulario con estos datos y continuar; llegará al formulario para revisarlo todo.';
+    return 'Cuando esté listo, toque “$buttonLabel” abajo para completar su formulario con estos datos y continuar; llegará al formulario para revisarlo todo.';
   }
 
   @override
@@ -3455,7 +3455,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get adminUpdateEGTheTrevorProject =>
-      'p. ej., \"El número de The Trevor Project cambió a ...\" o \"Revisa los límites actuales del nivel gratuito de Gemini\"';
+      'p. ej., “El número de The Trevor Project cambió a …” o “Revisa los límites actuales del nivel gratuito de Gemini”';
 
   @override
   String get adminUpdateRequiredWhatShouldTheAi =>
@@ -3467,7 +3467,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get adminUpdateRestrictTheAiToOne =>
-      'Limite la IA a un solo lugar; p. ej., \"config.timeoutsSeconds\" o \"sections.faq_valid\".';
+      'Limite la IA a un solo lugar; p. ej., “config.timeoutsSeconds” o “sections.faq_valid”.';
 
   @override
   String get reminderSheetsQuickRenew5Min => 'Renovación rápida · ~5 min';
@@ -3747,7 +3747,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get educationYourDirectiveIsYourVoice =>
-      '\"Su directiva es su voz: escrita por adelantado, guardada en un lugar seguro y respetada cuando usted no pueda hablar por sí mismo.\"';
+      '“Su directiva es su voz: escrita por adelantado, guardada en un lugar seguro y respetada cuando usted no pueda hablar por sí mismo.”';
 
   @override
   String get educationPaOfficeOfMentalHealth =>
@@ -3755,7 +3755,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get educationTypeToSearchEducationalContent =>
-      'Escriba para buscar contenido educativo...';
+      'Escriba para buscar contenido educativo…';
 
   @override
   String get educationBrowseAllTopics => 'Ver todos los temas';
@@ -3843,7 +3843,7 @@ class AppLocalizationsEs extends AppLocalizations {
       'A veces, durante una crisis, las personas rechazan tratamientos que querrían recibir cuando están bien. La ley de PA respeta lo que usted escribió hoy, aunque proteste en ese momento.';
 
   @override
-  String get ulyssesClauseSelfBindingUlysses => 'AUTOVINCULACIÓN (\"Ulises\")';
+  String get ulyssesClauseSelfBindingUlysses => 'AUTOVINCULACIÓN (“Ulises”)';
 
   @override
   String get ulyssesClauseTieMyselfToTheMast => 'Atarme al mástil.';
@@ -3878,7 +3878,7 @@ class AppLocalizationsEs extends AppLocalizations {
       'Importante: antes de compartirla, asegúrese de que esta directiva esté firmada, fechada y atestiguada por dos adultos, como exige la Ley 194 de PA. Dé copias a su agente, a su médico y a sus personas de apoyo.';
 
   @override
-  String get pdfPreviewUsLetter8511 => 'CARTA EE. UU. · 8.5×11\"';
+  String get pdfPreviewUsLetter8511 => 'CARTA EE. UU. · 8.5 × 11 PULG.';
 
   @override
   String get pdfPreviewShare => 'Compartir';
@@ -4127,7 +4127,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get aiSetupOnAPhoneTapThe =>
-      'En un teléfono: toque el menú (⋮ o ⋯) y seleccione \"Nueva pestaña de incógnito\" o \"Nueva pestaña privada\".';
+      'En un teléfono: toque el menú (⋮ o ⋯) y seleccione “Nueva pestaña de incógnito” o “Nueva pestaña privada”.';
 
   @override
   String get aiSetupYourGoogleLoginWillBe =>
@@ -4284,7 +4284,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get privacyPolicyIfYouAreLocatedIn =>
-      'Si se encuentra en el Espacio Económico Europeo (EEE), el Reino Unido o Suiza, el Reglamento General de Protección de Datos (RGPD) se aplica a su uso de esta aplicación.\n\nBase legal del tratamiento: su consentimiento explícito, otorgado mediante el aviso legal de la aplicación y los diálogos de consentimiento de IA.\n\nSus derechos según el RGPD:\n  - Derecho de acceso: todos sus datos se guardan localmente en su dispositivo; usted tiene acceso directo en todo momento.\n  - Derecho de supresión: use \"Eliminar todos los datos\" en el menú de la aplicación para borrar de forma permanente todos los datos locales.\n  - Derecho a la portabilidad de los datos: exporte sus directivas como PDF o FHIR JSON (un formato estándar de expedientes médicos) en cualquier momento.\n  - Derecho a retirar el consentimiento: deje de usar las funciones de IA cuando quiera; quite su clave de API para evitar más transmisiones de datos.\n  - Derecho a la limitación: puede usar la aplicación en Modo Público sin que se conserven datos.\n\nLos datos enviados al proveedor de IA que elija se procesan según la política de privacidad y las condiciones de tratamiento de datos de ese proveedor. No podemos controlar ni borrar los datos una vez enviados.';
+      'Si se encuentra en el Espacio Económico Europeo (EEE), el Reino Unido o Suiza, el Reglamento General de Protección de Datos (RGPD) se aplica a su uso de esta aplicación.\n\nBase legal del tratamiento: su consentimiento explícito, otorgado mediante el aviso legal de la aplicación y los diálogos de consentimiento de IA.\n\nSus derechos según el RGPD:\n  - Derecho de acceso: todos sus datos se guardan localmente en su dispositivo; usted tiene acceso directo en todo momento.\n  - Derecho de supresión: use “Eliminar todos los datos” en el menú de la aplicación para borrar de forma permanente todos los datos locales.\n  - Derecho a la portabilidad de los datos: exporte sus directivas como PDF o FHIR JSON (un formato estándar de expedientes médicos) en cualquier momento.\n  - Derecho a retirar el consentimiento: deje de usar las funciones de IA cuando quiera; quite su clave de API para evitar más transmisiones de datos.\n  - Derecho a la limitación: puede usar la aplicación en Modo Público sin que se conserven datos.\n\nLos datos enviados al proveedor de IA que elija se procesan según la política de privacidad y las condiciones de tratamiento de datos de ese proveedor. No podemos controlar ni borrar los datos una vez enviados.';
 
   @override
   String get privacyPolicyUsStateConsumerHealthData =>
@@ -4292,7 +4292,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get privacyPolicyThisAppMayBeSubject =>
-      'Esta aplicación puede estar sujeta a leyes estatales de privacidad de datos de salud del consumidor, como las de California (CCPA/CPRA), Washington (My Health My Data Act / MHMDA), Connecticut (disposiciones de salud de la CTDPA), Nevada (SB 370) y Nueva York (Health Information Privacy Act).\n\nEl contenido de una directiva de salud mental se considera \"datos de salud del consumidor\" según cada una de estas leyes. Según todas ellas: (1) Recopilamos datos sobre preferencias de tratamiento de salud mental **únicamente** para ayudarle a crear su directiva anticipada. (2) **No vendemos** sus datos de salud; no hay ningún destinatario comercial. (3) El único tercero que puede recibir parte de su texto es el proveedor de IA que usted elija (Google Gemini de forma predeterminada, o Anthropic, OpenAI o xAI), y **solo** si usted acepta expresamente las funciones de IA en cada sesión. (4) No usamos SDK de terceros, herramientas de análisis, plataformas de publicidad, píxeles de seguimiento ni cookies. (5) Puede eliminar todos los datos guardados localmente en cualquier momento con \"Eliminar todos los datos\" en el menú de la aplicación.\n\nLa MHMDA de Washington incluye un **derecho privado de acción**; hemos diseñado la aplicación para exigir un consentimiento explícito en cada sesión antes de cualquier transferencia de datos de salud del consumidor a terceros, y consideramos que el consentimiento por escrito está condicionado a los términos específicos que se muestran en el diálogo de consentimiento de IA.\n\nSi tiene preguntas sobre sus derechos de privacidad, comuníquese con el desarrollador por los medios indicados en la sección Contacto más abajo (se ofrecen varios medios, según la Norma de Notificación de Violaciones de Datos de Salud de la FTC).';
+      'Esta aplicación puede estar sujeta a leyes estatales de privacidad de datos de salud del consumidor, como las de California (CCPA/CPRA), Washington (My Health My Data Act / MHMDA), Connecticut (disposiciones de salud de la CTDPA), Nevada (SB 370) y Nueva York (Health Information Privacy Act).\n\nEl contenido de una directiva de salud mental se considera “datos de salud del consumidor” según cada una de estas leyes. Según todas ellas: (1) Recopilamos datos sobre preferencias de tratamiento de salud mental **únicamente** para ayudarle a crear su directiva anticipada. (2) **No vendemos** sus datos de salud; no hay ningún destinatario comercial. (3) El único tercero que puede recibir parte de su texto es el proveedor de IA que usted elija (Google Gemini de forma predeterminada, o Anthropic, OpenAI o xAI), y **solo** si usted acepta expresamente las funciones de IA en cada sesión. (4) No usamos SDK de terceros, herramientas de análisis, plataformas de publicidad, píxeles de seguimiento ni cookies. (5) Puede eliminar todos los datos guardados localmente en cualquier momento con “Eliminar todos los datos” en el menú de la aplicación.\n\nLa MHMDA de Washington incluye un **derecho privado de acción**; hemos diseñado la aplicación para exigir un consentimiento explícito en cada sesión antes de cualquier transferencia de datos de salud del consumidor a terceros, y consideramos que el consentimiento por escrito está condicionado a los términos específicos que se muestran en el diálogo de consentimiento de IA.\n\nSi tiene preguntas sobre sus derechos de privacidad, comuníquese con el desarrollador por los medios indicados en la sección Contacto más abajo (se ofrecen varios medios, según la Norma de Notificación de Violaciones de Datos de Salud de la FTC).';
 
   @override
   String get privacyPolicyMedicalReferenceLookupsUS =>
@@ -4494,7 +4494,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get assistantAskAQuestionAboutYour =>
-      'Haga una pregunta sobre su directiva...';
+      'Haga una pregunta sobre su directiva…';
 
   @override
   String get assistantSend => 'Enviar';
@@ -4673,7 +4673,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get legalSheetPaMentalHealthConsumersAssociation =>
-      'PA Mental Health Consumers\' Association';
+      'PA Mental Health Consumers’ Association';
 
   @override
   String get legalSheetMentalHealthAssociationInPennsylvania =>
@@ -4721,7 +4721,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get legalSheetThisAppIsProvided => 'Esta aplicación se proporciona ';
 
   @override
-  String get legalSheetAsIs => '\"tal cual\"';
+  String get legalSheetAsIs => '“tal cual”';
 
   @override
   String get legalSheetWithoutWarrantiesOfAnyKind =>
@@ -5361,7 +5361,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get sideEffectsBringAnythingYouCheckAnd =>
-      'Lleve todo lo que marque, y especialmente lo marcado como \"hablar con su médico\", a su médico o farmacéutico. Esta lista nunca le indica que empiece, suspenda o cambie un medicamento.';
+      'Lleve todo lo que marque, y especialmente lo marcado como “hablar con su médico”, a su médico o farmacéutico. Esta lista nunca le indica que empiece, suspenda o cambie un medicamento.';
 
   @override
   String get sideEffectsTheseArePossibleInteractionsDrawn =>
@@ -5380,7 +5380,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get ulyssesClauseStronglyRecommendedTalkWithA =>
-      'Muy recomendable: hable con un especialista de apoyo entre pares o un profesional clínico antes de agregarla. Vea \"Buscar apoyo\" en el menú.';
+      'Muy recomendable: hable con un especialista de apoyo entre pares o un profesional clínico antes de agregarla. Vea “Buscar apoyo” en el menú.';
 
   @override
   String get aiSetupIsTheApiKeyReally =>
@@ -5578,7 +5578,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String aiSetupTheKeyLooksLikeCopy(Object keyHint) {
-    return 'La clave se parece a \"$keyHint\": cópiela y luego use el botón de pegar o péguela manualmente.';
+    return 'La clave se parece a “$keyHint”: cópiela y luego use el botón de pegar o péguela manualmente.';
   }
 
   @override
@@ -5745,7 +5745,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get learnAiPanelAskAQuestionToGet =>
-      'Haga una pregunta para empezar; por ejemplo: \"¿Cuál es la diferencia entre una declaración y un poder notarial?\"';
+      'Haga una pregunta para empezar; por ejemplo: “¿Cuál es la diferencia entre una declaración y un poder notarial?”';
 
   @override
   String get learnAiPanelSetUpTheFreeAi =>
@@ -5975,7 +5975,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String aiConsentDialogByTappingIAuthorizeYou(Object label) {
-    return '\nAl tocar \"Autorizo\", usted acepta enviar su texto a $label para procesarlo con IA según estos términos.\n\nEste aviso aparece una vez por sesión.';
+    return '\nAl tocar “Autorizo”, usted acepta enviar su texto a $label para procesarlo con IA según estos términos.\n\nEste aviso aparece una vez por sesión.';
   }
 
   @override
@@ -6233,7 +6233,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get permissionsOverviewSpeakingLongFormAnswersE =>
-      'Dictar respuestas largas (por ejemplo, \"algo más\") en lugar de escribirlas. Disponible en una versión futura.';
+      'Dictar respuestas largas (por ejemplo, “algo más”) en lugar de escribirlas. Disponible en una versión futura.';
 
   @override
   String get permissionsOverviewAudioIsProcessedOnDevice =>
@@ -6515,7 +6515,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String educationNoResultsFor(String query) {
-    return 'No hay resultados para \"$query\"';
+    return 'No hay resultados para “$query”';
   }
 
   @override
@@ -6631,7 +6631,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get crisisPlanSpecificConcreteNotSelfCare =>
-      'Específico y concreto. No \'autocuidado\': lo que de verdad funciona.';
+      'Específico y concreto. No “autocuidado”: lo que de verdad funciona.';
 
   @override
   String get crisisPlanWordsThatGroundMeUseful =>
@@ -6958,7 +6958,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String llmGeminiModelNotFound(String provider, String model) {
-    return '$provider no reconoce el modelo \"$model\"; es posible que se haya retirado. Elija otro modelo en la configuración de IA.';
+    return '$provider no reconoce el modelo “$model”; es posible que se haya retirado. Elija otro modelo en la configuración de IA.';
   }
 
   @override
@@ -6973,7 +6973,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String llmModelNotFound(String provider, String model) {
-    return '$provider no reconoce el modelo \"$model\". Elija otro modelo en la configuración de IA.';
+    return '$provider no reconoce el modelo “$model”. Elija otro modelo en la configuración de IA.';
   }
 
   @override
@@ -7826,7 +7826,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get privacyPolicyIfYouChooseToUseHandoff =>
-      'La ayuda de IA es opcional, y esta aplicación nunca envía nada por sí misma a un servicio de IA. Si decide usarla, la aplicación redacta instrucciones que usted copia y pega en el servicio de chat de IA que elija (ChatGPT, Claude, Gemini o Grok), y usted mismo adjunta allí cualquier documento o grabación. Después copia la respuesta de vuelta en esta aplicación.\n\nLo que pegue o adjunte en ese servicio se rige por las condiciones y la política de privacidad de ese servicio, no por esta. Según el servicio y su configuración, puede:\n  - Conservar sus conversaciones, con o sin vencimiento automático\n  - Usarlas para mejorar sus productos\n  - Permitir que revisores humanos las lean\nLa mayoría de los servicios ofrecen un chat privado o temporal que conserva menos; consulte \"Servicios de IA externos\" más abajo.\n\nLas instrucciones que redacta esta aplicación omiten los datos de identificación más comunes (números de seguro social, números de teléfono, correos electrónicos, fechas de nacimiento, direcciones, nombres y nombres de centros). Es un filtro de mejor esfuerzo y no puede garantizar una eliminación completa. Un documento o una grabación que usted adjunte llega al servicio tal cual.\n\nLa ayuda de IA es totalmente opcional. La aplicación funciona por completo sin ella.';
+      'La ayuda de IA es opcional, y esta aplicación nunca envía nada por sí misma a un servicio de IA. Si decide usarla, la aplicación redacta instrucciones que usted copia y pega en el servicio de chat de IA que elija (ChatGPT, Claude, Gemini o Grok), y usted mismo adjunta allí cualquier documento o grabación. Después copia la respuesta de vuelta en esta aplicación.\n\nLo que pegue o adjunte en ese servicio se rige por las condiciones y la política de privacidad de ese servicio, no por esta. Según el servicio y su configuración, puede:\n  - Conservar sus conversaciones, con o sin vencimiento automático\n  - Usarlas para mejorar sus productos\n  - Permitir que revisores humanos las lean\nLa mayoría de los servicios ofrecen un chat privado o temporal que conserva menos; consulte “Servicios de IA externos” más abajo.\n\nLas instrucciones que redacta esta aplicación omiten los datos de identificación más comunes (números de seguro social, números de teléfono, correos electrónicos, fechas de nacimiento, direcciones, nombres y nombres de centros). Es un filtro de mejor esfuerzo y no puede garantizar una eliminación completa. Un documento o una grabación que usted adjunte llega al servicio tal cual.\n\nLa ayuda de IA es totalmente opcional. La aplicación funciona por completo sin ella.';
 
   @override
   String get privacyPolicyOutsideAiServices => 'Servicios de IA externos';
@@ -7837,11 +7837,11 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get privacyPolicyIfYouAreLocatedInHandoff =>
-      'Si se encuentra en el Espacio Económico Europeo (EEE), el Reino Unido o Suiza, el Reglamento General de Protección de Datos (RGPD) se aplica a su uso de esta aplicación.\n\nBase legal del tratamiento: su consentimiento explícito, otorgado mediante el aviso legal de la aplicación y el aviso que se muestra antes de que copie algo por primera vez para un servicio de IA externo.\n\nSus derechos según el RGPD:\n  - Derecho de acceso: todos sus datos se guardan localmente en su dispositivo; usted tiene acceso directo en todo momento.\n  - Derecho de supresión: use \"Eliminar todos los datos\" en el menú de la aplicación para borrar de forma permanente todos los datos locales.\n  - Derecho a la portabilidad de los datos: exporte sus directivas como PDF o FHIR JSON (un formato estándar de expedientes médicos) en cualquier momento.\n  - Derecho a retirar el consentimiento: deje de usar la ayuda de IA cuando quiera; esta aplicación nunca envía nada por sí misma a un servicio de IA.\n  - Derecho a la limitación: puede usar la aplicación en Modo Público sin que se conserven datos.\n\nLo que pegue o adjunte en un servicio de IA externo se procesa según la política de privacidad y las condiciones de tratamiento de datos de ese servicio. No podemos controlarlo ni borrarlo una vez enviado.';
+      'Si se encuentra en el Espacio Económico Europeo (EEE), el Reino Unido o Suiza, el Reglamento General de Protección de Datos (RGPD) se aplica a su uso de esta aplicación.\n\nBase legal del tratamiento: su consentimiento explícito, otorgado mediante el aviso legal de la aplicación y el aviso que se muestra antes de que copie algo por primera vez para un servicio de IA externo.\n\nSus derechos según el RGPD:\n  - Derecho de acceso: todos sus datos se guardan localmente en su dispositivo; usted tiene acceso directo en todo momento.\n  - Derecho de supresión: use “Eliminar todos los datos” en el menú de la aplicación para borrar de forma permanente todos los datos locales.\n  - Derecho a la portabilidad de los datos: exporte sus directivas como PDF o FHIR JSON (un formato estándar de expedientes médicos) en cualquier momento.\n  - Derecho a retirar el consentimiento: deje de usar la ayuda de IA cuando quiera; esta aplicación nunca envía nada por sí misma a un servicio de IA.\n  - Derecho a la limitación: puede usar la aplicación en Modo Público sin que se conserven datos.\n\nLo que pegue o adjunte en un servicio de IA externo se procesa según la política de privacidad y las condiciones de tratamiento de datos de ese servicio. No podemos controlarlo ni borrarlo una vez enviado.';
 
   @override
   String get privacyPolicyThisAppMayBeSubjectHandoff =>
-      'Esta aplicación puede estar sujeta a leyes estatales de privacidad de datos de salud del consumidor, como las de California (CCPA/CPRA), Washington (My Health My Data Act / MHMDA), Connecticut (disposiciones de salud de la CTDPA), Nevada (SB 370) y Nueva York (Health Information Privacy Act).\n\nEl contenido de una directiva de salud mental se considera \"datos de salud del consumidor\" según cada una de estas leyes. Según todas ellas: (1) Recopilamos datos sobre preferencias de tratamiento de salud mental **únicamente** para ayudarle a crear su directiva anticipada. (2) **No vendemos** sus datos de salud; no hay ningún destinatario comercial. (3) Esta aplicación nunca envía su contenido a terceros por sí misma. Si decide usar la ayuda de IA, usted mismo copia instrucciones en un servicio de IA externo; ese servicio recibe **solo** lo que usted pegue o adjunte allí. (4) No usamos SDK de terceros, herramientas de análisis, plataformas de publicidad, píxeles de seguimiento ni cookies. (5) Puede eliminar todos los datos guardados localmente en cualquier momento con \"Eliminar todos los datos\" en el menú de la aplicación.\n\nLa MHMDA de Washington incluye un **derecho privado de acción**; hemos diseñado la aplicación para que nunca transfiera por sí misma datos de salud del consumidor a terceros y para que, antes de que copie algo por primera vez en una sesión para un servicio de IA externo, muestre un aviso que explica que se aplican las condiciones de ese servicio.\n\nSi tiene preguntas sobre sus derechos de privacidad, comuníquese con el desarrollador por los medios indicados en la sección Contacto más abajo (se ofrecen varios medios, según la Norma de Notificación de Violaciones de Datos de Salud de la FTC).';
+      'Esta aplicación puede estar sujeta a leyes estatales de privacidad de datos de salud del consumidor, como las de California (CCPA/CPRA), Washington (My Health My Data Act / MHMDA), Connecticut (disposiciones de salud de la CTDPA), Nevada (SB 370) y Nueva York (Health Information Privacy Act).\n\nEl contenido de una directiva de salud mental se considera “datos de salud del consumidor” según cada una de estas leyes. Según todas ellas: (1) Recopilamos datos sobre preferencias de tratamiento de salud mental **únicamente** para ayudarle a crear su directiva anticipada. (2) **No vendemos** sus datos de salud; no hay ningún destinatario comercial. (3) Esta aplicación nunca envía su contenido a terceros por sí misma. Si decide usar la ayuda de IA, usted mismo copia instrucciones en un servicio de IA externo; ese servicio recibe **solo** lo que usted pegue o adjunte allí. (4) No usamos SDK de terceros, herramientas de análisis, plataformas de publicidad, píxeles de seguimiento ni cookies. (5) Puede eliminar todos los datos guardados localmente en cualquier momento con “Eliminar todos los datos” en el menú de la aplicación.\n\nLa MHMDA de Washington incluye un **derecho privado de acción**; hemos diseñado la aplicación para que nunca transfiera por sí misma datos de salud del consumidor a terceros y para que, antes de que copie algo por primera vez en una sesión para un servicio de IA externo, muestre un aviso que explica que se aplican las condiciones de ese servicio.\n\nSi tiene preguntas sobre sus derechos de privacidad, comuníquese con el desarrollador por los medios indicados en la sección Contacto más abajo (se ofrecen varios medios, según la Norma de Notificación de Violaciones de Datos de Salud de la FTC).';
 
   @override
   String get privacyPolicyYouCanDeleteAnyDirectiveHandoff =>

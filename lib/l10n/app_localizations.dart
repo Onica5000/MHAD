@@ -449,7 +449,7 @@ abstract class AppLocalizations {
   /// No description provided for @saveAndExitMessage.
   ///
   /// In en, this message translates to:
-  /// **'Your work isn\'t saved permanently — it stays in this browser only and is wiped when you close the tab (kept about 10 minutes for crash recovery). Export or print to keep a copy.'**
+  /// **'Your work isn’t saved permanently — it stays in this browser only and is wiped when you close the tab (kept about 10 minutes for crash recovery). Export or print to keep a copy.'**
   String get saveAndExitMessage;
 
   /// No description provided for @previewPdf.
@@ -605,7 +605,7 @@ abstract class AppLocalizations {
   /// No description provided for @executionIntro.
   ///
   /// In en, this message translates to:
-  /// **'Pennsylvania law requires a real signature on paper. We can\'t witness it for you — but here\'s exactly what to do.'**
+  /// **'Pennsylvania law requires a real signature on paper. We can’t witness it for you — but here’s exactly what to do.'**
   String get executionIntro;
 
   /// No description provided for @executionWhyNotAppLead.
@@ -629,7 +629,7 @@ abstract class AppLocalizations {
   /// No description provided for @executionWhyNotAppTail.
   ///
   /// In en, this message translates to:
-  /// **', together. A tap-to-sign wouldn\'t hold up.'**
+  /// **', together. A tap-to-sign wouldn’t hold up.'**
   String get executionWhyNotAppTail;
 
   /// No description provided for @executionAnyFormValid.
@@ -731,7 +731,7 @@ abstract class AppLocalizations {
   /// No description provided for @executionPacketWitnessSub.
   ///
   /// In en, this message translates to:
-  /// **'One page — who can and can\'t sign'**
+  /// **'One page — who can and can’t sign'**
   String get executionPacketWitnessSub;
 
   /// No description provided for @executionPacketAfterTitle.
@@ -941,13 +941,13 @@ abstract class AppLocalizations {
   /// No description provided for @reviewStepWhoPhone.
   ///
   /// In en, this message translates to:
-  /// **'{who}\'s phone number'**
+  /// **'{who}’s phone number'**
   String reviewStepWhoPhone(String who);
 
   /// No description provided for @reviewStepWhoAddress.
   ///
   /// In en, this message translates to:
-  /// **'{who}\'s address'**
+  /// **'{who}’s address'**
   String reviewStepWhoAddress(String who);
 
   /// No description provided for @reviewStepYourPrimaryAgent.
@@ -1187,7 +1187,7 @@ abstract class AppLocalizations {
   /// No description provided for @personalInfoStepZipLookupFailed.
   ///
   /// In en, this message translates to:
-  /// **'Couldn\'t look up that ZIP — you can type it in.'**
+  /// **'Couldn’t look up that ZIP — you can type it in.'**
   String get personalInfoStepZipLookupFailed;
 
   /// No description provided for @personalInfoStepCountyName.
@@ -1217,7 +1217,7 @@ abstract class AppLocalizations {
   /// No description provided for @personalInfoStepDobFuture.
   ///
   /// In en, this message translates to:
-  /// **'Date of birth can\'t be in the future'**
+  /// **'Date of birth can’t be in the future'**
   String get personalInfoStepDobFuture;
 
   /// No description provided for @personalInfoStepMustBeAdult.
@@ -1355,7 +1355,7 @@ abstract class AppLocalizations {
   /// No description provided for @peopleTrustLegendAgentDecides.
   ///
   /// In en, this message translates to:
-  /// **'\"Agent decides\"'**
+  /// **'“Agent decides”'**
   String get peopleTrustLegendAgentDecides;
 
   /// No description provided for @peopleTrustLegendGrants.
@@ -1367,7 +1367,7 @@ abstract class AppLocalizations {
   /// No description provided for @peopleTrustLegendNo.
   ///
   /// In en, this message translates to:
-  /// **'\"No\"'**
+  /// **'“No”'**
   String get peopleTrustLegendNo;
 
   /// No description provided for @peopleTrustLegendWithholds.
@@ -1379,7 +1379,7 @@ abstract class AppLocalizations {
   /// No description provided for @peopleTrustLegendIf.
   ///
   /// In en, this message translates to:
-  /// **'\"If…\"'**
+  /// **'“If…”'**
   String get peopleTrustLegendIf;
 
   /// No description provided for @peopleTrustLegendCondition.
@@ -1487,7 +1487,7 @@ abstract class AppLocalizations {
   /// No description provided for @agentAuthHelp.
   ///
   /// In en, this message translates to:
-  /// **'Consider carefully before restricting your agent\'s authority. Broad authority gives your agent flexibility to respond to situations you may not anticipate.'**
+  /// **'Consider carefully before restricting your agent’s authority. Broad authority gives your agent flexibility to respond to situations you may not anticipate.'**
   String get agentAuthHelp;
 
   /// No description provided for @agentAuthIntro.
@@ -1841,7 +1841,7 @@ abstract class AppLocalizations {
   /// No description provided for @diagnosesDescribeLead.
   ///
   /// In en, this message translates to:
-  /// **'Don\'t know the official name? '**
+  /// **'Don’t know the official name? '**
   String get diagnosesDescribeLead;
 
   /// No description provided for @diagnosesDescribeBold.
@@ -1853,7 +1853,7 @@ abstract class AppLocalizations {
   /// No description provided for @diagnosesDescribeTail.
   ///
   /// In en, this message translates to:
-  /// **' and I\'ll suggest the closest ICD-10 code for you to confirm.'**
+  /// **' and I’ll suggest the closest ICD-10 code for you to confirm.'**
   String get diagnosesDescribeTail;
 
   /// No description provided for @diagnosesTry.
@@ -1865,7 +1865,7 @@ abstract class AppLocalizations {
   /// No description provided for @diagnosesFooter.
   ///
   /// In en, this message translates to:
-  /// **'You\'re not required to list anything. Anything you do list is shared only with the people your directive names.'**
+  /// **'You’re not required to list anything. Anything you do list is shared only with the people your directive names.'**
   String get diagnosesFooter;
 
   /// No description provided for @diagnosesAddedName.
@@ -1889,13 +1889,13 @@ abstract class AppLocalizations {
   /// No description provided for @diagnosesDescribeIntro.
   ///
   /// In en, this message translates to:
-  /// **'In your own words — symptoms, how it affects you, when it happens. We\'ll suggest possible conditions and confirm each against the ICD-10 registry. These are suggestions to review, not a diagnosis.'**
+  /// **'In your own words — symptoms, how it affects you, when it happens. We’ll suggest possible conditions and confirm each against the ICD-10 registry. These are suggestions to review, not a diagnosis.'**
   String get diagnosesDescribeIntro;
 
   /// No description provided for @diagnosesDescribeHint.
   ///
   /// In en, this message translates to:
-  /// **'e.g. long stretches where I feel hopeless and can\'t get out of bed'**
+  /// **'e.g. long stretches where I feel hopeless and can’t get out of bed'**
   String get diagnosesDescribeHint;
 
   /// No description provided for @diagnosesFinding.
@@ -2003,7 +2003,7 @@ abstract class AppLocalizations {
   /// No description provided for @allergiesHelpText.
   ///
   /// In en, this message translates to:
-  /// **'List drug allergies, sensitivities, and past adverse reactions. ER staff check this section first. Severity = Mild / Moderate / Severe. Allergies and the \"Medications I never want\" list are separate sections — add a medication you refuse there yourself.'**
+  /// **'List drug allergies, sensitivities, and past adverse reactions. ER staff check this section first. Severity = Mild / Moderate / Severe. Allergies and the “Medications I never want” list are separate sections — add a medication you refuse there yourself.'**
   String get allergiesHelpText;
 
   /// No description provided for @allergiesAddSection.
@@ -2081,7 +2081,7 @@ abstract class AppLocalizations {
   /// No description provided for @allergiesFooter.
   ///
   /// In en, this message translates to:
-  /// **'You\'re not required to list anything. Anything you do list is shared only with the people your directive names.'**
+  /// **'You’re not required to list anything. Anything you do list is shared only with the people your directive names.'**
   String get allergiesFooter;
 
   /// No description provided for @allergiesClearSearch.
@@ -2147,7 +2147,7 @@ abstract class AppLocalizations {
   /// No description provided for @medsStepHelpText.
   ///
   /// In en, this message translates to:
-  /// **'List medications by name. Your preferences apply to generic, brand name, and trade name equivalents unless you specify otherwise in the notes — to request brand-name only, note it in the reason field.\n\nNarrow Therapeutic Index (NTI) drugs — ones with only a small safety margin between a helpful dose and a harmful one, like lithium, carbamazepine, and valproic acid — cannot have generics substituted under PA law (35 P.S. §960.3). These are marked with an \"NTI\" badge when you search.'**
+  /// **'List medications by name. Your preferences apply to generic, brand name, and trade name equivalents unless you specify otherwise in the notes — to request brand-name only, note it in the reason field.\n\nNarrow Therapeutic Index (NTI) drugs — ones with only a small safety margin between a helpful dose and a harmful one, like lithium, carbamazepine, and valproic acid — cannot have generics substituted under PA law (35 P.S. §960.3). These are marked with an “NTI” badge when you search.'**
   String get medsStepHelpText;
 
   /// No description provided for @medsStepHeadsUpLead.
@@ -2333,7 +2333,7 @@ abstract class AppLocalizations {
   /// No description provided for @facilityNoPreferenceBanner.
   ///
   /// In en, this message translates to:
-  /// **'Leave both sections empty if you have no preference. Your directive will indicate \"No Preference\" for treatment facilities.'**
+  /// **'Leave both sections empty if you have no preference. Your directive will indicate “No Preference” for treatment facilities.'**
   String get facilityNoPreferenceBanner;
 
   /// No description provided for @facilityPreferredTitle.
@@ -2429,7 +2429,7 @@ abstract class AppLocalizations {
   /// No description provided for @facilityRoommateMatchPrompt.
   ///
   /// In en, this message translates to:
-  /// **'For \"same-gender roommate\", match me with:'**
+  /// **'For “same-gender roommate”, match me with:'**
   String get facilityRoommateMatchPrompt;
 
   /// No description provided for @facilityMatchMeWithLabel.
@@ -2537,7 +2537,7 @@ abstract class AppLocalizations {
   /// No description provided for @addlInstrActivitiesDescription.
   ///
   /// In en, this message translates to:
-  /// **'Describe activities that help you feel better (e.g., walking, reading, music) and your preferences about your physical environment during treatment. You can also state whether you consent to or refuse the use of restraints (being physically held or strapped down, or given medication to restrict your movement or behavior — a \"chemical restraint\") or seclusion (being confined alone in a room).'**
+  /// **'Describe activities that help you feel better (e.g., walking, reading, music) and your preferences about your physical environment during treatment. You can also state whether you consent to or refuse the use of restraints (being physically held or strapped down, or given medication to restrict your movement or behavior — a “chemical restraint”) or seclusion (being confined alone in a room).'**
   String get addlInstrActivitiesDescription;
 
   /// No description provided for @addlInstrCrisisTitle.
@@ -2549,7 +2549,7 @@ abstract class AppLocalizations {
   /// No description provided for @addlInstrCrisisHint.
   ///
   /// In en, this message translates to:
-  /// **'What helps or doesn\'t help during a crisis'**
+  /// **'What helps or doesn’t help during a crisis'**
   String get addlInstrCrisisHint;
 
   /// No description provided for @addlInstrCrisisDescription.
@@ -2699,7 +2699,7 @@ abstract class AppLocalizations {
   /// No description provided for @addlInstrPetCareDescription.
   ///
   /// In en, this message translates to:
-  /// **'If you have pets, describe who should care for them if you are hospitalized. Include the caregiver\'s contact information, feeding and medication schedules, veterinary contacts, and any special care instructions.'**
+  /// **'If you have pets, describe who should care for them if you are hospitalized. Include the caregiver’s contact information, feeding and medication schedules, veterinary contacts, and any special care instructions.'**
   String get addlInstrPetCareDescription;
 
   /// No description provided for @addlInstrReproTitle.
@@ -2801,7 +2801,7 @@ abstract class AppLocalizations {
   /// No description provided for @addlInstrCrisisPlanSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Your early-warning signs, triggers, what genuinely helps, and what not to do. Not required by Act 194 — but it\'s the part agents and ER staff read first.'**
+  /// **'Your early-warning signs, triggers, what genuinely helps, and what not to do. Not required by Act 194 — but it’s the part agents and ER staff read first.'**
   String get addlInstrCrisisPlanSubtitle;
 
   /// No description provided for @addlInstrUlyssesTitle.
@@ -2819,7 +2819,7 @@ abstract class AppLocalizations {
   /// No description provided for @effCondHelpText.
   ///
   /// In en, this message translates to:
-  /// **'Describe the circumstances under which you want this directive to take effect — for example, \"when two qualified professionals certify that I lack capacity to make treatment decisions.\" Under PA Act 194, the declaration becomes operative when a psychiatrist and one of the following certify you lack capacity: another psychiatrist, a licensed psychologist, your family physician, your attending physician, or another mental health treatment professional.'**
+  /// **'Describe the circumstances under which you want this directive to take effect — for example, “when two qualified professionals certify that I lack capacity to make treatment decisions.” Under PA Act 194, the declaration becomes operative when a psychiatrist and one of the following certify you lack capacity: another psychiatrist, a licensed psychologist, your family physician, your attending physician, or another mental health treatment professional.'**
   String get effCondHelpText;
 
   /// No description provided for @effCondTakeEffectWhen.
@@ -2837,7 +2837,7 @@ abstract class AppLocalizations {
   /// No description provided for @effCondTriggerTwoSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'The standard PA Act 194 trigger — two qualified professionals certify you can\'t make mental-health treatment decisions.'**
+  /// **'The standard PA Act 194 trigger — two qualified professionals certify you can’t make mental-health treatment decisions.'**
   String get effCondTriggerTwoSubtitle;
 
   /// No description provided for @effCondTriggerCourtTitle.
@@ -3353,7 +3353,7 @@ abstract class AppLocalizations {
   /// No description provided for @quizQ1Sub.
   ///
   /// In en, this message translates to:
-  /// **'A family member, partner, or close friend who could make treatment decisions if you can\'t.'**
+  /// **'A family member, partner, or close friend who could make treatment decisions if you can’t.'**
   String get quizQ1Sub;
 
   /// No description provided for @quizQ1O1Label.
@@ -3395,7 +3395,7 @@ abstract class AppLocalizations {
   /// No description provided for @quizQ1O4Label.
   ///
   /// In en, this message translates to:
-  /// **'I\'m not sure yet'**
+  /// **'I’m not sure yet'**
   String get quizQ1O4Label;
 
   /// No description provided for @quizQ1O4Hint.
@@ -3431,13 +3431,13 @@ abstract class AppLocalizations {
   /// No description provided for @quizQ2O2Label.
   ///
   /// In en, this message translates to:
-  /// **'Some preferences, but I\'d rather my agent decide'**
+  /// **'Some preferences, but I’d rather my agent decide'**
   String get quizQ2O2Label;
 
   /// No description provided for @quizQ2O2Hint.
   ///
   /// In en, this message translates to:
-  /// **'Combined still works — agent decides where you didn\'t write.'**
+  /// **'Combined still works — agent decides where you didn’t write.'**
   String get quizQ2O2Hint;
 
   /// No description provided for @quizQ2O3Label.
@@ -3455,7 +3455,7 @@ abstract class AppLocalizations {
   /// No description provided for @quizQ2O4Label.
   ///
   /// In en, this message translates to:
-  /// **'I\'m not sure yet'**
+  /// **'I’m not sure yet'**
   String get quizQ2O4Label;
 
   /// No description provided for @quizQ2O4Hint.
@@ -3467,7 +3467,7 @@ abstract class AppLocalizations {
   /// No description provided for @quizQ3Headline.
   ///
   /// In en, this message translates to:
-  /// **'If you can\'t decide, **whose voice** should reach the doctors first?'**
+  /// **'If you can’t decide, **whose voice** should reach the doctors first?'**
   String get quizQ3Headline;
 
   /// No description provided for @quizQ3Sub.
@@ -3515,7 +3515,7 @@ abstract class AppLocalizations {
   /// No description provided for @quizQ3O4Label.
   ///
   /// In en, this message translates to:
-  /// **'I\'m not sure yet'**
+  /// **'I’m not sure yet'**
   String get quizQ3O4Label;
 
   /// No description provided for @quizQ3O4Hint.
@@ -3527,13 +3527,13 @@ abstract class AppLocalizations {
   /// No description provided for @quizQ4Headline.
   ///
   /// In en, this message translates to:
-  /// **'What\'s the **most important** thing this document does for you?'**
+  /// **'What’s the **most important** thing this document does for you?'**
   String get quizQ4Headline;
 
   /// No description provided for @quizQ4Sub.
   ///
   /// In en, this message translates to:
-  /// **'There\'s no wrong answer — this just confirms what we\'re seeing.'**
+  /// **'There’s no wrong answer — this just confirms what we’re seeing.'**
   String get quizQ4Sub;
 
   /// No description provided for @quizQ4O1Label.
@@ -3815,7 +3815,7 @@ abstract class AppLocalizations {
   /// No description provided for @contactSheetLocalOnly.
   ///
   /// In en, this message translates to:
-  /// **'From your phone\'s contacts. We never upload them — search runs locally.'**
+  /// **'From your phone’s contacts. We never upload them — search runs locally.'**
   String get contactSheetLocalOnly;
 
   /// No description provided for @contactSheetSearchHint.
@@ -3869,7 +3869,7 @@ abstract class AppLocalizations {
   /// No description provided for @contactSheetWarnConfirm.
   ///
   /// In en, this message translates to:
-  /// **'⚠ {note} — confirm they\'re not treating you'**
+  /// **'⚠ {note} — confirm they’re not treating you'**
   String contactSheetWarnConfirm(String note);
 
   /// No description provided for @contactSheetEligible.
@@ -3911,13 +3911,13 @@ abstract class AppLocalizations {
   /// No description provided for @contactSheetWhoCantBeAgent.
   ///
   /// In en, this message translates to:
-  /// **'Who can\'t be your agent'**
+  /// **'Who can’t be your agent'**
   String get contactSheetWhoCantBeAgent;
 
   /// No description provided for @contactSheetRulesFootnote.
   ///
   /// In en, this message translates to:
-  /// **'Under-18 is blocked automatically from the contact\'s birthday. We can\'t tell who your providers are, so anything that looks like a provider is a soft warning you can override — confirm only if they truly aren\'t treating you.'**
+  /// **'Under-18 is blocked automatically from the contact’s birthday. We can’t tell who your providers are, so anything that looks like a provider is a soft warning you can override — confirm only if they truly aren’t treating you.'**
   String get contactSheetRulesFootnote;
 
   /// No description provided for @voiceMicPermission.
@@ -3929,7 +3929,7 @@ abstract class AppLocalizations {
   /// No description provided for @voiceTranscribeFailed.
   ///
   /// In en, this message translates to:
-  /// **'Couldn\'t transcribe. Try again, or type it instead.'**
+  /// **'Couldn’t transcribe. Try again, or type it instead.'**
   String get voiceTranscribeFailed;
 
   /// No description provided for @voiceSpeechError.
@@ -3977,13 +3977,13 @@ abstract class AppLocalizations {
   /// No description provided for @voiceExplainAi.
   ///
   /// In en, this message translates to:
-  /// **'For better accuracy on medication names and conditions, your recording goes to Google\'s AI to transcribe. Review the text before saving.'**
+  /// **'For better accuracy on medication names and conditions, your recording goes to Google’s AI to transcribe. Review the text before saving.'**
   String get voiceExplainAi;
 
   /// No description provided for @voiceExplainBrowser.
   ///
   /// In en, this message translates to:
-  /// **'To transcribe, your browser sends the audio to its speech service (often Google). We don\'t keep the audio or text — edit it before saving.'**
+  /// **'To transcribe, your browser sends the audio to its speech service (often Google). We don’t keep the audio or text — edit it before saving.'**
   String get voiceExplainBrowser;
 
   /// No description provided for @voiceExplainDevice.
@@ -4019,19 +4019,19 @@ abstract class AppLocalizations {
   /// No description provided for @voiceFooterAi.
   ///
   /// In en, this message translates to:
-  /// **'WE STORE NOTHING · GOOGLE\'S AI TRANSCRIBES THE RECORDING'**
+  /// **'WE STORE NOTHING · GOOGLE’S AI TRANSCRIBES THE RECORDING'**
   String get voiceFooterAi;
 
   /// No description provided for @voiceFooterBrowser.
   ///
   /// In en, this message translates to:
-  /// **'WE STORE NOTHING · YOUR BROWSER\'S SPEECH SERVICE TRANSCRIBES THE AUDIO'**
+  /// **'WE STORE NOTHING · YOUR BROWSER’S SPEECH SERVICE TRANSCRIBES THE AUDIO'**
   String get voiceFooterBrowser;
 
   /// No description provided for @voiceFooterDevice.
   ///
   /// In en, this message translates to:
-  /// **'AUDIO ISN\'T SAVED · TRANSCRIPT STAYS IN THIS SESSION'**
+  /// **'AUDIO ISN’T SAVED · TRANSCRIPT STAYS IN THIS SESSION'**
   String get voiceFooterDevice;
 
   /// No description provided for @voiceTranscribingCard.
@@ -4055,7 +4055,7 @@ abstract class AppLocalizations {
   /// No description provided for @pipelineGeneratingSuggestions.
   ///
   /// In en, this message translates to:
-  /// **'AI is generating personalized suggestions...'**
+  /// **'AI is generating personalized suggestions…'**
   String get pipelineGeneratingSuggestions;
 
   /// No description provided for @pipelineNoAdditionalSuggestions.
@@ -4139,7 +4139,7 @@ abstract class AppLocalizations {
   /// No description provided for @pipelineSetupAiBody.
   ///
   /// In en, this message translates to:
-  /// **'Autofill uses AI to read your uploaded document (photo, PDF, or text) and pull out details to fill your form — medications, conditions, care preferences, and your contact details. It needs an AI key — Gemini\'s free tier takes about 30 seconds to set up. You review every field before anything lands in your form.'**
+  /// **'Autofill uses AI to read your uploaded document (photo, PDF, or text) and pull out details to fill your form — medications, conditions, care preferences, and your contact details. It needs an AI key — Gemini’s free tier takes about 30 seconds to set up. You review every field before anything lands in your form.'**
   String get pipelineSetupAiBody;
 
   /// No description provided for @pipelineSetupAi.
@@ -4157,7 +4157,7 @@ abstract class AppLocalizations {
   /// No description provided for @pipelineUnsupportedType.
   ///
   /// In en, this message translates to:
-  /// **'That file type isn\'t supported. Use a JPG, PNG, HEIC, PDF, or text file.'**
+  /// **'That file type isn’t supported. Use a JPG, PNG, HEIC, PDF, or text file.'**
   String get pipelineUnsupportedType;
 
   /// No description provided for @pipelineRpmLimit.
@@ -4175,19 +4175,19 @@ abstract class AppLocalizations {
   /// No description provided for @pipelineFileTooLarge.
   ///
   /// In en, this message translates to:
-  /// **'File \"{name}\" is too large ({sizeMb} MB). Maximum file size is 10 MB per document.'**
+  /// **'File “{name}” is too large ({sizeMb} MB). Maximum file size is 10 MB per document.'**
   String pipelineFileTooLarge(String name, String sizeMb);
 
   /// No description provided for @pipelineExtractingPage.
   ///
   /// In en, this message translates to:
-  /// **'Extracting page {current} of {total}...'**
+  /// **'Extracting page {current} of {total}…'**
   String pipelineExtractingPage(int current, int total);
 
   /// No description provided for @pipelineExtractingSingle.
   ///
   /// In en, this message translates to:
-  /// **'Extracting medical data from document...'**
+  /// **'Extracting medical data from document…'**
   String get pipelineExtractingSingle;
 
   /// No description provided for @pipelineLooksLikeKind.
@@ -4199,13 +4199,13 @@ abstract class AppLocalizations {
   /// No description provided for @pipelineNotMedicalSingle.
   ///
   /// In en, this message translates to:
-  /// **'This doesn\'t look like a health or medical document{kind}, so nothing was used. Upload a medical record, medication or allergy list, or an existing advance directive.'**
+  /// **'This doesn’t look like a health or medical document{kind}, so nothing was used. Upload a medical record, medication or allergy list, or an existing advance directive.'**
   String pipelineNotMedicalSingle(String kind);
 
   /// No description provided for @pipelineNotMedicalMulti.
   ///
   /// In en, this message translates to:
-  /// **'These don\'t look like health or medical documents{kind}, so nothing was used.'**
+  /// **'These don’t look like health or medical documents{kind}, so nothing was used.'**
   String pipelineNotMedicalMulti(String kind);
 
   /// No description provided for @pipelineNoMedicalInfoSingle.
@@ -4223,13 +4223,13 @@ abstract class AppLocalizations {
   /// No description provided for @pipelineValidating.
   ///
   /// In en, this message translates to:
-  /// **'Validating medications and conditions...'**
+  /// **'Validating medications and conditions…'**
   String get pipelineValidating;
 
   /// No description provided for @pipelinePleaseWait.
   ///
   /// In en, this message translates to:
-  /// **'Please wait while processing...'**
+  /// **'Please wait while processing…'**
   String get pipelinePleaseWait;
 
   /// No description provided for @pipelineBackWizard.
@@ -4277,13 +4277,13 @@ abstract class AppLocalizations {
   /// No description provided for @pipelinePickerFailed.
   ///
   /// In en, this message translates to:
-  /// **'Couldn\'t open the file picker ({error}). Try dragging the file onto the box above instead.'**
+  /// **'Couldn’t open the file picker ({error}). Try dragging the file onto the box above instead.'**
   String pipelinePickerFailed(String error);
 
   /// No description provided for @pipelineCouldNotRead.
   ///
   /// In en, this message translates to:
-  /// **'We couldn\'t read that file. Please use a PDF, JPG, PNG, WEBP, HEIC, or plain-text file under 10 MB.'**
+  /// **'We couldn’t read that file. Please use a PDF, JPG, PNG, WEBP, HEIC, or plain-text file under 10 MB.'**
   String get pipelineCouldNotRead;
 
   /// No description provided for @pipelineFormCombined.
@@ -4349,7 +4349,7 @@ abstract class AppLocalizations {
   /// No description provided for @pickHeadlineAccent.
   ///
   /// In en, this message translates to:
-  /// **'We\'ll read it.'**
+  /// **'We’ll read it.'**
   String get pickHeadlineAccent;
 
   /// No description provided for @pickIntro.
@@ -4373,7 +4373,7 @@ abstract class AppLocalizations {
   /// No description provided for @pickSkipTypeAll.
   ///
   /// In en, this message translates to:
-  /// **'Skip — I\'ll type it all'**
+  /// **'Skip — I’ll type it all'**
   String get pickSkipTypeAll;
 
   /// No description provided for @pickContinueStep2.
@@ -4427,13 +4427,13 @@ abstract class AppLocalizations {
   /// No description provided for @pickNoKeyTitle.
   ///
   /// In en, this message translates to:
-  /// **'AI isn\'t set up yet'**
+  /// **'AI isn’t set up yet'**
   String get pickNoKeyTitle;
 
   /// No description provided for @pickNoKeyBody.
   ///
   /// In en, this message translates to:
-  /// **'You can see how autofill works below, but reading a real photo or PDF needs an AI key (Gemini\'s free tier takes about 30 seconds). You review every field before it lands in your form.'**
+  /// **'You can see how autofill works below, but reading a real photo or PDF needs an AI key (Gemini’s free tier takes about 30 seconds). You review every field before it lands in your form.'**
   String get pickNoKeyBody;
 
   /// No description provided for @pickTryAgain.
@@ -4481,7 +4481,7 @@ abstract class AppLocalizations {
   /// No description provided for @pickSentToProvider.
   ///
   /// In en, this message translates to:
-  /// **'To autofill, your file — including any personal details in it — is sent to your AI provider to read. The app saves nothing (it\'s gone when this tab closes), but the provider may retain it (Gemini\'s free tier does). You review everything before it is added to your directive.'**
+  /// **'To autofill, your file — including any personal details in it — is sent to your AI provider to read. The app saves nothing (it’s gone when this tab closes), but the provider may retain it (Gemini’s free tier does). You review everything before it is added to your directive.'**
   String get pickSentToProvider;
 
   /// No description provided for @pickTargetId.
@@ -4595,7 +4595,7 @@ abstract class AppLocalizations {
   /// No description provided for @pickSentToProviderShort.
   ///
   /// In en, this message translates to:
-  /// **'Your file (including any personal details) is sent to your AI provider to read it. The app saves nothing; the provider may retain it (Gemini\'s free tier does). You review before anything is added.'**
+  /// **'Your file (including any personal details) is sent to your AI provider to read it. The app saves nothing; the provider may retain it (Gemini’s free tier does). You review before anything is added.'**
   String get pickSentToProviderShort;
 
   /// No description provided for @pickReadingDocs.
@@ -4607,7 +4607,7 @@ abstract class AppLocalizations {
   /// No description provided for @pickReadByAi.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =1{Read by Google\'s AI to autofill.} other{{count} files read by Google\'s AI to autofill.}}'**
+  /// **'{count, plural, =1{Read by Google’s AI to autofill.} other{{count} files read by Google’s AI to autofill.}}'**
   String pickReadByAi(int count);
 
   /// No description provided for @reviewLabelMedPrefer.
@@ -4907,7 +4907,7 @@ abstract class AppLocalizations {
   /// No description provided for @reviewLabelPersonDoctorPhone.
   ///
   /// In en, this message translates to:
-  /// **'Doctor\'s phone'**
+  /// **'Doctor’s phone'**
   String get reviewLabelPersonDoctorPhone;
 
   /// No description provided for @reviewLabelPersonEvalDoctorName.
@@ -5249,37 +5249,37 @@ abstract class AppLocalizations {
   /// No description provided for @reviewHeresWhatWeRead.
   ///
   /// In en, this message translates to:
-  /// **'Here\'s what we read.'**
+  /// **'Here’s what we read.'**
   String get reviewHeresWhatWeRead;
 
   /// No description provided for @reviewHowToIntro.
   ///
   /// In en, this message translates to:
-  /// **'These are the details the AI pulled from your document. Here\'s how to use this page:'**
+  /// **'These are the details the AI pulled from your document. Here’s how to use this page:'**
   String get reviewHowToIntro;
 
   /// No description provided for @reviewHowToChecked.
   ///
   /// In en, this message translates to:
-  /// **'A checked box means it will be added to your form. Uncheck anything you don\'t want.'**
+  /// **'A checked box means it will be added to your form. Uncheck anything you don’t want.'**
   String get reviewHowToChecked;
 
   /// No description provided for @reviewHowToEdit.
   ///
   /// In en, this message translates to:
-  /// **'Tap any field to edit its wording before it\'s added.'**
+  /// **'Tap any field to edit its wording before it’s added.'**
   String get reviewHowToEdit;
 
   /// No description provided for @reviewHowToGrouped.
   ///
   /// In en, this message translates to:
-  /// **'Results are grouped by form section (the same steps you\'ll see next). A \"Replaces what you have\" note means it would overwrite something you already entered — those start unchecked.'**
+  /// **'Results are grouped by form section (the same steps you’ll see next). A “Replaces what you have” note means it would overwrite something you already entered — those start unchecked.'**
   String get reviewHowToGrouped;
 
   /// No description provided for @reviewHowToFinish.
   ///
   /// In en, this message translates to:
-  /// **'When you\'re ready, tap \"{buttonLabel}\" at the bottom to fill these into your form and continue — you\'ll land in the form to review everything.'**
+  /// **'When you’re ready, tap “{buttonLabel}” at the bottom to fill these into your form and continue — you’ll land in the form to review everything.'**
   String reviewHowToFinish(String buttonLabel);
 
   /// No description provided for @reviewPiiRemoved.
@@ -5345,7 +5345,7 @@ abstract class AppLocalizations {
   /// No description provided for @reviewIdentityNotMerged.
   ///
   /// In en, this message translates to:
-  /// **'Identity fields aren\'t merged by the AI — double-check this one yourself.'**
+  /// **'Identity fields aren’t merged by the AI — double-check this one yourself.'**
   String get reviewIdentityNotMerged;
 
   /// No description provided for @reviewWillSave.
@@ -5507,7 +5507,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeLetSGetStarted.
   ///
   /// In en, this message translates to:
-  /// **'Let\'s get started.'**
+  /// **'Let’s get started.'**
   String get homeLetSGetStarted;
 
   /// No description provided for @homeRename.
@@ -5585,7 +5585,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeCouldnTLoadYourDirectives.
   ///
   /// In en, this message translates to:
-  /// **'Couldn\'t load your directives.'**
+  /// **'Couldn’t load your directives.'**
   String get homeCouldnTLoadYourDirectives;
 
   /// No description provided for @homeNothingWasLostThisIs.
@@ -5609,7 +5609,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeLetSKeepYourVoice.
   ///
   /// In en, this message translates to:
-  /// **'Let\'s keep your voice clear.'**
+  /// **'Let’s keep your voice clear.'**
   String get homeLetSKeepYourVoice;
 
   /// No description provided for @homeStartYourDirective.
@@ -5729,7 +5729,7 @@ abstract class AppLocalizations {
   /// No description provided for @crisisPlanDonTDoThese.
   ///
   /// In en, this message translates to:
-  /// **'Don\'t do these'**
+  /// **'Don’t do these'**
   String get crisisPlanDonTDoThese;
 
   /// No description provided for @crisisPlanTypeAShortNote.
@@ -5987,7 +5987,7 @@ abstract class AppLocalizations {
   /// No description provided for @adminUpdateEGTheTrevorProject.
   ///
   /// In en, this message translates to:
-  /// **'e.g. \"The Trevor Project number changed to ...\" or \"Check Gemini\'s current free-tier rate limits\"'**
+  /// **'e.g. “The Trevor Project number changed to …” or “Check Gemini’s current free-tier rate limits”'**
   String get adminUpdateEGTheTrevorProject;
 
   /// No description provided for @adminUpdateRequiredWhatShouldTheAi.
@@ -6005,7 +6005,7 @@ abstract class AppLocalizations {
   /// No description provided for @adminUpdateRestrictTheAiToOne.
   ///
   /// In en, this message translates to:
-  /// **'Restrict the AI to one spot, e.g. \"config.timeoutsSeconds\" or \"sections.faq_valid\".'**
+  /// **'Restrict the AI to one spot, e.g. “config.timeoutsSeconds” or “sections.faq_valid”.'**
   String get adminUpdateRestrictTheAiToOne;
 
   /// No description provided for @reminderSheetsQuickRenew5Min.
@@ -6017,7 +6017,7 @@ abstract class AppLocalizations {
   /// No description provided for @reminderSheetsMostPeopleKeepTheSame.
   ///
   /// In en, this message translates to:
-  /// **'Most people keep the same answers. We\'ll pre-fill all 11 sections from your current directive — tap any card to change it, then print and sign the new copy in ink with two witnesses.'**
+  /// **'Most people keep the same answers. We’ll pre-fill all 11 sections from your current directive — tap any card to change it, then print and sign the new copy in ink with two witnesses.'**
   String get reminderSheetsMostPeopleKeepTheSame;
 
   /// No description provided for @reminderSheetsStartQuickRenew.
@@ -6035,7 +6035,7 @@ abstract class AppLocalizations {
   /// No description provided for @reminderSheetsWeLlRemindYouAgain.
   ///
   /// In en, this message translates to:
-  /// **'We\'ll remind you again 7 days before expiration.'**
+  /// **'We’ll remind you again 7 days before expiration.'**
   String get reminderSheetsWeLlRemindYouAgain;
 
   /// No description provided for @reminderSheetsAnythingChanged.
@@ -6059,7 +6059,7 @@ abstract class AppLocalizations {
   /// No description provided for @reminderSheetsIfYouEditAnythingYou.
   ///
   /// In en, this message translates to:
-  /// **'If you edit anything, you\'ll re-print and sign that updated copy in ink. Small changes can wait for your 2-year renewal.'**
+  /// **'If you edit anything, you’ll re-print and sign that updated copy in ink. Small changes can wait for your 2-year renewal.'**
   String get reminderSheetsIfYouEditAnythingYou;
 
   /// No description provided for @reminderSheets3MonthCheckIn.
@@ -6221,7 +6221,7 @@ abstract class AppLocalizations {
   /// No description provided for @pastDirectiveDetailWeDonTTrackDelivery.
   ///
   /// In en, this message translates to:
-  /// **'We don\'t track delivery or receipt confirmation (that would need a server). Add entries manually as you distribute copies.'**
+  /// **'We don’t track delivery or receipt confirmation (that would need a server). Add entries manually as you distribute copies.'**
   String get pastDirectiveDetailWeDonTTrackDelivery;
 
   /// No description provided for @pastDirectiveDetailGeneratedOnDemand6Pages.
@@ -6431,7 +6431,7 @@ abstract class AppLocalizations {
   /// No description provided for @sideEffectsForTheMedicationsYouRe.
   ///
   /// In en, this message translates to:
-  /// **'For the medications you\'re currently taking, here are common side effects — check the ones you actually have. Noting them (especially any that affect your daily activities) helps your care team. This is common-side-effect information, not medical advice.'**
+  /// **'For the medications you’re currently taking, here are common side effects — check the ones you actually have. Noting them (especially any that affect your daily activities) helps your care team. This is common-side-effect information, not medical advice.'**
   String get sideEffectsForTheMedicationsYouRe;
 
   /// No description provided for @sideEffectsWorthDiscussingWithYourDoctor.
@@ -6473,7 +6473,7 @@ abstract class AppLocalizations {
   /// No description provided for @educationYourDirectiveIsYourVoice.
   ///
   /// In en, this message translates to:
-  /// **'\"Your directive is your voice — written in advance, kept safe, honored when you can\'t speak for yourself.\"'**
+  /// **'“Your directive is your voice — written in advance, kept safe, honored when you can’t speak for yourself.”'**
   String get educationYourDirectiveIsYourVoice;
 
   /// No description provided for @educationPaOfficeOfMentalHealth.
@@ -6485,7 +6485,7 @@ abstract class AppLocalizations {
   /// No description provided for @educationTypeToSearchEducationalContent.
   ///
   /// In en, this message translates to:
-  /// **'Type to search educational content...'**
+  /// **'Type to search educational content…'**
   String get educationTypeToSearchEducationalContent;
 
   /// No description provided for @educationBrowseAllTopics.
@@ -6557,7 +6557,7 @@ abstract class AppLocalizations {
   /// No description provided for @audioGuideCouldnTOpenTheQuestionnaire.
   ///
   /// In en, this message translates to:
-  /// **'Couldn\'t open the questionnaire to print. Please try again.'**
+  /// **'Couldn’t open the questionnaire to print. Please try again.'**
   String get audioGuideCouldnTOpenTheQuestionnaire;
 
   /// No description provided for @audioGuideRecordYourWishesByVoice.
@@ -6611,7 +6611,7 @@ abstract class AppLocalizations {
   /// No description provided for @audioGuideWhatTheRecordingCanT.
   ///
   /// In en, this message translates to:
-  /// **'What the recording can\'t fill'**
+  /// **'What the recording can’t fill'**
   String get audioGuideWhatTheRecordingCanT;
 
   /// No description provided for @ulyssesClauseBeforeYouAcknowledge.
@@ -6635,13 +6635,13 @@ abstract class AppLocalizations {
   /// No description provided for @ulyssesClauseSometimesDuringACrisisPeople.
   ///
   /// In en, this message translates to:
-  /// **'Sometimes during a crisis, people refuse treatment that they\'d want when well. PA law honors what you wrote today, even if you protest in the moment.'**
+  /// **'Sometimes during a crisis, people refuse treatment that they’d want when well. PA law honors what you wrote today, even if you protest in the moment.'**
   String get ulyssesClauseSometimesDuringACrisisPeople;
 
   /// No description provided for @ulyssesClauseSelfBindingUlysses.
   ///
   /// In en, this message translates to:
-  /// **'SELF-BINDING (\"Ulysses\")'**
+  /// **'SELF-BINDING (“Ulysses”)'**
   String get ulyssesClauseSelfBindingUlysses;
 
   /// No description provided for @ulyssesClauseTieMyselfToTheMast.
@@ -6653,7 +6653,7 @@ abstract class AppLocalizations {
   /// No description provided for @ulyssesClausePerPaAct19420.
   ///
   /// In en, this message translates to:
-  /// **'Per PA Act 194 (20 Pa.C.S. §§ 5825, 5839), this directive may be revoked only while I have capacity. Once I\'m found incapable, what I wrote here stands — even over my in-the-moment protest — until capacity returns.'**
+  /// **'Per PA Act 194 (20 Pa.C.S. §§ 5825, 5839), this directive may be revoked only while I have capacity. Once I’m found incapable, what I wrote here stands — even over my in-the-moment protest — until capacity returns.'**
   String get ulyssesClausePerPaAct19420;
 
   /// No description provided for @ulyssesClauseIAcknowledgeThis.
@@ -6701,7 +6701,7 @@ abstract class AppLocalizations {
   /// No description provided for @pdfPreviewUsLetter8511.
   ///
   /// In en, this message translates to:
-  /// **'US LETTER · 8.5×11\"'**
+  /// **'US LETTER · 8.5 × 11 IN'**
   String get pdfPreviewUsLetter8511;
 
   /// No description provided for @pdfPreviewShare.
@@ -6803,7 +6803,7 @@ abstract class AppLocalizations {
   /// No description provided for @exportCouldnTGenerateThePdf.
   ///
   /// In en, this message translates to:
-  /// **'Couldn\'t generate the PDF.'**
+  /// **'Couldn’t generate the PDF.'**
   String get exportCouldnTGenerateThePdf;
 
   /// No description provided for @exportSelectAtLeastOneSection2.
@@ -6923,7 +6923,7 @@ abstract class AppLocalizations {
   /// No description provided for @exportCouldnTSaveTheFile.
   ///
   /// In en, this message translates to:
-  /// **'Couldn\'t save the file. Please try again.'**
+  /// **'Couldn’t save the file. Please try again.'**
   String get exportCouldnTSaveTheFile;
 
   /// No description provided for @exportExportedYourDirectiveBundlePdf.
@@ -6941,7 +6941,7 @@ abstract class AppLocalizations {
   /// No description provided for @exportCouldnTGenerateTheWallet.
   ///
   /// In en, this message translates to:
-  /// **'Couldn\'t generate the wallet card. Please try again.'**
+  /// **'Couldn’t generate the wallet card. Please try again.'**
   String get exportCouldnTGenerateTheWallet;
 
   /// No description provided for @exportYourOfficialDirective.
@@ -7127,13 +7127,13 @@ abstract class AppLocalizations {
   /// No description provided for @aiSetupYouLlNeedToSign.
   ///
   /// In en, this message translates to:
-  /// **'You\'ll need to sign into your Google account to get an API key. To protect your login on shared or public devices, open a private browsing window first:'**
+  /// **'You’ll need to sign into your Google account to get an API key. To protect your login on shared or public devices, open a private browsing window first:'**
   String get aiSetupYouLlNeedToSign;
 
   /// No description provided for @aiSetupOnAPhoneTapThe.
   ///
   /// In en, this message translates to:
-  /// **'On a phone: tap the menu (⋮ or ⋯) and select \"New Incognito Tab\" or \"New Private Tab\".'**
+  /// **'On a phone: tap the menu (⋮ or ⋯) and select “New Incognito Tab” or “New Private Tab”.'**
   String get aiSetupOnAPhoneTapThe;
 
   /// No description provided for @aiSetupYourGoogleLoginWillBe.
@@ -7235,7 +7235,7 @@ abstract class AppLocalizations {
   /// No description provided for @accessibilitySettingsPeopleWhoITrustWill.
   ///
   /// In en, this message translates to:
-  /// **'People who I trust will make my decisions if I can\'t.'**
+  /// **'People who I trust will make my decisions if I can’t.'**
   String get accessibilitySettingsPeopleWhoITrustWill;
 
   /// No description provided for @accessibilitySettingsEnglish.
@@ -7373,7 +7373,7 @@ abstract class AppLocalizations {
   /// No description provided for @privacyPolicyIfYouChooseToUse.
   ///
   /// In en, this message translates to:
-  /// **'If you choose to use the optional AI features (AI Assistant chat or AI Suggest), text you submit is sent to the AI provider you select — Google Gemini by default, or Anthropic Claude, OpenAI, or xAI Grok if you choose one and add your own key — for processing.\n\nOn Google\'s Gemini free tier, Google may:\n  - Use your input/output data to improve their products\n  - Allow human reviewers to read your inputs and outputs\n  - Retain data indefinitely (no automatic expiration)\nOther providers handle your data under their own API data policies — review the policy of whichever provider you use.\n\nThe app strips common personally identifiable information (SSNs, phone numbers, emails, dates of birth, addresses, names, and facility names) before sending your text to any provider, but this is a best-effort filter and cannot guarantee complete removal.\n\nAI features are entirely optional. The app is fully functional without them.'**
+  /// **'If you choose to use the optional AI features (AI Assistant chat or AI Suggest), text you submit is sent to the AI provider you select — Google Gemini by default, or Anthropic Claude, OpenAI, or xAI Grok if you choose one and add your own key — for processing.\n\nOn Google’s Gemini free tier, Google may:\n  - Use your input/output data to improve their products\n  - Allow human reviewers to read your inputs and outputs\n  - Retain data indefinitely (no automatic expiration)\nOther providers handle your data under their own API data policies — review the policy of whichever provider you use.\n\nThe app strips common personally identifiable information (SSNs, phone numbers, emails, dates of birth, addresses, names, and facility names) before sending your text to any provider, but this is a best-effort filter and cannot guarantee complete removal.\n\nAI features are entirely optional. The app is fully functional without them.'**
   String get privacyPolicyIfYouChooseToUse;
 
   /// No description provided for @privacyPolicyGeminiFreeTierDataPractices.
@@ -7385,7 +7385,7 @@ abstract class AppLocalizations {
   /// No description provided for @privacyPolicyIfYouUseTheAi.
   ///
   /// In en, this message translates to:
-  /// **'If you use the AI features with Google\'s free Gemini tier, be aware of the following:\n\n1. Google retains AI conversation data indefinitely on the free tier. There is no automatic expiration.\n\n2. Human reviewers at Google may read your inputs and outputs as part of their quality and safety processes.\n\n3. Data sent to Gemini cannot be recalled or deleted by you or by this app. Once submitted, it is under Google\'s control.\n\n4. If you are concerned about data privacy, consider upgrading to the paid Gemini tier, which offers stronger data protection policies and does not use your data for model training.\n\nIf you select a different provider (Anthropic, OpenAI, or xAI) instead of Gemini, that provider\'s own data and retention policy applies — review it before sending sensitive content.\n\nYou can avoid all third-party data sharing by not using the AI features.'**
+  /// **'If you use the AI features with Google’s free Gemini tier, be aware of the following:\n\n1. Google retains AI conversation data indefinitely on the free tier. There is no automatic expiration.\n\n2. Human reviewers at Google may read your inputs and outputs as part of their quality and safety processes.\n\n3. Data sent to Gemini cannot be recalled or deleted by you or by this app. Once submitted, it is under Google’s control.\n\n4. If you are concerned about data privacy, consider upgrading to the paid Gemini tier, which offers stronger data protection policies and does not use your data for model training.\n\nIf you select a different provider (Anthropic, OpenAI, or xAI) instead of Gemini, that provider’s own data and retention policy applies — review it before sending sensitive content.\n\nYou can avoid all third-party data sharing by not using the AI features.'**
   String get privacyPolicyIfYouUseTheAi;
 
   /// No description provided for @privacyPolicyInternationalUsersGdpr.
@@ -7397,7 +7397,7 @@ abstract class AppLocalizations {
   /// No description provided for @privacyPolicyIfYouAreLocatedIn.
   ///
   /// In en, this message translates to:
-  /// **'If you are located in the European Economic Area (EEA), the UK, or Switzerland, the General Data Protection Regulation (GDPR) applies to your use of this app.\n\nLegal basis for processing: Your explicit consent, given through the in-app disclaimer and AI consent dialogs.\n\nYour rights under GDPR:\n  - Right to access: All your data is stored locally on your device — you have direct access at all times.\n  - Right to erasure: Use \"Delete All Data\" in the app menu to permanently erase all local data.\n  - Right to data portability: Export your directives as PDF or FHIR JSON (a standard health-records format) at any time.\n  - Right to withdraw consent: Stop using AI features at any time; remove your API key to prevent further data transmission.\n  - Right to restriction: You may use the app in Public Mode without any data persistence.\n\nData sent to your chosen AI provider is processed under that provider\'s own privacy policy and data processing terms. We cannot control or delete data once it has been sent.'**
+  /// **'If you are located in the European Economic Area (EEA), the UK, or Switzerland, the General Data Protection Regulation (GDPR) applies to your use of this app.\n\nLegal basis for processing: Your explicit consent, given through the in-app disclaimer and AI consent dialogs.\n\nYour rights under GDPR:\n  - Right to access: All your data is stored locally on your device — you have direct access at all times.\n  - Right to erasure: Use “Delete All Data” in the app menu to permanently erase all local data.\n  - Right to data portability: Export your directives as PDF or FHIR JSON (a standard health-records format) at any time.\n  - Right to withdraw consent: Stop using AI features at any time; remove your API key to prevent further data transmission.\n  - Right to restriction: You may use the app in Public Mode without any data persistence.\n\nData sent to your chosen AI provider is processed under that provider’s own privacy policy and data processing terms. We cannot control or delete data once it has been sent.'**
   String get privacyPolicyIfYouAreLocatedIn;
 
   /// No description provided for @privacyPolicyUsStateConsumerHealthData.
@@ -7409,7 +7409,7 @@ abstract class AppLocalizations {
   /// No description provided for @privacyPolicyThisAppMayBeSubject.
   ///
   /// In en, this message translates to:
-  /// **'This app may be subject to state consumer-health-data privacy laws including California (CCPA/CPRA), Washington (My Health My Data Act / MHMDA), Connecticut (CTDPA health provisions), Nevada (SB 370), and New York (Health Information Privacy Act).\n\nMental-health-directive content is \"consumer health data\" under each of these laws. Under all of them: (1) We collect mental-health treatment-preference data **solely** to help you create your advance directive. (2) We **do not sell** your health data — there is no commercial recipient. (3) The only third party that may receive any of your text is the AI provider you choose (Google Gemini by default, or Anthropic, OpenAI, or xAI), and **only** if you affirmatively opt in to AI features each session. (4) We use no third-party SDKs, no analytics, no advertising frameworks, no tracking pixels or cookies. (5) You may delete all locally stored data at any time via \"Delete All Data\" in the app menu.\n\nWashington MHMDA includes a **private right of action**; we have designed the app to require explicit, per-session consent before any third-party transfer of consumer health data, and we treat written consent as conditional on the specific terms shown in the AI consent dialog.\n\nFor questions about your privacy rights, contact the developer using the channels listed in the Contact section below (multiple methods are provided per the FTC Health Breach Notification Rule).'**
+  /// **'This app may be subject to state consumer-health-data privacy laws including California (CCPA/CPRA), Washington (My Health My Data Act / MHMDA), Connecticut (CTDPA health provisions), Nevada (SB 370), and New York (Health Information Privacy Act).\n\nMental-health-directive content is “consumer health data” under each of these laws. Under all of them: (1) We collect mental-health treatment-preference data **solely** to help you create your advance directive. (2) We **do not sell** your health data — there is no commercial recipient. (3) The only third party that may receive any of your text is the AI provider you choose (Google Gemini by default, or Anthropic, OpenAI, or xAI), and **only** if you affirmatively opt in to AI features each session. (4) We use no third-party SDKs, no analytics, no advertising frameworks, no tracking pixels or cookies. (5) You may delete all locally stored data at any time via “Delete All Data” in the app menu.\n\nWashington MHMDA includes a **private right of action**; we have designed the app to require explicit, per-session consent before any third-party transfer of consumer health data, and we treat written consent as conditional on the specific terms shown in the AI consent dialog.\n\nFor questions about your privacy rights, contact the developer using the channels listed in the Contact section below (multiple methods are provided per the FTC Health Breach Notification Rule).'**
   String get privacyPolicyThisAppMayBeSubject;
 
   /// No description provided for @privacyPolicyMedicalReferenceLookupsUS.
@@ -7421,7 +7421,7 @@ abstract class AppLocalizations {
   /// No description provided for @privacyPolicyToHelpYouFillIn.
   ///
   /// In en, this message translates to:
-  /// **'To help you fill in and understand your directive, the app looks things up in free, public U.S. government databases. These lookups use ONLY the single term or code needed for that lookup. They never receive your identity (your name, date of birth, address, or phone), the people you name (agents, witnesses, guardian), or your saved directive.\n\nWhat is sent, and to whom:\n  - Medication name you type → NLM RxTerms (autocomplete).\n  - Condition name you type → NLM ICD-10-CM (diagnosis lookup).\n  - A doctor / provider name you type into the optional doctor search → NLM NPI registry, used only to look that provider up in the public registry of healthcare providers.\n  - A condition (by its ICD-10 code) or a medication (by name, resolved to a code via NLM RxNav) → NLM MedlinePlus Connect, to fetch a plain-language explanation.\n  - A medication name → openFDA (U.S. Food & Drug Administration), to fetch that drug\'s official FDA label, which is used to ground the side-effects list.\n\nNo personal or identifying information is included in any of these requests — only the medical term, code, or provider name being looked up.\n\nNLM, NIH, and the FDA are not responsible for this product and do not endorse or recommend it. These services are for information only and are not medical advice — consult a qualified professional. The NLM Clinical Table services are rate-limited to 20 requests/second.\n\nSources: U.S. National Library of Medicine (RxTerms, ICD-10-CM, NPI registry, RxNav, MedlinePlus Connect); U.S. Food & Drug Administration (openFDA).'**
+  /// **'To help you fill in and understand your directive, the app looks things up in free, public U.S. government databases. These lookups use ONLY the single term or code needed for that lookup. They never receive your identity (your name, date of birth, address, or phone), the people you name (agents, witnesses, guardian), or your saved directive.\n\nWhat is sent, and to whom:\n  - Medication name you type → NLM RxTerms (autocomplete).\n  - Condition name you type → NLM ICD-10-CM (diagnosis lookup).\n  - A doctor / provider name you type into the optional doctor search → NLM NPI registry, used only to look that provider up in the public registry of healthcare providers.\n  - A condition (by its ICD-10 code) or a medication (by name, resolved to a code via NLM RxNav) → NLM MedlinePlus Connect, to fetch a plain-language explanation.\n  - A medication name → openFDA (U.S. Food & Drug Administration), to fetch that drug’s official FDA label, which is used to ground the side-effects list.\n\nNo personal or identifying information is included in any of these requests — only the medical term, code, or provider name being looked up.\n\nNLM, NIH, and the FDA are not responsible for this product and do not endorse or recommend it. These services are for information only and are not medical advice — consult a qualified professional. The NLM Clinical Table services are rate-limited to 20 requests/second.\n\nSources: U.S. National Library of Medicine (RxTerms, ICD-10-CM, NPI registry, RxNav, MedlinePlus Connect); U.S. Food & Drug Administration (openFDA).'**
   String get privacyPolicyToHelpYouFillIn;
 
   /// No description provided for @privacyPolicyPdfExportSharing.
@@ -7433,7 +7433,7 @@ abstract class AppLocalizations {
   /// No description provided for @privacyPolicyWhenYouExportAPdf.
   ///
   /// In en, this message translates to:
-  /// **'When you export a PDF of your directive, it is generated locally on your device. Sharing the PDF (via email, messaging, etc.) sends it through your device\'s standard sharing mechanism. The app cannot control where the PDF is stored once shared.'**
+  /// **'When you export a PDF of your directive, it is generated locally on your device. Sharing the PDF (via email, messaging, etc.) sends it through your device’s standard sharing mechanism. The app cannot control where the PDF is stored once shared.'**
   String get privacyPolicyWhenYouExportAPdf;
 
   /// No description provided for @privacyPolicyYourRights.
@@ -7709,7 +7709,7 @@ abstract class AppLocalizations {
   /// No description provided for @assistantToUseTheAiAssistant.
   ///
   /// In en, this message translates to:
-  /// **'To use the AI assistant, set up an AI key — Gemini\'s free tier works.'**
+  /// **'To use the AI assistant, set up an AI key — Gemini’s free tier works.'**
   String get assistantToUseTheAiAssistant;
 
   /// No description provided for @assistantSetUpFree.
@@ -7757,7 +7757,7 @@ abstract class AppLocalizations {
   /// No description provided for @assistantAskAQuestionAboutYour.
   ///
   /// In en, this message translates to:
-  /// **'Ask a question about your directive...'**
+  /// **'Ask a question about your directive…'**
   String get assistantAskAQuestionAboutYour;
 
   /// No description provided for @assistantSend.
@@ -7967,7 +7967,7 @@ abstract class AppLocalizations {
   /// No description provided for @facilitatorPrintOrScreenShareYour.
   ///
   /// In en, this message translates to:
-  /// **'Print or screen-share your draft and walk through it with a friend, family member, or peer. They can\'t change anything in your app — that stays in your hands.'**
+  /// **'Print or screen-share your draft and walk through it with a friend, family member, or peer. They can’t change anything in your app — that stays in your hands.'**
   String get facilitatorPrintOrScreenShareYour;
 
   /// No description provided for @facilitatorEmailADraftToMy.
@@ -7979,7 +7979,7 @@ abstract class AppLocalizations {
   /// No description provided for @facilitatorGenerateThePdfInExport.
   ///
   /// In en, this message translates to:
-  /// **'Generate the PDF in Export, then send it via your phone\'s email app. Ask your therapist or psychiatrist for comments. You\'ll transcribe their suggestions back into the form yourself — this app doesn\'t connect to their EHR.'**
+  /// **'Generate the PDF in Export, then send it via your phone’s email app. Ask your therapist or psychiatrist for comments. You’ll transcribe their suggestions back into the form yourself — this app doesn’t connect to their EHR.'**
   String get facilitatorGenerateThePdfInExport;
 
   /// No description provided for @facilitatorCall.
@@ -8069,7 +8069,7 @@ abstract class AppLocalizations {
   /// No description provided for @legalSheetPaMentalHealthConsumersAssociation.
   ///
   /// In en, this message translates to:
-  /// **'PA Mental Health Consumers\' Association'**
+  /// **'PA Mental Health Consumers’ Association'**
   String get legalSheetPaMentalHealthConsumersAssociation;
 
   /// No description provided for @legalSheetMentalHealthAssociationInPennsylvania.
@@ -8147,7 +8147,7 @@ abstract class AppLocalizations {
   /// No description provided for @legalSheetAsIs.
   ///
   /// In en, this message translates to:
-  /// **'\"as is\"'**
+  /// **'“as is”'**
   String get legalSheetAsIs;
 
   /// No description provided for @legalSheetWithoutWarrantiesOfAnyKind.
@@ -8285,7 +8285,7 @@ abstract class AppLocalizations {
   /// No description provided for @legalSheetIfYouUseTheOptional.
   ///
   /// In en, this message translates to:
-  /// **'If you use the optional AI Assistant, text you send is transmitted to the AI provider you choose (Google Gemini by default; or Anthropic, OpenAI, or xAI). On Gemini\'s free tier, Google may use this data to improve their products and human reviewers may read inputs; other providers handle your data under their own API policies.'**
+  /// **'If you use the optional AI Assistant, text you send is transmitted to the AI provider you choose (Google Gemini by default; or Anthropic, OpenAI, or xAI). On Gemini’s free tier, Google may use this data to improve their products and human reviewers may read inputs; other providers handle your data under their own API policies.'**
   String get legalSheetIfYouUseTheOptional;
 
   /// No description provided for @legalSheetToProtectYouTheApp.
@@ -8303,19 +8303,19 @@ abstract class AppLocalizations {
   /// No description provided for @legalSheetDocumentsYouUploadForAutofill.
   ///
   /// In en, this message translates to:
-  /// **'Documents you upload for autofill are different: the whole file is sent to your chosen AI provider as-is, and to fill in your directive the AI reads the personal details in it (your name, date of birth, address, and your agent\'s or guardian\'s details). You review everything before it is saved. '**
+  /// **'Documents you upload for autofill are different: the whole file is sent to your chosen AI provider as-is, and to fill in your directive the AI reads the personal details in it (your name, date of birth, address, and your agent’s or guardian’s details). You review everything before it is saved. '**
   String get legalSheetDocumentsYouUploadForAutofill;
 
   /// No description provided for @legalSheetBlackOutAnythingYouDon.
   ///
   /// In en, this message translates to:
-  /// **' — black out anything you don\'t want sent, or simply type any field by hand to keep it private. Also avoid typing personal identifiers (full name, SSN, date of birth, address) directly into chat messages.'**
+  /// **' — black out anything you don’t want sent, or simply type any field by hand to keep it private. Also avoid typing personal identifiers (full name, SSN, date of birth, address) directly into chat messages.'**
   String get legalSheetBlackOutAnythingYouDon;
 
   /// No description provided for @legalSheetSeparatelyToHelpYouFill.
   ///
   /// In en, this message translates to:
-  /// **'Separately, to help you fill in and understand your directive, the app looks up medications, conditions, and (optionally) your doctor in free, public U.S. government databases — the NIH/NLM Clinical Tables, MedlinePlus, and the FDA\'s openFDA. '**
+  /// **'Separately, to help you fill in and understand your directive, the app looks up medications, conditions, and (optionally) your doctor in free, public U.S. government databases — the NIH/NLM Clinical Tables, MedlinePlus, and the FDA’s openFDA. '**
   String get legalSheetSeparatelyToHelpYouFill;
 
   /// No description provided for @legalSheetNeverYourIdentityThePeople.
@@ -8357,7 +8357,7 @@ abstract class AppLocalizations {
   /// No description provided for @disclaimerIM18OrOlder.
   ///
   /// In en, this message translates to:
-  /// **'I\'m 18 or older, and I understand and want to continue.'**
+  /// **'I’m 18 or older, and I understand and want to continue.'**
   String get disclaimerIM18OrOlder;
 
   /// No description provided for @disclaimerBeforeYouBegin.
@@ -8411,7 +8411,7 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingWeLlWalkYouThrough.
   ///
   /// In en, this message translates to:
-  /// **'We\'ll walk you through it, step by step and in plain language: how you want to be treated during a mental health crisis — so your wishes are honored even when you can\'t speak for yourself.'**
+  /// **'We’ll walk you through it, step by step and in plain language: how you want to be treated during a mental health crisis — so your wishes are honored even when you can’t speak for yourself.'**
   String get onboardingWeLlWalkYouThrough;
 
   /// No description provided for @onboardingValidTwoYearsFromSigning.
@@ -8591,7 +8591,7 @@ abstract class AppLocalizations {
   /// No description provided for @draftRecoveryDialogCouldnTRestoreTheDraft.
   ///
   /// In en, this message translates to:
-  /// **'Couldn\'t restore the draft.'**
+  /// **'Couldn’t restore the draft.'**
   String get draftRecoveryDialogCouldnTRestoreTheDraft;
 
   /// No description provided for @moreSheetResetAndStartFresh.
@@ -8759,7 +8759,7 @@ abstract class AppLocalizations {
   /// No description provided for @aiConsentDialogUploadingIsOnlyAShortcut.
   ///
   /// In en, this message translates to:
-  /// **'Uploading is only a shortcut, never required:\n• Black out anything you don\'t want sent (ID or card numbers, other people\'s details) before uploading.\n• Or skip the upload and type any field by hand — typed fields stay on your device and are never sent to the AI.'**
+  /// **'Uploading is only a shortcut, never required:\n• Black out anything you don’t want sent (ID or card numbers, other people’s details) before uploading.\n• Or skip the upload and type any field by hand — typed fields stay on your device and are never sent to the AI.'**
   String get aiConsentDialogUploadingIsOnlyAShortcut;
 
   /// No description provided for @aiConsentDialogSendToTheAi.
@@ -8777,7 +8777,7 @@ abstract class AppLocalizations {
   /// No description provided for @aiConsentDialogYouReviewTheTextBefore.
   ///
   /// In en, this message translates to:
-  /// **'You review the text before it goes into your form. Prefer not to? Tap Cancel to use your device\'s built-in dictation instead, or just type — neither sends audio to the AI.'**
+  /// **'You review the text before it goes into your form. Prefer not to? Tap Cancel to use your device’s built-in dictation instead, or just type — neither sends audio to the AI.'**
   String get aiConsentDialogYouReviewTheTextBefore;
 
   /// No description provided for @aiConsentDialogUseAi.
@@ -8837,7 +8837,7 @@ abstract class AppLocalizations {
   /// No description provided for @mainTheAppCouldnTStart.
   ///
   /// In en, this message translates to:
-  /// **'The app couldn\'t start'**
+  /// **'The app couldn’t start'**
   String get mainTheAppCouldnTStart;
 
   /// No description provided for @mainPaMentalHealthAdvanceDirective.
@@ -8969,7 +8969,7 @@ abstract class AppLocalizations {
   /// No description provided for @aiConsistencyCheckFailed.
   ///
   /// In en, this message translates to:
-  /// **'Couldn\'t run the consistency check.\n{error}'**
+  /// **'Couldn’t run the consistency check.\n{error}'**
   String aiConsistencyCheckFailed(String error);
 
   /// No description provided for @aiConsistencyThingsCount.
@@ -8987,7 +8987,7 @@ abstract class AppLocalizations {
   /// No description provided for @aiConsistencyWarningsOnly.
   ///
   /// In en, this message translates to:
-  /// **'These won\'t block you from generating the PDF — they are warnings you can fix or ignore.'**
+  /// **'These won’t block you from generating the PDF — they are warnings you can fix or ignore.'**
   String get aiConsistencyWarningsOnly;
 
   /// No description provided for @aiConsistencyNoContradictions.
@@ -8999,7 +8999,7 @@ abstract class AppLocalizations {
   /// No description provided for @aiConsistencyRulesExplainer.
   ///
   /// In en, this message translates to:
-  /// **'The contradiction check above is built-in rules. When the AI assistant is set up, an additional AI review adds optional suggestions. Review anything before accepting — this screen warns; it doesn\'t block PDF generation.'**
+  /// **'The contradiction check above is built-in rules. When the AI assistant is set up, an additional AI review adds optional suggestions. Review anything before accepting — this screen warns; it doesn’t block PDF generation.'**
   String get aiConsistencyRulesExplainer;
 
   /// No description provided for @aiConsistencyConflictHeader.
@@ -9017,13 +9017,13 @@ abstract class AppLocalizations {
   /// No description provided for @crisisPlanHowIKnowIM.
   ///
   /// In en, this message translates to:
-  /// **'How I know I\'m not okay'**
+  /// **'How I know I’m not okay'**
   String get crisisPlanHowIKnowIM;
 
   /// No description provided for @crisisPlanHeadsUpThisSectionIs.
   ///
   /// In en, this message translates to:
-  /// **'Heads up: this section is yours alone — it isn\'t required by PA Act 194, but in practice it\'s the part agents and ER staff read first.'**
+  /// **'Heads up: this section is yours alone — it isn’t required by PA Act 194, but in practice it’s the part agents and ER staff read first.'**
   String get crisisPlanHeadsUpThisSectionIs;
 
   /// No description provided for @permissionsOverviewOnlyWhatWeNeed.
@@ -9035,7 +9035,7 @@ abstract class AppLocalizations {
   /// No description provided for @permissionsOverviewPermissionsAreManagedByYour.
   ///
   /// In en, this message translates to:
-  /// **'Permissions are managed by your device, not by this app. Open your device\'s Settings → PA MHAD to grant, revoke, or review any of the above at any time.'**
+  /// **'Permissions are managed by your device, not by this app. Open your device’s Settings → PA MHAD to grant, revoke, or review any of the above at any time.'**
   String get permissionsOverviewPermissionsAreManagedByYour;
 
   /// No description provided for @permissionsOverviewNoAnalyticsNoTrackingPixels.
@@ -9179,7 +9179,7 @@ abstract class AppLocalizations {
   /// No description provided for @sideEffectsBringAnythingYouCheckAnd.
   ///
   /// In en, this message translates to:
-  /// **'Bring anything you check — and especially anything marked \"discuss with your doctor\" — to your doctor or pharmacist. This list never tells you to start, stop, or change a medication.'**
+  /// **'Bring anything you check — and especially anything marked “discuss with your doctor” — to your doctor or pharmacist. This list never tells you to start, stop, or change a medication.'**
   String get sideEffectsBringAnythingYouCheckAnd;
 
   /// No description provided for @sideEffectsTheseArePossibleInteractionsDrawn.
@@ -9191,13 +9191,13 @@ abstract class AppLocalizations {
   /// No description provided for @sideEffectsAddTheMedicationsYouRe.
   ///
   /// In en, this message translates to:
-  /// **'Add the medications you\'re currently taking on the Medications step first, then come back here to check their common side effects.'**
+  /// **'Add the medications you’re currently taking on the Medications step first, then come back here to check their common side effects.'**
   String get sideEffectsAddTheMedicationsYouRe;
 
   /// No description provided for @audioGuideToTranscribeYourRecordingIncluding.
   ///
   /// In en, this message translates to:
-  /// **'To transcribe, your recording — including any personal details you speak — is sent to Google\'s AI. On the free tier it may be retained and reviewed, and can\'t be recalled. Don\'t say anything you\'re not comfortable sending; you can always type sensitive fields by hand instead.'**
+  /// **'To transcribe, your recording — including any personal details you speak — is sent to Google’s AI. On the free tier it may be retained and reviewed, and can’t be recalled. Don’t say anything you’re not comfortable sending; you can always type sensitive fields by hand instead.'**
   String get audioGuideToTranscribeYourRecordingIncluding;
 
   /// No description provided for @ulyssesClauseIfFutureMeRefuses.
@@ -9209,7 +9209,7 @@ abstract class AppLocalizations {
   /// No description provided for @ulyssesClauseStronglyRecommendedTalkWithA.
   ///
   /// In en, this message translates to:
-  /// **'Strongly recommended: talk with a peer specialist or clinician before you add it. See \"Find support\" in the menu.'**
+  /// **'Strongly recommended: talk with a peer specialist or clinician before you add it. See “Find support” in the menu.'**
   String get ulyssesClauseStronglyRecommendedTalkWithA;
 
   /// No description provided for @aiSetupIsTheApiKeyReally.
@@ -9221,7 +9221,7 @@ abstract class AppLocalizations {
   /// No description provided for @aiSetupYesGoogleOffersAGenerous.
   ///
   /// In en, this message translates to:
-  /// **'Yes. Google\'s free tier for Gemini needs no credit card. It has daily limits: the app\'s default model (Gemini Flash-Lite) allows a few hundred requests a day, which covers normal use; the stronger Flash models allow far fewer (about 20 a day).'**
+  /// **'Yes. Google’s free tier for Gemini needs no credit card. It has daily limits: the app’s default model (Gemini Flash-Lite) allows a few hundred requests a day, which covers normal use; the stronger Flash models allow far fewer (about 20 a day).'**
   String get aiSetupYesGoogleOffersAGenerous;
 
   /// No description provided for @aiSetupWhatGoogleAccountShouldI.
@@ -9251,7 +9251,7 @@ abstract class AppLocalizations {
   /// No description provided for @aiSetupWhatIfIDonT.
   ///
   /// In en, this message translates to:
-  /// **'What if I don\'t add a key?'**
+  /// **'What if I don’t add a key?'**
   String get aiSetupWhatIfIDonT;
 
   /// No description provided for @aiSetupTheAppWorksFullyWithout.
@@ -9275,7 +9275,7 @@ abstract class AppLocalizations {
   /// No description provided for @facilitatorYouDonTHaveTo.
   ///
   /// In en, this message translates to:
-  /// **'You don\'t have to do this alone.'**
+  /// **'You don’t have to do this alone.'**
   String get facilitatorYouDonTHaveTo;
 
   /// No description provided for @facilitatorPeerSpecialistAdvocateReferral.
@@ -9299,7 +9299,7 @@ abstract class AppLocalizations {
   /// No description provided for @facilitatorPreferToDoItYourself.
   ///
   /// In en, this message translates to:
-  /// **'Prefer to do it yourself? That\'s fine — keep going from where you left off.'**
+  /// **'Prefer to do it yourself? That’s fine — keep going from where you left off.'**
   String get facilitatorPreferToDoItYourself;
 
   /// No description provided for @moreSheetCallOrText98824.
@@ -9389,13 +9389,13 @@ abstract class AppLocalizations {
   /// No description provided for @aiSetupTheAssistantUsesGoogleS.
   ///
   /// In en, this message translates to:
-  /// **'The assistant uses Google\'s Gemini model. You need a free API key from Google AI Studio — it takes about 30 seconds.'**
+  /// **'The assistant uses Google’s Gemini model. You need a free API key from Google AI Studio — it takes about 30 seconds.'**
   String get aiSetupTheAssistantUsesGoogleS;
 
   /// No description provided for @aiSetupYouBringYourOwnApi.
   ///
   /// In en, this message translates to:
-  /// **'You bring your own {label} API key. Your provider\'s usage limits and billing apply — this app never sees or charges for your usage. Gemini stays the free default if you\'d rather not pay.'**
+  /// **'You bring your own {label} API key. Your provider’s usage limits and billing apply — this app never sees or charges for your usage. Gemini stays the free default if you’d rather not pay.'**
   String aiSetupYouBringYourOwnApi(Object label);
 
   /// No description provided for @aiSetupOpenGoogleAiStudioIn.
@@ -9449,7 +9449,7 @@ abstract class AppLocalizations {
   /// No description provided for @aiSetupNoCreditCardOrPayment.
   ///
   /// In en, this message translates to:
-  /// **'No credit card or payment is needed. The free tier has daily limits; the app\'s default model (Flash-Lite) is chosen to fit normal use.'**
+  /// **'No credit card or payment is needed. The free tier has daily limits; the app’s default model (Flash-Lite) is chosen to fit normal use.'**
   String get aiSetupNoCreditCardOrPayment;
 
   /// No description provided for @aiSetupMostProvidersRequireAPaid.
@@ -9509,7 +9509,7 @@ abstract class AppLocalizations {
   /// No description provided for @aiSetupThatDoesnTLookLike.
   ///
   /// In en, this message translates to:
-  /// **'That doesn\'t look like a valid {label} key ({keyHint}).'**
+  /// **'That doesn’t look like a valid {label} key ({keyHint}).'**
   String aiSetupThatDoesnTLookLike(Object label, Object keyHint);
 
   /// No description provided for @aiSetupCouldNotPasteTryPasting.
@@ -9521,13 +9521,13 @@ abstract class AppLocalizations {
   /// No description provided for @aiSetupMayBeBlockedByYour.
   ///
   /// In en, this message translates to:
-  /// **'{label} may be blocked by your browser\'s security (CORS) on the web. If it doesn\'t respond, pick Gemini or Claude — both work in the browser.'**
+  /// **'{label} may be blocked by your browser’s security (CORS) on the web. If it doesn’t respond, pick Gemini or Claude — both work in the browser.'**
   String aiSetupMayBeBlockedByYour(Object label);
 
   /// No description provided for @aiSetupTheKeyLooksLikeCopy.
   ///
   /// In en, this message translates to:
-  /// **'The key looks like \"{keyHint}\" — copy it, then use the paste button or paste it manually.'**
+  /// **'The key looks like “{keyHint}” — copy it, then use the paste button or paste it manually.'**
   String aiSetupTheKeyLooksLikeCopy(Object keyHint);
 
   /// No description provided for @aiSetupApiKey.
@@ -9539,7 +9539,7 @@ abstract class AppLocalizations {
   /// No description provided for @adminUpdateBlankUseTheAppS.
   ///
   /// In en, this message translates to:
-  /// **'Blank = use the app\'s saved key for this provider. Not stored.'**
+  /// **'Blank = use the app’s saved key for this provider. Not stored.'**
   String get adminUpdateBlankUseTheAppS;
 
   /// No description provided for @adminUpdateDrafting.
@@ -9761,7 +9761,7 @@ abstract class AppLocalizations {
   /// No description provided for @learnAiPanelAskAQuestionToGet.
   ///
   /// In en, this message translates to:
-  /// **'Ask a question to get started — e.g. \"What\'s the difference between a declaration and a power of attorney?\"'**
+  /// **'Ask a question to get started — e.g. “What’s the difference between a declaration and a power of attorney?”'**
   String get learnAiPanelAskAQuestionToGet;
 
   /// No description provided for @learnAiPanelSetUpTheFreeAi.
@@ -9896,7 +9896,7 @@ abstract class AppLocalizations {
   /// No description provided for @assistantOlderMessagesWereTrimmedTo.
   ///
   /// In en, this message translates to:
-  /// **'{trimmedCount} older messages were trimmed to fit within the AI\'s context limit. Recent messages are preserved.'**
+  /// **'{trimmedCount} older messages were trimmed to fit within the AI’s context limit. Recent messages are preserved.'**
   String assistantOlderMessagesWereTrimmedTo(Object trimmedCount);
 
   /// No description provided for @assistantNotLegalOrMedicalAdvice.
@@ -10056,7 +10056,7 @@ abstract class AppLocalizations {
   /// No description provided for @aiConsentDialogByTappingIAuthorizeYou.
   ///
   /// In en, this message translates to:
-  /// **'\nBy tapping \"I Authorize,\" you consent to sending your text to {label} for AI processing under these terms.\n\nThis notice appears once per session.'**
+  /// **'\nBy tapping “I Authorize,” you consent to sending your text to {label} for AI processing under these terms.\n\nThis notice appears once per session.'**
   String aiConsentDialogByTappingIAuthorizeYou(Object label);
 
   /// No description provided for @exportDraftModeFinal.
@@ -10224,7 +10224,7 @@ abstract class AppLocalizations {
   /// No description provided for @aiSetupPrivacyNoticeBody.
   ///
   /// In en, this message translates to:
-  /// **'{lead}\n\nThe AI features in this app send text you enter in form fields and chat messages to your AI provider\'s servers. Do not include personally identifying details (full legal name, Social Security number, date of birth, etc.) in AI chat or when using AI Suggest.\n\n{keyLine}'**
+  /// **'{lead}\n\nThe AI features in this app send text you enter in form fields and chat messages to your AI provider’s servers. Do not include personally identifying details (full legal name, Social Security number, date of birth, etc.) in AI chat or when using AI Suggest.\n\n{keyLine}'**
   String aiSetupPrivacyNoticeBody(String lead, String keyLine);
 
   /// No description provided for @aiSetupDuckDuckGoNote.
@@ -10258,7 +10258,7 @@ abstract class AppLocalizations {
   /// No description provided for @feAiUnreachable.
   ///
   /// In en, this message translates to:
-  /// **'Couldn\'t reach the AI service. Check your internet connection. If you are using the web app, this provider may also be blocked by your browser\'s security policy — Gemini and Claude both work in the browser.'**
+  /// **'Couldn’t reach the AI service. Check your internet connection. If you are using the web app, this provider may also be blocked by your browser’s security policy — Gemini and Claude both work in the browser.'**
   String get feAiUnreachable;
 
   /// No description provided for @feNoInternet.
@@ -10276,7 +10276,7 @@ abstract class AppLocalizations {
   /// No description provided for @feBlocked.
   ///
   /// In en, this message translates to:
-  /// **'Couldn\'t reach the AI service — the request was blocked or the connection failed. Check your internet connection, and if you are on the web app try Gemini or Claude, which work in the browser.'**
+  /// **'Couldn’t reach the AI service — the request was blocked or the connection failed. Check your internet connection, and if you are on the web app try Gemini or Claude, which work in the browser.'**
   String get feBlocked;
 
   /// No description provided for @feRateLimited.
@@ -10294,7 +10294,7 @@ abstract class AppLocalizations {
   /// No description provided for @feModelUnavailable.
   ///
   /// In en, this message translates to:
-  /// **'The selected AI model isn\'t available — it may have been retired. Pick a different model in AI setup.'**
+  /// **'The selected AI model isn’t available — it may have been retired. Pick a different model in AI setup.'**
   String get feModelUnavailable;
 
   /// No description provided for @feEmptyResponse.
@@ -10336,7 +10336,7 @@ abstract class AppLocalizations {
   /// No description provided for @assistantVerifyError.
   ///
   /// In en, this message translates to:
-  /// **'Sorry, I couldn\'t verify that on the web: {error}'**
+  /// **'Sorry, I couldn’t verify that on the web: {error}'**
   String assistantVerifyError(String error);
 
   /// No description provided for @permissionsOverviewUnlockingEncryptedOnDeviceStorage.
@@ -10426,13 +10426,13 @@ abstract class AppLocalizations {
   /// No description provided for @permissionsOverviewNothingIsSavedToYour.
   ///
   /// In en, this message translates to:
-  /// **'Nothing is saved to your device\'s photo library by default'**
+  /// **'Nothing is saved to your device’s photo library by default'**
   String get permissionsOverviewNothingIsSavedToYour;
 
   /// No description provided for @permissionsOverviewYouReviewEveryFieldBefore.
   ///
   /// In en, this message translates to:
-  /// **'You review every field before it\'s used'**
+  /// **'You review every field before it’s used'**
   String get permissionsOverviewYouReviewEveryFieldBefore;
 
   /// No description provided for @permissionsOverviewNotYetWiredFeatureIn.
@@ -10444,7 +10444,7 @@ abstract class AppLocalizations {
   /// No description provided for @permissionsOverviewSpeakingLongFormAnswersE.
   ///
   /// In en, this message translates to:
-  /// **'Speaking long-form answers (e.g. \"anything else\") instead of typing. Coming in a later release.'**
+  /// **'Speaking long-form answers (e.g. “anything else”) instead of typing. Coming in a later release.'**
   String get permissionsOverviewSpeakingLongFormAnswersE;
 
   /// No description provided for @permissionsOverviewAudioIsProcessedOnDevice.
@@ -10456,7 +10456,7 @@ abstract class AppLocalizations {
   /// No description provided for @permissionsOverviewIfSentToAiFor.
   ///
   /// In en, this message translates to:
-  /// **'If sent to AI for transcription, it isn\'t stored'**
+  /// **'If sent to AI for transcription, it isn’t stored'**
   String get permissionsOverviewIfSentToAiFor;
 
   /// No description provided for @permissionsOverviewTranscriptStaysInYourSession.
@@ -10780,7 +10780,7 @@ abstract class AppLocalizations {
   /// No description provided for @assistantSuggestWhatSTheDifferenceBetween.
   ///
   /// In en, this message translates to:
-  /// **'What\'s the difference between Combined, Declaration, and POA?'**
+  /// **'What’s the difference between Combined, Declaration, and POA?'**
   String get assistantSuggestWhatSTheDifferenceBetween;
 
   /// No description provided for @assistantSuggestWhoCanBeMyAgent.
@@ -10894,7 +10894,7 @@ abstract class AppLocalizations {
   /// No description provided for @educationNoResultsFor.
   ///
   /// In en, this message translates to:
-  /// **'No results for \"{query}\"'**
+  /// **'No results for “{query}”'**
   String educationNoResultsFor(String query);
 
   /// No description provided for @relativeJustNow.
@@ -11056,7 +11056,7 @@ abstract class AppLocalizations {
   /// No description provided for @crisisPlanSpecificConcreteNotSelfCare.
   ///
   /// In en, this message translates to:
-  /// **'Specific, concrete. Not \'self-care\' — what actually works.'**
+  /// **'Specific, concrete. Not “self-care” — what actually works.'**
   String get crisisPlanSpecificConcreteNotSelfCare;
 
   /// No description provided for @crisisPlanWordsThatGroundMeUseful.
@@ -11080,7 +11080,7 @@ abstract class AppLocalizations {
   /// No description provided for @reminderSheetsCurrentMedsOnesYouDon.
   ///
   /// In en, this message translates to:
-  /// **'Current meds, ones you don\'t want, allergies'**
+  /// **'Current meds, ones you don’t want, allergies'**
   String get reminderSheetsCurrentMedsOnesYouDon;
 
   /// No description provided for @reminderSheetsPreferredFacilityRoomEnvironment.
@@ -11260,7 +11260,7 @@ abstract class AppLocalizations {
   /// No description provided for @sideEffectsNoneFound.
   ///
   /// In en, this message translates to:
-  /// **'We couldn\'t find common side effects to list right now. You can add anything you\'re experiencing in the Anything-else step, and always raise side-effect concerns with your doctor.'**
+  /// **'We couldn’t find common side effects to list right now. You can add anything you’re experiencing in the Anything-else step, and always raise side-effect concerns with your doctor.'**
   String get sideEffectsNoneFound;
 
   /// No description provided for @sideEffectsGenerateError.
@@ -11284,7 +11284,7 @@ abstract class AppLocalizations {
   /// No description provided for @audioGuideTipQualityDoesnTMatterAny.
   ///
   /// In en, this message translates to:
-  /// **'Quality doesn\'t matter. Any phone voice memo works — the AI downsamples audio anyway, so a small low-quality file transcribes just as well as a large one.'**
+  /// **'Quality doesn’t matter. Any phone voice memo works — the AI downsamples audio anyway, so a small low-quality file transcribes just as well as a large one.'**
   String get audioGuideTipQualityDoesnTMatterAny;
 
   /// No description provided for @audioGuideTipKeepEachClipShortUnder.
@@ -11296,13 +11296,13 @@ abstract class AppLocalizations {
   /// No description provided for @audioGuideTipSayMedicationAndDoctorNames.
   ///
   /// In en, this message translates to:
-  /// **'Say medication and doctor names slowly and spell them. The AI won\'t guess a drug or condition it didn\'t clearly hear.'**
+  /// **'Say medication and doctor names slowly and spell them. The AI won’t guess a drug or condition it didn’t clearly hear.'**
   String get audioGuideTipSayMedicationAndDoctorNames;
 
   /// No description provided for @stepSubtitleAboutYou.
   ///
   /// In en, this message translates to:
-  /// **'Just the basics so this document is uniquely yours. Drop a photo of your ID and we\'ll read these for you.'**
+  /// **'Just the basics so this document is uniquely yours. Drop a photo of your ID and we’ll read these for you.'**
   String get stepSubtitleAboutYou;
 
   /// No description provided for @stepSubtitleWhenItKicksIn.
@@ -11314,7 +11314,7 @@ abstract class AppLocalizations {
   /// No description provided for @stepSubtitlePeopleITrust.
   ///
   /// In en, this message translates to:
-  /// **'They speak for you if you can\'t. You can name a primary, an alternate, and set limits on what they decide.'**
+  /// **'They speak for you if you can’t. You can name a primary, an alternate, and set limits on what they decide.'**
   String get stepSubtitlePeopleITrust;
 
   /// No description provided for @stepSubtitleGuardianNomination.
@@ -11356,13 +11356,13 @@ abstract class AppLocalizations {
   /// No description provided for @stepSubtitleAnythingElse.
   ///
   /// In en, this message translates to:
-  /// **'Free-form preferences not covered above. This is your voice — write it how you\'d say it.'**
+  /// **'Free-form preferences not covered above. This is your voice — write it how you’d say it.'**
   String get stepSubtitleAnythingElse;
 
   /// No description provided for @stepSubtitleReviewAndSign.
   ///
   /// In en, this message translates to:
-  /// **'One last look, then we\'ll make your signing packet. Tap any section to edit.'**
+  /// **'One last look, then we’ll make your signing packet. Tap any section to edit.'**
   String get stepSubtitleReviewAndSign;
 
   /// No description provided for @formTypeNameCombined.
@@ -11518,7 +11518,7 @@ abstract class AppLocalizations {
   /// No description provided for @rateDailyLimitUsed.
   ///
   /// In en, this message translates to:
-  /// **'You\'ve used all {max} free requests for today. The limit resets at midnight. Consider upgrading to a paid API key for higher limits.'**
+  /// **'You’ve used all {max} free requests for today. The limit resets at midnight. Consider upgrading to a paid API key for higher limits.'**
   String rateDailyLimitUsed(int max);
 
   /// No description provided for @rateTooManyThisMinute.
@@ -11554,19 +11554,19 @@ abstract class AppLocalizations {
   /// No description provided for @llmHeicUnsupported.
   ///
   /// In en, this message translates to:
-  /// **'{provider} can\'t read HEIC/HEIF photos (the iPhone default). Switch to Gemini, or re-save the photo as JPEG or PNG first.'**
+  /// **'{provider} can’t read HEIC/HEIF photos (the iPhone default). Switch to Gemini, or re-save the photo as JPEG or PNG first.'**
   String llmHeicUnsupported(String provider);
 
   /// No description provided for @llmPdfUnsupported.
   ///
   /// In en, this message translates to:
-  /// **'{provider} can\'t read PDFs here — switch to Gemini or Claude, or paste the document text instead.'**
+  /// **'{provider} can’t read PDFs here — switch to Gemini or Claude, or paste the document text instead.'**
   String llmPdfUnsupported(String provider);
 
   /// No description provided for @llmFileTypeUnsupported.
   ///
   /// In en, this message translates to:
-  /// **'{provider} can\'t read {mimeType} files here — switch to Gemini, or paste the text instead.'**
+  /// **'{provider} can’t read {mimeType} files here — switch to Gemini, or paste the text instead.'**
   String llmFileTypeUnsupported(String provider, String mimeType);
 
   /// No description provided for @llmRateLimited.
@@ -11584,13 +11584,13 @@ abstract class AppLocalizations {
   /// No description provided for @llmGeminiModelNotFound.
   ///
   /// In en, this message translates to:
-  /// **'{provider} doesn\'t recognise the model \"{model}\" — it may have been retired. Pick a different model in AI setup.'**
+  /// **'{provider} doesn’t recognise the model “{model}” — it may have been retired. Pick a different model in AI setup.'**
   String llmGeminiModelNotFound(String provider, String model);
 
   /// No description provided for @llmNetworkError.
   ///
   /// In en, this message translates to:
-  /// **'Couldn\'t reach {provider} ({detail}). Check your internet connection. If you are on the web app, this provider may also be blocked by your browser\'s CORS policy — Gemini and Claude both work in the browser.'**
+  /// **'Couldn’t reach {provider} ({detail}). Check your internet connection. If you are on the web app, this provider may also be blocked by your browser’s CORS policy — Gemini and Claude both work in the browser.'**
   String llmNetworkError(String provider, String detail);
 
   /// No description provided for @llmKeyRejected.
@@ -11602,7 +11602,7 @@ abstract class AppLocalizations {
   /// No description provided for @llmModelNotFound.
   ///
   /// In en, this message translates to:
-  /// **'{provider} doesn\'t recognise the model \"{model}\". Pick a different model in AI setup.'**
+  /// **'{provider} doesn’t recognise the model “{model}”. Pick a different model in AI setup.'**
   String llmModelNotFound(String provider, String model);
 
   /// No description provided for @importFileUnreadable.
@@ -11716,7 +11716,7 @@ abstract class AppLocalizations {
   /// No description provided for @facilitatorGuidedBody.
   ///
   /// In en, this message translates to:
-  /// **'The AI assistant asks the questions a trained facilitator would, in the same order: what a crisis looks like for you, what has helped or made things worse, who you trust, and then your choices. You fill in the form yourself — the assistant explains, it doesn\'t decide.'**
+  /// **'The AI assistant asks the questions a trained facilitator would, in the same order: what a crisis looks like for you, what has helped or made things worse, who you trust, and then your choices. You fill in the form yourself — the assistant explains, it doesn’t decide.'**
   String get facilitatorGuidedBody;
 
   /// No description provided for @facilitatorGuidedMetaPace.
@@ -11740,19 +11740,19 @@ abstract class AppLocalizations {
   /// No description provided for @facilitatorHelperStart.
   ///
   /// In en, this message translates to:
-  /// **'I\'m helping someone'**
+  /// **'I’m helping someone'**
   String get facilitatorHelperStart;
 
   /// No description provided for @facilitatorGuidedOpeningPrompt.
   ///
   /// In en, this message translates to:
-  /// **'I\'d like a guided session. Please walk me through my advance directive one question at a time, starting with what a crisis looks like for me.'**
+  /// **'I’d like a guided session. Please walk me through my advance directive one question at a time, starting with what a crisis looks like for me.'**
   String get facilitatorGuidedOpeningPrompt;
 
   /// No description provided for @facilitatorHelperOpeningPrompt.
   ///
   /// In en, this message translates to:
-  /// **'I\'m helping someone complete their advance directive. Please guide us through it one question at a time, starting with what a crisis looks like for them.'**
+  /// **'I’m helping someone complete their advance directive. Please guide us through it one question at a time, starting with what a crisis looks like for them.'**
   String get facilitatorHelperOpeningPrompt;
 
   /// No description provided for @assistantContextGuidedSession.
@@ -12010,7 +12010,7 @@ abstract class AppLocalizations {
   /// No description provided for @addressFieldsZipLookupFailed.
   ///
   /// In en, this message translates to:
-  /// **'Couldn\'t look up that ZIP — you can type it in.'**
+  /// **'Couldn’t look up that ZIP — you can type it in.'**
   String get addressFieldsZipLookupFailed;
 
   /// No description provided for @addressFieldsFilled.
@@ -12112,7 +12112,7 @@ abstract class AppLocalizations {
   /// No description provided for @sideEffectsOfficialLabelsIntro.
   ///
   /// In en, this message translates to:
-  /// **'Straight from each medication\'s FDA label (openFDA). No AI needed. Tap a medication to read its side effects and drug interactions.'**
+  /// **'Straight from each medication’s FDA label (openFDA). No AI needed. Tap a medication to read its side effects and drug interactions.'**
   String get sideEffectsOfficialLabelsIntro;
 
   /// No description provided for @sideEffectsChecklistOptionalTitle.
@@ -12130,7 +12130,7 @@ abstract class AppLocalizations {
   /// No description provided for @llmRefusal.
   ///
   /// In en, this message translates to:
-  /// **'{provider} declined to answer this. If you\'re in crisis or thinking about harming yourself, call or text 988 now. Otherwise, try rephrasing, or choose a different model in AI setup.'**
+  /// **'{provider} declined to answer this. If you’re in crisis or thinking about harming yourself, call or text 988 now. Otherwise, try rephrasing, or choose a different model in AI setup.'**
   String llmRefusal(String provider);
 
   /// No description provided for @llmTruncated.
@@ -12142,13 +12142,13 @@ abstract class AppLocalizations {
   /// No description provided for @crisisBannerTitle.
   ///
   /// In en, this message translates to:
-  /// **'You don\'t have to wait for the AI'**
+  /// **'You don’t have to wait for the AI'**
   String get crisisBannerTitle;
 
   /// No description provided for @crisisBannerBody.
   ///
   /// In en, this message translates to:
-  /// **'If you\'re thinking about suicide or hurting yourself, or you\'re in crisis, call or text 988 now — free, confidential, 24/7. If you\'re in immediate danger, call 911.'**
+  /// **'If you’re thinking about suicide or hurting yourself, or you’re in crisis, call or text 988 now — free, confidential, 24/7. If you’re in immediate danger, call 911.'**
   String get crisisBannerBody;
 
   /// No description provided for @crisisBannerCall.
@@ -12400,13 +12400,13 @@ abstract class AppLocalizations {
   /// No description provided for @aiHandoffSeeIncluded.
   ///
   /// In en, this message translates to:
-  /// **'See exactly what\'s included'**
+  /// **'See exactly what’s included'**
   String get aiHandoffSeeIncluded;
 
   /// No description provided for @aiHandoffHideIncluded.
   ///
   /// In en, this message translates to:
-  /// **'Hide what\'s included'**
+  /// **'Hide what’s included'**
   String get aiHandoffHideIncluded;
 
   /// No description provided for @aiHandoffStepPaste.
@@ -12424,7 +12424,7 @@ abstract class AppLocalizations {
   /// No description provided for @aiHandoffPasteHint.
   ///
   /// In en, this message translates to:
-  /// **'…or paste the AI\'s answer here'**
+  /// **'…or paste the AI’s answer here'**
   String get aiHandoffPasteHint;
 
   /// No description provided for @aiHandoffUseAnswer.
@@ -12460,7 +12460,7 @@ abstract class AppLocalizations {
   /// No description provided for @aiHandoffExpiring.
   ///
   /// In en, this message translates to:
-  /// **'Your work here will be cleared in {minutes} min. Extend to keep it while you\'re in your AI.'**
+  /// **'Your work here will be cleared in {minutes} min. Extend to keep it while you’re in your AI.'**
   String aiHandoffExpiring(int minutes);
 
   /// No description provided for @aiHandoffBackToPaste.
@@ -12478,19 +12478,19 @@ abstract class AppLocalizations {
   /// No description provided for @aiHandoffProblemEmpty.
   ///
   /// In en, this message translates to:
-  /// **'Nothing was pasted. Copy the AI\'s whole answer and try again.'**
+  /// **'Nothing was pasted. Copy the AI’s whole answer and try again.'**
   String get aiHandoffProblemEmpty;
 
   /// No description provided for @aiHandoffProblemPromptBack.
   ///
   /// In en, this message translates to:
-  /// **'That\'s the instructions, not the AI\'s answer. In your AI, copy its reply (the JSON block), then paste it here.'**
+  /// **'That’s the instructions, not the AI’s answer. In your AI, copy its reply (the JSON block), then paste it here.'**
   String get aiHandoffProblemPromptBack;
 
   /// No description provided for @aiHandoffProblemNotJson.
   ///
   /// In en, this message translates to:
-  /// **'We couldn\'t read that answer. Ask your AI to reply with only the JSON block.'**
+  /// **'We couldn’t read that answer. Ask your AI to reply with only the JSON block.'**
   String get aiHandoffProblemNotJson;
 
   /// No description provided for @aiHandoffProblemTruncated.
@@ -12574,7 +12574,7 @@ abstract class AppLocalizations {
   /// No description provided for @aiHandoffPrivacyBody.
   ///
   /// In en, this message translates to:
-  /// **'You\'re about to copy instructions to paste into {service}, a separate service you choose. PA MHAD\'s privacy promise covers this app only: {service}\'s own privacy terms apply to anything you share there, and using it is your choice.'**
+  /// **'You’re about to copy instructions to paste into {service}, a separate service you choose. PA MHAD’s privacy promise covers this app only: {service}’s own privacy terms apply to anything you share there, and using it is your choice.'**
   String aiHandoffPrivacyBody(String service);
 
   /// No description provided for @aiHandoffPrivacyPrivateTitle.
@@ -12598,13 +12598,13 @@ abstract class AppLocalizations {
   /// No description provided for @aiHandoffPrivacyHowSteps.
   ///
   /// In en, this message translates to:
-  /// **'1. Copy the instructions.\n2. Paste them into {service}, attach any document there, and send.\n3. Copy the AI\'s answer, come back, and paste it here.'**
+  /// **'1. Copy the instructions.\n2. Paste them into {service}, attach any document there, and send.\n3. Copy the AI’s answer, come back, and paste it here.'**
   String aiHandoffPrivacyHowSteps(String service);
 
   /// No description provided for @aiHandoffPrivacyKept.
   ///
   /// In en, this message translates to:
-  /// **'While you\'re away, your work here is kept for 30 minutes. You can extend it.'**
+  /// **'While you’re away, your work here is kept for 30 minutes. You can extend it.'**
   String get aiHandoffPrivacyKept;
 
   /// No description provided for @aiHandoffPrivacyContinue.
@@ -12718,7 +12718,7 @@ abstract class AppLocalizations {
   /// No description provided for @aiStepHelpPanelSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Your question goes with this step and what you\'ve filled in so far — names, addresses, and phone numbers removed.'**
+  /// **'Your question goes with this step and what you’ve filled in so far — names, addresses, and phone numbers removed.'**
   String get aiStepHelpPanelSubtitle;
 
   /// No description provided for @aiStepQAboutYou1.
@@ -12766,7 +12766,7 @@ abstract class AppLocalizations {
   /// No description provided for @aiStepQPeopleITrust2.
   ///
   /// In en, this message translates to:
-  /// **'Who can — and can\'t — be my agent?'**
+  /// **'Who can — and can’t — be my agent?'**
   String get aiStepQPeopleITrust2;
 
   /// No description provided for @aiStepQPeopleITrust3.
@@ -12778,7 +12778,7 @@ abstract class AppLocalizations {
   /// No description provided for @aiStepQGuardian1.
   ///
   /// In en, this message translates to:
-  /// **'What\'s the difference between a guardian and an agent?'**
+  /// **'What’s the difference between a guardian and an agent?'**
   String get aiStepQGuardian1;
 
   /// No description provided for @aiStepQGuardian2.
@@ -12802,7 +12802,7 @@ abstract class AppLocalizations {
   /// No description provided for @aiStepQWhereIWantCare2.
   ///
   /// In en, this message translates to:
-  /// **'Can I name facilities I don\'t want to go to?'**
+  /// **'Can I name facilities I don’t want to go to?'**
   String get aiStepQWhereIWantCare2;
 
   /// No description provided for @aiStepQWhereIWantCare3.
@@ -12850,7 +12850,7 @@ abstract class AppLocalizations {
   /// No description provided for @aiStepQAllergies1.
   ///
   /// In en, this message translates to:
-  /// **'What\'s the difference between an allergy and a side effect?'**
+  /// **'What’s the difference between an allergy and a side effect?'**
   String get aiStepQAllergies1;
 
   /// No description provided for @aiStepQAllergies2.
@@ -12922,7 +12922,7 @@ abstract class AppLocalizations {
   /// No description provided for @learnAskAiTitle.
   ///
   /// In en, this message translates to:
-  /// **'Ask AI about what you\'re reading'**
+  /// **'Ask AI about what you’re reading'**
   String get learnAskAiTitle;
 
   /// No description provided for @learnAskAiSubtitle.
@@ -13024,7 +13024,7 @@ abstract class AppLocalizations {
   /// No description provided for @smartFillHandoffSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Based on the conditions and medications found (identifying details removed). You review every suggestion before it\'s added.'**
+  /// **'Based on the conditions and medications found (identifying details removed). You review every suggestion before it’s added.'**
   String get smartFillHandoffSubtitle;
 
   /// No description provided for @homeToolsAskAiSub.
@@ -13042,13 +13042,13 @@ abstract class AppLocalizations {
   /// No description provided for @aiConsistencyRulesExplainerHandoff.
   ///
   /// In en, this message translates to:
-  /// **'The contradiction check above uses built-in rules. Anything your AI suggests is optional — review it before you change your directive. This screen warns; it doesn\'t block making the PDF.'**
+  /// **'The contradiction check above uses built-in rules. Anything your AI suggests is optional — review it before you change your directive. This screen warns; it doesn’t block making the PDF.'**
   String get aiConsistencyRulesExplainerHandoff;
 
   /// No description provided for @privacyPolicyIfYouChooseToUseHandoff.
   ///
   /// In en, this message translates to:
-  /// **'The AI help is optional, and this app never sends anything to an AI service itself. If you choose to use it, the app writes instructions that you copy and paste into an AI chat service you choose — ChatGPT, Claude, Gemini or Grok — and you attach any document or recording there yourself. You then copy the answer back into this app.\n\nWhat you paste or attach in that service is handled under that service\'s own terms and privacy policy, not this one. Depending on the service and your settings, it may:\n  - Keep your conversations, with or without an automatic expiration\n  - Use them to improve its products\n  - Let human reviewers read them\nMost services offer a private or temporary chat that keeps less — see \"Outside AI services\" below.\n\nThe instructions this app writes leave out common identifying details (SSNs, phone numbers, emails, dates of birth, addresses, names, and facility names). This is a best-effort filter and cannot guarantee complete removal. A document or recording you attach yourself reaches the service as it is.\n\nAI help is entirely optional. The app is fully functional without it.'**
+  /// **'The AI help is optional, and this app never sends anything to an AI service itself. If you choose to use it, the app writes instructions that you copy and paste into an AI chat service you choose — ChatGPT, Claude, Gemini or Grok — and you attach any document or recording there yourself. You then copy the answer back into this app.\n\nWhat you paste or attach in that service is handled under that service’s own terms and privacy policy, not this one. Depending on the service and your settings, it may:\n  - Keep your conversations, with or without an automatic expiration\n  - Use them to improve its products\n  - Let human reviewers read them\nMost services offer a private or temporary chat that keeps less — see “Outside AI services” below.\n\nThe instructions this app writes leave out common identifying details (SSNs, phone numbers, emails, dates of birth, addresses, names, and facility names). This is a best-effort filter and cannot guarantee complete removal. A document or recording you attach yourself reaches the service as it is.\n\nAI help is entirely optional. The app is fully functional without it.'**
   String get privacyPolicyIfYouChooseToUseHandoff;
 
   /// No description provided for @privacyPolicyOutsideAiServices.
@@ -13060,25 +13060,25 @@ abstract class AppLocalizations {
   /// No description provided for @privacyPolicyIfYouUseTheAiHandoff.
   ///
   /// In en, this message translates to:
-  /// **'If you use an outside AI service with this app, be aware of the following:\n\n1. That service decides how long it keeps what you send, and whether people or its AI models learn from it. Review its privacy policy and settings before you send sensitive content.\n\n2. Data you send to that service cannot be recalled or deleted by this app. Once sent, it is under that service\'s control.\n\n3. For more privacy, use a private chat: ChatGPT\'s Temporary Chat, Claude\'s Incognito chat, Gemini\'s Temporary chat, or Grok\'s Private Chat.\n\nYou can avoid all third-party data sharing by not using the AI help.'**
+  /// **'If you use an outside AI service with this app, be aware of the following:\n\n1. That service decides how long it keeps what you send, and whether people or its AI models learn from it. Review its privacy policy and settings before you send sensitive content.\n\n2. Data you send to that service cannot be recalled or deleted by this app. Once sent, it is under that service’s control.\n\n3. For more privacy, use a private chat: ChatGPT’s Temporary Chat, Claude’s Incognito chat, Gemini’s Temporary chat, or Grok’s Private Chat.\n\nYou can avoid all third-party data sharing by not using the AI help.'**
   String get privacyPolicyIfYouUseTheAiHandoff;
 
   /// No description provided for @privacyPolicyIfYouAreLocatedInHandoff.
   ///
   /// In en, this message translates to:
-  /// **'If you are located in the European Economic Area (EEA), the UK, or Switzerland, the General Data Protection Regulation (GDPR) applies to your use of this app.\n\nLegal basis for processing: Your explicit consent, given through the in-app disclaimer and the notice shown before you first copy anything to an outside AI service.\n\nYour rights under GDPR:\n  - Right to access: All your data is stored locally on your device — you have direct access at all times.\n  - Right to erasure: Use \"Delete All Data\" in the app menu to permanently erase all local data.\n  - Right to data portability: Export your directives as PDF or FHIR JSON (a standard health-records format) at any time.\n  - Right to withdraw consent: Stop using the AI help at any time — this app never sends anything to an AI service itself.\n  - Right to restriction: You may use the app in Public Mode without any data persistence.\n\nData you paste or attach in an outside AI service is processed under that service\'s own privacy policy and data processing terms. We cannot control or delete it once it has been sent.'**
+  /// **'If you are located in the European Economic Area (EEA), the UK, or Switzerland, the General Data Protection Regulation (GDPR) applies to your use of this app.\n\nLegal basis for processing: Your explicit consent, given through the in-app disclaimer and the notice shown before you first copy anything to an outside AI service.\n\nYour rights under GDPR:\n  - Right to access: All your data is stored locally on your device — you have direct access at all times.\n  - Right to erasure: Use “Delete All Data” in the app menu to permanently erase all local data.\n  - Right to data portability: Export your directives as PDF or FHIR JSON (a standard health-records format) at any time.\n  - Right to withdraw consent: Stop using the AI help at any time — this app never sends anything to an AI service itself.\n  - Right to restriction: You may use the app in Public Mode without any data persistence.\n\nData you paste or attach in an outside AI service is processed under that service’s own privacy policy and data processing terms. We cannot control or delete it once it has been sent.'**
   String get privacyPolicyIfYouAreLocatedInHandoff;
 
   /// No description provided for @privacyPolicyThisAppMayBeSubjectHandoff.
   ///
   /// In en, this message translates to:
-  /// **'This app may be subject to state consumer-health-data privacy laws including California (CCPA/CPRA), Washington (My Health My Data Act / MHMDA), Connecticut (CTDPA health provisions), Nevada (SB 370), and New York (Health Information Privacy Act).\n\nMental-health-directive content is \"consumer health data\" under each of these laws. Under all of them: (1) We collect mental-health treatment-preference data **solely** to help you create your advance directive. (2) We **do not sell** your health data — there is no commercial recipient. (3) This app never sends your content to a third party itself. If you choose to use the AI help, you copy instructions into an outside AI service yourself; that service receives **only** what you paste or attach there. (4) We use no third-party SDKs, no analytics, no advertising frameworks, no tracking pixels or cookies. (5) You may delete all locally stored data at any time via \"Delete All Data\" in the app menu.\n\nWashington MHMDA includes a **private right of action**; we have designed the app so that it never transfers consumer health data to a third party itself, and so that, before you first copy anything to an outside AI service in a session, it shows a notice explaining that the service\'s own terms apply.\n\nFor questions about your privacy rights, contact the developer using the channels listed in the Contact section below (multiple methods are provided per the FTC Health Breach Notification Rule).'**
+  /// **'This app may be subject to state consumer-health-data privacy laws including California (CCPA/CPRA), Washington (My Health My Data Act / MHMDA), Connecticut (CTDPA health provisions), Nevada (SB 370), and New York (Health Information Privacy Act).\n\nMental-health-directive content is “consumer health data” under each of these laws. Under all of them: (1) We collect mental-health treatment-preference data **solely** to help you create your advance directive. (2) We **do not sell** your health data — there is no commercial recipient. (3) This app never sends your content to a third party itself. If you choose to use the AI help, you copy instructions into an outside AI service yourself; that service receives **only** what you paste or attach there. (4) We use no third-party SDKs, no analytics, no advertising frameworks, no tracking pixels or cookies. (5) You may delete all locally stored data at any time via “Delete All Data” in the app menu.\n\nWashington MHMDA includes a **private right of action**; we have designed the app so that it never transfers consumer health data to a third party itself, and so that, before you first copy anything to an outside AI service in a session, it shows a notice explaining that the service’s own terms apply.\n\nFor questions about your privacy rights, contact the developer using the channels listed in the Contact section below (multiple methods are provided per the FTC Health Breach Notification Rule).'**
   String get privacyPolicyThisAppMayBeSubjectHandoff;
 
   /// No description provided for @privacyPolicyYouCanDeleteAnyDirectiveHandoff.
   ///
   /// In en, this message translates to:
-  /// **'You can delete any directive at any time from the home screen. Deleting a directive removes all associated data (personal info, agents, medications, witnesses, signatures) from the local database.\n\nConversations in an outside AI service are kept or deleted with that service\'s own controls.\n\nUninstalling the app removes all locally stored data.'**
+  /// **'You can delete any directive at any time from the home screen. Deleting a directive removes all associated data (personal info, agents, medications, witnesses, signatures) from the local database.\n\nConversations in an outside AI service are kept or deleted with that service’s own controls.\n\nUninstalling the app removes all locally stored data.'**
   String get privacyPolicyYouCanDeleteAnyDirectiveHandoff;
 
   /// No description provided for @privacyPolicyThisAppDoesNotIncludeHandoff.
@@ -13090,7 +13090,7 @@ abstract class AppLocalizations {
   /// No description provided for @legalSheetIfYouUseTheOptionalHandoff.
   ///
   /// In en, this message translates to:
-  /// **'If you use the optional AI help, you copy instructions from this app into an AI chat service you choose (ChatGPT, Claude, Gemini or Grok) — the app never sends anything to an AI service itself. What you paste or attach there is handled under that service\'s own terms: some keep conversations, use them to improve their products, or let human reviewers read them.'**
+  /// **'If you use the optional AI help, you copy instructions from this app into an AI chat service you choose (ChatGPT, Claude, Gemini or Grok) — the app never sends anything to an AI service itself. What you paste or attach there is handled under that service’s own terms: some keep conversations, use them to improve their products, or let human reviewers read them.'**
   String get legalSheetIfYouUseTheOptionalHandoff;
 
   /// No description provided for @legalSheetBoldAutomaticallyKeepsIdentifyingDetailsOutHandoff.
@@ -13108,13 +13108,13 @@ abstract class AppLocalizations {
   /// No description provided for @legalSheetDocumentsYouUploadForAutofillHandoff.
   ///
   /// In en, this message translates to:
-  /// **'Documents you attach for autofill are different: you attach the whole file in your AI service yourself, and to fill in your directive the AI reads the personal details in it (your name, date of birth, address, and your agent\'s or guardian\'s details). You review everything before it is added. '**
+  /// **'Documents you attach for autofill are different: you attach the whole file in your AI service yourself, and to fill in your directive the AI reads the personal details in it (your name, date of birth, address, and your agent’s or guardian’s details). You review everything before it is added. '**
   String get legalSheetDocumentsYouUploadForAutofillHandoff;
 
   /// No description provided for @facilitatorGuidedBodyHandoff.
   ///
   /// In en, this message translates to:
-  /// **'Your own AI (ChatGPT, Claude, Gemini or Grok) asks the questions a trained facilitator would, in the same order: what a crisis looks like for you, what has helped or made things worse, who you trust, and then your choices. You fill in the form yourself — the AI explains, it doesn\'t decide.'**
+  /// **'Your own AI (ChatGPT, Claude, Gemini or Grok) asks the questions a trained facilitator would, in the same order: what a crisis looks like for you, what has helped or made things worse, who you trust, and then your choices. You fill in the form yourself — the AI explains, it doesn’t decide.'**
   String get facilitatorGuidedBodyHandoff;
 
   /// No description provided for @facilitatorGuidedMetaAiHandoff.
@@ -13132,7 +13132,7 @@ abstract class AppLocalizations {
   /// No description provided for @moreSheetThisPermanentlyErasesEverythingInHandoff.
   ///
   /// In en, this message translates to:
-  /// **'This permanently erases everything in this session — all directives and any AI answer you\'re waiting for — and returns you to a blank start.\n\nExport or print anything you want to keep first. This cannot be undone.'**
+  /// **'This permanently erases everything in this session — all directives and any AI answer you’re waiting for — and returns you to a blank start.\n\nExport or print anything you want to keep first. This cannot be undone.'**
   String get moreSheetThisPermanentlyErasesEverythingInHandoff;
 
   /// No description provided for @audioGuideDescribeYourWishesOutLoudHandoff.
@@ -13144,7 +13144,7 @@ abstract class AppLocalizations {
   /// No description provided for @audioGuideToTranscribeYourRecordingIncludingHandoff.
   ///
   /// In en, this message translates to:
-  /// **'To transcribe it, you attach your recording — including any personal details you speak — in the AI you choose. Gemini takes recordings on its free plan (up to about 10 minutes each) and ChatGPT on paid plans; the Autofill page shows which AIs fit. That service\'s own terms apply, and this app can\'t recall what you send. Don\'t say anything you\'re not comfortable sending; you can always type sensitive fields by hand instead.'**
+  /// **'To transcribe it, you attach your recording — including any personal details you speak — in the AI you choose. Gemini takes recordings on its free plan (up to about 10 minutes each) and ChatGPT on paid plans; the Autofill page shows which AIs fit. That service’s own terms apply, and this app can’t recall what you send. Don’t say anything you’re not comfortable sending; you can always type sensitive fields by hand instead.'**
   String get audioGuideToTranscribeYourRecordingIncludingHandoff;
 
   /// No description provided for @audioGuideTipKeepEachClipShortUnderHandoff.
