@@ -269,7 +269,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get executionInYourPacket => 'En su paquete';
 
   @override
-  String get executionPacketMhadTitle => 'Su MHAD completada';
+  String get executionPacketMhadTitle => 'Su directiva completada';
 
   @override
   String get executionPacketMhadSub => 'PDF · formato de la Ley 194 de PA';
@@ -3436,7 +3436,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get educationMostOfThisComesStraight =>
-      'La mayor parte proviene directamente del folleto oficial de la MHAD de PA, más algunas explicaciones en lenguaje sencillo. Sin publicidad ni opiniones: solo las normas y lo que significan.';
+      'La mayor parte proviene directamente del folleto oficial de la DASM de PA, más algunas explicaciones en lenguaje sencillo. Sin publicidad ni opiniones: solo las normas y lo que significan.';
 
   @override
   String get educationSearchArticlesGlossaryFaqs =>
@@ -4052,7 +4052,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get settingsPaMentalHealthAdvanceDirective =>
-      'Directiva Anticipada de Salud Mental de PA\nSegún la Ley 194 de 2004 de Pensilvania (vigente desde el 29 de enero de 2005)\n\nEsta aplicación le ayuda a documentar sus preferencias de tratamiento de salud mental. No es asesoría legal ni médica, y no sustituye a un abogado o profesional clínico con licencia. Consulte el aviso legal completo más arriba para ver los detalles.\n\nSu directiva es válida durante dos años a partir de la fecha en que la firma, salvo que en la fecha de vencimiento se determine que usted no tiene capacidad para tomar decisiones de salud mental; en ese caso, sigue vigente hasta que recupere la capacidad.\n\nEl contenido del formulario se basa en el folleto oficial de la MHAD de PA publicado por el Disabilities Law Project (2005).';
+      'Directiva Anticipada de Salud Mental de PA\nSegún la Ley 194 de 2004 de Pensilvania (vigente desde el 29 de enero de 2005)\n\nEsta aplicación le ayuda a documentar sus preferencias de tratamiento de salud mental. No es asesoría legal ni médica, y no sustituye a un abogado o profesional clínico con licencia. Consulte el aviso legal completo más arriba para ver los detalles.\n\nSu directiva es válida durante dos años a partir de la fecha en que la firma, salvo que en la fecha de vencimiento se determine que usted no tiene capacidad para tomar decisiones de salud mental; en ese caso, sigue vigente hasta que recupere la capacidad.\n\nEl contenido del formulario se basa en el folleto oficial de la DASM de PA publicado por el Disabilities Law Project (2005).';
 
   @override
   String get settingsAccount => 'Cuenta';
@@ -4104,7 +4104,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get assistantContextPanelAskAboutFormTypesAgents =>
-      'Pregunte sobre los tipos de formulario, los agentes, las preferencias de tratamiento o cualquier tema del folleto de la MHAD de PA. Pruebe con una de estas:';
+      'Pregunte sobre los tipos de formulario, los agentes, las preferencias de tratamiento o cualquier tema del folleto de la DASM de PA. Pruebe con una de estas:';
 
   @override
   String get assistantContextPanelPiiRedactionOn =>
@@ -6942,7 +6942,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get calendarReminderDescription =>
-      'Su directiva anticipada de Pensilvania es válida por 2 años. Abra la aplicación MHAD para crear una nueva y firmarla ante dos testigos adultos.';
+      'Su directiva anticipada de Pensilvania es válida por 2 años. Abra la aplicación PA MHAD para crear una nueva y firmarla ante dos testigos adultos.';
 
   @override
   String tabTitle(String page) {

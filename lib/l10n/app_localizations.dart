@@ -575,7 +575,7 @@ abstract class AppLocalizations {
   /// No description provided for @executionPacketMhadTitle.
   ///
   /// In en, this message translates to:
-  /// **'Your completed MHAD'**
+  /// **'Your completed directive'**
   String get executionPacketMhadTitle;
 
   /// No description provided for @executionPacketMhadSub.
@@ -11458,7 +11458,7 @@ abstract class AppLocalizations {
   /// No description provided for @calendarReminderDescription.
   ///
   /// In en, this message translates to:
-  /// **'Your Pennsylvania advance directive is valid for 2 years. Open the MHAD app to make a new one and sign it with two adult witnesses.'**
+  /// **'Your Pennsylvania advance directive is valid for 2 years. Open the PA MHAD app to make a new one and sign it with two adult witnesses.'**
   String get calendarReminderDescription;
 
   /// No description provided for @tabTitle.

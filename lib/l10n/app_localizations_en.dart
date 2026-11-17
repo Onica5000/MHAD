@@ -268,7 +268,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get executionInYourPacket => 'In your packet';
 
   @override
-  String get executionPacketMhadTitle => 'Your completed MHAD';
+  String get executionPacketMhadTitle => 'Your completed directive';
 
   @override
   String get executionPacketMhadSub => 'PDF · PA Act 194 format';
@@ -6826,7 +6826,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get calendarReminderDescription =>
-      'Your Pennsylvania advance directive is valid for 2 years. Open the MHAD app to make a new one and sign it with two adult witnesses.';
+      'Your Pennsylvania advance directive is valid for 2 years. Open the PA MHAD app to make a new one and sign it with two adult witnesses.';
 
   @override
   String tabTitle(String page) {
