@@ -10,7 +10,10 @@ import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/services/onboarding_service.dart';
 import 'package:mhad/ui/router.dart';
+import 'package:mhad/ui/theme/app_art.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/design/art_image.dart';
+import 'package:mhad/ui/widgets/design/responsive_shell.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/design/brand_motif.dart';
 import 'package:mhad/ui/wizard/widgets/saved_file_import.dart';
@@ -60,10 +63,32 @@ class OnboardingScreen extends ConsumerWidget {
     context.go(AppRoutes.uploadRoute(id));
   }
 
+  /// Home's above-the-fold photos, at the widths Home will show them, so the
+  /// hand-off from this intro to Home doesn't pop in (review R3).
+  static Map<AppArt, double> _homePhotoWidths(BuildContext context) {
+    final w = MediaQuery.sizeOf(context).width;
+    if (w >= kWideLayoutBreakpoint) {
+      return const {
+        AppArt.homeHero: 480, // PageHero large, capped at 480
+        AppArt.formCombined: 225, // 150x150 box x 1.5 aspect
+        AppArt.formDeclaration: 96, // 64x64 thumb x 1.5 aspect
+        AppArt.formPoa: 96,
+      };
+    }
+    return {
+      AppArt.homeHero: w - 40, // greeting banner, full page width
+      AppArt.formCombined: w - 86, // combined card banner
+      AppArt.formDeclaration: 96,
+      AppArt.formPoa: 96,
+    };
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final p = Theme.of(context).mhadPalette;
-    return Scaffold(
+    return PrecacheArt(
+      widthsFor: _homePhotoWidths,
+      child: Scaffold(
       backgroundColor: p.surface,
       body: SafeArea(
         child: Stack(
@@ -294,6 +319,7 @@ class OnboardingScreen extends ConsumerWidget {
             ),
           ],
         ),
+      ),
       ),
     );
   }

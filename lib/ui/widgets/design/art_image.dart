@@ -149,3 +149,37 @@ class ArtImage extends StatelessWidget {
     return ExcludeSemantics(child: framed);
   }
 }
+
+/// Warms the image cache for the photos the NEXT screen shows above the fold,
+/// so a known hand-off (onboarding → Home, step n → n+1) doesn't pop in
+/// (review R3). Never precache the whole set — only what's about to show.
+///
+/// [widthsFor] returns each photo's NEEDED logical width for the current
+/// window (what ArtImage computes: max(box width, box height × aspect)), so
+/// the precache lands on the same decode bucket ArtImage will request.
+class PrecacheArt extends StatefulWidget {
+  final Map<AppArt, double> Function(BuildContext context) widthsFor;
+  final Widget child;
+  const PrecacheArt({required this.widthsFor, required this.child, super.key});
+
+  @override
+  State<PrecacheArt> createState() => _PrecacheArtState();
+}
+
+class _PrecacheArtState extends State<PrecacheArt> {
+  bool _done = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_done || ArtImage.debugUsePlaceholders) return;
+    _done = true;
+    for (final e in widget.widthsFor(context).entries) {
+      // Best effort: a failed precache just means the photo loads on view.
+      e.key.precache(context, e.value).catchError((_) {});
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) => widget.child;
+}

@@ -367,16 +367,21 @@ class _HelpMeChooseBanner extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 // Flexible so a longer translation wraps instead of starving
-                // the prompt text (Spanish overflowed at phone width).
+                // the prompt text (Spanish overflowed at phone width), and
+                // aligned to the END of the banner — as a plain Flexible it
+                // sat at the start of its half, mid-banner on desktop.
                 Flexible(
-                  child: Text(
-                    context.l10n.directiveFormChoiceHelpMeChoose,
-                    textAlign: TextAlign.end,
-                    style: TextStyle(
-                      fontFamily: kSansFamily,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      color: p.primary,
+                  child: Align(
+                    alignment: AlignmentDirectional.centerEnd,
+                    child: Text(
+                      context.l10n.directiveFormChoiceHelpMeChoose,
+                      textAlign: TextAlign.end,
+                      style: TextStyle(
+                        fontFamily: kSansFamily,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        color: p.primary,
+                      ),
                     ),
                   ),
                 ),

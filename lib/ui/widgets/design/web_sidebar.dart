@@ -373,7 +373,7 @@ class _SidebarItemRow extends StatelessWidget {
           borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
           child: Padding(
             padding:
-                const EdgeInsets.symmetric(horizontal: 8, vertical: 9),
+                const EdgeInsets.symmetric(horizontal: 6, vertical: 9),
             child: Row(
               children: [
                 // "You are here" accent bar — transparent when inactive so the
@@ -386,7 +386,7 @@ class _SidebarItemRow extends StatelessWidget {
                     borderRadius: BorderRadius.circular(DesignTokens.radiusXs),
                   ),
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 6),
                 Icon(
                   active && item.activeIcon != null
                       ? item.activeIcon!
@@ -396,7 +396,7 @@ class _SidebarItemRow extends StatelessWidget {
                       ? dangerColor
                       : (active ? p.primary : p.textMuted),
                 ),
-                const SizedBox(width: 10),
+                const SizedBox(width: 8),
                 Expanded(
                   child: Text(
                     item.label,
@@ -661,7 +661,7 @@ class _Badge extends StatelessWidget {
         ? SemanticColors.successTextLight
         : p.primary;
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
       decoration: BoxDecoration(
         color: bg,
         borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
@@ -671,7 +671,7 @@ class _Badge extends StatelessWidget {
         style: TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.w700,
-          letterSpacing: 0.6,
+          letterSpacing: 0.3,
           color: fg,
         ),
       ),
