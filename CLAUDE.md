@@ -48,12 +48,14 @@ lib/
     llm_client.dart            -- Provider-agnostic transport (Gemini/Claude/OpenAI/Grok)
     gemini_api_assistant.dart   -- LlmAssistant (typedef GeminiApiAssistant); chat + helpers
     document_extractor.dart / smart_fill_service.dart -- multimodal autofill / smart-fill
+    handoff/                   -- copy-and-paste handoff (what users see): task, prompt, parser, wait
   ui/
     theme/        -- app_theme.dart (teal Material3 theme)
     home/         -- HomeScreen
     wizard/       -- Step-by-step form flow (adaptive per FormType)
     education/    -- FAQ, instructions, glossary
-    assistant/    -- AI chat UI
+    ai/           -- handoff card, Ask AI page, step helper, "Back to paste" banner
+    assistant/    -- AI chat UI (API path — hidden)
     export/       -- PDF preview & export options
     router.dart   -- GoRouter config + AppRoutes constants
   main.dart       -- ProviderScope + MaterialApp.router
@@ -83,7 +85,22 @@ This regenerates `app_database.g.dart`.
 - One renderer for all three form types (layout differences handled in code)
 - Dynamic text expansion: measure text, expand box, shift content down
 
-## AI Assistant (multi-provider — see lib/ai/)
+## AI — copy-and-paste handoff (what users see; user decision 2026-11-17)
+No API key in view: the person copies MHAD's instructions into ChatGPT / Claude / Gemini /
+Grok, attaches any document **there**, and pastes the JSON answer back. The API path below
+stays as a hidden backup (`app_data.json` → `ai.apiModeVisible: false`). A dedicated MHAD
+key would need a **relay server** — keys never ship to the browser.
+
+| Piece | Where | Rule |
+|---|---|---|
+| The card | `AiHandoffPanel` (`ui/ai/`) | ONE card everywhere: choose AI → copy (+ Open, see what's included) → paste. Privacy notice once per session |
+| Prompts | `buildHandoffPrompt` + `assets/data/ai_handoff.json` (versioned: services + what each accepts, legal facts, en/es envelope) | Task instructions come from the API path's own builders — never fork them |
+| Answers | `parseHandoffReply` | Forgiving about format; strict about `mhad_task` + `mhad_ref` (`directiveHandoffRef` = the one `d<id>` format) |
+| The wait | `PendingHandoff` (30 min, extendable) | Keeps the web recovery copy; a reload restores the work and returns to the paste page; "Back to paste your AI answer" banner elsewhere |
+| After a paste | panel | Clipboard cleared; a failed paste says a fresh copy may be needed |
+| API-only extras | Consolidate, rate limits, AI setup | Hidden with the API path; return when it's shown |
+
+## AI API path (hidden backup — multi-provider, see lib/ai/)
 - **Provider-agnostic** since 2026-06-28. `AiProvider` (lib/ai/ai_provider.dart) is the
   single source of truth (label/keyHint/models/host + capability flags); `LlmClient`
   (lib/ai/llm_client.dart) is the transport (Gemini via `google_generative_ai`; Anthropic
