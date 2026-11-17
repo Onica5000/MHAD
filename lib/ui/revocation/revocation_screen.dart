@@ -190,7 +190,7 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
                   const SizedBox(height: 6),
                   Text(
                     context.l10n.revocationThisDeclarationMayBeRevoked,
-                    style: MhadText.serifAccent(context, size: 14, color: p.text, height: 1.6),
+                    style: MhadText.serifAccent(context, size: 14, color: p.text, height: MhadType.leadingParagraph),
                   ),
                 ],
               ),
@@ -239,7 +239,6 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
                   Text(
                     context.l10n.revocationTypeRevokeToConfirm,
                     style: TextStyle(
-                      fontFamily: kSansFamily,
                       fontWeight: FontWeight.w700,
                       fontSize: 14,
                       color: cs.onErrorContainer,
@@ -330,9 +329,7 @@ class _RevokeStep extends StatelessWidget {
               child: Text(
                 text,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
-                  fontSize: 14,
-                  height: 1.5,
+                  fontSize: 14, height: MhadType.leadingParagraph,
                   color: p.text,
                 ),
               ),

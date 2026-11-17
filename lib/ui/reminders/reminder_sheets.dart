@@ -157,9 +157,7 @@ class _RenewSheet extends StatelessWidget {
                         Text.rich(
                           TextSpan(
                             style: TextStyle(
-                              fontFamily: kSansFamily,
-                              fontSize: 14,
-                              height: 1.5,
+                              fontSize: 14, height: MhadType.leadingParagraph,
                               color: p.textMuted,
                             ),
                             children: [
@@ -203,7 +201,6 @@ class _RenewSheet extends StatelessWidget {
                         Text(
                           context.l10n.reminderSheetsQuickRenew5Min,
                           style: TextStyle(
-                            fontFamily: kSansFamily,
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
                             color: p.primaryDark,
@@ -215,9 +212,7 @@ class _RenewSheet extends StatelessWidget {
                     Text(
                       context.l10n.reminderSheetsMostPeopleKeepTheSame,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
-                        fontSize: 14,
-                        height: 1.5,
+                        fontSize: 14, height: MhadType.leadingParagraph,
                         color: p.text,
                       ),
                     ),
@@ -276,9 +271,7 @@ class _RenewSheet extends StatelessWidget {
                 context.l10n.reminderSheetsWeLlRemindYouAgain,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
-                  fontSize: 12,
-                  height: 1.5,
+                  fontSize: 12, height: MhadType.leadingParagraph,
                   color: p.textMuted,
                 ),
               ),
@@ -304,7 +297,6 @@ class _RenewMetric extends StatelessWidget {
           TextSpan(
             text: num,
             style: TextStyle(
-              fontFamily: kSansFamily,
               fontSize: 12,
               fontWeight: FontWeight.w700,
               color: p.text,
@@ -313,7 +305,6 @@ class _RenewMetric extends StatelessWidget {
           TextSpan(
             text: ' $label',
             style: TextStyle(
-              fontFamily: kSansFamily,
               fontSize: 12,
               color: p.textMuted,
             ),
@@ -434,9 +425,7 @@ class _CheckInSheet extends StatelessWidget {
                         Text.rich(
                           TextSpan(
                             style: TextStyle(
-                              fontFamily: kSansFamily,
-                              fontSize: 14,
-                              height: 1.5,
+                              fontSize: 14, height: MhadType.leadingParagraph,
                               color: p.textMuted,
                             ),
                             children: [
@@ -499,9 +488,7 @@ class _CheckInSheet extends StatelessWidget {
                 context.l10n.reminderSheetsIfYouEditAnythingYou,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
-                  fontSize: 12,
-                  height: 1.5,
+                  fontSize: 12, height: MhadType.leadingParagraph,
                   color: p.textMuted,
                 ),
               ),
@@ -557,7 +544,6 @@ class _CheckInRow extends StatelessWidget {
                   Text(
                     title,
                     style: TextStyle(
-                      fontFamily: kSansFamily,
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                       color: p.text,
@@ -566,7 +552,6 @@ class _CheckInRow extends StatelessWidget {
                   Text(
                     sub,
                     style: TextStyle(
-                      fontFamily: kSansFamily,
                       fontSize: 12,
                       color: p.textMuted,
                     ),
@@ -579,7 +564,6 @@ class _CheckInRow extends StatelessWidget {
             Text(
               '$stepLabel ›',
               style: TextStyle(
-                fontFamily: kSansFamily,
                 fontSize: 12,
                 fontWeight: FontWeight.w700,
                 color: p.primary,

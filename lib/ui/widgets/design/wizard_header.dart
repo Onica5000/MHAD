@@ -80,7 +80,6 @@ class WizardHeader extends StatelessWidget {
                         Text(
                           backLabel,
                           style: TextStyle(
-                            fontFamily: kSansFamily,
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
                             color: p.primary,
@@ -111,7 +110,6 @@ class WizardHeader extends StatelessWidget {
                         child: Text(
                           actionLabel,
                           style: TextStyle(
-                            fontFamily: kSansFamily,
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
                             color: p.textMuted,

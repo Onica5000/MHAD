@@ -57,11 +57,9 @@ class ConsentOptionTile extends StatelessWidget {
                   Text(
                     title,
                     style: TextStyle(
-                      fontFamily: kSansFamily,
                       fontWeight: FontWeight.w600,
                       fontSize: 14,
-                      color: p.text,
-                      height: 1.35,
+                      color: p.text, height: MhadType.leadingUi,
                     ),
                   ),
                   if (description != null) ...[
@@ -69,10 +67,8 @@ class ConsentOptionTile extends StatelessWidget {
                     Text(
                       description!,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
                         fontSize: 12,
-                        color: p.textMuted,
-                        height: 1.4,
+                        color: p.textMuted, height: MhadType.leadingParagraph,
                       ),
                     ),
                   ],

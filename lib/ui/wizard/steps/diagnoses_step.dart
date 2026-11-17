@@ -298,7 +298,6 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
               enableSuggestions: false,
               onChanged: _onSearchChanged,
               style: TextStyle(
-                fontFamily: kSansFamily,
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
                 color: p.text,
@@ -311,7 +310,6 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                 focusedBorder: InputBorder.none,
                 hintText: context.l10n.diagnosesSearchHint,
                 hintStyle: TextStyle(
-                  fontFamily: kSansFamily,
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                   color: p.textMuted,
@@ -356,8 +354,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                 'ICD-10',
                 style: TextStyle(
                   fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 0.5,
+                  fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingLabel,
                   color: p.primary,
                 ),
               ),
@@ -396,8 +393,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                   fontFamily: kMonoFamily,
                   fontFamilyFallback: kMonoFallbacks,
                   fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 0.4,
+                  fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingLabel,
                   color: p.primary,
                 ),
               ),
@@ -407,10 +403,8 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
               child: Text(
                 c.name,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
                   fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  height: 1.3,
+                  fontWeight: FontWeight.w600, height: MhadType.leadingUi,
                   color: p.text,
                 ),
               ),
@@ -435,8 +429,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
         label.toUpperCase(),
         style: TextStyle(
           fontSize: 12,
-          fontWeight: FontWeight.w700,
-          letterSpacing: 0.6,
+          fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingLabel,
           color: p.textMuted,
         ),
       ),
@@ -526,7 +519,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
             child: Text(
               _searching ? '' : l10n.diagnosesNoResults,
               textAlign: TextAlign.center,
-              style: TextStyle(fontFamily: kSansFamily, color: p.textMuted),
+              style: TextStyle( color: p.textMuted),
             ),
           ),
 
@@ -559,7 +552,6 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                       Text(
                         l10n.diagnosesEmptyTitle,
                         style: TextStyle(
-                          fontFamily: kSansFamily,
                           fontWeight: FontWeight.w600,
                           color: p.text,
                         ),
@@ -568,7 +560,6 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                       Text(
                         l10n.diagnosesEmptyBody,
                         style: TextStyle(
-                          fontFamily: kSansFamily,
                           fontSize: 12,
                           color: p.textMuted,
                         ),
@@ -688,7 +679,6 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                             Text(
                               r.name,
                               style: TextStyle(
-                                fontFamily: kSansFamily,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
                                 color: p.text,
@@ -705,7 +695,6 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
-                                    fontFamily: kSansFamily,
                                     fontSize: 12,
                                     color: p.textMuted,
                                   ),
@@ -720,7 +709,6 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                     child: Text(
                       l10n.diagnosesNpiNote,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
                         fontSize: 12,
                         fontStyle: FontStyle.italic,
                         color: p.textMuted,
@@ -788,9 +776,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                     child: Text.rich(
                       TextSpan(
                         style: TextStyle(
-                          fontFamily: kSansFamily,
-                          fontSize: 14,
-                          height: 1.45,
+                          fontSize: 14, height: MhadType.leadingParagraph,
                           color: p.text,
                         ),
                         children: [
@@ -808,7 +794,6 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                   Text(
                     l10n.diagnosesTry,
                     style: TextStyle(
-                      fontFamily: kSansFamily,
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
                       color: p.primary,
@@ -826,10 +811,8 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
         Text(
           l10n.diagnosesFooter,
           style: TextStyle(
-            fontFamily: kSansFamily,
             fontSize: 12,
-            fontStyle: FontStyle.italic,
-            height: 1.45,
+            fontStyle: FontStyle.italic, height: MhadType.leadingParagraph,
             color: p.textMuted,
           ),
         ),
@@ -920,8 +903,7 @@ class _DescribeConditionDialogState extends State<_DescribeConditionDialog> {
             Text(
               l10n.diagnosesDescribeIntro,
               style: TextStyle(
-                fontSize: 14,
-                height: 1.4,
+                fontSize: 14, height: MhadType.leadingParagraph,
                 color: cs.onSurfaceVariant,
               ),
             ),

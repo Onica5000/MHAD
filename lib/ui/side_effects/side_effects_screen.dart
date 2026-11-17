@@ -248,9 +248,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
                         Text(
                           context.l10n.sideEffectsOfficialLabelsIntro,
                           style: TextStyle(
-                            fontFamily: kSansFamily,
-                            fontSize: 14,
-                            height: 1.45,
+                            fontSize: 14, height: MhadType.leadingParagraph,
                             color: p.textMuted,
                           ),
                         ),
@@ -289,7 +287,6 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
             Text(
               context.l10n.sideEffectsChecklistOptionalTitle,
               style: TextStyle(
-                fontFamily: kSansFamily,
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
                 color: p.text,
@@ -299,9 +296,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
             Text(
               context.l10n.sideEffectsChecklistOptionalBody,
               style: TextStyle(
-                fontFamily: kSansFamily,
-                fontSize: 14,
-                height: 1.45,
+                fontSize: 14, height: MhadType.leadingParagraph,
                 color: p.textMuted,
               ),
             ),
@@ -328,7 +323,6 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
               ? context.l10n.sideEffectsCheckingCovers(_currentMeds.join(', '))
               : context.l10n.sideEffectsReCheckFor(_currentMeds.join(', ')),
           style: TextStyle(
-            fontFamily: kSansFamily,
             fontSize: 14,
             color: p.textMuted,
           ),
@@ -366,7 +360,6 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
           child: Text(
             med,
             style: TextStyle(
-              fontFamily: kSansFamily,
               fontSize: 14,
               fontWeight: FontWeight.w700,
               color: p.text,
@@ -402,7 +395,6 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
           Text(
             note.meds.join(' + '),
             style: TextStyle(
-              fontFamily: kSansFamily,
               fontSize: 14,
               fontWeight: FontWeight.w700,
               color: p.text,
@@ -412,9 +404,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
           Text(
             note.note,
             style: TextStyle(
-              fontFamily: kSansFamily,
-              fontSize: 14,
-              height: 1.4,
+              fontSize: 14, height: MhadType.leadingParagraph,
               color: p.textMuted,
             ),
           ),
@@ -462,7 +452,6 @@ class _SideEffectRow extends StatelessWidget {
                   child: Text(
                     item.effect,
                     style: TextStyle(
-                      fontFamily: kSansFamily,
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                       color: p.text,
@@ -475,9 +464,7 @@ class _SideEffectRow extends StatelessWidget {
                     child: Text(
                       context.l10n.sideEffectsMayAffect(item.adlImpact),
                       style: TextStyle(
-                        fontFamily: kSansFamily,
-                        fontSize: 12,
-                        height: 1.35,
+                        fontSize: 12, height: MhadType.leadingUi,
                         color: p.textMuted,
                       ),
                     ),
@@ -499,7 +486,6 @@ class _SideEffectRow extends StatelessWidget {
                                 .l10n
                                 .sideEffectsWorthDiscussingWithYourDoctor,
                             style: TextStyle(
-                              fontFamily: kSansFamily,
                               fontSize: 12,
                               fontWeight: FontWeight.w700,
                               color: seriousColor,

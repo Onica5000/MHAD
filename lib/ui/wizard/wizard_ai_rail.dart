@@ -179,7 +179,6 @@ class _WizardAiRailState extends ConsumerState<WizardAiRail> {
               Text(
                 context.l10n.navAiAssistant,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
                   color: p.text,
@@ -196,7 +195,6 @@ class _WizardAiRailState extends ConsumerState<WizardAiRail> {
                     child: Text(
                       context.l10n.wizardAiRailFullView,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
                         color: p.primary,
@@ -210,8 +208,7 @@ class _WizardAiRailState extends ConsumerState<WizardAiRail> {
           Text(
             context.l10n.learnAiPanelPiiStripped(ref.watch(activeProviderProvider).name.toUpperCase()),
             style: TextStyle(
-              fontSize: 12,
-              letterSpacing: 0.5,
+              fontSize: 12, letterSpacing: MhadType.trackingLabel,
               color: hasKey ? p.primary : p.textMuted,
             ),
           ),
@@ -248,7 +245,6 @@ class _WizardAiRailState extends ConsumerState<WizardAiRail> {
             Text(
               context.l10n.learnAiPanelNotLegalOrMedicalAdvice,
               style: TextStyle(
-                fontFamily: kSansFamily,
                 fontSize: 12,
                 color: p.textMuted,
               ),
@@ -314,7 +310,7 @@ class _RailNoAiCard extends StatelessWidget {
           const SizedBox(height: 10),
           Text(
             context.l10n.wizardAiRailOptionalHelpBody,
-            style: TextStyle(fontSize: 14, height: 1.45, color: p.text),
+            style: TextStyle(fontSize: 14, height: MhadType.leadingParagraph, color: p.text),
           ),
           const SizedBox(height: 14),
           SizedBox(
@@ -328,7 +324,7 @@ class _RailNoAiCard extends StatelessWidget {
           const SizedBox(height: 10),
           Text(
             context.l10n.wizardAiRailYourApiKeyStaysOn,
-            style: TextStyle(fontSize: 12, height: 1.4, color: p.textMuted),
+            style: TextStyle(fontSize: 12, height: MhadType.leadingParagraph, color: p.textMuted),
           ),
         ],
       ),
@@ -382,7 +378,6 @@ class _RailHeadsUp extends ConsumerWidget {
           Text(
             context.l10n.wizardAiRailReadingThisStep,
             style: TextStyle(
-              fontFamily: kSansFamily,
               fontSize: 12,
               color: p.onPrimaryLight,
             ),
@@ -405,9 +400,7 @@ class _RailHeadsUp extends ConsumerWidget {
                     child: Text(
                       s.headsUp,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
-                        fontSize: 14,
-                        height: 1.4,
+                        fontSize: 14, height: MhadType.leadingParagraph,
                         color: p.onPrimaryLight,
                       ),
                     ),
@@ -419,8 +412,7 @@ class _RailHeadsUp extends ConsumerWidget {
               Text(
                 context.l10n.wizardAiRailSuggestedForThisStep,
                 style: TextStyle(
-                  fontSize: 12,
-                  letterSpacing: 0.6,
+                  fontSize: 12, letterSpacing: MhadType.trackingLabel,
                   color: p.textMuted,
                 ),
               ),
@@ -444,7 +436,6 @@ class _RailHeadsUp extends ConsumerWidget {
                         child: Text(
                           c,
                           style: TextStyle(
-                            fontFamily: kSansFamily,
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
                             color: p.text,
@@ -477,7 +468,7 @@ class _RailFacilitySearch extends StatelessWidget {
       child: TextField(
         controller: controller,
         onSubmitted: (_) => onSubmit(),
-        style: const TextStyle(fontFamily: kSansFamily, fontSize: 14),
+        style: const TextStyle( fontSize: 14),
         decoration: InputDecoration(
           isDense: true,
           hintText: context.l10n.wizardAiRailFindAPaFacilityBy,
@@ -511,9 +502,7 @@ class _RailChat extends ConsumerWidget {
             context.l10n.wizardAiRailAskAnythingAboutThisStep,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontFamily: kSansFamily,
-              fontSize: 12,
-              height: 1.4,
+              fontSize: 12, height: MhadType.leadingParagraph,
               color: p.textMuted,
             ),
           ),
@@ -566,9 +555,7 @@ class _RailBubble extends StatelessWidget {
         child: Text(
           text,
           style: TextStyle(
-            fontFamily: kSansFamily,
-            fontSize: 14,
-            height: 1.4,
+            fontSize: 14, height: MhadType.leadingParagraph,
             fontStyle: muted ? FontStyle.italic : FontStyle.normal,
             color: isUser
                 ? p.onPrimary
@@ -603,7 +590,7 @@ class _RailInput extends ConsumerWidget {
               controller: controller,
               enabled: !isSending,
               onSubmitted: (_) => onSend(),
-              style: const TextStyle(fontFamily: kSansFamily, fontSize: 14),
+              style: const TextStyle( fontSize: 14),
               decoration: InputDecoration(
                 isCollapsed: true,
                 border: InputBorder.none,
@@ -657,7 +644,6 @@ class WizardAiBar extends StatelessWidget {
                 child: Text(
                   context.l10n.wizardAiRailNeedHelpWithThisStep,
                   style: TextStyle(
-                    fontFamily: kSansFamily,
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                     color: p.onPrimaryLight,

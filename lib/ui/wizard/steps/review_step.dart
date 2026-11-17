@@ -347,9 +347,7 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
         Text(
           context.l10n.reviewStepOneLastLook,
           style: TextStyle(
-            fontFamily: kSansFamily,
-            fontSize: 14,
-            height: 1.5,
+            fontSize: 14, height: MhadType.leadingParagraph,
             color: p.textMuted,
           ),
         ),
@@ -418,9 +416,7 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
         Text(
           context.l10n.reviewStepConsistencyCheckHelp,
           style: TextStyle(
-            fontFamily: kSansFamily,
-            fontSize: 12,
-            height: 1.4,
+            fontSize: 12, height: MhadType.leadingParagraph,
             color: p.textMuted,
           ),
         ),
@@ -536,7 +532,6 @@ class _ReviewRow extends StatelessWidget {
                   Text(
                     data.label,
                     style: TextStyle(
-                      fontFamily: kSansFamily,
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                       color: p.text,
@@ -550,9 +545,7 @@ class _ReviewRow extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      fontFamily: kSansFamily,
-                      fontSize: 12,
-                      height: 1.3,
+                      fontSize: 12, height: MhadType.leadingUi,
                       fontStyle:
                           data.hasContent ? FontStyle.normal : FontStyle.italic,
                       color: p.textMuted,
@@ -637,7 +630,6 @@ class _CalloutCard extends StatelessWidget {
       children.add(Text(
         title!,
         style: TextStyle(
-          fontFamily: kSansFamily,
           fontSize: 14,
           fontWeight: FontWeight.w700,
           color: fg,
@@ -649,9 +641,7 @@ class _CalloutCard extends StatelessWidget {
       children.add(Text(
         body!,
         style: TextStyle(
-          fontFamily: kSansFamily,
-          fontSize: 14,
-          height: 1.45,
+          fontSize: 14, height: MhadType.leadingParagraph,
           color: fg,
         ),
       ));
@@ -660,9 +650,7 @@ class _CalloutCard extends StatelessWidget {
       children.add(Text.rich(
         richBody!,
         style: TextStyle(
-          fontFamily: kSansFamily,
-          fontSize: 14,
-          height: 1.45,
+          fontSize: 14, height: MhadType.leadingParagraph,
           color: fg,
         ),
       ));

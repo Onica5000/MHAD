@@ -129,8 +129,7 @@ class _UlyssesClauseScreenState extends ConsumerState<UlyssesClauseScreen> {
                         Text(
                           context.l10n.ulyssesClauseSelfBindingUlysses,
                           style: TextStyle(
-                            fontSize: 12,
-                            letterSpacing: 1,
+                            fontSize: 12, letterSpacing: MhadType.trackingEyebrow,
                             fontWeight: FontWeight.w700,
                             color: _acknowledged
                                 ? cs.onPrimary
@@ -146,9 +145,7 @@ class _UlyssesClauseScreenState extends ConsumerState<UlyssesClauseScreen> {
                         Text(
                           context.l10n.ulyssesClausePerPaAct19420,
                           style: TextStyle(
-                            fontFamily: kSansFamily,
-                            fontSize: 14,
-                            height: 1.45,
+                            fontSize: 14, height: MhadType.leadingParagraph,
                             color: _acknowledged
                                 ? cs.onPrimary
                                 : cs.onSurfaceVariant,
@@ -228,9 +225,7 @@ class _BoundariesCard extends StatelessWidget {
                     Expanded(
                       child: Text(b,
                           style: const TextStyle(
-                            fontFamily: kSansFamily,
-                            fontSize: 14,
-                            height: 1.4,
+                            fontSize: 14, height: MhadType.leadingParagraph,
                           )),
                     ),
                   ],

@@ -14,13 +14,12 @@ Future<void> showMedlinePlusDialog(
   required String title,
   required Future<MedlinePlusTopic?> future,
 }) {
-  const kSans = kSansFamily;
   return showDialog<void>(
     context: context,
     builder: (ctx) {
       final p = Theme.of(ctx).mhadPalette;
       return AlertDialog(
-        title: Text(title, style: const TextStyle(fontFamily: kSans)),
+        title: Text(title, style: const TextStyle()),
         content: SizedBox(
           width: 420,
           child: FutureBuilder<MedlinePlusTopic?>(
@@ -37,7 +36,7 @@ Future<void> showMedlinePlusDialog(
                 return Text(
                   context.l10n.medlinePlusDialogNoPlainLanguageSummaryIs,
                   style: TextStyle(
-                      fontFamily: kSans, fontSize: 14, color: p.textMuted),
+                      fontSize: 14, color: p.textMuted),
                 );
               }
               return SingleChildScrollView(
@@ -48,9 +47,7 @@ Future<void> showMedlinePlusDialog(
                     Text(
                       topic.summary.isNotEmpty ? topic.summary : topic.title,
                       style: TextStyle(
-                        fontFamily: kSans,
-                        fontSize: 14,
-                        height: 1.5,
+                        fontSize: 14, height: MhadType.leadingParagraph,
                         color: p.text,
                       ),
                     ),
@@ -58,7 +55,6 @@ Future<void> showMedlinePlusDialog(
                     Text(
                       context.l10n.medlinePlusDialogPlainLanguageInformationFromThe,
                       style: TextStyle(
-                        fontFamily: kSans,
                         fontSize: 12,
                         fontStyle: FontStyle.italic,
                         color: p.textMuted,

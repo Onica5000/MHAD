@@ -84,8 +84,7 @@ class SerifNumeral extends StatelessWidget {
     return Text(
       value.toString().padLeft(2, '0'),
       style: display.copyWith(
-        fontSize: editorial ? size : (size * 0.82).roundToDouble(),
-        height: 1,
+        fontSize: editorial ? size : (size * 0.82).roundToDouble(), height: MhadType.leadingTitle,
         color: color ?? p.primary,
       ),
     );

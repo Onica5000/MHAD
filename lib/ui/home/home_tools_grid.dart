@@ -145,7 +145,6 @@ class _ToolTileCard extends StatelessWidget {
                 Text(
                   tile.label,
                   style: TextStyle(
-                    fontFamily: kSansFamily,
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                     color: palette.text,
@@ -154,7 +153,6 @@ class _ToolTileCard extends StatelessWidget {
                 Text(
                   tile.sub,
                   style: TextStyle(
-                    fontFamily: kSansFamily,
                     fontSize: 12,
                     color: palette.textMuted,
                   ),

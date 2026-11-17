@@ -225,10 +225,8 @@ class _ConsentChoiceStepState extends ConsumerState<ConsentChoiceStep>
           Text(
             c.subtitle(l),
             style: TextStyle(
-              fontFamily: kSansFamily,
               fontSize: 14,
-              color: p.textMuted,
-              height: 1.45,
+              color: p.textMuted, height: MhadType.leadingParagraph,
             ),
           ),
           const SizedBox(height: 14),

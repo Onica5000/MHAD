@@ -30,8 +30,7 @@ class MonoPill extends StatelessWidget {
       child: Text(
         '${dot ? '● ' : ''}${label.toUpperCase()}',
         style: TextStyle(
-          fontSize: 12,
-          letterSpacing: 1,
+          fontSize: 12, letterSpacing: MhadType.trackingEyebrow,
           fontWeight: FontWeight.w700,
           color: foreground,
         ),

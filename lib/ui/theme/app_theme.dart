@@ -76,7 +76,7 @@ abstract final class MhadType {
   /// Letter-spacing: four values instead of 23.
   static const double trackingDisplay = -0.6;
   static const double trackingTitle = -0.2;
-  static const double trackingLabel = 0.3;
+  static const double trackingLabel = 0.5;
   static const double trackingEyebrow = 1.1;
 
   /// Line heights: three values instead of 14.

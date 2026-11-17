@@ -387,7 +387,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             Text(
                               context.l10n.homeMakeItFindableInA,
                               style: TextStyle(
-                                fontFamily: kSansFamily,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
                                 color: p.text,
@@ -396,7 +395,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             Text(
                               context.l10n.homeShareCopiesCarryTheWallet,
                               style: TextStyle(
-                                fontFamily: kSansFamily,
                                 fontSize: 12,
                                 color: p.textMuted,
                               ),
@@ -712,7 +710,6 @@ class _PrivacyByDesignCard extends StatelessWidget {
               Text(
                 context.l10n.homePrivateByDesign,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
                   color: p.onPrimaryLight,
@@ -730,9 +727,7 @@ class _PrivacyByDesignCard extends StatelessWidget {
                 ? context.l10n.homePrivateBodyWeb
                 : context.l10n.homePrivateBodyDevice,
             style: TextStyle(
-              fontFamily: kSansFamily,
-              fontSize: 14,
-              height: 1.45,
+              fontSize: 14, height: MhadType.leadingParagraph,
               color: p.onPrimaryLight,
             ),
           ),
@@ -857,7 +852,6 @@ class _GreetingRow extends StatelessWidget {
                 child: Text(
                   _initialsFrom(fullName),
                   style: TextStyle(
-                    fontFamily: kSansFamily,
                     fontWeight: FontWeight.w700,
                     fontSize: 14,
                     color: p.primary,
@@ -1029,7 +1023,6 @@ class _PastDirectiveRow extends StatelessWidget {
                       Text(
                         _nameLine(context.l10n),
                         style: TextStyle(
-                          fontFamily: kSansFamily,
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
                           color: p.text,
@@ -1038,7 +1031,6 @@ class _PastDirectiveRow extends StatelessWidget {
                       Text(
                         _subLine(context.l10n),
                         style: TextStyle(
-                          fontFamily: kSansFamily,
                           fontSize: 12,
                           color: p.textMuted,
                         ),

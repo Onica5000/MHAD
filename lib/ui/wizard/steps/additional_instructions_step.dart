@@ -247,8 +247,7 @@ class _AdditionalInstructionsStepState
             description,
             style: TextStyle(
               fontSize: 12,
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-              height: 1.4,
+              color: Theme.of(context).colorScheme.onSurfaceVariant, height: MhadType.leadingParagraph,
             ),
           ),
         ),
@@ -333,8 +332,7 @@ class _AdditionalInstructionsStepState
             context.l10n.addlInstrRecordsDescription,
             style: TextStyle(
               fontSize: 12,
-              color: cs.onSurfaceVariant,
-              height: 1.4,
+              color: cs.onSurfaceVariant, height: MhadType.leadingParagraph,
             ),
           ),
         ),
@@ -557,7 +555,6 @@ class _AdditionalInstructionsStepState
                     Text(
                       title,
                       style: const TextStyle(
-                        fontFamily: kSansFamily,
                         fontWeight: FontWeight.w600,
                         fontSize: 16,
                       ),
@@ -566,9 +563,7 @@ class _AdditionalInstructionsStepState
                     Text(
                       subtitle,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
-                        fontSize: 12,
-                        height: 1.4,
+                        fontSize: 12, height: MhadType.leadingParagraph,
                         color: p.textMuted,
                       ),
                     ),

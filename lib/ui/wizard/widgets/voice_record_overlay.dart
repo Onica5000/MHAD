@@ -361,9 +361,7 @@ class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
                             : context.l10n.voiceExplainDevice),
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontFamily: kSansFamily,
-                      fontSize: 14,
-                      height: 1.5,
+                      fontSize: 14, height: MhadType.leadingParagraph,
                       color: p.textMuted,
                     ),
                   ),
@@ -384,8 +382,7 @@ class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
                       fontFamily: kMonoFamily,
                       fontFamilyFallback: kMonoFallbacks,
                       fontSize: 22,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 1.5,
+                      fontWeight: FontWeight.w600, letterSpacing: MhadType.trackingEyebrow,
                       color: p.text,
                     ),
                   ),
@@ -459,8 +456,7 @@ class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
                         : context.l10n.voiceFooterDevice),
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 12,
-                  letterSpacing: 0.5,
+                  fontSize: 12, letterSpacing: MhadType.trackingLabel,
                   color: p.textMuted,
                 ),
               ),
@@ -509,7 +505,6 @@ class _TranscribingCard extends StatelessWidget {
           Text(
             context.l10n.voiceTranscribingCard,
             style: TextStyle(
-              fontFamily: kSansFamily,
               fontSize: 14,
               color: textColor,
             ),
@@ -677,9 +672,7 @@ class _LiveCaptionState extends State<_LiveCaption>
           ],
         ),
         style: TextStyle(
-          fontFamily: kSansFamily,
-          fontSize: 14,
-          height: 1.5,
+          fontSize: 14, height: MhadType.leadingParagraph,
           color: widget.textColor,
         ),
       ),
@@ -728,7 +721,6 @@ class _CircleButton extends StatelessWidget {
                   : Text(
                       label!,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
                         color: fg,

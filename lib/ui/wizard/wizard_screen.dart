@@ -798,8 +798,7 @@ class _WideStepRail extends StatelessWidget {
               context.l10n.wizardYourDirective,
               style: TextStyle(
                 fontSize: 12,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 1.2,
+                fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingEyebrow,
                 color: p.textMuted,
               ),
             ),
@@ -913,11 +912,9 @@ class _RailStepRow extends StatelessWidget {
             child: Text(
               title,
               style: TextStyle(
-                fontFamily: kSansFamily,
                 fontSize: 14,
                 fontWeight: titleWeight,
-                color: titleColor,
-                height: 1.2,
+                color: titleColor, height: MhadType.leadingUi,
               ),
             ),
           ),

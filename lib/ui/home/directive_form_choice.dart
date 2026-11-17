@@ -124,9 +124,7 @@ class DirectiveFormChoice extends ConsumerWidget {
         Text(
           context.l10n.directiveFormChoiceYouCanSwitchFormTypes,
           style: TextStyle(
-            fontFamily: kSansFamily,
-            fontSize: 14,
-            height: 1.4,
+            fontSize: 14, height: MhadType.leadingParagraph,
             color: p.textMuted,
           ),
         ),
@@ -205,10 +203,8 @@ class _CombinedCard extends StatelessWidget {
                     child: Text(
                       context.l10n.modeSelectionRecommended,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
                         fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 0.4,
+                        fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingLabel,
                         color: p.onPrimary,
                       ),
                     ),
@@ -217,10 +213,8 @@ class _CombinedCard extends StatelessWidget {
                   Text(
                     context.l10n.directiveFormChoiceCombinedDirective,
                     style: TextStyle(
-                      fontFamily: kSansFamily,
                       fontSize: 24,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: -0.4,
+                      fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingTitle,
                       color: p.onPrimary,
                     ),
                   ),
@@ -228,9 +222,7 @@ class _CombinedCard extends StatelessWidget {
                   Text(
                     context.l10n.directiveFormChoiceTreatmentPreferencesAndATrusted,
                     style: TextStyle(
-                      fontFamily: kSansFamily,
-                      fontSize: 14,
-                      height: 1.5,
+                      fontSize: 14, height: MhadType.leadingParagraph,
                       color: p.onPrimary.withValues(alpha: 0.9),
                     ),
                   ),
@@ -297,7 +289,6 @@ class _SingleFormCard extends StatelessWidget {
                     Text(
                       title,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
                         color: p.text,
@@ -307,9 +298,7 @@ class _SingleFormCard extends StatelessWidget {
                     Text(
                       sub,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
-                        fontSize: 12,
-                        height: 1.4,
+                        fontSize: 12, height: MhadType.leadingParagraph,
                         color: p.textMuted,
                       ),
                     ),
@@ -358,7 +347,6 @@ class _HelpMeChooseBanner extends StatelessWidget {
                   child: Text(
                     context.l10n.directiveFormChoiceNotSureWhichFormFits,
                     style: TextStyle(
-                      fontFamily: kSansFamily,
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                       color: p.onPrimaryLight,
@@ -377,7 +365,6 @@ class _HelpMeChooseBanner extends StatelessWidget {
                       context.l10n.directiveFormChoiceHelpMeChoose,
                       textAlign: TextAlign.end,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
                         color: p.primary,

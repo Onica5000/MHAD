@@ -334,7 +334,6 @@ class _DocPreviewCard extends ConsumerWidget {
                         Text(
                           filename,
                           style: TextStyle(
-                            fontFamily: kSansFamily,
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
                             color: p.text,
@@ -345,7 +344,6 @@ class _DocPreviewCard extends ConsumerWidget {
                         Text(
                           context.l10n.pastDirectiveDetailGeneratedOnDemand6Pages,
                           style: TextStyle(
-                            fontFamily: kSansFamily,
                             fontSize: 12,
                             color: p.textMuted,
                           ),
@@ -405,8 +403,7 @@ class _SigCol extends StatelessWidget {
         Text(
           label,
           style: TextStyle(
-            fontSize: 12,
-            letterSpacing: 0.4,
+            fontSize: 12, letterSpacing: MhadType.trackingLabel,
             color: p.textMuted,
           ),
         ),
@@ -414,7 +411,6 @@ class _SigCol extends StatelessWidget {
         Text(
           value,
           style: TextStyle(
-            fontFamily: kSansFamily,
             fontSize: 12,
             fontWeight: FontWeight.w600,
             color: p.text,

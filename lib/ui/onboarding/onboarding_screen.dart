@@ -158,9 +158,7 @@ class OnboardingScreen extends ConsumerWidget {
                     child: Text(
                       context.l10n.onboardingWeLlWalkYouThrough,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
-                        fontSize: 17,
-                        height: 1.45,
+                        fontSize: 17, height: MhadType.leadingParagraph,
                         color: p.textMuted,
                       ),
                     ),
@@ -193,9 +191,7 @@ class OnboardingScreen extends ConsumerWidget {
                         ],
                       ),
                       style: TextStyle(
-                        fontFamily: kSansFamily,
-                        fontSize: 14,
-                        height: 1.4,
+                        fontSize: 14, height: MhadType.leadingParagraph,
                         color: p.onPrimaryLight,
                       ),
                     ),
@@ -208,9 +204,7 @@ class OnboardingScreen extends ConsumerWidget {
                   Text(
                     context.l10n.onboardingValidTwoYearsFromSigning,
                     style: TextStyle(
-                      fontFamily: kSansFamily,
-                      fontSize: 12,
-                      height: 1.4,
+                      fontSize: 12, height: MhadType.leadingParagraph,
                       color: p.textMuted,
                     ),
                   ),
@@ -248,7 +242,6 @@ class OnboardingScreen extends ConsumerWidget {
                         minimumSize: const Size.fromHeight(
                             DesignTokens.buttonHeightMd),
                         textStyle: const TextStyle(
-                          fontFamily: kSansFamily,
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
@@ -268,7 +261,6 @@ class OnboardingScreen extends ConsumerWidget {
                         minimumSize:
                             const Size.fromHeight(DesignTokens.buttonHeightMd),
                         textStyle: const TextStyle(
-                          fontFamily: kSansFamily,
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
@@ -283,9 +275,7 @@ class OnboardingScreen extends ConsumerWidget {
                       context.l10n.onboardingFreeNoAccountNoTracking,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
-                        fontSize: 12,
-                        height: 1.45,
+                        fontSize: 12, height: MhadType.leadingParagraph,
                         color: p.textMuted,
                       ),
                     ),
@@ -347,11 +337,9 @@ class _WelcomePills extends StatelessWidget {
                 Text(
                   label,
                   style: TextStyle(
-                    fontFamily: kSansFamily,
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
-                    color: p.onPrimaryLight,
-                    height: 1,
+                    color: p.onPrimaryLight, height: MhadType.leadingTitle,
                   ),
                 ),
               ],

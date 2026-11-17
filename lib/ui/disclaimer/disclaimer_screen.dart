@@ -162,10 +162,8 @@ class _GateLayout extends StatelessWidget {
                   Text(
                     context.l10n.disclaimerThisToolHelpsYouWrite,
                     style: TextStyle(
-                      fontFamily: kSansFamily,
                       fontSize: 14,
-                      color: palette.textMuted,
-                      height: 1.5,
+                      color: palette.textMuted, height: MhadType.leadingParagraph,
                     ),
                   ),
                   const SizedBox(height: 22),
@@ -232,7 +230,6 @@ class _GateLayout extends StatelessWidget {
                             style: TextButton.styleFrom(
                               foregroundColor: palette.text,
                               textStyle: const TextStyle(
-                                fontFamily: kSansFamily,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -271,7 +268,6 @@ class _GateLayout extends StatelessWidget {
                             ),
                           ),
                           textStyle: const TextStyle(
-                            fontFamily: kSansFamily,
                             fontWeight: FontWeight.w600,
                             fontSize: 16,
                           ),
@@ -304,8 +300,7 @@ class _SectionLabel extends StatelessWidget {
       text.toUpperCase(),
       style: TextStyle(
         fontSize: 12,
-        fontWeight: FontWeight.w600,
-        letterSpacing: 1.2,
+        fontWeight: FontWeight.w600, letterSpacing: MhadType.trackingEyebrow,
         color: palette.textMuted,
       ),
     );
@@ -351,7 +346,6 @@ class _DisclaimerCard extends StatelessWidget {
                 Text(
                   title,
                   style: TextStyle(
-                    fontFamily: kSansFamily,
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
                     color: p.text,
@@ -361,9 +355,7 @@ class _DisclaimerCard extends StatelessWidget {
                 Text(
                   body,
                   style: TextStyle(
-                    fontFamily: kSansFamily,
-                    fontSize: 14,
-                    height: 1.5,
+                    fontSize: 14, height: MhadType.leadingParagraph,
                     color: p.textMuted,
                   ),
                 ),
@@ -427,7 +419,6 @@ class _AckRow extends StatelessWidget {
                   child: Text(
                     context.l10n.disclaimerIM18OrOlder,
                     style: TextStyle(
-                      fontFamily: kSansFamily,
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                       color: palette.text,

@@ -233,18 +233,15 @@ class WebSidebar extends ConsumerWidget {
                         Text(
                           context.l10n.pinDialogPaMhad,
                           style: TextStyle(
-                            fontFamily: kSansFamily,
                             fontSize: 14,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: -0.2,
+                            fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingTitle,
                             color: p.text,
                           ),
                         ),
                         Text(
                           context.l10n.webSidebarAct1942004,
                           style: TextStyle(
-                            fontSize: 12,
-                            letterSpacing: 0.6,
+                            fontSize: 12, letterSpacing: MhadType.trackingLabel,
                             color: p.textMuted,
                           ),
                         ),
@@ -664,8 +661,7 @@ class _Badge extends StatelessWidget {
         label,
         style: TextStyle(
           fontSize: 12,
-          fontWeight: FontWeight.w700,
-          letterSpacing: 0.3,
+          fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingLabel,
           color: fg,
         ),
       ),
@@ -711,8 +707,7 @@ class _CrisisCard extends StatelessWidget {
                       context.l10n.webSidebar247Lifeline,
                       style: TextStyle(
                         fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 0.7,
+                        fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingLabel,
                         color: SemanticColors.errorTextLight,
                       ),
                     ),
@@ -723,7 +718,6 @@ class _CrisisCard extends StatelessWidget {
               Text(
                 context.l10n.webSidebar988CrisisHelp,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
                   color: SemanticColors.errorTextLight,
@@ -733,7 +727,6 @@ class _CrisisCard extends StatelessWidget {
               Text(
                 context.l10n.webSidebarClickForMoreInformation,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
                   fontSize: 12,
                   color: SemanticColors.errorTextLight.withValues(alpha: 0.85),
                 ),
@@ -787,7 +780,6 @@ class _GetHelpCard extends StatelessWidget {
                     Text(
                       context.l10n.moreSheetGetHelp,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
                         color: p.text,
@@ -797,7 +789,6 @@ class _GetHelpCard extends StatelessWidget {
                     Text(
                       context.l10n.webSidebarPeerSupportAdvocatesReferrals,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
                         fontSize: 12,
                         color: p.textMuted,
                       ),

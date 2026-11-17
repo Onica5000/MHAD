@@ -679,8 +679,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
                 Text(
                   context.l10n.reviewAiReadThisPhoto,
                   style: TextStyle(
-                    fontSize: 12,
-                    letterSpacing: 0.6,
+                    fontSize: 12, letterSpacing: MhadType.trackingLabel,
                     fontWeight: FontWeight.w700,
                     color: p.primary,
                   ),
@@ -699,11 +698,9 @@ extension _PipelineReviewUi on _PipelineScreenState {
       Text(
         context.l10n.reviewHowToIntro,
         style: TextStyle(
-          fontFamily: kSansFamily,
           fontSize: 14,
           fontWeight: FontWeight.w600,
-          color: p.text,
-          height: 1.5,
+          color: p.text, height: MhadType.leadingParagraph,
         ),
       ),
       const SizedBox(height: 6),
@@ -780,9 +777,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
                   child: Text(
                     context.l10n.reviewPiiRemoved(_piiStripped.toSet().join(', ')),
                     style: TextStyle(
-                      fontFamily: kSansFamily,
-                      fontSize: 12,
-                      height: 1.4,
+                      fontSize: 12, height: MhadType.leadingParagraph,
                       color: p.text,
                     ),
                   ),
@@ -796,8 +791,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
           context.l10n.reviewAddToDirective,
           style: TextStyle(
             fontSize: 12,
-            fontWeight: FontWeight.w700,
-            letterSpacing: 1.2,
+            fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingEyebrow,
             color: p.textMuted,
           ),
         ),
@@ -821,10 +815,8 @@ extension _PipelineReviewUi on _PipelineScreenState {
                 child: Text(
                   context.l10n.reviewPhotoDiscarded,
                   style: TextStyle(
-                    fontFamily: kSansFamily,
                     fontSize: 12,
-                    color: p.textMuted,
-                    height: 1.4,
+                    color: p.textMuted, height: MhadType.leadingParagraph,
                   ),
                 ),
               ),
@@ -836,8 +828,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
           context.l10n.reviewFieldsReady(checkedCount, keys.length),
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: 12,
-            letterSpacing: 0.6,
+            fontSize: 12, letterSpacing: MhadType.trackingLabel,
             color: checkedCount > 0 ? okText : p.textMuted,
           ),
         ),
@@ -965,7 +956,6 @@ extension _PipelineReviewUi on _PipelineScreenState {
               TextSpan(
                 text: '$tag: ',
                 style: TextStyle(
-                  fontFamily: kSansFamily,
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
                   color: p.textMuted,
@@ -974,7 +964,6 @@ extension _PipelineReviewUi on _PipelineScreenState {
               TextSpan(
                 text: value,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
                   fontSize: 14,
                   color: p.text,
                 ),
@@ -991,7 +980,6 @@ extension _PipelineReviewUi on _PipelineScreenState {
           Text(
             _displayLabel(it.key),
             style: TextStyle(
-              fontFamily: kSansFamily,
               fontSize: 14,
               fontWeight: FontWeight.w700,
               color: p.text,
@@ -1039,7 +1027,6 @@ extension _PipelineReviewUi on _PipelineScreenState {
               child: Text(
                 context.l10n.reviewIdentityNotMerged,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
                   fontSize: 12,
                   fontStyle: FontStyle.italic,
                   color: p.textMuted,
@@ -1051,20 +1038,16 @@ extension _PipelineReviewUi on _PipelineScreenState {
             Text(
               context.l10n.reviewWillSave,
               style: TextStyle(
-                fontFamily: kSansFamily,
                 fontSize: 12,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 0.3,
+                fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingLabel,
                 color: p.textMuted,
               ),
             ),
             Text(
               _reviewEdited[it.key] ?? '',
               style: TextStyle(
-                fontFamily: kSansFamily,
                 fontSize: 14,
-                color: p.text,
-                height: 1.4,
+                color: p.text, height: MhadType.leadingParagraph,
               ),
             ),
           ],
@@ -1152,9 +1135,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
             child: Text(
               context.l10n.reviewAgentInitialsNote,
               style: TextStyle(
-                fontFamily: kSansFamily,
-                fontSize: 12,
-                height: 1.4,
+                fontSize: 12, height: MhadType.leadingParagraph,
                 color: p.textMuted,
               ),
             ),
@@ -1168,8 +1149,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
         text.toUpperCase(),
         style: TextStyle(
           fontSize: 12,
-          fontWeight: FontWeight.w700,
-          letterSpacing: 1.2,
+          fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingEyebrow,
           color: p.textMuted,
         ),
       );
@@ -1446,8 +1426,7 @@ class _SnapReviewRow extends StatelessWidget {
                         fieldLabel.toUpperCase(),
                         style: TextStyle(
                           fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 0.5,
+                          fontWeight: FontWeight.w600, letterSpacing: MhadType.trackingLabel,
                           color: p.textMuted,
                         ),
                       ),
@@ -1457,8 +1436,7 @@ class _SnapReviewRow extends StatelessWidget {
                       ok ? '→ $target' : context.l10n.reviewNotAdded,
                       style: TextStyle(
                         fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 0.4,
+                        fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingLabel,
                         color: ok ? p.primary : p.textMuted,
                       ),
                     ),
@@ -1468,7 +1446,6 @@ class _SnapReviewRow extends StatelessWidget {
                 Text(
                   value,
                   style: TextStyle(
-                    fontFamily: kSansFamily,
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                     color: ok ? p.text : p.textMuted,

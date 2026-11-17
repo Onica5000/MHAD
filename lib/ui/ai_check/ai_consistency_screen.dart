@@ -433,7 +433,6 @@ Return plain-text suggestions (short bullets are fine). No preamble.''';
             Text(
               context.l10n.aiConsistencyTheAiIsReviewingYour,
               style: TextStyle(
-                fontFamily: kSansFamily,
                 fontSize: 14,
                 color: p.textMuted,
               ),
@@ -474,7 +473,6 @@ Return plain-text suggestions (short bullets are fine). No preamble.''';
         Text(
           context.l10n.aiConsistencyAiReviewSkippedYouCan,
           style: TextStyle(
-            fontFamily: kSansFamily,
             fontSize: 14,
             color: p.textMuted,
           ),
@@ -510,9 +508,7 @@ Return plain-text suggestions (short bullets are fine). No preamble.''';
                   ? _aiSuggestions!
                   : context.l10n.aiConsistencyNoSuggestions,
               style: TextStyle(
-                fontFamily: kSansFamily,
-                fontSize: 14,
-                height: 1.5,
+                fontSize: 14, height: MhadType.leadingParagraph,
                 color: p.text,
               ),
             ),
@@ -522,7 +518,6 @@ Return plain-text suggestions (short bullets are fine). No preamble.''';
         Text(
           context.l10n.aiConsistencyNotAdviceOptional(aiNotAdvice),
           style: TextStyle(
-            fontFamily: kSansFamily,
             fontSize: 12,
             fontStyle: FontStyle.italic,
             color: p.textMuted,
@@ -757,9 +752,7 @@ class _ConflictCard extends StatelessWidget {
       child: Text(
         text,
         style: TextStyle(
-          fontFamily: kSansFamily,
-          fontSize: 14,
-          height: 1.3,
+          fontSize: 14, height: MhadType.leadingUi,
           fontWeight: FontWeight.w600,
           color: p.text,
         ),
@@ -797,8 +790,7 @@ class _ConflictCard extends StatelessWidget {
                 Text(
                   context.l10n.aiConsistencyConflictHeader(index + 1, conflict.steps),
                   style: TextStyle(
-                    fontSize: 12,
-                    letterSpacing: 0.8,
+                    fontSize: 12, letterSpacing: MhadType.trackingLabel,
                     fontWeight: FontWeight.w700,
                     color: warnText,
                   ),
@@ -830,7 +822,6 @@ class _ConflictCard extends StatelessWidget {
             Text(
               conflict.title,
               style: TextStyle(
-                fontFamily: kSansFamily,
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
                 color: p.text,
@@ -840,9 +831,7 @@ class _ConflictCard extends StatelessWidget {
             Text(
               conflict.body,
               style: TextStyle(
-                fontFamily: kSansFamily,
-                fontSize: 14,
-                height: 1.45,
+                fontSize: 14, height: MhadType.leadingParagraph,
                 color: p.text,
               ),
             ),

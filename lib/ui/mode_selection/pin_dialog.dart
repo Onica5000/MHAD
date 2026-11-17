@@ -274,18 +274,15 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
                       Text(
                         context.l10n.pinDialogPaMhad,
                         style: TextStyle(
-                          fontFamily: kSansFamily,
                           fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: -0.2,
+                          fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingTitle,
                           color: p.text,
                         ),
                       ),
                       Text(
                         context.l10n.pinDialogPrivateModeLocked,
                         style: TextStyle(
-                          fontSize: 12,
-                          letterSpacing: 0.6,
+                          fontSize: 12, letterSpacing: MhadType.trackingLabel,
                           color: p.textMuted,
                         ),
                       ),
@@ -362,9 +359,7 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
                 context.l10n.pinDialogEnterYourPasscodeToUnlock,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
-                  fontSize: 14,
-                  height: 1.5,
+                  fontSize: 14, height: MhadType.leadingParagraph,
                   color: p.textMuted,
                 ),
               ),
@@ -409,8 +404,7 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
                                   : context.l10n.pinDialogAttempt(_failedAttempts, 5)),
                           style: TextStyle(
                             fontSize: 12,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: 0.8,
+                            fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingLabel,
                             color: _verifying
                                 ? p.primary
                                 : (_lockedOut ? cs.error : p.primary),

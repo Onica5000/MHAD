@@ -274,7 +274,6 @@ class _Section extends StatelessWidget {
                   Expanded(
                     child: Text(title,
                         style: const TextStyle(
-                          fontFamily: kSansFamily,
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                         )),

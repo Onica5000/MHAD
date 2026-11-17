@@ -64,8 +64,7 @@ class MessageBubble extends StatelessWidget {
                       message.content,
                       style: TextStyle(
                         color: isUser ? cs.onPrimary : cs.onSurface,
-                        fontSize: 14,
-                        height: 1.4,
+                        fontSize: 14, height: MhadType.leadingParagraph,
                       ),
                     ),
                   ),

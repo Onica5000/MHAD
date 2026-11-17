@@ -75,8 +75,7 @@ class WalletCard extends StatelessWidget {
                               context.l10n.walletCardPaMhadAct194,
                               style: TextStyle(
                                 fontSize: 10,
-                                fontWeight: FontWeight.w600,
-                                letterSpacing: 1.4,
+                                fontWeight: FontWeight.w600, letterSpacing: MhadType.trackingEyebrow,
                                 color: p.onPrimary.withValues(alpha: 0.8),
                               ),
                             ),
@@ -84,10 +83,8 @@ class WalletCard extends StatelessWidget {
                             Text(
                               principalName,
                               style: TextStyle(
-                                fontFamily: kSansFamily,
                                 fontSize: 18,
-                                fontWeight: FontWeight.w700,
-                                letterSpacing: -0.2,
+                                fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingTitle,
                                 color: p.onPrimary,
                               ),
                               maxLines: 1,
@@ -97,7 +94,6 @@ class WalletCard extends StatelessWidget {
                             Text(
                               context.l10n.walletCardHasAnActiveDirectiveOn,
                               style: TextStyle(
-                                fontFamily: kSansFamily,
                                 fontSize: 12,
                                 color: p.onPrimary.withValues(alpha: 0.85),
                               ),
@@ -181,8 +177,7 @@ class WalletCard extends StatelessWidget {
           label,
           style: TextStyle(
             fontSize: 10,
-            fontWeight: FontWeight.w600,
-            letterSpacing: 1.0,
+            fontWeight: FontWeight.w600, letterSpacing: MhadType.trackingEyebrow,
             color: color.withValues(alpha: 0.7),
           ),
         ),
@@ -190,7 +185,6 @@ class WalletCard extends StatelessWidget {
         Text(
           value,
           style: TextStyle(
-            fontFamily: kSansFamily,
             fontSize: 12,
             fontWeight: FontWeight.w600,
             color: color,

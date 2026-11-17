@@ -76,9 +76,7 @@ class AssistantContextPanel extends StatelessWidget {
               child: Text(
                 buildContext.l10n.assistantContextPanelAskAboutFormTypesAgents,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
-                  fontSize: 14,
-                  height: 1.45,
+                  fontSize: 14, height: MhadType.leadingParagraph,
                   color: p.textMuted,
                 ),
               ),
@@ -110,8 +108,7 @@ class AssistantContextPanel extends StatelessWidget {
                       buildContext.l10n.assistantContextPanelPiiRedactionOn,
                       style: TextStyle(
                         fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 0.6,
+                        fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingLabel,
                         color: p.primary,
                       ),
                     ),
@@ -121,9 +118,7 @@ class AssistantContextPanel extends StatelessWidget {
                 Text(
                   buildContext.l10n.assistantContextPanelNamesAddressesPhoneNumbersAnd,
                   style: TextStyle(
-                    fontFamily: kSansFamily,
-                    fontSize: 12,
-                    height: 1.45,
+                    fontSize: 12, height: MhadType.leadingParagraph,
                     color: p.text,
                   ),
                 ),
@@ -157,7 +152,6 @@ class _ContextKV extends StatelessWidget {
             child: Text(
               label,
               style: TextStyle(
-                fontFamily: kSansFamily,
                 fontSize: 12,
                 color: p.textMuted,
               ),
@@ -169,7 +163,6 @@ class _ContextKV extends StatelessWidget {
               value,
               textAlign: TextAlign.right,
               style: TextStyle(
-                fontFamily: kSansFamily,
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
                 color: p.text,
@@ -213,9 +206,7 @@ class _ContextPromptTile extends StatelessWidget {
                   child: Text(
                     text,
                     style: TextStyle(
-                      fontFamily: kSansFamily,
-                      fontSize: 14,
-                      height: 1.3,
+                      fontSize: 14, height: MhadType.leadingUi,
                       color: p.text,
                     ),
                   ),

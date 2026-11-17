@@ -178,7 +178,6 @@ class _AnonBanner extends StatelessWidget {
                 Text(
                   context.l10n.webLandingYouReWorkingAnonymouslyNothing,
                   style: TextStyle(
-                    fontFamily: kSansFamily,
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
                     color: p.text,
@@ -188,9 +187,7 @@ class _AnonBanner extends StatelessWidget {
                 Text(
                   context.l10n.webLandingNoAccountNoCloudIf,
                   style: TextStyle(
-                    fontFamily: kSansFamily,
-                    fontSize: 12,
-                    height: 1.4,
+                    fontSize: 12, height: MhadType.leadingParagraph,
                     color: p.textMuted,
                   ),
                 ),
@@ -210,8 +207,7 @@ class _AnonBanner extends StatelessWidget {
                 context.l10n.webLandingHowThisWorks,
                 style: TextStyle(
                   fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 0.6,
+                  fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingLabel,
                   color: p.primary,
                 ),
               ),
@@ -317,7 +313,6 @@ class _PromiseItem extends StatelessWidget {
               Text(
                 title,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
                   color: p.text,
@@ -327,9 +322,7 @@ class _PromiseItem extends StatelessWidget {
               Text(
                 sub,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
-                  fontSize: 12,
-                  height: 1.4,
+                  fontSize: 12, height: MhadType.leadingParagraph,
                   color: p.textMuted,
                 ),
               ),
@@ -364,15 +357,13 @@ class _BookletQuoteCard extends StatelessWidget {
               SectionLabel(context.l10n.webLandingFromTheBooklet),
               Text(
                 context.l10n.webLandingAnMhadIsYourVoice,
-                style: MhadText.serifAccent(context, size: 22, color: p.primaryDark, height: 1.2),
+                style: MhadText.serifAccent(context, size: 22, color: p.primaryDark, height: MhadType.leadingUi),
               ),
               const SizedBox(height: 8),
               Text(
                 context.l10n.webLandingPaMhadBookletOfficeOf,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
-                  fontSize: 12,
-                  letterSpacing: 0.3,
+                  fontSize: 12, letterSpacing: MhadType.trackingLabel,
                   color: p.textMuted,
                 ),
               ),

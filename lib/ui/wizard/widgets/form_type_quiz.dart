@@ -178,8 +178,7 @@ class _QuestionBody extends StatelessWidget {
                   child: Text(
                     context.l10n.quizQuestionEyebrow(step + 1, total),
                     style: TextStyle(
-                      fontSize: 12,
-                      letterSpacing: 1,
+                      fontSize: 12, letterSpacing: MhadType.trackingEyebrow,
                       color: p.textMuted,
                     ),
                   ),
@@ -210,10 +209,8 @@ class _QuestionBody extends StatelessWidget {
               Text(
                 question.sub,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
                   fontSize: 14,
-                  color: p.textMuted,
-                  height: 1.45,
+                  color: p.textMuted, height: MhadType.leadingParagraph,
                 ),
               ),
               const SizedBox(height: 16),
@@ -298,11 +295,9 @@ class _OptCard extends StatelessWidget {
                   Text(
                     label,
                     style: TextStyle(
-                      fontFamily: kSansFamily,
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
-                      color: p.text,
-                      height: 1.3,
+                      color: p.text, height: MhadType.leadingUi,
                     ),
                   ),
                   if (selected) ...[
@@ -310,10 +305,8 @@ class _OptCard extends StatelessWidget {
                     Text(
                       hint,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
                         fontSize: 14,
-                        color: p.textMuted,
-                        height: 1.4,
+                        color: p.textMuted, height: MhadType.leadingParagraph,
                       ),
                     ),
                   ],
@@ -366,8 +359,7 @@ class _ResultBody extends StatelessWidget {
                   child: Text(
                     context.l10n.quizResultEyebrow,
                     style: TextStyle(
-                      fontSize: 12,
-                      letterSpacing: 1,
+                      fontSize: 12, letterSpacing: MhadType.trackingEyebrow,
                       color: p.textMuted,
                     ),
                   ),
@@ -399,10 +391,8 @@ class _ResultBody extends StatelessWidget {
               Text(
                 _explanation(context, leader),
                 style: TextStyle(
-                  fontFamily: kSansFamily,
                   fontSize: 14,
-                  color: p.textMuted,
-                  height: 1.5,
+                  color: p.textMuted, height: MhadType.leadingParagraph,
                 ),
               ),
               const SizedBox(height: 18),
@@ -528,7 +518,6 @@ class _LegendRow extends StatelessWidget {
             child: Text(
               label,
               style: TextStyle(
-                fontFamily: kSansFamily,
                 fontSize: 14,
                 fontWeight: emphasized ? FontWeight.w700 : FontWeight.w500,
                 color: emphasized ? p.text : p.textMuted,

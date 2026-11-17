@@ -45,7 +45,6 @@ class PdfPreviewScreen extends StatelessWidget {
             Text(
               context.l10n.wizardPreview,
               style: TextStyle(
-                fontFamily: kSansFamily,
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
                 color: p.text,
@@ -54,8 +53,7 @@ class PdfPreviewScreen extends StatelessWidget {
             Text(
               context.l10n.pdfPreviewUsLetter8511,
               style: TextStyle(
-                fontSize: 12,
-                letterSpacing: 0.5,
+                fontSize: 12, letterSpacing: MhadType.trackingLabel,
                 color: p.textMuted,
               ),
             ),
@@ -430,7 +428,6 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
                 minimumSize: const Size(0, 32),
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 textStyle: const TextStyle(
-                  fontFamily: kSansFamily,
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
                 ),
@@ -452,9 +449,7 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
         Text(
           context.l10n.pdfPreviewSizedForUsLetter8,
           style: TextStyle(
-            fontFamily: kSansFamily,
-            fontSize: 12,
-            height: 1.4,
+            fontSize: 12, height: MhadType.leadingParagraph,
             color: p.textMuted,
           ),
         ),
@@ -465,7 +460,6 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
           Text(
             context.l10n.pdfPreviewPageOf(_current + 1, pageCount),
             style: TextStyle(
-              fontFamily: kSansFamily,
               fontSize: 14,
               fontWeight: FontWeight.w600,
               color: p.text,
@@ -487,8 +481,7 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
           Text(
             context.l10n.pdfPreviewPages,
             style: TextStyle(
-              fontSize: 12,
-              letterSpacing: 1,
+              fontSize: 12, letterSpacing: MhadType.trackingEyebrow,
               fontWeight: FontWeight.w700,
               color: p.textMuted,
             ),
@@ -540,7 +533,6 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
                         context.l10n.pdfPreviewPage(i + 1),
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontFamily: kSansFamily,
                           fontSize: 12,
                           fontWeight:
                               selected ? FontWeight.w700 : FontWeight.w500,
@@ -565,7 +557,6 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
         child: Text(
           text,
           style: TextStyle(
-            fontFamily: kSansFamily,
             fontSize: 14,
             color: p.textMuted,
           ),
@@ -591,8 +582,7 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
           label,
           style: TextStyle(
             fontSize: 17,
-            fontWeight: FontWeight.w600,
-            height: 1,
+            fontWeight: FontWeight.w600, height: MhadType.leadingTitle,
             color: enabled ? p.text : p.border,
           ),
         ),
@@ -626,8 +616,7 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
             fontFamily: kMonoFamily,
             fontFamilyFallback: kMonoFallbacks,
             fontSize: 12,
-            fontWeight: FontWeight.w700,
-            letterSpacing: 0.4,
+            fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingLabel,
             color: isFit ? p.primary : p.text,
           ),
         ),

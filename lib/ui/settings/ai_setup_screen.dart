@@ -297,8 +297,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                         context.l10n.aiSetupYourApiKeyWillNot,
                         style: TextStyle(
                             fontSize: 14,
-                            color: cs.onTertiaryContainer,
-                            height: 1.4),
+                            color: cs.onTertiaryContainer, height: MhadType.leadingParagraph),
                       ),
                     ),
                   ],
@@ -334,8 +333,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                         context.l10n.aiSetupMayBeBlockedByYour(_provider.label),
                         style: TextStyle(
                             fontSize: 14,
-                            color: cs.onErrorContainer,
-                            height: 1.4),
+                            color: cs.onErrorContainer, height: MhadType.leadingParagraph),
                       ),
                     ),
                   ],
@@ -360,7 +358,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                 ? context.l10n.aiSetupTheAssistantUsesGoogleS
                 : context.l10n.aiSetupYouBringYourOwnApi(_provider.label),
             style: TextStyle(
-                fontSize: 14, color: cs.onSurfaceVariant, height: 1.4),
+                fontSize: 14, color: cs.onSurfaceVariant, height: MhadType.leadingParagraph),
           ),
           const SizedBox(height: 16),
 
@@ -393,8 +391,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                   Text(
                     context.l10n.aiSetupYouLlNeedToSign,
                     style: TextStyle(
-                        fontSize: 14, color: cs.onErrorContainer,
-                        height: 1.4),
+                        fontSize: 14, color: cs.onErrorContainer, height: MhadType.leadingParagraph),
                   ),
                   const SizedBox(height: 10),
                   _BrowserShortcut(
@@ -439,14 +436,14 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                     context.l10n.aiSetupOnAPhoneTapThe,
                     style: TextStyle(
                         fontSize: 12, color: cs.onErrorContainer,
-                        fontStyle: FontStyle.italic, height: 1.4),
+                        fontStyle: FontStyle.italic, height: MhadType.leadingParagraph),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     context.l10n.aiSetupYourGoogleLoginWillBe,
                     style: TextStyle(
                         fontSize: 14, color: cs.onErrorContainer,
-                        fontWeight: FontWeight.w600, height: 1.4),
+                        fontWeight: FontWeight.w600, height: MhadType.leadingParagraph),
                   ),
                 ],
               ),
@@ -601,7 +598,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                     Expanded(
                       child: Text(
                         _testResult!,
-                        style: TextStyle(fontSize: 14, height: 1.4),
+                        style: TextStyle(fontSize: 14, height: MhadType.leadingParagraph),
                       ),
                     ),
                   ],
@@ -830,8 +827,7 @@ class _StepTile extends StatelessWidget {
                   Text(subtitle!,
                       style: TextStyle(
                           fontSize: 14,
-                          color: cs.onSurfaceVariant,
-                          height: 1.3)),
+                          color: cs.onSurfaceVariant, height: MhadType.leadingUi)),
                 ],
                 if (trailing != null) ...[
                   const SizedBox(height: 8),
@@ -885,8 +881,7 @@ class _BrowserShortcut extends StatelessWidget {
               style: TextStyle(
                 fontSize: 12,
                 color: color,
-                fontFamily: isNote ? null : 'monospace',
-                height: 1.3,
+                fontFamily: isNote ? null : 'monospace', height: MhadType.leadingUi,
               ),
             ),
           ),
@@ -915,7 +910,7 @@ class _FaqTile extends StatelessWidget {
         children: [
           Text(answer,
               style: TextStyle(
-                  fontSize: 14, color: cs.onSurfaceVariant, height: 1.4)),
+                  fontSize: 14, color: cs.onSurfaceVariant, height: MhadType.leadingParagraph)),
         ],
       ),
     );

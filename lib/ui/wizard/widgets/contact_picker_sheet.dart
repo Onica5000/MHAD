@@ -336,9 +336,7 @@ class _ContactPickerSheetState extends State<_ContactPickerSheet> {
                   Text(
                     context.l10n.contactSheetLocalOnly,
                     style: TextStyle(
-                      fontFamily: kSansFamily,
-                      fontSize: 14,
-                      height: 1.45,
+                      fontSize: 14, height: MhadType.leadingParagraph,
                       color: p.textMuted,
                     ),
                   ),
@@ -370,7 +368,6 @@ class _ContactPickerSheetState extends State<_ContactPickerSheet> {
                                   const EdgeInsets.symmetric(vertical: 10),
                             ),
                             style: TextStyle(
-                              fontFamily: kSansFamily,
                               fontSize: 14,
                               color: p.text,
                             ),
@@ -548,7 +545,6 @@ class _PersonTile extends StatelessWidget {
                     child: Text(
                       initials,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
                         fontWeight: FontWeight.w700,
                         fontSize: 14,
                         color: selected ? p.onPrimary : p.onPrimaryLight,
@@ -565,7 +561,6 @@ class _PersonTile extends StatelessWidget {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            fontFamily: kSansFamily,
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
                             color: p.text,
@@ -575,8 +570,7 @@ class _PersonTile extends StatelessWidget {
                           Text(
                             relLabel,
                             style: TextStyle(
-                              fontSize: 12,
-                              letterSpacing: 0.3,
+                              fontSize: 12, letterSpacing: MhadType.trackingLabel,
                               color: p.textMuted,
                             ),
                           ),
@@ -590,7 +584,6 @@ class _PersonTile extends StatelessWidget {
                                       _noteText(
                                           context, cand.eligibilityNote!)),
                               style: TextStyle(
-                                fontFamily: kSansFamily,
                                 fontSize: 12,
                                 color: blocked ? dangerColor : warnColor,
                               ),
@@ -602,7 +595,6 @@ class _PersonTile extends StatelessWidget {
                             child: Text(
                               context.l10n.contactSheetEligible,
                               style: TextStyle(
-                                fontFamily: kSansFamily,
                                 fontSize: 12,
                                 color: p.textMuted,
                               ),
@@ -680,7 +672,6 @@ class _ManualEntryTile extends StatelessWidget {
               Text(
                 context.l10n.contactSheetEnterManually,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
                   color: p.primary,
@@ -746,10 +737,8 @@ class _EligibilityRulesCard extends StatelessWidget {
                     child: Text(
                       rule,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
                         fontSize: 12,
-                        color: p.text,
-                        height: 1.4,
+                        color: p.text, height: MhadType.leadingParagraph,
                       ),
                     ),
                   ),
@@ -758,8 +747,7 @@ class _EligibilityRulesCard extends StatelessWidget {
                     label.toUpperCase(),
                     style: TextStyle(
                       fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 0.4,
+                      fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingLabel,
                       color:
                           kind == _Eligibility.blocked ? dangerColor : warnColor,
                     ),
@@ -771,11 +759,9 @@ class _EligibilityRulesCard extends StatelessWidget {
           Text(
             l10n.contactSheetRulesFootnote,
             style: TextStyle(
-              fontFamily: kSansFamily,
               fontSize: 12,
               color: p.textMuted,
-              fontStyle: FontStyle.italic,
-              height: 1.4,
+              fontStyle: FontStyle.italic, height: MhadType.leadingParagraph,
             ),
           ),
         ],

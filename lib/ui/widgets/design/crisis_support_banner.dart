@@ -34,7 +34,6 @@ class CrisisSupportBanner extends ConsumerWidget {
             Text(
               context.l10n.crisisBannerTitle,
               style: TextStyle(
-                fontFamily: kSansFamily,
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
                 color: cs.onErrorContainer,
@@ -44,9 +43,7 @@ class CrisisSupportBanner extends ConsumerWidget {
             Text(
               context.l10n.crisisBannerBody,
               style: TextStyle(
-                fontFamily: kSansFamily,
-                fontSize: 14,
-                height: 1.4,
+                fontSize: 14, height: MhadType.leadingParagraph,
                 color: cs.onErrorContainer,
               ),
             ),

@@ -114,8 +114,7 @@ class HealthChip extends StatelessWidget {
                   fontFamily: kMonoFamily,
                   fontFamilyFallback: kMonoFallbacks,
                   fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 0.4,
+                  fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingLabel,
                   color: codeFg,
                 ),
               ),
@@ -134,7 +133,6 @@ class HealthChip extends StatelessWidget {
                     Text(
                       label,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
                         color: text,
@@ -147,8 +145,7 @@ class HealthChip extends StatelessWidget {
                           fontFamily: kMonoFamily,
                           fontFamilyFallback: kMonoFallbacks,
                           fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 0.4,
+                          fontWeight: FontWeight.w600, letterSpacing: MhadType.trackingLabel,
                           color: text.withValues(alpha: 0.75),
                         ),
                       ),
@@ -165,8 +162,7 @@ class HealthChip extends StatelessWidget {
                           sourceTag!,
                           style: TextStyle(
                             fontSize: 12,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: 0.4,
+                            fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingLabel,
                             color: codeBg,
                           ),
                         ),
@@ -178,9 +174,7 @@ class HealthChip extends StatelessWidget {
                   Text(
                     sub!,
                     style: TextStyle(
-                      fontFamily: kSansFamily,
-                      fontSize: 12,
-                      height: 1.35,
+                      fontSize: 12, height: MhadType.leadingUi,
                       color: text.withValues(alpha: 0.78),
                     ),
                   ),

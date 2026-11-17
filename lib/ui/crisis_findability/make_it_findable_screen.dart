@@ -95,10 +95,8 @@ class MakeItFindableScreen extends ConsumerWidget {
                 Text(
                   context.l10n.makeItFindableThisIsGeneralInformationAbout,
                   style: TextStyle(
-                    fontFamily: kSansFamily,
                     fontSize: 12,
-                    fontStyle: FontStyle.italic,
-                    height: 1.45,
+                    fontStyle: FontStyle.italic, height: MhadType.leadingParagraph,
                     color: p.textMuted,
                   ),
                 ),

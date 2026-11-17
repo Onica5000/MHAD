@@ -679,7 +679,6 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                 const SizedBox(width: 2),
                 Text(label,
                     style: TextStyle(
-                        fontFamily: kSansFamily,
                         fontSize: 14,
                         color: p.textMuted)),
               ],

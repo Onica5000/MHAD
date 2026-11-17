@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/page_hero.dart';
 import 'package:mhad/ui/theme/app_art.dart';
 import 'package:mhad/l10n/l10n.dart';
@@ -14,7 +15,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
     final bodyStyle = Theme.of(context)
         .textTheme
         .bodySmall
-        ?.copyWith(height: 1.6);
+        ?.copyWith(height: MhadType.leadingParagraph);
     final headingStyle = Theme.of(context)
         .textTheme
         .titleSmall

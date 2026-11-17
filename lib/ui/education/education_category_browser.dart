@@ -142,7 +142,6 @@ class _BrowseRow extends StatelessWidget {
                     Text(
                       title,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                         color: p.text,
@@ -152,7 +151,6 @@ class _BrowseRow extends StatelessWidget {
                     Text(
                       sub,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
                         fontSize: 12,
                         color: p.textMuted,
                       ),
@@ -176,8 +174,7 @@ class _BrowseRow extends StatelessWidget {
                     fontFamily: kMonoFamily,
                     fontFamilyFallback: kMonoFallbacks,
                     fontSize: 12,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 0.4,
+                    fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingLabel,
                     color: p.primary,
                   ),
                 ),

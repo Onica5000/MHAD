@@ -65,7 +65,6 @@ class AudioGuideScreen extends StatelessWidget {
           Text(
             context.l10n.audioGuidePrintItToReadAloud,
             style: TextStyle(
-              fontFamily: kSansFamily,
               fontSize: 12,
               color: p.textMuted,
             ),
@@ -109,9 +108,7 @@ class AudioGuideScreen extends StatelessWidget {
           Text(
             audioQIntro,
             style: TextStyle(
-              fontFamily: kSansFamily,
-              fontSize: 14,
-              height: 1.5,
+              fontSize: 14, height: MhadType.leadingParagraph,
               color: p.textMuted,
             ),
           ),
@@ -124,7 +121,6 @@ class AudioGuideScreen extends StatelessWidget {
           Text(
             context.l10n.audioGuideSetTheseInTheApp,
             style: TextStyle(
-              fontFamily: kSansFamily,
               fontSize: 14,
               color: p.textMuted,
             ),
@@ -135,7 +131,6 @@ class AudioGuideScreen extends StatelessWidget {
           Text(
             context.l10n.audioGuideWorthSayingOutLoudAutofill,
             style: TextStyle(
-              fontFamily: kSansFamily,
               fontSize: 14,
               color: p.textMuted,
             ),
@@ -148,10 +143,8 @@ class AudioGuideScreen extends StatelessWidget {
           Text(
             audioQClosing,
             style: TextStyle(
-              fontFamily: kSansFamily,
               fontSize: 14,
-              fontStyle: FontStyle.italic,
-              height: 1.45,
+              fontStyle: FontStyle.italic, height: MhadType.leadingParagraph,
               color: p.text,
             ),
           ),
@@ -171,9 +164,7 @@ class AudioGuideScreen extends StatelessWidget {
               child: Text(
                 text,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
-                  fontSize: 14,
-                  height: 1.45,
+                  fontSize: 14, height: MhadType.leadingParagraph,
                   color: p.text,
                 ),
               ),
@@ -189,16 +180,13 @@ class AudioGuideScreen extends StatelessWidget {
           children: [
             Text('•  ',
                 style: TextStyle(
-                    fontFamily: kSansFamily,
                     fontSize: 14,
                     color: muted ? p.textMuted : p.text)),
             Expanded(
               child: Text(
                 text,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
-                  fontSize: 14,
-                  height: 1.45,
+                  fontSize: 14, height: MhadType.leadingParagraph,
                   color: muted ? p.textMuted : p.text,
                 ),
               ),
@@ -217,7 +205,6 @@ class AudioGuideScreen extends StatelessWidget {
             Text(
               '${s.number}.  ${s.title}',
               style: TextStyle(
-                fontFamily: kSansFamily,
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
                 color: p.text,
@@ -228,7 +215,6 @@ class AudioGuideScreen extends StatelessWidget {
               Text(
                 s.appliesWhen!,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
                   fontSize: 12,
                   fontStyle: FontStyle.italic,
                   color: p.textMuted,
@@ -249,10 +235,8 @@ class AudioGuideScreen extends StatelessWidget {
                 child: Text(
                   context.l10n.audioGuideExample(s.example!),
                   style: TextStyle(
-                    fontFamily: kSansFamily,
                     fontSize: 14,
-                    fontStyle: FontStyle.italic,
-                    height: 1.45,
+                    fontStyle: FontStyle.italic, height: MhadType.leadingParagraph,
                     color: p.textMuted,
                   ),
                 ),
@@ -269,9 +253,7 @@ class AudioGuideScreen extends StatelessWidget {
                     child: Text(
                       s.note!,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
-                        fontSize: 12,
-                        height: 1.4,
+                        fontSize: 12, height: MhadType.leadingParagraph,
                         color: p.textMuted,
                       ),
                     ),

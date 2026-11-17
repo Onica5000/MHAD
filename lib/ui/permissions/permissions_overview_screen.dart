@@ -203,7 +203,6 @@ class _PermissionCard extends StatelessWidget {
                     Text(
                       title,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
                         color: p.text,
@@ -225,8 +224,7 @@ class _PermissionCard extends StatelessWidget {
                           child: Text(
                             statusLine,
                             style: TextStyle(
-                              fontSize: 12,
-                              letterSpacing: 0.5,
+                              fontSize: 12, letterSpacing: MhadType.trackingLabel,
                               color: statusColor,
                             ),
                           ),
@@ -242,10 +240,8 @@ class _PermissionCard extends StatelessWidget {
           Text(
             usedFor,
             style: TextStyle(
-              fontFamily: kSansFamily,
               fontSize: 14,
-              color: p.text,
-              height: 1.5,
+              color: p.text, height: MhadType.leadingParagraph,
             ),
           ),
           const SizedBox(height: 10),
@@ -271,9 +267,7 @@ class _PermissionCard extends StatelessWidget {
                           child: Text(
                             line,
                             style: TextStyle(
-                              fontFamily: kSansFamily,
-                              fontSize: 12,
-                              height: 1.4,
+                              fontSize: 12, height: MhadType.leadingParagraph,
                               color: p.text,
                             ),
                           ),

@@ -233,7 +233,6 @@ class _EditorialLearnHub extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          fontFamily: kSansFamily,
                           fontSize: 14,
                           color: p.textMuted,
                         ),
@@ -339,15 +338,14 @@ class _EditorialLearnHub extends StatelessWidget {
               Text(
                 context.l10n.educationYourDirectiveIsYourVoice,
                 textAlign: TextAlign.center,
-                style: MhadText.serifAccent(context, size: 18, color: p.primaryDark, height: 1.3),
+                style: MhadText.serifAccent(context, size: 18, color: p.primaryDark, height: MhadType.leadingUi),
               ),
               const SizedBox(height: 8),
               Text(
                 context.l10n.educationPaOfficeOfMentalHealth,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 12,
-                  letterSpacing: 0.6,
+                  fontSize: 12, letterSpacing: MhadType.trackingLabel,
                   color: p.textMuted,
                 ),
               ),
@@ -388,7 +386,6 @@ class _CategoryPill extends StatelessWidget {
           child: Text(
             label,
             style: TextStyle(
-              fontFamily: kSansFamily,
               fontSize: 14,
               fontWeight: FontWeight.w700,
               color: active ? p.onPrimary : p.textMuted,
@@ -465,11 +462,8 @@ class _GridCard extends StatelessWidget {
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
                   fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: -0.2,
-                  height: 1.2,
+                  fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingTitle, height: MhadType.leadingUi,
                   color: p.text,
                 ),
               ),
@@ -479,9 +473,7 @@ class _GridCard extends StatelessWidget {
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
-                  fontSize: 12,
-                  height: 1.4,
+                  fontSize: 12, height: MhadType.leadingParagraph,
                   color: p.textMuted,
                 ),
               ),

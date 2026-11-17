@@ -52,8 +52,7 @@ class ArticleDetailScreen extends StatelessWidget {
           Text(
             source,
             style: TextStyle(
-              fontSize: 12,
-              letterSpacing: 0.6,
+              fontSize: 12, letterSpacing: MhadType.trackingLabel,
               fontWeight: FontWeight.w700,
               color: p.textMuted,
             ),
@@ -68,9 +67,7 @@ class ArticleDetailScreen extends StatelessWidget {
           RichContentText(
             section.content,
             style: const TextStyle(
-              fontFamily: kSansFamily,
-              fontSize: 16,
-              height: 1.6,
+              fontSize: 16, height: MhadType.leadingParagraph,
             ),
           ),
           const SizedBox(height: 24),
@@ -89,8 +86,7 @@ class ArticleDetailScreen extends StatelessWidget {
                   context.l10n.educationArticleDetailTryIt,
                   style: TextStyle(
                     fontSize: 12,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 0.6,
+                    fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingLabel,
                     color: p.primary,
                   ),
                 ),
@@ -98,7 +94,6 @@ class ArticleDetailScreen extends StatelessWidget {
                 Text(
                   context.l10n.educationArticleDetailReadyToWriteYours,
                   style: TextStyle(
-                    fontFamily: kSansFamily,
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
                     color: p.text,
@@ -108,9 +103,7 @@ class ArticleDetailScreen extends StatelessWidget {
                 Text(
                   context.l10n.educationArticleDetailTheGuidedWizardTakesAbout,
                   style: TextStyle(
-                    fontFamily: kSansFamily,
-                    fontSize: 14,
-                    height: 1.5,
+                    fontSize: 14, height: MhadType.leadingParagraph,
                     color: p.textMuted,
                   ),
                 ),

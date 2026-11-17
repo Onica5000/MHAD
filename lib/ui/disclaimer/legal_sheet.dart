@@ -38,7 +38,6 @@ class _ReadOnlyAccordionState extends State<ReadOnlyAccordion> {
             Text(
               context.l10n.legalSheetFullLegalDisclosure,
               style: TextStyle(
-                fontFamily: kSansFamily,
                 fontSize: 22,
                 fontWeight: FontWeight.w700,
                 color: p.text,
@@ -48,10 +47,8 @@ class _ReadOnlyAccordionState extends State<ReadOnlyAccordion> {
             Text(
               context.l10n.legalSheetTheEightSectionsBelowWere,
               style: TextStyle(
-                fontFamily: kSansFamily,
                 fontSize: 14,
-                color: p.textMuted,
-                height: 1.5,
+                color: p.textMuted, height: MhadType.leadingParagraph,
               ),
             ),
             const SizedBox(height: 14),
@@ -110,7 +107,6 @@ class _FullLegalSheetState extends State<FullLegalSheet> {
                 child: Text(
                   context.l10n.legalSheetFullLegalSections,
                   style: TextStyle(
-                    fontFamily: kSansFamily,
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
                     color: p.text,
@@ -423,10 +419,8 @@ class _Para extends StatelessWidget {
               .toList(growable: false),
         ),
         style: TextStyle(
-          fontFamily: kSansFamily,
           fontSize: 14,
-          color: palette.textMuted,
-          height: 1.55,
+          color: palette.textMuted, height: MhadType.leadingParagraph,
         ),
       ),
     );
@@ -464,10 +458,8 @@ class _Bullet extends StatelessWidget {
                     .toList(growable: false),
               ),
               style: TextStyle(
-                fontFamily: kSansFamily,
                 fontSize: 14,
-                color: palette.textMuted,
-                height: 1.55,
+                color: palette.textMuted, height: MhadType.leadingParagraph,
               ),
             ),
           ),
@@ -524,9 +516,7 @@ class _Resource extends StatelessWidget {
             ],
           ),
           style: const TextStyle(
-            fontFamily: kSansFamily,
-            fontSize: 14,
-            height: 1.45,
+            fontSize: 14, height: MhadType.leadingParagraph,
           ),
         ),
         const SizedBox(height: 2),
@@ -600,10 +590,8 @@ class _AccordionSection extends StatelessWidget {
                         child: Text(
                           title,
                           style: TextStyle(
-                            fontFamily: kSansFamily,
                             fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: -0.1,
+                            fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingTitle,
                             color: p.text,
                           ),
                         ),

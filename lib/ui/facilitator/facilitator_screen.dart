@@ -209,8 +209,7 @@ class _PathwayCard extends StatelessWidget {
               tag,
               style: TextStyle(
                 fontSize: 12,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 0.6,
+                fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingLabel,
                 color: primary ? cs.onPrimary : cs.onSurfaceVariant,
               ),
             ),
@@ -218,7 +217,6 @@ class _PathwayCard extends StatelessWidget {
             Text(
               title,
               style: TextStyle(
-                fontFamily: kSansFamily,
                 fontSize: 17,
                 fontWeight: FontWeight.w700,
                 color: primary ? cs.onPrimary : cs.onSurface,
@@ -228,9 +226,7 @@ class _PathwayCard extends StatelessWidget {
             Text(
               body,
               style: TextStyle(
-                fontFamily: kSansFamily,
-                fontSize: 14,
-                height: 1.45,
+                fontSize: 14, height: MhadType.leadingParagraph,
                 color: primary ? cs.onPrimary : cs.onSurfaceVariant,
               ),
             ),
@@ -256,8 +252,7 @@ class _PathwayCard extends StatelessWidget {
                     child: Text(
                       m,
                       style: TextStyle(
-                        fontSize: 12,
-                        letterSpacing: 0.4,
+                        fontSize: 12, letterSpacing: MhadType.trackingLabel,
                         color: primary ? cs.onPrimary : cs.onSurfaceVariant,
                       ),
                     ),
@@ -304,7 +299,6 @@ class _ReferralRow extends StatelessWidget {
                     Text(
                       label,
                       style: const TextStyle(
-                        fontFamily: kSansFamily,
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                       ),

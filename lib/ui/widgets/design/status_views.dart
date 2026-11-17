@@ -55,7 +55,6 @@ class PageLoading extends StatelessWidget {
                   label,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontFamily: kSansFamily,
                     fontSize: DesignTokens.fontCaption,
                     color: p.textMuted,
                   ),
@@ -131,9 +130,7 @@ class EmptyState extends StatelessWidget {
               message!,
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontFamily: kSansFamily,
-                fontSize: DesignTokens.fontCaption,
-                height: 1.45,
+                fontSize: DesignTokens.fontCaption, height: MhadType.leadingParagraph,
                 color: p.textMuted,
               ),
             ),

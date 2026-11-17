@@ -386,7 +386,6 @@ class _GuardianConditionRow extends StatelessWidget {
           child: Text(
             text,
             style: TextStyle(
-              fontFamily: kSansFamily,
               fontSize: 14,
               fontWeight: FontWeight.w600,
               color: selected ? cs.onPrimary : cs.onSurfaceVariant,
@@ -502,11 +501,9 @@ class _GuardianRelOptCard extends StatelessWidget {
                   Text(
                     option.label(context.l10n),
                     style: TextStyle(
-                      fontFamily: kSansFamily,
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
-                      color: cs.onSurface,
-                      height: 1.3,
+                      color: cs.onSurface, height: MhadType.leadingUi,
                     ),
                   ),
                   if (selected) ...[
@@ -514,10 +511,8 @@ class _GuardianRelOptCard extends StatelessWidget {
                     Text(
                       option.hint(context.l10n),
                       style: TextStyle(
-                        fontFamily: kSansFamily,
                         fontSize: 14,
-                        color: cs.onSurfaceVariant,
-                        height: 1.4,
+                        color: cs.onSurfaceVariant, height: MhadType.leadingParagraph,
                       ),
                     ),
                   ],

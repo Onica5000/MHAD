@@ -89,8 +89,7 @@ class _PeopleITrustStepState extends ConsumerState<PeopleITrustStep>
                   fontFamily: kMonoFamily,
                   fontFamilyFallback: kMonoFallbacks,
                   fontSize: 12,
-                  color: p.textMuted,
-                  letterSpacing: 0.4,
+                  color: p.textMuted, letterSpacing: MhadType.trackingLabel,
                 ),
               ),
             ),
@@ -99,10 +98,8 @@ class _PeopleITrustStepState extends ConsumerState<PeopleITrustStep>
         Text(
           context.l10n.peopleTrustAuthorityIntro,
           style: TextStyle(
-            fontFamily: kSansFamily,
             fontSize: 14,
-            color: p.textMuted,
-            height: 1.45,
+            color: p.textMuted, height: MhadType.leadingParagraph,
           ),
         ),
         const SizedBox(height: 8),
@@ -128,10 +125,8 @@ class _PeopleITrustStepState extends ConsumerState<PeopleITrustStep>
                 child: Text.rich(
                   TextSpan(
                     style: TextStyle(
-                      fontFamily: kSansFamily,
                       fontSize: 12,
-                      color: p.textMuted,
-                      height: 1.45,
+                      color: p.textMuted, height: MhadType.leadingParagraph,
                     ),
                     children: [
                       TextSpan(
@@ -281,7 +276,6 @@ class _AgentCardState extends ConsumerState<_AgentCard> {
                           ? Text(
                               initials,
                               style: TextStyle(
-                                fontFamily: kSansFamily,
                                 fontWeight: FontWeight.w700,
                                 fontSize: 14,
                                 color: widget.isPrimary
@@ -303,8 +297,7 @@ class _AgentCardState extends ConsumerState<_AgentCard> {
                                 widget.roleLabel,
                                 style: TextStyle(
                                   fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                  letterSpacing: 1,
+                                  fontWeight: FontWeight.w600, letterSpacing: MhadType.trackingEyebrow,
                                   color: p.textMuted,
                                 ),
                               ),
@@ -321,10 +314,8 @@ class _AgentCardState extends ConsumerState<_AgentCard> {
                                   child: Text(
                                     context.l10n.peopleTrustPrimaryBadge,
                                     style: TextStyle(
-                                      fontFamily: kSansFamily,
                                       fontSize: 12,
-                                      fontWeight: FontWeight.w700,
-                                      letterSpacing: 0.4,
+                                      fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingLabel,
                                       color: p.onPrimaryLight,
                                     ),
                                   ),
@@ -340,7 +331,6 @@ class _AgentCardState extends ConsumerState<_AgentCard> {
                                     ? context.l10n.peopleTrustAddSomeone
                                     : context.l10n.peopleTrustOptional),
                             style: TextStyle(
-                              fontFamily: kSansFamily,
                               fontSize: 16,
                               fontWeight: FontWeight.w700,
                               color: p.text,
@@ -362,7 +352,6 @@ class _AgentCardState extends ConsumerState<_AgentCard> {
                                 return Text(
                                   parts.join(' · '),
                                   style: TextStyle(
-                                    fontFamily: kSansFamily,
                                     fontSize: 12,
                                     color: p.textMuted,
                                   ),
@@ -461,7 +450,6 @@ class _StatusChip extends StatelessWidget {
           Text(
             label,
             style: TextStyle(
-              fontFamily: kSansFamily,
               fontSize: 12,
               fontWeight: FontWeight.w600,
               color: fg,

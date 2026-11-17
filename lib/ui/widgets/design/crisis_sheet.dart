@@ -81,10 +81,8 @@ class _CrisisSheet extends StatelessWidget {
                   Text(
                     context.l10n.crisisSheet247FreeConfidential,
                     style: TextStyle(
-                      fontFamily: kSansFamily,
                       fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 1.2,
+                      fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingEyebrow,
                       color: SemanticColors.errorAccentLight,
                     ),
                   ),
@@ -98,10 +96,8 @@ class _CrisisSheet extends StatelessWidget {
               Text(
                 context.l10n.crisisSheetRealPeopleAreStandingBy,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
                   fontSize: 14,
-                  color: p.textMuted,
-                  height: 1.5,
+                  color: p.textMuted, height: MhadType.leadingParagraph,
                 ),
               ),
               const SizedBox(height: 18),
@@ -164,10 +160,8 @@ class _CrisisSheet extends StatelessWidget {
               Text(
                 context.l10n.crisisSheetCalling988ConnectsYouTo,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
                   fontSize: 12,
-                  color: p.textMuted,
-                  height: 1.5,
+                  color: p.textMuted, height: MhadType.leadingParagraph,
                 ),
               ),
               const SizedBox(height: 16),
@@ -227,9 +221,7 @@ class _Emergency911Callout extends StatelessWidget {
                     ],
                   ),
                   style: TextStyle(
-                    fontFamily: kSansFamily,
-                    fontSize: 14,
-                    height: 1.4,
+                    fontSize: 14, height: MhadType.leadingParagraph,
                     color: p.onPrimaryLight,
                   ),
                 ),
@@ -314,7 +306,6 @@ class _CrisisRow extends StatelessWidget {
                       Text(
                         name,
                         style: TextStyle(
-                          fontFamily: kSansFamily,
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                           color: accent
@@ -328,7 +319,6 @@ class _CrisisRow extends StatelessWidget {
                       Text(
                         detail,
                         style: TextStyle(
-                          fontFamily: kSansFamily,
                           fontSize: 12,
                           color: accent
                               ? (dark

@@ -69,8 +69,7 @@ class InfoBanner extends StatelessWidget {
                   text,
                   style: TextStyle(
                     color: fg,
-                    fontSize: 14,
-                    height: 1.45,
+                    fontSize: 14, height: MhadType.leadingParagraph,
                   ),
                 ),
                 if (onAction != null && actionLabel != null)

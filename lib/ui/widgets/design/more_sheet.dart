@@ -156,10 +156,8 @@ class _MoreSheet extends StatelessWidget {
               Text(
                 context.l10n.moreSheetEverythingElseYouCanDo,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
                   fontSize: 14,
-                  color: p.textMuted,
-                  height: 1.5,
+                  color: p.textMuted, height: MhadType.leadingParagraph,
                 ),
               ),
               const SizedBox(height: 18),
@@ -392,7 +390,6 @@ class _MoreRow extends StatelessWidget {
                       Text(
                         title,
                         style: TextStyle(
-                          fontFamily: kSansFamily,
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                           color: titleColor,
@@ -402,7 +399,6 @@ class _MoreRow extends StatelessWidget {
                       Text(
                         detail,
                         style: TextStyle(
-                          fontFamily: kSansFamily,
                           fontSize: 12,
                           color: detailColor,
                         ),

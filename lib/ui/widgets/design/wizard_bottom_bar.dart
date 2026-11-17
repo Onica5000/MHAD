@@ -72,7 +72,6 @@ class WizardBottomBar extends StatelessWidget {
                   child: Text(
                     secondaryLabel!,
                     style: TextStyle(
-                      fontFamily: kSansFamily,
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                       color: p.primary,

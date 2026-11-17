@@ -64,8 +64,7 @@ class PhotoActionCard extends StatelessWidget {
             Text(
               body!,
               style: theme.textTheme.bodySmall?.copyWith(
-                color: p.textMuted,
-                height: 1.45,
+                color: p.textMuted, height: MhadType.leadingParagraph,
               ),
             ),
           ],

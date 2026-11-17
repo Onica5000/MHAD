@@ -246,10 +246,8 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                   Text(
                     context.l10n.navAiAssistant,
                     style: TextStyle(
-                      fontFamily: kSansFamily,
                       fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: -0.2,
+                      fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingTitle,
                       color: Theme.of(context).mhadPalette.text,
                     ),
                   ),
@@ -258,8 +256,7 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                         ? context.l10n.assistantActiveTextPiiStrippedBefore(ref.watch(activeModelProvider).toUpperCase().replaceAll('-', ' '))
                         : context.l10n.assistantNotSetUpAddA,
                     style: TextStyle(
-                      fontSize: 12,
-                      letterSpacing: 0.5,
+                      fontSize: 12, letterSpacing: MhadType.trackingLabel,
                       color: Theme.of(context).mhadPalette.textMuted,
                     ),
                   ),
@@ -402,7 +399,6 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                         child: Text(
                           context.l10n.assistantNotLegalOrMedicalAdvice(appData.phoneOf('paProtectionAdvocacy')),
                           style: TextStyle(
-                            fontFamily: kSansFamily,
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
                             color: fg,

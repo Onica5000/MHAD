@@ -122,10 +122,8 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
                 child: Text.rich(
                   TextSpan(
                     style: TextStyle(
-                      fontFamily: kSansFamily,
                       fontSize: 12,
-                      color: p.textMuted,
-                      height: 1.45,
+                      color: p.textMuted, height: MhadType.leadingParagraph,
                     ),
                     children: [
                       TextSpan(
@@ -157,10 +155,8 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
         Text(
           context.l10n.executionAnyFormValid,
           style: TextStyle(
-            fontFamily: kSansFamily,
             fontSize: 12,
-            color: p.textMuted,
-            height: 1.45,
+            color: p.textMuted, height: MhadType.leadingParagraph,
           ),
         ),
         const SizedBox(height: 22),
@@ -199,10 +195,8 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
                 child: Text.rich(
                   TextSpan(
                     style: TextStyle(
-                      fontFamily: kSansFamily,
                       fontSize: 14,
-                      color: warnText,
-                      height: 1.45,
+                      color: warnText, height: MhadType.leadingParagraph,
                     ),
                     children: [
                       TextSpan(text: context.l10n.executionWitnessLead),
@@ -276,9 +270,7 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
             context.l10n.executionNotYetValid,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 12,
-              letterSpacing: 0.6,
-              height: 1.4,
+              fontSize: 12, letterSpacing: MhadType.trackingLabel, height: MhadType.leadingParagraph,
               color: p.textMuted,
             ),
           ),
@@ -347,7 +339,6 @@ class _SignStep extends StatelessWidget {
                   Text(
                     title,
                     style: TextStyle(
-                      fontFamily: kSansFamily,
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
                       color: p.text,
@@ -357,10 +348,8 @@ class _SignStep extends StatelessWidget {
                   Text(
                     body,
                     style: TextStyle(
-                      fontFamily: kSansFamily,
                       fontSize: 14,
-                      color: p.textMuted,
-                      height: 1.45,
+                      color: p.textMuted, height: MhadType.leadingParagraph,
                     ),
                   ),
                 ],
@@ -404,7 +393,6 @@ class _PacketRow extends StatelessWidget {
                 Text(
                   title,
                   style: TextStyle(
-                    fontFamily: kSansFamily,
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                     color: p.text,
@@ -413,7 +401,6 @@ class _PacketRow extends StatelessWidget {
                 Text(
                   sub,
                   style: TextStyle(
-                    fontFamily: kSansFamily,
                     fontSize: 12,
                     color: p.textMuted,
                   ),

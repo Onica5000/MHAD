@@ -245,10 +245,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 Text(
                   context.l10n.settingsPaMentalHealthAdvanceDirective,
                   style: TextStyle(
-                    fontFamily: kSansFamily,
                     fontSize: 12,
-                    color: p.textMuted,
-                    height: 1.5,
+                    color: p.textMuted, height: MhadType.leadingParagraph,
                   ),
                 ),
               ],
@@ -306,7 +304,6 @@ class _SettingsRow extends StatelessWidget {
                   Text(
                     title,
                     style: const TextStyle(
-                      fontFamily: kSansFamily,
                       fontWeight: FontWeight.w600,
                       fontSize: 16,
                     ),
@@ -315,7 +312,6 @@ class _SettingsRow extends StatelessWidget {
                   Text(
                     subtitle,
                     style: TextStyle(
-                      fontFamily: kSansFamily,
                       fontSize: 12,
                       color: p.textMuted,
                     ),
@@ -381,7 +377,6 @@ class _ThemeModeSegment extends StatelessWidget {
                     Text(
                       opt.$2,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
                         color: selected ? p.text : p.textMuted,
@@ -477,7 +472,6 @@ class _ProfileChip extends ConsumerWidget {
             child: Text(
               initials,
               style: TextStyle(
-                fontFamily: kSansFamily,
                 fontWeight: FontWeight.w700,
                 fontSize: 16,
                 color: p.onPrimary,
@@ -492,7 +486,6 @@ class _ProfileChip extends ConsumerWidget {
                 Text(
                   displayName,
                   style: TextStyle(
-                    fontFamily: kSansFamily,
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
                     color: p.onPrimary,
@@ -504,8 +497,7 @@ class _ProfileChip extends ConsumerWidget {
                 Text(
                   _statusFor(context, mode),
                   style: TextStyle(
-                    fontSize: 12,
-                    letterSpacing: 0.4,
+                    fontSize: 12, letterSpacing: MhadType.trackingLabel,
                     color: p.onPrimary.withValues(alpha: 0.85),
                   ),
                 ),

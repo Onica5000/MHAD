@@ -87,7 +87,6 @@ class ActionRow extends StatelessWidget {
                     Text(
                       title,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                         color: titleColor,
@@ -99,7 +98,6 @@ class ActionRow extends StatelessWidget {
                         child: Text(
                           subtitle!,
                           style: TextStyle(
-                            fontFamily: kSansFamily,
                             fontSize: 12,
                             color: p.textMuted,
                           ),

@@ -121,7 +121,6 @@ class _LearnAiPanelState extends ConsumerState<LearnAiPanel> {
                     child: Text(
                       context.l10n.learnAiPanelAskTheAi,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
                         color: p.text,
@@ -139,8 +138,7 @@ class _LearnAiPanelState extends ConsumerState<LearnAiPanel> {
               child: Text(
                 context.l10n.learnAiPanelPiiStripped(ref.watch(activeProviderProvider).name.toUpperCase()),
                 style: TextStyle(
-                  fontSize: 12,
-                  letterSpacing: 0.5,
+                  fontSize: 12, letterSpacing: MhadType.trackingLabel,
                   color: hasKey ? p.primary : p.textMuted,
                 ),
               ),
@@ -158,9 +156,7 @@ class _LearnAiPanelState extends ConsumerState<LearnAiPanel> {
                               : context.l10n.learnAiPanelSetUpTheFreeAi,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontFamily: kSansFamily,
-                            fontSize: 14,
-                            height: 1.5,
+                            fontSize: 14, height: MhadType.leadingParagraph,
                             color: p.textMuted,
                           ),
                         ),
@@ -226,7 +222,6 @@ class _LearnAiPanelState extends ConsumerState<LearnAiPanel> {
               child: Text(
                 context.l10n.learnAiPanelNotLegalOrMedicalAdvice,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
                   fontSize: 12,
                   color: p.textMuted,
                 ),
@@ -262,9 +257,7 @@ class _LearnChatBubble extends StatelessWidget {
         child: Text(
           message.content,
           style: TextStyle(
-            fontFamily: kSansFamily,
-            fontSize: 14,
-            height: 1.4,
+            fontSize: 14, height: MhadType.leadingParagraph,
             color: isUser ? p.onPrimary : p.text,
           ),
         ),

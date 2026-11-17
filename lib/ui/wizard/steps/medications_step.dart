@@ -222,8 +222,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
                     child: Text.rich(
                       TextSpan(
                         style: TextStyle(
-                          fontSize: 14,
-                          height: 1.45,
+                          fontSize: 14, height: MhadType.leadingParagraph,
                           color: Theme.of(context)
                               .colorScheme
                               .onSurfaceVariant,
@@ -366,7 +365,6 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
                     Text(
                       context.l10n.medsStepSideEffectsTitle,
                       style: const TextStyle(
-                        fontFamily: kSansFamily,
                         fontWeight: FontWeight.w600,
                         fontSize: 16,
                       ),
@@ -375,9 +373,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
                     Text(
                       context.l10n.medsStepSideEffectsBody,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
-                        fontSize: 12,
-                        height: 1.4,
+                        fontSize: 12, height: MhadType.leadingParagraph,
                         color: p.textMuted,
                       ),
                     ),

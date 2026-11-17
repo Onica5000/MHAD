@@ -82,7 +82,6 @@ class ActiveDirectiveHero extends StatelessWidget {
                           child: Text(
                             context.l10n.homeDirectiveHeroDraft,
                             style: TextStyle(
-                              fontFamily: kSansFamily,
                               fontSize: 12,
                               fontWeight: FontWeight.w700,
                               color: p.onPrimary,
@@ -103,10 +102,8 @@ class ActiveDirectiveHero extends StatelessWidget {
                     Text(
                       headline,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
                         fontSize: 22,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: -0.3,
+                        fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingTitle,
                         color: p.onPrimary,
                       ),
                     ),
@@ -114,9 +111,7 @@ class ActiveDirectiveHero extends StatelessWidget {
                     Text(
                       context.l10n.homeDirectiveHeroLastEdited(formLabel, lastEdited),
                       style: TextStyle(
-                        fontFamily: kSansFamily,
-                        fontSize: 14,
-                        height: 1.4,
+                        fontSize: 14, height: MhadType.leadingParagraph,
                         color: p.onPrimary.withValues(alpha: 0.85),
                       ),
                     ),
@@ -141,7 +136,6 @@ class ActiveDirectiveHero extends StatelessWidget {
                           child: Text(
                             pctLabel,
                             style: TextStyle(
-                              fontFamily: kSansFamily,
                               fontSize: 12,
                               color:
                                   p.onPrimary.withValues(alpha: 0.85),
@@ -151,7 +145,6 @@ class ActiveDirectiveHero extends StatelessWidget {
                         Text(
                           remainingLabel,
                           style: TextStyle(
-                            fontFamily: kSansFamily,
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
                             color: p.onPrimary,
@@ -170,7 +163,6 @@ class ActiveDirectiveHero extends StatelessWidget {
                         label: Text(
                           context.l10n.homeDirectiveHeroContinueWhereYouLeftOff,
                           style: TextStyle(
-                            fontFamily: kSansFamily,
                             fontWeight: FontWeight.w600,
                             color: p.primaryDark,
                           ),

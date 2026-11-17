@@ -430,7 +430,6 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
                     Text(
                       context.l10n.exportNothingToDownloadYet,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
                         color: p.text,
@@ -441,9 +440,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
                       context.l10n.exportStartADirectiveFirstThen,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
-                        fontSize: 14,
-                        height: 1.4,
+                        fontSize: 14, height: MhadType.leadingParagraph,
                         color: p.textMuted,
                       ),
                     ),

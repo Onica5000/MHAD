@@ -115,11 +115,8 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                       Text(
                         context.l10n.modeSelectionHowShouldWeHandleYour,
                         style: TextStyle(
-                          fontFamily: kSansFamily,
                           fontSize: 28,
-                          fontWeight: FontWeight.w700,
-                          height: 1.15,
-                          letterSpacing: -0.5,
+                          fontWeight: FontWeight.w700, height: MhadType.leadingTitle, letterSpacing: MhadType.trackingDisplay,
                           color: p.text,
                         ),
                       ),
@@ -127,9 +124,7 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                       Text(
                         context.l10n.modeSelectionYouCanChangeThisAnytime,
                         style: TextStyle(
-                          fontFamily: kSansFamily,
-                          fontSize: 14,
-                          height: 1.5,
+                          fontSize: 14, height: MhadType.leadingParagraph,
                           color: p.textMuted,
                         ),
                       ),
@@ -181,9 +176,7 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                               : context.l10n.modeSelectionThisAppIsNotHipaa,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontFamily: kSansFamily,
-                            fontSize: 12,
-                            height: 1.45,
+                            fontSize: 12, height: MhadType.leadingParagraph,
                             color: p.textMuted,
                           ),
                         ),
@@ -288,10 +281,8 @@ class _Card2 extends StatelessWidget {
                             child: Text(
                               title,
                               style: TextStyle(
-                                fontFamily: kSansFamily,
                                 fontSize: 18,
-                                fontWeight: FontWeight.w700,
-                                letterSpacing: -0.2,
+                                fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingTitle,
                                 color: p.text,
                               ),
                             ),
@@ -302,9 +293,7 @@ class _Card2 extends StatelessWidget {
                       Text(
                         subtitle,
                         style: TextStyle(
-                          fontFamily: kSansFamily,
-                          fontSize: 14,
-                          height: 1.45,
+                          fontSize: 14, height: MhadType.leadingParagraph,
                           color: p.textMuted,
                         ),
                       ),
@@ -324,7 +313,6 @@ class _Card2 extends StatelessWidget {
                                   child: Text(
                                     b,
                                     style: TextStyle(
-                                      fontFamily: kSansFamily,
                                       fontSize: 12,
                                       fontWeight: FontWeight.w600,
                                       color: p.textMuted,
@@ -353,10 +341,8 @@ class _Card2 extends StatelessWidget {
                         child: Text(
                           context.l10n.modeSelectionRecommended,
                           style: TextStyle(
-                            fontFamily: kSansFamily,
                             fontSize: 12,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: 0.4,
+                            fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingLabel,
                             color: p.onPrimary,
                           ),
                         ),
