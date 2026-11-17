@@ -165,13 +165,21 @@ class _NavPill extends StatelessWidget {
         // (scaleDown) lets a long label (Spanish "Configuración") shrink to
         // its ~1/5 slot instead of overflowing; it never scales up. The
         // visual content is excluded from semantics: the Semantics label
-        // above already says it, once.
+        // above already says it, once. The 4px side padding INSIDE the
+        // FittedBox keeps neighbours apart: Spanish "Aprender" (bold, active)
+        // ran straight into "Preguntar" — now a long label shrinks a little
+        // instead, leaving at least 8px between labels.
         child: SizedBox(
           height: 56,
           child: Center(
             child: FittedBox(
               fit: BoxFit.scaleDown,
-              child: ExcludeSemantics(child: content),
+              child: ExcludeSemantics(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: content,
+                ),
+              ),
             ),
           ),
         ),

@@ -232,12 +232,18 @@ class _EditorialLearnHub extends StatelessWidget {
                   children: [
                     Icon(Icons.search, size: 16, color: p.textMuted),
                     const SizedBox(width: 10),
-                    Text(
-                      context.l10n.educationSearchArticlesGlossaryFaqs,
-                      style: TextStyle(
-                        fontFamily: kSansFamily,
-                        fontSize: 14,
-                        color: p.textMuted,
+                    // Expanded + ellipsis: the Spanish hint overflowed a
+                    // phone-width pill by 95px.
+                    Expanded(
+                      child: Text(
+                        context.l10n.educationSearchArticlesGlossaryFaqs,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontFamily: kSansFamily,
+                          fontSize: 14,
+                          color: p.textMuted,
+                        ),
                       ),
                     ),
                   ],
