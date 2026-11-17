@@ -364,7 +364,8 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                       // (incl. 988 crisis help) one tap away.
                       onMore: shellActive
                           ? null
-                          : () => showMoreSheet(context, ref),
+                          : () => showMoreSheet(context, ref,
+                              includePrimaryNav: true),
                     ),
                     Expanded(
                       // Stack so the transient "✓ Saved" chip (UX audit B5)

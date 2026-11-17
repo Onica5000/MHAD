@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/primary_destinations.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/domain/model/directive.dart';
@@ -15,19 +16,25 @@ import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 /// crisis-sheet guard.
 bool _moreSheetOpen = false;
 
-/// Mobile-only "More" bottom sheet: the secondary destinations that the
-/// persistent [WebSidebar] shows on wide screens but the four-item floating
-/// [MhadBottomNav] has no room for — Autofill, Download & print, Get help, and
-/// Reset. This brings narrow-screen navigation to parity with the desktop
-/// sidebar WITHOUT a hamburger drawer (CLAUDE.md forbids one); it is the same
-/// modal-bottom-sheet pattern as [showCrisisSheet].
+/// Mobile-only "More" bottom sheet: crisis help (pinned first), then the
+/// secondary destinations that the persistent [WebSidebar] shows on wide
+/// screens but the four-item floating [MhadBottomNav] has no room for —
+/// Autofill, Download & print, Get help, and Reset. This brings narrow-screen
+/// navigation to parity with the desktop sidebar WITHOUT a hamburger drawer
+/// (CLAUDE.md forbids one); it is the same modal-bottom-sheet pattern as
+/// [showCrisisSheet].
 ///
-/// Crisis/988 is intentionally NOT duplicated here — it stays the always-on
-/// floating button so help is one tap away from any screen.
+/// [includePrimaryNav]: the wizard hides the bottom nav on phones, so its
+/// step header's More opens this sheet WITH the four primary destinations
+/// (Home · Learn · Ask · Settings) too — nothing is more than one tap away.
 ///
 /// Navigation uses the global [appRouter] (not `context.go`) so it is safe
 /// across the `await`s when a fresh directive must be created first.
-Future<void> showMoreSheet(BuildContext context, WidgetRef ref) async {
+Future<void> showMoreSheet(
+  BuildContext context,
+  WidgetRef ref, {
+  bool includePrimaryNav = false,
+}) async {
   if (_moreSheetOpen) return;
   _moreSheetOpen = true;
   try {
@@ -35,7 +42,8 @@ Future<void> showMoreSheet(BuildContext context, WidgetRef ref) async {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (_) => _MoreSheet(ref: ref),
+      builder: (_) =>
+          _MoreSheet(ref: ref, includePrimaryNav: includePrimaryNav),
     );
   } finally {
     _moreSheetOpen = false;
@@ -44,7 +52,8 @@ Future<void> showMoreSheet(BuildContext context, WidgetRef ref) async {
 
 class _MoreSheet extends StatelessWidget {
   final WidgetRef ref;
-  const _MoreSheet({required this.ref});
+  final bool includePrimaryNav;
+  const _MoreSheet({required this.ref, this.includePrimaryNav = false});
 
   /// Most-recently-edited directive id, or null when none exist yet (fresh web
   /// session). Mirrors the sidebar's `recentId`.
@@ -171,6 +180,20 @@ class _MoreSheet extends StatelessWidget {
                   if (ctx != null) showCrisisSheet(ctx);
                 },
               ),
+              if (includePrimaryNav) ...[
+                _PrimaryNavRow(
+                  destinations: primaryDestinations(
+                    context,
+                    aiReady:
+                        ref.read(apiKeyProvider).value?.isNotEmpty ?? false,
+                  ),
+                  onGo: (route) {
+                    Navigator.of(context).pop();
+                    appRouter.go(route);
+                  },
+                ),
+                const SizedBox(height: 10),
+              ],
               _MoreRow(
                 icon: Icons.document_scanner_outlined,
                 title: context.l10n.navAutofill,
@@ -212,6 +235,83 @@ class _MoreSheet extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+/// Home · Learn · Ask · Settings as four equal tiles (one row, one height),
+/// shown when the sheet stands in for the hidden bottom nav.
+class _PrimaryNavRow extends StatelessWidget {
+  final List<PrimaryDestination> destinations;
+  final ValueChanged<String> onGo;
+  const _PrimaryNavRow({required this.destinations, required this.onGo});
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
+    return Row(
+      children: [
+        for (var i = 0; i < destinations.length; i++) ...[
+          if (i > 0) const SizedBox(width: 8),
+          Expanded(
+            child: Semantics(
+              button: true,
+              label: destinations[i].label,
+              child: Material(
+                color: p.surface,
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(color: p.border),
+                  borderRadius:
+                      BorderRadius.circular(DesignTokens.iconTileRadius),
+                ),
+                clipBehavior: Clip.antiAlias,
+                child: InkWell(
+                  onTap: () => onGo(destinations[i].route),
+                  child: SizedBox(
+                    height: 76,
+                    child: Center(
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: ExcludeSemantics(
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 6),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Container(
+                                  width: 34,
+                                  height: 34,
+                                  decoration: BoxDecoration(
+                                    color: p.primaryLight,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Icon(destinations[i].icon,
+                                      size: 18, color: p.onPrimaryLight),
+                                ),
+                                const SizedBox(height: 6),
+                                Text(
+                                  destinations[i].label,
+                                  maxLines: 1,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                    color: p.text,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ],
     );
   }
 }

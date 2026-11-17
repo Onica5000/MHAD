@@ -83,11 +83,25 @@ void main() {
         reason: 'every step shows its photo, always (never keyboard-toggled)');
     expect(find.byType(MhadBottomNav), findsNothing,
         reason: 'the wizard hides the phone nav to give the form room');
-    expect(
-        find.descendant(
-            of: find.byType(StepHead), matching: find.text('More')),
-        findsOneWidget,
+    final more = find.descendant(
+        of: find.byType(StepHead), matching: find.text('More'));
+    expect(more, findsOneWidget,
         reason: 'More replaces the hidden nav, so nothing is lost');
+
+    // The sheet carries the four primary destinations (the hidden nav's
+    // tabs) on top of crisis help and the secondary destinations.
+    await tester.tap(more);
+    await tester.pumpAndSettle();
+    for (final label in const ['Home', 'Learn', 'Ask', 'Settings']) {
+      expect(find.bySemanticsLabel(label), findsOneWidget,
+          reason: '$label must stay one tap away from the wizard');
+    }
+    expect(find.text('Crisis help'), findsOneWidget);
+
+    await tester.tap(find.bySemanticsLabel('Settings'));
+    await tester.pumpAndSettle();
+    expect(appRouter.routerDelegate.currentConfiguration.uri.path,
+        AppRoutes.settings);
 
     await db.close();
   });

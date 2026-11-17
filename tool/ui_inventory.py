@@ -106,12 +106,15 @@ def pass_gates(page) -> None:
 def collect_route(page) -> list[str]:
     seen: set[str] = set()
     stale = 0
-    for _ in range(14):
+    # Up to 30 wheel steps; stop after 4 in a row add nothing. (2 was too
+    # few: a photo header or a long pull-quote is a stretch with no
+    # controls, and the walk quit before the end of the page.)
+    for _ in range(30):
         found = set(page.evaluate(COLLECT_JS, list(ROLES)))
         new = found - seen
         seen |= found
         stale = 0 if new else stale + 1
-        if stale >= 2:
+        if stale >= 4:
             break
         page.mouse.move(page.viewport_size["width"] * 0.6, page.viewport_size["height"] * 0.5)
         page.mouse.wheel(0, 650)
@@ -183,12 +186,33 @@ def inventory(url: str) -> dict:
                 enable_semantics(page)
                 if click_named(page, "button", "More"):
                     page.wait_for_timeout(1200)
-                    routes["/ (More sheet open)"] = route_record(page)
+                    routes["/" + MORE_SUFFIX] = route_record(page)
+                    page.keyboard.press("Escape")
+                # The wizard hides the bottom nav on phones; its step header's
+                # More opens the same sheet WITH the primary destinations.
+                page.evaluate("() => { location.hash = '#/wizard/1?step=0'; }")
+                page.wait_for_timeout(1800)
+                enable_semantics(page)
+                if click_named(page, "button", "More"):
+                    page.wait_for_timeout(1200)
+                    routes["/wizard/1?step=0" + MORE_SUFFIX] = route_record(page)
                     page.keyboard.press("Escape")
             result[vp_name] = routes
             page.close()
         browser.close()
     return result
+
+
+MORE_SUFFIX = " (More sheet open)"
+
+
+def _more_reachable(after_routes: dict, route: str) -> set[str]:
+    """Controls one tap away through the route's More sheet (every wizard
+    step shares one step header, so they share the step-0 capture)."""
+    key = route + MORE_SUFFIX
+    if key not in after_routes and route.startswith("/wizard/"):
+        key = "/wizard/1?step=0" + MORE_SUFFIX
+    return set(_controls(after_routes.get(key, [])))
 
 
 def _controls(rec) -> list[str]:
@@ -205,6 +229,13 @@ def diff(before_path: str, after_path: str) -> int:
         for route, rec in routes.items():
             new = after.get(vp, {}).get(route, {})
             gone = sorted(set(_controls(rec)) - set(_controls(new)))
+            more = _more_reachable(after.get(vp, {}), route)
+            moved = [g for g in gone if g in more]
+            gone = [g for g in gone if g not in more]
+            if moved:
+                print(f"\n[{vp}] {route}  ({len(moved)} moved into its More sheet)")
+                for g in moved:
+                    print(f"   > {g}")
             if gone:
                 missing_total += len(gone)
                 print(f"\n[{vp}] {route}  ({len(gone)} missing)")

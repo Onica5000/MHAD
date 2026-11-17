@@ -1,4 +1,5 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/primary_destinations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/providers/assistant_providers.dart';
@@ -33,36 +34,16 @@ class MhadBottomNav extends ConsumerWidget {
         ref.watch(apiKeyProvider).value?.isNotEmpty ?? false;
 
     final items = <_NavItem>[
-      _NavItem(
-        icon: Icons.home_outlined,
-        activeIcon: Icons.home,
-        label: context.l10n.navHome,
-        active: loc == AppRoutes.home,
-        onTap: () => appRouter.go(AppRoutes.home),
-      ),
-      _NavItem(
-        icon: Icons.menu_book_outlined,
-        activeIcon: Icons.menu_book,
-        label: context.l10n.navLearn,
-        active: loc == AppRoutes.education,
-        onTap: () => appRouter.go(AppRoutes.education),
-      ),
-      _NavItem(
-        icon: Icons.auto_awesome_outlined,
-        activeIcon: Icons.auto_awesome,
-        label: context.l10n.navAsk,
-        active: loc == AppRoutes.assistant || loc == AppRoutes.aiSetup,
-        onTap: () => appRouter.go(
-          aiReady ? AppRoutes.assistant : AppRoutes.aiSetup,
+      // Home · Learn · Ask · Settings — the shared definition (also used by
+      // the More sheet when the wizard hides this nav).
+      for (final d in primaryDestinations(context, aiReady: aiReady))
+        _NavItem(
+          icon: d.icon,
+          activeIcon: d.activeIcon,
+          label: d.label,
+          active: d.isActiveOn(loc),
+          onTap: () => appRouter.go(d.route),
         ),
-      ),
-      _NavItem(
-        icon: Icons.settings_outlined,
-        activeIcon: Icons.settings,
-        label: context.l10n.navSettings,
-        active: loc == AppRoutes.settings,
-        onTap: () => appRouter.go(AppRoutes.settings),
-      ),
       // "More" — opens a bottom sheet with the secondary destinations the
       // four primary tabs can't hold (Autofill, Download & print, Get help,
       // Reset). Opened via the root navigator since the shell is above the
