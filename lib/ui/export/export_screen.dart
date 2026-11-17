@@ -1,3 +1,4 @@
+import 'package:mhad/utils/file_names.dart';
 import 'dart:convert';
 
 import 'package:archive/archive.dart';
@@ -259,7 +260,6 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       // than one is produced.
       final modes = _draftModeOrder.where(_draftModes.contains).toList();
       if (modes.isEmpty) modes.add(DraftMode.finalCopy);
-      final safeName = directive.fullName.replaceAll(' ', '_');
 
       for (final mode in modes) {
         final generator = PdfGenerator(
@@ -283,8 +283,11 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
           allergies: _allergies,
         ));
         if (!mounted) return;
-        final suffix = modes.length > 1 ? '_${_draftModeFileSuffix(mode)}' : '';
-        final fname = 'PA_MHAD_$safeName$suffix.pdf';
+        final fname = mhadFileName([
+          kFileNamePrefix,
+          directive.fullName,
+          if (modes.length > 1) _draftModeFileSuffix(mode),
+        ]);
         // Open in the user's PDF viewer (a new browser tab on web) instead of
         // force-downloading — they choose Print or Download there. Fall back to
         // the print/save dialog on native or if the browser blocks the tab.
@@ -1137,11 +1140,11 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         diagnoses: _diagnoses,
       );
 
-      final safe = _directive!.fullName.trim().isEmpty
-          ? 'directive'
-          : _directive!.fullName.trim().replaceAll(RegExp(r'\s+'), '_');
       final archive = Archive()
-        ..addFile(ArchiveFile('PA_MHAD_$safe.pdf', pdfBytes.length, pdfBytes))
+        ..addFile(ArchiveFile(
+            mhadFileName([kFileNamePrefix, _directive!.fullName]),
+            pdfBytes.length,
+            pdfBytes))
         ..addFile(_textFile('mhad_fhir.json', json))
         ..addFile(_textFile('mhad_fhir.xml', xml))
         ..addFile(_textFile('mhad_directive.csv', csv));
@@ -1152,7 +1155,8 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         files: [
           XFile.fromData(
             Uint8List.fromList(zip),
-            name: 'PA_MHAD_$safe.zip',
+            name: mhadFileName([kFileNamePrefix, _directive!.fullName],
+                extension: 'zip'),
             mimeType: 'application/zip',
           ),
         ],

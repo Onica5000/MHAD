@@ -488,10 +488,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get reviewStepLoading => 'Cargando';
 
   @override
-  String get reviewStepOneLastLook =>
-      'Una última revisión y luego prepararemos su paquete para firmar.';
-
-  @override
   String get reviewStepOneSectionNeedsAttention =>
       'Todavía hay 1 sección que requiere su atención antes de firmar.';
 

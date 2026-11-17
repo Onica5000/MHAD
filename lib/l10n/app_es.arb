@@ -148,7 +148,6 @@
   "reviewStepYourAlternateAgent": "su agente alternativo",
   "reviewStepYourGuardianNominee": "la persona que usted propone como tutor",
   "reviewStepLoading": "Cargando",
-  "reviewStepOneLastLook": "Una última revisión y luego prepararemos su paquete para firmar.",
   "reviewStepOneSectionNeedsAttention": "Todavía hay 1 sección que requiere su atención antes de firmar.",
   "reviewStepSectionsNeedAttention": "Todavía hay {count} secciones que requieren su atención antes de firmar.",
   "reviewStepAllGood": "Todo se ve bien. Se revisaron todas las secciones.",

@@ -341,18 +341,9 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
           ? const EdgeInsets.symmetric(horizontal: 4)
           : const EdgeInsets.fromLTRB(20, 4, 20, 16),
       children: [
-        // The wizard scaffold's StepHead already renders the "Review" title +
-        // subtitle above this step, so we avoid a duplicate H1 and instead
-        // lead with a short editorial summary line (prototype ScrReview copy).
-        Text(
-          context.l10n.reviewStepOneLastLook,
-          style: TextStyle(
-            fontSize: 14, height: MhadType.leadingParagraph,
-            color: p.textMuted,
-          ),
-        ),
-        const SizedBox(height: 16),
-
+        // The wizard's StepHead already shows the "Review" title and its
+        // subtitle ("One last look… Tap any section to edit.") — this step
+        // opens straight on the summary banner (it used to repeat that line).
         // ok / warning summary banner.
         if (warnCount > 0)
           InfoBanner(

@@ -1,3 +1,4 @@
+import 'package:mhad/utils/file_names.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mhad/l10n/l10n.dart';
@@ -11,9 +12,10 @@ import 'package:printing/printing.dart';
 /// print or save it — never an automatic download. Falls back to the print/save
 /// dialog on native or if the browser blocks the tab.
 Future<void> _openOrPrintPdf(Uint8List bytes) async {
-  final opened = await openPdfInViewer(bytes, filename: 'PA_MHAD.pdf');
+  final name = mhadFileName([kFileNamePrefix]);
+  final opened = await openPdfInViewer(bytes, filename: name);
   if (!opened) {
-    await Printing.layoutPdf(onLayout: (_) => bytes, name: 'PA_MHAD');
+    await Printing.layoutPdf(onLayout: (_) => bytes, name: name);
   }
 }
 

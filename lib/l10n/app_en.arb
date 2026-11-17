@@ -185,7 +185,6 @@
   "reviewStepYourAlternateAgent": "your alternate agent",
   "reviewStepYourGuardianNominee": "your guardian nominee",
   "reviewStepLoading": "Loading",
-  "reviewStepOneLastLook": "One last look, then we'll make your signing packet.",
   "reviewStepOneSectionNeedsAttention": "1 section still needs your attention before signing.",
   "reviewStepSectionsNeedAttention": "{count} sections still need your attention before signing.",
   "@reviewStepSectionsNeedAttention": {

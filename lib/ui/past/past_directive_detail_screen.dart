@@ -1,3 +1,4 @@
+import 'package:mhad/utils/file_names.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -294,9 +295,13 @@ class _DocPreviewCard extends ConsumerWidget {
     final principal = directive.fullName.trim().isEmpty
         ? context.l10n.pastDirectiveDetailPrincipalYou
         : directive.fullName.trim().split(RegExp(r'\s+')).first;
-    final filename =
-        'Directive_${DateTime.fromMillisecondsSinceEpoch(directive.executionDate ?? directive.createdAt).year}'
-        '_${directive.fullName.trim().split(RegExp(r'\s+')).lastOrNull ?? 'MHAD'}.pdf';
+    final filename = mhadFileName([
+      kFileNamePrefix,
+      directive.fullName,
+      DateTime.fromMillisecondsSinceEpoch(
+              directive.executionDate ?? directive.createdAt)
+          .year,
+    ]);
 
     return FutureBuilder<List<WitnessesData>>(
       // Cached via the provider so this doesn't re-query on every rebuild.

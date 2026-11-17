@@ -1,3 +1,4 @@
+import 'package:mhad/utils/file_names.dart';
 import 'package:flutter/material.dart';
 import 'package:mhad/ui/widgets/design/back_link.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
@@ -24,7 +25,7 @@ class AudioGuideScreen extends StatelessWidget {
       final bytes = await buildAudioQuestionnairePdf();
       await Printing.layoutPdf(
         onLayout: (_) async => bytes,
-        name: 'MHAD-voice-questionnaire.pdf',
+        name: mhadFileName([kFileNamePrefix, 'voice-questionnaire']),
       );
     } catch (e) {
       debugPrint('Audio questionnaire print failed: $e');

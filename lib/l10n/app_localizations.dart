@@ -986,12 +986,6 @@ abstract class AppLocalizations {
   /// **'Loading'**
   String get reviewStepLoading;
 
-  /// No description provided for @reviewStepOneLastLook.
-  ///
-  /// In en, this message translates to:
-  /// **'One last look, then we\'ll make your signing packet.'**
-  String get reviewStepOneLastLook;
-
   /// No description provided for @reviewStepOneSectionNeedsAttention.
   ///
   /// In en, this message translates to:

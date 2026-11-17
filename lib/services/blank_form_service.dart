@@ -1,3 +1,4 @@
+import 'package:mhad/utils/file_names.dart';
 import 'package:flutter/material.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/l10n/model_labels.dart';
@@ -93,7 +94,7 @@ Future<void> printBlankForm(
     );
     await Printing.layoutPdf(
       onLayout: (_) async => bytes,
-      name: 'PA-MHAD-blank-form.pdf',
+      name: mhadFileName([kFileNamePrefix, 'blank-form']),
     );
   } catch (e) {
     messenger.showSnackBar(

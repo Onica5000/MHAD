@@ -485,10 +485,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reviewStepLoading => 'Loading';
 
   @override
-  String get reviewStepOneLastLook =>
-      'One last look, then we\'ll make your signing packet.';
-
-  @override
   String get reviewStepOneSectionNeedsAttention =>
       '1 section still needs your attention before signing.';
 
