@@ -43,11 +43,17 @@ class VoiceInputButton extends StatelessWidget {
     if (!supported) return const SizedBox.shrink();
 
     final cs = Theme.of(context).colorScheme;
-    return Semantics(
+    // MergeSemantics: ONE button node named "Open voice dictation". Without
+    // it the IconButton made its own, NAMELESS button node under the
+    // labelled wrapper (screen readers heard just "button"; found by the
+    // ui_inventory unnamed-button count). The visual tooltip stays.
+    return MergeSemantics(
+      child: Semantics(
       button: true,
       label: context.l10n.voiceInputOpenDictation,
       child: Tooltip(
         message: context.l10n.voiceInputDictateText,
+        excludeFromSemantics: true,
         child: IconButton(
           icon: Icon(
             Icons.mic_none,
@@ -58,6 +64,7 @@ class VoiceInputButton extends StatelessWidget {
           padding: EdgeInsets.zero,
           constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
         ),
+      ),
       ),
     );
   }

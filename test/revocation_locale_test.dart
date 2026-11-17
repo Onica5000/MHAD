@@ -30,8 +30,12 @@ void main() {
     final id = await tester.runAsync(
       () => repo.createDirective(FormType.combined),
     );
-    await tester.binding.setSurfaceSize(const Size(1000, 3000));
-    addTearDown(() => tester.binding.setSurfaceSize(null));
+    tester.view.physicalSize = const Size(1000, 3000);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(() {
+      tester.view.resetPhysicalSize();
+      tester.view.resetDevicePixelRatio();
+    });
     await tester.pumpWidget(
       ProviderScope(
         overrides: [appDatabaseProvider.overrideWithValue(db)],

@@ -6,6 +6,8 @@ import 'package:cross_file/cross_file.dart';
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/theme/app_art.dart';
+import 'package:mhad/ui/widgets/design/page_hero.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/ai/document_extraction_result.dart';
@@ -677,7 +679,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
                 Text(label,
                     style: TextStyle(
                         fontFamily: kSansFamily,
-                        fontSize: 13,
+                        fontSize: 14,
                         color: p.textMuted)),
               ],
             ),

@@ -206,7 +206,7 @@ class _MedicationAutocompleteFieldState
                                         ),
                                         child: Text(context.l10n.medAutoNtiBadge,
                                             style: TextStyle(
-                                              fontSize: 11,
+                                              fontSize: 12,
                                               fontWeight: FontWeight.w700,
                                               color: cs.onTertiaryContainer,
                                             )),

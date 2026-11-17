@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mhad/ui/widgets/design/spot_illustration.dart';
-import 'package:mhad/ui/widgets/design/illustrated_intro.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -9,6 +7,12 @@ import 'package:mhad/ui/home/directive_form_choice.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
+import 'package:mhad/ui/wizard/widgets/saved_file_import.dart';
+import 'package:mhad/ui/widgets/design/photo_action_card.dart';
+import 'package:mhad/ui/widgets/design/page_hero.dart';
+import 'package:mhad/ui/theme/app_art.dart';
+import 'package:mhad/providers/app_providers.dart';
+import 'package:mhad/domain/model/directive.dart';
 
 /// Editorial web landing — a faithful Flutter port of the Claude Design
 /// `WebDashboard` (web.jsx). Rendered as the Home screen's WIDE (desktop/web)
@@ -26,6 +30,16 @@ class WebDashboardLanding extends ConsumerWidget {
   final bool isPublic;
   const WebDashboardLanding({required this.isPublic, super.key});
 
+  /// Same as onboarding's "Upload a document to autofill": a fresh
+  /// Combined directive, then the standalone autofill page.
+  Future<void> _startUpload(BuildContext context, WidgetRef ref) async {
+    final id = await ref
+        .read(directiveRepositoryProvider)
+        .createDirective(FormType.combined);
+    if (!context.mounted) return;
+    context.go(AppRoutes.uploadRoute(id));
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final p = Theme.of(context).mhadPalette;
@@ -35,78 +49,79 @@ class WebDashboardLanding extends ConsumerWidget {
       children: [
         if (isPublic) ...[_AnonBanner(), const SizedBox(height: 22)],
 
-        // ── Editorial hero ───────────────────────────────────────────────
-        // The welcome scene fills the empty space right of the headline on
-        // wide screens; on narrow ones it shrinks beside the section label.
-        // It sits above the form choice, never beside an input.
-        IllustratedIntro(
-          art: SpotArt.welcome,
-          wideSize: 200,
-          narrowSize: 64,
-          wideBreakpoint: 760,
-          label: SectionLabel(context.l10n.webLandingPennsylvaniaAct194Of2004),
-          body: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text.rich(
+        // ── Hero: headline + the Home photo (two people walking a path at
+        //    sunrise — planning ahead, together). Above the form choice,
+        //    never beside an input.
+        PageHero(
+          art: AppArt.homeHero,
+          size: PageHeroSize.large,
+          eyebrow: context.l10n.webLandingPennsylvaniaAct194Of2004,
+          lead: context.l10n.webLandingALegalDocumentThatTells,
+          title: Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(text: context.l10n.webLandingMakeAMentalHealth),
                 TextSpan(
-                  children: [
-                    TextSpan(text: context.l10n.webLandingMakeAMentalHealth),
-                    TextSpan(
-                      text: context.l10n.webLandingAdvanceDirective,
-                      style: TextStyle(color: p.primary),
-                    ),
-                  ],
+                  text: context.l10n.webLandingAdvanceDirective,
+                  style: TextStyle(color: p.primary),
                 ),
-                style: const TextStyle(
-                  fontFamily: 'Instrument Serif',
-                  fontFamilyFallback: ['Georgia', 'serif'],
-                  fontStyle: FontStyle.italic,
-                  fontSize: 56, // artboard WebDashboard hero size
-                  height: 1,
-                  letterSpacing: -1,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-              const SizedBox(height: 14),
-              ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 620),
-                child: Text(
-                  context.l10n.webLandingALegalDocumentThatTells,
-                  style: TextStyle(
-                    fontFamily: kSansFamily,
-                    fontSize: 15,
-                    height: 1.5,
-                    color: p.textMuted,
-                  ),
-                ),
-              ),
-            ],
+              ],
+            ),
+            style: const TextStyle(
+              fontFamily: kSerifFamily,
+              fontFamilyFallback: kSerifFallbacks,
+              fontStyle: FontStyle.italic,
+              fontSize: 56, // artboard WebDashboard hero size
+              height: 1,
+              letterSpacing: -1,
+              fontWeight: FontWeight.w400,
+            ),
           ),
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: 32),
 
         // ── Form choice (reusable — also shown on the returning dashboard so
         //    "Start a new directive" lands on the same picker) ──────────────
         const DirectiveFormChoice(),
         const SizedBox(height: 22),
 
-        // ── Print a blank form — pick any of the three official forms and
-        //    open the print dialog directly; does NOT start a wizard draft.
-        Align(
-          alignment: Alignment.centerLeft,
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 380),
-            child: _ToolCard(
-              icon: Icons.print_outlined,
-              title: context.l10n.webLandingPrintABlankForm,
-              sub: context.l10n.webLandingPreferPaperOpenAnyOf,
-              cta: context.l10n.webLandingPrintBlankForm,
-              onTap: () => showBlankFormPicker(context),
+        // ── Other ways to start: one row of three equal photo cards. It
+        //    replaces the lone "Print a blank form" card (which left half the
+        //    row empty) and brings the onboarding's upload and saved-file
+        //    starts to Home too.
+        SectionLabel(context.l10n.homeOtherWaysToStart),
+        // Equal boxes, CTAs on one line (the user flagged uneven cards).
+        EqualHeightRow(
+          children: [
+            PhotoActionCard(
+                fillHeight: true,
+                art: AppArt.startUpload,
+                title: context.l10n.onboardingUploadADocumentToAutofill,
+                body: context.l10n.homeStartUploadBody,
+                cta: context.l10n.homeStartUploadCta,
+                onTap: () => _startUpload(context, ref),
             ),
-          ),
+            PhotoActionCard(
+                fillHeight: true,
+                art: AppArt.startResume,
+                title: context.l10n.onboardingContinueFromASavedFile,
+                body: context.l10n.homeStartResumeBody,
+                cta: context.l10n.homeStartResumeCta,
+                onTap: () => importSavedDirectiveFile(context, ref),
+            ),
+            // Print a blank form — pick any of the three official forms and
+            // open the print dialog directly; does NOT start a wizard draft.
+            PhotoActionCard(
+                fillHeight: true,
+                art: AppArt.startPrint,
+                title: context.l10n.webLandingPrintABlankForm,
+                body: context.l10n.webLandingPreferPaperOpenAnyOf,
+                cta: context.l10n.webLandingPrintBlankForm,
+                onTap: () => showBlankFormPicker(context),
+            ),
+          ],
         ),
-        const SizedBox(height: 22),
+        const SizedBox(height: 28),
 
         // ── Privacy promise + booklet quote ──────────────────────────────
         // Both cards shrink-wrap (their Columns are mainAxisSize.min) so the
@@ -115,14 +130,12 @@ class WebDashboardLanding extends ConsumerWidget {
         // an infinite height ("BoxConstraints forces an infinite height") and
         // the whole section silently failed to paint — the bottom of the
         // dashboard went missing.
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        EqualHeightRow(
+          flex: const [14, 10],
+          gap: 18,
           children: [
-            Expanded(flex: 14, child: _PrivacyPromiseCard()),
-            const SizedBox(width: 18),
-            Expanded(
-              flex: 10,
-              child: _BookletQuoteCard(
+            _PrivacyPromiseCard(),
+            _BookletQuoteCard(
                 // Deep-link to the plain-language overview ("the basics") rather
                 // than the full Learn hub, so the button delivers the summary it
                 // promises. Back returns here.
@@ -133,7 +146,6 @@ class WebDashboardLanding extends ConsumerWidget {
                     title: context.l10n.webLandingTheBasics,
                   ),
                 ),
-              ),
             ),
           ],
         ),
@@ -174,7 +186,7 @@ class _AnonBanner extends StatelessWidget {
                   context.l10n.webLandingYouReWorkingAnonymouslyNothing,
                   style: TextStyle(
                     fontFamily: kSansFamily,
-                    fontSize: 13,
+                    fontSize: 14,
                     fontWeight: FontWeight.w700,
                     color: p.text,
                   ),
@@ -204,14 +216,7 @@ class _AnonBanner extends StatelessWidget {
               child: Text(
                 context.l10n.webLandingHowThisWorks,
                 style: TextStyle(
-                  fontFamily: kMonoFamily,
-                  fontFamilyFallback: const [
-                    'Consolas',
-                    'Menlo',
-                    'Courier New',
-                    'monospace',
-                  ],
-                  fontSize: 11,
+                  fontSize: 12,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 0.6,
                   color: p.primary,
@@ -225,85 +230,6 @@ class _AnonBanner extends StatelessWidget {
   }
 }
 
-// ── Tool card (3-column row) ───────────────────────────────────────────────
-class _ToolCard extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String sub;
-  final String cta;
-  final VoidCallback onTap;
-  const _ToolCard({
-    required this.icon,
-    required this.title,
-    required this.sub,
-    required this.cta,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final p = Theme.of(context).mhadPalette;
-    return Material(
-      color: p.card,
-      borderRadius: BorderRadius.circular(DesignTokens.buttonRadius),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(DesignTokens.buttonRadius),
-        onTap: onTap,
-        child: Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            border: Border.all(color: p.border),
-            borderRadius: BorderRadius.circular(DesignTokens.buttonRadius),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: 34,
-                height: 34,
-                decoration: BoxDecoration(
-                  color: p.primaryTint,
-                  borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
-                ),
-                child: Icon(icon, size: 18, color: p.primary),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                title,
-                style: TextStyle(
-                  fontFamily: kSansFamily,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                  color: p.text,
-                ),
-              ),
-              const SizedBox(height: 3),
-              Text(
-                sub,
-                style: TextStyle(
-                  fontFamily: kSansFamily,
-                  fontSize: 12,
-                  height: 1.4,
-                  color: p.textMuted,
-                ),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                '$cta →',
-                style: TextStyle(
-                  fontFamily: kSansFamily,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                  color: p.primary,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 // ── "Our privacy promise" 2×2 grid ─────────────────────────────────────────
 class _PrivacyPromiseCard extends StatelessWidget {
@@ -337,7 +263,7 @@ class _PrivacyPromiseCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: p.card,
         border: Border.all(color: p.border),
-        borderRadius: BorderRadius.circular(DesignTokens.buttonRadius),
+        borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -399,7 +325,7 @@ class _PromiseItem extends StatelessWidget {
                 title,
                 style: TextStyle(
                   fontFamily: kSansFamily,
-                  fontSize: 13,
+                  fontSize: 14,
                   fontWeight: FontWeight.w700,
                   color: p.text,
                 ),
@@ -430,28 +356,24 @@ class _BookletQuoteCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        SectionLabel(context.l10n.webLandingFromTheBooklet),
-        const SizedBox(height: 8),
-        Container(
+    return Container(
           width: double.infinity,
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.fromLTRB(20, 18, 20, 18),
           decoration: BoxDecoration(
             color: p.primaryTint,
             border: Border.all(color: p.primaryLight),
-            borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
+            borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
+              SectionLabel(context.l10n.webLandingFromTheBooklet),
               Text(
                 context.l10n.webLandingAnMhadIsYourVoice,
                 style: TextStyle(
-                  fontFamily: 'Instrument Serif',
-                  fontFamilyFallback: const ['Georgia', 'serif'],
+                  fontFamily: kSerifFamily,
+                  fontFamilyFallback: kSerifFallbacks,
                   fontStyle: FontStyle.italic,
                   fontSize: 22,
                   height: 1.2,
@@ -481,8 +403,6 @@ class _BookletQuoteCard extends StatelessWidget {
               ),
             ],
           ),
-        ),
-      ],
     );
   }
 }

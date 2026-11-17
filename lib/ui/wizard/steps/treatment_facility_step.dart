@@ -589,7 +589,7 @@ class _FacilitySectionState extends State<_FacilitySection> {
                     children: [
                       Text(f.name,
                           style: const TextStyle(
-                              fontSize: 13, fontWeight: FontWeight.w600)),
+                              fontSize: 14, fontWeight: FontWeight.w600)),
                       if (f.address.isNotEmpty)
                         Padding(
                           padding: const EdgeInsets.only(top: 2),
@@ -610,7 +610,7 @@ class _FacilitySectionState extends State<_FacilitySection> {
               child: Text(
                 context.l10n.facilityNpiAttribution,
                 style: TextStyle(
-                    fontSize: 11,
+                    fontSize: 12,
                     fontStyle: FontStyle.italic,
                     color: cs.onSurfaceVariant),
               ),

@@ -307,7 +307,7 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
             l10n.allergiesSourceNote,
             style: TextStyle(
               fontFamily: kSansFamily,
-              fontSize: 11,
+              fontSize: 12,
               fontStyle: FontStyle.italic,
               height: 1.4,
               color: p.textMuted,
@@ -343,7 +343,7 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
                 decoration: InputDecoration(
                   isDense: true,
                   hintText: l10n.allergiesReactionsHint,
-                  hintStyle: TextStyle(color: p.textMuted, fontSize: 13),
+                  hintStyle: TextStyle(color: p.textMuted, fontSize: 14),
                   border: const OutlineInputBorder(),
                 ),
               ),
@@ -386,7 +386,7 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
           l10n.allergiesFooter,
           style: TextStyle(
             fontFamily: kSansFamily,
-            fontSize: 11,
+            fontSize: 12,
             fontStyle: FontStyle.italic,
             height: 1.45,
             color: p.textMuted,
@@ -410,9 +410,7 @@ class _MonoLabel extends StatelessWidget {
     return Text(
       text.toUpperCase(),
       style: TextStyle(
-        fontFamily: kMonoFamily,
-        fontFamilyFallback: kMonoFallbacks,
-        fontSize: 11,
+        fontSize: 12,
         fontWeight: FontWeight.w700,
         letterSpacing: 0.6,
         color: p.textMuted,
@@ -497,7 +495,7 @@ class _KindSegment extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: kSansFamily,
-                  fontSize: 13,
+                  fontSize: 14,
                   fontWeight: FontWeight.w700,
                   color: active ? p.text : p.textMuted,
                 ),
@@ -507,9 +505,7 @@ class _KindSegment extends StatelessWidget {
                 kind.source,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontFamily: kMonoFamily,
-                  fontFamilyFallback: kMonoFallbacks,
-                  fontSize: 11,
+                  fontSize: 12,
                   letterSpacing: 0.4,
                   color: active ? p.primary : p.textMuted,
                 ),
@@ -614,9 +610,7 @@ class _SearchField extends StatelessWidget {
                   Text(
                     badge,
                     style: TextStyle(
-                      fontFamily: kMonoFamily,
-                      fontFamilyFallback: kMonoFallbacks,
-                      fontSize: 11,
+                      fontSize: 12,
                       fontWeight: FontWeight.w700,
                       letterSpacing: 0.5,
                       color: p.primary,
@@ -666,9 +660,7 @@ class _AutoComplete extends StatelessWidget {
                   child: Text(
                     source.toUpperCase(),
                     style: TextStyle(
-                      fontFamily: kMonoFamily,
-                      fontFamilyFallback: kMonoFallbacks,
-                      fontSize: 11,
+                      fontSize: 12,
                       fontWeight: FontWeight.w700,
                       letterSpacing: 0.6,
                       color: p.primary,
@@ -678,9 +670,7 @@ class _AutoComplete extends StatelessWidget {
                 Text(
                   context.l10n.allergiesMatches(items.length),
                   style: TextStyle(
-                    fontFamily: kMonoFamily,
-                    fontFamilyFallback: kMonoFallbacks,
-                    fontSize: 11,
+                    fontSize: 12,
                     letterSpacing: 0.4,
                     color: p.textMuted,
                   ),
@@ -781,7 +771,7 @@ class _AutoCompleteRow extends StatelessWidget {
                 style: TextStyle(
                   fontFamily: kMonoFamily,
                   fontFamilyFallback: kMonoFallbacks,
-                  fontSize: 11,
+                  fontSize: 12,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 0.4,
                   color: p.primary,
@@ -797,7 +787,7 @@ class _AutoCompleteRow extends StatelessWidget {
                     text: TextSpan(
                       style: const TextStyle(
                         fontFamily: kSansFamily,
-                        fontSize: 13,
+                        fontSize: 14,
                         fontWeight: FontWeight.w600,
                         height: 1.3,
                       ),
@@ -940,7 +930,7 @@ class _SeverityOption extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: kSansFamily,
-                  fontSize: 13,
+                  fontSize: 14,
                   fontWeight: FontWeight.w700,
                   height: 1.25,
                   color: active ? activeFg : fg,
@@ -952,7 +942,7 @@ class _SeverityOption extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: kSansFamily,
-                  fontSize: 11,
+                  fontSize: 12,
                   fontWeight: FontWeight.w500,
                   height: 1.2,
                   color: (active ? activeFg : fg).withValues(alpha: 0.85),

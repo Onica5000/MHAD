@@ -3,6 +3,8 @@
 import 'package:archive/archive.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/theme/app_art.dart';
+import 'package:mhad/ui/widgets/design/page_hero.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -440,7 +442,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontFamily: kSansFamily,
-                        fontSize: 13,
+                        fontSize: 14,
                         height: 1.4,
                         color: p.textMuted,
                       ),
@@ -474,20 +476,25 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
   Widget _buildUnencryptedBanner() => const ExportUnencryptedBanner();
 
   List<Widget> _buildHeaderChildren(MhadPalette p) => [
-        SectionLabel(context.l10n.pdfPreviewExportShare),
-        EditorialHeading(
-          textSpan: TextSpan(
-            children: [
-              TextSpan(text: context.l10n.exportYourDirective),
-              TextSpan(
-                text: context.l10n.pdfPreviewOnPaper,
-                style: TextStyle(color: p.primary),
-              ),
-            ],
+        // Compact photo header (printed pages + an envelope): the end of the
+        // flow, where the directive goes out into the world.
+        PageHero(
+          art: AppArt.flowExport,
+          eyebrow: context.l10n.pdfPreviewExportShare,
+          title: EditorialHeading(
+            textSpan: TextSpan(
+              children: [
+                TextSpan(text: context.l10n.exportYourDirective),
+                TextSpan(
+                  text: context.l10n.pdfPreviewOnPaper,
+                  style: TextStyle(color: p.primary),
+                ),
+              ],
+            ),
+            size: 36,
+            height: 1.05,
+            letterSpacing: -0.8,
           ),
-          size: 36,
-          height: 1.05,
-          letterSpacing: -0.8,
         ),
         const SizedBox(height: 16),
         if (_isGenerating)
@@ -856,14 +863,17 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
             ),
           ),
         ),
-        // RIGHT — control rail.
-        Container(
-          width: 300,
-          decoration: BoxDecoration(
+        // RIGHT — control rail. 360px (was 300): form names wrapped to
+        // three lines in the narrower rail.
+        SizedBox(
+          width: 360,
+          // A Material surface (not a coloured DecoratedBox): the rail's
+          // ListTiles paint hover/ink on the nearest Material, and a coloured
+          // box above it hid every splash (debug assertion on desktop).
+          child: Material(
             color: p.card,
-            border: Border(left: BorderSide(color: p.border)),
-          ),
-          child: FocusTraversalGroup(
+            shape: Border(left: BorderSide(color: p.border)),
+            child: FocusTraversalGroup(
             child: SingleChildScrollView(
               padding: const EdgeInsets.fromLTRB(20, 22, 20, 40),
               child: Column(
@@ -886,7 +896,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
               ),
             ),
           ),
-        ),
+        )),
       ],
     );
   }
@@ -1240,9 +1250,9 @@ class _FormCheckbox extends StatelessWidget {
         children: [
           CheckboxListTile(
             title: Text(title,
-                style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500)),
+                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
             subtitle: Text(subtitle,
-                style: TextStyle(fontSize: 11, color: cs.onSurfaceVariant)),
+                style: TextStyle(fontSize: 12, color: cs.onSurfaceVariant)),
             value: value,
             onChanged: onChanged,
             controlAffinity: ListTileControlAffinity.leading,
@@ -1260,7 +1270,7 @@ class _FormCheckbox extends StatelessWidget {
                     child: Text(
                       warning!,
                       style: TextStyle(
-                          fontSize: 11,
+                          fontSize: 12,
                           color: SemanticColors.warningText(cs.brightness)),
                     ),
                   ),

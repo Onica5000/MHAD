@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/theme/app_art.dart';
+import 'package:mhad/ui/widgets/design/art_image.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/labeled_spinner.dart';
@@ -78,6 +80,10 @@ class EmptyState extends StatelessWidget {
   /// Optional single action, e.g. a Retry button.
   final Widget? action;
 
+  /// Optional photo shown above the icon-less headline (e.g. AppArt.learnEmpty
+  /// for "no results"). When set it replaces the [icon] glyph.
+  final AppArt? art;
+
   /// Announce [title] politely when this state appears — use for *error*
   /// states, where the user needs to know something failed. Leave false for
   /// ordinary "nothing here yet" emptiness, which isn't worth interrupting for.
@@ -89,6 +95,7 @@ class EmptyState extends StatelessWidget {
     this.message,
     this.action,
     this.announce = false,
+    this.art,
     super.key,
   });
 
@@ -104,7 +111,11 @@ class EmptyState extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 32, color: p.textMuted),
+          if (art != null)
+            ArtImage(art!, width: 160, height: 160,
+                radius: DesignTokens.radiusLg)
+          else
+            Icon(icon, size: 32, color: p.textMuted),
           const SizedBox(height: DesignTokens.space12),
           Semantics(
             liveRegion: announce,

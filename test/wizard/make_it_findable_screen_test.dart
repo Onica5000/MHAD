@@ -9,8 +9,12 @@ import 'package:mhad/ui/crisis_findability/make_it_findable_screen.dart';
 /// enough.
 void main() {
   testWidgets('shows the crisis-findability checklist', (tester) async {
-    await tester.binding.setSurfaceSize(const Size(1000, 2200));
-    addTearDown(() => tester.binding.setSurfaceSize(null));
+    tester.view.physicalSize = const Size(1000, 2200);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(() {
+      tester.view.resetPhysicalSize();
+      tester.view.resetDevicePixelRatio();
+    });
 
     await tester.pumpWidget(
       const ProviderScope(

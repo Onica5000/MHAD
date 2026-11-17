@@ -1,4 +1,5 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/primary_destinations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/providers/assistant_providers.dart';
@@ -33,36 +34,16 @@ class MhadBottomNav extends ConsumerWidget {
         ref.watch(apiKeyProvider).value?.isNotEmpty ?? false;
 
     final items = <_NavItem>[
-      _NavItem(
-        icon: Icons.home_outlined,
-        activeIcon: Icons.home,
-        label: context.l10n.navHome,
-        active: loc == AppRoutes.home,
-        onTap: () => appRouter.go(AppRoutes.home),
-      ),
-      _NavItem(
-        icon: Icons.menu_book_outlined,
-        activeIcon: Icons.menu_book,
-        label: context.l10n.navLearn,
-        active: loc == AppRoutes.education,
-        onTap: () => appRouter.go(AppRoutes.education),
-      ),
-      _NavItem(
-        icon: Icons.auto_awesome_outlined,
-        activeIcon: Icons.auto_awesome,
-        label: context.l10n.navAsk,
-        active: loc == AppRoutes.assistant || loc == AppRoutes.aiSetup,
-        onTap: () => appRouter.go(
-          aiReady ? AppRoutes.assistant : AppRoutes.aiSetup,
+      // Home · Learn · Ask · Settings — the shared definition (also used by
+      // the More sheet when the wizard hides this nav).
+      for (final d in primaryDestinations(context, aiReady: aiReady))
+        _NavItem(
+          icon: d.icon,
+          activeIcon: d.activeIcon,
+          label: d.label,
+          active: d.isActiveOn(loc),
+          onTap: () => appRouter.go(d.route),
         ),
-      ),
-      _NavItem(
-        icon: Icons.settings_outlined,
-        activeIcon: Icons.settings,
-        label: context.l10n.navSettings,
-        active: loc == AppRoutes.settings,
-        onTap: () => appRouter.go(AppRoutes.settings),
-      ),
       // "More" — opens a bottom sheet with the secondary destinations the
       // four primary tabs can't hold (Autofill, Download & print, Get help,
       // Reset). Opened via the root navigator since the shell is above the
@@ -86,7 +67,7 @@ class MhadBottomNav extends ConsumerWidget {
         // Fixed, bounded height so the Scaffold body keeps its full
         // viewport — the bar never grows greedily.
         child: Container(
-          height: 60,
+          height: 64,
           decoration: BoxDecoration(
             color: p.card,
             border: Border.all(color: p.border),
@@ -141,35 +122,36 @@ class _NavPill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
-    final fg = item.active ? p.onPrimaryLight : p.textMuted;
 
-    // Visible pill matches the prototype (≈36px tall: icon 20 + 8px padding).
-    // The tap target is expanded to a 48px-minimum box around it so it meets
-    // the accessibility guideline without changing the prototype visual.
-    final pill = Container(
-      decoration: BoxDecoration(
-        color: item.active ? p.primaryLight : Colors.transparent,
-        borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(item.active ? item.activeIcon : item.icon, size: 20, color: fg),
-          if (item.active) ...[
-            const SizedBox(width: 6),
-            Text(
-              item.label,
-              style: TextStyle(
-                fontFamily: kSansFamily,
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-                color: fg,
-              ),
-            ),
-          ],
-        ],
-      ),
+    // Every tab shows its icon AND a short label (2026-11 redesign): an
+    // icon-only tab was ambiguous (the sparkle for "Ask" especially). The
+    // active tab gets a tinted pill behind its icon and a bold label.
+    final content = Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 3),
+          decoration: BoxDecoration(
+            color: item.active ? p.primaryLight : Colors.transparent,
+            borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
+          ),
+          child: Icon(
+            item.active ? item.activeIcon : item.icon,
+            size: 22,
+            color: item.active ? p.onPrimaryLight : p.textMuted,
+          ),
+        ),
+        const SizedBox(height: 2),
+        Text(
+          item.label,
+          maxLines: 1,
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: item.active ? FontWeight.w700 : FontWeight.w500,
+            color: item.active ? p.primary : p.textMuted,
+          ),
+        ),
+      ],
     );
 
     return Semantics(
@@ -178,18 +160,27 @@ class _NavPill extends StatelessWidget {
       label: item.label,
       child: InkWell(
         onTap: item.active ? null : item.onTap,
-        borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
-        // 48px tall hit target (meets the accessibility guideline) with the
-        // ~36px visible pill centred inside it — matches the prototype look.
-        // FittedBox(scaleDown) lets the active item's icon+label shrink to fit
-        // its share of the bar instead of overflowing: with five pills the
-        // longest active label ("Settings") would otherwise exceed its ~1/5
-        // slot on narrow widths. It never scales UP, so wide layouts are
-        // unchanged; the InkWell above keeps the full 48px tap target.
+        borderRadius: BorderRadius.circular(DesignTokens.iconTileRadius),
+        // A 56px-tall hit target (above the 48px guideline). FittedBox
+        // (scaleDown) lets a long label (Spanish "Configuración") shrink to
+        // its ~1/5 slot instead of overflowing; it never scales up. The
+        // visual content is excluded from semantics: the Semantics label
+        // above already says it, once. The 4px side padding INSIDE the
+        // FittedBox keeps neighbours apart: Spanish "Aprender" (bold, active)
+        // ran straight into "Preguntar" — now a long label shrinks a little
+        // instead, leaving at least 8px between labels.
         child: SizedBox(
-          height: 48,
+          height: 56,
           child: Center(
-            child: FittedBox(fit: BoxFit.scaleDown, child: pill),
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: ExcludeSemantics(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: content,
+                ),
+              ),
+            ),
           ),
         ),
       ),

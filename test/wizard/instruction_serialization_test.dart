@@ -37,8 +37,12 @@ void main() {
   tearDown(() => db.close());
 
   Future<void> pumpAndSave(WidgetTester tester, Widget step, GlobalKey key) async {
-    await tester.binding.setSurfaceSize(const Size(1200, 3000));
-    addTearDown(() => tester.binding.setSurfaceSize(null));
+    tester.view.physicalSize = const Size(1200, 3000);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(() {
+      tester.view.resetPhysicalSize();
+      tester.view.resetDevicePixelRatio();
+    });
     await tester.pumpWidget(
       ProviderScope(
         overrides: [appDatabaseProvider.overrideWithValue(db)],

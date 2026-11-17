@@ -1,4 +1,6 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/page_hero.dart';
+import 'package:mhad/ui/theme/app_art.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/providers/app_providers.dart';
@@ -42,19 +44,15 @@ class AccessibilitySettingsScreen extends ConsumerWidget {
         Expanded(child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
         children: [
-          SectionLabel(context.l10n.accessibilitySettingsAccessibility),
-          const SizedBox(height: 6),
-          EditorialHeading(text: context.l10n.accessibilitySettingsMakeItReadable, size: 32),
-          const SizedBox(height: 6),
-          Text(
-            context.l10n.accessibilitySettingsAdjustHowTheAppFeels,
-            style: TextStyle(
-              fontFamily: kSansFamily,
-              fontSize: 14,
-              color: p.textMuted,
-              height: 1.45,
-            ),
+          PageHero(
+            art: AppArt.miscAccessibility,
+            eyebrow: context.l10n.accessibilitySettingsAccessibility,
+            title: EditorialHeading(
+                text: context.l10n.accessibilitySettingsMakeItReadable,
+                size: 32),
+            lead: context.l10n.accessibilitySettingsAdjustHowTheAppFeels,
           ),
+
 
           const SizedBox(height: 18),
           _TextSizeCard(
@@ -215,7 +213,7 @@ class _GuideItem extends StatelessWidget {
         children: [
           Text(head, style: const TextStyle(fontWeight: FontWeight.w700)),
           const SizedBox(height: 2),
-          Text(body, style: const TextStyle(fontSize: 13, height: 1.4)),
+          Text(body, style: const TextStyle(fontSize: 14, height: 1.4)),
         ],
       ),
     );
@@ -255,7 +253,7 @@ class _TextSizeCard extends StatelessWidget {
               context.l10n.accessibilitySettingsPeopleWhoITrustWill,
               style: TextStyle(
                 fontFamily: kSansFamily,
-                fontSize: 13 + value * 4,
+                fontSize: 14 + value * 4,
                 color: p.text,
                 height: 1.45,
               ),

@@ -112,13 +112,8 @@ class HealthChip extends StatelessWidget {
                 code,
                 style: TextStyle(
                   fontFamily: kMonoFamily,
-                  fontFamilyFallback: const [
-                    'Consolas',
-                    'Menlo',
-                    'Courier New',
-                    'monospace'
-                  ],
-                  fontSize: 11,
+                  fontFamilyFallback: kMonoFallbacks,
+                  fontSize: 12,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 0.4,
                   color: codeFg,
@@ -150,13 +145,8 @@ class HealthChip extends StatelessWidget {
                         dose!,
                         style: TextStyle(
                           fontFamily: kMonoFamily,
-                          fontFamilyFallback: const [
-                            'Consolas',
-                            'Menlo',
-                            'Courier New',
-                            'monospace'
-                          ],
-                          fontSize: 11,
+                          fontFamilyFallback: kMonoFallbacks,
+                          fontSize: 12,
                           fontWeight: FontWeight.w600,
                           letterSpacing: 0.4,
                           color: text.withValues(alpha: 0.75),
@@ -174,14 +164,7 @@ class HealthChip extends StatelessWidget {
                         child: Text(
                           sourceTag!,
                           style: TextStyle(
-                            fontFamily: kMonoFamily,
-                            fontFamilyFallback: const [
-                              'Consolas',
-                              'Menlo',
-                              'Courier New',
-                              'monospace'
-                            ],
-                            fontSize: 11,
+                            fontSize: 12,
                             fontWeight: FontWeight.w700,
                             letterSpacing: 0.4,
                             color: codeBg,

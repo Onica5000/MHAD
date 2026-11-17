@@ -1,6 +1,7 @@
 ﻿import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/rich_content_text.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
@@ -177,14 +178,7 @@ class _QuestionBody extends StatelessWidget {
                   child: Text(
                     context.l10n.quizQuestionEyebrow(step + 1, total),
                     style: TextStyle(
-                      fontFamily: kMonoFamily,
-                      fontFamilyFallback: const [
-                        'Consolas',
-                        'Menlo',
-                        'Courier New',
-                        'monospace'
-                      ],
-                      fontSize: 11,
+                      fontSize: 12,
                       letterSpacing: 1,
                       color: p.textMuted,
                     ),
@@ -208,7 +202,8 @@ class _QuestionBody extends StatelessWidget {
               SectionLabel(context.l10n.quizInYourWords),
               const SizedBox(height: 8),
               EditorialHeading(
-                textSpan: _editorialFor(question.headline, p.primary),
+                textSpan: inlineMarkdownSpan(question.headline,
+                    emphasisStyle: TextStyle(color: p.primary)),
                 size: 26,
                 height: 1.15,
               ),
@@ -237,20 +232,6 @@ class _QuestionBody extends StatelessWidget {
         ),
       ],
     );
-  }
-
-  /// Build a text span that colors the keywords (wrapped in `**…**`) primary.
-  TextSpan _editorialFor(String headline, Color primary) {
-    final parts = headline.split('**');
-    final spans = <InlineSpan>[];
-    for (var i = 0; i < parts.length; i++) {
-      final isKeyword = i.isOdd;
-      spans.add(TextSpan(
-        text: parts[i],
-        style: isKeyword ? TextStyle(color: primary) : null,
-      ));
-    }
-    return TextSpan(children: spans);
   }
 }
 
@@ -319,7 +300,7 @@ class _OptCard extends StatelessWidget {
                     label,
                     style: TextStyle(
                       fontFamily: kSansFamily,
-                      fontSize: 15,
+                      fontSize: 16,
                       fontWeight: FontWeight.w600,
                       color: p.text,
                       height: 1.3,
@@ -331,7 +312,7 @@ class _OptCard extends StatelessWidget {
                       hint,
                       style: TextStyle(
                         fontFamily: kSansFamily,
-                        fontSize: 13,
+                        fontSize: 14,
                         color: p.textMuted,
                         height: 1.4,
                       ),
@@ -386,14 +367,7 @@ class _ResultBody extends StatelessWidget {
                   child: Text(
                     context.l10n.quizResultEyebrow,
                     style: TextStyle(
-                      fontFamily: kMonoFamily,
-                      fontFamilyFallback: const [
-                        'Consolas',
-                        'Menlo',
-                        'Courier New',
-                        'monospace'
-                      ],
-                      fontSize: 11,
+                      fontSize: 12,
                       letterSpacing: 1,
                       color: p.textMuted,
                     ),
@@ -558,7 +532,7 @@ class _LegendRow extends StatelessWidget {
               label,
               style: TextStyle(
                 fontFamily: kSansFamily,
-                fontSize: 13,
+                fontSize: 14,
                 fontWeight: emphasized ? FontWeight.w700 : FontWeight.w500,
                 color: emphasized ? p.text : p.textMuted,
               ),
@@ -568,12 +542,7 @@ class _LegendRow extends StatelessWidget {
             '$pct%',
             style: TextStyle(
               fontFamily: kMonoFamily,
-              fontFamilyFallback: const [
-                'Consolas',
-                'Menlo',
-                'Courier New',
-                'monospace'
-              ],
+              fontFamilyFallback: kMonoFallbacks,
               fontSize: 12,
               fontWeight: emphasized ? FontWeight.w700 : FontWeight.w500,
               color: emphasized ? p.text : p.textMuted,

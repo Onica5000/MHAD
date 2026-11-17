@@ -11,8 +11,8 @@ class SectionLabel extends StatelessWidget {
   final String text;
   final EdgeInsetsGeometry padding;
 
-  /// Optional override merged on top of the default uppercased monospace
-  /// style. Use it to tint the label (e.g. `TextStyle(color: p.primary)`)
+  /// Optional override merged on top of the default uppercased eyebrow
+  /// style ([MhadText.eyebrow]). Use it to tint the label (e.g. `TextStyle(color: p.primary)`)
   /// without redefining the whole text style.
   final TextStyle? style;
 
@@ -29,23 +29,10 @@ class SectionLabel extends StatelessWidget {
       padding: padding,
       child: Text(
         text.toUpperCase(),
-        // The design-system `SectionLabel` atom (ds.jsx) renders the eyebrow in
-        // the MONO face (JetBrains Mono, 10.5/600), not DM Sans. JetBrains Mono
-        // is bundled (pubspec); the fallback chain keeps it monospaced if the
-        // asset is ever missing on web.
-        style: TextStyle(
-          fontFamily: kMonoFamily,
-          fontFamilyFallback: const [
-            'Consolas',
-            'Menlo',
-            'Courier New',
-            'monospace',
-          ],
-          fontSize: 11,
-          fontWeight: FontWeight.w600,
-          letterSpacing: 1.2,
-          color: Theme.of(context).colorScheme.onSurfaceVariant,
-        ).merge(style),
+        // Shared eyebrow style (MhadText.eyebrow): DM Sans small caps, which
+        // replaced the old JetBrains Mono eyebrow in the 2026-11 redesign.
+        style: MhadText.eyebrow(Theme.of(context).colorScheme.onSurfaceVariant)
+            .merge(style),
       ),
     );
   }

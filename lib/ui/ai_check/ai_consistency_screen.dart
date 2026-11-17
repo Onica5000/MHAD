@@ -1,6 +1,8 @@
 ﻿import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/page_hero.dart';
+import 'package:mhad/ui/theme/app_art.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/ui/widgets/design/design_card.dart';
 import 'package:mhad/ui/widgets/design/status_views.dart';
@@ -432,7 +434,7 @@ Return plain-text suggestions (short bullets are fine). No preamble.''';
               context.l10n.aiConsistencyTheAiIsReviewingYour,
               style: TextStyle(
                 fontFamily: kSansFamily,
-                fontSize: 13,
+                fontSize: 14,
                 color: p.textMuted,
               ),
             ),
@@ -473,7 +475,7 @@ Return plain-text suggestions (short bullets are fine). No preamble.''';
           context.l10n.aiConsistencyAiReviewSkippedYouCan,
           style: TextStyle(
             fontFamily: kSansFamily,
-            fontSize: 13,
+            fontSize: 14,
             color: p.textMuted,
           ),
         ),
@@ -582,42 +584,28 @@ Return plain-text suggestions (short bullets are fine). No preamble.''';
               : ListView(
                   padding: const EdgeInsets.fromLTRB(20, 14, 20, 32),
               children: [
-                Row(
-                  children: [
-                    Icon(Icons.auto_awesome, color: p.primary),
-                    const SizedBox(width: 6),
-                    Expanded(
-                      child: SectionLabel(context.l10n.aiConsistencyConsistencyCheckCheckedAtReview),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 6),
-                EditorialHeading(
-                  textSpan: TextSpan(
-                    children: [
-                      TextSpan(text: context.l10n.aiConsistencyINoticed),
-                      TextSpan(
-                        text: context.l10n
-                            .aiConsistencyThingsCount(_conflicts.length),
-                        style: TextStyle(
-                          color: _conflicts.isEmpty ? okText : warnText,
+                PageHero(
+                  art: AppArt.aiCheck,
+                  eyebrow: context.l10n.aiConsistencyConsistencyCheckCheckedAtReview,
+                  title: EditorialHeading(
+                    textSpan: TextSpan(
+                      children: [
+                        TextSpan(text: context.l10n.aiConsistencyINoticed),
+                        TextSpan(
+                          text: context.l10n
+                              .aiConsistencyThingsCount(_conflicts.length),
+                          style: TextStyle(
+                            color: _conflicts.isEmpty ? okText : warnText,
+                          ),
                         ),
-                      ),
-                      const TextSpan(text: '.'),
-                    ],
+                        const TextSpan(text: '.'),
+                      ],
+                    ),
+                    size: 32,
                   ),
-                  size: 32,
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  _conflicts.isEmpty
+                  lead: _conflicts.isEmpty
                       ? context.l10n.aiConsistencyAllConsistent
                       : context.l10n.aiConsistencyWarningsOnly,
-                  style: TextStyle(
-                    fontFamily: kSansFamily,
-                    fontSize: 14,
-                    color: p.textMuted,
-                  ),
                 ),
                 const SizedBox(height: 16),
                 if (_conflicts.isEmpty) ...[
@@ -771,7 +759,7 @@ class _ConflictCard extends StatelessWidget {
         text,
         style: TextStyle(
           fontFamily: kSansFamily,
-          fontSize: 13,
+          fontSize: 14,
           height: 1.3,
           fontWeight: FontWeight.w600,
           color: p.text,
@@ -810,14 +798,7 @@ class _ConflictCard extends StatelessWidget {
                 Text(
                   context.l10n.aiConsistencyConflictHeader(index + 1, conflict.steps),
                   style: TextStyle(
-                    fontFamily: kMonoFamily,
-                    fontFamilyFallback: const [
-                      'Consolas',
-                      'Menlo',
-                      'Courier New',
-                      'monospace',
-                    ],
-                    fontSize: 11,
+                    fontSize: 12,
                     letterSpacing: 0.8,
                     fontWeight: FontWeight.w700,
                     color: warnText,
@@ -837,14 +818,7 @@ class _ConflictCard extends StatelessWidget {
                   child: Text(
                     context.l10n.aiConsistencyVs,
                     style: TextStyle(
-                      fontFamily: kMonoFamily,
-                      fontFamilyFallback: const [
-                        'Consolas',
-                        'Menlo',
-                        'Courier New',
-                        'monospace',
-                      ],
-                      fontSize: 11,
+                      fontSize: 12,
                       fontWeight: FontWeight.w700,
                       color: warnText,
                     ),
@@ -858,7 +832,7 @@ class _ConflictCard extends StatelessWidget {
               conflict.title,
               style: TextStyle(
                 fontFamily: kSansFamily,
-                fontSize: 15,
+                fontSize: 16,
                 fontWeight: FontWeight.w700,
                 color: p.text,
               ),

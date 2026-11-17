@@ -1,6 +1,8 @@
 ﻿import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/page_hero.dart';
+import 'package:mhad/ui/theme/app_art.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/l10n/model_labels.dart';
 import 'package:mhad/ui/widgets/design/design_card.dart';
@@ -52,7 +54,36 @@ class PastDirectiveDetailScreen extends ConsumerWidget {
           Expanded(
             child: directiveAsync.when(
               loading: () => PageLoading(label: context.l10n.pastDirectiveDetailLoadingThisDirective),
-              error: (e, _) => Center(child: Text(context.l10n.pastDirectiveDetailUnableToLoad(e))),
+              // A plain-language failure with a way forward — never the raw
+              // exception text (it showed "Unable to load: <stack-ish dump>").
+              error: (e, _) {
+                debugPrint('Past directive $directiveId failed to load: $e');
+                return Center(
+                  child: EmptyState(
+                    icon: Icons.error_outline,
+                    title: context.l10n.wizardUnableToLoad,
+                    announce: true,
+                    action: Wrap(
+                      spacing: 12,
+                      runSpacing: 8,
+                      alignment: WrapAlignment.center,
+                      children: [
+                        OutlinedButton.icon(
+                          onPressed: () => ref
+                              .invalidate(directiveByIdProvider(directiveId)),
+                          icon: const Icon(Icons.refresh),
+                          label: Text(context.l10n.retry),
+                        ),
+                        FilledButton.icon(
+                          onPressed: () => context.go(AppRoutes.home),
+                          icon: const Icon(Icons.home_outlined),
+                          label: Text(context.l10n.wizardBackToHome),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
               data: (d) {
                 if (d == null) {
                   return Center(child: Text(context.l10n.wizardDirectiveNotFound));
@@ -109,7 +140,6 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final p = Theme.of(context).mhadPalette;
     final status = directiveStatusLabel(directive.status, context.l10n);
     final dark = Theme.of(context).brightness == Brightness.dark;
     final statusColor = directiveStatusColor(directive.status, dark: dark);
@@ -127,10 +157,12 @@ class _Body extends ConsumerWidget {
         // year in primary color. Year comes from executionDate if set,
         // otherwise createdAt as a fallback. When the user's stored name
         // is on file it goes into the subtitle line for context.
-        _PastDetailTitle(directive: directive),
-        const SizedBox(height: 4),
-        Text(
-          [
+        // Photo header (a folder from an archive shelf): the title and
+        // the form / signed / expires line, unchanged.
+        PageHero(
+          art: AppArt.flowPast,
+          title: _PastDetailTitle(directive: directive),
+          lead: [
             FormType.values
                 .firstWhere((e) => e.name == directive.formType,
                     orElse: () => FormType.combined)
@@ -141,12 +173,7 @@ class _Body extends ConsumerWidget {
               directive.status == DirectiveStatus.expired.name
                   ? context.l10n.pastDirectiveExpiredOn(formatShortDate(DateTime.fromMillisecondsSinceEpoch(directive.expirationDate!)))
                   : context.l10n.pastDirectiveExpiresOn(formatShortDate(DateTime.fromMillisecondsSinceEpoch(directive.expirationDate!))),
-          ].join(' · '),
-          style: TextStyle(
-            fontFamily: kSansFamily,
-            fontSize: 14,
-            color: p.textMuted,
-          ),
+            ].join(' · '),
         ),
         const SizedBox(height: 16),
         // Editorial document-preview card — matches prototype ScrPastDetail
@@ -249,8 +276,8 @@ class _PastDetailTitle extends StatelessWidget {
         ],
       ),
       style: const TextStyle(
-        fontFamily: 'Instrument Serif',
-        fontFamilyFallback: ['Georgia', 'serif'],
+        fontFamily: kSerifFamily,
+        fontFamilyFallback: kSerifFallbacks,
         fontStyle: FontStyle.italic,
         fontSize: 38,
         fontWeight: FontWeight.w400,
@@ -385,14 +412,7 @@ class _SigCol extends StatelessWidget {
         Text(
           label,
           style: TextStyle(
-            fontFamily: kMonoFamily,
-            fontFamilyFallback: const [
-              'Consolas',
-              'Menlo',
-              'Courier New',
-              'monospace',
-            ],
-            fontSize: 11,
+            fontSize: 12,
             letterSpacing: 0.4,
             color: p.textMuted,
           ),

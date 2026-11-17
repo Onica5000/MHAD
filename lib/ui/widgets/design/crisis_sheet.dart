@@ -82,7 +82,7 @@ class _CrisisSheet extends StatelessWidget {
                     context.l10n.crisisSheet247FreeConfidential,
                     style: TextStyle(
                       fontFamily: kSansFamily,
-                      fontSize: 11,
+                      fontSize: 12,
                       fontWeight: FontWeight.w700,
                       letterSpacing: 1.2,
                       color: SemanticColors.errorAccentLight,
@@ -100,7 +100,7 @@ class _CrisisSheet extends StatelessWidget {
                 context.l10n.crisisSheetRealPeopleAreStandingBy,
                 style: TextStyle(
                   fontFamily: kSansFamily,
-                  fontSize: 13,
+                  fontSize: 14,
                   color: p.textMuted,
                   height: 1.5,
                 ),
@@ -229,7 +229,7 @@ class _Emergency911Callout extends StatelessWidget {
                   ),
                   style: TextStyle(
                     fontFamily: kSansFamily,
-                    fontSize: 13,
+                    fontSize: 14,
                     height: 1.4,
                     color: p.onPrimaryLight,
                   ),
@@ -316,7 +316,7 @@ class _CrisisRow extends StatelessWidget {
                         name,
                         style: TextStyle(
                           fontFamily: kSansFamily,
-                          fontSize: 15,
+                          fontSize: 16,
                           fontWeight: FontWeight.w700,
                           color: accent
                               ? (dark

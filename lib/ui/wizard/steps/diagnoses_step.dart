@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
+import 'package:mhad/utils/input_formatters.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/ai/gemini_api_assistant.dart';
@@ -354,9 +355,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
               child: Text(
                 'ICD-10',
                 style: TextStyle(
-                  fontFamily: kMonoFamily,
-                  fontFamilyFallback: kMonoFallbacks,
-                  fontSize: 11,
+                  fontSize: 12,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 0.5,
                   color: p.primary,
@@ -396,7 +395,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                 style: TextStyle(
                   fontFamily: kMonoFamily,
                   fontFamilyFallback: kMonoFallbacks,
-                  fontSize: 11,
+                  fontSize: 12,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 0.4,
                   color: p.primary,
@@ -409,7 +408,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                 c.name,
                 style: TextStyle(
                   fontFamily: kSansFamily,
-                  fontSize: 13,
+                  fontSize: 14,
                   fontWeight: FontWeight.w600,
                   height: 1.3,
                   color: p.text,
@@ -435,9 +434,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
       child: Text(
         label.toUpperCase(),
         style: TextStyle(
-          fontFamily: kMonoFamily,
-          fontFamilyFallback: kMonoFallbacks,
-          fontSize: 11,
+          fontSize: 12,
           fontWeight: FontWeight.w700,
           letterSpacing: 0.6,
           color: p.textMuted,
@@ -692,7 +689,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                               r.name,
                               style: TextStyle(
                                 fontFamily: kSansFamily,
-                                fontSize: 13,
+                                fontSize: 14,
                                 fontWeight: FontWeight.w600,
                                 color: p.text,
                               ),
@@ -724,7 +721,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                       l10n.diagnosesNpiNote,
                       style: TextStyle(
                         fontFamily: kSansFamily,
-                        fontSize: 11,
+                        fontSize: 12,
                         fontStyle: FontStyle.italic,
                         color: p.textMuted,
                       ),
@@ -754,6 +751,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
               child: TextField(
                 controller: _docPhoneCtrl,
                 keyboardType: TextInputType.phone,
+                inputFormatters: const [PhoneInputFormatter()],
                 decoration: InputDecoration(
                   labelText: l10n.diagnosesPhone,
                   border: const OutlineInputBorder(),
@@ -791,7 +789,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                       TextSpan(
                         style: TextStyle(
                           fontFamily: kSansFamily,
-                          fontSize: 13,
+                          fontSize: 14,
                           height: 1.45,
                           color: p.text,
                         ),
@@ -829,7 +827,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
           l10n.diagnosesFooter,
           style: TextStyle(
             fontFamily: kSansFamily,
-            fontSize: 11,
+            fontSize: 12,
             fontStyle: FontStyle.italic,
             height: 1.45,
             color: p.textMuted,
@@ -922,7 +920,7 @@ class _DescribeConditionDialogState extends State<_DescribeConditionDialog> {
             Text(
               l10n.diagnosesDescribeIntro,
               style: TextStyle(
-                fontSize: 13,
+                fontSize: 14,
                 height: 1.4,
                 color: cs.onSurfaceVariant,
               ),
@@ -962,7 +960,7 @@ class _DescribeConditionDialogState extends State<_DescribeConditionDialog> {
               if (_results.isEmpty)
                 Text(
                   l10n.diagnosesNoMatches,
-                  style: TextStyle(fontSize: 13, color: cs.onSurfaceVariant),
+                  style: TextStyle(fontSize: 14, color: cs.onSurfaceVariant),
                 )
               else
                 ConstrainedBox(
@@ -976,7 +974,7 @@ class _DescribeConditionDialogState extends State<_DescribeConditionDialog> {
               Text(
                 l10n.diagnosesSuggestionsNote,
                 style: TextStyle(
-                  fontSize: 11,
+                  fontSize: 12,
                   fontStyle: FontStyle.italic,
                   color: cs.onSurfaceVariant,
                 ),
@@ -1014,7 +1012,7 @@ class _DescribeConditionDialogState extends State<_DescribeConditionDialog> {
               child: Text(
                 c.code,
                 style: TextStyle(
-                  fontSize: 11,
+                  fontSize: 12,
                   fontWeight: FontWeight.w700,
                   color: cs.primary,
                 ),
@@ -1025,7 +1023,7 @@ class _DescribeConditionDialogState extends State<_DescribeConditionDialog> {
               child: Text(
                 c.name,
                 style: const TextStyle(
-                  fontSize: 13,
+                  fontSize: 14,
                   fontWeight: FontWeight.w600,
                 ),
               ),

@@ -73,7 +73,7 @@ class MessageBubble extends StatelessWidget {
                   Text(
                     timeStr,
                     style: TextStyle(
-                      fontSize: 11,
+                      fontSize: 12,
                       color: cs.onSurfaceVariant,
                     ),
                   ),
@@ -83,7 +83,7 @@ class MessageBubble extends StatelessWidget {
                       child: Text(
                         aiNotAdvice,
                         style: TextStyle(
-                          fontSize: 11,
+                          fontSize: 12,
                           fontStyle: FontStyle.italic,
                           color: cs.onSurfaceVariant,
                         ),
@@ -101,7 +101,7 @@ class MessageBubble extends StatelessWidget {
                           Text(
                             context.l10n.assistantMessageWidgetsVerifiedWithWebSearch,
                             style: TextStyle(
-                              fontSize: 11,
+                              fontSize: 12,
                               fontWeight: FontWeight.w700,
                               color: cs.primary,
                             ),
@@ -115,7 +115,7 @@ class MessageBubble extends StatelessWidget {
                     Text(
                       context.l10n.assistantMessageWidgetsSources,
                       style: TextStyle(
-                        fontSize: 11,
+                        fontSize: 12,
                         fontWeight: FontWeight.w700,
                         color: cs.onSurfaceVariant,
                       ),
@@ -132,7 +132,7 @@ class MessageBubble extends StatelessWidget {
                           child: Text(
                             '• ${s.title}',
                             style: TextStyle(
-                              fontSize: 11,
+                              fontSize: 12,
                               color: cs.primary,
                               decoration: TextDecoration.underline,
                             ),
@@ -158,7 +158,7 @@ class MessageBubble extends StatelessWidget {
                               Text(
                                 context.l10n.assistantMessageWidgetsVerifyOnTheWeb,
                                 style: TextStyle(
-                                  fontSize: 11,
+                                  fontSize: 12,
                                   fontWeight: FontWeight.w700,
                                   color: cs.primary,
                                 ),

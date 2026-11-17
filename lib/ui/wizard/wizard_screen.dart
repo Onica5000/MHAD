@@ -17,6 +17,8 @@ import 'package:mhad/ui/widgets/design/responsive_shell.dart';
 import 'package:mhad/ui/widgets/design/step_dots.dart';
 import 'package:mhad/ui/widgets/design/step_head.dart';
 import 'package:mhad/ui/widgets/design/wizard_bottom_bar.dart';
+import 'package:mhad/ui/widgets/design/more_sheet.dart';
+import 'package:mhad/ui/theme/app_art.dart';
 import 'package:mhad/ui/wizard/wizard_ai_rail.dart';
 import 'package:mhad/ui/wizard/wizard_mixins.dart';
 import 'package:mhad/ui/wizard/steps/additional_instructions_step.dart';
@@ -319,8 +321,13 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                 // collapses to the peeking "Need help?" bar.
                 final shellActive =
                     MediaQuery.sizeOf(context).width >= kWideLayoutBreakpoint;
+                // Show the AI rail only when the form still gets >= 600px:
+                // step rail 240 + AI rail 320 + 2 dividers + 600 = 1162 of
+                // CONTENT width (the wizard runs in focus mode, so the window
+                // needs ~1234px with the 72px rail). Review R7: at the old
+                // 1080 the form shrank to ~518px.
                 final showAiRail =
-                    shellActive && constraints.maxWidth >= 1080;
+                    shellActive && constraints.maxWidth >= 1162;
                 // When the on-screen keyboard is up on a narrow layout, the
                 // peeking "Need help?" bar just steals vertical space from the
                 // field being edited — hide it while typing. Wide layouts (which
@@ -350,7 +357,15 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                       totalSteps: steps.length,
                       title: currentStep.title(context.l10n),
                       subtitle: currentStep.localizedSubtitle(context.l10n),
+                      art: currentStep.art,
                       onExit: () => _saveAndExit(context),
+                      // Phones: the bottom nav is hidden in the wizard to
+                      // give the form room; More keeps every destination
+                      // (incl. 988 crisis help) one tap away.
+                      onMore: shellActive
+                          ? null
+                          : () => showMoreSheet(context, ref,
+                              includePrimaryNav: true),
                     ),
                     Expanded(
                       // Stack so the transient "✓ Saved" chip (UX audit B5)
@@ -384,7 +399,9 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                                           size: 14, color: p.textMuted),
                                       const SizedBox(width: 5),
                                       Text(
-                                        context.l10n.wizardSaved,
+                                        kIsWeb
+                                            ? context.l10n.wizardKeptInThisTab
+                                            : context.l10n.wizardSaved,
                                         style: TextStyle(
                                           fontSize: 12,
                                           color: p.textMuted,
@@ -412,9 +429,26 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                           currentStep.displayName,
                         ),
                       ),
-                    // Narrow (mobile) keeps a bottom Back/Continue bar. With the
-                    // desktop shell active the navigation lives under the step
-                    // rail instead, so the Scaffold has no bottomNavigationBar.
+                    // Desktop: the same Back/Continue bar as phones, under the
+                    // form (one implementation, one label). The column has a
+                    // TIGHT width here (see the LayoutBuilder below), so the
+                    // bar's Spacer row is always measured at a bounded width.
+                    if (shellActive)
+                      SizedBox(
+                        width: double.infinity,
+                        child: WizardBottomBar(
+                          primaryLabel: isLastStep
+                              ? context.l10n.wizardPreview
+                              : context.l10n.wizardContinue,
+                          primaryIcon: Icons.arrow_forward,
+                          primaryLoading: _isSaving,
+                          onPrimary: () => _goNext(context, isLastStep),
+                          secondaryLabel:
+                              _stepIndex > 0 ? context.l10n.back : null,
+                          onSecondary: _stepIndex > 0 ? _goBack : null,
+                          showGradient: false,
+                        ),
+                      ),
                     // Narrow (mobile) Back/Continue navigation is the
                     // Scaffold.bottomNavigationBar (see below), not a child of
                     // this Column — a bar with a Spacer-driven Row can hit an
@@ -436,21 +470,28 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                       child: _WideStepRail(
                         steps: steps,
                         currentIndex: _stepIndex,
-                        onNext: () => _goNext(context, isLastStep),
-                        onBack: _stepIndex > 0 ? _goBack : null,
-                        nextLabel: isLastStep
-                            ? context.l10n.wizardPreview
-                            : context.l10n.next,
-                        nextLoading: _isSaving,
                         onStepTap: _jumpToStep,
                       ),
                     ),
                     Container(width: 1, color: p.border),
                     Expanded(
                       child: FocusTraversalGroup(
-                        child: ConstrainedBox(
-                          constraints: const BoxConstraints(maxWidth: 760),
-                          child: mainColumn,
+                        // Centered, TIGHT-width form column (max 760): the old
+                        // ConstrainedBox left-aligned it with a blank band on
+                        // the right whenever the AI rail was hidden (R7).
+                        child: LayoutBuilder(
+                          builder: (context, box) {
+                            final w =
+                                box.maxWidth < 760 ? box.maxWidth : 760.0;
+                            return Align(
+                              alignment: Alignment.topCenter,
+                              child: SizedBox(
+                                width: w,
+                                height: box.maxHeight,
+                                child: mainColumn,
+                              ),
+                            );
+                          },
                         ),
                       ),
                     ),
@@ -734,21 +775,11 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
 class _WideStepRail extends StatelessWidget {
   final List<WizardStep> steps;
   final int currentIndex;
-  // Navigation lives directly under the step list on wide screens (there is
-  // no bottom bar in the desktop layout).
-  final VoidCallback onNext;
-  final VoidCallback? onBack;
-  final String nextLabel;
-  final bool nextLoading;
   // Jump straight to a step by tapping it in the "Your directive" list.
   final ValueChanged<int> onStepTap;
   const _WideStepRail({
     required this.steps,
     required this.currentIndex,
-    required this.onNext,
-    required this.onBack,
-    required this.nextLabel,
-    required this.nextLoading,
     required this.onStepTap,
   });
 
@@ -766,14 +797,7 @@ class _WideStepRail extends StatelessWidget {
             Text(
               context.l10n.wizardYourDirective,
               style: TextStyle(
-                fontFamily: kMonoFamily,
-                fontFamilyFallback: const [
-                  'Consolas',
-                  'Menlo',
-                  'Courier New',
-                  'monospace',
-                ],
-                fontSize: 11,
+                fontSize: 12,
                 fontWeight: FontWeight.w700,
                 letterSpacing: 1.2,
                 color: p.textMuted,
@@ -783,14 +807,23 @@ class _WideStepRail extends StatelessWidget {
             Text(
               '${currentIndex + 1} / ${steps.length}',
               style: TextStyle(
-                fontFamily: 'Instrument Serif',
-                fontFamilyFallback: const ['Georgia', 'serif'],
+                fontFamily: kSerifFamily,
+                fontFamilyFallback: kSerifFallbacks,
                 fontStyle: FontStyle.italic,
                 fontSize: 36,
                 fontWeight: FontWeight.w400,
                 letterSpacing: -0.5,
                 height: 1,
                 color: p.primary,
+              ),
+            ),
+            const SizedBox(height: 10),
+            // Overall progress at a glance.
+            ClipRRect(
+              borderRadius: BorderRadius.circular(DesignTokens.radiusXs),
+              child: LinearProgressIndicator(
+                value: (currentIndex + 1) / steps.length,
+                minHeight: 6,
               ),
             ),
             const SizedBox(height: 18),
@@ -805,41 +838,6 @@ class _WideStepRail extends StatelessWidget {
                         : _RailStepState.pending,
                 onTap: i == currentIndex ? null : () => onStepTap(i),
               ),
-            // Back / Next directly under the "Your directive" list.
-            const SizedBox(height: 22),
-            SizedBox(
-              width: double.infinity,
-              child: FilledButton.icon(
-                onPressed: nextLoading ? null : onNext,
-                icon: nextLoading
-                    ? const SizedBox(
-                        width: 16,
-                        height: 16,
-                        child: CircularProgressIndicator(
-                            strokeWidth: 2, color: Colors.white),
-                      )
-                    : const Icon(Icons.arrow_forward, size: 18),
-                label: Text(nextLabel),
-                style: FilledButton.styleFrom(
-                  iconAlignment: IconAlignment.end,
-                  minimumSize: const Size.fromHeight(48),
-                ),
-              ),
-            ),
-            if (onBack != null) ...[
-              const SizedBox(height: 8),
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton.icon(
-                  onPressed: onBack,
-                  icon: const Icon(Icons.arrow_back, size: 16),
-                  label: Text(context.l10n.back),
-                  style: OutlinedButton.styleFrom(
-                    minimumSize: const Size.fromHeight(44),
-                  ),
-                ),
-              ),
-            ],
           ],
         ),
       ),
@@ -912,13 +910,8 @@ class _RailStepRow extends StatelessWidget {
                     '$index',
                     style: TextStyle(
                       fontFamily: kMonoFamily,
-                      fontFamilyFallback: const [
-                        'Consolas',
-                        'Menlo',
-                        'Courier New',
-                        'monospace',
-                      ],
-                      fontSize: 11,
+                      fontFamilyFallback: kMonoFallbacks,
+                      fontSize: 12,
                       fontWeight: FontWeight.w700,
                       color: dotFg,
                     ),

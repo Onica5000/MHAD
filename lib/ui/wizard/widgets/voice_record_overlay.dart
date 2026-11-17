@@ -347,8 +347,8 @@ class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
                   Text(
                     context.l10n.voiceSayItYourWay,
                     style: TextStyle(
-                      fontFamily: 'Instrument Serif',
-                      fontFamilyFallback: const ['Georgia', 'serif'],
+                      fontFamily: kSerifFamily,
+                      fontFamilyFallback: kSerifFallbacks,
                       fontStyle: FontStyle.italic,
                       fontSize: 28,
                       fontWeight: FontWeight.w400,
@@ -369,7 +369,7 @@ class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontFamily: kSansFamily,
-                      fontSize: 13,
+                      fontSize: 14,
                       height: 1.5,
                       color: p.textMuted,
                     ),
@@ -389,12 +389,7 @@ class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
                     _timer(),
                     style: TextStyle(
                       fontFamily: kMonoFamily,
-                      fontFamilyFallback: const [
-                        'Consolas',
-                        'Menlo',
-                        'Courier New',
-                        'monospace',
-                      ],
+                      fontFamilyFallback: kMonoFallbacks,
                       fontSize: 22,
                       fontWeight: FontWeight.w600,
                       letterSpacing: 1.5,
@@ -471,14 +466,7 @@ class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
                         : context.l10n.voiceFooterDevice),
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontFamily: kMonoFamily,
-                  fontFamilyFallback: const [
-                    'Consolas',
-                    'Menlo',
-                    'Courier New',
-                    'monospace',
-                  ],
-                  fontSize: 11,
+                  fontSize: 12,
                   letterSpacing: 0.5,
                   color: p.textMuted,
                 ),

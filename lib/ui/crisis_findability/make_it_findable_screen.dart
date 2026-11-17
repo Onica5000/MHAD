@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mhad/ui/widgets/design/spot_illustration.dart';
-import 'package:mhad/ui/widgets/design/illustrated_intro.dart';
+import 'package:mhad/ui/widgets/design/page_hero.dart';
+import 'package:mhad/ui/theme/app_art.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -42,28 +42,11 @@ class MakeItFindableScreen extends ConsumerWidget {
             child: ListView(
               padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
               children: [
-                IllustratedIntro(
-                  art: SpotArt.people,
-                  label: SectionLabel(context.l10n.makeItFindableCrisisReadiness),
-                  body: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      EditorialHeading(
-                        text: context.l10n.makeItFindableMakeItFindableInA,
-                        size: 32,
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        context.l10n.makeItFindableADirectiveOnlyHelpsIf,
-                        style: TextStyle(
-                          fontFamily: kSansFamily,
-                          fontSize: 14,
-                          height: 1.5,
-                          color: p.textMuted,
-                        ),
-                      ),
-                    ],
-                  ),
+                PageHero(
+                  art: AppArt.flowFindable,
+                  eyebrow: context.l10n.makeItFindableCrisisReadiness,
+                  title: EditorialHeading(text: context.l10n.makeItFindableMakeItFindableInA, size: 32),
+                  lead: context.l10n.makeItFindableADirectiveOnlyHelpsIf,
                 ),
                 const SizedBox(height: 18),
                 SectionLabel(context.l10n.makeItFindableDoTheseNow),
@@ -113,7 +96,7 @@ class MakeItFindableScreen extends ConsumerWidget {
                   context.l10n.makeItFindableThisIsGeneralInformationAbout,
                   style: TextStyle(
                     fontFamily: kSansFamily,
-                    fontSize: 11,
+                    fontSize: 12,
                     fontStyle: FontStyle.italic,
                     height: 1.45,
                     color: p.textMuted,

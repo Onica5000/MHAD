@@ -3,9 +3,32 @@ import 'package:flutter/material.dart';
 /// App-wide font family constants.
 const kSansFamily = 'DM Sans';
 const kMonoFamily = 'JetBrains Mono';
+/// Display serif for editorial headlines (italic accents, big numerals).
+const kSerifFamily = 'Instrument Serif';
+const kSerifFallbacks = ['Georgia', 'serif'];
 // Dyslexia-friendly font, applied app-wide when the accessibility toggle is on.
 const kDyslexiaFamily = 'Atkinson Hyperlegible';
 const kMonoFallbacks = ['Consolas', 'Menlo', 'Courier New', 'monospace'];
+
+/// Shared styles for dense chrome that has no `textTheme` slot. One
+/// definition each, so a restyle happens in one place.
+///
+/// They set NO `fontFamily`: the text inherits the theme family, which keeps
+/// the dyslexia-font accessibility setting working (hand-typed DM Sans / mono
+/// styles silently ignored it).
+abstract final class MhadText {
+  /// Uppercase section / eyebrow label ("YOUR DIRECTIVE", "STEP 3 OF 11").
+  /// DM Sans small caps replaced the JetBrains Mono eyebrow in the 2026-11
+  /// redesign: mono read as a developer tool rather than a calm, professional
+  /// service.
+  static TextStyle eyebrow(Color color, {double size = 12}) => TextStyle(
+        fontSize: size,
+        fontWeight: FontWeight.w700,
+        letterSpacing: 1.1,
+        height: 1.3,
+        color: color,
+      );
+}
 
 /// Design tokens — single source of truth for radii, spacing, shadows used
 /// throughout the MHAD redesign. Keep in sync with the prototype.
@@ -75,7 +98,23 @@ class DesignTokens {
   /// Dense row title (list rows, compact tiles).
   static const fontRowTitle = 14.0;
   /// Smallest legible label — mono status strings, badge text.
-  static const fontMicro = 11.0;
+  static const fontMicro = 12.0;
+
+  /// Rendered size of a text field's label. Every field keeps its label
+  /// floated (`FloatingLabelBehavior.always`), and Flutter draws a floated
+  /// label at [flutterFloatingLabelScale] of its style size — so the style
+  /// must be set to `fieldLabelSize / flutterFloatingLabelScale` to actually
+  /// render at this size. (A 13px style rendered at ~9.75px: the "tiny field
+  /// labels" older users struggled with.)
+  static const fieldLabelSize = 14.0;
+
+  /// Mirrors Flutter's private `_kFinalLabelScale` in
+  /// `material/input_decorator.dart` (0.75 as of Flutter 3.47).
+  static const flutterFloatingLabelScale = 0.75;
+
+  /// Helper and error text under a field wrap to this many lines instead of
+  /// being cut off with "…" (Flutter's default is a single line).
+  static const fieldMessageMaxLines = 3;
 
   /// Resting card depth — a soft two-layer shadow so cards read as objects, not
   /// just outlined rectangles. Subtle in light, lifted in dark.
@@ -160,6 +199,8 @@ class SemanticColors {
       b == Brightness.dark ? warningBgDark : warningBgLight;
   static Color successBg(Brightness b) =>
       b == Brightness.dark ? successBgDark : successBgLight;
+  static Color errorBg(Brightness b) =>
+      b == Brightness.dark ? errorBgDark : errorBgLight;
 }
 
 /// A full palette = primary family + supporting surface/text tokens for a
@@ -420,6 +461,28 @@ class _NoPageTransitionsBuilder extends PageTransitionsBuilder {
       child;
 }
 
+/// The ONE page transition, on every platform: a short fade-in of the
+/// incoming page over the outgoing one. (Platform defaults differed — zoom on
+/// Windows/Android, a Cupertino slide on macOS browsers.)
+///
+/// It checks `MediaQuery.disableAnimations` at transition time, which
+/// main.dart sets from BOTH the in-app reduce-motion setting and the
+/// OS/browser `prefers-reduced-motion` — the theme flag alone only knew the
+/// in-app one (review R10).
+class _FadePageTransitionsBuilder extends PageTransitionsBuilder {
+  const _FadePageTransitionsBuilder();
+  @override
+  Widget buildTransitions<T>(PageRoute<T> route, BuildContext context,
+      Animation<double> animation, Animation<double> secondaryAnimation,
+      Widget child) {
+    if (MediaQuery.disableAnimationsOf(context)) return child;
+    return FadeTransition(
+      opacity: CurvedAnimation(parent: animation, curve: Curves.easeOutCubic),
+      child: child,
+    );
+  }
+}
+
 /// Builds a Material 3 ThemeData from a [MhadPalette] and [Brightness].
 ///
 /// Accessibility flags adjust the result app-wide:
@@ -511,15 +574,13 @@ ThemeData buildMhadTheme(
     textTheme: textTheme,
     primaryTextTheme: textTheme,
     extensions: [_MhadPaletteExt(p)],
-    pageTransitionsTheme: reduceMotion
-        ? const PageTransitionsTheme(builders: {
-            TargetPlatform.android: _NoPageTransitionsBuilder(),
-            TargetPlatform.iOS: _NoPageTransitionsBuilder(),
-            TargetPlatform.macOS: _NoPageTransitionsBuilder(),
-            TargetPlatform.windows: _NoPageTransitionsBuilder(),
-            TargetPlatform.linux: _NoPageTransitionsBuilder(),
-          })
-        : null,
+    // Every TargetPlatform (fuchsia used to fall back to the zoom default).
+    pageTransitionsTheme: PageTransitionsTheme(builders: {
+      for (final platform in TargetPlatform.values)
+        platform: reduceMotion
+            ? const _NoPageTransitionsBuilder()
+            : const _FadePageTransitionsBuilder(),
+    }),
 
     appBarTheme: AppBarTheme(
       backgroundColor: p.card,
@@ -569,7 +630,7 @@ ThemeData buildMhadTheme(
         ),
         textStyle: const TextStyle(
           fontFamily: kSansFamily,
-          fontSize: 15,
+          fontSize: 16,
           fontWeight: FontWeight.w600,
         ),
       ).copyWith(
@@ -628,7 +689,7 @@ ThemeData buildMhadTheme(
         ),
         textStyle: const TextStyle(
           fontFamily: kSansFamily,
-          fontSize: 15,
+          fontSize: 16,
           fontWeight: FontWeight.w600,
         ),
       ).copyWith(
@@ -709,23 +770,46 @@ ThemeData buildMhadTheme(
         borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
         borderSide: BorderSide(color: colorScheme.error, width: 1.5),
       ),
+      // A field that is both focused AND invalid used to fall back to the
+      // plain focused border, hiding the error state while typing.
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
+        borderSide: BorderSide(color: colorScheme.error, width: 2),
+      ),
+      // Helper / error text wraps instead of being cut off with "…".
+      helperMaxLines: DesignTokens.fieldMessageMaxLines,
+      errorMaxLines: DesignTokens.fieldMessageMaxLines,
       contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
       labelStyle: TextStyle(
-        fontFamily: kSansFamily,
-        color: p.textMuted,
-        fontSize: 15,
+        fontFamily: family,
+        color: mutedColor,
+        fontSize: 16,
       ),
+      // Sized so the always-floated label RENDERS at fieldLabelSize (see
+      // DesignTokens.fieldLabelSize), in the text color for legibility.
       floatingLabelStyle: TextStyle(
-        fontFamily: kSansFamily,
-        color: p.textMuted,
-        fontSize: 13,
+        fontFamily: family,
+        color: textColor,
+        fontSize: DesignTokens.fieldLabelSize /
+            DesignTokens.flutterFloatingLabelScale,
         fontWeight: FontWeight.w600,
-        letterSpacing: 0.2,
       ),
       hintStyle: TextStyle(
-        fontFamily: kSansFamily,
-        color: p.textMuted,
-        fontSize: 15,
+        fontFamily: family,
+        color: mutedColor,
+        fontSize: 16,
+      ),
+      helperStyle: TextStyle(
+        fontFamily: family,
+        color: mutedColor,
+        fontSize: 14,
+        height: 1.35,
+      ),
+      errorStyle: TextStyle(
+        fontFamily: family,
+        color: colorScheme.error,
+        fontSize: 14,
+        height: 1.35,
       ),
     ),
 
@@ -830,7 +914,7 @@ TextTheme _buildTextTheme(Color text, Color muted,
     labelMedium: TextStyle(
         fontFamily: family, fontSize: 12, fontWeight: FontWeight.w600, color: text),
     labelSmall: TextStyle(
-        fontFamily: family, fontSize: 13, fontWeight: FontWeight.w700, color: muted, letterSpacing: 1.0),
+        fontFamily: family, fontSize: 14, fontWeight: FontWeight.w700, color: muted, letterSpacing: 1.0),
   );
   // Bold-text accessibility: shift every weight up two steps (w400 → w600).
   // TextStyle.apply supports fontWeightDelta; TextTheme.apply does not, so map.

@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/page_hero.dart';
+import 'package:mhad/ui/theme/app_art.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/ui/widgets/design/design_card.dart';
 import 'package:mhad/ui/widgets/design/status_views.dart';
@@ -16,7 +18,6 @@ import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
-import 'package:mhad/ui/widgets/design/brand_motif.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
@@ -187,29 +188,11 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
                 : ListView(
                     padding: const EdgeInsets.fromLTRB(20, 14, 20, 32),
                     children: [
-                      BrandMotif(
-                        padding: const EdgeInsets.fromLTRB(20, 16, 20, 18),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SectionLabel(context.l10n.sideEffectsOptionalAddOn),
-                            const SizedBox(height: 6),
-                            EditorialHeading(
-                              text: context.l10n.medsStepSideEffectsTitle,
-                              size: 30,
-                            ),
-                            const SizedBox(height: 6),
-                            Text(
-                              context.l10n.sideEffectsForTheMedicationsYouRe,
-                              style: TextStyle(
-                                fontFamily: kSansFamily,
-                                fontSize: 14,
-                                height: 1.5,
-                                color: p.textMuted,
-                              ),
-                            ),
-                          ],
-                        ),
+                      PageHero(
+                        art: AppArt.flowSideEffects,
+                        eyebrow: context.l10n.sideEffectsOptionalAddOn,
+                        title: EditorialHeading(text: context.l10n.medsStepSideEffectsTitle, size: 30),
+                        lead: context.l10n.sideEffectsForTheMedicationsYouRe,
                       ),
                       const SizedBox(height: 16),
                       if (_labelMeds.isEmpty)
@@ -266,7 +249,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
                           context.l10n.sideEffectsOfficialLabelsIntro,
                           style: TextStyle(
                             fontFamily: kSansFamily,
-                            fontSize: 13,
+                            fontSize: 14,
                             height: 1.45,
                             color: p.textMuted,
                           ),
@@ -317,7 +300,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
               context.l10n.sideEffectsChecklistOptionalBody,
               style: TextStyle(
                 fontFamily: kSansFamily,
-                fontSize: 13,
+                fontSize: 14,
                 height: 1.45,
                 color: p.textMuted,
               ),
@@ -346,7 +329,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
               : context.l10n.sideEffectsReCheckFor(_currentMeds.join(', ')),
           style: TextStyle(
             fontFamily: kSansFamily,
-            fontSize: 13,
+            fontSize: 14,
             color: p.textMuted,
           ),
         ),
@@ -420,7 +403,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
             note.meds.join(' + '),
             style: TextStyle(
               fontFamily: kSansFamily,
-              fontSize: 13,
+              fontSize: 14,
               fontWeight: FontWeight.w700,
               color: p.text,
             ),
@@ -430,7 +413,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
             note.note,
             style: TextStyle(
               fontFamily: kSansFamily,
-              fontSize: 13,
+              fontSize: 14,
               height: 1.4,
               color: p.textMuted,
             ),

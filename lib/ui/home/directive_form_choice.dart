@@ -5,7 +5,9 @@ import 'package:go_router/go_router.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/router.dart';
+import 'package:mhad/ui/theme/app_art.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/design/art_image.dart';
 import 'package:mhad/ui/wizard/widgets/form_type_quiz.dart';
 
 /// Reusable form-type picker — the bold "Combined" card + Declaration/POA
@@ -60,17 +62,18 @@ class DirectiveFormChoice extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final p = Theme.of(context).mhadPalette;
-    final combined = _CombinedCard(
-      onStart: () => _start(context, ref, FormType.combined),
-    );
+    _CombinedCard combined({required bool wide}) => _CombinedCard(
+          wide: wide,
+          onStart: () => _start(context, ref, FormType.combined),
+        );
     final declaration = _SingleFormCard(
-      icon: Icons.description_outlined,
+      art: AppArt.formDeclaration,
       title: context.l10n.quizLegendDeclaration,
       sub: context.l10n.directiveFormChoiceTreatmentPreferencesWithoutNamingAn,
       onTap: () => _start(context, ref, FormType.declaration),
     );
     final poa = _SingleFormCard(
-      icon: Icons.people_alt_outlined,
+      art: AppArt.formPoa,
       title: context.l10n.directiveFormChoicePowerOfAttorneyOnly,
       sub: context.l10n.directiveFormChoiceNameADecisionMakerWithout,
       onTap: () => _startPoa(context, ref),
@@ -86,7 +89,7 @@ class DirectiveFormChoice extends ConsumerWidget {
             if (c.maxWidth < 520) {
               return Column(
                 children: [
-                  combined,
+                  combined(wide: false),
                   const SizedBox(height: 10),
                   declaration,
                   const SizedBox(height: 10),
@@ -98,7 +101,7 @@ class DirectiveFormChoice extends ConsumerWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Expanded(flex: 14, child: combined),
+                  Expanded(flex: 14, child: combined(wide: true)),
                   const SizedBox(width: 14),
                   Expanded(
                     flex: 10,
@@ -122,7 +125,7 @@ class DirectiveFormChoice extends ConsumerWidget {
           context.l10n.directiveFormChoiceYouCanSwitchFormTypes,
           style: TextStyle(
             fontFamily: kSansFamily,
-            fontSize: 13,
+            fontSize: 14,
             height: 1.4,
             color: p.textMuted,
           ),
@@ -132,40 +135,63 @@ class DirectiveFormChoice extends ConsumerWidget {
   }
 }
 
-// ── Bold primary "Combined directive" card with ★ watermark ───────────────
+// ── Bold primary "Combined directive" card, led by its photo ──────────────
 class _CombinedCard extends StatelessWidget {
   final VoidCallback onStart;
-  const _CombinedCard({required this.onStart});
+
+  /// Wide (desktop row): photo BESIDE the text. Narrow (stacked, phones):
+  /// photo banner ABOVE it. Decided by the caller's LayoutBuilder — this card
+  /// sits inside an IntrinsicHeight on wide screens, which cannot measure a
+  /// LayoutBuilder, so the photo there has a fixed width AND height.
+  final bool wide;
+  const _CombinedCard({required this.onStart, required this.wide});
+
+  static const _photoSize = 150.0;
 
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
+    final text = _text(context, p);
     return ClipRRect(
       borderRadius: BorderRadius.circular(DesignTokens.sheetRadius),
       child: Container(
         // Brand CTA gradient (primary → primaryMid) for a richer feature hero
         // than the flat primary fill. Foreground stays onPrimary, fully legible.
         decoration: BoxDecoration(gradient: p.ctaGradient),
-        child: Stack(
-          children: [
-            // Oversized decorative serif star, low opacity (artboard position).
-            Positioned(
-              right: -16,
-              top: -50,
-              child: Text(
-                '★',
-                style: TextStyle(
-                  fontFamily: 'Instrument Serif',
-                  fontStyle: FontStyle.italic,
-                  fontSize: 240,
-                  height: 1,
-                  color: p.onPrimary.withValues(alpha: 0.08),
-                ),
+        padding: const EdgeInsets.fromLTRB(24, 22, 22, 22),
+        child: wide
+            ? Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(child: text),
+                  const SizedBox(width: 18),
+                  const ArtImage(
+                    AppArt.formCombined,
+                    width: _photoSize,
+                    height: _photoSize,
+                    radius: DesignTokens.cardRadius,
+                  ),
+                ],
+              )
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const ArtImage(
+                    AppArt.formCombined,
+                    height: 130,
+                    expand: true,
+                    radius: DesignTokens.cardRadius,
+                  ),
+                  const SizedBox(height: 16),
+                  text,
+                ],
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(28, 24, 28, 22),
-              child: Column(
+      ),
+    );
+  }
+
+  Widget _text(BuildContext context, MhadPalette p) => Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -180,7 +206,7 @@ class _CombinedCard extends StatelessWidget {
                       context.l10n.modeSelectionRecommended,
                       style: TextStyle(
                         fontFamily: kSansFamily,
-                        fontSize: 11,
+                        fontSize: 12,
                         fontWeight: FontWeight.w700,
                         letterSpacing: 0.4,
                         color: p.onPrimary,
@@ -225,23 +251,17 @@ class _CombinedCard extends StatelessWidget {
                     ),
                   ),
                 ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+              );
 }
 
 // ── Declaration / POA single-form card ────────────────────────────────────
 class _SingleFormCard extends StatelessWidget {
-  final IconData icon;
+  final AppArt art;
   final String title;
   final String sub;
   final VoidCallback onTap;
   const _SingleFormCard({
-    required this.icon,
+    required this.art,
     required this.title,
     required this.sub,
     required this.onTap,
@@ -265,16 +285,11 @@ class _SingleFormCard extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                width: 34,
-                height: 34,
-                decoration: BoxDecoration(
-                  color: p.primaryTint,
-                  borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
-                ),
-                child: Icon(icon, size: 18, color: p.primary),
-              ),
-              const SizedBox(width: 12),
+              // Fixed width AND height: this card sits inside the wide
+              // layout's IntrinsicHeight, which can't measure a LayoutBuilder.
+              ArtImage(art,
+                  width: 64, height: 64, radius: DesignTokens.iconTileRadius),
+              const SizedBox(width: 14),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -344,7 +359,7 @@ class _HelpMeChooseBanner extends StatelessWidget {
                     context.l10n.directiveFormChoiceNotSureWhichFormFits,
                     style: TextStyle(
                       fontFamily: kSansFamily,
-                      fontSize: 13,
+                      fontSize: 14,
                       fontWeight: FontWeight.w500,
                       color: p.onPrimaryLight,
                     ),
@@ -352,16 +367,21 @@ class _HelpMeChooseBanner extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 // Flexible so a longer translation wraps instead of starving
-                // the prompt text (Spanish overflowed at phone width).
+                // the prompt text (Spanish overflowed at phone width), and
+                // aligned to the END of the banner — as a plain Flexible it
+                // sat at the start of its half, mid-banner on desktop.
                 Flexible(
-                  child: Text(
-                    context.l10n.directiveFormChoiceHelpMeChoose,
-                    textAlign: TextAlign.end,
-                    style: TextStyle(
-                      fontFamily: kSansFamily,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w700,
-                      color: p.primary,
+                  child: Align(
+                    alignment: AlignmentDirectional.centerEnd,
+                    child: Text(
+                      context.l10n.directiveFormChoiceHelpMeChoose,
+                      textAlign: TextAlign.end,
+                      style: TextStyle(
+                        fontFamily: kSansFamily,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        color: p.primary,
+                      ),
                     ),
                   ),
                 ),

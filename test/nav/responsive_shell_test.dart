@@ -129,6 +129,64 @@ void main() {
       expect(find.byType(MhadBottomNav), findsOneWidget);
     });
 
+    // ── 2026-11 shell foundation ────────────────────────────────────────
+
+    testWidgets('wide: sidebar destinations are visible to screen readers',
+        (tester) async {
+      // Page routes' modal barriers used to BlockSemantics the sidebar
+      // (painted before the Navigator): desktop screen readers could not
+      // reach Start/Learn/Settings or the 988 card at all.
+      final handle = tester.ensureSemantics();
+      await pumpShell(tester, size: desktop, initial: AppRoutes.settings);
+      expect(find.bySemanticsLabel(RegExp('^Learn')), findsOneWidget);
+      expect(find.bySemanticsLabel(RegExp('988')), findsOneWidget);
+      handle.dispose();
+    });
+
+    testWidgets('focus mode: wizard + Export get the 72px rail, others 232px',
+        (tester) async {
+      await pumpShell(tester, size: desktop, initial: '/wizard/1');
+      expect(tester.getSize(find.byType(WebSidebar)).width,
+          WebSidebar.compactWidth);
+      expect(sidebarWidthFor('/wizard/1'), WebSidebar.compactWidth);
+      expect(sidebarWidthFor('/export/1'), WebSidebar.compactWidth);
+      expect(sidebarWidthFor('/sign/1'), WebSidebar.width);
+      expect(sidebarWidthFor(AppRoutes.settings), WebSidebar.width);
+      expect(sidebarWidthFor(AppRoutes.disclaimer), 0);
+    });
+
+    testWidgets('narrow: the wizard hides the bottom nav, other pages keep it',
+        (tester) async {
+      expect(routeHidesBottomNav('/wizard/1'), isTrue);
+      expect(routeHidesBottomNav('/export/1'), isFalse);
+      await pumpShell(tester, size: phone, initial: '/wizard/1');
+      expect(find.byType(MhadBottomNav), findsNothing);
+      appRouter.go(AppRoutes.settings);
+      await tester.pumpAndSettle();
+      expect(find.byType(MhadBottomNav), findsOneWidget);
+    });
+
+    testWidgets('focus-mode rail still exposes every destination by name',
+        (tester) async {
+      final handle = tester.ensureSemantics();
+      await pumpShell(tester, size: desktop, initial: '/wizard/1');
+      for (final label in ['Start', 'Learn', 'Settings', 'Reset Form']) {
+        expect(find.bySemanticsLabel(RegExp('^$label')), findsOneWidget,
+            reason: '$label missing from the compact rail');
+      }
+      handle.dispose();
+    });
+
+    testWidgets('narrow: the bottom nav hides while the keyboard is open',
+        (tester) async {
+      await pumpShell(tester, size: phone, initial: AppRoutes.settings);
+      expect(find.byType(MhadBottomNav), findsOneWidget);
+      tester.view.viewInsets = const FakeViewPadding(bottom: 300);
+      addTearDown(tester.view.resetViewInsets);
+      await tester.pumpAndSettle();
+      expect(find.byType(MhadBottomNav), findsNothing);
+    });
+
     for (final gate in const [
       AppRoutes.disclaimer,
       AppRoutes.modeSelection,
@@ -142,9 +200,10 @@ void main() {
         tester.view.physicalSize = desktop;
         await tester.pumpAndSettle();
         expect(find.byType(WebSidebar), findsNothing);
-        // Centered in the reading column without a sidebar.
+        // Gates are capped at kGateMaxWidth (wide enough for SplitHero's
+        // photo panel beside the content) and get no sidebar.
         expect(tester.getSize(find.byKey(pageKey(gate))).width,
-            kReadingMaxWidth);
+            desktop.width < kGateMaxWidth ? desktop.width : kGateMaxWidth);
       });
     }
 
@@ -218,11 +277,20 @@ void main() {
   // ── Bottom nav highlight + navigation ────────────────────────────────────
 
   group('bottom nav', () {
-    // Only the active pill renders its text label; inactive pills are
-    // icon-only (label is in Semantics). So a visible Text with the label is
-    // the active-tab signal, scoped to the nav so page text can't match.
+    // Every tab shows its label (2026-11 redesign), so the active-tab signal
+    // is the tab's Semantics `selected` state — what a screen reader
+    // announces. navText finds a tab's visible label, scoped to the nav.
     Finder navText(String label) => find.descendant(
         of: find.byType(MhadBottomNav), matching: find.text(label));
+
+    bool tabSelected(WidgetTester tester, String label) => tester
+        .widgetList<Semantics>(find.descendant(
+            of: find.byType(MhadBottomNav), matching: find.byType(Semantics)))
+        .where((w) => w.properties.label == label)
+        .single
+        .properties
+        .selected ==
+        true;
 
     const tabs = {
       AppRoutes.home: 'Home',
@@ -237,8 +305,9 @@ void main() {
           (tester) async {
         await pumpShell(tester, size: phone, initial: entry.key);
         for (final label in const ['Home', 'Learn', 'Ask', 'Settings', 'More']) {
-          expect(navText(label),
-              label == entry.value ? findsOneWidget : findsNothing,
+          expect(navText(label), findsOneWidget,
+              reason: 'every tab shows its label');
+          expect(tabSelected(tester, label), label == entry.value,
               reason: '"$label" active state on ${entry.key}');
         }
       });
@@ -247,7 +316,7 @@ void main() {
     testWidgets('a secondary route highlights no tab', (tester) async {
       await pumpShell(tester, size: phone, initial: AppRoutes.privacyPolicy);
       for (final label in const ['Home', 'Learn', 'Ask', 'Settings', 'More']) {
-        expect(navText(label), findsNothing);
+        expect(tabSelected(tester, label), isFalse);
       }
     });
 
@@ -258,8 +327,8 @@ void main() {
       await tester.tap(find.bySemanticsLabel('Settings'));
       await tester.pumpAndSettle();
       expect(currentRoute(), AppRoutes.settings);
-      expect(navText('Settings'), findsOneWidget);
-      expect(navText('Home'), findsNothing);
+      expect(tabSelected(tester, 'Settings'), isTrue);
+      expect(tabSelected(tester, 'Home'), isFalse);
 
       await tester.tap(find.bySemanticsLabel('Home'));
       await tester.pumpAndSettle();

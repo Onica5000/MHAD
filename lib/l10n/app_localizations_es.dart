@@ -5353,8 +5353,11 @@ class AppLocalizationsEs extends AppLocalizations {
       '¿Necesita ayuda con este paso? Pregunte a la IA';
 
   @override
-  String get wizardAiRailAiHelpIsOffThe =>
-      'La ayuda de IA está desactivada. El aviso del paso, las preguntas sugeridas, el autocompletado con fotos y el chat de abajo no estarán disponibles hasta que configure la IA.';
+  String get wizardAiRailOptionalHelpTitle => 'Ayuda de IA opcional';
+
+  @override
+  String get wizardAiRailOptionalHelpBody =>
+      'Configure la IA para recibir un aviso en cada paso, preguntas sugeridas, autocompletado con fotos y el chat de abajo.';
 
   @override
   String get wizardAiRailCheckingThisStep => 'Revisando este paso';
@@ -5701,11 +5704,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get revocationRevokeNow => 'Revocar ahora';
-
-  @override
-  String pastDirectiveDetailUnableToLoad(Object error) {
-    return 'No se pudo cargar: $error';
-  }
 
   @override
   String pastDirectiveDetailTheDirectiveRemainsRegardless(Object status) {
@@ -7345,4 +7343,84 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get calendarReminderDescription =>
       'Su directiva anticipada de Pensilvania es válida por 2 años. Abra la aplicación MHAD para crear una nueva y firmarla ante dos testigos adultos.';
+
+  @override
+  String tabTitle(String page) {
+    return '$page · PA MHAD';
+  }
+
+  @override
+  String get tabPageDisclaimer => 'Antes de comenzar';
+
+  @override
+  String get tabPageWelcome => 'Bienvenida';
+
+  @override
+  String get tabPageAiSetup => 'Configuración de IA';
+
+  @override
+  String get tabPageAccessibility => 'Accesibilidad';
+
+  @override
+  String get tabPagePrivacyPolicy => 'Política de privacidad';
+
+  @override
+  String get tabPageGetHelp => 'Obtener ayuda';
+
+  @override
+  String get tabPageAudioGuide => 'Guía de audio';
+
+  @override
+  String get tabPageAdmin => 'Herramienta de administración';
+
+  @override
+  String get tabPageYourDirective => 'Su directiva';
+
+  @override
+  String get tabPageSign => 'Firmar en papel';
+
+  @override
+  String get tabPageCrisisPlan => 'Plan de crisis';
+
+  @override
+  String get tabPageUlysses => 'Cláusula de Ulises';
+
+  @override
+  String get tabPageSideEffects => 'Efectos secundarios';
+
+  @override
+  String get tabPageRevoke => 'Revocar una directiva';
+
+  @override
+  String get tabPageFindable => 'Hágala fácil de encontrar';
+
+  @override
+  String get tabPageAiCheck => 'Revisión de coherencia con IA';
+
+  @override
+  String get tabPagePast => 'Directiva anterior';
+
+  @override
+  String get homeOtherWaysToStart => 'Otras formas de comenzar';
+
+  @override
+  String get homeStartUploadBody =>
+      '¿Tiene una directiva o un formulario anterior? Súbalo para completar las respuestas que coincidan y luego revise cada una.';
+
+  @override
+  String get homeStartUploadCta => 'Subir un documento';
+
+  @override
+  String get homeStartResumeBody =>
+      'Abra un archivo de directiva que guardó antes desde esta aplicación y continúe donde lo dejó.';
+
+  @override
+  String get homeStartResumeCta => 'Abrir un archivo';
+
+  @override
+  String get aiSetupHeroLead =>
+      'Opcional: conecte un proveedor de IA para recibir ayuda mientras completa su directiva. Todo lo demás funciona sin ella.';
+
+  @override
+  String get wizardKeptInThisTab => 'Se conserva en esta pestaña';
 }

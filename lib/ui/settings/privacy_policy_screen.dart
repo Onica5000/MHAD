@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/page_hero.dart';
+import 'package:mhad/ui/theme/app_art.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/ui/disclaimer/disclaimer_screen.dart';
@@ -9,7 +11,6 @@ class PrivacyPolicyScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
     final bodyStyle = Theme.of(context)
         .textTheme
         .bodySmall
@@ -29,11 +30,13 @@ class PrivacyPolicyScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(context.l10n.privacyPolicyPaMhadAppPrivacyPolicy, style: headingStyle),
-            const SizedBox(height: 4),
-            Text(
-              context.l10n.privacyPolicyLastUpdated(appData.dateFact('privacyPolicyUpdated'), appData.dateFact('privacyPolicyVersion')),
-              style: bodyStyle?.copyWith(color: cs.onSurfaceVariant),
+            PageHero(
+              art: AppArt.miscPrivacy,
+              title: Text(context.l10n.privacyPolicyPaMhadAppPrivacyPolicy,
+                  style: headingStyle),
+              lead: context.l10n.privacyPolicyLastUpdated(
+                  appData.dateFact('privacyPolicyUpdated'),
+                  appData.dateFact('privacyPolicyVersion')),
             ),
             const SizedBox(height: 16),
 

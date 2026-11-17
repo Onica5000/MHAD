@@ -1,5 +1,7 @@
 ﻿import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/theme/app_art.dart';
+import 'package:mhad/ui/widgets/design/page_hero.dart';
 import 'package:mhad/constants.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -43,14 +45,19 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             child: ListView(
               padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
               children: [
-                SectionLabel(context.l10n.settingsAccount),
-                EditorialHeading(
-                  text: context.l10n.navSettings,
-                  size: 38,
-                  height: 1.0,
-                  letterSpacing: -0.5,
+                // Compact photo header (photo beside the title on wide
+                // screens, a small thumbnail beside it on phones).
+                PageHero(
+                  art: AppArt.miscSettings,
+                  eyebrow: context.l10n.settingsAccount,
+                  title: EditorialHeading(
+                    text: context.l10n.navSettings,
+                    size: 38,
+                    height: 1.0,
+                    letterSpacing: -0.5,
+                  ),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 16),
                 // Profile chip — matches prototype `ScrSettings` profile chip
                 // (mobile-extra.jsx L1076-1088). Pulls the user's name from the
                 // most-recently-edited directive (same source as the home
@@ -304,7 +311,7 @@ class _SettingsRow extends StatelessWidget {
                     style: const TextStyle(
                       fontFamily: kSansFamily,
                       fontWeight: FontWeight.w600,
-                      fontSize: 15,
+                      fontSize: 16,
                     ),
                   ),
                   const SizedBox(height: 2),
@@ -475,7 +482,7 @@ class _ProfileChip extends ConsumerWidget {
               style: TextStyle(
                 fontFamily: kSansFamily,
                 fontWeight: FontWeight.w700,
-                fontSize: 15,
+                fontSize: 16,
                 color: p.onPrimary,
               ),
             ),
@@ -489,7 +496,7 @@ class _ProfileChip extends ConsumerWidget {
                   displayName,
                   style: TextStyle(
                     fontFamily: kSansFamily,
-                    fontSize: 15,
+                    fontSize: 16,
                     fontWeight: FontWeight.w700,
                     color: p.onPrimary,
                   ),
@@ -500,14 +507,7 @@ class _ProfileChip extends ConsumerWidget {
                 Text(
                   _statusFor(context, mode),
                   style: TextStyle(
-                    fontFamily: kMonoFamily,
-                    fontFamilyFallback: const [
-                      'Consolas',
-                      'Menlo',
-                      'Courier New',
-                      'monospace',
-                    ],
-                    fontSize: 11,
+                    fontSize: 12,
                     letterSpacing: 0.4,
                     color: p.onPrimary.withValues(alpha: 0.85),
                   ),

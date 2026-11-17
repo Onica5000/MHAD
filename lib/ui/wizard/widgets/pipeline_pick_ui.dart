@@ -24,34 +24,29 @@ extension _PipelinePickUi on _PipelineScreenState {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SectionLabel(context.l10n.pickSnapOptional),
-              const SizedBox(height: 6),
-              Text.rich(
-                TextSpan(children: [
-                  TextSpan(text: context.l10n.pickHeadlineLead),
-                  TextSpan(
-                    text: context.l10n.pickHeadlineAccent,
-                    style: TextStyle(color: p.primary),
+              // Photo header (a phone scanning a page) — same photo as Home's
+              // "Upload a document" card, so the hand-off feels continuous.
+              PageHero(
+                art: AppArt.startUpload,
+                eyebrow: context.l10n.pickSnapOptional,
+                lead: context.l10n.pickIntro,
+                title: Text.rich(
+                  TextSpan(children: [
+                    TextSpan(text: context.l10n.pickHeadlineLead),
+                    TextSpan(
+                      text: context.l10n.pickHeadlineAccent,
+                      style: TextStyle(color: p.primary),
+                    ),
+                  ]),
+                  style: TextStyle(
+                    fontFamily: kSerifFamily,
+                    fontFamilyFallback: kSerifFallbacks,
+                    fontStyle: FontStyle.italic,
+                    fontSize: 32,
+                    height: 1.05,
+                    letterSpacing: -0.5,
+                    color: p.text,
                   ),
-                ]),
-                style: TextStyle(
-                  fontFamily: 'Instrument Serif',
-                  fontFamilyFallback: const ['Georgia', 'serif'],
-                  fontStyle: FontStyle.italic,
-                  fontSize: 32,
-                  height: 1.05,
-                  letterSpacing: -0.5,
-                  color: p.text,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                context.l10n.pickIntro,
-                style: TextStyle(
-                  fontFamily: kSansFamily,
-                  fontSize: 14,
-                  height: 1.5,
-                  color: p.textMuted,
                 ),
               ),
               const SizedBox(height: 10),
@@ -65,7 +60,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                       context.l10n.pickPrivacyNote,
                       style: TextStyle(
                         fontFamily: kSansFamily,
-                        fontSize: 13,
+                        fontSize: 14,
                         height: 1.45,
                         color: p.textMuted,
                       ),
@@ -222,14 +217,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                   context.l10n.pickFilesKeptInMemory(n),
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontFamily: kMonoFamily,
-                    fontFamilyFallback: const [
-                      'Consolas',
-                      'Menlo',
-                      'Courier New',
-                      'monospace',
-                    ],
-                    fontSize: 11,
+                    fontSize: 12,
                     letterSpacing: 0.4,
                     color: p.textMuted,
                   ),
@@ -314,7 +302,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontFamily: kSansFamily,
-                    fontSize: 13,
+                    fontSize: 14,
                     fontWeight: FontWeight.w600,
                     color: p.text,
                   ),
@@ -324,7 +312,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                     '${_docKind(d)} · $size',
                     style: TextStyle(
                       fontFamily: kSansFamily,
-                      fontSize: 11,
+                      fontSize: 12,
                       color: p.textMuted,
                     ),
                   ),
@@ -380,7 +368,7 @@ extension _PipelinePickUi on _PipelineScreenState {
             context.l10n.pickNoKeyBody,
             style: TextStyle(
               fontFamily: kSansFamily,
-              fontSize: 13,
+              fontSize: 14,
               height: 1.45,
               color: p.textMuted,
             ),
@@ -474,7 +462,7 @@ extension _PipelinePickUi on _PipelineScreenState {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontFamily: kSansFamily,
-                fontSize: 13,
+                fontSize: 14,
                 color: p.textMuted,
               ),
             ),
@@ -569,7 +557,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                     t.$2,
                     style: TextStyle(
                       fontFamily: kSansFamily,
-                      fontSize: 13,
+                      fontSize: 14,
                       fontWeight: FontWeight.w700,
                       color: p.text,
                     ),
@@ -579,7 +567,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                     t.$3,
                     style: TextStyle(
                       fontFamily: kSansFamily,
-                      fontSize: 11,
+                      fontSize: 12,
                       height: 1.3,
                       color: p.textMuted,
                     ),
@@ -632,7 +620,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                         l10n.pickOnAPhone,
                         style: TextStyle(
                           fontFamily: kSansFamily,
-                          fontSize: 13,
+                          fontSize: 14,
                           fontWeight: FontWeight.w700,
                           color: p.text,
                         ),
@@ -750,7 +738,7 @@ extension _PipelinePickUi on _PipelineScreenState {
               subtitle,
               style: TextStyle(
                 fontFamily: kSansFamily,
-                fontSize: 11,
+                fontSize: 12,
                 height: 1.35,
                 color: subtitleColor,
               ),
@@ -815,7 +803,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   fontFamily: kSansFamily,
-                                  fontSize: 13,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.w700,
                                   color: p.text,
                                 ),
@@ -833,14 +821,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                                 child: Text(
                                   l10n.pickFastest,
                                   style: TextStyle(
-                                    fontFamily: kMonoFamily,
-                                    fontFamilyFallback: const [
-                                      'Consolas',
-                                      'Menlo',
-                                      'Courier New',
-                                      'monospace',
-                                    ],
-                                    fontSize: 11,
+                                    fontSize: 12,
                                     fontWeight: FontWeight.w700,
                                     letterSpacing: 0.5,
                                     color: p.onPrimaryLight,
@@ -893,7 +874,7 @@ extension _PipelinePickUi on _PipelineScreenState {
               context.l10n.pickSentToProviderShort,
               style: TextStyle(
                 fontFamily: kSansFamily,
-                fontSize: 11,
+                fontSize: 12,
                 height: 1.4,
                 color: p.textMuted,
               ),
@@ -973,7 +954,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 fontFamily: kSansFamily,
-                                fontSize: 13,
+                                fontSize: 14,
                                 color: p.text,
                               ),
                             ),
@@ -1044,7 +1025,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontFamily: kSansFamily,
-                    fontSize: 13,
+                    fontSize: 14,
                     fontWeight: FontWeight.w700,
                     color: p.text,
                   ),
@@ -1080,7 +1061,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                 text,
                 style: TextStyle(
                   fontFamily: kSansFamily,
-                  fontSize: 13,
+                  fontSize: 14,
                   height: 1.45,
                   color: p.textMuted,
                 ),

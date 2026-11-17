@@ -1,8 +1,6 @@
-import 'dart:io';
 
 import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mhad/data/app_data/app_data.dart';
@@ -17,28 +15,16 @@ import 'package:mhad/services/privacy_mode_service.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'support/real_fonts.dart';
+
 /// Spanish strings run ~20-30% longer than English. Render the main screens
 /// in Spanish at phone and desktop widths; any RenderFlex overflow or other
 /// build error fails the test.
 void main() {
   setUpAll(() async {
     AppData.instance = AppData.fromJson(const {});
-    // Measure with the real bundled fonts. The default test font (Ahem)
-    // draws every glyph as a full em square, which flags "overflows" that
-    // never happen with DM Sans.
-    const families = {
-      'DM Sans': ['DMSans-Regular', 'DMSans-Medium', 'DMSans-SemiBold', 'DMSans-Bold'],
-      'Instrument Serif': ['InstrumentSerif-Regular', 'InstrumentSerif-Italic'],
-      'JetBrains Mono': ['JetBrainsMono-Regular', 'JetBrainsMono-Medium', 'JetBrainsMono-SemiBold'],
-    };
-    for (final e in families.entries) {
-      final loader = FontLoader(e.key);
-      for (final file in e.value) {
-        final bytes = File('assets/fonts/$file.ttf').readAsBytesSync();
-        loader.addFont(Future.value(ByteData.sublistView(bytes)));
-      }
-      await loader.load();
-    }
+    // Measure with the real bundled fonts (shared helper).
+    await loadRealFonts();
   });
 
   const sizes = {'phone': Size(390, 844), 'desktop': Size(1280, 900)};
@@ -61,8 +47,12 @@ void main() {
           OnboardingNotifier(initialValue: true),
           PrivacyModeNotifier()..setPublicMode(),
         );
-        await tester.binding.setSurfaceSize(size.value);
-        addTearDown(() => tester.binding.setSurfaceSize(null));
+        tester.view.physicalSize = size.value;
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(() {
+          tester.view.resetPhysicalSize();
+          tester.view.resetDevicePixelRatio();
+        });
         final db = AppDatabase(NativeDatabase.memory());
         await tester.pumpWidget(ProviderScope(
           overrides: [appDatabaseProvider.overrideWithValue(db)],
@@ -107,8 +97,12 @@ void main() {
           OnboardingNotifier(initialValue: true),
           PrivacyModeNotifier()..setPublicMode(),
         );
-        await tester.binding.setSurfaceSize(size.value);
-        addTearDown(() => tester.binding.setSurfaceSize(null));
+        tester.view.physicalSize = size.value;
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(() {
+          tester.view.resetPhysicalSize();
+          tester.view.resetDevicePixelRatio();
+        });
         final db = AppDatabase(NativeDatabase.memory());
         final id = (await tester.runAsync(
           () => DirectiveRepository(db).createDirective(FormType.combined),
@@ -137,8 +131,12 @@ void main() {
           OnboardingNotifier(initialValue: gate != 'onboarding'),
           PrivacyModeNotifier()..setPublicMode(),
         );
-        await tester.binding.setSurfaceSize(size.value);
-        addTearDown(() => tester.binding.setSurfaceSize(null));
+        tester.view.physicalSize = size.value;
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(() {
+          tester.view.resetPhysicalSize();
+          tester.view.resetDevicePixelRatio();
+        });
         final db = AppDatabase(NativeDatabase.memory());
         await tester.pumpWidget(ProviderScope(
           overrides: [appDatabaseProvider.overrideWithValue(db)],
@@ -163,8 +161,12 @@ void main() {
       OnboardingNotifier(initialValue: true),
       PrivacyModeNotifier()..setPublicMode(),
     );
-    await tester.binding.setSurfaceSize(const Size(1280, 2400));
-    addTearDown(() => tester.binding.setSurfaceSize(null));
+    tester.view.physicalSize = const Size(1280, 2400);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(() {
+      tester.view.resetPhysicalSize();
+      tester.view.resetDevicePixelRatio();
+    });
     final db = AppDatabase(NativeDatabase.memory());
     await tester.pumpWidget(ProviderScope(
       overrides: [appDatabaseProvider.overrideWithValue(db)],

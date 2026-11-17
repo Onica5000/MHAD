@@ -1,5 +1,8 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/editorial_heading.dart';
+import 'package:mhad/ui/widgets/design/page_hero.dart';
+import 'package:mhad/ui/theme/app_art.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -251,8 +254,9 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
             false;
 
     return Scaffold(
+      // Slim app bar (back + remove-key action); the photo header below
+      // carries the title once, large.
       appBar: AppBar(
-        title: Text(context.l10n.aiSetupAiAssistantSetup),
         actions: [
           if (hasKey)
             IconButton(
@@ -268,6 +272,15 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
             child: ListView(
         padding: const EdgeInsets.all(20),
         children: [
+          PageHero(
+            art: AppArt.aiSetup,
+            title: EditorialHeading(
+              text: context.l10n.aiSetupAiAssistantSetup,
+              size: 32,
+            ),
+            lead: context.l10n.aiSetupHeroLead,
+          ),
+          const SizedBox(height: 20),
           // ---- Ephemeral mode banner ----
           if (_isEphemeral) ...[
             Card(
@@ -284,7 +297,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                       child: Text(
                         context.l10n.aiSetupYourApiKeyWillNot,
                         style: TextStyle(
-                            fontSize: 13,
+                            fontSize: 14,
                             color: cs.onTertiaryContainer,
                             height: 1.4),
                       ),
@@ -321,7 +334,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                       child: Text(
                         context.l10n.aiSetupMayBeBlockedByYour(_provider.label),
                         style: TextStyle(
-                            fontSize: 13,
+                            fontSize: 14,
                             color: cs.onErrorContainer,
                             height: 1.4),
                       ),
@@ -348,7 +361,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                 ? context.l10n.aiSetupTheAssistantUsesGoogleS
                 : context.l10n.aiSetupYouBringYourOwnApi(_provider.label),
             style: TextStyle(
-                fontSize: 13, color: cs.onSurfaceVariant, height: 1.4),
+                fontSize: 14, color: cs.onSurfaceVariant, height: 1.4),
           ),
           const SizedBox(height: 16),
 
@@ -381,7 +394,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                   Text(
                     context.l10n.aiSetupYouLlNeedToSign,
                     style: TextStyle(
-                        fontSize: 13, color: cs.onErrorContainer,
+                        fontSize: 14, color: cs.onErrorContainer,
                         height: 1.4),
                   ),
                   const SizedBox(height: 10),
@@ -433,7 +446,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                   Text(
                     context.l10n.aiSetupYourGoogleLoginWillBe,
                     style: TextStyle(
-                        fontSize: 13, color: cs.onErrorContainer,
+                        fontSize: 14, color: cs.onErrorContainer,
                         fontWeight: FontWeight.w600, height: 1.4),
                   ),
                 ],
@@ -494,7 +507,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                           style: TextStyle(
                               color: success,
                               fontWeight: FontWeight.w600,
-                              fontSize: 13),
+                              fontSize: 14),
                         ),
                       ],
                     );
@@ -589,7 +602,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                     Expanded(
                       child: Text(
                         _testResult!,
-                        style: TextStyle(fontSize: 13, height: 1.4),
+                        style: TextStyle(fontSize: 14, height: 1.4),
                       ),
                     ),
                   ],
@@ -615,7 +628,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                       Text(context.l10n.aiSetupPrivacyNotice,
                           style: TextStyle(
                               fontWeight: FontWeight.w600,
-                              fontSize: 13,
+                              fontSize: 14,
                               color: cs.onErrorContainer)),
                     ],
                   ),
@@ -645,7 +658,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                       Text(context.l10n.aiSetupHowYourDataIsHandled,
                           style: TextStyle(
                               fontWeight: FontWeight.w600,
-                              fontSize: 13,
+                              fontSize: 14,
                               color: cs.onSurface)),
                     ],
                   ),
@@ -801,7 +814,7 @@ class _StepTile extends StatelessWidget {
             backgroundColor: cs.primary,
             child: Text(number,
                 style: TextStyle(
-                    fontSize: 13,
+                    fontSize: 14,
                     fontWeight: FontWeight.bold,
                     color: cs.onPrimary)),
           ),
@@ -817,7 +830,7 @@ class _StepTile extends StatelessWidget {
                   const SizedBox(height: 2),
                   Text(subtitle!,
                       style: TextStyle(
-                          fontSize: 13,
+                          fontSize: 14,
                           color: cs.onSurfaceVariant,
                           height: 1.3)),
                 ],
@@ -866,7 +879,7 @@ class _BrowserShortcut extends StatelessWidget {
       child: Row(
         children: [
           const SizedBox(width: 4),
-          Text('\u2022 ', style: TextStyle(color: color, fontSize: 13)),
+          Text('\u2022 ', style: TextStyle(color: color, fontSize: 14)),
           Expanded(
             child: Text(
               text,
@@ -899,11 +912,11 @@ class _FaqTile extends StatelessWidget {
         tilePadding: const EdgeInsets.symmetric(horizontal: 4),
         childrenPadding: const EdgeInsets.fromLTRB(4, 0, 4, 12),
         title: Text(question,
-            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500)),
+            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
         children: [
           Text(answer,
               style: TextStyle(
-                  fontSize: 13, color: cs.onSurfaceVariant, height: 1.4)),
+                  fontSize: 14, color: cs.onSurfaceVariant, height: 1.4)),
         ],
       ),
     );

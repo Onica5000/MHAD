@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/split_hero.dart';
+import 'package:mhad/ui/theme/app_art.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/ui/widgets/design/design_card.dart';
 import 'package:mhad/services/disclaimer_service.dart';
@@ -126,7 +128,12 @@ class _GateLayout extends StatelessWidget {
             // Decorative brand backdrop behind the gate content (no input/
             // layout impact); uses the gate's threaded palette.
             BrandBackdrop(intensity: 0.6, palette: palette),
-            Padding(
+            // Desktop: photo panel beside the content; phone: photo
+            // banner above it. The consent row + CTA stay pinned.
+            SplitHero(
+              tallArt: AppArt.welcomeDisclaimerTall,
+              wideArt: AppArt.welcomeDisclaimerWide,
+              child: Padding(
               padding: const EdgeInsets.fromLTRB(20, 18, 20, 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -149,8 +156,8 @@ class _GateLayout extends StatelessWidget {
                   Text(
                     context.l10n.disclaimerAFewThingsToUnderstand,
                     style: TextStyle(
-                      fontFamily: 'Instrument Serif',
-                      fontFamilyFallback: const ['Georgia', 'serif'],
+                      fontFamily: kSerifFamily,
+                      fontFamilyFallback: kSerifFallbacks,
                       fontStyle: FontStyle.italic,
                       fontSize: 36,
                       fontWeight: FontWeight.w400,
@@ -222,19 +229,28 @@ class _GateLayout extends StatelessWidget {
                   // left and the primary "Get started" CTA on the right.
                   Row(
                     children: [
-                      TextButton(
-                        onPressed: onOpenFull,
-                        style: TextButton.styleFrom(
-                          foregroundColor: palette.text,
-                          textStyle: const TextStyle(
-                            fontFamily: kSansFamily,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
+                      // Takes the free space and may wrap (Spanish at 390px
+                      // overflowed with a fixed link + Spacer); the CTA stays
+                      // on the right.
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: TextButton(
+                            onPressed: onOpenFull,
+                            style: TextButton.styleFrom(
+                              foregroundColor: palette.text,
+                              textStyle: const TextStyle(
+                                fontFamily: kSansFamily,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            child: Text(
+                                context.l10n.disclaimerReadFullDisclaimer),
                           ),
                         ),
-                        child: Text(context.l10n.disclaimerReadFullDisclaimer),
                       ),
-                      const Spacer(),
+                      const SizedBox(width: 12),
                       // NOTE: set the height via minimumSize, NOT a wrapping
                       // SizedBox(height:). Inside a Row with a Spacer, a
                       // SizedBox(height:) lets the button be measured at
@@ -265,7 +281,7 @@ class _GateLayout extends StatelessWidget {
                           textStyle: const TextStyle(
                             fontFamily: kSansFamily,
                             fontWeight: FontWeight.w600,
-                            fontSize: 15,
+                            fontSize: 16,
                           ),
                         ),
                       ),
@@ -273,6 +289,7 @@ class _GateLayout extends StatelessWidget {
                   ),
                 ],
               ),
+            ),
             ),
             // No crisis chip on this first-run gate by design; crisis access
             // begins on the dashboard (Home tools / the mobile "More" sheet).
@@ -294,14 +311,7 @@ class _SectionLabel extends StatelessWidget {
     return Text(
       text.toUpperCase(),
       style: TextStyle(
-        fontFamily: kMonoFamily,
-        fontFamilyFallback: const [
-          'Consolas',
-          'Menlo',
-          'Courier New',
-          'monospace',
-        ],
-        fontSize: 11,
+        fontSize: 12,
         fontWeight: FontWeight.w600,
         letterSpacing: 1.2,
         color: palette.textMuted,
@@ -350,7 +360,7 @@ class _DisclaimerCard extends StatelessWidget {
                   title,
                   style: TextStyle(
                     fontFamily: kSansFamily,
-                    fontSize: 15,
+                    fontSize: 16,
                     fontWeight: FontWeight.w700,
                     color: p.text,
                   ),
@@ -360,7 +370,7 @@ class _DisclaimerCard extends StatelessWidget {
                   body,
                   style: TextStyle(
                     fontFamily: kSansFamily,
-                    fontSize: 13,
+                    fontSize: 14,
                     height: 1.5,
                     color: p.textMuted,
                   ),

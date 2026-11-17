@@ -5257,8 +5257,11 @@ class AppLocalizationsEn extends AppLocalizations {
       'Need help with this step? Ask the AI';
 
   @override
-  String get wizardAiRailAiHelpIsOffThe =>
-      'AI help is off. The step heads-up, suggested questions, photo auto-fill, and the chat below aren\'t available until you set up AI.';
+  String get wizardAiRailOptionalHelpTitle => 'Optional AI help';
+
+  @override
+  String get wizardAiRailOptionalHelpBody =>
+      'Set up AI to get a heads-up on each step, suggested questions, photo auto-fill, and the chat below.';
 
   @override
   String get wizardAiRailCheckingThisStep => 'Checking this step';
@@ -5599,11 +5602,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get revocationRevokeNow => 'Revoke now';
-
-  @override
-  String pastDirectiveDetailUnableToLoad(Object error) {
-    return 'Unable to load: $error';
-  }
 
   @override
   String pastDirectiveDetailTheDirectiveRemainsRegardless(Object status) {
@@ -7225,4 +7223,84 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get calendarReminderDescription =>
       'Your Pennsylvania advance directive is valid for 2 years. Open the MHAD app to make a new one and sign it with two adult witnesses.';
+
+  @override
+  String tabTitle(String page) {
+    return '$page · PA MHAD';
+  }
+
+  @override
+  String get tabPageDisclaimer => 'Before you begin';
+
+  @override
+  String get tabPageWelcome => 'Welcome';
+
+  @override
+  String get tabPageAiSetup => 'AI setup';
+
+  @override
+  String get tabPageAccessibility => 'Accessibility';
+
+  @override
+  String get tabPagePrivacyPolicy => 'Privacy policy';
+
+  @override
+  String get tabPageGetHelp => 'Get help';
+
+  @override
+  String get tabPageAudioGuide => 'Audio guide';
+
+  @override
+  String get tabPageAdmin => 'Admin tool';
+
+  @override
+  String get tabPageYourDirective => 'Your directive';
+
+  @override
+  String get tabPageSign => 'Sign on paper';
+
+  @override
+  String get tabPageCrisisPlan => 'Crisis plan';
+
+  @override
+  String get tabPageUlysses => 'Ulysses clause';
+
+  @override
+  String get tabPageSideEffects => 'Side effects';
+
+  @override
+  String get tabPageRevoke => 'Revoke a directive';
+
+  @override
+  String get tabPageFindable => 'Make it findable';
+
+  @override
+  String get tabPageAiCheck => 'AI consistency check';
+
+  @override
+  String get tabPagePast => 'Past directive';
+
+  @override
+  String get homeOtherWaysToStart => 'Other ways to start';
+
+  @override
+  String get homeStartUploadBody =>
+      'Have an earlier directive or form? Upload it to fill in matching answers, then review each one.';
+
+  @override
+  String get homeStartUploadCta => 'Upload a document';
+
+  @override
+  String get homeStartResumeBody =>
+      'Open a directive file you saved from this app earlier and pick up where you left off.';
+
+  @override
+  String get homeStartResumeCta => 'Open a file';
+
+  @override
+  String get aiSetupHeroLead =>
+      'Optional: connect an AI provider to get help while you fill out your directive. Everything else works without it.';
+
+  @override
+  String get wizardKeptInThisTab => 'Kept in this tab';
 }

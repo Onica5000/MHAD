@@ -63,8 +63,8 @@ class ActiveDirectiveHero extends StatelessWidget {
                 child: Text(
                   '$currentStep',
                   style: TextStyle(
-                    fontFamily: 'Instrument Serif',
-                    fontFamilyFallback: const ['Georgia', 'serif'],
+                    fontFamily: kSerifFamily,
+                    fontFamilyFallback: kSerifFallbacks,
                     fontStyle: FontStyle.italic,
                     fontSize: 180,
                     height: 1,
@@ -91,7 +91,7 @@ class ActiveDirectiveHero extends StatelessWidget {
                             context.l10n.homeDirectiveHeroDraft,
                             style: TextStyle(
                               fontFamily: kSansFamily,
-                              fontSize: 11,
+                              fontSize: 12,
                               fontWeight: FontWeight.w700,
                               color: p.onPrimary,
                             ),
@@ -101,11 +101,6 @@ class ActiveDirectiveHero extends StatelessWidget {
                         Text(
                           context.l10n.homeDirectiveHeroStepOf(currentStep, totalSteps),
                           style: TextStyle(
-                            fontFamily: kMonoFamily,
-                            fontFamilyFallback: const [
-                              'Consolas',
-                              'monospace'
-                            ],
                             fontSize: 12,
                             color: p.onPrimary.withValues(alpha: 0.85),
                           ),
@@ -128,7 +123,7 @@ class ActiveDirectiveHero extends StatelessWidget {
                       context.l10n.homeDirectiveHeroLastEdited(formLabel, lastEdited),
                       style: TextStyle(
                         fontFamily: kSansFamily,
-                        fontSize: 13,
+                        fontSize: 14,
                         height: 1.4,
                         color: p.onPrimary.withValues(alpha: 0.85),
                       ),

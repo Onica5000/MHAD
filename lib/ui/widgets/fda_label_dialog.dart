@@ -39,7 +39,7 @@ Future<void> showFdaLabelDialog(
             heading,
             style: const TextStyle(
               fontFamily: kSans,
-              fontSize: 13,
+              fontSize: 14,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -48,7 +48,7 @@ Future<void> showFdaLabelDialog(
             body,
             style: TextStyle(
               fontFamily: kSans,
-              fontSize: 13,
+              fontSize: 14,
               height: 1.45,
               color: p.text,
             ),
@@ -81,7 +81,7 @@ Future<void> showFdaLabelDialog(
                   context.l10n.fdaLabelDialogNoFdaLabelInformationIs,
                   style: TextStyle(
                     fontFamily: kSans,
-                    fontSize: 13,
+                    fontSize: 14,
                     color: p.textMuted,
                   ),
                 );
@@ -105,7 +105,7 @@ Future<void> showFdaLabelDialog(
                       context.l10n.fdaLabelDialogOfficialUSFdaDrug,
                       style: TextStyle(
                         fontFamily: kSans,
-                        fontSize: 11,
+                        fontSize: 12,
                         fontStyle: FontStyle.italic,
                         color: p.textMuted,
                       ),
@@ -154,7 +154,7 @@ class _FdaLabelCardState extends State<FdaLabelCard> {
     final p = Theme.of(context).mhadPalette;
     TextStyle body([Color? c]) => TextStyle(
       fontFamily: kSansFamily,
-      fontSize: 13,
+      fontSize: 14,
       height: 1.45,
       color: c ?? p.text,
     );
@@ -168,7 +168,7 @@ class _FdaLabelCardState extends State<FdaLabelCard> {
             heading,
             style: const TextStyle(
               fontFamily: kSansFamily,
-              fontSize: 13,
+              fontSize: 14,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -243,7 +243,7 @@ class _FdaLabelCardState extends State<FdaLabelCard> {
                       context.l10n.fdaLabelDialogOfficialUSFdaDrug,
                       style: TextStyle(
                         fontFamily: kSansFamily,
-                        fontSize: 11,
+                        fontSize: 12,
                         fontStyle: FontStyle.italic,
                         color: p.textMuted,
                       ),

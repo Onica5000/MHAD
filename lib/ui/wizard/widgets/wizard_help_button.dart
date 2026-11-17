@@ -39,7 +39,7 @@ class WizardHelpButton extends StatelessWidget {
           label: Text(context.l10n.wizardHelpButton),
           style: TextButton.styleFrom(
             foregroundColor: Theme.of(context).colorScheme.primary,
-            textStyle: const TextStyle(fontSize: 13),
+            textStyle: const TextStyle(fontSize: 14),
             visualDensity: VisualDensity.compact,
           ),
         ),

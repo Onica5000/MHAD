@@ -2,7 +2,6 @@
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'package:mhad/ui/widgets/design/spot_illustration.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -10,8 +9,12 @@ import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/services/onboarding_service.dart';
 import 'package:mhad/ui/router.dart';
+import 'package:mhad/ui/theme/app_art.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/design/art_image.dart';
+import 'package:mhad/ui/widgets/design/responsive_shell.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
+import 'package:mhad/ui/widgets/design/split_hero.dart';
 import 'package:mhad/ui/widgets/design/brand_motif.dart';
 import 'package:mhad/ui/wizard/widgets/saved_file_import.dart';
 
@@ -60,10 +63,32 @@ class OnboardingScreen extends ConsumerWidget {
     context.go(AppRoutes.uploadRoute(id));
   }
 
+  /// Home's above-the-fold photos, at the widths Home will show them, so the
+  /// hand-off from this intro to Home doesn't pop in (review R3).
+  static Map<AppArt, double> _homePhotoWidths(BuildContext context) {
+    final w = MediaQuery.sizeOf(context).width;
+    if (w >= kWideLayoutBreakpoint) {
+      return const {
+        AppArt.homeHero: 480, // PageHero large, capped at 480
+        AppArt.formCombined: 225, // 150x150 box x 1.5 aspect
+        AppArt.formDeclaration: 96, // 64x64 thumb x 1.5 aspect
+        AppArt.formPoa: 96,
+      };
+    }
+    return {
+      AppArt.homeHero: w - 40, // greeting banner, full page width
+      AppArt.formCombined: w - 86, // combined card banner
+      AppArt.formDeclaration: 96,
+      AppArt.formPoa: 96,
+    };
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final p = Theme.of(context).mhadPalette;
-    return Scaffold(
+    return PrecacheArt(
+      widthsFor: _homePhotoWidths,
+      child: Scaffold(
       backgroundColor: p.surface,
       body: SafeArea(
         child: Stack(
@@ -81,9 +106,11 @@ class OnboardingScreen extends ConsumerWidget {
             // (fill-mode) Home route, so cap + centre the column at the
             // design's WebCenter measure (~640) — otherwise the banner and
             // CTAs stretch the full viewport width. No-op on mobile (422 px).
-            Center(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 640),
+            // Desktop: photo panel beside the intro (SplitHero caps the
+            // column at 640); phone: photo banner above it.
+            SplitHero(
+              tallArt: AppArt.welcomeOnboardingTall,
+              wideArt: AppArt.welcomeOnboardingWide,
                 // Fill-or-scroll: SliverFillRemaining(hasScrollBody: false) sizes
                 // the column to AT LEAST the viewport (so the Spacer still
                 // bottom-anchors the CTAs on tall screens) yet lets it grow and
@@ -96,24 +123,12 @@ class OnboardingScreen extends ConsumerWidget {
                     SliverFillRemaining(
                       hasScrollBody: false,
                       child: Padding(
-              padding: const EdgeInsets.fromLTRB(28, 64, 28, 24),
+              padding: const EdgeInsets.fromLTRB(28, 32, 28, 24),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Voice motif beside the label on wide screens only; on
-                  // phones vertical space is reserved for the CTAs.
-                  if (box.maxWidth >= 600)
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Expanded(
-                          child: SectionLabel(context.l10n.onboardingPaMhadAct194),
-                        ),
-                        const SpotIllustration(art: SpotArt.voice, size: 88),
-                      ],
-                    )
-                  else
-                    SectionLabel(context.l10n.onboardingPaMhadAct194),
+                  // The photo (SplitHero) replaced the small voice sketch.
+                  SectionLabel(context.l10n.onboardingPaMhadAct194),
                   const SizedBox(height: 18),
                   // Editorial 68pt h1 "In your\nwords." — "words." is the
                   // primary-tinted accent (prototype L58-64).
@@ -128,8 +143,8 @@ class OnboardingScreen extends ConsumerWidget {
                       ],
                     ),
                     style: TextStyle(
-                      fontFamily: 'Instrument Serif',
-                      fontFamilyFallback: const ['Georgia', 'serif'],
+                      fontFamily: kSerifFamily,
+                      fontFamilyFallback: kSerifFallbacks,
                       fontStyle: FontStyle.italic,
                       fontSize: 68,
                       height: 0.95,
@@ -242,7 +257,7 @@ class OnboardingScreen extends ConsumerWidget {
                             DesignTokens.buttonHeightMd),
                         textStyle: const TextStyle(
                           fontFamily: kSansFamily,
-                          fontSize: 15,
+                          fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -262,7 +277,7 @@ class OnboardingScreen extends ConsumerWidget {
                             const Size.fromHeight(DesignTokens.buttonHeightMd),
                         textStyle: const TextStyle(
                           fontFamily: kSansFamily,
-                          fontSize: 15,
+                          fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -277,7 +292,7 @@ class OnboardingScreen extends ConsumerWidget {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontFamily: kSansFamily,
-                        fontSize: 11,
+                        fontSize: 12,
                         height: 1.45,
                         color: p.textMuted,
                       ),
@@ -290,10 +305,10 @@ class OnboardingScreen extends ConsumerWidget {
                   ],
                 ),
                 ),
-              ),
             ),
           ],
         ),
+      ),
       ),
     );
   }

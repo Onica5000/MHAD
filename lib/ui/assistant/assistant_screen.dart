@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:mhad/ui/widgets/design/crisis_support_banner.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/l10n/model_labels.dart';
+import 'package:mhad/ui/theme/app_art.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/design/art_image.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/ai/ai_assistant.dart';
@@ -245,7 +247,7 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                     context.l10n.navAiAssistant,
                     style: TextStyle(
                       fontFamily: kSansFamily,
-                      fontSize: 15,
+                      fontSize: 16,
                       fontWeight: FontWeight.w700,
                       letterSpacing: -0.2,
                       color: Theme.of(context).mhadPalette.text,
@@ -256,14 +258,7 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                         ? context.l10n.assistantActiveTextPiiStrippedBefore(ref.watch(activeModelProvider).toUpperCase().replaceAll('-', ' '))
                         : context.l10n.assistantNotSetUpAddA,
                     style: TextStyle(
-                      fontFamily: kMonoFamily,
-                      fontFamilyFallback: const [
-                        'Consolas',
-                        'Menlo',
-                        'Courier New',
-                        'monospace',
-                      ],
-                      fontSize: 11,
+                      fontSize: 12,
                       letterSpacing: 0.5,
                       color: Theme.of(context).mhadPalette.textMuted,
                     ),
@@ -408,7 +403,7 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                           context.l10n.assistantNotLegalOrMedicalAdvice(appData.phoneOf('paProtectionAdvocacy')),
                           style: TextStyle(
                             fontFamily: kSansFamily,
-                            fontSize: 11,
+                            fontSize: 12,
                             fontWeight: FontWeight.w600,
                             color: fg,
                           ),
@@ -435,7 +430,7 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                   avatar: const Icon(Icons.edit_note, size: 16),
                   label: Text(
                     _contextLabel(widget.context!),
-                    style: const TextStyle(fontSize: 11),
+                    style: const TextStyle(fontSize: 12),
                   ),
                   padding: EdgeInsets.zero,
                   visualDensity: VisualDensity.compact,
@@ -458,7 +453,7 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                       Text(
                         context.l10n.assistantToUseTheAiAssistant,
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 13),
+                        style: TextStyle(fontSize: 14),
                       ),
                       const SizedBox(height: 8),
                       FilledButton.tonal(
@@ -523,7 +518,7 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                 child: Chip(
                   avatar: const Icon(Icons.shield_outlined, size: 14),
                   label: Text(context.l10n.assistantPersonalInfoRemoved,
-                      style: TextStyle(fontSize: 11)),
+                      style: TextStyle(fontSize: 12)),
                   padding: EdgeInsets.zero,
                   visualDensity: VisualDensity.compact,
                 ),
@@ -602,7 +597,7 @@ class _RateLimitBar extends ConsumerWidget {
             Expanded(
               child: Text(
                 tracker.statusTextFor(context.l10n),
-                style: TextStyle(fontSize: 11, color: fg),
+                style: TextStyle(fontSize: 12, color: fg),
               ),
             ),
             Tooltip(
@@ -698,13 +693,18 @@ class _EmptyState extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.all(20),
       children: [
-        const SizedBox(height: 16),
-        Icon(
-          Icons.smart_toy_outlined,
-          size: 48,
-          color: Theme.of(context).colorScheme.primary,
+        const SizedBox(height: 8),
+        // The assistant photo (someone at a desk with tea, phone beside
+        // them) instead of a robot icon: calm and human.
+        const Center(
+          child: ArtImage(
+            AppArt.aiAssistant,
+            width: 168,
+            height: 168,
+            radius: DesignTokens.radiusLg,
+          ),
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 16),
         Text(
           context.l10n.assistantAskMeAnythingAboutYour,
           textAlign: TextAlign.center,
@@ -755,7 +755,7 @@ class _SuggestionChip extends StatelessWidget {
             child: Row(
               children: [
                 Expanded(
-                  child: Text(text, style: const TextStyle(fontSize: 13)),
+                  child: Text(text, style: const TextStyle(fontSize: 14)),
                 ),
                 Icon(
                   Icons.arrow_forward_ios,

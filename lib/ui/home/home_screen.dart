@@ -2,7 +2,8 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:mhad/ui/widgets/design/spot_illustration.dart';
+import 'package:mhad/ui/theme/app_art.dart';
+import 'package:mhad/ui/widgets/design/art_image.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/ui/widgets/design/status_views.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -730,7 +731,7 @@ class _PrivacyByDesignCard extends StatelessWidget {
                 : context.l10n.homePrivateBodyDevice,
             style: TextStyle(
               fontFamily: kSansFamily,
-              fontSize: 13,
+              fontSize: 14,
               height: 1.45,
               color: p.onPrimaryLight,
             ),
@@ -841,8 +842,8 @@ class _GreetingRow extends StatelessWidget {
                   ],
                 ),
                 style: const TextStyle(
-                  fontFamily: 'Instrument Serif',
-                  fontFamilyFallback: ['Georgia', 'serif'],
+                  fontFamily: kSerifFamily,
+                  fontFamilyFallback: kSerifFallbacks,
                   fontStyle: FontStyle.italic,
                   fontSize: 38,
                   height: 1.05,
@@ -882,13 +883,24 @@ class _GreetingRow extends StatelessWidget {
 
     return RevealOnMount(
       child: BrandMotif(
-        padding: const EdgeInsets.fromLTRB(20, 22, 20, 24),
+        padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
         child: showArt
-            ? Row(
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Expanded(child: inner),
-                  const SizedBox(width: 12),
-                  const SpotIllustration(art: SpotArt.welcome, size: 84),
+                  // The Home photo (also the desktop hero). RevealOnMount
+                  // already animates this card, so the photo doesn't fade
+                  // on its own as well (review R13f).
+                  const ArtImage(
+                    AppArt.homeHero,
+                    height: 150,
+                    expand: true,
+                    radius: DesignTokens.radiusLg,
+                    fade: false,
+                  ),
+                  const SizedBox(height: 18),
+                  inner,
                 ],
               )
             : Align(alignment: Alignment.centerLeft, child: inner),
@@ -907,8 +919,8 @@ class _PublicGuestGreeting extends StatelessWidget {
     return Text(
       context.l10n.homeLetSGetStarted,
       style: TextStyle(
-        fontFamily: 'Instrument Serif',
-        fontFamilyFallback: ['Georgia', 'serif'],
+        fontFamily: kSerifFamily,
+        fontFamilyFallback: kSerifFallbacks,
         fontStyle: FontStyle.italic,
         fontSize: 38,
         height: 1.05,

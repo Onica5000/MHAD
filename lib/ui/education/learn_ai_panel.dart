@@ -19,6 +19,15 @@ import 'package:mhad/ui/widgets/ai_consent_dialog.dart';
 class LearnAiPanel extends ConsumerStatefulWidget {
   const LearnAiPanel({super.key});
 
+  /// The panel's fixed width.
+  static const double width = 340;
+
+  /// The panel joins the desktop Learn page only when the reading column
+  /// keeps at least this much beside it (the wizard's AI rail follows the
+  /// same rule): at ~1000-1170px windows it squeezed the article grid
+  /// into tiny tiles. Below that, Ask the AI stays in the sidebar.
+  static const double minReadingWidth = 600;
+
   @override
   ConsumerState<LearnAiPanel> createState() => _LearnAiPanelState();
 }
@@ -92,7 +101,7 @@ class _LearnAiPanelState extends ConsumerState<LearnAiPanel> {
     final hasKey = ref.watch(apiKeyProvider).value?.isNotEmpty ?? false;
 
     return Container(
-      width: 340,
+      width: LearnAiPanel.width,
       decoration: BoxDecoration(
         color: p.card,
         border: Border(left: BorderSide(color: p.border)),
@@ -113,7 +122,7 @@ class _LearnAiPanelState extends ConsumerState<LearnAiPanel> {
                       context.l10n.learnAiPanelAskTheAi,
                       style: TextStyle(
                         fontFamily: kSansFamily,
-                        fontSize: 15,
+                        fontSize: 16,
                         fontWeight: FontWeight.w700,
                         color: p.text,
                       ),
@@ -130,14 +139,7 @@ class _LearnAiPanelState extends ConsumerState<LearnAiPanel> {
               child: Text(
                 context.l10n.learnAiPanelPiiStripped(ref.watch(activeProviderProvider).name.toUpperCase()),
                 style: TextStyle(
-                  fontFamily: kMonoFamily,
-                  fontFamilyFallback: const [
-                    'Consolas',
-                    'Menlo',
-                    'Courier New',
-                    'monospace',
-                  ],
-                  fontSize: 11,
+                  fontSize: 12,
                   letterSpacing: 0.5,
                   color: hasKey ? p.primary : p.textMuted,
                 ),
@@ -157,7 +159,7 @@ class _LearnAiPanelState extends ConsumerState<LearnAiPanel> {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontFamily: kSansFamily,
-                            fontSize: 13,
+                            fontSize: 14,
                             height: 1.5,
                             color: p.textMuted,
                           ),
@@ -202,6 +204,7 @@ class _LearnAiPanelState extends ConsumerState<LearnAiPanel> {
                         ),
                         const SizedBox(width: 8),
                         IconButton.filled(
+                          tooltip: context.l10n.assistantSend,
                           onPressed:
                               isSending ? null : () => _send(_inputCtrl.text),
                           icon: const Icon(Icons.send, size: 18),
@@ -224,7 +227,7 @@ class _LearnAiPanelState extends ConsumerState<LearnAiPanel> {
                 context.l10n.learnAiPanelNotLegalOrMedicalAdvice,
                 style: TextStyle(
                   fontFamily: kSansFamily,
-                  fontSize: 11,
+                  fontSize: 12,
                   color: p.textMuted,
                 ),
               ),
@@ -260,7 +263,7 @@ class _LearnChatBubble extends StatelessWidget {
           message.content,
           style: TextStyle(
             fontFamily: kSansFamily,
-            fontSize: 13,
+            fontSize: 14,
             height: 1.4,
             color: isUser ? p.onPrimary : p.text,
           ),

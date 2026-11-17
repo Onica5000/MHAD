@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/rich_content_text.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/l10n/model_labels.dart';
 import 'package:mhad/data/educational_content.dart';
@@ -173,13 +174,8 @@ class _BrowseRow extends StatelessWidget {
                   '$count',
                   style: TextStyle(
                     fontFamily: kMonoFamily,
-                    fontFamilyFallback: const [
-                      'Consolas',
-                      'Menlo',
-                      'Courier New',
-                      'monospace',
-                    ],
-                    fontSize: 11,
+                    fontFamilyFallback: kMonoFallbacks,
+                    fontSize: 12,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 0.4,
                     color: p.primary,
@@ -282,7 +278,7 @@ class SectionTile extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               Text(
-                section.content,
+                plainExcerpt(section.content),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
@@ -339,7 +335,7 @@ class _CategoryBadge extends StatelessWidget {
       ),
       child: Text(
         category.label(context.l10n),
-        style: TextStyle(fontSize: 11, color: color, fontWeight: FontWeight.w600),
+        style: TextStyle(fontSize: 12, color: color, fontWeight: FontWeight.w600),
       ),
     );
   }

@@ -559,7 +559,7 @@ class _AdditionalInstructionsStepState
                       style: const TextStyle(
                         fontFamily: kSansFamily,
                         fontWeight: FontWeight.w600,
-                        fontSize: 15,
+                        fontSize: 16,
                       ),
                     ),
                     const SizedBox(height: 2),

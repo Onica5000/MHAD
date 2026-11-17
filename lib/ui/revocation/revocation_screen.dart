@@ -1,6 +1,8 @@
 ﻿import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/page_hero.dart';
+import 'package:mhad/ui/theme/app_art.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/domain/model/directive.dart';
@@ -139,17 +141,13 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
             background: cs.errorContainer,
           ),
           const SizedBox(height: 12),
-          // Headline bumped 30 -> 38pt to match prototype L1568.
-          EditorialHeading(text: context.l10n.revocationAreYouSure, size: 38),
-          const SizedBox(height: 8),
-          Text(
-            context.l10n.revocationYourDirectiveWillNoLonger,
-            style: TextStyle(
-              fontFamily: kSansFamily,
-              fontSize: 14,
-              color: p.textMuted,
-              height: 1.5,
-            ),
+          // Photo header (an open door): 'Are you sure?' + what revoking
+          // means. The red PERMANENT ACTION pill above keeps the weight.
+          PageHero(
+            art: AppArt.flowRevocation,
+            title: EditorialHeading(
+                text: context.l10n.revocationAreYouSure, size: 38),
+            lead: context.l10n.revocationYourDirectiveWillNoLonger,
           ),
 
           const SizedBox(height: 16),
@@ -193,12 +191,8 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
                   Text(
                     context.l10n.revocationThisDeclarationMayBeRevoked,
                     style: TextStyle(
-                      fontFamily: 'Instrument Serif',
-                      fontFamilyFallback: const [
-                        'Georgia',
-                        'Times New Roman',
-                        'serif',
-                      ],
+                      fontFamily: kSerifFamily,
+                      fontFamilyFallback: kSerifFallbacks,
                       fontSize: 14,
                       height: 1.6,
                       color: p.text,
@@ -253,7 +247,7 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
                     style: TextStyle(
                       fontFamily: kSansFamily,
                       fontWeight: FontWeight.w700,
-                      fontSize: 13,
+                      fontSize: 14,
                       color: cs.onErrorContainer,
                     ),
                   ),
@@ -328,13 +322,8 @@ class _RevokeStep extends StatelessWidget {
               '$n',
               style: TextStyle(
                 fontFamily: kMonoFamily,
-                fontFamilyFallback: const [
-                  'Consolas',
-                  'Menlo',
-                  'Courier New',
-                  'monospace',
-                ],
-                fontSize: 11,
+                fontFamilyFallback: kMonoFallbacks,
+                fontSize: 12,
                 fontWeight: FontWeight.w700,
                 color: p.primary,
               ),

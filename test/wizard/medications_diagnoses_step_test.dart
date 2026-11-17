@@ -47,8 +47,12 @@ void main() {
   }
 
   Future<void> pump(WidgetTester tester, Widget step) async {
-    await tester.binding.setSurfaceSize(const Size(1200, 4000));
-    addTearDown(() => tester.binding.setSurfaceSize(null));
+    tester.view.physicalSize = const Size(1200, 4000);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(() {
+      tester.view.resetPhysicalSize();
+      tester.view.resetDevicePixelRatio();
+    });
     await tester.pumpWidget(
       ProviderScope(
         overrides: [appDatabaseProvider.overrideWithValue(db)],
@@ -265,7 +269,9 @@ void main() {
 
       final d = await repo.getDirectiveById(id);
       expect(d!.primaryDoctorName, 'Dr. Rivera');
-      expect(d.primaryDoctorPhone, '717-555-0100');
+      // The doctor phone uses the shared PhoneInputFormatter like every other
+      // phone field, so typed digits are stored in the standard format.
+      expect(d.primaryDoctorPhone, '(717) 555-0100');
 
       // Remount: fields come back.
       await tester.pumpWidget(const SizedBox());

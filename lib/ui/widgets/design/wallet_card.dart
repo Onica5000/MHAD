@@ -54,12 +54,8 @@ class WalletCard extends StatelessWidget {
                 child: Text(
                   context.l10n.walletCardMh,
                   style: TextStyle(
-                    fontFamily: 'Instrument Serif',
-                    fontFamilyFallback: const [
-                      'Georgia',
-                      'Times New Roman',
-                      'serif'
-                    ],
+                    fontFamily: kSerifFamily,
+                    fontFamilyFallback: kSerifFallbacks,
                     fontStyle: FontStyle.italic,
                     fontSize: 140,
                     height: 1,
@@ -85,13 +81,6 @@ class WalletCard extends StatelessWidget {
                             Text(
                               context.l10n.walletCardPaMhadAct194,
                               style: TextStyle(
-                                fontFamily: kMonoFamily,
-                                fontFamilyFallback: const [
-                                  'Consolas',
-                                  'Menlo',
-                                  'Courier New',
-                                  'monospace'
-                                ],
                                 fontSize: 10,
                                 fontWeight: FontWeight.w600,
                                 letterSpacing: 1.4,
@@ -198,13 +187,6 @@ class WalletCard extends StatelessWidget {
         Text(
           label,
           style: TextStyle(
-            fontFamily: kMonoFamily,
-            fontFamilyFallback: const [
-              'Consolas',
-              'Menlo',
-              'Courier New',
-              'monospace'
-            ],
             fontSize: 10,
             fontWeight: FontWeight.w600,
             letterSpacing: 1.0,

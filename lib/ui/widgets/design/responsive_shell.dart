@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:mhad/l10n/l10n.dart';
+import 'package:mhad/ui/route_titles.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/widgets/design/bottom_nav.dart';
 import 'package:mhad/ui/widgets/design/web_sidebar.dart';
@@ -42,6 +44,11 @@ const double kReadingMaxWidth = 760;
 /// a centered island with a left gutter.
 const double kFillMaxWidth = 1800;
 
+/// Width cap for the pre-app welcome gates (disclaimer, onboarding):
+/// wide enough for SplitHero's photo panel beside a 640px content
+/// column. On bigger windows the gate centers.
+const double kGateMaxWidth = 1280;
+
 /// Routes whose screens have purpose-built multi-column desktop layouts and
 /// should FILL the content area (prototype "sidebar + flex:1" pages):
 ///   - home (`/`)            — dashboard column + right "Tools" sidebar
@@ -69,6 +76,47 @@ bool _routeHidesSidebar(String route) =>
     route == AppRoutes.modeSelection ||
     route == AppRoutes.onboarding;
 
+/// Routes in desktop "focus mode": the 232px sidebar shrinks to a 72px icon
+/// rail so a dense multi-column screen gets the room — the wizard (step rail
+/// + form + AI rail) and Export (page thumbnails + PDF preview + options
+/// rail). Not /sign or /upload (review R7 / "cut or defer": short
+/// single-column flows, where the compact rail buys little).
+bool routeUsesFocusMode(String route) =>
+    route.startsWith('/wizard/') || route.startsWith('/export/');
+
+/// Phone routes that hide the bottom nav to give the form the room: the
+/// wizard (about 450px of form was left on a 390x844 phone with the nav, the
+/// sticky Back/Continue bar and the keyboard). The wizard's StepHead shows a
+/// "More" button instead, so every destination (incl. 988 crisis help) stays
+/// one tap away. ONE definition, read by the shell and its tests.
+bool routeHidesBottomNav(String route) => route.startsWith('/wizard/');
+
+/// Width the desktop shell gives the sidebar on [route]: 0 on the gates,
+/// [WebSidebar.compactWidth] in focus mode, [WebSidebar.width] otherwise.
+/// ONE definition for the shell and any screen needing its content width.
+double sidebarWidthFor(String route) {
+  if (_routeHidesSidebar(route)) return 0;
+  return routeUsesFocusMode(route)
+      ? WebSidebar.compactWidth
+      : WebSidebar.width;
+}
+
+/// The routed pages get their OWN semantics container. Every page route has a
+/// modal barrier whose BlockSemantics drops all semantics painted before it
+/// in the same container — and the sidebar is painted before the Navigator,
+/// so on desktop the whole sidebar (nav, Get help, 988 crisis card) was
+/// invisible to screen readers. A container boundary keeps the barrier's
+/// blocking inside the page area.
+Widget _pageSemantics(Widget page) => Semantics(container: true, child: page);
+
+/// Browser-tab title for the current route (see route_titles.dart). Built
+/// inside the route listener so it updates on every navigation.
+Widget _titled(BuildContext context, String route, Widget child) => Title(
+      title: routeTitle(context.l10n, route),
+      color: Theme.of(context).scaffoldBackgroundColor,
+      child: child,
+    );
+
 /// Wraps [child] so the navigation chrome matches the prototype:
 ///
 ///  - **Wide screens (≥ [kWideLayoutBreakpoint])** — a persistent
@@ -92,7 +140,7 @@ class ResponsiveShell extends StatelessWidget {
     if (!wide) {
       return Column(
         children: [
-          Expanded(child: child),
+          Expanded(child: _pageSemantics(child)),
           _RouteListener(
             listenable: appRouter.routerDelegate,
             builder: (context, _) {
@@ -100,8 +148,20 @@ class ResponsiveShell extends StatelessWidget {
                       .routerDelegate.currentConfiguration.lastOrNull
                       ?.matchedLocation ??
                   appRouter.routerDelegate.currentConfiguration.uri.path;
-              if (_routeHidesSidebar(route)) return const SizedBox.shrink();
-              return MhadBottomNav(activeRoute: route);
+              // While the on-screen keyboard is up, the nav would sit above it
+              // AND the routed Scaffold subtracts the full inset again, costing
+              // the page the nav's height twice (review R4). Hide it then.
+              final keyboardOpen = MediaQuery.viewInsetsOf(context).bottom > 0;
+              final hideNav = _routeHidesSidebar(route) ||
+                  routeHidesBottomNav(route) ||
+                  keyboardOpen;
+              return _titled(
+                context,
+                route,
+                hideNav
+                    ? const SizedBox.shrink()
+                    : MhadBottomNav(activeRoute: route),
+              );
             },
           ),
         ],
@@ -133,12 +193,31 @@ class ResponsiveShell extends StatelessWidget {
         // reading content in the full window (no nav rail) until the user
         // reaches the dashboard.
         if (_routeHidesSidebar(route)) {
-          return ClipRect(
-            child: Align(
-              alignment: Alignment.topCenter,
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: kReadingMaxWidth),
-                child: child,
+          // Gutters in the page background (no white "strip"), and a TIGHT
+          // width like the reading branch below — the old Align+ConstrainedBox
+          // passed loose constraints, the pattern that collapsed Row>Expanded
+          // in release builds (review R15).
+          return _titled(
+            context,
+            route,
+            ColoredBox(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final w = constraints.maxWidth < kGateMaxWidth
+                      ? constraints.maxWidth
+                      : kGateMaxWidth;
+                  return ClipRect(
+                    child: Align(
+                      alignment: Alignment.topCenter,
+                      child: SizedBox(
+                        width: w,
+                        height: constraints.maxHeight,
+                        child: _pageSemantics(child),
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
           );
@@ -155,9 +234,31 @@ class ResponsiveShell extends StatelessWidget {
         //   /sign/            — the "Make it legal" signing screen (fill, not centered)
         final bool fullBleed = route.startsWith('/export/') ||
             route.startsWith('/sign/');
-        return Row(
+        final page = _pageSemantics(child);
+        // Tab order: the PAGE first, then the sidebar (review R8) — otherwise
+        // keyboard users crossed ~9 sidebar stops before every form field.
+        // Overlay.wrap: the sidebar is built ABOVE the routed Navigator (whose
+        // Overlay hosts the pages), so its tooltips — the compact rail's only
+        // visible labels — need their own Overlay; without it Tooltip throws
+        // "No Overlay widget found". Wrapping the whole row lets a tooltip
+        // draw over the page area.
+        return _titled(
+          context,
+          route,
+          Overlay.wrap(
+            child: FocusTraversalGroup(
+            policy: OrderedTraversalPolicy(),
+            child: Row(
           children: [
-            WebSidebar(activeRoute: route),
+            FocusTraversalOrder(
+              order: const NumericFocusOrder(2),
+              child: FocusTraversalGroup(
+                child: WebSidebar(
+                  activeRoute: route,
+                  compact: routeUsesFocusMode(route),
+                ),
+              ),
+            ),
             // FULL-BLEED (export): hand the child the Expanded's TIGHT width
             // directly. The Align path below passes *loose* constraints, which
             // lets a self-sizing Scaffold/Row collapse to its columns' intrinsic
@@ -165,7 +266,12 @@ class ResponsiveShell extends StatelessWidget {
             // monitor — the bug we keep chasing. A direct child forces it to
             // fill the whole content area, flush from sidebar to window edge.
             if (fullBleed)
-              Expanded(child: child)
+              Expanded(
+                child: FocusTraversalOrder(
+                  order: const NumericFocusOrder(1),
+                  child: FocusTraversalGroup(child: page),
+                ),
+              )
             else
               Expanded(
                 // Hand the child a TIGHT width, not a capped-but-loose one.
@@ -185,19 +291,34 @@ class ResponsiveShell extends StatelessWidget {
                     final w = constraints.maxWidth < cap
                         ? constraints.maxWidth
                         : cap;
-                    return ClipRect(
-                      child: Align(
-                        // FILL: flush to the sidebar (top-left).
-                        // READING: centered reading column.
-                        alignment:
-                            fills ? Alignment.topLeft : Alignment.topCenter,
-                        child: SizedBox(width: w, child: child),
+                    // The gutters beside a capped page take the page
+                    // background (they used to show the bare white canvas,
+                    // so reading routes looked like a floating strip).
+                    return ColoredBox(
+                      color: Theme.of(context).scaffoldBackgroundColor,
+                      child: ClipRect(
+                        child: Align(
+                          // FILL: flush to the sidebar (top-left).
+                          // READING: centered reading column.
+                          alignment:
+                              fills ? Alignment.topLeft : Alignment.topCenter,
+                          child: SizedBox(
+                            width: w,
+                            child: FocusTraversalOrder(
+                              order: const NumericFocusOrder(1),
+                              child: FocusTraversalGroup(child: page),
+                            ),
+                          ),
+                        ),
                       ),
                     );
                   },
                 ),
               ),
           ],
+            ),
+          ),
+          ),
         );
       },
     );

@@ -60,7 +60,7 @@ Future<bool> showAutofillConsentDialog(
                           _providerDataCaveat(context, provider),
                           style: TextStyle(
                             color: cs.onErrorContainer,
-                            fontSize: 13,
+                            fontSize: 14,
                           ),
                         ),
                       ),
@@ -135,7 +135,7 @@ Future<bool> showAudioConsentDialog(
                           _providerDataCaveat(context, provider),
                           style: TextStyle(
                             color: cs.onErrorContainer,
-                            fontSize: 13,
+                            fontSize: 14,
                           ),
                         ),
                       ),
@@ -208,7 +208,7 @@ Future<bool> showAiConsentDialog(
                       context.l10n.aiConsentDialogNeverEnterPersonalInformationFull,
                       style: TextStyle(
                         color: cs.onErrorContainer,
-                        fontSize: 13,
+                        fontSize: 14,
                       ),
                     ),
                   ),

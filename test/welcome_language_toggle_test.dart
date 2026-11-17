@@ -62,8 +62,12 @@ void main() {
         OnboardingNotifier(initialValue: false),
         PrivacyModeNotifier()..setPublicMode(),
       );
-      await tester.binding.setSurfaceSize(size);
-      addTearDown(() => tester.binding.setSurfaceSize(null));
+      tester.view.physicalSize = size;
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(() {
+        tester.view.resetPhysicalSize();
+        tester.view.resetDevicePixelRatio();
+      });
       final db = AppDatabase(NativeDatabase.memory());
       await tester.pumpWidget(
         ProviderScope(

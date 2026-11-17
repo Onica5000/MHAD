@@ -1,0 +1,185 @@
+import 'dart:math' as math;
+
+import 'package:flutter/material.dart';
+import 'package:mhad/ui/theme/app_art.dart';
+import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/design/spot_illustration.dart';
+
+/// Shows an [AppArt] illustration the same way everywhere:
+///
+/// - **decoded near display size**: the laid-out size × device pixel ratio
+///   (covering `BoxFit.cover` crops) snapped to a few fixed widths
+///   ([AppArt.decodeWidthFor]), so a wide hero doesn't cost full-size memory
+///   on a phone and resizing the window doesn't decode it again and again;
+/// - a palette-tinted placeholder while it loads, then a short fade-in (none
+///   under reduce-motion);
+/// - gently dimmed in dark mode so a light illustration doesn't glare;
+/// - purely decorative: hidden from screen readers;
+/// - if the asset ever fails to load, the code-drawn [SpotIllustration]
+///   stand-in appears instead of a broken box.
+///
+/// Sizing: give [width] and/or [height]. With only one of them (or neither,
+/// inside a width-bounded parent) the image keeps its own aspect ratio. Pass
+/// [expand] to fill a parent that already has a fixed size.
+class ArtImage extends StatelessWidget {
+  final AppArt art;
+  final double? width;
+  final double? height;
+  final double radius;
+  final BoxFit fit;
+
+  /// Overrides [AppArt.focal] for this particular crop.
+  final Alignment? alignment;
+
+  /// Fill the parent's (bounded) size instead of using the art's aspect ratio.
+  final bool expand;
+
+  /// Fade the photo in once decoded. Pass false when the caller already
+  /// animates the surrounding card (e.g. RevealOnMount) — two stacked fades
+  /// read as a slow, blank hero (review R13f).
+  final bool fade;
+
+  const ArtImage(
+    this.art, {
+    this.width,
+    this.height,
+    this.radius = DesignTokens.cardRadius,
+    this.fit = BoxFit.cover,
+    this.alignment,
+    this.expand = false,
+    this.fade = true,
+    super.key,
+  });
+
+  /// Dark-mode dim applied over the art (~12% black).
+  static const _darkDim = Color(0x1F000000);
+
+  /// Fade-in length: short, so a page transition + this fade stay one beat.
+  static const _fadeDuration = Duration(milliseconds: 150);
+
+  /// Test hook: when true, ArtImage paints only its tinted placeholder and
+  /// never decodes a real asset — widget tests stay fast and deterministic
+  /// (set globally in test/flutter_test_config.dart; review R12). The widget
+  /// tree keeps its production shape, so layout bugs still show in tests.
+  static bool debugUsePlaceholders = false;
+
+  /// Width used when a caller puts an ArtImage with no [width] inside a
+  /// parent that gives unbounded width (a Row without Expanded, a horizontal
+  /// list). Without this the AspectRatio is measured under an infinite width
+  /// and, in release builds, silently fails to paint (review R13a).
+  static const _unboundedFallbackWidth = 240.0;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final p = theme.mhadPalette;
+    final dark = theme.brightness == Brightness.dark;
+    final reduceMotion = MediaQuery.disableAnimationsOf(context);
+    final dpr = MediaQuery.devicePixelRatioOf(context);
+
+    final image = LayoutBuilder(builder: (context, box) {
+      // Tests: keep the SAME widget structure (this LayoutBuilder included,
+      // so IntrinsicHeight/unbounded-layout problems still surface) but skip
+      // the decode.
+      if (debugUsePlaceholders) return const SizedBox.expand();
+      final w = box.hasBoundedWidth ? box.maxWidth : (width ?? 400);
+      final h = box.hasBoundedHeight ? box.maxHeight : w / art.aspectRatio;
+      // Cover-cropping a wide image into a tall box scales it by HEIGHT, so
+      // the decoded width must cover h × aspect, not just the box width.
+      final needed = math.max(w, h * art.aspectRatio) * dpr;
+      // Bucketed decode width (AppArt.imageProvider): one cache entry per
+      // bucket instead of one per pixel width, and the same key precache uses.
+      return Image(
+        image: art.imageProvider(needed),
+        width: double.infinity,
+        height: double.infinity,
+        fit: fit,
+        alignment: alignment ?? art.focal,
+        filterQuality: FilterQuality.medium,
+        frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+          if (wasSynchronouslyLoaded || reduceMotion || !fade) return child;
+          return AnimatedOpacity(
+            opacity: frame == null ? 0 : 1,
+            duration: _fadeDuration,
+            curve: Curves.easeOut,
+            child: child,
+          );
+        },
+        errorBuilder: (context, error, stack) => Center(
+          child: SpotIllustration(
+            art: art.fallback,
+            size: math.max(32, math.min(w, h) * 0.6),
+          ),
+        ),
+      );
+    });
+
+    Widget framed = ClipRRect(
+      borderRadius: BorderRadius.circular(radius),
+      child: ColoredBox(
+        color: p.primaryTint,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            image,
+            if (dark) const ColoredBox(color: _darkDim),
+          ],
+        ),
+      ),
+    );
+
+    if (!expand && (width == null || height == null)) {
+      framed = AspectRatio(aspectRatio: art.aspectRatio, child: framed);
+    }
+    if (width != null || height != null) {
+      framed = SizedBox(width: width, height: height, child: framed);
+    } else if (!expand) {
+      // No explicit width: the parent must bound it. Guard the unbounded
+      // case (assert in debug, a sane fixed width in release) instead of
+      // letting AspectRatio fail to paint (review R13a).
+      final sized = framed;
+      framed = LayoutBuilder(builder: (context, box) {
+        if (box.hasBoundedWidth) return sized;
+        assert(false,
+            'ArtImage(${art.id}) got unbounded width; give it a width or '
+            'wrap it in Expanded/SizedBox.');
+        return SizedBox(width: _unboundedFallbackWidth, child: sized);
+      });
+    }
+    return ExcludeSemantics(child: framed);
+  }
+}
+
+/// Warms the image cache for the photos the NEXT screen shows above the fold,
+/// so a known hand-off (onboarding → Home, step n → n+1) doesn't pop in
+/// (review R3). Never precache the whole set — only what's about to show.
+///
+/// [widthsFor] returns each photo's NEEDED logical width for the current
+/// window (what ArtImage computes: max(box width, box height × aspect)), so
+/// the precache lands on the same decode bucket ArtImage will request.
+class PrecacheArt extends StatefulWidget {
+  final Map<AppArt, double> Function(BuildContext context) widthsFor;
+  final Widget child;
+  const PrecacheArt({required this.widthsFor, required this.child, super.key});
+
+  @override
+  State<PrecacheArt> createState() => _PrecacheArtState();
+}
+
+class _PrecacheArtState extends State<PrecacheArt> {
+  bool _done = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_done || ArtImage.debugUsePlaceholders) return;
+    _done = true;
+    for (final e in widget.widthsFor(context).entries) {
+      // Best effort: a failed precache just means the photo loads on view.
+      e.key.precache(context, e.value).catchError((_) {});
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) => widget.child;
+}

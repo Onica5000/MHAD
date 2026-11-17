@@ -140,7 +140,7 @@ class _NeverAuthorizedCard extends StatelessWidget {
                 context.l10n.procResearchNeverAuthorizedTitle,
                 style: TextStyle(
                   fontFamily: kSansFamily,
-                  fontSize: 13,
+                  fontSize: 14,
                   fontWeight: FontWeight.w700,
                   color: fg,
                 ),
@@ -152,7 +152,7 @@ class _NeverAuthorizedCard extends StatelessWidget {
             context.l10n.procResearchNeverAuthorizedBody,
             style: TextStyle(
               fontFamily: kSansFamily,
-              fontSize: 13,
+              fontSize: 14,
               color: fg,
               height: 1.45,
             ),
@@ -198,7 +198,7 @@ class _NeverItem extends StatelessWidget {
               text,
               style: TextStyle(
                 fontFamily: kSansFamily,
-                fontSize: 13,
+                fontSize: 14,
                 fontWeight: FontWeight.w600,
                 color: fg,
               ),

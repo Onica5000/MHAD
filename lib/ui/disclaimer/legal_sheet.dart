@@ -48,7 +48,7 @@ class _ReadOnlyAccordionState extends State<ReadOnlyAccordion> {
               context.l10n.legalSheetTheEightSectionsBelowWere,
               style: TextStyle(
                 fontFamily: kSansFamily,
-                fontSize: 13,
+                fontSize: 14,
                 color: p.textMuted,
                 height: 1.5,
               ),
@@ -533,12 +533,7 @@ class _Resource extends StatelessWidget {
           mono,
           style: TextStyle(
             fontFamily: kMonoFamily,
-            fontFamilyFallback: const [
-              'Consolas',
-              'Menlo',
-              'Courier New',
-              'monospace'
-            ],
+            fontFamilyFallback: kMonoFallbacks,
             fontSize: 12,
             color: palette.text,
           ),
@@ -597,8 +592,8 @@ class _AccordionSection extends StatelessWidget {
                         child: Text(
                           number,
                           style: TextStyle(
-                            fontFamily: 'Instrument Serif',
-                            fontFamilyFallback: const ['Georgia', 'serif'],
+                            fontFamily: kSerifFamily,
+                            fontFamilyFallback: kSerifFallbacks,
                             fontStyle: FontStyle.italic,
                             fontSize: 24,
                             fontWeight: FontWeight.w400,
@@ -614,7 +609,7 @@ class _AccordionSection extends StatelessWidget {
                           title,
                           style: TextStyle(
                             fontFamily: kSansFamily,
-                            fontSize: 15,
+                            fontSize: 16,
                             fontWeight: FontWeight.w700,
                             letterSpacing: -0.1,
                             color: p.text,

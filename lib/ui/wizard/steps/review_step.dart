@@ -537,7 +537,7 @@ class _ReviewRow extends StatelessWidget {
                     data.label,
                     style: TextStyle(
                       fontFamily: kSansFamily,
-                      fontSize: 13,
+                      fontSize: 14,
                       fontWeight: FontWeight.w600,
                       color: p.text,
                     ),
@@ -650,7 +650,7 @@ class _CalloutCard extends StatelessWidget {
         body!,
         style: TextStyle(
           fontFamily: kSansFamily,
-          fontSize: 13,
+          fontSize: 14,
           height: 1.45,
           color: fg,
         ),
@@ -661,7 +661,7 @@ class _CalloutCard extends StatelessWidget {
         richBody!,
         style: TextStyle(
           fontFamily: kSansFamily,
-          fontSize: 13,
+          fontSize: 14,
           height: 1.45,
           color: fg,
         ),

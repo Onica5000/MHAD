@@ -1930,7 +1930,8 @@
   "wizardAiRailSuggestedForThisStep": "SUGGESTED FOR THIS STEP",
   "wizardAiRailAskAnythingAboutThisStep": "Ask anything about this step — answers appear here, and in the full assistant.",
   "wizardAiRailNeedHelpWithThisStep": "Need help with this step? Ask the AI",
-  "wizardAiRailAiHelpIsOffThe": "AI help is off. The step heads-up, suggested questions, photo auto-fill, and the chat below aren't available until you set up AI.",
+  "wizardAiRailOptionalHelpTitle": "Optional AI help",
+  "wizardAiRailOptionalHelpBody": "Set up AI to get a heads-up on each step, suggested questions, photo auto-fill, and the chat below.",
   "wizardAiRailCheckingThisStep": "Checking this step",
   "wizardAiRailFindAPaFacilityBy": "Find a PA facility by name or county…",
   "wizardAiRailThinking": "Thinking…",
@@ -2134,12 +2135,6 @@
   "revocationTapToInclude": "Tap to include",
   "revocationRevoking": "Revoking…",
   "revocationRevokeNow": "Revoke now",
-  "pastDirectiveDetailUnableToLoad": "Unable to load: {error}",
-  "@pastDirectiveDetailUnableToLoad": {
-    "placeholders": {
-      "error": {"type": "Object"}
-    }
-  },
   "pastDirectiveDetailTheDirectiveRemainsRegardless": "The directive remains {status} regardless",
   "@pastDirectiveDetailTheDirectiveRemainsRegardless": {
     "placeholders": {
@@ -3011,5 +3006,31 @@
   "exportAddToCalendarSemantics": "Download a calendar file with reminders to renew your directive",
   "calendarRenewSoonTitle": "Renew your advance directive",
   "calendarExpiresTodayTitle": "Your advance directive expires today",
-  "calendarReminderDescription": "Your Pennsylvania advance directive is valid for 2 years. Open the MHAD app to make a new one and sign it with two adult witnesses."
+  "calendarReminderDescription": "Your Pennsylvania advance directive is valid for 2 years. Open the MHAD app to make a new one and sign it with two adult witnesses.",
+  "tabTitle": "{page} · PA MHAD",
+  "@tabTitle": {"placeholders": {"page": {"type": "String"}}},
+  "tabPageDisclaimer": "Before you begin",
+  "tabPageWelcome": "Welcome",
+  "tabPageAiSetup": "AI setup",
+  "tabPageAccessibility": "Accessibility",
+  "tabPagePrivacyPolicy": "Privacy policy",
+  "tabPageGetHelp": "Get help",
+  "tabPageAudioGuide": "Audio guide",
+  "tabPageAdmin": "Admin tool",
+  "tabPageYourDirective": "Your directive",
+  "tabPageSign": "Sign on paper",
+  "tabPageCrisisPlan": "Crisis plan",
+  "tabPageUlysses": "Ulysses clause",
+  "tabPageSideEffects": "Side effects",
+  "tabPageRevoke": "Revoke a directive",
+  "tabPageFindable": "Make it findable",
+  "tabPageAiCheck": "AI consistency check",
+  "tabPagePast": "Past directive",
+  "homeOtherWaysToStart": "Other ways to start",
+  "homeStartUploadBody": "Have an earlier directive or form? Upload it to fill in matching answers, then review each one.",
+  "homeStartUploadCta": "Upload a document",
+  "homeStartResumeBody": "Open a directive file you saved from this app earlier and pick up where you left off.",
+  "homeStartResumeCta": "Open a file",
+  "aiSetupHeroLead": "Optional: connect an AI provider to get help while you fill out your directive. Everything else works without it.",
+  "wizardKeptInThisTab": "Kept in this tab"
 }
