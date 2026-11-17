@@ -171,7 +171,7 @@ void main() {
         (tester) async {
       final handle = tester.ensureSemantics();
       await pumpShell(tester, size: desktop, initial: '/wizard/1');
-      for (final label in ['Start', 'Learn', 'Settings', 'Reset Form']) {
+      for (final label in ['Home', 'Learn', 'Settings', 'Start over']) {
         expect(find.bySemanticsLabel(RegExp('^$label')), findsOneWidget,
             reason: '$label missing from the compact rail');
       }

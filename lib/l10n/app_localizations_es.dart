@@ -27,9 +27,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get navMore => 'Más';
 
   @override
-  String get navStart => 'Comenzar';
-
-  @override
   String get navAutofill => 'Autocompletar';
 
   @override
@@ -37,9 +34,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get navDownloadPrint => 'Descargar e imprimir';
-
-  @override
-  String get navResetForm => 'Reiniciar formulario';
 
   @override
   String get badgeAiReady => 'LISTO';
@@ -2386,7 +2380,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get pipelineSetupAiBody =>
-      'Autocompletar con una foto usa la IA para leer el documento que usted sube (foto, PDF o texto) y extraer datos para completar su formulario: medicamentos, condiciones, preferencias de atención y sus datos de contacto. Necesita una clave de IA; configurar el nivel gratuito de Gemini toma unos 30 segundos. Usted revisa cada campo antes de que se añada a su formulario.';
+      'Autocompletar usa la IA para leer el documento que usted sube (foto, PDF o texto) y extraer datos para completar su formulario: medicamentos, condiciones, preferencias de atención y sus datos de contacto. Necesita una clave de IA; configurar el nivel gratuito de Gemini toma unos 30 segundos. Usted revisa cada campo antes de que se añada a su formulario.';
 
   @override
   String get pipelineSetupAi => 'Configurar la IA';
@@ -2459,7 +2453,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get pipelineBackReview => 'Revisión';
 
   @override
-  String get pipelineTitleSnapToFill => 'Autocompletar con una foto';
+  String get pipelineTitleSnapToFill => 'Autocompletar';
 
   @override
   String get pipelineTitleProcessing => 'Procesando';
@@ -2511,7 +2505,7 @@ class AppLocalizationsEs extends AppLocalizations {
       'Elija primero su formulario; la IA leerá solo las partes que ese formulario necesita. El Combinado es el más amplio; puede cambiarlo después.';
 
   @override
-  String get pickSnapOptional => 'Autocompletar con una foto · opcional';
+  String get pickSnapOptional => 'Autocompletar · opcional';
 
   @override
   String get pickHeadlineLead => '¿Tiene una foto a mano? ';
@@ -2581,7 +2575,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get pickNoKeyBody =>
-      'Abajo puede ver cómo funciona el autocompletado con una foto, pero leer una foto o un PDF real requiere una clave de IA (configurar el nivel gratuito de Gemini toma unos 30 segundos). Usted revisa cada campo antes de que se añada a su formulario.';
+      'Abajo puede ver cómo funciona el autocompletado, pero leer una foto o un PDF real requiere una clave de IA (configurar el nivel gratuito de Gemini toma unos 30 segundos). Usted revisa cada campo antes de que se añada a su formulario.';
 
   @override
   String get pickTryAgain => 'Intentar de nuevo';
@@ -3808,7 +3802,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get audioGuideDescribeYourWishesOutLoud =>
-      'Describa sus deseos en voz alta, suba la grabación en la pantalla Autocompletar con una foto y la IA completará su directiva; usted revisa cada campo antes de que se guarde nada.';
+      'Describa sus deseos en voz alta, suba la grabación en la página Autocompletar y la IA completará su directiva; usted revisa cada campo antes de que se agregue nada.';
 
   @override
   String get audioGuidePrintTheQuestionnaire => 'Imprimir el cuestionario';
@@ -3895,9 +3889,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get pdfPreviewPages => 'PÁGINAS';
-
-  @override
-  String get pdfPreviewExportShare => 'Exportar y compartir';
 
   @override
   String get pdfPreviewClosePreview => 'Cerrar la vista previa';
@@ -4611,7 +4602,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get facilitatorGetHelpEvidenceBased =>
-      'Obtenga ayuda · basada en evidencia';
+      'Buscar apoyo · basado en evidencia';
 
   @override
   String get facilitatorTalkToSomeoneTrained => 'Hable con alguien capacitado';
@@ -5006,24 +4997,21 @@ class AppLocalizationsEs extends AppLocalizations {
       'No se pudo restaurar el borrador.';
 
   @override
-  String get moreSheetResetAndStartFresh => '¿Restablecer y empezar de nuevo?';
+  String get moreSheetResetAndStartFresh => '¿Empezar de nuevo?';
 
   @override
   String get moreSheetThisPermanentlyErasesEverythingIn =>
       'Esto borra de forma permanente todo lo de esta sesión (todas las directivas, su clave de IA y el historial del chat) y le devuelve a un inicio en blanco.\n\nExporte o imprima primero lo que quiera conservar. No se puede deshacer.';
 
   @override
-  String get moreSheetResetEverything => 'Restablecer todo';
+  String get moreSheetResetEverything => 'Borrar y empezar de nuevo';
 
   @override
   String get moreSheetEverythingElseYouCanDo =>
       'Todo lo demás que puede hacer aquí.';
 
   @override
-  String get moreSheetGetHelp => 'Obtener ayuda';
-
-  @override
-  String get moreSheetReset => 'Restablecer';
+  String get moreSheetGetHelp => 'Buscar apoyo';
 
   @override
   String get crisisSheet247FreeConfidential => '24/7 GRATIS Y CONFIDENCIAL';
@@ -5392,7 +5380,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get ulyssesClauseStronglyRecommendedTalkWithA =>
-      'Muy recomendable: hable con un especialista de apoyo entre pares o un profesional clínico antes de guardar. Vea \"Obtener ayuda\" en Configuración.';
+      'Muy recomendable: hable con un especialista de apoyo entre pares o un profesional clínico antes de agregarla. Vea \"Buscar apoyo\" en el menú.';
 
   @override
   String get aiSetupIsTheApiKeyReally =>
@@ -7361,9 +7349,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get tabPagePrivacyPolicy => 'Política de privacidad';
 
   @override
-  String get tabPageGetHelp => 'Obtener ayuda';
-
-  @override
   String get tabPageAudioGuide => 'Guía de audio';
 
   @override
@@ -7506,11 +7491,11 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get aiHandoffProblemNotJson =>
-      'No pudimos leer esa respuesta. Pida a la IA que responda solo con el bloque JSON.';
+      'No pudimos leer esa respuesta. Pida a su IA que responda solo con el bloque JSON.';
 
   @override
   String get aiHandoffProblemTruncated =>
-      'La respuesta parece cortada. Pida a la IA que envíe el JSON completo.';
+      'La respuesta parece cortada. Pida a su IA que envíe el JSON completo.';
 
   @override
   String get aiHandoffProblemWrongTask =>
@@ -7909,4 +7894,10 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get audioGuideTipKeepEachClipShortUnderHandoff =>
       'Haga cada grabación corta, de menos de unos 2 minutos. Grabe una por cada sección de abajo y adjúntelas juntas en su IA; algunas IA limitan la duración de las grabaciones.';
+
+  @override
+  String get navStartOver => 'Empezar de nuevo';
+
+  @override
+  String get tabPageGetHelp => 'Buscar apoyo';
 }

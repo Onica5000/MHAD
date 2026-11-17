@@ -154,7 +154,7 @@ class _MoreSheet extends StatelessWidget {
               const SizedBox(height: 4),
               _MoreRow(
                 icon: Icons.delete_sweep_outlined,
-                title: context.l10n.moreSheetReset,
+                title: context.l10n.navStartOver,
                 detail: context.l10n.moreSheetEraseThisSessionAndStart,
                 destructive: true,
                 onTap: () {

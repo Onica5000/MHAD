@@ -419,7 +419,7 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
         // Title row — "Export & share" on the left, Back on the opposite right.
         Row(
           children: [
-            Expanded(child: SectionLabel(context.l10n.pdfPreviewExportShare)),
+            Expanded(child: SectionLabel(context.l10n.navDownloadPrint)),
             TextButton.icon(
               onPressed: widget.onClose,
               icon: const Icon(Icons.arrow_back, size: 16),

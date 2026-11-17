@@ -56,7 +56,7 @@ class WebSidebar extends ConsumerWidget {
       _SidebarItem(
         icon: Icons.home_outlined,
         activeIcon: Icons.home,
-        label: context.l10n.navStart,
+        label: context.l10n.navHome,
         isActive: activeRoute == AppRoutes.home,
         onTap: () => appRouter.go(AppRoutes.home),
       ),
@@ -141,7 +141,7 @@ class WebSidebar extends ConsumerWidget {
     // dialog was the only guard). delete_sweep reads as "clear it all".
     final reset = _SidebarItem(
       icon: Icons.delete_sweep_outlined,
-      label: context.l10n.navResetForm,
+      label: context.l10n.navStartOver,
       isActive: false,
       danger: true,
       onTap: () => confirmAndResetSession(ref),

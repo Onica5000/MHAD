@@ -475,7 +475,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         // flow, where the directive goes out into the world.
         PageHero(
           art: AppArt.flowExport,
-          eyebrow: context.l10n.pdfPreviewExportShare,
+          eyebrow: context.l10n.navDownloadPrint,
           title: EditorialHeading(
             textSpan: TextSpan(
               children: [

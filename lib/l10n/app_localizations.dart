@@ -134,12 +134,6 @@ abstract class AppLocalizations {
   /// **'More'**
   String get navMore;
 
-  /// No description provided for @navStart.
-  ///
-  /// In en, this message translates to:
-  /// **'Start'**
-  String get navStart;
-
   /// No description provided for @navAutofill.
   ///
   /// In en, this message translates to:
@@ -157,12 +151,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Download & print'**
   String get navDownloadPrint;
-
-  /// No description provided for @navResetForm.
-  ///
-  /// In en, this message translates to:
-  /// **'Reset Form'**
-  String get navResetForm;
 
   /// No description provided for @badgeAiReady.
   ///
@@ -4151,7 +4139,7 @@ abstract class AppLocalizations {
   /// No description provided for @pipelineSetupAiBody.
   ///
   /// In en, this message translates to:
-  /// **'Snap-to-fill uses AI to read your uploaded document (photo, PDF, or text) and pull out details to fill your form — medications, conditions, care preferences, and your contact details. It needs an AI key — Gemini\'s free tier takes about 30 seconds to set up. You review every field before anything lands in your form.'**
+  /// **'Autofill uses AI to read your uploaded document (photo, PDF, or text) and pull out details to fill your form — medications, conditions, care preferences, and your contact details. It needs an AI key — Gemini\'s free tier takes about 30 seconds to set up. You review every field before anything lands in your form.'**
   String get pipelineSetupAiBody;
 
   /// No description provided for @pipelineSetupAi.
@@ -4259,7 +4247,7 @@ abstract class AppLocalizations {
   /// No description provided for @pipelineTitleSnapToFill.
   ///
   /// In en, this message translates to:
-  /// **'Snap to fill'**
+  /// **'Autofill'**
   String get pipelineTitleSnapToFill;
 
   /// No description provided for @pipelineTitleProcessing.
@@ -4349,7 +4337,7 @@ abstract class AppLocalizations {
   /// No description provided for @pickSnapOptional.
   ///
   /// In en, this message translates to:
-  /// **'Snap to fill · optional'**
+  /// **'Autofill · optional'**
   String get pickSnapOptional;
 
   /// No description provided for @pickHeadlineLead.
@@ -4445,7 +4433,7 @@ abstract class AppLocalizations {
   /// No description provided for @pickNoKeyBody.
   ///
   /// In en, this message translates to:
-  /// **'You can see how snap-to-fill works below, but reading a real photo or PDF needs an AI key (Gemini\'s free tier takes about 30 seconds). You review every field before it lands in your form.'**
+  /// **'You can see how autofill works below, but reading a real photo or PDF needs an AI key (Gemini\'s free tier takes about 30 seconds). You review every field before it lands in your form.'**
   String get pickNoKeyBody;
 
   /// No description provided for @pickTryAgain.
@@ -6581,7 +6569,7 @@ abstract class AppLocalizations {
   /// No description provided for @audioGuideDescribeYourWishesOutLoud.
   ///
   /// In en, this message translates to:
-  /// **'Describe your wishes out loud, upload the recording on the Snap-to-fill screen, and the AI fills your directive — you review every field before anything is saved.'**
+  /// **'Describe your wishes out loud, upload the recording on the Autofill page, and the AI fills your directive — you review every field before anything is added.'**
   String get audioGuideDescribeYourWishesOutLoud;
 
   /// No description provided for @audioGuidePrintTheQuestionnaire.
@@ -6733,12 +6721,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'PAGES'**
   String get pdfPreviewPages;
-
-  /// No description provided for @pdfPreviewExportShare.
-  ///
-  /// In en, this message translates to:
-  /// **'Export & share'**
-  String get pdfPreviewExportShare;
 
   /// No description provided for @pdfPreviewClosePreview.
   ///
@@ -7961,7 +7943,7 @@ abstract class AppLocalizations {
   /// No description provided for @facilitatorGetHelpEvidenceBased.
   ///
   /// In en, this message translates to:
-  /// **'Get help · evidence-based'**
+  /// **'Find support · evidence-based'**
   String get facilitatorGetHelpEvidenceBased;
 
   /// No description provided for @facilitatorTalkToSomeoneTrained.
@@ -8615,7 +8597,7 @@ abstract class AppLocalizations {
   /// No description provided for @moreSheetResetAndStartFresh.
   ///
   /// In en, this message translates to:
-  /// **'Reset and start fresh?'**
+  /// **'Start over?'**
   String get moreSheetResetAndStartFresh;
 
   /// No description provided for @moreSheetThisPermanentlyErasesEverythingIn.
@@ -8627,7 +8609,7 @@ abstract class AppLocalizations {
   /// No description provided for @moreSheetResetEverything.
   ///
   /// In en, this message translates to:
-  /// **'Reset everything'**
+  /// **'Erase and start over'**
   String get moreSheetResetEverything;
 
   /// No description provided for @moreSheetEverythingElseYouCanDo.
@@ -8639,14 +8621,8 @@ abstract class AppLocalizations {
   /// No description provided for @moreSheetGetHelp.
   ///
   /// In en, this message translates to:
-  /// **'Get help'**
+  /// **'Find support'**
   String get moreSheetGetHelp;
-
-  /// No description provided for @moreSheetReset.
-  ///
-  /// In en, this message translates to:
-  /// **'Reset'**
-  String get moreSheetReset;
 
   /// No description provided for @crisisSheet247FreeConfidential.
   ///
@@ -9233,7 +9209,7 @@ abstract class AppLocalizations {
   /// No description provided for @ulyssesClauseStronglyRecommendedTalkWithA.
   ///
   /// In en, this message translates to:
-  /// **'Strongly recommended: talk with a peer specialist or clinician before saving. See \"Get help\" in Settings.'**
+  /// **'Strongly recommended: talk with a peer specialist or clinician before you add it. See \"Find support\" in the menu.'**
   String get ulyssesClauseStronglyRecommendedTalkWithA;
 
   /// No description provided for @aiSetupIsTheApiKeyReally.
@@ -12271,12 +12247,6 @@ abstract class AppLocalizations {
   /// **'Privacy policy'**
   String get tabPagePrivacyPolicy;
 
-  /// No description provided for @tabPageGetHelp.
-  ///
-  /// In en, this message translates to:
-  /// **'Get help'**
-  String get tabPageGetHelp;
-
   /// No description provided for @tabPageAudioGuide.
   ///
   /// In en, this message translates to:
@@ -12520,13 +12490,13 @@ abstract class AppLocalizations {
   /// No description provided for @aiHandoffProblemNotJson.
   ///
   /// In en, this message translates to:
-  /// **'We couldn\'t read that answer. Ask the AI to reply with only the JSON block.'**
+  /// **'We couldn\'t read that answer. Ask your AI to reply with only the JSON block.'**
   String get aiHandoffProblemNotJson;
 
   /// No description provided for @aiHandoffProblemTruncated.
   ///
   /// In en, this message translates to:
-  /// **'The answer looks cut off. Ask the AI to send the complete JSON.'**
+  /// **'The answer looks cut off. Ask your AI to send the complete JSON.'**
   String get aiHandoffProblemTruncated;
 
   /// No description provided for @aiHandoffProblemWrongTask.
@@ -13182,6 +13152,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Keep each clip short — under about 2 minutes. Record one clip per section below and attach them together in your AI; some AIs limit how long a recording can be.'**
   String get audioGuideTipKeepEachClipShortUnderHandoff;
+
+  /// No description provided for @navStartOver.
+  ///
+  /// In en, this message translates to:
+  /// **'Start over'**
+  String get navStartOver;
+
+  /// No description provided for @tabPageGetHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Find support'**
+  String get tabPageGetHelp;
 }
 
 class _AppLocalizationsDelegate

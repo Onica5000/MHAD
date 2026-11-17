@@ -27,9 +27,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navMore => 'More';
 
   @override
-  String get navStart => 'Start';
-
-  @override
   String get navAutofill => 'Autofill';
 
   @override
@@ -37,9 +34,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get navDownloadPrint => 'Download & print';
-
-  @override
-  String get navResetForm => 'Reset Form';
 
   @override
   String get badgeAiReady => 'READY';
@@ -2341,7 +2335,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pipelineSetupAiBody =>
-      'Snap-to-fill uses AI to read your uploaded document (photo, PDF, or text) and pull out details to fill your form — medications, conditions, care preferences, and your contact details. It needs an AI key — Gemini\'s free tier takes about 30 seconds to set up. You review every field before anything lands in your form.';
+      'Autofill uses AI to read your uploaded document (photo, PDF, or text) and pull out details to fill your form — medications, conditions, care preferences, and your contact details. It needs an AI key — Gemini\'s free tier takes about 30 seconds to set up. You review every field before anything lands in your form.';
 
   @override
   String get pipelineSetupAi => 'Set up AI';
@@ -2414,7 +2408,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pipelineBackReview => 'Review';
 
   @override
-  String get pipelineTitleSnapToFill => 'Snap to fill';
+  String get pipelineTitleSnapToFill => 'Autofill';
 
   @override
   String get pipelineTitleProcessing => 'Processing';
@@ -2466,7 +2460,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Choose your form first — the AI will then read only the parts that form needs. Combined is the broadest; you can change this later.';
 
   @override
-  String get pickSnapOptional => 'Snap to fill · optional';
+  String get pickSnapOptional => 'Autofill · optional';
 
   @override
   String get pickHeadlineLead => 'Have a photo handy? ';
@@ -2536,7 +2530,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pickNoKeyBody =>
-      'You can see how snap-to-fill works below, but reading a real photo or PDF needs an AI key (Gemini\'s free tier takes about 30 seconds). You review every field before it lands in your form.';
+      'You can see how autofill works below, but reading a real photo or PDF needs an AI key (Gemini\'s free tier takes about 30 seconds). You review every field before it lands in your form.';
 
   @override
   String get pickTryAgain => 'Try again';
@@ -3736,7 +3730,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get audioGuideDescribeYourWishesOutLoud =>
-      'Describe your wishes out loud, upload the recording on the Snap-to-fill screen, and the AI fills your directive — you review every field before anything is saved.';
+      'Describe your wishes out loud, upload the recording on the Autofill page, and the AI fills your directive — you review every field before anything is added.';
 
   @override
   String get audioGuidePrintTheQuestionnaire => 'Print the questionnaire';
@@ -3822,9 +3816,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pdfPreviewPages => 'PAGES';
-
-  @override
-  String get pdfPreviewExportShare => 'Export & share';
 
   @override
   String get pdfPreviewClosePreview => 'Close preview';
@@ -4526,7 +4517,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Continue where you left off';
 
   @override
-  String get facilitatorGetHelpEvidenceBased => 'Get help · evidence-based';
+  String get facilitatorGetHelpEvidenceBased => 'Find support · evidence-based';
 
   @override
   String get facilitatorTalkToSomeoneTrained => 'Talk to someone trained';
@@ -4915,24 +4906,21 @@ class AppLocalizationsEn extends AppLocalizations {
       'Couldn\'t restore the draft.';
 
   @override
-  String get moreSheetResetAndStartFresh => 'Reset and start fresh?';
+  String get moreSheetResetAndStartFresh => 'Start over?';
 
   @override
   String get moreSheetThisPermanentlyErasesEverythingIn =>
       'This permanently erases everything in this session — all directives, your AI key, and chat history — and returns you to a blank start.\n\nExport or print anything you want to keep first. This cannot be undone.';
 
   @override
-  String get moreSheetResetEverything => 'Reset everything';
+  String get moreSheetResetEverything => 'Erase and start over';
 
   @override
   String get moreSheetEverythingElseYouCanDo =>
       'Everything else you can do here.';
 
   @override
-  String get moreSheetGetHelp => 'Get help';
-
-  @override
-  String get moreSheetReset => 'Reset';
+  String get moreSheetGetHelp => 'Find support';
 
   @override
   String get crisisSheet247FreeConfidential => '24/7 FREE, CONFIDENTIAL';
@@ -5296,7 +5284,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get ulyssesClauseStronglyRecommendedTalkWithA =>
-      'Strongly recommended: talk with a peer specialist or clinician before saving. See \"Get help\" in Settings.';
+      'Strongly recommended: talk with a peer specialist or clinician before you add it. See \"Find support\" in the menu.';
 
   @override
   String get aiSetupIsTheApiKeyReally => 'Is the API key really free?';
@@ -7241,9 +7229,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tabPagePrivacyPolicy => 'Privacy policy';
 
   @override
-  String get tabPageGetHelp => 'Get help';
-
-  @override
   String get tabPageAudioGuide => 'Audio guide';
 
   @override
@@ -7386,11 +7371,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aiHandoffProblemNotJson =>
-      'We couldn\'t read that answer. Ask the AI to reply with only the JSON block.';
+      'We couldn\'t read that answer. Ask your AI to reply with only the JSON block.';
 
   @override
   String get aiHandoffProblemTruncated =>
-      'The answer looks cut off. Ask the AI to send the complete JSON.';
+      'The answer looks cut off. Ask your AI to send the complete JSON.';
 
   @override
   String get aiHandoffProblemWrongTask =>
@@ -7780,4 +7765,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get audioGuideTipKeepEachClipShortUnderHandoff =>
       'Keep each clip short — under about 2 minutes. Record one clip per section below and attach them together in your AI; some AIs limit how long a recording can be.';
+
+  @override
+  String get navStartOver => 'Start over';
+
+  @override
+  String get tabPageGetHelp => 'Find support';
 }
