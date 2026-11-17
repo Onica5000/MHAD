@@ -29,7 +29,9 @@ extension _PipelinePickUi on _PipelineScreenState {
               PageHero(
                 art: AppArt.startUpload,
                 eyebrow: context.l10n.pickSnapOptional,
-                lead: context.l10n.pickIntro,
+                lead: appData.ai.apiModeVisible
+                    ? context.l10n.pickIntro
+                    : context.l10n.autofillHandoffLead,
                 title: Text.rich(
                   TextSpan(children: [
                     TextSpan(text: context.l10n.pickHeadlineLead),
@@ -74,12 +76,18 @@ extension _PipelinePickUi on _PipelineScreenState {
                 ),
               ),
               const SizedBox(height: 20),
-              if (!hasKey) ...[
-                _noKeyBanner(p),
-                const SizedBox(height: 16),
-              ],
               if (_error != null) ...[
                 _errorCard(p),
+                const SizedBox(height: 16),
+              ],
+              // Copy-and-paste autofill (the API path is hidden — 2026-11-17):
+              // the document goes into the person's own AI, never through
+              // MHAD; the pasted answer takes the same review path.
+              if (!appData.ai.apiModeVisible)
+                _handoffAutofill(p, wide)
+              else ...[
+              if (!hasKey) ...[
+                _noKeyBanner(p),
                 const SizedBox(height: 16),
               ],
               // Document-gathering affordances. Autofill REQUIRES the AI to
@@ -133,6 +141,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                 const SizedBox(height: 24),
                 _pendingDocsTray(p, hasKey, kept),
               ],
+              ],
               // Skip / Continue footer (standalone only; the modal uses its
               // AppBar close). WebSnapFill jsx L253-258.
               if (_standalone) ...[
@@ -162,6 +171,70 @@ extension _PipelinePickUi on _PipelineScreenState {
           ),
         );
       },
+    );
+  }
+
+  /// Copy-and-paste autofill: choose document or recording (decides which
+  /// AIs fit), then the shared handoff card; beside it on wide screens, what
+  /// kinds of documents work well (read-only).
+  Widget _handoffAutofill(MhadPalette p, bool wide) {
+    final t = Theme.of(context).textTheme;
+    final left = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(context.l10n.autofillWhatWillYouShare, style: t.titleSmall),
+        const SizedBox(height: 8),
+        SegmentedButton<HandoffAttachment>(
+          segments: [
+            ButtonSegment(
+              value: HandoffAttachment.document,
+              icon: const Icon(Icons.description_outlined),
+              label: Text(context.l10n.autofillShareDocument),
+            ),
+            ButtonSegment(
+              value: HandoffAttachment.audio,
+              icon: const Icon(Icons.mic_none),
+              label: Text(context.l10n.autofillShareRecording),
+            ),
+          ],
+          selected: {_handoffAttachment},
+          onSelectionChanged: (sel) =>
+              setState(() => _handoffAttachment = sel.first),
+        ),
+        const SizedBox(height: 16),
+        AiHandoffPanel(
+          kind: HandoffTaskKind.autofill,
+          attachment: _handoffAttachment,
+          title: context.l10n.autofillHandoffTitle,
+          subtitle: context.l10n.autofillHandoffSubtitle,
+          buildTask: (_) => HandoffTask(
+            kind: HandoffTaskKind.autofill,
+            // The SAME instructions the API path sends (one definition).
+            instructions: DocumentExtractor.promptFor(_activeFormType),
+            ref: 'd${widget.directiveId}',
+            attachment: _handoffAttachment,
+          ),
+          onAnswer: _useHandoffAnswer,
+        ),
+      ],
+    );
+    if (!wide) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          left,
+          const SizedBox(height: 20),
+          _targetsPanel(p, interactive: false),
+        ],
+      );
+    }
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(flex: 3, child: left),
+        const SizedBox(width: 16),
+        Expanded(flex: 2, child: _targetsPanel(p, interactive: false)),
+      ],
     );
   }
 
@@ -496,7 +569,7 @@ extension _PipelinePickUi on _PipelineScreenState {
   );
   }
 
-  Widget _targetsPanel(MhadPalette p) {
+  Widget _targetsPanel(MhadPalette p, {bool interactive = true}) {
     final l10n = context.l10n;
     final targets = <(IconData, String, String)>[
       (Icons.badge_outlined, l10n.pickTargetId, l10n.pickTargetIdSub),
@@ -508,7 +581,7 @@ extension _PipelinePickUi on _PipelineScreenState {
     ];
     Widget tile((IconData, String, String) t) => Expanded(
           child: InkWell(
-            onTap: _browseFiles,
+            onTap: interactive ? _browseFiles : null,
             borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
             child: Container(
               padding: const EdgeInsets.all(12),
@@ -555,8 +628,11 @@ extension _PipelinePickUi on _PipelineScreenState {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SectionLabel(
-            deviceHasCamera ? l10n.pickWhatYouCanAdd : l10n.pickWhatYouCanDrop),
+        SectionLabel(!interactive
+            ? l10n.autofillWhatWorksWell
+            : deviceHasCamera
+                ? l10n.pickWhatYouCanAdd
+                : l10n.pickWhatYouCanDrop),
         const SizedBox(height: 8),
         IntrinsicHeight(
           child: Row(
@@ -573,7 +649,7 @@ extension _PipelinePickUi on _PipelineScreenState {
         ),
         // Cross-device nudge — desktop / PC web only (no camera here). On a
         // phone this is redundant: the "Take a photo" button is right above.
-        if (!deviceHasCamera) ...[
+        if (interactive && !deviceHasCamera) ...[
           const SizedBox(height: 12),
           Container(
             padding: const EdgeInsets.all(12),

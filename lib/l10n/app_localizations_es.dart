@@ -7609,4 +7609,27 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get navAskAi => 'Preguntar a la IA';
+
+  @override
+  String get autofillHandoffLead =>
+      '¿Tiene una foto, un PDF o una grabación (una identificación, una lista de medicamentos, una etiqueta de receta, una directiva anterior)? Su IA la lee y PA MHAD completa lo que encontró. Usted revisa cada campo antes. O puede omitirlo y escribirlo usted.';
+
+  @override
+  String get autofillWhatWillYouShare => '¿Qué compartirá con su IA?';
+
+  @override
+  String get autofillShareDocument => 'Un documento';
+
+  @override
+  String get autofillShareRecording => 'Una grabación de voz';
+
+  @override
+  String get autofillHandoffTitle => 'Autocompletar con su IA';
+
+  @override
+  String get autofillHandoffSubtitle =>
+      'Usted adjunta su documento en su IA: nunca pasa por PA MHAD. Revisará cada campo antes de que se complete nada.';
+
+  @override
+  String get autofillWhatWorksWell => 'Qué funciona bien';
 }

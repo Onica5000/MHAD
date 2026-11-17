@@ -20,13 +20,23 @@ class BackLink extends StatelessWidget {
   /// Optional widget on the right (a status pill, an action).
   final Widget? trailing;
 
-  const BackLink({this.label, this.onTap, this.trailing, super.key});
+  /// False while going back isn't possible (e.g. mid-processing): the link
+  /// shows but can't be activated.
+  final bool enabled;
+
+  const BackLink({
+    this.label,
+    this.onTap,
+    this.trailing,
+    this.enabled = true,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return WizardHeader(
       backLabel: label,
-      onBack: onTap ?? () => safeBack(context),
+      onBack: !enabled ? null : onTap ?? () => safeBack(context),
       actionLabel: '',
       right: trailing,
     );

@@ -12690,6 +12690,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Ask AI'**
   String get navAskAi;
+
+  /// No description provided for @autofillHandoffLead.
+  ///
+  /// In en, this message translates to:
+  /// **'Have a photo, PDF, or recording — an ID, a medication list, a prescription label, an old directive? Your AI reads it and PA MHAD fills in what it found. You review every field first. Or skip and type it yourself.'**
+  String get autofillHandoffLead;
+
+  /// No description provided for @autofillWhatWillYouShare.
+  ///
+  /// In en, this message translates to:
+  /// **'What will you share with your AI?'**
+  String get autofillWhatWillYouShare;
+
+  /// No description provided for @autofillShareDocument.
+  ///
+  /// In en, this message translates to:
+  /// **'A document'**
+  String get autofillShareDocument;
+
+  /// No description provided for @autofillShareRecording.
+  ///
+  /// In en, this message translates to:
+  /// **'A voice recording'**
+  String get autofillShareRecording;
+
+  /// No description provided for @autofillHandoffTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Autofill with your AI'**
+  String get autofillHandoffTitle;
+
+  /// No description provided for @autofillHandoffSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You attach your document in your AI — it never passes through PA MHAD. You review every field before anything is filled in.'**
+  String get autofillHandoffSubtitle;
+
+  /// No description provided for @autofillWhatWorksWell.
+  ///
+  /// In en, this message translates to:
+  /// **'What works well'**
+  String get autofillWhatWorksWell;
 }
 
 class _AppLocalizationsDelegate
