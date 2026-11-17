@@ -13032,6 +13032,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Paste the wording into the field'**
   String get aiWordingPasteButton;
+
+  /// No description provided for @aiCheckHandoffTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Get a second opinion from your AI'**
+  String get aiCheckHandoffTitle;
+
+  /// No description provided for @aiCheckHandoffSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional. Your AI reviews a summary of your directive (identifying details removed) for gaps and anything to double-check. The built-in check above always runs.'**
+  String get aiCheckHandoffSubtitle;
 }
 
 class _AppLocalizationsDelegate

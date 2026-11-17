@@ -7687,4 +7687,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aiWordingPasteButton => 'Paste the wording into the field';
+
+  @override
+  String get aiCheckHandoffTitle => 'Get a second opinion from your AI';
+
+  @override
+  String get aiCheckHandoffSubtitle =>
+      'Optional. Your AI reviews a summary of your directive (identifying details removed) for gaps and anything to double-check. The built-in check above always runs.';
 }

@@ -2149,5 +2149,7 @@
   "diagnosesHandoffTitle": "Encuentre el nombre oficial con su IA",
   "aiWordingTitle": "Ayuda con la redacción: {field}",
   "aiWordingPanelTitle": "Obtenga un texto sugerido de su IA",
-  "aiWordingPasteButton": "Pegar el texto en el campo"
+  "aiWordingPasteButton": "Pegar el texto en el campo",
+  "aiCheckHandoffTitle": "Pida una segunda opinión a su IA",
+  "aiCheckHandoffSubtitle": "Opcional. Su IA revisa un resumen de su directiva (sin datos de identificación) en busca de vacíos y cosas que conviene revisar. La revisión integrada de arriba siempre se hace."
 }

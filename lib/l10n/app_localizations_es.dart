@@ -7814,4 +7814,11 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get aiWordingPasteButton => 'Pegar el texto en el campo';
+
+  @override
+  String get aiCheckHandoffTitle => 'Pida una segunda opinión a su IA';
+
+  @override
+  String get aiCheckHandoffSubtitle =>
+      'Opcional. Su IA revisa un resumen de su directiva (sin datos de identificación) en busca de vacíos y cosas que conviene revisar. La revisión integrada de arriba siempre se hace.';
 }

@@ -1,6 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/ai/ai_handoff_panel.dart';
+import 'package:mhad/data/app_data/app_data.dart' show appData;
+import 'package:mhad/ai/handoff/handoff_task.dart';
 import 'package:mhad/ui/widgets/design/back_link.dart';
 import 'package:mhad/ui/widgets/design/page_hero.dart';
 import 'package:mhad/ui/theme/app_art.dart';
@@ -22,7 +25,6 @@ import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/ai_consent_dialog.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
-import 'package:mhad/ui/widgets/design/spot_illustration.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/friendly_error.dart';
 
@@ -387,7 +389,37 @@ Return plain-text suggestions (short bullets are fine). No preamble.''';
 
   /// The AI-review block shown beneath the rule-based conflicts. Its content
   /// depends on whether AI is set up, loading, errored, declined, or done.
+  /// The directive summary (identifying details removed) for the
+  /// copy-and-paste second opinion — built once, then the card can copy.
+  String? _handoffSummary;
+  bool _preparingSummary = false;
+
+  Future<void> _prepareHandoffSummary() async {
+    if (_handoffSummary != null || _preparingSummary) return;
+    _preparingSummary = true;
+    final summary = await _buildSummary();
+    if (mounted) setState(() => _handoffSummary = summary);
+  }
+
   List<Widget> _buildAiSection(MhadPalette p) {
+    // Copy-and-paste second opinion (API path hidden): the SAME review prompt
+    // over the same summary; the person reads the review in their own AI.
+    if (!appData.ai.apiModeVisible) {
+      _prepareHandoffSummary();
+      return [
+        AiHandoffPanel(
+          kind: HandoffTaskKind.review,
+          title: context.l10n.aiCheckHandoffTitle,
+          subtitle: context.l10n.aiCheckHandoffSubtitle,
+          enabled: _handoffSummary != null,
+          buildTask: (_) => HandoffTask(
+            kind: HandoffTaskKind.review,
+            instructions: _reviewPrompt(_handoffSummary ?? ''),
+            ref: 'd${widget.directiveId}',
+          ),
+        ),
+      ];
+    }
     final hasAi = ref.watch(aiAssistantProvider) != null;
 
     Widget label() => Row(
@@ -578,42 +610,34 @@ Return plain-text suggestions (short bullets are fine). No preamble.''';
                 PageHero(
                   art: AppArt.aiCheck,
                   eyebrow: context.l10n.aiConsistencyConsistencyCheckCheckedAtReview,
-                  title: EditorialHeading(
-                    textSpan: TextSpan(
-                      children: [
-                        TextSpan(text: context.l10n.aiConsistencyINoticed),
-                        TextSpan(
-                          text: context.l10n
-                              .aiConsistencyThingsCount(_conflicts.length),
-                          style: TextStyle(
-                            color: _conflicts.isEmpty ? okText : warnText,
+                  // Nothing found: say so once ("I noticed 0 things." plus a
+                  // lead and a green banner said it three times). Issues:
+                  // "I noticed N things."
+                  title: _conflicts.isEmpty
+                      ? EditorialHeading(
+                          text: context.l10n.aiConsistencyAllConsistent,
+                          color: okText,
+                        )
+                      : EditorialHeading(
+                          textSpan: TextSpan(
+                            children: [
+                              TextSpan(
+                                  text: context.l10n.aiConsistencyINoticed),
+                              TextSpan(
+                                text: context.l10n.aiConsistencyThingsCount(
+                                    _conflicts.length),
+                                style: TextStyle(color: warnText),
+                              ),
+                              const TextSpan(text: '.'),
+                            ],
                           ),
                         ),
-                        const TextSpan(text: '.'),
-                      ],
-                    ),
-                  ),
                   lead: _conflicts.isEmpty
-                      ? context.l10n.aiConsistencyAllConsistent
+                      ? context.l10n.aiConsistencyNoContradictions
                       : context.l10n.aiConsistencyWarningsOnly,
                 ),
                 const SizedBox(height: 16),
-                if (_conflicts.isEmpty) ...[
-                  const Center(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: 6),
-                      child:
-                          SpotIllustration(art: SpotArt.success, size: 84),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  InfoBanner(
-                    icon: Icons.check_circle_outline,
-                    variant: InfoBannerVariant.success,
-                    text: context.l10n.aiConsistencyNoContradictions,
-                  ),
-                ]
-                else
+                if (_conflicts.isNotEmpty)
                   for (var i = 0; i < _conflicts.length; i++)
                     _ConflictCard(
                       index: i,

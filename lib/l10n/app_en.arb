@@ -3150,5 +3150,7 @@
   "aiWordingTitle": "Wording help: {field}",
   "@aiWordingTitle": {"placeholders": {"field": {"type": "String"}}},
   "aiWordingPanelTitle": "Get suggested wording from your AI",
-  "aiWordingPasteButton": "Paste the wording into the field"
+  "aiWordingPasteButton": "Paste the wording into the field",
+  "aiCheckHandoffTitle": "Get a second opinion from your AI",
+  "aiCheckHandoffSubtitle": "Optional. Your AI reviews a summary of your directive (identifying details removed) for gaps and anything to double-check. The built-in check above always runs."
 }
