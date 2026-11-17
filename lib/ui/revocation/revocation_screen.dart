@@ -11,7 +11,7 @@ import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
-import 'package:mhad/ui/widgets/design/mono_pill.dart';
+import 'package:mhad/ui/widgets/design/status_pill.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 
 /// Revocation flow (v2 prototype `m-revoke`, v3 canonical PA statutory
@@ -131,7 +131,7 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
           // Editorial 'PERMANENT ACTION' pill replaces what was the
           // AppBar's title. The 38pt 'Are you sure?' headline below
           // matches the prototype L1568 wording exactly.
-          MonoPill(
+          StatusPill(
             label: context.l10n.revocationPermanentAction,
             foreground: cs.onErrorContainer,
             background: cs.errorContainer,

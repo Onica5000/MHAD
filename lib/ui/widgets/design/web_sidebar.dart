@@ -1,13 +1,11 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:mhad/ui/app_actions.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/providers/assistant_providers.dart';
-import 'package:mhad/services/web_session_cache.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
-import 'package:mhad/ui/widgets/design/crisis_sheet.dart';
 
 /// Persistent left-rail navigation for wide (desktop / web) screens.
 ///
@@ -27,48 +25,6 @@ class WebSidebar extends ConsumerWidget {
   static const double width = 232;
   static const double compactWidth = 72;
 
-  /// Erase everything in this session and return to a blank start. Confirms
-  /// first (destructive). Uses the root navigator's context because the sidebar
-  /// lives above the router's Navigator/InheritedGoRouter.
-  Future<void> _resetForm(WidgetRef ref) async {
-    final ctx = rootNavigatorKey.currentContext;
-    if (ctx == null) return;
-    final confirmed = await showDialog<bool>(
-      context: ctx,
-      builder: (dctx) {
-        final cs = Theme.of(dctx).colorScheme;
-        return AlertDialog(
-          icon: Icon(Icons.warning_amber_rounded, color: cs.error, size: 36),
-          title: Text(dctx.l10n.moreSheetResetAndStartFresh),
-          content: Text(
-            dctx.l10n.moreSheetThisPermanentlyErasesEverythingIn,
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(dctx, false),
-              child: Text(dctx.l10n.cancel),
-            ),
-            FilledButton(
-              onPressed: () => Navigator.pop(dctx, true),
-              style: FilledButton.styleFrom(backgroundColor: cs.error),
-              child: Text(dctx.l10n.moreSheetResetEverything),
-            ),
-          ],
-        );
-      },
-    );
-    if (confirmed != true) return;
-
-    await endPublicSession(ref);
-    await WebSessionCache.clear();
-    try {
-      await ref.read(directiveRepositoryProvider).deleteAllDirectives();
-    } catch (_) {}
-
-    // Land on a blank Home — the visibly fresh dashboard is the confirmation.
-    appRouter.go(AppRoutes.home);
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final p = Theme.of(context).mhadPalette;
@@ -76,15 +32,8 @@ class WebSidebar extends ConsumerWidget {
         ref.watch(apiKeyProvider).value?.isNotEmpty ?? false;
     // Most-recently-edited directive — the "Download & print" destination
     // (export is a per-directive route).
-    final recentId = ref.watch(allDirectivesProvider).maybeWhen(
-      data: (list) {
-        if (list.isEmpty) return null;
-        final sorted = [...list]
-          ..sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
-        return sorted.first.id;
-      },
-      orElse: () => null,
-    );
+    final recentId =
+        mostRecentDirectiveId(ref.watch(allDirectivesProvider).value ?? const []);
     // Directive currently in focus: prefer the one in the active route
     // (/wizard/:id, /sign/:id, /export/:id, /upload/:id, /wizard-complete/:id),
     // else the most-recently-edited. This lets "Download & print" open the SAME
@@ -126,13 +75,8 @@ class WebSidebar extends ConsumerWidget {
         // page autofills it; with none on file (fresh web session), create a
         // Combined directive first. Either way the upload page is reachable
         // again after the AI-setup hop drops you in the assistant.
-        onTap: () async {
-          final id = recentId ??
-              await ref
-                  .read(directiveRepositoryProvider)
-                  .createDirective(FormType.combined);
-          appRouter.go(AppRoutes.uploadRoute(id));
-        },
+        onTap: () => openForDirective(ref, AppRoutes.uploadRoute,
+            preferredId: recentId),
       ),
       _SidebarItem(
         icon: aiReady ? Icons.auto_awesome : Icons.auto_awesome_outlined,
@@ -167,13 +111,8 @@ class WebSidebar extends ConsumerWidget {
         // 760px reading column, while opening it from a fill route (Learn)
         // looked right. go() replaces the stack so the shell always sees
         // /export/… and gives it the correct full-bleed layout.
-        onTap: () async {
-          final id = focusedId ??
-              await ref
-                  .read(directiveRepositoryProvider)
-                  .createDirective(FormType.combined);
-          appRouter.go(AppRoutes.exportRoute(id));
-        },
+        onTap: () => openForDirective(ref, AppRoutes.exportRoute,
+            preferredId: focusedId),
       ),
       _SidebarItem(
         icon: Icons.settings_outlined,
@@ -193,7 +132,7 @@ class WebSidebar extends ConsumerWidget {
       label: context.l10n.navResetForm,
       isActive: false,
       danger: true,
-      onTap: () => _resetForm(ref),
+      onTap: () => confirmAndResetSession(ref),
     );
 
     // Material root: the sidebar is built in MaterialApp.router's builder,
@@ -485,7 +424,7 @@ class _CompactRail extends StatelessWidget {
               label: context.l10n.moreSheetGetHelp,
               tooltip: context.l10n.moreSheetGetHelp,
               selected: false,
-              onTap: _openGetHelp,
+              onTap: openGetHelp,
             ),
             const SizedBox(height: 6),
             // 988 stays one tap away with a 48px target and a red cue.
@@ -496,7 +435,7 @@ class _CompactRail extends StatelessWidget {
               selected: false,
               iconColor: SemanticColors.errorText(brightness),
               background: SemanticColors.errorBg(brightness),
-              onTap: _openCrisisSheet,
+              onTap: openCrisisHelp,
             ),
             const SizedBox(height: 16),
           ],
@@ -618,25 +557,6 @@ class _BrandMark extends StatelessWidget {
   }
 }
 
-/// Opens the crisis-resources sheet via the root navigator (the sidebar sits
-/// above the router). Shared by the full card and the rail button.
-void _openCrisisSheet() {
-  final ctx = rootNavigatorKey.currentContext;
-  if (ctx != null) showCrisisSheet(ctx);
-}
-
-/// Opens the facilitator ("Get help") screen once — repeated taps don't stack
-/// copies. Shared by the full card and the rail button.
-Future<void> _openGetHelp() async {
-  if (_getHelpOpen) return;
-  _getHelpOpen = true;
-  try {
-    await appRouter.push(AppRoutes.facilitator);
-  } finally {
-    _getHelpOpen = false;
-  }
-}
-
 class _Badge extends StatelessWidget {
   final String label;
   final String tone; // 'ok' or default (primary)
@@ -682,7 +602,7 @@ class _CrisisCard extends StatelessWidget {
       color: SemanticColors.errorBgLight,
       borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
       child: InkWell(
-        onTap: _openCrisisSheet,
+        onTap: openCrisisHelp,
         focusColor: SemanticColors.errorAccentLight.withValues(alpha: 0.18),
         borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
         child: Container(
@@ -743,7 +663,6 @@ class _CrisisCard extends StatelessWidget {
 
 /// True while the facilitator ("Get help") screen is open, so repeated taps on
 /// the card don't push multiple stacked copies. Mirrors the crisis-sheet guard.
-bool _getHelpOpen = false;
 
 /// Prominent "Get help" card in the sidebar (above the crisis card): peer
 /// specialists, rights advocates, clinician referral. Opens the facilitator
@@ -759,7 +678,7 @@ class _GetHelpCard extends StatelessWidget {
       color: p.primaryTint,
       borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
       child: InkWell(
-        onTap: _openGetHelp,
+        onTap: openGetHelp,
         focusColor: _focusTint(p),
         borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
         child: Container(

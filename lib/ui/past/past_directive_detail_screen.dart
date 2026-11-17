@@ -21,7 +21,7 @@ import 'package:mhad/ui/widgets/design/action_row.dart';
 import 'package:mhad/ui/widgets/design/dashed_divider.dart';
 import 'package:mhad/ui/widgets/design/directive_status_style.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
-import 'package:mhad/ui/widgets/design/mono_pill.dart';
+import 'package:mhad/ui/widgets/design/status_pill.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 
 /// Past directive detail (v2 prototype `m-past`).
@@ -144,7 +144,7 @@ class _Body extends ConsumerWidget {
     return ListView(
       padding: DesignTokens.pagePadding,
       children: [
-        MonoPill(
+        StatusPill(
           label: status,
           foreground: statusColor,
           background: statusColor.withValues(alpha: 0.15),

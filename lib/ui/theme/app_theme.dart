@@ -885,11 +885,23 @@ ThemeData buildMhadTheme(
       linearTrackColor: p.border,
     ),
 
+    // Off is a grey thumb in an outlined track and on carries a check mark, so
+    // the state never relies on colour alone. (The old off state — a white
+    // thumb on a pale grey track, no outline — was nearly invisible: below the
+    // 3:1 contrast UI controls need.)
     switchTheme: SwitchThemeData(
-      thumbColor: WidgetStatePropertyAll(Colors.white),
+      thumbColor: WidgetStateProperty.resolveWith((states) =>
+          states.contains(WidgetState.selected) ? Colors.white : p.textMuted),
       trackColor: WidgetStateProperty.resolveWith((states) =>
-          states.contains(WidgetState.selected) ? p.primary : p.border),
-      trackOutlineColor: const WidgetStatePropertyAll(Colors.transparent),
+          states.contains(WidgetState.selected) ? p.primary : p.card),
+      trackOutlineColor: WidgetStateProperty.resolveWith((states) =>
+          states.contains(WidgetState.selected)
+              ? Colors.transparent
+              : p.textMuted),
+      thumbIcon: WidgetStateProperty.resolveWith((states) =>
+          states.contains(WidgetState.selected)
+              ? Icon(Icons.check, size: 14, color: p.primary)
+              : null),
     ),
 
     dividerTheme: DividerThemeData(
