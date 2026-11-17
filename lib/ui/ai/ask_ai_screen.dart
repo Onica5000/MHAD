@@ -48,6 +48,8 @@ class _AskAiScreenState extends ConsumerState<AskAiScreen> {
             ref: 'general',
             panelTitle: context.l10n.askAiPanelTitle,
             panelSubtitle: context.l10n.askAiPanelSubtitle,
+            // A guided session (facilitator page) opens with its request.
+            initialQuestion: widget.assistantContext?.openingPrompt,
             // The same instructions the in-app chat sends (shared builder);
             // wizard context when opened from a step.
             instructions: () =>

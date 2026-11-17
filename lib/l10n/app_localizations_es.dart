@@ -7838,4 +7838,55 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get aiConsistencyRulesExplainerHandoff =>
       'La verificación de contradicciones de arriba usa reglas integradas. Lo que sugiera su IA es opcional: revíselo antes de cambiar su directiva. Esta pantalla advierte, pero no impide crear el PDF.';
+
+  @override
+  String get privacyPolicyIfYouChooseToUseHandoff =>
+      'La ayuda de IA es opcional, y esta aplicación nunca envía nada por sí misma a un servicio de IA. Si decide usarla, la aplicación redacta instrucciones que usted copia y pega en el servicio de chat de IA que elija (ChatGPT, Claude, Gemini o Grok), y usted mismo adjunta allí cualquier documento o grabación. Después copia la respuesta de vuelta en esta aplicación.\n\nLo que pegue o adjunte en ese servicio se rige por las condiciones y la política de privacidad de ese servicio, no por esta. Según el servicio y su configuración, puede:\n  - Conservar sus conversaciones, con o sin vencimiento automático\n  - Usarlas para mejorar sus productos\n  - Permitir que revisores humanos las lean\nLa mayoría de los servicios ofrecen un chat privado o temporal que conserva menos; consulte \"Servicios de IA externos\" más abajo.\n\nLas instrucciones que redacta esta aplicación omiten los datos de identificación más comunes (números de seguro social, números de teléfono, correos electrónicos, fechas de nacimiento, direcciones, nombres y nombres de centros). Es un filtro de mejor esfuerzo y no puede garantizar una eliminación completa. Un documento o una grabación que usted adjunte llega al servicio tal cual.\n\nLa ayuda de IA es totalmente opcional. La aplicación funciona por completo sin ella.';
+
+  @override
+  String get privacyPolicyOutsideAiServices => 'Servicios de IA externos';
+
+  @override
+  String get privacyPolicyIfYouUseTheAiHandoff =>
+      'Si usa un servicio de IA externo con esta aplicación, tenga en cuenta lo siguiente:\n\n1. Ese servicio decide cuánto tiempo conserva lo que usted envía y si las personas o sus modelos de IA aprenden de ello. Revise su política de privacidad y su configuración antes de enviar contenido sensible.\n\n2. Esta aplicación no puede recuperar ni borrar los datos que envíe a ese servicio. Una vez enviados, quedan bajo el control de ese servicio.\n\n3. Para más privacidad, use un chat privado: el Chat temporal de ChatGPT, el chat de incógnito de Claude, el Chat temporal de Gemini o el Chat privado de Grok.\n\nPuede evitar compartir cualquier dato con terceros si no usa la ayuda de IA.';
+
+  @override
+  String get privacyPolicyIfYouAreLocatedInHandoff =>
+      'Si se encuentra en el Espacio Económico Europeo (EEE), el Reino Unido o Suiza, el Reglamento General de Protección de Datos (RGPD) se aplica a su uso de esta aplicación.\n\nBase legal del tratamiento: su consentimiento explícito, otorgado mediante el aviso legal de la aplicación y el aviso que se muestra antes de que copie algo por primera vez para un servicio de IA externo.\n\nSus derechos según el RGPD:\n  - Derecho de acceso: todos sus datos se guardan localmente en su dispositivo; usted tiene acceso directo en todo momento.\n  - Derecho de supresión: use \"Eliminar todos los datos\" en el menú de la aplicación para borrar de forma permanente todos los datos locales.\n  - Derecho a la portabilidad de los datos: exporte sus directivas como PDF o FHIR JSON (un formato estándar de expedientes médicos) en cualquier momento.\n  - Derecho a retirar el consentimiento: deje de usar la ayuda de IA cuando quiera; esta aplicación nunca envía nada por sí misma a un servicio de IA.\n  - Derecho a la limitación: puede usar la aplicación en Modo Público sin que se conserven datos.\n\nLo que pegue o adjunte en un servicio de IA externo se procesa según la política de privacidad y las condiciones de tratamiento de datos de ese servicio. No podemos controlarlo ni borrarlo una vez enviado.';
+
+  @override
+  String get privacyPolicyThisAppMayBeSubjectHandoff =>
+      'Esta aplicación puede estar sujeta a leyes estatales de privacidad de datos de salud del consumidor, como las de California (CCPA/CPRA), Washington (My Health My Data Act / MHMDA), Connecticut (disposiciones de salud de la CTDPA), Nevada (SB 370) y Nueva York (Health Information Privacy Act).\n\nEl contenido de una directiva de salud mental se considera \"datos de salud del consumidor\" según cada una de estas leyes. Según todas ellas: (1) Recopilamos datos sobre preferencias de tratamiento de salud mental **únicamente** para ayudarle a crear su directiva anticipada. (2) **No vendemos** sus datos de salud; no hay ningún destinatario comercial. (3) Esta aplicación nunca envía su contenido a terceros por sí misma. Si decide usar la ayuda de IA, usted mismo copia instrucciones en un servicio de IA externo; ese servicio recibe **solo** lo que usted pegue o adjunte allí. (4) No usamos SDK de terceros, herramientas de análisis, plataformas de publicidad, píxeles de seguimiento ni cookies. (5) Puede eliminar todos los datos guardados localmente en cualquier momento con \"Eliminar todos los datos\" en el menú de la aplicación.\n\nLa MHMDA de Washington incluye un **derecho privado de acción**; hemos diseñado la aplicación para que nunca transfiera por sí misma datos de salud del consumidor a terceros y para que, antes de que copie algo por primera vez en una sesión para un servicio de IA externo, muestre un aviso que explica que se aplican las condiciones de ese servicio.\n\nSi tiene preguntas sobre sus derechos de privacidad, comuníquese con el desarrollador por los medios indicados en la sección Contacto más abajo (se ofrecen varios medios, según la Norma de Notificación de Violaciones de Datos de Salud de la FTC).';
+
+  @override
+  String get privacyPolicyYouCanDeleteAnyDirectiveHandoff =>
+      'Puede eliminar cualquier directiva en cualquier momento desde la pantalla de inicio. Al eliminar una directiva se borran de la base de datos local todos los datos asociados (información personal, agentes, medicamentos, testigos, firmas).\n\nLas conversaciones en un servicio de IA externo se conservan o se borran con los controles de ese servicio.\n\nDesinstalar la aplicación elimina todos los datos guardados localmente.';
+
+  @override
+  String get privacyPolicyThisAppDoesNotIncludeHandoff =>
+      'Esta aplicación no incluye SDK de análisis de terceros, plataformas de publicidad, servicios de informes de fallos (como Firebase, Crashlytics o Sentry) ni píxeles de seguimiento.\n\nLas únicas conexiones de red externas que realiza esta aplicación son:\n  - NIH/NLM Clinical Table Search Service: búsquedas de medicamentos, condiciones y proveedores (médicos)\n  - NLM MedlinePlus Connect y RxNav: explicaciones en lenguaje sencillo sobre condiciones y medicamentos (solo envía un código CIE-10 o el nombre de un medicamento)\n  - openFDA / FDA de EE. UU.: etiquetas oficiales de medicamentos que sirven de base para la lista de efectos secundarios (solo envía el nombre de un medicamento)\n\nCada uno recibe solo el término o código que se busca, nunca su identidad ni su directiva. La aplicación nunca se conecta a un servicio de IA: cuando usa la ayuda de IA, usted mismo abre ese servicio. En ningún momento se envían datos al desarrollador de la aplicación.';
+
+  @override
+  String get legalSheetIfYouUseTheOptionalHandoff =>
+      'Si usa la ayuda de IA opcional, usted copia instrucciones de esta aplicación en el servicio de chat de IA que elija (ChatGPT, Claude, Gemini o Grok); la aplicación nunca envía nada por sí misma a un servicio de IA. Lo que pegue o adjunte allí se rige por las condiciones de ese servicio: algunos conservan las conversaciones, las usan para mejorar sus productos o permiten que revisores humanos las lean.';
+
+  @override
+  String get legalSheetBoldAutomaticallyKeepsIdentifyingDetailsOutHandoff =>
+      'excluye automáticamente los datos identificativos de las instrucciones que redacta para su IA';
+
+  @override
+  String get legalSheetYourNameDateOfBirthHandoff =>
+      ': nunca se incluyen su nombre, fecha de nacimiento, dirección ni los nombres y datos de contacto de sus agentes y tutor. Solo se incluye contexto que no le identifica (como afecciones, medicamentos y preferencias de atención), y solo si decide usar la ayuda de IA. (Un documento que adjunte para autocompletar es la única excepción, descrita a continuación.)';
+
+  @override
+  String get legalSheetDocumentsYouUploadForAutofillHandoff =>
+      'Los documentos que adjunta para autocompletar son distintos: usted mismo adjunta el archivo completo en su servicio de IA, y para completar su directiva la IA lee los datos personales que contiene (su nombre, fecha de nacimiento, dirección y los datos de su agente o tutor). Usted revisa todo antes de que se agregue. ';
+
+  @override
+  String get facilitatorGuidedBodyHandoff =>
+      'Su propia IA (ChatGPT, Claude, Gemini o Grok) hace las preguntas que haría un facilitador capacitado, en el mismo orden: cómo es una crisis para usted, qué le ha ayudado o empeorado las cosas, en quién confía y luego sus decisiones. Usted mismo completa el formulario; la IA explica, no decide.';
+
+  @override
+  String get facilitatorGuidedMetaAiHandoff =>
+      'Su propia IA, copiando y pegando';
 }

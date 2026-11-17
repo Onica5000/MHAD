@@ -62,15 +62,17 @@ class PrivacyPolicyScreen extends StatelessWidget {
             _PolicySection(
               title: context.l10n.privacyPolicyAiFeaturesThirdPartyData,
               body:
-                  context.l10n.privacyPolicyIfYouChooseToUse,
+                  (appData.ai.apiModeVisible ? context.l10n.privacyPolicyIfYouChooseToUse : context.l10n.privacyPolicyIfYouChooseToUseHandoff),
               headingStyle: headingStyle,
               bodyStyle: bodyStyle,
             ),
 
             _PolicySection(
-              title: context.l10n.privacyPolicyGeminiFreeTierDataPractices,
+              title: appData.ai.apiModeVisible
+                  ? context.l10n.privacyPolicyGeminiFreeTierDataPractices
+                  : context.l10n.privacyPolicyOutsideAiServices,
               body:
-                  context.l10n.privacyPolicyIfYouUseTheAi,
+                  (appData.ai.apiModeVisible ? context.l10n.privacyPolicyIfYouUseTheAi : context.l10n.privacyPolicyIfYouUseTheAiHandoff),
               headingStyle: headingStyle,
               bodyStyle: bodyStyle,
             ),
@@ -78,7 +80,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
             _PolicySection(
               title: context.l10n.privacyPolicyInternationalUsersGdpr,
               body:
-                  context.l10n.privacyPolicyIfYouAreLocatedIn,
+                  (appData.ai.apiModeVisible ? context.l10n.privacyPolicyIfYouAreLocatedIn : context.l10n.privacyPolicyIfYouAreLocatedInHandoff),
               headingStyle: headingStyle,
               bodyStyle: bodyStyle,
             ),
@@ -86,7 +88,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
             _PolicySection(
               title: context.l10n.privacyPolicyUsStateConsumerHealthData,
               body:
-                  context.l10n.privacyPolicyThisAppMayBeSubject,
+                  (appData.ai.apiModeVisible ? context.l10n.privacyPolicyThisAppMayBeSubject : context.l10n.privacyPolicyThisAppMayBeSubjectHandoff),
               headingStyle: headingStyle,
               bodyStyle: bodyStyle,
             ),
@@ -110,7 +112,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
             _PolicySection(
               title: context.l10n.privacyPolicyYourRights,
               body:
-                  context.l10n.privacyPolicyYouCanDeleteAnyDirective,
+                  (appData.ai.apiModeVisible ? context.l10n.privacyPolicyYouCanDeleteAnyDirective : context.l10n.privacyPolicyYouCanDeleteAnyDirectiveHandoff),
               headingStyle: headingStyle,
               bodyStyle: bodyStyle,
             ),
@@ -118,7 +120,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
             _PolicySection(
               title: context.l10n.privacyPolicyNoThirdPartyTracking,
               body:
-                  context.l10n.privacyPolicyThisAppDoesNotInclude,
+                  (appData.ai.apiModeVisible ? context.l10n.privacyPolicyThisAppDoesNotInclude : context.l10n.privacyPolicyThisAppDoesNotIncludeHandoff),
               headingStyle: headingStyle,
               bodyStyle: bodyStyle,
             ),

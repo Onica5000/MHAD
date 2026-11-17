@@ -38,12 +38,17 @@ class AiQuestionHandoff extends ConsumerStatefulWidget {
   final String panelTitle;
   final String? panelSubtitle;
 
+  /// Starts the question box filled in (e.g. a guided session's opening
+  /// request from the facilitator page).
+  final String? initialQuestion;
+
   const AiQuestionHandoff({
     required this.suggestions,
     required this.instructions,
     required this.ref,
     required this.panelTitle,
     this.panelSubtitle,
+    this.initialQuestion,
     super.key,
   });
 
@@ -52,7 +57,8 @@ class AiQuestionHandoff extends ConsumerStatefulWidget {
 }
 
 class _AiQuestionHandoffState extends ConsumerState<AiQuestionHandoff> {
-  final _question = TextEditingController();
+  late final _question =
+      TextEditingController(text: widget.initialQuestion ?? '');
 
   @override
   void initState() {

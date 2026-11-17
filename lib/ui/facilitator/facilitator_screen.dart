@@ -99,10 +99,10 @@ class FacilitatorScreen extends StatelessWidget {
                 _PathwayCard(
                   tag: context.l10n.facilitatorGuidedTag,
                   title: context.l10n.facilitatorGuidedTitle,
-                  body: context.l10n.facilitatorGuidedBody,
+                  body: (appData.ai.apiModeVisible ? context.l10n.facilitatorGuidedBody : context.l10n.facilitatorGuidedBodyHandoff),
                   meta: [
                     context.l10n.facilitatorGuidedMetaPace,
-                    context.l10n.facilitatorGuidedMetaAi,
+                    (appData.ai.apiModeVisible ? context.l10n.facilitatorGuidedMetaAi : context.l10n.facilitatorGuidedMetaAiHandoff),
                   ],
                   actions: [
                     FilledButton(

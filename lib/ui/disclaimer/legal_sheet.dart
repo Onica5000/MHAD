@@ -329,19 +329,19 @@ List<_SectionData> _buildSections(BuildContext context, MhadPalette p) {
         _Para(spans: [
           TextSpan(
               text:
-                  context.l10n.legalSheetIfYouUseTheOptional),
+                  (appData.ai.apiModeVisible ? context.l10n.legalSheetIfYouUseTheOptional : context.l10n.legalSheetIfYouUseTheOptionalHandoff)),
         ], palette: p),
         _Para(spans: [
           TextSpan(text: context.l10n.legalSheetToProtectYouTheApp),
-          _bold(context.l10n.legalSheetBoldAutomaticallyKeepsIdentifyingDetailsOut),
+          _bold((appData.ai.apiModeVisible ? context.l10n.legalSheetBoldAutomaticallyKeepsIdentifyingDetailsOut : context.l10n.legalSheetBoldAutomaticallyKeepsIdentifyingDetailsOutHandoff)),
           TextSpan(
               text:
-                  context.l10n.legalSheetYourNameDateOfBirth),
+                  (appData.ai.apiModeVisible ? context.l10n.legalSheetYourNameDateOfBirth : context.l10n.legalSheetYourNameDateOfBirthHandoff)),
         ], palette: p),
         _Para(spans: [
           TextSpan(
               text:
-                  context.l10n.legalSheetDocumentsYouUploadForAutofill),
+                  (appData.ai.apiModeVisible ? context.l10n.legalSheetDocumentsYouUploadForAutofill : context.l10n.legalSheetDocumentsYouUploadForAutofillHandoff)),
           _bold(context.l10n.legalSheetBoldUploadingIsNeverRequired),
           TextSpan(
               text:

@@ -13074,6 +13074,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The contradiction check above uses built-in rules. Anything your AI suggests is optional — review it before you change your directive. This screen warns; it doesn\'t block making the PDF.'**
   String get aiConsistencyRulesExplainerHandoff;
+
+  /// No description provided for @privacyPolicyIfYouChooseToUseHandoff.
+  ///
+  /// In en, this message translates to:
+  /// **'The AI help is optional, and this app never sends anything to an AI service itself. If you choose to use it, the app writes instructions that you copy and paste into an AI chat service you choose — ChatGPT, Claude, Gemini or Grok — and you attach any document or recording there yourself. You then copy the answer back into this app.\n\nWhat you paste or attach in that service is handled under that service\'s own terms and privacy policy, not this one. Depending on the service and your settings, it may:\n  - Keep your conversations, with or without an automatic expiration\n  - Use them to improve its products\n  - Let human reviewers read them\nMost services offer a private or temporary chat that keeps less — see \"Outside AI services\" below.\n\nThe instructions this app writes leave out common identifying details (SSNs, phone numbers, emails, dates of birth, addresses, names, and facility names). This is a best-effort filter and cannot guarantee complete removal. A document or recording you attach yourself reaches the service as it is.\n\nAI help is entirely optional. The app is fully functional without it.'**
+  String get privacyPolicyIfYouChooseToUseHandoff;
+
+  /// No description provided for @privacyPolicyOutsideAiServices.
+  ///
+  /// In en, this message translates to:
+  /// **'Outside AI Services'**
+  String get privacyPolicyOutsideAiServices;
+
+  /// No description provided for @privacyPolicyIfYouUseTheAiHandoff.
+  ///
+  /// In en, this message translates to:
+  /// **'If you use an outside AI service with this app, be aware of the following:\n\n1. That service decides how long it keeps what you send, and whether people or its AI models learn from it. Review its privacy policy and settings before you send sensitive content.\n\n2. Data you send to that service cannot be recalled or deleted by this app. Once sent, it is under that service\'s control.\n\n3. For more privacy, use a private chat: ChatGPT\'s Temporary Chat, Claude\'s Incognito chat, Gemini\'s Temporary chat, or Grok\'s Private Chat.\n\nYou can avoid all third-party data sharing by not using the AI help.'**
+  String get privacyPolicyIfYouUseTheAiHandoff;
+
+  /// No description provided for @privacyPolicyIfYouAreLocatedInHandoff.
+  ///
+  /// In en, this message translates to:
+  /// **'If you are located in the European Economic Area (EEA), the UK, or Switzerland, the General Data Protection Regulation (GDPR) applies to your use of this app.\n\nLegal basis for processing: Your explicit consent, given through the in-app disclaimer and the notice shown before you first copy anything to an outside AI service.\n\nYour rights under GDPR:\n  - Right to access: All your data is stored locally on your device — you have direct access at all times.\n  - Right to erasure: Use \"Delete All Data\" in the app menu to permanently erase all local data.\n  - Right to data portability: Export your directives as PDF or FHIR JSON (a standard health-records format) at any time.\n  - Right to withdraw consent: Stop using the AI help at any time — this app never sends anything to an AI service itself.\n  - Right to restriction: You may use the app in Public Mode without any data persistence.\n\nData you paste or attach in an outside AI service is processed under that service\'s own privacy policy and data processing terms. We cannot control or delete it once it has been sent.'**
+  String get privacyPolicyIfYouAreLocatedInHandoff;
+
+  /// No description provided for @privacyPolicyThisAppMayBeSubjectHandoff.
+  ///
+  /// In en, this message translates to:
+  /// **'This app may be subject to state consumer-health-data privacy laws including California (CCPA/CPRA), Washington (My Health My Data Act / MHMDA), Connecticut (CTDPA health provisions), Nevada (SB 370), and New York (Health Information Privacy Act).\n\nMental-health-directive content is \"consumer health data\" under each of these laws. Under all of them: (1) We collect mental-health treatment-preference data **solely** to help you create your advance directive. (2) We **do not sell** your health data — there is no commercial recipient. (3) This app never sends your content to a third party itself. If you choose to use the AI help, you copy instructions into an outside AI service yourself; that service receives **only** what you paste or attach there. (4) We use no third-party SDKs, no analytics, no advertising frameworks, no tracking pixels or cookies. (5) You may delete all locally stored data at any time via \"Delete All Data\" in the app menu.\n\nWashington MHMDA includes a **private right of action**; we have designed the app so that it never transfers consumer health data to a third party itself, and so that, before you first copy anything to an outside AI service in a session, it shows a notice explaining that the service\'s own terms apply.\n\nFor questions about your privacy rights, contact the developer using the channels listed in the Contact section below (multiple methods are provided per the FTC Health Breach Notification Rule).'**
+  String get privacyPolicyThisAppMayBeSubjectHandoff;
+
+  /// No description provided for @privacyPolicyYouCanDeleteAnyDirectiveHandoff.
+  ///
+  /// In en, this message translates to:
+  /// **'You can delete any directive at any time from the home screen. Deleting a directive removes all associated data (personal info, agents, medications, witnesses, signatures) from the local database.\n\nConversations in an outside AI service are kept or deleted with that service\'s own controls.\n\nUninstalling the app removes all locally stored data.'**
+  String get privacyPolicyYouCanDeleteAnyDirectiveHandoff;
+
+  /// No description provided for @privacyPolicyThisAppDoesNotIncludeHandoff.
+  ///
+  /// In en, this message translates to:
+  /// **'This app does not include any third-party analytics SDKs, advertising frameworks, crash reporting services (such as Firebase, Crashlytics, or Sentry), or tracking pixels.\n\nThe only external network connections this app makes are:\n  - NIH/NLM Clinical Table Search Service — medication, condition, and provider (doctor) lookups\n  - NLM MedlinePlus Connect & RxNav — plain-language condition and medication explanations (sends only an ICD-10 code or a medication name)\n  - openFDA / U.S. FDA — official drug labels used to ground the side-effects list (sends only a medication name)\n\nEach of these receives only the term or code being looked up — never your identity or your directive. The app never connects to an AI service: when you use the AI help, you open that service yourself. No data is sent to the app developer at any time.'**
+  String get privacyPolicyThisAppDoesNotIncludeHandoff;
+
+  /// No description provided for @legalSheetIfYouUseTheOptionalHandoff.
+  ///
+  /// In en, this message translates to:
+  /// **'If you use the optional AI help, you copy instructions from this app into an AI chat service you choose (ChatGPT, Claude, Gemini or Grok) — the app never sends anything to an AI service itself. What you paste or attach there is handled under that service\'s own terms: some keep conversations, use them to improve their products, or let human reviewers read them.'**
+  String get legalSheetIfYouUseTheOptionalHandoff;
+
+  /// No description provided for @legalSheetBoldAutomaticallyKeepsIdentifyingDetailsOutHandoff.
+  ///
+  /// In en, this message translates to:
+  /// **'automatically keeps identifying details out of the instructions it writes for your AI'**
+  String get legalSheetBoldAutomaticallyKeepsIdentifyingDetailsOutHandoff;
+
+  /// No description provided for @legalSheetYourNameDateOfBirthHandoff.
+  ///
+  /// In en, this message translates to:
+  /// **' — your name, date of birth, address, and the names and contact details of your agents and guardian are never included. Only non-identifying context (such as conditions, medications, and care preferences) goes in, and only if you choose to use the AI help. (A document you attach for autofill is the one exception, described next.)'**
+  String get legalSheetYourNameDateOfBirthHandoff;
+
+  /// No description provided for @legalSheetDocumentsYouUploadForAutofillHandoff.
+  ///
+  /// In en, this message translates to:
+  /// **'Documents you attach for autofill are different: you attach the whole file in your AI service yourself, and to fill in your directive the AI reads the personal details in it (your name, date of birth, address, and your agent\'s or guardian\'s details). You review everything before it is added. '**
+  String get legalSheetDocumentsYouUploadForAutofillHandoff;
+
+  /// No description provided for @facilitatorGuidedBodyHandoff.
+  ///
+  /// In en, this message translates to:
+  /// **'Your own AI (ChatGPT, Claude, Gemini or Grok) asks the questions a trained facilitator would, in the same order: what a crisis looks like for you, what has helped or made things worse, who you trust, and then your choices. You fill in the form yourself — the AI explains, it doesn\'t decide.'**
+  String get facilitatorGuidedBodyHandoff;
+
+  /// No description provided for @facilitatorGuidedMetaAiHandoff.
+  ///
+  /// In en, this message translates to:
+  /// **'Your own AI, by copy and paste'**
+  String get facilitatorGuidedMetaAiHandoff;
 }
 
 class _AppLocalizationsDelegate
