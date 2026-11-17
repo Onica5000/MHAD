@@ -319,8 +319,13 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                 // collapses to the peeking "Need help?" bar.
                 final shellActive =
                     MediaQuery.sizeOf(context).width >= kWideLayoutBreakpoint;
+                // Show the AI rail only when the form still gets >= 600px:
+                // step rail 240 + AI rail 320 + 2 dividers + 600 = 1162 of
+                // CONTENT width (the wizard runs in focus mode, so the window
+                // needs ~1234px with the 72px rail). Review R7: at the old
+                // 1080 the form shrank to ~518px.
                 final showAiRail =
-                    shellActive && constraints.maxWidth >= 1080;
+                    shellActive && constraints.maxWidth >= 1162;
                 // When the on-screen keyboard is up on a narrow layout, the
                 // peeking "Need help?" bar just steals vertical space from the
                 // field being edited — hide it while typing. Wide layouts (which
@@ -448,9 +453,22 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                     Container(width: 1, color: p.border),
                     Expanded(
                       child: FocusTraversalGroup(
-                        child: ConstrainedBox(
-                          constraints: const BoxConstraints(maxWidth: 760),
-                          child: mainColumn,
+                        // Centered, TIGHT-width form column (max 760): the old
+                        // ConstrainedBox left-aligned it with a blank band on
+                        // the right whenever the AI rail was hidden (R7).
+                        child: LayoutBuilder(
+                          builder: (context, box) {
+                            final w =
+                                box.maxWidth < 760 ? box.maxWidth : 760.0;
+                            return Align(
+                              alignment: Alignment.topCenter,
+                              child: SizedBox(
+                                width: w,
+                                height: box.maxHeight,
+                                child: mainColumn,
+                              ),
+                            );
+                          },
                         ),
                       ),
                     ),

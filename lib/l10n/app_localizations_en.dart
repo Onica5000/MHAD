@@ -7220,4 +7220,60 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get calendarReminderDescription =>
       'Your Pennsylvania advance directive is valid for 2 years. Open the MHAD app to make a new one and sign it with two adult witnesses.';
+
+  @override
+  String tabTitle(String page) {
+    return '$page · PA MHAD';
+  }
+
+  @override
+  String get tabPageDisclaimer => 'Before you begin';
+
+  @override
+  String get tabPageWelcome => 'Welcome';
+
+  @override
+  String get tabPageAiSetup => 'AI setup';
+
+  @override
+  String get tabPageAccessibility => 'Accessibility';
+
+  @override
+  String get tabPagePrivacyPolicy => 'Privacy policy';
+
+  @override
+  String get tabPageGetHelp => 'Get help';
+
+  @override
+  String get tabPageAudioGuide => 'Audio guide';
+
+  @override
+  String get tabPageAdmin => 'Admin tool';
+
+  @override
+  String get tabPageYourDirective => 'Your directive';
+
+  @override
+  String get tabPageSign => 'Sign on paper';
+
+  @override
+  String get tabPageCrisisPlan => 'Crisis plan';
+
+  @override
+  String get tabPageUlysses => 'Ulysses clause';
+
+  @override
+  String get tabPageSideEffects => 'Side effects';
+
+  @override
+  String get tabPageRevoke => 'Revoke a directive';
+
+  @override
+  String get tabPageFindable => 'Make it findable';
+
+  @override
+  String get tabPageAiCheck => 'AI consistency check';
+
+  @override
+  String get tabPagePast => 'Past directive';
 }

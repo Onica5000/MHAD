@@ -34,6 +34,11 @@ class ArtImage extends StatelessWidget {
   /// Fill the parent's (bounded) size instead of using the art's aspect ratio.
   final bool expand;
 
+  /// Fade the photo in once decoded. Pass false when the caller already
+  /// animates the surrounding card (e.g. RevealOnMount) — two stacked fades
+  /// read as a slow, blank hero (review R13f).
+  final bool fade;
+
   const ArtImage(
     this.art, {
     this.width,
@@ -42,11 +47,26 @@ class ArtImage extends StatelessWidget {
     this.fit = BoxFit.cover,
     this.alignment,
     this.expand = false,
+    this.fade = true,
     super.key,
   });
 
   /// Dark-mode dim applied over the art (~12% black).
   static const _darkDim = Color(0x1F000000);
+
+  /// Fade-in length: short, so a page transition + this fade stay one beat.
+  static const _fadeDuration = Duration(milliseconds: 150);
+
+  /// Test hook: when true, ArtImage paints only its tinted placeholder and
+  /// never decodes a real asset — widget tests stay fast and deterministic
+  /// (set globally in test/flutter_test_config.dart; review R12).
+  static bool debugUsePlaceholders = false;
+
+  /// Width used when a caller puts an ArtImage with no [width] inside a
+  /// parent that gives unbounded width (a Row without Expanded, a horizontal
+  /// list). Without this the AspectRatio is measured under an infinite width
+  /// and, in release builds, silently fails to paint (review R13a).
+  static const _unboundedFallbackWidth = 240.0;
 
   @override
   Widget build(BuildContext context) {
@@ -72,10 +92,10 @@ class ArtImage extends StatelessWidget {
         alignment: alignment ?? art.focal,
         filterQuality: FilterQuality.medium,
         frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-          if (wasSynchronouslyLoaded || reduceMotion) return child;
+          if (wasSynchronouslyLoaded || reduceMotion || !fade) return child;
           return AnimatedOpacity(
             opacity: frame == null ? 0 : 1,
-            duration: const Duration(milliseconds: 280),
+            duration: _fadeDuration,
             curve: Curves.easeOut,
             child: child,
           );
@@ -96,7 +116,7 @@ class ArtImage extends StatelessWidget {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            image,
+            if (!debugUsePlaceholders) image,
             if (dark) const ColoredBox(color: _darkDim),
           ],
         ),
@@ -108,6 +128,18 @@ class ArtImage extends StatelessWidget {
     }
     if (width != null || height != null) {
       framed = SizedBox(width: width, height: height, child: framed);
+    } else if (!expand) {
+      // No explicit width: the parent must bound it. Guard the unbounded
+      // case (assert in debug, a sane fixed width in release) instead of
+      // letting AspectRatio fail to paint (review R13a).
+      final sized = framed;
+      framed = LayoutBuilder(builder: (context, box) {
+        if (box.hasBoundedWidth) return sized;
+        assert(false,
+            'ArtImage(${art.id}) got unbounded width; give it a width or '
+            'wrap it in Expanded/SizedBox.');
+        return SizedBox(width: _unboundedFallbackWidth, child: sized);
+      });
     }
     return ExcludeSemantics(child: framed);
   }

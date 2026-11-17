@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:mhad/l10n/l10n.dart';
+import 'package:mhad/ui/route_titles.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/widgets/design/bottom_nav.dart';
 import 'package:mhad/ui/widgets/design/web_sidebar.dart';
@@ -69,6 +71,38 @@ bool _routeHidesSidebar(String route) =>
     route == AppRoutes.modeSelection ||
     route == AppRoutes.onboarding;
 
+/// Routes in desktop "focus mode": the 232px sidebar shrinks to a 72px icon
+/// rail so a dense multi-column screen gets the room. The wizard only for now
+/// (review R7 / "cut or defer": /sign and /upload are short single-column
+/// flows, where the compact rail's accessibility cost buys little).
+bool routeUsesFocusMode(String route) => route.startsWith('/wizard/');
+
+/// Width the desktop shell gives the sidebar on [route]: 0 on the gates,
+/// [WebSidebar.compactWidth] in focus mode, [WebSidebar.width] otherwise.
+/// ONE definition for the shell and any screen needing its content width.
+double sidebarWidthFor(String route) {
+  if (_routeHidesSidebar(route)) return 0;
+  return routeUsesFocusMode(route)
+      ? WebSidebar.compactWidth
+      : WebSidebar.width;
+}
+
+/// The routed pages get their OWN semantics container. Every page route has a
+/// modal barrier whose BlockSemantics drops all semantics painted before it
+/// in the same container — and the sidebar is painted before the Navigator,
+/// so on desktop the whole sidebar (nav, Get help, 988 crisis card) was
+/// invisible to screen readers. A container boundary keeps the barrier's
+/// blocking inside the page area.
+Widget _pageSemantics(Widget page) => Semantics(container: true, child: page);
+
+/// Browser-tab title for the current route (see route_titles.dart). Built
+/// inside the route listener so it updates on every navigation.
+Widget _titled(BuildContext context, String route, Widget child) => Title(
+      title: routeTitle(context.l10n, route),
+      color: Theme.of(context).scaffoldBackgroundColor,
+      child: child,
+    );
+
 /// Wraps [child] so the navigation chrome matches the prototype:
 ///
 ///  - **Wide screens (≥ [kWideLayoutBreakpoint])** — a persistent
@@ -92,7 +126,7 @@ class ResponsiveShell extends StatelessWidget {
     if (!wide) {
       return Column(
         children: [
-          Expanded(child: child),
+          Expanded(child: _pageSemantics(child)),
           _RouteListener(
             listenable: appRouter.routerDelegate,
             builder: (context, _) {
@@ -100,8 +134,18 @@ class ResponsiveShell extends StatelessWidget {
                       .routerDelegate.currentConfiguration.lastOrNull
                       ?.matchedLocation ??
                   appRouter.routerDelegate.currentConfiguration.uri.path;
-              if (_routeHidesSidebar(route)) return const SizedBox.shrink();
-              return MhadBottomNav(activeRoute: route);
+              // While the on-screen keyboard is up, the nav would sit above it
+              // AND the routed Scaffold subtracts the full inset again, costing
+              // the page the nav's height twice (review R4). Hide it then.
+              final keyboardOpen = MediaQuery.viewInsetsOf(context).bottom > 0;
+              final hideNav = _routeHidesSidebar(route) || keyboardOpen;
+              return _titled(
+                context,
+                route,
+                hideNav
+                    ? const SizedBox.shrink()
+                    : MhadBottomNav(activeRoute: route),
+              );
             },
           ),
         ],
@@ -133,18 +177,31 @@ class ResponsiveShell extends StatelessWidget {
         // reading content in the full window (no nav rail) until the user
         // reaches the dashboard.
         if (_routeHidesSidebar(route)) {
-          // Paint the gutters in the page background so the centered column
-          // doesn't read as a strip floating on a white canvas.
-          return ColoredBox(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            child: ClipRect(
-              child: Align(
-                alignment: Alignment.topCenter,
-                child: ConstrainedBox(
-                  constraints:
-                      const BoxConstraints(maxWidth: kReadingMaxWidth),
-                  child: child,
-                ),
+          // Gutters in the page background (no white "strip"), and a TIGHT
+          // width like the reading branch below — the old Align+ConstrainedBox
+          // passed loose constraints, the pattern that collapsed Row>Expanded
+          // in release builds (review R15).
+          return _titled(
+            context,
+            route,
+            ColoredBox(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final w = constraints.maxWidth < kReadingMaxWidth
+                      ? constraints.maxWidth
+                      : kReadingMaxWidth;
+                  return ClipRect(
+                    child: Align(
+                      alignment: Alignment.topCenter,
+                      child: SizedBox(
+                        width: w,
+                        height: constraints.maxHeight,
+                        child: _pageSemantics(child),
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
           );
@@ -161,9 +218,31 @@ class ResponsiveShell extends StatelessWidget {
         //   /sign/            — the "Make it legal" signing screen (fill, not centered)
         final bool fullBleed = route.startsWith('/export/') ||
             route.startsWith('/sign/');
-        return Row(
+        final page = _pageSemantics(child);
+        // Tab order: the PAGE first, then the sidebar (review R8) — otherwise
+        // keyboard users crossed ~9 sidebar stops before every form field.
+        // Overlay.wrap: the sidebar is built ABOVE the routed Navigator (whose
+        // Overlay hosts the pages), so its tooltips — the compact rail's only
+        // visible labels — need their own Overlay; without it Tooltip throws
+        // "No Overlay widget found". Wrapping the whole row lets a tooltip
+        // draw over the page area.
+        return _titled(
+          context,
+          route,
+          Overlay.wrap(
+            child: FocusTraversalGroup(
+            policy: OrderedTraversalPolicy(),
+            child: Row(
           children: [
-            WebSidebar(activeRoute: route),
+            FocusTraversalOrder(
+              order: const NumericFocusOrder(2),
+              child: FocusTraversalGroup(
+                child: WebSidebar(
+                  activeRoute: route,
+                  compact: routeUsesFocusMode(route),
+                ),
+              ),
+            ),
             // FULL-BLEED (export): hand the child the Expanded's TIGHT width
             // directly. The Align path below passes *loose* constraints, which
             // lets a self-sizing Scaffold/Row collapse to its columns' intrinsic
@@ -171,7 +250,12 @@ class ResponsiveShell extends StatelessWidget {
             // monitor — the bug we keep chasing. A direct child forces it to
             // fill the whole content area, flush from sidebar to window edge.
             if (fullBleed)
-              Expanded(child: child)
+              Expanded(
+                child: FocusTraversalOrder(
+                  order: const NumericFocusOrder(1),
+                  child: FocusTraversalGroup(child: page),
+                ),
+              )
             else
               Expanded(
                 // Hand the child a TIGHT width, not a capped-but-loose one.
@@ -202,7 +286,13 @@ class ResponsiveShell extends StatelessWidget {
                           // READING: centered reading column.
                           alignment:
                               fills ? Alignment.topLeft : Alignment.topCenter,
-                          child: SizedBox(width: w, child: child),
+                          child: SizedBox(
+                            width: w,
+                            child: FocusTraversalOrder(
+                              order: const NumericFocusOrder(1),
+                              child: FocusTraversalGroup(child: page),
+                            ),
+                          ),
                         ),
                       ),
                     );
@@ -210,6 +300,9 @@ class ResponsiveShell extends StatelessWidget {
                 ),
               ),
           ],
+            ),
+          ),
+          ),
         );
       },
     );

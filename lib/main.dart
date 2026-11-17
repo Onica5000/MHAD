@@ -252,10 +252,13 @@ class MhadApp extends ConsumerWidget {
         Intl.defaultLocale = Localizations.localeOf(context).languageCode;
         final mq = MediaQuery.of(context);
         return MediaQuery(
-          // Apply the accessibility text-scale on top of the platform's own
-          // accessibility scale (so platform AX settings still compose).
+          // Apply the accessibility text-scale ON TOP OF the platform's own
+          // scale (browser / OS large-text setting), as the comment always
+          // said: it used to REPLACE it (TextScaler.linear(factor)), so a
+          // browser at 150% text got 100% inside the app (review R11).
           data: mq.copyWith(
-            textScaler: TextScaler.linear(a11y.textScaleFactor),
+            textScaler: TextScaler.linear(
+                mq.textScaler.scale(1) * a11y.textScaleFactor),
             // Reduce motion: ask the framework to skip implicit animations too.
             disableAnimations: a11y.reduceMotion || mq.disableAnimations,
           ),

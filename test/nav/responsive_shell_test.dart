@@ -129,6 +129,51 @@ void main() {
       expect(find.byType(MhadBottomNav), findsOneWidget);
     });
 
+    // ── 2026-11 shell foundation ────────────────────────────────────────
+
+    testWidgets('wide: sidebar destinations are visible to screen readers',
+        (tester) async {
+      // Page routes' modal barriers used to BlockSemantics the sidebar
+      // (painted before the Navigator): desktop screen readers could not
+      // reach Start/Learn/Settings or the 988 card at all.
+      final handle = tester.ensureSemantics();
+      await pumpShell(tester, size: desktop, initial: AppRoutes.settings);
+      expect(find.bySemanticsLabel(RegExp('^Learn')), findsOneWidget);
+      expect(find.bySemanticsLabel(RegExp('988')), findsOneWidget);
+      handle.dispose();
+    });
+
+    testWidgets('focus mode: the wizard gets the 72px rail, others 232px',
+        (tester) async {
+      await pumpShell(tester, size: desktop, initial: '/wizard/1');
+      expect(tester.getSize(find.byType(WebSidebar)).width,
+          WebSidebar.compactWidth);
+      expect(sidebarWidthFor('/wizard/1'), WebSidebar.compactWidth);
+      expect(sidebarWidthFor(AppRoutes.settings), WebSidebar.width);
+      expect(sidebarWidthFor(AppRoutes.disclaimer), 0);
+    });
+
+    testWidgets('focus-mode rail still exposes every destination by name',
+        (tester) async {
+      final handle = tester.ensureSemantics();
+      await pumpShell(tester, size: desktop, initial: '/wizard/1');
+      for (final label in ['Start', 'Learn', 'Settings', 'Reset Form']) {
+        expect(find.bySemanticsLabel(RegExp('^$label')), findsOneWidget,
+            reason: '$label missing from the compact rail');
+      }
+      handle.dispose();
+    });
+
+    testWidgets('narrow: the bottom nav hides while the keyboard is open',
+        (tester) async {
+      await pumpShell(tester, size: phone, initial: AppRoutes.settings);
+      expect(find.byType(MhadBottomNav), findsOneWidget);
+      tester.view.viewInsets = const FakeViewPadding(bottom: 300);
+      addTearDown(tester.view.resetViewInsets);
+      await tester.pumpAndSettle();
+      expect(find.byType(MhadBottomNav), findsNothing);
+    });
+
     for (final gate in const [
       AppRoutes.disclaimer,
       AppRoutes.modeSelection,

@@ -12234,6 +12234,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your Pennsylvania advance directive is valid for 2 years. Open the MHAD app to make a new one and sign it with two adult witnesses.'**
   String get calendarReminderDescription;
+
+  /// No description provided for @tabTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{page} · PA MHAD'**
+  String tabTitle(String page);
+
+  /// No description provided for @tabPageDisclaimer.
+  ///
+  /// In en, this message translates to:
+  /// **'Before you begin'**
+  String get tabPageDisclaimer;
+
+  /// No description provided for @tabPageWelcome.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome'**
+  String get tabPageWelcome;
+
+  /// No description provided for @tabPageAiSetup.
+  ///
+  /// In en, this message translates to:
+  /// **'AI setup'**
+  String get tabPageAiSetup;
+
+  /// No description provided for @tabPageAccessibility.
+  ///
+  /// In en, this message translates to:
+  /// **'Accessibility'**
+  String get tabPageAccessibility;
+
+  /// No description provided for @tabPagePrivacyPolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy policy'**
+  String get tabPagePrivacyPolicy;
+
+  /// No description provided for @tabPageGetHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Get help'**
+  String get tabPageGetHelp;
+
+  /// No description provided for @tabPageAudioGuide.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio guide'**
+  String get tabPageAudioGuide;
+
+  /// No description provided for @tabPageAdmin.
+  ///
+  /// In en, this message translates to:
+  /// **'Admin tool'**
+  String get tabPageAdmin;
+
+  /// No description provided for @tabPageYourDirective.
+  ///
+  /// In en, this message translates to:
+  /// **'Your directive'**
+  String get tabPageYourDirective;
+
+  /// No description provided for @tabPageSign.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign on paper'**
+  String get tabPageSign;
+
+  /// No description provided for @tabPageCrisisPlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Crisis plan'**
+  String get tabPageCrisisPlan;
+
+  /// No description provided for @tabPageUlysses.
+  ///
+  /// In en, this message translates to:
+  /// **'Ulysses clause'**
+  String get tabPageUlysses;
+
+  /// No description provided for @tabPageSideEffects.
+  ///
+  /// In en, this message translates to:
+  /// **'Side effects'**
+  String get tabPageSideEffects;
+
+  /// No description provided for @tabPageRevoke.
+  ///
+  /// In en, this message translates to:
+  /// **'Revoke a directive'**
+  String get tabPageRevoke;
+
+  /// No description provided for @tabPageFindable.
+  ///
+  /// In en, this message translates to:
+  /// **'Make it findable'**
+  String get tabPageFindable;
+
+  /// No description provided for @tabPageAiCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'AI consistency check'**
+  String get tabPageAiCheck;
+
+  /// No description provided for @tabPagePast.
+  ///
+  /// In en, this message translates to:
+  /// **'Past directive'**
+  String get tabPagePast;
 }
 
 class _AppLocalizationsDelegate

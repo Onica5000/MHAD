@@ -199,6 +199,8 @@ class SemanticColors {
       b == Brightness.dark ? warningBgDark : warningBgLight;
   static Color successBg(Brightness b) =>
       b == Brightness.dark ? successBgDark : successBgLight;
+  static Color errorBg(Brightness b) =>
+      b == Brightness.dark ? errorBgDark : errorBgLight;
 }
 
 /// A full palette = primary family + supporting surface/text tokens for a
@@ -459,6 +461,28 @@ class _NoPageTransitionsBuilder extends PageTransitionsBuilder {
       child;
 }
 
+/// The ONE page transition, on every platform: a short fade-in of the
+/// incoming page over the outgoing one. (Platform defaults differed — zoom on
+/// Windows/Android, a Cupertino slide on macOS browsers.)
+///
+/// It checks `MediaQuery.disableAnimations` at transition time, which
+/// main.dart sets from BOTH the in-app reduce-motion setting and the
+/// OS/browser `prefers-reduced-motion` — the theme flag alone only knew the
+/// in-app one (review R10).
+class _FadePageTransitionsBuilder extends PageTransitionsBuilder {
+  const _FadePageTransitionsBuilder();
+  @override
+  Widget buildTransitions<T>(PageRoute<T> route, BuildContext context,
+      Animation<double> animation, Animation<double> secondaryAnimation,
+      Widget child) {
+    if (MediaQuery.disableAnimationsOf(context)) return child;
+    return FadeTransition(
+      opacity: CurvedAnimation(parent: animation, curve: Curves.easeOutCubic),
+      child: child,
+    );
+  }
+}
+
 /// Builds a Material 3 ThemeData from a [MhadPalette] and [Brightness].
 ///
 /// Accessibility flags adjust the result app-wide:
@@ -550,15 +574,13 @@ ThemeData buildMhadTheme(
     textTheme: textTheme,
     primaryTextTheme: textTheme,
     extensions: [_MhadPaletteExt(p)],
-    pageTransitionsTheme: reduceMotion
-        ? const PageTransitionsTheme(builders: {
-            TargetPlatform.android: _NoPageTransitionsBuilder(),
-            TargetPlatform.iOS: _NoPageTransitionsBuilder(),
-            TargetPlatform.macOS: _NoPageTransitionsBuilder(),
-            TargetPlatform.windows: _NoPageTransitionsBuilder(),
-            TargetPlatform.linux: _NoPageTransitionsBuilder(),
-          })
-        : null,
+    // Every TargetPlatform (fuchsia used to fall back to the zoom default).
+    pageTransitionsTheme: PageTransitionsTheme(builders: {
+      for (final platform in TargetPlatform.values)
+        platform: reduceMotion
+            ? const _NoPageTransitionsBuilder()
+            : const _FadePageTransitionsBuilder(),
+    }),
 
     appBarTheme: AppBarTheme(
       backgroundColor: p.card,

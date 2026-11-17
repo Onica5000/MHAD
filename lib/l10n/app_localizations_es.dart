@@ -7340,4 +7340,60 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get calendarReminderDescription =>
       'Su directiva anticipada de Pensilvania es válida por 2 años. Abra la aplicación MHAD para crear una nueva y firmarla ante dos testigos adultos.';
+
+  @override
+  String tabTitle(String page) {
+    return '$page · PA MHAD';
+  }
+
+  @override
+  String get tabPageDisclaimer => 'Antes de comenzar';
+
+  @override
+  String get tabPageWelcome => 'Bienvenida';
+
+  @override
+  String get tabPageAiSetup => 'Configuración de IA';
+
+  @override
+  String get tabPageAccessibility => 'Accesibilidad';
+
+  @override
+  String get tabPagePrivacyPolicy => 'Política de privacidad';
+
+  @override
+  String get tabPageGetHelp => 'Obtener ayuda';
+
+  @override
+  String get tabPageAudioGuide => 'Guía de audio';
+
+  @override
+  String get tabPageAdmin => 'Herramienta de administración';
+
+  @override
+  String get tabPageYourDirective => 'Su directiva';
+
+  @override
+  String get tabPageSign => 'Firmar en papel';
+
+  @override
+  String get tabPageCrisisPlan => 'Plan de crisis';
+
+  @override
+  String get tabPageUlysses => 'Cláusula de Ulises';
+
+  @override
+  String get tabPageSideEffects => 'Efectos secundarios';
+
+  @override
+  String get tabPageRevoke => 'Revocar una directiva';
+
+  @override
+  String get tabPageFindable => 'Hágala fácil de encontrar';
+
+  @override
+  String get tabPageAiCheck => 'Revisión de coherencia con IA';
+
+  @override
+  String get tabPagePast => 'Directiva anterior';
 }
