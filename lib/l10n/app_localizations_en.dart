@@ -9,9 +9,6 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appTitle => 'PA Mental Health\nAdvance Directive';
-
-  @override
   String get navHome => 'Home';
 
   @override
@@ -42,9 +39,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get badgeAiSetUp => 'SET UP';
 
   @override
-  String get newDirective => 'New Directive';
-
-  @override
   String get home => 'Home';
 
   @override
@@ -52,9 +46,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get assistant => 'Assistant';
-
-  @override
-  String get exportDirective => 'Export Directive';
 
   @override
   String get cancel => 'Cancel';
@@ -67,9 +58,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get next => 'Next';
-
-  @override
-  String get finish => 'Finish';
 
   @override
   String get done => 'Done';
@@ -123,34 +111,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get state => 'State';
 
   @override
-  String get zipCode => 'ZIP code';
-
-  @override
   String get phone => 'Phone number';
 
   @override
   String get effectiveCondition => 'Effective condition';
 
   @override
-  String get treatmentFacility => 'Treatment Facility';
-
-  @override
   String get medications => 'Medications';
-
-  @override
-  String get ectPreferences => 'ECT Preferences';
-
-  @override
-  String get experimentalStudies => 'Experimental Studies';
 
   @override
   String get drugTrials => 'Drug Trials';
 
   @override
   String get additionalInstructions => 'Additional instructions';
-
-  @override
-  String get agentDesignation => 'Agent Designation';
 
   @override
   String get alternateAgent => 'Alternate agent';
@@ -163,9 +136,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get review => 'Review';
-
-  @override
-  String get execution => 'Execution';
 
   @override
   String get draft => 'Draft';
@@ -183,29 +153,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get saveAndExit => 'Save & exit';
 
   @override
-  String get saveAndExitMessage =>
-      'Your work isn’t saved permanently — it stays in this browser only and is wiped when you close the tab (kept about 10 minutes for crash recovery). Export or print to keep a copy.';
-
-  @override
   String get previewPdf => 'Preview PDF';
-
-  @override
-  String get sharePrint => 'Share / Print';
-
-  @override
-  String get generateWalletCard => 'Generate Wallet Card';
 
   @override
   String get importFromDocument => 'Import from Document';
 
   @override
   String get importFromContacts => 'Import from Contacts';
-
-  @override
-  String get seeExamples => 'See examples';
-
-  @override
-  String get aiSuggest => 'AI Suggest';
 
   @override
   String stepNOfTotal(int current, int total) {
@@ -533,16 +487,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get wizardLoading => 'Loading';
 
   @override
-  String get wizardError => 'Error';
-
-  @override
   String get wizardUnableToLoad => 'Unable to load this directive.';
 
   @override
   String get wizardBackToHome => 'Back to home';
-
-  @override
-  String get wizardNotFound => 'Not found';
 
   @override
   String get wizardDirectiveNotFound => 'Directive not found.';
@@ -715,9 +663,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get peopleTrustLegendCondition =>
       ' lets you add a condition in your own words.';
-
-  @override
-  String get peopleTrustPrimaryBadge => 'Primary';
 
   @override
   String get peopleTrustAddSomeone => 'Add someone';
@@ -2400,9 +2345,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pipelinePleaseWait => 'Please wait while processing…';
-
-  @override
-  String get pipelineBackWizard => 'Wizard';
 
   @override
   String get pipelineBackReview => 'Review';
@@ -5044,13 +4986,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addressFieldsFillCityStateFromZip => 'Fill city & state from ZIP';
 
   @override
-  String get mainTheAppCouldnTStart => 'The app couldn’t start';
-
-  @override
-  String get mainPaMentalHealthAdvanceDirective =>
-      'PA Mental Health Advance Directive';
-
-  @override
   String get mainAppTitle => 'PA Mental Health Advance Directive';
 
   @override
@@ -5674,9 +5609,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String exportCardsExpires(Object expirationDate) {
     return 'Expires: $expirationDate';
   }
-
-  @override
-  String get pdfPreviewFit => 'FIT';
 
   @override
   String pdfPreviewPageOf(Object current, Object pageCount) {

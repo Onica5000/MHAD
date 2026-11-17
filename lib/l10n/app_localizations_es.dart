@@ -9,9 +9,6 @@ class AppLocalizationsEs extends AppLocalizations {
   AppLocalizationsEs([String locale = 'es']) : super(locale);
 
   @override
-  String get appTitle => 'Directiva Anticipada de\nSalud Mental de PA';
-
-  @override
   String get navHome => 'Inicio';
 
   @override
@@ -42,9 +39,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get badgeAiSetUp => 'ACTIVAR';
 
   @override
-  String get newDirective => 'Nueva Directiva';
-
-  @override
   String get home => 'Inicio';
 
   @override
@@ -52,9 +46,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get assistant => 'Asistente';
-
-  @override
-  String get exportDirective => 'Exportar Directiva';
 
   @override
   String get cancel => 'Cancelar';
@@ -67,9 +58,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get next => 'Siguiente';
-
-  @override
-  String get finish => 'Finalizar';
 
   @override
   String get done => 'Listo';
@@ -123,34 +111,19 @@ class AppLocalizationsEs extends AppLocalizations {
   String get state => 'Estado';
 
   @override
-  String get zipCode => 'Código postal';
-
-  @override
   String get phone => 'Teléfono';
 
   @override
   String get effectiveCondition => 'Condición de Vigencia';
 
   @override
-  String get treatmentFacility => 'Centro de Tratamiento';
-
-  @override
   String get medications => 'Medicamentos';
-
-  @override
-  String get ectPreferences => 'Preferencias de TEC';
-
-  @override
-  String get experimentalStudies => 'Estudios Experimentales';
 
   @override
   String get drugTrials => 'Ensayos Clínicos';
 
   @override
   String get additionalInstructions => 'Instrucciones adicionales';
-
-  @override
-  String get agentDesignation => 'Designación de Agente';
 
   @override
   String get alternateAgent => 'Agente alternativo';
@@ -163,9 +136,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get review => 'Revisar';
-
-  @override
-  String get execution => 'Ejecución';
 
   @override
   String get draft => 'Borrador';
@@ -183,29 +153,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get saveAndExit => 'Guardar y Salir';
 
   @override
-  String get saveAndExitMessage =>
-      'Su progreso en este paso se guardará. Puede regresar para continuar más tarde (solo en Modo Privado).';
-
-  @override
   String get previewPdf => 'Vista Previa del PDF';
-
-  @override
-  String get sharePrint => 'Compartir / Imprimir';
-
-  @override
-  String get generateWalletCard => 'Generar Tarjeta de Billetera';
 
   @override
   String get importFromDocument => 'Importar de Documento';
 
   @override
   String get importFromContacts => 'Importar de Contactos';
-
-  @override
-  String get seeExamples => 'Ver ejemplos';
-
-  @override
-  String get aiSuggest => 'Sugerencia IA';
 
   @override
   String stepNOfTotal(int current, int total) {
@@ -537,16 +491,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get wizardLoading => 'Cargando';
 
   @override
-  String get wizardError => 'Error';
-
-  @override
   String get wizardUnableToLoad => 'No se pudo cargar esta directiva.';
 
   @override
   String get wizardBackToHome => 'Volver al inicio';
-
-  @override
-  String get wizardNotFound => 'No encontrado';
 
   @override
   String get wizardDirectiveNotFound => 'No se encontró la directiva.';
@@ -723,9 +671,6 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get peopleTrustLegendCondition =>
       ' le permite añadir una condición con sus propias palabras.';
-
-  @override
-  String get peopleTrustPrimaryBadge => 'Principal';
 
   @override
   String get peopleTrustAddSomeone => 'Añadir a alguien';
@@ -2445,9 +2390,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get pipelinePleaseWait => 'Espere mientras se procesa…';
-
-  @override
-  String get pipelineBackWizard => 'Asistente';
 
   @override
   String get pipelineBackReview => 'Revisión';
@@ -5138,13 +5080,6 @@ class AppLocalizationsEs extends AppLocalizations {
       'Completar ciudad y estado a partir del código postal';
 
   @override
-  String get mainTheAppCouldnTStart => 'La aplicación no pudo iniciarse';
-
-  @override
-  String get mainPaMentalHealthAdvanceDirective =>
-      'Directiva Anticipada de Salud Mental de PA';
-
-  @override
   String get mainAppTitle => 'Directiva Anticipada de Salud Mental de PA';
 
   @override
@@ -5777,9 +5712,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String exportCardsExpires(Object expirationDate) {
     return 'Vence: $expirationDate';
   }
-
-  @override
-  String get pdfPreviewFit => 'AJUSTAR';
 
   @override
   String pdfPreviewPageOf(Object current, Object pageCount) {

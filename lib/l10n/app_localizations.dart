@@ -98,12 +98,6 @@ abstract class AppLocalizations {
     Locale('es'),
   ];
 
-  /// No description provided for @appTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'PA Mental Health\nAdvance Directive'**
-  String get appTitle;
-
   /// No description provided for @navHome.
   ///
   /// In en, this message translates to:
@@ -164,12 +158,6 @@ abstract class AppLocalizations {
   /// **'SET UP'**
   String get badgeAiSetUp;
 
-  /// No description provided for @newDirective.
-  ///
-  /// In en, this message translates to:
-  /// **'New Directive'**
-  String get newDirective;
-
   /// No description provided for @home.
   ///
   /// In en, this message translates to:
@@ -187,12 +175,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Assistant'**
   String get assistant;
-
-  /// No description provided for @exportDirective.
-  ///
-  /// In en, this message translates to:
-  /// **'Export Directive'**
-  String get exportDirective;
 
   /// No description provided for @cancel.
   ///
@@ -217,12 +199,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Next'**
   String get next;
-
-  /// No description provided for @finish.
-  ///
-  /// In en, this message translates to:
-  /// **'Finish'**
-  String get finish;
 
   /// No description provided for @done.
   ///
@@ -326,12 +302,6 @@ abstract class AppLocalizations {
   /// **'State'**
   String get state;
 
-  /// No description provided for @zipCode.
-  ///
-  /// In en, this message translates to:
-  /// **'ZIP code'**
-  String get zipCode;
-
   /// No description provided for @phone.
   ///
   /// In en, this message translates to:
@@ -344,29 +314,11 @@ abstract class AppLocalizations {
   /// **'Effective condition'**
   String get effectiveCondition;
 
-  /// No description provided for @treatmentFacility.
-  ///
-  /// In en, this message translates to:
-  /// **'Treatment Facility'**
-  String get treatmentFacility;
-
   /// No description provided for @medications.
   ///
   /// In en, this message translates to:
   /// **'Medications'**
   String get medications;
-
-  /// No description provided for @ectPreferences.
-  ///
-  /// In en, this message translates to:
-  /// **'ECT Preferences'**
-  String get ectPreferences;
-
-  /// No description provided for @experimentalStudies.
-  ///
-  /// In en, this message translates to:
-  /// **'Experimental Studies'**
-  String get experimentalStudies;
 
   /// No description provided for @drugTrials.
   ///
@@ -379,12 +331,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Additional instructions'**
   String get additionalInstructions;
-
-  /// No description provided for @agentDesignation.
-  ///
-  /// In en, this message translates to:
-  /// **'Agent Designation'**
-  String get agentDesignation;
 
   /// No description provided for @alternateAgent.
   ///
@@ -409,12 +355,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Review'**
   String get review;
-
-  /// No description provided for @execution.
-  ///
-  /// In en, this message translates to:
-  /// **'Execution'**
-  String get execution;
 
   /// No description provided for @draft.
   ///
@@ -446,29 +386,11 @@ abstract class AppLocalizations {
   /// **'Save & exit'**
   String get saveAndExit;
 
-  /// No description provided for @saveAndExitMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Your work isn’t saved permanently — it stays in this browser only and is wiped when you close the tab (kept about 10 minutes for crash recovery). Export or print to keep a copy.'**
-  String get saveAndExitMessage;
-
   /// No description provided for @previewPdf.
   ///
   /// In en, this message translates to:
   /// **'Preview PDF'**
   String get previewPdf;
-
-  /// No description provided for @sharePrint.
-  ///
-  /// In en, this message translates to:
-  /// **'Share / Print'**
-  String get sharePrint;
-
-  /// No description provided for @generateWalletCard.
-  ///
-  /// In en, this message translates to:
-  /// **'Generate Wallet Card'**
-  String get generateWalletCard;
 
   /// No description provided for @importFromDocument.
   ///
@@ -481,18 +403,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Import from Contacts'**
   String get importFromContacts;
-
-  /// No description provided for @seeExamples.
-  ///
-  /// In en, this message translates to:
-  /// **'See examples'**
-  String get seeExamples;
-
-  /// No description provided for @aiSuggest.
-  ///
-  /// In en, this message translates to:
-  /// **'AI Suggest'**
-  String get aiSuggest;
 
   /// No description provided for @stepNOfTotal.
   ///
@@ -1064,12 +974,6 @@ abstract class AppLocalizations {
   /// **'Loading'**
   String get wizardLoading;
 
-  /// No description provided for @wizardError.
-  ///
-  /// In en, this message translates to:
-  /// **'Error'**
-  String get wizardError;
-
   /// No description provided for @wizardUnableToLoad.
   ///
   /// In en, this message translates to:
@@ -1081,12 +985,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Back to home'**
   String get wizardBackToHome;
-
-  /// No description provided for @wizardNotFound.
-  ///
-  /// In en, this message translates to:
-  /// **'Not found'**
-  String get wizardNotFound;
 
   /// No description provided for @wizardDirectiveNotFound.
   ///
@@ -1387,12 +1285,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **' lets you add a condition in your own words.'**
   String get peopleTrustLegendCondition;
-
-  /// No description provided for @peopleTrustPrimaryBadge.
-  ///
-  /// In en, this message translates to:
-  /// **'Primary'**
-  String get peopleTrustPrimaryBadge;
 
   /// No description provided for @peopleTrustAddSomeone.
   ///
@@ -4231,12 +4123,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please wait while processing…'**
   String get pipelinePleaseWait;
-
-  /// No description provided for @pipelineBackWizard.
-  ///
-  /// In en, this message translates to:
-  /// **'Wizard'**
-  String get pipelineBackWizard;
 
   /// No description provided for @pipelineBackReview.
   ///
@@ -8834,18 +8720,6 @@ abstract class AppLocalizations {
   /// **'Fill city & state from ZIP'**
   String get addressFieldsFillCityStateFromZip;
 
-  /// No description provided for @mainTheAppCouldnTStart.
-  ///
-  /// In en, this message translates to:
-  /// **'The app couldn’t start'**
-  String get mainTheAppCouldnTStart;
-
-  /// No description provided for @mainPaMentalHealthAdvanceDirective.
-  ///
-  /// In en, this message translates to:
-  /// **'PA Mental Health Advance Directive'**
-  String get mainPaMentalHealthAdvanceDirective;
-
   /// No description provided for @mainAppTitle.
   ///
   /// In en, this message translates to:
@@ -9801,12 +9675,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Expires: {expirationDate}'**
   String exportCardsExpires(Object expirationDate);
-
-  /// No description provided for @pdfPreviewFit.
-  ///
-  /// In en, this message translates to:
-  /// **'FIT'**
-  String get pdfPreviewFit;
 
   /// No description provided for @pdfPreviewPageOf.
   ///
