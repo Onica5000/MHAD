@@ -1,6 +1,7 @@
-﻿import 'dart:convert';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/back_link.dart';
 import 'package:mhad/ui/widgets/design/page_hero.dart';
 import 'package:mhad/ui/theme/app_art.dart';
 import 'package:mhad/l10n/l10n.dart';
@@ -23,7 +24,6 @@ import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/design/spot_illustration.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
-import 'package:mhad/ui/widgets/design/wizard_header.dart';
 import 'package:mhad/ui/widgets/friendly_error.dart';
 
 /// AI consistency check (v2 prototype `m-conflict`).
@@ -545,11 +545,7 @@ Return plain-text suggestions (short bullets are fine). No preamble.''';
       // Material AppBar. The editorial "I noticed N things." heading owns the
       // visual title (it duplicated the dropped AppBar title).
       body: Column(children: [
-        WizardHeader(
-          backLabel: context.l10n.back,
-          onBack: () => Navigator.of(context).maybePop(),
-          actionLabel: '',
-        ),
+        const BackLink(),
         Expanded(
           child: _loading
               ? PageLoading(label: context.l10n.aiConsistencyCheckingYourDirective)

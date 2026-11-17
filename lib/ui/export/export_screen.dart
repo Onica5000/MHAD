@@ -1,8 +1,9 @@
-﻿import 'dart:convert';
+import 'dart:convert';
 
 import 'package:archive/archive.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/back_link.dart';
 import 'package:mhad/ui/theme/app_art.dart';
 import 'package:mhad/ui/widgets/design/page_hero.dart';
 import 'package:mhad/l10n/l10n.dart';
@@ -14,7 +15,6 @@ import 'package:mhad/domain/agent_ext.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/router.dart';
-import 'package:mhad/utils/nav_utils.dart';
 import 'package:mhad/ui/export/export_cards.dart';
 import 'package:mhad/ui/export/pdf_preview_screen.dart';
 import 'package:mhad/ui/export/pdf/pdf_generator.dart';
@@ -25,7 +25,6 @@ import 'package:mhad/ui/widgets/design/responsive_shell.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/design/wallet_card.dart';
-import 'package:mhad/ui/widgets/design/wizard_header.dart';
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/services/blank_form_service.dart';
 import 'package:mhad/services/calendar_reminder_service.dart';
@@ -412,11 +411,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       backgroundColor: p.scaffoldBackground,
       body: Column(
         children: [
-          WizardHeader(
-            backLabel: context.l10n.back,
-            onBack: () => safeBack(context),
-            actionLabel: '',
-          ),
+          const BackLink(),
           Expanded(
             child: Center(
               child: Padding(
@@ -920,11 +915,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       body: Column(children: [
         // Wide layout moves Back into the preview's left panel.
         if (!isWide)
-          WizardHeader(
-            backLabel: context.l10n.back,
-            onBack: () => safeBack(context),
-            actionLabel: '',
-          ),
+          const BackLink(),
         Expanded(child: isWide ? _wideLayout(p) : _narrowLayout(p)),
       ]),
     );

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/editorial_heading.dart';
+import 'package:mhad/ui/widgets/design/back_link.dart';
 import 'package:mhad/ui/widgets/rich_content_text.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/l10n/model_labels.dart';
@@ -204,8 +206,19 @@ class _CategoryListScreen extends StatelessWidget {
         .where((s) => s.category == category)
         .toList();
     return Scaffold(
-      appBar: AppBar(title: Text(category.label(context.l10n))),
-      body: sections.isEmpty
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const BackLink(),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 4, 20, 8),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: EditorialHeading(text: category.label(context.l10n)),
+            ),
+          ),
+          Expanded(
+            child: sections.isEmpty
           ? Center(
               child: Text(
                 context.l10n.educationCategoryBrowserNoSectionsInThisCategory,
@@ -218,6 +231,9 @@ class _CategoryListScreen extends StatelessWidget {
               itemBuilder: (context, i) =>
                   SectionTile(section: sections[i]),
             ),
+          ),
+        ],
+      ),
     );
   }
 }

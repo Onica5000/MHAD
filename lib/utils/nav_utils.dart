@@ -1,7 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/ui/router.dart';
-import 'package:mhad/ui/widgets/design/responsive_shell.dart';
 
 /// A Back affordance that never dead-ends on mobile.
 ///
@@ -12,14 +11,12 @@ import 'package:mhad/ui/widgets/design/responsive_shell.dart';
 /// did nothing, stranding the user.
 ///
 /// [safeBack] first tries to pop (works when the screen was `push()`ed). If
-/// there's nothing to pop, it falls back to Home — but ONLY on narrow widths,
-/// where the user would otherwise be stuck. On wide layouts behaviour is
-/// unchanged (pop-only; the WebSidebar is the way back), so the desktop
-/// experience is untouched.
+/// there's nothing to pop, it goes Home — on every width (2026-11 overhaul:
+/// desktop used to do nothing, so a visible "Back" link silently failed on a
+/// page opened from the sidebar or a shared link).
 Future<void> safeBack(BuildContext context) async {
   final nav = Navigator.of(context);
   if (await nav.maybePop()) return;
   if (!context.mounted) return;
-  final isNarrow = MediaQuery.sizeOf(context).width < kWideLayoutBreakpoint;
-  if (isNarrow) context.go(AppRoutes.home);
+  context.go(AppRoutes.home);
 }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/editorial_heading.dart';
+import 'package:mhad/ui/widgets/design/back_link.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/page_hero.dart';
 import 'package:mhad/ui/theme/app_art.dart';
@@ -22,9 +24,9 @@ class PrivacyPolicyScreen extends StatelessWidget {
         ?.copyWith(fontWeight: FontWeight.w600);
 
     return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.privacyPolicyPrivacyPolicy)),
       body: Column(
         children: [
+          const BackLink(),
           Expanded(
             child: SingleChildScrollView(
         padding: DesignTokens.pagePadding,
@@ -33,8 +35,8 @@ class PrivacyPolicyScreen extends StatelessWidget {
           children: [
             PageHero(
               art: AppArt.miscPrivacy,
-              title: Text(context.l10n.privacyPolicyPaMhadAppPrivacyPolicy,
-                  style: headingStyle),
+              title: EditorialHeading(
+                  text: context.l10n.privacyPolicyPaMhadAppPrivacyPolicy),
               lead: context.l10n.privacyPolicyLastUpdated(
                   appData.dateFact('privacyPolicyUpdated'),
                   appData.dateFact('privacyPolicyVersion')),

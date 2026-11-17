@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/back_link.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/page_hero.dart';
 import 'package:mhad/ui/theme/app_art.dart';
@@ -39,10 +40,12 @@ class AudioGuideScreen extends StatelessWidget {
     final p = Theme.of(context).mhadPalette;
     return Scaffold(
       backgroundColor: p.scaffoldBackground,
-      // Slim app bar (back only): the photo header below carries the
-      // title once, large, instead of twice.
-      appBar: AppBar(),
-      body: ListView(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const BackLink(),
+          Expanded(
+            child: ListView(
         padding: DesignTokens.pagePadding,
         children: [
           PageHero(
@@ -147,6 +150,9 @@ class AudioGuideScreen extends StatelessWidget {
               fontStyle: FontStyle.italic, height: MhadType.leadingParagraph,
               color: p.text,
             ),
+          ),
+        ],
+      ),
           ),
         ],
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/back_link.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/rich_content_text.dart';
 import 'package:mhad/l10n/l10n.dart';
@@ -27,12 +28,16 @@ class ArticleDetailScreen extends StatelessWidget {
         ? context.l10n.educationSourceBeyondBooklet
         : context.l10n.educationSourceOfficialBooklet;
     return Scaffold(
-      appBar: AppBar(title: Text(section.title)),
       // A centered ~720px reading column (about 70 characters a line): the
       // article is pushed over Learn's FILL layout, so on a wide monitor the
       // text used to run the whole content width. The scrollbar stays at the
       // window edge because the padding, not a box, centers the column.
-      body: LayoutBuilder(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const BackLink(),
+          Expanded(
+            child: LayoutBuilder(
         builder: (context, box) {
           final side = box.maxWidth > _readingWidth + 40
               ? (box.maxWidth - _readingWidth) / 2
@@ -141,6 +146,9 @@ class ArticleDetailScreen extends StatelessWidget {
         ],
           );
         },
+      ),
+          ),
+        ],
       ),
     );
   }

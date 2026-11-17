@@ -1,6 +1,7 @@
-﻿import 'dart:async';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/back_link.dart';
 import 'package:mhad/ui/widgets/design/page_hero.dart';
 import 'package:mhad/ui/theme/app_art.dart';
 import 'package:mhad/l10n/l10n.dart';
@@ -12,7 +13,6 @@ import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/design/mono_pill.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
-import 'package:mhad/ui/widgets/design/wizard_header.dart';
 
 /// Revocation flow (v2 prototype `m-revoke`, v3 canonical PA statutory
 /// wording).
@@ -124,11 +124,7 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
       // CrisisBar + a thin in-body back row, then the editorial 'Are you
       // sure?' headline. No Material AppBar.
       body: Column(children: [
-        WizardHeader(
-          backLabel: context.l10n.back,
-          onBack: () => Navigator.of(context).maybePop(),
-          actionLabel: '',
-        ),
+        const BackLink(),
         Expanded(child: ListView(
         padding: DesignTokens.pagePadding,
         children: [

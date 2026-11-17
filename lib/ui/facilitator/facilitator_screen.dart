@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/back_link.dart';
 import 'package:mhad/ui/widgets/design/page_hero.dart';
 import 'package:mhad/ui/theme/app_art.dart';
 import 'package:mhad/l10n/l10n.dart';
@@ -6,9 +7,7 @@ import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
-import 'package:mhad/ui/widgets/design/wizard_header.dart';
 import 'package:mhad/utils/launch_utils.dart';
-import 'package:mhad/utils/nav_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/ai/ai_assistant.dart';
@@ -48,11 +47,7 @@ class FacilitatorScreen extends StatelessWidget {
       // alone." 32pt headline owns the visual title.
       body: Column(
         children: [
-          WizardHeader(
-            backLabel: context.l10n.back,
-            onBack: () => safeBack(context),
-            actionLabel: '',
-          ),
+          const BackLink(),
           Expanded(
             child: ListView(
               padding: DesignTokens.pagePadding,

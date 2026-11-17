@@ -1,7 +1,8 @@
-﻿import 'dart:convert';
+import 'dart:convert';
 
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/back_link.dart';
 import 'package:mhad/ui/widgets/design/page_hero.dart';
 import 'package:mhad/ui/theme/app_art.dart';
 import 'package:mhad/l10n/l10n.dart';
@@ -11,7 +12,6 @@ import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
-import 'package:mhad/ui/widgets/design/wizard_header.dart';
 
 /// Crisis plan / wellness toolbox optional add-on (v2 prototype `m-crisisplan`).
 ///
@@ -112,11 +112,7 @@ class _CrisisPlanScreenState extends ConsumerState<CrisisPlanScreen> {
       // + in-body back chevron, then a 38pt editorial heading. No Material
       // AppBar — the "How I know I'm not okay" headline owns the title.
       body: Column(children: [
-        WizardHeader(
-          backLabel: context.l10n.back,
-          onBack: () => Navigator.of(context).maybePop(),
-          actionLabel: '',
-        ),
+        const BackLink(),
         Expanded(child: ListView(
         padding: DesignTokens.pagePadding,
         children: [

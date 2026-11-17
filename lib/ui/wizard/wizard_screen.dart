@@ -2,6 +2,7 @@
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/back_link.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/ai/ai_assistant.dart' show AssistantContext;
@@ -169,8 +170,12 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
       error: (e, _) {
         debugPrint('Error loading directive: $e');
         return Scaffold(
-          appBar: AppBar(title: Text(context.l10n.wizardError)),
-          body: Center(
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const BackLink(),
+              Expanded(
+                child: Center(
             child: Padding(
               padding: const EdgeInsets.all(24),
               child: Column(
@@ -212,13 +217,23 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
               ),
             ),
           ),
+              ),
+            ],
+          ),
         );
       },
       data: (directive) {
         if (directive == null) {
           return Scaffold(
-            appBar: AppBar(title: Text(context.l10n.wizardNotFound)),
-            body: Center(child: Text(context.l10n.wizardDirectiveNotFound)),
+            body: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const BackLink(),
+                Expanded(
+                  child: Center(child: Text(context.l10n.wizardDirectiveNotFound)),
+                ),
+              ],
+            ),
           );
         }
 

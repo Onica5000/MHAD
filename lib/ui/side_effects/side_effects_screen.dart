@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/back_link.dart';
 import 'package:mhad/ui/widgets/design/page_hero.dart';
 import 'package:mhad/ui/theme/app_art.dart';
 import 'package:mhad/l10n/l10n.dart';
@@ -21,7 +22,6 @@ import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
-import 'package:mhad/ui/widgets/design/wizard_header.dart';
 import 'package:mhad/ui/widgets/fda_label_dialog.dart';
 
 /// "Are you experiencing these side effects?" — for the user's CURRENT
@@ -177,11 +177,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
       backgroundColor: p.scaffoldBackground,
       body: Column(
         children: [
-          WizardHeader(
-            backLabel: context.l10n.back,
-            onBack: () => Navigator.of(context).maybePop(),
-            actionLabel: '',
-          ),
+          const BackLink(),
           Expanded(
             child: _loading
                 ? const PageLoading()

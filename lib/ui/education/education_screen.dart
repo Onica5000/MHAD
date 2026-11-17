@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/back_link.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/status_views.dart';
 import 'package:mhad/ui/widgets/design/photo_action_card.dart';
@@ -59,10 +60,19 @@ class _EducationScreenState extends State<EducationScreen> {
     // already lives inside the body widget.
     if (isFiltered) {
       return Scaffold(
-        appBar: AppBar(
-          title: Text(widget.filterTitle ?? context.l10n.educationHelpTitle),
-        ),
-        body: _filteredSections.isEmpty
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const BackLink(),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 4, 20, 8),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: EditorialHeading(text: widget.filterTitle ?? context.l10n.educationHelpTitle),
+              ),
+            ),
+            Expanded(
+              child: _filteredSections.isEmpty
             ? _emptyArt(context.l10n.educationNoResultsFound)
             : ListView.builder(
                 padding: const EdgeInsets.all(12),
@@ -70,6 +80,9 @@ class _EducationScreenState extends State<EducationScreen> {
                 itemBuilder: (context, i) =>
                     SectionTile(section: _filteredSections[i]),
               ),
+            ),
+          ],
+        ),
       );
     }
     final hub = _filteredSections.isEmpty

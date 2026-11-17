@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/back_link.dart';
 import 'package:mhad/ui/widgets/design/page_hero.dart';
 import 'package:mhad/ui/theme/app_art.dart';
 import 'package:mhad/l10n/l10n.dart';
@@ -10,7 +11,6 @@ import 'package:mhad/ui/widgets/design/action_row.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
-import 'package:mhad/ui/widgets/design/wizard_header.dart';
 
 /// "Make it findable in a crisis" — addresses the #1 evidence-based failure
 /// mode for psychiatric advance directives (the "transmitter/receiver problem":
@@ -33,11 +33,7 @@ class MakeItFindableScreen extends ConsumerWidget {
       backgroundColor: p.scaffoldBackground,
       body: Column(
         children: [
-          WizardHeader(
-            backLabel: context.l10n.back,
-            onBack: () => Navigator.of(context).maybePop(),
-            actionLabel: '',
-          ),
+          const BackLink(),
           Expanded(
             child: ListView(
               padding: DesignTokens.pagePadding,

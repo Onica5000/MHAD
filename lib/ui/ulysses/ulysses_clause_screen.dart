@@ -1,5 +1,6 @@
-﻿import 'package:drift/drift.dart' show Value;
+import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/back_link.dart';
 import 'package:mhad/ui/widgets/design/page_hero.dart';
 import 'package:mhad/ui/theme/app_art.dart';
 import 'package:mhad/l10n/l10n.dart';
@@ -11,7 +12,6 @@ import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
-import 'package:mhad/ui/widgets/design/wizard_header.dart';
 
 /// Self-binding ("Ulysses") clause (v2 prototype `m-ulysses`, v3 corrected
 /// framing).
@@ -102,11 +102,7 @@ class _UlyssesClauseScreenState extends ConsumerState<UlyssesClauseScreen> {
       // in-body back chevron. The editorial "If future-me refuses…" header
       // owns the visual title rather than a Material AppBar string.
       body: Column(children: [
-        WizardHeader(
-          backLabel: context.l10n.back,
-          onBack: () => Navigator.of(context).maybePop(),
-          actionLabel: '',
-        ),
+        const BackLink(),
         Expanded(child: _loading
           ? const PageLoading()
           : ListView(

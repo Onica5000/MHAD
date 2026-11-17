@@ -1,6 +1,7 @@
-﻿import 'dart:async';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/back_link.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/page_hero.dart';
 import 'package:mhad/ui/theme/app_art.dart';
@@ -22,7 +23,6 @@ import 'package:mhad/ui/widgets/design/directive_status_style.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/design/mono_pill.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
-import 'package:mhad/ui/widgets/design/wizard_header.dart';
 
 /// Past directive detail (v2 prototype `m-past`).
 ///
@@ -47,11 +47,7 @@ class PastDirectiveDetailScreen extends ConsumerWidget {
       // AppBar.
       body: Column(
         children: [
-          WizardHeader(
-            backLabel: context.l10n.homePastDirectives,
-            onBack: () => Navigator.of(context).maybePop(),
-            actionLabel: '',
-          ),
+          BackLink(label: context.l10n.homePastDirectives),
           Expanded(
             child: directiveAsync.when(
               loading: () => PageLoading(label: context.l10n.pastDirectiveDetailLoadingThisDirective),

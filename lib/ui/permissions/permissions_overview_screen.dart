@@ -1,5 +1,6 @@
-﻿import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/back_link.dart';
 import 'package:mhad/ui/widgets/design/page_hero.dart';
 import 'package:mhad/ui/theme/app_art.dart';
 import 'package:mhad/l10n/l10n.dart';
@@ -7,7 +8,6 @@ import 'package:mhad/ui/widgets/design/design_card.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
-import 'package:mhad/ui/widgets/design/wizard_header.dart';
 import 'package:mhad/utils/platform_utils.dart';
 
 /// In-app privacy & permissions overview.
@@ -38,11 +38,7 @@ class PermissionsOverviewScreen extends StatelessWidget {
       // + in-body back chevron. The 'Only what we need.' 30pt editorial
       // owns the header in the body.
       body: Column(children: [
-        WizardHeader(
-          backLabel: context.l10n.back,
-          onBack: () => Navigator.of(context).maybePop(),
-          actionLabel: '',
-        ),
+        const BackLink(),
         Expanded(child: ListView(
         padding: DesignTokens.pagePadding,
         children: [
