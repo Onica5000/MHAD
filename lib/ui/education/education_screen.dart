@@ -90,7 +90,11 @@ class _EducationScreenState extends State<EducationScreen> {
           // old content-width check only showed the rail from ~1232px.
           final wide =
               MediaQuery.sizeOf(context).width >= kWideLayoutBreakpoint;
-          if (!wide) return hub;
+          // ...and only with room to spare beside the reading column.
+          final showPanel = wide &&
+              c.maxWidth >=
+                  LearnAiPanel.width + LearnAiPanel.minReadingWidth;
+          if (!showPanel) return hub;
           return Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [

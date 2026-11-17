@@ -51,8 +51,12 @@ void main() {
   }
 
   Future<void> pump(WidgetTester tester, Widget step) async {
-    await tester.binding.setSurfaceSize(const Size(1200, 3000));
-    addTearDown(() => tester.binding.setSurfaceSize(null));
+    tester.view.physicalSize = const Size(1200, 3000);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(() {
+      tester.view.resetPhysicalSize();
+      tester.view.resetDevicePixelRatio();
+    });
     await tester.pumpWidget(
       ProviderScope(
         overrides: [appDatabaseProvider.overrideWithValue(db)],
@@ -155,8 +159,12 @@ void main() {
 
     final hangingRepo = _HangingReadRepo(db);
     final key = GlobalKey<State<PersonalInfoStep>>();
-    await tester.binding.setSurfaceSize(const Size(1200, 3000));
-    addTearDown(() => tester.binding.setSurfaceSize(null));
+    tester.view.physicalSize = const Size(1200, 3000);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(() {
+      tester.view.resetPhysicalSize();
+      tester.view.resetDevicePixelRatio();
+    });
     await tester.pumpWidget(
       ProviderScope(
         overrides: [

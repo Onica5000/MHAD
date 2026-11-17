@@ -32,8 +32,12 @@ void main() {
       WidgetTester tester) async {
     // PeopleITrustStep is itself a ListView; give it a tall, bounded surface so
     // every field lays out and is hittable without scrolling.
-    await tester.binding.setSurfaceSize(const Size(1200, 3000));
-    addTearDown(() => tester.binding.setSurfaceSize(null));
+    tester.view.physicalSize = const Size(1200, 3000);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(() {
+      tester.view.resetPhysicalSize();
+      tester.view.resetDevicePixelRatio();
+    });
     final key = GlobalKey<State<PeopleITrustStep>>();
     await tester.pumpWidget(
       ProviderScope(

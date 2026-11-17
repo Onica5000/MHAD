@@ -19,6 +19,15 @@ import 'package:mhad/ui/widgets/ai_consent_dialog.dart';
 class LearnAiPanel extends ConsumerStatefulWidget {
   const LearnAiPanel({super.key});
 
+  /// The panel's fixed width.
+  static const double width = 340;
+
+  /// The panel joins the desktop Learn page only when the reading column
+  /// keeps at least this much beside it (the wizard's AI rail follows the
+  /// same rule): at ~1000-1170px windows it squeezed the article grid
+  /// into tiny tiles. Below that, Ask the AI stays in the sidebar.
+  static const double minReadingWidth = 600;
+
   @override
   ConsumerState<LearnAiPanel> createState() => _LearnAiPanelState();
 }
@@ -92,7 +101,7 @@ class _LearnAiPanelState extends ConsumerState<LearnAiPanel> {
     final hasKey = ref.watch(apiKeyProvider).value?.isNotEmpty ?? false;
 
     return Container(
-      width: 340,
+      width: LearnAiPanel.width,
       decoration: BoxDecoration(
         color: p.card,
         border: Border(left: BorderSide(color: p.border)),

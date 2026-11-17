@@ -865,13 +865,15 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         ),
         // RIGHT — control rail. 360px (was 300): form names wrapped to
         // three lines in the narrower rail.
-        Container(
+        SizedBox(
           width: 360,
-          decoration: BoxDecoration(
+          // A Material surface (not a coloured DecoratedBox): the rail's
+          // ListTiles paint hover/ink on the nearest Material, and a coloured
+          // box above it hid every splash (debug assertion on desktop).
+          child: Material(
             color: p.card,
-            border: Border(left: BorderSide(color: p.border)),
-          ),
-          child: FocusTraversalGroup(
+            shape: Border(left: BorderSide(color: p.border)),
+            child: FocusTraversalGroup(
             child: SingleChildScrollView(
               padding: const EdgeInsets.fromLTRB(20, 22, 20, 40),
               child: Column(
@@ -894,7 +896,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
               ),
             ),
           ),
-        ),
+        )),
       ],
     );
   }

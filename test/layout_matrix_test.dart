@@ -9,6 +9,7 @@ import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/services/disclaimer_service.dart';
 import 'package:mhad/services/onboarding_service.dart';
 import 'package:mhad/services/privacy_mode_service.dart';
+import 'package:mhad/ui/education/learn_ai_panel.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -51,8 +52,16 @@ void main() {
               OnboardingNotifier(initialValue: true),
               PrivacyModeNotifier()..setPublicMode(),
             );
-            await tester.binding.setSurfaceSize(size.value);
-            addTearDown(() => tester.binding.setSurfaceSize(null));
+            // The VIEW size (what MediaQuery reports), not setSurfaceSize:
+            // that only resized the render surface while MediaQuery kept the
+            // 800x600 test default, so every 'desktop' case silently ran the
+            // phone layout.
+            tester.view.physicalSize = size.value;
+            tester.view.devicePixelRatio = 1.0;
+            addTearDown(() {
+              tester.view.resetPhysicalSize();
+              tester.view.resetDevicePixelRatio();
+            });
             final db = AppDatabase(NativeDatabase.memory());
             await tester.pumpWidget(ProviderScope(
               overrides: [appDatabaseProvider.overrideWithValue(db)],
@@ -63,6 +72,13 @@ void main() {
             await tester.pumpAndSettle();
 
             expect(tester.takeException(), isNull);
+            if (route == AppRoutes.education) {
+              // The AI panel only joins Learn with room beside the reading
+              // column (not at the 1000px breakpoint; not on phones).
+              expect(find.byType(LearnAiPanel),
+                  size.key == 'desktop' ? findsOneWidget : findsNothing,
+                  reason: 'Learn AI panel at ${size.key}');
+            }
 
             await tester.pumpWidget(const SizedBox());
             await tester.pump(const Duration(seconds: 1));

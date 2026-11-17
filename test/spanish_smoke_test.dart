@@ -47,8 +47,12 @@ void main() {
           OnboardingNotifier(initialValue: true),
           PrivacyModeNotifier()..setPublicMode(),
         );
-        await tester.binding.setSurfaceSize(size.value);
-        addTearDown(() => tester.binding.setSurfaceSize(null));
+        tester.view.physicalSize = size.value;
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(() {
+          tester.view.resetPhysicalSize();
+          tester.view.resetDevicePixelRatio();
+        });
         final db = AppDatabase(NativeDatabase.memory());
         await tester.pumpWidget(ProviderScope(
           overrides: [appDatabaseProvider.overrideWithValue(db)],
@@ -93,8 +97,12 @@ void main() {
           OnboardingNotifier(initialValue: true),
           PrivacyModeNotifier()..setPublicMode(),
         );
-        await tester.binding.setSurfaceSize(size.value);
-        addTearDown(() => tester.binding.setSurfaceSize(null));
+        tester.view.physicalSize = size.value;
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(() {
+          tester.view.resetPhysicalSize();
+          tester.view.resetDevicePixelRatio();
+        });
         final db = AppDatabase(NativeDatabase.memory());
         final id = (await tester.runAsync(
           () => DirectiveRepository(db).createDirective(FormType.combined),
@@ -123,8 +131,12 @@ void main() {
           OnboardingNotifier(initialValue: gate != 'onboarding'),
           PrivacyModeNotifier()..setPublicMode(),
         );
-        await tester.binding.setSurfaceSize(size.value);
-        addTearDown(() => tester.binding.setSurfaceSize(null));
+        tester.view.physicalSize = size.value;
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(() {
+          tester.view.resetPhysicalSize();
+          tester.view.resetDevicePixelRatio();
+        });
         final db = AppDatabase(NativeDatabase.memory());
         await tester.pumpWidget(ProviderScope(
           overrides: [appDatabaseProvider.overrideWithValue(db)],
@@ -149,8 +161,12 @@ void main() {
       OnboardingNotifier(initialValue: true),
       PrivacyModeNotifier()..setPublicMode(),
     );
-    await tester.binding.setSurfaceSize(const Size(1280, 2400));
-    addTearDown(() => tester.binding.setSurfaceSize(null));
+    tester.view.physicalSize = const Size(1280, 2400);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(() {
+      tester.view.resetPhysicalSize();
+      tester.view.resetDevicePixelRatio();
+    });
     final db = AppDatabase(NativeDatabase.memory());
     await tester.pumpWidget(ProviderScope(
       overrides: [appDatabaseProvider.overrideWithValue(db)],
