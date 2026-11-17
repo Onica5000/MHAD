@@ -77,10 +77,12 @@ bool _routeHidesSidebar(String route) =>
     route == AppRoutes.onboarding;
 
 /// Routes in desktop "focus mode": the 232px sidebar shrinks to a 72px icon
-/// rail so a dense multi-column screen gets the room. The wizard only for now
-/// (review R7 / "cut or defer": /sign and /upload are short single-column
-/// flows, where the compact rail's accessibility cost buys little).
-bool routeUsesFocusMode(String route) => route.startsWith('/wizard/');
+/// rail so a dense multi-column screen gets the room — the wizard (step rail
+/// + form + AI rail) and Export (page thumbnails + PDF preview + options
+/// rail). Not /sign or /upload (review R7 / "cut or defer": short
+/// single-column flows, where the compact rail buys little).
+bool routeUsesFocusMode(String route) =>
+    route.startsWith('/wizard/') || route.startsWith('/export/');
 
 /// Width the desktop shell gives the sidebar on [route]: 0 on the gates,
 /// [WebSidebar.compactWidth] in focus mode, [WebSidebar.width] otherwise.

@@ -3,6 +3,8 @@
 import 'package:archive/archive.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/theme/app_art.dart';
+import 'package:mhad/ui/widgets/design/page_hero.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -474,20 +476,25 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
   Widget _buildUnencryptedBanner() => const ExportUnencryptedBanner();
 
   List<Widget> _buildHeaderChildren(MhadPalette p) => [
-        SectionLabel(context.l10n.pdfPreviewExportShare),
-        EditorialHeading(
-          textSpan: TextSpan(
-            children: [
-              TextSpan(text: context.l10n.exportYourDirective),
-              TextSpan(
-                text: context.l10n.pdfPreviewOnPaper,
-                style: TextStyle(color: p.primary),
-              ),
-            ],
+        // Compact photo header (printed pages + an envelope): the end of the
+        // flow, where the directive goes out into the world.
+        PageHero(
+          art: AppArt.flowExport,
+          eyebrow: context.l10n.pdfPreviewExportShare,
+          title: EditorialHeading(
+            textSpan: TextSpan(
+              children: [
+                TextSpan(text: context.l10n.exportYourDirective),
+                TextSpan(
+                  text: context.l10n.pdfPreviewOnPaper,
+                  style: TextStyle(color: p.primary),
+                ),
+              ],
+            ),
+            size: 36,
+            height: 1.05,
+            letterSpacing: -0.8,
           ),
-          size: 36,
-          height: 1.05,
-          letterSpacing: -0.8,
         ),
         const SizedBox(height: 16),
         if (_isGenerating)
@@ -856,9 +863,10 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
             ),
           ),
         ),
-        // RIGHT — control rail.
+        // RIGHT — control rail. 360px (was 300): form names wrapped to
+        // three lines in the narrower rail.
         Container(
-          width: 300,
+          width: 360,
           decoration: BoxDecoration(
             color: p.card,
             border: Border(left: BorderSide(color: p.border)),

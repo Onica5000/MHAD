@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/utils/date_format.dart';
 
@@ -12,21 +13,19 @@ import 'package:mhad/utils/date_format.dart';
 class ExportLegalDisclaimerCard extends StatelessWidget {
   const ExportLegalDisclaimerCard({super.key});
 
+  // A calm INFO checklist, not an error: nothing went wrong — this is the
+  // normal next step (sign, date, two adult witnesses, hand out copies). The
+  // red error card read as a failure on every export (2026-11 redesign).
+  // Same words; the shared InfoBanner gives the one info style.
   @override
   Widget build(BuildContext context) => Semantics(
         label: context.l10n.exportCardsImportantBeforeSharingEnsureThis,
         container: true,
-        child: Card(
-          color: Theme.of(context).colorScheme.errorContainer,
-          child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Text(
-              context.l10n.exportCardsBeforeSharingEnsureThisDirective,
-              style: TextStyle(
-                fontSize: 12,
-                color: Theme.of(context).colorScheme.onErrorContainer,
-              ),
-            ),
+        child: ExcludeSemantics(
+          child: InfoBanner(
+            icon: Icons.fact_check_outlined,
+            variant: InfoBannerVariant.info,
+            text: context.l10n.exportCardsBeforeSharingEnsureThisDirective,
           ),
         ),
       );
