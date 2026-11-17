@@ -212,7 +212,7 @@ Return only the draft text — no explanation, no quotes, no preamble.''';
                   const SizedBox(height: 4),
                   Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       color: cs.surfaceContainerHighest,
                       borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
@@ -236,7 +236,7 @@ Return only the draft text — no explanation, no quotes, no preamble.''';
                 const SizedBox(height: 4),
                 Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: cs.primaryContainer.withValues(alpha: 0.3),
                     borderRadius: BorderRadius.circular(DesignTokens.radiusSm),

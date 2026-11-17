@@ -44,7 +44,7 @@ class PermissionsOverviewScreen extends StatelessWidget {
           actionLabel: '',
         ),
         Expanded(child: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 14, 20, 32),
+        padding: DesignTokens.pagePadding,
         children: [
           PageHero(
             art: AppArt.miscPrivacy,
@@ -54,7 +54,7 @@ class PermissionsOverviewScreen extends StatelessWidget {
             ),
             lead: context.l10n.permissionsOverviewPaMhadRequestsSystemPermissions,
           ),
-          const SizedBox(height: 18),
+          const SizedBox(height: 20),
           _PermissionCard(
             icon: Icons.fingerprint,
             title: context.l10n.permissionsOverviewBiometricsPasscode,
@@ -132,7 +132,7 @@ class PermissionsOverviewScreen extends StatelessWidget {
             statusLine: context.l10n.permissionsOverviewNotYetWiredFeatureIn,
             statusOk: false,
           ),
-          const SizedBox(height: 18),
+          const SizedBox(height: 20),
           InfoBanner(
             icon: Icons.settings_outlined,
             variant: InfoBannerVariant.info,
@@ -244,7 +244,7 @@ class _PermissionCard extends StatelessWidget {
               color: p.text, height: MhadType.leadingParagraph,
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
           // Promises block — the prototype's "What we use it for" 4-check list.
           Container(
             padding: const EdgeInsets.all(12),
@@ -257,7 +257,7 @@ class _PermissionCard extends StatelessWidget {
               children: [
                 for (final line in promises)
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 3),
+                    padding: const EdgeInsets.symmetric(vertical: 4),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

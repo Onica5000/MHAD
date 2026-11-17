@@ -666,7 +666,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
       Row(
         children: [
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
               color: p.primaryTint,
               borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
@@ -675,7 +675,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(Icons.auto_awesome, size: 11, color: p.primary),
-                const SizedBox(width: 5),
+                const SizedBox(width: 4),
                 Text(
                   context.l10n.reviewAiReadThisPhoto,
                   style: TextStyle(
@@ -718,16 +718,16 @@ extension _PipelineReviewUi on _PipelineScreenState {
       builder: (context, c) {
         final twoPane = c.maxWidth >= 720 && _sourceDocs.isNotEmpty;
         return ListView(
-          padding: const EdgeInsets.fromLTRB(20, 14, 20, 28),
+          padding: DesignTokens.pagePadding,
           children: [
             ...header,
-            const SizedBox(height: 18),
+            const SizedBox(height: 20),
             if (twoPane)
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(flex: 10, child: _sourceThumb(p)),
-                  const SizedBox(width: 18),
+                  const SizedBox(width: 16),
                   Expanded(
                     flex: 14,
                     child: _reviewFieldsPane(p, keys, checkedCount, okText),
@@ -762,7 +762,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
       children: [
         if (_piiStripped.isNotEmpty) ...[
           Container(
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               color: p.primaryTint,
               border: Border.all(color: p.primary.withValues(alpha: 0.2)),
@@ -797,10 +797,10 @@ extension _PipelineReviewUi on _PipelineScreenState {
         ),
         const SizedBox(height: 8),
         _buildReconGroups(p, keys),
-        const SizedBox(height: 14),
+        const SizedBox(height: 16),
         // Privacy reassurance lock-line — matches prototype L2082-2087.
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
           decoration: BoxDecoration(
             color: p.surface,
             border: Border.all(color: p.border),
@@ -884,7 +884,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
           _groupLabel(titles[o]!, p),
           const SizedBox(height: 6),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             decoration: BoxDecoration(
               color: p.card,
               border: Border.all(color: p.border),
@@ -900,7 +900,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
               ],
             ),
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 16),
         ],
       ],
     );

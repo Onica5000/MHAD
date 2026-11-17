@@ -41,12 +41,12 @@ extension _PipelinePickUi on _PipelineScreenState {
                   style: EditorialHeading.styleFor(context, HeadingLevel.page).copyWith(color: p.text),
                 ),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 12),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Icon(Icons.privacy_tip_outlined, size: 15, color: p.textMuted),
-                  const SizedBox(width: 7),
+                  const SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       context.l10n.pickPrivacyNote,
@@ -58,7 +58,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                   ),
                 ],
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 12),
               // Voice path: the read-aloud questionnaire + how-to (printable).
               Align(
                 alignment: Alignment.centerLeft,
@@ -110,9 +110,9 @@ extension _PipelinePickUi on _PipelineScreenState {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 _mobileChooser(p),
-                                const SizedBox(height: 18),
+                                const SizedBox(height: 20),
                                 _mobileTargets(p),
-                                const SizedBox(height: 14),
+                                const SizedBox(height: 16),
                                 _privacyLockLine(p),
                               ],
                             )
@@ -130,7 +130,7 @@ extension _PipelinePickUi on _PipelineScreenState {
               // it persists across navigation into the wizard and back). The AI
               // is only called when the user taps "Read … with AI" in the tray.
               if (kept.isNotEmpty) ...[
-                const SizedBox(height: 22),
+                const SizedBox(height: 24),
                 _pendingDocsTray(p, hasKey, kept),
               ],
               // Skip / Continue footer (standalone only; the modal uses its
@@ -189,7 +189,7 @@ extension _PipelinePickUi on _PipelineScreenState {
   Widget _pendingDocsTray(MhadPalette p, bool hasKey, List<PickedDocument> kept) {
     final n = kept.length;
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: p.card,
         border: Border.all(color: p.border),
@@ -226,12 +226,12 @@ extension _PipelinePickUi on _PipelineScreenState {
           ),
           const SizedBox(height: 6),
           for (final d in kept) _pendingDocRow(p, d),
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Icon(Icons.lock_outline, size: 13, color: p.textMuted),
-              const SizedBox(width: 7),
+              const SizedBox(width: 8),
               Expanded(
                 child: Text(
                   hasKey
@@ -264,7 +264,7 @@ extension _PipelinePickUi on _PipelineScreenState {
   Widget _pendingDocRow(MhadPalette p, PickedDocument d) {
     final size = _humanSize(d.bytes?.length);
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5),
+      padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
         children: [
           Container(
@@ -278,7 +278,7 @@ extension _PipelinePickUi on _PipelineScreenState {
             alignment: Alignment.center,
             child: Icon(_docIcon(d), size: 16, color: p.textMuted),
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 8),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -322,7 +322,7 @@ extension _PipelinePickUi on _PipelineScreenState {
   Widget _noKeyBanner(MhadPalette p) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: p.primaryTint,
         borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
@@ -355,7 +355,7 @@ extension _PipelinePickUi on _PipelineScreenState {
               color: p.textMuted,
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
           FilledButton.icon(
             onPressed: _goAiSetup,
             icon: const Icon(Icons.auto_awesome, size: 16),
@@ -408,7 +408,7 @@ extension _PipelinePickUi on _PipelineScreenState {
               width: _dragOver ? 3 : 2,
             ),
           ),
-          padding: const EdgeInsets.fromLTRB(20, 30, 20, 22),
+          padding: const EdgeInsets.fromLTRB(20, 32, 20, 24),
         child: Column(
           children: [
             Container(
@@ -420,7 +420,7 @@ extension _PipelinePickUi on _PipelineScreenState {
               ),
               child: Icon(Icons.upload_file, size: 28, color: p.onPrimary),
             ),
-            const SizedBox(height: 14),
+            const SizedBox(height: 16),
             Text(
               // Phones can't drag-and-drop files; desktop / PC web can.
               deviceHasCamera
@@ -446,7 +446,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                 color: p.textMuted,
               ),
             ),
-            const SizedBox(height: 18),
+            const SizedBox(height: 20),
             Wrap(
               spacing: 10,
               runSpacing: 8,
@@ -465,9 +465,9 @@ extension _PipelinePickUi on _PipelineScreenState {
                   ),
               ],
             ),
-            const SizedBox(height: 18),
+            const SizedBox(height: 20),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
               decoration: BoxDecoration(
                 color: p.card,
                 border: Border.all(color: p.primaryLight),
@@ -586,7 +586,7 @@ extension _PipelinePickUi on _PipelineScreenState {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Icon(Icons.smartphone_outlined, size: 18, color: p.primary),
-                const SizedBox(width: 10),
+                const SizedBox(width: 8),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -676,7 +676,7 @@ extension _PipelinePickUi on _PipelineScreenState {
       onTap: onTap,
       borderRadius: BorderRadius.circular(DesignTokens.buttonRadius),
       child: Container(
-        padding: const EdgeInsets.fromLTRB(14, 16, 14, 14),
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
         decoration: BoxDecoration(
           color: bg,
           borderRadius: BorderRadius.circular(DesignTokens.buttonRadius),
@@ -695,7 +695,7 @@ extension _PipelinePickUi on _PipelineScreenState {
               ),
               child: Icon(icon, size: 18, color: iconFg ?? fg),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 12),
             Text(
               title,
               style: TextStyle(
@@ -742,7 +742,7 @@ extension _PipelinePickUi on _PipelineScreenState {
             onTap: _browseFiles,
             borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
               decoration: BoxDecoration(
                 color: p.card,
                 border: Border.all(color: p.border),
@@ -759,7 +759,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                     ),
                     child: Icon(t.$1, size: 14, color: p.primary),
                   ),
-                  const SizedBox(width: 10),
+                  const SizedBox(width: 8),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -781,7 +781,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                               const SizedBox(width: 6),
                               Container(
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 5, vertical: 1),
+                                    horizontal: 4, vertical: 1),
                                 decoration: BoxDecoration(
                                   color: p.primaryLight,
                                   borderRadius: BorderRadius.circular(DesignTokens.radiusXs),
@@ -824,7 +824,7 @@ extension _PipelinePickUi on _PipelineScreenState {
   // (WebSnapFillMobile jsx L621-631).
   Widget _privacyLockLine(MhadPalette p) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       decoration: BoxDecoration(
         color: p.surface,
         border: Border.all(color: p.border),
@@ -943,7 +943,7 @@ extension _PipelinePickUi on _PipelineScreenState {
     final name = doc.path.split(RegExp(r'[\\/]')).last;
     final n = _sourceDocs.length;
     return Container(
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: p.card,
         border: Border.all(color: p.border),

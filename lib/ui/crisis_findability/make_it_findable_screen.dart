@@ -40,7 +40,7 @@ class MakeItFindableScreen extends ConsumerWidget {
           ),
           Expanded(
             child: ListView(
-              padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
+              padding: DesignTokens.pagePadding,
               children: [
                 PageHero(
                   art: AppArt.flowFindable,
@@ -48,7 +48,7 @@ class MakeItFindableScreen extends ConsumerWidget {
                   title: EditorialHeading(text: context.l10n.makeItFindableMakeItFindableInA),
                   lead: context.l10n.makeItFindableADirectiveOnlyHelpsIf,
                 ),
-                const SizedBox(height: 18),
+                const SizedBox(height: 20),
                 SectionLabel(context.l10n.makeItFindableDoTheseNow),
                 const SizedBox(height: 8),
                 ActionRow(
@@ -59,7 +59,7 @@ class MakeItFindableScreen extends ConsumerWidget {
                       context.l10n.makeItFindableTheyShouldEachHaveA,
                   onTap: toExport,
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 12),
                 ActionRow(
                   icon: Icons.medical_services_outlined,
                   tone: ActionRowTone.primary,
@@ -68,7 +68,7 @@ class MakeItFindableScreen extends ConsumerWidget {
                       context.l10n.makeItFindableAskYourPsychiatristTherapistPrimary,
                   onTap: toExport,
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 12),
                 ActionRow(
                   icon: Icons.account_balance_wallet_outlined,
                   tone: ActionRowTone.primary,

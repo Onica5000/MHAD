@@ -117,7 +117,7 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Icon(Icons.info_outline, size: 16, color: p.textMuted),
-              const SizedBox(width: 10),
+              const SizedBox(width: 8),
               Expanded(
                 child: Text.rich(
                   TextSpan(
@@ -149,7 +149,7 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
             ],
           ),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 12),
         // A3 / F19: reassure that any correctly-executed document is valid —
         // the PA forms are recommended, not mandatory; content controls.
         Text(
@@ -159,7 +159,7 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
             color: p.textMuted, height: MhadType.leadingParagraph,
           ),
         ),
-        const SizedBox(height: 22),
+        const SizedBox(height: 24),
         _SignStep(
           n: 1,
           title: context.l10n.executionStep1Title,
@@ -190,7 +190,7 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
             children: [
               Icon(Icons.warning_amber_rounded,
                   size: 16, color: warnText),
-              const SizedBox(width: 10),
+              const SizedBox(width: 8),
               Expanded(
                 child: Text.rich(
                   TextSpan(
@@ -214,7 +214,7 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
             ],
           ),
         ),
-        const SizedBox(height: 18),
+        const SizedBox(height: 20),
         SectionLabel(context.l10n.executionInYourPacket),
         const SizedBox(height: 8),
         _PacketRow(
@@ -240,7 +240,7 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
           title: context.l10n.executionPacketAfterTitle,
           sub: context.l10n.executionPacketAfterSub,
         ),
-        const SizedBox(height: 22),
+        const SizedBox(height: 24),
         SizedBox(
           width: double.infinity,
           child: FilledButton.icon(
@@ -332,7 +332,7 @@ class _SignStep extends StatelessWidget {
           const SizedBox(width: 12),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 18, top: 4),
+              padding: const EdgeInsets.only(bottom: 20, top: 4),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -344,7 +344,7 @@ class _SignStep extends StatelessWidget {
                       color: p.text,
                     ),
                   ),
-                  const SizedBox(height: 3),
+                  const SizedBox(height: 4),
                   Text(
                     body,
                     style: TextStyle(
@@ -376,7 +376,7 @@ class _PacketRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
         color: p.card,
         border: Border.all(color: p.border),

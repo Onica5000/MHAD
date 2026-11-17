@@ -66,7 +66,7 @@ class ActiveDirectiveHero extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(18),
+                padding: const EdgeInsets.all(20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -74,7 +74,7 @@ class ActiveDirectiveHero extends StatelessWidget {
                       children: [
                         Container(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 3),
+                              horizontal: 8, vertical: 4),
                           decoration: BoxDecoration(
                             color: p.onPrimary.withValues(alpha: 0.18),
                             borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
@@ -115,7 +115,7 @@ class ActiveDirectiveHero extends StatelessWidget {
                         color: p.onPrimary.withValues(alpha: 0.85),
                       ),
                     ),
-                    const SizedBox(height: 14),
+                    const SizedBox(height: 16),
                     ClipRRect(
                       borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
                       child: SizedBox(
@@ -129,7 +129,7 @@ class ActiveDirectiveHero extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 12),
                     Row(
                       children: [
                         Expanded(
@@ -152,7 +152,7 @@ class ActiveDirectiveHero extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 14),
+                    const SizedBox(height: 16),
                     SizedBox(
                       height: 40,
                       child: FilledButton.icon(
@@ -171,7 +171,7 @@ class ActiveDirectiveHero extends StatelessWidget {
                           backgroundColor: Colors.white,
                           iconAlignment: IconAlignment.end,
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 14),
+                              horizontal: 16),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
                           ),

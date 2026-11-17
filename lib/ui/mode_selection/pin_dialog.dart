@@ -245,7 +245,7 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
       backgroundColor: p.scaffoldBackground,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(28, 24, 28, 24),
+          padding: const EdgeInsets.fromLTRB(32, 24, 32, 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -267,7 +267,7 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
                       style: MhadText.serifAccent(context, size: 20, color: p.onPrimary),
                     ),
                   ),
-                  const SizedBox(width: 10),
+                  const SizedBox(width: 8),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -371,7 +371,7 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
                 Center(
                   child: Container(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 4),
+                        horizontal: 12, vertical: 4),
                     decoration: BoxDecoration(
                       color: _verifying
                           ? p.primaryTint
@@ -414,7 +414,7 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
                     ),
                   ),
                 ),
-              const SizedBox(height: 18),
+              const SizedBox(height: 20),
               TextField(
                 controller: _controller,
                 obscureText: _obscure,
@@ -460,14 +460,14 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
                 onSubmitted: (_) => _submit(),
               ),
               if (_error != null) ...[
-                const SizedBox(height: 10),
+                const SizedBox(height: 12),
                 Text(
                   _error!,
                   textAlign: TextAlign.center,
                   style: TextStyle(color: cs.error, fontSize: 14),
                 ),
               ],
-              const SizedBox(height: 18),
+              const SizedBox(height: 20),
               SizedBox(
                 width: double.infinity,
                 child: FilledButton(

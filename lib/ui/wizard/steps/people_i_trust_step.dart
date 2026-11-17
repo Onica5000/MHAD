@@ -51,7 +51,7 @@ class _PeopleITrustStepState extends ConsumerState<PeopleITrustStep>
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
     return ListView(
-      padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+      padding: DesignTokens.pagePadding,
       children: [
         _AgentCard(
           directiveId: widget.directiveId,
@@ -108,7 +108,7 @@ class _PeopleITrustStepState extends ConsumerState<PeopleITrustStep>
           directiveId: widget.directiveId,
           embedded: true,
         ),
-        const SizedBox(height: 14),
+        const SizedBox(height: 16),
         Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
@@ -120,7 +120,7 @@ class _PeopleITrustStepState extends ConsumerState<PeopleITrustStep>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Icon(Icons.info_outline, size: 16, color: p.textMuted),
-              const SizedBox(width: 10),
+              const SizedBox(width: 8),
               Expanded(
                 child: Text.rich(
                   TextSpan(
@@ -247,7 +247,7 @@ class _AgentCardState extends ConsumerState<_AgentCard> {
             ),
             borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
           ),
-          padding: const EdgeInsets.all(14),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -286,7 +286,7 @@ class _AgentCardState extends ConsumerState<_AgentCard> {
                           : Icon(Icons.add,
                               size: 18, color: p.textMuted),
                     ),
-                    const SizedBox(width: 10),
+                    const SizedBox(width: 8),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -435,7 +435,7 @@ class _StatusChip extends StatelessWidget {
         : p.surface;
     final fg = ok ? okText : p.textMuted;
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       decoration: BoxDecoration(
         color: bg,
         border: Border.all(color: ok ? fg.withValues(alpha: 0.2) : p.border),
@@ -446,7 +446,7 @@ class _StatusChip extends StatelessWidget {
         children: [
           Icon(ok ? Icons.check : Icons.remove,
               size: 12, color: fg),
-          const SizedBox(width: 5),
+          const SizedBox(width: 4),
           Text(
             label,
             style: TextStyle(

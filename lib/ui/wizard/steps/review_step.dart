@@ -397,7 +397,7 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
           );
         }),
 
-        const SizedBox(height: 18),
+        const SizedBox(height: 20),
         // Opt-in review (moved here from Settings). Built-in rules flag
         // cross-step contradictions; when the AI is set up it adds an optional
         // AI review (gaps + things to double-check) on the same screen.
@@ -453,7 +453,7 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
             ],
           ),
         ),
-        const SizedBox(height: 80),
+        const SizedBox(height: 64),
       ],
     );
   }
@@ -504,7 +504,7 @@ class _ReviewRow extends StatelessWidget {
           borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
           border: Border.all(color: p.border),
         ),
-        padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -554,7 +554,7 @@ class _ReviewRow extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(width: 10),
+            const SizedBox(width: 8),
             // Per-row ok / needs-attention indicator.
             Padding(
               padding: const EdgeInsets.only(top: 2),
@@ -667,7 +667,7 @@ class _CalloutCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
         border: Border.all(color: border),
       ),
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(16),
       child: icon == null
           ? body0
           : Row(

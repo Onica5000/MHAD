@@ -46,9 +46,9 @@ class WebDashboardLanding extends ConsumerWidget {
     final p = Theme.of(context).mhadPalette;
 
     return ListView(
-      padding: const EdgeInsets.fromLTRB(40, 32, 40, 60),
+      padding: const EdgeInsets.fromLTRB(40, 32, 40, 64),
       children: [
-        if (isPublic) ...[_AnonBanner(), const SizedBox(height: 22)],
+        if (isPublic) ...[_AnonBanner(), const SizedBox(height: 24)],
 
         // ── Hero: headline + the Home photo (two people walking a path at
         //    sunrise — planning ahead, together). Above the form choice,
@@ -76,7 +76,7 @@ class WebDashboardLanding extends ConsumerWidget {
         // ── Form choice (reusable — also shown on the returning dashboard so
         //    "Start a new directive" lands on the same picker) ──────────────
         const DirectiveFormChoice(),
-        const SizedBox(height: 22),
+        const SizedBox(height: 24),
 
         // ── Other ways to start: one row of three equal photo cards. It
         //    replaces the lone "Print a blank form" card (which left half the
@@ -114,7 +114,7 @@ class WebDashboardLanding extends ConsumerWidget {
             ),
           ],
         ),
-        const SizedBox(height: 28),
+        const SizedBox(height: 32),
 
         // ── Privacy promise + booklet quote ──────────────────────────────
         // Both cards shrink-wrap (their Columns are mainAxisSize.min) so the
@@ -170,7 +170,7 @@ class _AnonBanner extends StatelessWidget {
             ),
             child: Icon(Icons.lock_outline, size: 16, color: p.onPrimary),
           ),
-          const SizedBox(width: 14),
+          const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -194,7 +194,7 @@ class _AnonBanner extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 8),
           // "HOW THIS WORKS →" link (artboard WebDashboard anon banner) →
           // the privacy policy, which explains the anonymous / nothing-saved
           // model in full.
@@ -248,7 +248,7 @@ class _PrivacyPromiseCard extends StatelessWidget {
       ),
     ];
     return Container(
-      padding: const EdgeInsets.fromLTRB(20, 18, 20, 18),
+      padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
       decoration: BoxDecoration(
         color: p.card,
         border: Border.all(color: p.border),
@@ -265,7 +265,7 @@ class _PrivacyPromiseCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(child: _PromiseItem(row: rows[0])),
-              const SizedBox(width: 10),
+              const SizedBox(width: 8),
               Expanded(child: _PromiseItem(row: rows[1])),
             ],
           ),
@@ -274,7 +274,7 @@ class _PrivacyPromiseCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(child: _PromiseItem(row: rows[2])),
-              const SizedBox(width: 10),
+              const SizedBox(width: 8),
               Expanded(child: _PromiseItem(row: rows[3])),
             ],
           ),
@@ -305,7 +305,7 @@ class _PromiseItem extends StatelessWidget {
           ),
           child: Icon(icon, size: 14, color: p.primary),
         ),
-        const SizedBox(width: 10),
+        const SizedBox(width: 8),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -344,7 +344,7 @@ class _BookletQuoteCard extends StatelessWidget {
     final p = Theme.of(context).mhadPalette;
     return Container(
           width: double.infinity,
-          padding: const EdgeInsets.fromLTRB(20, 18, 20, 18),
+          padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
           decoration: BoxDecoration(
             color: p.primaryTint,
             border: Border.all(color: p.primaryLight),

@@ -869,7 +869,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
             shape: Border(left: BorderSide(color: p.border)),
             child: FocusTraversalGroup(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(20, 22, 20, 40),
+              padding: DesignTokens.pagePadding,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -896,7 +896,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
   }
 
   Widget _narrowLayout(MhadPalette p) => ListView(
-        padding: const EdgeInsets.fromLTRB(20, 4, 20, 16),
+        padding: DesignTokens.pagePadding,
         children: [
           ..._buildHeaderChildren(p),
           ..._buildDocumentChildren(),

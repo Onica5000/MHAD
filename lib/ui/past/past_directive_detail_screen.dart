@@ -146,14 +146,14 @@ class _Body extends ConsumerWidget {
     final statusColor = directiveStatusColor(directive.status, dark: dark);
 
     return ListView(
-      padding: const EdgeInsets.fromLTRB(20, 14, 20, 32),
+      padding: DesignTokens.pagePadding,
       children: [
         MonoPill(
           label: status,
           foreground: statusColor,
           background: statusColor.withValues(alpha: 0.15),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 12),
         // Editorial title — prototype uses "Directive · <YEAR>" with the
         // year in primary color. Year comes from executionDate if set,
         // otherwise createdAt as a fallback. When the user's stored name
@@ -200,7 +200,7 @@ class _Body extends ConsumerWidget {
         else
           Card(
             child: Padding(
-              padding: const EdgeInsets.all(14),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -318,7 +318,7 @@ class _DocPreviewCard extends ConsumerWidget {
         }
 
         return DesignCard(
-          padding: const EdgeInsets.all(14),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -326,7 +326,7 @@ class _DocPreviewCard extends ConsumerWidget {
                 children: [
                   Icon(Icons.description_outlined,
                       size: 20, color: p.textMuted),
-                  const SizedBox(width: 10),
+                  const SizedBox(width: 8),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -365,11 +365,11 @@ class _DocPreviewCard extends ConsumerWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 12),
               // Dashed-style divider — drawn as a custom painted line
               // since Flutter has no built-in dashed Divider widget.
               DashedDivider(color: p.border),
-              const SizedBox(height: 10),
+              const SizedBox(height: 12),
               Row(
                 children: [
                   Expanded(child: _SigCol(label: context.l10n.pastDirectiveDetailSignedBy, value: principal)),

@@ -270,7 +270,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
         children: [
           Expanded(
             child: ListView(
-        padding: const EdgeInsets.all(20),
+        padding: DesignTokens.pagePadding,
         children: [
           PageHero(
             art: AppArt.aiSetup,
@@ -285,13 +285,13 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
             Card(
               color: cs.tertiaryContainer,
               child: Padding(
-                padding: const EdgeInsets.all(14),
+                padding: const EdgeInsets.all(16),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Icon(Icons.info_outline,
                         size: 20, color: cs.onTertiaryContainer),
-                    const SizedBox(width: 10),
+                    const SizedBox(width: 8),
                     Expanded(
                       child: Text(
                         context.l10n.aiSetupYourApiKeyWillNot,
@@ -321,13 +321,13 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
             Card(
               color: cs.errorContainer,
               child: Padding(
-                padding: const EdgeInsets.all(14),
+                padding: const EdgeInsets.all(16),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Icon(Icons.public_off,
                         size: 20, color: cs.onErrorContainer),
-                    const SizedBox(width: 10),
+                    const SizedBox(width: 8),
                     Expanded(
                       child: Text(
                         context.l10n.aiSetupMayBeBlockedByYour(_provider.label),
@@ -366,7 +366,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
           Card(
             color: cs.errorContainer,
             child: Padding(
-              padding: const EdgeInsets.all(14),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -393,7 +393,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                     style: TextStyle(
                         fontSize: 14, color: cs.onErrorContainer, height: MhadType.leadingParagraph),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 12),
                   _BrowserShortcut(
                     browser: 'Chrome',
                     shortcut: 'Ctrl + Shift + N',
@@ -612,7 +612,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
           Card(
             color: cs.errorContainer,
             child: Padding(
-              padding: const EdgeInsets.all(14),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -643,7 +643,7 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
           Card(
             color: cs.surfaceContainerHighest,
             child: Padding(
-              padding: const EdgeInsets.all(14),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -737,7 +737,7 @@ class _ProviderModelPicker extends StatelessWidget {
     return Card(
       color: cs.surfaceContainerHighest,
       child: Padding(
-        padding: const EdgeInsets.all(14),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -801,7 +801,7 @@ class _StepTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
     return Padding(
-      padding: const EdgeInsets.only(bottom: 14),
+      padding: const EdgeInsets.only(bottom: 16),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

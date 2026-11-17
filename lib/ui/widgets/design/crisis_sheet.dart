@@ -54,7 +54,7 @@ class _CrisisSheet extends StatelessWidget {
           top: false,
           child: ListView(
             controller: scrollController,
-            padding: const EdgeInsets.fromLTRB(20, 14, 20, 24),
+            padding: DesignTokens.pagePadding,
             children: [
               Center(
                 child: Container(
@@ -66,7 +66,7 @@ class _CrisisSheet extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 14),
+              const SizedBox(height: 16),
               Row(
                 children: [
                   Container(
@@ -100,7 +100,7 @@ class _CrisisSheet extends StatelessWidget {
                   color: p.textMuted, height: MhadType.leadingParagraph,
                 ),
               ),
-              const SizedBox(height: 18),
+              const SizedBox(height: 20),
               _CrisisRow(
                 name: '988 Suicide & Crisis Lifeline',
                 detail: context.l10n.crisisSheetCallOrText988,
@@ -149,12 +149,12 @@ class _CrisisSheet extends StatelessWidget {
                 onTap: () => _launch(context, 'tel:${appData.phoneOf('trevorProject')}',
                     copyValue: appData.phoneOf('trevorProject')),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 12),
               // Immediate-danger callout (artboard WebCrisis). 911 is the right
               // escalation when someone is in physical danger right now — kept
               // visually distinct from the 24/7 support lines above.
               const _Emergency911Callout(),
-              const SizedBox(height: 10),
+              const SizedBox(height: 12),
               SectionLabel(context.l10n.crisisSheetWhyTheseNumbers),
               const SizedBox(height: 4),
               Text(
@@ -203,7 +203,7 @@ class _Emergency911Callout extends StatelessWidget {
           child: Row(
             children: [
               Icon(Icons.favorite, size: 18, color: p.primary),
-              const SizedBox(width: 10),
+              const SizedBox(width: 8),
               Expanded(
                 child: Text.rich(
                   TextSpan(
@@ -282,7 +282,7 @@ class _CrisisRow extends StatelessWidget {
           autofocus: autofocus,
           borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
               border: Border.all(color: border),

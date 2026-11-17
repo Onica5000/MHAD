@@ -127,7 +127,7 @@ class WalletCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 14),
+                  const SizedBox(height: 16),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -143,7 +143,7 @@ class WalletCard extends StatelessWidget {
                           color: p.onPrimary,
                         ),
                       ),
-                      const SizedBox(width: 10),
+                      const SizedBox(width: 8),
                       _walletKeyValue(
                         context,
                         label: context.l10n.walletCardExp,

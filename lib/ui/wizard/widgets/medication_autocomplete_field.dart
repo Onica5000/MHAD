@@ -182,7 +182,7 @@ class _MedicationAutocompleteFieldState
                               color: i == _highlighted
                                   ? cs.primaryContainer.withValues(alpha: 0.5)
                                   : null,
-                              padding: const EdgeInsets.fromLTRB(12, 10, 12, 4),
+                              padding: const EdgeInsets.fromLTRB(12, 12, 12, 4),
                               child: Row(
                                 children: [
                                   Icon(Icons.medication,
@@ -198,7 +198,7 @@ class _MedicationAutocompleteFieldState
                                       message: context.l10n.medAutoNtiTooltip,
                                       child: Container(
                                         padding: const EdgeInsets.symmetric(
-                                            horizontal: 5, vertical: 1),
+                                            horizontal: 4, vertical: 1),
                                         decoration: BoxDecoration(
                                           color: cs.tertiaryContainer,
                                           borderRadius:
@@ -221,7 +221,7 @@ class _MedicationAutocompleteFieldState
                         if (widget.showStrengths && med.strengths.isNotEmpty)
                           Padding(
                             padding:
-                                const EdgeInsets.fromLTRB(36, 0, 12, 8),
+                                const EdgeInsets.fromLTRB(40, 0, 12, 8),
                             child: Wrap(
                               spacing: 6,
                               runSpacing: 4,

@@ -229,7 +229,7 @@ class _ConsentChoiceStepState extends ConsumerState<ConsentChoiceStep>
               color: p.textMuted, height: MhadType.leadingParagraph,
             ),
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 16),
           InfoBanner(
             icon: Icons.gavel_outlined,
             variant: InfoBannerVariant.warning,

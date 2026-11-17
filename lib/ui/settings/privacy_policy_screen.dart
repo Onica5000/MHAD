@@ -27,7 +27,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
         children: [
           Expanded(
             child: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
+        padding: DesignTokens.pagePadding,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

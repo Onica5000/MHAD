@@ -42,7 +42,7 @@ class AccessibilitySettingsScreen extends ConsumerWidget {
           actionLabel: '',
         ),
         Expanded(child: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
+        padding: DesignTokens.pagePadding,
         children: [
           PageHero(
             art: AppArt.miscAccessibility,
@@ -53,14 +53,14 @@ class AccessibilitySettingsScreen extends ConsumerWidget {
           ),
 
 
-          const SizedBox(height: 18),
+          const SizedBox(height: 20),
           _TextSizeCard(
             value: settings.textScale,
             onChanged: (v) => ref
                 .read(accessibilitySettingsProvider.notifier)
                 .setTextScale(v),
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 16),
 
           _SectionHeader(context.l10n.accessibilitySettingsSectionReading),
           _ToggleRow(
@@ -96,10 +96,10 @@ class AccessibilitySettingsScreen extends ConsumerWidget {
                 .setHighContrast(v),
           ),
 
-          const SizedBox(height: 14),
+          const SizedBox(height: 16),
           _SectionHeader(context.l10n.accessibilitySettingsSectionLanguage),
           const LanguageToggle(),
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
           InfoBanner(
             icon: Icons.info_outline,
             variant: InfoBannerVariant.info,
@@ -107,7 +107,7 @@ class AccessibilitySettingsScreen extends ConsumerWidget {
                 context.l10n.accessibilitySettingsLegalTextIsAlwaysRendered,
           ),
           if (settings.languageCode == 'es') ...[
-            const SizedBox(height: 10),
+            const SizedBox(height: 12),
             InfoBanner(
               icon: Icons.translate,
               variant: InfoBannerVariant.warning,
@@ -115,7 +115,7 @@ class AccessibilitySettingsScreen extends ConsumerWidget {
             ),
           ],
 
-          const SizedBox(height: 18),
+          const SizedBox(height: 20),
           // Read it aloud with your browser or device — see the in-app guide.
           _ToggleRow(
             title: context.l10n.accessibilitySettingsReadAloud,
@@ -133,7 +133,7 @@ class AccessibilitySettingsScreen extends ConsumerWidget {
             ),
           ),
 
-          const SizedBox(height: 18),
+          const SizedBox(height: 20),
           OutlinedButton.icon(
             onPressed: () => ref
                 .read(accessibilitySettingsProvider.notifier)
@@ -206,7 +206,7 @@ class _GuideItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.only(bottom: 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -226,7 +226,7 @@ class _SectionHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 14, 0, 6),
+      padding: const EdgeInsets.fromLTRB(0, 16, 0, 6),
       child: SectionLabel(text),
     );
   }
@@ -247,7 +247,7 @@ class _TextSizeCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SectionLabel(context.l10n.accessibilitySettingsTextSize),
-            const SizedBox(height: 10),
+            const SizedBox(height: 12),
             Text(
               context.l10n.accessibilitySettingsPeopleWhoITrustWill,
               style: TextStyle(
@@ -255,7 +255,7 @@ class _TextSizeCard extends StatelessWidget {
                 color: p.text, height: MhadType.leadingParagraph,
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 12),
             Row(
               children: [
                 const Text('A',

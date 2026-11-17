@@ -285,11 +285,11 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
         border: Border.all(color: active ? p.primary : p.border, width: 1.5),
         borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       child: Row(
         children: [
           Icon(Icons.search, size: 18, color: p.textMuted),
-          const SizedBox(width: 10),
+          const SizedBox(width: 8),
           Expanded(
             child: TextField(
               controller: _searchCtrl,
@@ -345,7 +345,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
           else
             // ICD-10 mono badge pill
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
               decoration: BoxDecoration(
                 color: p.primaryTint,
                 borderRadius: BorderRadius.circular(DesignTokens.radiusXs),
@@ -381,7 +381,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
           children: [
             Container(
               margin: const EdgeInsets.only(top: 1),
-              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
               decoration: BoxDecoration(
                 color: p.card,
                 border: Border.all(color: p.primaryLight),
@@ -398,7 +398,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                 ),
               ),
             ),
-            const SizedBox(width: 10),
+            const SizedBox(width: 8),
             Expanded(
               child: Text(
                 c.name,
@@ -771,7 +771,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Icon(Icons.auto_awesome, size: 16, color: p.primary),
-                  const SizedBox(width: 10),
+                  const SizedBox(width: 8),
                   Expanded(
                     child: Text.rich(
                       TextSpan(
@@ -920,7 +920,7 @@ class _DescribeConditionDialogState extends State<_DescribeConditionDialog> {
                 hintText: l10n.diagnosesDescribeHint,
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 12),
             Align(
               alignment: Alignment.centerRight,
               child: FilledButton.icon(
@@ -986,7 +986,7 @@ class _DescribeConditionDialogState extends State<_DescribeConditionDialog> {
           children: [
             Container(
               margin: const EdgeInsets.only(top: 1),
-              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
               decoration: BoxDecoration(
                 color: cs.surfaceContainerHighest,
                 borderRadius: BorderRadius.circular(DesignTokens.radiusXs),
@@ -1000,7 +1000,7 @@ class _DescribeConditionDialogState extends State<_DescribeConditionDialog> {
                 ),
               ),
             ),
-            const SizedBox(width: 10),
+            const SizedBox(width: 8),
             Expanded(
               child: Text(
                 c.name,

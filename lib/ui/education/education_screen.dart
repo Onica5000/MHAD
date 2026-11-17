@@ -152,7 +152,7 @@ class _EditorialLearnHub extends StatelessWidget {
     final grid = _gridSections();
 
     return ListView(
-      padding: const EdgeInsets.fromLTRB(20, 8, 20, 28),
+      padding: DesignTokens.pagePadding,
       children: [
         // Hero: the Learn photo (a reading nook) beside the headline on wide
         // screens, a banner above it on phones.
@@ -214,7 +214,7 @@ class _EditorialLearnHub extends StatelessWidget {
                 // floor it; padding adds breathing room beyond).
                 constraints: const BoxConstraints(minHeight: 48),
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 14,
+                  horizontal: 16,
                   vertical: 12,
                 ),
                 decoration: BoxDecoration(
@@ -224,7 +224,7 @@ class _EditorialLearnHub extends StatelessWidget {
                 child: Row(
                   children: [
                     Icon(Icons.search, size: 16, color: p.textMuted),
-                    const SizedBox(width: 10),
+                    const SizedBox(width: 8),
                     // Expanded + ellipsis: the Spanish hint overflowed a
                     // phone-width pill by 95px.
                     Expanded(
@@ -250,7 +250,7 @@ class _EditorialLearnHub extends StatelessWidget {
         // grid tile below).
         Container(
           width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           decoration: BoxDecoration(
             color: p.primaryTint,
             border: Border.all(color: p.primary.withValues(alpha: 0.15)),
@@ -270,7 +270,7 @@ class _EditorialLearnHub extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: 18),
+        const SizedBox(height: 20),
         // 2-column grid for the remaining sections — built as a Wrap
         // of FixedExtentColumns instead of GridView so the children
         // size naturally to their content (the prototype's cards are
@@ -312,7 +312,7 @@ class _EditorialLearnHub extends StatelessWidget {
             );
           },
         ),
-        const SizedBox(height: 22),
+        const SizedBox(height: 24),
         // Comprehensive topic index — moved BELOW the grid (UX audit C4):
         // the pills are the hub's primary organizer for quick filtering;
         // this 8-way per-category index is the deep browse, so it no longer
@@ -320,13 +320,13 @@ class _EditorialLearnHub extends StatelessWidget {
         SectionLabel(context.l10n.educationBrowseAllTopics),
         const SizedBox(height: 8),
         const BrowseByTopic(),
-        const SizedBox(height: 18),
+        const SizedBox(height: 20),
         // Full-width editorial pull-quote, centered. (The "Read the booklet"
         // CTA was removed — the topic index + tabs above already lead into the
         // booklet content.)
         Container(
           width: double.infinity,
-          padding: const EdgeInsets.fromLTRB(20, 18, 20, 16),
+          padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
           decoration: BoxDecoration(
             color: p.primaryTint,
             border: Border.all(color: p.primary.withValues(alpha: 0.15)),
@@ -378,7 +378,7 @@ class _CategoryPill extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           decoration: BoxDecoration(
             border: Border.all(color: active ? p.primary : p.border),
             borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
@@ -434,7 +434,7 @@ class _GridCard extends StatelessWidget {
         ),
         borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
         child: Container(
-          padding: const EdgeInsets.all(14),
+          padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             border: Border.all(color: p.border),
             borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
@@ -456,7 +456,7 @@ class _GridCard extends StatelessWidget {
                   color: p.primary,
                 ),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 12),
               Text(
                 section.title,
                 maxLines: 3,

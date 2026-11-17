@@ -67,7 +67,7 @@ class WizardBottomBar extends StatelessWidget {
                     // Guarantee a 48px tap target (accessibility) for the
                     // mobile Back action.
                     minimumSize: const Size(0, 48),
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                   ),
                   child: Text(
                     secondaryLabel!,
@@ -100,7 +100,7 @@ class WizardBottomBar extends StatelessWidget {
                 style: FilledButton.styleFrom(
                   iconAlignment: IconAlignment.end,
                   minimumSize: Size(0, DesignTokens.buttonHeightMd),
-                  padding: const EdgeInsets.symmetric(horizontal: 22),
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
                 ),
               ),
             ],

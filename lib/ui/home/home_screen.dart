@@ -126,7 +126,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             final list = ListView(
           // The persistent bottom nav now reserves its own space (rendered by
           // ResponsiveShell below this screen), so no extra bottom gap is needed.
-          padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
+          padding: DesignTokens.pagePadding,
           children: [
             const _DeviceSecurityCheck(),
             SectionLabel(dateLabel),
@@ -159,7 +159,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 22),
+                    const SizedBox(height: 24),
                     // Start-a-new-directive picker (the form-type page was
                     // retired — picking happens on the dashboard now).
                     SectionLabel(directives.isEmpty
@@ -168,7 +168,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     const SizedBox(height: 12),
                     const DirectiveFormChoice(),
                     if (drafts.isNotEmpty) ...[
-                      const SizedBox(height: 28),
+                      const SizedBox(height: 32),
                       // "Continue where you left off" sits BELOW the form
                       // picker (under "You can switch form types later").
                       ActiveDirectiveHero(directive: drafts.first),
@@ -193,12 +193,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
             // Tools — inline on narrow; relocated to the right sidebar on wide.
             if (!isWide) ...[
-              const SizedBox(height: 22),
+              const SizedBox(height: 24),
               SectionLabel(context.l10n.homeTools),
               const SizedBox(height: 8),
               const ToolsGrid(),
             ],
-            const SizedBox(height: 18),
+            const SizedBox(height: 20),
             // Past directives — completed / expired / revoked rendered as
             // compact tiles matching prototype L326-334. The active draft
             // is intentionally excluded (it lives in the hero above). When
@@ -335,7 +335,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   onRename: () => _renameDirective(context, ref, d),
                 ),
               ],
-              const SizedBox(height: 28),
+              const SizedBox(height: 32),
               newDirective,
             ],
           );
@@ -344,7 +344,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         }
 
         return ListView(
-          padding: const EdgeInsets.fromLTRB(40, 20, 40, 60),
+          padding: const EdgeInsets.fromLTRB(40, 20, 40, 64),
           children: [
             const _DeviceSecurityCheck(),
             // "Private by design" moved to the very top, replacing the
@@ -355,7 +355,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             const SizedBox(height: 16),
             SectionLabel(dateLabel),
             _GreetingRow(directives: directives, isPublic: isPublic),
-            const SizedBox(height: 28),
+            const SizedBox(height: 32),
             // Primary action column, now full width.
             primary,
             // "Make it findable" was previously narrow-only (the ToolsGrid)
@@ -372,7 +372,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               return <Widget>[
                 const SizedBox(height: 16),
                 DesignCard(
-                  padding: const EdgeInsets.all(14),
+                  padding: const EdgeInsets.all(16),
                   onTap: () =>
                       context.push(AppRoutes.findableRoute(mostRecent.id)),
                   child: Row(
@@ -410,9 +410,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             })(),
             // Past directives — 2-column grid filling the full width.
             if (past.isNotEmpty) ...[
-              const SizedBox(height: 28),
+              const SizedBox(height: 32),
               SectionLabel(context.l10n.homePastDirectives),
-              const SizedBox(height: 10),
+              const SizedBox(height: 12),
               LayoutBuilder(
                 builder: (context, c) {
                   const gap = 12.0;
@@ -694,7 +694,7 @@ class _PrivacyByDesignCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: p.primaryTint,
         border: Border.all(color: p.primaryLight),
@@ -882,7 +882,7 @@ class _GreetingRow extends StatelessWidget {
                     radius: DesignTokens.radiusLg,
                     fade: false,
                   ),
-                  const SizedBox(height: 18),
+                  const SizedBox(height: 20),
                   inner,
                 ],
               )
@@ -1005,7 +1005,7 @@ class _PastDirectiveRow extends StatelessWidget {
           onTap: onTap,
           borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
           child: Container(
-            padding: const EdgeInsets.all(14),
+            padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
               border: Border.all(color: p.border),

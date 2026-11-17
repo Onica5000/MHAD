@@ -237,7 +237,7 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                 color: Theme.of(context).mhadPalette.primary,
               ),
             ),
-            const SizedBox(width: 10),
+            const SizedBox(width: 8),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -640,7 +640,7 @@ class _InputBar extends StatelessWidget {
                   // vertical 14 (was 10) brings the single-line height to
                   // ~52 — comfortably over the 48px a11y guideline.
                   contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 16, vertical: 14),
+                      horizontal: 16, vertical: 16),
                   isDense: true,
                 ),
                 onSubmitted: (_) => onSend(),
@@ -687,7 +687,7 @@ class _EmptyState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      padding: const EdgeInsets.all(20),
+      padding: DesignTokens.pagePadding,
       children: [
         const SizedBox(height: 8),
         // The assistant photo (someone at a desk with tea, phone beside
@@ -742,7 +742,7 @@ class _SuggestionChip extends StatelessWidget {
           borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
           child: Container(
             constraints: const BoxConstraints(minHeight: 48),
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
               border: Border.all(
                   color: Theme.of(context).colorScheme.outlineVariant),

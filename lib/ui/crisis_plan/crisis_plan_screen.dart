@@ -118,7 +118,7 @@ class _CrisisPlanScreenState extends ConsumerState<CrisisPlanScreen> {
           actionLabel: '',
         ),
         Expanded(child: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 14, 20, 32),
+        padding: DesignTokens.pagePadding,
         children: [
           PageHero(
             art: AppArt.flowCrisisPlan,
@@ -126,7 +126,7 @@ class _CrisisPlanScreenState extends ConsumerState<CrisisPlanScreen> {
             title: EditorialHeading(text: context.l10n.crisisPlanHowIKnowIM),
             lead: context.l10n.crisisPlanHelpThePeopleAroundYou,
           ),
-          const SizedBox(height: 18),
+          const SizedBox(height: 20),
           _Section(
             title: context.l10n.crisisPlanEarlyWarningSigns,
             sub: context.l10n.crisisPlanTheFirstThingsINotice,
@@ -169,7 +169,7 @@ class _CrisisPlanScreenState extends ConsumerState<CrisisPlanScreen> {
             onAdd: () => _addItem('dontDo'),
             onRemove: (i) => _removeItem('dontDo', i),
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 16),
           InfoBanner(
             icon: Icons.auto_awesome,
             variant: InfoBannerVariant.info,
@@ -260,10 +260,10 @@ class _Section extends StatelessWidget {
         : p.onPrimaryLight;
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 14),
+      padding: const EdgeInsets.only(bottom: 16),
       child: Card(
         child: Padding(
-          padding: const EdgeInsets.all(14),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -282,7 +282,7 @@ class _Section extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               Text(sub, style: Theme.of(context).textTheme.bodySmall),
-              const SizedBox(height: 10),
+              const SizedBox(height: 12),
               Wrap(
                 spacing: 6,
                 runSpacing: 6,

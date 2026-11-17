@@ -138,7 +138,7 @@ class _MoreSheet extends StatelessWidget {
           top: false,
           child: ListView(
             controller: scrollController,
-            padding: const EdgeInsets.fromLTRB(20, 14, 20, 24),
+            padding: DesignTokens.pagePadding,
             children: [
               Center(
                 child: Container(
@@ -150,7 +150,7 @@ class _MoreSheet extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 14),
+              const SizedBox(height: 16),
               EditorialHeading(text: context.l10n.navMore),
               const SizedBox(height: 4),
               Text(
@@ -160,7 +160,7 @@ class _MoreSheet extends StatelessWidget {
                   color: p.textMuted, height: MhadType.leadingParagraph,
                 ),
               ),
-              const SizedBox(height: 18),
+              const SizedBox(height: 20),
               // Crisis help, pinned first — the mobile crisis affordance now
               // that the floating 988 button is gone. Opens the full
               // crisis-resources sheet (via the root navigator, since this
@@ -190,7 +190,7 @@ class _MoreSheet extends StatelessWidget {
                     appRouter.go(route);
                   },
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 12),
               ],
               _MoreRow(
                 icon: Icons.document_scanner_outlined,
@@ -366,7 +366,7 @@ class _MoreRow extends StatelessWidget {
           autofocus: autofocus,
           borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
               border: Border.all(color: border),

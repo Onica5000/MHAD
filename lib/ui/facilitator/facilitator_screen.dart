@@ -55,7 +55,7 @@ class FacilitatorScreen extends StatelessWidget {
           ),
           Expanded(
             child: ListView(
-              padding: const EdgeInsets.fromLTRB(20, 14, 20, 32),
+              padding: DesignTokens.pagePadding,
               children: [
                 PageHero(
                   art: AppArt.flowFacilitator,
@@ -64,7 +64,7 @@ class FacilitatorScreen extends StatelessWidget {
                   lead: context.l10n.facilitatorPickTheKindOfSupport(
                       appData.fact('facilitatorCompletionStat')),
                 ),
-                const SizedBox(height: 18),
+                const SizedBox(height: 20),
 
                 // Pathway 1 — Referral to PA partners
                 _PathwayCard(
@@ -95,7 +95,7 @@ class FacilitatorScreen extends StatelessWidget {
                         : () => _open(context, partner.contact.web!),
                   ),
 
-                const SizedBox(height: 18),
+                const SizedBox(height: 20),
 
                 // Pathway 1b — guided session in the app (V4-L12): the AI assistant
                 // leads the facilitation interview (reflection → crisis history →
@@ -136,7 +136,7 @@ class FacilitatorScreen extends StatelessWidget {
                   ],
                 ),
 
-                const SizedBox(height: 18),
+                const SizedBox(height: 20),
 
                 // Pathway 2 — print + review in person
                 _PathwayCard(
@@ -149,7 +149,7 @@ class FacilitatorScreen extends StatelessWidget {
                   ],
                 ),
 
-                const SizedBox(height: 18),
+                const SizedBox(height: 20),
 
                 // Pathway 3 — email draft to clinician
                 _PathwayCard(
@@ -162,7 +162,7 @@ class FacilitatorScreen extends StatelessWidget {
                   ],
                 ),
 
-                const SizedBox(height: 18),
+                const SizedBox(height: 20),
                 InfoBanner(
                   icon: Icons.info_outline,
                   variant: InfoBannerVariant.info,
@@ -230,7 +230,7 @@ class _PathwayCard extends StatelessWidget {
                 color: primary ? cs.onPrimary : cs.onSurfaceVariant,
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 12),
             Wrap(
               spacing: 6,
               runSpacing: 6,
@@ -260,7 +260,7 @@ class _PathwayCard extends StatelessWidget {
               ],
             ),
             if (actions.isNotEmpty) ...[
-              const SizedBox(height: 14),
+              const SizedBox(height: 16),
               Wrap(spacing: 10, runSpacing: 8, children: actions),
             ],
           ],
@@ -289,7 +289,7 @@ class _ReferralRow extends StatelessWidget {
       child: Card(
         margin: EdgeInsets.zero,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(12, 10, 4, 10),
+          padding: const EdgeInsets.fromLTRB(12, 12, 4, 12),
           child: Row(
             children: [
               Expanded(

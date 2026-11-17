@@ -375,7 +375,7 @@ class _AdditionalInstructionsStepState
     return Form(
       key: _formKey,
       child: ListView(
-        padding: const EdgeInsets.all(20),
+        padding: DesignTokens.pagePadding,
         children: [
           WizardHelpButton(helpText: helpText, stepId: 'additionalInstructions'),
           ExampleTextButton(

@@ -219,11 +219,11 @@ class WebSidebar extends ConsumerWidget {
           children: [
             // Brand
             Padding(
-              padding: const EdgeInsets.fromLTRB(14, 16, 14, 12),
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
               child: Row(
                 children: [
                   const ExcludeSemantics(child: _BrandMark()),
-                  const SizedBox(width: 10),
+                  const SizedBox(width: 8),
                   Flexible(
                     // Lets the wordmark wrap instead of overflowing the fixed-width
                     // sidebar when the fallback font runs wide.
@@ -257,7 +257,7 @@ class WebSidebar extends ConsumerWidget {
             // Items
             Expanded(
               child: ListView(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 12),
                 children: [
                   for (final item in items)
                     _SidebarItemRow(
@@ -265,9 +265,9 @@ class WebSidebar extends ConsumerWidget {
                       active: item.isActive,
                       onTap: item.onTap,
                     ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 12),
                   Divider(color: p.border, height: 1),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 12),
                   _SidebarItemRow(
                     item: reset,
                     active: false,
@@ -370,7 +370,7 @@ class _SidebarItemRow extends StatelessWidget {
           borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
           child: Padding(
             padding:
-                const EdgeInsets.symmetric(horizontal: 6, vertical: 9),
+                const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
             child: Row(
               children: [
                 // "You are here" accent bar — transparent when inactive so the
@@ -439,7 +439,7 @@ class _CompactRail extends StatelessWidget {
         right: false,
         child: Column(
           children: [
-            const SizedBox(height: 14),
+            const SizedBox(height: 16),
             Semantics(
               label: context.l10n.pinDialogPaMhad,
               child: ExcludeSemantics(child: _BrandMark(size: 36)),
@@ -449,7 +449,7 @@ class _CompactRail extends StatelessWidget {
             const SizedBox(height: 8),
             Expanded(
               child: ListView(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 12),
                 children: [
                   for (final item in items)
                     _RailButton(
@@ -652,7 +652,7 @@ class _Badge extends StatelessWidget {
         ? SemanticColors.successTextLight
         : p.primary;
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
       decoration: BoxDecoration(
         color: bg,
         borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
@@ -771,7 +771,7 @@ class _GetHelpCard extends StatelessWidget {
           child: Row(
             children: [
               Icon(Icons.support_agent_outlined, size: 20, color: p.primary),
-              const SizedBox(width: 10),
+              const SizedBox(width: 8),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

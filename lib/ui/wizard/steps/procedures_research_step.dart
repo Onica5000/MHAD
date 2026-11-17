@@ -42,7 +42,7 @@ class _ProceduresResearchStepState
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
     return ListView(
-      padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+      padding: DesignTokens.pagePadding,
       children: [
         SectionLabel(context.l10n.procResearchEctLabel),
         const SizedBox(height: 4),
@@ -123,7 +123,7 @@ class _NeverAuthorizedCard extends StatelessWidget {
         : SemanticColors.errorAccentLight;
 
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: bg,
         border: Border.all(color: border),

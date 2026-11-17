@@ -42,9 +42,9 @@ Future<bool> showAutofillConsentDialog(
                 Text(
                   context.l10n.aiConsentDialogToAutofillYourDirectiveThe(provider.label),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 12),
                 Container(
-                  padding: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: cs.errorContainer,
                     borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
@@ -67,11 +67,11 @@ Future<bool> showAutofillConsentDialog(
                     ],
                   ),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 12),
                 Text(
                   context.l10n.aiConsentDialogNothingIsSavedToYour,
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 12),
                 Text(
                   context.l10n.aiConsentDialogUploadingIsOnlyAShortcut,
                 ),
@@ -118,9 +118,9 @@ Future<bool> showAudioConsentDialog(
                 Text(
                   context.l10n.aiConsentDialogForMoreAccurateTranscriptionEspecially(provider.label),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 12),
                 Container(
-                  padding: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: cs.errorContainer,
                     borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
@@ -142,7 +142,7 @@ Future<bool> showAudioConsentDialog(
                     ],
                   ),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 12),
                 Text(
                   context.l10n.aiConsentDialogYouReviewTheTextBefore,
                 ),
@@ -193,7 +193,7 @@ Future<bool> showAiConsentDialog(
               context.l10n.aiConsentDialogTextYouEnterWillBe(provider.label, _providerDataCaveat(context, provider)),
             ),
             Container(
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 color: cs.errorContainer,
                 borderRadius: BorderRadius.circular(DesignTokens.radiusSm),

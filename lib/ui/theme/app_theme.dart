@@ -134,9 +134,9 @@ class DesignTokens {
   /// sideways a few pixels — subtle, but it reads as "unfinished". One value.
   static const pageGutter = 20.0;
   /// Top inset for a screen's primary scroll view.
-  static const pageTop = 20.0;
+  static const pageTop = 16.0;
   /// Bottom inset — clears the floating bottom nav / action bars.
-  static const pageBottom = 24.0;
+  static const pageBottom = 40.0;
 
   /// Standard page padding for a screen's primary [ListView]/[SingleChildScrollView].
   static const pagePadding = EdgeInsets.fromLTRB(

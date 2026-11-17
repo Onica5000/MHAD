@@ -48,7 +48,7 @@ class MessageBubble extends StatelessWidget {
                 children: [
                   Container(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 14, vertical: 10),
+                        horizontal: 16, vertical: 12),
                     decoration: BoxDecoration(
                       color: isUser ? cs.primary : cs.surfaceContainerHighest,
                       borderRadius: BorderRadius.only(
@@ -240,7 +240,7 @@ class _TypingIndicatorState extends State<TypingIndicator>
             ),
             const SizedBox(width: 8),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
                 color: cs.surfaceContainerHighest,
                 borderRadius: const BorderRadius.only(

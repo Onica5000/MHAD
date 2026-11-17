@@ -101,7 +101,7 @@ class PdfPreviewScreen extends StatelessWidget {
       bottomNavigationBar: SafeArea(
         top: false,
         child: Container(
-          padding: const EdgeInsets.fromLTRB(16, 12, 16, 14),
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
           decoration: BoxDecoration(
             color: p.card,
             border: Border(top: BorderSide(color: p.border)),
@@ -435,7 +435,7 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
             ),
           ],
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 12),
         EditorialHeading(
           textSpan: TextSpan(
             children: [
@@ -456,7 +456,7 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
         if (hasPages) ...[
           const SizedBox(height: 16),
           Divider(height: 1, color: p.border),
-          const SizedBox(height: 14),
+          const SizedBox(height: 16),
           Text(
             context.l10n.pdfPreviewPageOf(_current + 1, pageCount),
             style: TextStyle(
@@ -465,7 +465,7 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
               color: p.text,
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
           Row(
             children: [
               _zoomBtn(p, '−', _zoom > 0.5, () => _setZoom(_zoom - 0.1)),
@@ -477,7 +477,7 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
           ),
         ],
         if (hasPages && pageCount > 1) ...[
-          const SizedBox(height: 18),
+          const SizedBox(height: 20),
           Text(
             context.l10n.pdfPreviewPages,
             style: TextStyle(
@@ -528,7 +528,7 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 5),
+                      const SizedBox(height: 4),
                       Text(
                         context.l10n.pdfPreviewPage(i + 1),
                         textAlign: TextAlign.center,

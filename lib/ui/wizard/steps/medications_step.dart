@@ -191,7 +191,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
     return Form(
       key: _formKey,
       child: ListView(
-        padding: const EdgeInsets.all(20),
+        padding: DesignTokens.pagePadding,
         children: [
           WizardHelpButton(
             // The meaning of each category (Never give / Limitations /

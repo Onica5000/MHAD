@@ -429,7 +429,7 @@ Return plain-text suggestions (short bullets are fine). No preamble.''';
               height: 14,
               child: CircularProgressIndicator(strokeWidth: 2, color: p.primary),
             ),
-            const SizedBox(width: 10),
+            const SizedBox(width: 8),
             Text(
               context.l10n.aiConsistencyTheAiIsReviewingYour,
               style: TextStyle(
@@ -497,7 +497,7 @@ Return plain-text suggestions (short bullets are fine). No preamble.''';
         label(),
         const SizedBox(height: 8),
         DesignCard(
-          padding: const EdgeInsets.all(14),
+          padding: const EdgeInsets.all(16),
           radius: DesignTokens.inputRadius,
           // Was a width:double.infinity Container; SizedBox keeps it stretching
           // to the column width now that the decoration lives in DesignCard.
@@ -577,7 +577,7 @@ Return plain-text suggestions (short bullets are fine). No preamble.''';
                   ),
                 )
               : ListView(
-                  padding: const EdgeInsets.fromLTRB(20, 14, 20, 32),
+                  padding: DesignTokens.pagePadding,
               children: [
                 PageHero(
                   art: AppArt.aiCheck,
@@ -624,9 +624,9 @@ Return plain-text suggestions (short bullets are fine). No preamble.''';
                       conflict: _conflicts[i],
                       directiveId: widget.directiveId,
                     ),
-                const SizedBox(height: 18),
+                const SizedBox(height: 20),
                 ..._buildAiSection(p),
-                const SizedBox(height: 14),
+                const SizedBox(height: 16),
                 InfoBanner(
                   icon: Icons.auto_awesome,
                   variant: InfoBannerVariant.info,
@@ -743,7 +743,7 @@ class _ConflictCard extends StatelessWidget {
   /// One of the two contradicting statements, in a bordered chip.
   Widget _statementBubble(MhadPalette p, String text) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
         color: p.card,
         border: Border.all(color: p.border),
@@ -779,7 +779,7 @@ class _ConflictCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(DesignTokens.buttonRadius),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(14),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -797,7 +797,7 @@ class _ConflictCard extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 12),
             // Side-by-side "A vs B" comparison of the two contradicting
             // statements (artboard WebConflict).
             Row(
@@ -818,7 +818,7 @@ class _ConflictCard extends StatelessWidget {
                 Expanded(child: _statementBubble(p, conflict.bStatement)),
               ],
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 12),
             Text(
               conflict.title,
               style: TextStyle(

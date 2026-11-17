@@ -102,7 +102,7 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
             children: [
               Expanded(
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 40),
+                  padding: DesignTokens.pagePadding,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -128,7 +128,7 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                           color: p.textMuted,
                         ),
                       ),
-                      const SizedBox(height: 22),
+                      const SizedBox(height: 24),
 
                       // Mode cards. Order follows the prototype: Private
                       // (recommended) first, then Public. On web, the
@@ -168,7 +168,7 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                         onTap: _loading != null ? null : _pickPublic,
                       ),
 
-                      const SizedBox(height: 18),
+                      const SizedBox(height: 20),
                       Center(
                         child: Text(
                           kIsWeb
@@ -236,7 +236,7 @@ class _Card2 extends StatelessWidget {
             onTap: onTap,
             borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
             child: Container(
-              padding: const EdgeInsets.all(18),
+              padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
                 border: Border.all(color: borderColor, width: 1.5),
@@ -276,7 +276,7 @@ class _Card2 extends StatelessWidget {
                                 // the icon against navy's primaryLight.
                                 : Icon(icon, color: p.onPrimaryLight, size: 20),
                           ),
-                          const SizedBox(width: 10),
+                          const SizedBox(width: 8),
                           Expanded(
                             child: Text(
                               title,
@@ -304,7 +304,7 @@ class _Card2 extends StatelessWidget {
                         children: badges
                             .map((b) => Container(
                                   padding: const EdgeInsets.symmetric(
-                                      horizontal: 8, vertical: 3),
+                                      horizontal: 8, vertical: 4),
                                   decoration: BoxDecoration(
                                     color: p.scaffoldBackground,
                                     borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
@@ -333,7 +333,7 @@ class _Card2 extends StatelessWidget {
                       left: 16,
                       child: Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 9, vertical: 4),
+                            horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
                           color: p.primary,
                           borderRadius: BorderRadius.circular(DesignTokens.radiusSm),

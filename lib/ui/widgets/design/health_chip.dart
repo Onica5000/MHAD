@@ -96,14 +96,14 @@ class HealthChip extends StatelessWidget {
         border: Border.all(color: border),
         borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (code.isNotEmpty) ...[
             Container(
               margin: const EdgeInsets.only(top: 1),
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
               decoration: BoxDecoration(
                 color: codeBg,
                 borderRadius: BorderRadius.circular(DesignTokens.radiusXs),
@@ -119,7 +119,7 @@ class HealthChip extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(width: 10),
+            const SizedBox(width: 8),
           ],
           Expanded(
             child: Column(
@@ -152,7 +152,7 @@ class HealthChip extends StatelessWidget {
                     if (sourceTag != null && sourceTag!.isNotEmpty)
                       Container(
                         padding:
-                            const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                            const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
                         decoration: BoxDecoration(
                           color: p.card,
                           border: Border.all(color: border),

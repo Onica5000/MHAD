@@ -165,7 +165,7 @@ class _QuestionBody extends StatelessWidget {
       children: [
         // Header — back row + step dots + "question N of 4" eyebrow
         Padding(
-          padding: const EdgeInsets.fromLTRB(20, 14, 20, 6),
+          padding: const EdgeInsets.fromLTRB(20, 16, 20, 6),
           child: Row(
             children: [
               IconButton(
@@ -189,14 +189,14 @@ class _QuestionBody extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 22),
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           child: StepDots(current: step + 1, total: total),
         ),
 
         // Scrollable body
         Expanded(
           child: ListView(
-            padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
+            padding: DesignTokens.pagePadding,
             children: [
               SectionLabel(context.l10n.quizInYourWords),
               const SizedBox(height: 8),
@@ -252,7 +252,7 @@ class _OptCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 140),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
           color: selected ? p.primaryTint : p.card,
           border: Border.all(
@@ -346,7 +346,7 @@ class _ResultBody extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(20, 14, 20, 6),
+          padding: const EdgeInsets.fromLTRB(20, 16, 20, 6),
           child: Row(
             children: [
               IconButton(
@@ -371,7 +371,7 @@ class _ResultBody extends StatelessWidget {
         ),
         Expanded(
           child: ListView(
-            padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
+            padding: DesignTokens.pagePadding,
             children: [
               SectionLabel(context.l10n.quizRecommendedForYou),
               const SizedBox(height: 8),
@@ -395,7 +395,7 @@ class _ResultBody extends StatelessWidget {
                   color: p.textMuted, height: MhadType.leadingParagraph,
                 ),
               ),
-              const SizedBox(height: 18),
+              const SizedBox(height: 20),
 
               // Stacked confidence bar with three segments
               ClipRRect(
@@ -420,7 +420,7 @@ class _ResultBody extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 12),
               _LegendRow(
                 color: p.primary,
                 label: context.l10n.quizLegendCombined,
@@ -443,7 +443,7 @@ class _ResultBody extends StatelessWidget {
           ),
         ),
         Container(
-          padding: const EdgeInsets.fromLTRB(20, 12, 20, 14),
+          padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
           decoration: BoxDecoration(
             color: p.card,
             border: Border(top: BorderSide(color: p.border)),
@@ -462,7 +462,7 @@ class _ResultBody extends StatelessWidget {
                 label: Text(context.l10n.quizUseForm(_formName(context, leader))),
                 style: FilledButton.styleFrom(
                   iconAlignment: IconAlignment.end,
-                  padding: const EdgeInsets.symmetric(horizontal: 18),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                 ),
               ),
             ],

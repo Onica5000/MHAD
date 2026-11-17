@@ -263,7 +263,7 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
             if (_query.length >= 2) _onSearchChanged(_query);
           },
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 12),
 
         // Search field + autocomplete.
         _SearchField(
@@ -312,7 +312,7 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
           ),
         ),
 
-        const SizedBox(height: 14),
+        const SizedBox(height: 16),
 
         // ── Severity & reaction ───────────────────────────────────────────
         SectionLabel(l10n.allergiesSeveritySection),
@@ -322,7 +322,7 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
             border: Border.all(color: p.border),
             borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
           ),
-          padding: const EdgeInsets.all(14),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -467,7 +467,7 @@ class _KindSegment extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 4),
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
           decoration: BoxDecoration(
             color: active ? p.card : Colors.transparent,
             borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
@@ -542,7 +542,7 @@ class _SearchField extends StatelessWidget {
       child: Row(
         children: [
           Icon(Icons.search, size: 18, color: p.textMuted),
-          const SizedBox(width: 10),
+          const SizedBox(width: 8),
           Expanded(
             child: TextField(
               controller: controller,
@@ -556,7 +556,7 @@ class _SearchField extends StatelessWidget {
               ),
               decoration: InputDecoration(
                 isCollapsed: true,
-                contentPadding: const EdgeInsets.symmetric(vertical: 11),
+                contentPadding: const EdgeInsets.symmetric(vertical: 12),
                 hintText: hint,
                 hintStyle: TextStyle(
                   color: p.textMuted,
@@ -588,7 +588,7 @@ class _SearchField extends StatelessWidget {
             )
           else
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
               decoration: BoxDecoration(
                 color: p.primaryTint,
                 borderRadius: BorderRadius.circular(DesignTokens.radiusXs),
@@ -748,7 +748,7 @@ class _AutoCompleteRow extends StatelessWidget {
           children: [
             Container(
               margin: const EdgeInsets.only(top: 1),
-              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
               decoration: BoxDecoration(
                 color: p.card,
                 border: Border.all(color: p.primaryLight),
@@ -765,7 +765,7 @@ class _AutoCompleteRow extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(width: 10),
+            const SizedBox(width: 8),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

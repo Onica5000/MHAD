@@ -110,7 +110,7 @@ class _UlyssesClauseScreenState extends ConsumerState<UlyssesClauseScreen> {
         Expanded(child: _loading
           ? const PageLoading()
           : ListView(
-              padding: const EdgeInsets.fromLTRB(20, 14, 20, 32),
+              padding: DesignTokens.pagePadding,
               children: [
                 PageHero(
                   art: AppArt.flowUlysses,
@@ -151,7 +151,7 @@ class _UlyssesClauseScreenState extends ConsumerState<UlyssesClauseScreen> {
                                 : cs.onSurfaceVariant,
                           ),
                         ),
-                        const SizedBox(height: 14),
+                        const SizedBox(height: 16),
                         SwitchListTile(
                           value: _acknowledged,
                           onChanged: _setAcknowledged,
@@ -178,9 +178,9 @@ class _UlyssesClauseScreenState extends ConsumerState<UlyssesClauseScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 14),
+                const SizedBox(height: 16),
                 _BoundariesCard(),
-                const SizedBox(height: 14),
+                const SizedBox(height: 16),
                 InfoBanner(
                   icon: Icons.warning_amber_rounded,
                   variant: InfoBannerVariant.warning,
@@ -206,7 +206,7 @@ class _BoundariesCard extends StatelessWidget {
     ];
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(14),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

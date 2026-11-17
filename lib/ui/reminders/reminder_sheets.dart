@@ -110,7 +110,7 @@ class _RenewSheet extends StatelessWidget {
           top: false,
           child: ListView(
             controller: scrollController,
-            padding: const EdgeInsets.fromLTRB(20, 14, 20, 24),
+            padding: DesignTokens.pagePadding,
             children: [
               Center(
                 child: Container(
@@ -122,7 +122,7 @@ class _RenewSheet extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 14),
+              const SizedBox(height: 16),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -137,7 +137,7 @@ class _RenewSheet extends StatelessWidget {
                     child:
                         Icon(Icons.event_outlined, size: 26, color: warnText),
                   ),
-                  const SizedBox(width: 14),
+                  const SizedBox(width: 12),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -182,9 +182,9 @@ class _RenewSheet extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 18),
+              const SizedBox(height: 20),
               Container(
-                padding: const EdgeInsets.all(14),
+                padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: p.primaryTint,
                   border: Border.all(
@@ -216,26 +216,26 @@ class _RenewSheet extends StatelessWidget {
                         color: p.text,
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 12),
                     Row(
                       children: [
                         _RenewMetric(num: '11', label: context.l10n.reminderRenewMetricSections),
-                        const SizedBox(width: 14),
+                        const SizedBox(width: 12),
                         Text('·',
                             style: TextStyle(color: p.textMuted)),
-                        const SizedBox(width: 14),
+                        const SizedBox(width: 12),
                         _RenewMetric(num: context.l10n.reminderRenewMetricWetInk, label: context.l10n.reminderRenewMetricSigning),
-                        const SizedBox(width: 14),
+                        const SizedBox(width: 12),
                         Text('·',
                             style: TextStyle(color: p.textMuted)),
-                        const SizedBox(width: 14),
+                        const SizedBox(width: 12),
                         _RenewMetric(num: '~5', label: context.l10n.reminderRenewMetricMin),
                       ],
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 14),
+              const SizedBox(height: 16),
               SizedBox(
                 width: double.infinity,
                 child: FilledButton.icon(
@@ -380,7 +380,7 @@ class _CheckInSheet extends StatelessWidget {
           top: false,
           child: ListView(
             controller: scrollController,
-            padding: const EdgeInsets.fromLTRB(20, 14, 20, 24),
+            padding: DesignTokens.pagePadding,
             children: [
               Center(
                 child: Container(
@@ -392,7 +392,7 @@ class _CheckInSheet extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 14),
+              const SizedBox(height: 16),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -407,7 +407,7 @@ class _CheckInSheet extends StatelessWidget {
                     child: Icon(Icons.favorite_outline,
                         size: 26, color: p.primary),
                   ),
-                  const SizedBox(width: 14),
+                  const SizedBox(width: 12),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -455,7 +455,7 @@ class _CheckInSheet extends StatelessWidget {
                 SectionLabel(context.l10n.reminderSheetsCommonThingsThatChange),
                 ...rows,
               ],
-              const SizedBox(height: 14),
+              const SizedBox(height: 16),
               SizedBox(
                 width: double.infinity,
                 child: FilledButton.icon(
@@ -518,7 +518,7 @@ class _CheckInRow extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 8),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
           color: p.surface,
           border: Border.all(color: p.border),

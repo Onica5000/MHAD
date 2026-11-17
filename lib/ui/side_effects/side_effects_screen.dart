@@ -186,7 +186,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
             child: _loading
                 ? const PageLoading()
                 : ListView(
-                    padding: const EdgeInsets.fromLTRB(20, 14, 20, 32),
+                    padding: DesignTokens.pagePadding,
                     children: [
                       PageHero(
                         art: AppArt.flowSideEffects,
@@ -212,7 +212,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
                         if (_items.isNotEmpty) ...[
                           const SizedBox(height: 16),
                           ..._buildGroupedItems(p),
-                          const SizedBox(height: 14),
+                          const SizedBox(height: 16),
                           InfoBanner(
                             icon: Icons.medical_information_outlined,
                             variant: InfoBannerVariant.info,
@@ -222,7 +222,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
                           ),
                         ],
                         if (_interactions.isNotEmpty) ...[
-                          const SizedBox(height: 22),
+                          const SizedBox(height: 24),
                           SectionLabel(
                             context.l10n.sideEffectsAskYourDoctorOrPharmacist,
                           ),
@@ -240,7 +240,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
                         // AI-free: the official FDA label for every current
                         // medication, with or without an AI key. The AI
                         // checklist above is an optional summary of these.
-                        const SizedBox(height: 22),
+                        const SizedBox(height: 24),
                         SectionLabel(
                           context.l10n.sideEffectsOfficialLabelsHeading,
                         ),
@@ -275,7 +275,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
   Widget _generateBar(MhadPalette p, bool hasKey) {
     if (!hasKey) {
       return Container(
-        padding: const EdgeInsets.all(14),
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: p.primaryTint,
           borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
@@ -300,7 +300,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
                 color: p.textMuted,
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 12),
             FilledButton.icon(
               onPressed: () => context.push(AppRoutes.aiSetup),
               icon: const Icon(Icons.auto_awesome, size: 16),
@@ -327,7 +327,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
             color: p.textMuted,
           ),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 12),
         FilledButton.icon(
           onPressed: _generating ? null : _generate,
           icon: _generating
@@ -387,7 +387,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
   Widget _interactionCard(MhadPalette p, InteractionNote note) {
     return DesignCard(
       margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       radius: DesignTokens.inputRadius,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -400,7 +400,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
               color: p.text,
             ),
           ),
-          const SizedBox(height: 3),
+          const SizedBox(height: 4),
           Text(
             note.note,
             style: TextStyle(
@@ -448,7 +448,7 @@ class _SideEffectRow extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 11),
+                  padding: const EdgeInsets.only(top: 12),
                   child: Text(
                     item.effect,
                     style: TextStyle(

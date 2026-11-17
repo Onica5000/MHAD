@@ -168,7 +168,7 @@ class _WizardAiRailState extends ConsumerState<WizardAiRail> {
     return Container(
       width: 320,
       color: p.card,
-      padding: const EdgeInsets.fromLTRB(20, 24, 18, 16),
+      padding: const EdgeInsets.fromLTRB(20, 24, 20, 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -212,7 +212,7 @@ class _WizardAiRailState extends ConsumerState<WizardAiRail> {
               color: hasKey ? p.primary : p.textMuted,
             ),
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 16),
           if (!hasKey)
             Expanded(
               child: SingleChildScrollView(
@@ -233,7 +233,7 @@ class _WizardAiRailState extends ConsumerState<WizardAiRail> {
                 controller: _facilityCtrl,
                 onSubmit: _askFacility,
               ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 12),
             Divider(color: p.border, height: 1),
             const CrisisSupportBanner(),
             Expanded(child: _RailChat(scrollController: _scrollCtrl)),
@@ -291,7 +291,7 @@ class _RailNoAiCard extends StatelessWidget {
                 child: Icon(Icons.auto_awesome,
                     size: 18, color: p.onPrimaryLight),
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: 8),
               Expanded(
                 child: Semantics(
                   header: true,
@@ -307,12 +307,12 @@ class _RailNoAiCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
           Text(
             context.l10n.wizardAiRailOptionalHelpBody,
             style: TextStyle(fontSize: 14, height: MhadType.leadingParagraph, color: p.text),
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 16),
           SizedBox(
             width: double.infinity,
             child: FilledButton.icon(
@@ -321,7 +321,7 @@ class _RailNoAiCard extends StatelessWidget {
               label: Text(context.l10n.pipelineSetupAi),
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
           Text(
             context.l10n.wizardAiRailYourApiKeyStaysOn,
             style: TextStyle(fontSize: 12, height: MhadType.leadingParagraph, color: p.textMuted),
@@ -374,7 +374,7 @@ class _RailHeadsUp extends ConsumerWidget {
             strokeWidth: 2,
             color: p.primary,
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 8),
           Text(
             context.l10n.wizardAiRailReadingThisStep,
             style: TextStyle(
@@ -408,7 +408,7 @@ class _RailHeadsUp extends ConsumerWidget {
                 ],
               )),
             if (s.chips.isNotEmpty) ...[
-              const SizedBox(height: 10),
+              const SizedBox(height: 12),
               Text(
                 context.l10n.wizardAiRailSuggestedForThisStep,
                 style: TextStyle(
@@ -427,7 +427,7 @@ class _RailHeadsUp extends ConsumerWidget {
                       borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
                       child: Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 6),
+                            horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
                           color: p.surface,
                           border: Border.all(color: p.border),
@@ -464,7 +464,7 @@ class _RailFacilitySearch extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
     return Padding(
-      padding: const EdgeInsets.only(top: 10),
+      padding: const EdgeInsets.only(top: 12),
       child: TextField(
         controller: controller,
         onSubmitted: (_) => onSubmit(),
@@ -512,7 +512,7 @@ class _RailChat extends ConsumerWidget {
 
     return ListView.builder(
       controller: scrollController,
-      padding: const EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(vertical: 12),
       itemCount: messages.length + (isSending ? 1 : 0),
       itemBuilder: (context, i) {
         if (i >= messages.length) {
@@ -545,7 +545,7 @@ class _RailBubble extends StatelessWidget {
       alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
         margin: const EdgeInsets.only(bottom: 8),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         constraints: const BoxConstraints(maxWidth: 250),
         decoration: BoxDecoration(
           color: isUser ? p.primary : p.surface,
@@ -582,7 +582,7 @@ class _RailInput extends ConsumerWidget {
         borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
         border: Border.all(color: p.border),
       ),
-      padding: const EdgeInsets.only(left: 14, right: 4),
+      padding: const EdgeInsets.only(left: 16, right: 4),
       child: Row(
         children: [
           Expanded(
@@ -635,11 +635,11 @@ class WizardAiBar extends StatelessWidget {
           decoration: BoxDecoration(
             border: Border(top: BorderSide(color: p.primaryLight)),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Row(
             children: [
               Icon(Icons.auto_awesome, size: 16, color: p.primary),
-              const SizedBox(width: 10),
+              const SizedBox(width: 8),
               Expanded(
                 child: Text(
                   context.l10n.wizardAiRailNeedHelpWithThisStep,

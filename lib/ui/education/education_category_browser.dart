@@ -132,7 +132,7 @@ class _BrowseRow extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Row(
             children: [
               Expanded(
@@ -163,7 +163,7 @@ class _BrowseRow extends StatelessWidget {
               // style so it reads as a count, not a button.
               Container(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
                   color: p.primaryTint,
                   borderRadius: BorderRadius.circular(DesignTokens.radiusXs),

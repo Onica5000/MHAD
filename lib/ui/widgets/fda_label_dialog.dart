@@ -49,7 +49,7 @@ Future<void> showFdaLabelDialog(
               color: p.text,
             ),
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 16),
         ],
       );
 

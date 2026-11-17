@@ -318,7 +318,7 @@ class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
             top: Radius.circular(DesignTokens.sheetRadius),
           ),
         ),
-        padding: const EdgeInsets.fromLTRB(0, 14, 0, 32),
+        padding: const EdgeInsets.fromLTRB(0, 16, 0, 32),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -330,9 +330,9 @@ class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
                 borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
               ),
             ),
-            const SizedBox(height: 18),
+            const SizedBox(height: 20),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 28),
+              padding: const EdgeInsets.symmetric(horizontal: 32),
               child: Column(
                 children: [
                   SectionLabel(
@@ -410,9 +410,9 @@ class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
                 ],
               ),
             ),
-            const SizedBox(height: 22),
+            const SizedBox(height: 24),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 22),
+              padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -425,14 +425,14 @@ class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
                     onTap: _onCancel,
                     semantics: context.l10n.voiceCancelA11y,
                   ),
-                  const SizedBox(width: 26),
+                  const SizedBox(width: 24),
                   _RecordCircle(
                     listening: _listening,
                     onTap: _toggleListening,
                     crisisAccent: Theme.of(context).colorScheme.error,
                     cardColor: p.card,
                   ),
-                  const SizedBox(width: 26),
+                  const SizedBox(width: 24),
                   _CircleButton(
                     size: 52,
                     icon: Icons.check,
@@ -445,7 +445,7 @@ class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
                 ],
               ),
             ),
-            const SizedBox(height: 14),
+            const SizedBox(height: 16),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Text(
@@ -487,7 +487,7 @@ class _TranscribingCard extends StatelessWidget {
     return Container(
       constraints: const BoxConstraints(minHeight: 70),
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
         color: surface,
         border: Border.all(color: borderColor),
@@ -543,7 +543,7 @@ class _Waveform extends StatelessWidget {
         children: [
           for (var i = 0; i < _baseHeights.length; i++)
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 1.5),
+              padding: const EdgeInsets.symmetric(horizontal: 2),
               child: _bar(i),
             ),
         ],
@@ -619,7 +619,7 @@ class _LiveCaptionState extends State<_LiveCaption>
     return Container(
       constraints: const BoxConstraints(minHeight: 70),
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
         color: widget.surface,
         border: Border.all(color: widget.borderColor),

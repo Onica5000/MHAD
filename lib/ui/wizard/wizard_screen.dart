@@ -386,7 +386,7 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                                 duration: const Duration(milliseconds: 200),
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 5),
+                                      horizontal: 12, vertical: 4),
                                   decoration: BoxDecoration(
                                     color: p.card,
                                     border: Border.all(color: p.border),
@@ -397,7 +397,7 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                                     children: [
                                       Icon(Icons.check,
                                           size: 14, color: p.textMuted),
-                                      const SizedBox(width: 5),
+                                      const SizedBox(width: 4),
                                       Text(
                                         kIsWeb
                                             ? context.l10n.wizardKeptInThisTab
@@ -807,7 +807,7 @@ class _WideStepRail extends StatelessWidget {
               '${currentIndex + 1} / ${steps.length}',
               style: MhadText.serifAccent(context, size: 36, color: p.primary, height: 1),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 12),
             // Overall progress at a glance.
             ClipRRect(
               borderRadius: BorderRadius.circular(DesignTokens.radiusXs),
@@ -816,7 +816,7 @@ class _WideStepRail extends StatelessWidget {
                 minHeight: 6,
               ),
             ),
-            const SizedBox(height: 18),
+            const SizedBox(height: 20),
             for (var i = 0; i < steps.length; i++)
               _RailStepRow(
                 index: i + 1,
@@ -907,7 +907,7 @@ class _RailStepRow extends StatelessWidget {
                     ),
                   ),
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 8),
           Expanded(
             child: Text(
               title,

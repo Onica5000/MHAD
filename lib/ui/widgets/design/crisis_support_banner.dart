@@ -22,8 +22,8 @@ class CrisisSupportBanner extends ConsumerWidget {
       container: true,
       liveRegion: true,
       child: Container(
-        margin: const EdgeInsets.fromLTRB(12, 10, 12, 4),
-        padding: const EdgeInsets.fromLTRB(14, 12, 14, 8),
+        margin: const EdgeInsets.fromLTRB(12, 12, 12, 4),
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
         decoration: BoxDecoration(
           color: cs.errorContainer,
           borderRadius: BorderRadius.circular(DesignTokens.inputRadius),

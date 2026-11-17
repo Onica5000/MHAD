@@ -43,7 +43,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         children: [
           Expanded(
             child: ListView(
-              padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
+              padding: DesignTokens.pagePadding,
               children: [
                 // Compact photo header (photo beside the title on wide
                 // screens, a small thumbnail beside it on phones).
@@ -60,7 +60,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 // most-recently-edited directive (same source as the home
                 // greeting); status pill reflects current privacy mode.
                 const _ProfileChip(),
-                const SizedBox(height: 18),
+                const SizedBox(height: 20),
                 SectionLabel(context.l10n.settingsAppearance),
                 const SizedBox(height: 8),
           // Per user direction (2026-06-02): the app ships in the Deep Navy
@@ -354,7 +354,7 @@ class _ThemeModeSegment extends StatelessWidget {
               onTap: () => onChanged(opt.$1),
               borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
               child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 10),
+                padding: const EdgeInsets.symmetric(vertical: 12),
                 decoration: BoxDecoration(
                   color: selected ? p.card : Colors.transparent,
                   borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
@@ -454,7 +454,7 @@ class _ProfileChip extends ConsumerWidget {
     final initials = _initialsFor(name);
 
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: p.primary,
         borderRadius: BorderRadius.circular(DesignTokens.cardRadius),

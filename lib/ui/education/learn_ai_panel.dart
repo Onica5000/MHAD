@@ -112,7 +112,7 @@ class _LearnAiPanelState extends ConsumerState<LearnAiPanel> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(20, 18, 20, 4),
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 4),
               child: Row(
                 children: [
                   Icon(Icons.auto_awesome, size: 18, color: p.primary),
@@ -218,7 +218,7 @@ class _LearnAiPanelState extends ConsumerState<LearnAiPanel> {
             ),
             // Disclaimer by the input, mirroring the wizard step rail.
             Padding(
-              padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
+              padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
               child: Text(
                 context.l10n.learnAiPanelNotLegalOrMedicalAdvice,
                 style: TextStyle(
@@ -247,7 +247,7 @@ class _LearnChatBubble extends StatelessWidget {
       alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
         margin: const EdgeInsets.only(bottom: 8),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         constraints: const BoxConstraints(maxWidth: 280),
         decoration: BoxDecoration(
           color: isUser ? p.primary : p.surface,

@@ -38,7 +38,7 @@ class ArticleDetailScreen extends StatelessWidget {
               ? (box.maxWidth - _readingWidth) / 2
               : 20.0;
           return ListView(
-        padding: EdgeInsets.fromLTRB(side, 20, side, 28),
+        padding: EdgeInsets.fromLTRB(side, 20, side, 32),
         children: [
           // Category photo header (one definition: EducationCategoryArt).
           ArtImage(
@@ -47,7 +47,7 @@ class ArticleDetailScreen extends StatelessWidget {
             expand: true,
             radius: DesignTokens.radiusLg,
           ),
-          const SizedBox(height: 18),
+          const SizedBox(height: 20),
           // Source line (artboard WebArticle).
           Text(
             source,
@@ -57,7 +57,7 @@ class ArticleDetailScreen extends StatelessWidget {
               color: p.textMuted,
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
           Text(
             section.title,
             style: EditorialHeading.styleFor(context, HeadingLevel.page),

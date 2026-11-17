@@ -688,7 +688,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
 
     if (_step == _PipelineStep.pick) {
       return Padding(
-        padding: const EdgeInsets.fromLTRB(20, 14, 20, 0),
+        padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
         child: Row(
           children: [
             backLink(context.l10n.pipelineBackWizard, _toWizard),
@@ -710,7 +710,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
         ),
     };
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 14, 20, 0),
+      padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
       child: Row(
         children: [
           backLink(label, onBack),
@@ -857,7 +857,7 @@ class _FormTypeChooserState extends State<_FormTypeChooser> {
                       size: 20,
                       color: _selected == ft ? cs.primary : cs.onSurfaceVariant,
                     ),
-                    const SizedBox(width: 10),
+                    const SizedBox(width: 8),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

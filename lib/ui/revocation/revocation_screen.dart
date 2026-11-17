@@ -130,7 +130,7 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
           actionLabel: '',
         ),
         Expanded(child: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 14, 20, 32),
+        padding: DesignTokens.pagePadding,
         children: [
           // Editorial 'PERMANENT ACTION' pill replaces what was the
           // AppBar's title. The 38pt 'Are you sure?' headline below
@@ -155,12 +155,12 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
           // above the verbatim statutory statement as an actionable summary.
           Card(
             child: Padding(
-              padding: const EdgeInsets.all(14),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SectionLabel(context.l10n.revocationHowRevocationWorksInPa),
-                  SizedBox(height: 10),
+                  SizedBox(height: 12),
                   _RevokeStep(
                     n: 1,
                     text: context.l10n.revocationPutItInWritingSign,
@@ -179,10 +179,10 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
             ),
           ),
 
-          const SizedBox(height: 14),
+          const SizedBox(height: 16),
           Card(
             child: Padding(
-              padding: const EdgeInsets.all(14),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -197,7 +197,7 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
             ),
           ),
 
-          const SizedBox(height: 14),
+          const SizedBox(height: 16),
           SectionLabel(context.l10n.revocationWhoToNotifyOptIn),
           const SizedBox(height: 4),
           Text(
@@ -228,11 +228,11 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
               contentPadding: EdgeInsets.zero,
             ),
 
-          const SizedBox(height: 14),
+          const SizedBox(height: 16),
           Card(
             color: cs.errorContainer,
             child: Padding(
-              padding: const EdgeInsets.all(14),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -273,7 +273,7 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
             ),
           ),
 
-          const SizedBox(height: 14),
+          const SizedBox(height: 16),
           InfoBanner(
             icon: Icons.info_outline,
             variant: InfoBannerVariant.info,
@@ -299,7 +299,7 @@ class _RevokeStep extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
     return Padding(
-      padding: EdgeInsets.only(bottom: last ? 0 : 10),
+      padding: EdgeInsets.only(bottom: last ? 0 : 12),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -322,7 +322,7 @@ class _RevokeStep extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 8),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(top: 2),
