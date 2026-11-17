@@ -5703,11 +5703,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get revocationRevokeNow => 'Revocar ahora';
 
   @override
-  String pastDirectiveDetailUnableToLoad(Object error) {
-    return 'No se pudo cargar: $error';
-  }
-
-  @override
   String pastDirectiveDetailTheDirectiveRemainsRegardless(Object status) {
     return 'La directiva sigue $status de todos modos';
   }

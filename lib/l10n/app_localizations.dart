@@ -9706,12 +9706,6 @@ abstract class AppLocalizations {
   /// **'Revoke now'**
   String get revocationRevokeNow;
 
-  /// No description provided for @pastDirectiveDetailUnableToLoad.
-  ///
-  /// In en, this message translates to:
-  /// **'Unable to load: {error}'**
-  String pastDirectiveDetailUnableToLoad(Object error);
-
   /// No description provided for @pastDirectiveDetailTheDirectiveRemainsRegardless.
   ///
   /// In en, this message translates to:

@@ -5601,11 +5601,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get revocationRevokeNow => 'Revoke now';
 
   @override
-  String pastDirectiveDetailUnableToLoad(Object error) {
-    return 'Unable to load: $error';
-  }
-
-  @override
   String pastDirectiveDetailTheDirectiveRemainsRegardless(Object status) {
     return 'The directive remains $status regardless';
   }
