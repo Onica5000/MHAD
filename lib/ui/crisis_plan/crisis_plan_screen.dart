@@ -2,15 +2,15 @@
 
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/page_hero.dart';
+import 'package:mhad/ui/theme/app_art.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
-import 'package:mhad/ui/widgets/design/brand_motif.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
-import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/design/wizard_header.dart';
 
 /// Crisis plan / wellness toolbox optional add-on (v2 prototype `m-crisisplan`).
@@ -120,28 +120,11 @@ class _CrisisPlanScreenState extends ConsumerState<CrisisPlanScreen> {
         Expanded(child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 14, 20, 32),
         children: [
-          BrandMotif(
-            padding: const EdgeInsets.fromLTRB(20, 16, 20, 18),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SectionLabel(context.l10n.crisisPlanOptionalAddOnCrisisPlan),
-                const SizedBox(height: 6),
-                // Headline bumped 30 -> 38pt to match prototype L446.
-                EditorialHeading(
-                    text: context.l10n.crisisPlanHowIKnowIM, size: 38),
-                const SizedBox(height: 6),
-                Text(
-                  context.l10n.crisisPlanHelpThePeopleAroundYou,
-                  style: TextStyle(
-                    fontFamily: kSansFamily,
-                    fontSize: 14,
-                    color: p.textMuted,
-                    height: 1.5,
-                  ),
-                ),
-              ],
-            ),
+          PageHero(
+            art: AppArt.flowCrisisPlan,
+            eyebrow: context.l10n.crisisPlanOptionalAddOnCrisisPlan,
+            title: EditorialHeading(text: context.l10n.crisisPlanHowIKnowIM, size: 38),
+            lead: context.l10n.crisisPlanHelpThePeopleAroundYou,
           ),
           const SizedBox(height: 18),
           _Section(

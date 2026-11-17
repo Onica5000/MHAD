@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/page_hero.dart';
+import 'package:mhad/ui/theme/app_art.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
-import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
-import 'package:mhad/ui/widgets/design/brand_motif.dart';
-import 'package:mhad/ui/widgets/design/spot_illustration.dart';
 import 'package:mhad/ui/widgets/design/wizard_header.dart';
 import 'package:mhad/utils/launch_utils.dart';
 import 'package:mhad/utils/nav_utils.dart';
@@ -58,42 +57,12 @@ class FacilitatorScreen extends StatelessWidget {
             child: ListView(
               padding: const EdgeInsets.fromLTRB(20, 14, 20, 32),
               children: [
-                BrandMotif(
-                  padding: const EdgeInsets.fromLTRB(20, 16, 14, 18),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SectionLabel(
-                              context.l10n.facilitatorGetHelpEvidenceBased,
-                            ),
-                            const SizedBox(height: 6),
-                            EditorialHeading(
-                              text: context.l10n.facilitatorYouDonTHaveTo,
-                              size: 32,
-                            ),
-                            const SizedBox(height: 6),
-                            Text(
-                              context.l10n.facilitatorPickTheKindOfSupport(
-                                appData.fact('facilitatorCompletionStat'),
-                              ),
-                              style: TextStyle(
-                                fontFamily: kSansFamily,
-                                fontSize: 14,
-                                color: p.textMuted,
-                                height: 1.5,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      const SpotIllustration(art: SpotArt.shield, size: 72),
-                    ],
-                  ),
+                PageHero(
+                  art: AppArt.flowFacilitator,
+                  eyebrow: context.l10n.facilitatorGetHelpEvidenceBased,
+                  title: EditorialHeading(text: context.l10n.facilitatorYouDonTHaveTo, size: 32),
+                  lead: context.l10n.facilitatorPickTheKindOfSupport(
+                      appData.fact('facilitatorCompletionStat')),
                 ),
                 const SizedBox(height: 18),
 
