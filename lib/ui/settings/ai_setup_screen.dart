@@ -1,5 +1,8 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/editorial_heading.dart';
+import 'package:mhad/ui/widgets/design/page_hero.dart';
+import 'package:mhad/ui/theme/app_art.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -251,8 +254,9 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
             false;
 
     return Scaffold(
+      // Slim app bar (back + remove-key action); the photo header below
+      // carries the title once, large.
       appBar: AppBar(
-        title: Text(context.l10n.aiSetupAiAssistantSetup),
         actions: [
           if (hasKey)
             IconButton(
@@ -268,6 +272,15 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
             child: ListView(
         padding: const EdgeInsets.all(20),
         children: [
+          PageHero(
+            art: AppArt.aiSetup,
+            title: EditorialHeading(
+              text: context.l10n.aiSetupAiAssistantSetup,
+              size: 32,
+            ),
+            lead: context.l10n.aiSetupHeroLead,
+          ),
+          const SizedBox(height: 20),
           // ---- Ephemeral mode banner ----
           if (_isEphemeral) ...[
             Card(

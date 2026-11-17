@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:mhad/ui/widgets/design/crisis_support_banner.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/l10n/model_labels.dart';
+import 'package:mhad/ui/theme/app_art.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/design/art_image.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/ai/ai_assistant.dart';
@@ -691,13 +693,18 @@ class _EmptyState extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.all(20),
       children: [
-        const SizedBox(height: 16),
-        Icon(
-          Icons.smart_toy_outlined,
-          size: 48,
-          color: Theme.of(context).colorScheme.primary,
+        const SizedBox(height: 8),
+        // The assistant photo (someone at a desk with tea, phone beside
+        // them) instead of a robot icon: calm and human.
+        const Center(
+          child: ArtImage(
+            AppArt.aiAssistant,
+            width: 168,
+            height: 168,
+            radius: DesignTokens.radiusLg,
+          ),
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 16),
         Text(
           context.l10n.assistantAskMeAnythingAboutYour,
           textAlign: TextAlign.center,

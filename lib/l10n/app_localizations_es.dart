@@ -7413,4 +7413,8 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get homeStartResumeCta => 'Abrir un archivo';
+
+  @override
+  String get aiSetupHeroLead =>
+      'Opcional: conecte un proveedor de IA para recibir ayuda mientras completa su directiva. Todo lo demás funciona sin ella.';
 }

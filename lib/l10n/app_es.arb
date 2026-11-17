@@ -2039,5 +2039,6 @@
   "homeStartUploadBody": "¿Tiene una directiva o un formulario anterior? Súbalo para completar las respuestas que coincidan y luego revise cada una.",
   "homeStartUploadCta": "Subir un documento",
   "homeStartResumeBody": "Abra un archivo de directiva que guardó antes desde esta aplicación y continúe donde lo dejó.",
-  "homeStartResumeCta": "Abrir un archivo"
+  "homeStartResumeCta": "Abrir un archivo",
+  "aiSetupHeroLead": "Opcional: conecte un proveedor de IA para recibir ayuda mientras completa su directiva. Todo lo demás funciona sin ella."
 }

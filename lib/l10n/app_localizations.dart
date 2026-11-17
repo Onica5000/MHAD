@@ -12372,6 +12372,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Open a file'**
   String get homeStartResumeCta;
+
+  /// No description provided for @aiSetupHeroLead.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional: connect an AI provider to get help while you fill out your directive. Everything else works without it.'**
+  String get aiSetupHeroLead;
 }
 
 class _AppLocalizationsDelegate

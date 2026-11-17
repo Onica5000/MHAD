@@ -24,34 +24,29 @@ extension _PipelinePickUi on _PipelineScreenState {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SectionLabel(context.l10n.pickSnapOptional),
-              const SizedBox(height: 6),
-              Text.rich(
-                TextSpan(children: [
-                  TextSpan(text: context.l10n.pickHeadlineLead),
-                  TextSpan(
-                    text: context.l10n.pickHeadlineAccent,
-                    style: TextStyle(color: p.primary),
+              // Photo header (a phone scanning a page) — same photo as Home's
+              // "Upload a document" card, so the hand-off feels continuous.
+              PageHero(
+                art: AppArt.startUpload,
+                eyebrow: context.l10n.pickSnapOptional,
+                lead: context.l10n.pickIntro,
+                title: Text.rich(
+                  TextSpan(children: [
+                    TextSpan(text: context.l10n.pickHeadlineLead),
+                    TextSpan(
+                      text: context.l10n.pickHeadlineAccent,
+                      style: TextStyle(color: p.primary),
+                    ),
+                  ]),
+                  style: TextStyle(
+                    fontFamily: kSerifFamily,
+                    fontFamilyFallback: kSerifFallbacks,
+                    fontStyle: FontStyle.italic,
+                    fontSize: 32,
+                    height: 1.05,
+                    letterSpacing: -0.5,
+                    color: p.text,
                   ),
-                ]),
-                style: TextStyle(
-                  fontFamily: kSerifFamily,
-                  fontFamilyFallback: kSerifFallbacks,
-                  fontStyle: FontStyle.italic,
-                  fontSize: 32,
-                  height: 1.05,
-                  letterSpacing: -0.5,
-                  color: p.text,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                context.l10n.pickIntro,
-                style: TextStyle(
-                  fontFamily: kSansFamily,
-                  fontSize: 14,
-                  height: 1.5,
-                  color: p.textMuted,
                 ),
               ),
               const SizedBox(height: 10),

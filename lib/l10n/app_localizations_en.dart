@@ -7293,4 +7293,8 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeStartResumeCta => 'Open a file';
+
+  @override
+  String get aiSetupHeroLead =>
+      'Optional: connect an AI provider to get help while you fill out your directive. Everything else works without it.';
 }
