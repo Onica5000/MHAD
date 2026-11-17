@@ -19,9 +19,9 @@ When implementing screens, assume Material 3 + a responsive web layout. Lean tow
 Material affordances (`Scaffold`, `FilledButton`, `MaterialPageRoute`) and avoid
 `Cupertino*` widgets — keep the codebase Cupertino-free.
 
-The shipped UI/UX (fonts, layout, look) is the source of truth — preserve it. The old
-Claude Design artboard/handoff bundle was removed 2026-06-28 (it had served its purpose
-and was stale); do not reintroduce it or design against it.
+The shipped UI/UX is the source of truth: the **2026-11 design system** (see *Design
+system* below) — extend it, don't fork it. The old Claude Design artboard/handoff bundle
+was removed 2026-06-28; do not reintroduce it or design against it.
 
 Source PDF: `PA MHAD.pdf`. Improvement backlog: `docs/GAP_ANALYSIS_V4.md`.
 
@@ -120,11 +120,33 @@ This regenerates `app_database.g.dart`.
 - "Not legal advice" disclaimer always shown in UI.
 
 ## Navigation (current model — no hamburger drawer)
-- **Mobile**: floating pill `MhadBottomNav` (Home · Learn · Ask · Settings) on the four
-  top-level screens. **Wide ≥1000px**: persistent `WebSidebar` via `ResponsiveShell`.
+- **Mobile**: floating `MhadBottomNav` (Home · Learn · Ask · Settings · More), every tab
+  labelled. **Wide ≥1000px** (total window width): persistent `WebSidebar` via `ResponsiveShell`.
+- Home/Learn/Ask/Settings are ONE definition: `primaryDestinations()`
+  (`widgets/design/primary_destinations.dart`), read by the nav and the More sheet.
+- **Focus mode** (`routeUsesFocusMode`): wizard + Export shrink the sidebar to a 72px icon
+  rail; `sidebarWidthFor(route)` is the one width source. **Phones hide the nav in the
+  wizard** (`routeHidesBottomNav`); the step header's More opens the More sheet WITH the
+  four primary destinations — nothing is more than one tap away.
 - `app_drawer.dart` was deleted — do not reintroduce a Scaffold `drawer:`.
 - Secondary destinations (New directive, Export, AI setup, Privacy policy) are reached
-  contextually, not via global nav.
+  contextually or via the More sheet / sidebar.
+
+## Design system (2026-11 refresh — extend, don't fork)
+| Piece | Where | Rule |
+|---|---|---|
+| Tokens, palette, type, eyebrow | `ui/theme/app_theme.dart` (`DesignTokens`, `MhadPalette`, `MhadText`) | Font sizes 12/14/16 + display sizes; no 11/13/15 literals (`type_scale_test`) |
+| Photos | `AppArt` enum (`ui/theme/app_art.dart`) → `ArtImage`; files `assets/images/<group>/<id>.webp` | Never `Image.asset` directly (decode buckets + one shared provider) |
+| Headers | `PageHero` (compact / large); gates use `SplitHero` | Keep each screen's own back / exit / status controls |
+| Card rows | `EqualHeightRow`, `PhotoActionCard(fillHeight:)` | **Sibling cards in a row are equal height** (user, 2026-11-17) |
+| Tab titles | `ui/route_titles.dart` | Every route has one (`route_titles_test`) |
+| Art pipeline | `tool/art/art_manifest.json` (single source) → `tool/art/generate_art.py` (Grok `image_gen`, verified, WebP); see `assets/images/README.md` | People photos name a **diverse cast** (user, 2026-11-17); review every image |
+| Nothing-removed check | `tool/ui_inventory.py --build build/web --out after.json`, then `--diff tool/ui_inventory_before.json after.json` | Explain every missing control before merging a UI change |
+
+**Widget tests:** size the VIEW (`tester.view.physicalSize` + `devicePixelRatio = 1`), never
+`binding.setSurfaceSize` — it leaves MediaQuery at 800×600, so "desktop" cases silently
+render the phone layout (`test_view_size_rule_test`). `test/flutter_test_config.dart` loads
+the Learn articles (as `main()` does) and makes `ArtImage` paint placeholders.
 
 ## Localization (single mechanism)
 - Use **only** the generated `AppLocalizations` (ARB files in `lib/l10n/app_*.arb`,
