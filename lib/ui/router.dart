@@ -1,4 +1,6 @@
 import 'package:flutter/foundation.dart';
+import 'package:mhad/data/app_data/app_data.dart' show appData;
+import 'package:mhad/ui/ai/ask_ai_screen.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/ai/ai_assistant.dart';
@@ -214,7 +216,11 @@ GoRouter _buildRouter(DisclaimerNotifier disclaimer,
           path: AppRoutes.assistant,
           builder: (context, state) {
             final assistantContext = state.extra as AssistantContext?;
-            return AssistantScreen(context: assistantContext);
+            // The API-key chat is hidden (AiConfig.apiModeVisible, 2026-11-17):
+            // the visible AI is the copy-and-paste "Ask AI" handoff.
+            return appData.ai.apiModeVisible
+                ? AssistantScreen(context: assistantContext)
+                : AskAiScreen(assistantContext: assistantContext);
           },
         ),
         GoRoute(
@@ -240,6 +246,9 @@ GoRouter _buildRouter(DisclaimerNotifier disclaimer,
         ),
         GoRoute(
           path: AppRoutes.aiSetup,
+          // Hidden with the API path: AI help needs no key now.
+          redirect: (_, _) =>
+              appData.ai.apiModeVisible ? null : AppRoutes.assistant,
           builder: (_, state) =>
               AiSetupScreen(returnRoute: state.uri.queryParameters['return']),
         ),

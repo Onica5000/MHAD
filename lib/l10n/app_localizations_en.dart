@@ -7466,4 +7466,27 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aiHandoffPrivacyContinue => 'I understand, continue';
+
+  @override
+  String get askAiTitle => 'Ask AI';
+
+  @override
+  String get askAiEyebrow => 'AI help · optional';
+
+  @override
+  String get askAiLead =>
+      'Type your question, copy it into the AI you already use, and read the answer there. PA MHAD adds the Pennsylvania facts it needs.';
+
+  @override
+  String get askAiQuestionLabel => 'Your question';
+
+  @override
+  String get askAiPanelTitle => 'Ask your AI';
+
+  @override
+  String get askAiPanelSubtitle =>
+      'Your question goes with the Pennsylvania facts it needs. Names, addresses, and phone numbers are removed.';
+
+  @override
+  String get navAskAi => 'Ask AI';
 }

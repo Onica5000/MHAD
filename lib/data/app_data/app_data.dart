@@ -71,6 +71,14 @@ class AiConfig {
   /// empty/absent → the consumer falls back to the hardcoded `AiProvider.models`.
   final Map<String, List<String>> providerModels;
 
+  /// Whether the API-key AI (AI setup page, in-app chat, automatic tips,
+  /// per-field suggestions) is shown. FALSE since 2026-11-17: the visible AI
+  /// is the copy-and-paste handoff to the person's own ChatGPT / Claude /
+  /// Gemini / Grok, and the API path stays in the code as a hidden backup
+  /// until the owner decides it's needed (e.g. with a dedicated key — which
+  /// would need a relay server; a static site can't hide a key).
+  final bool apiModeVisible;
+
   const AiConfig({
     this.model = 'gemini-3.5-flash-lite',
     this.maxContextTokens = 1048576,
@@ -81,6 +89,7 @@ class AiConfig {
     this.rateLimitsAsOf = '',
     this.providerModels = const {},
     this.freeTierRpdByModel = const {},
+    this.apiModeVisible = false,
   });
 
   /// The curated picker list for [providerName], or null if not externalized.
@@ -97,6 +106,7 @@ class AiConfig {
         tpm: (m['tpm'] as num?)?.toInt() ?? 1000000,
         maxOutputTokens: (m['maxOutputTokens'] as num?)?.toInt() ?? 65536,
         rateLimitsAsOf: (m['rateLimitsAsOf'] ?? '').toString(),
+        apiModeVisible: m['apiModeVisible'] == true,
         providerModels: _parseProviderModels(m['providerModels']),
         freeTierRpdByModel: {
           if (m['freeTierRpdByModel'] is Map)

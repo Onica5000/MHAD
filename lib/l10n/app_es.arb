@@ -2085,5 +2085,12 @@
   "aiHandoffPrivacyHowTitle": "Cómo funciona",
   "aiHandoffPrivacyHowSteps": "1. Copie las instrucciones.\n2. Péguelas en {service}, adjunte allí cualquier documento y envíelas.\n3. Copie la respuesta de la IA, vuelva y péguela aquí.",
   "aiHandoffPrivacyKept": "Mientras no esté, su trabajo aquí se conserva durante 30 minutos. Puede ampliar ese tiempo.",
-  "aiHandoffPrivacyContinue": "Entiendo, continuar"
+  "aiHandoffPrivacyContinue": "Entiendo, continuar",
+  "askAiTitle": "Pregunte a la IA",
+  "askAiEyebrow": "Ayuda de IA · opcional",
+  "askAiLead": "Escriba su pregunta, cópiela en la IA que ya usa y lea la respuesta allí. PA MHAD agrega los datos de Pensilvania que hacen falta.",
+  "askAiQuestionLabel": "Su pregunta",
+  "askAiPanelTitle": "Pregunte a su IA",
+  "askAiPanelSubtitle": "Su pregunta va con los datos de Pensilvania que hacen falta. Se quitan nombres, direcciones y teléfonos.",
+  "navAskAi": "Preguntar a la IA"
 }

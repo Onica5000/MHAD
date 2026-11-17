@@ -3085,5 +3085,12 @@
   "aiHandoffPrivacyHowSteps": "1. Copy the instructions.\n2. Paste them into {service}, attach any document there, and send.\n3. Copy the AI's answer, come back, and paste it here.",
   "@aiHandoffPrivacyHowSteps": {"placeholders": {"service": {"type": "String"}}},
   "aiHandoffPrivacyKept": "While you're away, your work here is kept for 30 minutes. You can extend it.",
-  "aiHandoffPrivacyContinue": "I understand, continue"
+  "aiHandoffPrivacyContinue": "I understand, continue",
+  "askAiTitle": "Ask AI",
+  "askAiEyebrow": "AI help · optional",
+  "askAiLead": "Type your question, copy it into the AI you already use, and read the answer there. PA MHAD adds the Pennsylvania facts it needs.",
+  "askAiQuestionLabel": "Your question",
+  "askAiPanelTitle": "Ask your AI",
+  "askAiPanelSubtitle": "Your question goes with the Pennsylvania facts it needs. Names, addresses, and phone numbers are removed.",
+  "navAskAi": "Ask AI"
 }

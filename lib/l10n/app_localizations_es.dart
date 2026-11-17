@@ -7586,4 +7586,27 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get aiHandoffPrivacyContinue => 'Entiendo, continuar';
+
+  @override
+  String get askAiTitle => 'Pregunte a la IA';
+
+  @override
+  String get askAiEyebrow => 'Ayuda de IA · opcional';
+
+  @override
+  String get askAiLead =>
+      'Escriba su pregunta, cópiela en la IA que ya usa y lea la respuesta allí. PA MHAD agrega los datos de Pensilvania que hacen falta.';
+
+  @override
+  String get askAiQuestionLabel => 'Su pregunta';
+
+  @override
+  String get askAiPanelTitle => 'Pregunte a su IA';
+
+  @override
+  String get askAiPanelSubtitle =>
+      'Su pregunta va con los datos de Pensilvania que hacen falta. Se quitan nombres, direcciones y teléfonos.';
+
+  @override
+  String get navAskAi => 'Preguntar a la IA';
 }

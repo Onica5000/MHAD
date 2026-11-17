@@ -1,5 +1,6 @@
 ﻿import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:mhad/data/app_data/app_data.dart' show appData;
 import 'package:mhad/ui/theme/app_art.dart';
 import 'package:mhad/ui/widgets/design/page_hero.dart';
 import 'package:mhad/constants.dart';
@@ -90,18 +91,22 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           // mixed one functional item (AI setup) with three legal/
           // informational ones. AI assistant is now its own functional
           // section; the legal/privacy items live under "Legal & privacy".
-          SectionLabel(context.l10n.navAiAssistant),
-          const SizedBox(height: 8),
-          DesignCard(
-            padding: EdgeInsets.zero,
-            child: _SettingsRow(
-              icon: Icons.auto_awesome,
-              title: context.l10n.navAiAssistant,
-              subtitle: context.l10n.settingsChooseAProviderAndAdd,
-              onTap: () => context.push(AppRoutes.aiSetup),
+          // AI setup (keys, providers) exists only with the API path
+          // (AiConfig.apiModeVisible); "Ask AI" needs no setup.
+          if (appData.ai.apiModeVisible) ...[
+            SectionLabel(context.l10n.navAiAssistant),
+            const SizedBox(height: 8),
+            DesignCard(
+              padding: EdgeInsets.zero,
+              child: _SettingsRow(
+                icon: Icons.auto_awesome,
+                title: context.l10n.navAiAssistant,
+                subtitle: context.l10n.settingsChooseAProviderAndAdd,
+                onTap: () => context.push(AppRoutes.aiSetup),
+              ),
             ),
-          ),
-          const SizedBox(height: 20),
+            const SizedBox(height: 20),
+          ],
 
           // "Get help" moved to the left sidebar (above the crisis card) for
           // prominence. Accessibility stays here.

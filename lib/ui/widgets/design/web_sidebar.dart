@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/data/app_data/app_data.dart' show appData;
 import 'package:mhad/ui/app_actions.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -78,19 +79,30 @@ class WebSidebar extends ConsumerWidget {
         onTap: () => openForDirective(ref, AppRoutes.uploadRoute,
             preferredId: recentId),
       ),
-      _SidebarItem(
-        icon: aiReady ? Icons.auto_awesome : Icons.auto_awesome_outlined,
-        activeIcon: Icons.auto_awesome,
-        label: context.l10n.navAiAssistant,
-        isActive: activeRoute == AppRoutes.assistant ||
-            activeRoute == AppRoutes.aiSetup,
-        badge: aiReady
-            ? context.l10n.badgeAiReady
-            : context.l10n.badgeAiSetUp,
-        badgeOk: aiReady,
-        onTap: () =>
-            appRouter.go(aiReady ? AppRoutes.assistant : AppRoutes.aiSetup),
-      ),
+      // With the API path hidden (AiConfig.apiModeVisible) this is "Ask AI"
+      // — the copy-and-paste handoff needs no setup, so no SET UP badge.
+      if (appData.ai.apiModeVisible)
+        _SidebarItem(
+          icon: aiReady ? Icons.auto_awesome : Icons.auto_awesome_outlined,
+          activeIcon: Icons.auto_awesome,
+          label: context.l10n.navAiAssistant,
+          isActive: activeRoute == AppRoutes.assistant ||
+              activeRoute == AppRoutes.aiSetup,
+          badge: aiReady
+              ? context.l10n.badgeAiReady
+              : context.l10n.badgeAiSetUp,
+          badgeOk: aiReady,
+          onTap: () =>
+              appRouter.go(aiReady ? AppRoutes.assistant : AppRoutes.aiSetup),
+        )
+      else
+        _SidebarItem(
+          icon: Icons.auto_awesome_outlined,
+          activeIcon: Icons.auto_awesome,
+          label: context.l10n.navAskAi,
+          isActive: activeRoute == AppRoutes.assistant,
+          onTap: () => appRouter.go(AppRoutes.assistant),
+        ),
       _SidebarItem(
         icon: Icons.print_outlined,
         activeIcon: Icons.print,

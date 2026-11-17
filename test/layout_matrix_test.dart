@@ -35,7 +35,12 @@ void main() {
     'breakpoint': Size(1000, 700),
     'desktop': Size(1440, 900),
   };
-  const routes = [AppRoutes.home, AppRoutes.education, AppRoutes.settings];
+  const routes = [
+    AppRoutes.home,
+    AppRoutes.education,
+    AppRoutes.settings,
+    AppRoutes.assistant, // Ask AI (copy-and-paste handoff)
+  ];
 
   for (final lang in const ['en', 'es']) {
     for (final scale in const [1.0, 1.3]) {

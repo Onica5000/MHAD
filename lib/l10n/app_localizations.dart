@@ -12648,6 +12648,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'I understand, continue'**
   String get aiHandoffPrivacyContinue;
+
+  /// No description provided for @askAiTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask AI'**
+  String get askAiTitle;
+
+  /// No description provided for @askAiEyebrow.
+  ///
+  /// In en, this message translates to:
+  /// **'AI help · optional'**
+  String get askAiEyebrow;
+
+  /// No description provided for @askAiLead.
+  ///
+  /// In en, this message translates to:
+  /// **'Type your question, copy it into the AI you already use, and read the answer there. PA MHAD adds the Pennsylvania facts it needs.'**
+  String get askAiLead;
+
+  /// No description provided for @askAiQuestionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Your question'**
+  String get askAiQuestionLabel;
+
+  /// No description provided for @askAiPanelTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask your AI'**
+  String get askAiPanelTitle;
+
+  /// No description provided for @askAiPanelSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your question goes with the Pennsylvania facts it needs. Names, addresses, and phone numbers are removed.'**
+  String get askAiPanelSubtitle;
+
+  /// No description provided for @navAskAi.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask AI'**
+  String get navAskAi;
 }
 
 class _AppLocalizationsDelegate

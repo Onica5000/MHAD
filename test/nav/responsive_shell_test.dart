@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mhad/data/app_data/app_data.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/providers/app_providers.dart';
@@ -335,8 +336,23 @@ void main() {
       expect(currentRoute(), AppRoutes.home);
     });
 
-    testWidgets('Ask goes to AI setup when no key is configured',
+    testWidgets('Ask opens Ask AI without any key (copy-and-paste handoff)',
         (tester) async {
+      // The API-key AI is hidden by default (AiConfig.apiModeVisible), so
+      // AI help needs no setup.
+      await pumpShell(tester, size: phone, initial: AppRoutes.home);
+      await tester.tap(find.bySemanticsLabel('Ask'));
+      await tester.pumpAndSettle();
+      expect(currentRoute(), AppRoutes.assistant);
+    });
+
+    testWidgets('with the API path shown, Ask without a key goes to AI setup',
+        (tester) async {
+      final saved = AppData.instance;
+      AppData.instance = AppData.fromJson(const {
+        'ai': {'apiModeVisible': true},
+      });
+      addTearDown(() => AppData.instance = saved);
       await pumpShell(tester, size: phone, initial: AppRoutes.home);
       await tester.tap(find.bySemanticsLabel('Ask'));
       await tester.pumpAndSettle();
