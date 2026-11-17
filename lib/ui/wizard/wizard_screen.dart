@@ -2,6 +2,8 @@
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:mhad/data/app_data/app_data.dart' show appData;
+import 'package:mhad/ui/ai/ai_step_helper.dart';
 import 'package:mhad/ui/widgets/design/back_link.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -438,11 +440,21 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                     // that's too narrow for the rail.
                     if (!showAiRail && !(keyboardOpen && !shellActive))
                       WizardAiBar(
-                        onAsk: () => _openStepAi(
-                          context,
-                          formType,
-                          currentStep.displayName,
-                        ),
+                        // Copy-and-paste AI help opens IN the wizard (a
+                        // sheet); with the API path shown, the old chat page.
+                        onAsk: () => appData.ai.apiModeVisible
+                            ? _openStepAi(
+                                context,
+                                formType,
+                                currentStep.displayName,
+                              )
+                            : showAiStepHelperSheet(
+                                context,
+                                formType: formType.name,
+                                step: currentStep,
+                                stepName: currentStep.displayName,
+                                directiveId: directive.id,
+                              ),
                       ),
                     // Desktop: the same Back/Continue bar as phones, under the
                     // form (one implementation, one label). The column has a
@@ -517,17 +529,33 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                     if (showAiRail) ...[
                       Container(width: 1, color: p.border),
                       FocusTraversalGroup(
-                        child: WizardAiRail(
-                          formType: formType.name,
-                          step: currentStep,
-                          stepName: currentStep.displayName,
-                          directiveId: directive.id,
-                          onOpenFull: () => _openStepAi(
-                            context,
-                            formType,
-                            currentStep.displayName,
-                          ),
-                        ),
+                        child: appData.ai.apiModeVisible
+                            ? WizardAiRail(
+                                formType: formType.name,
+                                step: currentStep,
+                                stepName: currentStep.displayName,
+                                directiveId: directive.id,
+                                onOpenFull: () => _openStepAi(
+                                  context,
+                                  formType,
+                                  currentStep.displayName,
+                                ),
+                              )
+                            // Copy-and-paste step help (API path hidden).
+                            : Container(
+                                width: 320,
+                                color: p.card,
+                                child: SingleChildScrollView(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(20, 24, 20, 24),
+                                  child: AiStepHelper(
+                                    formType: formType.name,
+                                    step: currentStep,
+                                    stepName: currentStep.displayName,
+                                    directiveId: directive.id,
+                                  ),
+                                ),
+                              ),
                       ),
                     ],
                   ],

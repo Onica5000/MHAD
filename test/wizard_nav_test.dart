@@ -10,6 +10,7 @@ import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/services/disclaimer_service.dart';
 import 'package:mhad/services/onboarding_service.dart';
 import 'package:mhad/services/privacy_mode_service.dart';
+import 'package:mhad/ui/ai/ai_step_helper.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/widgets/design/art_image.dart';
 import 'package:mhad/ui/widgets/design/bottom_nav.dart';
@@ -116,6 +117,24 @@ void main() {
             of: find.byType(StepHead), matching: find.text('More')),
         findsNothing,
         reason: 'desktop keeps the sidebar rail; More is a phone affordance');
+    // The AI rail is the copy-and-paste step helper (API path hidden).
+    expect(find.byType(AiStepHelper), findsOneWidget);
+
+    await db.close();
+  });
+
+  testWidgets('phone: "Need help?" opens the step helper without leaving',
+      (tester) async {
+    final db = await pumpWizard(tester, const Size(390, 844));
+    expect(find.byType(AiStepHelper), findsNothing);
+
+    await tester.tap(find.textContaining('Need help with this step'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(AiStepHelper), findsOneWidget);
+    expect(appRouter.routerDelegate.currentConfiguration.uri.path,
+        startsWith('/wizard/'),
+        reason: 'the help opens in a sheet; the person stays in the wizard');
 
     await db.close();
   });

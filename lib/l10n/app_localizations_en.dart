@@ -7512,4 +7512,135 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get autofillWhatWorksWell => 'What works well';
+
+  @override
+  String get aiStepHelpTitle => 'AI help for this step';
+
+  @override
+  String get aiStepHelpSubtitle =>
+      'Optional. Your own AI answers — nothing is filled in for you.';
+
+  @override
+  String get aiStepHelpPanelTitle => 'Ask your AI about this step';
+
+  @override
+  String get aiStepHelpPanelSubtitle =>
+      'Your question goes with this step and what you\'ve filled in so far — names, addresses, and phone numbers removed.';
+
+  @override
+  String get aiStepQAboutYou1 =>
+      'Why does the directive ask for my date of birth and address?';
+
+  @override
+  String get aiStepQAboutYou2 => 'Who should have a copy of my directive?';
+
+  @override
+  String get aiStepQAboutYou3 => 'Can someone help me fill this out?';
+
+  @override
+  String get aiStepQWhenItKicksIn1 =>
+      'What does it mean to be found unable to make mental health decisions?';
+
+  @override
+  String get aiStepQWhenItKicksIn2 =>
+      'Who decides when my directive takes effect?';
+
+  @override
+  String get aiStepQWhenItKicksIn3 =>
+      'Can I choose more than one situation for when it applies?';
+
+  @override
+  String get aiStepQPeopleITrust1 => 'What does a mental health care agent do?';
+
+  @override
+  String get aiStepQPeopleITrust2 => 'Who can — and can\'t — be my agent?';
+
+  @override
+  String get aiStepQPeopleITrust3 => 'Should I name an alternate agent?';
+
+  @override
+  String get aiStepQGuardian1 =>
+      'What\'s the difference between a guardian and an agent?';
+
+  @override
+  String get aiStepQGuardian2 => 'Do I have to nominate a guardian?';
+
+  @override
+  String get aiStepQGuardian3 => 'How does a court choose a guardian?';
+
+  @override
+  String get aiStepQWhereIWantCare1 =>
+      'How do I find mental health facilities near me?';
+
+  @override
+  String get aiStepQWhereIWantCare2 =>
+      'Can I name facilities I don\'t want to go to?';
+
+  @override
+  String get aiStepQWhereIWantCare3 =>
+      'What room and environment preferences can I list?';
+
+  @override
+  String get aiStepQDiagnoses1 => 'Do I have to list my diagnoses?';
+
+  @override
+  String get aiStepQDiagnoses2 =>
+      'How do I find the official name of a condition?';
+
+  @override
+  String get aiStepQDiagnoses3 => 'Who will see the diagnoses I list?';
+
+  @override
+  String get aiStepQMedications1 =>
+      'Are my medication preferences binding on doctors?';
+
+  @override
+  String get aiStepQMedications2 =>
+      'What should I write about medications I refuse?';
+
+  @override
+  String get aiStepQMedications3 => 'Can I set limits on a medication?';
+
+  @override
+  String get aiStepQAllergies1 =>
+      'What\'s the difference between an allergy and a side effect?';
+
+  @override
+  String get aiStepQAllergies2 =>
+      'Why does this section matter so much in an emergency?';
+
+  @override
+  String get aiStepQAllergies3 => 'How should I describe a past bad reaction?';
+
+  @override
+  String get aiStepQProcedures1 =>
+      'What is ECT, and what does consenting to it mean?';
+
+  @override
+  String get aiStepQProcedures2 =>
+      'What happens if I say nothing about research studies?';
+
+  @override
+  String get aiStepQProcedures3 => 'Can my agent consent to these for me?';
+
+  @override
+  String get aiStepQAnythingElse1 =>
+      'What else do people include in a mental health directive?';
+
+  @override
+  String get aiStepQAnythingElse2 =>
+      'How do I write a crisis plan my care team can use?';
+
+  @override
+  String get aiStepQAnythingElse3 =>
+      'Can I include instructions about my children or pets?';
+
+  @override
+  String get aiStepQReview1 => 'Who can be a witness when I sign?';
+
+  @override
+  String get aiStepQReview2 => 'What should I do with copies after I sign?';
+
+  @override
+  String get aiStepQReview3 => 'How do I change or revoke my directive later?';
 }

@@ -12732,6 +12732,228 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'What works well'**
   String get autofillWhatWorksWell;
+
+  /// No description provided for @aiStepHelpTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'AI help for this step'**
+  String get aiStepHelpTitle;
+
+  /// No description provided for @aiStepHelpSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional. Your own AI answers — nothing is filled in for you.'**
+  String get aiStepHelpSubtitle;
+
+  /// No description provided for @aiStepHelpPanelTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask your AI about this step'**
+  String get aiStepHelpPanelTitle;
+
+  /// No description provided for @aiStepHelpPanelSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your question goes with this step and what you\'ve filled in so far — names, addresses, and phone numbers removed.'**
+  String get aiStepHelpPanelSubtitle;
+
+  /// No description provided for @aiStepQAboutYou1.
+  ///
+  /// In en, this message translates to:
+  /// **'Why does the directive ask for my date of birth and address?'**
+  String get aiStepQAboutYou1;
+
+  /// No description provided for @aiStepQAboutYou2.
+  ///
+  /// In en, this message translates to:
+  /// **'Who should have a copy of my directive?'**
+  String get aiStepQAboutYou2;
+
+  /// No description provided for @aiStepQAboutYou3.
+  ///
+  /// In en, this message translates to:
+  /// **'Can someone help me fill this out?'**
+  String get aiStepQAboutYou3;
+
+  /// No description provided for @aiStepQWhenItKicksIn1.
+  ///
+  /// In en, this message translates to:
+  /// **'What does it mean to be found unable to make mental health decisions?'**
+  String get aiStepQWhenItKicksIn1;
+
+  /// No description provided for @aiStepQWhenItKicksIn2.
+  ///
+  /// In en, this message translates to:
+  /// **'Who decides when my directive takes effect?'**
+  String get aiStepQWhenItKicksIn2;
+
+  /// No description provided for @aiStepQWhenItKicksIn3.
+  ///
+  /// In en, this message translates to:
+  /// **'Can I choose more than one situation for when it applies?'**
+  String get aiStepQWhenItKicksIn3;
+
+  /// No description provided for @aiStepQPeopleITrust1.
+  ///
+  /// In en, this message translates to:
+  /// **'What does a mental health care agent do?'**
+  String get aiStepQPeopleITrust1;
+
+  /// No description provided for @aiStepQPeopleITrust2.
+  ///
+  /// In en, this message translates to:
+  /// **'Who can — and can\'t — be my agent?'**
+  String get aiStepQPeopleITrust2;
+
+  /// No description provided for @aiStepQPeopleITrust3.
+  ///
+  /// In en, this message translates to:
+  /// **'Should I name an alternate agent?'**
+  String get aiStepQPeopleITrust3;
+
+  /// No description provided for @aiStepQGuardian1.
+  ///
+  /// In en, this message translates to:
+  /// **'What\'s the difference between a guardian and an agent?'**
+  String get aiStepQGuardian1;
+
+  /// No description provided for @aiStepQGuardian2.
+  ///
+  /// In en, this message translates to:
+  /// **'Do I have to nominate a guardian?'**
+  String get aiStepQGuardian2;
+
+  /// No description provided for @aiStepQGuardian3.
+  ///
+  /// In en, this message translates to:
+  /// **'How does a court choose a guardian?'**
+  String get aiStepQGuardian3;
+
+  /// No description provided for @aiStepQWhereIWantCare1.
+  ///
+  /// In en, this message translates to:
+  /// **'How do I find mental health facilities near me?'**
+  String get aiStepQWhereIWantCare1;
+
+  /// No description provided for @aiStepQWhereIWantCare2.
+  ///
+  /// In en, this message translates to:
+  /// **'Can I name facilities I don\'t want to go to?'**
+  String get aiStepQWhereIWantCare2;
+
+  /// No description provided for @aiStepQWhereIWantCare3.
+  ///
+  /// In en, this message translates to:
+  /// **'What room and environment preferences can I list?'**
+  String get aiStepQWhereIWantCare3;
+
+  /// No description provided for @aiStepQDiagnoses1.
+  ///
+  /// In en, this message translates to:
+  /// **'Do I have to list my diagnoses?'**
+  String get aiStepQDiagnoses1;
+
+  /// No description provided for @aiStepQDiagnoses2.
+  ///
+  /// In en, this message translates to:
+  /// **'How do I find the official name of a condition?'**
+  String get aiStepQDiagnoses2;
+
+  /// No description provided for @aiStepQDiagnoses3.
+  ///
+  /// In en, this message translates to:
+  /// **'Who will see the diagnoses I list?'**
+  String get aiStepQDiagnoses3;
+
+  /// No description provided for @aiStepQMedications1.
+  ///
+  /// In en, this message translates to:
+  /// **'Are my medication preferences binding on doctors?'**
+  String get aiStepQMedications1;
+
+  /// No description provided for @aiStepQMedications2.
+  ///
+  /// In en, this message translates to:
+  /// **'What should I write about medications I refuse?'**
+  String get aiStepQMedications2;
+
+  /// No description provided for @aiStepQMedications3.
+  ///
+  /// In en, this message translates to:
+  /// **'Can I set limits on a medication?'**
+  String get aiStepQMedications3;
+
+  /// No description provided for @aiStepQAllergies1.
+  ///
+  /// In en, this message translates to:
+  /// **'What\'s the difference between an allergy and a side effect?'**
+  String get aiStepQAllergies1;
+
+  /// No description provided for @aiStepQAllergies2.
+  ///
+  /// In en, this message translates to:
+  /// **'Why does this section matter so much in an emergency?'**
+  String get aiStepQAllergies2;
+
+  /// No description provided for @aiStepQAllergies3.
+  ///
+  /// In en, this message translates to:
+  /// **'How should I describe a past bad reaction?'**
+  String get aiStepQAllergies3;
+
+  /// No description provided for @aiStepQProcedures1.
+  ///
+  /// In en, this message translates to:
+  /// **'What is ECT, and what does consenting to it mean?'**
+  String get aiStepQProcedures1;
+
+  /// No description provided for @aiStepQProcedures2.
+  ///
+  /// In en, this message translates to:
+  /// **'What happens if I say nothing about research studies?'**
+  String get aiStepQProcedures2;
+
+  /// No description provided for @aiStepQProcedures3.
+  ///
+  /// In en, this message translates to:
+  /// **'Can my agent consent to these for me?'**
+  String get aiStepQProcedures3;
+
+  /// No description provided for @aiStepQAnythingElse1.
+  ///
+  /// In en, this message translates to:
+  /// **'What else do people include in a mental health directive?'**
+  String get aiStepQAnythingElse1;
+
+  /// No description provided for @aiStepQAnythingElse2.
+  ///
+  /// In en, this message translates to:
+  /// **'How do I write a crisis plan my care team can use?'**
+  String get aiStepQAnythingElse2;
+
+  /// No description provided for @aiStepQAnythingElse3.
+  ///
+  /// In en, this message translates to:
+  /// **'Can I include instructions about my children or pets?'**
+  String get aiStepQAnythingElse3;
+
+  /// No description provided for @aiStepQReview1.
+  ///
+  /// In en, this message translates to:
+  /// **'Who can be a witness when I sign?'**
+  String get aiStepQReview1;
+
+  /// No description provided for @aiStepQReview2.
+  ///
+  /// In en, this message translates to:
+  /// **'What should I do with copies after I sign?'**
+  String get aiStepQReview2;
+
+  /// No description provided for @aiStepQReview3.
+  ///
+  /// In en, this message translates to:
+  /// **'How do I change or revoke my directive later?'**
+  String get aiStepQReview3;
 }
 
 class _AppLocalizationsDelegate

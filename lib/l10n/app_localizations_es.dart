@@ -7632,4 +7632,140 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get autofillWhatWorksWell => 'Qué funciona bien';
+
+  @override
+  String get aiStepHelpTitle => 'Ayuda de IA para este paso';
+
+  @override
+  String get aiStepHelpSubtitle =>
+      'Opcional. Responde su propia IA: no se completa nada por usted.';
+
+  @override
+  String get aiStepHelpPanelTitle => 'Pregunte a su IA sobre este paso';
+
+  @override
+  String get aiStepHelpPanelSubtitle =>
+      'Su pregunta va con este paso y lo que ha completado hasta ahora, sin nombres, direcciones ni teléfonos.';
+
+  @override
+  String get aiStepQAboutYou1 =>
+      '¿Por qué la directiva pide mi fecha de nacimiento y mi dirección?';
+
+  @override
+  String get aiStepQAboutYou2 =>
+      '¿Quién debería tener una copia de mi directiva?';
+
+  @override
+  String get aiStepQAboutYou3 => '¿Alguien puede ayudarme a completar esto?';
+
+  @override
+  String get aiStepQWhenItKicksIn1 =>
+      '¿Qué significa que se determine que no puedo tomar decisiones de salud mental?';
+
+  @override
+  String get aiStepQWhenItKicksIn2 =>
+      '¿Quién decide cuándo entra en vigor mi directiva?';
+
+  @override
+  String get aiStepQWhenItKicksIn3 =>
+      '¿Puedo elegir más de una situación en la que se aplique?';
+
+  @override
+  String get aiStepQPeopleITrust1 =>
+      '¿Qué hace un agente de atención de salud mental?';
+
+  @override
+  String get aiStepQPeopleITrust2 => '¿Quién puede ser mi agente y quién no?';
+
+  @override
+  String get aiStepQPeopleITrust3 => '¿Debería nombrar un agente suplente?';
+
+  @override
+  String get aiStepQGuardian1 =>
+      '¿Cuál es la diferencia entre un tutor y un agente?';
+
+  @override
+  String get aiStepQGuardian2 => '¿Tengo que nombrar a un tutor?';
+
+  @override
+  String get aiStepQGuardian3 => '¿Cómo elige un tribunal a un tutor?';
+
+  @override
+  String get aiStepQWhereIWantCare1 =>
+      '¿Cómo encuentro centros de salud mental cerca de mí?';
+
+  @override
+  String get aiStepQWhereIWantCare2 =>
+      '¿Puedo nombrar centros a los que no quiero ir?';
+
+  @override
+  String get aiStepQWhereIWantCare3 =>
+      '¿Qué preferencias de habitación y entorno puedo indicar?';
+
+  @override
+  String get aiStepQDiagnoses1 => '¿Tengo que indicar mis diagnósticos?';
+
+  @override
+  String get aiStepQDiagnoses2 =>
+      '¿Cómo encuentro el nombre oficial de una afección?';
+
+  @override
+  String get aiStepQDiagnoses3 => '¿Quién verá los diagnósticos que indique?';
+
+  @override
+  String get aiStepQMedications1 =>
+      '¿Mis preferencias sobre medicamentos obligan a los médicos?';
+
+  @override
+  String get aiStepQMedications2 =>
+      '¿Qué debo escribir sobre los medicamentos que rechazo?';
+
+  @override
+  String get aiStepQMedications3 => '¿Puedo poner límites a un medicamento?';
+
+  @override
+  String get aiStepQAllergies1 =>
+      '¿Cuál es la diferencia entre una alergia y un efecto secundario?';
+
+  @override
+  String get aiStepQAllergies2 =>
+      '¿Por qué esta sección es tan importante en una emergencia?';
+
+  @override
+  String get aiStepQAllergies3 =>
+      '¿Cómo debo describir una mala reacción que tuve?';
+
+  @override
+  String get aiStepQProcedures1 =>
+      '¿Qué es la TEC y qué significa dar mi consentimiento?';
+
+  @override
+  String get aiStepQProcedures2 =>
+      '¿Qué pasa si no digo nada sobre los estudios de investigación?';
+
+  @override
+  String get aiStepQProcedures3 =>
+      '¿Puede mi agente dar su consentimiento a esto por mí?';
+
+  @override
+  String get aiStepQAnythingElse1 =>
+      '¿Qué más suele incluir la gente en una directiva de salud mental?';
+
+  @override
+  String get aiStepQAnythingElse2 =>
+      '¿Cómo escribo un plan de crisis que mi equipo de atención pueda usar?';
+
+  @override
+  String get aiStepQAnythingElse3 =>
+      '¿Puedo incluir instrucciones sobre mis hijos o mascotas?';
+
+  @override
+  String get aiStepQReview1 => '¿Quién puede ser testigo cuando firme?';
+
+  @override
+  String get aiStepQReview2 => '¿Qué hago con las copias después de firmar?';
+
+  @override
+  String get aiStepQReview3 =>
+      '¿Cómo cambio o revoco mi directiva más adelante?';
 }
