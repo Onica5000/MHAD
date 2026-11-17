@@ -3142,5 +3142,8 @@
   "articleAskAiButton": "Ask AI about this article",
   "articleAskAiQ1": "Explain this in simpler words.",
   "articleAskAiQ2": "What does this mean for my directive?",
-  "articleAskAiQ3": "What should I ask my doctor or agent about this?"
+  "articleAskAiQ3": "What should I ask my doctor or agent about this?",
+  "sideEffectsHandoffTitle": "Check side effects with your AI",
+  "sideEffectsHandoffSubtitle": "PA MHAD adds the official FDA label text for your medications. Your AI turns it into a checklist you can tick.",
+  "sideEffectsGettingLabels": "Getting the official FDA label text…"
 }

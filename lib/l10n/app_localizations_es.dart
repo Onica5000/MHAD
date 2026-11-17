@@ -7788,4 +7788,16 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get articleAskAiQ3 =>
       '¿Qué debería preguntarle a mi médico o a mi agente sobre esto?';
+
+  @override
+  String get sideEffectsHandoffTitle =>
+      'Revise los efectos secundarios con su IA';
+
+  @override
+  String get sideEffectsHandoffSubtitle =>
+      'PA MHAD agrega el texto oficial de la etiqueta de la FDA de sus medicamentos. Su IA lo convierte en una lista que usted puede marcar.';
+
+  @override
+  String get sideEffectsGettingLabels =>
+      'Obteniendo el texto oficial de la etiqueta de la FDA…';
 }

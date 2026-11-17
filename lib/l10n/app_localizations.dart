@@ -12990,6 +12990,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'What should I ask my doctor or agent about this?'**
   String get articleAskAiQ3;
+
+  /// No description provided for @sideEffectsHandoffTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Check side effects with your AI'**
+  String get sideEffectsHandoffTitle;
+
+  /// No description provided for @sideEffectsHandoffSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'PA MHAD adds the official FDA label text for your medications. Your AI turns it into a checklist you can tick.'**
+  String get sideEffectsHandoffSubtitle;
+
+  /// No description provided for @sideEffectsGettingLabels.
+  ///
+  /// In en, this message translates to:
+  /// **'Getting the official FDA label text…'**
+  String get sideEffectsGettingLabels;
 }
 
 class _AppLocalizationsDelegate

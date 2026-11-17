@@ -67,7 +67,9 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('Want a short checklist? (optional)'), findsOneWidget);
+    // The checklist is optional AI help — by copy and paste now (the
+    // API-key path is hidden), with no setup needed.
+    expect(find.text('Check side effects with your AI'), findsOneWidget);
     expect(
       find.text('Official FDA labels'.toUpperCase()).evaluate().isNotEmpty ||
           find.text('Official FDA labels').evaluate().isNotEmpty,
@@ -128,7 +130,7 @@ void main() {
 
     final cards = tester.widgetList<FdaLabelCard>(find.byType(FdaLabelCard));
     expect(cards.map((c) => c.medName), ['Olanzapine']);
-    expect(find.text('Want a short checklist? (optional)'), findsNothing);
+    expect(find.text('Check side effects with your AI'), findsNothing);
     expect(find.textContaining('Add the medications you'), findsNothing);
 
     await tester.pumpWidget(const SizedBox());

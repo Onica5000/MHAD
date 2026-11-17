@@ -2,6 +2,11 @@ import 'dart:convert';
 
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/ai/ai_handoff_panel.dart';
+import 'package:mhad/services/openfda_service.dart';
+import 'package:mhad/data/app_data/app_data.dart' show appData;
+import 'package:mhad/ai/handoff/handoff_task.dart';
+import 'dart:async';
 import 'package:mhad/ui/widgets/design/back_link.dart';
 import 'package:mhad/ui/widgets/design/page_hero.dart';
 import 'package:mhad/ui/theme/app_art.dart';
@@ -106,6 +111,79 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
       _interactions = interactions;
       _loading = false;
     });
+    if (!appData.ai.apiModeVisible) unawaited(_prepareHandoff());
+  }
+
+  /// Copy-and-paste instructions for the side-effects checklist: the SAME
+  /// prompts as the API path (shared builders), grounded in the official FDA
+  /// label text MHAD fetches here (free, no key). With two or more meds and
+  /// interaction labels, one answer carries both lists ("items" and
+  /// "interactions").
+  String? _handoffInstructions;
+
+  Future<void> _prepareHandoff() async {
+    final cleaned = _currentMeds
+        .map((m) => m.trim())
+        .where((m) => m.isNotEmpty)
+        .toSet()
+        .toList();
+    if (cleaned.isEmpty) return;
+    Future<Map<String, String>> labels(
+        Future<String?> Function(String) fetch) async {
+      final got = await Future.wait(
+          cleaned.map((m) async => MapEntry(m, await fetch(m))));
+      return {
+        for (final e in got)
+          if (e.value != null && e.value!.isNotEmpty) e.key: e.value!,
+      };
+    }
+
+    var instructions = LlmAssistant.sideEffectsPrompt(
+        cleaned, await labels(OpenFdaService.adverseReactions));
+    if (cleaned.length >= 2) {
+      final interactionLabels = await labels(OpenFdaService.drugInteractions);
+      if (interactionLabels.isNotEmpty) {
+        final interactions = LlmAssistant.interactionsPrompt(
+                cleaned, interactionLabels)
+            .replaceAll('{"items": [{"meds"', '{"interactions": [{"meds"')
+            .replaceAll('{"items": []}', '{"interactions": []}');
+        instructions = 'This has TWO parts. Answer both in ONE JSON object: '
+            'PART 1\'s list goes under "items" and PART 2\'s list under '
+            '"interactions".\n\nPART 1 — COMMON SIDE EFFECTS\n'
+            '$instructions\n\nPART 2 — POSSIBLE INTERACTIONS\n$interactions';
+      }
+    }
+    if (mounted) setState(() => _handoffInstructions = instructions);
+  }
+
+  /// Keeps what the person already ticked when a new list arrives.
+  List<SideEffectItem> _keepChecked(List<SideEffectItem> found) {
+    final priorChecked = {
+      for (final p in _items.where((p) => p.experiencing)) '${p.med}|${p.effect}',
+    };
+    for (final f in found) {
+      if (priorChecked.contains('${f.med}|${f.effect}')) f.experiencing = true;
+    }
+    return found;
+  }
+
+  /// A pasted copy-and-paste answer → the same checklist the API fills.
+  Future<bool> _useHandoffAnswer(Map<String, dynamic> json) async {
+    final found = LlmAssistant.parseSideEffects(json);
+    final interactions = json['interactions'] is List
+        ? LlmAssistant.parseInteractions({'items': json['interactions']})
+        : const <InteractionNote>[];
+    if (found.isEmpty) {
+      setState(() => _error = context.l10n.sideEffectsNoneFound);
+      return true;
+    }
+    setState(() {
+      _items = _keepChecked(found);
+      _interactions = interactions;
+      _error = null;
+    });
+    await _persist();
+    return true;
   }
 
   Future<void> _persist() async {
@@ -146,16 +224,7 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
         setState(() => _error = context.l10n.sideEffectsNoneFound);
       } else {
         // Preserve any previously-checked items that match.
-        final priorChecked = {
-          for (final p in _items.where((p) => p.experiencing))
-            '${p.med}|${p.effect}',
-        };
-        for (final f in found) {
-          if (priorChecked.contains('${f.med}|${f.effect}')) {
-            f.experiencing = true;
-          }
-        }
-        setState(() => _items = found);
+        setState(() => _items = _keepChecked(found));
       }
       setState(() => _interactions = interactions);
       await _persist();
@@ -268,7 +337,55 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
     );
   }
 
+  /// Copy-and-paste version of the checklist bar.
+  Widget _handoffBar(MhadPalette p) {
+    final ready = _handoffInstructions != null;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(
+          _items.isEmpty
+              ? context.l10n.sideEffectsCheckingCovers(_currentMeds.join(', '))
+              : context.l10n.sideEffectsReCheckFor(_currentMeds.join(', ')),
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
+        const SizedBox(height: 12),
+        if (!ready)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: Row(
+              children: [
+                const SizedBox(
+                  width: 16,
+                  height: 16,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(context.l10n.sideEffectsGettingLabels,
+                      style: Theme.of(context).textTheme.bodySmall),
+                ),
+              ],
+            ),
+          ),
+        AiHandoffPanel(
+          kind: HandoffTaskKind.sideEffects,
+          title: context.l10n.sideEffectsHandoffTitle,
+          subtitle: context.l10n.sideEffectsHandoffSubtitle,
+          enabled: ready,
+          buildTask: (_) => HandoffTask(
+            kind: HandoffTaskKind.sideEffects,
+            instructions: _handoffInstructions ?? '',
+            ref: 'd${widget.directiveId}',
+          ),
+          onAnswer: _useHandoffAnswer,
+        ),
+      ],
+    );
+  }
+
   Widget _generateBar(MhadPalette p, bool hasKey) {
+    if (!appData.ai.apiModeVisible) return _handoffBar(p);
     if (!hasKey) {
       return Container(
         padding: const EdgeInsets.all(16),
