@@ -186,7 +186,7 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
                   const SizedBox(height: 6),
                   Text(
                     context.l10n.revocationThisDeclarationMayBeRevoked,
-                    style: MhadText.serifAccent(context, size: 14, color: p.text, height: MhadType.leadingParagraph),
+                    style: MhadText.serifAccent(context, size: 14, color: p.text, height: MhadType.leadingParagraph).copyWith(fontStyle: FontStyle.normal),
                   ),
                 ],
               ),
