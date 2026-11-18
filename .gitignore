@@ -64,3 +64,5 @@ _visual_backup/
 .playwright-mcp/
 # Grok art originals (full-size JPEGs); only optimized WebP ships in assets/images/
 tool/art/originals/
+# Node deps of the Learn review-copy generator
+tool/learn_review/node_modules/

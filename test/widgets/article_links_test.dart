@@ -36,6 +36,8 @@ void main() {
     ));
     await tester.pumpAndSettle();
 
+    expect(find.textContaining('TRANSLATED'), findsNothing,
+        reason: 'the English booklet text is not a translation');
     expect(find.text('Words used here'), findsOneWidget);
     expect(find.text('Related reading'), findsOneWidget);
     for (final r in relatedSections(article)) {

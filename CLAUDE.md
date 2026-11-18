@@ -177,6 +177,13 @@ the Learn articles (as `main()` does) and makes `ArtImage` paint placeholders.
   not add a parallel string-constants class.
 - Migrate hardcoded UI strings to ARB screen-by-screen; only ship a locale (`es`) for a
   screen once it is fully covered (partial localization is worse than none).
+- **Spanish style** (terms, typography, names): `docs/SPANISH_STYLE.md`, one source for
+  `app_es.arb` and the Learn articles.
+- **Learn articles** are content, not strings: `assets/data/educational_content_es.json`
+  (same ids; `sourceHash` = the English each was translated from). Draft 2026-11-18, **off**
+  until a fluent review (`app_data.json` `learn.spanishArticles`); display only, the AI keeps
+  the English. `learn_es_test` checks sections, lists, bold, numbers, typography, staleness.
+  Reviewer's Word copy: `tool/learn_review` (see `docs/SPANISH_STYLE.md`).
 
 ## Docs
 - Gap/improvement backlog: `docs/GAP_ANALYSIS_V4.md` (V2/V3 historical; re-scoped 2026-06-20

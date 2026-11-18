@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/education/learn_links.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/back_link.dart';
 import 'package:mhad/ui/widgets/rich_content_text.dart';
@@ -96,7 +97,7 @@ class BrowseByTopic extends StatelessWidget {
               category: rows[i].$1,
               title: rows[i].$2,
               sub: rows[i].$3,
-              count: allEducationSections
+              count: learnSections(context)
                   .where((s) => s.category == rows[i].$1)
                   .length,
               onTap: () => _open(context, rows[i].$1),
@@ -202,7 +203,7 @@ class _CategoryListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sections = allEducationSections
+    final sections = learnSections(context)
         .where((s) => s.category == category)
         .toList();
     return Scaffold(

@@ -79,4 +79,31 @@ void main() {
     expect(withTerms, greaterThan(sections.length ~/ 2),
         reason: 'most articles use at least one glossary word');
   });
+
+  group('any language', () {
+    test('whole words with accents; Spanish plurals count', () {
+      final agente = s('g1', EducationCategory.glossary, 'Agente');
+      final medico = s('g2', EducationCategory.glossary, 'Médico tratante');
+      final tutor = s('g3', EducationCategory.glossary, 'Tutor');
+      final all = [agente, medico, tutor];
+      final a = s('a', EducationCategory.faq, 'A',
+          'Sus **agentes** hablan con el médico tratante. Los tutores firman.');
+      expect(glossaryTermsIn(a, all: all), [agente, medico, tutor]);
+      final b = s('b', EducationCategory.faq, 'B', 'Reagente; médico tratanteé.');
+      expect(glossaryTermsIn(b, all: all), isEmpty,
+          reason: 'an accented letter is part of the word');
+    });
+
+    test('a title in « » or “ ” quotes still matches', () {
+      expect(glossaryMatchTerms('«Deberá cumplir» (lenguaje de la ley)'),
+          ['Deberá cumplir']);
+    });
+
+    test('search ignores accents and case', () {
+      expect(foldForSearch('Revocación del PODER'), 'revocacion del poder');
+      expect(foldForSearch('niño'), 'nino');
+      expect(foldForSearch('Revocacion').contains(foldForSearch('revocación')),
+          isTrue);
+    });
+  });
 }

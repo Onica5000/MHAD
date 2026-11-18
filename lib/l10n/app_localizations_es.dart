@@ -7567,4 +7567,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get learnOpenInGlossary => 'Abrir en el glosario';
+
+  @override
+  String get educationSourceTranslated => 'Traducido del inglés';
 }
