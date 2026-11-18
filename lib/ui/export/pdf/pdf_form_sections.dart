@@ -688,23 +688,7 @@ List<pw.Widget> alternateAgentSection({
       ),
     ];
 
-// ─── Agent authority (hospitalization / medications / limitations) ──────────
-
-List<pw.Widget> hospitalizationAuthorityBlock(DirectivePref prefs) => [
-      pw.Text('Preferences regarding hospitalization.', style: boldStyle()),
-      pw.SizedBox(height: 2),
-      checkRow(
-        'My agent is authorized to consent to my voluntary admission to a '
-        'treatment facility for mental health care.',
-        checked: prefs.agentCanConsentHospitalization,
-      ),
-      checkRow(
-        'My agent is not authorized to consent to my voluntary admission to a '
-        'treatment facility for mental health care.',
-        checked: !prefs.agentCanConsentHospitalization,
-      ),
-      pw.SizedBox(height: 4),
-    ];
+// ─── Agent authority (medications / limitations) ────────────────────────────
 
 List<pw.Widget> medicationAuthorityBlock(DirectivePref prefs) => [
       pw.Text(
@@ -783,25 +767,6 @@ List<pw.Widget> guardianSection({
     ),
     if (guardian != null && guardian.guardianCanRevoke)
       guardianNote(guardian.guardianCanRevokeNote),
-    if (guardian != null &&
-        (guardian.guardianCanChangeAgent ||
-            guardian.guardianMustConsultAgent)) ...[
-      pw.SizedBox(height: 4),
-      if (guardian.guardianCanChangeAgent)
-        checkRow(
-          'The guardian may change my designated agent.',
-          checked: true,
-        ),
-      if (guardian.guardianCanChangeAgent)
-        guardianNote(guardian.guardianCanChangeAgentNote),
-      if (guardian.guardianMustConsultAgent)
-        checkRow(
-          'The guardian must consult my agent before acting.',
-          checked: true,
-        ),
-      if (guardian.guardianMustConsultAgent)
-        guardianNote(guardian.guardianMustConsultAgentNote),
-    ],
   ];
 }
 

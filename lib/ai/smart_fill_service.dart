@@ -37,7 +37,6 @@ class SmartFillInput {
   final String existingEctConsent;
   final String existingExperimentalConsent;
   final String existingDrugTrialConsent;
-  final bool existingAgentCanConsentHospitalization;
   final bool existingAgentCanConsentMedication;
   final String existingAgentAuthorityLimitations;
   // ── Additional instructions ──
@@ -69,7 +68,6 @@ class SmartFillInput {
     this.existingEctConsent = 'no',
     this.existingExperimentalConsent = 'no',
     this.existingDrugTrialConsent = 'no',
-    this.existingAgentCanConsentHospitalization = true,
     this.existingAgentCanConsentMedication = true,
     this.existingAgentAuthorityLimitations = '',
     this.existingHealthHistory = '',
@@ -110,8 +108,6 @@ class SmartFillInput {
       existingEctConsent: existingEctConsent,
       existingExperimentalConsent: existingExperimentalConsent,
       existingDrugTrialConsent: existingDrugTrialConsent,
-      existingAgentCanConsentHospitalization:
-          existingAgentCanConsentHospitalization,
       existingAgentCanConsentMedication: existingAgentCanConsentMedication,
       existingAgentAuthorityLimitations:
           _truncate(existingAgentAuthorityLimitations),
@@ -425,15 +421,14 @@ class SmartFillService {
     existing.add('Drug trial consent: ${s(describeConsent(input.existingDrugTrialConsent))}');
     // Agent authority (POA/combined only) — always send full picture
     if (input.formType != FormType.declaration.name) {
-      existing.add('Agent consent to hospitalization: ${input.existingAgentCanConsentHospitalization ? "YES — agent authorized" : "NO — agent NOT authorized"}');
       existing.add('Agent consent to medication: ${input.existingAgentCanConsentMedication ? "YES — agent authorized" : "NO — agent NOT authorized"}');
       if (input.existingAgentAuthorityLimitations.isNotEmpty) {
         existing.add('Agent authority limitations: ${s(input.existingAgentAuthorityLimitations)}');
       }
     }
     existing.add('');
-    existing.add('FIELD RULE: The agent hospitalization/medication fields cover '
-        'admission and general psychiatric medications only. ECT, experimental '
+    existing.add('FIELD RULE: The agent medication field covers '
+        'general psychiatric medications only. ECT, experimental '
         'studies and drug trials are the separate consent fields above: the '
         'agent may decide those only if the patient chose "my agent decides" '
         'there (20 Pa.C.S. § 5836(c)), and must follow the patient\'s choices.');

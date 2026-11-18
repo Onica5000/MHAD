@@ -680,7 +680,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get agentAuthScopeBody =>
-      'Las casillas de abajo se aplican SOLO a:\n  • Hospitalización voluntaria (ingreso a un centro de tratamiento)\n  • Medicamentos psiquiátricos en general\n\nNO incluyen:\n  • Terapia electroconvulsiva (TEC)\n  • Estudios o procedimientos experimentales\n  • Ensayos clínicos de medicamentos\n\nSus decisiones de consentimiento sobre la TEC, los estudios experimentales y los ensayos de medicamentos se indican en sus propias páginas, antes en este formulario. Según la Ley 194 de PA, su agente NO PUEDE anular esas decisiones: son obligatorias independientemente de la autoridad del agente.';
+      'La casilla de abajo se aplica SOLO a los medicamentos psiquiátricos en general.\n\nNO incluye:\n  • Terapia electroconvulsiva (TEC)\n  • Estudios o procedimientos experimentales\n  • Ensayos clínicos de medicamentos\n\nSus decisiones de consentimiento sobre la TEC, los estudios experimentales y los ensayos de medicamentos se indican en sus propias páginas, antes en este formulario. Según la Ley 194 de PA, su agente NO PUEDE anular esas decisiones: son obligatorias independientemente de la autoridad del agente.';
 
   @override
   String get agentAuthStandardLead => 'La norma que su agente debe seguir: ';
@@ -688,14 +688,6 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get agentAuthStandardBody =>
       'según el § 5836(d), su agente está legalmente obligado a tomar la decisión que usted tomaría si fuera competente, guiándose por lo que escriba en esta directiva y por cualquier instrucción previa clara, después de consultar con los proveedores. Cuanto más complete, más podrán sus decisiones parecerse a las suyas.';
-
-  @override
-  String get agentAuthHospitalization =>
-      'El agente puede consentir a una hospitalización voluntaria';
-
-  @override
-  String get agentAuthHospitalizationSub =>
-      'Solo el ingreso a un centro de tratamiento psiquiátrico';
 
   @override
   String get agentAuthMedication => 'El agente puede consentir a medicamentos';
@@ -714,10 +706,6 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get agentAuthExample2 =>
       'Mi agente debe consultar con mi terapeuta, el Dr. Smith, antes de aceptar cualquier cambio en mi régimen de medicamentos.';
-
-  @override
-  String get agentAuthExample3 =>
-      'Mi agente puede consentir a un ingreso hospitalario voluntario de hasta 72 horas, pero no puede consentir a estancias más largas sin consultar a mi familia.';
 
   @override
   String get agentAuthLimitationsLabel =>
@@ -787,13 +775,6 @@ class AppLocalizationsEs extends AppLocalizations {
       'Si un tribunal nombra a un tutor, elija si el tutor puede revocar, suspender o terminar esta directiva; salvo que usted lo permita, el tribunal da preferencia a que su agente siga decidiendo. Cualquier otra condición que agregue es una orientación para el tribunal.';
 
   @override
-  String get guardianNomCanChangeAgent => 'Puede cambiar a mi agente';
-
-  @override
-  String get guardianNomCanChangeAgentHint =>
-      '¿Cuándo o cómo puede el tutor cambiar a mi agente? (opcional)';
-
-  @override
   String get guardianNomCanOverride => 'Puede anular esta directiva';
 
   @override
@@ -803,13 +784,6 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get guardianNomCanOverrideHint =>
       '¿Algún límite para anular esta directiva? (opcional)';
-
-  @override
-  String get guardianNomMustConsult => 'Debe consultar primero con mi agente';
-
-  @override
-  String get guardianNomMustConsultHint =>
-      '¿Sobre qué debe el tutor consultar a mi agente? (opcional)';
 
   @override
   String diagnosesAlreadyAdded(String name) {
@@ -2554,16 +2528,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get reviewLabelGuardianCanRevoke => 'Tutor: anular';
-
-  @override
-  String get reviewLabelGuardianCanChangeAgent => 'Tutor: reemplazar al agente';
-
-  @override
-  String get reviewLabelGuardianMustConsultAgent =>
-      'Tutor: consultar al agente';
-
-  @override
-  String get reviewLabelAuthorityHospitalization => 'Agente: hospitalización';
 
   @override
   String get reviewLabelAuthorityMedication => 'Agente: medicamentos';

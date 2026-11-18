@@ -125,6 +125,7 @@ class DirectivePrefs extends Table {
       text().withDefault(const Constant('no'))();
   TextColumn get drugTrialConsent => text().withDefault(const Constant('no'))();
 
+  // Unused since 2026-11-18: option removed (not on the official form; not a power PA law gives). Kept to avoid a schema migration.
   BoolColumn get agentCanConsentHospitalization =>
       boolean().withDefault(const Constant(true))();
   BoolColumn get agentCanConsentMedication =>
@@ -258,18 +259,20 @@ class GuardianNominations extends Table {
   // false = guardian cannot revoke
   BoolColumn get guardianCanRevoke =>
       boolean().withDefault(const Constant(false))();
-  // Artboard guardian "conditions": may the guardian change my agent, and
-  // must the guardian consult my agent before acting?
+  // Unused since 2026-11-18: option removed (not on the official form; not a power PA law gives). Kept to avoid a schema migration.
   BoolColumn get guardianCanChangeAgent =>
       boolean().withDefault(const Constant(false))();
+  // Unused since 2026-11-18: option removed (not on the official form; not a power PA law gives). Kept to avoid a schema migration.
   BoolColumn get guardianMustConsultAgent =>
       boolean().withDefault(const Constant(false))();
-  // Free-form detail the user can add to qualify each "yes" condition above
-  // (shown only when the matching condition is Yes). Schema 17.
+  // Free-form detail the user can add to qualify the "yes" revoke condition
+  // above (shown only when it is Yes). Schema 17.
   TextColumn get guardianCanRevokeNote =>
       text().withDefault(const Constant(''))();
+  // Unused since 2026-11-18: option removed (not on the official form; not a power PA law gives). Kept to avoid a schema migration.
   TextColumn get guardianCanChangeAgentNote =>
       text().withDefault(const Constant(''))();
+  // Unused since 2026-11-18: option removed (not on the official form; not a power PA law gives). Kept to avoid a schema migration.
   TextColumn get guardianMustConsultAgentNote =>
       text().withDefault(const Constant(''))();
   // Relation to existing agents: 'sameAsPrimary' | 'sameAsAlternate' |

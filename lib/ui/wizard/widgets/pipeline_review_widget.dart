@@ -202,13 +202,6 @@ extension _PipelineReviewUi on _PipelineScreenState {
     // ── Structured toggles (agent authority / Ulysses / same-gender roommate).
     // Extracted only on an explicit statement; shown here so the user confirms
     // (or unchecks) before they're applied.
-    if (v.agentCanConsentHospitalization != null) {
-      _reviewChecked['authority_hospitalization'] = true;
-      _reviewEdited['authority_hospitalization'] =
-          v.agentCanConsentHospitalization!
-              ? 'Agent MAY consent to hospitalization'
-              : 'Agent may NOT consent to hospitalization';
-    }
     if (v.agentCanConsentMedication != null) {
       _reviewChecked['authority_medication'] = true;
       _reviewEdited['authority_medication'] = v.agentCanConsentMedication!
@@ -260,15 +253,6 @@ extension _PipelineReviewUi on _PipelineScreenState {
         v.guardianCanRevokeNote,
         yes: 'A guardian MAY override this directive',
         no: 'A guardian may NOT override this directive');
-    guardianCondition('guardian_can_change_agent', v.guardianCanChangeAgent,
-        v.guardianCanChangeAgentNote,
-        yes: 'A guardian MAY replace my agent',
-        no: 'A guardian may NOT replace my agent');
-    guardianCondition(
-        'guardian_must_consult_agent', v.guardianMustConsultAgent,
-        v.guardianMustConsultAgentNote,
-        yes: 'A guardian MUST consult my agent first',
-        no: 'A guardian does NOT need to consult my agent');
 
     // Structured crisis plan — one confirmable row; apply reads the lists
     // from the validated result and merges into crisisPlanJson.
@@ -514,9 +498,6 @@ extension _PipelineReviewUi on _PipelineScreenState {
     if (key == 'room_pref_chips') return l.reviewLabelRoomPrefChips;
     if (key == 'roommate_same_gender') return l.facilityRoomSameGender;
     if (key == 'guardian_can_revoke') return l.reviewLabelGuardianCanRevoke;
-    if (key == 'guardian_can_change_agent') return l.reviewLabelGuardianCanChangeAgent;
-    if (key == 'guardian_must_consult_agent') return l.reviewLabelGuardianMustConsultAgent;
-    if (key == 'authority_hospitalization') return l.reviewLabelAuthorityHospitalization;
     if (key == 'authority_medication') return l.reviewLabelAuthorityMedication;
     if (key == 'ulysses_optin') return l.reviewLabelUlyssesOptin;
     if (key == 'pet_custody') return l.reviewStepPetCare;
@@ -585,7 +566,6 @@ extension _PipelineReviewUi on _PipelineScreenState {
       return l.reviewSectionAgent;
     }
     if (key == 'agent_authority_limitations' ||
-        key == 'authority_hospitalization' ||
         key == 'authority_medication') {
       return l.reviewSectionAgentAuthority;
     }
@@ -618,8 +598,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
     if (key.startsWith('trigger_')) return (2, l.stepTitleWhenItKicksIn);
     if (key.startsWith('person_doctor')) return (6, l.stepTitleDiagnoses);
     if (key.startsWith('person_')) return (1, l.stepTitleAboutYou);
-    if (key == 'authority_hospitalization' ||
-        key == 'authority_medication' ||
+    if (key == 'authority_medication' ||
         key == 'agent_authority_limitations' ||
         key.startsWith('alt_agent_') ||
         (key.startsWith('agent_') && !key.startsWith('agent_authority'))) {

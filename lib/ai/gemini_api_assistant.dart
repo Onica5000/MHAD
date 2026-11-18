@@ -758,7 +758,7 @@ class LlmAssistant implements AiAssistant {
     buf.writeln('   • ALTERNATE AGENT — same fields, backup in case the '
         'primary is unavailable.');
     buf.writeln('   • AGENT AUTHORITY — specific powers granted or '
-        'withheld: consent to admission, consent to medication, access to '
+        'withheld: consent to medication, access to '
         'records. Also sets whether the agent may consent to ECT, '
         'experimental studies, and drug trials — under §5836(c) the agent '
         'has these three powers only if the directive specifically grants '

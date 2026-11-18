@@ -1283,7 +1283,7 @@ abstract class AppLocalizations {
   /// No description provided for @agentAuthScopeBody.
   ///
   /// In en, this message translates to:
-  /// **'The checkboxes below apply ONLY to:\n  • Voluntary hospitalization (admission to a treatment facility)\n  • General psychiatric medications\n\nThey do NOT cover:\n  • Electroconvulsive therapy (ECT)\n  • Experimental studies or procedures\n  • Clinical drug trials\n\nYour consent choices for ECT, experimental studies, and drug trials are set on their dedicated pages earlier in this form. Under PA Act 194, your agent CANNOT override those decisions — they are binding regardless of agent authority.'**
+  /// **'The checkbox below applies ONLY to general psychiatric medications.\n\nIt does NOT cover:\n  • Electroconvulsive therapy (ECT)\n  • Experimental studies or procedures\n  • Clinical drug trials\n\nYour consent choices for ECT, experimental studies, and drug trials are set on their dedicated pages earlier in this form. Under PA Act 194, your agent CANNOT override those decisions — they are binding regardless of agent authority.'**
   String get agentAuthScopeBody;
 
   /// No description provided for @agentAuthStandardLead.
@@ -1297,18 +1297,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'under § 5836(d), your agent is legally bound to make the decision you would make if you were competent, guided by what you write in this directive and any clear prior instructions, after consulting with providers. The more you fill in, the closer their decisions can match yours.'**
   String get agentAuthStandardBody;
-
-  /// No description provided for @agentAuthHospitalization.
-  ///
-  /// In en, this message translates to:
-  /// **'Agent may consent to voluntary hospitalization'**
-  String get agentAuthHospitalization;
-
-  /// No description provided for @agentAuthHospitalizationSub.
-  ///
-  /// In en, this message translates to:
-  /// **'Admission to a psychiatric treatment facility only'**
-  String get agentAuthHospitalizationSub;
 
   /// No description provided for @agentAuthMedication.
   ///
@@ -1339,12 +1327,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'My agent should consult with my therapist, Dr. Smith, before agreeing to any changes in my medication regimen.'**
   String get agentAuthExample2;
-
-  /// No description provided for @agentAuthExample3.
-  ///
-  /// In en, this message translates to:
-  /// **'My agent may consent to voluntary inpatient admission for up to 72 hours, but may not consent to longer stays without consulting my family.'**
-  String get agentAuthExample3;
 
   /// No description provided for @agentAuthLimitationsLabel.
   ///
@@ -1454,18 +1436,6 @@ abstract class AppLocalizations {
   /// **'If a court appoints a guardian, choose whether the guardian may revoke, suspend or end this directive — unless you allow it, the court gives preference to your agent continuing to decide. Any other conditions you add are guidance for the court.'**
   String get guardianNomConditionsIntro;
 
-  /// No description provided for @guardianNomCanChangeAgent.
-  ///
-  /// In en, this message translates to:
-  /// **'Can change my agent'**
-  String get guardianNomCanChangeAgent;
-
-  /// No description provided for @guardianNomCanChangeAgentHint.
-  ///
-  /// In en, this message translates to:
-  /// **'When or how may the guardian change my agent? (optional)'**
-  String get guardianNomCanChangeAgentHint;
-
   /// No description provided for @guardianNomCanOverride.
   ///
   /// In en, this message translates to:
@@ -1483,18 +1453,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Any limits on overriding this directive? (optional)'**
   String get guardianNomCanOverrideHint;
-
-  /// No description provided for @guardianNomMustConsult.
-  ///
-  /// In en, this message translates to:
-  /// **'Must consult my agent first'**
-  String get guardianNomMustConsult;
-
-  /// No description provided for @guardianNomMustConsultHint.
-  ///
-  /// In en, this message translates to:
-  /// **'What should the guardian consult my agent about? (optional)'**
-  String get guardianNomMustConsultHint;
 
   /// No description provided for @diagnosesAlreadyAdded.
   ///
@@ -4339,24 +4297,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Guardian: override'**
   String get reviewLabelGuardianCanRevoke;
-
-  /// No description provided for @reviewLabelGuardianCanChangeAgent.
-  ///
-  /// In en, this message translates to:
-  /// **'Guardian: replace agent'**
-  String get reviewLabelGuardianCanChangeAgent;
-
-  /// No description provided for @reviewLabelGuardianMustConsultAgent.
-  ///
-  /// In en, this message translates to:
-  /// **'Guardian: consult agent'**
-  String get reviewLabelGuardianMustConsultAgent;
-
-  /// No description provided for @reviewLabelAuthorityHospitalization.
-  ///
-  /// In en, this message translates to:
-  /// **'Agent: hospitalization'**
-  String get reviewLabelAuthorityHospitalization;
 
   /// No description provided for @reviewLabelAuthorityMedication.
   ///

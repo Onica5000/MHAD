@@ -661,20 +661,12 @@ extension _PipelineApplyLogic on _PipelineScreenState {
     final gCanRevoke = _reviewChecked['guardian_can_revoke'] == true
         ? validated?.guardianCanRevoke
         : null;
-    final gCanChange = _reviewChecked['guardian_can_change_agent'] == true
-        ? validated?.guardianCanChangeAgent
-        : null;
-    final gMustConsult = _reviewChecked['guardian_must_consult_agent'] == true
-        ? validated?.guardianMustConsultAgent
-        : null;
     if (gName != null ||
         gRel != null ||
         gAddr1 != null ||
         gCity != null ||
         gPhone != null ||
-        gCanRevoke != null ||
-        gCanChange != null ||
-        gMustConsult != null) {
+        gCanRevoke != null) {
       final cur = await repo.getGuardianNomination(id);
       await repo.upsertGuardianNomination(GuardianNominationsCompanion(
         id: cur != null ? Value(cur.id) : const Value.absent(),
@@ -692,20 +684,9 @@ extension _PipelineApplyLogic on _PipelineScreenState {
         guardianCanRevokeNote: gCanRevoke != null
             ? Value(validated?.guardianCanRevokeNote ?? '')
             : const Value.absent(),
-        guardianCanChangeAgent:
-            gCanChange != null ? Value(gCanChange) : const Value.absent(),
-        guardianCanChangeAgentNote: gCanChange != null
-            ? Value(validated?.guardianCanChangeAgentNote ?? '')
-            : const Value.absent(),
-        guardianMustConsultAgent:
-            gMustConsult != null ? Value(gMustConsult) : const Value.absent(),
-        guardianMustConsultAgentNote: gMustConsult != null
-            ? Value(validated?.guardianMustConsultAgentNote ?? '')
-            : const Value.absent(),
       ));
       applied += [gName, gRel, gAddr1, gCity, gPhone].whereType<String>().length;
-      applied +=
-          [gCanRevoke, gCanChange, gMustConsult].whereType<bool>().length;
+      if (gCanRevoke != null) applied++;
     }
 
     // ── Apply agent authority limitations ─────────────────────────────
@@ -749,8 +730,6 @@ extension _PipelineApplyLogic on _PipelineScreenState {
     // actually set a value (the boolean lives on the validated result, not the
     // display string). Same-gender roommate maps to the room-preference chip
     // plus the default same-as-identity match.
-    final applyHosp = _reviewChecked['authority_hospitalization'] == true &&
-        validated?.agentCanConsentHospitalization != null;
     final applyMeds = _reviewChecked['authority_medication'] == true &&
         validated?.agentCanConsentMedication != null;
     final applyUlysses = _reviewChecked['ulysses_optin'] == true &&
@@ -798,7 +777,6 @@ extension _PipelineApplyLogic on _PipelineScreenState {
         drugVal != null ||
         medConsentVal != null ||
         roomNote != null ||
-        applyHosp ||
         applyMeds ||
         applyUlysses ||
         applyRoommate ||
@@ -812,9 +790,6 @@ extension _PipelineApplyLogic on _PipelineScreenState {
             ? Value(medConsentVal)
             : const Value.absent(),
         roomPreferencesNote: roomNote != null ? Value(roomNote) : const Value.absent(),
-        agentCanConsentHospitalization: applyHosp
-            ? Value(validated!.agentCanConsentHospitalization!)
-            : const Value.absent(),
         agentCanConsentMedication: applyMeds
             ? Value(validated!.agentCanConsentMedication!)
             : const Value.absent(),
@@ -830,7 +805,7 @@ extension _PipelineApplyLogic on _PipelineScreenState {
           .whereType<String>()
           .length;
       applied +=
-          [applyHosp, applyMeds, applyUlysses, applyRoommate].where((b) => b).length;
+          [applyMeds, applyUlysses, applyRoommate].where((b) => b).length;
       applied += confirmedChips.length;
     }
 

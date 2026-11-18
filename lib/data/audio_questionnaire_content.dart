@@ -229,8 +229,7 @@ const List<String> audioQCantDo = [
 /// Things the recording now CAN fill if you say them clearly — called out so
 /// users know they're worth speaking aloud.
 const List<String> audioQNowCaptured = [
-  'Whether your agent may consent to your hospitalization, and whether your '
-      'agent may decide your medications (say it explicitly).',
+  'Whether your agent may decide your medications (say it explicitly).',
   'A self-binding ("Ulysses") instruction — that your directive should be '
       'followed even if you object during a future crisis.',
   'Dosages for the medications you currently take.',

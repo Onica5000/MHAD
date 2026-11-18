@@ -32,7 +32,6 @@ class _AgentAuthorityStepState
     with WizardStepMixin, WizardStepLoadGuard {
   final _formKey = GlobalKey<FormState>();
 
-  bool _canConsentHospitalization = true;
   bool _canConsentMedication = true;
   final _limitationsCtrl = TextEditingController();
 
@@ -55,7 +54,6 @@ class _AgentAuthorityStepState
     markLoaded();
     if (pref != null && mounted) {
       setState(() {
-        _canConsentHospitalization = pref.agentCanConsentHospitalization;
         _canConsentMedication = pref.agentCanConsentMedication;
         _limitationsCtrl.text = pref.agentAuthorityLimitations;
       });
@@ -70,7 +68,6 @@ class _AgentAuthorityStepState
     await ref.read(directiveRepositoryProvider).upsertPreferences(
           DirectivePrefsCompanion(
             directiveId: Value(widget.directiveId),
-            agentCanConsentHospitalization: Value(_canConsentHospitalization),
             agentCanConsentMedication: Value(_canConsentMedication),
             agentAuthorityLimitations: Value(_limitationsCtrl.text.trim()),
           ),
@@ -182,16 +179,6 @@ class _AgentAuthorityStepState
           ),
           const SizedBox(height: 16),
           CheckboxListTile(
-            title: Text(context.l10n.agentAuthHospitalization),
-            subtitle: Text(context.l10n.agentAuthHospitalizationSub,
-                style: TextStyle(fontSize: 12,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant)),
-            value: _canConsentHospitalization,
-            onChanged: (v) =>
-                setState(() => _canConsentHospitalization = v ?? true),
-            controlAffinity: ListTileControlAffinity.leading,
-          ),
-          CheckboxListTile(
             title: Text(context.l10n.agentAuthMedication),
             subtitle: Text(context.l10n.agentAuthMedicationSub,
                 style: TextStyle(fontSize: 12,
@@ -207,7 +194,6 @@ class _AgentAuthorityStepState
             examples: [
               context.l10n.agentAuthExample1,
               context.l10n.agentAuthExample2,
-              context.l10n.agentAuthExample3,
             ],
           ),
           TextFormField(

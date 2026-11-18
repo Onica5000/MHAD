@@ -191,10 +191,10 @@ void main() {
     nomineeRelationship: 'Attorney',
     guardianCanRevoke: false,
     guardianCanChangeAgent: false,
-    guardianMustConsultAgent: true,
+    guardianMustConsultAgent: false,
     guardianCanRevokeNote: '',
     guardianCanChangeAgentNote: '',
-    guardianMustConsultAgentNote: 'Only about medication decisions.',
+    guardianMustConsultAgentNote: '',
     guardianRelation: 'different',
   );
 

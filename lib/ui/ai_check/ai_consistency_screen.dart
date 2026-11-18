@@ -333,8 +333,6 @@ class _AiConsistencyScreenState extends ConsumerState<AiConsistencyScreen> {
             prefs.roommateGenderMatch.trim().isNotEmpty;
         b.writeln('Room preferences: ${hasRoom ? "provided" : "empty"}');
         if (hasAgent) {
-          b.writeln('Agent may consent to hospitalization: '
-              '${prefs.agentCanConsentHospitalization ? "yes" : "no"}');
           b.writeln('Agent may consent to medication: '
               '${prefs.agentCanConsentMedication ? "yes" : "no"}');
           b.writeln('Limits on agent authority: '
