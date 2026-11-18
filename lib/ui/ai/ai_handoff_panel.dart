@@ -44,6 +44,9 @@ class AiHandoffPanel extends ConsumerStatefulWidget {
   /// False while the task isn't ready (e.g. no question typed yet).
   final bool enabled;
 
+  /// Shown under a disabled Copy button: what to do first.
+  final String? disabledHint;
+
   /// The attachment the task needs (decides which AIs fit).
   final HandoffAttachment attachment;
 
@@ -65,6 +68,7 @@ class AiHandoffPanel extends ConsumerStatefulWidget {
     this.subtitle,
     this.onAnswer,
     this.enabled = true,
+    this.disabledHint,
     this.attachment = HandoffAttachment.none,
     this.resumable = true,
     this.resumeRoute,
@@ -82,6 +86,11 @@ class _AiHandoffPanelState extends ConsumerState<AiHandoffPanel> {
   bool _copied = false;
   bool _showPrompt = false;
   bool _done = false;
+
+  /// The paste-by-hand box: on request, or by itself when the browser
+  /// didn't hand over the clipboard (Firefox blocks reading it).
+  bool _manual = false;
+  bool _clipboardBlocked = false;
   HandoffProblem? _problem;
   Timer? _tick;
 
@@ -220,7 +229,19 @@ class _AiHandoffPanelState extends ConsumerState<AiHandoffPanel> {
 
   Future<void> _pasteFromClipboard() async {
     final data = await Clipboard.getData(Clipboard.kTextPlain);
-    _paste.text = data?.text ?? '';
+    if (!mounted) return;
+    final text = data?.text ?? '';
+    if (text.trim().isEmpty) {
+      // Nothing came through: blocked by the browser, or nothing copied —
+      // open the box so the answer can be pasted by hand.
+      setState(() {
+        _manual = true;
+        _clipboardBlocked = true;
+        _problem = null;
+      });
+      return;
+    }
+    _paste.text = text;
     await _use();
   }
 
@@ -283,36 +304,92 @@ class _AiHandoffPanelState extends ConsumerState<AiHandoffPanel> {
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
     final t = Theme.of(context).textTheme;
+    final l10n = context.l10n;
     final service = _service;
     final serviceLabel = service == null ? '' : _label(service);
+    // "ChatGPT", or "your AI" before one is chosen.
+    final aiName = service == null ? l10n.aiHandoffYourAi : serviceLabel;
+    final json = widget.kind.returnsJson;
     final pending = ref.watch(pendingHandoffProvider);
-    final waiting = widget.kind.returnsJson &&
+    final waiting = json &&
         pending != null &&
         pending.taskTag == widget.kind.tag &&
         !pending.isExpired();
 
-    Widget step(int n, String label) => Padding(
-          padding: const EdgeInsets.only(bottom: 8),
+    // Progress: a done step shows ✓ and the next one is highlighted. Sending
+    // happens in the AI, so step 3 is confirmed by the answer coming back.
+    final done = [service != null, _copied, _done, _done];
+    final next = done.indexOf(false);
+
+    Widget step(int n, String title, {String? help}) {
+      final isDone = done[n - 1];
+      final isNext = n - 1 == next;
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 8),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            AnimatedContainer(
+              duration: MediaQuery.disableAnimationsOf(context)
+                  ? Duration.zero
+                  : const Duration(milliseconds: 200),
+              width: 24,
+              height: 24,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: isDone || isNext ? p.primary : p.primaryLight,
+                shape: BoxShape.circle,
+              ),
+              child: isDone
+                  ? Icon(Icons.check, size: 16, color: p.onPrimary)
+                  : Text('$n',
+                      style: t.labelMedium!.copyWith(
+                          color: isNext ? p.onPrimary : p.onPrimaryLight)),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Semantics(
+                    header: true,
+                    child: Text(title, style: t.titleSmall),
+                  ),
+                  if (help != null) ...[
+                    const SizedBox(height: 2),
+                    Text(help, style: t.bodySmall),
+                  ],
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    // Content under a step, lined up with its title (24 circle + 8 gap).
+    Widget indent(Widget child) => Padding(
+          padding: const EdgeInsetsDirectional.only(start: 32),
+          child: child,
+        );
+
+    // One line of the "in your AI" checklist.
+    Widget todo(String text) => Padding(
+          padding: const EdgeInsets.only(bottom: 4),
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                width: 24,
-                height: 24,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: p.primary,
-                  shape: BoxShape.circle,
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Container(
+                  width: 6,
+                  height: 6,
+                  decoration:
+                      BoxDecoration(color: p.primary, shape: BoxShape.circle),
                 ),
-                child: Text('$n',
-                    style: t.labelMedium!.copyWith(color: p.onPrimary)),
               ),
               const SizedBox(width: 8),
-              Expanded(
-                child: Semantics(
-                  header: true,
-                  child: Text(label, style: t.titleSmall),
-                ),
-              ),
+              Expanded(child: Text(text, style: t.bodyMedium)),
             ],
           ),
         );
@@ -362,8 +439,8 @@ class _AiHandoffPanelState extends ConsumerState<AiHandoffPanel> {
           const SizedBox(height: 20),
 
           // 1 — Choose your AI
-          step(1, context.l10n.aiHandoffChooseAi),
-          Wrap(
+          step(1, l10n.aiHandoffChooseAi),
+          indent(Wrap(
             spacing: 8,
             runSpacing: 8,
             children: [
@@ -378,127 +455,166 @@ class _AiHandoffPanelState extends ConsumerState<AiHandoffPanel> {
                         ref.read(preferredAiServiceProvider.notifier).choose(s),
                   ),
             ],
-          ),
+          )),
           const SizedBox(height: 20),
 
-          // 2 — Copy the instructions
-          step(2, context.l10n.aiHandoffStepCopy),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
+          // 2 — Copy the message for your AI
+          step(2, l10n.aiHandoffStepCopy, help: l10n.aiHandoffCopyHelp),
+          indent(Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               FilledButton.icon(
                 onPressed: widget.enabled ? _copy : null,
-                icon: const Icon(Icons.content_copy, size: 18),
-                label: Text(context.l10n.aiHandoffCopyButton),
+                icon: Icon(_copied ? Icons.check : Icons.content_copy,
+                    size: 18),
+                label: Text(_copied
+                    ? l10n.aiHandoffCopyAgain
+                    : l10n.aiHandoffCopyButton),
               ),
-              if (service != null)
+              if (!widget.enabled && widget.disabledHint != null) ...[
+                const SizedBox(height: 8),
+                Text(widget.disabledHint!, style: t.bodySmall),
+              ],
+              if (_copied) ...[
+                const SizedBox(height: 8),
+                Text(l10n.aiHandoffCopied(aiName),
+                    style: t.bodySmall!.copyWith(
+                        color: p.primary, fontWeight: FontWeight.w600)),
+              ],
+              if (_prompt != null)
+                TextButton.icon(
+                  onPressed: () => setState(() => _showPrompt = !_showPrompt),
+                  icon: Icon(
+                      _showPrompt ? Icons.expand_less : Icons.expand_more,
+                      size: 18),
+                  label: Text(_showPrompt
+                      ? l10n.aiHandoffHideIncluded
+                      : l10n.aiHandoffSeeIncluded),
+                ),
+              if (_showPrompt && _prompt != null)
+                Container(
+                  constraints: const BoxConstraints(maxHeight: 240),
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: p.surface,
+                    borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
+                    border: Border.all(color: p.border),
+                  ),
+                  child: SingleChildScrollView(
+                    child: SelectableText(_prompt!, style: t.bodySmall),
+                  ),
+                ),
+            ],
+          )),
+          const SizedBox(height: 20),
+
+          // 3 — Send it in your AI (what to do there, in order)
+          step(3, l10n.aiHandoffStepSend(aiName)),
+          indent(Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              todo(l10n.aiHandoffSendOpen(aiName)),
+              todo(l10n.aiHandoffSendPaste),
+              if (widget.attachment == HandoffAttachment.document)
+                todo(l10n.aiHandoffAttachDocumentTodo),
+              if (widget.attachment == HandoffAttachment.audio)
+                todo(l10n.aiHandoffAttachAudioTodo),
+              todo(l10n.aiHandoffSendIt),
+              if (service != null) ...[
+                const SizedBox(height: 8),
                 OutlinedButton.icon(
                   onPressed: _open,
                   icon: const Icon(Icons.open_in_new, size: 18),
-                  label: Text(context.l10n.aiHandoffOpenService(serviceLabel)),
+                  label: Text(l10n.aiHandoffOpenService(serviceLabel)),
                 ),
+              ],
             ],
-          ),
-          if (_copied) ...[
-            const SizedBox(height: 12),
-            InfoBanner(
-              icon: Icons.check_circle_outline,
-              variant: InfoBannerVariant.success,
-              text: [
-                context.l10n.aiHandoffCopied(serviceLabel),
-                if (widget.attachment == HandoffAttachment.document)
-                  context.l10n.aiHandoffAttachDocument(serviceLabel),
-                if (widget.attachment == HandoffAttachment.audio)
-                  context.l10n.aiHandoffAttachAudio(serviceLabel),
-              ].join(' '),
-            ),
-          ],
-          if (_prompt != null)
-            Align(
-              alignment: AlignmentDirectional.centerStart,
-              child: TextButton.icon(
-                onPressed: () => setState(() => _showPrompt = !_showPrompt),
-                icon: Icon(
-                    _showPrompt ? Icons.expand_less : Icons.expand_more,
-                    size: 18),
-                label: Text(_showPrompt
-                    ? context.l10n.aiHandoffHideIncluded
-                    : context.l10n.aiHandoffSeeIncluded),
-              ),
-            ),
-          if (_showPrompt && _prompt != null)
-            Container(
-              constraints: const BoxConstraints(maxHeight: 240),
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: p.surface,
-                borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
-                border: Border.all(color: p.border),
-              ),
-              child: SingleChildScrollView(
-                child: SelectableText(_prompt!, style: t.bodySmall),
-              ),
-            ),
-
-          // 3 — Paste the answer (JSON tasks) / where to read it
+          )),
           const SizedBox(height: 20),
-          if (widget.kind.returnsJson) ...[
-            step(3, context.l10n.aiHandoffStepPaste),
-            if (waiting) _WaitRow(pending: pending),
-            FilledButton.tonalIcon(
-              onPressed: _pasteFromClipboard,
-              icon: const Icon(Icons.content_paste, size: 18),
-              label: Text(context.l10n.aiHandoffPasteButton),
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: _paste,
-              minLines: 3,
-              maxLines: 6,
-              decoration: InputDecoration(
-                hintText: context.l10n.aiHandoffPasteHint,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Align(
-              alignment: AlignmentDirectional.centerEnd,
-              child: FilledButton(
-                onPressed: _use,
-                child: Text(context.l10n.aiHandoffUseAnswer),
-              ),
-            ),
-            if (_problem != null) ...[
-              const SizedBox(height: 12),
-              InfoBanner(
-                icon: Icons.info_outline,
-                variant: InfoBannerVariant.warning,
-                text: _problemText(_problem!),
-              ),
-              Align(
-                alignment: AlignmentDirectional.centerStart,
-                child: TextButton.icon(
-                  onPressed: _copyFixIt,
-                  icon: const Icon(Icons.build_outlined, size: 18),
-                  label: Text(context.l10n.aiHandoffFixItButton),
+
+          // 4 — Bring the answer back (JSON tasks), or read it there
+          if (json) ...[
+            step(4, l10n.aiHandoffStepPaste, help: l10n.aiHandoffPasteHelp),
+            indent(Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (waiting) _WaitRow(pending: pending),
+                FilledButton.icon(
+                  onPressed: _pasteFromClipboard,
+                  icon: const Icon(Icons.content_paste, size: 18),
+                  label: Text(l10n.aiHandoffPasteButton),
                 ),
-              ),
-              Text(context.l10n.aiHandoffFreshAttempt, style: t.bodySmall),
-            ],
-            if (_done) ...[
-              const SizedBox(height: 12),
-              InfoBanner(
-                icon: Icons.check_circle_outline,
-                variant: InfoBannerVariant.success,
-                text: context.l10n.aiHandoffDone,
-              ),
-            ],
+                if (!_manual)
+                  TextButton(
+                    onPressed: () => setState(() => _manual = true),
+                    child: Text(l10n.aiHandoffPasteManual),
+                  ),
+                if (_manual) ...[
+                  const SizedBox(height: 12),
+                  if (_clipboardBlocked) ...[
+                    InfoBanner(
+                      icon: Icons.content_paste_off,
+                      variant: InfoBannerVariant.info,
+                      text: l10n.aiHandoffClipboardBlocked,
+                    ),
+                    const SizedBox(height: 8),
+                  ],
+                  TextField(
+                    controller: _paste,
+                    minLines: 3,
+                    maxLines: 6,
+                    decoration: InputDecoration(
+                      hintText: l10n.aiHandoffPasteHint,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Align(
+                    alignment: AlignmentDirectional.centerEnd,
+                    child: FilledButton(
+                      onPressed: _use,
+                      child: Text(l10n.aiHandoffUseAnswer),
+                    ),
+                  ),
+                ],
+                if (_problem != null) ...[
+                  const SizedBox(height: 12),
+                  InfoBanner(
+                    icon: Icons.info_outline,
+                    variant: InfoBannerVariant.warning,
+                    text: _problemText(_problem!),
+                  ),
+                  TextButton.icon(
+                    onPressed: _copyFixIt,
+                    icon: const Icon(Icons.build_outlined, size: 18),
+                    label: Text(l10n.aiHandoffFixItButton),
+                  ),
+                  Text(l10n.aiHandoffFreshAttempt, style: t.bodySmall),
+                ],
+                if (_done) ...[
+                  const SizedBox(height: 12),
+                  InfoBanner(
+                    icon: Icons.check_circle_outline,
+                    variant: InfoBannerVariant.success,
+                    text: l10n.aiHandoffDone,
+                  ),
+                ],
+              ],
+            )),
           ] else
-            Text(
-              widget.kind == HandoffTaskKind.fieldWording
-                  ? context.l10n.aiHandoffWordingNote
-                  : context.l10n.aiHandoffReadThere(serviceLabel),
-              style: t.bodySmall,
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(Icons.forum_outlined, size: 20, color: p.primary),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    widget.kind == HandoffTaskKind.fieldWording
+                        ? l10n.aiHandoffWordingNote
+                        : l10n.aiHandoffAnswerThere,
+                    style: t.bodyMedium,
+                  ),
+                ),
+              ],
             ),
         ],
       ),

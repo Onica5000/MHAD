@@ -74,7 +74,10 @@ void main() {
       (tester) async {
     final applied = await pump(tester);
 
-    await tester.tap(find.text('Copy instructions'));
+    // Step 3 says what to do in the AI before anything is copied.
+    expect(find.textContaining('Attach your document'), findsOneWidget);
+
+    await tester.tap(find.text('Copy message'));
     await tester.pumpAndSettle();
     expect(find.text('Before you use an outside AI'), findsOneWidget);
     await tester.tap(find.text('I understand, continue'));
@@ -82,10 +85,9 @@ void main() {
 
     expect(clipboard, startsWith(kHandoffMarker));
     expect(clipboard, contains('READ THE DOCUMENT'));
-    expect(find.textContaining('attach your document'), findsOneWidget);
 
     // A second copy in the same session: no notice.
-    await tester.tap(find.text('Copy instructions'));
+    await tester.tap(find.text('Copy again'));
     await tester.pumpAndSettle();
     expect(find.text('Before you use an outside AI'), findsNothing);
 
@@ -102,11 +104,14 @@ void main() {
   testWidgets('a bad answer explains the problem and offers a fix-it message',
       (tester) async {
     final applied = await pump(tester);
-    await tester.tap(find.text('Copy instructions'));
+    await tester.tap(find.text('Copy message'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('I understand, continue'));
     await tester.pumpAndSettle();
 
+    // The paste-by-hand box opens on request.
+    await tester.tap(find.text('Paste it into a box instead'));
+    await tester.pumpAndSettle();
     await tester.enterText(find.byType(TextField),
         '{"mhad_task": "mhad-autofill", "mhad_ref": "d9"}');
     await tester.tap(find.text('Use this answer'));
@@ -114,10 +119,20 @@ void main() {
 
     expect(applied, isEmpty);
     expect(find.textContaining('for a different directive'), findsOneWidget);
-    expect(find.textContaining('Start a fresh attempt'), findsOneWidget);
+    expect(find.textContaining('Start fresh'), findsOneWidget);
 
     await tester.tap(find.text('Copy a fix-it message'));
     await tester.pumpAndSettle();
     expect(clipboard, contains('"mhad_task": "mhad-autofill"'));
+  });
+
+  testWidgets('a browser that blocks the clipboard opens the box, explained',
+      (tester) async {
+    await pump(tester);
+    clipboard = null; // nothing comes through (as Firefox does)
+    await tester.tap(find.text('Paste the answer'));
+    await tester.pumpAndSettle();
+    expect(find.byType(TextField), findsOneWidget);
+    expect(find.textContaining('some browsers block this'), findsOneWidget);
   });
 }

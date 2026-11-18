@@ -7015,10 +7015,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get aiHandoffChooseAi => 'Elija su IA';
 
   @override
-  String get aiHandoffStepCopy => 'Copie las instrucciones';
+  String get aiHandoffStepCopy => 'Copie el mensaje para su IA';
 
   @override
-  String get aiHandoffCopyButton => 'Copiar instrucciones';
+  String get aiHandoffCopyButton => 'Copiar mensaje';
 
   @override
   String aiHandoffOpenService(String service) {
@@ -7027,17 +7027,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String aiHandoffCopied(String service) {
-    return 'Copiadas. Péguelas en $service y envíelas.';
-  }
-
-  @override
-  String aiHandoffAttachDocument(String service) {
-    return 'En $service, adjunte su documento (una foto, un escaneo o un PDF) antes de enviar.';
-  }
-
-  @override
-  String aiHandoffAttachAudio(String service) {
-    return 'En $service, adjunte su grabación de voz antes de enviar.';
+    return 'Copiado. Ahora envíelo en $service.';
   }
 
   @override
@@ -7047,25 +7037,20 @@ class AppLocalizationsEs extends AppLocalizations {
   String get aiHandoffHideIncluded => 'Ocultar lo que se incluye';
 
   @override
-  String get aiHandoffStepPaste => 'Pegue la respuesta';
+  String get aiHandoffStepPaste => 'Traiga la respuesta aquí';
 
   @override
   String get aiHandoffPasteButton => 'Pegar la respuesta';
 
   @override
-  String get aiHandoffPasteHint => '…o pegue aquí la respuesta de la IA';
+  String get aiHandoffPasteHint => 'Pegue aquí la respuesta de su IA';
 
   @override
   String get aiHandoffUseAnswer => 'Usar esta respuesta';
 
   @override
-  String aiHandoffReadThere(String service) {
-    return 'Lea la respuesta en $service.';
-  }
-
-  @override
   String get aiHandoffWordingNote =>
-      'Copie el texto que sugiera la IA y péguelo en el campo.';
+      'Cuando responda, copie el texto que sugiere y toque “Pegar el texto en el campo” abajo.';
 
   @override
   String aiHandoffWaiting(int minutes) {
@@ -7089,23 +7074,23 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get aiHandoffProblemEmpty =>
-      'No se pegó nada. Copie toda la respuesta de la IA e inténtelo de nuevo.';
+      'No se pegó nada. Copie toda la respuesta de su IA e inténtelo de nuevo.';
 
   @override
   String get aiHandoffProblemPromptBack =>
-      'Eso son las instrucciones, no la respuesta de la IA. En su IA, copie su respuesta (el bloque JSON) y péguela aquí.';
+      'Ese es el mensaje que usted envió, no la respuesta de su IA. En su IA, copie su respuesta (el recuadro de código) y péguela aquí.';
 
   @override
   String get aiHandoffProblemNotJson =>
-      'No pudimos leer esa respuesta. Pida a su IA que responda solo con el bloque JSON.';
+      'No pudimos leer esa respuesta. Pida a su IA que responda solo con el recuadro de código.';
 
   @override
   String get aiHandoffProblemTruncated =>
-      'La respuesta parece cortada. Pida a su IA que envíe el JSON completo.';
+      'La respuesta parece cortada. Pida a su IA que vuelva a enviar el recuadro de código completo.';
 
   @override
   String get aiHandoffProblemWrongTask =>
-      'Esa respuesta es para otra tarea. Copie la respuesta a estas instrucciones.';
+      'Esa respuesta es de otra tarea. Copie la respuesta a este mensaje.';
 
   @override
   String get aiHandoffProblemWrongRef =>
@@ -7129,7 +7114,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get aiHandoffFreshAttempt =>
-      '¿Sigue sin funcionar? Empiece de nuevo: copie otra vez las instrucciones y péguelas en un chat nuevo. Por su seguridad, nunca se reutiliza una respuesta anterior.';
+      '¿Sigue sin funcionar? Empiece de nuevo: copie otra vez el mensaje y péguelo en un chat nuevo. Por su seguridad, nunca se reutiliza una respuesta anterior.';
 
   @override
   String get aiHandoffAudioPaid => 'Audio: planes de pago';
@@ -7148,7 +7133,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String aiHandoffPrivacyBody(String service) {
-    return 'Está a punto de copiar instrucciones para pegarlas en $service, un servicio aparte que usted elige. La promesa de privacidad de PA MHAD cubre solo esta aplicación: las condiciones de privacidad de $service se aplican a todo lo que comparta allí, y usarlo es su decisión.';
+    return 'Está a punto de copiar un mensaje para pegarlo en $service, un servicio aparte que usted elige. La promesa de privacidad de PA MHAD cubre solo esta aplicación: las condiciones de privacidad de $service se aplican a todo lo que comparta allí, y usarlo es su decisión.';
   }
 
   @override
@@ -7164,7 +7149,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String aiHandoffPrivacyHowSteps(String service) {
-    return '1. Copie las instrucciones.\n2. Péguelas en $service, adjunte allí cualquier documento y envíelas.\n3. Copie la respuesta de la IA, vuelva y péguela aquí.';
+    return '1. Copie el mensaje.\n2. En $service, péguelo en un chat nuevo (adjunte allí cualquier documento) y envíelo.\n3. Lea la respuesta allí o, cuando PA MHAD se la pida, cópiela y péguela aquí.';
   }
 
   @override
@@ -7510,4 +7495,62 @@ class AppLocalizationsEs extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get aiHandoffCopyHelp =>
+      'Un mensaje listo que le dice a su IA qué hacer, con los datos de Pensilvania que necesita.';
+
+  @override
+  String get aiHandoffCopyAgain => 'Copiar de nuevo';
+
+  @override
+  String get aiHandoffYourAi => 'su IA';
+
+  @override
+  String aiHandoffStepSend(String service) {
+    return 'Envíelo en $service';
+  }
+
+  @override
+  String aiHandoffSendOpen(String service) {
+    return 'Abra $service e inicie un chat nuevo.';
+  }
+
+  @override
+  String get aiHandoffSendPaste =>
+      'Pegue allí el mensaje (Ctrl+V, o mantenga presionado y elija Pegar).';
+
+  @override
+  String get aiHandoffAttachDocumentTodo =>
+      'Adjunte su documento (una foto, un escaneo o un PDF) al mismo mensaje.';
+
+  @override
+  String get aiHandoffAttachAudioTodo =>
+      'Adjunte su grabación de voz al mismo mensaje.';
+
+  @override
+  String get aiHandoffSendIt => 'Envíelo.';
+
+  @override
+  String get aiHandoffPasteHelp =>
+      'Su IA responde con un recuadro de código. Cópielo con el botón Copiar del recuadro (o copie toda la respuesta), vuelva aquí y toque Pegar la respuesta.';
+
+  @override
+  String get aiHandoffPasteManual => 'Pegarla en un cuadro';
+
+  @override
+  String get aiHandoffClipboardBlocked =>
+      'No llegó nada de lo que copió; algunos navegadores lo bloquean. Pegue la respuesta en este cuadro (Ctrl+V, o mantenga presionado y elija Pegar) y toque Usar esta respuesta.';
+
+  @override
+  String get aiHandoffAnswerThere =>
+      'Su IA responde allí; nada vuelve a PA MHAD. Puede hacer más preguntas en el mismo chat.';
+
+  @override
+  String get aiHandoffNeedQuestion =>
+      'Primero escriba una pregunta arriba o elija una.';
+
+  @override
+  String get aiHandoffNeedDescription =>
+      'Primero descríbalo arriba en pocas palabras.';
 }

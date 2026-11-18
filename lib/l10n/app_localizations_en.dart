@@ -6896,10 +6896,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aiHandoffChooseAi => 'Choose your AI';
 
   @override
-  String get aiHandoffStepCopy => 'Copy the instructions';
+  String get aiHandoffStepCopy => 'Copy the message for your AI';
 
   @override
-  String get aiHandoffCopyButton => 'Copy instructions';
+  String get aiHandoffCopyButton => 'Copy message';
 
   @override
   String aiHandoffOpenService(String service) {
@@ -6908,17 +6908,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String aiHandoffCopied(String service) {
-    return 'Copied. Paste them into $service and send.';
-  }
-
-  @override
-  String aiHandoffAttachDocument(String service) {
-    return 'In $service, attach your document (a photo, scan, or PDF) before you send.';
-  }
-
-  @override
-  String aiHandoffAttachAudio(String service) {
-    return 'In $service, attach your voice recording before you send.';
+    return 'Copied. Next, send it in $service.';
   }
 
   @override
@@ -6928,25 +6918,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aiHandoffHideIncluded => 'Hide what’s included';
 
   @override
-  String get aiHandoffStepPaste => 'Paste the answer';
+  String get aiHandoffStepPaste => 'Bring the answer back';
 
   @override
   String get aiHandoffPasteButton => 'Paste the answer';
 
   @override
-  String get aiHandoffPasteHint => '…or paste the AI’s answer here';
+  String get aiHandoffPasteHint => 'Paste your AI’s answer here';
 
   @override
   String get aiHandoffUseAnswer => 'Use this answer';
 
   @override
-  String aiHandoffReadThere(String service) {
-    return 'Read the answer in $service.';
-  }
-
-  @override
   String get aiHandoffWordingNote =>
-      'Copy the wording the AI suggests, then paste it into the field.';
+      'When it answers, copy the wording it suggests, then tap “Paste the wording into the field” below.';
 
   @override
   String aiHandoffWaiting(int minutes) {
@@ -6970,23 +6955,23 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aiHandoffProblemEmpty =>
-      'Nothing was pasted. Copy the AI’s whole answer and try again.';
+      'Nothing was pasted. Copy your AI’s whole answer and try again.';
 
   @override
   String get aiHandoffProblemPromptBack =>
-      'That’s the instructions, not the AI’s answer. In your AI, copy its reply (the JSON block), then paste it here.';
+      'That’s the message you sent, not your AI’s answer. In your AI, copy its reply (the code box), then paste it here.';
 
   @override
   String get aiHandoffProblemNotJson =>
-      'We couldn’t read that answer. Ask your AI to reply with only the JSON block.';
+      'We couldn’t read that answer. Ask your AI to reply with only the code box.';
 
   @override
   String get aiHandoffProblemTruncated =>
-      'The answer looks cut off. Ask your AI to send the complete JSON.';
+      'The answer looks cut off. Ask your AI to send the whole code box again.';
 
   @override
   String get aiHandoffProblemWrongTask =>
-      'That answer is for a different task. Copy the answer to these instructions.';
+      'That answer is for a different task. Copy the answer to this message.';
 
   @override
   String get aiHandoffProblemWrongRef =>
@@ -7010,7 +6995,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aiHandoffFreshAttempt =>
-      'Still not working? Start a fresh attempt: copy the instructions again and paste them into a new chat. For your security, an old answer is never reused.';
+      'Still not working? Start fresh: copy the message again and paste it into a new chat. For your security, an old answer is never reused.';
 
   @override
   String get aiHandoffAudioPaid => 'Audio: paid plans';
@@ -7029,7 +7014,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String aiHandoffPrivacyBody(String service) {
-    return 'You’re about to copy instructions to paste into $service, a separate service you choose. PA MHAD’s privacy promise covers this app only: $service’s own privacy terms apply to anything you share there, and using it is your choice.';
+    return 'You’re about to copy a message to paste into $service, a separate service you choose. PA MHAD’s privacy promise covers this app only: $service’s own privacy terms apply to anything you share there, and using it is your choice.';
   }
 
   @override
@@ -7045,7 +7030,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String aiHandoffPrivacyHowSteps(String service) {
-    return '1. Copy the instructions.\n2. Paste them into $service, attach any document there, and send.\n3. Copy the AI’s answer, come back, and paste it here.';
+    return '1. Copy the message.\n2. In $service, paste it into a new chat (attach any document there) and send.\n3. Read the answer there — or, when PA MHAD asks for it, copy it and paste it back here.';
   }
 
   @override
@@ -7383,4 +7368,62 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get aiHandoffCopyHelp =>
+      'A ready-made message that tells your AI what to do, with the Pennsylvania facts it needs.';
+
+  @override
+  String get aiHandoffCopyAgain => 'Copy again';
+
+  @override
+  String get aiHandoffYourAi => 'your AI';
+
+  @override
+  String aiHandoffStepSend(String service) {
+    return 'Send it in $service';
+  }
+
+  @override
+  String aiHandoffSendOpen(String service) {
+    return 'Open $service and start a new chat.';
+  }
+
+  @override
+  String get aiHandoffSendPaste =>
+      'Paste the message there (Ctrl+V, or press and hold, then Paste).';
+
+  @override
+  String get aiHandoffAttachDocumentTodo =>
+      'Attach your document (a photo, scan, or PDF) to the same message.';
+
+  @override
+  String get aiHandoffAttachAudioTodo =>
+      'Attach your voice recording to the same message.';
+
+  @override
+  String get aiHandoffSendIt => 'Send it.';
+
+  @override
+  String get aiHandoffPasteHelp =>
+      'Your AI replies with a code box. Copy it with the box’s Copy button (or copy the whole reply), then come back and tap Paste the answer.';
+
+  @override
+  String get aiHandoffPasteManual => 'Paste it into a box instead';
+
+  @override
+  String get aiHandoffClipboardBlocked =>
+      'Nothing came through from what you copied — some browsers block this. Paste the answer into this box (Ctrl+V, or press and hold, then Paste), then tap Use this answer.';
+
+  @override
+  String get aiHandoffAnswerThere =>
+      'Your AI answers there — nothing comes back to PA MHAD. You can ask follow-up questions in the same chat.';
+
+  @override
+  String get aiHandoffNeedQuestion =>
+      'Type a question above, or pick one, first.';
+
+  @override
+  String get aiHandoffNeedDescription =>
+      'Describe it in a few words above first.';
 }

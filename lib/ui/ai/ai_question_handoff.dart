@@ -127,6 +127,7 @@ class _AiQuestionHandoffState extends ConsumerState<AiQuestionHandoff> {
           title: widget.panelTitle,
           subtitle: widget.panelSubtitle,
           enabled: _question.text.trim().isNotEmpty,
+          disabledHint: context.l10n.aiHandoffNeedQuestion,
           buildTask: (_) => HandoffTask(
             kind: HandoffTaskKind.ask,
             instructions: widget.instructions(),

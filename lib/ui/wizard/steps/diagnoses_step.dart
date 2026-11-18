@@ -980,6 +980,7 @@ class _DescribeConditionDialogState extends State<_DescribeConditionDialog> {
                 kind: HandoffTaskKind.conditionTerms,
                 title: l10n.diagnosesHandoffTitle,
                 enabled: _ctrl.text.trim().length >= 3,
+                disabledHint: l10n.aiHandoffNeedDescription,
                 buildTask: (_) => HandoffTask(
                   kind: HandoffTaskKind.conditionTerms,
                   // The SAME prompt as the API path (shared builder).
