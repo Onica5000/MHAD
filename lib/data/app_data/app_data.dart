@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'dart:convert';
 
 import 'package:flutter/services.dart' show rootBundle;
@@ -382,6 +383,21 @@ class AppData {
 
   /// Null-safe lookup into the `dated` block (version/date strings).
   String dateFact(String key) => dated[key] ?? '';
+
+  /// A dated fact for display in [locale]: `yyyy-MM` reads as a month
+  /// ("November 2026" / "noviembre de 2026"), `yyyy-MM-dd` as a date; any
+  /// other text (e.g. typed on the admin page) is shown as written.
+  String dateFactFor(String key, String locale) {
+    final raw = dateFact(key);
+    final m = RegExp(r'^(\d{4})-(\d{2})(?:-(\d{2}))?$').firstMatch(raw);
+    if (m == null) return raw;
+    final day = m.group(3);
+    final d = DateTime(int.parse(m.group(1)!), int.parse(m.group(2)!),
+        day == null ? 1 : int.parse(day));
+    return day == null
+        ? DateFormat.yMMMM(locale).format(d)
+        : DateFormat.yMMMMd(locale).format(d);
+  }
 
   /// Null-safe lookup into the `facts` block (updatable user-facing copy).
   String fact(String key) => facts[key] ?? '';

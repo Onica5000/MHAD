@@ -7,8 +7,9 @@ import 'package:flutter/material.dart';
 /// - `**bold**` → bold (or [emphasisStyle] when given, e.g. the quiz's
 ///   primary-colored keywords), `*italic*` → italic;
 /// - blank-line-separated paragraphs get paragraph spacing;
-/// - lines starting with `•` or `1.` … get a hanging indent, so wrapped list
-///   text lines up under the text instead of under the bullet.
+/// - lines starting with `•`, `-` (drawn as •) or `1.` … get a hanging
+///   indent, so wrapped list text lines up under the text instead of under
+///   the bullet.
 ///
 /// This is the ONE place that interprets these markers; card previews use
 /// [plainExcerpt], which strips them.
@@ -28,7 +29,7 @@ class RichContentText extends StatelessWidget {
     super.key,
   });
 
-  static final RegExp _listMarker = RegExp(r'^(•|\d{1,2}[.)])\s+');
+  static final RegExp _listMarker = RegExp(r'^(•|-|\d{1,2}[.)])\s+');
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +59,9 @@ class RichContentText extends StatelessWidget {
             children: [
               SizedBox(
                 width: (base.fontSize ?? 16) * 1.6,
-                child: Text(marker.group(1)!, style: base),
+                // A '-' bullet is drawn as '•' (one bullet look).
+                child: Text(marker.group(1) == '-' ? '•' : marker.group(1)!,
+                    style: base),
               ),
               Expanded(
                 child: Text.rich(
@@ -114,7 +117,7 @@ String stripInlineMarkdown(String text) => text
     .replaceAllMapped(RegExp(r'\*\*(.+?)\*\*'), (m) => m.group(1)!)
     .replaceAllMapped(
         RegExp(r'(?<![*\w])\*(?!\s)(.+?)(?<!\s)\*(?![*\w])'), (m) => m.group(1)!)
-    .replaceAll(RegExp(r'^\s*(•|\d{1,2}[.)])\s+', multiLine: true), '')
+    .replaceAll(RegExp(r'^\s*(•|-|\d{1,2}[.)])\s+', multiLine: true), '')
     .replaceAll(RegExp(r'\s+'), ' ')
     .trim();
 

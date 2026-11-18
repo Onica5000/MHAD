@@ -78,8 +78,8 @@
   "dated": {
     "_note": "Date/version-stamped facts shown to users that go stale. VERIFY tier — confirm before changing.",
     "autonomy": "verify",
-    "privacyPolicyVersion": "v1.2",
-    "privacyPolicyUpdated": "September 2026",
+    "privacyPolicyVersion": "v1.3",
+    "privacyPolicyUpdated": "2026-11",
     "playStoreRulesAsOf": "Jan 2026"
   },
   "facts": {

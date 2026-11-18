@@ -1,3 +1,4 @@
+import 'package:mhad/ui/widgets/rich_content_text.dart';
 import 'package:flutter/material.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/back_link.dart';
@@ -38,7 +39,8 @@ class PrivacyPolicyScreen extends StatelessWidget {
               title: EditorialHeading(
                   text: context.l10n.privacyPolicyPaMhadAppPrivacyPolicy),
               lead: context.l10n.privacyPolicyLastUpdated(
-                  appData.dateFact('privacyPolicyUpdated'),
+                  appData.dateFactFor('privacyPolicyUpdated',
+                      Localizations.localeOf(context).toLanguageTag()),
                   appData.dateFact('privacyPolicyVersion')),
             ),
             const SizedBox(height: 16),
@@ -196,7 +198,9 @@ class _PolicySection extends StatelessWidget {
         children: [
           Text(title, style: headingStyle),
           const SizedBox(height: 4),
-          Text(body, style: bodyStyle),
+          // The shared renderer: real bold (it showed raw **), and
+          // bullets with a hanging indent.
+          RichContentText(body, style: bodyStyle),
         ],
       ),
     );
