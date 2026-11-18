@@ -3895,7 +3895,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get privacyPolicyInternationalUsersGdpr =>
-      'International Users (GDPR)';
+      'International users (GDPR)';
 
   @override
   String get privacyPolicyIfYouAreLocatedIn =>
@@ -3903,7 +3903,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get privacyPolicyUsStateConsumerHealthData =>
-      'US State Consumer Health Data Laws (CA, WA, CT, NV, NY)';
+      'US state consumer health data laws (CA, WA, CT, NV, NY)';
 
   @override
   String get privacyPolicyThisAppMayBeSubject =>
@@ -3911,7 +3911,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get privacyPolicyMedicalReferenceLookupsUS =>
-      'Medical Reference Lookups (U.S. government data)';
+      'Medical reference lookups (U.S. government data)';
 
   @override
   String get privacyPolicyToHelpYouFillIn =>

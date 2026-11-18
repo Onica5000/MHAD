@@ -6785,7 +6785,7 @@ abstract class AppLocalizations {
   /// No description provided for @privacyPolicyInternationalUsersGdpr.
   ///
   /// In en, this message translates to:
-  /// **'International Users (GDPR)'**
+  /// **'International users (GDPR)'**
   String get privacyPolicyInternationalUsersGdpr;
 
   /// No description provided for @privacyPolicyIfYouAreLocatedIn.
@@ -6797,7 +6797,7 @@ abstract class AppLocalizations {
   /// No description provided for @privacyPolicyUsStateConsumerHealthData.
   ///
   /// In en, this message translates to:
-  /// **'US State Consumer Health Data Laws (CA, WA, CT, NV, NY)'**
+  /// **'US state consumer health data laws (CA, WA, CT, NV, NY)'**
   String get privacyPolicyUsStateConsumerHealthData;
 
   /// No description provided for @privacyPolicyThisAppMayBeSubject.
@@ -6809,7 +6809,7 @@ abstract class AppLocalizations {
   /// No description provided for @privacyPolicyMedicalReferenceLookupsUS.
   ///
   /// In en, this message translates to:
-  /// **'Medical Reference Lookups (U.S. government data)'**
+  /// **'Medical reference lookups (U.S. government data)'**
   String get privacyPolicyMedicalReferenceLookupsUS;
 
   /// No description provided for @privacyPolicyToHelpYouFillIn.
