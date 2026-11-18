@@ -13,12 +13,15 @@ void main() {
       expect(steps, contains(WizardStep.reviewAndSign));
     });
 
-    test('declaration form excludes peopleITrust + guardianNomination', () {
+    test('declaration form excludes peopleITrust but keeps the guardian part',
+        () {
       final steps = FormType.declaration.steps;
       expect(steps, isNot(contains(WizardStep.peopleITrust)));
-      expect(steps, isNot(contains(WizardStep.guardianNomination)));
-      // 11 - 2 (peopleITrust, guardianNomination) = 9
-      expect(steps.length, 9);
+      // The official Declaration has "E. Preference as to a court-appointed
+      // guardian" (20 Pa.C.S. § 5823 form), so the person can fill it in.
+      expect(steps, contains(WizardStep.guardianNomination));
+      // 11 - 1 (peopleITrust) = 10
+      expect(steps.length, 10);
     });
 
     test('declaration form still includes about you and review & sign', () {

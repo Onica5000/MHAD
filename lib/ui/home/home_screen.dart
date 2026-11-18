@@ -988,8 +988,7 @@ class _PastDirectiveRow extends StatelessWidget {
       return l.homeCardDraft(step, total, stamp);
     }
     return switch (status) {
-      // "Prepared", not "Complete": landing on Sign stamps executionDate
-      // (sign_screen.dart), but the app cannot know a paper signature
+      // "Prepared", not "Complete": the app cannot know a paper signature
       // actually happened — don't overclaim (2026-07-11 UX audit B6).
       'complete' => l.homeCardPrepared(stamp),
       'expired' => l.homeCardExpired,

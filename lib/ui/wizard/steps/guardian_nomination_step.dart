@@ -1,4 +1,5 @@
-﻿import 'package:drift/drift.dart' show Value;
+﻿import 'package:mhad/domain/model/directive.dart';
+import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -113,10 +114,15 @@ class _GuardianNominationStepState
     super.dispose();
   }
 
+  /// The official Declaration has no agent, so its guardian part (form part
+  /// E) shows only the nominee and the revoke / suspend / end choice.
+  bool _isDeclaration = false;
+
   Future<void> _loadData() async {
-    final g = await ref
-        .read(directiveRepositoryProvider)
-        .getGuardianNomination(widget.directiveId);
+    final repo = ref.read(directiveRepositoryProvider);
+    final d = await repo.getDirectiveById(widget.directiveId);
+    _isDeclaration = d?.formType == FormType.declaration.name;
+    final g = await repo.getGuardianNomination(widget.directiveId);
     markLoaded();
     if (g != null && mounted) {
       setState(() {
@@ -224,12 +230,14 @@ class _GuardianNominationStepState
                 ),
           ),
           const SizedBox(height: 12),
-          InfoBanner(
-            icon: Icons.info_outline,
-            margin: EdgeInsets.zero,
-            text: context.l10n.guardianNomGuardianVsAgent,
-          ),
-          const SizedBox(height: 12),
+          if (!_isDeclaration) ...[
+            InfoBanner(
+              icon: Icons.info_outline,
+              margin: EdgeInsets.zero,
+              text: context.l10n.guardianNomGuardianVsAgent,
+            ),
+            const SizedBox(height: 12),
+          ],
           // Phase 2 — 4-radio Opt pattern per v2 prototype's `ScrWizardGuardian`.
           // The 'Someone different' branch expands inline to show the existing
           // free-text fields; other branches hide them (and clear on save).
@@ -243,7 +251,10 @@ class _GuardianNominationStepState
             style: Theme.of(context).textTheme.bodySmall,
           ),
           const SizedBox(height: 12),
-          for (final rel in _GuardianRel.values) ...[
+          for (final rel in _GuardianRel.values.where((r) =>
+              !_isDeclaration ||
+              (r != _GuardianRel.sameAsPrimary &&
+                  r != _GuardianRel.sameAsAlternate))) ...[
             _GuardianRelOptCard(
               option: rel,
               selected: _relation == rel,
@@ -314,20 +325,24 @@ class _GuardianNominationStepState
           ),
           const SizedBox(height: 4),
           Text(
-            context.l10n.guardianNomConditionsIntro,
+            _isDeclaration
+                ? context.l10n.guardianNomConditionsIntroDeclaration
+                : context.l10n.guardianNomConditionsIntro,
             style: Theme.of(context).textTheme.bodySmall,
           ),
           const SizedBox(height: 12),
-          _GuardianConditionRow(
-            label: context.l10n.guardianNomCanChangeAgent,
-            value: _guardianCanChangeAgent,
-            onChanged: (v) => setState(() => _guardianCanChangeAgent = v),
-          ),
-          if (_guardianCanChangeAgent)
-            _conditionNote(
-              _changeAgentNoteCtrl,
-              context.l10n.guardianNomCanChangeAgentHint,
+          if (!_isDeclaration) ...[
+            _GuardianConditionRow(
+              label: context.l10n.guardianNomCanChangeAgent,
+              value: _guardianCanChangeAgent,
+              onChanged: (v) => setState(() => _guardianCanChangeAgent = v),
             ),
+            if (_guardianCanChangeAgent)
+              _conditionNote(
+                _changeAgentNoteCtrl,
+                context.l10n.guardianNomCanChangeAgentHint,
+              ),
+          ],
           _GuardianConditionRow(
             label: context.l10n.guardianNomCanOverride,
             sub: context.l10n.guardianNomCanOverrideSub,
@@ -339,16 +354,18 @@ class _GuardianNominationStepState
               _revokeNoteCtrl,
               context.l10n.guardianNomCanOverrideHint,
             ),
-          _GuardianConditionRow(
-            label: context.l10n.guardianNomMustConsult,
-            value: _guardianMustConsultAgent,
-            onChanged: (v) => setState(() => _guardianMustConsultAgent = v),
-          ),
-          if (_guardianMustConsultAgent)
-            _conditionNote(
-              _consultNoteCtrl,
-              context.l10n.guardianNomMustConsultHint,
+          if (!_isDeclaration) ...[
+            _GuardianConditionRow(
+              label: context.l10n.guardianNomMustConsult,
+              value: _guardianMustConsultAgent,
+              onChanged: (v) => setState(() => _guardianMustConsultAgent = v),
             ),
+            if (_guardianMustConsultAgent)
+              _conditionNote(
+                _consultNoteCtrl,
+                context.l10n.guardianNomMustConsultHint,
+              ),
+          ],
         ],
       ),
     );

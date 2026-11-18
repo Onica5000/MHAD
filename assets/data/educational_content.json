@@ -553,7 +553,7 @@
     "check_renewal": {
       "category": "checklist",
       "title": "Planning for Renewal",
-      "content": "Your directive automatically expires two years from the execution date (unless it is invoked at the time of expiration, in which case it remains effective until incapacity ends).\n\n• Mark your calendar for two years from your execution date\n• Plan to review and re-execute before expiration\n• This app will send notification reminders at 60 days and 14 days before expiration\n• When renewing, consider whether your preferences or circumstances have changed"
+      "content": "Your directive automatically expires two years from the execution date (unless it is invoked at the time of expiration, in which case it remains effective until incapacity ends).\n\n• Mark your calendar for two years from your execution date\n• Plan to review and re-execute before expiration\n• Add the renewal dates to your calendar from the \"Download & print\" page — this web app can't send notifications\n• When renewing, consider whether your preferences or circumstances have changed"
     },
     "check_revocation": {
       "category": "checklist",

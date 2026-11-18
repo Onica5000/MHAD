@@ -1412,7 +1412,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get effCondHelpText =>
-      'Describe the circumstances under which you want this directive to take effect — for example, “when two qualified professionals certify that I lack capacity to make treatment decisions.” Under PA Act 194, the declaration becomes operative when a psychiatrist and one of the following certify you lack capacity: another psychiatrist, a licensed psychologist, your family physician, your attending physician, or another mental health treatment professional.';
+      'Describe the circumstances under which you want this directive to take effect — for example, “when a psychiatrist and one other professional certify that I lack capacity to make treatment decisions.” Under PA Act 194, the declaration becomes operative when a psychiatrist and one of the following certify you lack capacity: another psychiatrist, a licensed psychologist, your family physician, your attending physician, or another mental health treatment professional.';
 
   @override
   String get effCondTakeEffectWhen => 'This directive should take effect when…';
@@ -4376,7 +4376,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get legalSheetOfMakingMentalHealthDecisions =>
-      ' of making mental health decisions at the time it would expire, in which case it remains in effect until capacity returns. This app will remind you when your directive is approaching expiration.';
+      ' of making mental health decisions at the time it would expire, in which case it remains in effect until capacity returns. To be reminded, add the dates to your calendar from the “Download & print” page.';
 
   @override
   String get legalSheetYouMayRevokeThisDirective =>
@@ -4499,7 +4499,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get onboardingFreeNoAccountNoTracking =>
-      'Free · no account · no tracking · open source';
+      'Free · no account · no tracking';
 
   @override
   String get onboardingPaMhadAct194 => 'PA MHAD · Act 194';
@@ -6319,7 +6319,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get stepSubtitleGuardianNomination =>
-      'Rare, but worth planning for. A court appoints a guardian and must choose the person you nominate unless there’s good reason not to — and your agent keeps making mental health decisions unless you let the guardian override this directive.';
+      'Rare, but worth planning for. A court appoints a guardian and must choose the person you nominate unless there’s good reason not to — and you decide whether a guardian could override this directive.';
 
   @override
   String get stepSubtitleWhereIWantCare =>
@@ -6800,11 +6800,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'Add a renewal reminder to your calendar';
 
   @override
-  String exportRenewalReminderBody(String date, int days) {
-    return 'Your directive expires on $date. This saves a calendar file with two reminders: $days days before it expires, and on the day itself. The file is made on your device and holds only the reminder titles, never your name or your directive.';
-  }
-
-  @override
   String get exportAddToCalendar => 'Add to calendar';
 
   @override
@@ -6820,7 +6815,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get calendarReminderDescription =>
-      'Your Pennsylvania advance directive is valid for 2 years. Open the PA MHAD app to make a new one and sign it with two adult witnesses.';
+      'Your Pennsylvania advance directive is valid for 2 years from the day you sign it — longer if you can’t make mental health decisions when it would expire. Open the PA MHAD app to make a new one and sign it with two adult witnesses.';
 
   @override
   String tabTitle(String page) {
@@ -7441,4 +7436,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get educationSourceTranslated => 'Translated from English';
+
+  @override
+  String get guardianNomConditionsIntroDeclaration =>
+      'If a court appoints a guardian, choose whether the guardian may revoke, suspend or end this declaration. Any notes you add are guidance for the court.';
+
+  @override
+  String exportRenewalReminderBodyNoDate(int days) {
+    return 'Your directive is valid for two years from the day you sign it — longer if you can’t make mental health decisions when it would expire. This web app can’t send reminders, so this saves a calendar file with two reminders: $days days before it expires, and on the day itself. You pick the day you sign; the file is made on your device and holds only the reminder titles, never your name or your directive.';
+  }
+
+  @override
+  String get calendarWhenWillYouSign => 'When will you sign it?';
+
+  @override
+  String get moreSheetRevokeADirective => 'Revoke a directive';
+
+  @override
+  String get moreSheetRevokeDetail => 'Cancel one you signed, and who to tell';
 }

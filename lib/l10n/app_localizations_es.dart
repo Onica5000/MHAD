@@ -1439,7 +1439,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get effCondHelpText =>
-      'Describa las circunstancias en las que quiere que esta directiva entre en vigor; por ejemplo, “cuando dos profesionales calificados certifiquen que no tengo capacidad para tomar decisiones sobre mi tratamiento”. Según la Ley 194 de PA, la declaración entra en vigor cuando un psiquiatra y uno de los siguientes certifican que usted no tiene capacidad: otro psiquiatra, un psicólogo con licencia, su médico de familia, su médico tratante u otro profesional de tratamiento de salud mental.';
+      'Describa las circunstancias en las que quiere que esta directiva entre en vigor; por ejemplo, “cuando un psiquiatra y otro profesional certifiquen que no tengo capacidad para tomar decisiones sobre mi tratamiento”. Según la Ley 194 de PA, la declaración entra en vigor cuando un psiquiatra y uno de los siguientes certifican que usted no tiene capacidad: otro psiquiatra, un psicólogo con licencia, su médico de familia, su médico tratante u otro profesional de tratamiento de salud mental.';
 
   @override
   String get effCondTakeEffectWhen =>
@@ -4462,7 +4462,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get legalSheetOfMakingMentalHealthDecisions =>
-      ' de tomar decisiones de salud mental en el momento en que vencería, en cuyo caso sigue vigente hasta que recupere la capacidad. Esta aplicación le avisará cuando su directiva se acerque a su vencimiento.';
+      ' de tomar decisiones de salud mental en el momento en que vencería, en cuyo caso sigue vigente hasta que recupere la capacidad. Para recordarlo, agregue las fechas a su calendario desde la página “Descargar e imprimir”.';
 
   @override
   String get legalSheetYouMayRevokeThisDirective =>
@@ -4588,7 +4588,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get onboardingFreeNoAccountNoTracking =>
-      'Gratis · sin cuenta · sin rastreo · código abierto';
+      'Gratis · sin cuenta · sin rastreo';
 
   @override
   String get onboardingPaMhadAct194 => 'DASM de PA · Ley 194';
@@ -6432,7 +6432,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get stepSubtitleGuardianNomination =>
-      'Es poco común, pero conviene planificarlo. Un tribunal nombra al tutor y debe elegir a la persona que usted proponga, salvo que haya un buen motivo para no hacerlo; y su agente sigue tomando las decisiones de salud mental, salvo que usted permita que el tutor anule esta directiva.';
+      'Es poco común, pero conviene planificarlo. Un tribunal nombra al tutor y debe elegir a la persona que usted proponga, salvo que haya un buen motivo para no hacerlo; y usted decide si un tutor podría anular esta directiva.';
 
   @override
   String get stepSubtitleWhereIWantCare =>
@@ -6920,11 +6920,6 @@ class AppLocalizationsEs extends AppLocalizations {
       'Añadir un recordatorio de renovación a su calendario';
 
   @override
-  String exportRenewalReminderBody(String date, int days) {
-    return 'Su directiva vence el $date. Esto guarda un archivo de calendario con dos recordatorios: $days días antes del vencimiento y el mismo día. El archivo se crea en su dispositivo y solo contiene los títulos de los recordatorios, nunca su nombre ni su directiva.';
-  }
-
-  @override
   String get exportAddToCalendar => 'Añadir al calendario';
 
   @override
@@ -6939,7 +6934,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get calendarReminderDescription =>
-      'Su directiva anticipada de Pensilvania es válida por 2 años. Abra la aplicación PA MHAD para crear una nueva y firmarla ante dos testigos adultos.';
+      'Su directiva anticipada de Pensilvania es válida por 2 años desde el día en que la firma; más tiempo si usted no puede tomar decisiones de salud mental cuando vencería. Abra la aplicación PA MHAD para crear una nueva y firmarla ante dos testigos adultos.';
 
   @override
   String tabTitle(String page) {
@@ -7568,4 +7563,22 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get educationSourceTranslated => 'Traducido del inglés';
+
+  @override
+  String get guardianNomConditionsIntroDeclaration =>
+      'Si un tribunal nombra a un tutor, elija si el tutor puede revocar, suspender o terminar esta declaración. Cualquier nota que agregue es una orientación para el tribunal.';
+
+  @override
+  String exportRenewalReminderBodyNoDate(int days) {
+    return 'Su directiva es válida por dos años desde el día en que la firma; más tiempo si usted no puede tomar decisiones de salud mental cuando vencería. Esta aplicación web no puede enviar recordatorios, así que esto guarda un archivo de calendario con dos recordatorios: $days días antes del vencimiento y el mismo día. Usted elige el día en que firma; el archivo se crea en su dispositivo y solo contiene los títulos de los recordatorios, nunca su nombre ni su directiva.';
+  }
+
+  @override
+  String get calendarWhenWillYouSign => '¿Cuándo la firmará?';
+
+  @override
+  String get moreSheetRevokeADirective => 'Revocar una directiva';
+
+  @override
+  String get moreSheetRevokeDetail => 'Cancelar una que firmó y a quién avisar';
 }

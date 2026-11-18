@@ -664,8 +664,8 @@
     "check_renewal": {
       "category": "checklist",
       "title": "Planificación de la renovación",
-      "content": "Su directiva vence automáticamente dos años después de la fecha de firma, a menos que sea invocada en el momento del vencimiento, en cuyo caso permanece vigente hasta que termine la incapacidad.\n\n• Marque su calendario para dos años después de la fecha en que firmó\n• Planifique revisar y volver a firmar antes del vencimiento\n• Esta aplicación enviará recordatorios a los 60 días y a los 14 días antes del vencimiento\n• Al renovar, considere si sus preferencias o circunstancias han cambiado",
-      "sourceHash": "c90759be19db"
+      "content": "Su directiva vence automáticamente dos años después de la fecha de firma, a menos que sea invocada en el momento del vencimiento, en cuyo caso permanece vigente hasta que termine la incapacidad.\n\n• Marque su calendario para dos años después de la fecha en que firmó\n• Planifique revisar y volver a firmar antes del vencimiento\n• Agregue las fechas de renovación a su calendario desde la página “Descargar e imprimir”; esta aplicación web no puede enviar notificaciones\n• Al renovar, considere si sus preferencias o circunstancias han cambiado",
+      "sourceHash": "73b9e891a62e"
     },
     "check_revocation": {
       "category": "checklist",

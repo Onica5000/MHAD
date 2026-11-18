@@ -766,7 +766,7 @@ class LlmAssistant implements AiAssistant {
     buf.writeln('   • ADDITIONAL LIMITATIONS — free-text restrictions on '
         'what the agent can or cannot do.\n');
 
-    buf.writeln('4. IF A COURT APPOINTS A GUARDIAN (Combined and POA forms only)');
+    buf.writeln('4. IF A COURT APPOINTS A GUARDIAN (all forms)');
     buf.writeln('   Optional. Nominate a preferred guardian (name, '
         'relationship, reason) in case a court ever appoints one. The '
         'court must appoint the most recently nominated person unless there '

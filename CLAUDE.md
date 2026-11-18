@@ -76,7 +76,7 @@ This regenerates `app_database.g.dart`.
 
 ## Form Types & Wizard Steps
 - COMBINED: all steps including agent designation, alternate agent, agent authority
-- DECLARATION: no agent sections
+- DECLARATION: no agent sections (guardian nomination included — official form part E)
 - POA: all steps including agent sections
 - `FormType.steps` getter returns the correct step list per type
 

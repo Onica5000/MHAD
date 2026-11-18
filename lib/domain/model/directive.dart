@@ -82,14 +82,13 @@ extension FormTypeExt on FormType {
   /// what isn't written.
   List<WizardStep> get steps {
     final isPoa = this == FormType.poa;
-    final isDeclaration = this == FormType.declaration;
     return [
       WizardStep.aboutYou,
       WizardStep.whenItKicksIn,
       if (hasAgentSections) WizardStep.peopleITrust,
-      // Guardian: Combined + POA. Declaration omits — the document is about
-      // preferences, not about who acts when a guardian is appointed.
-      if (!isDeclaration) WizardStep.guardianNomination,
+      // Guardian: every form — the official Declaration has it too (part E,
+      // 20 Pa.C.S. § 5823), so the person can fill it in here.
+      WizardStep.guardianNomination,
       // Preference-only clinical steps: Combined + Declaration. POA skips
       // these five so the agent decides what's not written.
       if (!isPoa) WizardStep.whereIWantCare,
@@ -143,8 +142,8 @@ extension WizardStepExt on WizardStep {
         WizardStep.guardianNomination =>
           'Rare, but worth planning for. A court appoints a guardian and must '
               "choose the person you nominate unless there's good reason not "
-              'to — and your agent keeps making mental health decisions unless '
-              'you let the guardian override this directive.',
+              'to — and you decide whether a guardian could override this '
+              'directive.',
         WizardStep.whereIWantCare =>
           'Facilities you prefer — and any you specifically want to avoid — '
               'plus room and environment preferences.',

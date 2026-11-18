@@ -2525,7 +2525,7 @@ abstract class AppLocalizations {
   /// No description provided for @effCondHelpText.
   ///
   /// In en, this message translates to:
-  /// **'Describe the circumstances under which you want this directive to take effect — for example, “when two qualified professionals certify that I lack capacity to make treatment decisions.” Under PA Act 194, the declaration becomes operative when a psychiatrist and one of the following certify you lack capacity: another psychiatrist, a licensed psychologist, your family physician, your attending physician, or another mental health treatment professional.'**
+  /// **'Describe the circumstances under which you want this directive to take effect — for example, “when a psychiatrist and one other professional certify that I lack capacity to make treatment decisions.” Under PA Act 194, the declaration becomes operative when a psychiatrist and one of the following certify you lack capacity: another psychiatrist, a licensed psychologist, your family physician, your attending physician, or another mental health treatment professional.'**
   String get effCondHelpText;
 
   /// No description provided for @effCondTakeEffectWhen.
@@ -7613,7 +7613,7 @@ abstract class AppLocalizations {
   /// No description provided for @legalSheetOfMakingMentalHealthDecisions.
   ///
   /// In en, this message translates to:
-  /// **' of making mental health decisions at the time it would expire, in which case it remains in effect until capacity returns. This app will remind you when your directive is approaching expiration.'**
+  /// **' of making mental health decisions at the time it would expire, in which case it remains in effect until capacity returns. To be reminded, add the dates to your calendar from the “Download & print” page.'**
   String get legalSheetOfMakingMentalHealthDecisions;
 
   /// No description provided for @legalSheetYouMayRevokeThisDirective.
@@ -7811,7 +7811,7 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingFreeNoAccountNoTracking.
   ///
   /// In en, this message translates to:
-  /// **'Free · no account · no tracking · open source'**
+  /// **'Free · no account · no tracking'**
   String get onboardingFreeNoAccountNoTracking;
 
   /// No description provided for @onboardingPaMhadAct194.
@@ -10612,7 +10612,7 @@ abstract class AppLocalizations {
   /// No description provided for @stepSubtitleGuardianNomination.
   ///
   /// In en, this message translates to:
-  /// **'Rare, but worth planning for. A court appoints a guardian and must choose the person you nominate unless there’s good reason not to — and your agent keeps making mental health decisions unless you let the guardian override this directive.'**
+  /// **'Rare, but worth planning for. A court appoints a guardian and must choose the person you nominate unless there’s good reason not to — and you decide whether a guardian could override this directive.'**
   String get stepSubtitleGuardianNomination;
 
   /// No description provided for @stepSubtitleWhereIWantCare.
@@ -11413,12 +11413,6 @@ abstract class AppLocalizations {
   /// **'Add a renewal reminder to your calendar'**
   String get exportRenewalReminderTitle;
 
-  /// No description provided for @exportRenewalReminderBody.
-  ///
-  /// In en, this message translates to:
-  /// **'Your directive expires on {date}. This saves a calendar file with two reminders: {days} days before it expires, and on the day itself. The file is made on your device and holds only the reminder titles, never your name or your directive.'**
-  String exportRenewalReminderBody(String date, int days);
-
   /// No description provided for @exportAddToCalendar.
   ///
   /// In en, this message translates to:
@@ -11446,7 +11440,7 @@ abstract class AppLocalizations {
   /// No description provided for @calendarReminderDescription.
   ///
   /// In en, this message translates to:
-  /// **'Your Pennsylvania advance directive is valid for 2 years. Open the PA MHAD app to make a new one and sign it with two adult witnesses.'**
+  /// **'Your Pennsylvania advance directive is valid for 2 years from the day you sign it — longer if you can’t make mental health decisions when it would expire. Open the PA MHAD app to make a new one and sign it with two adult witnesses.'**
   String get calendarReminderDescription;
 
   /// No description provided for @tabTitle.
@@ -12480,6 +12474,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Translated from English'**
   String get educationSourceTranslated;
+
+  /// No description provided for @guardianNomConditionsIntroDeclaration.
+  ///
+  /// In en, this message translates to:
+  /// **'If a court appoints a guardian, choose whether the guardian may revoke, suspend or end this declaration. Any notes you add are guidance for the court.'**
+  String get guardianNomConditionsIntroDeclaration;
+
+  /// No description provided for @exportRenewalReminderBodyNoDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Your directive is valid for two years from the day you sign it — longer if you can’t make mental health decisions when it would expire. This web app can’t send reminders, so this saves a calendar file with two reminders: {days} days before it expires, and on the day itself. You pick the day you sign; the file is made on your device and holds only the reminder titles, never your name or your directive.'**
+  String exportRenewalReminderBodyNoDate(int days);
+
+  /// No description provided for @calendarWhenWillYouSign.
+  ///
+  /// In en, this message translates to:
+  /// **'When will you sign it?'**
+  String get calendarWhenWillYouSign;
+
+  /// No description provided for @moreSheetRevokeADirective.
+  ///
+  /// In en, this message translates to:
+  /// **'Revoke a directive'**
+  String get moreSheetRevokeADirective;
+
+  /// No description provided for @moreSheetRevokeDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel one you signed, and who to tell'**
+  String get moreSheetRevokeDetail;
 }
 
 class _AppLocalizationsDelegate
