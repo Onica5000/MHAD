@@ -3494,7 +3494,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Before sharing: ensure this directive has been signed, dated, and witnessed by two adults (18+) as required by PA Act 194. Give copies to your agent, physician, and support people.';
 
   @override
-  String get exportCardsPrincipal => 'Principal';
+  String get exportCardsPrincipal => 'The person who made it';
 
   @override
   String get exportCardsTheExportedPdfIsNot =>
@@ -3512,7 +3512,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pdfPreviewSizedForUsLetter8 =>
-      'Sized for US Letter (8.5 × 11″) with 1-inch margins. The preview fills the width — use − / + to zoom.';
+      'Sized for US Letter (8.5 × 11 in) with 1-inch margins. The preview fills the width — use − / + to zoom.';
 
   @override
   String get pdfPreviewPages => 'PAGES';
@@ -6309,7 +6309,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get stepSubtitleAboutYou =>
-      'Just the basics so this document is uniquely yours. Drop a photo of your ID and we’ll read these for you.';
+      'Just the basics so this document is uniquely yours. Have your ID handy? Autofill can fill these in from a photo of it.';
 
   @override
   String get stepSubtitleWhenItKicksIn =>

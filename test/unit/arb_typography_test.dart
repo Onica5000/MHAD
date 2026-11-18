@@ -23,6 +23,9 @@ void main() {
         if (value.contains('...')) bad.add('$key: "..." → …');
         if (value.contains("'")) bad.add("$key: ' → ’ (or “ ” for a quote)");
         if (value.contains('"')) bad.add('$key: " → “ ” (“in” for inches)');
+        if (value.contains('″')) {
+          bad.add('$key: ″ → “in” (no UI font has the glyph)');
+        }
         if (!layoutSpacing.contains(key) &&
             RegExp(r'\S  \S').hasMatch(value)) {
           bad.add('$key: double space');

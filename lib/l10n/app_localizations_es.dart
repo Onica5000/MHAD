@@ -3564,7 +3564,7 @@ class AppLocalizationsEs extends AppLocalizations {
       'Antes de compartirla: asegúrese de que esta directiva esté firmada, fechada y atestiguada por dos adultos (18+), como exige la Ley 194 de PA. Dé copias a su agente, a su médico y a sus personas de apoyo.';
 
   @override
-  String get exportCardsPrincipal => 'Declarante';
+  String get exportCardsPrincipal => 'La persona que la hizo';
 
   @override
   String get exportCardsTheExportedPdfIsNot =>
@@ -3582,7 +3582,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get pdfPreviewSizedForUsLetter8 =>
-      'Tamaño carta de EE. UU. (8.5 × 11″) con márgenes de 1 pulgada. La vista previa ocupa todo el ancho; use − / + para acercar o alejar.';
+      'Tamaño carta de EE. UU. (8.5 × 11 pulg.) con márgenes de 1 pulgada. La vista previa ocupa todo el ancho; use − / + para acercar o alejar.';
 
   @override
   String get pdfPreviewPages => 'PÁGINAS';
@@ -6420,7 +6420,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get stepSubtitleAboutYou =>
-      'Solo lo básico para que este documento sea exclusivamente suyo. Suba una foto de su identificación y los leeremos por usted.';
+      'Solo lo básico para que este documento sea exclusivamente suyo. ¿Tiene a mano su identificación? Autocompletar puede llenar estos datos con una foto.';
 
   @override
   String get stepSubtitleWhenItKicksIn =>

@@ -6089,7 +6089,7 @@ abstract class AppLocalizations {
   /// No description provided for @exportCardsPrincipal.
   ///
   /// In en, this message translates to:
-  /// **'Principal'**
+  /// **'The person who made it'**
   String get exportCardsPrincipal;
 
   /// No description provided for @exportCardsTheExportedPdfIsNot.
@@ -6119,7 +6119,7 @@ abstract class AppLocalizations {
   /// No description provided for @pdfPreviewSizedForUsLetter8.
   ///
   /// In en, this message translates to:
-  /// **'Sized for US Letter (8.5 × 11″) with 1-inch margins. The preview fills the width — use − / + to zoom.'**
+  /// **'Sized for US Letter (8.5 × 11 in) with 1-inch margins. The preview fills the width — use − / + to zoom.'**
   String get pdfPreviewSizedForUsLetter8;
 
   /// No description provided for @pdfPreviewPages.
@@ -10600,7 +10600,7 @@ abstract class AppLocalizations {
   /// No description provided for @stepSubtitleAboutYou.
   ///
   /// In en, this message translates to:
-  /// **'Just the basics so this document is uniquely yours. Drop a photo of your ID and we’ll read these for you.'**
+  /// **'Just the basics so this document is uniquely yours. Have your ID handy? Autofill can fill these in from a photo of it.'**
   String get stepSubtitleAboutYou;
 
   /// No description provided for @stepSubtitleWhenItKicksIn.
