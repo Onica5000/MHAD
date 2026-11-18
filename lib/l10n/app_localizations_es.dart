@@ -7496,4 +7496,15 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get wizardAskAboutStep => 'Preguntar a la IA sobre este paso';
+
+  @override
+  String readingTimeMinutes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count min de lectura',
+      one: '1 min de lectura',
+    );
+    return '$_temp0';
+  }
 }

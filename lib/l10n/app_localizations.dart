@@ -12378,6 +12378,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Ask AI about this step'**
   String get wizardAskAboutStep;
+
+  /// No description provided for @readingTimeMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 min read} other{{count} min read}}'**
+  String readingTimeMinutes(int count);
 }
 
 class _AppLocalizationsDelegate

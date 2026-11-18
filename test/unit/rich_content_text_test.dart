@@ -77,4 +77,10 @@ void main() {
     expect(find.textContaining('Right to access', findRichText: true),
         findsOneWidget);
   });
+
+  test('readingMinutes: words / 200, rounded up, at least 1', () {
+    expect(readingMinutes('**Short.**'), 1);
+    expect(readingMinutes(List.filled(401, 'word').join(' ')), 3);
+    expect(readingMinutes(List.filled(400, 'word').join(' ')), 2);
+  });
 }

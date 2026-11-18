@@ -2040,5 +2040,6 @@
   "audioGuideToTranscribeYourRecordingIncludingHandoff": "Para transcribirla, usted adjunta su grabación (incluidos los datos personales que diga) en la IA que elija. Gemini acepta grabaciones en su plan gratuito (de hasta unos 10 minutos cada una) y ChatGPT en los planes de pago; la página Autocompletar muestra qué IA sirven. Se aplican las condiciones de ese servicio, y esta aplicación no puede recuperar lo que envíe. No diga nada que no quiera enviar; siempre puede escribir a mano los campos delicados.",
   "audioGuideTipKeepEachClipShortUnderHandoff": "Haga cada grabación corta, de menos de unos 2 minutos. Grabe una por cada sección de abajo y adjúntelas juntas en su IA; algunas IA limitan la duración de las grabaciones.",
   "navStartOver": "Empezar de nuevo",
-  "wizardAskAboutStep": "Preguntar a la IA sobre este paso"
+  "wizardAskAboutStep": "Preguntar a la IA sobre este paso",
+  "readingTimeMinutes": "{count, plural, =1{1 min de lectura} other{{count} min de lectura}}"
 }

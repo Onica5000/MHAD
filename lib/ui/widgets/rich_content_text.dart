@@ -138,3 +138,14 @@ String plainExcerpt(String content, {int maxChars = 140}) {
       .replaceAll(RegExp(r'[\s,;:.\-–—]+$'), '');
   return '$trimmed…';
 }
+
+/// Minutes to read [content] (markup stripped), at [wordsPerMinute] —
+/// rounded up, at least 1. Shown as "3 min read" on Learn articles.
+int readingMinutes(String content, {int wordsPerMinute = 200}) {
+  final words = stripInlineMarkdown(content)
+      .split(RegExp(r'\s+'))
+      .where((w) => w.isNotEmpty)
+      .length;
+  final minutes = (words / wordsPerMinute).ceil();
+  return minutes < 1 ? 1 : minutes;
+}

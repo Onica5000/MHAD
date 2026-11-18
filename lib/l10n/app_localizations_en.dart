@@ -7372,4 +7372,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get wizardAskAboutStep => 'Ask AI about this step';
+
+  @override
+  String readingTimeMinutes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count min read',
+      one: '1 min read',
+    );
+    return '$_temp0';
+  }
 }

@@ -3041,5 +3041,7 @@
   "audioGuideToTranscribeYourRecordingIncludingHandoff": "To transcribe it, you attach your recording — including any personal details you speak — in the AI you choose. Gemini takes recordings on its free plan (up to about 10 minutes each) and ChatGPT on paid plans; the Autofill page shows which AIs fit. That service’s own terms apply, and this app can’t recall what you send. Don’t say anything you’re not comfortable sending; you can always type sensitive fields by hand instead.",
   "audioGuideTipKeepEachClipShortUnderHandoff": "Keep each clip short — under about 2 minutes. Record one clip per section below and attach them together in your AI; some AIs limit how long a recording can be.",
   "navStartOver": "Start over",
-  "wizardAskAboutStep": "Ask AI about this step"
+  "wizardAskAboutStep": "Ask AI about this step",
+  "readingTimeMinutes": "{count, plural, =1{1 min read} other{{count} min read}}",
+  "@readingTimeMinutes": {"placeholders": {"count": {"type": "int"}}}
 }

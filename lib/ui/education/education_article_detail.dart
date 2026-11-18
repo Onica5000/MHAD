@@ -92,9 +92,9 @@ class ArticleDetailScreen extends StatelessWidget {
             radius: DesignTokens.radiusLg,
           ),
           const SizedBox(height: 20),
-          // Source line (artboard WebArticle).
+          // Source line (artboard WebArticle) + reading time.
           Text(
-            source,
+            '$source · ${context.l10n.readingTimeMinutes(readingMinutes(section.content)).toUpperCase()}',
             style: TextStyle(
               fontSize: 12, letterSpacing: MhadType.trackingLabel,
               fontWeight: FontWeight.w700,
