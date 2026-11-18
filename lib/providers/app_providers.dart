@@ -113,7 +113,7 @@ class AccessibilitySettings {
   /// Maps the discrete 0-3 slider to the actual Flutter text-scale factor.
   ///
   /// Older-adult usability (real user test, mid-70s): the out-of-box default
-  /// read too small, so "Default" maps to 1.1 — a ~10% lift applied app-wide
+  /// read too small, so "Default" maps to 1.2 — a 20% lift applied app-wide
   /// (it scales every `Text`, including hardcoded `fontSize:` values) without
   /// anyone needing to open Settings. "Small" still lands below 1.0 for users
   /// who want the tighter editorial look. See [[visual-accessibility-older-users]].
