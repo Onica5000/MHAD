@@ -1761,7 +1761,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get quizQ1O1Hint =>
-      'Probablemente le convenga un formulario Combinado o solo de Poder Notarial.';
+      'Probablemente le convenga un formulario Combinado o solo de Poder de Salud Mental.';
 
   @override
   String get quizQ1O2Label => 'Sí, pero quiero poner límites firmes';
@@ -1811,7 +1811,8 @@ class AppLocalizationsEs extends AppLocalizations {
   String get quizQ2O3Label => 'No, que mi agente o los médicos decidan todo';
 
   @override
-  String get quizQ2O3Hint => 'Solo Poder Notarial es la opción más sencilla.';
+  String get quizQ2O3Hint =>
+      'Solo Poder de Salud Mental es la opción más sencilla.';
 
   @override
   String get quizQ2O4Hint =>
@@ -1839,7 +1840,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get quizQ3O2Hint =>
-      'Solo Poder Notarial, o Combinado con amplia autoridad para el agente.';
+      'Solo Poder de Salud Mental, o Combinado con amplia autoridad para el agente.';
 
   @override
   String get quizQ3O3Label =>
@@ -1865,7 +1866,7 @@ class AppLocalizationsEs extends AppLocalizations {
       'Nombra a las personas en quienes confío para hablar por mí';
 
   @override
-  String get quizQ4O1Hint => 'Combinado o solo Poder Notarial.';
+  String get quizQ4O1Hint => 'Combinado o solo Poder de Salud Mental.';
 
   @override
   String get quizQ4O2Label =>
@@ -1908,7 +1909,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get quizLegendDeclaration => 'Solo Declaración';
 
   @override
-  String get quizLegendPoa => 'Solo Poder Notarial';
+  String get quizLegendPoa => 'Solo Poder de Salud Mental';
 
   @override
   String get quizRetake => 'Repetir';
@@ -1919,7 +1920,7 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get quizFormNamePoa => 'Poder Notarial';
+  String get quizFormNamePoa => 'Poder de Salud Mental';
 
   @override
   String get quizExplainCombined =>
@@ -3718,7 +3719,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get exportDeclarationPowerOfAttorneyMost =>
-      'Declaración + Poder Notarial (lo más completo)';
+      'Declaración + Poder de Salud Mental (lo más completo)';
 
   @override
   String get exportTreatmentPreferencesOnlyNoAgent =>
@@ -4192,11 +4193,11 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get directiveFormChoiceWithAPoaOnlyForm =>
-      'Con un formulario de solo Poder Notarial, su agente tendrá autoridad para tomar decisiones de atención de salud mental en su nombre, pero el documento no incluirá sus preferencias personales de tratamiento.\n\nConsidere usar el formulario Combinado para documentar sus preferencias Y nombrar a un agente. Así su equipo de atención tendrá la mayor orientación posible.';
+      'Con un formulario de solo Poder de Salud Mental, su agente tendrá autoridad para tomar decisiones de atención de salud mental en su nombre, pero el documento no incluirá sus preferencias personales de tratamiento.\n\nConsidere usar el formulario Combinado para documentar sus preferencias Y nombrar a un agente. Así su equipo de atención tendrá la mayor orientación posible.';
 
   @override
   String get directiveFormChoiceContinueWithPoa =>
-      'Continuar con Poder Notarial';
+      'Continuar con Poder de Salud Mental';
 
   @override
   String get directiveFormChoiceYouCanSwitchFormTypes =>
@@ -4220,7 +4221,8 @@ class AppLocalizationsEs extends AppLocalizations {
   String get directiveFormChoiceHelpMeChoose => 'Ayúdeme a elegir →';
 
   @override
-  String get directiveFormChoicePowerOfAttorneyOnly => 'Solo Poder Notarial';
+  String get directiveFormChoicePowerOfAttorneyOnly =>
+      'Solo Poder de Salud Mental';
 
   @override
   String get directiveFormChoiceTakeThe4QuestionQuiz =>
@@ -5410,7 +5412,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get learnAiPanelAskAQuestionToGet =>
-      'Haga una pregunta para empezar; por ejemplo: “¿Cuál es la diferencia entre una declaración y un poder notarial?”';
+      'Haga una pregunta para empezar; por ejemplo: “¿Cuál es la diferencia entre una declaración y un poder de salud mental?”';
 
   @override
   String get learnAiPanelSetUpTheFreeAi =>
@@ -6087,7 +6089,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get assistantSuggestWhatSTheDifferenceBetween =>
-      '¿Cuál es la diferencia entre Combinado, Declaración y Poder Notarial?';
+      '¿Cuál es la diferencia entre Combinado, Declaración y Poder de Salud Mental?';
 
   @override
   String get assistantSuggestWhoCanBeMyAgent => '¿Quién puede ser mi agente?';
@@ -6463,13 +6465,14 @@ class AppLocalizationsEs extends AppLocalizations {
       'Un último vistazo y luego prepararemos su paquete para firmar. Toque cualquier sección para editarla.';
 
   @override
-  String get formTypeNameCombined => 'Declaración y Poder Notarial combinados';
+  String get formTypeNameCombined =>
+      'Declaración y Poder de Salud Mental combinados';
 
   @override
   String get formTypeNameDeclaration => 'Solo Declaración';
 
   @override
-  String get formTypeNamePoa => 'Solo Poder Notarial';
+  String get formTypeNamePoa => 'Solo Poder de Salud Mental';
 
   @override
   String get formTypeShortCombined => 'Combinado';
@@ -6478,7 +6481,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get formTypeShortDeclaration => 'Declaración';
 
   @override
-  String get formTypeShortPoa => 'Poder Notarial';
+  String get formTypeShortPoa => 'Poder de Salud Mental';
 
   @override
   String get stepTitleAboutYou => 'Sobre usted';
