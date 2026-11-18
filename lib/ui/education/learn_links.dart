@@ -3,9 +3,30 @@ import 'package:mhad/data/educational_content.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/ui/widgets/rich_content_text.dart';
 
-/// Learn's cross-links — the glossary words an article uses, and the articles
-/// nearest it — so a reader can check a term or keep reading without going
-/// back to the list. ONE place for the matching rules.
+/// Learn's shared rules: the articles in the reader's language, search that
+/// ignores accents, and the cross-links (the glossary words an article uses,
+/// the articles nearest it) so a reader can check a term or keep reading
+/// without going back to the list.
+
+/// The Learn articles in the reader's language: Spanish once that
+/// translation is switched on (see [EducationalContent.sectionsFor]).
+List<EducationSection> learnSections(BuildContext context) =>
+    EducationalContent.sectionsFor(
+        Localizations.localeOf(context).languageCode);
+
+const _foldFrom = 'áàäâéèëêíìïîóòöôúùüûñçÁÀÄÂÉÈËÊÍÌÏÎÓÒÖÔÚÙÜÛÑÇ';
+const _foldTo = 'aaaaeeeeiiiioooouuuuncaaaaeeeeiiiioooouuuunc';
+
+/// Lower case without accents, so "revocacion" finds "revocación".
+String foldForSearch(String s) {
+  final b = StringBuffer();
+  for (final r in s.runes) {
+    final c = String.fromCharCode(r);
+    final i = _foldFrom.indexOf(c);
+    b.write(i < 0 ? c : _foldTo[i]);
+  }
+  return b.toString().toLowerCase();
+}
 
 /// The words a glossary title is found by in text: the title without a
 /// parenthetical note or quotes, and both names around an em dash
@@ -13,7 +34,7 @@ import 'package:mhad/ui/widgets/rich_content_text.dart';
 List<String> glossaryMatchTerms(String title) {
   final plain = title
       .replaceAll(RegExp(r'\([^)]*\)'), '')
-      .replaceAll(RegExp('["“”]'), '')
+      .replaceAll(RegExp('["“”«»]'), '')
       .trim();
   return [
     for (final part in plain.split(RegExp(r'\s+—\s+')))
@@ -21,10 +42,17 @@ List<String> glossaryMatchTerms(String title) {
   ];
 }
 
-RegExp _termPattern(String term) => RegExp(
-      '(?<![\\w])${RegExp.escape(term)}(?:s|es|d|ed)?(?![\\w])',
-      caseSensitive: false,
-    );
+/// Whole words in any language (Unicode letters, not just a-z), so Spanish
+/// terms match as well as English ones.
+RegExp _termPattern(String term) {
+  final escaped = term.replaceAllMapped(
+      RegExp(r'[\^$\\.*+?()[\]{}|/]'), (m) => '\\${m[0]}');
+  return RegExp(
+    '(?<![\\p{L}\\p{N}_])$escaped(?:s|es|d|ed)?(?![\\p{L}\\p{N}_])',
+    caseSensitive: false,
+    unicode: true,
+  );
+}
 
 /// The glossary entries [section] uses, in order of first use (at most
 /// [max]); never the entry itself. Plurals and past forms count ("agents",

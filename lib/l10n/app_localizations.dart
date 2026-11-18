@@ -12480,6 +12480,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Open in the glossary'**
   String get learnOpenInGlossary;
+
+  /// No description provided for @educationSourceTranslated.
+  ///
+  /// In en, this message translates to:
+  /// **'Translated from English'**
+  String get educationSourceTranslated;
 }
 
 class _AppLocalizationsDelegate

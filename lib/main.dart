@@ -97,6 +97,11 @@ Future<void> _bootstrap() async {
     disclaimerLoad,
     onboardingLoad,
   ]);
+  // Learn articles in Spanish, once a reviewer has approved them
+  // (app_data.json "learn"). Needs AppData and the English corpus first.
+  if (AppData.instance.learn.spanishArticles) {
+    await EducationalContent.loadLanguage('es');
+  }
   final disclaimerNotifier = await disclaimerLoad;
   final onboardingNotifier = await onboardingLoad;
   final dbEncryptionKey = await dbKeyLoad;

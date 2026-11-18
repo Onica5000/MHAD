@@ -72,11 +72,14 @@ class ArticleDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
-    final terms = glossaryTermsIn(section);
-    final related = relatedSections(section);
+    final terms = glossaryTermsIn(section, all: learnSections(context));
+    final related = relatedSections(section, all: learnSections(context));
     final source = section.category == EducationCategory.supplementary
         ? context.l10n.educationSourceBeyondBooklet
         : context.l10n.educationSourceOfficialBooklet;
+    // A translated article says so (the booklet itself is in English).
+    final translated = EducationalContent.isTranslated(
+        Localizations.localeOf(context).languageCode);
     return Scaffold(
       // A centered ~720px reading column (about 70 characters a line): the
       // article is pushed over Learn's FILL layout, so on a wide monitor the
@@ -105,7 +108,14 @@ class ArticleDetailScreen extends StatelessWidget {
           const SizedBox(height: 20),
           // Source line (artboard WebArticle) + reading time.
           Text(
-            '$source · ${context.l10n.readingTimeMinutes(readingMinutes(section.content)).toUpperCase()}',
+            [
+              source,
+              if (translated)
+                context.l10n.educationSourceTranslated.toUpperCase(),
+              context.l10n
+                  .readingTimeMinutes(readingMinutes(section.content))
+                  .toUpperCase(),
+            ].join(' · '),
             style: TextStyle(
               fontSize: 12, letterSpacing: MhadType.trackingLabel,
               fontWeight: FontWeight.w700,

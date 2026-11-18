@@ -124,6 +124,12 @@
       "lib/ui/export/pdf/supplementary_pdf.dart"
     ]
   },
+  "learn": {
+    "_note": "Learn article languages. VERIFY tier: a human approves a translation before it ships.",
+    "autonomy": "verify",
+    "_spanishArticles": "true = Spanish readers see assets/data/educational_content_es.json. That file is a draft (2026-11-18, machine translation of the English booklet text): set true only after a fluent reviewer approves it.",
+    "spanishArticles": false
+  },
   "contacts": {
     "crisis988": {
       "name": "988 Suicide & Crisis Lifeline",

@@ -1,0 +1,713 @@
+{
+  "_meta": {
+    "schemaVersion": 1,
+    "autonomy": "verify",
+    "language": "es",
+    "status": "draft",
+    "note": "Spanish translation of educational_content.json: same section ids and order. sourceHash = first 12 hex digits of sha256(English title + newline + content) it was translated from; learn_es_test flags a section whose English changed. DRAFT 2026-11-18: machine-translated by the GitHub Copilot CLI (Claude Sonnet 4.6) with the term sheet in docs/SPANISH_STYLE.md, checked by script and spot-read by Claude; NOT yet reviewed by a fluent speaker. Shown only when app_data.json learn.spanishArticles is true."
+  },
+  "sections": {
+    "intro_overview": {
+      "category": "intro",
+      "title": "¿Qué es la Directiva Anticipada de Salud Mental de PA?",
+      "content": "El 3 de noviembre de 2004, el gobernador Rendell promulgó el Proyecto de Ley 2036 de la Cámara de Representantes, convirtiéndolo en la Ley 194 de 2004 (Act 194). Al permitirle crear una directiva anticipada de salud mental — que puede incluir una Declaración de Salud Mental y/o un Poder de Salud Mental — esta nueva ley promueve la planificación anticipada de los servicios y apoyos de atención de salud mental que usted podría querer recibir durante una crisis si no puede tomar decisiones.\n\nLa Ley 194 de 2004 (Act 194) entró en vigor el 29 de enero de 2005. La Directiva Anticipada de Atención de Salud Mental es una herramienta que se centra en el bienestar y la planificación de la recuperación. Pensilvania se suma con satisfacción a la tendencia nacional de promover el uso de esta herramienta como política de salud mental.\n\nEs importante entender cómo hacer que esta nueva ley funcione para usted — incluyendo cómo crear una directiva anticipada y/o designar un agente para su Poder de Salud Mental.\n\nEsta aplicación incluye formularios e instrucciones que puede usar para crear su directiva anticipada y respuestas a las preguntas frecuentes.",
+      "sourceHash": "5a73e94f582a"
+    },
+    "intro_why_take_your_time": {
+      "category": "intro",
+      "title": "Por qué tomarse el tiempo necesario vale la pena",
+      "content": "Las investigaciones sobre las directivas anticipadas psiquiátricas muestran de manera consistente que las personas que completan una a través de un proceso deliberado y guiado — con tiempo para reflexionar sobre su historial de crisis, sus preferencias y en quién confían para hablar en su nombre — tienen muchas más probabilidades de tener una directiva que se use y se respete en la práctica. En un estudio aleatorizado, ese tipo de proceso guiado redujo el uso de intervenciones coercitivas (como el internamiento involuntario) a aproximadamente la mitad durante los dos años siguientes.\n\nEsta aplicación está diseñada con la misma idea. El asistente paso a paso le guía a través de las preguntas que haría un facilitador capacitado, el asistente de inteligencia artificial está disponible para ofrecer explicaciones aclaratorias (no consejos), y la sección educativa está abierta en cualquier momento. No hay prisa — guardar su progreso y volver después está bien, y revisar su directiva más adelante también está bien.\n\nLa razón más común por la que una directiva no funciona no es el documento en sí, sino que las personas que la tratan no pueden encontrarla durante una crisis. Cuando termine, la aplicación le mostrará una lista de verificación para que su directiva sea fácil de localizar: lleve consigo la tarjeta para la billetera, comparta copias con su agente y sus proveedores, y dígales a las personas que la rodean que existe.",
+      "sourceHash": "b8e2bfc55981"
+    },
+    "intro_contacts": {
+      "category": "intro",
+      "title": "Dónde obtener ayuda",
+      "content": "Si tiene preguntas adicionales o necesita ayuda para completar un formulario, comuníquese con cualquiera de las siguientes organizaciones:\n\n• Pennsylvania Mental Health Consumers' Association\n  1-800-88PMHCA\n  pmhca@pmhca.org\n\n• Pennsylvania Protection & Advocacy / Disabilities Law Project\n  1-800-692-7443\n  717-236-8110\n  1-877-375-7139 (TDD/TTY)\n\n• Mental Health Association in Pennsylvania\n  1-866-578-3659\n  717-346-0549\n  info@mhapa.org",
+      "sourceHash": "c39e8015cdc9"
+    },
+    "faq_what_is": {
+      "category": "faq",
+      "title": "¿Qué es una directiva anticipada de salud mental?",
+      "content": "**En términos simples: Es un plan escrito para su atención de salud mental si usted no puede hablar por sí mismo.**\n\nUna directiva anticipada de salud mental es un documento que le permite dar a conocer sus preferencias sobre el tratamiento de salud mental en caso de que su enfermedad mental le impida tomar decisiones. En efecto, usted está tomando decisiones sobre el tratamiento antes de que lo necesite. Esto le permite tomar decisiones más informadas y hacer que sus deseos queden claramente establecidos. En Pensilvania se aprobó una nueva ley, vigente desde el 28 de enero de 2005, que hace posible el uso de una directiva anticipada de salud mental.\n\nEs posible que muchas decisiones deban tomarse por usted si tiene una crisis de salud mental o es sometido a un internamiento involuntario y queda sin poder tomar decisiones de tratamiento. Por ejemplo, la elección del hospital, los tipos de tratamiento y a quién se debe notificar son decisiones que pueden tomarse en su nombre. Una forma de asegurarse de que su médico, sus familiares y sus amigos entiendan sus deseos es preparar una directiva anticipada de salud mental antes de que usted quede sin poder tomar decisiones.\n\nLa ley de Pensilvania le permite hacer una directiva anticipada de salud mental que sea una declaración, un poder de salud mental o una combinación de ambos.",
+      "sourceHash": "06552be0f171"
+    },
+    "faq_combined": {
+      "category": "faq",
+      "title": "¿Cuáles son los tres tipos: formulario Combinado, Declaración y Poder de Salud Mental?",
+      "content": "La ley de Pensilvania le permite hacer una directiva anticipada de salud mental como una **Declaración**, un **Poder de Salud Mental**, o una **combinación de ambos**. Usted elige la opción que mejor se adapte a cuánto desea decidir de antemano frente a cuánto desea que una persona de confianza decida por usted.\n\n**Declaración** — *una lista escrita de instrucciones para su equipo de atención.* Una Declaración contiene instrucciones para los médicos, hospitales y otros proveedores de atención de salud mental sobre su tratamiento en caso de que usted quede sin poder comunicar sus deseos. Por lo general, se ocupa de situaciones específicas y no permite mucha flexibilidad para los cambios que surjan después de redactar el documento, como un nuevo tipo de crisis, nuevos tipos de medicamentos u otras opciones de tratamiento.\n\n**Poder de Salud Mental** — *usted elige a una persona de confianza para que decida por usted.* Un Poder de Salud Mental le permite designar a otra persona, llamada agente, para que tome decisiones de tratamiento en su nombre durante una crisis de salud mental. Ofrece flexibilidad para hacer frente a una situación a medida que se presenta, en lugar de intentar anticipar cada posible situación de antemano.\n\n**formulario Combinado: Declaración y Poder de Salud Mental** — *escriba sus deseos Y elija a alguien para que decida.* Una directiva combinada le permite tomar algunas decisiones usted mismo mientras le otorga a un agente el poder de tomar otras — las que usted desee. Esto hace que su directiva sea más flexible para situaciones futuras, como nuevas opciones de tratamiento, sobre las que no tiene manera de saber ahora.\n\nIndependientemente de lo que elija, su agente debe ser alguien en quien usted confíe, y debe hablar con esa persona sobre sus sentimientos acerca de las diferentes opciones de tratamiento para que pueda tomar las decisiones más parecidas a las que usted tomaría.",
+      "sourceHash": "9342bc6ff382"
+    },
+    "faq_valid": {
+      "category": "faq",
+      "title": "¿Qué hace válida una directiva anticipada de salud mental?",
+      "content": "**En términos simples: Debe tener 18 años o más (o ser un menor emancipado), firmarla y contar con dos testigos adultos.**\n\nNo existe un formulario específico que deba utilizarse, pero su directiva anticipada de salud mental debe cumplir los siguientes requisitos:\n\n1. Debe tener al menos 18 años de edad, o ser un menor emancipado.\n\n2. No debe haber sido declarado incapaz por un tribunal y tener un tutor designado, ni encontrarse actualmente bajo un internamiento involuntario.\n\n3. La directiva anticipada de salud mental debe estar firmada, presenciada por testigos y fechada. Los testigos deben tener al menos 18 años de edad. Si no puede firmar físicamente el documento, otra persona puede firmar en su nombre, pero esa persona no puede ser también un testigo. Su médico o su empleado, ni el propietario, operador o empleado de una instalación residencial donde usted viva pueden actuar como agente.\n\n4. La directiva anticipada de salud mental debe contener sus elecciones sobre el inicio, la continuación o el rechazo del tratamiento de salud mental. También puede incluir elecciones sobre otras cosas, como quién desea que sea su agente o tutor, quién desea que cuide de sus hijos o mascotas, a quién desea que se notifique sobre su condición y/o sus preferencias dietéticas o religiosas.\n\n5. Si su directiva anticipada de salud mental es un Poder de Salud Mental, entonces debe nombrar a la persona que desea que sea su agente e indicar que la está autorizando a tomar las decisiones que usted desea que tome.\n\nLa directiva anticipada de salud mental es válida por dos años a partir de la fecha en que la firma, a menos que: (a) usted revoque la directiva en su totalidad, o (b) cree una nueva directiva anticipada de salud mental.\n\nSi usted no tiene capacidad para tomar decisiones de tratamiento en el momento en que venza la directiva, esta permanecerá vigente hasta que usted pueda tomar decisiones de tratamiento.",
+      "sourceHash": "41d9b4fd8036"
+    },
+    "faq_capacity": {
+      "category": "faq",
+      "title": "¿Qué es la capacidad y necesito demostrarla?",
+      "content": "La capacidad es la habilidad básica para entender su diagnóstico y para comprender los riesgos, los beneficios y los tratamientos alternativos de su atención de salud mental. También incluye la capacidad de entender lo que puede ocurrir si no recibe tratamiento.\n\n**¿Necesito incluir prueba de mi capacidad?** No. A menos que tenga un tutor o se encuentre actualmente bajo un internamiento involuntario, se presume que usted tiene capacidad cuando hace una directiva anticipada de salud mental. Sin embargo, en un momento posterior es posible que alguien cuestione si usted tenía capacidad.\n\nSi desea estar muy seguro de que nadie pueda impugnar su directiva más adelante, puede incluir una carta de su médico tratante, del mismo período de tiempo en que hizo su directiva, indicando que usted tenía capacidad en ese momento.",
+      "sourceHash": "f3f86bcc10db"
+    },
+    "faq_effective": {
+      "category": "faq",
+      "title": "¿Cuándo entra en vigor mi directiva y quién determina que no tengo capacidad?",
+      "content": "**Cuándo entra en vigor.** Usted puede escribir en su directiva anticipada de salud mental cuándo desea que la directiva entre en vigor — por ejemplo, cuando ocurra un internamiento involuntario, o cuando un psiquiatra y otro profesional de tratamiento de salud mental indiquen que usted ya no tiene capacidad para tomar decisiones de tratamiento de salud mental.\n\n**Quién determina la incapacidad.** A efectos de su directiva, la incapacidad se determina después de que un psiquiatra y uno de los siguientes profesionales lo examinen: otro psiquiatra, psicólogo, médico de familia, médico tratante o profesional de tratamiento de salud mental. Siempre que sea posible, uno de los evaluadores será uno de sus profesionales tratantes actuales.\n\n**Si los evaluadores no están de acuerdo.** Si los dos profesionales no están de acuerdo sobre si usted carece de capacidad, la directiva NO entra en vigor — se presume que usted tiene capacidad a menos que ambos evaluadores estén de acuerdo. Usted o su agente pueden solicitar evaluaciones adicionales si considera que la determinación es incorrecta.",
+      "sourceHash": "681286557750"
+    },
+    "faq_guardian": {
+      "category": "faq",
+      "title": "¿Qué ocurre si un tribunal designa un tutor después de que yo haya designado un agente?",
+      "content": "En su directiva anticipada puede nombrar a la persona que desea que el tribunal elija como su tutor. El tribunal designará a la persona que usted elija, a menos que haya una buena razón para no hacerlo. En muchos casos, su agente y la persona que usted desearía como tutor serían la misma persona. Sin embargo, es posible que desee que una persona tome sus decisiones de atención de salud mental y que otra persona tome otras decisiones por usted.\n\nSi el tutor designado por el tribunal y su agente son personas diferentes, el tribunal permitirá que su agente tome las decisiones de atención de salud mental, a menos que usted indique lo contrario en su directiva anticipada de salud mental. Si el tribunal decide otorgar al tutor los poderes que usted le dio a un agente, el tutor aún tendría que tomar las decisiones conforme a lo escrito en su directiva anticipada.\n\n**Usted decide si un tutor puede anular su directiva.** Si un tribunal designa un tutor para usted posteriormente (bajo 20 Pa.C.S. §5511), su directiva le permite elegir una de dos opciones:\n\n• El tutor NO PUEDE revocar, suspender ni dar por terminada su directiva — sus deseos previamente expresados permanecen en vigor.\n• El tutor SÍ PUEDE revocar, suspender o dar por terminada su directiva — otorgándole al tutor plena autoridad.\n\nEsta es una decisión importante. Si tiene convicciones firmes sobre sus preferencias de tratamiento, considere impedir que el tutor las anule. Si confía en que un futuro tutor actuará en su mejor interés, puede permitir la revocación.\n\nRecuerde que su agente y su tutor tienen funciones diferentes: su agente toma decisiones bajo el poder de salud mental, mientras que un tutor tiene una autoridad más amplia, otorgada por el tribunal, sobre sus asuntos personales.",
+      "sourceHash": "ddd753786a4d"
+    },
+    "faq_providers_follow": {
+      "category": "faq",
+      "title": "¿Los proveedores de atención médica están obligados a seguir mis instrucciones?",
+      "content": "**Respuesta corta: sí — y la ley usa lenguaje obligatorio.**\n\nBajo la Ley 194 de PA (Act 194), **20 Pa.C.S. §5842** (Deberes del médico tratante y del proveedor de atención de salud mental) exige que un médico tratante o proveedor de atención de salud mental “**deberá cumplir**” (“shall comply”) con una decisión de atención de salud mental tomada por un agente de salud mental. En la redacción legislativa, “deberá” crea un deber — no es una sugerencia. La decisión del agente se trata como si usted mismo la hubiera tomado.\n\nEl mismo marco obligatorio se aplica a su agente de atención médica general bajo el estatuto paralelo, **20 Pa.C.S. §5462(c)(1)** del Capítulo 54 (Ley 169 de 2006, Act 169), que establece que, salvo una excepción limitada relacionada con la preservación de la vida, el proveedor “**deberá cumplir**” (“shall comply”) con una decisión de atención médica tomada por un agente o representante de atención médica “en la misma medida que si la decisión hubiera sido tomada por la persona que hizo la directiva”.\n\n**Excepciones limitadas.** Un proveedor puede negarse a cumplir cuando:\n• Sus instrucciones van en contra de la práctica clínica aceptada y los estándares médicos; o\n• El tratamiento no está físicamente disponible en la instalación; o\n• La política del proveedor o de la institución, o la cobertura del seguro, impide el cumplimiento (consulte la sección Suplementaria “Seguro, cobertura y límites de la política del proveedor”); o\n• El proveedor tiene una objeción de conciencia de buena fe; o\n• La directiva no es legalmente efectiva — por ejemplo, no fue firmada correctamente, ha vencido (superado el período de dos años mientras usted aún tiene capacidad), fue revocada, o aún no ha sido activada bajo el desencadenante que usted especificó (como un internamiento involuntario o una determinación de incapacidad por un psiquiatra y otro profesional).\n\nCuando un proveedor no puede cumplir, **§5804** le exige que (a) se lo comunique a usted, a su agente y a cualquier tutor lo antes posible, (b) documente la razón, (c) haga un esfuerzo razonable para transferir su atención a un proveedor que sí cumpla, y (d) continúe brindando atención conforme a su directiva mientras se lleva a cabo la transferencia.\n\n**Tenga cuidado con la descripción “solo orientativo”.** Algunos folletos de hospitales y preguntas frecuentes para pacientes describen las directivas anticipadas como “solo orientativas” o dicen que “no hay ninguna ley que garantice” el cumplimiento. Ese lenguaje subestima la norma estatutaria. La regla es el cumplimiento obligatorio más un conjunto definido de excepciones y la obligación de transferir — no pura discreción clínica. Consulte la sección Suplementaria “Obligaciones del proveedor bajo la Ley 194” y la pregunta frecuente “¿Qué pasa si un proveedor dice que mi directiva es solo una guía?” para el análisis estatutario completo.\n\n**Consejo práctico.** Hable sobre su directiva con sus proveedores de antemano para saber si podrán seguirla. Incluso cuando usted consiente de antemano un medicamento o tratamiento específico, la decisión clínica de utilizarlo en un momento determinado aún debe ser apropiada para su condición en ese momento y estar dentro de los estándares de atención aceptados.\n\n**Si cree que su directiva está siendo ignorada:** un proveedor no puede negarse simplemente porque personalmente no esté de acuerdo con su elección. Si no es posible transferirlo a un proveedor que cumpla, el proveedor debe continuar actuando en su mejor interés mientras consulta con su agente. Comuníquese con Disability Rights Pennsylvania (antes conocida como PA Protection & Advocacy) al 1-800-692-7443 — ellos atienden quejas relacionadas con la Ley 194 (Act 194). Un tribunal también puede anular disposiciones específicas de una directiva, pero solo a través del proceso de petición del §5843 (consulte la sección Suplementaria “Petición judicial por daño irreparable”).",
+      "sourceHash": "2bd6df69b79d"
+    },
+    "faq_involuntary": {
+      "category": "faq",
+      "title": "¿Cómo interactúa mi directiva con el internamiento involuntario (secciones 302–305)?",
+      "content": "Tener una directiva anticipada de salud mental no cambia las disposiciones de Pensilvania sobre el internamiento voluntario e involuntario bajo la Ley de Procedimientos de Salud Mental (Mental Health Procedures Act). Lo que sí puede afectar es cómo lo tratan *después* de ser internado.\n\nLas secciones de internamiento (50 P.S. §§ 7301–7306) son distintas de la Ley 194 (Act 194) pero con frecuencia surgen juntas, porque una directiva puede entrar en vigor durante un ingreso involuntario:\n\n• **Sección 302** — Examen y tratamiento de emergencia por hasta **120 horas** (5 días). Iniciado por un médico, un agente del orden o cualquier adulto responsable mediante una petición escrita.\n• **Sección 303** — Tratamiento involuntario de emergencia extendido por hasta **20 días** tras una Sección 302. Requiere una audiencia judicial dentro de las 120 horas siguientes al ingreso inicial bajo la Sección 302.\n• **Sección 304** — Tratamiento involuntario ordenado por un tribunal por hasta **90 días** (renovable por períodos adicionales de 90 días). Requiere una certificación formal y una audiencia adicional.\n• **Sección 305** — Una extensión adicional de 180 días tras una Sección 304.\n\nSu directiva anticipada de salud mental continúa aplicándose durante un ingreso bajo las Secciones 302/303/304 en la medida en que lo permita la ley. Su agente (si tiene uno) conserva la autoridad sobre las decisiones que se le han otorgado, y sus preferencias aún deben informar al equipo de atención. El procedimiento de internamiento en sí, sin embargo, está regido por la Ley de Procedimientos de Salud Mental (Mental Health Procedures Act), no por la Ley 194 (Act 194).\n\nSer internado no autoriza por sí solo al personal a ignorar su directiva. Durante una emergencia de seguridad real pueden administrar el tratamiento necesario en contra de su objeción mientras dure la emergencia; fuera de una emergencia, su directiva sigue siendo aplicable, y un rechazo de medicamentos en ella se trata como una objeción simultánea que debe respetarse mientras sea válida (consulte la sección Suplementaria “Anulación de emergencia y Sección 302”).",
+      "sourceHash": "11df8a09b41e"
+    },
+    "faq_revoke": {
+      "category": "faq",
+      "title": "¿Puedo modificar o revocar mi directiva?",
+      "content": "**Puede revocar, o cancelar, una parte o la totalidad de su directiva anticipada de salud mental en cualquier momento, siempre que tenga capacidad** para tomar decisiones de atención de salud mental. Una revocación puede ser oral o por escrito, y es efectiva en cuanto la comunica a su médico tratante o proveedor de atención de salud mental — ya sea directamente o a través de un testigo de su revocación.\n\n**Tres formas de revocar:**\n\n1. **Por escrito** — firme y feche una declaración en la que indique que está revocando la directiva.\n2. **Destruyendo el original** — rompa, destruya con triturador u otras formas de destruir físicamente el documento original con la intención de revocar.\n3. **Firmando una nueva directiva** — firmar una nueva directiva anticipada de salud mental revoca automáticamente cualquier directiva anterior.\n\n**Asegúrese de que la revocación sea efectiva — notifique a todos los que tienen una copia.** La notificación es tan importante como el acto en sí: una directiva cuya revocación olvidó comunicar puede seguir siendo utilizada de buena fe por un proveedor que tiene una copia antigua. Una revocación completa generalmente significa:\n\n1. Notifique a su(s) agente(s) por escrito.\n2. Notifique a sus proveedores de atención médica (psiquiatra, terapeuta, médico de atención primaria).\n3. Notifique a cualquier hospital o instalación que tenga una copia.\n4. Destruya o marque claramente “REVOCADO” en todas las copias impresas.\n5. Solicite la devolución de las copias que distribuyó.\n\n**También puede revocar solo una parte de su directiva** mientras mantiene el resto en vigor — por ejemplo, revocar la designación del agente pero conservar sus preferencias de tratamiento.\n\n**Modificar en lugar de revocar.** Puede enmendar su directiva por escrito en cualquier momento, siempre que tenga capacidad. Para cambios significativos, es mejor hacer un nuevo documento para que no haya conflictos ni malentendidos. Cualquier cambio o nueva directiva debe ser presenciado por dos personas de al menos 18 años de edad, y debe entregar nuevas copias a su proveedor, agente y otras personas de apoyo.\n\n**Si no la revoca,** su directiva anticipada termina automáticamente dos años a partir de la fecha en que la firmó, a menos que no tenga capacidad para tomar decisiones de atención de salud mental en ese momento, en cuyo caso permanece en vigor hasta que recupere la capacidad.",
+      "sourceHash": "3b2af1318bf9"
+    },
+    "faq_what_to_include": {
+      "category": "faq",
+      "title": "¿Qué tipo de instrucciones debo incluir?",
+      "content": "Una directiva anticipada de salud mental es una forma de comunicar mucha información a su proveedor. Es posible que desee incluir sus elecciones sobre diferentes opciones de tratamiento, como medicamentos, terapia electroconvulsiva y manejo de crisis. Además, puede indicar a quién desea que se notifique en caso de una crisis, o anotar sus preferencias alimentarias, su historial de tratamientos anteriores, a quién desea que cuide de sus hijos o mascotas, y otra información que desea que se atienda mientras usted recibe tratamiento.",
+      "sourceHash": "c5c6b469e4bb"
+    },
+    "faq_who_to_give": {
+      "category": "faq",
+      "title": "¿A quién debo dar una copia y cómo acceden los proveedores a ella?",
+      "content": "La única forma de que sus proveedores conozcan sus elecciones es que usted les entregue su directiva anticipada de salud mental — la ley de PA no crea un registro central, por lo que el acceso depende de que usted y su agente compartan copias.\n\nEntregue copias a su médico tratante, psiquiatra y otros proveedores de atención de salud mental, a su agente y a familiares u otras personas que serían notificadas en caso de una crisis. Considere también dar una copia a la sala de urgencias local o al centro de crisis. Guarde el original en un lugar seguro y asegúrese de que alguien que sería notificado de cualquier crisis pueda obtener el original para entregárselo al médico tratante.\n\nHaga que sea fácil de encontrar en una emergencia:\n• Lleve una tarjeta en su billetera que indique que tiene una directiva anticipada de salud mental y a quién llamar si usted no tiene capacidad — incluya los números de teléfono de esa persona y nombre a un suplente en caso de que la primera persona no esté disponible (esta aplicación puede generar la tarjeta).\n• Dígale a su agente dónde se guarda el original.\n• Guarde una copia digital en su teléfono para emergencias.\n• Algunos hospitales y sistemas de salud le permiten cargar directivas anticipadas en su portal de pacientes o historial médico electrónico.\n\nRecuerde que si realiza cambios o crea una nueva directiva, debe asegurarse de que todos tengan copias de la versión más reciente.",
+      "sourceHash": "0ff18efb05f9"
+    },
+    "faq_out_of_state": {
+      "category": "faq",
+      "title": "¿Mi directiva de PA será reconocida si viajo o me mudo a otro estado?",
+      "content": "La ley de Pensilvania (20 Pa.C.S. §5845) establece que una directiva anticipada de salud mental firmada en otro estado es válida en PA si era válida donde fue firmada. Sin embargo, lo contrario no está garantizado: otros estados no están obligados a honrar una directiva de Pensilvania de la misma manera en que lo están los proveedores de PA, aunque muchos extienden un “reconocimiento razonable” a las directivas de otros estados como práctica clínica.\n\nSi viaja o se muda entre estados:\n\n• Lleve una copia de su directiva de PA Y una breve hoja de presentación que la identifique como una “directiva anticipada de salud mental bajo la Ley 194 de Pensilvania de 2004 (Ley 194 de 2004, Act 194) (20 Pa.C.S. Ch. 58)”.\n• Lleve la tarjeta de billetera y los nombres y números de teléfono de su agente de PA.\n• Si se establece en otro estado, considere firmar una nueva directiva bajo la ley de ese estado además de la de PA.\n• Consulte las leyes del otro estado o consulte con un abogado sobre el reconocimiento transfronterizo.\n\nPara preguntas específicas sobre reconocimiento transfronterizo, comuníquese con PA Protection & Advocacy (1-800-692-7443).",
+      "sourceHash": "169b610cf9da"
+    },
+    "faq_agent_unavailable": {
+      "category": "faq",
+      "title": "¿Qué ocurre si mi agente no está disponible o no está de acuerdo con mis deseos?",
+      "content": "**Si su agente no está disponible.** Si no se puede contactar a su agente principal o no puede actuar, su agente alternativo (si designó uno) lo reemplazará. Esta es la razón por la que se recomienda firmemente nombrar un agente alternativo.\n\nSi ninguno de los dos agentes está disponible, las preferencias de tratamiento escritas en su directiva siguen orientando a su equipo de atención. Los proveedores deben seguir sus deseos documentados en la medida de lo posible, incluso sin un agente presente para interpretarlos. Si no hay ningún agente disponible y su directiva no aborda la decisión de tratamiento específica, los proveedores utilizarán su juicio clínico conforme a la práctica médica aceptada.\n\n**Si su agente no está de acuerdo con lo que usted escribió.** Su agente está legalmente obligado a actuar según los deseos que usted expresó cuando su directiva está en vigor; su desacuerdo personal no lo autoriza a anular sus instrucciones escritas. La mejor medida de protección es tener la conversación ahora, antes de cualquier crisis: revise su directiva con su agente en persona — explique por qué eligió cada preferencia, qué experiencias lo llevaron a ello y qué significa “respetar” la directiva en situaciones concretas (medicamentos, TEC, instalaciones). Un agente que ha tenido esta conversación tiene muchas más probabilidades de seguir sus deseos con confianza y abogar por usted con los proveedores. Si su agente indica que no puede o no quiere seguir su directiva, nombre a un agente diferente (o cámbielo al puesto de alternativo y elija un nuevo agente principal).",
+      "sourceHash": "3cbb521f19dc"
+    },
+    "faq_finding_witnesses": {
+      "category": "faq",
+      "title": "¿Cómo encuentro testigos elegibles?",
+      "content": "Necesita dos testigos adultos (de 18 años o más) que NO sean:\n\n• Su agente designado o agente alternativo\n• Su proveedor de atención médica\n• Un empleado de la instalación donde recibe tratamiento\n\nExcepción: Una persona que de otro modo estaría descalificada SÍ PUEDE actuar como testigo si está relacionada con usted por sangre, matrimonio o adopción.\n\nBuenas opciones para testigos incluyen: amigos, vecinos, compañeros de trabajo, miembros de una comunidad de fe, o personal de una biblioteca, banco o centro comunitario. También puede pedirle a un abogado o a un notario.\n\nAmbos testigos deben estar físicamente presentes cuando usted firme la directiva. La presencia remota o por video no es aceptada bajo la ley de PA.",
+      "sourceHash": "20f890ec05ce"
+    },
+    "faq_deescalation": {
+      "category": "faq",
+      "title": "¿Cuáles son las preferencias de desescalada?",
+      "content": "Las preferencias de desescalada describen qué le ayuda a calmarse durante una crisis de salud mental. Documentarlas le proporciona a su equipo de atención herramientas específicas para ayudarle sin recurrir a la sujeción ni a la medicación forzada.\n\nEjemplos de técnicas de desescalada para incluir:\n\n• Escuchar música (especificar género o lista de reproducción)\n• Estar en una habitación tranquila y tenuemente iluminada\n• Hablar con una persona específica (nombre y contacto)\n• Ejercicios de respiración profunda o de anclaje\n• Acceso a objetos de confort (manta, peluche, libro)\n• Que le hablen con una voz tranquila y pausada\n• Que le dejen solo durante un período determinado\n• Actividad física (caminar, estiramientos)\n\nTambién considere enumerar los desencadenantes que empeoran las cosas — entornos ruidosos, temas específicos, contacto físico, estar solo, o ciertas personas o entornos.",
+      "sourceHash": "b0d1be08a9f1"
+    },
+    "faq_reproductive_health": {
+      "category": "faq",
+      "title": "¿Puedo incluir preferencias de salud reproductiva?",
+      "content": "Sí. Si está o puede quedar embarazada, puede incluir preferencias sobre cómo debe gestionarse su tratamiento de salud mental durante el embarazo, el trabajo de parto, el parto y la atención posparto.\n\nEsto es especialmente importante porque algunos medicamentos psiquiátricos conllevan riesgos durante el embarazo, y las decisiones de tratamiento pueden necesitar equilibrar las necesidades de salud mental con la seguridad del feto.\n\nEjemplos de preferencias de salud reproductiva:\n\n• Qué medicamentos continuar o suspender durante el embarazo\n• Si consiente la hospitalización psiquiátrica mientras está embarazada\n• Preferencias para el seguimiento de la salud mental posparto\n• A quién se debe notificar si es hospitalizada mientras está embarazada\n• Preferencias sobre lactancia materna frente a compatibilidad con medicamentos\n\nInclúyalas en la sección “Otros asuntos de importancia” de su directiva. California ha sido pionera en un modelo especializado de “Directiva Anticipada Reproductiva” (“Reproductive PAD”) que aborda estos temas en detalle.",
+      "sourceHash": "864879573516"
+    },
+    "faq_capacity_restoration": {
+      "category": "faq",
+      "title": "¿Qué ocurre cuando recupero la capacidad?",
+      "content": "Su directiva se suspende automáticamente cuando usted recupera la capacidad. En otras palabras: cuando usted es capaz de tomar y comunicar sus propias decisiones de tratamiento de salud mental, esas decisiones actuales tienen prioridad sobre cualquier preferencia escrita en su directiva.\n\nCuando se restablece la capacidad, también puede optar por:\n\n• **Revocar** la directiva (consulte la pregunta frecuente sobre revocación).\n• **Enmendar** la directiva firmando una nueva que reemplace a la anterior.\n• **Dejarla como está** para que esté lista la próxima vez que sea necesaria.\n\nLas determinaciones de capacidad son realizadas por clínicos calificados bajo la Ley 194 de PA (Act 194) — por lo general un médico, un enfermero practicante certificado o un psicólogo familiarizado con el paciente. La determinación debe quedar documentada en el expediente médico.",
+      "sourceHash": "0f4b3267fcf9"
+    },
+    "faq_emancipated_minor": {
+      "category": "faq",
+      "title": "¿Puede un menor de edad crear una directiva anticipada de salud mental?",
+      "content": "Bajo la ley de Pensilvania, la persona que hace una directiva anticipada de salud mental debe tener **18 años o más** o ser un **menor legalmente emancipado**. La emancipación en PA es otorgada por un tribunal y le da a un menor una capacidad legal similar a la de un adulto para tomar decisiones, incluidas las de atención médica.\n\nSi usted es menor de 18 años y no está emancipado, no puede crear de forma independiente una directiva anticipada de salud mental vinculante, pero puede:\n\n• Hablar con un padre o tutor sobre el tipo de tratamiento que desearía o que desearía evitar — ellos toman estas decisiones por usted hasta que cumpla 18 años.\n• Crear un “plan personal de crisis de salud mental” que enumere sus preferencias, desencadenantes, apoyos y contactos. No es una directiva vinculante, pero proporciona información útil a los clínicos.\n• Planear firmar una directiva anticipada de salud mental en su 18.º cumpleaños o poco después.",
+      "sourceHash": "c8ffa617ac4b"
+    },
+    "faq_guidelines_only_misconception": {
+      "category": "faq",
+      "title": "¿Qué ocurre si un proveedor dice que mi directiva es “solo una guía”?",
+      "content": "Este es un malentendido común — a veces repetido en folletos de hospitales y preguntas frecuentes para pacientes. El estatuto es más claro que eso. Bajo **20 Pa.C.S. §5842** (para directivas anticipadas de salud mental) y **§5462(c)(1)** (para directivas de atención médica general), los proveedores “**deberán cumplir**” (“shall comply”) con las decisiones tomadas por un agente o representante válido, tratándolas como si usted mismo las hubiera tomado.\n\nEs posible que vea el encuadre de “solo orientativo” en folletos de pacientes de PA muy difundidos y en preguntas frecuentes de hospitales — por ejemplo, que una directiva “actúa solo como orientación, no como órdenes médicas automáticas”, que “no hay ninguna ley en Pensilvania que garantice que sus proveedores médicos seguirán sus instrucciones en todas las circunstancias”, o lenguaje que enfatiza el “juicio profesional” sin citar el estatuto.\n\n**Leyendo ese lenguaje con objetividad:** no es incorrecto en sentido absoluto — ninguna ley *garantiza* literalmente el resultado en todos los casos posibles, y existen excepciones estatutarias limitadas (conciencia, estándares clínicos, indisponibilidad, política institucional y la excepción de preservación de la vida en §5462(c)(1) para la atención médica general). Pero describir una directiva como “solo orientativa” oculta la norma central — el cumplimiento obligatorio — bajo un lenguaje que enfatiza la discreción del proveedor.\n\n“Shall” (deberá) es la palabra de la ley para *obligatorio*. No equivale a “may” (puede). No equivale a “should consider” (debería considerar). No es una sugerencia clínica. Las excepciones limitadas (objeción de conciencia, indisponibilidad clínica, política institucional) generan una **obligación de transferencia**, no una libertad absoluta de discreción del proveedor.\n\n**Si un proveedor le dice “esto es solo una guía”:**\n\n1. Mantenga la calma y sea amable — la mayoría del personal que dice esto repite una capacitación más antigua, no se niega de mala fe.\n2. Cite el estatuto por su nombre: “Bajo 20 Pa.C.S. §5842, usted está obligado a cumplir con las decisiones de mi agente en la misma medida que si yo las hubiera tomado”. Para una directiva que no sea de salud mental, cite §5462(c)(1).\n3. Pregunte en cuál de las **excepciones estatutarias específicas** se basan (conciencia, estándares clínicos, indisponibilidad, política institucional). El desacuerdo clínico vago no es una de las excepciones.\n4. Si invocan una excepción, solicite el **plan de transferencia** requerido por §5804 — quién se encargará del caso y qué atención se brindará mientras tanto.\n5. Solicite la participación del defensor del paciente o del ombudsman del hospital.\n6. Si la disputa no se resuelve, comuníquese con **Disability Rights Pennsylvania (antes conocida como PA Protection & Advocacy)** al 1-800-692-7443. Ellos atienden quejas relacionadas con la Ley 194 (Act 194).\n\n**Para las instituciones:** alinear los folletos para pacientes y la orientación del comité de ética con el texto del estatuto (“deberá cumplir” (“shall comply”) + excepciones definidas + obligación de transferencia) reduce los conflictos con los representantes y apoya una práctica más coherente — la conclusión principal de los comentarios de bioética que comparan la Ley 194 (Act 194) y la Ley 169 (Act 169) con los materiales para pacientes de uso generalizado.\n\n**En resumen:** esta aplicación describe el deber del proveedor usando el lenguaje estatutario “deberá cumplir” (“shall comply”). Si un folleto impreso o una sección de preguntas frecuentes que encuentre en otro lugar describe las cosas de manera diferente, el estatuto es la autoridad que prevalece. Consulte también la pregunta frecuente “¿Los proveedores de atención médica están obligados a seguir mis instrucciones?” y la sección Suplementaria “Obligaciones del proveedor bajo la Ley 194” para el marco estatutario completo.",
+      "sourceHash": "052ae3f8a4d7"
+    },
+    "faq_mhad_vs_health_care_directive": {
+      "category": "faq",
+      "title": "¿En qué se diferencia mi directiva anticipada de salud mental de una directiva de atención médica regular o de un testamento vital?",
+      "content": "Pensilvania tiene **dos estatutos paralelos de directivas anticipadas** en el Título 20 de los Estatutos Consolidados (Consolidated Statutes). Muchas personas se benefician de tener ambos. Cubren decisiones diferentes pero utilizan el mismo marco de “deberá cumplir” (“shall comply”) para los deberes del proveedor.\n\n**Capítulo 58 — Atención de salud mental (Ley 194 de 2004, Act 194).** Esta es la ley para las decisiones de tratamiento de *salud mental*: hospitalización en una instalación psiquiátrica, medicamentos psicotrópicos, TEC, estudios psiquiátricos experimentales, ensayos de medicamentos, preferencias de instalaciones de tratamiento y un agente de salud mental. Esta aplicación genera directivas bajo el Capítulo 58.\n\n**Capítulo 54 — Atención médica (Ley 169 de 2006, Act 169).** Esta es la ley para las decisiones de atención médica *general*: testamentos vitales, atención al final de la vida, tratamiento para preservar la vida, consentimiento para cirugías, el poder para atención médica y la jerarquía predeterminada de “representante de atención médica” cuando no se nombra a ningún agente.\n\n**Cómo encajan:**\n• Si usted firma una directiva anticipada de salud mental del Capítulo 58 y un poder para atención médica del Capítulo 54, ambos pueden estar vigentes al mismo tiempo. El agente de salud mental toma las decisiones de salud mental; el agente de atención médica general (o representante) toma todas las demás.\n• La misma persona puede ser nombrada en ambos — con frecuencia tiene sentido que una persona de confianza desempeñe ambas funciones.\n• Ambos estatutos utilizan el lenguaje obligatorio “**deberá cumplir**” (“shall comply”) para los deberes del proveedor (véase §5842 para la directiva anticipada de salud mental, §5462(c)(1) para la atención médica general).\n• Ambos permiten la negativa basada en la conciencia, pero ambos también exigen que el proveedor **transfiera** a un proveedor que sí cumpla, en lugar de simplemente anular sus deseos.\n\n**En caso de duda, pregunte qué estatuto aplica.** Una decisión de ingreso psiquiátrico corresponde al Capítulo 58. Una pregunta sobre no reanimación cardiopulmonar corresponde al Capítulo 54. Una decisión sobre medicamentos durante una hospitalización psiquiátrica generalmente corresponde al Capítulo 58. Los hospitales ocasionalmente citan el estatuto incorrecto o aplican las reglas del Capítulo 54 a una situación de salud mental — conocer la distinción le ayuda a usted y a su agente a abogar correctamente.",
+      "sourceHash": "8d267a323a5e"
+    },
+    "faq_scenario_admission": {
+      "category": "faq",
+      "title": "Situación de ejemplo: cómo una directiva ayuda durante el ingreso",
+      "content": "A continuación se presenta una situación anónima y compuesta, basada en la literatura de implementación de directivas anticipadas psiquiátricas (PAD) — es ilustrativa, no un caso real.\n\n**Antecedentes.** Alex tiene trastorno bipolar I y un historial de episodios maníacos que han requerido hospitalización. Hace dos años, con la ayuda de un especialista en pares, Alex completó una directiva anticipada de salud mental en la que nombra a su hermana como agente principal, rechaza un antipsicótico específico que le causó una acatisia grave, identifica dos instalaciones preferidas y una que desea evitar, y consiente la TEC solo si su hermana también lo aprueba por escrito en ese momento.\n\n**Crisis.** Alex es llevado a un hospital por los servicios de emergencias médicas (EMS) durante un episodio maníaco. No puede comunicar sus preferencias de manera coherente.\n\n**Con la directiva en vigor.** La enfermera de admisión encuentra la tarjeta en el bolsillo de Alex, escanea el código QR y recupera el resumen de la directiva. El equipo contacta a su hermana, lo transfiere a una de las instalaciones de su preferencia a la mañana siguiente, evita el antipsicótico nombrado y comienza el medicamento que él señaló como preferido. La TEC no se plantea porque no se puede cumplir la condición previa de aprobación escrita por parte del agente.\n\n**Por qué funcionó.** La directiva existía *y* era fácil de encontrar. El agente había sido informado de antemano. Las preferencias eran lo suficientemente específicas para orientar la elección del medicamento, no solo para llevar un registro.",
+      "sourceHash": "07b7cc2cde59"
+    },
+    "combined_overview": {
+      "category": "combined",
+      "title": "Vista general del formulario Combinado",
+      "content": "La ley de Pensilvania le permite hacer una Declaración de Salud Mental y un Poder de Salud Mental en un formulario Combinado. Esto le permite tomar decisiones sobre algunos asuntos, y también le permite otorgar a un agente el poder de tomar otras decisiones por usted. Usted elige las decisiones que desea que su agente tome en su nombre, tantas o tan pocas como prefiera. Esto hace que su Directiva Anticipada de Salud Mental de PA sea más flexible para hacer frente a situaciones futuras, como nuevas opciones de tratamiento, que usted no podría conocer ahora.\n\nLea cada sección con mucho cuidado. Comience escribiendo su nombre en el espacio en blanco del párrafo introductorio al inicio del formulario.",
+      "sourceHash": "7f307e60c21a"
+    },
+    "combined_effective": {
+      "category": "combined",
+      "title": "Parte I — Cuándo entra en vigencia el formulario Combinado",
+      "content": "Decida cuándo desea que la Declaración entre en vigencia. Puede especificar una condición, por ejemplo, si es sometido a un internamiento involuntario para atención ambulatoria o de hospitalización, u otro comportamiento o evento que usted sabe que ocurre cuando ya no tiene capacidad para tomar decisiones de salud mental; o puede indicar que desea una evaluación de incapacidad.\n\nSi no elige una condición, su incapacidad será determinada tras un examen realizado por un psiquiatra y uno de los siguientes: otro psiquiatra, psicólogo, médico de familia, médico tratante u otro profesional de tratamiento de salud mental. Si hay médicos que preferiría que realizaran la evaluación, debe especificarlos en su Declaración. Aunque es posible que ese médico no esté disponible, al menos se hará un esfuerzo por contactarlo.\n\nHasta que se cumpla su condición, o se determine que usted no puede tomar decisiones de salud mental, usted tomará las decisiones por sí mismo.",
+      "sourceHash": "fb2579886173"
+    },
+    "combined_revocation": {
+      "category": "combined",
+      "title": "Parte I — Revocaciones y enmiendas",
+      "content": "Revocar significa que usted está cancelando su Directiva. Si revoca su Directiva, su médico ya no estará obligado a seguir las instrucciones que usted dio en el documento. Puede cambiar o revocar su Directiva en cualquier momento, siempre que tenga capacidad para tomar decisiones de salud mental al momento de hacer el cambio o la revocación. Puede revocar una instrucción específica sin revocar el documento completo.\n\nSi actualmente está bajo un internamiento involuntario y desea cambiar o revocar su Declaración, deberá solicitar una evaluación para determinar si es capaz de tomar decisiones de salud mental. La evaluación será realizada por un psiquiatra y otro psiquiatra, psicólogo, médico de familia, médico tratante u otro profesional de salud mental.\n\nPuede revocar su Directiva Anticipada de Salud Mental de forma oral o por escrito. Su Directiva Anticipada terminará en cuanto usted comunique su revocación a su médico tratante. Lo mejor es hacer cualquier cambio o revocación por escrito, porque así queda un registro claro de sus deseos.\n\nEnmendar su Directiva significa que le hace cambios. Puede hacer cambios en cualquier momento, siempre que tenga capacidad para tomar decisiones de atención de salud mental. Cualquier cambio debe hacerse por escrito y ser firmado y atestiguado por dos personas de la misma manera que el documento original. Cualquier cambio tendrá efecto en cuanto los cambios sean comunicados a su médico tratante u otro proveedor de atención de salud mental.",
+      "sourceHash": "58659237fe7e"
+    },
+    "combined_facility": {
+      "category": "combined",
+      "title": "Parte II — Elección del centro de tratamiento",
+      "content": "Si tiene preferencia por algún hospital en particular, o si tiene sentimientos negativos hacia alguno, indíquelos aquí. Desafortunadamente, hay ocasiones en que un lugar determinado ya está lleno y no podría atenderle, o el médico tratante no tiene privilegios en el hospital que usted preferiría. Por eso, aunque su médico intentará respetar su elección, no siempre será posible.",
+      "sourceHash": "02c246db0d38"
+    },
+    "combined_medications": {
+      "category": "combined",
+      "title": "Parte II — Medicamentos",
+      "content": "Si da instrucciones sobre medicamentos, asegúrese de dar razones para sus decisiones. Si, por ejemplo, experimentó efectos secundarios inaceptables con un genérico o dosis en particular, querrá ser específico para que su médico tratante entienda su preocupación. De esa manera, su médico tendrá menos probabilidades de recetarle algo más que podría causar problemas similares. Del mismo modo, si sabe que un medicamento específico le ha funcionado en el pasado, asegúrese de incluir esa información. Si la versión de liberación prolongada funciona, pero la marca habitual no, asegúrese de incluir esa información. Cuanto más sepa su médico sobre usted, más probable es que obtenga el tratamiento correcto, con mayor rapidez.\n\nTenga cuidado con lo que especifica. Los medicamentos tienen nombres de marca y genéricos, y también pertenecen a clases más amplias de fármacos, como “antipsicóticos atípicos” o “ISRS.” Si excluye toda una clase de fármacos, tenga en cuenta que podría descartarse un fármaco nuevo y útil que salga al mercado, aunque usted en realidad no sepa nada al respecto.\n\nPuede optar por dejar que su agente tome decisiones relacionadas con el uso de medicamentos. Si elige esta opción, asegúrese de hablar con su agente sobre sus sentimientos y experiencias anteriores.\n\nPuede optar por no dar su consentimiento para el uso de ningún medicamento. Tenga en cuenta que también estaría descartando medicamentos nuevos que podrían ser útiles en su tratamiento. Su Directiva Anticipada también podría ser cuestionada si su médico considera que esta elección le causaría un daño irreparable.",
+      "sourceHash": "16f11962ff4d"
+    },
+    "combined_ect": {
+      "category": "combined",
+      "title": "Parte II — Terapia electroconvulsiva (TEC)",
+      "content": "En algunos casos, un médico puede determinar que la TEC sería una forma de tratamiento eficaz. Si la TEC le ha resultado útil en el pasado, o confía en que su médico tome esa decisión en su nombre, puede decidir dar su consentimiento a este tratamiento con anticipación.\n\nPuede optar por dejar que su agente tome decisiones relacionadas con la TEC. Si elige esta opción, asegúrese de hablar con su agente sobre sus sentimientos y experiencias anteriores con la TEC.\n\nSi no desea someterse a la TEC bajo ninguna circunstancia, debe rubricar la línea junto a “No doy mi consentimiento para la administración de la terapia electroconvulsiva.”\n\nNOTA: Su agente NO tiene permitido dar su consentimiento para la TEC a menos que usted rubrique esta autorización.",
+      "sourceHash": "b81f87425a2e"
+    },
+    "combined_experimental": {
+      "category": "combined",
+      "title": "Parte II — Estudios experimentales",
+      "content": "Es posible que tenga la oportunidad de participar en estudios experimentales relacionados con el tratamiento de su enfermedad. A veces, estos estudios proporcionan más datos que ayudan a los médicos a determinar la causa o la mejor práctica para tratar una enfermedad. A veces, los estudios se basan en la idea de que un nuevo tratamiento podría ayudar. Si participa en un estudio, puede tener acceso a un nuevo tratamiento antes de lo que lo tendría de otra manera. Sin embargo, puede haber cierto nivel de riesgo. Si desea participar en un estudio porque su médico considera que los posibles beneficios para usted superan los posibles riesgos, debe rubricar la primera opción.\n\nPuede optar por dejar que su agente tome decisiones relacionadas con su participación en estudios experimentales. Es importante que su agente entienda el tipo de estudios a los que usted se opondría.\n\nSi no desea participar en estudios experimentales de ningún tipo, bajo ninguna circunstancia, debe rubricar la opción que indica que no da su consentimiento.\n\nNOTA: Su agente NO tiene permitido dar su consentimiento para estudios experimentales a menos que usted rubrique esta autorización.",
+      "sourceHash": "5324e4176469"
+    },
+    "combined_drug_trials": {
+      "category": "combined",
+      "title": "Parte II — Ensayos de medicamentos",
+      "content": "De igual manera, es posible que tenga la oportunidad de participar en un ensayo relacionado con medicamentos nuevos. Si participa, puede tener acceso a un nuevo fármaco antes de lo que lo tendría de otra manera. Sin embargo, puede haber riesgos o efectos secundarios.\n\nSi desea participar en un ensayo de medicamento porque su médico considera que los posibles beneficios para usted superan los posibles riesgos, debe rubricar la primera opción.\n\nPuede optar por dejar que su agente tome decisiones relacionadas con su participación en ensayos de medicamentos. Es importante que su agente entienda los riesgos particulares que usted no estaría dispuesto a asumir, para que pueda tomar la decisión que usted tomaría con la misma información.\n\nSi no desea participar en un ensayo de medicamento de ningún tipo, bajo ninguna circunstancia, debe rubricar la opción que indica que no da su consentimiento.\n\nNOTA: Su agente NO tiene permitido dar su consentimiento para investigaciones que incluyan ensayos de medicamentos a menos que usted rubrique esta autorización.",
+      "sourceHash": "d37c2651df44"
+    },
+    "combined_additional": {
+      "category": "combined",
+      "title": "Parte II — Instrucciones o información adicional",
+      "content": "Uno de los beneficios importantes de completar una Directiva Anticipada es que está comunicando información importante a su proveedor de atención de salud mental, su agente y otras personas que le apoyan. Esta parte de su formulario le permite proporcionar información que puede o no estar directamente relacionada con su tratamiento de salud mental.\n\nSi hay otra información que le gustaría que su proveedor de atención de salud mental y su agente conocieran, debe incluirla aquí. Puede adjuntar una página adicional al formulario si no hay suficiente espacio para escribir todo lo que necesita. Solo asegúrese de imprimir o escribir a máquina sus declaraciones, e intente que sean lo más claras posible, para minimizar la confusión sobre lo que desea que suceda. Nuevamente, si no tiene preferencia sobre algo que aparece en la lista o si se siente cómodo dejando que su agente tome esa decisión en particular, simplemente deje esa sección en blanco.",
+      "sourceHash": "3cd8b86e4bc7"
+    },
+    "combined_agent": {
+      "category": "combined",
+      "title": "Parte III — Designación de su agente",
+      "content": "Puede designar a cualquier adulto con capacidad como su agente, con las siguientes excepciones: su proveedor de atención de salud mental, un empleado de su proveedor de atención de salud mental, o un agente, operador o empleado de una instalación residencial en la que usted recibe atención no puede actuar como su agente a menos que esté relacionado con usted por matrimonio, sangre o adopción.\n\nEscriba el nombre de la persona que elija, y complete su dirección y número de teléfono. Desea que se pueda contactar a esa persona en cualquier momento, así que añada la mayor cantidad de información posible, incluyendo números de teléfono del trabajo y del hogar. La persona que elija como su agente también debe firmar el documento para indicar que acepta actuar como su agente.\n\nDado que su agente tomará decisiones en su nombre, es muy importante elegir a alguien en quien confíe y hablar con detalle sobre sus ideas y sentimientos para que esa persona entienda realmente qué decisiones de salud mental usted habría tomado por sí mismo.",
+      "sourceHash": "7e963fadc01d"
+    },
+    "combined_alt_agent": {
+      "category": "combined",
+      "title": "Parte III — Designación de un agente alternativo",
+      "content": "Es posible que desee designar a una persona alternativa en caso de que la primera persona que eligió no esté disponible. Esta es una buena idea si tiene otra persona de su confianza, ya que las personas pueden no estar disponibles por diversas razones, como enfermedad o viaje. Si no tiene a nadie que desee designar como alternativo, deje esta sección en blanco.\n\nLa persona que elija como su agente alternativo también debe firmar el documento para indicar que acepta actuar como su agente. Su agente alternativo debe completar su dirección y número de teléfono para que su proveedor pueda contactarlo.",
+      "sourceHash": "a3f3e30b8e29"
+    },
+    "combined_authority": {
+      "category": "combined",
+      "title": "Parte III — Autoridad otorgada al agente",
+      "content": "Puede otorgar plenos poderes y autoridad a su agente para tomar todas sus decisiones de atención de salud mental, o puede establecer límites en los tipos de decisiones que su agente puede tomar en su nombre. Si desea limitar las decisiones que su agente puede tomar, debe leer cada subsección con cuidado y rubricar su elección.\n\nSu agente no puede dar su consentimiento para la terapia electroconvulsiva, procedimientos experimentales o investigaciones a menos que usted le otorgue expresamente esos poderes al rubricar el consentimiento en esas secciones. Si hay alguna otra decisión de atención de salud mental que no desea que su agente pueda tomar, puede escribirla. Asegúrese de escribir con claridad, para que no haya lugar a confusión.\n\nLa ley de Pensilvania no permite que su agente dé su consentimiento para la psicocirugía ni para la terminación de los derechos parentales en su nombre, aunque usted esté dispuesto a que su agente tenga ese poder.",
+      "sourceHash": "87298443c814"
+    },
+    "combined_guardian": {
+      "category": "combined",
+      "title": "Parte IV — Nominación de un tutor",
+      "content": "Si queda incapaz, es posible que un tribunal designe a un tutor para actuar en su nombre. Según las leyes de tutela, usted puede nominar a un tutor de su persona para que el tribunal lo considere. El tribunal designará a su tutor de acuerdo con su nominación más reciente, salvo por causa justificada o descalificación.\n\nSi desea designar a alguien en su Declaración, es importante que hable con esa persona sobre si se siente capaz de actuar como su tutor, porque un tribunal no la obligará a hacerlo. También es importante que le dé a esa persona una copia de su Poder de Salud Mental y le explique sus deseos con respecto al tratamiento de salud mental.\n\nSi el tribunal designa a un tutor, esa persona no podrá terminar, revocar o suspender su Declaración a menos que usted desee que tenga ese poder. En esta sección, debe decidir si desea que un tutor designado por el tribunal tenga ese poder.\n\nSi el tutor designado por el tribunal y su agente resultan ser personas diferentes, el tribunal dará preferencia a permitir que su agente de atención de salud mental continúe tomando decisiones de atención de salud mental según lo establecido en su Directiva, a menos que usted indique lo contrario.",
+      "sourceHash": "3962a78c7f1f"
+    },
+    "combined_execution": {
+      "category": "combined",
+      "title": "Parte V — Firma y formalización",
+      "content": "Debe firmar y fechar su Declaración de Salud Mental y Poder de Salud Mental Combinados en esta sección. Si no puede firmar por sí mismo, otra persona puede firmar en su nombre. Su documento debe ser firmado y fechado por usted en presencia de dos testigos. Cada testigo debe tener al menos 18 años de edad. Los testigos no pueden ser su agente ni una persona que firme en su nombre.\n\nPara que su Declaración sea eficaz, debe asegurarse de que las personas adecuadas tengan acceso a ella. Asegúrese de dar copias de esta Directiva Anticipada a su agente, proveedor de atención de salud mental, y a cualquier otra persona que pueda ser notificada en caso de que se determine que usted no tiene capacidad para tomar decisiones de atención de salud mental. Recuerde que si cancela o cambia su documento, debe informar a todos. Es una buena idea llevar una tarjeta en su billetera para que la gente sepa que tiene una Directiva Anticipada.\n\nNota: La información de este documento no pretende constituir asesoramiento legal aplicable a situaciones fácticas específicas. Para obtener asesoramiento específico, comuníquese con la línea de admisión de Disabilities Law Project/Pennsylvania Protection & Advocacy (DLP/PP&A) al 1-800-692-7443 (voz) o 1-877-375-7139 (TDD).",
+      "sourceHash": "a4ba85ae0226"
+    },
+    "decl_overview": {
+      "category": "declaration",
+      "title": "Vista general de la Declaración",
+      "content": "Una Declaración contiene instrucciones para médicos, hospitales y otros proveedores de atención de salud mental sobre su tratamiento en caso de que usted quede incapaz de tomar decisiones o de comunicar sus deseos. Una Declaración generalmente aborda situaciones específicas y no permite mucha flexibilidad para los cambios que surjan después de que el documento haya sido redactado, como un nuevo tipo de crisis médica, nuevos tipos de medicamentos u opciones de tratamiento diferentes.\n\nSe presume que usted es capaz de hacer una Directiva Anticipada a menos que haya sido declarado judicialmente incapaz, haya sido sujeto a internamiento involuntario, o haya sido determinado como incapaz de tomar decisiones de salud mental después de un examen por un psiquiatra y otro médico o profesional de salud mental.\n\nLea cada sección con mucho cuidado. Comience escribiendo su nombre en letra de imprenta en el espacio en blanco del párrafo introductorio al inicio del formulario.",
+      "sourceHash": "31c296229341"
+    },
+    "decl_effective": {
+      "category": "declaration",
+      "title": "Cuándo entra en vigencia la Declaración",
+      "content": "Decida cuándo desea que la Declaración entre en vigencia. Puede especificar una condición, como que sea sometido a internamiento involuntario para atención ambulatoria u hospitalaria, u otro comportamiento o evento que usted sepa que ocurre cuando ya no tiene capacidad para tomar decisiones de salud mental; o puede especificar que desea una evaluación de incapacidad.\n\nSi no elige una condición, su incapacidad será determinada después de un examen por un psiquiatra y uno de los siguientes: otro psiquiatra, psicólogo, médico de familia, médico tratante u otro profesional de tratamiento de salud mental. Si prefiere que ciertos médicos realicen la evaluación, debe especificarlos en su Declaración.\n\nHasta que se cumpla su condición o se determine que usted no puede tomar decisiones de salud mental, usted tomará decisiones por sí mismo.",
+      "sourceHash": "7d1bb2cc82fe"
+    },
+    "decl_treatment_prefs": {
+      "category": "declaration",
+      "title": "Preferencias de tratamiento",
+      "content": "Su Directiva Anticipada tendrá menos posibilidades de ser impugnada si incluye información sobre lo que sí desea, además de lo que no desea.\n\nRecuerde que dar su consentimiento anticipado a un medicamento o tratamiento específico no significa que su médico recetará ese tratamiento o medicamento a menos que sea el tratamiento adecuado en el momento en que usted esté enfermo. El consentimiento solo significa que usted consiente si es una opción apropiada en ese momento dentro de los estándares de atención médica.\n\nAsegúrese de marcar su preferencia en cada sección. Aunque no está obligado a explicar sus elecciones, es útil que incluya declaraciones que expliquen por qué desea o no desea ciertos tratamientos específicos. Si alguna de sus elecciones es impugnada, tendrá más posibilidades de que se respete su elección si un tribunal comprende cuáles son sus razones para tomarla. Si no tiene preferencia en una sección determinada, puede dejarla en blanco.",
+      "sourceHash": "9e01b3c9bd90"
+    },
+    "decl_facility": {
+      "category": "declaration",
+      "title": "Elección del centro de tratamiento",
+      "content": "Si tiene preferencia por algún hospital en particular, o sentimientos negativos hacia alguno, indíquelos aquí. Lamentablemente, hay ocasiones en que un lugar determinado ya está lleno y no podría atenderle, o el médico tratante no tiene privilegios en el hospital de su preferencia. Por lo tanto, aunque su médico intentará respetar su elección, puede que no siempre sea posible.",
+      "sourceHash": "980bcbcb863c"
+    },
+    "decl_medications": {
+      "category": "declaration",
+      "title": "Medicamentos",
+      "content": "Si da instrucciones sobre medicamentos, asegúrese de dar razones para sus decisiones. Si, por ejemplo, experimentó efectos secundarios inaceptables con un genérico o dosis específica, debe ser específico para que su médico tratante comprenda su preocupación. De esa manera, su médico tendrá menos probabilidad de recetar algo más que pueda causar problemas similares. Del mismo modo, si sabe que un medicamento específico le ha funcionado en el pasado, asegúrese de incluir esa información.\n\nTenga cuidado con lo que especifica. Los medicamentos tienen nombres de marca y genéricos, y también pertenecen a categorías más amplias, como los “antipsicóticos atípicos” o los “ISRS”. Si descarta toda una categoría de medicamentos, debe tener en cuenta que podría aparecer en el mercado un nuevo medicamento útil que quedaría descartado, aunque usted no sepa nada sobre él.\n\nPuede optar por no dar su consentimiento al uso de ningún medicamento. Solo tenga en cuenta que también estaría descartando nuevos medicamentos que podrían ser útiles en su tratamiento. Su Directiva Anticipada también podría ser impugnada si su médico considera que esta elección le causará un daño irreparable.",
+      "sourceHash": "a03f186dfd13"
+    },
+    "decl_ect": {
+      "category": "declaration",
+      "title": "Terapia electroconvulsiva (TEC)",
+      "content": "En algunos casos, un médico puede considerar que la TEC sería una forma de tratamiento eficaz. Si en el pasado la TEC le ha resultado útil, o si confía en que su médico tome esa decisión en su nombre, puede decidir dar su consentimiento anticipado a este tratamiento.\n\nSi no desea someterse a la TEC bajo ninguna circunstancia, debe rubricar la línea junto a “No doy mi consentimiento para la administración de la terapia electroconvulsiva”.",
+      "sourceHash": "be5eea05fde5"
+    },
+    "decl_experimental": {
+      "category": "declaration",
+      "title": "Estudios experimentales",
+      "content": "Puede haber oportunidades para que usted participe en estudios experimentales relacionados con el tratamiento de su enfermedad. A veces estos estudios proporcionan más datos que ayudan a los médicos a determinar la causa o la mejor práctica para tratar una enfermedad. A veces los estudios se basan en la idea de que un nuevo tratamiento podría ser útil. Si participa en un estudio, podría tener acceso a un nuevo tratamiento antes de lo que lo tendría de otro modo. Sin embargo, puede haber cierto nivel de riesgo.\n\nSi desea participar en un estudio porque su médico considera que los posibles beneficios para usted superan los posibles riesgos, debe rubricar la primera opción.\n\nSi no desea participar en estudios experimentales de ningún tipo, bajo ninguna circunstancia, debe rubricar la opción que indica que no da su consentimiento.",
+      "sourceHash": "5381b04cb534"
+    },
+    "decl_drug_trials": {
+      "category": "declaration",
+      "title": "Ensayos de medicamentos",
+      "content": "Del mismo modo, puede tener la oportunidad de participar en un ensayo relacionado con nuevos medicamentos. Si participa, podría tener acceso a un nuevo medicamento antes de lo que lo tendría de otro modo. Sin embargo, puede haber riesgos o efectos secundarios.\n\nSi desea participar en un ensayo de medicamentos porque su médico considera que los posibles beneficios para usted superan los posibles riesgos, debe rubricar la primera opción.\n\nSi no desea participar en un ensayo de medicamentos de ningún tipo, bajo ninguna circunstancia, debe rubricar la opción que indica que no da su consentimiento.",
+      "sourceHash": "3cb3c7ce7918"
+    },
+    "decl_additional": {
+      "category": "declaration",
+      "title": "Instrucciones o información adicional",
+      "content": "Uno de los beneficios importantes de llenar una Directiva Anticipada es que está comunicando información importante a su médico y a las personas que le apoyan. Esta parte de su formulario le permite proporcionar información que puede estar relacionada o no directamente con su tratamiento de salud mental. Si hay otra información que desee que su médico sepa, debe incluirla aquí.\n\nPuede adjuntar una página adicional al formulario si no hay espacio suficiente para escribir todo lo que necesita. Solo asegúrese de escribir sus declaraciones en letra de imprenta o a máquina, e intente hacerlas lo más claras posible, para minimizar la confusión sobre lo que desea que suceda. Nuevamente, si no tiene preferencia sobre algo indicado, simplemente deje esa sección en blanco.",
+      "sourceHash": "1b6e57bb2876"
+    },
+    "decl_revocation": {
+      "category": "declaration",
+      "title": "Revocaciones y enmiendas",
+      "content": "Revocación significa que usted está cancelando su Declaración. Si revoca su Declaración, su médico ya no estará obligado a seguir las instrucciones que usted dio en el documento. Puede cambiar o revocar su Declaración en cualquier momento, siempre que tenga capacidad para tomar decisiones de salud mental al momento de hacer el cambio o la revocación. Puede revocar una instrucción específica sin revocar el documento completo.\n\nSi actualmente está bajo un internamiento involuntario y desea cambiar o revocar su Declaración, deberá solicitar una evaluación para determinar si es capaz de tomar decisiones de salud mental. Si se determina que tiene capacidad para tomar decisiones de salud mental, podrá revocar o cambiar su Declaración, aunque esté en el hospital.\n\nPuede revocar su Declaración de forma oral o por escrito. La revocación tiene efecto en cuanto usted la comunica a su médico tratante. Lo mejor es hacer cualquier cambio o revocación por escrito, porque así queda un registro claro de sus deseos.\n\nSi hace una nueva Declaración, asegúrese de notificar a su médico y a las personas de apoyo que ha revocado la anterior. Su Declaración vencerá automáticamente dos años a partir de la fecha en que la hizo, a menos que usted sea incapaz de tomar decisiones de salud mental por sí mismo en el momento en que vencería. En ese caso, permanecerá vigente hasta que usted pueda tomar decisiones por sí mismo.\n\nEnmendar su Declaración significa hacerle cambios. Cualquier cambio debe hacerse por escrito y ser firmado y atestiguado por dos personas de la misma manera que el documento original.",
+      "sourceHash": "cb427a620c86"
+    },
+    "decl_guardian": {
+      "category": "declaration",
+      "title": "Preferencia en cuanto a un tutor designado por el tribunal",
+      "content": "Si usted queda incapacitado, es posible que un tribunal designe un tutor para actuar en su nombre. Según las leyes de tutela, usted puede nominar un tutor de su persona para consideración del tribunal. El tribunal designará a su tutor de acuerdo con su nominación más reciente, salvo que haya una causa justificada o descalificación.\n\nSi desea nombrar a alguien en su Declaración, es importante que hable con esa persona sobre si considera que puede servir como su tutor, porque un tribunal no la obligará a hacerlo.\n\nSi el tribunal designa un tutor, esa persona no podrá terminar, revocar ni suspender su Declaración a menos que usted desee que tenga ese poder. En esta sección, debe decidir si desea que un tutor designado por el tribunal tenga ese poder.",
+      "sourceHash": "a09b98358517"
+    },
+    "decl_execution": {
+      "category": "declaration",
+      "title": "Firma",
+      "content": "Debe firmar y fechar su Declaración en esta sección. Si no puede firmar por sí mismo, otra persona puede firmar en su nombre. Su documento debe ser firmado y fechado por usted en presencia de dos testigos. Cada testigo debe tener al menos 18 años de edad. Si no puede firmar el documento usted mismo, puede pedir a otra persona que firme en su nombre, pero esa persona no puede ser también un testigo.\n\nPara que su Declaración sea efectiva, debe asegurarse de que las personas adecuadas tengan acceso a ella. Asegúrese de dar copias de esta Directiva Anticipada a su proveedor de atención de salud mental, y a cualquier otra persona que pueda ser notificada en caso de que se determine que usted no tiene capacidad para tomar decisiones de atención de salud mental.\n\nNota importante: La información en este documento no pretende constituir asesoramiento legal aplicable a situaciones de hecho específicas. Para asesoramiento específico, comuníquese con la línea de admisión del Disabilities Law Project/Pennsylvania Protection & Advocacy (DLP/PP&A) al 1-800-692-7443 (voz) o 1-877-375-7139 (TDD).",
+      "sourceHash": "4e755162499c"
+    },
+    "poa_overview": {
+      "category": "poa",
+      "title": "Vista general del Poder de Salud Mental",
+      "content": "Un Poder de Salud Mental le permite designar a otra persona, llamada agente, para tomar decisiones de tratamiento en su nombre en caso de una crisis de salud mental. Un Poder de Salud Mental ofrece flexibilidad para hacer frente a una situación a medida que ocurre, en lugar de intentar prever cada situación posible con anticipación. Al usar un Poder de Salud Mental, es muy importante elegir a alguien en quien confíe como su agente y dedicar tiempo a explicarle sus sentimientos sobre las opciones de tratamiento. Su médico o su empleado, o un propietario, operador o empleado de una instalación residencial donde usted vive no puede actuar como agente.\n\nSe presume que usted tiene capacidad para hacer una Directiva Anticipada a menos que haya sido declarado incapaz por un tribunal, haya sido sometido a un internamiento involuntario, o se haya determinado que es incapaz de tomar decisiones de salud mental tras un examen realizado por un psiquiatra y otro médico o profesional de salud mental.\n\nLea cada sección con mucho cuidado. Comience escribiendo su nombre en el espacio en blanco del párrafo introductorio al inicio del formulario.",
+      "sourceHash": "122d94c2861c"
+    },
+    "poa_agent": {
+      "category": "poa",
+      "title": "Designación de agente",
+      "content": "Puede designar a cualquier adulto con capacidad como su agente, con las siguientes excepciones: su proveedor de atención de salud mental, un empleado de su proveedor de atención de salud mental, o un agente, operador o empleado de una instalación residencial en la que usted recibe atención no puede actuar como su agente a menos que esté relacionado con usted por matrimonio, sangre o adopción.\n\nEscriba el nombre de la persona que elija, y complete su dirección y número de teléfono. Desea que se pueda contactar a esa persona en cualquier momento, así que añada la mayor cantidad de información posible, incluyendo números de teléfono del trabajo y del hogar. La persona que elija como su agente también debe firmar el documento para indicar que acepta actuar como su agente.\n\nDado que su agente tomará decisiones en su nombre, es muy importante elegir a alguien en quien confíe y hablar con detalle sobre sus ideas y sentimientos para que esa persona entienda realmente qué decisiones de salud mental usted habría tomado por sí mismo.",
+      "sourceHash": "1087bf91a9d3"
+    },
+    "poa_alt_agent": {
+      "category": "poa",
+      "title": "Designación de un agente alternativo",
+      "content": "Puede que desee designar a una persona alternativa en caso de que la primera persona que eligió no esté disponible. Esta es una buena idea si tiene otra persona de confianza, ya que las personas pueden no estar disponibles por diversas razones, como enfermedad o viaje. Si no tiene a nadie que desee nombrar como alternativo, deje esta sección en blanco.\n\nLa persona que elija como su agente alternativo también debe firmar el documento para indicar que acepta actuar como su agente. Su agente alternativo debe completar su dirección y número de teléfono para que su proveedor pueda localizarlo.",
+      "sourceHash": "509a2917baab"
+    },
+    "poa_effective": {
+      "category": "poa",
+      "title": "Cuándo entra en vigor el Poder de Salud Mental",
+      "content": "Decida cuándo desea que el Poder de Salud Mental entre en vigor. Puede especificar una condición, por ejemplo, si es sometido a un internamiento involuntario para atención ambulatoria o de hospitalización, u otro comportamiento o evento que usted sabe que ocurre cuando ya no tiene capacidad para tomar decisiones de salud mental, o puede especificar que desea una evaluación de incapacidad.\n\nSi no elige una condición, su incapacidad será determinada tras un examen realizado por un psiquiatra y uno de los siguientes: otro psiquiatra, psicólogo, médico de familia, médico tratante u otro profesional de tratamiento de salud mental. Si hay médicos que preferiría que realizaran la evaluación, debe especificarlos en su Poder de Salud Mental.\n\nHasta que se cumpla su condición, o se determine que usted no puede tomar decisiones de salud mental, usted tomará las decisiones por sí mismo.",
+      "sourceHash": "43007669e154"
+    },
+    "poa_authority": {
+      "category": "poa",
+      "title": "Autoridad otorgada a su agente",
+      "content": "Puede otorgar plenas facultades y autoridad a su agente para tomar todas sus decisiones de atención de salud mental, o puede establecer límites a los tipos de decisiones que su agente puede tomar en su nombre. Si desea limitar las decisiones que puede tomar su agente, debe leer cada subsección con cuidado. Si hay alguna otra decisión de atención de salud mental que no desea que su agente pueda tomar, puede escribirla.\n\nLa ley de Pensilvania no permite que su agente consienta una psicocirugía o la terminación de los derechos parentales en su nombre, aunque usted esté dispuesto a otorgarle ese poder.",
+      "sourceHash": "0c82c9e8a080"
+    },
+    "poa_facility": {
+      "category": "poa",
+      "title": "Elección del centro de tratamiento",
+      "content": "Si tiene preferencia por algún hospital en particular, o sentimientos negativos hacia alguno, indíquelos aquí. Lamentablemente, hay ocasiones en que un lugar determinado ya está lleno y no puede recibirlo, o el médico tratante no tiene privilegios en el hospital que usted prefiere. Por lo tanto, aunque su médico intentará respetar su elección, no siempre será posible.",
+      "sourceHash": "980bcbcb863c"
+    },
+    "poa_medications": {
+      "category": "poa",
+      "title": "Preferencias sobre medicamentos",
+      "content": "Si da instrucciones sobre medicamentos, asegúrese de dar razones para sus decisiones. Si, por ejemplo, experimentó efectos secundarios inaceptables con un medicamento genérico o una dosis específica, debe ser detallado para que su médico tratante entienda su preocupación. Así, su médico tendrá menos probabilidades de recetar algo que pueda causar problemas similares.\n\nTenga cuidado con lo que especifica. Los medicamentos tienen nombres de marca y nombres genéricos, y también pertenecen a clases más amplias de fármacos, como los “antipsicóticos atípicos” o los “ISRS”. Si descarta una clase entera de fármacos, debe saber que podría descartarse un medicamento nuevo y útil que salga al mercado, aunque usted no sepa nada sobre él.\n\nOtorgar a su agente autoridad para tomar decisiones sobre medicamentos ofrece más flexibilidad para hacer frente a situaciones futuras. Por ejemplo, puede salir al mercado un medicamento nuevo que actualmente no esté disponible. Al permitir que su agente tome la decisión en el momento de su incapacidad, su agente dispondrá de la información más actualizada para basar sus decisiones.",
+      "sourceHash": "76be324d4856"
+    },
+    "poa_ect": {
+      "category": "poa",
+      "title": "Preferencias sobre la TEC",
+      "content": "En algunos casos, un médico puede determinar que la TEC sería una forma de tratamiento eficaz. Si la TEC le ha resultado útil en el pasado, y/o confía en que su agente tome esa decisión si su médico cree que puede ayudar, debe rubricar la línea junto a “mi agente está autorizado para consentir la administración de terapia electroconvulsiva”.\n\nSi no desea someterse a la TEC bajo ninguna circunstancia, debe rubricar la línea junto a “no doy mi consentimiento para la administración de terapia electroconvulsiva”.\n\nNOTA: Su agente NO PUEDE consentir la TEC a menos que usted rubrique esta autorización.",
+      "sourceHash": "35698f408f2b"
+    },
+    "poa_experimental": {
+      "category": "poa",
+      "title": "Preferencias sobre estudios experimentales",
+      "content": "Es posible que existan oportunidades para que usted participe en estudios experimentales relacionados con el tratamiento de su enfermedad. Si desea participar en un estudio porque su médico considera que los beneficios potenciales para usted superan los riesgos potenciales, debe rubricar la primera opción.\n\nSi no desea participar en estudios experimentales de ningún tipo, bajo ninguna circunstancia, debe rubricar la opción que indica que no da su consentimiento.\n\nNOTA: Su agente NO PUEDE consentir estudios experimentales a menos que usted rubrique esta autorización.",
+      "sourceHash": "c89b7e63902c"
+    },
+    "poa_drug_trials": {
+      "category": "poa",
+      "title": "Preferencias sobre ensayos de medicamentos",
+      "content": "De igual manera, puede tener la oportunidad de participar en un ensayo relacionado con nuevos medicamentos. Si participa, puede tener acceso a un medicamento nuevo antes de lo que lo tendría de otro modo. Sin embargo, puede haber riesgos o efectos secundarios. Si desea participar en un ensayo de medicamentos porque su médico considera que los beneficios potenciales para usted superan los riesgos potenciales, debe rubricar la primera opción.\n\nSi no desea participar en un ensayo de medicamentos de ningún tipo, bajo ninguna circunstancia, debe rubricar la opción que indica que su agente no tiene su autorización para dar su consentimiento en su nombre.",
+      "sourceHash": "e87b8077b9ae"
+    },
+    "poa_revocation": {
+      "category": "poa",
+      "title": "Revocaciones y enmiendas",
+      "content": "Revocación significa que usted está cancelando su Poder de Salud Mental. Si revoca su Poder de Salud Mental, su agente ya no lo representará, y su médico ya no tendrá que seguir las instrucciones que su agente dé. Puede cambiar o revocar su Poder de Salud Mental en cualquier momento, siempre que tenga capacidad para tomar decisiones de salud mental al momento de hacer el cambio o la revocación. Puede revocar una instrucción específica sin revocar el documento completo.\n\nSi actualmente está bajo un internamiento involuntario y desea cambiar o revocar su Poder de Salud Mental, deberá solicitar una evaluación para determinar si tiene capacidad para tomar decisiones de salud mental. Si se determina que tiene capacidad, podrá revocar o cambiar su Poder de Salud Mental, aunque esté en el hospital.\n\nPuede revocar su Poder de Salud Mental de forma oral o por escrito. La revocación entra en vigor en cuanto usted la comunica a su médico tratante. Lo mejor es hacer cualquier cambio o revocación por escrito, porque así queda un registro claro de sus deseos.\n\nSi hace un nuevo Poder de Salud Mental, asegúrese de notificar a su médico y a sus personas de apoyo que ha revocado el anterior. Su Poder de Salud Mental vencerá automáticamente dos años después de la fecha en que lo hizo, a menos que usted sea incapaz de tomar decisiones de salud mental por sí mismo en el momento en que vencería. En ese caso, permanecerá vigente hasta que pueda tomar decisiones por sí mismo.",
+      "sourceHash": "1abf8def7c3c"
+    },
+    "poa_guardian": {
+      "category": "poa",
+      "title": "Preferencia sobre un tutor designado por el tribunal",
+      "content": "Si usted queda incapacitado, es posible que un tribunal designe a un tutor para actuar en su nombre. Según las leyes de tutela, usted puede proponer un tutor de su persona para que el tribunal lo considere. El tribunal designará a su tutor de acuerdo con su nominación más reciente, salvo por causa justificada o descalificación.\n\nSi desea nombrar a alguien, es importante que hable con esa persona sobre si se siente capaz de actuar como su tutor, porque un tribunal no la obligará a hacerlo. También es importante que le entregue a esa persona una copia de su Poder de Salud Mental y le explique sus deseos sobre el tratamiento de salud mental.",
+      "sourceHash": "a6bd53c585c1"
+    },
+    "poa_execution": {
+      "category": "poa",
+      "title": "Firma y formalización",
+      "content": "Debe firmar y fechar su Poder de Salud Mental en esta sección. Si no puede firmar por sí mismo, otra persona puede firmar en su nombre. Su documento debe ser firmado y fechado por usted en presencia de dos testigos. Cada testigo debe tener al menos 18 años de edad.\n\nPara que su Poder de Salud Mental sea eficaz, debe asegurarse de que las personas adecuadas tengan acceso a él. Asegúrese de entregar copias a su agente, su proveedor de atención de salud mental, y a cualquier otra persona que pueda ser notificada en caso de que se determine que usted no tiene capacidad para tomar decisiones de atención de salud mental. Recuerde que si cancela o cambia su documento, debe informar a todos.\n\nNota: La información de este documento no pretende constituir asesoramiento legal aplicable a situaciones fácticas específicas. Para obtener asesoramiento específico, comuníquese con la línea de admisión de Disabilities Law Project/Pennsylvania Protection & Advocacy (DLP/PP&A) al 1-800-692-7443 (voz) o 1-877-375-7139 (TDD).",
+      "sourceHash": "12034b64cc59"
+    },
+    "gloss_agent": {
+      "category": "glossary",
+      "title": "Agente",
+      "content": "Una persona designada en un Poder de Salud Mental para tomar decisiones de atención de salud mental en nombre de quien firmó el poder.",
+      "sourceHash": "93d236fb35e8"
+    },
+    "gloss_amend": {
+      "category": "glossary",
+      "title": "Enmendar",
+      "content": "Cambiar o modificar mediante la adición o eliminación de texto.",
+      "sourceHash": "47f3b02a9eee"
+    },
+    "gloss_attending_physician": {
+      "category": "glossary",
+      "title": "Médico tratante",
+      "content": "Un médico que tiene la responsabilidad principal del tratamiento y la atención de la persona que hace la directiva anticipada de salud mental.",
+      "sourceHash": "c8d534c4cd6f"
+    },
+    "glossary_capacity": {
+      "category": "glossary",
+      "title": "Capacidad",
+      "content": "Una determinación clínica de que una persona puede entender, evaluar y comunicar una decisión sobre su propia atención. La capacidad es específica a cada decisión (usted puede tener capacidad para una decisión y no para otra) y específica al momento (puede aparecer y desaparecer). Según la Ley 194 de PA (Act 194), la capacidad es determinada por un profesional clínico calificado y documentada en el expediente médico.",
+      "sourceHash": "de2484e87e8d"
+    },
+    "glossary_chapter_54_vs_58": {
+      "category": "glossary",
+      "title": "Capítulo 54 vs Capítulo 58 (las dos leyes de directivas anticipadas de PA)",
+      "content": "Pensilvania tiene dos leyes paralelas de directivas anticipadas en el Título 20 de los Estatutos Consolidados (Consolidated Statutes):\n\n• **Capítulo 54 — Atención médica general (Ley 169 de 2006, Act 169).** Decisiones de atención médica general: testamentos vitales, atención al final de la vida, tratamientos para preservar la vida, consentimiento para cirugías, poder para atención médica, jerarquía predeterminada de representantes de atención médica. Sección de deberes del proveedor: §5462.\n\n• **Capítulo 58 — Atención de salud mental (Ley 194 de 2004, Act 194).** Decisiones de tratamiento de salud mental: hospitalización psiquiátrica, medicamentos psicotrópicos, TEC, estudios psiquiátricos experimentales, ensayos de medicamentos, preferencias de instalaciones, agente de salud mental. Sección de deberes del proveedor: §5842. Esta es la ley bajo la cual se redacta su Directiva Anticipada de Salud Mental de PA.\n\nAmbos capítulos usan el lenguaje obligatorio “deberá cumplir” (“shall comply”) para los deberes del proveedor. La misma persona puede ser designada como su agente bajo ambas leyes —y con frecuencia es más sencillo que así sea. Consulte la sección Suplementaria “Cómo funcionan juntos el Capítulo 54 y el Capítulo 58” para saber cómo se aplica cada ley en situaciones clínicas específicas.",
+      "sourceHash": "68df84904d6d"
+    },
+    "glossary_competence": {
+      "category": "glossary",
+      "title": "Competencia (vs. capacidad)",
+      "content": "“Competencia” es un estatus *legal* determinado por un tribunal (por ejemplo, después de una audiencia de tutela). “Capacidad” es un juicio *clínico* que puede emitirse momento a momento por un médico, psicólogo o enfermero practicante certificado. Su Directiva Anticipada de Salud Mental de PA se activa con una determinación clínica de incapacidad — no requiere una declaración judicial de incompetencia.",
+      "sourceHash": "9259170d0ce9"
+    },
+    "glossary_county_mh_idd": {
+      "category": "glossary",
+      "title": "Programa MH/IDD del condado",
+      "content": "Cada condado de PA opera un programa de Salud Mental / Discapacidades Intelectuales (MH/IDD) que sirve como el punto de entrada local para los servicios de salud mental públicos, la intervención en crisis y la gestión de casos. La oficina MH/IDD de su condado es, con frecuencia, un contacto útil que puede incluir en su directiva — pueden ayudar a coordinar la atención entre distintos proveedores.",
+      "sourceHash": "95c419de06eb"
+    },
+    "gloss_declaration": {
+      "category": "glossary",
+      "title": "Declaración",
+      "content": "Un documento que expresa los deseos e instrucciones de una persona para la atención de salud mental u otros temas.",
+      "sourceHash": "7c71e0a5351b"
+    },
+    "gloss_execute": {
+      "category": "glossary",
+      "title": "Firmar (formalizar)",
+      "content": "Firmar, fechar y hacer que la firma sea presenciada por testigos.",
+      "sourceHash": "f2b58c24157b"
+    },
+    "gloss_incapacity": {
+      "category": "glossary",
+      "title": "Incapacidad",
+      "content": "Una determinación clínica de que una persona carece de la comprensión o la capacidad suficientes para tomar o comunicar decisiones responsables sobre su tratamiento de salud mental — es la ausencia de capacidad para una decisión determinada en un momento determinado. Una determinación de incapacidad es lo que activa las partes operativas de su Directiva Anticipada de Salud Mental de PA.\n\nSegún la Ley 194 de PA (Act 194), la incapacidad es determinada por un psiquiatra y un profesional calificado adicional (otro psiquiatra, psicólogo con licencia, médico de familia, médico tratante o profesional de tratamiento de salud mental).\n\nLa incapacidad NO es lo mismo que un diagnóstico psiquiátrico, un internamiento involuntario o una determinación de incompetencia legal — una persona puede ser hospitalizada bajo la Sección 302 y aun así tener capacidad para algunas decisiones.",
+      "sourceHash": "a9c67c830f7f"
+    },
+    "gloss_involuntary_commitment": {
+      "category": "glossary",
+      "title": "Internamiento involuntario",
+      "content": "Un proceso legal establecido en la Ley de Procedimientos de Salud Mental (Mental Health Procedures Act) de Pensilvania (50 P.S. §7301 et seq.) por el cual una persona puede ser hospitalizada para recibir tratamiento psiquiátrico sin su consentimiento, generalmente cuando representa un peligro claro e inminente para sí misma o para otros. Una persona que se encuentra bajo internamiento involuntario no puede firmar una nueva directiva anticipada de salud mental durante el período de internamiento, pero una directiva firmada con anterioridad permanece vigente.",
+      "sourceHash": "51c152fdeb34"
+    },
+    "glossary_least_restrictive": {
+      "category": "glossary",
+      "title": "Alternativa menos restrictiva",
+      "content": "Un principio fundamental de la ley de salud mental de PA: el tratamiento debe brindarse en el entorno y la forma que impongan la menor limitación posible a la libertad de la persona, siempre que sea compatible con una atención eficaz. Su directiva puede especificar entornos preferidos (ambulatorio, hospitalización parcial, instalaciones específicas) que se correspondan con este principio.",
+      "sourceHash": "77c6458aceab"
+    },
+    "gloss_mhad": {
+      "category": "glossary",
+      "title": "Directiva anticipada de salud mental",
+      "content": "Un documento que permite a una persona comunicar sus preferencias sobre el tratamiento de salud mental en caso de que quede incapaz a causa de su enfermedad mental. En la práctica, la persona está dando o denegando su consentimiento al tratamiento antes de que este sea necesario.",
+      "sourceHash": "5f87f50d4022"
+    },
+    "gloss_mental_health_care": {
+      "category": "glossary",
+      "title": "Atención de salud mental",
+      "content": "Cualquier cuidado, tratamiento, servicio o procedimiento para mantener, diagnosticar, tratar o atender la salud mental, incluido cualquier programa de medicación y tratamiento terapéutico.",
+      "sourceHash": "6caea1ecf572"
+    },
+    "gloss_provider": {
+      "category": "glossary",
+      "title": "Proveedor de atención de salud mental",
+      "content": "Una persona que cuenta con licencia, certificación u otra autorización otorgada por las leyes de Pensilvania para brindar atención de salud mental.",
+      "sourceHash": "0aa2c13eb04b"
+    },
+    "gloss_treatment_professional": {
+      "category": "glossary",
+      "title": "Profesional de tratamiento de salud mental",
+      "content": "Una persona capacitada y con licencia en psiquiatría, trabajo social, psicología o enfermería, que posee un título de posgrado y experiencia clínica.",
+      "sourceHash": "2ea49355da31"
+    },
+    "glossary_pmhca": {
+      "category": "glossary",
+      "title": "PMHCA — PA Mental Health Consumers' Association",
+      "content": "PMHCA (Asociación de Consumidores de Salud Mental de PA) es una organización de todo el estado, dirigida por sus propios usuarios, que brinda apoyo entre pares, defensa de derechos y recursos de autoayuda para pennsilvanos con condiciones de salud mental. Línea de ayuda: 1-800-887-6422. Es un contacto útil para incluir en la sección de instrucciones adicionales de su directiva para especialistas de pares, grupos de recuperación y recursos comunitarios.",
+      "sourceHash": "a2745c34d9d1"
+    },
+    "gloss_poa": {
+      "category": "glossary",
+      "title": "Poder de Salud Mental",
+      "content": "Un documento elaborado por una persona en el que designa a otra para tomar decisiones de atención de salud mental en su nombre.",
+      "sourceHash": "a316a10f0815"
+    },
+    "glossary_principal": {
+      "category": "glossary",
+      "title": "El declarante",
+      "content": "La persona que crea la directiva — es decir, usted. El término proviene del lenguaje de los instrumentos legales: el declarante es quien expresa sus deseos y en cuyo nombre actúa el agente.",
+      "sourceHash": "40805824f55a"
+    },
+    "gloss_psychotropic": {
+      "category": "glossary",
+      "title": "Medicamento psicotrópico",
+      "content": "Medicamentos que afectan la mente, las emociones o el comportamiento. Las categorías incluyen antidepresivos (p. ej., ISRS, IRSN), antipsicóticos (típicos y atípicos), estabilizadores del estado de ánimo (p. ej., litio, valproato), medicamentos ansiolíticos (p. ej., benzodiazepinas) y estimulantes. En su directiva, usted puede especificar preferencias o rechazos para medicamentos psicotrópicos específicos.",
+      "sourceHash": "8dfa45a9f1d0"
+    },
+    "gloss_revoke": {
+      "category": "glossary",
+      "title": "Revocar",
+      "content": "Cancelar o poner fin a algo.",
+      "sourceHash": "1e48b1c809aa"
+    },
+    "glossary_section_302": {
+      "category": "glossary",
+      "title": "Sección 302 (examen involuntario de emergencia)",
+      "content": "Según 50 P.S. § 7302 de la Ley de Procedimientos de Salud Mental (Mental Health Procedures Act), una persona puede ser trasladada involuntariamente para examen y tratamiento psiquiátrico por hasta **120 horas** (5 días) cuando existe un peligro claro e inminente para sí misma o para otros. Puede ser iniciada por un médico, un agente del orden o una petición escrita por un adulto responsable. Un ingreso bajo la Sección 302 no activa por sí solo su Directiva Anticipada de Salud Mental de PA; lo que la activa es una determinación de incapacidad.",
+      "sourceHash": "f82923749643"
+    },
+    "glossary_section_303": {
+      "category": "glossary",
+      "title": "Sección 303 (tratamiento de emergencia extendido)",
+      "content": "Según 50 P.S. § 7303, un tribunal puede ordenar tratamiento involuntario extendido por hasta **20 días** tras una Sección 302. Requiere una audiencia ante un oficial de revisión de salud mental dentro de las 120 horas siguientes al ingreso bajo la Sección 302. Usted tiene derecho a contar con representación legal y a estar presente.",
+      "sourceHash": "847437913875"
+    },
+    "glossary_shall_comply": {
+      "category": "glossary",
+      "title": "“Deberá cumplir” (lenguaje estatutario)",
+      "content": "En la redacción legislativa, la palabra “shall” (“deberá”) crea un deber obligatorio — no equivale a “may” (“puede”) ni a “should” (“debería”). Cuando un estatuto de PA dice que un médico o proveedor “shall comply” (“deberá cumplir”) con la decisión de un agente, la ley exige el cumplimiento; no lo sugiere.\n\nDos estatutos de PA usan exactamente esta construcción para las directivas anticipadas:\n• **20 Pa.C.S. §5842** (Capítulo 58 — Atención de salud mental): los médicos tratantes y los proveedores de atención de salud mental “shall comply” (“deberán cumplir”) con las decisiones tomadas por un agente de salud mental.\n• **20 Pa.C.S. §5462(c)(1)** (Capítulo 54 — Atención médica general): los médicos tratantes y los proveedores de atención médica “shall comply” (“deberán cumplir”) con las decisiones tomadas por un agente o representante de atención médica, en la misma medida que si la persona que hizo la directiva las hubiera tomado, con excepción de una limitación específica relacionada con la preservación de la vida.\n\nLos materiales informativos para pacientes que describen las directivas como “solo orientativas” o afirman que “ninguna ley garantiza el cumplimiento” no modifican la fuerza obligatoria del estatuto. Describen resultados (que dependen de los hechos y las excepciones), no la norma predeterminada (que es el cumplimiento obligatorio sujeto a un proceso definido de transferencia).",
+      "sourceHash": "8e32a5fc7066"
+    },
+    "gloss_substituted_judgment": {
+      "category": "glossary",
+      "title": "Juicio sustituto",
+      "content": "El estándar legal que utilizan los agentes de salud mental al tomar decisiones en nombre de la persona que hizo la directiva. Según la Ley 194 de PA §5836 (Act 194 §5836), el agente debe decidir basándose en lo que la persona que hizo la directiva QUERRÍA — no en lo que el agente considera personalmente como lo mejor para esa persona.\n\nEsto significa que el agente debe:\n• Seguir las instrucciones específicas de la directiva\n• Considerar los valores, creencias y preferencias conocidos de la persona que hizo la directiva\n• Tomar la decisión que la persona que hizo la directiva tomaría si tuviera capacidad\n\nEsto es distinto del estándar de “mejores intereses” (“best interests”) utilizado en otros contextos, que se centra en lo que una persona objetiva consideraría mejor para el paciente.",
+      "sourceHash": "496d638a968b"
+    },
+    "glossary_treatment_over_objection": {
+      "category": "glossary",
+      "title": "Tratamiento en contra de su objeción",
+      "content": "Tratamiento que se brinda a pesar de la objeción simultánea del paciente. Según la ley de PA y las protecciones constitucionales, el tratamiento en contra de su objeción generalmente está permitido solo con estrictas garantías procesales (orden judicial o situación de internamiento involuntario que cumpla los requisitos) y únicamente para tratamientos en los que el beneficio supera sustancialmente la carga. Las preferencias expresadas en su directiva forman parte del análisis que un tribunal consideraría.",
+      "sourceHash": "69c6cb71694c"
+    },
+    "supp_governing_law": {
+      "category": "supplementary",
+      "title": "Ley aplicable y requisitos de formalización",
+      "content": "Las Directivas Anticipadas de Salud Mental de PA están regidas por 20 Pa.C.S. Capítulo 58 (Atención de salud mental), aprobado mediante la Ley 194 de 2004 (Act 194) (P.L.1525, No.194), con vigor desde el 29 de enero de 2005.\n\n**Requisitos de formalización**\n\nLos requisitos específicos de formalización se encuentran en:\n• 20 Pa.C.S. §5822 — para las declaraciones de salud mental\n• 20 Pa.C.S. §5832 — para los poderes de salud mental\n\nPara firmar una directiva válida, usted necesita:\n1. Su firma (o marca) como declarante/persona que hace la directiva\n2. La fecha de formalización\n3. Al menos dos testigos (cada uno de 18 años o más) que presencien su firma y luego firmen el documento en presencia uno del otro\n\nSegún el §5822, una persona que firme una declaración en nombre y a instrucción del declarante no puede ser testigo de esa declaración. Un proveedor de atención de salud mental (ni su agente) no puede firmar en nombre del declarante si le presta servicios.\n\n**No se requiere notarización**\n\nEl Capítulo 58 no exige notarización en ninguna parte. Su directiva debe ser firmada y fechada por usted y al menos dos testigos — eso es todo. Sin notario, sin abogado, sin costo.\n\nA modo de contraste, el estatuto de poder general de PA (20 Pa.C.S. §5601) sí exige notarización. La legislatura omitió deliberadamente ese requisito del Capítulo 58 para las directivas anticipadas de salud mental. Si el documento cuenta tanto con testigos como con notarización, es más probable que sea reconocido por las leyes de otros estados — pero la notarización es completamente opcional según la ley de PA.\n\n**Las enmiendas siguen el mismo proceso**\n\nCualquier cambio a su directiva también debe hacerse por escrito y ser firmado y presenciado por dos personas de la misma manera que el documento original.\n\nFuentes: orientación oficial de Disability Rights Pennsylvania; Guía del Agente de MHAD del Condado de Allegheny; MHAPA.",
+      "sourceHash": "b1aa557db535"
+    },
+    "supp_provider_obligations": {
+      "category": "supplementary",
+      "title": "Obligaciones del proveedor según la Ley 194 de 2004 (Act 194) — “deberá cumplir”",
+      "content": "**La norma legal.** Según el 20 Pa.C.S. §5842 (Deberes del médico tratante y del proveedor de atención de salud mental), la ley utiliza lenguaje obligatorio: “Un médico tratante o proveedor de atención de salud mental **deberá cumplir** (“shall comply”) con una decisión de atención de salud mental tomada por un agente de salud mental.”\n\nEn la redacción legislativa, “shall” (“deberá”) crea un deber — no es lenguaje permisivo. La decisión del agente debe respetarse en la misma medida que si usted la hubiera tomado. Esta norma predeterminada está sujeta únicamente a las excepciones específicas del §5804 (conciencia, estándares clínicos, falta de disponibilidad, política institucional) y a cualquier limitación que usted mismo haya incluido en el poder de salud mental.\n\n**El mecanismo de transferencia (§5804).** Un proveedor que no pueda cumplir de buena fe con una directiva no tiene derecho a ignorarla unilateralmente. En cambio, el proveedor debe:\n• Informar de inmediato a usted (si tiene capacidad), a su agente, al sustituto designado en su declaración y a cualquier tutor;\n• Documentar en el expediente médico los motivos del incumplimiento;\n• Hacer un esfuerzo razonable para transferir su atención a un proveedor que sí cumpla;\n• Continuar tratándole conforme a la directiva mientras la transferencia está pendiente;\n• Permitir el alta si ningún proveedor que cumpla acepta la transferencia.\n\n**Otros deberes (§5807).** Los proveedores deben preguntar sobre la existencia de una Directiva Anticipada de Salud Mental de PA en el momento del ingreso o la evaluación inicial, e informar a los pacientes que reciben el alta sobre la disponibilidad de declaraciones y poderes de salud mental. Un proveedor no puede exigir una directiva como condición para el tratamiento, ni basar la aceptación o el rechazo del tratamiento en si existe o no una directiva.\n\n**Inmunidad por buena fe (§5805).** Un proveedor que actúe de buena fe y de conformidad con el Capítulo 58 no está sujeto a responsabilidad penal ni civil, ni a sanciones disciplinarias profesionales o administrativas por seguir las instrucciones de un agente — siempre que dichas instrucciones no sean claramente contrarias a los términos del poder de salud mental. El estatuto, por lo tanto, tanto exige el cumplimiento COMO protege al proveedor que cumple.\n\n**Norma paralela para la atención médica general.** El Capítulo 54 (Ley 169 de 2006, Act 169) contiene el mismo marco para las directivas de atención médica general en el §5462(c)(1): fuera de una excepción limitada relacionada con la preservación de la vida, el médico tratante o el proveedor de atención médica “deberá cumplir” (“shall comply”) con una decisión de atención médica tomada por un agente o representante de atención médica en la misma medida que si la hubiera tomado la persona que hizo la directiva. Los dos capítulos funcionan en paralelo — consulte la pregunta frecuente “¿En qué se diferencia mi Directiva Anticipada de Salud Mental de PA de una directiva de atención médica ordinaria?” para conocer la interacción práctica.\n\n**Fuentes:** 20 Pa.C.S. §§ 5804, 5805, 5807, 5842 (Capítulo 58 — Ley 194 de 2004, Act 194); 20 Pa.C.S. § 5462(c)(1) (Capítulo 54 — Ley 169 de 2006, Act 169).",
+      "sourceHash": "44befac286dd"
+    },
+    "supp_coverage_policy_limits": {
+      "category": "supplementary",
+      "title": "Límites de seguros, cobertura y políticas del proveedor",
+      "content": "Su directiva se refiere al **consentimiento** — comunica sus deseos y los hace vinculantes bajo la norma “deberá cumplir” — pero no es un cheque en blanco que obligue a un proveedor o asegurador a darle todo lo que usted escriba. “Políticas del proveedor o límites de cobertura” es la forma que tiene el estatuto de indicar que un proveedor todavía debe respetar su contrato de seguro y sus propias normas del programa. Su consentimiento y sus preferencias siguen siendo importantes; simplemente no pueden anular:\n\n• **Contratos de seguro** — lo que el plan pagará.\n• **Contratos entre proveedor y asegurador** — lo que el proveedor puede facturar u ofrecer bajo ese beneficio.\n• **Normas de la instalación/programa** — a quién puede admitir un lugar y qué nivel de atención ofrece.\n\n**Ejemplo de formulario de medicamentos.** Si su directiva solicita un medicamento de marca específico que su plan no cubre, el médico no está obligado a infringir las normas del seguro para obtenerlo. Puede recetar un equivalente cubierto que esté en el formulario — a menos que usted haya denegado específicamente el consentimiento para esa alternativa — o iniciar un proceso de autorización previa, o ayudar a transferirle a un proveedor que pueda atender la solicitud dentro de sus políticas.\n\n**Ejemplo de nivel de atención.** Si su directiva dice “tráteme solo en una instalación privada pequeña” pero usted llega en crisis a un hospital público grande, ese hospital no está obligado a infringir sus políticas de admisión o transferencia ni a absorber costos no cubiertos. Debe atenderle dentro de sus propias normas y su cobertura y hacer esfuerzos razonables para transferirle si eso es viable.\n\n**Servicios no cubiertos o excluidos.** Si su directiva exige un servicio que su plan excluye — por ejemplo, un programa residencial fuera del estado, psicoterapia individual diaria durante una hospitalización, o un tratamiento que el plan considera experimental — un proveedor no puede ignorar esos límites de cobertura y contrato simplemente porque la directiva lo indique.\n\n**Lo que el proveedor sigue debiendo a usted.** Incluso cuando la política o la cobertura bloquee parte de su directiva, el proveedor debe informarle a usted o a su agente lo antes posible, hacer todo esfuerzo razonable para transferirle a un proveedor o instalación que pueda cumplirla, y tratarle de la manera más coherente con la directiva que sea posible en ese ínterin.\n\n**Consejo: redacte instrucciones que tengan en cuenta las políticas.** En lugar de exigir una única opción, dé opciones flexibles y ordenadas por preferencia — por ejemplo, “si el Medicamento X no está disponible o no está cubierto, use Y o Z, pero nunca A ni B.” Así trabaja con los límites de cobertura en lugar de verse sorprendido por ellos.",
+      "sourceHash": "667fa11ded1e"
+    },
+    "supp_emergency_override": {
+      "category": "supplementary",
+      "title": "Anulación de emergencia y Sección 302",
+      "content": "Si usted está internado voluntariamente (con 14 años o más), su negativa a tomar medicamentos psicotrópicos — incluso mediante instrucción en la Directiva Anticipada de Salud Mental de PA — DEBE ser respetada A MENOS QUE represente una amenaza inminente de peligro para sí mismo o para otros.\n\nEn una emergencia, su protesta solo puede ser anulada CUANDO el personal también inicia un internamiento involuntario de emergencia bajo la Sección 302 de la Ley de Procedimientos de Salud Mental (Mental Health Procedures Act).\n\nEn situaciones que no sean de emergencia, si la falta de medicación representa un peligro grave o le impide cuidarse a sí mismo, el proveedor debe iniciar un internamiento involuntario ordenado por un tribunal bajo la Sección 304(c) antes de anular su directiva.\n\nEn cualquier caso, una directiva válida que rechace un medicamento específico se trata como una **objeción contemporánea** y debe respetarse mientras la directiva siga siendo válida. Si el personal considera que no puede tratarle eficazmente sin ese medicamento, debe transferirle a un médico o instalación dispuesto a respetar la directiva, o solicitar una orden judicial que autorice el tratamiento en contra de ella — el hecho de estar internado involuntariamente no crea, por sí solo, una excepción general que permita al personal ignorar una directiva de otro modo válida.",
+      "sourceHash": "fae2b461609b"
+    },
+    "supp_substituted_judgment": {
+      "category": "supplementary",
+      "title": "El estándar del juicio sustituto",
+      "content": "Según el 20 Pa.C.S. §5836, su agente debe tomar decisiones basándose en sus instrucciones conocidas — incluidas declaraciones previas y direcciones escritas o verbales que usted haya dado.\n\nSi no existe ninguna instrucción específica que cubra una situación, su agente debe evaluar lo que USTED habría querido (sus preferencias), no lo que el agente considere “lo mejor.” Esto se llama el estándar de “juicio sustituto” (“substituted judgment”), a diferencia del estándar de “mejores intereses” (“best interests”).\n\nSu agente tiene los mismos derechos que usted para solicitar, examinar, copiar y dar consentimiento a la divulgación de sus registros de salud mental (a menos que usted haya limitado esto en el poder). La divulgación no renuncia al privilegio de confidencialidad probatoria. Su agente solo puede divulgar información en la medida razonablemente necesaria para cumplir sus obligaciones o según lo exija la ley.",
+      "sourceHash": "cb646b27bf96"
+    },
+    "supp_agent_removal": {
+      "category": "supplementary",
+      "title": "Cuándo un agente pierde su autoridad (remoción y divorcio)",
+      "content": "Según el 20 Pa.C.S. §5837, un agente puede ser removido por cualquiera de los siguientes motivos:\n• Fallecimiento o incapacidad del agente\n• Incumplimiento del poder de salud mental\n• Agresión física o amenazas contra usted (la persona que hizo la directiva)\n• Coacción sobre usted\n• Renuncia voluntaria — el agente debe notificarle a usted y, si el poder está en vigor, también debe notificar a sus proveedores\n• Divorcio (véase más adelante)\n\nTerceros pueden impugnar la autoridad de un agente presentando una petición ante el juzgado de sucesiones (orphan's court).\n\n**El divorcio revoca automáticamente a un cónyuge-agente.** Según el 20 Pa.C.S. §5838, si usted designó a su cónyuge como agente, esa designación queda REVOCADA AUTOMÁTICAMENTE cuando cualquiera de los cónyuges presenta una acción de divorcio. La única excepción es si su poder de salud mental deja claro que era su intención que la designación continuara a pesar de la presentación de una demanda de divorcio. Si su cónyuge es su agente y está considerando el divorcio, planifique la designación de un nuevo agente.",
+      "sourceHash": "a865f19e5646"
+    },
+    "supp_penalties": {
+      "category": "supplementary",
+      "title": "Sanciones penales por manipulación",
+      "content": "Según el 20 Pa.C.S. §5806, es un delito grave de tercer grado hacer deliberadamente cualquiera de lo siguiente:\n• Ocultar, cancelar, alterar, desfigurar, borrar o dañar una declaración sin el consentimiento del declarante\n• Hacer lo mismo con un poder de salud mental, enmienda o revocación sin el consentimiento de la persona que hizo la directiva\n• Provocar la formalización de una directiva mediante influencia indebida, fraude o coacción\n• Falsificar o forjar un poder de salud mental o una declaración que resulte en cambios directos en la atención\n\nLos agentes que incumplan deliberadamente sus obligaciones pueden ser removidos y demandados por daños y perjuicios reales.",
+      "sourceHash": "9f4182251c59"
+    },
+    "supp_immunity": {
+      "category": "supplementary",
+      "title": "Protecciones de inmunidad del proveedor",
+      "content": "Según el 20 Pa.C.S. §5805, los proveedores que actúan de buena fe están protegidos de responsabilidad penal, responsabilidad civil y sanciones disciplinarias profesionales por:\n• Cumplir con instrucciones del agente que se consideran autorizadas\n• Negarse a cumplir basándose en la creencia de buena fe de que el agente carece de autoridad\n• Cumplir asumiendo una formalización válida y la inexistencia de enmiendas o revocaciones\n• Divulgar información que se considera autorizada por el capítulo\n• Negarse a cumplir por conflictos con políticas contractuales, de red o de pago\n• Negarse a cumplir cuando esto entraría en conflicto con estándares clínicos o médicos reconocidos\n• Realizar determinaciones de capacidad que activen una directiva\n• No determinar que un paciente carece de capacidad\n\nLos agentes de salud mental que actúan de buena fe reciben una protección paralela.",
+      "sourceHash": "ad6a52e0c039"
+    },
+    "supp_conflicting": {
+      "category": "supplementary",
+      "title": "Cuando las directivas entran en conflicto",
+      "content": "Según el 20 Pa.C.S. §5844, si usted ha formalizado múltiples declaraciones o poderes de salud mental, prevalece el que tenga la fecha de formalización más reciente.\n\nImportante: un poder de salud mental SIEMPRE prevalece sobre un poder general de atención médica, independientemente de cuál se haya formalizado más recientemente.",
+      "sourceHash": "bdc9db050364"
+    },
+    "supp_interstate": {
+      "category": "supplementary",
+      "title": "Validez en otros estados",
+      "content": "Según el 20 Pa.C.S. §5845, un poder de salud mental formalizado en otro estado o jurisdicción es válido en Pensilvania si se ajusta a las leyes de esa jurisdicción — siempre que no permita decisiones incompatibles con la ley de Pensilvania. (Una directiva de otro estado no será respetada si las decisiones del agente entrarían en conflicto con la ley de Pensilvania.)\n\nSin embargo, es posible que su directiva de Pensilvania no sea reconocida automáticamente en otros estados. Cada estado tiene sus propias leyes que rigen las directivas anticipadas de salud mental.\n\nSi viaja con frecuencia o vive parte del tiempo en otro estado, considere:\n• Notarizar su directiva (no es obligatorio según la ley de PA, pero puede facilitar su aceptación en otros estados)\n• Crear una directiva en cada estado donde recibe atención\n• Llevar una copia de su directiva cuando viaje",
+      "sourceHash": "5d9f5e232f20"
+    },
+    "supp_court_petition": {
+      "category": "supplementary",
+      "title": "Petición judicial por daño irreparable",
+      "content": "Según el 20 Pa.C.S. §5843, si una parte interesada considera que cumplir con su directiva podría causarle un daño irreparable potencial o la muerte, puede presentar una petición ante el juzgado de sucesiones (orphan's court).\n\nEl tribunal puede invalidar disposiciones específicas de su directiva o autorizar un tratamiento alternativo. El tribunal debe actuar dentro de las 72 horas siguientes a la presentación de la petición.",
+      "sourceHash": "ff718015a56d"
+    },
+    "supp_guardian_hierarchy": {
+      "category": "supplementary",
+      "title": "El tutor frente a su directiva y su agente",
+      "content": "Su directiva está diseñada para proteger su autonomía incluso si posteriormente se le nombra un tutor. Dos secciones de la Ley 194 de 2004 (Act 194) funcionan juntas aquí.\n\n**Precedencia (20 Pa.C.S. §5833).** Una Directiva Anticipada de Salud Mental de PA válida tiene precedencia sobre las decisiones de un tutor designado por un tribunal respecto a su atención de salud mental — sus deseos escritos tienen prioridad. Un tutor solo puede anular su directiva si un tribunal lo autoriza específicamente; sin una orden judicial, el tutor debe seguirla. Si existe un conflicto entre su directiva y lo que quiere un tutor, su directiva prevalece a menos que un tribunal resuelva lo contrario. Esta protección existe porque la directiva representa decisiones que usted tomó mientras tenía capacidad, y la ley de Pensilvania respeta esas decisiones incluso si posteriormente se nombra un tutor.\n\n**Procedimiento cuando se inicia una tutela (20 Pa.C.S. §5841).**\n• Su proveedor debe notificar tanto al tribunal como a su agente sobre su directiva anticipada\n• Su agente debe informar al tribunal del contenido de la directiva\n• Si posteriormente se le declara incapaz, su poder de salud mental sigue siendo efectivo\n• El tribunal DEBERÁ PREFERIR permitir que su agente continúe tomando decisiones conforme a la directiva — a menos que usted haya especificado que un tutor tiene poder para terminarla, revocarla o suspenderla\n• Si el tribunal otorga a un tutor poderes sobre la atención de salud mental, el tutor queda sujeto a las mismas obligaciones que un agente\n\n**Nombramiento de un tutor.** Usted puede nominar a una persona de su confianza como tutor de su persona en su directiva. El tribunal deberá designar a la persona que usted nomine a menos que exista una causa justificada o una descalificación.\n\nLa conclusión práctica: crear una directiva ahora le brinda una protección duradera para sus preferencias de tratamiento, independientemente de lo que ocurra en el futuro.",
+      "sourceHash": "48b2b80f0911"
+    },
+    "supp_agent_limits": {
+      "category": "supplementary",
+      "title": "Límites absolutos a la autoridad del agente",
+      "content": "Independientemente de lo que diga su directiva, la ley de Pensilvania impone estas prohibiciones absolutas a su agente:\n\n• Su agente NUNCA puede consentir a que se le realice una psicocirugía\n• Su agente NUNCA puede consentir a la terminación de sus derechos parentales\n• Su agente SOLO puede consentir a la terapia electroconvulsiva (TEC) si usted la AUTORIZÓ ESPECÍFICAMENTE en la directiva\n• Su agente SOLO puede consentir a procedimientos experimentales o investigación si usted los AUTORIZÓ ESPECÍFICAMENTE en la directiva\n\nEstos límites se aplican incluso si usted intenta otorgar una autoridad más amplia en su poder de salud mental.\n\nPor qué existen estos límites: la legislatura de Pensilvania reconoció que ciertas decisiones médicas son tan graves e irreversibles que requieren su propio consentimiento informado, no el de un sustituto. La psicocirugía altera permanentemente el tejido cerebral, y la terminación de los derechos parentales tiene consecuencias de por vida. La TEC y los tratamientos experimentales conllevan riesgos importantes que justifican una autorización personal explícita en lugar de una autoridad delegada.",
+      "sourceHash": "271ba47127ec"
+    },
+    "supp_incapacity_declaration": {
+      "category": "supplementary",
+      "title": "Determinación de incapacidad (§§5823, 5833)",
+      "content": "Según el texto del formulario legal en el 20 Pa.C.S. §§5823 y 5833 (que su directiva incorpora), la determinación de que usted es incapaz de tomar decisiones de atención de salud mental requiere la evaluación de dos profesionales calificados:\n\n1. Un psiquiatra debe ser uno de los profesionales evaluadores\n2. El segundo evaluador puede ser: otro psiquiatra, un psicólogo con licencia, su médico de familia, su médico tratante, u otro profesional de tratamiento de salud mental\n\nAmbos evaluadores deben coincidir en que usted carece de capacidad antes de que su directiva entre en vigor. Se presume que usted tiene capacidad a menos que se haya realizado una declaración de incapacidad adecuada.\n\nLa declaración de incapacidad debe quedar documentada en su expediente médico. Una vez que la capacidad sea restaurada (certificada por los mismos tipos de profesionales), la directiva deja de estar en vigor, aunque sigue siendo válida para un uso futuro hasta que expire o sea revocada.",
+      "sourceHash": "c94a06d14260"
+    },
+    "supp_resources": {
+      "category": "supplementary",
+      "title": "Recursos externos: NAMI, SAMHSA y más",
+      "content": "Las siguientes organizaciones brindan apoyo, educación y defensa de derechos valiosos relacionados con las directivas anticipadas de salud mental y la atención de salud mental en Pensilvania.\n\n• NAMI Pennsylvania (https://namipa.org)\nLa National Alliance on Mental Illness (Alianza Nacional sobre Enfermedades Mentales) — el capítulo de Pensilvania ofrece defensa de derechos en todo el estado, grupos de apoyo dirigidos por pares y programas educativos para personas y familias afectadas por enfermedades mentales.\n\n• Recursos de directivas anticipadas psiquiátricas de SAMHSA (https://www.samhsa.gov/mental-health/mental-health-treatment/advance-directives)\nLa Substance Abuse and Mental Health Services Administration (Administración de Servicios de Abuso de Sustancias y Salud Mental) ofrece orientación federal, investigación y recursos sobre directivas anticipadas psiquiátricas, incluidas las mejores prácticas y guías de implementación.\n\n• NRC-PAD — National Resource Center on Psychiatric Advance Directives (https://nrc-pad.org)\nUn centro de investigación y educación que ofrece plantillas, información legal por estado, materiales de capacitación y las investigaciones más recientes sobre directivas anticipadas psiquiátricas.\n\n• Disability Rights Pennsylvania (https://www.disabilityrightspa.org)\nLa organización de protección y defensa de derechos designada por el gobierno federal para Pensilvania, que ofrece defensa legal gratuita y protección de derechos para personas con discapacidades, incluidas las condiciones de salud mental.\n\n• Pennsylvania 211 (marque el 211)\nUn servicio gratuito y confidencial que conecta a los residentes de Pensilvania con servicios locales de salud mental, apoyo en crisis, vivienda y otros recursos comunitarios. Disponible las 24 horas, los 7 días de la semana marcando el 211.",
+      "sourceHash": "d2f550cfe7da"
+    },
+    "supp_chapter_54_vs_58": {
+      "category": "supplementary",
+      "title": "Cómo funcionan juntos el Capítulo 54 (atención médica general) y el Capítulo 58 (salud mental)",
+      "content": "La ley de Pensilvania divide las directivas anticipadas en dos capítulos paralelos del Título 20 de los Estatutos Consolidados (Consolidated Statutes):\n\n**Capítulo 54 — Atención médica (Ley 169 de 2006, Act 169).** Testamentos vitales, poderes para atención médica, tratamiento al final de la vida y tratamientos para preservar la vida, la jerarquía predeterminada de “representante de atención médica” cuando no se designa ningún agente. Sección de deber del proveedor: §5462. Frase principal de “deberá cumplir” (“shall comply”) en §5462(c)(1): “En todos los demás casos, con sujeción a cualquier limitación especificada en el poder para atención médica, un médico tratante o proveedor de atención médica deberá cumplir con una decisión de atención médica tomada por un agente o representante de atención médica en la misma medida que si la hubiera tomado la persona que hizo la directiva.”\n\n**Capítulo 58 — Atención de salud mental (Ley 194 de 2004, Act 194).** Declaraciones de salud mental, poderes de salud mental, decisiones de tratamiento de salud mental (medicamentos, TEC, estudios experimentales, ensayos de medicamentos, preferencias de instalaciones). Sección de deber del proveedor: §5842. La norma “deberá cumplir” (“shall comply”) para los agentes de salud mental refleja el §5462(c)(1): “Un médico tratante o proveedor de atención de salud mental deberá cumplir con una decisión de atención de salud mental tomada por un agente de salud mental.”\n\n**¿Cuándo se aplica cada uno?**\n• Una decisión de hospitalización psiquiátrica → Capítulo 58.\n• Una cuestión de no reanimar durante la atención médica → Capítulo 54.\n• Una decisión sobre medicamentos psicotrópicos durante una hospitalización psiquiátrica → Capítulo 58.\n• Una decisión de consentimiento quirúrgico durante un internamiento involuntario → por lo general el Capítulo 54 (atención médica general), pero verifique si su Directiva Anticipada de Salud Mental de PA cubre el aspecto específico.\n• Una preferencia de instalación para atención psiquiátrica → Capítulo 58.\n\n**La misma persona, dos funciones.** La mayoría de las personas se benefician de tener tanto una Directiva Anticipada de Salud Mental de PA del Capítulo 58 (que esta aplicación genera) como un poder para atención médica del Capítulo 54. La misma persona de confianza puede ser designada en ambas funciones — y con frecuencia es más sencillo que así sea.\n\n**Por qué la distinción importa en una disputa.** Si un hospital cita las normas del Capítulo 54 en una situación de salud mental (o viceversa), el análisis puede producir una respuesta incorrecta. El deber de “deberá cumplir” existe en ambos capítulos, pero las excepciones y las categorías de decisiones difieren. Conocer el estatuto correcto le ayuda a usted, a su agente y a cualquier defensor del paciente a insistir en el marco jurídico adecuado.",
+      "sourceHash": "a7d9b245c6b3"
+    },
+    "check_distribution": {
+      "category": "checklist",
+      "title": "Lista de distribución",
+      "content": "Después de firmar su directiva, distribuya copias a:\n\n• Su agente designado\n• Su agente alternativo\n• Su médico tratante o psiquiatra\n• Su terapeuta o consejero\n• Su hospital local (con frecuencia la archivan para futuras admisiones)\n• Los familiares que desea informar\n• Amigos cercanos en su red de apoyo\n• Clérigo o asesor espiritual (si corresponde)\n• Su abogado (si tiene uno)\n• Guarde una copia con sus documentos importantes\n\nCuantas más personas tengan copias, más probable será que su directiva sea encontrada y seguida cuando se necesite.",
+      "sourceHash": "da79e7fce3c6"
+    },
+    "check_storage": {
+      "category": "checklist",
+      "title": "Dónde guardar su directiva",
+      "content": "• Guarde el original en un lugar seguro pero FÁCIL DE ENCONTRAR: haga saber a otras personas dónde está\n• NO lo guarde en una caja de seguridad bancaria (inaccesible en emergencias)\n• Considere escanearlo y usar un servicio seguro de almacenamiento en línea para que esté disponible desde cualquier lugar\n• Haga MUCHAS copias: más es mejor que menos\n• Dígale a su agente y a su agente alternativo exactamente dónde está guardado el original",
+      "sourceHash": "4817b4cc9eb9"
+    },
+    "check_capacity_letter": {
+      "category": "checklist",
+      "title": "Protección ante impugnaciones de capacidad",
+      "content": "Si desea protección adicional ante posibles impugnaciones futuras de su directiva, considere incluir una carta de su médico tratante del MISMO PERÍODO en que firmó su directiva, indicando que usted tenía capacidad en ese momento.\n\nEsto es opcional, pero se recomienda firmemente. Una carta de capacidad contemporánea puede ayudar a prevenir impugnaciones a la validez de su directiva.",
+      "sourceHash": "25480c2de43f"
+    },
+    "check_discussion": {
+      "category": "checklist",
+      "title": "Cómo hablar sobre su directiva",
+      "content": "Antes de firmar su directiva, hable sobre sus preferencias de tratamiento con:\n\n• Su agente: asegúrese de que entienda lo que usted desearía en distintos escenarios\n• Su médico tratante: asegúrese de que sus preferencias sean claras desde el punto de vista médico y que las comprenda\n• Sus familiares: para que conozcan sus deseos y puedan apoyar a su agente\n\nEstas conversaciones ayudan a garantizar que su directiva sea interpretada y seguida tal como usted lo desea.",
+      "sourceHash": "55da8ee10149"
+    },
+    "check_renewal": {
+      "category": "checklist",
+      "title": "Planificación de la renovación",
+      "content": "Su directiva vence automáticamente dos años después de la fecha de firma, a menos que sea invocada en el momento del vencimiento, en cuyo caso permanece vigente hasta que termine la incapacidad.\n\n• Marque su calendario para dos años después de la fecha en que firmó\n• Planifique revisar y volver a firmar antes del vencimiento\n• Esta aplicación enviará recordatorios a los 60 días y a los 14 días antes del vencimiento\n• Al renovar, considere si sus preferencias o circunstancias han cambiado",
+      "sourceHash": "c90759be19db"
+    },
+    "check_revocation": {
+      "category": "checklist",
+      "title": "Cómo revocar su directiva",
+      "content": "Usted puede revocar su directiva en cualquier momento mientras tenga capacidad, ya sea de forma oral o escrita.\n\nPasos para revocar:\n• Notifique a TODAS las personas que tienen copias de su directiva\n• Notifique a sus proveedores de atención médica\n• Si crea una nueva directiva, la nueva reemplaza automáticamente a la antigua (pero aun así notifique a todos)\n\nDurante el internamiento involuntario: la revocación solo es posible si se determina que usted tiene capacidad después de un examen psiquiátrico más una evaluación profesional adicional.",
+      "sourceHash": "01ff9a818f5d"
+    },
+    "check_agent_discussion_record": {
+      "category": "checklist",
+      "title": "Documente las conversaciones con su agente",
+      "content": "Lleve un breve registro escrito de las conversaciones con su agente sobre sus preferencias. Esto puede ser útil si surgen preguntas más adelante.\n\n• Anote la fecha en que habló sobre su directiva\n• Registre los temas clave tratados (medicamentos, hospitalización, TEC)\n• Documente cualquier escenario específico que hayan analizado\n• Pida a su agente que confirme que entiende sus deseos\n\nEsta documentación no es un requisito legal, pero fortalece el expediente si su directiva llega a ser impugnada o cuestionada.",
+      "sourceHash": "c459ad12db55"
+    },
+    "check_update_contacts": {
+      "category": "checklist",
+      "title": "Actualice los contactos de emergencia anualmente",
+      "content": "Los números de teléfono y las direcciones cambian. Revise su información de contacto periódicamente:\n\n• Confirme que los números de teléfono de su agente siguen siendo actuales\n• Verifique la información de contacto de su agente alternativo\n• Actualice su propia dirección y teléfono si se ha mudado\n• Asegúrese de que sus proveedores de atención médica tengan copias actualizadas\n• Verifique que los contactos familiares indicados en su directiva sigan siendo correctos\n\nConfigure un recordatorio en su calendario para revisar los contactos al menos una vez al año, incluso antes del vencimiento de los dos años de su directiva.",
+      "sourceHash": "cb2185d9f33e"
+    },
+    "checklist_before_signing": {
+      "category": "checklist",
+      "title": "Antes de firmar: verificación final",
+      "content": "Repase esta lista con la directiva impresa en mano, antes de que ningún testigo firme:\n\n☐ Mi nombre legal completo es correcto en todos los lugares.\n☐ Mi fecha de nacimiento y dirección son correctas.\n☐ El texto de la condición de entrada en vigor refleja el momento en que deseo que esto surta efecto.\n☐ Mi agente principal (y agente alternativo, si corresponde) está nombrado correctamente, con números de teléfono actuales.\n☐ El cuadro de autoridad del agente está completado (¿qué decisiones puede tomar el agente? ¿Los tratamientos experimentales están abordados explícitamente conforme al §5805(c)(4)?).\n☐ Las preferencias y exclusiones de instalaciones de tratamiento se indican por nombre específico de instalación donde sea posible.\n☐ Las preferencias de medicamentos incluyen tanto las listas de medicamentos preferidos como los que se deben evitar, con sus motivos.\n☐ Las casillas de consentimiento para TEC, estudios experimentales y ensayos de medicamentos están cada una marcada (sí / no / agente / condicional — no en blanco).\n☐ La sección de instrucciones adicionales cubre mis preferencias en cuanto a religión, cultura, comunicación, comodidad, contacto, custodia y expedientes que me importan.\n☐ La nominación de tutor está completada (o intencionalmente en blanco).\n☐ Hay dos testigos presentes, ambos tienen 18 años o más, y ninguno de ellos es mi agente, el cónyuge de mi agente, mi proveedor de atención de salud mental, ni un empleado de mi instalación de tratamiento (a menos que sea familiar).\n☐ Los bolígrafos son de tinta bolígrafo azul o negra (sin lápiz, sin gel que se corra).\n☐ Todas las fechas las escribe quien firma, no están preimpresas.",
+      "sourceHash": "ab3a2a307161"
+    },
+    "checklist_conversation_with_agent": {
+      "category": "checklist",
+      "title": "Conversación con su agente designado",
+      "content": "Una directiva solo funciona si su agente la entiende y está dispuesto a actuar conforme a ella. Reserve una hora y repase estos puntos juntos:\n\n☐ Muéstrele la directiva completa (no solo un resumen).\n☐ Explíquele por qué eligió cada preferencia de medicamento (qué funcionó, qué no, qué efectos secundarios le importan más).\n☐ Repase uno o dos episodios de crisis pasados: qué ayudó, qué empeoró las cosas, qué hubiera deseado que ocurriera.\n☐ Identifiquen juntos sus señales de alerta para que pueda reconocer un episodio a tiempo.\n☐ Hable sobre las instalaciones que prefiere y las que desea evitar, y por qué.\n☐ Confirme que sabe cómo comunicarse con su médico de atención primaria, su psiquiatra y la oficina del condado de salud mental/IDD.\n☐ Hable sobre las decisiones de consentimiento para TEC, investigación y ensayos de medicamentos, y los motivos.\n☐ Confirme que está dispuesto a defender firmemente sus deseos expresados si un proveedor se opone.\n☐ Dígale dónde se guardan la copia firmada original y la tarjeta de billetera.\n☐ Pregúntele si hay algo en la directiva que le parezca poco claro o impracticable, y revísela si es necesario antes de firmar.",
+      "sourceHash": "12e6e4617d94"
+    },
+    "checklist_share_with_providers": {
+      "category": "checklist",
+      "title": "Qué compartir con sus proveedores",
+      "content": "Distribuir la directiva a su equipo de tratamiento es el factor más importante para que sea respetada en una crisis. Para cada proveedor al que acude regularmente:\n\n☐ Entrégueles una copia *impresa* de la directiva firmada (el papel sigue siendo más accesible de forma confiable que el EHR en muchos contextos de crisis).\n☐ Pídales que la escaneen o carguen en su expediente médico bajo “directiva anticipada” o “documento aportado por el paciente”.\n☐ Confirme que aparece en su sistema en su próxima visita de rutina (verifíquelo pidiéndoles que abran su expediente).\n☐ Si cambia de proveedores o instalaciones, entregue al nuevo proveedor una copia nueva: las directivas no se transfieren automáticamente.\n\nPersonas a quienes se recomienda entregar una copia:\n\n• Médico de atención primaria.\n• Psiquiatra / profesional que prescribe atención de salud mental.\n• Terapeuta o consejero.\n• Su agente designado (y agente alternativo).\n• La oficina del condado de salud mental/IDD, si recibe servicios del condado.\n• Un familiar de confianza.\n• El servicio de urgencias local al que más probablemente lo llevarían en una crisis (su registro de directivas anticipadas).",
+      "sourceHash": "072b2eb32eb5"
+    },
+    "checklist_provider_refuses_to_follow": {
+      "category": "checklist",
+      "title": "Si un proveedor se niega a cumplir su directiva: paso a paso",
+      "content": "La ley de Pensilvania (20 Pa.C.S. §5842 para las directivas de salud mental; §5462(c)(1) para las directivas de atención médica general) exige que los proveedores “deberán cumplir” (“shall comply”) las decisiones de un agente válido. Si un proveedor le dice a usted o a su agente que no seguirá la directiva, trabaje con esta lista:\n\n☐ **Mantenga la calma y documente.** Anote la fecha, la hora, quién dijo qué y los testigos presentes. Sea objetivo.\n\n☐ **Pídales que identifiquen la excepción específica en la que se basan.** Las únicas excepciones establecidas por ley son:\n   • Objeción de conciencia de buena fe;\n   • Tratamiento contrario a la práctica clínica aceptada o a las normas médicas;\n   • Tratamiento físicamente no disponible en la instalación;\n   • Política institucional o de seguro que impide el cumplimiento.\n   “Simplemente no creo que debamos hacer eso” no es una excepción válida.\n\n☐ **Cite el estatuto por sección.** Para decisiones de salud mental: “Conforme a 20 Pa.C.S. §5842, usted está obligado a cumplir las decisiones de mi agente en la misma medida que si yo las hubiera tomado”. Para decisiones de atención médica general: cite el §5462(c)(1).\n\n☐ **Solicite el plan de traslado del §5804.** Si están invocando una excepción real, la ley les exige (a) notificarle a usted y a su agente, (b) documentar el motivo, (c) hacer un esfuerzo razonable para trasladarle a un proveedor que cumpla, y (d) continuar tratándole conforme a la directiva mientras el traslado esté pendiente. Pregunte: “¿Quién está gestionando el traslado y cuál es el plazo?”\n\n☐ **Escale dentro de la institución.** Pida hablar con el defensor del paciente / defensor del pueblo, el director médico de guardia o el comité de ética. Muchas disputas se resuelven cuando alguien con autoridad revisa el estatuto.\n\n☐ **Llame a Disability Rights Pennsylvania al 1-800-692-7443.** Es la organización de protección y defensa designada federalmente para PA y gestiona las quejas relacionadas con la Ley 194 (Act 194). Pueden asesorarle en tiempo real.\n\n☐ **No firme nada que pretenda revocar la directiva** a menos que usted (la persona que hizo la directiva, con capacidad) realmente tenga la intención de revocarla. Un agente no tiene autoridad para revocar la directiva de la persona que la hizo.\n\n☐ **Continúe tratando a su agente como el tomador de decisiones.** El agente debe continuar tomando decisiones y haciendo valer el deber estatutario hasta el traslado o la resolución. La Sección 5805 protege a los proveedores que cumplan de buena fe: no hay riesgo de responsabilidad legal por seguir la directiva.",
+      "sourceHash": "6cee4acb5b86"
+    }
+  }
+}

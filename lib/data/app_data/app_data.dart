@@ -348,12 +348,25 @@ class LegalFacts {
 /// prompt builders, services) that can't reach a Riverpod provider. The data is
 /// immutable at runtime in this phase; when the admin update flow can mutate it
 /// live, this can move behind a provider for reactivity.
+/// Learn article languages (app_data.json "learn", VERIFY tier).
+class LearnConfig {
+  /// Show the Spanish Learn articles to Spanish readers. Off until a fluent
+  /// reviewer approves the draft (assets/data/educational_content_es.json).
+  final bool spanishArticles;
+
+  const LearnConfig({this.spanishArticles = false});
+
+  factory LearnConfig.fromJson(Map<String, dynamic> m) =>
+      LearnConfig(spanishArticles: m['spanishArticles'] == true);
+}
+
 class AppData {
   final Map<String, ContactEntry> contacts;
   final List<ReferralPartner> referralPartners;
   final AiConfig ai;
   final Map<String, String> urls;
   final LegalFacts legal;
+  final LearnConfig learn;
   final AppConfig config;
   final Map<String, String> dated;
   final Map<String, String> facts;
@@ -368,6 +381,7 @@ class AppData {
     this.ai = const AiConfig(),
     this.urls = const {},
     this.legal = const LegalFacts(),
+    this.learn = const LearnConfig(),
     this.config = const AppConfig(),
     this.dated = const {},
     this.facts = const {},
@@ -444,6 +458,8 @@ class AppData {
       urls: urls,
       legal: LegalFacts.fromJson(
           (json['legal'] as Map?)?.cast<String, dynamic>() ?? const {}),
+      learn: LearnConfig.fromJson(
+          (json['learn'] as Map?)?.cast<String, dynamic>() ?? const {}),
       config: AppConfig.fromJson(
           (json['config'] as Map?)?.cast<String, dynamic>() ?? const {}),
       dated: _stringMap(json['dated']),

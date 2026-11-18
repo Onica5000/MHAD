@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/education/learn_links.dart';
 import 'package:mhad/ui/widgets/design/back_link.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/status_views.dart';
@@ -44,9 +45,9 @@ class _EducationScreenState extends State<EducationScreen> {
     // and ignore the tab filter entirely.
     if (widget.filterIds != null && widget.filterIds!.isNotEmpty) {
       final ids = widget.filterIds!.toSet();
-      return allEducationSections.where((s) => ids.contains(s.id)).toList();
+      return learnSections(context).where((s) => ids.contains(s.id)).toList();
     }
-    return _activeTab.filter(allEducationSections);
+    return _activeTab.filter(learnSections(context));
   }
 
   @override
@@ -527,12 +528,12 @@ class _EducationSearchDelegate extends SearchDelegate<EducationSection?> {
         child: Text(context.l10n.educationTypeToSearchEducationalContent),
       );
     }
-    final q = query.toLowerCase();
-    final results = allEducationSections
+    final q = foldForSearch(query);
+    final results = learnSections(context)
         .where(
           (s) =>
-              s.title.toLowerCase().contains(q) ||
-              s.content.toLowerCase().contains(q),
+              foldForSearch(s.title).contains(q) ||
+              foldForSearch(s.content).contains(q),
         )
         .toList();
 

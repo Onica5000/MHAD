@@ -3059,5 +3059,6 @@
   "learnRelatedReading": "Related reading",
   "learnShowMeaning": "What “{term}” means",
   "@learnShowMeaning": {"placeholders": {"term": {"type": "String"}}},
-  "learnOpenInGlossary": "Open in the glossary"
+  "learnOpenInGlossary": "Open in the glossary",
+  "educationSourceTranslated": "Translated from English"
 }

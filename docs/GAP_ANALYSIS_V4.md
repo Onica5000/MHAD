@@ -392,8 +392,9 @@ Re-scoped for the web-first pivot (2026-06-20):
 AI moved to a copy-and-paste handoff (H5 note above), the hosted policy is live (C1), and
 new checkers guard the work — typography, palette contrast in light and dark, a dark-mode
 render sweep of every route, plus the nothing-removed UI inventory. Still open outside
-this backlog: a native-speaker review of the Spanish copy, and translating the Learn
-articles (legal booklet text — a reviewed translation).
+this backlog: a native-speaker review of the Spanish copy, including the Spanish draft of
+the Learn articles (`educational_content_es.json`, 2026-11-18; off until that review:
+`app_data.json` `learn.spanishArticles`).
 
 **Update 2026-09-30:** all live items above are closed. Remaining work is outside this
 backlog: a native-speaker review of the Spanish copy and (optionally) translating the Learn articles. Dependencies were brought

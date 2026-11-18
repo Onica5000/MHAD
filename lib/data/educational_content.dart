@@ -11,7 +11,7 @@ library;
 
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart' show debugPrint;
+import 'package:flutter/foundation.dart' show debugPrint, visibleForTesting;
 import 'package:flutter/services.dart' show rootBundle;
 
 enum EducationCategory {
@@ -89,6 +89,44 @@ class EducationalContent {
         await rootBundle.loadString('assets/data/educational_content.json');
     return jsonDecode(raw) as Map<String, dynamic>;
   }
+
+  /// Translations of [sections] by language code. Loaded only for a language
+  /// that is switched on (main.dart; app_data.json "learn"), and used only if
+  /// it covers EVERY section: partial localization is worse than none.
+  /// Display only: the AI keeps the English booklet text.
+  static final Map<String, List<EducationSection>> _translations = {};
+
+  /// Load `assets/data/educational_content_<code>.json` (after [load]).
+  /// Never throws; a missing or partial file leaves English in place.
+  static Future<void> loadLanguage(String code) async {
+    try {
+      final raw = await rootBundle
+          .loadString('assets/data/educational_content_$code.json');
+      final list = _parse(jsonDecode(raw) as Map<String, dynamic>);
+      final missing = {for (final s in sections) s.id}
+          .difference({for (final s in list) s.id});
+      if (sections.isEmpty || missing.isNotEmpty) {
+        debugPrint('EducationalContent: $code lacks ${missing.length} '
+            'sections; showing English');
+        return;
+      }
+      _translations[code] = list;
+    } catch (e) {
+      debugPrint('EducationalContent: failed to load $code: $e');
+    }
+  }
+
+  /// The sections in [languageCode] when that translation is loaded, else
+  /// the English booklet text.
+  static List<EducationSection> sectionsFor(String languageCode) =>
+      _translations[languageCode] ?? sections;
+
+  /// Whether [sectionsFor] returns a translation for [languageCode].
+  static bool isTranslated(String languageCode) =>
+      _translations.containsKey(languageCode);
+
+  @visibleForTesting
+  static void debugClearTranslations() => _translations.clear();
 
   static List<EducationSection> _parse(Map<String, dynamic> json) {
     final out = <EducationSection>[];
