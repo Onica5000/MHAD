@@ -19,6 +19,8 @@ List<String> generalAiQuestions(AppLocalizations l) => [
       l.assistantSuggestWhatMedicationsShouldIList,
       l.assistantSuggestWhatDoesEctMean,
       l.assistantSuggestHowLongIsTheDirective,
+      // The old chat offered this one too (nothing-removed check, 2026-11-17).
+      l.assistantSuggestCanIChangeMyDirective,
     ];
 
 /// Ask a question by copy and paste: suggested questions, a question box, the
