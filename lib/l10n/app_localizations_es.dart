@@ -5008,10 +5008,6 @@ class AppLocalizationsEs extends AppLocalizations {
       'Pregunte lo que quiera sobre este paso; las respuestas aparecen aquí y en el asistente completo.';
 
   @override
-  String get wizardAiRailNeedHelpWithThisStep =>
-      '¿Necesita ayuda con este paso? Pregunte a la IA';
-
-  @override
   String get wizardAiRailOptionalHelpTitle => 'Ayuda de IA opcional';
 
   @override
@@ -7421,10 +7417,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get homeToolsAskAiSub => 'Haga preguntas con su propia IA';
 
   @override
-  String get wizardAiBarAskYourAi =>
-      '¿Necesita ayuda con este paso? Pregunte a su IA';
-
-  @override
   String get aiConsistencyRulesExplainerHandoff =>
       'La verificación de contradicciones de arriba usa reglas integradas. Lo que sugiera su IA es opcional: revíselo antes de cambiar su directiva. Esta pantalla advierte, pero no impide crear el PDF.';
 
@@ -7501,4 +7493,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get navStartOver => 'Empezar de nuevo';
+
+  @override
+  String get wizardAskAboutStep => 'Preguntar a la IA sobre este paso';
 }

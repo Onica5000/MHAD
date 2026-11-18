@@ -8492,12 +8492,6 @@ abstract class AppLocalizations {
   /// **'Ask anything about this step — answers appear here, and in the full assistant.'**
   String get wizardAiRailAskAnythingAboutThisStep;
 
-  /// No description provided for @wizardAiRailNeedHelpWithThisStep.
-  ///
-  /// In en, this message translates to:
-  /// **'Need help with this step? Ask the AI'**
-  String get wizardAiRailNeedHelpWithThisStep;
-
   /// No description provided for @wizardAiRailOptionalHelpTitle.
   ///
   /// In en, this message translates to:
@@ -12259,12 +12253,6 @@ abstract class AppLocalizations {
   /// **'Ask questions with your own AI'**
   String get homeToolsAskAiSub;
 
-  /// No description provided for @wizardAiBarAskYourAi.
-  ///
-  /// In en, this message translates to:
-  /// **'Need help with this step? Ask your AI'**
-  String get wizardAiBarAskYourAi;
-
   /// No description provided for @aiConsistencyRulesExplainerHandoff.
   ///
   /// In en, this message translates to:
@@ -12384,6 +12372,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Start over'**
   String get navStartOver;
+
+  /// No description provided for @wizardAskAboutStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask AI about this step'**
+  String get wizardAskAboutStep;
 }
 
 class _AppLocalizationsDelegate

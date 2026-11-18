@@ -1399,7 +1399,6 @@
   "wizardAiRailReadingThisStep": "Leyendo este paso…",
   "wizardAiRailSuggestedForThisStep": "SUGERIDO PARA ESTE PASO",
   "wizardAiRailAskAnythingAboutThisStep": "Pregunte lo que quiera sobre este paso; las respuestas aparecen aquí y en el asistente completo.",
-  "wizardAiRailNeedHelpWithThisStep": "¿Necesita ayuda con este paso? Pregunte a la IA",
   "wizardAiRailOptionalHelpTitle": "Ayuda de IA opcional",
   "wizardAiRailOptionalHelpBody": "Configure la IA para recibir un aviso en cada paso, preguntas sugeridas, autocompletado con fotos y el chat de abajo.",
   "wizardAiRailCheckingThisStep": "Revisando este paso",
@@ -2021,7 +2020,6 @@
   "smartFillHandoffPanelTitle": "Pida sugerencias a su IA",
   "smartFillHandoffSubtitle": "Según las afecciones y los medicamentos encontrados (sin datos de identificación). Usted revisa cada sugerencia antes de que se agregue.",
   "homeToolsAskAiSub": "Haga preguntas con su propia IA",
-  "wizardAiBarAskYourAi": "¿Necesita ayuda con este paso? Pregunte a su IA",
   "aiConsistencyRulesExplainerHandoff": "La verificación de contradicciones de arriba usa reglas integradas. Lo que sugiera su IA es opcional: revíselo antes de cambiar su directiva. Esta pantalla advierte, pero no impide crear el PDF.",
   "privacyPolicyIfYouChooseToUseHandoff": "La ayuda de IA es opcional, y esta aplicación nunca envía nada por sí misma a un servicio de IA. Si decide usarla, la aplicación redacta instrucciones que usted copia y pega en el servicio de chat de IA que elija (ChatGPT, Claude, Gemini o Grok), y usted mismo adjunta allí cualquier documento o grabación. Después copia la respuesta de vuelta en esta aplicación.\n\nLo que pegue o adjunte en ese servicio se rige por las condiciones y la política de privacidad de ese servicio, no por esta. Según el servicio y su configuración, puede:\n  - Conservar sus conversaciones, con o sin vencimiento automático\n  - Usarlas para mejorar sus productos\n  - Permitir que revisores humanos las lean\nLa mayoría de los servicios ofrecen un chat privado o temporal que conserva menos; consulte “Servicios de IA externos” más abajo.\n\nLas instrucciones que redacta esta aplicación omiten los datos de identificación más comunes (números de seguro social, números de teléfono, correos electrónicos, fechas de nacimiento, direcciones, nombres y nombres de centros). Es un filtro de mejor esfuerzo y no puede garantizar una eliminación completa. Un documento o una grabación que usted adjunte llega al servicio tal cual.\n\nLa ayuda de IA es totalmente opcional. La aplicación funciona por completo sin ella.",
   "privacyPolicyOutsideAiServices": "Servicios de IA externos",
@@ -2041,5 +2039,6 @@
   "audioGuideDescribeYourWishesOutLoudHandoff": "Describa sus deseos en voz alta, adjunte la grabación en su propia IA desde la página Autocompletar y PA MHAD completará su directiva con la respuesta; usted revisa cada campo antes de que se agregue nada.",
   "audioGuideToTranscribeYourRecordingIncludingHandoff": "Para transcribirla, usted adjunta su grabación (incluidos los datos personales que diga) en la IA que elija. Gemini acepta grabaciones en su plan gratuito (de hasta unos 10 minutos cada una) y ChatGPT en los planes de pago; la página Autocompletar muestra qué IA sirven. Se aplican las condiciones de ese servicio, y esta aplicación no puede recuperar lo que envíe. No diga nada que no quiera enviar; siempre puede escribir a mano los campos delicados.",
   "audioGuideTipKeepEachClipShortUnderHandoff": "Haga cada grabación corta, de menos de unos 2 minutos. Grabe una por cada sección de abajo y adjúntelas juntas en su IA; algunas IA limitan la duración de las grabaciones.",
-  "navStartOver": "Empezar de nuevo"
+  "navStartOver": "Empezar de nuevo",
+  "wizardAskAboutStep": "Preguntar a la IA sobre este paso"
 }

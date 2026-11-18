@@ -302,6 +302,11 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                             _stepIndex > 0 ? context.l10n.back : null,
                         onSecondary: _stepIndex > 0 ? _goBack : null,
                         showGradient: false,
+                        // Phones never show the AI rail: ✦ Ask lives here.
+                        assistLabel: context.l10n.navAsk,
+                        assistTooltip: context.l10n.wizardAskAboutStep,
+                        onAssist: () => _askStepAi(
+                            context, formType, currentStep, directive.id),
                       ),
             body: LayoutBuilder(
               builder: (context, constraints) {
@@ -328,12 +333,6 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                 // 1080 the form shrank to ~518px.
                 final showAiRail =
                     shellActive && constraints.maxWidth >= 1162;
-                // When the on-screen keyboard is up on a narrow layout, the
-                // peeking "Need help?" bar just steals vertical space from the
-                // field being edited — hide it while typing. Wide layouts (which
-                // show the full rail, or the peeking bar in the 1000–1080 band)
-                // are unaffected.
-                final keyboardOpen = MediaQuery.viewInsetsOf(context).bottom > 0;
                 final mainColumn = Column(
                   children: [
                     if (!shellActive)
@@ -417,28 +416,10 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                         ],
                       ),
                     ),
-                    // Prototype `w-wiz-mobile`: the AI rail collapses to a slim
-                    // peeking "Need help?" bar whenever the full 320px rail
-                    // isn't shown — i.e. on mobile AND in the desktop band
-                    // that's too narrow for the rail.
-                    if (!showAiRail && !(keyboardOpen && !shellActive))
-                      WizardAiBar(
-                        // Copy-and-paste AI help opens IN the wizard (a
-                        // sheet); with the API path shown, the old chat page.
-                        onAsk: () => appData.ai.apiModeVisible
-                            ? _openStepAi(
-                                context,
-                                formType,
-                                currentStep.displayName,
-                              )
-                            : showAiStepHelperSheet(
-                                context,
-                                formType: formType.name,
-                                step: currentStep,
-                                stepName: currentStep.displayName,
-                                directiveId: directive.id,
-                              ),
-                      ),
+                    // AI help without the 320px rail (phones, and the desktop
+                    // band too narrow for it) is the ✦ Ask button in the
+                    // Back/Continue bar — one bar, not two stacked (the old
+                    // "Need help?" strip cost a phone ~56px of form).
                     // Desktop: the same Back/Continue bar as phones, under the
                     // form (one implementation, one label). The column has a
                     // TIGHT width here (see the LayoutBuilder below), so the
@@ -457,6 +438,13 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                               _stepIndex > 0 ? context.l10n.back : null,
                           onSecondary: _stepIndex > 0 ? _goBack : null,
                           showGradient: false,
+                          assistLabel:
+                              showAiRail ? null : context.l10n.navAsk,
+                          assistTooltip: context.l10n.wizardAskAboutStep,
+                          onAssist: showAiRail
+                              ? null
+                              : () => _askStepAi(
+                                  context, formType, currentStep, directive.id),
                         ),
                       ),
                     // Narrow (mobile) Back/Continue navigation is the
@@ -563,6 +551,24 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
   /// Opens the AI assistant pre-loaded with this step's context. Used by both
   /// the desktop right rail and the narrow peeking bar (prototype w-wizard /
   /// w-wiz-mobile).
+  /// AI help for the current step without the rail: the copy-and-paste
+  /// step helper in a sheet (stays in the wizard); with the API path shown,
+  /// the old chat page.
+  void _askStepAi(BuildContext context, FormType formType, WizardStep step,
+      int directiveId) {
+    if (appData.ai.apiModeVisible) {
+      _openStepAi(context, formType, step.displayName);
+      return;
+    }
+    showAiStepHelperSheet(
+      context,
+      formType: formType.name,
+      step: step,
+      stepName: step.displayName,
+      directiveId: directiveId,
+    );
+  }
+
   Future<void> _openStepAi(
       BuildContext context, FormType formType, String stepName) async {
     final filled = await buildAiFilledFields(

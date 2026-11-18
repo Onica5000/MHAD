@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:mhad/data/app_data/app_data.dart' show appData;
 import 'package:mhad/ui/widgets/design/crisis_support_banner.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -613,50 +612,6 @@ class _RailInput extends ConsumerWidget {
                 : Icon(Icons.arrow_upward, size: 18, color: p.primary),
           ),
         ],
-      ),
-    );
-  }
-}
-
-/// Narrow-width collapse of [WizardAiRail] (prototype `w-wiz-mobile`): a slim
-/// tappable "Need help?" bar above the bottom action bar.
-class WizardAiBar extends StatelessWidget {
-  final VoidCallback onAsk;
-  const WizardAiBar({required this.onAsk, super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final p = Theme.of(context).mhadPalette;
-    return Material(
-      color: p.primaryTint,
-      child: InkWell(
-        onTap: onAsk,
-        child: Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-            border: Border(top: BorderSide(color: p.primaryLight)),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          child: Row(
-            children: [
-              Icon(Icons.auto_awesome, size: 16, color: p.primary),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  appData.ai.apiModeVisible
-                      ? context.l10n.wizardAiRailNeedHelpWithThisStep
-                      : context.l10n.wizardAiBarAskYourAi,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: p.onPrimaryLight,
-                  ),
-                ),
-              ),
-              Icon(Icons.keyboard_arrow_up, size: 18, color: p.primary),
-            ],
-          ),
-        ),
       ),
     );
   }

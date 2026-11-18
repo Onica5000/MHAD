@@ -1,3 +1,4 @@
+import 'package:mhad/ui/widgets/design/wizard_bottom_bar.dart';
 import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,11 +17,15 @@ import 'package:mhad/ui/widgets/design/art_image.dart';
 import 'package:mhad/ui/widgets/design/bottom_nav.dart';
 import 'package:mhad/ui/widgets/design/step_head.dart';
 
+import 'support/real_fonts.dart';
+
 /// The wizard has ONE Back/Continue bar (WizardBottomBar) on both layouts
 /// (review R18: the desktop rail used to carry its own "Next" button). On
 /// phones the bottom nav is hidden in the wizard and the step header's
 /// "More" button keeps every destination one tap away.
 void main() {
+  setUpAll(loadRealFonts);
+
   Future<AppDatabase> pumpWizard(WidgetTester tester, Size size) async {
     tester.view.physicalSize = size;
     tester.view.devicePixelRatio = 1.0;
@@ -123,12 +128,18 @@ void main() {
     await db.close();
   });
 
-  testWidgets('phone: "Need help?" opens the step helper without leaving',
-      (tester) async {
+  testWidgets('phone: Ask in the one bottom bar opens the step helper '
+      'without leaving', (tester) async {
     final db = await pumpWizard(tester, const Size(390, 844));
     expect(find.byType(AiStepHelper), findsNothing);
+    // One bar: Ask sits beside Continue (no separate "Need help?" strip).
+    expect(find.byType(WizardBottomBar), findsOneWidget);
+    final ask = find.descendant(
+        of: find.byType(WizardBottomBar),
+        matching: find.byTooltip('Ask AI about this step'));
+    expect(ask, findsOneWidget);
 
-    await tester.tap(find.textContaining('Need help with this step'));
+    await tester.tap(ask);
     await tester.pumpAndSettle();
 
     expect(find.byType(AiStepHelper), findsOneWidget);

@@ -1818,7 +1818,6 @@
   "wizardAiRailReadingThisStep": "Reading this step…",
   "wizardAiRailSuggestedForThisStep": "SUGGESTED FOR THIS STEP",
   "wizardAiRailAskAnythingAboutThisStep": "Ask anything about this step — answers appear here, and in the full assistant.",
-  "wizardAiRailNeedHelpWithThisStep": "Need help with this step? Ask the AI",
   "wizardAiRailOptionalHelpTitle": "Optional AI help",
   "wizardAiRailOptionalHelpBody": "Set up AI to get a heads-up on each step, suggested questions, photo auto-fill, and the chat below.",
   "wizardAiRailCheckingThisStep": "Checking this step",
@@ -3022,7 +3021,6 @@
   "smartFillHandoffPanelTitle": "Ask your AI for suggestions",
   "smartFillHandoffSubtitle": "Based on the conditions and medications found (identifying details removed). You review every suggestion before it’s added.",
   "homeToolsAskAiSub": "Ask questions with your own AI",
-  "wizardAiBarAskYourAi": "Need help with this step? Ask your AI",
   "aiConsistencyRulesExplainerHandoff": "The contradiction check above uses built-in rules. Anything your AI suggests is optional — review it before you change your directive. This screen warns; it doesn’t block making the PDF.",
   "privacyPolicyIfYouChooseToUseHandoff": "The AI help is optional, and this app never sends anything to an AI service itself. If you choose to use it, the app writes instructions that you copy and paste into an AI chat service you choose — ChatGPT, Claude, Gemini or Grok — and you attach any document or recording there yourself. You then copy the answer back into this app.\n\nWhat you paste or attach in that service is handled under that service’s own terms and privacy policy, not this one. Depending on the service and your settings, it may:\n  - Keep your conversations, with or without an automatic expiration\n  - Use them to improve its products\n  - Let human reviewers read them\nMost services offer a private or temporary chat that keeps less — see “Outside AI services” below.\n\nThe instructions this app writes leave out common identifying details (SSNs, phone numbers, emails, dates of birth, addresses, names, and facility names). This is a best-effort filter and cannot guarantee complete removal. A document or recording you attach yourself reaches the service as it is.\n\nAI help is entirely optional. The app is fully functional without it.",
   "privacyPolicyOutsideAiServices": "Outside AI services",
@@ -3042,5 +3040,6 @@
   "audioGuideDescribeYourWishesOutLoudHandoff": "Describe your wishes out loud, attach the recording in your own AI from the Autofill page, and PA MHAD fills in your directive from its answer — you review every field before anything is added.",
   "audioGuideToTranscribeYourRecordingIncludingHandoff": "To transcribe it, you attach your recording — including any personal details you speak — in the AI you choose. Gemini takes recordings on its free plan (up to about 10 minutes each) and ChatGPT on paid plans; the Autofill page shows which AIs fit. That service’s own terms apply, and this app can’t recall what you send. Don’t say anything you’re not comfortable sending; you can always type sensitive fields by hand instead.",
   "audioGuideTipKeepEachClipShortUnderHandoff": "Keep each clip short — under about 2 minutes. Record one clip per section below and attach them together in your AI; some AIs limit how long a recording can be.",
-  "navStartOver": "Start over"
+  "navStartOver": "Start over",
+  "wizardAskAboutStep": "Ask AI about this step"
 }

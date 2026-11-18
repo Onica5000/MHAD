@@ -4914,10 +4914,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'Ask anything about this step — answers appear here, and in the full assistant.';
 
   @override
-  String get wizardAiRailNeedHelpWithThisStep =>
-      'Need help with this step? Ask the AI';
-
-  @override
   String get wizardAiRailOptionalHelpTitle => 'Optional AI help';
 
   @override
@@ -7298,9 +7294,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeToolsAskAiSub => 'Ask questions with your own AI';
 
   @override
-  String get wizardAiBarAskYourAi => 'Need help with this step? Ask your AI';
-
-  @override
   String get aiConsistencyRulesExplainerHandoff =>
       'The contradiction check above uses built-in rules. Anything your AI suggests is optional — review it before you change your directive. This screen warns; it doesn’t block making the PDF.';
 
@@ -7376,4 +7369,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get navStartOver => 'Start over';
+
+  @override
+  String get wizardAskAboutStep => 'Ask AI about this step';
 }
