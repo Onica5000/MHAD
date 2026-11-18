@@ -183,6 +183,7 @@ the Learn articles (as `main()` does) and makes `ArtImage` paint placeholders.
   (same ids; `sourceHash` = the English each was translated from). Draft 2026-11-18, **off**
   until a fluent review (`app_data.json` `learn.spanishArticles`); display only, the AI keeps
   the English. `learn_es_test` checks sections, lists, bold, numbers, typography, staleness.
+  Reviewer's Word copy: `tool/learn_review` (see `docs/SPANISH_STYLE.md`).
 
 ## Docs
 - Gap/improvement backlog: `docs/GAP_ANALYSIS_V4.md` (V2/V3 historical; re-scoped 2026-06-20

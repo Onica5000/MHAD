@@ -1,0 +1,11 @@
+{
+  "name": "mhad-learn-review",
+  "private": true,
+  "description": "Generates the English | Espa\u00f1ol review copy (.docx) of the Learn articles. See make_review_docx.js.",
+  "scripts": {
+    "build": "node make_review_docx.js ../.. ../../build/learn-review-es.docx"
+  },
+  "dependencies": {
+    "docx": "^9.15.4"
+  }
+}

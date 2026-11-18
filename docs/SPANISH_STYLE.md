@@ -71,6 +71,13 @@ under stress, some with limited formal schooling.
 - A phrase quoted from the law: translated, with the English in parentheses, e.g.
   “deberá cumplir” (“shall comply”).
 
+## Review copy
+
+`tool/learn_review` makes the English | Español Word copy that a fluent reviewer edits with
+Track Changes (`npm install`, then `npm run build`; or `node make_review_docx.js <repo> <out.docx>`).
+Each table carries its section id, and each line is its own paragraph, so the corrected Spanish
+maps back to `educational_content_es.json` line for line.
+
 ## Checked by tests
 
 `arb_typography_test` (screens) and `learn_es_test` (articles: same sections as the English,
