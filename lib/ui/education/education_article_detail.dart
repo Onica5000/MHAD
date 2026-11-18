@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/education/learn_links.dart';
 import 'package:mhad/ui/ai/ai_step_helper.dart' show showAiSheet;
 import 'package:mhad/ui/ai/ai_question_handoff.dart';
 import 'package:mhad/ai/gemini_api_assistant.dart';
 import 'package:mhad/ai/handoff/ai_handoff_data.dart';
 import 'package:mhad/ui/widgets/design/back_link.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
+import 'package:mhad/ui/widgets/design/pills.dart';
 import 'package:mhad/ui/widgets/rich_content_text.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/data/app_data/app_data.dart';
@@ -60,9 +62,18 @@ class ArticleDetailScreen extends StatelessWidget {
   }
   const ArticleDetailScreen({required this.section, super.key});
 
+  /// Another article (a related one, or a glossary entry) on top.
+  void _open(BuildContext context, EducationSection target) {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (_) => ArticleDetailScreen(section: target),
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
+    final terms = glossaryTermsIn(section);
+    final related = relatedSections(section);
     final source = section.category == EducationCategory.supplementary
         ? context.l10n.educationSourceBeyondBooklet
         : context.l10n.educationSourceOfficialBooklet;
@@ -115,6 +126,35 @@ class ArticleDetailScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 24),
+          // Glossary words this article uses: tap one for its meaning.
+          if (terms.isNotEmpty) ...[
+            Text(context.l10n.learnWordsUsedHere, style: MhadText.eyebrow(p.textMuted)),
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                for (final g in terms)
+                  ActionPill(
+                    icon: Icons.menu_book_outlined,
+                    label: glossaryMatchTerms(g.title).first,
+                    tooltip: context.l10n
+                        .learnShowMeaning(glossaryMatchTerms(g.title).first),
+                    onPressed: () => showGlossaryTerm(context, g,
+                        onOpen: (e) => _open(context, e)),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 24),
+          ],
+          // Keep reading: the nearest articles in the booklet's order.
+          if (related.isNotEmpty) ...[
+            Text(context.l10n.learnRelatedReading, style: MhadText.eyebrow(p.textMuted)),
+            const SizedBox(height: 8),
+            for (final r in related)
+              _RelatedRow(section: r, onTap: () => _open(context, r)),
+            const SizedBox(height: 24),
+          ],
           // Ask AI about this article (copy-and-paste handoff) — on phones
           // too, where Learn had no AI entry before. API path hidden only;
           // with it shown, Learn's chat panel covers this.
@@ -208,4 +248,55 @@ class ArticleDetailScreen extends StatelessWidget {
 
   /// Reading measure for the article column (~70 characters at 16px).
   static const double _readingWidth = 720;
+}
+
+/// One "Related reading" row: title and a two-line preview.
+class _RelatedRow extends StatelessWidget {
+  final EducationSection section;
+  final VoidCallback onTap;
+  const _RelatedRow({required this.section, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Theme.of(context).mhadPalette;
+    final t = Theme.of(context).textTheme;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Material(
+        color: p.card,
+        shape: RoundedRectangleBorder(
+          side: BorderSide(color: p.border),
+          borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 12, 12, 12),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(section.title, style: t.titleSmall),
+                      const SizedBox(height: 2),
+                      Text(
+                        plainExcerpt(section.content, maxChars: 110),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: t.bodySmall,
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Icon(Icons.chevron_right, color: p.textMuted),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }

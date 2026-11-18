@@ -1132,7 +1132,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get medsStepRemoveDefault => 'Quitar medicamento';
 
   @override
-  String medsStepRemoveNamed(String name) {
+  String removeNamed(String name) {
     return 'Quitar $name';
   }
 
@@ -7553,4 +7553,18 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get aiHandoffNeedDescription =>
       'Primero descríbalo arriba en pocas palabras.';
+
+  @override
+  String get learnWordsUsedHere => 'Palabras que se usan aquí';
+
+  @override
+  String get learnRelatedReading => 'Lecturas relacionadas';
+
+  @override
+  String learnShowMeaning(String term) {
+    return 'Qué significa “$term”';
+  }
+
+  @override
+  String get learnOpenInGlossary => 'Abrir en el glosario';
 }

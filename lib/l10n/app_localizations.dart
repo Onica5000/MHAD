@@ -2018,11 +2018,11 @@ abstract class AppLocalizations {
   /// **'Remove medication'**
   String get medsStepRemoveDefault;
 
-  /// No description provided for @medsStepRemoveNamed.
+  /// No description provided for @removeNamed.
   ///
   /// In en, this message translates to:
   /// **'Remove {name}'**
-  String medsStepRemoveNamed(String name);
+  String removeNamed(String name);
 
   /// No description provided for @medsStepAddToList.
   ///
@@ -12456,6 +12456,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Describe it in a few words above first.'**
   String get aiHandoffNeedDescription;
+
+  /// No description provided for @learnWordsUsedHere.
+  ///
+  /// In en, this message translates to:
+  /// **'Words used here'**
+  String get learnWordsUsedHere;
+
+  /// No description provided for @learnRelatedReading.
+  ///
+  /// In en, this message translates to:
+  /// **'Related reading'**
+  String get learnRelatedReading;
+
+  /// No description provided for @learnShowMeaning.
+  ///
+  /// In en, this message translates to:
+  /// **'What “{term}” means'**
+  String learnShowMeaning(String term);
+
+  /// No description provided for @learnOpenInGlossary.
+  ///
+  /// In en, this message translates to:
+  /// **'Open in the glossary'**
+  String get learnOpenInGlossary;
 }
 
 class _AppLocalizationsDelegate

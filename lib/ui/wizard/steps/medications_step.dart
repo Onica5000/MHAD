@@ -584,7 +584,7 @@ class _MedTable extends StatelessWidget {
                       color: cs.error,
                       tooltip: rows[i].nameCtrl.text.isEmpty
                           ? context.l10n.medsStepRemoveDefault
-                          : context.l10n.medsStepRemoveNamed(
+                          : context.l10n.removeNamed(
                               rows[i].nameCtrl.text),
                       onPressed: () => onRemove(i),
                     ),

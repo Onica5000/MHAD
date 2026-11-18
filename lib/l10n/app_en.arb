@@ -457,8 +457,8 @@
   "medsStepMedlineInfo": "Plain-language info (MedlinePlus)",
   "medsStepFdaInfo": "Official FDA label (side effects & interactions)",
   "medsStepRemoveDefault": "Remove medication",
-  "medsStepRemoveNamed": "Remove {name}",
-  "@medsStepRemoveNamed": {
+  "removeNamed": "Remove {name}",
+  "@removeNamed": {
     "placeholders": {
       "name": {"type": "String"}
     }
@@ -3054,5 +3054,10 @@
   "aiHandoffClipboardBlocked": "Nothing came through from what you copied — some browsers block this. Paste the answer into this box (Ctrl+V, or press and hold, then Paste), then tap Use this answer.",
   "aiHandoffAnswerThere": "Your AI answers there — nothing comes back to PA MHAD. You can ask follow-up questions in the same chat.",
   "aiHandoffNeedQuestion": "Type a question above, or pick one, first.",
-  "aiHandoffNeedDescription": "Describe it in a few words above first."
+  "aiHandoffNeedDescription": "Describe it in a few words above first.",
+  "learnWordsUsedHere": "Words used here",
+  "learnRelatedReading": "Related reading",
+  "learnShowMeaning": "What “{term}” means",
+  "@learnShowMeaning": {"placeholders": {"term": {"type": "String"}}},
+  "learnOpenInGlossary": "Open in the glossary"
 }

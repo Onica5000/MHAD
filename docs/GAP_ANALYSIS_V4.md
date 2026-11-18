@@ -44,9 +44,12 @@ were superseded by regulations that changed *after* they were written.
 - **Fix:** Publish the privacy policy at a stable HTTPS page; reference that exact URL in
   the app (e.g., a "View online" link on the privacy screen), Play Console, and website.
   Keep the in-app copy in sync.
-- **Status:** `[deferred — native]` — no longer a Play blocker (web-first pivot). Note: the
-  in-app "View this policy online" link was deliberately **removed** (2026-06; product
-  decision). Hosting `PRIVACY_POLICY.md` via the web deploy would still be a clean win.
+- **Status:** `[x]` **DONE for the web** — the policy is hosted at
+  <https://onica5000.github.io/MHAD/privacy.html>, generated from the in-app screen by
+  `tool/gen_privacy_html.py`; CI ("Hosted privacy policy is in sync") fails if it drifts.
+  v1.3 (2026-11-18) describes the copy-and-paste AI. The Play-submission parts stay
+  `[deferred — native]`. (The in-app "View this policy online" link stays removed —
+  2026-06 product decision.)
 
 ### V4-C2: Google Play health/medical category now requires a verified Organization account
 - **Evidence:** As of **Jan 28 2026**, individual developer accounts are no longer
@@ -112,8 +115,12 @@ were superseded by regulations that changed *after* they were written.
   bypassable; (2) ensure the privacy label/manifest declare health data sent to a third
   party for the AI feature; (3) Spring 2026 — set the Medical/Health regulatory-status
   declaration ("not a regulated medical device").
-- **Status:** `[deferred — native]` — Apple App Store / iOS-manifest scoped; the in-app
-  Gemini consent gate (the part that also matters on web) is in place.
+- **Status:** `[deferred — native]` — Apple App Store / iOS-manifest scoped. **Web:
+  superseded 2026-11-18 (PR #18)** — the visible AI is a copy-and-paste handoff: the app
+  never sends anything to an AI service itself; the person copies a message into the AI
+  they choose, after a notice (once per session, before the first copy) that the outside
+  service's own terms apply. The API path and its consent gate remain, hidden
+  (`app_data.json` `ai.apiModeVisible: false`).
 
 ### V4-H6: Test coverage is far below what health/legal software warrants
 - **Files:** `test/` — the suite has grown substantially since this was written (the
@@ -380,6 +387,13 @@ Re-scoped for the web-first pivot (2026-06-20):
 | Low | 0 live | L12 facilitation / guided sessions → DONE 2026-09-30. |
 | Deferred — native | 3 | V4-C1 (privacy URL), V4-C2 (Play org account), V4-H5 (Apple AI rule) |
 | Closed since V4 | 2 | V4-H7 (orphan `AppStrings` deleted), V4-M9 (draw-to-sign pad dropped) |
+
+**Update 2026-11-18:** the UI/UX overhaul shipped (PR #17 refresh, PR #18 overhaul): the
+AI moved to a copy-and-paste handoff (H5 note above), the hosted policy is live (C1), and
+new checkers guard the work — typography, palette contrast in light and dark, a dark-mode
+render sweep of every route, plus the nothing-removed UI inventory. Still open outside
+this backlog: a native-speaker review of the Spanish copy, and translating the Learn
+articles (legal booklet text — a reviewed translation).
 
 **Update 2026-09-30:** all live items above are closed. Remaining work is outside this
 backlog: a native-speaker review of the Spanish copy and (optionally) translating the Learn articles. Dependencies were brought
