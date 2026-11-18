@@ -7202,7 +7202,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get autofillShareDocument => 'Un documento';
 
   @override
-  String get autofillShareRecording => 'Una grabación de voz';
+  String get autofillShareRecording => 'Una grabación';
 
   @override
   String get autofillHandoffTitle => 'Autocompletar con su IA';

@@ -7086,7 +7086,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get autofillShareDocument => 'A document';
 
   @override
-  String get autofillShareRecording => 'A voice recording';
+  String get autofillShareRecording => 'A recording';
 
   @override
   String get autofillHandoffTitle => 'Autofill with your AI';

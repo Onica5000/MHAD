@@ -849,46 +849,18 @@ class _SeverityOption extends StatelessWidget {
     final p = Theme.of(context).mhadPalette;
     final dark = Theme.of(context).brightness == Brightness.dark;
 
-    // Tone family per severity.
-    late final Color bg;
-    late final Color fg;
-    late final Color border;
-    late final Color activeBg;
-    late final Color activeFg;
-    switch (severity) {
-      case AllergySeverity.mild:
-        bg = p.primaryTint;
-        fg = p.text;
-        border = p.primaryLight;
-        activeBg = p.primary;
-        activeFg = p.onPrimary;
-      case AllergySeverity.moderate:
-        bg = dark
-            ? SemanticColors.warningBgDark
-            : SemanticColors.warningBgLight;
-        fg = dark
-            ? SemanticColors.warningTextDark
-            : SemanticColors.warningTextLight;
-        border = dark
-            ? SemanticColors.warningBorderDark
-            : SemanticColors.warningBorderLight;
-        activeBg = dark
-            ? SemanticColors.warningTextDark
-            : SemanticColors.warningTextLight;
-        activeFg = dark ? const Color(0xFF2A2102) : Colors.white;
-      case AllergySeverity.severe:
-        bg = dark ? SemanticColors.errorBgDark : SemanticColors.errorBgLight;
-        fg = dark
-            ? SemanticColors.errorTextDark
-            : SemanticColors.errorTextLight;
-        border = dark
-            ? SemanticColors.errorBorderDark
-            : SemanticColors.errorBorderLight;
-        activeBg = dark
-            ? SemanticColors.errorAccentDark
-            : SemanticColors.errorAccentLight;
-        activeFg = Colors.white;
-    }
+    // One colour per severity (the meaning), used calmly: chosen = its tint
+    // + a 2px border in it + ✓ (the app's segmented style); not chosen =
+    // neutral with a severity dot. It used to be a solid orange/red block.
+    final (Color tone, Color tint) = switch (severity) {
+      AllergySeverity.mild => (p.primary, p.primaryTint),
+      AllergySeverity.moderate => dark
+          ? (SemanticColors.warningTextDark, SemanticColors.warningBgDark)
+          : (SemanticColors.warningTextLight, SemanticColors.warningBgLight),
+      AllergySeverity.severe => dark
+          ? (SemanticColors.errorTextDark, SemanticColors.errorBgDark)
+          : (SemanticColors.errorTextLight, SemanticColors.errorBgLight),
+    };
 
     return Semantics(
       button: true,
@@ -897,26 +869,47 @@ class _SeverityOption extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
-        child: Container(
+        child: AnimatedContainer(
+          duration: MediaQuery.disableAnimationsOf(context)
+              ? Duration.zero
+              : const Duration(milliseconds: 150),
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 6),
           decoration: BoxDecoration(
-            color: active ? activeBg : bg,
+            color: active ? tint : p.card,
             border: Border.all(
-              color: active ? activeBg : border,
-              width: 1.5,
+              color: active ? tone : p.border,
+              width: active ? 2 : 1,
             ),
             borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              // ✓ when chosen; otherwise the severity dot (the colour coding,
+              // before choosing). Above the label, so the word keeps the
+              // full width (inline, 'Moderate' broke mid-word on phones).
+              SizedBox(
+                height: 16,
+                child: Center(
+                  child: active
+                      ? Icon(Icons.check, size: 16, color: tone)
+                      : Container(
+                          width: 8,
+                          height: 8,
+                          decoration: BoxDecoration(
+                              color: tone, shape: BoxShape.circle),
+                        ),
+                ),
+              ),
+              const SizedBox(height: 2),
               Text(
                 label,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 14,
-                  fontWeight: FontWeight.w700, height: MhadType.leadingUi,
-                  color: active ? activeFg : fg,
+                  fontWeight: FontWeight.w700,
+                  height: MhadType.leadingUi,
+                  color: active ? tone : p.text,
                 ),
               ),
               const SizedBox(height: 2),
@@ -925,8 +918,9 @@ class _SeverityOption extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 12,
-                  fontWeight: FontWeight.w500, height: MhadType.leadingUi,
-                  color: (active ? activeFg : fg).withValues(alpha: 0.85),
+                  fontWeight: FontWeight.w500,
+                  height: MhadType.leadingUi,
+                  color: active ? tone : p.textMuted,
                 ),
               ),
             ],

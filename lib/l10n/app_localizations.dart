@@ -11896,7 +11896,7 @@ abstract class AppLocalizations {
   /// No description provided for @autofillShareRecording.
   ///
   /// In en, this message translates to:
-  /// **'A voice recording'**
+  /// **'A recording'**
   String get autofillShareRecording;
 
   /// No description provided for @autofillHandoffTitle.

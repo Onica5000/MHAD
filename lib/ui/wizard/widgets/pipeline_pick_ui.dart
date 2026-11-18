@@ -200,6 +200,8 @@ extension _PipelinePickUi on _PipelineScreenState {
           selected: {_handoffAttachment},
           onSelectionChanged: (sel) =>
               setState(() => _handoffAttachment = sel.first),
+          // Two equal halves across the column (no wrapped label).
+          expandedInsets: EdgeInsets.zero,
         ),
         const SizedBox(height: 16),
         AiHandoffPanel(
