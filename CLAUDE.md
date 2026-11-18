@@ -145,6 +145,9 @@ key would need a **relay server** — keys never ship to the browser.
   rail; `sidebarWidthFor(route)` is the one width source. **Phones hide the nav in the
   wizard** (`routeHidesBottomNav`); the step header's More opens the More sheet WITH the
   four primary destinations — nothing is more than one tap away.
+- Wizard actions = ONE `WizardBottomBar`: `[✦ Ask] … [Back] [Continue →]` (Ask only where
+  the AI rail isn't shown). It MEASURES its fit (theme text styles × text size — the app's
+  default is 1.2×): label → ✦ icon → no Ask (More still has Ask AI). Never stack a second bar.
 - `app_drawer.dart` was deleted — do not reintroduce a Scaffold `drawer:`.
 - Secondary destinations (New directive, Export, AI setup, Privacy policy) are reached
   contextually or via the More sheet / sidebar.
@@ -158,6 +161,8 @@ key would need a **relay server** — keys never ship to the browser.
 | Card rows | `EqualHeightRow`, `PhotoActionCard(fillHeight:)` | **Sibling cards in a row are equal height** (user, 2026-11-17) |
 | Tab titles | `ui/route_titles.dart` | Every route has one (`route_titles_test`) |
 | Art pipeline | `tool/art/art_manifest.json` (single source) → `tool/art/generate_art.py` (Grok `image_gen`, verified, WebP); see `assets/images/README.md` | People photos name a **diverse cast** (user, 2026-11-17); review every image |
+| Copy | `lib/l10n/app_{en,es}.arb` | Sentence case (form names, orgs, acronyms excepted); ’ “ ” … not ' " ... (`arb_typography_test`); one key per meaning (merge, don't copy); "PA MHAD" = the app, "directive" / es "DASM" = the document; plain words for legal terms ("the person who made it", not "principal") |
+| File names | `mhadFileName()` (`lib/utils/file_names.dart`) | Never hand-build a download name (blank parts were leaving `PA_MHAD_.pdf`) |
 | Nothing-removed check | `tool/ui_inventory.py --build build/web --out after.json`, then `--diff tool/ui_inventory_before.json after.json` | Explain every missing control before merging a UI change |
 
 **Widget tests:** size the VIEW (`tester.view.physicalSize` + `devicePixelRatio = 1`), never
