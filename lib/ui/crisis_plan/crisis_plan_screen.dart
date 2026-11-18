@@ -12,6 +12,7 @@ import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
+import 'package:mhad/ui/widgets/design/pills.dart';
 
 /// Crisis plan / wellness toolbox optional add-on (v2 prototype `m-crisisplan`).
 ///
@@ -244,7 +245,6 @@ class _Section extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
-    final cs = Theme.of(context).colorScheme;
     final dark = Theme.of(context).brightness == Brightness.dark;
     final chipBg = tone == _SecTone.crisis
         ? (dark ? SemanticColors.errorBgDark : SemanticColors.errorBgLight)
@@ -284,17 +284,16 @@ class _Section extends StatelessWidget {
                 runSpacing: 6,
                 children: [
                   for (var i = 0; i < items.length; i++)
-                    InputChip(
-                      label: Text(items[i]),
-                      backgroundColor: chipBg,
-                      labelStyle: TextStyle(color: chipFg),
-                      onDeleted: () => onRemove(i),
+                    RemovablePill(
+                      label: items[i],
+                      background: chipBg,
+                      foreground: chipFg,
+                      onRemove: () => onRemove(i),
                     ),
-                  ActionChip(
-                    label: Text(context.l10n.crisisPlanAdd2),
+                  ActionPill(
+                    label: context.l10n.crisisPlanAdd2,
                     onPressed: onAdd,
-                    side: BorderSide(color: cs.outline, style: BorderStyle.solid),
-                    backgroundColor: Colors.transparent,
+                    outlined: true,
                   ),
                 ],
               ),

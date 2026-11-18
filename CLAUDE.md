@@ -159,6 +159,7 @@ key would need a **relay server** — keys never ship to the browser.
 | Photos | `AppArt` enum (`ui/theme/app_art.dart`) → `ArtImage`; files `assets/images/<group>/<id>.webp` | Never `Image.asset` directly (decode buckets + one shared provider) |
 | Headers | `PageHero` (compact / large); gates use `SplitHero` | Keep each screen's own back / exit / status controls |
 | Card rows | `EqualHeightRow`, `PhotoActionCard(fillHeight:)` | **Sibling cards in a row are equal height** (user, 2026-11-17) |
+| Pills | `ActionPill`, `RemovablePill` (`widgets/design/pills.dart`) | Never `ActionChip` / `InputChip`: Flutter web announces every chip as a checkbox (`web_chip_semantics_rule_test`). `FilterChip` / `ChoiceChip` are fine (they are selectable) |
 | Tab titles | `ui/route_titles.dart` | Every route has one (`route_titles_test`) |
 | Art pipeline | `tool/art/art_manifest.json` (single source) → `tool/art/generate_art.py` (Grok `image_gen`, verified, WebP); see `assets/images/README.md` | People photos name a **diverse cast** (user, 2026-11-17); review every image |
 | Copy | `lib/l10n/app_{en,es}.arb` | Sentence case (form names, orgs, acronyms excepted); ’ “ ” … not ' " ... (`arb_typography_test`); one key per meaning (merge, don't copy); "PA MHAD" = the app, "directive" / es "DASM" = the document; plain words for legal terms ("the person who made it", not "principal") |
