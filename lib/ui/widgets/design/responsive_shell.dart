@@ -139,7 +139,12 @@ class ResponsiveShell extends StatelessWidget {
     // rebuilds it mid-notification ("markNeedsBuild during build"); only the
     // nav strip listens and rebuilds. Hidden on pre-app gate screens.
     if (!wide) {
-      return Column(
+      // The strip around the floating nav (and the "Back to paste" banner)
+      // takes the page background — unpainted, it showed the white canvas:
+      // a bright band under a dark app.
+      return ColoredBox(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        child: Column(
         children: [
           Expanded(child: _pageSemantics(child)),
           _RouteListener(
@@ -176,6 +181,7 @@ class ResponsiveShell extends StatelessWidget {
             },
           ),
         ],
+        ),
       );
     }
 

@@ -585,8 +585,10 @@ ThemeData buildMhadTheme(
     onSecondary: p.onPrimary,
     secondaryContainer: p.primaryTint,
     onSecondaryContainer: p.onPrimaryLight,
-    tertiary: SemanticColors.warningTextLight,
-    onTertiary: Colors.white,
+    // Amber that reads on THIS brightness (the light-mode amber was used in
+    // dark mode too: ~3.4:1 on the dark card).
+    tertiary: SemanticColors.warningText(brightness),
+    onTertiary: dark ? const Color(0xFF2A2102) : Colors.white,
     tertiaryContainer: brightness == Brightness.dark
         ? SemanticColors.warningBgDark
         : SemanticColors.warningBgLight,
@@ -596,7 +598,8 @@ ThemeData buildMhadTheme(
     error: brightness == Brightness.dark
         ? SemanticColors.errorAccentDark
         : SemanticColors.errorAccentLight,
-    onError: Colors.white,
+    // Dark text on the dark-mode red (#E06B5D): white on it is ~3.3:1.
+    onError: dark ? const Color(0xFF2A0B07) : Colors.white,
     errorContainer: brightness == Brightness.dark
         ? SemanticColors.errorBgDark
         : SemanticColors.errorBgLight,

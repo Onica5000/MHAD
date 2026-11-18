@@ -74,7 +74,7 @@ class _CrisisSheet extends StatelessWidget {
                     height: 8,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: SemanticColors.errorAccentLight,
+                      color: SemanticColors.errorAccent(Theme.of(context).brightness),
                     ),
                   ),
                   const SizedBox(width: 6),
@@ -83,7 +83,10 @@ class _CrisisSheet extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingEyebrow,
-                      color: SemanticColors.errorAccentLight,
+                      // the light-mode red was ~3.1:1 on the dark sheet
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? SemanticColors.errorTextDark
+                          : SemanticColors.errorAccentLight,
                     ),
                   ),
                 ],
@@ -269,7 +272,7 @@ class _CrisisRow extends StatelessWidget {
             : SemanticColors.errorAccentLight)
         : p.primaryLight;
     final iconFg = accent
-        ? Colors.white
+        ? Theme.of(context).colorScheme.onError
         : p.onPrimaryLight;
 
     return Padding(

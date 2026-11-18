@@ -59,9 +59,11 @@ class RichContentText extends StatelessWidget {
             children: [
               SizedBox(
                 width: (base.fontSize ?? 16) * 1.6,
-                // A '-' bullet is drawn as '•' (one bullet look).
-                child: Text(marker.group(1) == '-' ? '•' : marker.group(1)!,
-                    style: base),
+                // A '-' bullet is drawn as '•' (one bullet look). A bullet
+                // is decoration — not read aloud; numbers are kept.
+                child: marker.group(1) == '-' || marker.group(1) == '•'
+                    ? ExcludeSemantics(child: Text('•', style: base))
+                    : Text(marker.group(1)!, style: base),
               ),
               Expanded(
                 child: Text.rich(

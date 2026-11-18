@@ -289,7 +289,9 @@ class _MoreRow extends StatelessWidget {
             ? SemanticColors.errorAccentDark
             : SemanticColors.errorAccentLight)
         : p.primaryLight;
-    final iconFg = destructive ? Colors.white : p.onPrimaryLight;
+    final iconFg = destructive
+        ? Theme.of(context).colorScheme.onError
+        : p.onPrimaryLight;
     final titleColor = destructive
         ? (dark ? SemanticColors.errorTextDark : SemanticColors.errorTextLight)
         : p.text;

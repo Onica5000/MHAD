@@ -146,15 +146,27 @@ extension _PipelinePickUi on _PipelineScreenState {
               // AppBar close). WebSnapFill jsx L253-258.
               if (_standalone) ...[
                 const SizedBox(height: 24),
-                Row(
+                // Side by side when they fit; stacked, Continue on top, on a
+                // narrow phone or with large text (a Row overflowed 71px).
+                OverflowBar(
+                  alignment: MainAxisAlignment.spaceBetween,
+                  overflowAlignment: OverflowBarAlignment.center,
+                  overflowDirection: VerticalDirection.up,
+                  overflowSpacing: 8,
                   children: [
                     TextButton(
                       onPressed: _toWizard,
                       child: Text(context.l10n.pickSkipTypeAll),
                     ),
-                    const Spacer(),
                     FilledButton(
                       onPressed: _toWizard,
+                      // The theme's buttons are full-width (an infinite
+                      // minimum width); beside a Spacer that never laid out,
+                      // so the release build showed no Continue button.
+                      style: FilledButton.styleFrom(
+                        minimumSize:
+                            const Size(0, DesignTokens.buttonHeightMd),
+                      ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
