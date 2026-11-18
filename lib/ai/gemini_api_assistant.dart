@@ -748,7 +748,8 @@ class LlmAssistant implements AiAssistant {
     buf.writeln('   When the user is considered unable to make their own '
         'decisions — the effective condition (e.g., "when I am unable to '
         'make mental health treatment decisions for myself as determined '
-        'by a physician") AND any relevant diagnoses.\n');
+        'by a psychiatrist and one other professional after examining '
+        'me") AND any relevant diagnoses.\n');
 
     buf.writeln('3. PEOPLE I TRUST (Combined and POA forms only)');
     buf.writeln('   One screen, four sections:');
@@ -759,16 +760,17 @@ class LlmAssistant implements AiAssistant {
     buf.writeln('   • AGENT AUTHORITY — specific powers granted or '
         'withheld: consent to admission, consent to medication, access to '
         'records. Also sets whether the agent may consent to ECT, '
-        'experimental studies, and drug trials — under §5836(c) these '
-        'three require the declarant to PHYSICALLY INITIAL the printed '
-        'form (a checkbox alone is not sufficient).');
+        'experimental studies, and drug trials — under §5836(c) the agent '
+        'has these three powers only if the directive specifically grants '
+        'them (the official form asks the person to initial that choice).');
     buf.writeln('   • ADDITIONAL LIMITATIONS — free-text restrictions on '
         'what the agent can or cannot do.\n');
 
     buf.writeln('4. IF A COURT APPOINTS A GUARDIAN (Combined and POA forms only)');
     buf.writeln('   Optional. Nominate a preferred guardian (name, '
         'relationship, reason) in case a court ever appoints one. The '
-        'court is not bound by the nomination but generally honors it.\n');
+        'court must appoint the most recently nominated person unless there '
+        'is good cause or a disqualification (20 Pa.C.S. § 5841(c)).\n');
 
     buf.writeln('5. WHERE I WANT CARE (Combined and Declaration forms only)');
     buf.writeln('   Preferred inpatient facilities AND facilities the user '
@@ -798,7 +800,8 @@ class LlmAssistant implements AiAssistant {
     buf.writeln('   • EXPERIMENTAL STUDIES.');
     buf.writeln('   • DRUG TRIALS / clinical trials.');
     buf.writeln('   Note: "agent-decides" here means the agent authority '
-        'set in step 3 governs — the agent still needs initials from step 3.\n');
+        'set in step 3 governs — the agent has that power only because the '
+        'directive specifically grants it (§5836(c)).\n');
 
     buf.writeln('10. ANYTHING ELSE (Combined and Declaration forms only)');
     buf.writeln('   Free-text additional instructions not covered above '
@@ -808,10 +811,12 @@ class LlmAssistant implements AiAssistant {
 
     buf.writeln('11. REVIEW');
     buf.writeln('   Summary of everything entered. Tap any section to edit.');
-    buf.writeln('   • The directive is not legally valid without two adult '
-        'witnesses signing the printed copy in original ink.');
-    buf.writeln('   • Witnesses must not be the agent, alternate agent, '
-        'or any person with a financial interest in the estate.\n');
+    buf.writeln('   • The directive must be signed and dated by the person (or '
+        'by someone at their direction) in the presence of two witnesses aged '
+        '18 or older, who sign it too; the app has the person print it and '
+        'sign in ink.');
+    buf.writeln('   • A witness may not be the agent or the person signing on '
+        "the person's behalf (to be safe, not the alternate agent either).\n");
 
     buf.writeln('--- END WALKTHROUGH GUIDE ---\n');
 
@@ -995,7 +1000,7 @@ class LlmAssistant implements AiAssistant {
     buf.writeln(
         '    b. Immediately respond: "I cannot process personal information. '
         'Please enter personal details directly into the form fields — they '
-        'are stored securely on your device and never sent to the AI."');
+        'stay in the app and are never sent to the AI."');
     buf.writeln(
         '    c. Do NOT answer the rest of the message if it contains PII. '
         'Reject the entire message and ask the user to re-send without PII.');

@@ -432,11 +432,11 @@ class SmartFillService {
       }
     }
     existing.add('');
-    existing.add('SCOPE RULE: Agent hospitalization/medication authority covers ONLY '
-        'voluntary admission and general psychiatric medications. It does NOT '
-        'extend to ECT, experimental studies, or drug trials — those are '
-        'governed by the separate consent fields above and the agent CANNOT '
-        'override the patient\'s choices on those matters under PA Act 194.');
+    existing.add('FIELD RULE: The agent hospitalization/medication fields cover '
+        'admission and general psychiatric medications only. ECT, experimental '
+        'studies and drug trials are the separate consent fields above: the '
+        'agent may decide those only if the patient chose "my agent decides" '
+        'there (20 Pa.C.S. § 5836(c)), and must follow the patient\'s choices.');
     existing.add('=== END CONSENT DECISIONS ===');
     existing.add('');
     // Additional instructions — all free-text, PII-strip each one
@@ -544,8 +544,8 @@ class SmartFillService {
     buf.writeln('- Use plain language suitable for a legal document.');
     buf.writeln('- Do NOT include patient name, DOB, or any PII.');
     buf.writeln('- PA NTI drug rule: Narrow Therapeutic Index drugs '
-        '(${appData.legal.ntiDrugs.join(', ')}) CANNOT have generics substituted under '
-        'PA law (${appData.legal.ntiCitation}). If the user takes one of these, you may '
+        '(${appData.legal.ntiDrugs.join(', ')}) have special generic-substitution '
+        'rules under PA law (${appData.legal.ntiCitation}). If the user takes one of these, you may '
         'note its monitoring requirements in health_history — never as a new '
         'medication suggestion.');
 

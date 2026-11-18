@@ -141,8 +141,10 @@ extension WizardStepExt on WizardStep {
           "They speak for you if you can't. You can name a primary, an "
               'alternate, and set limits on what they decide.',
         WizardStep.guardianNomination =>
-          'Rare, but worth planning for. A guardian is named by a court — '
-              'not by you — and has broader authority than an agent.',
+          'Rare, but worth planning for. A court appoints a guardian and must '
+              "choose the person you nominate unless there's good reason not "
+              'to — and your agent keeps making mental health decisions unless '
+              'you let the guardian override this directive.',
         WizardStep.whereIWantCare =>
           'Facilities you prefer — and any you specifically want to avoid — '
               'plus room and environment preferences.',
@@ -151,14 +153,15 @@ extension WizardStepExt on WizardStep {
               'name — we attach the ICD-10 code your doctors use.',
         WizardStep.medications =>
           'What you take now (for your care team) plus the medications you '
-              'refuse, limit, or prefer. Your refusals and limits are binding '
-              'under Act 194.',
+              'refuse, limit, or prefer. Providers must follow your refusals '
+              'and limits, except in the narrow cases Act 194 allows.',
         WizardStep.allergies =>
           'Drug allergies, sensitivities, past adverse reactions. This is the '
               'most-checked section by ER staff.',
         WizardStep.proceduresResearch =>
           'Three treatments under PA law need your explicit consent. Set each '
-              'one — your agent fills any gaps.',
+              'one — your agent can decide them only if you choose “My agent '
+              'will decide”.',
         WizardStep.anythingElse =>
           'Free-form preferences not covered above. This is your voice — '
               "write it how you'd say it.",

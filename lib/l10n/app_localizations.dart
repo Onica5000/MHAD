@@ -461,7 +461,7 @@ abstract class AppLocalizations {
   /// No description provided for @executionHelpText.
   ///
   /// In en, this message translates to:
-  /// **'Per 20 Pa.C.S. § 5822 / § 5832, a Mental Health Advance Directive must be signed on paper by you and two adult witnesses, all present at the same time. The app cannot witness it for you — this step walks you through what to do.'**
+  /// **'Per 20 Pa.C.S. § 5822 / § 5832, a Mental Health Advance Directive must be dated and signed by you and witnessed by two people aged 18 or older, who should be there when you sign. The app can’t witness it for you — this step walks you through what to do.'**
   String get executionHelpText;
 
   /// No description provided for @executionFinalStepLabel.
@@ -479,7 +479,7 @@ abstract class AppLocalizations {
   /// No description provided for @executionIntro.
   ///
   /// In en, this message translates to:
-  /// **'Pennsylvania law requires a real signature on paper. We can’t witness it for you — but here’s exactly what to do.'**
+  /// **'Pennsylvania law requires your signature and two witnesses. Signing a printed copy is the safe way to do it — we can’t witness it for you, but here’s exactly what to do.'**
   String get executionIntro;
 
   /// No description provided for @executionWhyNotAppLead.
@@ -491,7 +491,7 @@ abstract class AppLocalizations {
   /// No description provided for @executionWhyNotAppBody.
   ///
   /// In en, this message translates to:
-  /// **'Under Act 194 the directive is only valid when you and two adult witnesses sign the '**
+  /// **'Under Act 194 you sign and date the directive, and two adult witnesses sign it too. Signing the '**
   String get executionWhyNotAppBody;
 
   /// No description provided for @executionSamePaperDocument.
@@ -503,7 +503,7 @@ abstract class AppLocalizations {
   /// No description provided for @executionWhyNotAppTail.
   ///
   /// In en, this message translates to:
-  /// **', together. A tap-to-sign wouldn’t hold up.'**
+  /// **', together, is the surest way to have it accepted — this app doesn’t do electronic signatures.'**
   String get executionWhyNotAppTail;
 
   /// No description provided for @executionAnyFormValid.
@@ -563,7 +563,7 @@ abstract class AppLocalizations {
   /// No description provided for @executionWitnessRest.
   ///
   /// In en, this message translates to:
-  /// **' be your agent or alternate agent, your mental health care provider, or an employee of the facility where you receive treatment — unless they are related to you by blood, marriage, or adoption.'**
+  /// **' be your agent (or, to be safe, your alternate agent) or the person who signs on your behalf, and must be 18 or older.'**
   String get executionWitnessRest;
 
   /// No description provided for @executionInYourPacket.
@@ -629,7 +629,7 @@ abstract class AppLocalizations {
   /// No description provided for @executionNotYetValid.
   ///
   /// In en, this message translates to:
-  /// **'NOT YET VALID · BECOMES LEGAL ONCE SIGNED ON PAPER BY YOU + 2 WITNESSES'**
+  /// **'NOT YET VALID · BECOMES LEGAL ONCE YOU SIGN AND DATE IT IN FRONT OF 2 ADULT WITNESSES WHO ALSO SIGN'**
   String get executionNotYetValid;
 
   /// No description provided for @reviewStepNotProvidedYet.
@@ -869,7 +869,7 @@ abstract class AppLocalizations {
   /// No description provided for @reviewStepProvidersMustComplyBody.
   ///
   /// In en, this message translates to:
-  /// **'with your directive under PA Act 194 (20 Pa.C.S. §§ 5804, 5842). A provider may decline specific instructions only if they conflict with accepted medical practice, or when the provider is not physically available.'**
+  /// **'with your directive under PA Act 194 (20 Pa.C.S. §§ 5804, 5842). A provider may decline an instruction only if it is against accepted clinical practice and medical standards, the treatment is unavailable, or the provider’s own policies prevent it — and then must tell you or your agent, record why, and try to transfer you to a provider who will comply.'**
   String get reviewStepProvidersMustComplyBody;
 
   /// No description provided for @wizardProgressSaved.
@@ -1235,7 +1235,7 @@ abstract class AppLocalizations {
   /// No description provided for @altAgentHelp.
   ///
   /// In en, this message translates to:
-  /// **'Your agent must be 18 or older. They cannot be your treating physician, an employee of your treatment facility (unless a relative), or someone with financial interest in your estate. Choose someone you trust to honor your wishes.'**
+  /// **'Your agent must be 18 or older. Unless related to you by blood, marriage or adoption, they can’t be your doctor or other mental health care provider, an employee of one, or an owner, operator or employee of a residential facility where you receive care. Choose someone you trust to honor your wishes.'**
   String get altAgentHelp;
 
   /// No description provided for @altAgentTitle.
@@ -1361,7 +1361,7 @@ abstract class AppLocalizations {
   /// No description provided for @guardianNomNoPreferenceHint.
   ///
   /// In en, this message translates to:
-  /// **'Let the court decide. They will usually appoint a family member or county guardianship office.'**
+  /// **'Let the court decide who to appoint.'**
   String get guardianNomNoPreferenceHint;
 
   /// No description provided for @guardianNomSameAsPrimary.
@@ -1451,7 +1451,7 @@ abstract class AppLocalizations {
   /// No description provided for @guardianNomConditionsIntro.
   ///
   /// In en, this message translates to:
-  /// **'If a court appoints a guardian, set the limits you want it to honor. These are guidance for the court, not binding.'**
+  /// **'If a court appoints a guardian, choose whether the guardian may revoke, suspend or end this directive — unless you allow it, the court gives preference to your agent continuing to decide. Any other conditions you add are guidance for the court.'**
   String get guardianNomConditionsIntro;
 
   /// No description provided for @guardianNomCanChangeAgent.
@@ -1631,7 +1631,7 @@ abstract class AppLocalizations {
   /// No description provided for @diagnosesFooter.
   ///
   /// In en, this message translates to:
-  /// **'You’re not required to list anything. Anything you do list is shared only with the people your directive names.'**
+  /// **'You’re not required to list anything. Anything you list goes to whoever you give a copy of your directive to.'**
   String get diagnosesFooter;
 
   /// No description provided for @diagnosesAddedName.
@@ -1883,7 +1883,7 @@ abstract class AppLocalizations {
   /// No description provided for @medsStepHelpText.
   ///
   /// In en, this message translates to:
-  /// **'List medications by name. Your preferences apply to generic, brand name, and trade name equivalents unless you specify otherwise in the notes — to request brand-name only, note it in the reason field.\n\nNarrow Therapeutic Index (NTI) drugs — ones with only a small safety margin between a helpful dose and a harmful one, like lithium, carbamazepine, and valproic acid — cannot have generics substituted under PA law (35 P.S. §960.3). These are marked with an “NTI” badge when you search.'**
+  /// **'List medications by name. Your preferences apply to generic, brand name, and trade name equivalents unless you specify otherwise in the notes — to request brand-name only, note it in the reason field.\n\nNarrow Therapeutic Index (NTI) drugs — ones with only a small safety margin between a helpful dose and a harmful one, like lithium and carbamazepine — have special generic-substitution rules under Pennsylvania’s Generic Equivalent Drug Law. These are marked with an “NTI” badge when you search.'**
   String get medsStepHelpText;
 
   /// No description provided for @medsStepHeadsUpLead.
@@ -1895,7 +1895,7 @@ abstract class AppLocalizations {
   /// No description provided for @medsStepHeadsUpBody.
   ///
   /// In en, this message translates to:
-  /// **'your refusal of a medication and any limits you set on its use are binding under PA Act 194, but '**
+  /// **'your refusal of a medication and any limits you set on its use must be followed by your providers (except in the narrow cases in § 5804, when they must try to transfer you), but '**
   String get medsStepHeadsUpBody;
 
   /// No description provided for @medsStepHeadsUpBold.
@@ -2459,7 +2459,7 @@ abstract class AppLocalizations {
   /// No description provided for @addlInstrRecordsDescription.
   ///
   /// In en, this message translates to:
-  /// **'Choose who may — and may not — receive copies of your mental health records. Under 20 Pa.C.S. § 5836(e), the disclosure authority you grant here can override certain confidentiality protections (including drug & alcohol, mental-health-procedures, and HIV confidentiality laws), so be specific.'**
+  /// **'Choose who may — and may not — receive copies of your mental health records. Unless you limit it, your agent has the same right you have to see and release your records, and under 20 Pa.C.S. § 5843(b) that right overrides some other Pennsylvania confidentiality laws (drug and alcohol, Mental Health Procedures Act, HIV) — though not federal law — so be specific.'**
   String get addlInstrRecordsDescription;
 
   /// No description provided for @addlInstrRecordsReleaseLabel.
@@ -2519,7 +2519,7 @@ abstract class AppLocalizations {
   /// No description provided for @addlInstrUlyssesSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Acknowledge that, once two professionals find you incapable, what you wrote stands even over your in-the-moment protest, until capacity returns (20 Pa.C.S. §§ 5824, 5834).'**
+  /// **'Acknowledge that, once a psychiatrist and one other professional find you incapable, you can’t revoke what you wrote — it stands even over your in-the-moment protest until you are found capable again (20 Pa.C.S. §§ 5825, 5839).'**
   String get addlInstrUlyssesSubtitle;
 
   /// No description provided for @effCondHelpText.
@@ -2573,7 +2573,7 @@ abstract class AppLocalizations {
   /// No description provided for @effCondExample1.
   ///
   /// In en, this message translates to:
-  /// **'This directive takes effect when I am unable to make mental health treatment decisions for myself, as determined by two qualified professionals.'**
+  /// **'This directive takes effect when I am unable to make mental health treatment decisions for myself, as determined by a psychiatrist and one other qualified professional after examining me.'**
   String get effCondExample1;
 
   /// No description provided for @effCondExample2.
@@ -3545,7 +3545,7 @@ abstract class AppLocalizations {
   /// No description provided for @contactSheetRuleFacilityOwner.
   ///
   /// In en, this message translates to:
-  /// **'An owner/operator of a facility where you receive care'**
+  /// **'An owner, operator or employee of a residential facility where you receive care'**
   String get contactSheetRuleFacilityOwner;
 
   /// No description provided for @contactSheetWhoCantBeAgent.
@@ -3557,7 +3557,7 @@ abstract class AppLocalizations {
   /// No description provided for @contactSheetRulesFootnote.
   ///
   /// In en, this message translates to:
-  /// **'Under-18 is blocked automatically from the contact’s birthday. We can’t tell who your providers are, so anything that looks like a provider is a soft warning you can override — confirm only if they truly aren’t treating you.'**
+  /// **'Under-18 is blocked automatically from the contact’s birthday. We can’t tell who your providers are, so anything that looks like a provider is a soft warning you can override — confirm only if they truly aren’t treating you, or are related to you by blood, marriage or adoption.'**
   String get contactSheetRulesFootnote;
 
   /// No description provided for @voiceMicPermission.
@@ -4769,7 +4769,7 @@ abstract class AppLocalizations {
   /// No description provided for @reviewAgentInitialsNote.
   ///
   /// In en, this message translates to:
-  /// **'This lets your agent decide. Under PA law (§5836(c)) it only takes effect if you physically initial this authorization on the printed form — confirm this is what you want.'**
+  /// **'This lets your agent decide. Under PA law (§5836(c)) your agent has this power only because you specifically grant it here — the official form asks you to initial it; confirm this is what you want.'**
   String get reviewAgentInitialsNote;
 
   /// No description provided for @reviewSmartIntro.
@@ -4895,7 +4895,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeAmendingOpensThisDirectiveSo.
   ///
   /// In en, this message translates to:
-  /// **'Amending opens this directive so you can change it — your existing answers stay in place.\n\nImportant: an amendment is only valid once you re-sign it on paper with two adult witnesses, the same way as the original (PA Act 194). Until you re-sign, this directive will show as an unsigned draft, and any printed copies of the old version stay in effect until you replace them.\n\nPrefer to keep the signed original untouched? Use “Renew (copy to new)” instead.'**
+  /// **'Amending opens this directive so you can change it — your existing answers stay in place.\n\nImportant: an amendment is only valid once you sign and date it again with two adult witnesses, the same way as the original (PA Act 194). Until you re-sign, this directive will show as an unsigned draft, and any printed copies of the old version stay in effect until you replace them.\n\nPrefer to keep the signed original untouched? Use “Renew (copy to new)” instead.'**
   String get homeAmendingOpensThisDirectiveSo;
 
   /// No description provided for @homeAmend.
@@ -7571,31 +7571,31 @@ abstract class AppLocalizations {
   /// No description provided for @legalSheetYourDesignatedAgentOrAlternate.
   ///
   /// In en, this message translates to:
-  /// **'your designated agent or alternate agent, your mental health care provider, or an employee of the facility where you receive treatment — unless they are related to you by blood, marriage, or adoption.'**
+  /// **'your agent (or, to be safe, your alternate agent) or the person who signs on your behalf.'**
   String get legalSheetYourDesignatedAgentOrAlternate;
 
   /// No description provided for @legalSheetThisAppCapturesTouchDrawn.
   ///
   /// In en, this message translates to:
-  /// **'This app captures touch-drawn signatures for convenience during preparation. The '**
+  /// **'This app doesn’t sign for you. The '**
   String get legalSheetThisAppCapturesTouchDrawn;
 
   /// No description provided for @legalSheetDirectiveMustBeSignedIn.
   ///
   /// In en, this message translates to:
-  /// **' directive must be signed in original ink, in the presence of your two witnesses, to be legally valid.'**
+  /// **' directive must be signed and dated by you in the presence of your two witnesses, who sign it too.'**
   String get legalSheetDirectiveMustBeSignedIn;
 
   /// No description provided for @legalSheetOnceSignedProvidersAndYour.
   ///
   /// In en, this message translates to:
-  /// **'Once signed, providers and your agent '**
+  /// **'Once it is in effect and your providers have a copy, they and your agent '**
   String get legalSheetOnceSignedProvidersAndYour;
 
   /// No description provided for @legalSheetWithYourDirective20Pa.
   ///
   /// In en, this message translates to:
-  /// **' with your directive (20 Pa.C.S. §§ 5804, 5842). However, a provider may decline to follow specific instructions that are against accepted medical practice, or when the provider is not physically available.'**
+  /// **' with your directive (20 Pa.C.S. §§ 5804, 5842). A provider who can’t in good conscience follow an instruction — because it is against accepted clinical practice and medical standards, the treatment is unavailable, or the provider’s own policies prevent it — must tell you or your agent, record why, and try to transfer you to a provider who will comply.'**
   String get legalSheetWithYourDirective20Pa;
 
   /// No description provided for @legalSheetUnderPaAct194An.
@@ -7625,25 +7625,19 @@ abstract class AppLocalizations {
   /// No description provided for @legalSheetNotifyingYourHealthcareProviderOr.
   ///
   /// In en, this message translates to:
-  /// **'Notifying your healthcare provider or agent in writing'**
+  /// **'Telling your doctor or other mental health care provider — yourself or through a witness, orally or in writing'**
   String get legalSheetNotifyingYourHealthcareProviderOr;
-
-  /// No description provided for @legalSheetDestroyingTheDirective.
-  ///
-  /// In en, this message translates to:
-  /// **'Destroying the directive'**
-  String get legalSheetDestroyingTheDirective;
 
   /// No description provided for @legalSheetExecutingANewDirective.
   ///
   /// In en, this message translates to:
-  /// **'Executing a new directive'**
+  /// **'Making and signing a new directive (where the two conflict, the newer one controls)'**
   String get legalSheetExecutingANewDirective;
 
   /// No description provided for @legalSheetNotifyEveryoneWhoHasCopies.
   ///
   /// In en, this message translates to:
-  /// **'Notify everyone who has copies of the revocation.'**
+  /// **'Then tell everyone who has a copy, and destroy old copies or mark them “REVOKED”.'**
   String get legalSheetNotifyEveryoneWhoHasCopies;
 
   /// No description provided for @legalSheetThisIsAWebApp.
@@ -7739,7 +7733,7 @@ abstract class AppLocalizations {
   /// No description provided for @disclaimerIM18OrOlder.
   ///
   /// In en, this message translates to:
-  /// **'I’m 18 or older, and I understand and want to continue.'**
+  /// **'I’m 18 or older (or an emancipated minor), and I understand and want to continue.'**
   String get disclaimerIM18OrOlder;
 
   /// No description provided for @disclaimerBeforeYouBegin.
@@ -7763,13 +7757,13 @@ abstract class AppLocalizations {
   /// No description provided for @disclaimerItBecomesValidOnlyWhen.
   ///
   /// In en, this message translates to:
-  /// **'It becomes valid only when signed on paper'**
+  /// **'It becomes valid only when signed, dated and witnessed'**
   String get disclaimerItBecomesValidOnlyWhen;
 
   /// No description provided for @disclaimerPaLawRequiresYourSignature.
   ///
   /// In en, this message translates to:
-  /// **'PA law requires your signature plus two adult witnesses, in ink, in person. The app cannot sign for you.'**
+  /// **'PA law requires your signature (or someone signing at your direction), the date, and two witnesses aged 18 or older who watch you sign. Print it and sign it in ink — the app can’t sign for you.'**
   String get disclaimerPaLawRequiresYourSignature;
 
   /// No description provided for @disclaimerNothingIsSavedOrSent.
@@ -7853,7 +7847,7 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingUntilTwoProfessionalsFindYou.
   ///
   /// In en, this message translates to:
-  /// **' until two professionals find you unable to decide for yourself.'**
+  /// **' until a psychiatrist and one other professional find you unable to decide for yourself (or a condition you choose is met).'**
   String get onboardingUntilTwoProfessionalsFindYou;
 
   /// No description provided for @aiConsistencyTheAiIsReviewingYour.
@@ -8237,7 +8231,7 @@ abstract class AppLocalizations {
   /// No description provided for @aiConsistencyProcBody.
   ///
   /// In en, this message translates to:
-  /// **'Pennsylvania’s form lets you do both: give your own consent AND authorize your agent to consent on your behalf (that agent authorization needs your physical initials, §5836(c)). As entered, only your own consent is recorded, so the document says your agent may not consent to {name}. That is allowed and may be exactly what you intend — keep both if so. If you also want your agent able to consent (e.g. if you later can’t decide), choose “My agent will decide” for {name}.'**
+  /// **'Pennsylvania’s form lets you do both: give your own consent AND authorize your agent to consent on your behalf (your agent can consent only if you specifically grant it, § 5836(c)). As entered, only your own consent is recorded, so the document says your agent may not consent to {name}. That is allowed and may be exactly what you intend — keep both if so. If you also want your agent able to consent (e.g. if you later can’t decide), choose “My agent will decide” for {name}.'**
   String aiConsistencyProcBody(String name);
 
   /// No description provided for @aiConsistencyProcA.
@@ -9181,7 +9175,7 @@ abstract class AppLocalizations {
   /// No description provided for @exportTheFollowingFieldsAreEmpty.
   ///
   /// In en, this message translates to:
-  /// **'The following fields are empty or missing:\n\n{n}\n\nAn incomplete directive may not be legally valid under PA Act 194. Export anyway?'**
+  /// **'The following fields are empty or missing:\n\n{n}\n\nBlank optional sections are fine, but the directive needs your treatment choices (and, for a power of attorney, your agent) to work as intended. Export anyway?'**
   String exportTheFollowingFieldsAreEmpty(Object n);
 
   /// No description provided for @privacyPolicyLastUpdated.
@@ -10618,7 +10612,7 @@ abstract class AppLocalizations {
   /// No description provided for @stepSubtitleGuardianNomination.
   ///
   /// In en, this message translates to:
-  /// **'Rare, but worth planning for. A guardian is named by a court — not by you — and has broader authority than an agent.'**
+  /// **'Rare, but worth planning for. A court appoints a guardian and must choose the person you nominate unless there’s good reason not to — and your agent keeps making mental health decisions unless you let the guardian override this directive.'**
   String get stepSubtitleGuardianNomination;
 
   /// No description provided for @stepSubtitleWhereIWantCare.
@@ -10636,7 +10630,7 @@ abstract class AppLocalizations {
   /// No description provided for @stepSubtitleMedications.
   ///
   /// In en, this message translates to:
-  /// **'What you take now (for your care team) plus the medications you refuse, limit, or prefer. Your refusals and limits are binding under Act 194.'**
+  /// **'What you take now (for your care team) plus the medications you refuse, limit, or prefer. Providers must follow your refusals and limits, except in the narrow cases Act 194 allows.'**
   String get stepSubtitleMedications;
 
   /// No description provided for @stepSubtitleAllergies.
@@ -10648,7 +10642,7 @@ abstract class AppLocalizations {
   /// No description provided for @stepSubtitleProceduresResearch.
   ///
   /// In en, this message translates to:
-  /// **'Three treatments under PA law need your explicit consent. Set each one — your agent fills any gaps.'**
+  /// **'Three treatments under PA law need your explicit consent. Set each one — your agent can decide them only if you choose “My agent will decide”.'**
   String get stepSubtitleProceduresResearch;
 
   /// No description provided for @stepSubtitleAnythingElse.

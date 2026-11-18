@@ -203,7 +203,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get executionHelpText =>
-      'Per 20 Pa.C.S. § 5822 / § 5832, a Mental Health Advance Directive must be signed on paper by you and two adult witnesses, all present at the same time. The app cannot witness it for you — this step walks you through what to do.';
+      'Per 20 Pa.C.S. § 5822 / § 5832, a Mental Health Advance Directive must be dated and signed by you and witnessed by two people aged 18 or older, who should be there when you sign. The app can’t witness it for you — this step walks you through what to do.';
 
   @override
   String get executionFinalStepLabel => 'Final step · on paper';
@@ -213,21 +213,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get executionIntro =>
-      'Pennsylvania law requires a real signature on paper. We can’t witness it for you — but here’s exactly what to do.';
+      'Pennsylvania law requires your signature and two witnesses. Signing a printed copy is the safe way to do it — we can’t witness it for you, but here’s exactly what to do.';
 
   @override
   String get executionWhyNotAppLead => 'Why not sign in the app? ';
 
   @override
   String get executionWhyNotAppBody =>
-      'Under Act 194 the directive is only valid when you and two adult witnesses sign the ';
+      'Under Act 194 you sign and date the directive, and two adult witnesses sign it too. Signing the ';
 
   @override
   String get executionSamePaperDocument => 'same paper document';
 
   @override
   String get executionWhyNotAppTail =>
-      ', together. A tap-to-sign wouldn’t hold up.';
+      ', together, is the surest way to have it accepted — this app doesn’t do electronic signatures.';
 
   @override
   String get executionAnyFormValid =>
@@ -262,7 +262,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get executionWitnessRest =>
-      ' be your agent or alternate agent, your mental health care provider, or an employee of the facility where you receive treatment — unless they are related to you by blood, marriage, or adoption.';
+      ' be your agent (or, to be safe, your alternate agent) or the person who signs on your behalf, and must be 18 or older.';
 
   @override
   String get executionInYourPacket => 'In your packet';
@@ -298,7 +298,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get executionNotYetValid =>
-      'NOT YET VALID · BECOMES LEGAL ONCE SIGNED ON PAPER BY YOU + 2 WITNESSES';
+      'NOT YET VALID · BECOMES LEGAL ONCE YOU SIGN AND DATE IT IN FRONT OF 2 ADULT WITNESSES WHO ALSO SIGN';
 
   @override
   String get reviewStepNotProvidedYet => 'Not provided yet';
@@ -433,7 +433,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reviewStepProvidersMustComplyBody =>
-      'with your directive under PA Act 194 (20 Pa.C.S. §§ 5804, 5842). A provider may decline specific instructions only if they conflict with accepted medical practice, or when the provider is not physically available.';
+      'with your directive under PA Act 194 (20 Pa.C.S. §§ 5804, 5842). A provider may decline an instruction only if it is against accepted clinical practice and medical standards, the treatment is unavailable, or the provider’s own policies prevent it — and then must tell you or your agent, record why, and try to transfer you to a provider who will comply.';
 
   @override
   String get wizardProgressSaved => 'Progress saved';
@@ -641,7 +641,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get altAgentHelp =>
-      'Your agent must be 18 or older. They cannot be your treating physician, an employee of your treatment facility (unless a relative), or someone with financial interest in your estate. Choose someone you trust to honor your wishes.';
+      'Your agent must be 18 or older. Unless related to you by blood, marriage or adoption, they can’t be your doctor or other mental health care provider, an employee of one, or an owner, operator or employee of a residential facility where you receive care. Choose someone you trust to honor your wishes.';
 
   @override
   String get altAgentTitle => 'Alternate agent designation';
@@ -720,7 +720,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get guardianNomNoPreferenceHint =>
-      'Let the court decide. They will usually appoint a family member or county guardianship office.';
+      'Let the court decide who to appoint.';
 
   @override
   String get guardianNomSameAsPrimary => 'Same as my primary agent';
@@ -773,7 +773,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get guardianNomConditionsIntro =>
-      'If a court appoints a guardian, set the limits you want it to honor. These are guidance for the court, not binding.';
+      'If a court appoints a guardian, choose whether the guardian may revoke, suspend or end this directive — unless you allow it, the court gives preference to your agent continuing to decide. Any other conditions you add are guidance for the court.';
 
   @override
   String get guardianNomCanChangeAgent => 'Can change my agent';
@@ -884,7 +884,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get diagnosesFooter =>
-      'You’re not required to list anything. Anything you do list is shared only with the people your directive names.';
+      'You’re not required to list anything. Anything you list goes to whoever you give a copy of your directive to.';
 
   @override
   String diagnosesAddedName(String name) {
@@ -1033,14 +1033,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get medsStepHelpText =>
-      'List medications by name. Your preferences apply to generic, brand name, and trade name equivalents unless you specify otherwise in the notes — to request brand-name only, note it in the reason field.\n\nNarrow Therapeutic Index (NTI) drugs — ones with only a small safety margin between a helpful dose and a harmful one, like lithium, carbamazepine, and valproic acid — cannot have generics substituted under PA law (35 P.S. §960.3). These are marked with an “NTI” badge when you search.';
+      'List medications by name. Your preferences apply to generic, brand name, and trade name equivalents unless you specify otherwise in the notes — to request brand-name only, note it in the reason field.\n\nNarrow Therapeutic Index (NTI) drugs — ones with only a small safety margin between a helpful dose and a harmful one, like lithium and carbamazepine — have special generic-substitution rules under Pennsylvania’s Generic Equivalent Drug Law. These are marked with an “NTI” badge when you search.';
 
   @override
   String get medsStepHeadsUpLead => 'Heads up — ';
 
   @override
   String get medsStepHeadsUpBody =>
-      'your refusal of a medication and any limits you set on its use are binding under PA Act 194, but ';
+      'your refusal of a medication and any limits you set on its use must be followed by your providers (except in the narrow cases in § 5804, when they must try to transfer you), but ';
 
   @override
   String get medsStepHeadsUpBold =>
@@ -1373,7 +1373,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get addlInstrRecordsDescription =>
-      'Choose who may — and may not — receive copies of your mental health records. Under 20 Pa.C.S. § 5836(e), the disclosure authority you grant here can override certain confidentiality protections (including drug & alcohol, mental-health-procedures, and HIV confidentiality laws), so be specific.';
+      'Choose who may — and may not — receive copies of your mental health records. Unless you limit it, your agent has the same right you have to see and release your records, and under 20 Pa.C.S. § 5843(b) that right overrides some other Pennsylvania confidentiality laws (drug and alcohol, Mental Health Procedures Act, HIV) — though not federal law — so be specific.';
 
   @override
   String get addlInstrRecordsReleaseLabel => 'Who may receive my records';
@@ -1408,7 +1408,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get addlInstrUlyssesSubtitle =>
-      'Acknowledge that, once two professionals find you incapable, what you wrote stands even over your in-the-moment protest, until capacity returns (20 Pa.C.S. §§ 5824, 5834).';
+      'Acknowledge that, once a psychiatrist and one other professional find you incapable, you can’t revoke what you wrote — it stands even over your in-the-moment protest until you are found capable again (20 Pa.C.S. §§ 5825, 5839).';
 
   @override
   String get effCondHelpText =>
@@ -1441,7 +1441,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get effCondExample1 =>
-      'This directive takes effect when I am unable to make mental health treatment decisions for myself, as determined by two qualified professionals.';
+      'This directive takes effect when I am unable to make mental health treatment decisions for myself, as determined by a psychiatrist and one other qualified professional after examining me.';
 
   @override
   String get effCondExample2 =>
@@ -2016,14 +2016,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get contactSheetRuleFacilityOwner =>
-      'An owner/operator of a facility where you receive care';
+      'An owner, operator or employee of a residential facility where you receive care';
 
   @override
   String get contactSheetWhoCantBeAgent => 'Who can’t be your agent';
 
   @override
   String get contactSheetRulesFootnote =>
-      'Under-18 is blocked automatically from the contact’s birthday. We can’t tell who your providers are, so anything that looks like a provider is a soft warning you can override — confirm only if they truly aren’t treating you.';
+      'Under-18 is blocked automatically from the contact’s birthday. We can’t tell who your providers are, so anything that looks like a provider is a soft warning you can override — confirm only if they truly aren’t treating you, or are related to you by blood, marriage or adoption.';
 
   @override
   String get voiceMicPermission => 'Microphone permission is needed.';
@@ -2733,7 +2733,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reviewAgentInitialsNote =>
-      'This lets your agent decide. Under PA law (§5836(c)) it only takes effect if you physically initial this authorization on the printed form — confirm this is what you want.';
+      'This lets your agent decide. Under PA law (§5836(c)) your agent has this power only because you specifically grant it here — the official form asks you to initial it; confirm this is what you want.';
 
   @override
   String get reviewSmartIntro =>
@@ -2803,7 +2803,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeAmendingOpensThisDirectiveSo =>
-      'Amending opens this directive so you can change it — your existing answers stay in place.\n\nImportant: an amendment is only valid once you re-sign it on paper with two adult witnesses, the same way as the original (PA Act 194). Until you re-sign, this directive will show as an unsigned draft, and any printed copies of the old version stay in effect until you replace them.\n\nPrefer to keep the signed original untouched? Use “Renew (copy to new)” instead.';
+      'Amending opens this directive so you can change it — your existing answers stay in place.\n\nImportant: an amendment is only valid once you sign and date it again with two adult witnesses, the same way as the original (PA Act 194). Until you re-sign, this directive will show as an unsigned draft, and any printed copies of the old version stay in effect until you replace them.\n\nPrefer to keep the signed original untouched? Use “Renew (copy to new)” instead.';
 
   @override
   String get homeAmend => 'Amend';
@@ -4348,23 +4348,23 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get legalSheetYourDesignatedAgentOrAlternate =>
-      'your designated agent or alternate agent, your mental health care provider, or an employee of the facility where you receive treatment — unless they are related to you by blood, marriage, or adoption.';
+      'your agent (or, to be safe, your alternate agent) or the person who signs on your behalf.';
 
   @override
   String get legalSheetThisAppCapturesTouchDrawn =>
-      'This app captures touch-drawn signatures for convenience during preparation. The ';
+      'This app doesn’t sign for you. The ';
 
   @override
   String get legalSheetDirectiveMustBeSignedIn =>
-      ' directive must be signed in original ink, in the presence of your two witnesses, to be legally valid.';
+      ' directive must be signed and dated by you in the presence of your two witnesses, who sign it too.';
 
   @override
   String get legalSheetOnceSignedProvidersAndYour =>
-      'Once signed, providers and your agent ';
+      'Once it is in effect and your providers have a copy, they and your agent ';
 
   @override
   String get legalSheetWithYourDirective20Pa =>
-      ' with your directive (20 Pa.C.S. §§ 5804, 5842). However, a provider may decline to follow specific instructions that are against accepted medical practice, or when the provider is not physically available.';
+      ' with your directive (20 Pa.C.S. §§ 5804, 5842). A provider who can’t in good conscience follow an instruction — because it is against accepted clinical practice and medical standards, the treatment is unavailable, or the provider’s own policies prevent it — must tell you or your agent, record why, and try to transfer you to a provider who will comply.';
 
   @override
   String get legalSheetUnderPaAct194An =>
@@ -4384,17 +4384,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get legalSheetNotifyingYourHealthcareProviderOr =>
-      'Notifying your healthcare provider or agent in writing';
+      'Telling your doctor or other mental health care provider — yourself or through a witness, orally or in writing';
 
   @override
-  String get legalSheetDestroyingTheDirective => 'Destroying the directive';
-
-  @override
-  String get legalSheetExecutingANewDirective => 'Executing a new directive';
+  String get legalSheetExecutingANewDirective =>
+      'Making and signing a new directive (where the two conflict, the newer one controls)';
 
   @override
   String get legalSheetNotifyEveryoneWhoHasCopies =>
-      'Notify everyone who has copies of the revocation.';
+      'Then tell everyone who has a copy, and destroy old copies or mark them “REVOKED”.';
 
   @override
   String get legalSheetThisIsAWebApp =>
@@ -4453,7 +4451,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get disclaimerIM18OrOlder =>
-      'I’m 18 or older, and I understand and want to continue.';
+      'I’m 18 or older (or an emancipated minor), and I understand and want to continue.';
 
   @override
   String get disclaimerBeforeYouBegin => 'Before you begin';
@@ -4467,11 +4465,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get disclaimerItBecomesValidOnlyWhen =>
-      'It becomes valid only when signed on paper';
+      'It becomes valid only when signed, dated and witnessed';
 
   @override
   String get disclaimerPaLawRequiresYourSignature =>
-      'PA law requires your signature plus two adult witnesses, in ink, in person. The app cannot sign for you.';
+      'PA law requires your signature (or someone signing at your direction), the date, and two witnesses aged 18 or older who watch you sign. Print it and sign it in ink — the app can’t sign for you.';
 
   @override
   String get disclaimerNothingIsSavedOrSent => 'Nothing is saved or sent to us';
@@ -4521,7 +4519,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get onboardingUntilTwoProfessionalsFindYou =>
-      ' until two professionals find you unable to decide for yourself.';
+      ' until a psychiatrist and one other professional find you unable to decide for yourself (or a condition you choose is met).';
 
   @override
   String get aiConsistencyTheAiIsReviewingYour =>
@@ -4744,7 +4742,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String aiConsistencyProcBody(String name) {
-    return 'Pennsylvania’s form lets you do both: give your own consent AND authorize your agent to consent on your behalf (that agent authorization needs your physical initials, §5836(c)). As entered, only your own consent is recorded, so the document says your agent may not consent to $name. That is allowed and may be exactly what you intend — keep both if so. If you also want your agent able to consent (e.g. if you later can’t decide), choose “My agent will decide” for $name.';
+    return 'Pennsylvania’s form lets you do both: give your own consent AND authorize your agent to consent on your behalf (your agent can consent only if you specifically grant it, § 5836(c)). As entered, only your own consent is recorded, so the document says your agent may not consent to $name. That is allowed and may be exactly what you intend — keep both if so. If you also want your agent able to consent (e.g. if you later can’t decide), choose “My agent will decide” for $name.';
   }
 
   @override
@@ -5366,7 +5364,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String exportTheFollowingFieldsAreEmpty(Object n) {
-    return 'The following fields are empty or missing:\n\n$n\n\nAn incomplete directive may not be legally valid under PA Act 194. Export anyway?';
+    return 'The following fields are empty or missing:\n\n$n\n\nBlank optional sections are fine, but the directive needs your treatment choices (and, for a power of attorney, your agent) to work as intended. Export anyway?';
   }
 
   @override
@@ -6321,7 +6319,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get stepSubtitleGuardianNomination =>
-      'Rare, but worth planning for. A guardian is named by a court — not by you — and has broader authority than an agent.';
+      'Rare, but worth planning for. A court appoints a guardian and must choose the person you nominate unless there’s good reason not to — and your agent keeps making mental health decisions unless you let the guardian override this directive.';
 
   @override
   String get stepSubtitleWhereIWantCare =>
@@ -6333,7 +6331,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get stepSubtitleMedications =>
-      'What you take now (for your care team) plus the medications you refuse, limit, or prefer. Your refusals and limits are binding under Act 194.';
+      'What you take now (for your care team) plus the medications you refuse, limit, or prefer. Providers must follow your refusals and limits, except in the narrow cases Act 194 allows.';
 
   @override
   String get stepSubtitleAllergies =>
@@ -6341,7 +6339,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get stepSubtitleProceduresResearch =>
-      'Three treatments under PA law need your explicit consent. Set each one — your agent fills any gaps.';
+      'Three treatments under PA law need your explicit consent. Set each one — your agent can decide them only if you choose “My agent will decide”.';
 
   @override
   String get stepSubtitleAnythingElse =>

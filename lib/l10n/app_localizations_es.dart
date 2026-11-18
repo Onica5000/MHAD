@@ -203,7 +203,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get executionHelpText =>
-      'Según 20 Pa.C.S. § 5822 / § 5832, una Directiva Anticipada de Salud Mental debe firmarse en papel por usted y dos testigos adultos, todos presentes al mismo tiempo. La aplicación no puede actuar como testigo; este paso le explica qué hacer.';
+      'Según 20 Pa.C.S. § 5822 / § 5832, una Directiva Anticipada de Salud Mental debe estar fechada y firmada por usted y contar con dos testigos de 18 años o más, que deben estar presentes cuando usted firme. La aplicación no puede actuar como testigo; este paso le explica qué hacer.';
 
   @override
   String get executionFinalStepLabel => 'Último paso · en papel';
@@ -213,21 +213,21 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get executionIntro =>
-      'La ley de Pensilvania exige una firma real en papel. No podemos ser testigos por usted, pero aquí tiene exactamente lo que debe hacer.';
+      'La ley de Pensilvania exige su firma y dos testigos. Firmar una copia impresa es la forma segura de hacerlo; no podemos ser testigos por usted, pero aquí tiene exactamente lo que debe hacer.';
 
   @override
   String get executionWhyNotAppLead => '¿Por qué no firmar en la aplicación? ';
 
   @override
   String get executionWhyNotAppBody =>
-      'Según la Ley 194, la directiva solo es válida cuando usted y dos testigos adultos firman el ';
+      'Según la Ley 194, usted firma y fecha la directiva, y dos testigos adultos también la firman. Firmar el ';
 
   @override
   String get executionSamePaperDocument => 'mismo documento en papel';
 
   @override
   String get executionWhyNotAppTail =>
-      ', juntos. Una firma con un toque en la pantalla no sería válida.';
+      ', juntos, es la forma más segura de que la acepten; esta aplicación no hace firmas electrónicas.';
 
   @override
   String get executionAnyFormValid =>
@@ -263,7 +263,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get executionWitnessRest =>
-      ' ser su agente ni su agente alternativo, su proveedor de atención de salud mental ni un empleado del centro donde recibe tratamiento, a menos que tenga con usted parentesco por consanguinidad, matrimonio o adopción.';
+      ' ser su agente (ni, por precaución, su agente alternativo) ni la persona que firma en su nombre, y debe tener 18 años o más.';
 
   @override
   String get executionInYourPacket => 'En su paquete';
@@ -300,7 +300,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get executionNotYetValid =>
-      'AÚN NO ES VÁLIDA · SERÁ LEGAL CUANDO USTED Y 2 TESTIGOS LA FIRMEN EN PAPEL';
+      'AÚN NO ES VÁLIDA · SERÁ LEGAL CUANDO USTED LA FIRME Y LA FECHE ANTE 2 TESTIGOS ADULTOS QUE TAMBIÉN FIRMEN';
 
   @override
   String get reviewStepNotProvidedYet => 'Aún no se ha indicado';
@@ -437,7 +437,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get reviewStepProvidersMustComplyBody =>
-      'su directiva según la Ley 194 de PA (20 Pa.C.S. §§ 5804, 5842). Un proveedor solo puede negarse a seguir instrucciones específicas si contradicen la práctica médica aceptada o si el proveedor no está físicamente disponible.';
+      'su directiva según la Ley 194 de PA (20 Pa.C.S. §§ 5804, 5842). Un proveedor solo puede negarse a seguir una instrucción si va en contra de la práctica clínica y las normas médicas aceptadas, si el tratamiento no está disponible o si sus propias políticas lo impiden; en ese caso debe informarle a usted o a su agente, dejar constancia del motivo e intentar trasladarle a un proveedor que sí la cumpla.';
 
   @override
   String get wizardProgressSaved => 'Progreso guardado';
@@ -649,7 +649,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get altAgentHelp =>
-      'Su agente debe tener 18 años o más. No puede ser su médico tratante, un empleado de su centro de tratamiento (salvo que sea pariente) ni alguien con un interés económico en su patrimonio. Elija a alguien de confianza que respete sus deseos.';
+      'Su agente debe tener 18 años o más. Salvo que tenga con usted parentesco por consanguinidad, matrimonio o adopción, no puede ser su médico u otro proveedor de atención de salud mental, un empleado de uno de ellos, ni el propietario, operador o empleado de un centro residencial donde usted recibe atención. Elija a alguien de confianza que respete sus deseos.';
 
   @override
   String get altAgentTitle => 'Designación del agente alternativo';
@@ -728,7 +728,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get guardianNomNoPreferenceHint =>
-      'Que decida el tribunal. Por lo general, nombrará a un familiar o a la oficina de tutela del condado.';
+      'Que el tribunal decida a quién nombrar.';
 
   @override
   String get guardianNomSameAsPrimary =>
@@ -784,7 +784,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get guardianNomConditionsIntro =>
-      'Si un tribunal nombra a un tutor, indique los límites que desea que respete. Son una orientación para el tribunal, no son obligatorios.';
+      'Si un tribunal nombra a un tutor, elija si el tutor puede revocar, suspender o terminar esta directiva; salvo que usted lo permita, el tribunal da preferencia a que su agente siga decidiendo. Cualquier otra condición que agregue es una orientación para el tribunal.';
 
   @override
   String get guardianNomCanChangeAgent => 'Puede cambiar a mi agente';
@@ -896,7 +896,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get diagnosesFooter =>
-      'No está obligado a indicar nada. Lo que indique solo se comparte con las personas que nombra en su directiva.';
+      'No está obligado a indicar nada. Lo que indique llegará a quien usted le dé una copia de su directiva.';
 
   @override
   String diagnosesAddedName(String name) {
@@ -1047,14 +1047,14 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get medsStepHelpText =>
-      'Indique los medicamentos por su nombre. Sus preferencias se aplican a los equivalentes genéricos, de marca y comerciales, salvo que indique lo contrario en las notas; para pedir solo la versión de marca, anótelo en el campo de motivo.\n\nLos medicamentos de índice terapéutico estrecho (NTI), que tienen un margen de seguridad pequeño entre una dosis útil y una dañina, como el litio, la carbamazepina y el ácido valproico, no pueden sustituirse por genéricos según la ley de PA (35 P.S. §960.3). Aparecen con la etiqueta “NTI” al buscarlos.';
+      'Indique los medicamentos por su nombre. Sus preferencias se aplican a los equivalentes genéricos, de marca y comerciales, salvo que indique lo contrario en las notas; para pedir solo la versión de marca, anótelo en el campo de motivo.\n\nLos medicamentos de índice terapéutico estrecho (NTI), que tienen un margen de seguridad pequeño entre una dosis útil y una dañina, como el litio y la carbamazepina, tienen reglas especiales de sustitución por genéricos según la ley de medicamentos genéricos equivalentes de Pensilvania (Generic Equivalent Drug Law). Aparecen con la etiqueta “NTI” al buscarlos.';
 
   @override
   String get medsStepHeadsUpLead => 'Atención: ';
 
   @override
   String get medsStepHeadsUpBody =>
-      'su rechazo de un medicamento y los límites que ponga a su uso son obligatorios según la Ley 194 de PA, pero ';
+      'su rechazo de un medicamento y los límites que ponga a su uso deben ser respetados por sus proveedores (salvo en los casos limitados del § 5804, en los que deben intentar trasladarle), pero ';
 
   @override
   String get medsStepHeadsUpBold =>
@@ -1396,7 +1396,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get addlInstrRecordsDescription =>
-      'Elija quién puede recibir copias de sus registros de salud mental y quién no. Según 20 Pa.C.S. § 5836(e), la autorización de divulgación que otorgue aquí puede prevalecer sobre ciertas protecciones de confidencialidad (incluidas las leyes de confidencialidad sobre drogas y alcohol, procedimientos de salud mental y VIH), así que sea específico.';
+      'Elija quién puede recibir copias de sus registros de salud mental y quién no. Salvo que usted lo limite, su agente tiene el mismo derecho que usted a ver y divulgar sus registros, y según 20 Pa.C.S. § 5843(b) ese derecho prevalece sobre otras leyes de confidencialidad de Pensilvania (drogas y alcohol, Ley de Procedimientos de Salud Mental, VIH), aunque no sobre la ley federal; así que sea específico.';
 
   @override
   String get addlInstrRecordsReleaseLabel =>
@@ -1435,7 +1435,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get addlInstrUlyssesSubtitle =>
-      'Reconozca que, una vez que dos profesionales determinen que usted no tiene capacidad, lo que escribió se mantiene incluso si usted protesta en ese momento, hasta que recupere la capacidad (20 Pa.C.S. §§ 5824, 5834).';
+      'Reconozca que, una vez que un psiquiatra y otro profesional determinen que usted no tiene capacidad, no podrá revocar lo que escribió: se mantiene incluso si usted protesta en ese momento, hasta que se determine que vuelve a tener capacidad (20 Pa.C.S. §§ 5825, 5839).';
 
   @override
   String get effCondHelpText =>
@@ -1470,7 +1470,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get effCondExample1 =>
-      'Esta directiva entra en vigor cuando yo no pueda tomar por mí mismo decisiones sobre mi tratamiento de salud mental, según lo determinen dos profesionales calificados.';
+      'Esta directiva entra en vigor cuando yo no pueda tomar por mí mismo decisiones sobre mi tratamiento de salud mental, según lo determinen un psiquiatra y otro profesional calificado después de examinarme.';
 
   @override
   String get effCondExample2 =>
@@ -2060,14 +2060,14 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get contactSheetRuleFacilityOwner =>
-      'El propietario u operador de un centro donde usted recibe atención';
+      'El propietario, operador o empleado de un centro residencial donde usted recibe atención';
 
   @override
   String get contactSheetWhoCantBeAgent => 'Quién no puede ser su agente';
 
   @override
   String get contactSheetRulesFootnote =>
-      'Los menores de 18 se bloquean automáticamente según la fecha de nacimiento del contacto. No podemos saber quiénes son sus proveedores, así que todo lo que parezca un proveedor es una advertencia que puede ignorar; confírmelo solo si realmente no le está dando tratamiento.';
+      'Los menores de 18 se bloquean automáticamente según la fecha de nacimiento del contacto. No podemos saber quiénes son sus proveedores, así que todo lo que parezca un proveedor es una advertencia que puede ignorar; confírmelo solo si realmente no le está dando tratamiento, o si tiene con usted parentesco por consanguinidad, matrimonio o adopción.';
 
   @override
   String get voiceMicPermission =>
@@ -2788,7 +2788,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get reviewAgentInitialsNote =>
-      'Esto permite que su agente decida. Según la ley de PA (§5836(c)), solo tiene efecto si usted pone sus iniciales a mano en esta autorización en el formulario impreso; confirme que esto es lo que quiere.';
+      'Esto permite que su agente decida. Según la ley de PA (§5836(c)), su agente tiene esta facultad solo porque usted se la otorga aquí de forma específica; el formulario oficial le pide poner sus iniciales. Confirme que esto es lo que quiere.';
 
   @override
   String get reviewSmartIntro =>
@@ -2858,7 +2858,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get homeAmendingOpensThisDirectiveSo =>
-      'Modificarla abre esta directiva para que pueda cambiarla; sus respuestas actuales se mantienen.\n\nImportante: una modificación solo es válida cuando usted la vuelve a firmar en papel con dos testigos adultos, igual que la original (Ley 194 de PA). Hasta que la vuelva a firmar, esta directiva aparecerá como un borrador sin firmar, y las copias impresas de la versión anterior seguirán vigentes hasta que las reemplace.\n\n¿Prefiere no tocar el original firmado? Use “Renovar (copiar a una nueva)”.';
+      'Modificarla abre esta directiva para que pueda cambiarla; sus respuestas actuales se mantienen.\n\nImportante: una modificación solo es válida cuando usted la vuelve a firmar y fechar con dos testigos adultos, igual que la original (Ley 194 de PA). Hasta que la vuelva a firmar, esta directiva aparecerá como un borrador sin firmar, y las copias impresas de la versión anterior seguirán vigentes hasta que las reemplace.\n\n¿Prefiere no tocar el original firmado? Use “Renovar (copiar a una nueva)”.';
 
   @override
   String get homeAmend => 'Modificar';
@@ -4434,23 +4434,23 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get legalSheetYourDesignatedAgentOrAlternate =>
-      'su agente designado o agente alternativo, su proveedor de atención de salud mental ni un empleado del centro donde recibe tratamiento, a menos que sean parientes suyos por consanguinidad, matrimonio o adopción.';
+      'su agente (ni, por precaución, su agente alternativo) ni la persona que firma en su nombre.';
 
   @override
   String get legalSheetThisAppCapturesTouchDrawn =>
-      'Esta aplicación captura firmas dibujadas en la pantalla para su comodidad durante la preparación. La directiva ';
+      'Esta aplicación no firma por usted. La directiva ';
 
   @override
   String get legalSheetDirectiveMustBeSignedIn =>
-      ' debe firmarse con tinta original, en presencia de sus dos testigos, para ser legalmente válida.';
+      ' debe firmarla y fecharla usted en presencia de sus dos testigos, que también la firman.';
 
   @override
   String get legalSheetOnceSignedProvidersAndYour =>
-      'Una vez firmada, los proveedores y su agente ';
+      'Una vez que está en vigor y sus proveedores tienen una copia, ellos y su agente ';
 
   @override
   String get legalSheetWithYourDirective20Pa =>
-      ' con su directiva (20 Pa.C.S. §§ 5804, 5842). Sin embargo, un proveedor puede negarse a seguir instrucciones específicas que vayan en contra de la práctica médica aceptada, o cuando el proveedor no esté físicamente disponible.';
+      ' con su directiva (20 Pa.C.S. §§ 5804, 5842). Un proveedor que, en conciencia, no pueda seguir una instrucción —porque va en contra de la práctica clínica y las normas médicas aceptadas, porque el tratamiento no está disponible o porque sus propias políticas lo impiden— debe informarle a usted o a su agente, dejar constancia del motivo e intentar trasladarle a un proveedor que sí la cumpla.';
 
   @override
   String get legalSheetUnderPaAct194An =>
@@ -4470,17 +4470,15 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get legalSheetNotifyingYourHealthcareProviderOr =>
-      'Notificando por escrito a su proveedor de atención médica o a su agente';
+      'Comunicándoselo a su médico u otro proveedor de atención de salud mental, usted mismo o mediante un testigo, de palabra o por escrito';
 
   @override
-  String get legalSheetDestroyingTheDirective => 'Destruyendo la directiva';
-
-  @override
-  String get legalSheetExecutingANewDirective => 'Firmando una nueva directiva';
+  String get legalSheetExecutingANewDirective =>
+      'Haciendo y firmando una nueva directiva (donde las dos se contradigan, prevalece la más reciente)';
 
   @override
   String get legalSheetNotifyEveryoneWhoHasCopies =>
-      'Avise de la revocación a todas las personas que tengan copias.';
+      'Después, avise a todas las personas que tengan una copia y destruya las copias anteriores o márquelas como “REVOCADA”.';
 
   @override
   String get legalSheetThisIsAWebApp =>
@@ -4540,7 +4538,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get disclaimerIM18OrOlder =>
-      'Tengo 18 años o más, lo entiendo y quiero continuar.';
+      'Tengo 18 años o más (o soy un menor emancipado), lo entiendo y quiero continuar.';
 
   @override
   String get disclaimerBeforeYouBegin => 'Antes de empezar';
@@ -4554,11 +4552,11 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get disclaimerItBecomesValidOnlyWhen =>
-      'Solo es válida cuando se firma en papel';
+      'Solo es válida cuando se firma y se fecha ante testigos';
 
   @override
   String get disclaimerPaLawRequiresYourSignature =>
-      'La ley de PA exige su firma y la de dos testigos adultos, con tinta y en persona. La aplicación no puede firmar por usted.';
+      'La ley de PA exige su firma (o la de alguien que firme por indicación suya), la fecha y dos testigos de 18 años o más que lo vean firmar. Imprímala y fírmela con tinta; la aplicación no puede firmar por usted.';
 
   @override
   String get disclaimerNothingIsSavedOrSent =>
@@ -4611,7 +4609,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get onboardingUntilTwoProfessionalsFindYou =>
-      ' hasta que dos profesionales determinen que usted no puede decidir por sí mismo.';
+      ' hasta que un psiquiatra y otro profesional determinen que usted no puede decidir por sí mismo (o se cumpla una condición que usted elija).';
 
   @override
   String get aiConsistencyTheAiIsReviewingYour =>
@@ -4838,7 +4836,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String aiConsistencyProcBody(String name) {
-    return 'El formulario de Pensilvania le permite hacer ambas cosas: dar su propio consentimiento Y autorizar a su agente a dar consentimiento en su nombre (esa autorización al agente requiere sus iniciales a mano, §5836(c)). Tal como está ingresado, solo se registra su propio consentimiento, por lo que el documento indica que su agente no puede dar consentimiento para $name. Eso está permitido y puede ser exactamente lo que desea; si es así, conserve ambos. Si también quiere que su agente pueda dar consentimiento (por ejemplo, si más adelante usted no puede decidir), elija “Mi agente decidirá” para $name.';
+    return 'El formulario de Pensilvania le permite hacer ambas cosas: dar su propio consentimiento Y autorizar a su agente a dar consentimiento en su nombre (su agente solo puede dar consentimiento si usted se lo autoriza de forma específica, § 5836(c)). Tal como está ingresado, solo se registra su propio consentimiento, por lo que el documento indica que su agente no puede dar consentimiento para $name. Eso está permitido y puede ser exactamente lo que desea; si es así, conserve ambos. Si también quiere que su agente pueda dar consentimiento (por ejemplo, si más adelante usted no puede decidir), elija “Mi agente decidirá” para $name.';
   }
 
   @override
@@ -5468,7 +5466,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String exportTheFollowingFieldsAreEmpty(Object n) {
-    return 'Los siguientes campos están vacíos o faltan:\n\n$n\n\nUna directiva incompleta podría no ser legalmente válida según la Ley 194 de PA. ¿Exportar de todos modos?';
+    return 'Los siguientes campos están vacíos o faltan:\n\n$n\n\nLas secciones opcionales en blanco no son un problema, pero la directiva necesita sus decisiones de tratamiento (y, en un Poder de Salud Mental, su agente) para funcionar como usted quiere. ¿Exportar de todos modos?';
   }
 
   @override
@@ -6434,7 +6432,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get stepSubtitleGuardianNomination =>
-      'Es poco común, pero conviene planificarlo. Un tutor lo nombra un tribunal, no usted, y tiene una autoridad más amplia que un agente.';
+      'Es poco común, pero conviene planificarlo. Un tribunal nombra al tutor y debe elegir a la persona que usted proponga, salvo que haya un buen motivo para no hacerlo; y su agente sigue tomando las decisiones de salud mental, salvo que usted permita que el tutor anule esta directiva.';
 
   @override
   String get stepSubtitleWhereIWantCare =>
@@ -6446,7 +6444,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get stepSubtitleMedications =>
-      'Lo que toma ahora (para su equipo de atención) y los medicamentos que rechaza, limita o prefiere. Sus rechazos y límites son vinculantes según la Ley 194.';
+      'Lo que toma ahora (para su equipo de atención) y los medicamentos que rechaza, limita o prefiere. Sus proveedores deben respetar sus rechazos y límites, salvo en los casos limitados que permite la Ley 194.';
 
   @override
   String get stepSubtitleAllergies =>
@@ -6454,7 +6452,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get stepSubtitleProceduresResearch =>
-      'Según la ley de PA, tres tratamientos requieren su consentimiento explícito. Defina cada uno; su agente completa lo que falte.';
+      'Según la ley de PA, tres tratamientos requieren su consentimiento explícito. Defina cada uno; su agente solo puede decidirlos si usted elige “Mi agente decidirá”.';
 
   @override
   String get stepSubtitleAnythingElse =>

@@ -293,8 +293,8 @@ class FacilityResult {
 
 /// Pennsylvania Narrow Therapeutic Index (NTI) psychiatric medications.
 ///
-/// Under PA Generic Equivalent Drug Law (35 P.S. §960.3), pharmacists
-/// CANNOT substitute generic equivalents for NTI drugs. These drugs
+/// PA's Generic Equivalent Drug Law (35 P.S. § 960.1 et seq.) has special
+/// substitution rules for NTI drugs (check the current DOH list). These drugs
 /// require careful titration and monitoring — small changes in blood
 /// levels can cause toxicity or treatment failure.
 ///

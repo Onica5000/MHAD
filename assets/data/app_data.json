@@ -96,7 +96,7 @@
     "witnessMinAge": 18,
     "courtPetitionHours": 72,
     "ntiDrugs": ["lithium", "carbamazepine", "valproic acid"],
-    "ntiCitation": "35 P.S. §960.3",
+    "ntiCitation": "35 P.S. § 960.1 et seq. (Generic Equivalent Drug Law)",
     "involuntaryCommitment": {
       "section302Hours": 120,
       "section303Days": 20,

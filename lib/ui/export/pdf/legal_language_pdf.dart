@@ -28,7 +28,8 @@ List<pw.Page> buildLegalLanguagePages({
   }
 
   final paras = <String>[
-    'I, $name, being of sound mind and at least eighteen (18) years of age, do '
+    'I, $name, having capacity to make mental health decisions and being at '
+        'least eighteen (18) years of age or an emancipated minor, do '
         'hereby execute this Mental Health Advance Directive pursuant to '
         'Pennsylvania Act 194 of 2004, 20 Pa.C.S. Ch. 58.',
     'This Directive shall become effective upon a written determination by a '

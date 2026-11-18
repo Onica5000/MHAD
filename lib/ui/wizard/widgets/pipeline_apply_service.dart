@@ -303,8 +303,9 @@ extension _PipelineApplyLogic on _PipelineScreenState {
           ecEdited.isNotEmpty
               ? ecEdited
               : 'This directive becomes effective when I am unable to make '
-                  'mental health treatment decisions as determined by '
-                  'qualified professionals. '
+                  'mental health treatment decisions as determined by a '
+                  'psychiatrist and one other qualified professional after '
+                  'examining me. '
                   'Relevant conditions: ${condNames.join(", ")}.',
         );
         applied++;

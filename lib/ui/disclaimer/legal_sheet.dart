@@ -301,9 +301,6 @@ List<_SectionData> _buildSections(BuildContext context, MhadPalette p) {
               text: context.l10n.legalSheetNotifyingYourHealthcareProviderOr),
         ], palette: p),
         _Bullet(spans: [
-          TextSpan(text: context.l10n.legalSheetDestroyingTheDirective),
-        ], palette: p),
-        _Bullet(spans: [
           TextSpan(text: context.l10n.legalSheetExecutingANewDirective),
         ], palette: p),
         _Para(spans: [

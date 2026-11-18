@@ -1116,9 +1116,9 @@ extension _PipelineReviewUi on _PipelineScreenState {
   }
 
   /// §5836(c) reminder: when an autofilled consent would delegate ECT,
-  /// experimental studies, or drug trials to the agent, that delegation only
-  /// takes legal effect if the declarant physically initials it on the printed
-  /// form. Surfaced here so the user confirms the AI's assumption deliberately.
+  /// experimental studies, or drug trials to the agent, the directive must
+  /// grant that specifically (the official form asks for the declarant's
+  /// initials). Surfaced here so the user confirms the AI's assumption deliberately.
   Widget _agentInitialsNote(String key, MhadPalette p) {
     const procedureKeys = {
       'ect_consent',

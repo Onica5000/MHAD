@@ -281,8 +281,9 @@ List<pw.Widget> _sharedMedTables({
           preferred.isNotEmpty) ...[
         pw.Text(genericNote, style: smallBodyStyle()),
         pw.Text(
-          'Note: Narrow therapeutic index (NTI) drugs (e.g., lithium, carbamazepine, '
-          'valproic acid) cannot have generics substituted under PA law (35 P.S. §960.3).',
+          'Note: Narrow therapeutic index (NTI) drugs (e.g., lithium, carbamazepine) '
+          "have special generic-substitution rules under Pennsylvania's Generic "
+          'Equivalent Drug Law.',
           style: smallBodyStyle(),
         ),
       ],
